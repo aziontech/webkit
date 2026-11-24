@@ -141,7 +141,7 @@
 
   const widget = shallowRef<Component | null>(null)
   const declared = shallowRef<string[]>([])
-  const plates = shallowRef<typeof Plates | null>(null)
+  const plates = shallowRef<(typeof Plates)['default'] | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'console-mockup')
 
@@ -173,7 +173,10 @@
     )
     if (!ignored.length) return
     console.warn(
-      `[webkit] <ConsoleMockup name="${name}">: ${ignored.join(', ')} ${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. Fragments keep their own width and fade and take only variant, and chrome while framed; the workload screens take variant, chrome, width and fade (see the console-mockup spec).`
+      `[webkit] <ConsoleMockup name="${name}">: ${ignored.join(', ')} ` +
+        `${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. ` +
+        'Fragments keep their own width and fade and take only variant, and chrome while framed; ' +
+        'the workload screens take variant, chrome, width and fade (see the console-mockup spec).'
     )
   }
 
@@ -188,7 +191,7 @@
           console.warn(`[webkit] <ConsoleMockup>: no widget registered under name "${name}".`)
         return
       }
-      Promise.all([load(), import('./plates')])
+      Promise.all([load(), import('./plates').then(({ default: module }) => module)])
         .then(([{ default: component }, module]) => {
           if (props.name !== name) return
           plates.value = module

@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
   import ConsoleLayoutRoot, {
     type ConsoleLayoutNavGroup
   } from '@aziontech/webkit/console-layout-root'
+  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
 
   const navigation: ConsoleLayoutNavGroup[] = [
@@ -24,48 +26,52 @@
     active-id="workloads"
   >
     <template #sidebar-header="{ compact }">
-      <button
+      <Item
         v-if="!compact"
-        type="button"
+        size="small"
+        clickable
         :aria-label="`Account: ${organization}. Switch account`"
         aria-haspopup="dialog"
-        class="flex h-10 w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
       >
-        <Avatar
-          :label="organization"
-          pattern="marble"
-          size="small"
-          variant="square"
-        />
-        <span class="min-w-0 flex-1 truncate text-start text-label-sm text-(--text-default)">{{
-          organization
-        }}</span>
-        <i
-          class="az az-sort shrink-0 text-body-xs text-(--text-muted)"
-          aria-hidden="true"
-        />
-      </button>
+        <Item.Media>
+          <Avatar
+            :label="organization"
+            pattern="marble"
+            size="small"
+            variant="square"
+          />
+        </Item.Media>
+        <Item.Content>
+          <Item.Title>{{ organization }}</Item.Title>
+        </Item.Content>
+        <Item.Actions>
+          <i
+            class="az az-sort text-body-xs text-(--text-muted)"
+            aria-hidden="true"
+          />
+        </Item.Actions>
+      </Item>
     </template>
 
     <template #header-leading="{ compact }">
-      <button
+      <Button
         v-if="compact"
-        type="button"
+        variant="ghost"
+        size="small"
+        icon="az az-chevron-down"
+        icon-position="trailing"
         :aria-label="`Account: ${organization}. Switch account`"
         aria-haspopup="dialog"
-        class="flex h-7 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
       >
-        <Avatar
-          :label="organization"
-          pattern="marble"
-          size="small"
-          variant="square"
-        />
-        <i
-          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted)"
-          aria-hidden="true"
-        />
-      </button>
+        <template #leading>
+          <Avatar
+            :label="organization"
+            pattern="marble"
+            size="small"
+            variant="square"
+          />
+        </template>
+      </Button>
     </template>
 
     <div class="layout-boundary">

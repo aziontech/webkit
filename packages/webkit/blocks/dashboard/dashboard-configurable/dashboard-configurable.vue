@@ -7,6 +7,7 @@
   import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/webkit/dashboard-grid'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -129,7 +130,6 @@
   const sources = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
   const cardOf = (id: string) => cards[id as ConfigurableDashboardCardId]
   const seriesOf = (id: string) => chartSeries.value[id as ConfigurableDashboardChartId] ?? []
-  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
   const fixed = (value: number, digits: number) =>
@@ -159,6 +159,16 @@
     layout.value = defaultLayout.map((card) => ({ ...card }))
     announcement.value = 'Layout reset to the default.'
   }
+
+  const moveCard = (id: string, step: -1 | 1) => {
+    const from = layout.value.findIndex((card) => card.id === id)
+    const to = from + step
+    if (from < 0 || to < 0 || to >= layout.value.length) return
+    const next = [...layout.value]
+    ;[next[from], next[to]] = [next[to]!, next[from]!]
+    layout.value = next
+    announcement.value = `${cardOf(id).title} moved to position ${to + 1} of ${next.length}.`
+  }
 </script>
 
 <template>
@@ -168,13 +178,21 @@
         title="Traffic overview"
         description="Requests, regions, errors and response time for the period, in the layout you set."
       />
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the traffic overview. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-configurable__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
       <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
         <p
           v-if="editing"
           class="m-0 min-w-0 grow text-body-sm text-(--text-muted)"
         >
           Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use
-          the arrow keys.
+          the arrow keys. On a narrow screen, use Move up and Move down.
         </p>
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
@@ -206,35 +224,56 @@
         :max-height="720"
       >
         <DashboardGrid.Item
-          v-for="card in layout"
+          v-for="(card, index) in layout"
           :key="card.id"
           :item-id="card.id"
           :label="cardOf(card.id).title"
         >
           <ChartCard>
             <ChartCard.Header>
-              <ChartCard.DragHandle :aria-label="'Move ' + cardOf(card.id).title" />
+              <span class="contents @max-3xl/dashboard-grid:hidden">
+                <ChartCard.DragHandle :aria-label="'Move ' + cardOf(card.id).title" />
+              </span>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ cardOf(card.id).title }}</ChartCard.Title>
                 <Hint :content="cardOf(card.id).hint" />
               </span>
               <ChartCard.Action v-if="editing">
-                <Tag
-                  :label="card.span + '/12'"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-move-horizontal"
-                />
+                <span class="contents @max-3xl/dashboard-grid:hidden">
+                  <Tag
+                    :label="card.span + '/12'"
+                    severity="neutral"
+                    size="small"
+                    icon="az az-move-horizontal"
+                  />
+                </span>
+                <span class="flex items-center gap-(--spacing-2xs) @3xl/dashboard-grid:hidden">
+                  <IconButton
+                    icon="az az-arrow-up"
+                    variant="ghost"
+                    size="medium"
+                    :aria-label="'Move ' + cardOf(card.id).title + ' up'"
+                    :disabled="index === 0"
+                    @click="moveCard(card.id, -1)"
+                  />
+                  <IconButton
+                    icon="az az-arrow-down"
+                    variant="ghost"
+                    size="medium"
+                    :aria-label="'Move ' + cardOf(card.id).title + ' down'"
+                    :disabled="index === layout.length - 1"
+                    @click="moveCard(card.id, 1)"
+                  />
+                </span>
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="failed(cardOf(card.id).title.toLowerCase())"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <DonutChart
                 v-else-if="cardOf(card.id).kind === 'donut'"
                 :series="seriesOf(card.id)"

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-delete-dialog/edit-delete-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-delete-dialog")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [ConfirmDialog](../../components/confirm-dialog.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Toast](../../components/toast.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [ConfirmDialog](../../components/confirm-dialog.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Toast](../../components/toast.md)
 - Skills: `webkit-ux-heuristics`, `webkit-microcopy`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -34,9 +34,9 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 `ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button variant="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot; the dialog's own Cancel and Delete buttons take `confirm-label`, `cancel-label`, `:confirmation-phrase` and `:loading`.
 
-### B. Consequence — `Alert` (required)
+### B. Consequence — `Alert`, `Link` (required)
 
-A `severity="warning"` `Alert` first in the body states that the action cannot be reversed. Below it, one muted sentence names what goes with the resource and links the Help Center with the `text-link` utility. When the server refuses the delete, the same slot shows a `severity="danger"` `Alert` that says what blocks it and how to fix it. A container that holds other items (a folder, a database) passes its own consequence sentence instead of the generic one.
+A `severity="warning"` `Alert` first in the body states that the action cannot be reversed. Below it, one muted sentence names what goes with the resource and links the Help Center with a `Link inline`. When the server refuses the delete, the same slot shows a `severity="danger"` `Alert` that says what blocks it and how to fix it. A container that holds other items (a folder, a database) passes its own consequence sentence instead of the generic one.
 
 ### C. Typed confirmation — `ConfirmDialog` `confirmation-phrase` (required)
 
@@ -149,6 +149,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Link from '@aziontech/webkit/link'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, watch } from 'vue'
 
@@ -232,10 +233,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
       <p class="m-0 text-body-sm text-(--text-muted)">
         The selected resource will be deleted, along with all associated settings or instances.
         Check the
-        <a
+        <Link
           href="https://example.com/docs"
-          class="text-link"
-          >Help Center</a
+          inline
+          >Help Center</Link
         >
         for more details.
       </p>

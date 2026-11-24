@@ -197,6 +197,24 @@ describe('FlowDiagram', () => {
     )
   })
 
+  it('asks before the topology unbinds a policy', async () => {
+    const user = userEvent.setup()
+    const { container } = render(Topology)
+    await waitFor(() => expect(cards(container).length).toBe(7))
+    const policy = cards(container).find(
+      (card) => card.dataset['nodeKey'] === 'policy'
+    ) as HTMLElement
+    await user.click(within(policy).getByTestId('flow-diagram-bind__remove'))
+    const dialog = await within(document.body).findByRole('alertdialog')
+    expect(within(policy).getByText('edge-guard')).toBeTruthy()
+    await user.click(within(dialog).getByRole('button', { name: 'Unbind' }))
+    await waitFor(() =>
+      expect(container.querySelector('p[role="status"]')?.textContent).toContain(
+        'Removed the policy binding'
+      )
+    )
+  })
+
   it('keeps the spacing token between a row of controls and the divider or border below', async () => {
     const { container } = render(() => h('div', { style: 'width: 1600px' }, [h(Topology)]))
     await waitFor(() => expect(cards(container).length).toBe(7))

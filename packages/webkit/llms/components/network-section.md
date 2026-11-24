@@ -213,7 +213,8 @@
           icon: 'az az-globe',
           title: 'Global resilience beyond anycast',
           description:
-            'Azion\'s software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide.'
+            'Azion\'s software-defined global router steers traffic around failures and network degradation faster than ' +
+            'BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide.'
         },
         {
           icon: 'az az-stopwatch',
@@ -225,7 +226,8 @@
           icon: 'az az-move-vertical',
           title: 'Zero-ops autoscaling and failover',
           description:
-            'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
+            'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, ' +
+            'no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
         }
       ]"
     />

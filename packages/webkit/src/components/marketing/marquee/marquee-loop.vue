@@ -78,6 +78,19 @@
   })
 
   onScopeDispose(() => observer?.disconnect())
+
+  const LOOP_CLASS =
+    'group/loop relative w-full overflow-hidden focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset ' +
+    'data-[faded]:mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] ' +
+    'data-[reduced=scroll]:motion-reduce:overflow-x-auto data-[reduced=wrap]:motion-reduce:mask-none'
+
+  const TRACK_CLASS =
+    'flex w-max animate-brand-marquee group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] ' +
+    'data-[loading]:invisible data-[loading]:[animation-play-state:paused] ' +
+    'data-[paused]:[animation-play-state:paused] ' +
+    'motion-reduce:animate-none ' +
+    'data-[reduced=wrap]:motion-reduce:w-full data-[reduced=wrap]:motion-reduce:flex-wrap data-[reduced=wrap]:motion-reduce:justify-center ' +
+    'rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0'
 </script>
 
 <template>
@@ -89,7 +102,7 @@
       :tabindex="reduced === 'scroll' ? 0 : undefined"
       :data-reduced="reduced"
       :data-faded="faded || null"
-      class="group/loop relative w-full overflow-hidden focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-[faded]:mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] data-[reduced=scroll]:motion-reduce:overflow-x-auto data-[reduced=wrap]:motion-reduce:mask-none"
+      :class="LOOP_CLASS"
     >
       <div
         ref="trackEl"
@@ -97,7 +110,7 @@
         :data-loading="loading || null"
         :data-paused="paused || null"
         :data-reduced="reduced"
-        class="flex w-max animate-brand-marquee group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] data-[loading]:invisible data-[loading]:[animation-play-state:paused] data-[paused]:[animation-play-state:paused] motion-reduce:animate-none data-[reduced=wrap]:motion-reduce:w-full data-[reduced=wrap]:motion-reduce:flex-wrap data-[reduced=wrap]:motion-reduce:justify-center rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0"
+        :class="TRACK_CLASS"
       >
         <template
           v-for="copy in copies"

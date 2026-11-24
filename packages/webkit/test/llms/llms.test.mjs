@@ -186,6 +186,10 @@ test('llms-full.txt cuts repeats and detail, the per-page files keep them', () =
   assert.doesNotMatch(auth, /```vue/)
   assert.match(files['blocks/auth/auth-sign-in.md'], /## Code \(`Login`\)/)
 
+  const activity = entry('blocks/account/account-activity-history.md')
+  assert.match(files['blocks/account/account-activity-history.md'], /^Then delete `sample\.ts`/m)
+  assert.doesNotMatch(activity, /^Then delete `sample\.ts`/m, 'the step after cut code goes too')
+
   for (const m of full.matchAll(/\]\(([^)\s]+\.(?:md|json))\)/g)) {
     if (/^https?:/.test(m[1])) continue
     assert.ok(m[1] in files, `llms-full.txt links ${m[1]}, which is not a file under llms/`)
@@ -272,4 +276,21 @@ test('every composable export has an llms page built from its typed options', ()
   )
   assert.ok(page.indexOf('## `useCollection`') < page.indexOf('## `UseCollectionOptions'))
   assert.ok(page.indexOf('## `UseCollectionOptions') < page.indexOf('## `UseCollectionReturn'))
+})
+
+test('a preview component and block are marked on their pages, their JSON and in llms.txt', async () => {
+  const { catalogView } = await import('../../scripts/build-llms.mjs')
+  const copy = structuredClone(catalog)
+  for (const entry of Object.values(copy.imports)) delete entry.stability
+  for (const block of Object.values(copy.blocks)) delete block.stability
+  copy.imports.button.stability = 'preview'
+  copy.blocks['view/view-table'].stability = 'preview'
+  const read = (file) => JSON.parse(readFileSync(new URL(`../../${file}`, import.meta.url), 'utf-8'))
+  const out = buildLlms(catalogView(copy, read))
+  assert.match(out['components/button.md'], /^- Stability: preview\./m)
+  assert.equal(JSON.parse(out['components/button.json']).stability, 'preview')
+  assert.match(out['blocks/view/view-table.md'], /^- Stability: preview\./m)
+  assert.match(out['llms.txt'], /^- \[Button\]\(components\/button\.md\): Preview\. /m)
+  assert.doesNotMatch(out['components/badge.md'], /Stability/)
+  assert.equal('stability' in JSON.parse(out['components/badge.json']), false)
 })

@@ -47,7 +47,7 @@
   },
   {
    "name": "EmailAlreadyRegistered",
-   "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.",
+   "summary": "409 on Sign up (the address already has an account): the card answers exactly as for a new address, Check your inbox, so nobody can test which addresses are registered; the email to the owner explains how to sign in.",
    "file": "blocks/auth/auth-sign-in/variants/email-already-registered.vue"
   },
   {
@@ -88,7 +88,28 @@
  ],
  "sfcFile": "blocks/auth/auth-sign-in/auth-sign-in.vue",
  "guidelinesFile": "blocks/auth/auth-sign-in/guidelines.md",
- "fileSources": {
-  "token-sign-in.vue": "blocks/auth/auth-sign-in/token-sign-in.vue"
- }
+ "fileSources": [
+  "sample.ts",
+  "token-sign-in.vue",
+  "lib/sign-in-copy.ts",
+  "lib/sign-in-rules.ts",
+  "composables/use-card-height.ts",
+  "composables/use-code-check.ts",
+  "parts/sign-in-frame.vue",
+  "parts/auth-card.vue",
+  "parts/email-field.vue",
+  "parts/password-field.vue",
+  "parts/last-used-tag.vue",
+  "parts/sign-in-providers.vue",
+  "parts/step-back.vue",
+  "parts/sent-step.vue",
+  "parts/sign-in-footer.vue",
+  "parts/signed-in-as.vue",
+  "parts/scope-list.vue",
+  "parts/sign-up-card.vue",
+  "parts/mfa-code-card.vue",
+  "parts/mfa-setup-card.vue",
+  "parts/oauth-consent-card.vue",
+  "parts/device-authorization-card.vue"
+ ]
 }

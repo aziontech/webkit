@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-get-started/detail-get-started.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-get-started")`
-- Components: [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [Subheader](../../components/subheader.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [Link](../../components/link.md), [Subheader](../../components/subheader.md), [ToggleGroup](../../components/toggle-group.md)
 - Skills: `webkit-microcopy`
 
 ## Asked as
@@ -30,9 +30,9 @@ The first thing a user reads about a resource they created from the CLI and have
 
 ## Building blocks
 
-### A. Section heading — `Subheader` (required)
+### A. Section heading — `Subheader`, `Link` (required)
 
-`Subheader` titled "Get started" with a one-sentence description that ends on a link to the CLI docs. It is a section inside the page, never the page title.
+`Subheader` titled "Get started" with a one-sentence description that ends on a link to the CLI docs, a `Link inline` that opens in a new tab. It is a section inside the page, never the page title.
 
 ### B. Path switch — `ToggleGroup` (required)
 
@@ -135,6 +135,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-get-
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import Link from '@aziontech/webkit/link'
   import Subheader from '@aziontech/webkit/subheader'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed } from 'vue'
@@ -276,12 +277,11 @@ jobs:
     <Subheader title="Get started">
       <template #description>
         Two ways to build and deploy this resource. Select one and follow the steps, or read the
-        <a
+        <Link
           href="https://example.com/docs/cli"
           target="_blank"
-          rel="noopener noreferrer"
-          class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-          >CLI docs</a
+          inline
+          >CLI docs</Link
         >.
       </template>
       <template #actions>

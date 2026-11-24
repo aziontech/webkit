@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: 092e27302da6214de1048c34f9b7deb1bc54e57ca69123a7b2be65cd0c3d603b
+checksum: 45dfd850e1e6c9b938f374f8eff785f9b5ece9133c32d3627469e33406048db2
 created: 2026-06-23
-last_updated: 2026-11-15
+last_updated: 2026-11-23
 ---
 
 # Badge — Component Spec
@@ -124,7 +124,7 @@ _none_
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: none mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: the label renders `dir="auto"`, so a count or value in another script keeps its own direction.
+- Isolation: the label renders `dir="auto"`, so a value in another script keeps its own direction; a label with no letter (a count, `+3`, `-12%`) renders `dir="ltr"`, so its sign and unit stay in order in every engine.
 
 ## Examples
 

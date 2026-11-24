@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Button from '../../action/button/button.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ArchitectureTabsSection',
@@ -44,7 +44,11 @@
     description?: string
     /** Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs. */
     tabsSide?: ArchitectureTabsSectionSide
-    /** The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description it ships. */
+    /**
+     * The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }`
+     * where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel`
+     * replaces the description it ships.
+     */
     tabs?: ArchitectureTabsSectionTab[]
     /** Opens the next tab on a timer, with the composed tabs' visible pause control. */
     autoplay?: boolean
@@ -71,10 +75,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'architecture-tabs-section'
   )
-
-  const hasTabs = computed(() => props.tabs.length > 0)
-
-  const hasHeader = computed(() => props.title.length > 0)
+  const headerActions = computed(() => sectionActions(props.primaryAction, undefined))
 
   const items = computed(() =>
     props.tabs.map((tab) => ({ title: tab.title, description: tab.description }))
@@ -82,70 +83,48 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :filled="tabs.length > 0"
+    :framed="false"
+    align="split"
+    header-padding="small"
   >
-    <Module
-      v-if="hasTabs"
-      :divided="false"
-      :padded="false"
+    <template
+      v-if="headerActions.length"
+      #header-actions
     >
-      <template
-        v-if="hasHeader"
-        #header
-      >
-        <ModuleHeader
-          align="split"
-          padding="small"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
-        >
-          <template
-            v-if="primaryAction"
-            #actions
-          >
-            <Button
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              variant="secondary"
-              size="large"
-              :target="primaryAction.target"
-              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(primaryAction.trailing)"
-            />
-          </template>
-        </ModuleHeader>
-      </template>
+      <SectionActions :actions="headerActions" />
+    </template>
 
-      <RegistrationFrame
-        flush
-        borders="top"
-        marks="none"
+    <RegistrationFrame
+      flush
+      borders="top"
+      marks="none"
+    >
+      <MediaTabs
+        :tabs-side="tabsSide"
+        size="small"
+        :items="items"
+        :autoplay="autoplay"
+        :autoplay-interval="autoplayInterval"
+        class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
       >
-        <MediaTabs
-          :tabs-side="tabsSide"
-          size="small"
-          :items="items"
-          :autoplay="autoplay"
-          :autoplay-interval="autoplayInterval"
-          class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
-        >
-          <template #media="{ index }">
-            <Diagram
-              :key="tabs[index]?.value"
-              :name="tabs[index]?.diagram"
-              :aria-label="tabs[index]?.diagramAriaLabel ?? ''"
-              class="w-full"
-            />
-          </template>
-        </MediaTabs>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        <template #media="{ index }">
+          <Diagram
+            :key="tabs[index]?.value"
+            :name="tabs[index]?.diagram"
+            :aria-label="tabs[index]?.diagramAriaLabel ?? ''"
+            class="w-full"
+          />
+        </template>
+      </MediaTabs>
+    </RegistrationFrame>
+  </SectionBand>
 </template>

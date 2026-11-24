@@ -15,10 +15,9 @@ describe('Eyebrow', () => {
 
   it('does not render a prefix span when prefix is the empty default', () => {
     const { container, queryByText } = render(Eyebrow, { slots: { default: 'NO PREFIX' } })
-    // Two spans max: the (absent) prefix and the (present) content span.
-    // With the default empty prefix, only the content span is rendered.
     const spans = container.querySelectorAll('span')
     expect(spans).toHaveLength(1)
+    expect(spans[0]?.getAttribute('aria-hidden')).toBeNull()
     expect(queryByText('//')).not.toBeInTheDocument()
   })
 
@@ -90,6 +89,18 @@ describe('Eyebrow', () => {
     expect(root).toHaveAttribute('data-cursor')
     expect(root).toHaveAttribute('data-single-line')
     expect(container.querySelector('.animate-blink-settle')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('sets the cursor inline at the end of the label, so a wrapped label keeps it on its last line', () => {
+    const { getByTestId } = render(Eyebrow, {
+      props: { cursor: true },
+      slots: { default: 'TRUSTED BY TEAMS RUNNING IN PRODUCTION' }
+    })
+    const label = getByTestId('eyebrow__label')
+    const cursor = getByTestId('eyebrow__cursor')
+    expect(label.contains(cursor)).toBe(true)
+    expect(label.lastElementChild).toBe(cursor)
+    expect(label).toHaveTextContent(/^TRUSTED BY TEAMS RUNNING IN PRODUCTION$/)
   })
 
   it('renders prefix and cursor together', () => {
@@ -169,7 +180,9 @@ describe('Eyebrow', () => {
     it('paints the label and the prefix through real token utilities', () => {
       const view = render(Eyebrow, { props: { prefix: '//' }, slots: { default: 'LABEL' } })
 
-      expect(view.getByText('LABEL').className).toContain('text-(--text-brand)')
+      expect(view.getByText('LABEL').className).toContain('text-(--text-default)')
+      expect(view.queryByTestId('eyebrow__mark')).toBeNull()
+      expect(view.getByTestId('eyebrow').innerHTML).not.toContain('--primary')
       expect(view.getByText('LABEL').className).not.toContain('text-(--primary)')
       expect(view.getByText('//').className).toContain('text-(--text-default)')
       expect(view.getByText('LABEL').className).not.toMatch(/(^|\s)text-primary(\s|$)/)

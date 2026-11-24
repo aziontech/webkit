@@ -5,6 +5,7 @@
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -12,8 +13,8 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
     { id: 'actions', header: '', type: 'action', sortable: false }
@@ -48,11 +49,11 @@
     @row-click="onRowClick"
   >
     <template #cell-name="{ row, value }">
-      <a
-        :href="'/workloads/' + row.id"
-        class="cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline"
-        >{{ value }}</a
-      >
+      <TableCellLink
+        :label="value"
+        :to="`/workloads/${row.id}`"
+        destination="Workloads"
+      />
     </template>
     <template #cell-status="{ value }">
       <Tag :severity="statusSeverity(value)">{{ value }}</Tag>
@@ -65,7 +66,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />

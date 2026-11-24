@@ -162,6 +162,10 @@
       emit('item-resize', event, { id, span: item.span, height: item.height })
     }
   })
+
+  const GRID_CLASS =
+    'm-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 [--dashboard-grid-grid-columns:1] ' +
+    '@3xl/dashboard-grid:grid-cols-[repeat(var(--dashboard-grid-columns),minmax(0,1fr))] @3xl/dashboard-grid:[--dashboard-grid-grid-columns:var(--dashboard-grid-columns)]'
 </script>
 
 <template>
@@ -176,7 +180,7 @@
       :aria-label="ariaLabel || t('dashboardGrid.label')"
       :data-testid="`${testId}__grid`"
       :style="{ '--dashboard-grid-columns': `${columns}` }"
-      class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 [--dashboard-grid-grid-columns:1] @3xl/dashboard-grid:grid-cols-[repeat(var(--dashboard-grid-columns),minmax(0,1fr))] @3xl/dashboard-grid:[--dashboard-grid-grid-columns:var(--dashboard-grid-columns)]"
+      :class="GRID_CLASS"
     >
       <slot />
     </ul>

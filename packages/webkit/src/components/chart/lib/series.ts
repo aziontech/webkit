@@ -6,7 +6,7 @@ import type {
   NormalizedSeries
 } from './types'
 
-export const OTHER_SERIES_ID = '__other'
+const OTHER_SERIES_ID = '__other'
 
 const MAX_SLOTS = 8
 
@@ -36,7 +36,7 @@ export function keepIds(
     : next
 }
 
-export function seriesTotal(values: ReadonlyArray<number | null>): number {
+function seriesTotal(values: ReadonlyArray<number | null>): number {
   return values.reduce<number>((sum, value) => sum + (isFiniteNumber(value) ? value : 0), 0)
 }
 

@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band spans the window; its copy stays on the page’s measure.",
+      "summary": "The band spans the window; its copy stays on the page’s measure and ends on the primary action the visitor came for.",
       "file": "default.vue"
     },
     {

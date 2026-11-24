@@ -5,6 +5,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import type {
     DateRangeUnit,
     DateRangeValue,
@@ -144,16 +145,23 @@
     { accessorKey: 'at', header: 'Date', sortable: true, minWidth: 150 }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
-    useCollection({
-      items: inRange,
-      columns,
-      filtering: { fields: ['event', 'category', 'user', 'ip'] },
-      propertyFiltering: { properties },
-      sorting: { defaultState: [{ id: 'at', desc: true }] },
-      pagination: { pageSize: 25, pageSizeOptions: [25, 50, 100] },
-      preferences: { storageKey: 'activity-history' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: inRange,
+    columns,
+    filtering: { fields: ['event', 'category', 'user', 'ip'] },
+    propertyFiltering: { properties },
+    sorting: { defaultState: [{ id: 'at', desc: true }] },
+    pagination: { pageSize: 25, pageSizeOptions: [25, 50, 100] },
+    preferences: { storageKey: 'activity-history' }
+  })
 
   const activityTableEl = ref<TableExposed<ActivityHistoryEvent> | null>(null)
   const exportCsv = () => activityTableEl.value?.exportCsv({ filename: 'activity-history.csv' })
@@ -193,6 +201,7 @@
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -320,6 +329,18 @@
                   size="small"
                 />
               </template>
+              <template #cell-event="{ row, value }">
+                <div class="flex min-w-0 flex-col">
+                  <span class="truncate">{{ value }}</span>
+                  <div
+                    aria-hidden="true"
+                    data-slot="narrow-summary"
+                    class="mt-(--spacing-2xs) sm:hidden"
+                  >
+                    <TableCellTime :value="row.at" />
+                  </div>
+                </div>
+              </template>
               <template #cell-user="{ value }">
                 <span
                   class="truncate"
@@ -361,6 +382,12 @@
                     />
                   </template>
                 </EmptyState>
+              </template>
+              <template #footer>
+                <DataTablePagination
+                  v-bind="paginationProps"
+                  manual
+                />
               </template>
             </DataTable>
           </template>

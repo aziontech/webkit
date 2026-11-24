@@ -15,6 +15,10 @@ export interface CommandRegisteredItem {
   disabled: Ref<boolean>
   /** Whether the item currently passes the substring filter. */
   isVisible: Ref<boolean>
+  /** Whether the item matches the query on its page, before any hint-only cap. */
+  matched: Ref<boolean>
+  /** Whether the item matches the query only through its value or keywords, not its label. */
+  hint: Ref<boolean>
   /** The item's root element, so the root can rove in DOM order rather than registration
    *  order (a group mounted after the palette opened registers last but renders where the
    *  consumer put it). `null` only in the tick before it mounts. */
@@ -54,6 +58,8 @@ export interface CommandContext {
   hasVisibleItems: Ref<boolean>
   /** Whether the given group has at least one visible item. */
   groupHasVisibleItems: (groupId: string) => boolean
+  /** Whether a hint-only match is hidden because its group already shows enough of them. */
+  isCapped: (itemId: string) => boolean
   /** Whether the query is not empty, so the list shows items in ranked order. */
   ranking: Ref<boolean>
   /** The CSS `order` of a group: the order of its best visible item. */

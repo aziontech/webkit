@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: 238c42c6009131ec03f86077c6203ee7615812248b6538712cec7bdcfee626bd
+checksum: b451918f3fc9c3aecb1da532cfa106c7e77cab012ee42b86db3067660cf2f779
 created: 2026-05-22
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 ---
 
 # Button — Component Spec
@@ -185,16 +185,10 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 ## Examples
 
 - Default
-- Primary (variant)
-- Secondary (variant)
-- Outlined (variant)
-- Transparent (variant)
-- Danger (variant)
-- Link (variant) — shown in the Types example beside the others.
-- Small (size)
-- Medium (size)
-- Large (size)
+- Variants — composite story rendering every `variant` value side by side: primary, secondary, outline, ghost, danger and link.
+- Sizes — composite story rendering every `size` value side by side.
 - Icon
+- Loading
 - Disabled
 - Disabled reason (`disabledReason`)
 - Form submit (`type`) — `type` only acts inside a form, so this story renders one with a field, a reset and a submit Button

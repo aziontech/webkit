@@ -3,10 +3,10 @@ name: link
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: 03a7672887b666784dbb184225cc87e07f4c62221b1b4ff55291bb0a446a1c19
+spec_version: 7
+checksum: ccbc7bf299fed77fb11732e48dd8db914b4d0ef2ee54c92473bf1309519a8578
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
@@ -23,10 +23,10 @@ Helps users move between views or sections. Migrated from the existing implement
 - Use Link when the text takes the person to another page, resource or URL.
 - A standalone navigation link: a domain, a repository, a docs page, "View all".
 - An in-console navigation action ("Add custom domain"): no trailing icon unless `icon` is set.
+- A link inside a sentence: set `inline`, so it takes the size of the text around it and keeps the underline at rest.
 
 ## When NOT to use
 
-- A link inside a sentence → use a plain anchor with the text-link class.
 - An action that changes something instead of navigating → use `button`.
 - A text action that runs something instead of navigating → use `button` with `variant="link"`.
 
@@ -39,9 +39,10 @@ Helps users move between views or sections. Migrated from the existing implement
 
 - Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
 - Pass the label as the default slot or the `label` prop; the slot wins when both are set.
-- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
+- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `az az-external-link` glyph so an off-site link reads as one; a `_blank` link also carries visually hidden text from the locale catalog (`common.newTab`, `(opens in a new tab)`) after its label, so a screen reader announces the new tab the glyph shows (the glyph stays `aria-hidden`); same-tab links show no icon unless `icon` is set.
 - An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
+- Inside running prose set `inline`: the link inherits the font size and line height of its sentence, wraps with it and keeps a quiet underline at rest (color alone fails WCAG 1.4.1); `size` does not apply.
 - `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
 
 ## Usage
@@ -63,19 +64,29 @@ Helps users move between views or sections. Migrated from the existing implement
   >
     Add custom domain
   </Link>
+  <p>
+    Read the
+    <Link
+      href="/docs/domains"
+      inline
+      >domains guide</Link
+    >
+    before you point a record.
+  </p>
 </template>
 ```
 
 ## Props
 
-| Prop       | Type                             | Default   | Required | JSDoc                                                                                                                   |
-| ---------- | -------------------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                         | `''`      | false    | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`).                               |
-| `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button.                       |
-| `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                                                                       |
-| `icon`     | `string`                         | `''`      | false    | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`. |
-| `href`     | `string`                         | `''`      | false    | Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`.                                                                      |
-| `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when navigating.                                                                                            |
+| Prop       | Type                             | Default   | Required | JSDoc                                                                                                                                                                    |
+| ---------- | -------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `label`    | `string`                         | `''`      | false    | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`).                                                                                |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button.                                                                        |
+| `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                                                                                                                        |
+| `icon`     | `string`                         | `''`      | false    | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`.                                                  |
+| `href`     | `string`                         | `''`      | false    | Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`.                                                                           |
+| `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when navigating.                                                                                                                                             |
+| `inline`   | `boolean`                        | `false`   | false    | Renders the link inside running prose: it inherits the size and line height of the text around it, wraps with it and keeps the underline at rest; `size` does not apply. |
 
 ## Events
 
@@ -94,6 +105,7 @@ Helps users move between views or sections. Migrated from the existing implement
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
+- `inline`: the anchor carries the `text-link` style (link colour, underline at rest, stronger on hover, outline focus ring) and `data-inline`; no box height
 - Consumer attributes (`id`, `aria-*`, `download`, `rel`, `data-*`, listeners) land on the anchor through `v-bind="$attrs"`; a consumer `rel` overrides the computed one
 
 ## Motion & Animations
@@ -104,13 +116,13 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)                 |
-| ---------- | --------------------------------- |
-| typography | .text-button-lg / .text-button-md |
-| text       | `var(--text-link)`                |
-| spacing    | `var(--spacing-xs)`               |
-| shape      | `var(--shape-button)`             |
-| ring       | `var(--ring-color)`               |
+| Region     | Token (DESIGN.md)                                             |
+| ---------- | ------------------------------------------------------------- |
+| typography | .text-button-lg / .text-button-md; `.text-link` when `inline` |
+| text       | `var(--text-link)`                                            |
+| spacing    | `var(--spacing-xs)`                                           |
+| shape      | `var(--shape-button)`                                         |
+| ring       | `var(--ring-color)`                                           |
 
 ## Theme gaps
 
@@ -120,6 +132,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Accessibility (WCAG 2.1 AA)
 
+- `target="_blank"` adds the visually hidden `common.newTab` text (`(opens in a new tab)`) after the label, so a screen reader hears what the external glyph shows.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter` activates.
 - ARIA: `aria-disabled` and `tabindex="-1"` when disabled.
@@ -139,6 +152,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 - Default
 - Sizes
+- Inline
 - Disabled
 
 ## Constraints — DO NOT

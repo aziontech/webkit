@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import Hint from '../../../input/hint/hint.vue'
   import Input from '../../../input/input/input.vue'
   import Textarea from '../../../input/textarea/textarea.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'ApplicationsDeviceGroupFragment' })
 
@@ -20,9 +20,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const EXPRESSION = '(Mobile|iPhone|Android|BlackBerry)'
 
@@ -44,53 +41,19 @@
     }))
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
+  const { frame, step } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
   const expression = computed(() => EXPRESSION.slice(0, frame.value.typed))
   const lifted = computed(() => step.value > 0)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     :fade="lifted ? 'y' : 'bottom'"
     class="[--console-mockup-fade-edge:14%] [--console-mockup-fade-start:80%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div
       :data-lifted="lifted || null"
@@ -152,5 +115,5 @@
         </div>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

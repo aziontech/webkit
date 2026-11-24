@@ -16,7 +16,7 @@ interface ShortcutEntry {
 const entries = new Set<ShortcutEntry>()
 let listening = false
 
-export function parseShortcut(command: string): DropdownMenuShortcut | null {
+function parseShortcut(command: string): DropdownMenuShortcut | null {
   let meta = false
   let ctrl = false
   let shift = false
@@ -25,10 +25,10 @@ export function parseShortcut(command: string): DropdownMenuShortcut | null {
   const tokens = command.split(/\s*\+\s*/).flatMap((part) => Array.from(part))
   for (const token of tokens) {
     const lower = token.toLowerCase()
-    if (token === '⌘' || lower === 'cmd' || lower === 'meta') meta = true
-    else if (token === '⌃' || lower === 'ctrl' || lower === 'control') ctrl = true
-    else if (token === '⇧' || lower === 'shift') shift = true
-    else if (token === '⌥' || lower === 'alt' || lower === 'option' || lower === 'opt') alt = true
+    if (/^(⌘|cmd|meta)$/.test(lower)) meta = true
+    else if (/^(⌃|ctrl|control)$/.test(lower)) ctrl = true
+    else if (/^(⇧|shift)$/.test(lower)) shift = true
+    else if (/^(⌥|alt|option|opt)$/.test(lower)) alt = true
     else key += token
   }
   if (!key) return null

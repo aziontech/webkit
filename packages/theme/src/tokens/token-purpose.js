@@ -38,8 +38,6 @@ export const tokenPurpose = {
   '--text-muted': 'Secondary text: descriptions, captions, metadata.',
   '--text-disabled': 'Text of a disabled control.',
   '--text-danger': 'Error text on the page, such as the FieldError message.',
-  '--text-brand':
-    'The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception.',
   '--text-link': 'Links in text and the link button.',
   '--text-link-hover': 'A link under the pointer.',
   '--text-contrast': 'Text on the inverted --bg-contrast surface.',
@@ -54,19 +52,19 @@ export const tokenPurpose = {
   '--code-syntax-string': 'String literals.',
   '--success': 'The box of a success message, tag or badge.',
   '--success-border': 'The edge of a success box.',
-  '--success-foreground': 'Text and icons on --success, and success icons on a surface.',
+  '--success-foreground': 'Text and icons on --success; on a surface, --success-mark.',
   '--success-mark': 'A success mark standing on the page: the status dot, the outcome disc.',
   '--warning': 'The box of a warning message, tag or badge.',
   '--warning-border': 'The edge of a warning box.',
-  '--warning-foreground': 'Text and icons on --warning, and warning icons on a surface.',
+  '--warning-foreground': 'Text and icons on --warning; on a surface, --warning-mark.',
   '--warning-mark': 'A warning mark standing on the page: the status dot, the outcome disc.',
   '--danger': 'The box of an error message, tag or badge, and the danger button.',
   '--danger-border': 'The edge of a danger box and the outline of an invalid field.',
-  '--danger-foreground': 'Text and icons on --danger, and error icons on a surface.',
+  '--danger-foreground': 'Text and icons on --danger; on a surface, --danger-mark.',
   '--danger-mark': 'An error mark standing on the page: the status dot, the outcome disc.',
   '--info': 'The box of an informational message, tag or badge.',
   '--info-border': 'The edge of an info box.',
-  '--info-foreground': 'Text and icons on --info, and info icons on a surface.',
+  '--info-foreground': 'Text and icons on --info; on a surface, --info-mark.',
   '--info-mark': 'An info mark standing on the page: the status dot, the outcome disc.',
   '--illustration-ground': 'The ground an illustration scene stands on.',
   '--illustration-surface': 'Panels drawn inside an illustration.',
@@ -203,5 +201,3 @@ export const tokenPurpose = {
   'text-button-md': 'The label of a medium or small button.',
   'text-link': 'An inline link inside body or heading copy; inherits the size.'
 }
-
-export default { tokenPurpose }

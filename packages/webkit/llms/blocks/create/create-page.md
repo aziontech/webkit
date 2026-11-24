@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [TagEditor](../../components/tag-editor.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [TagEditor](../../components/tag-editor.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -32,9 +32,9 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-`AppHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `Avatar` on the right. The breadcrumb's last item repeats the create button's label exactly.
+`AppHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `AppHeaderAccount` on the right. The breadcrumb's last item repeats the create button's label exactly.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -60,23 +60,27 @@ A Tags band between the required fields and Advanced: a padded `Card` holding on
 
 `SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. On a phone the muted line hides, so Import keeps its label beside Cancel and Save; the Domain name description already says a paste imports. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
-### H. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+### H. Failed request — `Alert` (required)
+
+When the request fails, a danger `Alert` under the last section, above the commit bar, names what failed ("Could not create the domain."), says why, and carries Retry. It stays until the next request ends, and it is mounted again after each one, so a second identical failure is announced again. Nothing is reported only in a toast.
+
+### I. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
 Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too. Escape runs the same Cancel path through `useEscapeToCancel(onCancel)`.
 
-### I. Shortcut keycap — `Kbd` (optional)
+### J. Shortcut keycap — `Kbd` (optional)
 
-A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`. `Kbd` hides itself inside a button on a touch screen and greys with a disabled button.
 
 ## Data
 
-The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the new domain.
+The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry above the commit bar; on success the page shows the toast and opens the new domain.
 
-| Prop            | Type                        | What it does                                                                        |
-| --------------- | --------------------------- | ----------------------------------------------------------------------------------- |
-| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on. |
-| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.               |
-| `error`         | `string`                    | Why the request failed, the description of the error toast with Retry.              |
+| Prop            | Type                        | What it does                                                                         |
+| --------------- | --------------------------- | ------------------------------------------------------------------------------------ |
+| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on.  |
+| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.                |
+| `error`         | `string`                    | Why the request failed, shown in the danger `Alert` with Retry above the commit bar. |
 
 | Event    | Payload           | When                                                                               |
 | -------- | ----------------- | ---------------------------------------------------------------------------------- |
@@ -182,8 +186,9 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
@@ -200,11 +205,13 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import TagEditor, { type TagEditorTag } from '@aziontech/webkit/tag-editor'
-  import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import { onMounted, reactive, ref, watch } from 'vue'
+
+  import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'
 
   /** The values of the Create Domain form. */
   export interface CreatePageValues {
@@ -225,15 +232,8 @@ Each variant is the same screen in another state: `get_block("create/create-page
     defaultValues?: Partial<CreatePageValues>
     /** The create request is in flight; the form locks and Save spins. */
     loading?: boolean
-    /** Why the create request failed, shown in an error toast with Retry. */
+    /** Why the create request failed, shown in an inline error with Retry above the save bar. */
     error?: string
-  }
-
-  interface FormErrors {
-    name: string
-    nameKind: 'helper' | 'invalid' | 'required'
-    domain: string
-    domainKind: 'helper' | 'invalid' | 'required'
   }
 
   const props = withDefaults(defineProps<CreatePageProps>(), {
@@ -259,7 +259,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   })
   const tagKeySuggestions = ['team', 'environment', 'owner', 'cost-center']
   const tagEditorEl = ref<InstanceType<typeof TagEditor> | null>(null)
-  const errors = reactive<FormErrors>({
+  const errors = reactive<CreatePageDomainErrors>({
     name: '',
     nameKind: 'required',
     domain: '',
@@ -267,34 +267,10 @@ Each variant is the same screen in another state: `get_block("create/create-page
   })
   const advancedOpen = ref(false)
 
-  const NAME_MAX = 50
-  const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
-
   const validate = () => {
-    const name = form.name.trim()
-    if (!name) {
-      errors.nameKind = 'required'
-      errors.name = 'This field is required.'
-    } else if (name.length > NAME_MAX) {
-      errors.nameKind = 'invalid'
-      errors.name = 'Use at most ' + NAME_MAX + ' characters.'
-    } else {
-      errors.name = ''
-    }
-
-    const domain = form.domain.trim()
-    if (!domain) {
-      errors.domainKind = 'required'
-      errors.domain = 'This field is required.'
-    } else if (!DOMAIN_PATTERN.test(domain)) {
-      errors.domainKind = 'invalid'
-      errors.domain = 'Enter a valid domain name. Example: example.com.'
-    } else {
-      errors.domain = ''
-    }
-
+    const fieldsValid = validateDomainForm(form, errors)
     const tagsValid = tagEditorEl.value?.validate() ?? true
-    return !errors.name && !errors.domain && tagsValid
+    return fieldsValid && tagsValid
   }
 
   const values = (): CreatePageValues => ({
@@ -333,21 +309,25 @@ Each variant is the same screen in another state: `get_block("create/create-page
   onMounted(() => nameEl.value?.focus())
 
   const submit = (event: Event) => {
-    if (props.loading || !validate()) return
+    if (props.loading) return
+    if (!validate()) {
+      focusFirstInvalid(formEl.value)
+      return
+    }
     emit('submit', event, values())
   }
 
+  const attempt = ref(0)
+
   watch(
-    () => props.error,
-    (message) => {
-      if (!message) return
-      toast.error('Could not create the domain.', {
-        description: message,
-        action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
-      })
-    },
-    { immediate: true }
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) attempt.value += 1
+    }
   )
+
+  const DNSSEC_DESCRIPTION =
+    "Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
 </script>
 
 <template>
@@ -374,17 +354,10 @@ Each variant is the same screen in another state: `get_block("create/create-page
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          name="name@example.com"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
+        />
       </AppHeader.End>
     </AppHeader>
 
@@ -421,6 +394,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        required
                         stackable
                         title="Name"
                         description="Identifies the domain in this list. It is not the hostname."
@@ -445,6 +419,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                         >
                       </SettingsRow>
                       <SettingsRow
+                        required
                         stackable
                         title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain."
@@ -502,7 +477,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                     <Item.List>
                       <SettingsRow
                         title="DNSSEC"
-                        description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
+                        :description="DNSSEC_DESCRIPTION"
                         variant="compact"
                       >
                         <Switch
@@ -525,6 +500,17 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 </Card>
               </SettingsGroup>
             </fieldset>
+
+            <Alert
+              v-if="error"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="Could not create the domain."
+              :label="error"
+              action-label="Retry"
+              @action="submit"
+            />
           </div>
           <SaveBar variant="centered">
             <template #actions>
@@ -577,4 +563,55 @@ Each variant is the same screen in another state: `get_block("create/create-page
     </ConfirmDialog>
   </div>
 </template>
+```
+
+## `domain-validation.ts`
+
+```ts
+/** Why a field shows its message: an empty required field, a value the endpoint rejects, or guidance. */
+export type CreatePageErrorKind = 'helper' | 'invalid' | 'required'
+
+/** The messages of the Name and Domain name fields. */
+export interface CreatePageDomainErrors {
+  /** The message under Name; empty while the field is valid. */
+  name: string
+  /** Why Name shows its message. */
+  nameKind: CreatePageErrorKind
+  /** The message under Domain name; empty while the field is valid. */
+  domain: string
+  /** Why Domain name shows its message. */
+  domainKind: CreatePageErrorKind
+}
+
+const NAME_MAX = 50
+const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
+
+export function validateDomainForm(
+  form: { name: string; domain: string },
+  errors: CreatePageDomainErrors
+): boolean {
+  const name = form.name.trim()
+  if (!name) {
+    errors.nameKind = 'required'
+    errors.name = 'This field is required.'
+  } else if (name.length > NAME_MAX) {
+    errors.nameKind = 'invalid'
+    errors.name = 'Use at most ' + NAME_MAX + ' characters.'
+  } else {
+    errors.name = ''
+  }
+
+  const domain = form.domain.trim()
+  if (!domain) {
+    errors.domainKind = 'required'
+    errors.domain = 'This field is required.'
+  } else if (!DOMAIN_PATTERN.test(domain)) {
+    errors.domainKind = 'invalid'
+    errors.domain = 'Enter a valid domain name. Example: example.com.'
+  } else {
+    errors.domain = ''
+  }
+
+  return !errors.name && !errors.domain
+}
 ```

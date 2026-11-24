@@ -91,7 +91,7 @@ export interface TableExposed<TRecord extends object = TableRowRecord> {
   }) => Promise<void>
   /** Deep-cloned snapshot of sorting, page and page size, column visibility and order, search and filters. */
   getSnapshot: () => TableStateSnapshot
-  /** Writes the given concerns back through the same models that back v-model:snapshot. */
+  /** Writes the given concerns back: sorting and column visibility through their models, the rest into the table state the parts read. */
   setSnapshot: (next: Partial<TableStateSnapshot>) => void
 }
 
@@ -108,24 +108,28 @@ export interface TableContext {
   clearSelection: () => void
   /** Loading flag (data-driven); toolbar controls reflect it. */
   loading: ComputedRef<boolean>
-  /** Live tail state (backs the `live` model); TableLiveButton reflects it. */
+  /** Live tail state; TableLiveButton reflects and drives it. */
   live?: ComputedRef<boolean>
   /** Turns the live tail on or off (TableLiveButton). */
   setLive?: (value: boolean) => void
-  /** Fields TableFilter offers when it has no `fields` of its own. */
+  /** Fields the mounted TableFilter offers; FilterMenu.ChipGroup labels its chips with them. */
   filterFields: ComputedRef<TableFilterField[]>
-  /** Committed structured filters (backs the `filters` model). */
+  /** TableFilter registers its fields while mounted; returns the unregister function. */
+  registerFilterFields?: (fields: () => TableFilterField[]) => () => void
+  /** Committed structured filters; TableFilter reflects and drives them. */
   appliedFilters: ComputedRef<TableAppliedFilter[]>
   /** Replace the committed filter set (Apply); the DOM event that committed it comes first. */
   applyFilters: (event: Event, filters: TableAppliedFilter[]) => void
+  /** Replace the committed filter set without an event (a bound TableFilter v-model). */
+  setFilters?: (filters: TableAppliedFilter[]) => void
   /** Remove one committed filter; the DOM event that removed it comes first. */
   removeFilter: (event: Event, filter: TableAppliedFilter) => void
   /** Clear structured filters and the global search text. */
   clearFilters: () => void
   /** Filter the user asked to edit; TableFilter watches this to reopen the menu at its field. */
-  editingFilter: Ref<TableAppliedFilter | null>
-  /** Request editing a committed filter (sets `editingFilter`). */
-  editFilter: (filter: TableAppliedFilter) => void
+  editingFilter: Readonly<Ref<TableAppliedFilter | null>>
+  /** Request editing a committed filter (sets `editingFilter`); null clears the request. */
+  editFilter: (filter: TableAppliedFilter | null) => void
   /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`); the triggering DOM event is emitted first. */
   exportCsv: (
     options?: {
@@ -171,7 +175,11 @@ export interface TableColumn {
   frozen?: 'start' | 'end'
   /** Fixed width (px) — needed for a frozen column that precedes another frozen column on the same edge, so sticky offsets can be summed. */
   width?: number
-  /** Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves nothing it is not using and never clips a chip. `width` wins when both are set. */
+  /**
+   * Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with
+   * the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves
+   * nothing it is not using and never clips a chip. `width` wins when both are set.
+   */
   minWidth?: number
   /** Cell alignment. */
   align?: 'start' | 'center' | 'end'

@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import { toast } from '@aziontech/webkit/toast'
   import { onScopeDispose, ref } from 'vue'
@@ -40,11 +41,14 @@
     <Item variant="outline">
       <Item.Content>
         <Item.Title>Delete resource</Item.Title>
-        <Item.Description>
+        <p
+          data-slot="item-description"
+          class="text-balance text-body-sm text-(--text-muted)"
+        >
           Permanently removes
           <span class="text-label-code-sm">{{ resource.name }}</span> and all associated settings.
           This cannot be undone.
-        </Item.Description>
+        </p>
       </Item.Content>
 
       <Item.Actions>
@@ -70,10 +74,10 @@
             <Alert severity="warning">
               Once confirmed, this action can't be reversed. The resource will be deleted, along
               with all associated settings or instances. Check the
-              <a
+              <Link
                 href="https://example.com/docs"
-                class="text-link"
-                >Help Center</a
+                inline
+                >Help Center</Link
               >
               for more details.
             </Alert>

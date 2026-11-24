@@ -28,7 +28,10 @@ export interface UseColorModeReturn {
 
 export const COLOR_MODE_STORAGE_KEY = 'webkit-color-mode'
 
-export const colorModeScript = `(function(){var d=document.documentElement,m;try{m=localStorage.getItem('${COLOR_MODE_STORAGE_KEY}')}catch(e){}d.setAttribute('data-theme',m==='light'||m==='dark'?m:'system')})()`
+export const colorModeScript =
+  `(function(){var d=document.documentElement,m;` +
+  `try{m=localStorage.getItem('${COLOR_MODE_STORAGE_KEY}')}catch(e){}` +
+  `d.setAttribute('data-theme',m==='light'||m==='dark'?m:'system')})()`
 
 const DARK_QUERY = '(prefers-color-scheme: dark)'
 

@@ -3,7 +3,6 @@
 
   import Tag from '../../../content/tag/tag.vue'
   import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
-  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import type { DiagramNode } from '../types'
 
   defineOptions({ name: 'DiagramNode', inheritAttrs: false })
@@ -20,6 +19,35 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'diagram-node')
 
   const markStyle = (url: string) => ({ maskImage: `url("${url}")` })
+
+  const PILL_CLASS =
+    'relative inline-flex h-(--size-7) items-center gap-(--spacing-2xs) rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) ' +
+    'text-label-sm whitespace-nowrap text-(--text-default) shadow-(--shadow-xs) ' +
+    'data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] ' +
+    "data-[lit]:before:content-[''] " +
+    'data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]'
+
+  const TILE_CLASS =
+    'flex size-(--size-14) items-center justify-center rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) text-(--text-muted) ' +
+    'data-[lit]:border-(--primary) data-[lit]:text-(--text-default)'
+
+  const APP_CLASS =
+    'flex w-full max-w-(--size-72) flex-col gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) ' +
+    '[mask-image:linear-gradient(to_bottom,black_60%,transparent)] @5xl:w-(--size-44)'
+
+  const ITEM_CLASS =
+    'relative flex w-full max-w-(--size-72) items-center gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) ' +
+    'px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-xs) @5xl:w-(--size-72) ' +
+    'data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] ' +
+    "data-[lit]:before:content-[''] " +
+    'data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]'
+
+  const CARD_CLASS =
+    'relative flex w-full max-w-(--size-72) flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) ' +
+    '@5xl:w-(--size-60) ' +
+    'data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] ' +
+    "data-[lit]:before:content-[''] " +
+    'data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]'
 </script>
 
 <template>
@@ -32,7 +60,7 @@
       :data-testid="testId"
       :data-diagram-node="node.key"
       :data-lit="node.lit || null"
-      class="relative inline-flex h-(--size-7) items-center gap-(--spacing-2xs) rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm whitespace-nowrap text-(--text-default) shadow-(--shadow-xs) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
+      :class="PILL_CLASS"
     >
       <i
         v-if="node.icon"
@@ -43,9 +71,9 @@
     </span>
   </div>
 
-  <Tooltip
+  <span
     v-else-if="node.type === 'tile'"
-    :content="node.title"
+    class="flex w-(--size-20) flex-col items-center gap-(--spacing-2xs)"
   >
     <RegistrationFrame
       borders="none"
@@ -56,7 +84,7 @@
         :data-testid="testId"
         :data-diagram-node="node.key"
         :data-lit="node.lit || null"
-        class="flex size-(--size-14) items-center justify-center rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) text-(--text-muted) data-[lit]:border-(--primary) data-[lit]:text-(--text-default)"
+        :class="TILE_CLASS"
       >
         <i
           :class="node.icon"
@@ -64,14 +92,19 @@
         />
       </span>
     </RegistrationFrame>
-  </Tooltip>
+    <span
+      :data-testid="`${testId}__label`"
+      class="text-center text-label-sm text-balance text-(--text-muted)"
+      >{{ node.title }}</span
+    >
+  </span>
 
   <div
     v-else-if="node.type === 'app'"
     v-bind="$attrs"
     :data-testid="testId"
     :data-diagram-node="node.key"
-    class="flex w-full max-w-(--size-72) flex-col gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) [mask-image:linear-gradient(to_bottom,black_60%,transparent)] @5xl:w-(--size-44)"
+    :class="APP_CLASS"
   >
     <span class="flex gap-(--spacing-2xs)">
       <span class="size-(--size-2) rounded-full bg-(--bg-placeholder)" />
@@ -96,7 +129,7 @@
     :data-testid="testId"
     :data-diagram-node="node.key"
     :data-lit="node.lit || null"
-    class="relative flex w-full max-w-(--size-72) items-center gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-xs) @5xl:w-(--size-72) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
+    :class="ITEM_CLASS"
   >
     <span
       v-if="node.mark"
@@ -140,7 +173,7 @@
     :data-testid="testId"
     :data-diagram-node="node.key"
     :data-lit="node.lit || null"
-    class="relative flex w-full max-w-(--size-72) flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) @5xl:w-(--size-60) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
+    :class="CARD_CLASS"
   >
     <span
       class="flex w-full min-w-0 items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"

@@ -1,14 +1,18 @@
 <script setup lang="ts">
-  import { computed, nextTick, onBeforeUpdate, provide, ref, useAttrs, watch } from 'vue'
+  import { computed, nextTick, onBeforeUpdate, provide, ref, useAttrs } from 'vue'
 
-  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
+  import { useTreeEvents } from './composables/use-tree-events'
   import { useTreeNavigation } from './composables/use-tree-navigation'
+  import { useTreeRename } from './composables/use-tree-rename'
+  import { useTreeRows } from './composables/use-tree-rows'
+  import { type TreeSelectionMode, useTreeSelection } from './composables/use-tree-selection'
   import { TreeInjectionKey } from './injection-key'
+  import { rowElement } from './lib/tree-dom'
+  import { ROW_HEIGHTS, SKELETON_WIDTHS } from './lib/tree-rows'
   import TreeNode from './parts/tree-node.vue'
 
   defineOptions({ name: 'Tree', inheritAttrs: false })
@@ -102,17 +106,14 @@
   const ActionsOutlet = (outlet: { scope: { item: TreeItem; level: number } }): unknown =>
     slots.actions?.(outlet.scope)
 
-  const mode = computed(() => {
+  const mode = computed<TreeSelectionMode>(() => {
     if (props.selectable === 'multiple') return 'multiple'
     return props.selectable ? 'single' : 'none'
   })
 
-  const selectedSet = computed(() => new Set(mode.value === 'multiple' ? selectedKeys.value : []))
-
   const activeSelection = computed(() => {
-    if (mode.value === 'single') return selectedKey.value
-    if (mode.value === 'multiple') return selectedKeys.value[0] ?? ''
-    return ''
+    if (mode.value === 'none') return ''
+    return mode.value === 'single' ? selectedKey.value : (selectedKeys.value[0] ?? '')
   })
 
   const navigation = useTreeNavigation<TreeItem>({
@@ -120,33 +121,14 @@
     expanded: () => openKeys.value,
     selected: activeSelection
   })
+  const selection = useTreeSelection(mode, selectedKey, selectedKeys, navigation)
 
   const treeEl = ref<globalThis.HTMLElement | null>(null)
 
-  const FLAT_THRESHOLD = 300
-  const CHUNK_SIZE = 100
-  const ROW_HEIGHTS: Record<TreeSize, number> = { small: 24, medium: 32, large: 40 }
-
-  const rowHeight = computed(() => ROW_HEIGHTS[props.size] ?? ROW_HEIGHTS.medium)
-
-  const { split, observe, reveal } = useLazyChunks({
-    get rowHeight() {
-      return rowHeight.value
-    },
-    chunkSize: CHUNK_SIZE,
-    threshold: FLAT_THRESHOLD
-  })
-
-  const SKELETON_WIDTHS = ['100%', '80%', '64%', '48%', '32%']
-
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tree')
-
   const isEmpty = computed(() => !props.loading && props.items.length === 0)
-
   const selectionOn = computed(() => mode.value !== 'none')
-
   const multiple = computed(() => mode.value === 'multiple')
-
   const editable = computed(() => props.editable)
 
   const grid = ref<boolean>(Boolean(slots.actions))
@@ -154,157 +136,33 @@
     grid.value = Boolean(slots.actions)
   })
 
-  const renamingId = ref('')
-
-  const anchorId = ref('')
-
   const expandedSet = computed(() => new Set(openKeys.value))
+  const rowHeight = computed(() => ROW_HEIGHTS[props.size] ?? ROW_HEIGHTS.medium)
 
   function isExpanded(id: string) {
     return navigation.isParent(id) && expandedSet.value.has(id)
   }
 
-  type TreeRow = { item: TreeItem; level: number; posinset: number; setsize: number }
-  type TreeEntry =
-    | (TreeRow & { key: string; placeholder?: undefined })
-    | { key: number; placeholder: true; chunk: number; height: number }
-
-  const flat = computed(() => navigation.count.value > FLAT_THRESHOLD)
-
-  const flatRows = computed<TreeRow[]>(() => {
-    if (!flat.value) return []
-    const open = expandedSet.value
-    const rows: TreeRow[] = []
-    const walk = (nodes: TreeItem[], level: number) => {
-      nodes.forEach((item, position) => {
-        rows.push({ item, level, posinset: position + 1, setsize: nodes.length })
-        const children = item.children ?? []
-        const parent = item.lazy === true || children.length > 0
-        if (parent && open.has(item.id) && !item.loading) walk(children, level + 1)
-      })
-    }
-    walk(props.items, 1)
-    return rows
-  })
-
-  const rowIndex = computed(
-    () => new Map(flatRows.value.map((row, position) => [row.item.id, position]))
+  const { flat, entries, revealRow, observe } = useTreeRows(
+    () => props.items,
+    expandedSet,
+    rowHeight,
+    navigation
   )
-
-  const entries = computed<TreeEntry[]>(() => {
-    if (!flat.value) {
-      return props.items.map((item, position) => ({
-        key: item.id,
-        item,
-        level: 1,
-        posinset: position + 1,
-        setsize: props.items.length
-      }))
-    }
-    return split(flatRows.value).flatMap<TreeEntry>((chunk) =>
-      chunk.mounted
-        ? chunk.items.map((row) => ({ ...row, key: row.item.id }))
-        : [
-            {
-              key: -1 - chunk.index,
-              placeholder: true,
-              chunk: chunk.index,
-              height: chunk.estimatedHeight
-            }
-          ]
-    )
-  })
-
-  function revealRow(id: string) {
-    const position = rowIndex.value.get(id)
-    if (position === undefined) return false
-    reveal([Math.floor(position / CHUNK_SIZE)])
-    return true
-  }
-
-  watch(
-    [() => flatRows.value.length, () => navigation.tabStop.value],
-    ([count], previous) => {
-      const shown = previous?.[0] ?? 0
-      if (shown > 0 && shown <= FLAT_THRESHOLD && count > FLAT_THRESHOLD) {
-        reveal(Array.from({ length: Math.ceil(shown / CHUNK_SIZE) }, (_, chunk) => chunk))
-      }
-      revealRow(navigation.tabStop.value)
-    },
-    { immediate: true }
-  )
-
-  function isSelected(id: string) {
-    if (mode.value === 'multiple') return selectedSet.value.has(id)
-    return mode.value === 'single' && selectedKey.value !== '' && selectedKey.value === id
-  }
-
-  function isEnabled(id: string) {
-    const entry = navigation.entry(id)
-    return Boolean(entry && !entry.item.disabled)
-  }
-
-  function writeSelection(ids: string[]) {
-    const next = [...new Set(ids)]
-    const same =
-      next.length === selectedKeys.value.length && next.every((id) => selectedSet.value.has(id))
-    if (!same) selectedKeys.value = next
-  }
-
-  function rangeTo(id: string) {
-    const visible = navigation.visible.value
-    const from = visible.indexOf(anchorId.value || id)
-    const to = visible.indexOf(id)
-    if (from === -1 || to === -1) return [id]
-    const [start, end] = from < to ? [from, to] : [to, from]
-    return visible.slice(start, end + 1).filter(isEnabled)
-  }
-
-  function toggleSelected(id: string) {
-    anchorId.value = id
-    writeSelection(
-      selectedSet.value.has(id)
-        ? selectedKeys.value.filter((key) => key !== id)
-        : [...selectedKeys.value, id]
-    )
-  }
-
-  function selectMultiple(event: MouseEvent | KeyboardEvent, id: string) {
-    if (event.shiftKey) {
-      writeSelection([
-        ...(event.ctrlKey || event.metaKey ? selectedKeys.value : []),
-        ...rangeTo(id)
-      ])
-      return
-    }
-    if (event instanceof MouseEvent && (event.ctrlKey || event.metaKey)) {
-      toggleSelected(id)
-      return
-    }
-    anchorId.value = id
-    writeSelection([id])
-  }
 
   function setExpanded(id: string, open: boolean) {
     if (!navigation.isParent(id) || isExpanded(id) === open) return
     openKeys.value = open ? [...openKeys.value, id] : openKeys.value.filter((key) => key !== id)
   }
 
-  function toggle(id: string) {
-    setExpanded(id, !isExpanded(id))
-  }
-
   function withRow(id: string, run: (row: globalThis.HTMLElement) => void) {
-    const target = rowElement(id)
-    if (target) {
-      run(target)
-      return
-    }
-    if (!revealRow(id)) return
-    nextTick(() => {
-      const mounted = rowElement(id)
-      if (mounted) run(mounted)
-    })
+    const target = rowElement(treeEl.value, id)
+    if (target) run(target)
+    else if (revealRow(id))
+      nextTick(() => {
+        const mounted = rowElement(treeEl.value, id)
+        if (mounted) run(mounted)
+      })
   }
 
   function focusItem(id: string) {
@@ -319,272 +177,54 @@
     const entry = navigation.entry(id)
     if (!entry || entry.item.disabled) return
     if (mode.value === 'single' && selectedKey.value !== id) selectedKey.value = id
-    if (mode.value === 'multiple') selectMultiple(event, id)
+    if (mode.value === 'multiple') selection.selectMultiple(event, id)
     emit('item-click', event, entry.item)
   }
 
-  function startRename(id: string) {
-    const entry = navigation.entry(id)
-    if (!props.editable || !entry || entry.item.disabled) return
-    renamingId.value = id
-  }
+  const rename = useTreeRename(
+    () => props.editable,
+    navigation,
+    focusItem,
+    (event, payload) => emit('rename', event, payload)
+  )
 
-  function endRename(id: string, refocus: boolean) {
-    if (renamingId.value !== id) return
-    renamingId.value = ''
-    if (refocus) nextTick(() => focusItem(id))
-  }
-
-  function commitRename(event: KeyboardEvent | FocusEvent, id: string, value: string) {
-    const entry = navigation.entry(id)
-    const label = value.trim()
-    endRename(id, event.type === 'keydown')
-    if (!entry || !label || label === entry.item.label) return
-    emit('rename', event, { item: entry.item, label })
-  }
-
-  function cancelRename(id: string) {
-    endRename(id, true)
-  }
-
-  function extendTo(id: string) {
-    if (!id) return
-    focusItem(id)
-    if (!isEnabled(id)) return
-    writeSelection([...selectedKeys.value, id])
-  }
-
-  function selectAll() {
-    anchorId.value = navigation.visible.value[0] ?? ''
-    writeSelection(navigation.visible.value.filter(isEnabled))
-  }
-
-  function rowElement(id: string) {
-    const nodes = treeEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-tree-focus]') ?? []
-    return Array.from(nodes).find((node) => node.dataset['itemId'] === id) ?? null
-  }
-
-  function treeitemOf(target: EventTarget | null) {
-    if (!(target instanceof globalThis.HTMLElement)) return ''
-    if (!target.hasAttribute('data-tree-focus')) return ''
-    return target.dataset['itemId'] ?? ''
-  }
-
-  function rowOf(target: EventTarget | null) {
-    if (!(target instanceof globalThis.Element)) return null
-    return target.closest<globalThis.HTMLElement>('[data-tree-focus]')
-  }
-
-  const CELL_CONTROLS =
-    'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]'
-
-  function cellsOf(row: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
-    if (!row) return []
-    const label = row.querySelector<globalThis.HTMLElement>('[data-slot="tree-cell"]')
-    const actions = row.querySelector<globalThis.HTMLElement>('[data-slot="tree-actions"]')
-    const controls = actions
-      ? Array.from(actions.querySelectorAll<globalThis.HTMLElement>(CELL_CONTROLS))
-      : []
-    return [...(label ? [label] : []), ...new Set(controls)]
-  }
-
-  function onFocusin(event: FocusEvent) {
-    const id =
-      treeitemOf(event.target) || (grid.value ? (rowOf(event.target)?.dataset['itemId'] ?? '') : '')
-    if (id) navigation.setFocused(id)
-  }
-
-  function onCellKeydown(event: KeyboardEvent) {
-    const row = rowOf(event.target)
-    const id = row?.dataset['itemId'] ?? ''
-    if (!row || !id) return
-    const cells = cellsOf(row)
-    const at = cells.findIndex(
-      (cell) => cell === event.target || cell.contains(event.target as Node)
-    )
-    if (at === -1) return
-    const moveRow = (offset: 1 | -1) => {
-      const next = navigation.sibling(id, offset)
-      if (!next) return
-      withRow(next, (nextRow) => {
-        const target = cellsOf(nextRow)
-        if (target.length === 0) return
-        navigation.setFocused(next)
-        target[Math.min(at, target.length - 1)]?.focus()
-      })
-    }
-    switch (logicalArrowKey(event.key, eventDirection(event))) {
-      case 'ArrowRight':
-        cells[at + 1]?.focus()
-        break
-      case 'ArrowLeft':
-        if (at > 0) cells[at - 1]?.focus()
-        else focusItem(id)
-        break
-      case 'ArrowDown':
-        moveRow(1)
-        break
-      case 'ArrowUp':
-        moveRow(-1)
-        break
-      case 'Escape':
-        focusItem(id)
-        break
-      case 'Enter':
-        if (at !== 0) return
-        activate(event, id)
-        break
-      default:
-        return
-    }
-    event.preventDefault()
-  }
-
-  function onClick(event: MouseEvent) {
-    const target = event.target
-    if (!(target instanceof globalThis.Element)) return
-    if (
-      target.closest(
-        '[data-slot="tree-toggle"], [data-slot="tree-actions"], [data-slot="tree-rename"]'
-      )
-    )
-      return
-    const row = target.closest('[data-slot="tree-row"]')
-    const id = row?.closest<globalThis.HTMLElement>('[data-item-id]')?.dataset['itemId'] ?? ''
-    if (!id) return
-    focusItem(id)
-    activate(event, id)
-  }
-
-  function onMousedown(event: MouseEvent) {
-    if (!event.shiftKey && !event.ctrlKey && !event.metaKey) return
-    const target = event.target
-    if (!(target instanceof globalThis.Element)) return
-    if (target.closest('[data-slot="tree-actions"], [data-slot="tree-rename"]')) return
-    if (target.closest('[data-slot="tree-row"]')) event.preventDefault()
-  }
-
-  function onDblclick(event: MouseEvent) {
-    const target = event.target
-    if (!(target instanceof globalThis.Element)) return
-    if (
-      target.closest(
-        '[data-slot="tree-toggle"], [data-slot="tree-actions"], [data-slot="tree-rename"]'
-      )
-    )
-      return
-    const row = target.closest('[data-slot="tree-row"]')
-    const entry = navigation.entry(
-      row?.closest<globalThis.HTMLElement>('[data-item-id]')?.dataset['itemId'] ?? ''
-    )
-    if (!entry || entry.item.disabled) return
-    emit('item-double-click', event, entry.item)
-  }
-
-  function onKeydown(event: KeyboardEvent) {
-    const id = treeitemOf(event.target)
-    if (!id) {
-      if (grid.value) onCellKeydown(event)
-      return
-    }
-    const parent = navigation.isParent(id)
-    const extend = multiple.value && event.shiftKey
-    if (multiple.value && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') {
-      selectAll()
-      event.preventDefault()
-      return
-    }
-    switch (logicalArrowKey(event.key, eventDirection(event))) {
-      case 'ArrowDown':
-        if (extend) extendTo(navigation.sibling(id, 1))
-        else focusItem(navigation.sibling(id, 1))
-        break
-      case 'ArrowUp':
-        if (extend) extendTo(navigation.sibling(id, -1))
-        else focusItem(navigation.sibling(id, -1))
-        break
-      case 'ArrowRight':
-        if (parent && !isExpanded(id)) setExpanded(id, true)
-        else if (grid.value) cellsOf(rowElement(id))[0]?.focus()
-        else if (parent) focusItem(navigation.firstChildOf(id))
-        break
-      case 'ArrowLeft':
-        if (parent && isExpanded(id)) setExpanded(id, false)
-        else focusItem(navigation.parentOf(id))
-        break
-      case 'Home':
-        focusItem(navigation.first())
-        break
-      case 'End':
-        focusItem(navigation.last())
-        break
-      case 'F2':
-        if (!props.editable) return
-        startRename(id)
-        break
-      case ' ':
-        if (multiple.value) {
-          if (isEnabled(id)) toggleSelected(id)
-          break
-        }
-        activate(event, id)
-        break
-      case 'Enter':
-        activate(event, id)
-        break
-      default:
-        if (!typeahead(event, id)) return
-    }
-    event.preventDefault()
-  }
-
-  let typed = ''
-  let typedAt = 0
-
-  function typeahead(event: KeyboardEvent, fromId: string): boolean {
-    if (
-      event.key.length !== 1 ||
-      event.key === ' ' ||
-      event.ctrlKey ||
-      event.metaKey ||
-      event.altKey
-    )
-      return false
-    typed = event.timeStamp - typedAt > 500 ? event.key : `${typed}${event.key}`
-    typedAt = event.timeStamp
-    const query = typed.toLocaleLowerCase()
-    const ids = navigation.visible.value
-    const position = ids.indexOf(fromId)
-    const start = typed.length === 1 ? position + 1 : Math.max(position, 0)
-    const ordered = [...ids.slice(start), ...ids.slice(0, start)]
-    const match = ordered.find((candidate) =>
-      (navigation.entry(candidate)?.item.label ?? '').toLocaleLowerCase().startsWith(query)
-    )
-    if (!match) return false
-    focusItem(match)
-    return true
-  }
+  const { onKeydown, onFocusin, onClick, onMousedown, onDblclick } = useTreeEvents({
+    navigation,
+    selection,
+    tree: () => treeEl.value,
+    grid: () => grid.value,
+    multiple: () => multiple.value,
+    selectable: () => selectionOn.value,
+    editable: () => props.editable,
+    isExpanded,
+    setExpanded,
+    focusItem,
+    withRow,
+    activate,
+    startRename: rename.start,
+    doubleClick: (event, item) => emit('item-double-click', event, item)
+  })
 
   provide(TreeInjectionKey, {
     testId,
     grid,
     selectable: selectionOn,
     editable,
-    renamingId,
+    renamingId: rename.renamingId,
     loadingLabel: computed(() => t('tree.loadingChildren')),
     renameLabel: (label: string) => t('tree.renameLabel', { label }),
-    commitRename,
-    cancelRename,
+    commitRename: rename.commit,
+    cancelRename: rename.cancel,
     tabStop: navigation.tabStop,
     isExpanded,
-    isSelected,
-    toggle,
+    isSelected: selection.isSelected,
+    toggle: (id: string) => setExpanded(id, !isExpanded(id)),
     focusItem
   })
 
   defineExpose({
     /** Opens the in-place rename field on the node with this id, when editable. */
-    startRename
+    startRename: rename.start
   })
 </script>
 

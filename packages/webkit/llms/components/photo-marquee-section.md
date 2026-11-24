@@ -80,12 +80,16 @@ No built-in strings: every visible and announced text is a prop from the page JS
 <script setup>
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import PhotoMarqueeSection from '@aziontech/webkit/photo-marquee-section'
+
+  const DESCRIPTION =
+    'The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across ' +
+    "countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
 </script>
 
 <template>
   <PhotoMarqueeSection
     title="Work at Azion"
-    description="The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
+    :description="DESCRIPTION"
     description-width="wide"
     aria-label="Azion offices"
     :photos="[

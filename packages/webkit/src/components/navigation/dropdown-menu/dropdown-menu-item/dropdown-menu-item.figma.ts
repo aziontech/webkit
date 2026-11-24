@@ -32,7 +32,9 @@ const value = label
   .replace(/[^a-z0-9]+/g, '-')
   .replace(/^-|-$/g, '')
 
-const attrs = figma.code` value="${value || 'option'}" label="${label}"${showCommand && !showRight ? figma.code` command="${command}"` : ''}${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}`
+const commandAttr = showCommand && !showRight ? figma.code` command="${command}"` : ''
+
+const attrs = figma.code` value="${value || 'option'}" label="${label}"${commandAttr}${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}`
 
 const option =
   showIcon || showRight

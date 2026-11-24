@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-alerts")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -99,7 +99,8 @@ Ranks alert types by count, largest first, labelled `Alerts by type`.
 
 Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert.
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
-Figures use tabular numbers.
+Figures use tabular numbers. Both tables set `stackable`: on a phone each row becomes a card of
+label and value lines, so the deciding figure never sits off-screen.
 
 ### M. Alert status — `TableCellStatus`, `Tag` (required)
 
@@ -108,7 +109,7 @@ so it is a `TableCellStatus` (one semantic `Tag`), separate from severity. The a
 
 ### N. Load failure — `Alert` (required)
 
-When `error` is set, every region keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <region>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -124,13 +125,13 @@ The block takes its figures and records through props and emits every action; it
 | `entities`       | `AlertsDashboardEntity[]`     | The Highest risk rows. `[]` shows No entities at risk yet.                                                                                     |
 | `alerts`         | `AlertsDashboardAlert[]`      | The Open alerts rows. `[]` shows No open alerts.                                                                                               |
 | `loading`        | `boolean`                     | The period is loading; every region shows its skeleton.                                                                                        |
-| `error`          | `string`                      | Why the period could not load; each region shows `Couldn't load <region>.` and this message in a danger `Alert` with Retry.                    |
+| `error`          | `string`                      | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                 |
 | `v-model:period` | `string`                      | The selected period (`7d`, `30d`, `90d`); default `30d`. Refetch when it changes.                                                              |
 
-| Event           | Payload   | When                               |
-| --------------- | --------- | ---------------------------------- |
-| `retry`         | `(event)` | Retry in any region's error alert. |
-| `update:period` | `(value)` | The reader picked another period.  |
+| Event           | Payload   | When                              |
+| --------------- | --------- | --------------------------------- |
+| `retry`         | `(event)` | Retry in the page's error alert.  |
+| `update:period` | `(value)` | The reader picked another period. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -196,7 +197,7 @@ Then delete `sample.ts` and its import.
 - Default: the populated page for the selected period (`v-model:period`).
 - Loading: `loading` is set; tiles, chart, bar list and both tables render their own `Skeleton`; Open by severity holds Skeleton rows.
 - Empty: a period with no alerts (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta, and every region keeps its box with an `EmptyState` that says why and what to do next.
-- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -210,7 +211,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the period loads, the tiles, the chart, the bar list and both tables render their own Skeleton, and Open by severity holds Skeleton rows, so nothing reflows when data arrives.
 - `Empty` — A period with no alerts. The tiles show a dash with no delta, and every region keeps its box with an EmptyState that says why it is empty and what to do next.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-alerts", { variant })`, or the file under `blocks/dashboard/dashboard-alerts/variants/`.
 
@@ -219,23 +220,21 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ```vue
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Card from '@aziontech/webkit/card'
+  import type { BarListItem } from '@aziontech/webkit/bar-list'
+  import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import type { SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
+  import AlertsCard from './parts/alerts-card.vue'
+  import EntityTable from './parts/entity-table.vue'
+  import OpenAlertTable from './parts/open-alert-table.vue'
+  import OpenBySeverity from './parts/open-by-severity.vue'
   import {
     sampleAlerts,
     sampleEntities,
@@ -409,79 +408,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const types = computed(() => props.types ?? (blocked.value ? [] : sampleTypes))
   const entities = computed(() => props.entities ?? (blocked.value ? [] : sampleEntities))
   const alerts = computed(() => props.alerts ?? (blocked.value ? [] : sampleAlerts))
-  const openTotal = computed(() => openByLevel.value.reduce((sum, level) => sum + level.count, 0))
-  const failed = (region: string) => `Couldn't load ${region}. ${props.error}`
-
-  const entityColumns: TableColumn[] = [
-    {
-      accessorKey: 'name',
-      header: 'Entity',
-      align: 'start',
-      principal: true,
-      grow: 2
-    },
-    {
-      accessorKey: 'type',
-      header: 'Type',
-      align: 'start',
-      minWidth: 136
-    },
-    {
-      accessorKey: 'score',
-      header: 'Risk score',
-      align: 'start',
-      sortable: true,
-      minWidth: 160
-    },
-    {
-      accessorKey: 'alerts',
-      header: 'Open alerts',
-      align: 'end',
-      sortable: true,
-      minWidth: 104
-    }
-  ]
-
-  const alertColumns: TableColumn[] = [
-    {
-      accessorKey: 'rank',
-      id: 'severity',
-      header: 'Severity',
-      align: 'start',
-      sortable: true,
-      minWidth: 120
-    },
-    {
-      accessorKey: 'title',
-      header: 'Alert',
-      align: 'start',
-      principal: true,
-      grow: 2
-    },
-    {
-      accessorKey: 'entity',
-      header: 'Entity',
-      align: 'start',
-      minWidth: 160
-    },
-    {
-      accessorKey: 'opened',
-      header: 'Opened',
-      align: 'start',
-      minWidth: 136
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      align: 'start',
-      minWidth: 128
-    }
-  ]
-
-  const statusSeverity: Record<AlertsDashboardAlertStatus, TagSeverity> = {
-    Open: 'neutral',
-    Investigating: 'info'
-  }
 
   const { formatNumber } = useLocale()
   const fixed = (value: number, digits: number) =>
@@ -494,6 +420,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     count: (value) => compact(value),
     percentage: (value) => `${fixed(value, 0)}%`
   }
+
+  const retry = (event: MouseEvent) => emit('retry', event)
 </script>
 
 <template>
@@ -527,6 +455,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </div>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the alerts. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-alerts__error"
+        @action="retry"
+      />
 
       <section aria-label="Summary">
         <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
@@ -556,240 +492,83 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       <div
         class="grid grid-cols-1 items-stretch gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
-        <ChartCard :span="8">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Alerts per day</ChartCard.Title>
-              <Hint content="Alerts raised each day, stacked by severity level." />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('alerts per day')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
+        <AlertsCard
+          :span="8"
+          title="Alerts per day"
+          hint="Alerts raised each day, stacked by severity level."
+          region="alerts per day"
+          :error="error"
+        >
+          <Chart
+            v-model:active-index="activeIndex"
+            :series="series"
+            :labels="labels"
+            :format-value="formatters.count"
+            :height="240"
+            empty-title="No alerts in this period"
+            :empty-description="`Nothing was raised in the ${periodPhrase}. Select a longer period.`"
+            :loading="loading"
+          >
+            <Chart.Grid />
+            <Chart.Axis type="y" />
+            <Chart.Axis
+              type="x"
+              :ticks="6"
             />
-            <Chart
-              v-else
-              v-model:active-index="activeIndex"
-              :series="series"
-              :labels="labels"
-              :format-value="formatters.count"
-              :height="240"
-              empty-title="No alerts in this period"
-              :empty-description="`Nothing was raised in the ${periodPhrase}. Select a longer period.`"
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis
-                type="x"
-                :ticks="6"
-              />
-              <Chart.Bar stacked />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+            <Chart.Bar stacked />
+            <Chart.Crosshair />
+            <Chart.Tooltip />
+            <Chart.Legend />
+          </Chart>
+        </AlertsCard>
 
-        <div class="lg:col-span-4">
-          <Card title="Open by severity">
-            <template #default>
-              <Alert
-                v-if="error"
-                severity="danger"
-                :label="failed('open alerts by severity')"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-              <ul
-                v-else-if="loading"
-                aria-busy="true"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="index in 5"
-                  :key="index"
-                  class="flex items-center justify-between gap-(--spacing-sm)"
-                >
-                  <Skeleton
-                    width="30%"
-                    height="1.25rem"
-                  />
-                  <Skeleton
-                    width="20%"
-                    height="1rem"
-                  />
-                </li>
-              </ul>
-              <ul
-                v-else-if="openByLevel.length"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="level in openByLevel"
-                  :key="level.id"
-                  class="flex items-center justify-between gap-(--spacing-sm)"
-                >
-                  <SeverityTag :severity="level.id" />
-                  <span class="flex items-baseline gap-(--spacing-xs) tabular-nums">
-                    <span class="text-body-md text-(--text-default)">{{ level.count }}</span>
-                    <span class="w-10 text-end text-body-sm text-(--text-muted)"
-                      >{{ Math.round((level.count / openTotal) * 100) }}%</span
-                    >
-                  </span>
-                </li>
-              </ul>
-              <EmptyState
-                v-else
-                size="small"
-                icon="az az-circle-check"
-                title="No open alerts"
-                description="Every alert raised in the period has been closed."
-              />
-            </template>
-          </Card>
-        </div>
+        <OpenBySeverity
+          :levels="openByLevel"
+          :loading="loading"
+          :error="error"
+        />
 
-        <ChartCard :span="4">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>By type</ChartCard.Title>
-              <Hint
-                content="Alerts raised in the period, by the kind of behavior that raised them."
-              />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('alerts by type')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <BarList
-              v-else
-              :items="types"
-              :format-value="formatters.count"
-              empty-title="No alerts in this period"
-              :loading="loading"
-              aria-label="Alerts by type"
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <AlertsCard
+          :span="4"
+          title="By type"
+          hint="Alerts raised in the period, by the kind of behavior that raised them."
+          region="alerts by type"
+          :error="error"
+        >
+          <BarList
+            :items="types"
+            :format-value="formatters.count"
+            empty-title="No alerts in this period"
+            :loading="loading"
+            aria-label="Alerts by type"
+          />
+        </AlertsCard>
 
-        <ChartCard :span="8">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Highest risk</ChartCard.Title>
-              <Hint
-                content="The entities with the highest risk score, from the severity and number of their open alerts."
-              />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('highest risk')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <DataTable
-              v-else-if="loading || entities.length"
-              :data="entities"
-              :columns="entityColumns"
-              row-key="id"
-              sortable
-              density="compact"
-              bordered
-              :loading="loading"
-            >
-              <template #cell-type="{ row }">
-                <Tag
-                  :label="row.type"
-                  severity="neutral"
-                  size="small"
-                />
-              </template>
-              <template #cell-score="{ row }">
-                <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-                  <span class="w-8 shrink-0 text-end tabular-nums">{{ row.score }}</span>
-                  <SeverityTag
-                    :severity="row.level"
-                    size="small"
-                  />
-                </div>
-              </template>
-              <template #cell-alerts="{ row }">
-                <span class="tabular-nums">{{ row.alerts }}</span>
-              </template>
-            </DataTable>
-            <EmptyState
-              v-else
-              size="small"
-              icon="az az-users"
-              title="No entities at risk yet"
-              description="Entities appear here once an alert names them."
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <AlertsCard
+          :span="8"
+          title="Highest risk"
+          hint="The entities with the highest risk score, from the severity and number of their open alerts."
+          region="highest risk"
+          :error="error"
+        >
+          <EntityTable
+            :entities="entities"
+            :loading="loading"
+          />
+        </AlertsCard>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Open alerts</ChartCard.Title>
-              <Hint content="Every open alert, most severe first." />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="failed('open alerts')"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <DataTable
-              v-else-if="loading || alerts.length"
-              :data="alerts"
-              :columns="alertColumns"
-              row-key="id"
-              sortable
-              paginated
-              :page-size="10"
-              :page-size-options="[10, 25, 50]"
-              density="compact"
-              bordered
-              :loading="loading"
-            >
-              <template #cell-severity="{ row }">
-                <SeverityTag
-                  :severity="row.level"
-                  size="small"
-                />
-              </template>
-              <template #cell-status="{ row }">
-                <TableCellStatus
-                  :label="row.status"
-                  :severity="statusSeverity[row.status]"
-                />
-              </template>
-            </DataTable>
-            <EmptyState
-              v-else
-              size="small"
-              icon="az az-bell"
-              title="No open alerts"
-              description="Alerts appear here when a detection rule matches. Select a longer period to see closed ones."
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <AlertsCard
+          :span="12"
+          title="Open alerts"
+          hint="Every open alert, most severe first."
+          region="open alerts"
+          :error="error"
+        >
+          <OpenAlertTable
+            :alerts="alerts"
+            :loading="loading"
+          />
+        </AlertsCard>
       </div>
     </div>
   </div>
@@ -1122,4 +901,335 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
     status: 'Open'
   }
 ]
+```
+
+## `parts/alerts-card.vue`
+
+```ts
+<script setup lang="ts">
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import Hint from '@aziontech/webkit/hint'
+
+  export interface AlertsCardProps {
+    /** Columns of the 12-column grid the card spans. */
+    span: number
+    /** The card title. */
+    title: string
+    /** One sentence on what the card shows. */
+    hint: string
+    /** The region name the danger alert reads. */
+    region: string
+    /** Why the period could not load; empty shows the content. */
+    error?: string
+  }
+
+  withDefaults(defineProps<AlertsCardProps>(), { error: '' })
+
+  defineSlots<{ default(): unknown }>()
+</script>
+
+<template>
+  <ChartCard :span="span">
+    <ChartCard.Header>
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+        <ChartCard.Title>{{ title }}</ChartCard.Title>
+        <Hint :content="hint" />
+      </span>
+    </ChartCard.Header>
+    <ChartCard.Content>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <slot v-else />
+    </ChartCard.Content>
+  </ChartCard>
+</template>
+```
+
+## `parts/entity-table.vue`
+
+```ts
+<script setup lang="ts">
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import SeverityTag from '@aziontech/webkit/severity-tag'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type { AlertsDashboardEntity } from '../dashboard-alerts.vue'
+
+  export interface EntityTableProps {
+    /** The entities with the highest risk score. */
+    entities: AlertsDashboardEntity[]
+    /** The period is loading. */
+    loading?: boolean
+  }
+
+  withDefaults(defineProps<EntityTableProps>(), { loading: false })
+
+  const entityColumns: TableColumn[] = [
+    {
+      accessorKey: 'name',
+      header: 'Entity',
+      align: 'start',
+      principal: true,
+      grow: 2
+    },
+    {
+      accessorKey: 'type',
+      header: 'Type',
+      align: 'start',
+      minWidth: 136
+    },
+    {
+      accessorKey: 'score',
+      header: 'Risk score',
+      align: 'start',
+      sortable: true,
+      minWidth: 160
+    },
+    {
+      accessorKey: 'alerts',
+      header: 'Open alerts',
+      align: 'end',
+      sortable: true,
+      minWidth: 104
+    }
+  ]
+</script>
+
+<template>
+  <DataTable
+    v-if="loading || entities.length"
+    :data="entities"
+    :columns="entityColumns"
+    row-key="id"
+    sortable
+    density="compact"
+    stackable
+    bordered
+    :loading="loading"
+  >
+    <template #cell-type="{ row }">
+      <Tag
+        :label="row.type"
+        severity="neutral"
+        size="small"
+      />
+    </template>
+    <template #cell-score="{ row }">
+      <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+        <span class="w-8 shrink-0 text-end tabular-nums">{{ row.score }}</span>
+        <SeverityTag
+          :severity="row.level"
+          size="small"
+        />
+      </div>
+    </template>
+    <template #cell-alerts="{ row }">
+      <span class="tabular-nums">{{ row.alerts }}</span>
+    </template>
+  </DataTable>
+  <EmptyState
+    v-else
+    size="small"
+    icon="az az-users"
+    title="No entities at risk yet"
+    description="Entities appear here once an alert names them."
+  />
+</template>
+```
+
+## `parts/open-alert-table.vue`
+
+```ts
+<script setup lang="ts">
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import SeverityTag from '@aziontech/webkit/severity-tag'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
+
+  import type { AlertsDashboardAlert, AlertsDashboardAlertStatus } from '../dashboard-alerts.vue'
+
+  export interface OpenAlertTableProps {
+    /** Every open alert, most severe first. */
+    alerts: AlertsDashboardAlert[]
+    /** The period is loading. */
+    loading?: boolean
+  }
+
+  withDefaults(defineProps<OpenAlertTableProps>(), { loading: false })
+
+  const alertColumns: TableColumn[] = [
+    {
+      accessorKey: 'rank',
+      id: 'severity',
+      header: 'Severity',
+      align: 'start',
+      sortable: true,
+      minWidth: 120
+    },
+    {
+      accessorKey: 'title',
+      header: 'Alert',
+      align: 'start',
+      principal: true,
+      grow: 2
+    },
+    {
+      accessorKey: 'entity',
+      header: 'Entity',
+      align: 'start',
+      minWidth: 160
+    },
+    {
+      accessorKey: 'opened',
+      header: 'Opened',
+      align: 'start',
+      minWidth: 136
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      align: 'start',
+      minWidth: 128
+    }
+  ]
+
+  const statusSeverity: Record<AlertsDashboardAlertStatus, TagSeverity> = {
+    Open: 'neutral',
+    Investigating: 'info'
+  }
+</script>
+
+<template>
+  <DataTable
+    v-if="loading || alerts.length"
+    :data="alerts"
+    :columns="alertColumns"
+    row-key="id"
+    sortable
+    density="compact"
+    stackable
+    bordered
+    :loading="loading"
+  >
+    <template #cell-severity="{ row }">
+      <SeverityTag
+        :severity="row.level"
+        size="small"
+      />
+    </template>
+    <template #cell-status="{ row }">
+      <TableCellStatus
+        :label="row.status"
+        :severity="statusSeverity[row.status]"
+      />
+    </template>
+    <template #footer>
+      <DataTablePagination
+        :page-size="10"
+        :page-size-options="[10, 25, 50]"
+      />
+    </template>
+  </DataTable>
+  <EmptyState
+    v-else
+    size="small"
+    icon="az az-bell"
+    title="No open alerts"
+    description="Alerts appear here when a detection rule matches. Select a longer period to see closed ones."
+  />
+</template>
+```
+
+## `parts/open-by-severity.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import SeverityTag from '@aziontech/webkit/severity-tag'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import { computed } from 'vue'
+
+  import type { AlertsDashboardLevelCount } from '../dashboard-alerts.vue'
+
+  export interface OpenBySeverityProps {
+    /** Open alerts by severity level. */
+    levels: AlertsDashboardLevelCount[]
+    /** The period is loading. */
+    loading?: boolean
+    /** Why the period could not load. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<OpenBySeverityProps>(), { loading: false, error: '' })
+
+  const openTotal = computed(() => props.levels.reduce((sum, level) => sum + level.count, 0))
+</script>
+
+<template>
+  <div class="lg:col-span-4">
+    <Card title="Open by severity">
+      <template #default>
+        <p
+          v-if="error"
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
+        <ul
+          v-else-if="loading"
+          aria-busy="true"
+          class="flex flex-col gap-(--spacing-md)"
+        >
+          <li
+            v-for="index in 5"
+            :key="index"
+            class="flex items-center justify-between gap-(--spacing-sm)"
+          >
+            <Skeleton
+              width="30%"
+              height="1.25rem"
+            />
+            <Skeleton
+              width="20%"
+              height="1rem"
+            />
+          </li>
+        </ul>
+        <ul
+          v-else-if="levels.length"
+          class="flex flex-col gap-(--spacing-md)"
+        >
+          <li
+            v-for="level in levels"
+            :key="level.id"
+            class="flex items-center justify-between gap-(--spacing-sm)"
+          >
+            <SeverityTag :severity="level.id" />
+            <span class="flex items-baseline gap-(--spacing-xs) tabular-nums">
+              <span class="text-body-md text-(--text-default)">{{ level.count }}</span>
+              <span class="w-10 text-end text-body-sm text-(--text-muted)"
+                >{{ Math.round((level.count / openTotal) * 100) }}%</span
+              >
+            </span>
+          </li>
+        </ul>
+        <EmptyState
+          v-else
+          size="small"
+          icon="az az-circle-check"
+          title="No open alerts"
+          description="Every alert raised in the period has been closed."
+        />
+      </template>
+    </Card>
+  </div>
+</template>
 ```

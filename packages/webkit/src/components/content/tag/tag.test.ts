@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/tag/default.vue'
 import Types from '../../../../examples/tag/severities.vue'
+import WithIcon from '../../../../examples/tag/with-icon.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tag from './tag.vue'
 
@@ -169,6 +170,27 @@ describe('Tag', () => {
     )
 
     expect([...looks].sort()).toEqual([...SEVERITIES, ...VARIANTS].sort())
+  })
+
+  it.each([
+    ['Severities', Types],
+    ['WithIcon', WithIcon]
+  ])('names each look in words in the %s example, never by colour alone', (_, example) => {
+    const tags = render(example).getAllByTestId('tag')
+    const words = tags.map((tag) => tag.textContent?.trim().toLowerCase())
+    const looks = tags.map(
+      (tag) => tag.getAttribute('data-severity') ?? tag.getAttribute('data-variant')
+    )
+
+    expect(words).toEqual(looks)
+  })
+
+  it('gives each severity its own glyph in the WithIcon example', () => {
+    const glyphs = render(WithIcon)
+      .getAllByTestId('tag__icon')
+      .map((icon) => icon.className)
+
+    expect(new Set(glyphs).size).toBe(glyphs.length)
   })
 
   it('renders the Default story fixture cleanly', async () => {

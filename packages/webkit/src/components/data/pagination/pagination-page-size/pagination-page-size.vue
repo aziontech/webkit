@@ -37,17 +37,26 @@
   const onChange = (event: Event) => {
     model.value = Number((event.target as HTMLSelectElement).value)
   }
+
+  const ROOT_CLASS =
+    'relative inline-flex h-7 min-w-16 items-center rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) ' +
+    'text-body-sm text-(--text-muted) has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-(--ring-color) has-[select:focus-visible]:ring-offset-2 ' +
+    'has-[select:focus-visible]:ring-offset-(--bg-canvas)'
+
+  const SELECT_CLASS =
+    'h-full w-full cursor-pointer appearance-none rounded-(--shape-control) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm ' +
+    'pointer-coarse:text-body-md text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)'
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="relative inline-flex h-7 min-w-16 items-center rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-muted) has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-(--ring-color) has-[select:focus-visible]:ring-offset-2 has-[select:focus-visible]:ring-offset-(--bg-canvas)"
+    :class="ROOT_CLASS"
   >
     <select
       :value="model"
-      class="h-full w-full cursor-pointer appearance-none rounded-(--shape-control) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm pointer-coarse:text-body-md text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)"
+      :class="SELECT_CLASS"
       :aria-label="t('pagination.pageSize')"
       @change="onChange"
     >

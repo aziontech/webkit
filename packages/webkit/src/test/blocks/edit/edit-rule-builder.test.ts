@@ -93,6 +93,16 @@ describe('edit-rule-builder data contract', () => {
     expect(panel.textContent).toContain('Edit Rule')
   })
 
+  it('states the locked phase as text, not as a disabled choice', async () => {
+    render(EditRuleBuilder, { props: { rule: given, defaultOpen: true } })
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    const panel = dialog() as HTMLElement
+    expect(panel.querySelector('[data-testid="edit-rule-builder__phase"]')?.textContent).toContain(
+      'Request phase'
+    )
+    expect(panel.querySelector('[role="radiogroup"][aria-label="Phase"]')).toBeNull()
+  })
+
   it('emits submit with the values and closes once loading ends', async () => {
     const { emitted, rerender } = render(EditRuleBuilder, {
       props: {

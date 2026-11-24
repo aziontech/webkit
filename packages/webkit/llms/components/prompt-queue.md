@@ -127,7 +127,9 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
   const queue = ref([
     {
       id: 'q1',
-      text: 'After this finishes, compare the cache hit ratio of the production and staging applications over the last seven days, list the five paths with the most misses in each, and suggest a TTL for every one of them'
+      text:
+        'After this finishes, compare the cache hit ratio of the production and staging applications over the last ' +
+        'seven days, list the five paths with the most misses in each, and suggest a TTL for every one of them'
     },
     {
       id: 'q2',

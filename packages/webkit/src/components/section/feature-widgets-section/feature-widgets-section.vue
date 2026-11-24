@@ -1,21 +1,24 @@
 <script setup lang="ts">
-  import { type Component, computed, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
-  import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
+  import type { SceneRef } from '../../../assets/scene-registry'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { copyText } from '../../../utils/clipboard'
+  import { resolveItemScenes } from '../../../utils/item-scenes'
   import Button from '../../action/button/button.vue'
   import HighlightButton from '../../action/highlight-button/highlight-button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import BentoGrid from '../../layout/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader, {
-    type ModuleHeaderAction,
-    type ModuleHeaderAlign
+  import type {
+    ModuleHeaderAction,
+    ModuleHeaderAlign
   } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'FeatureWidgetsSection',
@@ -73,7 +76,13 @@
     columns?: FeatureWidgetsSectionColumns
     /** Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. */
     copiedLabel?: string
-    /** The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is a webkit scene asset handed `hovered` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. */
+    /**
+     * The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy?
+     * }` where `scene` is a webkit scene asset handed `hovered` while the pointer is over the
+     * cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered
+     * as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that
+     * puts `text` on the clipboard; a cell may carry both.
+     */
     items?: FeatureWidgetsSectionItem[]
   }
 
@@ -103,14 +112,9 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-widgets-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, props.secondaryAction))
 
-  const hasItems = computed(() => props.items.length > 0)
-
-  const hasHeader = computed(() => props.title.length > 0)
-
-  const scenes = computed<(Component | null)[]>(() =>
-    props.items.map((item) => (item.scene ? resolveScene(item.scene.component) : null))
-  )
+  const scenes = computed(() => resolveItemScenes(props.items))
 
   const doneLabel = computed(() => props.copiedLabel || t('common.copied'))
 
@@ -122,116 +126,105 @@
   }
 
   onScopeDispose(() => clearTimeout(copiedTimer))
+
+  const COPY_TEXT_CLASS =
+    'm-0 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs) text-start text-label-code-sm break-words ' +
+    'whitespace-pre-wrap text-(--text-default)'
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
-    :id="anchor || undefined"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :filled="items.length > 0"
+    :framed="false"
+    :align="titleAlign"
   >
-    <Module
-      v-if="hasItems"
-      :divided="false"
-      :padded="false"
+    <template
+      v-if="headerActions.length"
+      #header-actions
     >
-      <template
-        v-if="hasHeader"
-        #header
-      >
-        <ModuleHeader
-          :align="titleAlign"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
-        >
-          <template #actions>
-            <Button
-              v-if="primaryAction"
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              variant="secondary"
-            />
-            <Button
-              key="button-2"
-              v-if="secondaryAction"
-              :label="secondaryAction.label"
-              :href="secondaryAction.href"
-              variant="outline"
-              :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-            />
-          </template>
-        </ModuleHeader>
-      </template>
-      <RegistrationFrame
+      <SectionActions :actions="headerActions" />
+    </template>
+
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="bottom"
+    >
+      <BentoGrid
         flush
-        borders="y"
-        marks="bottom"
+        :columns="columns"
       >
-        <BentoGrid
-          flush
-          :columns="columns"
+        <BentoGridCell
+          v-for="(item, index) in items"
+          :key="item.title"
+          :padded="false"
         >
-          <BentoGridCell
-            v-for="(item, index) in items"
-            :key="item.title"
-            :padded="false"
+          <div
+            class="flex h-full w-full min-w-0 flex-col"
+            @pointerenter="hovered = index"
+            @pointermove="hovered = index"
+            @pointerleave="hovered = -1"
           >
             <div
-              class="flex h-full w-full min-w-0 flex-col"
-              @pointerenter="hovered = index"
-              @pointermove="hovered = index"
-              @pointerleave="hovered = -1"
+              v-if="scenes[index]"
+              class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--console-mockup-fade-color:var(--bg-surface)]"
             >
-              <div
-                v-if="scenes[index]"
-                class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--console-mockup-fade-color:var(--bg-surface)]"
-              >
-                <component
-                  :is="scenes[index]"
-                  v-bind="{ ...item.scene?.props, hovered: hovered === index }"
-                />
-              </div>
-              <Illustration
-                v-else-if="item.illustration"
-                :name="item.illustration"
+              <component
+                :is="scenes[index]"
+                v-bind="{ ...item.scene?.props, hovered: hovered === index }"
               />
-              <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
-                <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-                  <strong class="font-medium text-(--text-default)">{{ item.title }}</strong>
-                  {{ item.description }}
-                </p>
-                <span
-                  v-if="item.action || item.copy"
-                  aria-live="polite"
-                  class="mt-auto flex flex-wrap gap-(--spacing-sm)"
-                >
-                  <Button
-                    v-if="item.action"
-                    :label="item.action.label"
-                    :href="item.action.href"
-                    variant="outline"
-                    size="medium"
-                    icon="az az-chevron-right"
-                    icon-position="trailing"
-                    animated
-                  />
-                  <HighlightButton
-                    v-if="item.copy"
-                    :label="copied === index ? doneLabel : item.copy.label"
-                    size="medium"
-                    :icon="copied === index ? 'az az-check' : 'az az-copy'"
-                    @click="copyPrompt(index, item.copy.text)"
-                  />
-                </span>
-              </div>
             </div>
-          </BentoGridCell>
-        </BentoGrid>
-      </RegistrationFrame>
-    </Module>
-  </section>
+            <Illustration
+              v-else-if="item.illustration"
+              :name="item.illustration"
+            />
+            <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
+              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
+                <strong class="font-medium text-(--text-default)">{{ item.title }}</strong>
+                {{ item.description }}
+              </p>
+              <p
+                v-if="item.copy"
+                dir="ltr"
+                data-slot="copy-text"
+                :class="COPY_TEXT_CLASS"
+              >
+                {{ item.copy.text }}
+              </p>
+              <span
+                v-if="item.action || item.copy"
+                aria-live="polite"
+                class="mt-auto flex flex-wrap gap-(--spacing-sm)"
+              >
+                <Button
+                  v-if="item.action"
+                  :label="item.action.label"
+                  :href="item.action.href"
+                  variant="outline"
+                  size="medium"
+                  icon="az az-chevron-right"
+                  icon-position="trailing"
+                  animated
+                />
+                <HighlightButton
+                  v-if="item.copy"
+                  :label="copied === index ? doneLabel : item.copy.label"
+                  size="medium"
+                  :icon="copied === index ? 'az az-check' : 'az az-copy'"
+                  @click="copyPrompt(index, item.copy.text)"
+                />
+              </span>
+            </div>
+          </div>
+        </BentoGridCell>
+      </BentoGrid>
+    </RegistrationFrame>
+  </SectionBand>
 </template>

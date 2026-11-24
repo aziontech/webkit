@@ -14,7 +14,7 @@ export const sampleDeployment: DeploySuccessDeployment = {
     scope: 'acme',
     icon: 'az az-github',
     repository: 'acme/web-app',
-    href: 'https://github.com/acme/web-app',
+    href: 'https://github.example.com/acme/web-app',
     branch: 'main'
   }
 }

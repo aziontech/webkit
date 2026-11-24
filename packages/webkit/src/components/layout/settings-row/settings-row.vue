@@ -29,8 +29,10 @@
     depth?: SettingsRowDepth
     /** Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. */
     stackable?: boolean
-    /** Extra guidance in a Hint glyph beside the title; empty renders no glyph. */
+    /** Extra guidance, one to three sentences, in a click-open Hint note beside the title; empty renders no glyph. */
     hint?: string
+    /** Marks the setting as required after its title, as a required field label does. */
+    required?: boolean
   }
 
   withDefaults(defineProps<SettingsRowProps>(), {
@@ -38,7 +40,8 @@
     variant: 'field',
     depth: 0,
     stackable: false,
-    hint: ''
+    hint: '',
+    required: false
   })
 
   defineSlots<{
@@ -53,6 +56,19 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'settings-row')
+
+  const TEXT_CLASS =
+    'flex flex-col ' +
+    '[&>[data-slot=item-description]]:line-clamp-none ' +
+    'data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) ' +
+    'data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)'
+
+  const CONTROL_CLASS =
+    'contents ' +
+    'data-[variant=field]:flex data-[variant=field]:min-w-0 data-[variant=field]:max-w-(--container-3xs) data-[variant=field]:flex-1 data-[variant=field]:justify-end ' +
+    '@max-md/settings-row:data-[variant=field]:max-w-none @max-md/settings-row:data-[variant=field]:basis-full @max-md/settings-row:data-[variant=field]:justify-start ' +
+    '@max-lg/settings-row:data-[variant=field]:data-[stackable]:max-w-none @max-lg/settings-row:data-[variant=field]:data-[stackable]:basis-full ' +
+    '@max-lg/settings-row:data-[variant=field]:data-[stackable]:justify-start'
 </script>
 
 <template>
@@ -73,10 +89,17 @@
       <ItemContent>
         <div
           :data-depth="depth"
-          class="flex flex-col [&>[data-slot=item-description]]:line-clamp-none data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)"
+          :class="TEXT_CLASS"
         >
           <ItemTitle :data-testid="`${testId}__title`">
             <slot name="title">{{ title }}</slot>
+            <span
+              v-if="required"
+              :data-testid="`${testId}__required`"
+              aria-hidden="true"
+              class="text-label-sm text-(--text-default)"
+              >*</span
+            >
             <Hint
               v-if="hint"
               :content="hint"
@@ -94,7 +117,7 @@
       <div
         :data-variant="variant"
         :data-stackable="stackable || null"
-        class="contents data-[variant=field]:flex data-[variant=field]:min-w-0 data-[variant=field]:max-w-(--container-3xs) data-[variant=field]:flex-1 data-[variant=field]:justify-end @max-md/settings-row:data-[variant=field]:max-w-none @max-md/settings-row:data-[variant=field]:basis-full @max-md/settings-row:data-[variant=field]:justify-start @max-lg/settings-row:data-[variant=field]:data-[stackable]:max-w-none @max-lg/settings-row:data-[variant=field]:data-[stackable]:basis-full @max-lg/settings-row:data-[variant=field]:data-[stackable]:justify-start"
+        :class="CONTROL_CLASS"
       >
         <ItemActions
           :data-testid="`${testId}__control`"

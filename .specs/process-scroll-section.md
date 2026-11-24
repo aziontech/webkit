@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 03c14a8ae95ba61440fb6183f995e2a6b86b988e0d813b8134a74c3a3f5f1579
+checksum: 1104d8db8774789474661029bf14ffc338124dd53aa6bbd94ed3f2668ca82b5e
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -81,7 +81,7 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 
 - Renders nothing without a title or steps.
 - Cards are `data-theme="dark"` in both themes (the sample's design).
-- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` or under `prefers-reduced-motion` the band does not pin and the row scrolls inside itself. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
+- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` the band does not pin and the row scrolls inside itself; from `lg` under `prefers-reduced-motion` the band does not pin and every card shares one row in equal columns, as the unpinned band does, so no card sits off-screen without a scrollbar. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
 
 ## Motion & Animations
 

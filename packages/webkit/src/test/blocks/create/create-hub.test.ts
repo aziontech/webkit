@@ -15,7 +15,7 @@ describe('create-hub', () => {
     expect(screen.getByRole('link', { name: 'Static Site' }).getAttribute('href')).toBe(
       '/create/templates/static-site'
     )
-    expect(screen.getByRole('link', { name: 'Nuxt E-commerce' }).getAttribute('href')).toBe(
+    expect(screen.getByRole('link', { name: /^Nuxt E-commerce/ }).getAttribute('href')).toBe(
       '/create/templates/nuxt-ecommerce'
     )
     expect(view.container.querySelector('[role="button"][tabindex="0"]')).toBeNull()

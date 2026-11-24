@@ -7,7 +7,7 @@
 // DS-internal only (depends on .specs/), so it lives in lib — not in the package.
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import {
   componentRootName,
   extractAnimationClasses,
@@ -71,9 +71,29 @@ function familyAnimations(abs, name, vueText) {
   const found = new Set(animateClasses(vueText))
   for (const file of vueFilesUnder(componentDir(abs, name))) {
     if (file === abs) continue
-    for (const c of animateClasses(readFileSync(file, 'utf-8'))) found.add(c)
+    const text = readFileSync(file, 'utf-8')
+    for (const part of [file, ...privatePartFiles(file, text)])
+      for (const c of animateClasses(part === file ? text : readFileSync(part, 'utf-8')))
+        found.add(c)
   }
   return found
+}
+
+function isPrivatePart(abs) {
+  return (
+    abs.endsWith('.vue') &&
+    abs.split('/src/components/').pop().split('/').slice(0, -1).includes('parts')
+  )
+}
+
+function privatePartFiles(abs, vueText, seen = new Set()) {
+  for (const m of vueText.matchAll(/\bfrom\s+['"](\.{1,2}\/[^'"]+\.vue)['"]/g)) {
+    const file = resolve(dirname(abs), m[1])
+    if (seen.has(file) || !isPrivatePart(file) || !existsSync(file)) continue
+    seen.add(file)
+    privatePartFiles(file, readFileSync(file, 'utf-8'), seen)
+  }
+  return [...seen]
 }
 
 function diff(actualSet, expectedSet) {
@@ -82,7 +102,7 @@ function diff(actualSet, expectedSet) {
   return { missing, extra }
 }
 
-export function toPascal(kebab) {
+function toPascal(kebab) {
   return kebab
     .split('-')
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
@@ -105,7 +125,7 @@ function normalizeDefault(raw) {
 }
 
 /** The component's own kebab name: no category, so moving a component never changes its test id. */
-export function testIdFallback(name) {
+function testIdFallback(name) {
   return name
 }
 
@@ -118,6 +138,7 @@ export function testIdFallback(name) {
 export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
   const info = resolveSpecForComponentPath(abs, ROOT)
   if (!info) return null
+  if (isPrivatePart(abs)) return null
   if (isLegacyComponent(info.category, info.name, ROOT)) return null
   if (!existsSync(abs)) return null
   if (!existsSync(info.specPath)) {
@@ -226,11 +247,12 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
   // ---- Animation catalog cross-check (independent of the spec Motion table) ----
   // Loud, not conditional: a component that uses animate-* classes fails when the
   // generated catalog cannot be read, instead of silently skipping the check.
-  const usedAnims = new Set(
-    extractAnimationClasses(vueText)
-      .filter((c) => c.startsWith('animate-') && c !== 'animate-none')
-      .map((c) => c.replace(/^animate-/, ''))
-  )
+  const motionTexts = [
+    vueText,
+    ...privatePartFiles(abs, vueText).map((file) => readFileSync(file, 'utf-8'))
+  ]
+  const motionText = motionTexts.join('\n')
+  const usedAnims = new Set(animateClasses(motionText).map((c) => c.replace(/^animate-/, '')))
   if (usedAnims.size) {
     const catalogAnims = loadCatalogAnimations(ROOT)
     if (!catalogAnims) {
@@ -257,7 +279,7 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
   // the animations it renders itself, never flagged for its siblings' rows.
   const motionSection = getSection(body, 'Motion & Animations')
   if (motionSection !== null) {
-    const codeAnimClasses = new Set(animateClasses(vueText))
+    const codeAnimClasses = new Set(animateClasses(motionText))
     const specAnimMatches = (motionSection.match(/animate-[a-z0-9-]+/g) ?? []).filter(
       (c) => c !== 'animate-none'
     )
@@ -265,7 +287,7 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
     const isNone = /^_none_/.test(motionSection.trim().split('\n').slice(2).join('\n').trim())
 
     if (isNone) {
-      if (codeAnimClasses.size > 0 || /\btransition-/.test(vueText)) {
+      if (codeAnimClasses.size > 0 || /\btransition-/.test(motionText)) {
         violations.push(
           `Motion & Animations says _none_ but .vue contains: ${[...codeAnimClasses].join(', ') || 'transition-*'}`
         )
@@ -273,7 +295,7 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
     } else {
       const animDiff = diff(codeAnimClasses, specAnimClasses)
       const missing = isRoot
-        ? [...specAnimClasses].filter((c) => !familyAnimations(abs, info.name, vueText).has(c))
+        ? [...specAnimClasses].filter((c) => !familyAnimations(abs, info.name, motionText).has(c))
         : []
       if (missing.length) {
         violations.push(`Animation classes in spec but missing in .vue: ${missing.join(', ')}`)
@@ -281,7 +303,9 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
       if (animDiff.extra.length) {
         violations.push(`Animation classes in .vue but not in spec: ${animDiff.extra.join(', ')}`)
       }
-      if (codeAnimClasses.size > 0 && !hasMotionReduceEscape(vueText)) {
+      if (
+        motionTexts.some((text) => animateClasses(text).length > 0 && !hasMotionReduceEscape(text))
+      ) {
         violations.push(
           `Animations present without motion-reduce:* escape. Add motion-reduce:animate-none on the same class string.`
         )

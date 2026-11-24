@@ -2,7 +2,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import { type Component, onMounted, onScopeDispose, ref, shallowRef } from 'vue'
 
-  import { exampleLoader } from '../lib/data'
+  import { loadExample } from '../lib/route-data'
   import { scheduleMount } from '../lib/mount-queue'
 
   const props = defineProps<{ dir: string; file: string }>()
@@ -13,8 +13,7 @@
   let cancel: (() => void) | null = null
 
   async function load() {
-    const loader = exampleLoader(props.dir, props.file)
-    if (loader) live.value = await loader()
+    live.value = (await loadExample(props.dir, props.file)) ?? null
   }
 
   onMounted(() => {

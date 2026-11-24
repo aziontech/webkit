@@ -104,27 +104,26 @@ A timing has no "previous period" the reader acts on here, so these tiles carry 
 
 ### O. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each region's content, naming what
-did not load (`Couldn't load overall score.`); the score shows a dash with no band.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `HealthScoreOverall`, `HealthScoreHourlyRow`, `HealthScoreIncident`, `HealthScoreBand`, `HealthScorePeriod` and `HealthScoreDashboardProps` are exported from `dashboard-health-score.vue`, and `sample.ts` holds the sample score, rankings, hourly rows and incidents the block renders when a data prop is left out (and never while `loading` or `error` is set). The RealUser variant is a separate page and keeps its own sample figures.
 
-| Prop / model     | Type                     | What it does                                                                                                               |
-| ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `overall`        | `HealthScoreOverall`     | The score, its band, the top cause and the score line with its labels. `score: null` shows a dash, no band.                |
-| `applications`   | `BarListItem[]`          | Score per application, lowest first; the cause goes in the name (`Video calls · packet loss`).                             |
-| `locations`      | `BarListItem[]`          | Score per location, the same shape.                                                                                        |
-| `hourly`         | `HealthScoreHourlyRow[]` | One tracker row per application with one block per hour.                                                                   |
-| `incidents`      | `HealthScoreIncident[]`  | The incidents still open, each linking to `/incidents/<id>`. Pass `[]` for `No open incidents`.                            |
-| `loading`        | `boolean`                | The period is loading: every region shows its Skeleton.                                                                    |
-| `error`          | `string`                 | Why the request failed, shown after `Couldn't load overall score.` (hourly score, open incidents…) in each danger `Alert`. |
-| `v-model:period` | `HealthScorePeriod`      | The period every region reads and the empty states name; refetch when it changes. Defaults to `Last 24 hours`.             |
+| Prop / model     | Type                     | What it does                                                                                                                   |
+| ---------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `overall`        | `HealthScoreOverall`     | The score, its band, the top cause and the score line with its labels. `score: null` shows a dash, no band.                    |
+| `applications`   | `BarListItem[]`          | Score per application, lowest first; the cause goes in the name (`Video calls · packet loss`).                                 |
+| `locations`      | `BarListItem[]`          | Score per location, the same shape.                                                                                            |
+| `hourly`         | `HealthScoreHourlyRow[]` | One tracker row per application with one block per hour.                                                                       |
+| `incidents`      | `HealthScoreIncident[]`  | The incidents still open, each linking to `/incidents/<id>`. Pass `[]` for `No open incidents`.                                |
+| `loading`        | `boolean`                | The period is loading: every region shows its Skeleton.                                                                        |
+| `error`          | `string`                 | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:period` | `HealthScorePeriod`      | The period every region reads and the empty states name; refetch when it changes. Defaults to `Last 24 hours`.                 |
 
-| Event   | Payload   | When                              |
-| ------- | --------- | --------------------------------- |
-| `retry` | `(event)` | Retry in any of the error alerts. |
+| Event   | Payload   | When                             |
+| ------- | --------- | -------------------------------- |
+| `retry` | `(event)` | Retry in the page's error alert. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -190,7 +189,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading`; the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
 - Empty: a period with no samples (`overall.score: null`, every list `[]`); the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
 - RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
-- Error: `error`; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 

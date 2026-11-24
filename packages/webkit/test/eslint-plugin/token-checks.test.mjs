@@ -78,6 +78,22 @@ test('0rem inside a math function is the sanctioned form — both checks stay si
   }
 })
 
+test('a var() fallback inside a math function is math-function territory', () => {
+  for (const content of [
+    'min-h-[calc(100dvh-var(--offset,0rem))]',
+    'top-[calc(var(--offset,0rem)+var(--spacing-xl))]'
+  ]) {
+    const found = ids(content)
+    assert.ok(!found.includes('zero-with-unit'), `expected no zero-with-unit for: ${content}`)
+    assert.ok(!found.includes('zero-unit-in-calc'), `expected no zero-unit-in-calc for: ${content}`)
+  }
+  const wrong = ids('h-[calc(100dvh-var(--offset,0px))]')
+  assert.ok(wrong.includes('zero-unit-in-calc'), 'a px zero in a var() fallback inside calc()')
+  assert.ok(!wrong.includes('zero-with-unit'), 'not reported as a bare zero')
+  const after = ids('w-[calc(var(--a,0rem))] m-[0px]')
+  assert.ok(after.includes('zero-with-unit'), 'the zero after the closed calc() is a bare zero')
+})
+
 test('a closed math function does not leak its exemption to a later zero', () => {
   const found = ids('width: calc(100% - 1px); margin: 0px')
   assert.ok(found.includes('zero-with-unit'), 'the zero after the closed calc() is a bare zero')
@@ -285,9 +301,11 @@ test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
   }
 })
 
-test('off-brand-orange fires on --text-primary and on any orange step but the logo orange', () => {
+test('off-brand-orange fires on an orange text token and on any orange step but the logo orange', () => {
   for (const content of [
     'class="text-(--text-primary)"',
+    'class="text-(--text-brand)"',
+    'color: var(--text-brand);',
     "colors: ['var(--text-primary)']",
     'color: var(--color-orange-300);',
     'class="bg-(--color-brand-primary-700)"',
@@ -303,7 +321,7 @@ test('off-brand-orange fires on --text-primary and on any orange step but the lo
 
 test('off-brand-orange stays silent on the logo orange and on the primary roles', () => {
   for (const content of [
-    'class="text-(--text-brand)"',
+    'class="border-s-2 border-(--primary) text-(--text-default)"',
     'class="bg-(--primary) text-(--primary-foreground)"',
     'class="text-primary"',
     'class="text-(--text-primary-foreground)"',
@@ -316,7 +334,7 @@ test('off-brand-orange stays silent on the logo orange and on the primary roles'
 })
 
 test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
-  const WIDE = ['rtl-double-flip', 'off-brand-orange']
+  const WIDE = ['rtl-double-flip', 'off-brand-orange', 'status-fill-as-text']
   const idsFor = (rel, dirs) => tokenChecksFor(rel, dirs).map((c) => c.id)
   assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
   for (const rel of [
@@ -350,4 +368,29 @@ test('tokenChecksApply scopes enforcement to component sources', () => {
   assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.test.ts'))
   assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.spec.ts'))
   assert.ok(!tokenChecksApply('packages/webkit/src/composables/use-controllable.ts'))
+})
+
+test('status-fill-as-text fires on a status fill used as text or icon colour', () => {
+  for (const content of [
+    'class="az az-circle-x text-(--danger)"',
+    'class="data-[type=ok]:text-(--success)"',
+    'class="text-(color:--warning)"',
+    "'text-(--info)'"
+  ]) {
+    assert.ok(
+      ids(content).includes('status-fill-as-text'),
+      `expected status-fill-as-text for: ${content}`
+    )
+  }
+})
+
+test('status-fill-as-text stays silent on the mark, foreground and text roles', () => {
+  for (const content of [
+    'class="text-(--danger-mark)"',
+    'class="bg-(--success) text-(--success-foreground)"',
+    'class="text-(--text-danger)"',
+    'class="bg-(--danger) border-(--danger-border)"'
+  ]) {
+    assert.ok(!ids(content).includes('status-fill-as-text'), `expected silence for: ${content}`)
+  }
 })

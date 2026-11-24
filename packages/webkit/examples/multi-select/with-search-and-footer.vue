@@ -44,6 +44,7 @@
             v-model="search"
             size="small"
             placeholder="Search"
+            aria-label="Search options"
           >
             <template #leading>
               <i

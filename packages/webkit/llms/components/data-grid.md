@@ -75,7 +75,7 @@
 
 ## States
 
-- Visual states: `default`, `hover` (row), `focus-visible` (the cursor ring on the active cell or header), `selected` (cells in the range: `data-selected`, `aria-selected="true"`; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
+- Visual states: `default`, `hover` (row), `focus-visible` (the cursor ring on the active cell or header), `selected` (cells in a range of two or more cells: `data-selected`, `aria-selected="true"`; the cursor cell alone is shown by its focus ring and is not painted as selected, so a grid nobody touched shows no selection; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
 - `invalid`: a number cell whose text is not a number stays in its editor on Enter or Tab, with `data-invalid` on the cell and the editor, `aria-invalid="true"` and `aria-describedby` pointing to a message (`dataGrid.invalidNumber`, `role="alert"`) under the cell; nothing is committed until the text parses or Escape restores the value. Blur with an invalid text discards it and keeps the previous value.
 - `paste`: Ctrl+V or Cmd+V on the cell cursor reads the `paste` event's `text/plain` (no clipboard permission prompt) as tab-separated text: rows by line break (CRLF or LF), cells by tab, one trailing line break ignored, and a cell wrapped in double quotes may hold tabs and line breaks (`""` is a quote), the way Excel and Google Sheets copy. The block is written from the top-left cell of the selected range (the cursor cell when there is no range), clipped at the last row and column (a paste never adds rows; rows are the app's, through `row-add`); a single value with a range of several cells selected fills every cell of the range. Each value is read the way an in-cell edit commits it: `number` parses a number (empty clears it), `boolean` takes `true` / `false`, `1` / `0`, `yes` / `no` or the localized Yes / No (case-insensitive), `select` takes an option value or an option label (case-insensitive), `text` takes the text as is (empty clears it). A value that does not fit, a cell of a non-editable column and every cell of a `readonly` grid are skipped and keep their value. Afterwards the selected range is the pasted area, the cursor on its top-left cell, and a polite status announces the result (`dataGrid.pasted`, `dataGrid.pastedSkipped`, `dataGrid.pasteReadonly`). While an in-cell editor is open the grid does not handle the paste, so the editor's native paste inserts the text; on the header row a paste does nothing.
 - `copy`: Ctrl+C or Cmd+C on the cell cursor writes the selected range to the native `copy` event's `clipboardData` as `text/plain` and cancels the event, so it needs no clipboard permission and works on an insecure (plain http) origin. When the browser fires no `copy` event for the shortcut, the grid runs the copy command itself. Rows go by `\n`, cells by tab, and a cell holding a tab, a line break or a double quote is wrapped in double quotes with each quote doubled, the way Excel and Google Sheets copy, so a copied range pastes back into the grid cell for cell. While an in-cell editor is open the grid does not handle the copy, so the editor's native copy takes its selected text.
@@ -86,7 +86,7 @@
 
 ## Accessibility
 
-- Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `ariaLabel`, or by an `aria-labelledby` / `aria-describedby` passed to DataGrid (both are forwarded to the grid element, not the frame), `aria-multiselectable="true"` (a cell range can always be selected) and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when row selection is on; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; every gridcell carries `aria-selected` (`true` in the range, `false` outside it) and a cell that cannot be edited `aria-readonly="true"`. The empty state renders outside the grid's rows, so `aria-rowcount` stays exact.
+- Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `ariaLabel`, or by an `aria-labelledby` / `aria-describedby` passed to DataGrid (both are forwarded to the grid element, not the frame), `aria-multiselectable="true"` (a cell range can always be selected) and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when row selection is on; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; every gridcell carries `aria-selected` (`true` in a range of two or more cells, `false` outside it and on a lone cursor cell) and a cell that cannot be edited `aria-readonly="true"`. The empty state renders outside the grid's rows, so `aria-rowcount` stays exact.
 - One tab stop: exactly one cell of the grid has `tabindex="0"` (the active cell, the first body cell at start; the header row is part of the cursor), every other cell, checkbox and resize handle `-1`. `Tab` enters the grid on the active cell and `Tab` / `Shift+Tab` leave it. The editor inside a cell takes focus while editing and returns it to the cell when it closes.
 - Keyboard map (cell cursor): `Arrow` keys move one cell, up into the header row and back (inline arrows follow the reading direction); `Home` / `End` the first / last cell of the row; `Ctrl+Home` / `Ctrl+End` the first / last cell of the grid; `PageUp` / `PageDown` ten rows; `Shift` with an arrow, `Home` or `End` extends the range over body cells; `Tab` / `Shift+Tab` leave the grid. `Enter` or `F2` opens the editor of a body cell and, on a header cell, moves focus to its resize handle; typing a character opens a text or number editor with that character (select and boolean cells do not open on typing); `Space` toggles a boolean cell, the row checkbox, or Select all on its header; `Delete` / `Backspace` clears an editable text or number cell; `Ctrl+C` / `Cmd+C` copies the range; `Ctrl+V` / `Cmd+V` pastes a tab-separated block from the top-left cell of the range, or fills the range with a single value (see States); `Ctrl+A` / `Cmd+A` selects every cell.
 - Keyboard map (editing): `Enter` commits and moves down; `Tab` / `Shift+Tab` commit and move to the next / previous cell (wrapping across rows), the one case where Tab moves inside the grid; `Escape` cancels and restores the value; blur commits. A select editor is a native `select`: its arrow keys change the choice without committing, and Enter, Tab or blur commit it. An invalid number keeps the editor open (see States).
@@ -110,7 +110,7 @@
 | Key                         | English source                                                                               | Override prop |
 | --------------------------- | -------------------------------------------------------------------------------------------- | ------------- |
 | `dataGrid.selectAll`        | `Select all rows`                                                                            | —             |
-| `dataGrid.selectRow`        | `Select row`                                                                                 | —             |
+| `dataGrid.selectRow`        | `Select row {row}`                                                                           | —             |
 | `dataGrid.resize`           | `Resize {column}`                                                                            | —             |
 | `dataGrid.invalidNumber`    | `Enter a number`                                                                             | —             |
 | `dataGrid.emptyTitle`       | `No rows yet`                                                                                | `empty` slot  |
@@ -181,6 +181,7 @@
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataGrid from '@aziontech/webkit/data-grid'
   import { ref } from 'vue'
 
@@ -190,16 +191,21 @@
     { id: 'r3', host: 'docs.example.com', ttl: 3600, proxied: false }
   ])
   const selection = ref([])
+  const confirming = ref(false)
   let next = 4
 
   const columns = [
-    { id: 'host', header: 'Host', width: 220 },
-    { id: 'ttl', header: 'TTL (seconds)', type: 'number', align: 'end', width: 140 },
+    { id: 'host', header: 'Host', width: 150 },
+    { id: 'ttl', header: 'TTL (seconds)', type: 'number', align: 'end', width: 120 },
     { id: 'proxied', header: 'Proxied', type: 'boolean', width: 120 }
   ]
 
   const addRow = () => {
     rows.value = [...rows.value, { id: `r${next++}`, host: '', ttl: 3600, proxied: false }]
+  }
+  const confirmRemove = (event, remove) => {
+    remove(event)
+    confirming.value = false
   }
   const removeRows = (event, removed) => {
     const ids = new Set(removed.map((row) => row.id))
@@ -226,13 +232,27 @@
         size="small"
         @click="add"
       />
-      <Button
-        label="Delete rows"
-        variant="outline"
-        size="small"
-        :disabled="selectedCount === 0"
-        @click="remove"
-      />
+      <ConfirmDialog
+        v-model:open="confirming"
+        :title="selectedCount === 1 ? 'Delete 1 record' : `Delete ${selectedCount} records`"
+        description="The selected DNS records stop answering as soon as they are deleted. This cannot be undone."
+        :confirm-label="selectedCount === 1 ? 'Delete record' : 'Delete records'"
+        variant="danger"
+        @confirm="(event) => confirmRemove(event, remove)"
+      >
+        <template #trigger>
+          <Button
+            :label="
+              selectedCount === 0
+                ? 'Delete rows'
+                : `Delete ${selectedCount} ${selectedCount === 1 ? 'row' : 'rows'}`
+            "
+            variant="danger"
+            size="small"
+            :disabled="selectedCount === 0"
+          />
+        </template>
+      </ConfirmDialog>
     </template>
   </DataGrid>
 </template>

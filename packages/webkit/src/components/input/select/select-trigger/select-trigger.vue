@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, h, inject, useAttrs } from 'vue'
 
-  import { useListboxTrigger } from '../../../../composables/use-listbox-trigger'
   import { SelectInjectionKey } from '../injection-key'
+  import SelectTriggerButton from '../parts/select-trigger-button.vue'
 
   defineOptions({
     name: 'SelectTrigger',
@@ -10,12 +10,16 @@
   })
 
   export interface SelectTriggerProps {
-    /** Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+1`) that have none. */
+    /**
+     * Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows
+     * the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+1`) that
+     * have none.
+     */
     valueDir?: 'ltr' | 'rtl' | 'auto'
   }
   const props = defineProps<SelectTriggerProps>()
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** Leading adornment before the value (an icon, a flag). */
     leading(): unknown
     /** Trailing adornment after the value, before the chevron (a dial code, a count). It never shrinks. */
@@ -30,86 +34,28 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-trigger')
-  const triggerId = computed(
-    () => (attrs['id'] as string | undefined) ?? ctx.controlId.value ?? `${ctx.contentId}-trigger`
-  )
-  const describedBy = computed(
-    () => (attrs['aria-describedby'] as string | undefined) ?? ctx.describedBy.value
-  )
 
-  const onClick = () => {
-    if (ctx.disabled.value || ctx.readonly.value) return
-    ctx.setOpen(!ctx.open.value)
-  }
+  const GHOST_CLASS =
+    'data-[variant=ghost]:w-auto data-[variant=ghost]:max-w-full data-[variant=ghost]:gap-(--spacing-2xs) data-[variant=ghost]:border-0 data-[variant=ghost]:bg-transparent ' +
+    'data-[variant=ghost]:px-(--spacing-xs) data-[variant=ghost]:text-label-md data-[variant=ghost]:focus-visible:ring-offset-0 data-[variant=ghost]:hover:bg-(--bg-mask) ' +
+    'data-[variant=ghost]:data-[state=open]:bg-(--bg-mask) data-[variant=ghost]:data-[disabled]:bg-transparent data-[variant=ghost]:data-[disabled]:hover:bg-transparent'
 
-  const { onKeydown } = useListboxTrigger({
-    open: ctx.open,
-    setOpen: ctx.setOpen,
-    locked: () => ctx.disabled.value || ctx.readonly.value,
-    pendingFocus: ctx.pendingFocus
-  })
+  const trigger = () =>
+    h(
+      SelectTriggerButton,
+      {
+        ...attrs,
+        ...props,
+        ctx,
+        testId: testId.value,
+        isolated: true,
+        'data-variant': ctx.variant.value,
+        class: [GHOST_CLASS, attrs.class]
+      },
+      slots
+    )
 </script>
 
 <template>
-  <button
-    :ref="
-      (el) => {
-        ctx.triggerEl.value = el as globalThis.HTMLElement | null
-      }
-    "
-    v-bind="$attrs"
-    :id="triggerId"
-    :aria-describedby="describedBy"
-    :aria-label="(attrs['aria-label'] as string | undefined) ?? ctx.ariaLabel.value"
-    :aria-labelledby="(attrs['aria-labelledby'] as string | undefined) ?? ctx.ariaLabelledby.value"
-    type="button"
-    role="combobox"
-    aria-haspopup="listbox"
-    :aria-expanded="ctx.open.value"
-    :aria-controls="ctx.contentId"
-    :aria-invalid="ctx.invalid.value || undefined"
-    :aria-required="ctx.required.value || undefined"
-    :aria-disabled="ctx.disabled.value || undefined"
-    :disabled="ctx.disabled.value"
-    :data-testid="testId"
-    :data-state="ctx.open.value ? 'open' : 'closed'"
-    :data-size="ctx.size.value"
-    :data-variant="ctx.variant.value"
-    :data-disabled="ctx.disabled.value || null"
-    :data-readonly="ctx.readonly.value || null"
-    :data-invalid="ctx.invalid.value || null"
-    :data-required="ctx.required.value || null"
-    :data-filled="ctx.filled.value || null"
-    :class="attrs.class"
-    class="group relative flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 data-[readonly]:cursor-default data-[variant=ghost]:w-auto data-[variant=ghost]:max-w-full data-[variant=ghost]:gap-(--spacing-2xs) data-[variant=ghost]:border-0 data-[variant=ghost]:bg-transparent data-[variant=ghost]:px-(--spacing-xs) data-[variant=ghost]:text-label-md data-[variant=ghost]:focus-visible:ring-offset-0 data-[variant=ghost]:hover:bg-(--bg-mask) data-[variant=ghost]:data-[state=open]:bg-(--bg-mask) data-[variant=ghost]:data-[disabled]:bg-transparent data-[variant=ghost]:data-[disabled]:hover:bg-transparent"
-    @click="onClick"
-    @keydown="onKeydown"
-  >
-    <span
-      aria-hidden="true"
-      data-slot="touch-target"
-      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-    />
-    <slot name="leading" />
-    <span
-      class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
-      :data-filled="ctx.filled.value"
-      data-slot="value"
-      :data-testid="`${testId}__value`"
-    >
-      <bdi
-        v-if="ctx.filled.value"
-        :dir="props.valueDir"
-        >{{ ctx.displayValue.value }}</bdi
-      >
-      <template v-else>{{ ctx.placeholder.value }}</template>
-    </span>
-    <slot name="trailing" />
-    <i
-      class="az az-chevron-down shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
-      :data-state="ctx.open.value ? 'open' : 'closed'"
-      aria-hidden="true"
-      :data-testid="`${testId}__chevron`"
-    />
-  </button>
+  <component :is="trigger()" />
 </template>

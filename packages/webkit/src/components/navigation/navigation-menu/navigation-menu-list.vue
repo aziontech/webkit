@@ -67,6 +67,16 @@
   const VERTICAL_CLASS = 'flex-col items-stretch'
 
   const isVertical = computed(() => root.menuOrientation.value === 'vertical')
+
+  const LABEL_LINK_CLASS =
+    'flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted) ' +
+    'cursor-pointer no-underline transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas)'
+
+  const SELECTOR_CLASS =
+    'pointer-events-none absolute z-0 rounded-(--shape-button) bg-(--navigation-menu-highlight-background) transition-[left,top,width,height,opacity] duration-moderate-02 ' +
+    'ease-productive-entrance motion-reduce:transition-none'
 </script>
 
 <template>
@@ -81,7 +91,7 @@
       v-if="isLabelLink"
       :id="headingId"
       :href="safeHref(href) ?? undefined"
-      class="flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted) cursor-pointer no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+      :class="LABEL_LINK_CLASS"
       :data-testid="`${testId}__label`"
       @click="onLabelClick"
     >
@@ -124,7 +134,7 @@
   >
     <span
       aria-hidden="true"
-      class="pointer-events-none absolute z-0 rounded-(--shape-button) bg-(--navigation-menu-highlight-background) transition-[left,top,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      :class="SELECTOR_CLASS"
       :style="selectorStyle"
       :data-testid="`${testId}__selector`"
     />

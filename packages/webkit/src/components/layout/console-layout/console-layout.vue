@@ -1,72 +1,48 @@
 <script setup lang="ts">
-  import {
-    Comment,
-    computed,
-    Fragment,
-    type FunctionalComponent,
-    h,
-    isVNode,
-    nextTick,
-    onScopeDispose,
-    provide,
-    readonly,
-    ref,
-    shallowRef,
-    Text,
-    useAttrs,
-    type VNode,
-    watch
-  } from 'vue'
+  import { computed, provide, proxyRefs, ref, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import {
     type AppNavGroup,
     type AppNavItem,
-    matchActiveId,
-    navLeaves,
-    navPaletteGroups,
-    navTrail,
-    toMenuGroups,
     useAppNavigation
   } from '../../../composables/use-app-navigation'
+  import { useAppNavigationMenu } from '../../../composables/use-app-navigation-menu'
   import { useShortcuts } from '../../../composables/use-shortcuts'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import { safeHref } from '../../../utils/safe-href'
+  import { initials } from '../../../utils/initials'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import SearchTrigger from '../../action/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import Brand from '../../content/brand/brand.vue'
   import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
-  import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
-  import BreadcrumbItem from '../../navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue'
-  import BreadcrumbList from '../../navigation/breadcrumb/breadcrumb-list.vue'
-  import BreadcrumbSeparator from '../../navigation/breadcrumb/breadcrumb-separator.vue'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import type { DropdownMenuItemValue } from '../../navigation/dropdown-menu/injection-key'
   import type { SidebarMenuNode } from '../../navigation/sidebar-menu/injection-key'
   import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
   import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
-  import Command from '../../overlay/command/command.vue'
-  import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
-  import CommandGroup from '../../overlay/command/command-group/command-group.vue'
-  import CommandInput from '../../overlay/command/command-input/command-input.vue'
-  import CommandItem from '../../overlay/command/command-item/command-item.vue'
-  import CommandList from '../../overlay/command/command-list/command-list.vue'
   import ShortcutsDialog from '../../overlay/shortcuts-dialog/shortcuts-dialog.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import AppHeader from '../app-header/app-header.vue'
+  import AppHeaderAccount from '../app-header/app-header-account.vue'
+  import AppHeaderBrand from '../app-header/app-header-brand.vue'
   import AppHeaderCenter from '../app-header/app-header-center.vue'
   import AppHeaderEnd from '../app-header/app-header-end.vue'
   import AppHeaderStart from '../app-header/app-header-start.vue'
   import AppLayout from '../app-layout/app-layout.vue'
   import Sidebar from '../sidebar/sidebar.vue'
+  import { useConsoleLayoutNavAudit } from './composables/use-console-layout-nav-audit'
   import {
     ConsoleLayoutInjectionKey,
     type ConsoleLayoutTrail,
     ConsoleLayoutTrailsInjectionKey
   } from './injection-key'
+  import { createLayoutContext } from './lib/layout-context'
+  import { revealActive } from './lib/reveal-active'
+  import ConsoleLayoutHeaderStart from './parts/console-layout-header-start.vue'
+  import ConsoleLayoutPalette from './parts/console-layout-palette.vue'
 
   defineOptions({
     name: 'ConsoleLayout',
@@ -166,17 +142,9 @@
     'account-menu'(): unknown
   }>()
 
-  const { currentPath, hrefOf, follow } = useAppNavigation()
+  const toolsId = `${useId()}-tools`
 
-  provide(ConsoleLayoutInjectionKey, {
-    openSearch: () => {
-      searchOpen.value = true
-    },
-    closeSearch: () => {
-      searchOpen.value = false
-    },
-    searchOpen: readonly(searchOpen)
-  })
+  provide(ConsoleLayoutInjectionKey, createLayoutContext(searchOpen, toolsOpen, toolsId))
 
   const trails = shallowRef<ConsoleLayoutTrail[]>([])
 
@@ -194,7 +162,6 @@
 
   useShortcuts({ keys: 'meta+k', label: () => t('consoleLayout.searchShortcut') })
 
-  const query = ref('')
   const railWidth = ref<number | null>(null)
   const menuPath = ref<string[]>([])
   const menuExpanded = ref<string[]>([])
@@ -206,248 +173,57 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'console-layout')
 
-  const leaves = computed(
-    () =>
-      new Map(
-        navLeaves(props.navigation.flatMap((group) => group.items)).map((item) => [item.id, item])
-      )
-  )
+  const appNavigation = useAppNavigation()
+  const { currentPath, hrefOf, follow } = appNavigation
 
-  const currentId = computed(
-    () => props.activeId || matchActiveId(props.navigation, currentPath.value, hrefOf)
+  const appMenu = proxyRefs(
+    useAppNavigationMenu(appNavigation, {
+      navigation: () => props.navigation,
+      activeId: () => props.activeId,
+      menuPath,
+      menuExpanded,
+      searchOpen,
+      valuePrefix: NAV_VALUE,
+      emit
+    })
   )
 
   const accountTriggerLabel = computed(() => {
-    const initials = props.account?.name.trim().slice(0, 2).toUpperCase() ?? ''
-    return props.account?.src || !initials
+    const name = props.account?.name.trim() ?? ''
+    const short = initials(name)
+    return props.account?.src || !short
       ? t('consoleLayout.accountMenu')
-      : t('consoleLayout.accountMenuFor', { initials })
+      : t('consoleLayout.accountMenuFor', { initials: short, name })
   })
-
-  const menuGroups = computed(() => toMenuGroups(props.navigation, hrefOf))
-
-  const paletteGroups = computed(() => navPaletteGroups(props.navigation))
 
   const pageTrail = computed(() => trails.value[trails.value.length - 1] ?? null)
 
-  const activeCrumbs = computed(() =>
-    pageTrail.value ? pageTrail.value.items() : props.breadcrumbs
-  )
-
-  const crumbItems = computed(() =>
-    activeCrumbs.value.map((crumb) => {
-      const href = hrefOf(crumb)
-      return href ? { label: crumb.label, href } : { label: crumb.label }
-    })
-  )
-
-  const pageControl = computed(() => Boolean(pageTrail.value?.hasControl()))
-
   const pageKey = ref(0)
 
-  const controlNodes = (children: unknown): VNode[] =>
-    (Array.isArray(children) ? children : [children]).flatMap((child) => {
-      if (!isVNode(child) || child.type === Comment || child.type === Text) return []
-      if (child.type === Fragment) return controlNodes(child.children)
-      return [child]
-    })
-
-  const PageCrumbControls: FunctionalComponent = () =>
-    controlNodes(pageTrail.value?.control()).flatMap((node, index) => [
-      ...(index ? [h(BreadcrumbSeparator, { key: `separator-${index}` })] : []),
-      h('li', { key: `control-${index}`, class: 'inline-flex min-w-0 items-center' }, [node])
-    ])
-
-  watch(
-    currentId,
-    (id) => {
-      const ancestors = navTrail(props.navigation, id).slice(0, -1)
-      menuPath.value = ancestors
-        .filter((item) => item.groups || item.type === 'drill')
-        .map((item) => item.id)
-      const inline = ancestors
-        .filter((item) => item.children && !item.groups && item.type !== 'drill')
-        .map((item) => item.id)
-      menuExpanded.value = [...new Set([...menuExpanded.value, ...inline])]
-    },
-    { immediate: true }
-  )
-
-  watch([currentId, navEl], () => revealActive(), { flush: 'post' })
+  watch([() => appMenu.currentId, navEl], () => revealActive(navEl.value), { flush: 'post' })
 
   watch(currentPath, (_next, previous) => {
     if (previous) pageKey.value += 1
   })
 
-  watch(searchOpen, () => {
-    query.value = ''
-  })
-
-  if (dev) {
-    const warnedRoutes = new Set<string>()
-    let pageObserver: globalThis.MutationObserver | null = null
-
-    const routeOf = (href: string | null | undefined): string | null => {
-      if (!href || href.startsWith('#') || !globalThis.location) return null
-      try {
-        const url = new globalThis.URL(href, globalThis.location.href)
-        if (url.origin !== globalThis.location.origin) return null
-        const path = url.pathname
-        return path.length > 1 ? path.replace(/\/+$/, '') : path
-      } catch {
-        return null
-      }
-    }
-
-    const navigationRoutes = (): Map<string, string> => {
-      const routes = new Map<string, string>()
-      const walk = (items: ConsoleLayoutNavItem[]) => {
-        for (const item of items) {
-          const route = routeOf(hrefOf(item))
-          if (route && !routes.has(route)) routes.set(route, item.label)
-          if (item.groups && menuPath.value.includes(item.id))
-            walk(item.groups.flatMap((group) => group.items))
-          if (item.children) walk(item.children)
-        }
-      }
-      walk(props.navigation.flatMap((group) => group.items))
-      return routes
-    }
-
-    const warnDuplicateDestinations = () => {
-      const root = mainEl.value
-      const route = currentPath.value || globalThis.location?.pathname || ''
-      if (!root || warnedRoutes.has(route)) return
-      const menus = [...root.querySelectorAll('[data-testid$="__levels"]')]
-        .map((levels) => levels.parentElement)
-        .filter((menu): menu is globalThis.HTMLElement => Boolean(menu))
-      if (!menus.length) return
-      const routes = navigationRoutes()
-      const pairs: string[] = []
-      for (const menu of menus) {
-        for (const link of menu.querySelectorAll('a[href]')) {
-          const target = routeOf(link.getAttribute('href'))
-          const navLabel = target ? routes.get(target) : undefined
-          if (!target || navLabel === undefined) continue
-          const label = (
-            link.querySelector('[data-testid$="__label"]')?.textContent ??
-            link.textContent ??
-            ''
-          ).trim()
-          pairs.push(
-            `"${label}" (page SidebarMenu) and "${navLabel}" (navigation) both lead to ${target}`
-          )
-        }
-      }
-      if (!pairs.length) return
-      warnedRoutes.add(route)
-      console.warn(
-        `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ${[...new Set(pairs)].join('; ')}. A destination appears once per screen, and a page has only its PageTabs: drop the in-page menu and keep these pages in the rail or in the resource's tabs (rule webkit-navigation-levels).`
-      )
-    }
-
-    watch(
-      mainEl,
-      (el) => {
-        pageObserver?.disconnect()
-        pageObserver = null
-        if (!el || typeof globalThis.MutationObserver === 'undefined') return
-        pageObserver = new globalThis.MutationObserver(() => warnDuplicateDestinations())
-        pageObserver.observe(el, { childList: true, subtree: true })
-        void nextTick(warnDuplicateDestinations)
-      },
-      { flush: 'post' }
-    )
-    watch(currentPath, () => void nextTick(warnDuplicateDestinations), { flush: 'post' })
-    onScopeDispose(() => pageObserver?.disconnect())
-  }
-
-  const railScroller = (from: globalThis.HTMLElement): globalThis.HTMLElement | null => {
-    const limit = from.closest('nav')
-    let node = from.parentElement
-    while (node && limit?.contains(node)) {
-      const { overflowY } = globalThis.getComputedStyle(node)
-      if ((overflowY === 'auto' || overflowY === 'scroll') && node.scrollHeight > node.clientHeight)
-        return node
-      node = node.parentElement
-    }
-    return null
-  }
-
-  const revealActive = () => {
-    const root = navEl.value
-    const entry = root?.querySelector<globalThis.HTMLElement>('[aria-current="page"]')
-    const scroller = root && entry ? railScroller(root) : null
-    if (!entry || !scroller) return
-    const style = globalThis.getComputedStyle(scroller)
-    const padStart = Number.parseFloat(style.scrollPaddingTop) || 0
-    const padEnd = Number.parseFloat(style.scrollPaddingBottom) || 0
-    const box = scroller.getBoundingClientRect()
-    const rect = entry.getBoundingClientRect()
-    const delta =
-      rect.top < box.top + padStart
-        ? rect.top - box.top - padStart
-        : rect.bottom > box.bottom - padEnd
-          ? rect.bottom - box.bottom + padEnd
-          : 0
-    if (delta) scroller.scrollTo({ top: scroller.scrollTop + delta, behavior: 'instant' })
-  }
-
-  const onAccountSelect = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    value: DropdownMenuItemValue
-  ) => {
-    emit('account-select', event, value)
-  }
-
-  const activate = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    item: ConsoleLayoutNavItem
-  ) => {
-    emit('navigate', event, item)
-    follow(event, item)
-  }
+  if (dev) useConsoleLayoutNavAudit(mainEl, currentPath, () => props.navigation, menuPath, hrefOf)
 
   const onMenuNavigate = (
     event: globalThis.MouseEvent,
     node: SidebarMenuNode,
     closeNavigation: () => void
   ) => {
-    const item = leaves.value.get(node.id)
+    const item = appMenu.leaves.get(node.id)
     if (!item || node.groups || node.children) return
-    activate(event, item)
+    appMenu.activate(event, item)
     closeNavigation()
   }
 
-  const onCrumbNavigate = (event: globalThis.MouseEvent, href: string) => {
-    const crumb = activeCrumbs.value.find((entry) => hrefOf(entry) === href)
-    if (crumb) follow(event, crumb)
-  }
-
-  const onPageCrumbClick = (event: globalThis.MouseEvent, crumb: BreadcrumbItemData) => {
-    if (hrefOf(crumb)) follow(event, crumb)
-  }
-
-  const onPaletteSelect = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    value: string | number
-  ) => {
-    const key = String(value)
-    if (key.startsWith(NAV_VALUE)) {
-      const item = leaves.value.get(key.slice(NAV_VALUE.length))
-      if (item) activate(event, item)
-      return
-    }
-    emit('search-select', event, value)
-  }
-
-  const onQuery = (value: unknown) => {
-    query.value = typeof value === 'string' ? value : ''
-  }
-
-  const openSearch = () => {
-    searchOpen.value = true
-  }
+  const MAIN_CLASS =
+    'flex min-h-full min-w-0 flex-col animate-page-enter ' +
+    'has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden ' +
+    'motion-reduce:animate-none ' +
+    '[&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1'
 </script>
 
 <template>
@@ -460,6 +236,7 @@
   >
     <AppLayout
       v-model:tools-open="toolsOpen"
+      :compact-below="1024"
       :navigation-aria-label="ariaLabel || t('consoleLayout.navigation')"
       :tools-label="toolsLabel"
     >
@@ -478,16 +255,16 @@
               <div
                 class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
               >
-                <a
-                  :href="safeHref(home) ?? undefined"
+                <AppHeaderBrand
+                  :href="home"
                   :aria-label="t('consoleLayout.home')"
-                  class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                  class="px-(--spacing-xs)"
                 >
                   <Brand
                     variant="default"
                     size="small"
                   />
-                </a>
+                </AppHeaderBrand>
               </div>
               <div
                 v-if="$slots['sidebar-header']"
@@ -509,8 +286,8 @@
             <SidebarMenu
               v-model:path="menuPath"
               v-model:open-keys="menuExpanded"
-              :groups="menuGroups"
-              :active-id="currentId"
+              :groups="appMenu.menuGroups"
+              :active-id="appMenu.currentId"
               role="presentation"
               @navigate="(event, node) => onMenuNavigate(event, node, closeNavigation)"
             >
@@ -540,7 +317,7 @@
                 v-if="$slots['account-menu']"
                 side="top"
                 align="end"
-                @select="onAccountSelect"
+                @select="(event, value) => emit('account-select', event, value)"
               >
                 <DropdownMenuTrigger>
                   <Tooltip :content="t('consoleLayout.accountMenu')">
@@ -563,94 +340,38 @@
         <div class="@container">
           <AppHeader :data-testid="`${testId}__header`">
             <AppHeaderStart>
-              <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-                <template v-if="compact">
-                  <Tooltip
-                    :content="t('consoleLayout.openNavigation')"
-                    side="bottom"
-                  >
-                    <IconButton
-                      icon="az az-menu"
-                      :ariaLabel="t('consoleLayout.openNavigation')"
-                      variant="outline"
-                      size="medium"
-                      @click="openNavigation"
-                    />
-                  </Tooltip>
-                  <a
-                    v-if="!pageControl"
-                    :href="safeHref(home) ?? undefined"
-                    :aria-label="t('consoleLayout.home')"
-                    class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                  >
-                    <Brand
-                      variant="default"
-                      size="small"
-                    />
-                  </a>
+              <ConsoleLayoutHeaderStart
+                :compact="compact"
+                :home="home"
+                :home-label="t('consoleLayout.home')"
+                :open-navigation-label="t('consoleLayout.openNavigation')"
+                :trail="pageTrail"
+                :breadcrumbs="breadcrumbs"
+                :href-of="hrefOf"
+                :follow="follow"
+                :layout-test-id="testId"
+                @open-navigation="openNavigation"
+              >
+                <template #header-leading>
+                  <slot
+                    name="header-leading"
+                    :compact="compact"
+                  />
                 </template>
-                <slot
-                  name="header-leading"
-                  :compact="compact"
-                />
-                <div
-                  v-if="compact && pageControl"
-                  :data-testid="`${testId}__page-control`"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb class="ms-0 w-full">
-                    <BreadcrumbList>
-                      <PageCrumbControls />
-                    </BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-                <div
-                  v-else-if="!compact && pageControl"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb class="ms-0 w-full">
-                    <BreadcrumbList>
-                      <template
-                        v-for="(crumb, index) in activeCrumbs"
-                        :key="`${crumb.label}-${index}`"
-                      >
-                        <li class="inline-flex items-center">
-                          <BreadcrumbItem
-                            :label="crumb.label"
-                            :href="hrefOf(crumb) ?? '#'"
-                            @click="(event) => onPageCrumbClick(event, crumb)"
-                          />
-                        </li>
-                        <BreadcrumbSeparator />
-                      </template>
-                      <PageCrumbControls />
-                    </BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-                <div
-                  v-else-if="!compact && !pageTrail && $slots['breadcrumbs']"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink *:ms-0"
+                <template
+                  v-if="$slots['breadcrumbs']"
+                  #breadcrumbs
                 >
                   <slot name="breadcrumbs" />
-                </div>
-                <div
-                  v-else-if="!compact && crumbItems.length"
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb
-                    :items="crumbItems"
-                    class="ms-0 w-full"
-                    @navigate="onCrumbNavigate"
-                  />
-                </div>
-              </div>
+                </template>
+              </ConsoleLayoutHeaderStart>
             </AppHeaderStart>
             <AppHeaderCenter />
             <AppHeaderEnd>
               <SearchTrigger
                 collapsible
                 :data-testid="`${testId}__search`"
-                @open="openSearch"
+                @open="appMenu.openSearch"
               />
               <slot
                 name="actions"
@@ -661,21 +382,14 @@
                 v-if="account && $slots['account-menu']"
                 side="bottom"
                 align="end"
-                @select="onAccountSelect"
+                @select="(event, value) => emit('account-select', event, value)"
               >
                 <DropdownMenuTrigger>
-                  <button
-                    type="button"
+                  <AppHeaderAccount
+                    :src="account.src"
+                    :name="account.name"
                     :aria-label="accountTriggerLabel"
-                    class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-                  >
-                    <Avatar
-                      :src="account.src"
-                      :label="account.name"
-                      size="medium"
-                      variant="square"
-                    />
-                  </button>
+                  />
                 </DropdownMenuTrigger>
                 <slot name="account-menu" />
               </DropdownMenu>
@@ -703,57 +417,41 @@
         v-if="$slots['tools']"
         #tools
       >
-        <slot name="tools" />
+        <div
+          :id="toolsId"
+          :data-testid="`${testId}__tools`"
+        >
+          <slot name="tools" />
+        </div>
       </template>
 
       <main
         ref="mainEl"
         :key="pageKey"
         :data-testid="`${testId}__main`"
-        class="flex min-h-full min-w-0 flex-col animate-page-enter has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden motion-reduce:animate-none [&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1"
+        :class="MAIN_CLASS"
       >
         <slot />
       </main>
     </AppLayout>
 
-    <Command
+    <ConsoleLayoutPalette
       v-model:open="searchOpen"
-      @select="onPaletteSelect"
+      :placeholder="searchPlaceholder || t('consoleLayout.searchPlaceholder')"
+      :pages-label="t('consoleLayout.pages')"
+      :no-match-label="t('consoleLayout.noMatch')"
+      :groups="appMenu.paletteGroups"
+      :value-prefix="NAV_VALUE"
+      @select="appMenu.onPaletteSelect"
+      @query="appMenu.onQuery"
     >
-      <CommandInput
-        :placeholder="searchPlaceholder || t('consoleLayout.searchPlaceholder')"
-        @update:model-value="onQuery"
-      />
-      <CommandList>
+      <template #search>
         <slot
           name="search"
-          :query="query"
+          :query="appMenu.query"
         />
-        <CommandGroup
-          v-for="group in paletteGroups"
-          :key="group.key"
-          :label="group.heading || t('consoleLayout.pages')"
-        >
-          <CommandItem
-            v-for="item in group.items"
-            :key="item.id"
-            :value="NAV_VALUE + item.id"
-          >
-            <template
-              v-if="item.icon"
-              #leading
-            >
-              <i
-                :class="item.icon"
-                aria-hidden="true"
-              />
-            </template>
-            {{ item.label }}
-          </CommandItem>
-        </CommandGroup>
-        <CommandEmpty>{{ t('consoleLayout.noMatch') }}</CommandEmpty>
-      </CommandList>
-    </Command>
+      </template>
+    </ConsoleLayoutPalette>
     <ShortcutsDialog :data-testid="`${testId}__shortcuts`" />
   </div>
 </template>

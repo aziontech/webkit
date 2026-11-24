@@ -426,6 +426,35 @@ describe('Chart', () => {
     })
   })
 
+  it.each(['ltr', 'rtl'])(
+    'keeps the edge-anchored first and last month labels clear of their neighbours (%s)',
+    async (dir) => {
+      const months = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+      const labels = months.map((month, index) => `${month} ${index < 3 ? 2025 : 2026}`)
+      const series: ChartSeries[] = [
+        { id: 'spend', name: 'Spend', values: labels.map((_, index) => 100 + index * 9) }
+      ]
+      const view = render({
+        render: () =>
+          h('div', { dir, style: 'width: 280px' }, [
+            h(
+              Chart,
+              { series, labels, ariaLabel: 'Spend' },
+              { default: () => [h(ChartAxis, { type: 'x' }), h(ChartLine)] }
+            )
+          ])
+      })
+      const axis = () =>
+        view.container.querySelector('[data-testid="chart-axis"][data-type="x"]') as Element
+      await vi.waitFor(() => expect(axis().querySelectorAll('text').length).toBeGreaterThan(1))
+      const boxes = [...axis().querySelectorAll('text')]
+        .map((text) => text.getBoundingClientRect())
+        .sort((a, b) => a.left - b.left)
+      for (let index = 1; index < boxes.length; index += 1)
+        expect(boxes[index]!.left).toBeGreaterThanOrEqual(boxes[index - 1]!.right)
+    }
+  )
+
   it('explains an empty range and offers the consumer actions', async () => {
     const view = render(Chart, {
       props: {
@@ -682,6 +711,27 @@ describe('Chart', () => {
         expect(texts.length).toBeGreaterThan(1)
         for (const text of texts) expect(text).toMatch(/^Nov \d+/)
       })
+    })
+  })
+
+  describe('Chart examples with several series name them in a legend', () => {
+    it.each([
+      ['chart/tooltip-total', () => import('../../../../examples/chart/tooltip-total.vue'), [4]],
+      ['chart/brush', () => import('../../../../examples/chart/brush.vue'), [3]],
+      [
+        'chart-card/draggable',
+        () => import('../../../../examples/chart-card/draggable.vue'),
+        [3, 5]
+      ]
+    ])('%s', async (_name, load, counts) => {
+      const view = render((await load()).default)
+      await nextTick()
+      const legends = view.getAllByTestId('chart-legend')
+      expect(
+        legends.map(
+          (legend) => legend.querySelectorAll('[data-testid="chart-legend__item"]').length
+        )
+      ).toEqual(counts)
     })
   })
 })

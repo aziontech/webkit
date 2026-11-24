@@ -32,8 +32,14 @@ describe('ai/ai-api-key', () => {
     const field = keyField(view.container)
     expect(field.value).toBe('')
     expect(field.type).toBe('password')
-    expect(field.getAttribute('placeholder') ?? '').toBe('')
+    expect(field.getAttribute('placeholder')).toBe('Paste a new key to replace ••••3f9a')
     expect(field.getAttribute('autocomplete')).toBe('off')
+    const replace = view.getByRole('button', { name: 'Replace key' })
+    expect(replace.getAttribute('data-variant')).toBe('outline')
+    expect(view.queryByRole('button', { name: 'Save key' })).toBeNull()
+    await userEvent.type(field, 'sk-new')
+    await waitFor(() => expect(replace.getAttribute('data-variant')).toBe('primary'))
+    await userEvent.clear(field)
     const note = document.getElementById(field.getAttribute('aria-describedby')!)
     expect(note?.textContent).toContain('Saved in this browser only')
     const status = statusRegion(view.container)
@@ -79,6 +85,7 @@ describe('ai/ai-api-key', () => {
 
   it('shows only Save key when no key is saved', async () => {
     const view = render(Empty)
+    expect(keyField(view.container).getAttribute('placeholder') ?? '').toBe('')
     expect(statusRegion(view.container).textContent).toContain('No key saved')
     expect(view.queryByRole('button', { name: 'Test connection' })).toBeNull()
     expect(view.queryByRole('button', { name: 'Remove key' })).toBeNull()
@@ -94,19 +101,19 @@ describe('ai/ai-api-key', () => {
     expect(provider).toBe('openai')
   })
 
-  it('locks Remove key and the Provider while a test runs, and keeps Save key', async () => {
+  it('locks Remove key and the Provider while a test runs, and keeps Replace key', async () => {
     const view = render(Testing)
     expect(statusRegion(view.container).textContent).toContain('Testing')
     const test = view.getByRole('button', { name: /Test connection/ })
     expect(test.getAttribute('aria-busy')).toBe('true')
     expect(view.getByRole('button', { name: 'Remove key' })).toBeDisabled()
     expect(view.getByRole('combobox', { name: 'Provider' })).toBeDisabled()
-    expect(view.getByRole('button', { name: 'Save key' })).not.toBeDisabled()
+    expect(view.getByRole('button', { name: 'Replace key' })).not.toBeDisabled()
   })
 
   it('locks the controls while saving and keeps Save key focusable', async () => {
     const view = render(Saving)
-    const save = view.getByRole('button', { name: /Save key/ })
+    const save = view.getByRole('button', { name: /Replace key/ })
     expect(save.getAttribute('aria-busy')).toBe('true')
     expect(save.hasAttribute('disabled')).toBe(false)
     expect(keyField(view.container)).toBeDisabled()

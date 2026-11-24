@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
@@ -32,7 +33,8 @@
 
   const MAX_ROWS = 50
 
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const folderPicker = useFilePicker({ directory: true, multiple: true })
+  const { formatFileSize } = useLocale()
   const received = ref(0)
   const files = ref<ProjectIntakeUpload[]>([])
 
@@ -44,20 +46,23 @@
     { immediate: true }
   )
 
-  const doneCount = computed(() => files.value.filter((file) => file.status === 'success').length)
   const failedCount = computed(() => files.value.filter((file) => file.status === 'error').length)
   const shownFiles = computed(() =>
     files.value.length <= MAX_ROWS
       ? files.value
       : files.value.filter((file) => file.status !== 'success').slice(0, MAX_ROWS)
   )
-  const { formatFileSize } = useLocale()
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
-  const chooseFolder = () => folderInputEl.value?.click()
+  const failedLabel = computed(() =>
+    failedCount.value === 1
+      ? '1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.'
+      : `${failedCount.value} files could not be uploaded. Retry them, or remove them from the folder and drop the project again.`
+  )
 
-  const onFolderChosen = (event: Event) => {
-    const chosen = Array.from((event.target as HTMLInputElement).files ?? [])
+  const chooseFolder = async (event: MouseEvent) => {
+    const chosen = await folderPicker.open()
+    if (!chosen.length) return
     received.value = chosen.length
     emit('select', event, chosen)
   }
@@ -95,9 +100,14 @@
       class="animate-fade-in motion-reduce:animate-none fixed inset-0 z-(--z-control-overlay) flex flex-col items-center justify-center gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
     >
       <header class="flex flex-col items-center gap-(--spacing-2xs) text-center">
-        <h1 class="text-heading-sm text-(--text-default)">Initializing</h1>
-        <p class="text-body-sm text-(--text-muted)">
-          Setting up your deployment. {{ doneCount }} of {{ files.length }} files.
+        <h1 class="text-heading-sm text-(--text-default)">
+          {{ failedCount ? 'Upload paused' : 'Initializing' }}
+        </h1>
+        <p
+          v-if="!failedCount"
+          class="text-body-sm text-(--text-muted)"
+        >
+          Setting up your deployment.
         </p>
       </header>
 
@@ -106,7 +116,7 @@
         severity="danger"
         size="small"
         class="w-full max-w-(--container-md)"
-        :label="`${failedCount} file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`"
+        :label="failedLabel"
         action-label="Retry"
         @action="(event: MouseEvent) => retry(event)"
       />
@@ -141,15 +151,6 @@
         size="medium"
         icon="az az-folder-open"
         @click="chooseFolder"
-      />
-      <input
-        ref="folderInputEl"
-        type="file"
-        webkitdirectory
-        multiple
-        hidden
-        aria-label="Project folder"
-        @change="onFolderChosen"
       />
     </FileDropzone>
     <p

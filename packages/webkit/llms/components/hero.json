@@ -144,7 +144,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
+   "doc": "Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage (it collapses the window)."
   },
   {
    "name": "marquee",

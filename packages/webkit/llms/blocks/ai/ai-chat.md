@@ -1,18 +1,18 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.
+> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
 ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat; tanstack ai; usechat; agent activity; subagent; agent question
 
-A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
+A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation: one reading column the thread scrolls in, with the header controls and the composer floating over it. Beside it, the conversation history. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: its root carries `data-layout-fill`, so it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), only the log scrolls, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -30,41 +30,45 @@ A full page where a person talks with the generative AI assistant about their ac
 
 ## Building blocks
 
-### A. Header — `Tag`, `Button`
+### A. Header — `IconButton`, `Button`, `DropdownMenu`
 
-The assistant's name as the page heading, a Preview `Tag` while the feature is in preview, and a transparent New chat `Button` at the inline end, disabled while the thread is empty. New chat clears the thread without confirmation; the previous thread belongs in a history list, not in a dialog.
+No bar and no border: the thread scrolls under it. On a phone it is round-cornered floating controls over the thread, blurred over a translucent raised surface: Open conversation history at the inline start, and at the inline end one grouped control holding New chat and More conversation actions; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the model picker as the title (`AI assistant` with the chosen model muted and a chevron, a `DropdownMenu` of `models` as radio items, `v-model:modelKey`), New chat while the history panel is folded away, and at the inline end Share and More conversation actions. The More menu holds Share (on a phone), Rename, Archive and Delete for the open conversation; each emits `share-chat`, `rename-chat`, `archive-chat` or `remove-chat` with `activeKey`, and the app does the work. New chat, Share and More are disabled while the thread is empty; New chat clears it without confirmation, and the previous thread stays in the history.
 
-### B. Empty state — `EmptyState`, `SuggestionGroup`
+### A2. History — `ConversationHistory`, `Drawer`
 
-Before the first message: an `EmptyState` with the assistant mark, one question as the title and one sentence on what the assistant can read, over a vertical `SuggestionGroup` of up to five support prompts with icons. Selecting a prompt sends it as the first message.
+The reader's earlier conversations, grouped by date, with a New chat row and a search field (`creatable`, `searchable`). From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, closed by picking a conversation or New chat. The open conversation is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
+
+### B. Empty state — `SuggestionGroup`, `PromptInput`
+
+Before the first message there is no log: a welcome page with one question as its heading ("What can I help with?"). On desktop the heading and the composer sit together in the middle of the page with the support prompts as chips under them; on a phone the heading sits in the middle and the prompts are one row of chips that scrolls sideways just above the composer at the foot of the screen. Selecting a prompt sends it as the first message. Once a message exists the composer moves to the foot of the log; when the reader sent from the composer, focus follows it there.
 
 ### C. Message log — `Conversation`
 
-Fills the space between header and composer and is the only part that scrolls. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
+Fills the page and is the only part that scrolls, in a centered reading column; the header controls and the composer float over it. It follows the newest message while the reader is at the end, stops when they scroll up, and offers Scroll to the latest message. It announces each finished response once; streaming text is never read token by token.
 
 ### D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 
-The reader's prompt at the inline end in a filled bubble with their name and time. The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
+The reader's prompt at the inline end in a filled bubble with the stacked composer's radius, no avatar, no visible name or time (both stay in its accessible name; the time is its tooltip). Under it, Copy and Edit show on hover or focus (always on a touch screen). Edit turns the bubble into a field with Cancel and Send; Send emits `edit`, and once the app has sent the new prompt the bubble carries a `ResponseBranches` pager (`‹ 2/2 ›`) to page back to the earlier prompt and its answers. The files they attached draw under the text the way media draws in a response (section L): images in an `ImageGallery`, a document in a `FilePreview`, audio and video in their players.
 
 ### E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 
-The assistant's response at the inline start beside its mark. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Numbered citations link to the sources. On failure the partial text stays with the error line and Try again.
+The assistant's response as plain text across the reading column, in the larger reading size, with no avatar, bubble or visible name. It shows the loading text while pending, a collapsed `Reasoning` that reads Thinking and then Thought for N seconds, and the Markdown answer in `StreamingResponse` with a caret while it streams. Each citation is a small chip with the source's site name that links to it. On failure the partial text stays with the error line and Try again.
 
 ### F. Sources — `Sources`
 
-Under a complete response that used documents: collapsed under the count, opened by a citation. Item n is citation [n].
+At the end of the action row of a complete response that used documents: a pill with up to three overlapping site marks, named by the count, that opens the list under the row; a citation opens it too. Item n is citation [n].
 
-### G. Response actions — `ChatMessage`, `CopyButton`, `IconButton`
+### G. Response actions — `ChatMessage`, `ResponseBranches`, `FeedbackReasonDialog`
 
-`ChatMessage.Actions` under a complete response, always visible: Copy (`CopyButton`), Regenerate (`IconButton`, disabled while another response is generating) and `ChatMessage.Feedback` with Helpful and Not helpful.
+`ChatMessage.Actions` under a complete response, always visible and always one line, with its built-in actions in ChatGPT's order: Copy, Good response, Bad response, Read aloud (hidden where the browser has no speech synthesis), Share, Try again (disabled while another response is generating), More (Branch in new chat), then the Sources pill in `#trailing`. When the row is narrower than 480px (a phone, the drawer) it keeps Copy, Read aloud, Share and More, and More also holds Good response, Bad response and Try again. A rating fills its thumb and hides the other; pressing it again clears it. Good response raises the toast Thanks for your feedback; Bad response opens `FeedbackReasonDialog`, and sending it emits `feedback` again with the reason, then the toast. After Try again the row starts with a `ResponseBranches` pager (`‹ 2/2 ›`) over the versions of that response. Icons draw at 16px inside a 40px target.
 
 ### H. Follow-up questions — `SuggestionGroup`
 
-After the last complete response, two or three questions that narrow it, as wrapping chips aligned with the response text. They disappear as soon as the reader sends anything else.
+After the last complete response, two or three questions that narrow it, as wrapping pills aligned with the response text. They disappear as soon as the reader sends anything else.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 
-Pinned under the log, centered on the reading width. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter, and Submit becomes Stop while a response is pending or streaming. The disclaimer is its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
@@ -102,7 +106,7 @@ While `hydrating` (`isHydrating` of `useChat`) and no message is in place yet, t
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, `AiChatSendContent`, re-exported from `ai-chat.vue`), so any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/webkit/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, `AiChatSendContent`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 An activity step reads, by convention, `content.title` (else its `activityType`), `content.status` (`pending`, `running`, `success` or `complete`, `error`, `canceled` or `cancelled`, `skipped`; left out, running) and `content.detail` as the line under it.
 
@@ -125,27 +129,41 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `resuming`          | `boolean`                                 | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                                                                                |
 | `hydrating`         | `boolean`                                 | `isHydrating` of `useChat`: placeholders stand in for the conversation and the composer waits.                                                                                                                                |
 | `sessionGenerating` | `boolean`                                 | `sessionGenerating` of `useChat`: Responding in another tab while this tab is not loading.                                                                                                                                    |
-| `attachable`        | `boolean`                                 | The reader may attach files; `send` then hands over multimodal content.                                                                                                                                                       |
+| `attachable`        | `boolean`                                 | The Attach "+" at the start of the composer; `send` then hands over multimodal content. Default `true`.                                                                                                                       |
+| `voice`             | `boolean`                                 | An empty composer shows Start voice conversation in place of Send; it emits `voice-start`. Default `true`.                                                                                                                    |
 | `accept`            | `string`                                  | The files the reader may attach; default `image/*,application/pdf`.                                                                                                                                                           |
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                         |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                         |
 | `resolveAppUrl`     | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                                                                                         |
+| `models`            | `PromptInputMenuOption[]`                 | The models the header title picks from on desktop; left out, the sample models. The choice is `v-model:modelKey`.                                                                                                             |
+| `toolOptions`       | `PromptInputMenuOption[]`                 | The tools the composer's "+" menu turns on; left out, the sample tools. The turned-on ones are `v-model:toolKeys`.                                                                                                            |
 
-| Event              | Payload                     | When                                                                                                                                              |
-| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.      |
-| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                         |
-| `feedback`         | `({ message, value })`      | The reader rated a response.                                                                                                                      |
-| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
-| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
-| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
-| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
-| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                          |
-| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                       |
-| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                |
+The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes. The model of the header title is `v-model:modelKey` and the tools turned on in the "+" menu are `v-model:toolKeys`: pass both with each message, `sendMessage(content, { body: { model: modelKey, tools: toolKeys } })`, and read them from `forwardedProps` on the server.
+
+| Event              | Payload                     | When                                                                                                                                                                           |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.                                   |
+| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                                                          |
+| `voice-start`      | `(event)`                   | Start voice conversation on an empty composer: open the app's audio session (set `voice` to `false` when there is none).                                                       |
+| `retry`            | `(event, message)`          | Try again: call `reload()`. The block keeps the earlier answer as a version.                                                                                                   |
+| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                                                      |
+| `feedback`         | `(value, message, reason?)` | The reader rated a response (`up`, `down`, or `null` when cleared); after Bad response a second `feedback` carries `reason` (`{ reason, details }`) from the dialog: store it. |
+| `share`            | `(event, message)`          | Share on a response: make a link to it.                                                                                                                                        |
+| `edit`             | `(event, message, text)`    | Send on an edited prompt: `setMessages` with the messages before it, then `sendMessage(text)`. The block keeps the earlier prompt as a version.                                |
+| `version-change`   | `(messages)`                | The reader paged to another version of a prompt or an answer: call `setMessages(messages)`.                                                                                    |
+| `branch`           | `(event, message)`          | Branch in new chat on a response: start a new thread from the messages up to it.                                                                                               |
+| `share-chat`       | `(event, key)`              | Share in the header: make a link to the conversation `key` (`activeKey`).                                                                                                      |
+| `rename-chat`      | `(event, key)`              | Rename in the More menu: rename the conversation `key`.                                                                                                                        |
+| `archive-chat`     | `(event, key)`              | Archive in the More menu: archive the conversation `key`.                                                                                                                      |
+| `remove-chat`      | `(event, key)`              | Delete in the More menu: confirm, then delete the conversation `key`.                                                                                                          |
+| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt.                              |
+| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                                                      |
+| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                                                    |
+| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                                              |
+| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                                                   |
+| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                                                       |
+| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                                                    |
+| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                                             |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -182,6 +200,7 @@ export async function POST(request: Request) {
     retryInterrupts,
     stop,
     reload,
+    setMessages,
     clear,
     cancelQueued,
     loadOlderMessages
@@ -189,6 +208,11 @@ export async function POST(request: Request) {
     connection: fetchServerSentEvents('/api/chat'),
     threadId: 'assistant'
   })
+
+  function edit(message, text) {
+    setMessages(messages.value.slice(0, messages.value.findIndex((entry) => entry.id === message.id)))
+    sendMessage(text)
+  }
 </script>
 
 <template>
@@ -212,6 +236,8 @@ export async function POST(request: Request) {
     @load-more="loadOlderMessages()"
     @stop="stop()"
     @retry="reload()"
+    @edit="(_event, message, text) => edit(message, text)"
+    @version-change="(next) => setMessages(next)"
     @new-chat="clear()"
   />
 </template>
@@ -223,7 +249,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 
 - Show the loading text only after a second; a response that arrives faster streams directly.
 - Keep actions visible on every complete response, not on hover.
-- Cite sources inline with numbers and list them under the response.
+- Cite sources inline with site-name chips and open the list from the Sources pill.
 - Let the reader stop a response and keep what streamed, marked as stopped.
 - Keep the composer usable while a response streams so the reader can draft the next prompt.
 - Return focus to the composer when a response finishes.
@@ -239,15 +265,15 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 
 ## Copy
 
-- **Title of the page:** `AI assistant`; the Preview tag while in preview.
-- **Empty state:** a question the reader would ask themselves, e.g. "How can I help with your Azion account?", and one sentence on what the assistant can read.
+- **Title of the page:** `AI assistant`, with the chosen model after it on desktop.
+- **Empty state:** "What can I help with?".
 - **Support prompts and follow-ups:** written as the reader would ask, under 72 characters, e.g. "How do I purge the cache of one URL?".
 - **Placeholder:** `Ask a question`, no end punctuation.
 - **Disclaimer (hint):** "The AI assistant can make mistakes. Check important information before you act on it."
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
-- **Feedback:** Helpful, Not helpful, Feedback submitted (built in).
+- **Feedback:** Good response, Bad response (built in); the toast says Thanks for your feedback.
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -255,25 +281,29 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 ## Accessibility
 
 - The log is a named `role="log"` whose own live behavior is off; a polite live region reads each finished response once, with its author.
-- Each message is an `article` named by author and time; avatars are hidden from assistive tech because the author line names the author.
+- Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
 - The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
-- Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
-- Keyboard order: header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
-- Alignment never carries meaning alone: every message has its author line.
+- Feedback thumbs are toggle buttons with `aria-pressed`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
+- A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
+- Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
+- The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.
+- The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
+- Alignment never carries meaning alone: every message's accessible name says who wrote it.
 - Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
 
 ## States
 
-- Empty: `messages` left out or `[]`, with the empty state and four support prompts; selecting one emits `send`.
+- Empty: `messages` left out or `[]`, with the welcome heading, the composer and four support prompts; selecting one emits `send`.
 - Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
 - Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
-- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
+- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response with its Sources pill, with `followUps`.
 - Media: an answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary.
 - Agent: activity steps, a finished `SubagentCard` and a pending `AgentQuestion`; answering it resolves the interrupt and the card keeps the answer.
-- Restoring: `hydrating` with no messages yet shows the `Skeleton` rows and a disabled composer.
+- Restoring: `hydrating` with no messages yet shows `Skeleton` bubbles and lines and a disabled composer.
+- History: the side panel on desktop, the start drawer on a phone, with New chat and search.
 - Attachments, structured answers and rich tool results: a prompt with an image and a PDF, a `structured-output` part as JSON and a tool result with text and an image (variant Media).
 - Queue, older messages and connection: `queue` shows a `PromptQueue` over the composer, `moreMessages` a Load earlier messages button, and `connection` a Reconnecting status or a Connection lost alert.
 
@@ -290,7 +320,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - `Empty` — primary (the code below)
 - `Streaming` — A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear.
 - `Error` — A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place.
-- `LongThread` — Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread.
+- `LongThread` — Six earlier turns about one workload that overflow the log: it opens on the newest response and its Sources pill, stops following when the reader scrolls up, and the round Scroll to the latest message button above the composer brings them back; follow-up questions close the thread.
 - `Artifact` — An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question fills the composer. While a new version is written the canvas takes `streaming`, which locks its pager.
 - `Media` — A prompt with an attached image, then an answer with a chart tool result, two charts in an `ImageGallery`, a structured answer, a CSV in a `FilePreview` and an audio summary; the composer attaches files.
 - `Agent` — `AgentActivity` steps, a finished `SubagentCard` and a pending `AgentQuestion` that keeps its answer.
@@ -301,124 +331,51 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 
 ```vue
 <script setup lang="ts">
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
   import Alert from '@aziontech/webkit/alert'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
-  import Button from '@aziontech/webkit/button'
-  import ChatMessage, {
-    type ChatMessageFeedbackValue,
-    type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
+  import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import FilePreview from '@aziontech/webkit/file-preview'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import McpAppFrame, {
+  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
+  import {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
-  import Reasoning from '@aziontech/webkit/reasoning'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Sources from '@aziontech/webkit/sources'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import Tag from '@aziontech/webkit/tag'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
+  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import VideoPlayer from '@aziontech/webkit/video-player'
-  import { computed, ref, watch } from 'vue'
-
   import {
-    activitiesBefore,
     type AiChatConnection,
     type AiChatInterrupt,
     type AiChatInterruptError,
     type AiChatMessage,
-    type AiChatQuestion,
     type AiChatQueuedMessage,
     type AiChatSendContent,
     type AiChatTool,
     type AiChatToolAnswer,
     type AiChatToolCallPart,
     type AiChatUiResourcePart,
-    answerable,
-    answerInterrupt,
-    approvalOf,
     contentOf,
-    documentNameOf,
     hasAnswer,
     interruptErrorText,
-    isQuestion,
-    json,
-    needsApproval,
-    parsesAsJson,
-    questionOf,
-    queueItemOf,
-    resolveInterrupt,
-    segmentsOf,
-    skipInterrupt,
-    stopSubagent,
-    structuredOf,
-    subagentStatusOf,
-    subagentTextOf,
-    textOf,
-    toolContentOf,
-    toolQuestionOf,
-    toolStatusOf
-  } from './messages'
-  import { sampleSuggestions } from './sample'
+    queueItemOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
-  export type {
-    AiChatActivityPart,
-    AiChatAttachment,
-    AiChatAudioPart,
-    AiChatConnection,
-    AiChatContent,
-    AiChatDataSource,
-    AiChatDocumentPart,
-    AiChatImagePart,
-    AiChatInterrupt,
-    AiChatInterruptError,
-    AiChatMediaSource,
-    AiChatMessage,
-    AiChatMessageMetadata,
-    AiChatOtherPart,
-    AiChatPart,
-    AiChatQueuedMessage,
-    AiChatRole,
-    AiChatSendContent,
-    AiChatStructuredOutputPart,
-    AiChatSubagentPart,
-    AiChatSubagentStatus,
-    AiChatTextPart,
-    AiChatThinkingPart,
-    AiChatTool,
-    AiChatToolAnswer,
-    AiChatToolCallPart,
-    AiChatToolCallState,
-    AiChatToolResultPart,
-    AiChatUiResourcePart,
-    AiChatVideoPart
-  } from './messages'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatFeedback {
-    /** The rated response. */
-    message: AiChatMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
+  import AiChatComposer from './parts/ai-chat-composer.vue'
+  import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
+  import AiChatHeader, { type AiChatHeaderAction } from './parts/ai-chat-header.vue'
+  import AiChatHistory from './parts/ai-chat-history.vue'
+  import AiChatSkeleton from './parts/ai-chat-skeleton.vue'
+  import AiChatStart from './parts/ai-chat-start.vue'
+  import AiChatTurn from './parts/ai-chat-turn.vue'
+  import { sampleModels, sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -451,8 +408,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     hydrating?: boolean
     /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
     sessionGenerating?: boolean
-    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    /** The reader may attach files from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
     attachable?: boolean
+    /** An empty composer shows the round Start voice conversation control in place of Send; it emits `voice-start` and the app owns the audio session. */
+    voice?: boolean
     /** The files the reader may attach, in the native accept syntax. */
     accept?: string
     /** Most files attached to one message. */
@@ -461,6 +420,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The models the header title picks from on desktop; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    models?: PromptInputMenuOption[]
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatProps>(), {
@@ -479,19 +442,35 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     resuming: false,
     hydrating: false,
     sessionGenerating: false,
-    attachable: false,
+    attachable: true,
+    voice: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    models: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
     send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiChatMessage]
+    'voice-start': [event: MouseEvent]
+    retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatFeedback]
+    feedback: [
+      value: ChatMessageFeedbackValue | null,
+      message: AiChatMessage,
+      reason?: FeedbackReasonDialogPayload
+    ]
+    'share-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'rename-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'archive-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
+    'remove-chat': [event: MouseEvent | KeyboardEvent, key: string | null]
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
@@ -506,35 +485,41 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     'retry-interrupts': [event: MouseEvent]
   }>()
 
-  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
-
-  function setAppFrame(key: string, el: unknown) {
-    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
-    else appFrames.delete(key)
-  }
-
-  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
-    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
-  }
+  const activeKey = defineModel<string | null>('activeKey', { default: null })
+  /** The model chosen in the header title, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
+  const versions = useAiChatVersions(() => props.messages)
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
-  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+  const composerEl = ref<InstanceType<typeof AiChatComposer> | null>(null)
   const stoppedIds = ref<Set<string>>(new Set())
-  const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const askedAfter = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiChatQuestion>>({})
-  const routed = ref<Record<string, boolean>>({})
-  const toolAnswers = ref<Record<string, AiChatQuestion>>({})
+  const historyPanel = ref(true)
+  const historyDrawer = ref(false)
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
+  const chatTools = useAiChatTools({
+    turns: () => turns.value,
+    interrupts: () => props.interrupts,
+    tools: () => props.tools,
+    onAnswerInterrupt: (event, interrupt, value) =>
+      emit('answer-interrupt', event, interrupt, value),
+    onAnswerTool: (event, answer) => emit('answer-tool', event, answer),
+    onApprove: (event, call, input) => emit('approve', event, call, input),
+    onDeny: (event, call) => emit('deny', event, call)
+  })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const modelOptions = computed(() => props.models ?? sampleModels)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
+  const welcome = computed(() => !turns.value.length && !props.hydrating)
+  let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -554,82 +539,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 
   const queueable = computed(() => props.queue !== undefined)
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
-  const wasConnected = ref(props.connection === 'connected')
-  watch(
-    () => props.connection,
-    (value) => {
-      if (value === 'connected') wasConnected.value = true
-    }
-  )
-  const reconnecting = computed(
-    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
-  )
-  const offline = computed(
-    () =>
-      !reconnecting.value &&
-      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
-  )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
-
-  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
-  watch(
-    pendingQuestions,
-    (now) => {
-      for (const interrupt of now) askedAfter.value[interrupt.id!] ??= last.value?.id ?? ''
-    },
-    { immediate: true }
-  )
-
-  const questions = computed(() => {
-    const live = pendingQuestions.value
-      .map(questionOf)
-      .map((question) =>
-        !question.bound && routed.value[question.id]
-          ? { ...question, status: 'running' as const }
-          : question
-      )
-    const ids = new Set(live.map((question) => question.id))
-    const known = new Set(turns.value.map((turn) => turn.id))
-    const groups: Record<string, AiChatQuestion[]> = {}
-    for (const question of [
-      ...live,
-      ...Object.values(settled.value).filter((question) => !ids.has(question.id))
-    ]) {
-      const after = askedAfter.value[question.id] ?? ''
-      ;(groups[known.has(after) ? after : (last.value?.id ?? '')] ??= []).push(question)
-    }
-    return groups
-  })
-
-  function answer(event: Event, question: AiChatQuestion, value: string) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'success', error: '' }
-    if (question.bound) {
-      answerInterrupt(interrupt, value)
-    } else {
-      routed.value[question.id] = true
-      if (interrupt) emit('answer-interrupt', event, interrupt, value)
-    }
-  }
-
-  function askOf(call: AiChatToolCallPart): AiChatQuestion {
-    return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
-  }
-
-  function answerTool(event: Event, call: AiChatToolCallPart, value: string) {
-    toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
-    emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
-  }
-
-  function skip(question: AiChatQuestion) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'skipped', error: '' }
-    skipInterrupt(interrupt)
-  }
-
-  function editOf(call: AiChatToolCallPart): string {
-    return edits.value[call.id] ?? json(call.input ?? call.arguments)
-  }
 
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
@@ -651,9 +561,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
   }
 
-  function toolOf(call: AiChatToolCallPart): AiChatTool {
-    return props.tools[call.name] ?? { title: '' }
-  }
+  onMounted(() => nextTick(() => composerEl.value?.focus()))
 
   watch(
     () => props.loading,
@@ -662,7 +570,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     }
   )
 
-  async function send(event: MouseEvent | KeyboardEvent, text: string) {
+  watch(welcome, (now) => {
+    if (now || !refocus) return
+    refocus = false
+    void nextTick(() => composerEl.value?.focus())
+  })
+
+  async function send(event: MouseEvent | KeyboardEvent, text: string, typed = false) {
     const attached = files.value
     const picked = attached.flatMap((item) => (item.file instanceof File ? [item.file] : []))
     if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
@@ -676,6 +590,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       files.value = attached
       return
     }
+    refocus = typed
     emit('send', event, content)
   }
 
@@ -688,108 +603,79 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     prompt.value = ''
     files.value = []
     stoppedIds.value.clear()
-    edits.value = {}
     answers.value = {}
-    askedAfter.value = {}
-    settled.value = {}
-    routed.value = {}
-    toolAnswers.value = {}
+    chatTools.reset()
+    versions.clear()
+    activeKey.value = null
     emit('new-chat', event)
   }
 
-  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
-    ratings.value[message.id] = value
-    emit('feedback', { message, value })
+  function onChatAction(event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction) {
+    if (action === 'share') emit('share-chat', event, activeKey.value)
+    else if (action === 'rename') emit('rename-chat', event, activeKey.value)
+    else if (action === 'archive') emit('archive-chat', event, activeKey.value)
+    else emit('remove-chat', event, activeKey.value)
   }
 
   function removeQueued(event: MouseEvent, id: string) {
     const item = props.queue?.find((entry) => entry.id === id)
     if (item) emit('remove-queued', event, item)
   }
-
-  function approve(event: MouseEvent, call: AiChatToolCallPart, text: string) {
-    const edited =
-      toolOf(call).editable && text !== json(call.input ?? call.arguments)
-        ? (JSON.parse(text) as unknown)
-        : undefined
-    emit('approve', event, call, edited)
-    resolveInterrupt(props.interrupts, call, true, edited)
-  }
-
-  function deny(event: MouseEvent, call: AiChatToolCallPart) {
-    emit('deny', event, call)
-    resolveInterrupt(props.interrupts, call, false)
-  }
 </script>
 
 <template>
   <section
     aria-labelledby="ai-chat-title"
-    class="flex min-h-0 w-full grow basis-0 flex-col"
+    data-layout-fill
+    class="flex min-h-0 w-full grow basis-0"
   >
-    <header
-      class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-    >
-      <div class="flex items-center gap-(--spacing-xs)">
-        <h1
-          id="ai-chat-title"
-          class="text-heading-xs text-(--text-default)"
-        >
-          AI assistant
-        </h1>
-        <Tag
-          label="Preview"
-          severity="info"
-          size="small"
-        />
-      </div>
-      <Button
-        label="New chat"
-        variant="ghost"
-        size="small"
-        icon="az az-plus"
-        :disabled="!turns.length"
-        @click="newChat"
+    <AiChatHistory
+      v-model="activeKey"
+      v-model:drawer-open="historyDrawer"
+      :panel-open="historyPanel"
+      @create="newChat"
+    />
+    <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+      <AiChatHeader
+        v-model:model-key="modelKey"
+        :empty="!turns.length"
+        :history-open="historyPanel"
+        :models="modelOptions"
+        @new-chat="newChat"
+        @open-history="historyDrawer = true"
+        @toggle-history="historyPanel = !historyPanel"
+        @action="onChatAction"
       />
-    </header>
-    <div class="flex min-h-0 flex-1 flex-col">
-      <div
-        v-if="hydrating && !turns.length"
-        role="status"
-        aria-label="Loading the conversation"
-        class="layout-column-content layout-boundary-inline flex flex-1 flex-col gap-(--spacing-lg) py-(--spacing-md)"
+      <AiChatStart
+        v-if="welcome"
+        :starters="starters"
+        @select="(event, item) => send(event, item.label)"
       >
-        <div
-          v-for="row in 3"
-          :key="row"
-          class="flex gap-(--spacing-sm)"
-        >
-          <Skeleton
-            variant="circle"
-            width="2rem"
-            height="2rem"
-          />
-          <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-            <Skeleton width="25%" />
-            <Skeleton :width="row === 2 ? '50%' : '85%'" />
-          </div>
-        </div>
-      </div>
-      <div
-        v-else-if="!turns.length"
-        class="layout-column-content layout-boundary-inline flex flex-1 flex-col justify-center gap-(--spacing-lg) py-(--spacing-md)"
-      >
-        <EmptyState
-          title="How can I help with your Azion account?"
-          description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
-          icon="az az-ask-azion"
+        <AiChatConnectionStatus
+          :connection="connection"
+          :resuming="resuming"
+          :session-generating="sessionGenerating"
+          :loading="loading"
         />
-        <SuggestionGroup
-          :items="starters"
-          orientation="vertical"
-          @select="(event, item) => send(event, item.label)"
+        <AiChatComposer
+          ref="composerEl"
+          v-model="prompt"
+          v-model:files="files"
+          v-model:tool-keys="toolKeys"
+          :state="state"
+          :queueable="queueable"
+          :hydrating="hydrating"
+          :accept="accept"
+          :max-files="maxFiles"
+          :max-file-size="maxFileSize"
+          :attachable="attachable"
+          :voice="voice"
+          :tools="composerTools"
+          @submit="(event, text) => send(event, text, true)"
+          @stop="stop"
+          @voice-start="emit('voice-start', $event)"
         />
-      </div>
+      </AiChatStart>
       <Conversation
         v-else
         aria-label="Conversation with the AI assistant"
@@ -797,1076 +683,111 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         :loading-more="loadingMore"
         @load-more="emit('load-more', $event)"
       >
-        <template
+        <div
+          aria-hidden="true"
+          class="h-(--spacing-lg) shrink-0"
+        />
+        <AiChatSkeleton v-if="!turns.length" />
+        <AiChatTurn
           v-for="turn in turns"
           :key="turn.id"
-        >
-          <ChatMessage
-            :from="turn.role === 'user' ? 'user' : 'assistant'"
-            :status="statusOf(turn)"
-            :timestamp="timeOf(turn)"
-            :error-message="statusOf(turn) === 'error' ? failure : undefined"
-            @retry="emit('retry', $event, turn)"
-          >
-            <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
-            <template
-              v-for="segment in segmentsOf(
-                turn,
-                turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
-              )"
-              :key="segment.key"
-            >
-              <template v-if="turn.role === 'user' && segment.type === 'text'" />
-              <AgentActivity
-                v-else-if="segment.type === 'activity'"
-                :steps="segment.steps"
-              />
-              <Reasoning
-                v-else-if="segment.type === 'reasoning'"
-                :streaming="statusOf(turn) === 'pending'"
-                :duration="
-                  statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
-                "
-              >
-                <p class="whitespace-pre-line">{{ segment.content }}</p>
-              </Reasoning>
-              <StreamingResponse
-                v-else-if="segment.type === 'text'"
-                :content="segment.content"
-                :streaming="statusOf(turn) === 'streaming'"
-                :sources="turn.metadata?.sources ?? []"
-                :anchor="`answer-${turn.id}`"
-              />
-              <AgentQuestion
-                v-else-if="
-                  segment.type === 'tool' &&
-                  answerable(toolOf(segment.call), segment.call, segment.result)
-                "
-                v-model="answers[segment.call.id]"
-                :title="askOf(segment.call).title"
-                :type="askOf(segment.call).options.length ? 'choice' : 'text'"
-                :options="askOf(segment.call).options"
-                :status="askOf(segment.call).status"
-                @submit="(event, value) => answerTool(event, segment.call, value)"
-              />
-              <template v-else-if="segment.type === 'tool'">
-                <ToolApproval
-                  v-if="needsApproval(segment.call)"
-                  :title="
-                    toolOf(segment.call).question ||
-                    toolOf(segment.call).title ||
-                    `Run ${segment.call.name}?`
-                  "
-                  :description="toolOf(segment.call).description"
-                  :approve-label="toolOf(segment.call).approveLabel"
-                  :variant="toolOf(segment.call).variant"
-                  :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
-                  :status="approvalOf(segment.call)"
-                  :loading="loading && turn === last"
-                  :editable="toolOf(segment.call).editable"
-                  :invalid="toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))"
-                  :model-value="editOf(segment.call)"
-                  @update:model-value="(text) => (edits[segment.call.id] = text)"
-                  @approve="(event, text) => approve(event, segment.call, text)"
-                  @deny="deny($event, segment.call)"
-                >
-                  <CodeBlock
-                    v-if="
-                      !toolOf(segment.call).editable &&
-                      json(segment.call.input ?? segment.call.arguments)
-                    "
-                    :code="json(segment.call.input ?? segment.call.arguments)"
-                    language="json"
-                    :show-line-numbers="false"
-                  />
-                </ToolApproval>
-                <ToolCall
-                  v-if="!needsApproval(segment.call) || approvalOf(segment.call) === 'approved'"
-                  :name="segment.call.name"
-                  :title="toolOf(segment.call).title"
-                  :status="toolStatusOf(segment.call, segment.result)"
-                >
-                  <template
-                    v-if="json(segment.call.input ?? segment.call.arguments)"
-                    #input
-                  >
-                    <CodeBlock
-                      :code="json(segment.call.input ?? segment.call.arguments)"
-                      language="json"
-                      :show-line-numbers="false"
-                    />
-                  </template>
-                  <template
-                    v-if="
-                      !segment.result?.error &&
-                      segment.call.output === undefined &&
-                      toolContentOf(segment.result?.content)
-                    "
-                    #output
-                  >
-                    <p
-                      v-if="toolContentOf(segment.result?.content)?.text"
-                      class="whitespace-pre-line text-body-sm text-(--text-default)"
-                    >
-                      {{ toolContentOf(segment.result?.content)?.text }}
-                    </p>
-                    <ImageGallery
-                      v-if="toolContentOf(segment.result?.content)?.images.length"
-                      :items="toolContentOf(segment.result?.content)?.images ?? []"
-                    />
-                  </template>
-                  <template
-                    v-else-if="
-                      json(segment.result?.error || segment.call.output || segment.result?.content)
-                    "
-                    #output
-                  >
-                    <CodeBlock
-                      :code="
-                        json(
-                          segment.result?.error || segment.call.output || segment.result?.content
-                        )
-                      "
-                      language="json"
-                      :show-line-numbers="false"
-                    />
-                  </template>
-                </ToolCall>
-              </template>
-              <ImageGallery
-                v-else-if="segment.type === 'gallery'"
-                :items="segment.images"
-              />
-              <AudioPlayer
-                v-else-if="segment.type === 'audio'"
-                :src="segment.src"
-              />
-              <VideoPlayer
-                v-else-if="segment.type === 'video'"
-                :src="segment.src"
-                :mime-type="segment.mimeType"
-              />
-              <FilePreview
-                v-else-if="segment.type === 'document'"
-                :file-name="documentNameOf(segment.part)"
-                :mime-type="segment.part.source.mimeType"
-                :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
-                :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
-              />
-              <SubagentCard
-                v-else-if="segment.type === 'subagent'"
-                :name="segment.part.subagent.name"
-                :title="segment.part.subagent.description"
-                :description="segment.part.subagent.error?.message"
-                :status="subagentStatusOf(segment.part)"
-                :stoppable="typeof segment.part.subagent.stop === 'function'"
-                @stop="stopSubagent(segment.part)"
-              >
-                <StreamingResponse
-                  v-if="subagentTextOf(segment.part)"
-                  :content="subagentTextOf(segment.part)"
-                />
-                <template
-                  v-if="json(segment.part.subagent.input)"
-                  #input
-                >
-                  <CodeBlock
-                    :code="json(segment.part.subagent.input)"
-                    language="json"
-                    :show-line-numbers="false"
-                  />
-                </template>
-              </SubagentCard>
-              <template v-else-if="segment.type === 'structured'">
-                <Alert
-                  v-if="segment.part.status === 'error'"
-                  severity="danger"
-                  size="small"
-                  title="The structured answer failed"
-                >
-                  {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
-                </Alert>
-                <CodeBlock
-                  v-else-if="structuredOf(segment.part)"
-                  :code="structuredOf(segment.part)"
-                  language="json"
-                  :show-line-numbers="false"
-                  :aria-busy="segment.part.status === 'streaming' || undefined"
-                />
-              </template>
-              <McpAppFrame
-                v-else-if="segment.type === 'app'"
-                :ref="(el) => setAppFrame(segment.key, el)"
-                :resource="segment.part.resource"
-                :title="
-                  (tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName
-                "
-                :resolve-url="resolveAppUrl"
-                @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
-              />
-            </template>
-            <template v-if="turn.role === 'assistant'">
-              <p
-                v-if="stopped(turn)"
-                class="text-body-sm text-(--text-muted)"
-              >
-                You stopped this response.
-              </p>
-              <Sources
-                v-if="statusOf(turn) === 'success' && !stopped(turn)"
-                :items="turn.metadata?.sources ?? []"
-                :anchor="`answer-${turn.id}`"
-              />
-            </template>
-            <template
-              v-if="turn.role === 'assistant'"
-              #actions
-            >
-              <ChatMessage.Actions>
-                <CopyButton
-                  size="small"
-                  :value="textOf(turn)"
-                />
-                <IconButton
-                  icon="az az-refresh"
-                  aria-label="Regenerate response"
-                  variant="ghost"
-                  size="small"
-                  :disabled="state !== 'ready'"
-                  @click="emit('retry', $event, turn)"
-                />
-                <ChatMessage.Feedback
-                  :model-value="ratings[turn.id] ?? null"
-                  @update:model-value="(value) => rate(turn, value)"
-                />
-              </ChatMessage.Actions>
-            </template>
-          </ChatMessage>
-          <ChatMessage
-            v-if="questions[turn.id]?.length"
-            from="assistant"
-          >
-            <AgentQuestion
-              v-for="question in questions[turn.id]"
-              :key="question.id"
-              v-model="answers[question.id]"
-              :title="question.title"
-              :type="question.options.length ? 'choice' : 'text'"
-              :options="question.options"
-              :status="question.status"
-              :error="question.error"
-              :skippable="question.bound"
-              @submit="(event, value) => answer(event, question, value)"
-              @skip="skip(question)"
-            />
-          </ChatMessage>
-        </template>
+          v-model:answers="answers"
+          :turn="turn"
+          :messages="messages"
+          :status="statusOf(turn)"
+          :time="timeOf(turn)"
+          :failure="failure"
+          :tools="tools"
+          :busy="loading && turn === last"
+          :ready="state === 'ready'"
+          :stopped="stopped(turn)"
+          :questions="chatTools.questions.value[turn.id]"
+          :ask-of="chatTools.askOf"
+          :edit-of="chatTools.editOf"
+          :resolve-app-url="resolveAppUrl"
+          :versions="versions"
+          @retry="emit('retry', $event, turn)"
+          @rate="(value, reason) => emit('feedback', value, turn, reason)"
+          @share="(event) => emit('share', event, turn)"
+          @branch="(event) => emit('branch', event, turn)"
+          @edit-prompt="(event, text) => emit('edit', event, turn, text)"
+          @version-change="(next) => emit('version-change', next)"
+          @answer-tool="chatTools.answerTool"
+          @edit="chatTools.setEdit"
+          @approve="chatTools.approve"
+          @deny="chatTools.deny"
+          @answer="chatTools.answer"
+          @skip="chatTools.skip"
+          @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
+        />
         <ChatMessage
           v-if="waiting && last"
           :status="failure ? 'error' : 'pending'"
           :error-message="failure || undefined"
           @retry="emit('retry', $event, last)"
         />
-        <div
+        <SuggestionGroup
           v-if="lastAnswer && followUps?.length"
-          class="ps-[calc(2rem+var(--spacing-sm))]"
-        >
-          <SuggestionGroup
-            :items="followUps"
-            aria-label="Follow-up questions"
-            @select="(event, item) => send(event, item.label)"
+          :items="followUps"
+          aria-label="Follow-up questions"
+          @select="(event, item) => send(event, item.label)"
+        />
+        <template #composer>
+          <AiChatConnectionStatus
+            :connection="connection"
+            :resuming="resuming"
+            :session-generating="sessionGenerating"
+            :loading="loading"
           />
-        </div>
+          <Alert
+            key="alert-2"
+            v-if="interruptErrors.length"
+            severity="danger"
+            size="small"
+            title="Your answer was not sent"
+            :action-label="retryable ? 'Retry' : ''"
+            @action="emit('retry-interrupts', $event)"
+          >
+            {{ interruptErrorText(interruptErrors) }}
+          </Alert>
+          <PromptQueue
+            v-if="queued.length"
+            :items="queued"
+            @remove="(event, item) => removeQueued(event, item.id)"
+          />
+          <AiChatComposer
+            ref="composerEl"
+            v-model="prompt"
+            v-model:files="files"
+            v-model:tool-keys="toolKeys"
+            :state="state"
+            :queueable="queueable"
+            :hydrating="hydrating"
+            :accept="accept"
+            :max-files="maxFiles"
+            :max-file-size="maxFileSize"
+            :attachable="attachable"
+            :voice="voice"
+            :tools="composerTools"
+            @submit="(event, text) => send(event, text, true)"
+            @stop="stop"
+            @voice-start="emit('voice-start', $event)"
+          />
+        </template>
       </Conversation>
     </div>
-    <footer
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
-    >
-      <StatusIndicator
-        v-if="reconnecting"
-        key="reconnecting"
-        severity="warning"
-        label="Reconnecting"
-        loading
-      />
-      <Alert
-        v-else-if="offline"
-        key="offline"
-        severity="danger"
-        size="small"
-        title="Connection lost"
-      >
-        Your messages send when the connection returns.
-      </Alert>
-      <StatusIndicator
-        v-else-if="sessionGenerating && !loading"
-        key="elsewhere"
-        severity="info"
-        label="Responding in another tab"
-        loading
-      />
-      <Alert
-        key="alert-2"
-        v-if="interruptErrors.length"
-        severity="danger"
-        size="small"
-        title="Your answer was not sent"
-        :action-label="retryable ? 'Retry' : ''"
-        @action="emit('retry-interrupts', $event)"
-      >
-        {{ interruptErrorText(interruptErrors) }}
-      </Alert>
-      <PromptQueue
-        v-if="queued.length"
-        :items="queued"
-        @remove="(event, item) => removeQueued(event, item.id)"
-      />
-      <PromptInput
-        ref="composerEl"
-        v-model="prompt"
-        v-model:files="files"
-        :status="state"
-        :queueable="queueable"
-        :disabled="hydrating"
-        :accept="accept"
-        :max-files="maxFiles"
-        :max-file-size="maxFileSize"
-        :max-length="4000"
-        @submit="(event, { value }) => send(event, value)"
-        @stop="stop"
-      >
-        <template
-          v-if="attachable"
-          #actions
-        >
-          <PromptInputAttachButton />
-        </template>
-        <template #hint>
-          The AI assistant can make mistakes. Check important information before you act on it.
-        </template>
-      </PromptInput>
-    </footer>
   </section>
 </template>
-```
-
-## `messages.ts`
-
-```ts
-import type { AgentActivityStatus, AgentActivityStep } from '@aziontech/webkit/agent-activity'
-import type { AgentQuestionOption, AgentQuestionStatus } from '@aziontech/webkit/agent-question'
-import type { ImageGalleryItem } from '@aziontech/webkit/image-gallery'
-import type { PromptQueueItem } from '@aziontech/webkit/prompt-queue'
-import type { SourcesItem } from '@aziontech/webkit/sources'
-import type { SubagentCardStatus } from '@aziontech/webkit/subagent-card'
-import type { ToolApprovalVariant } from '@aziontech/webkit/tool-approval'
-import type { ToolCallStatus } from '@aziontech/webkit/tool-call'
-
-/** Who wrote a message; the conversation draws the reader's and the assistant's. */
-export type AiChatRole = 'system' | 'user' | 'assistant' | 'activity'
-
-/** Text of a message: plain for the reader, Markdown for the assistant. */
-export interface AiChatTextPart {
-  type: 'text'
-  content: string
-}
-
-/** How the assistant reached the answer, shown in the collapsible Reasoning. */
-export interface AiChatThinkingPart {
-  type: 'thinking'
-  content: string
-}
-
-/** Where a tool call stands. */
-export type AiChatToolCallState =
-  | 'awaiting-input'
-  | 'input-streaming'
-  | 'input-complete'
-  | 'approval-requested'
-  | 'approval-responded'
-  | 'complete'
-  | 'error'
-
-/** A tool the assistant calls; one that needs approval carries `approval`. */
-export interface AiChatToolCallPart {
-  type: 'tool-call'
-  id: string
-  name: string
-  arguments: string
-  input?: unknown
-  state: AiChatToolCallState
-  output?: unknown
-  approval?: {
-    id: string
-    needsApproval: boolean
-    approved?: boolean
-  }
-}
-
-/** What a tool returned, matched to its call by `toolCallId`. */
-export interface AiChatToolResultPart {
-  type: 'tool-result'
-  toolCallId: string
-  content: unknown
-  state: 'streaming' | 'complete' | 'error'
-  outcome?: 'cancelled' | 'denied'
-  error?: string
-}
-
-/** Where the bytes of an image, audio, video or document come from: a URL, base64 data, or a provider file the block cannot draw. */
-export interface AiChatMediaSource {
-  type: 'url' | 'data' | 'file'
-  value: string
-  mimeType?: string
-}
-
-/** An image the message carries; consecutive images draw as one gallery. */
-export interface AiChatImagePart {
-  type: 'image'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
-
-/** An audio clip the message carries. */
-export interface AiChatAudioPart {
-  type: 'audio'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
-
-/** A video the message carries. */
-export interface AiChatVideoPart {
-  type: 'video'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
-
-/** A document the message carries, such as a PDF; `metadata.name` names it. */
-export interface AiChatDocumentPart {
-  type: 'document'
-  id?: string
-  source: AiChatMediaSource
-  metadata?: unknown
-}
-
-/** A step the agent reports; `content.title`, `content.status` and `content.detail` draw it. */
-export interface AiChatActivityPart {
-  type: 'activity'
-  activityType: string
-  content: Record<string, unknown>
-}
-
-/** Where a helper agent stands. */
-export type AiChatSubagentStatus = 'running' | 'finished' | 'error' | 'suspended'
-
-/** A helper agent the assistant started, with its own messages. */
-export interface AiChatSubagentPart {
-  type: 'subagent'
-  subagent: {
-    name: string
-    description?: string
-    status: AiChatSubagentStatus
-    messages: ReadonlyArray<AiChatMessage>
-    input?: unknown
-    error?: { message: string }
-    stop?: unknown
-  }
-}
-
-/** An interactive widget a tool returned (an MCP app), drawn in a sandboxed frame. */
-export interface AiChatUiResourcePart {
-  type: 'ui-resource'
-  resource: { uri: string; mimeType: string; text?: string; blob?: string }
-  toolCallId: string
-  toolName: string
-  serverId?: string
-}
-
-/** A typed answer the assistant returned against a schema; `data` is set once it is complete. */
-export interface AiChatStructuredOutputPart {
-  type: 'structured-output'
-  status: 'streaming' | 'complete' | 'error'
-  raw: string
-  data?: unknown
-  partial?: unknown
-  reasoning?: string
-  errorMessage?: string
-}
-
-/** A part the conversation does not draw. */
-export interface AiChatOtherPart {
-  type: string
-}
-
-/** One piece of a message, in the order it arrived. */
-export type AiChatPart =
-  | AiChatTextPart
-  | AiChatThinkingPart
-  | AiChatToolCallPart
-  | AiChatToolResultPart
-  | AiChatImagePart
-  | AiChatAudioPart
-  | AiChatVideoPart
-  | AiChatDocumentPart
-  | AiChatActivityPart
-  | AiChatSubagentPart
-  | AiChatUiResourcePart
-  | AiChatStructuredOutputPart
-  | AiChatOtherPart
-
-/** What the app adds to a message beside its parts. */
-export interface AiChatMessageMetadata {
-  /** The documents the response cites, numbered in order. */
-  sources?: SourcesItem[]
-  /** How long the assistant thought, in seconds; left out, the block measures it while it streams. */
-  reasoningSeconds?: number
-  /** The reader stopped this response; the block also marks the response Stop ends. */
-  stopped?: boolean
-}
-
-/** One message, in the shape TanStack AI's `useChat` returns. */
-export interface AiChatMessage {
-  /** Stable key. */
-  id: string
-  /** Who wrote it; `system` and `activity` messages are not drawn. */
-  role: AiChatRole
-  /** The text, reasoning and tool calls, in order. */
-  parts: ReadonlyArray<AiChatPart>
-  /** When it was written. */
-  createdAt?: Date
-  /** Sources, the thinking time and the stopped flag. */
-  metadata?: AiChatMessageMetadata & Record<string, unknown>
-}
-
-/** How a tool reads in the conversation and on its approval card. */
-export interface AiChatTool {
-  /** What the call does, in plain words. */
-  title: string
-  /** The question on the approval card, naming the action; left out, the title. */
-  question?: string
-  /** What changes and what stays, on the approval card. */
-  description?: string
-  /** The approve button label, the verb of the title. */
-  approveLabel?: string
-  /** Danger for an irreversible action. */
-  variant?: ToolApprovalVariant
-  /** The phrase the reader types before an irreversible action enables. */
-  confirmationPhrase?: string
-  /** The reader may edit the call's arguments, as JSON, before approving. */
-  editable?: boolean
-  /** The reader answers this tool in the chat: the block asks `question` (else the title) and hands the answer back for `addToolResult`. */
-  answerable?: boolean
-  /** The answers the reader picks from when `answerable`; left out, the reader types one. */
-  options?: AgentQuestionOption[]
-}
-
-/** A pending request from the chat, as TanStack AI's `useChat` returns it in `interrupts`. */
-export interface AiChatInterrupt {
-  kind: string
-  id?: string
-  toolCallId?: string
-  message?: string
-  metadata?: Readonly<Record<string, unknown>>
-  payload?: unknown
-  status?: string
-  errors?: ReadonlyArray<{ message: string }>
-  resolveInterrupt?: unknown
-  cancel?: unknown
-}
-
-/** A failed attempt to send the answers to pending requests, as `useChat` returns it in `interruptErrors`. */
-export interface AiChatInterruptError {
-  message: string
-  retryable?: boolean
-  code?: string
-}
-
-/** The answer to a tool the reader answers, in the shape `addToolResult` takes. */
-export interface AiChatToolAnswer {
-  toolCallId: string
-  tool: string
-  output: unknown
-}
-
-/** Inline base64 bytes of a file the reader attached. */
-export interface AiChatDataSource {
-  type: 'data'
-  value: string
-  mimeType: string
-}
-
-/** A file the reader attached to a message, as a TanStack AI content part. */
-export interface AiChatAttachment {
-  type: 'image' | 'audio' | 'video' | 'document'
-  source: AiChatDataSource
-  metadata: { name: string }
-}
-
-/** A message with attachments, as `sendMessage` takes it. */
-export interface AiChatContent {
-  content: Array<AiChatTextPart | AiChatAttachment>
-}
-
-/** What the reader sent: the text alone, or the text with its attachments. */
-export type AiChatSendContent = string | AiChatContent
-
-/** A message waiting to be sent, as `useChat` returns it in `queue`. */
-export interface AiChatQueuedMessage {
-  id: string
-  content: unknown
-}
-
-/** The state of the connection to the chat, as `useChat` returns `connectionStatus`. */
-export type AiChatConnection = 'disconnected' | 'connecting' | 'connected' | 'error'
-
-/** A question the agent asked through a generic interrupt, as the block draws it. */
-export interface AiChatQuestion {
-  id: string
-  title: string
-  options: AgentQuestionOption[]
-  status: AgentQuestionStatus
-  error: string
-  bound: boolean
-}
-
-/** A rendered piece of an assistant message. */
-export type AiChatSegment =
-  | { type: 'activity'; key: string; steps: AgentActivityStep[] }
-  | { type: 'reasoning'; key: string; content: string }
-  | { type: 'text'; key: string; content: string }
-  | { type: 'tool'; key: string; call: AiChatToolCallPart; result?: AiChatToolResultPart }
-  | { type: 'gallery'; key: string; images: ImageGalleryItem[] }
-  | { type: 'audio'; key: string; src: string }
-  | { type: 'video'; key: string; src: string; mimeType: string }
-  | { type: 'document'; key: string; part: AiChatDocumentPart }
-  | { type: 'subagent'; key: string; part: AiChatSubagentPart }
-  | { type: 'app'; key: string; part: AiChatUiResourcePart }
-  | { type: 'structured'; key: string; part: AiChatStructuredOutputPart }
-
-export const isUiResourcePart = (part: AiChatPart): part is AiChatUiResourcePart =>
-  part.type === 'ui-resource'
-
-export const isStructuredOutputPart = (part: AiChatPart): part is AiChatStructuredOutputPart =>
-  part.type === 'structured-output'
-
-export const isTextPart = (part: AiChatPart): part is AiChatTextPart => part.type === 'text'
-
-export const isThinkingPart = (part: AiChatPart): part is AiChatThinkingPart =>
-  part.type === 'thinking'
-
-export const isToolCallPart = (part: AiChatPart): part is AiChatToolCallPart =>
-  part.type === 'tool-call'
-
-export const isToolResultPart = (part: AiChatPart): part is AiChatToolResultPart =>
-  part.type === 'tool-result'
-
-export const isImagePart = (part: AiChatPart): part is AiChatImagePart => part.type === 'image'
-
-export const isAudioPart = (part: AiChatPart): part is AiChatAudioPart => part.type === 'audio'
-
-export const isVideoPart = (part: AiChatPart): part is AiChatVideoPart => part.type === 'video'
-
-export const isDocumentPart = (part: AiChatPart): part is AiChatDocumentPart =>
-  part.type === 'document'
-
-export const isActivityPart = (part: AiChatPart): part is AiChatActivityPart =>
-  part.type === 'activity'
-
-export const isSubagentPart = (part: AiChatPart): part is AiChatSubagentPart =>
-  part.type === 'subagent'
-
-export function mediaUrl(source: AiChatMediaSource): string {
-  if (source.type === 'url') return source.value
-  if (source.type !== 'data') return ''
-  if (source.value.startsWith('data:')) return source.value
-  return `data:${source.mimeType ?? 'application/octet-stream'};base64,${source.value}`
-}
-
-function metadataText(metadata: unknown, key: string): string {
-  if (!metadata || typeof metadata !== 'object' || !(key in metadata)) return ''
-  const value = (metadata as Record<string, unknown>)[key]
-  return typeof value === 'string' ? value : ''
-}
-
-export function imageOf(part: AiChatImagePart, index: number): ImageGalleryItem | null {
-  const key = part.id ?? `image-${index}`
-  const alt = metadataText(part.metadata, 'alt')
-  if (part.source.type === 'url') return { key, src: part.source.value, alt }
-  if (part.source.type === 'data')
-    return { key, data: part.source.value, mimeType: part.source.mimeType, alt }
-  return null
-}
-
-export function documentNameOf(part: AiChatDocumentPart): string {
-  return metadataText(part.metadata, 'name') || 'Document'
-}
-
-const ACTIVITY_STATUS: Record<string, AgentActivityStatus> = {
-  pending: 'pending',
-  running: 'running',
-  success: 'success',
-  complete: 'success',
-  error: 'error',
-  canceled: 'canceled',
-  cancelled: 'canceled',
-  skipped: 'skipped'
-}
-
-export function activityStepOf(part: AiChatActivityPart, key: string): AgentActivityStep {
-  const { title, status, detail } = part.content
-  return {
-    key,
-    title: typeof title === 'string' && title ? title : part.activityType,
-    status: (typeof status === 'string' && ACTIVITY_STATUS[status]) || 'running',
-    description: typeof detail === 'string' && detail ? detail : undefined
-  }
-}
-
-export function activitiesBefore(
-  messages: ReadonlyArray<AiChatMessage>,
-  turn: AiChatMessage
-): AiChatActivityPart[] {
-  const parts: AiChatActivityPart[] = []
-  for (let index = messages.indexOf(turn) - 1; index >= 0; index--) {
-    const message = messages[index]!
-    if (message.role === 'user' || message.role === 'assistant') break
-    if (message.role === 'activity') parts.unshift(...message.parts.filter(isActivityPart))
-  }
-  return parts
-}
-
-export function subagentStatusOf(part: AiChatSubagentPart): SubagentCardStatus {
-  const { status, error } = part.subagent
-  if (status === 'finished') return 'success'
-  if (status === 'suspended') return 'pending'
-  if (status === 'error') return error?.message === 'Stopped' ? 'canceled' : 'error'
-  return 'running'
-}
-
-export function subagentTextOf(part: AiChatSubagentPart): string {
-  return part.subagent.messages
-    .filter((message) => message.role === 'assistant')
-    .map((message) => textOf(message))
-    .filter(Boolean)
-    .join('\n\n')
-}
-
-export function stopSubagent(part: AiChatSubagentPart): void {
-  const stop = part.subagent.stop
-  if (typeof stop === 'function') stop.call(part.subagent)
-}
-
-export function textOf(message: AiChatMessage, separator = '\n\n'): string {
-  return message.parts
-    .filter(isTextPart)
-    .map((part) => part.content)
-    .filter(Boolean)
-    .join(separator)
-}
-
-export function hasText(message: AiChatMessage): boolean {
-  return message.parts.some((part) => isTextPart(part) && part.content.length > 0)
-}
-
-export function hasAnswer(message: AiChatMessage): boolean {
-  return (
-    hasText(message) ||
-    message.parts.some((part) => isStructuredOutputPart(part) && part.raw.length > 0)
-  )
-}
-
-export function hasThinking(message: AiChatMessage): boolean {
-  return message.parts.some(isThinkingPart)
-}
-
-export function segmentsOf(
-  message: AiChatMessage,
-  activities: ReadonlyArray<AiChatActivityPart> = []
-): AiChatSegment[] {
-  const results = new Map<string, AiChatToolResultPart>()
-  for (const part of message.parts) {
-    if (isToolResultPart(part)) results.set(part.toolCallId, part)
-  }
-  const steps = [...activities, ...message.parts.filter(isActivityPart)].map((part, index) =>
-    activityStepOf(part, `step-${index}`)
-  )
-  const segments: AiChatSegment[] = steps.length
-    ? [{ type: 'activity', key: 'activity', steps }]
-    : []
-  const thinking = message.parts
-    .flatMap((part) =>
-      isThinkingPart(part)
-        ? [part.content]
-        : isStructuredOutputPart(part) && part.reasoning
-          ? [part.reasoning]
-          : []
-    )
-    .join('\n\n')
-  if (thinking) segments.push({ type: 'reasoning', key: 'reasoning', content: thinking })
-  message.parts.forEach((part, index) => {
-    const previous = segments[segments.length - 1]
-    if (isTextPart(part)) {
-      if (!part.content) return
-      if (previous?.type === 'text') previous.content = `${previous.content}\n\n${part.content}`
-      else segments.push({ type: 'text', key: `text-${index}`, content: part.content })
-    } else if (isToolCallPart(part)) {
-      segments.push({ type: 'tool', key: part.id, call: part, result: results.get(part.id) })
-    } else if (isImagePart(part)) {
-      const image = imageOf(part, index)
-      if (!image) return
-      if (previous?.type === 'gallery') previous.images.push(image)
-      else segments.push({ type: 'gallery', key: `gallery-${index}`, images: [image] })
-    } else if (isAudioPart(part)) {
-      const src = mediaUrl(part.source)
-      if (src) segments.push({ type: 'audio', key: part.id ?? `audio-${index}`, src })
-    } else if (isVideoPart(part)) {
-      const src = mediaUrl(part.source)
-      if (src)
-        segments.push({
-          type: 'video',
-          key: part.id ?? `video-${index}`,
-          src,
-          mimeType: part.source.mimeType ?? ''
-        })
-    } else if (isDocumentPart(part)) {
-      if (part.source.type === 'url' || part.source.type === 'data')
-        segments.push({ type: 'document', key: part.id ?? `document-${index}`, part })
-    } else if (isSubagentPart(part)) {
-      segments.push({ type: 'subagent', key: `subagent-${index}`, part })
-    } else if (isUiResourcePart(part)) {
-      segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
-    } else if (isStructuredOutputPart(part)) {
-      segments.push({ type: 'structured', key: `structured-${index}`, part })
-    }
-  })
-  return segments
-}
-
-export function toolStatusOf(
-  call: AiChatToolCallPart,
-  result?: AiChatToolResultPart
-): ToolCallStatus {
-  if (result?.outcome === 'denied' || call.approval?.approved === false) return 'denied'
-  if (result?.outcome === 'cancelled') return 'canceled'
-  if (call.state === 'error' || result?.state === 'error') return 'error'
-  if (call.state === 'complete' || result?.state === 'complete') return 'success'
-  if (call.state === 'awaiting-input' || call.state === 'input-streaming') return 'streaming'
-  return 'running'
-}
-
-export function structuredOf(part: AiChatStructuredOutputPart): string {
-  if (part.status === 'complete') return json(part.data)
-  return json(part.partial) || part.raw
-}
-
-export interface AiChatToolContent {
-  text: string
-  images: ImageGalleryItem[]
-}
-
-export function toolContentOf(content: unknown): AiChatToolContent | null {
-  if (!Array.isArray(content) || !content.length) return null
-  const texts: string[] = []
-  const images: ImageGalleryItem[] = []
-  for (const [index, part] of (content as AiChatPart[]).entries()) {
-    if (!part || typeof part !== 'object') return null
-    if (isTextPart(part)) texts.push(part.content)
-    else if (isImagePart(part)) {
-      const image = imageOf(part, index)
-      if (image) images.push(image)
-    } else return null
-  }
-  return { text: texts.filter(Boolean).join('\n\n'), images }
-}
-
-export function answerable(
-  tool: AiChatTool | undefined,
-  call: AiChatToolCallPart,
-  result?: AiChatToolResultPart
-): boolean {
-  return Boolean(tool?.answerable) && call.output === undefined && !result && call.state !== 'error'
-}
-
-export function toolQuestionOf(call: AiChatToolCallPart, tool: AiChatTool): AiChatQuestion {
-  return {
-    id: call.id,
-    title: tool.question || tool.title || `Answer ${call.name}`,
-    options: tool.options ?? [],
-    status: 'pending',
-    error: '',
-    bound: true
-  }
-}
-
-export function needsApproval(call: AiChatToolCallPart): boolean {
-  return call.state === 'approval-requested' || Boolean(call.approval?.needsApproval)
-}
-
-export function approvalOf(call: AiChatToolCallPart): 'pending' | 'approved' | 'denied' {
-  if (call.approval?.approved === true) return 'approved'
-  if (call.approval?.approved === false) return 'denied'
-  return 'pending'
-}
-
-export function json(value: unknown): string {
-  if (value === undefined || value === null || value === '') return ''
-  if (typeof value === 'string') {
-    try {
-      return JSON.stringify(JSON.parse(value), null, 2)
-    } catch {
-      return value
-    }
-  }
-  try {
-    return JSON.stringify(value, null, 2)
-  } catch {
-    return String(value)
-  }
-}
-
-export function parsesAsJson(text: string): boolean {
-  try {
-    JSON.parse(text)
-    return true
-  } catch {
-    return false
-  }
-}
-
-export function resolveInterrupt(
-  interrupts: ReadonlyArray<AiChatInterrupt> | undefined,
-  call: AiChatToolCallPart,
-  approved: boolean,
-  editedArgs?: unknown
-): void {
-  const interrupt = interrupts?.find(
-    (item) => item.kind === 'tool-approval' && item.toolCallId === call.id
-  )
-  const resolve = interrupt?.resolveInterrupt
-  if (typeof resolve !== 'function') return
-  if (editedArgs === undefined) resolve.call(interrupt, approved)
-  else resolve.call(interrupt, approved, { editedArgs })
-}
-
-export function isQuestion(interrupt: AiChatInterrupt): boolean {
-  return (interrupt.kind === 'generic' || interrupt.kind === 'unbound') && Boolean(interrupt.id)
-}
-
-function optionsIn(value: unknown): AgentQuestionOption[] {
-  if (!value || typeof value !== 'object' || !('options' in value)) return []
-  const options = (value as { options?: unknown }).options
-  if (!Array.isArray(options)) return []
-  return options.flatMap((option): AgentQuestionOption[] => {
-    if (typeof option === 'string') return [{ value: option, label: option }]
-    if (option && typeof option === 'object' && 'value' in option) {
-      const { value: answer, label } = option as { value?: unknown; label?: unknown }
-      if (typeof answer !== 'string') return []
-      return [{ value: answer, label: typeof label === 'string' ? label : answer }]
-    }
-    return []
-  })
-}
-
-const QUESTION_STATUS: Record<string, AgentQuestionStatus> = {
-  validating: 'running',
-  staged: 'running',
-  submitting: 'running',
-  error: 'error'
-}
-
-export function questionOf(interrupt: AiChatInterrupt): AiChatQuestion {
-  const options = optionsIn(interrupt.metadata)
-  return {
-    id: interrupt.id ?? '',
-    title: interrupt.message || 'The agent needs an answer to continue.',
-    options: options.length ? options : optionsIn(interrupt.payload),
-    status: QUESTION_STATUS[interrupt.status ?? ''] ?? 'pending',
-    error: interrupt.errors?.[0]?.message ?? '',
-    bound: interrupt.kind !== 'unbound'
-  }
-}
-
-export function answerInterrupt(interrupt: AiChatInterrupt | undefined, value: string): void {
-  const resolve = interrupt?.resolveInterrupt
-  if (typeof resolve === 'function') resolve.call(interrupt, value)
-}
-
-export function skipInterrupt(interrupt: AiChatInterrupt | undefined): void {
-  const cancel = interrupt?.cancel
-  if (typeof cancel === 'function') cancel.call(interrupt)
-}
-
-export function interruptErrorText(errors: ReadonlyArray<AiChatInterruptError>): string {
-  return [...new Set(errors.map((error) => error.message).filter(Boolean))].join(' ')
-}
-
-const ATTACHMENT_KINDS = ['image', 'audio', 'video'] as const
-
-export function attachmentKindOf(mimeType: string): AiChatAttachment['type'] {
-  return ATTACHMENT_KINDS.find((kind) => mimeType.startsWith(`${kind}/`)) ?? 'document'
-}
-
-function base64Of(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const url = typeof reader.result === 'string' ? reader.result : ''
-      resolve(url.slice(url.indexOf(',') + 1))
-    }
-    reader.onerror = () => reject(reader.error)
-    reader.readAsDataURL(file)
-  })
-}
-
-export async function attachmentOf(file: File): Promise<AiChatAttachment> {
-  const mimeType = file.type || 'application/octet-stream'
-  return {
-    type: attachmentKindOf(mimeType),
-    source: { type: 'data', value: await base64Of(file), mimeType },
-    metadata: { name: file.name }
-  }
-}
-
-export async function contentOf(
-  text: string,
-  files: ReadonlyArray<File>
-): Promise<AiChatSendContent> {
-  if (!files.length) return text
-  const attachments = await Promise.all(files.map(attachmentOf))
-  return {
-    content: [...(text.trim() ? [{ type: 'text' as const, content: text }] : []), ...attachments]
-  }
-}
-
-export function queueItemOf(message: AiChatQueuedMessage): PromptQueueItem {
-  const content =
-    message.content && typeof message.content === 'object' && 'content' in message.content
-      ? (message.content as { content: unknown }).content
-      : message.content
-  if (typeof content === 'string') return { id: message.id, text: content }
-  const parts: unknown[] = Array.isArray(content) ? content : []
-  const texts = parts.flatMap((part) =>
-    part &&
-    typeof part === 'object' &&
-    (part as { type?: unknown }).type === 'text' &&
-    typeof (part as { content?: unknown }).content === 'string'
-      ? [(part as { content: string }).content]
-      : []
-  )
-  return { id: message.id, text: texts.join(' '), attachmentCount: parts.length - texts.length }
-}
 ```
 
 ## `sample.ts`
 
 ````ts
+import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-
-import type { AiChatInterrupt, AiChatMessage } from './messages'
+import type { AiChatInterrupt, AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
@@ -1928,7 +849,9 @@ export const sampleStreamingMessages: AiChatMessage[] = [
       {
         title: 'Troubleshooting 502 responses',
         href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · Observe'
+        description: 'A 502 means the edge reached the origin but got no valid answer back.',
+        site: 'Azion',
+        icon: 'az az-azion'
       }
     ]
   })
@@ -1944,12 +867,16 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
       {
         title: 'Real-Time Purge',
         href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · Cache'
+        description: 'Removes a cached object from every data center in a few seconds.',
+        site: 'Azion',
+        icon: 'az az-azion'
       },
       {
-        title: 'Azion CLI: purge',
-        href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · CLI'
+        title: 'aziontech/azion: purge',
+        href: 'https://github.com/aziontech/azion',
+        description: 'Purge URLs, wildcards and cache keys from a terminal.',
+        site: 'GitHub',
+        image: 'https://github.com/favicon.ico'
       }
     ]
   })
@@ -1969,6 +896,33 @@ const history: [string, string][] = [
     'Can it renew on its own?',
     'Yes. Automatic renewal is on for both domains, 30 days before expiry.'
   ],
+  [
+    'How do I check the certificate from a terminal?',
+    [
+      '### 1. Read the dates with OpenSSL',
+      '',
+      'Connect to the domain and print the validity window of `shop.example.com`:',
+      '',
+      '```bash',
+      'openssl s_client -connect shop.example.com:443 -servername shop.example.com </dev/null \\',
+      '  | openssl x509 -noout -dates',
+      '```',
+      '',
+      'The output has two lines:',
+      '',
+      '- `notBefore`: when the certificate became valid.',
+      '- `notAfter`: when it expires.',
+      '  - Renewal starts 30 days before this date.',
+      '',
+      '### 2. Check it with curl',
+      '',
+      '```bash',
+      'curl -vI https://shop.example.com 2>&1 | grep -i "expire date"',
+      '```',
+      '',
+      '**Important:** run both from outside your network, so you read the certificate the edge serves.'
+    ].join('\n')
+  ],
   ['What is the cache hit ratio today?', '**91%** over the last 24 hours, up from 87% last week.'],
   [
     'Which paths miss the cache most?',
@@ -1976,8 +930,38 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [2][3].'
   ]
+]
+
+const cacheKeySources: SourcesItem[] = [
+  {
+    title: 'Cache settings',
+    href: 'https://www.azion.com/en/documentation/',
+    description: 'Choose which query string parameters build the cache key of each path.',
+    site: 'Azion',
+    icon: 'az az-azion'
+  },
+  {
+    title: 'aziontech/azion',
+    href: 'https://github.com/aziontech/azion',
+    description: 'Change the cache settings of an application from a terminal.',
+    site: 'GitHub',
+    image: 'https://github.com/favicon.ico'
+  },
+  {
+    title: 'HTTP Caching (RFC 9111)',
+    href: 'https://www.w3.org/Protocols/',
+    description: 'Every distinct URL, query string included, is a separate entry in a cache.',
+    site: 'W3C',
+    image: 'https://www.w3.org/favicon.ico'
+  },
+  {
+    title: 'cache-control',
+    href: 'https://www.npmjs.com/package/cache-control',
+    description: 'Writes Cache-Control headers from a route table.',
+    cited: false
+  }
 ]
 
 export const sampleLongThread: AiChatMessage[] = history.flatMap(
@@ -1986,7 +970,7 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
-      sources: []
+      sources: index === history.length - 1 ? cacheKeySources : []
     })
   ]
 )
@@ -2067,6 +1051,7 @@ export const sampleAgentMessages: AiChatMessage[] = [
       {
         type: 'subagent',
         subagent: {
+          id: 'researcher-1',
           name: 'researcher',
           description: 'Comparing the two deployments',
           status: 'finished',
@@ -2111,4 +1096,1030 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
     errors: []
   }
 ]
+
+export const sampleHistoryNow = '2026-11-19T12:00:00'
+
+export const sampleHistory: ConversationHistoryItem[] = [
+  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00' },
+  { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00' },
+  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00' },
+  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00' },
+  { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00' },
+  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00' }
+]
+
+export const sampleModels: PromptInputMenuOption[] = [
+  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
+  { value: 'fast', label: 'Fast', description: 'Answers right away' },
+  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
+]
 ````
+
+## `parts/ai-chat-composer.vue`
+
+```ts
+<script setup lang="ts">
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
+  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import { ref } from 'vue'
+
+  defineProps<{
+    state: PromptInputStatus
+    queueable: boolean
+    hydrating: boolean
+    accept: string
+    maxFiles: number
+    maxFileSize: number
+    attachable: boolean
+    voice: boolean
+    tools: PromptInputMenuOption[]
+  }>()
+
+  const emit = defineEmits<{
+    submit: [event: MouseEvent | KeyboardEvent, value: string]
+    stop: [event: MouseEvent]
+    'voice-start': [event: MouseEvent]
+  }>()
+
+  const prompt = defineModel<string>({ required: true })
+  const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const toolKeys = defineModel<string[]>('toolKeys', { required: true })
+
+  const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
+
+  defineExpose({ focus: () => inputEl.value?.focus() })
+</script>
+
+<template>
+  <PromptInput
+    ref="inputEl"
+    v-model="prompt"
+    v-model:files="files"
+    :status="state"
+    :queueable="queueable"
+    :disabled="hydrating"
+    :accept="accept"
+    :max-files="maxFiles"
+    :max-file-size="maxFileSize"
+    :max-length="4000"
+    :voice="voice"
+    @submit="(event, { value }) => emit('submit', event, value)"
+    @stop="emit('stop', $event)"
+    @voice-start="emit('voice-start', $event)"
+  >
+    <template
+      v-if="attachable"
+      #actions
+    >
+      <PromptInputAttachButton
+        v-model="toolKeys"
+        :tools="tools"
+      />
+    </template>
+    <template #end>
+      <PromptInputDictateButton />
+    </template>
+    <template #hint>
+      <span class="max-md:sr-only">
+        The AI assistant can make mistakes. Check important information before you act on it.
+      </span>
+    </template>
+  </PromptInput>
+</template>
+```
+
+## `parts/ai-chat-connection-status.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import type { AiChatConnection } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref, watch } from 'vue'
+
+  const props = defineProps<{
+    connection: AiChatConnection
+    resuming: boolean
+    sessionGenerating: boolean
+    loading: boolean
+  }>()
+
+  const wasConnected = ref(props.connection === 'connected')
+  watch(
+    () => props.connection,
+    (value) => {
+      if (value === 'connected') wasConnected.value = true
+    }
+  )
+  const reconnecting = computed(
+    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
+  )
+  const offline = computed(
+    () =>
+      !reconnecting.value &&
+      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
+  )
+</script>
+
+<template>
+  <StatusIndicator
+    v-if="reconnecting"
+    key="reconnecting"
+    severity="warning"
+    label="Reconnecting"
+    loading
+  />
+  <Alert
+    v-else-if="offline"
+    key="offline"
+    severity="danger"
+    size="small"
+    title="Connection lost"
+  >
+    Your messages send when the connection returns.
+  </Alert>
+  <StatusIndicator
+    v-else-if="sessionGenerating && !loading"
+    key="elsewhere"
+    severity="info"
+    label="Responding in another tab"
+    loading
+  />
+</template>
+```
+
+## `parts/ai-chat-header.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
+  import { computed } from 'vue'
+
+  export type AiChatHeaderAction = 'share' | 'rename' | 'archive' | 'remove'
+
+  const props = defineProps<{
+    empty: boolean
+    historyOpen: boolean
+    models: PromptInputMenuOption[]
+  }>()
+
+  const emit = defineEmits<{
+    'new-chat': [event: MouseEvent]
+    'open-history': [event: MouseEvent]
+    'toggle-history': [event: MouseEvent]
+    action: [event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction]
+  }>()
+
+  const modelKey = defineModel<string>('modelKey', { required: true })
+
+  const modelLabel = computed(
+    () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
+  )
+
+  const actions: { value: AiChatHeaderAction; label: string }[] = [
+    { value: 'share', label: 'Share' },
+    { value: 'rename', label: 'Rename' },
+    { value: 'archive', label: 'Archive' },
+    { value: 'remove', label: 'Delete' }
+  ]
+
+  function onModel(_event: MouseEvent | KeyboardEvent, value: string | number) {
+    modelKey.value = String(value)
+  }
+
+  function onAction(event: MouseEvent | KeyboardEvent, value: string | number) {
+    emit('action', event, value as AiChatHeaderAction)
+  }
+
+  const HEADER_CLASS =
+    'pointer-events-none absolute inset-x-0 top-0 z-2 flex items-center justify-between gap-(--spacing-sm) p-(--spacing-sm) ' +
+    'md:bg-[linear-gradient(to_bottom,var(--bg-canvas)_55%,transparent)] md:px-(--spacing-md)'
+
+  const FLOATING_CLASS =
+    'pointer-events-auto inline-flex items-center overflow-hidden rounded-(--shape-button) border border-(--border-default) ' +
+    'bg-[color-mix(in_srgb,var(--bg-surface-raised)_80%,transparent)] shadow-(--shadow-md) backdrop-blur-md md:hidden'
+</script>
+
+<template>
+  <header :class="HEADER_CLASS">
+    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+      <span :class="FLOATING_CLASS">
+        <IconButton
+          icon="az az-menu"
+          aria-label="Open conversation history"
+          variant="ghost"
+          @click="emit('open-history', $event)"
+        />
+      </span>
+      <span class="pointer-events-auto inline-flex max-md:hidden">
+        <IconButton
+          icon="az az-history"
+          :aria-label="historyOpen ? 'Hide conversation history' : 'Show conversation history'"
+          :aria-expanded="historyOpen"
+          aria-controls="ai-chat-history"
+          variant="ghost"
+          size="medium"
+          @click="emit('toggle-history', $event)"
+        />
+      </span>
+      <h1
+        id="ai-chat-title"
+        class="sr-only"
+      >
+        AI assistant
+      </h1>
+      <span class="pointer-events-auto inline-flex min-w-0 max-md:hidden">
+        <DropdownMenu
+          side="bottom"
+          align="start"
+          :disabled="!models.length"
+          @select="onModel"
+        >
+          <DropdownMenuTrigger>
+            <Button
+              variant="ghost"
+              size="medium"
+              icon="az az-chevron-down"
+              icon-position="trailing"
+              :disabled="!models.length"
+              class="min-w-0"
+            >
+              <span class="truncate text-label-lg">AI assistant</span>
+              <span
+                v-if="modelLabel"
+                class="truncate text-(--text-muted)"
+                >{{ modelLabel }}</span
+              >
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup label="Model">
+            <DropdownMenuItem
+              v-for="option in models"
+              :key="option.value"
+              :value="option.value"
+              type="radio"
+              :selected="option.value === modelKey"
+              :label="option.label"
+            >
+              <template
+                v-if="option.description"
+                #trailing
+              >
+                <span class="max-w-48 truncate text-body-xs text-(--text-muted)">{{
+                  option.description
+                }}</span>
+              </template>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenu>
+      </span>
+    </div>
+    <div class="flex items-center gap-(--spacing-2xs)">
+      <span class="pointer-events-auto inline-flex max-md:hidden">
+        <Button
+          label="Share"
+          variant="ghost"
+          size="small"
+          icon="az az-share"
+          :disabled="empty"
+          @click="emit('action', $event, 'share')"
+        />
+      </span>
+      <span :class="FLOATING_CLASS">
+        <IconButton
+          icon="az az-square-pen"
+          aria-label="New chat"
+          variant="ghost"
+          :disabled="empty"
+          @click="emit('new-chat', $event)"
+        />
+        <DropdownMenu
+          side="bottom"
+          align="end"
+          :disabled="empty"
+          @select="onAction"
+        >
+          <DropdownMenuTrigger>
+            <IconButton
+              icon="az az-ellipsis"
+              aria-label="More conversation actions"
+              variant="ghost"
+              :disabled="empty"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              v-for="action in actions"
+              :key="action.value"
+              :value="action.value"
+              :label="action.label"
+            />
+          </DropdownMenuGroup>
+        </DropdownMenu>
+      </span>
+      <span
+        v-if="!historyOpen"
+        class="pointer-events-auto inline-flex max-md:hidden"
+      >
+        <IconButton
+          icon="az az-square-pen"
+          aria-label="New chat"
+          variant="ghost"
+          size="medium"
+          :disabled="empty"
+          @click="emit('new-chat', $event)"
+        />
+      </span>
+      <span class="pointer-events-auto inline-flex max-md:hidden">
+        <DropdownMenu
+          side="bottom"
+          align="end"
+          :disabled="empty"
+          @select="onAction"
+        >
+          <DropdownMenuTrigger>
+            <IconButton
+              icon="az az-ellipsis"
+              aria-label="More conversation actions"
+              variant="ghost"
+              size="medium"
+              :disabled="empty"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              v-for="action in actions.slice(1)"
+              :key="action.value"
+              :value="action.value"
+              :label="action.label"
+            />
+          </DropdownMenuGroup>
+        </DropdownMenu>
+      </span>
+    </div>
+  </header>
+</template>
+```
+
+## `parts/ai-chat-history.vue`
+
+```ts
+<script setup lang="ts">
+  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import DrawerBody from '@aziontech/webkit/drawer-body'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerHeader from '@aziontech/webkit/drawer-header'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import { watch } from 'vue'
+
+  import { sampleHistory, sampleHistoryNow } from '../sample'
+
+  defineProps<{ panelOpen: boolean }>()
+
+  const emit = defineEmits<{ create: [event: MouseEvent] }>()
+
+  const active = defineModel<string | null>({ required: true })
+  const drawerOpen = defineModel<boolean>('drawerOpen', { required: true })
+
+  watch(active, () => {
+    drawerOpen.value = false
+  })
+
+  function create(event: MouseEvent) {
+    drawerOpen.value = false
+    emit('create', event)
+  }
+</script>
+
+<template>
+  <aside
+    v-if="panelOpen"
+    id="ai-chat-history"
+    aria-label="Conversation history"
+    class="flex w-(--container-3xs) shrink-0 flex-col overflow-y-auto bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
+  >
+    <ConversationHistory
+      v-model="active"
+      :items="sampleHistory"
+      :now="sampleHistoryNow"
+      creatable
+      searchable
+      @create="create"
+    />
+  </aside>
+  <Drawer
+    v-model:open="drawerOpen"
+    side="start"
+    size="small"
+  >
+    <DrawerContent>
+      <DrawerHeader class="w-full">
+        <DrawerTitle>Conversation history</DrawerTitle>
+      </DrawerHeader>
+      <DrawerBody>
+        <ConversationHistory
+          v-model="active"
+          :items="sampleHistory"
+          :now="sampleHistoryNow"
+          creatable
+          searchable
+          @create="create"
+        />
+      </DrawerBody>
+    </DrawerContent>
+  </Drawer>
+</template>
+```
+
+## `parts/ai-chat-media-segment.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import FilePreview from '@aziontech/webkit/file-preview'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import {
+    type AiChatSegment,
+    documentNameOf,
+    json,
+    stopSubagent,
+    structuredOf,
+    subagentStatusOf,
+    subagentTextOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import VideoPlayer from '@aziontech/webkit/video-player'
+
+  defineProps<{ segment: AiChatSegment }>()
+</script>
+
+<template>
+  <ImageGallery
+    v-if="segment.type === 'gallery'"
+    :items="segment.images"
+  />
+  <AudioPlayer
+    v-else-if="segment.type === 'audio'"
+    :src="segment.src"
+  />
+  <VideoPlayer
+    v-else-if="segment.type === 'video'"
+    :src="segment.src"
+    :mime-type="segment.mimeType"
+  />
+  <FilePreview
+    v-else-if="segment.type === 'document'"
+    :file-name="documentNameOf(segment.part)"
+    :mime-type="segment.part.source.mimeType"
+    :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
+    :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
+  />
+  <SubagentCard
+    v-else-if="segment.type === 'subagent'"
+    :name="segment.part.subagent.name"
+    :title="segment.part.subagent.description"
+    :description="segment.part.subagent.error?.message"
+    :status="subagentStatusOf(segment.part)"
+    :stoppable="typeof segment.part.subagent.stop === 'function'"
+    @stop="stopSubagent(segment.part)"
+  >
+    <StreamingResponse
+      v-if="subagentTextOf(segment.part)"
+      :content="subagentTextOf(segment.part)"
+    />
+    <template
+      v-if="json(segment.part.subagent.input)"
+      #input
+    >
+      <CodeBlock
+        :code="json(segment.part.subagent.input)"
+        language="json"
+        :show-line-numbers="false"
+      />
+    </template>
+  </SubagentCard>
+  <template v-else-if="segment.type === 'structured'">
+    <Alert
+      v-if="segment.part.status === 'error'"
+      severity="danger"
+      size="small"
+      title="The structured answer failed"
+    >
+      {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
+    </Alert>
+    <CodeBlock
+      v-else-if="structuredOf(segment.part)"
+      :code="structuredOf(segment.part)"
+      language="json"
+      :show-line-numbers="false"
+      :aria-busy="segment.part.status === 'streaming' || undefined"
+    />
+  </template>
+</template>
+```
+
+## `parts/ai-chat-skeleton.vue`
+
+```ts
+<script setup lang="ts">
+  import Skeleton from '@aziontech/webkit/skeleton'
+</script>
+
+<template>
+  <div
+    role="status"
+    aria-label="Loading the conversation"
+    class="flex flex-col gap-(--spacing-xl)"
+  >
+    <template
+      v-for="row in 2"
+      :key="row"
+    >
+      <Skeleton
+        width="45%"
+        height="2.75rem"
+        class="self-end"
+      />
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <Skeleton width="90%" />
+        <Skeleton width="80%" />
+        <Skeleton :width="row === 2 ? '40%' : '60%'" />
+      </div>
+    </template>
+  </div>
+</template>
+```
+
+## `parts/ai-chat-start.vue`
+
+```ts
+<script setup lang="ts">
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+
+  defineProps<{ starters: SuggestionGroupItem[] }>()
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent | KeyboardEvent, item: SuggestionGroupItem]
+  }>()
+
+  defineSlots<{ default(): unknown }>()
+
+  const START_CLASS =
+    'flex min-h-0 flex-1 flex-col overflow-y-auto px-(--spacing-md) pt-(--spacing-2xl) ' +
+    'pb-[max(var(--spacing-md),env(safe-area-inset-bottom))] md:justify-center md:pb-(--spacing-2xl)'
+</script>
+
+<template>
+  <div :class="START_CLASS">
+    <div
+      class="mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-md) max-md:flex-1"
+    >
+      <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
+        <h2 class="text-center text-heading-lg text-(--text-default)">What can I help with?</h2>
+      </div>
+      <div class="flex md:order-last md:justify-center">
+        <SuggestionGroup
+          :items="starters"
+          @select="(event, item) => emit('select', event, item)"
+        />
+      </div>
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <slot />
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+## `parts/ai-chat-tool-segment.vue`
+
+```ts
+<script setup lang="ts">
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolCall from '@aziontech/webkit/tool-call'
+  import {
+    type AiChatQuestion,
+    type AiChatTool,
+    type AiChatToolCallPart,
+    type AiChatToolResultPart,
+    answerable,
+    approvalOf,
+    json,
+    needsApproval,
+    parsesAsJson,
+    toolContentOf,
+    toolStatusOf
+  } from '@aziontech/webkit/utils/ai-chat'
+
+  defineProps<{
+    call: AiChatToolCallPart
+    result?: AiChatToolResultPart
+    tool: AiChatTool
+    ask: AiChatQuestion
+    edit: string
+    busy: boolean
+  }>()
+
+  const emit = defineEmits<{
+    answer: [event: Event, value: string]
+    edit: [text: string]
+    approve: [event: MouseEvent, text: string]
+    deny: [event: MouseEvent]
+  }>()
+
+  const answer = defineModel<string>('answer')
+</script>
+
+<template>
+  <AgentQuestion
+    v-if="answerable(tool, call, result)"
+    v-model="answer"
+    :title="ask.title"
+    :type="ask.options.length ? 'choice' : 'text'"
+    :options="ask.options"
+    :status="ask.status"
+    @submit="(event, value) => emit('answer', event, value)"
+  />
+  <template v-else>
+    <ToolApproval
+      v-if="needsApproval(call)"
+      :title="tool.question || tool.title || `Run ${call.name}?`"
+      :description="tool.description"
+      :approve-label="tool.approveLabel"
+      :variant="tool.variant"
+      :confirmation-phrase="tool.confirmationPhrase"
+      :status="approvalOf(call)"
+      :loading="busy"
+      :editable="tool.editable"
+      :invalid="tool.editable && !parsesAsJson(edit)"
+      :model-value="edit"
+      @update:model-value="(text) => emit('edit', text)"
+      @approve="(event, text) => emit('approve', event, text)"
+      @deny="emit('deny', $event)"
+    >
+      <CodeBlock
+        v-if="!tool.editable && json(call.input ?? call.arguments)"
+        :code="json(call.input ?? call.arguments)"
+        language="json"
+        :show-line-numbers="false"
+      />
+    </ToolApproval>
+    <ToolCall
+      v-if="!needsApproval(call) || approvalOf(call) === 'approved'"
+      :name="call.name"
+      :title="tool.title"
+      :status="toolStatusOf(call, result)"
+    >
+      <template
+        v-if="json(call.input ?? call.arguments)"
+        #input
+      >
+        <CodeBlock
+          :code="json(call.input ?? call.arguments)"
+          language="json"
+          :show-line-numbers="false"
+        />
+      </template>
+      <template
+        v-if="!result?.error && call.output === undefined && toolContentOf(result?.content)"
+        #output
+      >
+        <p
+          v-if="toolContentOf(result?.content)?.text"
+          class="whitespace-pre-line text-body-sm text-(--text-default)"
+        >
+          {{ toolContentOf(result?.content)?.text }}
+        </p>
+        <ImageGallery
+          v-if="toolContentOf(result?.content)?.images.length"
+          :items="toolContentOf(result?.content)?.images ?? []"
+        />
+      </template>
+      <template
+        v-else-if="json(result?.error || call.output || result?.content)"
+        #output
+      >
+        <CodeBlock
+          :code="json(result?.error || call.output || result?.content)"
+          language="json"
+          :show-line-numbers="false"
+        />
+      </template>
+    </ToolCall>
+  </template>
+</template>
+```
+
+## `parts/ai-chat-turn.vue`
+
+```ts
+<script setup lang="ts">
+  import AgentActivity from '@aziontech/webkit/agent-activity'
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import ChatMessage, {
+    type ChatMessageFeedbackValue,
+    type ChatMessageStatus
+  } from '@aziontech/webkit/chat-message'
+  import FeedbackReasonDialog, {
+    type FeedbackReasonDialogPayload
+  } from '@aziontech/webkit/feedback-reason-dialog'
+  import McpAppFrame, {
+    type McpAppFrameMessage,
+    type McpAppFrameResource
+  } from '@aziontech/webkit/mcp-app-frame'
+  import Reasoning from '@aziontech/webkit/reasoning'
+  import ResponseBranches from '@aziontech/webkit/response-branches'
+  import Sources from '@aziontech/webkit/sources'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { toast } from '@aziontech/webkit/toast'
+  import type { UseAiChatVersionsReturn } from '@aziontech/webkit/use-ai-chat-versions'
+  import {
+    activitiesBefore,
+    type AiChatMessage,
+    type AiChatQuestion,
+    type AiChatSegment,
+    type AiChatTool,
+    type AiChatToolCallPart,
+    type AiChatUiResourcePart,
+    segmentsOf,
+    textOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref } from 'vue'
+
+  import AiChatMediaSegment from './ai-chat-media-segment.vue'
+  import AiChatToolSegment from './ai-chat-tool-segment.vue'
+
+  const props = defineProps<{
+    turn: AiChatMessage
+    messages: ReadonlyArray<AiChatMessage>
+    status: ChatMessageStatus
+    time: string
+    failure: string
+    tools: Record<string, AiChatTool>
+    busy: boolean
+    ready: boolean
+    stopped: boolean
+    versions: UseAiChatVersionsReturn
+    questions?: AiChatQuestion[]
+    askOf: (call: AiChatToolCallPart) => AiChatQuestion
+    editOf: (call: AiChatToolCallPart) => string
+    resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+  }>()
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent | KeyboardEvent]
+    rate: [value: ChatMessageFeedbackValue | null, reason?: FeedbackReasonDialogPayload]
+    share: [event: MouseEvent]
+    branch: [event: MouseEvent | KeyboardEvent]
+    'edit-prompt': [event: MouseEvent | KeyboardEvent, text: string]
+    'version-change': [messages: AiChatMessage[]]
+    'answer-tool': [event: Event, call: AiChatToolCallPart, value: string]
+    edit: [call: AiChatToolCallPart, text: string]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, text: string]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
+    answer: [event: Event, question: AiChatQuestion, value: string]
+    skip: [question: AiChatQuestion]
+    'app-message': [
+      message: McpAppFrameMessage,
+      part: AiChatUiResourcePart,
+      reply: (message: McpAppFrameMessage) => void
+    ]
+  }>()
+
+  const answers = defineModel<Record<string, string>>('answers', { required: true })
+
+  const reasonOpen = ref(false)
+  const rating = ref<ChatMessageFeedbackValue | null>(null)
+  const versionsOfTurn = computed(() => props.versions.versionsOf(props.turn))
+
+  function regenerate(event: MouseEvent | KeyboardEvent) {
+    props.versions.fork(props.turn)
+    emit('retry', event)
+  }
+
+  function editPrompt(event: MouseEvent | KeyboardEvent, text: string) {
+    props.versions.fork(props.turn)
+    emit('edit-prompt', event, text)
+  }
+
+  function page(index: number) {
+    const next = props.versions.select(props.turn, index)
+    if (next) emit('version-change', next)
+  }
+
+  function rate(value: ChatMessageFeedbackValue | null) {
+    rating.value = value
+    emit('rate', value)
+    if (value === 'up') toast('Thanks for your feedback')
+    if (value === 'down') reasonOpen.value = true
+  }
+
+  function sendReason(reason: FeedbackReasonDialogPayload) {
+    reasonOpen.value = false
+    emit('rate', 'down', reason)
+    toast('Thanks for your feedback')
+  }
+
+  const MEDIA_TYPES = new Set(['gallery', 'audio', 'video', 'document', 'subagent', 'structured'])
+  const isMedia = (segment: AiChatSegment) => MEDIA_TYPES.has(segment.type)
+
+  function toolOf(call: AiChatToolCallPart): AiChatTool {
+    return props.tools[call.name] ?? { title: '' }
+  }
+
+  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
+
+  function setAppFrame(key: string, el: unknown) {
+    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
+    else appFrames.delete(key)
+  }
+
+  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
+    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
+  }
+</script>
+
+<template>
+  <ChatMessage
+    :from="turn.role === 'user' ? 'user' : 'assistant'"
+    :status="status"
+    :timestamp="time"
+    :error-message="status === 'error' ? failure : undefined"
+    @retry="emit('retry', $event)"
+    @edit="editPrompt"
+  >
+    <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
+    <template
+      v-for="segment in segmentsOf(
+        turn,
+        turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
+      )"
+      :key="segment.key"
+    >
+      <template v-if="turn.role === 'user' && segment.type === 'text'" />
+      <AgentActivity
+        v-else-if="segment.type === 'activity'"
+        :steps="segment.steps"
+      />
+      <Reasoning
+        v-else-if="segment.type === 'reasoning'"
+        :streaming="status === 'pending'"
+        :duration="status === 'pending' ? undefined : turn.metadata?.reasoningSeconds"
+      >
+        <p class="whitespace-pre-line">{{ segment.content }}</p>
+      </Reasoning>
+      <StreamingResponse
+        v-else-if="segment.type === 'text'"
+        :content="segment.content"
+        :streaming="status === 'streaming'"
+        :sources="turn.metadata?.sources ?? []"
+      />
+      <AiChatToolSegment
+        v-else-if="segment.type === 'tool'"
+        v-model:answer="answers[segment.call.id]"
+        :call="segment.call"
+        :result="segment.result"
+        :tool="toolOf(segment.call)"
+        :ask="askOf(segment.call)"
+        :edit="editOf(segment.call)"
+        :busy="busy"
+        @answer="(event, value) => emit('answer-tool', event, segment.call, value)"
+        @edit="(text) => emit('edit', segment.call, text)"
+        @approve="(event, text) => emit('approve', event, segment.call, text)"
+        @deny="(event) => emit('deny', event, segment.call)"
+      />
+      <AiChatMediaSegment
+        v-else-if="isMedia(segment)"
+        :segment="segment"
+      />
+      <McpAppFrame
+        v-else-if="segment.type === 'app'"
+        :ref="(el) => setAppFrame(segment.key, el)"
+        :resource="segment.part.resource"
+        :title="(tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName"
+        :resolve-url="resolveAppUrl"
+        @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
+      />
+    </template>
+    <template v-if="turn.role === 'assistant'">
+      <p
+        v-if="stopped"
+        class="text-body-sm text-(--text-muted)"
+      >
+        You stopped this response.
+      </p>
+    </template>
+    <template
+      v-if="turn.role === 'user'"
+      #actions
+    >
+      <ChatMessage.Actions
+        copyable
+        editable
+        :copy-text="textOf(turn, '\n')"
+        :disabled="!ready"
+      >
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            aria-label="Prompt versions"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
+      </ChatMessage.Actions>
+    </template>
+    <template
+      v-else
+      #actions
+    >
+      <ChatMessage.Actions
+        copyable
+        show-feedback
+        show-read-aloud
+        shareable
+        retryable
+        branchable
+        :copy-text="textOf(turn)"
+        :read-aloud-text="textOf(turn)"
+        :feedback="rating"
+        :disabled="!ready"
+        @update:feedback="rate"
+        @share="emit('share', $event)"
+        @retry="regenerate"
+        @branch="emit('branch', $event)"
+      >
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
+        <template
+          v-if="!stopped && turn.metadata?.sources?.length"
+          #trailing
+        >
+          <Sources :items="turn.metadata.sources" />
+        </template>
+      </ChatMessage.Actions>
+    </template>
+  </ChatMessage>
+  <ChatMessage
+    v-if="questions?.length"
+    from="assistant"
+  >
+    <AgentQuestion
+      v-for="question in questions"
+      :key="question.id"
+      v-model="answers[question.id]"
+      :title="question.title"
+      :type="question.options.length ? 'choice' : 'text'"
+      :options="question.options"
+      :status="question.status"
+      :error="question.error"
+      :skippable="question.bound"
+      @submit="(event, value) => emit('answer', event, question, value)"
+      @skip="emit('skip', question)"
+    />
+  </ChatMessage>
+  <FeedbackReasonDialog
+    v-if="turn.role === 'assistant'"
+    v-model:open="reasonOpen"
+    @submit="(_event, reason) => sendReason(reason)"
+  />
+</template>
+```

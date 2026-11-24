@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readdirSync, readFileSync } from 'node:fs'
-import { dirname, join, relative } from 'node:path'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { typography } from '../../../theme/src/tokens/semantic/typography.js'
@@ -53,12 +53,51 @@ const typedControls = (source) =>
       return !/\stabindex="-1"/.test(tag)
     })
 
-const sixteenOnTouch = (tag) =>
-  (tag.match(/\sclass="([^"]*)"/)?.[1] ?? '').split(/\s+/).some((token) => {
-    const [utility, ...variants] = token.split(':').reverse()
-    if (!SIXTEEN.includes(utility)) return false
-    return variants.length === 0 || variants.at(-1) === 'pointer-coarse'
-  })
+const CLASS_CONSTANT = /const ([A-Z0-9_]*CLASS)\b[^=\n]*=((?:\s*(?:'[^'\n]*'|"[^"\n]*")\s*\+?)+)/g
+
+const classConstants = (source) =>
+  new Map(
+    [...source.matchAll(CLASS_CONSTANT)].map(([, name, body]) => [
+      name,
+      [...body.matchAll(/'([^'\n]*)'|"([^"\n]*)"/g)]
+        .map(([, single, double]) => single ?? double)
+        .join('')
+    ])
+  )
+
+const LOCAL_IMPORT = /import\s*\{([^}]*)\}\s*from\s*'(\.[^']*)'/g
+
+const importedClassConstants = (source, file) => {
+  const constants = new Map()
+  for (const [, names, spec] of source.matchAll(LOCAL_IMPORT)) {
+    const base = resolve(dirname(file), spec)
+    const target = [base, `${base}.ts`, `${base}.js`].find(
+      (path) => /\.(ts|js)$/.test(path) && existsSync(path)
+    )
+    if (!target) continue
+    const wanted = new Set(names.split(',').map((name) => name.trim().split(/\s+/)[0]))
+    for (const [name, value] of classConstants(readFileSync(target, 'utf8')))
+      if (wanted.has(name)) constants.set(name, value)
+  }
+  return constants
+}
+
+const classesOf = (tag, constants) => {
+  const bound = tag.match(/\s:class="([^"]*)"/)?.[1] ?? ''
+  const named = [...bound.matchAll(/[A-Z][A-Z0-9_]*CLASS\b/g)].map(
+    ([name]) => constants.get(name) ?? ''
+  )
+  return [tag.match(/\sclass="([^"]*)"/)?.[1] ?? '', ...named].join(' ')
+}
+
+const sixteenOnTouch = (tag, constants) =>
+  classesOf(tag, constants)
+    .split(/\s+/)
+    .some((token) => {
+      const [utility, ...variants] = token.split(':').reverse()
+      if (!SIXTEEN.includes(utility)) return false
+      return variants.length === 0 || variants.at(-1) === 'pointer-coarse'
+    })
 
 test('the theme still has 16px type classes to step up to', () => {
   assert.ok(SIXTEEN.includes('text-body-md'))
@@ -70,8 +109,14 @@ test('every typed native control, select and focusable read-only field steps its
   const missing = []
   for (const dir of SCANNED) {
     for (const file of vueFiles(join(ROOT, dir))) {
-      for (const tag of typedControls(readFileSync(file, 'utf8'))) {
-        if (!sixteenOnTouch(tag)) missing.push(`${relative(ROOT, file)}: ${tag.slice(0, 80)}`)
+      const source = readFileSync(file, 'utf8')
+      const constants = new Map([
+        ...importedClassConstants(source, file),
+        ...classConstants(source)
+      ])
+      for (const tag of typedControls(source)) {
+        if (!sixteenOnTouch(tag, constants))
+          missing.push(`${relative(ROOT, file)}: ${tag.slice(0, 80)}`)
       }
     }
   }

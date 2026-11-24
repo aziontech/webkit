@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 8688df8d224ccac40128d07a85e3e4548b37b40c260e5db95f7a5b21821a1e97
+checksum: 8a848e6e5935afb8002ef8a9253bec05a300c2835a41afb9f644a08bd1e84775
 created: 2026-06-26
 last_updated: 2026-11-19
 ---
@@ -188,7 +188,7 @@ Sub-menus and checkable options:
   - Props: `label: string` default `''` — plain-text label; falls back to the default slot. `disabled: boolean` default `false` — the row cannot open its sub-menu and applies disabled tokens.
   - Events: _none_.
   - Slots: `default` (rich label), `leading` (icon before the label).
-- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `side="end"` + `align="start"` (the right side in ltr, the left side under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu.
+- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `side="end"` + `align="start"` (the right side in ltr, the left side under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu. When neither side of the parent has room for it (a phone), it is not teleported: it opens inline under its sub-trigger, indented, without border or shadow (`data-inline`), its list a `role="group"` labelled by the sub-trigger inside the parent menu, so it never covers the row that opened it; the keyboard is unchanged.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Group>` (groups render into this panel exactly as they do at the top level), which may hold further `<DropdownMenu.Sub>`.

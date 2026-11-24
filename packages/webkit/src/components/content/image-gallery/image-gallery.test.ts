@@ -36,6 +36,15 @@ describe('ImageGallery', () => {
     await expectNoA11yViolations(view.container)
   })
 
+  it('shows the whole image in every thumbnail, never a crop', () => {
+    const view = render(Default)
+    const images = within(view.getByRole('list', { name: 'Images' })).getAllByRole('img')
+    for (const image of images) {
+      expect(image.classList.contains('object-contain')).toBe(true)
+      expect(image.classList.contains('object-cover')).toBe(false)
+    }
+  })
+
   it('lets a consumer data-testid win', () => {
     const view = render(ImageGallery, {
       props: { items: [{ src: `data:image/png;base64,${PIXEL}` }] },
@@ -189,7 +198,8 @@ describe('ImageGallery', () => {
     expect(view.queryByRole('list')).toBeNull()
     const alert = view.getByRole('alert')
     expect(alert.textContent).toContain('The images could not load')
-    expect(alert.textContent).toContain('The image model is busy.')
+    expect(alert.textContent).toContain('The image model was busy')
+    expect(alert.textContent).not.toMatch(/try again/i)
     await expectNoA11yViolations(view.container)
   })
 

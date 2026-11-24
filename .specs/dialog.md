@@ -7,9 +7,9 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 790acbb521efc1d807ccbda7e739bcba92ad4a2f4d52430bdfc8fde7783cb639
+checksum: 66b3f8e8b54fa65b1594334f31267f601ff59b8341971d9017d2aa45924046b8
 created: 2026-05-22
-last_updated: 2026-11-20
+last_updated: 2026-11-22
 ---
 
 # Dialog — Component Spec
@@ -95,10 +95,12 @@ Tree-shaking: `@aziontech/webkit/dialog-root` is the root alone (nothing attache
 
 - `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header`, `Dialog.Body` and `Dialog.Footer`, each importable on its own as `@aziontech/webkit/dialog-header`, `dialog-body` and `dialog-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat).
 - `dialog-close.vue` — Public sub-component `dialog-close`: the close (X) `IconButton`. `Dialog.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the dialog.
-- `dialog-content.vue` — Public sub-component `dialog-content`: the modal itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay (`aria-hidden`, `__backdrop` test id; a click on it closes the dialog when `dismissible`) and the `role="dialog"` panel, traps focus, scroll-locks the page and restores focus on close.
+- `dialog-content.vue` — Public sub-component `dialog-content`: the modal itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay (`aria-hidden`, `dialog-content__backdrop` test id; a click on it closes the dialog when `dismissible`) and the `role="dialog"` panel, traps focus, scroll-locks the page and restores focus on close.
 - `dialog-description.vue` — Public sub-component `dialog-description`.
 - `dialog-title.vue` — Public sub-component `dialog-title`.
 - `dialog-trigger.vue` — Public sub-component `dialog-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the dialog on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+
+- Test ids: each part falls back to its own name (`dialog-trigger`, `dialog-content`, `dialog-title`, `dialog-description`, `dialog-close`, and `panel-header`, `panel-body`, `panel-footer` for the shared regions), and a `data-testid` passed to the part wins; the root's `data-testid` does not rename the parts. The inner overlay and shell of `dialog-content` are `dialog-content__backdrop`, `__portal` and `__panel-shell`. The close button `Dialog.Content` adds while `closable` belongs to the root: `dialog__close`, or `<root test id>__close`.
 
 ## Props
 
@@ -139,7 +141,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 - Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
 - Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-body`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
-- Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
+- Phones: below `md` the panel is a bottom sheet: full width, as tall as its content (`h-fit`), rounded top corners, capped at 80 dvh and at 90 dvh below `sm`, where its body scrolls. It never grows to the full screen, so a short confirmation stays a compact sheet and the page it is about stays in view above it. The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
 - Server render and hydration: the phone layout and its motion timing are CSS breakpoints (`max-md:` / `md:` utilities), so the server HTML and the hydrated DOM are identical at every width.
 
 ## Motion & Animations

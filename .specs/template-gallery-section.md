@@ -7,14 +7,14 @@ status: implemented
 spec_version: 10
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: c5798a9367648e4ffcb98ee8669a6105f29e66c7c15f9c36b2f9ff2c5b0f1bab
+checksum: 9912b714d6731140d4b03a6ced5e33ed2556732de819539a202500ca94c5efac
 ---
 
 # TemplateGallerySection — Component Spec
 
 ## Purpose
 
-The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
+The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a two-column wall, scrolling once the band splits, of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
 
 ## When to use
 
@@ -165,7 +165,7 @@ _none_
 - The composed `media-split` splits on its own width: from a band 60rem wide the ask and the template grid sit side by side as two equal halves, in a docs preview as on a full-width page; a narrower band (a phone, a tablet, a narrow column) stacks the ask over the grid.
 - The headline keeps two lines from the split up: in a band 60 to 72rem wide the large copy cell pads `var(--spacing-xl)` instead of `var(--spacing-2xl)` (owned by `media-split`), which leaves the `heading-xl` headline room for its longest line. It wraps naturally (`text-wrap: balance` from the type scale); no line breaks are written into the copy.
 - The template grid keeps two columns inside its half; titles and descriptions wrap, and each deploy button stays inside its card.
-- The grid scrolls inside its `scroll-area`, at least 36rem tall and 44rem once the band splits (the root is a size container for this).
+- Once the band splits, the grid scrolls inside its `scroll-area`, 44rem tall with faded edges (the root is a size container for this); a narrower band lets every card flow in the page, with no nested scroll box and no fade cutting a card.
 - No horizontal scroll at 320 px.
 
 ## Performance

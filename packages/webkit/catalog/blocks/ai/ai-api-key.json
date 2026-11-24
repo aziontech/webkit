@@ -33,7 +33,7 @@
  ],
  "sfcFile": "blocks/ai/ai-api-key/ai-api-key.vue",
  "guidelinesFile": "blocks/ai/ai-api-key/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/ai/ai-api-key/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

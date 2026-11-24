@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'ImageProcessorEventsFragment' })
 
@@ -18,9 +17,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const AGENT =
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15'
@@ -79,151 +75,108 @@
     { ...REST, cursor: REFRESH, added: true, forward: 300, back: 300 }
   ]
 
-  const LAST = FRAMES.length - 1
+  const { frame, goingBack } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const goingBack = ref(false)
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const frame = computed(() => FRAMES[step.value])
   const pressed = computed(() => frame.value.pressed && !goingBack.value)
   const records = computed(() => EVENTS.length + (frame.value.added ? 1 : 0))
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    goingBack.value = !forward
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const BUTTON_RING_CLASS =
+    'inline-flex rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'data-pressed:ring-2 data-pressed:ring-offset-2 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:70%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    stage-class="flex h-full flex-col gap-(--spacing-sm) py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Priya"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative flex h-full flex-col gap-(--spacing-sm) py-(--spacing-xs)"
-    >
-      <ConsoleMockupShellItem :order="0">
-        <span class="flex items-center justify-between gap-(--spacing-sm)">
-          <span
-            data-cursor="refresh"
-            :data-pressed="pressed || null"
-            class="inline-flex rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-pressed:ring-2 data-pressed:ring-offset-2 motion-reduce:transition-none"
-          >
-            <Button
-              label="Refresh"
-              variant="outline"
-              size="small"
-              icon="az az-refresh"
-            />
-          </span>
-          <span
-            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-body-xs text-(--text-default) tabular-nums"
-          >
-            {{ records }} records found
-          </span>
-        </span>
-      </ConsoleMockupShellItem>
-
-      <ConsoleMockupShellItem :order="1">
-        <div
-          class="flex flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
+    <ConsoleMockupShellItem :order="0">
+      <span class="flex items-center justify-between gap-(--spacing-sm)">
+        <span
+          data-cursor="refresh"
+          :data-pressed="pressed || null"
+          :class="BUTTON_RING_CLASS"
         >
-          <span
-            class="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-(--spacing-md) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) text-label-sm text-(--text-default)"
-          >
-            <span>Time</span>
-            <span>Log Body</span>
-          </span>
+          <Button
+            label="Refresh"
+            variant="outline"
+            size="small"
+            icon="az az-refresh"
+          />
+        </span>
+        <span
+          class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-body-xs text-(--text-default) tabular-nums"
+        >
+          {{ records }} records found
+        </span>
+      </span>
+    </ConsoleMockupShellItem>
 
-          <Transition
-            enter-from-class="-translate-y-1 opacity-0"
-            enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-            leave-to-class="-translate-y-1 opacity-0"
-            leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+    <ConsoleMockupShellItem :order="1">
+      <div
+        class="flex flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
+      >
+        <span
+          class="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-(--spacing-md) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) text-label-sm text-(--text-default)"
+        >
+          <span>Time</span>
+          <span>Log Body</span>
+        </span>
+
+        <Transition
+          enter-from-class="-translate-y-1 opacity-0"
+          enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          leave-to-class="-translate-y-1 opacity-0"
+          leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        >
+          <div
+            v-if="frame.added"
+            class="overflow-hidden [interpolate-size:allow-keywords]"
           >
-            <div
-              v-if="frame.added"
-              class="overflow-hidden [interpolate-size:allow-keywords]"
+            <span
+              class="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-(--spacing-md) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
             >
-              <span
-                class="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-(--spacing-md) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-              >
-                <span class="text-body-xs text-(--text-default)">{{ ARRIVAL.time }}</span>
-                <span class="line-clamp-4 text-body-code-sm wrap-anywhere text-(--text-default)">
-                  <span
-                    v-for="item in ARRIVAL.body"
-                    :key="item.key"
-                    class="me-(--spacing-xs)"
-                  >
-                    <span class="bg-(--bg-surface-raised)">{{ item.key }}:</span>
-                    {{ formatValue(item.value) }}
-                  </span>
+              <span class="text-body-xs text-(--text-default)">{{ ARRIVAL.time }}</span>
+              <span class="line-clamp-4 text-body-code-sm wrap-anywhere text-(--text-default)">
+                <span
+                  v-for="item in ARRIVAL.body"
+                  :key="item.key"
+                  class="me-(--spacing-xs)"
+                >
+                  <span class="bg-(--bg-surface-raised)">{{ item.key }}:</span>
+                  {{ formatValue(item.value) }}
                 </span>
               </span>
-            </div>
-          </Transition>
+            </span>
+          </div>
+        </Transition>
 
-          <span
-            v-for="row in EVENTS"
-            :key="row.time"
-            class="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-(--spacing-md) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-          >
-            <span class="text-body-xs text-(--text-default)">{{ row.time }}</span>
-            <span class="line-clamp-4 text-body-code-sm wrap-anywhere text-(--text-default)">
-              <span
-                v-for="item in row.body"
-                :key="item.key"
-                class="me-(--spacing-xs)"
-              >
-                <span class="bg-(--bg-surface-raised)">{{ item.key }}:</span>
-                {{ formatValue(item.value) }}
-              </span>
+        <span
+          v-for="row in EVENTS"
+          :key="row.time"
+          class="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-(--spacing-md) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+        >
+          <span class="text-body-xs text-(--text-default)">{{ row.time }}</span>
+          <span class="line-clamp-4 text-body-code-sm wrap-anywhere text-(--text-default)">
+            <span
+              v-for="item in row.body"
+              :key="item.key"
+              class="me-(--spacing-xs)"
+            >
+              <span class="bg-(--bg-surface-raised)">{{ item.key }}:</span>
+              {{ formatValue(item.value) }}
             </span>
           </span>
-        </div>
-      </ConsoleMockupShellItem>
-
-      <MockupCursor
-        name="Priya"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+        </span>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

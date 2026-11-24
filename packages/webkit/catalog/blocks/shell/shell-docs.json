@@ -27,5 +27,8 @@
   }
  ],
  "sfcFile": "blocks/shell/shell-docs/shell-docs.vue",
- "guidelinesFile": "blocks/shell/shell-docs/guidelines.md"
+ "guidelinesFile": "blocks/shell/shell-docs/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
 }

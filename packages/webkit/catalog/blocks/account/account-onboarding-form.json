@@ -13,7 +13,15 @@
  ],
  "sfcFile": "blocks/account/account-onboarding-form/account-onboarding-form.vue",
  "guidelinesFile": "blocks/account/account-onboarding-form/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-onboarding-form/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "onboarding-form-data.ts",
+  "parts/organization-preview.vue",
+  "parts/organization-step.vue",
+  "parts/profile-step.vue",
+  "parts/upgrade-address-card.vue",
+  "parts/upgrade-charge-card.vue",
+  "parts/upgrade-drawer.vue",
+  "parts/upgrade-payment-card.vue"
+ ]
 }

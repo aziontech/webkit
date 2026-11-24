@@ -9,6 +9,8 @@ export const DIRECTIONAL_ICONS: ReadonlySet<string> = new Set([
   'az-chevrons-right',
   'az-arrow-left',
   'az-arrow-right',
+  'az-arrow-left-to-line',
+  'az-arrow-right-to-line',
   'az-circle-arrow-left',
   'az-circle-arrow-right',
   'az-arrow-down-left',
@@ -22,7 +24,7 @@ export const DIRECTIONAL_ICONS: ReadonlySet<string> = new Set([
 ])
 
 const DIRECTIONAL_TOKEN =
-  /(?:^|\s)az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|log-in|log-out|reply|undo)(?=\s|$)/
+  /(?:^|\s)az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|arrow-(?:left|right)-to-line|log-in|log-out|reply|undo)(?=\s|$)/
 
 export function isDirectionalIcon(icon?: string | null): boolean {
   return Boolean(icon && DIRECTIONAL_TOKEN.test(icon))

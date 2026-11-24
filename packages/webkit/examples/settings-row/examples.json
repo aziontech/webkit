@@ -14,7 +14,7 @@
     },
     {
       "name": "WithMessage",
-      "summary": "A Name row after Save was pressed with it empty: the input carries its required state and the FieldError message sits under it in the control column.",
+      "summary": "A required Name row (marked `*`) after Save was pressed with it empty: the input carries its required state and the FieldError message sits under it in the control column.",
       "file": "with-message.vue"
     },
     {

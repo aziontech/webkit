@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <InputGroup>
+  <InputGroup dir="ltr">
     <InputGroup.Input
       aria-label="Domain"
       placeholder="domain"

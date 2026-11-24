@@ -18,6 +18,11 @@
       "file": "sizes.vue"
     },
     {
+      "name": "IconTransition",
+      "summary": "`icon-transition` animates the swap when `icon` changes at runtime, here between show and hide; the accessible name changes with it. With a static icon it adds nothing.",
+      "file": "icon-transition.vue"
+    },
+    {
       "name": "Loading",
       "summary": "Loading adopts the disabled visual treatment for clarity: a spinner replaces the icon and activation is blocked while the async action runs.",
       "file": "loading.vue"

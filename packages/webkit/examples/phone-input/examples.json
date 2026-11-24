@@ -11,6 +11,11 @@
       "name": "DefaultCountry",
       "summary": "`default-country` starts the field on another country (here the United Kingdom) without binding `v-model:country`; the field starts on the United States when it is not set.",
       "file": "default-country.vue"
+    },
+    {
+      "name": "Optional",
+      "summary": "Optional: no `required`, no marker. It may stay empty, but a started number must be complete (`phone-change` reports `complete`).",
+      "file": "optional.vue"
     }
   ]
 }

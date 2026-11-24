@@ -61,6 +61,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CreatePage (create/create-page)](blocks/create/create-page.md): The page a first-level resource is created on when everything it needs fits on one screen.
 - [CreateReleaseImpact (create/create-release-impact)](blocks/create/create-release-impact.md): The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference.
 - [CreateResourcePicker (create/create-resource-picker)](blocks/create/create-resource-picker.md): The band a create flow uses when the resource being created needs another resource that may already exist.
+- [CreateTicket (create/create-ticket)](blocks/create/create-ticket.md): Preview. The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in.
 - [CreateWizard (create/create-wizard)](blocks/create/create-wizard.md): The page a first-level resource is created on one step at a time.
 
 ## Blocks: Dashboard
@@ -79,6 +80,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Blocks: Detail
 
+- [DetailCustomer (detail/detail-customer)](blocks/detail/detail-customer.md): Preview. The page a support agent opens to learn who is asking: how to reach the customer, how happy they have been, every ticket they opened, what happened on their account, and the notes other agents left.
 - [DetailDeploymentLogs (detail/detail-deployment-logs)](blocks/detail/detail-deployment-logs.md): The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why.
 - [DetailDnsZone (detail/detail-dns-zone)](blocks/detail/detail-dns-zone.md): The detail page of a resource that owns a long list of records, here a DNS zone.
 - [DetailDomainsCard (detail/detail-domains-card)](blocks/detail/detail-domains-card.md): A short list of the things one resource is attached to, shown in place inside its Settings tab.
@@ -86,6 +88,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DetailInvocations (detail/detail-invocations)](blocks/detail/detail-invocations.md): The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print.
 - [DetailProductionChecklist (detail/detail-production-checklist)](blocks/detail/detail-production-checklist.md): A service that is live on its generated hostname is not yet ready for real traffic.
 - [DetailResource (detail/detail-resource)](blocks/detail/detail-resource.md): The second-level page of one resource.
+- [DetailTicket (detail/detail-ticket)](blocks/detail/detail-ticket.md): Preview. The support agent's view of one ticket.
 - [DetailVersion (detail/detail-version)](blocks/detail/detail-version.md): One version of a resource, opened from its Versions tab.
 
 ## Blocks: Edit
@@ -99,6 +102,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Blocks: Settings
 
+- [SettingsCannedResponses (settings/settings-canned-responses)](blocks/settings/settings-canned-responses.md): Preview. The admin page for the saved replies support agents insert into a ticket.
 - [SettingsForm (settings/settings-form)](blocks/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
 
 ## Blocks: Shell
@@ -132,6 +136,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ViewRuleList (view/view-rule-list)](blocks/view/view-rule-list.md): An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only).
 - [ViewTable (view/view-table)](blocks/view/view-table.md): The first-level index of one resource type, in rows.
 - [ViewTemplateBrowser (view/view-template-browser)](blocks/view/view-template-browser.md): The catalog of templates a person starts a project from.
+- [ViewTicketInbox (view/view-ticket-inbox)](blocks/view/view-ticket-inbox.md): Preview. The support agent's inbox.
 - [ViewWafTuning (view/view-waf-tuning)](blocks/view/view-waf-tuning.md): The Tuning tab of a WAF rule set.
 
 ## Components: Actions
@@ -152,18 +157,18 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [AgentQuestion](components/agent-question.md): A question the agent asks the reader in the middle of a run, before it can go on (a human-in-the-loop interrupt, Cloudscape follow-up input, the "ask the user" step of coding agents): pick one of a few options, type a…
 - [ArtifactCanvas](components/artifact-canvas.md): The side panel that shows one generated artifact in full next to the conversation: a SQL file, a configuration, a table of results, a document.
 - [ArtifactPreview](components/artifact-preview.md): A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact).
-- [ChatMessage](components/chat-message.md): One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes…
-- [Citation](components/citation.md): An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL…
+- [ChatMessage](components/chat-message.md): One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the good / bad response thumbs,…
+- [Citation](components/citation.md): An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href`…
 - [Conversation](components/conversation.md): The scrolling message log of a generative AI chat.
-- [ConversationHistory](components/conversation-history.md): The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and…
+- [ConversationHistory](components/conversation-history.md): The list of past conversations with an assistant, in a side panel on wide screens or a `Drawer` on phones: plain rows of titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 day…
 - [FeedbackReasonDialog](components/feedback-reason-dialog.md): Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback.
 - [McpAppFrame](components/mcp-app-frame.md): The safe frame for an interactive widget a tool returns inside a chat answer: an MCP app (MCP Apps, or the older MCP-UI) such as a plan picker, a booking form or a map that a tool call rendered as HTML.
 - [PromptInput](components/prompt-input.md): The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attac…
 - [PromptQueue](components/prompt-queue.md): Messages sent while a response is generating, waiting above the prompt input (TanStack AI `useChat` `queue`): each shows its text in send order with a button that removes it before it is sent; changes are announced po…
 - [Reasoning](components/reasoning.md): Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is…
-- [ResponseBranches](components/response-branches.md): Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it.
+- [ResponseBranches](components/response-branches.md): Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a ti…
 - [ResponseLoading](components/response-loading.md): Use ResponseLoading only while a generative AI answer is being produced; never for loading product data, which uses Skeleton (known shape), Spinner (inline) or Progress (measurable).
-- [Sources](components/sources.md): The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line descript…
+- [Sources](components/sources.md): The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources that opens a panel li…
 - [StreamingResponse](components/streaming-response.md): Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely.
 - [SubagentCard](components/subagent-card.md): One helper agent the main agent handed part of the work to, shown inside the conversation (TanStack AI `subagent` parts, AG-UI sub-agent runs; benchmarks: Vercel AI Elements Task, Cloudscape generative AI progressive…
 - [SuggestionGroup](components/suggestion-group.md): A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clar…
@@ -203,6 +208,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Carousel](components/carousel.md): A horizontally scrollable track of cards with snap points and a pair of step controls.
 - [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketin…
 - [CopyText](components/copy-text.md): CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies…
+- [Countdown](components/countdown.md): Preview. Countdown shows the time left until a deadline as a compact tag: the SLA badge of a support ticket (`Due in 2h 15m`, `Due tomorrow`, `Overdue by 15m`), or the time before a certificate or a trial expires (`Expires in…
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
 - [Embed](components/embed.md): A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs.
 - [Eyebrow](components/eyebrow.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
@@ -214,17 +220,20 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and w…
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValueList](components/key-value-list.md): Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
+- [MessageThread](components/message-thread.md): Preview. The conversation of a support ticket, oldest first, as Help Scout, Front, Plain and the Zendesk Agent Workspace show it: each message names its author (avatar, name, customer or agent), the channel it came by, when it…
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's data centers lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): Use OverflowCount for the '+N' that opens the hidden items of a truncated list; a plain number attached to something else is a Badge.
 - [PaymentBrand](components/payment-brand.md): The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme…
 - [PlanFeatureList](components/plan-feature-list.md): Use PlanFeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList.
 - [PricingCard](components/pricing-card.md): One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it.
+- [PriorityTag](components/priority-tag.md): Preview. Use PriorityTag only for the priority of a ticket, task or request on the urgent → low scale, or for "no priority"; the severity of a finding or alert is a SeverityTag, and the state of a ticket is a StatusIndicator o…
 - [QrCode](components/qr-code.md): A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws the…
 - [SeverityTag](components/severity-tag.md): Use SeverityTag only for a level on the critical → info scale of findings and alerts; the state of a resource is a StatusIndicator, and any other category word is a Tag.
 - [StatusCode](components/status-code.md): Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag.
 - [Tag](components/tag.md): Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state.
 - [Texture](components/texture.md): The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it.
 - [ThirdPartyLogo](components/third-party-logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
+- [Timeline](components/timeline.md): Preview. Use Timeline for the history of one record: a vertical list of dated events joined by a line, newest or oldest first, such as the activity of a ticket (status changed, assigned, SLA breached, merged), the audit trail…
 - [Timestamp](components/timestamp.md): Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates e…
 - [TutorialPanel](components/tutorial-panel.md): The guide that runs tutorials beside the real product.
 - [VideoPlayer](components/video-player.md): A native video player with play and pause, seek with time, mute and volume, captions and full screen.
@@ -234,7 +243,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CardList](components/card-list.md): Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard.
 - [CollectionPreferences](components/collection-preferences.md): The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wr…
 - [DataGrid](components/data-grid.md): An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges, copy them and paste a block of cells from a spreadsheet, the…
-- [DataTable](components/data-table.md): The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, paging, empty / loading / error states and the footer `Pagination` itself, through the same `Table` parts (`Table.Hea…
+- [DataTable](components/data-table.md): The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, empty / loading / error states itself, through the same `Table` parts (`Table.Header`, `Table.Row`, `Table.HeadCell`,…
 - [FilterMenu](components/filter-menu.md): The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu.
 - [FlowDiagram](components/flow-diagram.md): The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break.
 - [Pagination](components/pagination.md): Pagination controls for tables and lists, pixel-perfect to Figma, in two modes.
@@ -292,10 +301,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`,…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [FileTokenGroup](components/file-token-group.md): Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress.
-- [Hint](components/hint.md): Small info affordance — a muted `az az-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
+- [Hint](components/hint.md): Click-open note (a "toggletip") on a small muted `az az-circle-info` glyph.
 - [Input](components/input.md): Single-line text input for forms and inline editing.
 - [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it).
-- [LanguageSelect](components/language-select.md): A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a locale with a country (a BCP 47 tag such as `en-US`, `pt-BR`, `es-ES`), shown with that country's r…
+- [LanguageSelect](components/language-select.md): A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the lan…
+- [MarkdownEditor](components/markdown-editor.md): Preview. The text area of a reply composer: a person writes Markdown in a `Textarea`, formats it from a toolbar (bold, italic, link, bulleted list, numbered list, quote, code) or with Ctrl/⌘+B, I and K, checks the result on a…
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.
 - [NumberInput](components/number-input.md): Numeric input field with optional increment/decrement spinner buttons.
 - [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.
@@ -303,6 +313,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PasswordRequirements](components/password-requirements.md): Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it.
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list…
 - [RadioGroup](components/radio-group.md): RadioGroup is the one "pick one of a few" component: it picks exactly one value from a short list of labelled options shown at once.
+- [Rating](components/rating.md): Preview. Rating is a row of stars that picks a whole score from 1 to `max` (5 by default), the way a customer rates a support conversation (CSAT) or a product review.
 - [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
 - [Select](components/select.md): Select control for choosing exactly one option from a list; several values are `multi-select`.
 - [Slider](components/slider.md): Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled.
@@ -329,7 +340,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SaveBar](components/save-bar.md): The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions.
 - [ScrollArea](components/scroll-area.md): Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling.
 - [Separator](components/separator.md): Thin separator line that visually splits content into groups.
-- [SettingsGroup](components/settings-group.md): A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows).
+- [SettingsGroup](components/settings-group.md): A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence guidance on click, over the band body (usually a flush `Card` of `SettingsRow` rows).
 - [SettingsRow](components/settings-row.md): One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs.
 - [Sidebar](components/sidebar.md): Helps users move between views or sections.
 - [SiteLayout](components/site-layout.md): The marketing site's chrome, composed once in the app: `SiteHeaderSection` on top, the page's sections in the layout's `<main>`, `SiteFooterSection` at the foot, and the `Command` search palette wired to the bar's sea…
@@ -406,7 +417,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ComplianceLogosSection](components/compliance-logos-section.md): The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell.
 - [ConsoleShowcaseSection](components/console-showcase-section.md): A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene.
 - [ContactHubSection](components/contact-hub-section.md): The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels.
-- [CopyCommandSection](components/copy-command-section.md): A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy ("npm create azion", "Ask your agent to …").
+- [CopyCommandSection](components/copy-command-section.md): A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …").
 - [CustomerUseCasesSection](components/customer-use-cases-section.md): The "what teams use it for" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case.
 - [FaqSection](components/faq-section.md): The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time.
 - [FeatureScrollSection](components/feature-scroll-section.md): The walkthrough band of a product page: a large section title over one screen per feature.
@@ -434,11 +445,13 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SiteHeaderSection](components/site-header-section.md): The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`.
 - [StatsSection](components/stats-section.md): The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit.
 - [StoryIndexSection](components/story-index-section.md): Every success story of a company as one filterable library.
-- [SubjectGridSection](components/subject-grid-section.md): A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells s…
-- [TemplateGallerySection](components/template-gallery-section.md): The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a mar…
+- [SubjectGridSection](components/subject-grid-section.md): A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans every cell left in the grid…
+- [TemplateGallerySection](components/template-gallery-section.md): The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a two-column wall, scrolling once the band splits, of deployable template…
 
 ## Composables
 
+- [useAiChatTools](composables/use-ai-chat-tools.md): `useAiChatTools` and 2 more exports (options, return, helpers and types).
+- [useAiChatVersions](composables/use-ai-chat-versions.md): `useAiChatVersions` and 2 more exports (options, return, helpers and types).
 - [useAnnouncer](composables/use-announcer.md): `useAnnouncer` and 1 more exports (options, return, helpers and types).
 - [useCollection](composables/use-collection.md): `useCollection` and 36 more exports (options, return, helpers and types).
 - [useColorMode](composables/use-color-mode.md): `useColorMode` and 6 more exports (options, return, helpers and types).
@@ -446,9 +459,10 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [useControllable](composables/use-controllable.md): `useControllable` and 2 more exports (options, return, helpers and types).
 - [useDirection](composables/use-direction.md): `useDirection` and 4 more exports (options, return, helpers and types).
 - [useEscapeToCancel](composables/use-escape-to-cancel.md): `useEscapeToCancel` and 1 more exports (options, return, helpers and types).
+- [useFilePicker](composables/use-file-picker.md): `useFilePicker` and 2 more exports (options, return, helpers and types).
 - [useFocusTrap](composables/use-focus-trap.md): `useFocusTrap` and 1 more exports (options, return, helpers and types).
 - [useHeadingNavigation](composables/use-heading-navigation.md): `useHeadingNavigation` and 7 more exports (options, return, helpers and types).
-- [useLocale](composables/use-locale.md): `useLocale` and 19 more exports (options, return, helpers and types).
+- [useLocale](composables/use-locale.md): `useLocale` and 20 more exports (options, return, helpers and types).
 - [usePinnedRow](composables/use-pinned-row.md): `usePinnedRow` and 2 more exports (options, return, helpers and types).
 - [usePlacement](composables/use-placement.md): `usePlacement` and 12 more exports (options, return, helpers and types).
 - [useShortcuts](composables/use-shortcuts.md): `useShortcuts` and 17 more exports (options, return, helpers and types).

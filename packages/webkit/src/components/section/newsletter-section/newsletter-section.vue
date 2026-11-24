@@ -10,8 +10,8 @@
   import Field from '../../input/field/field.vue'
   import FieldDescription from '../../input/field/field-description/field-description.vue'
   import Input from '../../input/input/input.vue'
-  import Module from '../../layout/module/module.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import SectionBand from '../parts/section-band.vue'
+  import SectionHatch from '../parts/section-hatch.vue'
 
   defineOptions({
     name: 'NewsletterSection',
@@ -108,144 +108,130 @@
   const clearError = () => {
     invalidMessage.value = ''
   }
+
+  const FLOOR_CLASS =
+    'relative isolate h-[calc(var(--spacing-2xl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] ' +
+    '[--texture-wave-gain:3] [--texture-wave-pace:5]'
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
+    :anchor="anchor"
     :data-testid="testId"
     :data-loading="loading || null"
     :data-submitted="submitted || null"
     :data-failed="failed || null"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :label="title"
   >
-    <Module
-      :divided="false"
-      :padded="false"
+    <div
+      class="grid gap-(--spacing-2xl) bg-(--bg-surface) p-(--spacing-xl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-md))] lg:items-start"
     >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
+      <div class="flex flex-col gap-(--spacing-lg)">
+        <Eyebrow
+          v-if="eyebrow"
+          cursor
+          >{{ eyebrow }}</Eyebrow
+        >
+        <h2
+          v-if="description"
+          class="m-0 max-w-(--container-lg) text-balance text-heading-lg text-(--text-default)"
+        >
+          {{ description }}
+        </h2>
+      </div>
+
+      <div
+        ref="outcomeEl"
+        class="flex flex-col gap-(--spacing-md)"
       >
-        <div
-          class="grid gap-(--spacing-2xl) bg-(--bg-surface) p-(--spacing-xl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-md))] lg:items-start"
-        >
-          <div class="flex flex-col gap-(--spacing-lg)">
-            <Eyebrow
-              v-if="eyebrow"
-              cursor
-              >{{ eyebrow }}</Eyebrow
-            >
-            <h2
-              v-if="description"
-              class="m-0 max-w-(--container-lg) text-balance text-heading-lg text-(--text-default)"
-            >
-              {{ description }}
-            </h2>
-          </div>
-
-          <div
-            ref="outcomeEl"
-            class="flex flex-col gap-(--spacing-md)"
+        <template v-if="submitted">
+          <p
+            v-if="title"
+            class="m-0 text-pretty text-heading-sm text-(--text-default)"
           >
-            <template v-if="submitted">
-              <p
-                v-if="title"
-                class="m-0 text-pretty text-heading-sm text-(--text-default)"
-              >
-                {{ title }}
-              </p>
-              <Alert
-                :id="`${inputId}-success`"
-                tabindex="-1"
-                class="outline-none"
-                severity="success"
-                :label="form.successMessage"
-              />
-            </template>
-            <template v-else>
-              <label
-                v-if="title"
-                :for="inputId"
-                class="text-pretty text-heading-sm text-(--text-default)"
-              >
-                {{ title }}
-              </label>
-              <label
-                v-else
-                :for="inputId"
-                class="sr-only"
-              >
-                {{ t('newsletterSection.email') }}
-              </label>
-              <form
-                novalidate
-                class="flex w-full flex-col gap-(--spacing-sm) sm:flex-row sm:items-start"
-                @submit.prevent="subscribe"
-              >
-                <div class="min-w-0 flex-1">
-                  <Field
-                    required
-                    :invalid="Boolean(invalidMessage)"
-                    :disabled="loading"
-                  >
-                    <Input
-                      v-model="email"
-                      name="email"
-                      size="large"
-                      type="email"
-                      autocomplete="email"
-                      :spellcheck="false"
-                      :id="inputId"
-                      :placeholder="form.placeholder"
-                      @update:model-value="clearError"
-                    />
-                    <FieldDescription v-if="invalidMessage">
-                      {{ invalidMessage }}
-                    </FieldDescription>
-                  </Field>
-                </div>
-                <div>
-                  <Button
-                    type="submit"
-                    :label="form.submitLabel"
-                    variant="secondary"
-                    size="large"
-                    :loading="loading"
-                  />
-                </div>
-              </form>
-              <Alert
-                v-if="failed && form.errorMessage"
-                severity="danger"
-                :label="form.errorMessage"
-              />
-            </template>
-          </div>
-        </div>
-
-        <div
-          aria-hidden="true"
-          class="relative isolate h-[calc(var(--spacing-2xl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] [--texture-wave-gain:3] [--texture-wave-pace:5]"
-        >
-          <Texture
-            variant="pixelate"
-            size="small"
+            {{ title }}
+          </p>
+          <Alert
+            :id="`${inputId}-success`"
+            tabindex="-1"
+            class="outline-none"
+            severity="success"
+            :label="form.successMessage"
           />
-        </div>
-      </RegistrationFrame>
-    </Module>
-    <RegistrationFrame
-      v-if="hatch"
-      borders="none"
-      marks="all"
-      data-hatch="true"
-      class="h-[calc(var(--spacing-2xl)*2)]"
+        </template>
+        <template v-else>
+          <label
+            v-if="title"
+            :for="inputId"
+            class="text-pretty text-heading-sm text-(--text-default)"
+          >
+            {{ title }}
+          </label>
+          <label
+            v-else
+            :for="inputId"
+            class="sr-only"
+          >
+            {{ t('newsletterSection.email') }}
+          </label>
+          <form
+            novalidate
+            class="flex w-full flex-col gap-(--spacing-sm) sm:flex-row sm:items-start"
+            @submit.prevent="subscribe"
+          >
+            <div class="min-w-0 flex-1">
+              <Field
+                required
+                :invalid="Boolean(invalidMessage)"
+                :disabled="loading"
+              >
+                <Input
+                  v-model="email"
+                  name="email"
+                  size="large"
+                  type="email"
+                  autocomplete="email"
+                  :spellcheck="false"
+                  :id="inputId"
+                  :placeholder="form.placeholder"
+                  @update:model-value="clearError"
+                />
+                <FieldDescription v-if="invalidMessage">
+                  {{ invalidMessage }}
+                </FieldDescription>
+              </Field>
+            </div>
+            <div>
+              <Button
+                type="submit"
+                :label="form.submitLabel"
+                variant="secondary"
+                size="large"
+                :loading="loading"
+              />
+            </div>
+          </form>
+          <Alert
+            v-if="failed && form.errorMessage"
+            severity="danger"
+            :label="form.errorMessage"
+          />
+        </template>
+      </div>
+    </div>
+
+    <div
+      aria-hidden="true"
+      :class="FLOOR_CLASS"
     >
-      <Texture variant="lines" />
-    </RegistrationFrame>
-  </section>
+      <Texture
+        variant="pixelate"
+        size="small"
+      />
+    </div>
+    <template #after>
+      <SectionHatch v-if="hatch" />
+    </template>
+  </SectionBand>
 </template>

@@ -6,53 +6,53 @@
   <div class="flex flex-col gap-4">
     <div class="flex flex-wrap items-center gap-4">
       <Tag
-        label="Label"
+        label="Medium"
         variant="primary"
         size="medium"
       />
       <Tag
-        label="Label"
+        label="Medium pill"
         variant="primary"
         size="medium"
         rounded
       />
       <Tag
-        label="Label"
+        label="Medium icon"
         variant="primary"
+        icon="az az-tag"
         size="medium"
-        icon="az az-box"
       />
       <Tag
-        label="Label"
+        label="Medium icon pill"
         variant="primary"
+        icon="az az-tag"
         size="medium"
-        icon="az az-box"
         rounded
       />
     </div>
     <div class="flex flex-wrap items-center gap-4">
       <Tag
-        label="Label"
+        label="Small"
         variant="primary"
         size="small"
       />
       <Tag
-        label="Label"
+        label="Small pill"
         variant="primary"
         size="small"
         rounded
       />
       <Tag
-        label="Label"
+        label="Small icon"
         variant="primary"
+        icon="az az-tag"
         size="small"
-        icon="az az-box"
       />
       <Tag
-        label="Label"
+        label="Small icon pill"
         variant="primary"
+        icon="az az-tag"
         size="small"
-        icon="az az-box"
         rounded
       />
     </div>

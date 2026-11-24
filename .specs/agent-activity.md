@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4022e21e9b6066706623f33900a1c4949de5d904b3ebe72774988b46b80b80ca
+checksum: f7c9abfee257e6a69774d45130badabccc0883afa238cfb1155439c1dc33e496
 created: 2026-11-19
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # AgentActivity — Component Spec
@@ -70,11 +70,11 @@ a step only when it has been the current one for a second, and the outcome once,
 
 ## Props
 
-| Prop          | Type                  | Default    | Required | JSDoc                                                                                                                                                                               |
-| ------------- | --------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `steps`       | `AgentActivityStep[]` | `[]`       | false    | The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending. |
-| `defaultOpen` | `boolean`             | `false`    | false    | Initial open state of the step list when uncontrolled; collapsed shows only the current step.                                                                                       |
-| `ariaLabel`   | `string`              | `''`       | false    | Accessible name of the activity. Empty uses the locale catalog (`Agent activity`).                                                                                                  |
+| Prop          | Type                  | Default | Required | JSDoc                                                                                                                                                                                                                                                                                        |
+| ------------- | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `steps`       | `AgentActivityStep[]` | `[]`    | false    | The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending. |
+| `defaultOpen` | `boolean`             | `false` | false    | Initial open state of the step list when uncontrolled; collapsed shows only the current step.                                                                                                                                                                                                |
+| `ariaLabel`   | `string`              | `''`    | false    | Accessible name of the activity. Empty uses the locale catalog (`Agent activity`).                                                                                                                                                                                                           |
 
 Exported types:
 
@@ -116,14 +116,14 @@ _No slots._
 
 ## Tokens
 
-| Region           | Token                                                                                         |
-| ---------------- | --------------------------------------------------------------------------------------------- |
-| step title       | `.text-body-sm`, `var(--text-default)`; pending, canceled, skipped `var(--text-muted)`        |
-| step description | `.text-body-sm`, `var(--text-muted)`                                                          |
-| toggle           | `.text-label-sm`, `var(--text-muted)` → hover `var(--text-default)`                           |
+| Region           | Token                                                                                                                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| step title       | `.text-body-md`, `var(--text-default)`; pending, canceled, skipped `var(--text-muted)`                                                                                                |
+| step description | `.text-body-sm`, `var(--text-muted)`                                                                                                                                                  |
+| toggle           | `.text-body-sm`, `var(--text-muted)` → hover `var(--text-default)`                                                                                                                    |
 | glyphs           | `az-circle-check` `var(--success-mark)`, `az-circle-x` `var(--danger-mark)`; `az-circle-stop`, `az-circle-minus`, the running Spinner and the pending ring border `var(--text-muted)` |
-| gaps             | `var(--spacing-2xs)`, `var(--spacing-xs)`                                                     |
-| ring             | `var(--ring-color)`                                                                           |
+| gaps             | `var(--spacing-2xs)`, `var(--spacing-xs)`                                                                                                                                             |
+| ring             | `var(--ring-color)`                                                                                                                                                                   |
 
 ## Theme gaps
 
@@ -141,19 +141,19 @@ _None._
 
 ## Internationalization
 
-| Key                       | English source                    | Override prop |
-| ------------------------- | --------------------------------- | ------------- |
-| `agentActivity.label`     | `Agent activity`                  | `ariaLabel`   |
-| `agentActivity.steps`     | `{count} step(s)` (plural)        | —             |
-| `agentActivity.finished`  | `Finished {count} step(s)` (plural) | —           |
-| `agentActivity.stopped`   | `Stopped after {count} step(s)` (plural) | —      |
-| `agentActivity.failed`    | `Failed: {title}`                 | —             |
-| `agentActivity.pending`   | `Pending`                         | —             |
-| `agentActivity.running`   | `Running`                         | —             |
-| `agentActivity.success`   | `Done`                            | —             |
-| `agentActivity.error`     | `Failed`                          | —             |
-| `agentActivity.canceled`  | `Canceled`                        | —             |
-| `agentActivity.skipped`   | `Skipped`                         | —             |
+| Key                      | English source                           | Override prop |
+| ------------------------ | ---------------------------------------- | ------------- |
+| `agentActivity.label`    | `Agent activity`                         | `ariaLabel`   |
+| `agentActivity.steps`    | `{count} step(s)` (plural)               | —             |
+| `agentActivity.finished` | `Finished {count} step(s)` (plural)      | —             |
+| `agentActivity.stopped`  | `Stopped after {count} step(s)` (plural) | —             |
+| `agentActivity.failed`   | `Failed: {title}`                        | —             |
+| `agentActivity.pending`  | `Pending`                                | —             |
+| `agentActivity.running`  | `Running`                                | —             |
+| `agentActivity.success`  | `Done`                                   | —             |
+| `agentActivity.error`    | `Failed`                                 | —             |
+| `agentActivity.canceled` | `Canceled`                               | —             |
+| `agentActivity.skipped`  | `Skipped`                                | —             |
 
 - Formatting: plural rules through `Intl.PluralRules` and the count through `Intl.NumberFormat`, both with the provider locale (the same locale the messages resolve from); a plural form the catalog lacks falls back to `other`. Step titles and descriptions come translated from the owner.
 

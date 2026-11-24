@@ -1,5 +1,4 @@
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import DashboardGrid from '@aziontech/webkit/dashboard-grid'
   import StatTile from '@aziontech/webkit/stat-tile'
   import { ref } from 'vue'
@@ -55,19 +54,16 @@
       :item-id="item.id"
       :label="tiles[item.id].title"
     >
-      <ChartCard :aria-label="tiles[item.id].title">
-        <ChartCard.Content>
-          <StatTile
-            :label="tiles[item.id].title"
-            :value="tiles[item.id].value"
-            :unit="tiles[item.id].unit"
-            :delta="tiles[item.id].delta"
-            delta-label="vs previous 24 hours"
-            :inverse="tiles[item.id].inverse"
-            :trend="tiles[item.id].trend"
-          />
-        </ChartCard.Content>
-      </ChartCard>
+      <StatTile
+        :label="tiles[item.id].title"
+        :value="tiles[item.id].value"
+        :unit="tiles[item.id].unit"
+        :delta="tiles[item.id].delta"
+        delta-label="vs previous 24 hours"
+        :inverse="tiles[item.id].inverse"
+        :trend="tiles[item.id].trend"
+        class="flex-1"
+      />
     </DashboardGrid.Item>
   </DashboardGrid>
 </template>

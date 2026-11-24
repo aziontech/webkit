@@ -7,6 +7,7 @@
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Spinner from '../../feedback/spinner/spinner.vue'
   import Slider from '../../input/slider/slider.vue'
+  import { clock, spoken } from './lib/audio-time'
 
   defineOptions({
     name: 'AudioPlayer',
@@ -99,47 +100,19 @@
     () => props.downloadable && Boolean(props.src) && !props.loading && !hasError.value
   )
 
-  function clock(seconds: number | undefined): string {
-    if (seconds === undefined || !Number.isFinite(seconds)) return '--:--'
-    const total = Math.max(0, Math.floor(seconds))
-    const hours = Math.floor(total / 3600)
-    const minutes = Math.floor((total % 3600) / 60)
-    const secs = total % 60
-    const padded = (value: number) =>
-      formatNumber(value, { minimumIntegerDigits: 2, useGrouping: false })
-    if (hours > 0) {
-      return `${formatNumber(hours, { useGrouping: false })}:${padded(minutes)}:${padded(secs)}`
-    }
-    return `${formatNumber(minutes, { useGrouping: false })}:${padded(secs)}`
-  }
-
-  function spoken(seconds: number): string {
-    const total = Math.max(0, Math.floor(seconds))
-    const units: Array<[number, string]> = [
-      [Math.floor(total / 3600), 'hour'],
-      [Math.floor((total % 3600) / 60), 'minute'],
-      [total % 60, 'second']
-    ]
-    const parts = units
-      .filter(([value]) => value > 0)
-      .map(([value, unit]) => formatNumber(value, { style: 'unit', unit, unitDisplay: 'long' }))
-    if (!parts.length) {
-      return formatNumber(0, { style: 'unit', unit: 'second', unitDisplay: 'long' })
-    }
-    return formatList(parts, { type: 'unit', style: 'long' })
-  }
-
   const currentLabel = computed(() =>
-    knownDuration.value === undefined ? clock(undefined) : clock(currentTime.value)
+    knownDuration.value === undefined
+      ? clock(formatNumber, undefined)
+      : clock(formatNumber, currentTime.value)
   )
-  const durationLabel = computed(() => clock(knownDuration.value))
+  const durationLabel = computed(() => clock(formatNumber, knownDuration.value))
 
   const positionText = computed(() =>
     knownDuration.value === undefined
       ? undefined
       : t('audioPlayer.position', {
-          current: spoken(seekValue.value),
-          total: spoken(knownDuration.value)
+          current: spoken(formatNumber, formatList, seekValue.value),
+          total: spoken(formatNumber, formatList, knownDuration.value)
         })
   )
 
@@ -184,10 +157,6 @@
     if (audioEl.value) audioEl.value.playbackRate = rate.value
   }
 
-  function onDurationchange() {
-    readDuration()
-  }
-
   function onTimeupdate() {
     currentTime.value = audioEl.value?.currentTime ?? 0
   }
@@ -201,18 +170,6 @@
     playing.value = false
     buffering.value = false
     emit('pause', event)
-  }
-
-  function onWaiting() {
-    buffering.value = true
-  }
-
-  function onPlaying() {
-    buffering.value = false
-  }
-
-  function onCanplay() {
-    buffering.value = false
   }
 
   function onError() {
@@ -263,6 +220,10 @@
     rate.value = rates[(index + 1) % rates.length] ?? rates[0] ?? 1
     if (audioEl.value) audioEl.value.playbackRate = rate.value
   }
+
+  const TRANSCRIPT_SUMMARY_CLASS =
+    'cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -287,13 +248,13 @@
       preload="metadata"
       class="hidden"
       @loadedmetadata="onLoadedmetadata"
-      @durationchange="onDurationchange"
+      @durationchange="readDuration"
       @timeupdate="onTimeupdate"
       @play="onPlay"
       @pause="onPause"
-      @waiting="onWaiting"
-      @playing="onPlaying"
-      @canplay="onCanplay"
+      @waiting="buffering = true"
+      @playing="buffering = false"
+      @canplay="buffering = false"
       @error="onError"
       @volumechange="onVolumechange"
     />
@@ -366,7 +327,10 @@
         :data-testid="`${testId}__download`"
       />
     </div>
-    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+    <div
+      :dir="hasError ? undefined : 'ltr'"
+      class="flex min-w-0 items-center gap-(--spacing-xs)"
+    >
       <p
         v-if="hasError"
         role="alert"
@@ -390,10 +354,7 @@
           />
           <bdi v-else>{{ currentLabel }}</bdi>
         </span>
-        <div
-          dir="ltr"
-          class="min-w-24 flex-1"
-        >
+        <div class="min-w-24 flex-1">
           <Slider
             :model-value="seekValue"
             :min="0"
@@ -425,9 +386,7 @@
       v-if="transcript"
       :data-testid="`${testId}__transcript`"
     >
-      <summary
-        class="cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
-      >
+      <summary :class="TRANSCRIPT_SUMMARY_CLASS">
         {{ t('audioPlayer.transcript') }}
       </summary>
       <p

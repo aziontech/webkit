@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Slider from '@aziontech/webkit/slider'
   import { ref } from 'vue'
 
@@ -6,7 +7,15 @@
 </script>
 
 <template>
-  <div class="w-full max-w-(--container-xs)">
+  <Field class="w-full max-w-(--container-xs)">
+    <div class="flex items-center justify-between gap-(--spacing-xs)">
+      <Field.Label>Alert threshold</Field.Label>
+      <span
+        class="text-body-sm text-(--text-default) tabular-nums"
+        aria-hidden="true"
+        >{{ value }}%</span
+      >
+    </div>
     <Slider
       v-model="value"
       :min="0"
@@ -14,7 +23,7 @@
       :step="1"
       :reference-values="[0, 25, 50, 75, 100]"
       unit="%"
-      aria-label="Alert threshold"
     />
-  </div>
+    <Field.Description>Alert when CPU use passes this level.</Field.Description>
+  </Field>
 </template>

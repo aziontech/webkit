@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 312b6ddaf5d6fcc9998ed40ba773ec95c3d54e15253dc74472dd80659c1bf456
+checksum: 4517eeec2e83c4c52148706e08e184d63887ac106e1730dac0e808400819093f
 ---
 
 # Tracker — Component Spec
@@ -102,13 +102,15 @@ _No slots._
 
 ## States
 
-- Visual states: `default`, `active block` (pointer or keyboard; the others dim), `loading` (Skeleton strip), `empty` (one neutral strip announced as No data), `error` (inline danger line, `role="alert"`)
+- Visual states: `default`, `active block` (pointer or keyboard; the others dim), `loading` (Skeleton strip), `empty` (one dashed strip that reads No data on screen and is announced as No data), `error` (inline danger line, `role="alert"`)
 - `data-loading` mirrors `loading`
 - `data-severity` on each block: `success` | `warning` | `danger` | `info` | `none`
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
 - `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
+- Narrow strips: blocks keep at least 6px; when the strip is too narrow, consecutive periods merge into one block coloured by their worst state (danger, warning, info, success), read as `{count} periods. Worst: {label}`. Pointer and arrows move by block; `v-model:activeIndex` carries the block's worst period. An unmeasured strip (server render) draws one block per period.
 
 ## Motion & Animations
 

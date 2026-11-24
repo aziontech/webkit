@@ -56,7 +56,7 @@
     mediaAlign?: HeroMediaAlign
     /** Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length. */
     offset?: string
-    /** Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. */
+    /** Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage, which collapses the window. */
     bottomHeight?: string
     /** Stand the brand marquee on the band's floor, under the `bottom` window. */
     marquee?: boolean
@@ -105,6 +105,39 @@
   const hasBackdrop = () => Boolean(slots.background) || props.texture !== 'none'
   const hasMedia = () => Boolean(slots.media)
   const hasFloorTexture = computed(() => props.floorTexture !== 'none')
+
+  const ROOT_CLASS =
+    'relative isolate grid w-full grid-cols-1 grid-rows-[1fr_auto] overflow-clip bg-(--bg-canvas) ' +
+    'data-[bordered]:border-b data-[bordered]:border-(--border-default) ' +
+    'data-[variant=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))]'
+
+  const BACKDROP_CLASS =
+    'pointer-events-none relative col-[1] row-[1/3] overflow-hidden [z-index:var(--hero-banner-z-background,0)] ' +
+    '[:has(>[data-slot=hero-bottom]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:row-[1/2] ' +
+    '[:has(>[data-slot=hero-top]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden ' +
+    '[:has(>[data-slot=hero-content]_[data-slot=hero-media]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden'
+
+  const CONTENT_CLASS =
+    'relative col-[1] row-[1] mx-auto w-full px-(--spacing-xl) [z-index:var(--hero-banner-z-content,10)] ' +
+    'data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start ' +
+    'data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end ' +
+    'data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) ' +
+    'data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none ' +
+    'data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]'
+
+  const FLOOR_TEXTURE_CLASS =
+    '[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] ' +
+    '[opacity:var(--hero-banner-floor-ink,0.6)]'
+
+  const BOTTOM_WINDOW_CLASS =
+    'relative w-full overflow-hidden [height:var(--hero-banner-bottom-height,auto)] ' +
+    'data-[floor]:[height:var(--hero-banner-bottom-height,clamp(9rem,30dvh,34rem))] ' +
+    'max-md:data-[floor]:data-[strip]:[height:var(--hero-banner-bottom-height,clamp(4rem,12dvh,8rem))]'
+
+  const MARQUEE_CLASS =
+    'mx-auto w-full px-(--spacing-xl) py-(--spacing-xl) ' +
+    'data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) ' +
+    'data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none'
 </script>
 
 <template>
@@ -123,13 +156,13 @@
       '--hero-banner-offset': offset || undefined,
       '--hero-banner-bottom-height': bottomHeight || undefined
     }"
-    class="relative isolate grid w-full grid-cols-1 grid-rows-[1fr_auto] overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[variant=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))]"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="hasBackdrop()"
       aria-hidden="true"
       data-slot="hero-backdrop"
-      class="pointer-events-none relative col-[1] row-[1/3] overflow-hidden [z-index:var(--hero-banner-z-background,0)] [:has(>[data-slot=hero-bottom]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:row-[1/2] [:has(>[data-slot=hero-top]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden [:has(>[data-slot=hero-content]_[data-slot=hero-media]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden"
+      :class="BACKDROP_CLASS"
     >
       <div
         class="absolute inset-0 [--texture-fade-lead:transparent] [translate:var(--hero-banner-background-x,0)_var(--hero-banner-background-y,0)]"
@@ -163,7 +196,7 @@
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative col-[1] row-[1] mx-auto w-full px-(--spacing-xl) [z-index:var(--hero-banner-z-content,10)] data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
+      :class="CONTENT_CLASS"
     >
       <div
         v-if="hasMedia()"
@@ -192,14 +225,16 @@
     >
       <div
         v-if="slots.bottom || hasFloorTexture"
+        data-slot="hero-bottom-window"
         :data-floor="hasFloorTexture || null"
-        class="relative w-full overflow-hidden [height:var(--hero-banner-bottom-height,auto)] data-[floor]:[height:var(--hero-banner-bottom-height,clamp(9rem,30dvh,34rem))]"
+        :data-strip="marquee || null"
+        :class="BOTTOM_WINDOW_CLASS"
       >
         <Texture
           v-if="hasFloorTexture"
           :variant="floorTexture"
           :size="floorTextureSize"
-          class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] [opacity:var(--hero-banner-floor-ink,0.6)]"
+          :class="FLOOR_TEXTURE_CLASS"
         />
 
         <div
@@ -219,7 +254,7 @@
           :marks="marqueeMarks"
           :label="marqueeLabel"
           size="small"
-          class="mx-auto w-full px-(--spacing-xl) py-(--spacing-xl) data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none"
+          :class="MARQUEE_CLASS"
         />
       </div>
     </div>

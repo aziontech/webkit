@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/state/state-form-validation/state-form-validation.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-form-validation")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -57,7 +57,7 @@ Each control sits in a `Field` with `Field.Label` (bound by `for`), `Field.Descr
 
 ### D. Text value — `Input` (required)
 
-Key and Value. A placeholder may show the expected shape (`API_TOKEN`); the rule itself lives in the description.
+Key and Value. A required text field carries no placeholder: an example value in it reads as filled once the field is empty and in error. The expected shape and the rule live in the description (`for example API_TOKEN`).
 
 ### E. Choice — `Select` (required)
 
@@ -438,7 +438,6 @@ Each variant is the same screen in another state: `get_block("state/state-form-v
               :id="fieldIds.key"
               v-model="form.key"
               name="key"
-              placeholder="API_TOKEN"
             />
             <Field.Description
               >Uppercase letters, digits and underscores, for example API_TOKEN.</Field.Description
@@ -525,31 +524,4 @@ Each variant is the same screen in another state: `get_block("state/state-form-v
     </form>
   </div>
 </template>
-```
-
-## `sample.ts`
-
-```ts
-import type { FormValidationValues } from './state-form-validation.vue'
-import type { FormValidationOrigin } from './variants/section-rejected.vue'
-
-export const sampleValues: FormValidationValues = {
-  key: 'API_BASE_URL',
-  value: 'https://api.example.com/v2',
-  environment: 'Production',
-  description: 'Base URL the checkout service calls.'
-}
-
-export const sampleOrigins: FormValidationOrigin[] = [
-  { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },
-  { value: 'origin-api-prod', label: 'api-origin-prod', kind: 'HTTP' },
-  { value: 'origin-assets', label: 'assets-storage', kind: 'Storage' }
-]
-
-export const sampleReloadedOrigins: FormValidationOrigin[] = sampleOrigins.filter(
-  (origin) => origin.value !== 'origin-web-prod'
-)
-
-export const sampleOriginError =
-  'Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn\'t created. Nothing else was lost: reload the origin list and select another one.'
 ```

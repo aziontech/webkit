@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import {
   sampleFailedUploads,
@@ -35,6 +35,8 @@ describe('state/state-project-intake', () => {
   it('UploadError: Retry clears the failure and emits retry for every failed file', async () => {
     const view = render(StateProjectIntake, { props: { uploads: sampleFailedUploads } })
     expect(view.container.textContent).toContain('1 file could not be uploaded')
+    expect(view.getByRole('heading', { level: 1 }).textContent?.trim()).toBe('Upload paused')
+    expect(view.container.textContent).not.toContain('Setting up your deployment')
     const alertRetry = Array.from(
       view.container.querySelectorAll('[role="alert"] button, [role="status"] button')
     ).find((b) => b.textContent?.trim() === 'Retry') as HTMLButtonElement
@@ -57,7 +59,8 @@ describe('state/state-project-intake', () => {
         ]
       }
     })
-    expect(view.container.textContent).toContain('Setting up your deployment. 1 of 2 files.')
+    expect(view.container.textContent).toContain('Setting up your deployment.')
+    expect(view.container.querySelector('header')?.textContent).not.toMatch(/\d+ of \d+/)
     expect(view.container.textContent).toContain('2 files, 4.9 kB')
     expect(view.container.textContent).not.toContain(sampleUploads[0].name)
     expect(view.queryByRole('button', { name: 'Choose a folder' })).toBeNull()
@@ -65,10 +68,24 @@ describe('state/state-project-intake', () => {
 
   it('emits select with the chosen folder', async () => {
     const view = render(StateProjectIntake)
-    const input = view.getByLabelText('Project folder') as HTMLInputElement
+    const pickers: HTMLInputElement[] = []
+    const createElement = document.createElement.bind(document)
+    const spy = vi.spyOn(document, 'createElement').mockImplementation(((tag: string) => {
+      const el = createElement(tag)
+      if (tag === 'input') {
+        vi.spyOn(el as HTMLInputElement, 'click').mockImplementation(() => {})
+        pickers.push(el as HTMLInputElement)
+      }
+      return el
+    }) as typeof document.createElement)
+    await fireEvent.click(buttonByText('Choose a folder')!)
+    spy.mockRestore()
+    const input = pickers[0]
+    expect(input.webkitdirectory).toBe(true)
     const file = new File(['{}'], 'package.json', { type: 'application/json' })
     Object.defineProperty(input, 'files', { value: [file] })
-    await fireEvent.change(input)
+    input.dispatchEvent(new Event('change'))
+    await waitFor(() => expect(view.emitted('select')).toBeTruthy())
     const selected = view.emitted('select') as [Event, File[]][]
     expect(selected).toHaveLength(1)
     expect(selected[0][1].map((f) => f.name)).toEqual(['package.json'])

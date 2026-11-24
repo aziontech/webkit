@@ -24,6 +24,7 @@
       cn(
         'flex min-w-0 flex-nowrap items-center gap-(--spacing-2xs) rounded-(--shape-button)',
         '[&>li]:min-w-0',
+        '[&>li:last-child:not(:first-child)]:shrink-[1000] [&>li:last-child:not(:first-child)]:min-w-10',
         attrs.class as string | undefined
       )
     "

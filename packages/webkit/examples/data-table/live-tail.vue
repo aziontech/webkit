@@ -37,7 +37,6 @@
 
 <template>
   <DataTable
-    v-model:live="live"
     :data="rows"
     :columns="columns"
     max-height="420px"
@@ -47,7 +46,7 @@
   >
     <template #title>Requests</template>
     <template #toolbar>
-      <TableLiveButton />
+      <TableLiveButton v-model="live" />
     </template>
     <template #cell-status="{ row }">
       <StatusCode

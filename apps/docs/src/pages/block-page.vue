@@ -14,6 +14,7 @@
   import CodeView from '../components/code-view.vue'
   import DoDont from '../components/do-dont.vue'
   import MarkdownParts from '../components/markdown-parts.vue'
+  import PreviewNote from '../components/preview-note.vue'
   import RawHtml from '../components/raw-html.vue'
   import TableOfContents from '../components/table-of-contents.vue'
   import { blockMarkdown, copyText } from '../lib/copy'
@@ -116,8 +117,8 @@
   })
 
   const toc = computed(() => {
-    const items = [{ id: 'usage', text: t.value.whenToUse, depth: 2 }]
-    items.push({ id: 'preview', text: t.value.preview, depth: 2 })
+    const items = [{ id: 'preview', text: t.value.preview, depth: 2 }]
+    items.push({ id: 'usage', text: t.value.whenToUse, depth: 2 })
     items.push({ id: 'code', text: t.value.code, depth: 2 })
     if (uses.value.length || anatomy.value)
       items.push({ id: 'anatomy', text: t.value.anatomy, depth: 2 })
@@ -167,7 +168,9 @@
     v-else
     class="flex w-full gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-lg) lg:px-(--spacing-xl)"
   >
-    <article class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl)">
+    <article
+      class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) xl:max-w-[calc(100%-var(--container-3xs)-var(--spacing-xl))]"
+    >
       <DocPageHeader
         :title="block.title"
         :description="guidelines?.lead || block.summary"
@@ -176,17 +179,26 @@
         @action-click="onMetaAction"
       >
         <template #details>
-          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-            <Tag
-              :label="block.surface"
-              severity="neutral"
-              size="small"
-            />
-            <Tag
-              :label="`${block.states.length} ${t.states.toLowerCase()}`"
-              severity="neutral"
-              size="small"
-            />
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <Tag
+                v-if="block.stability === 'preview'"
+                :label="t.stabilityPreview"
+                severity="info"
+                size="small"
+              />
+              <Tag
+                :label="block.surface"
+                severity="neutral"
+                size="small"
+              />
+              <Tag
+                :label="`${block.states.length} ${t.states.toLowerCase()}`"
+                severity="neutral"
+                size="small"
+              />
+            </div>
+            <PreviewNote v-if="block.stability === 'preview'" />
           </div>
         </template>
       </DocPageHeader>
@@ -198,28 +210,10 @@
         />
       </div>
 
-      <section
-        id="usage"
-        class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
-      >
-        <DocProse v-if="guidelines?.intro">
-          <RawHtml :html="guidelines.intro" />
-        </DocProse>
-        <DoDont
-          type="usage"
-          :do-html="useWhen"
-          :dont-html="avoidWhen"
-        />
-        <div
-          v-if="related"
-          class="flex flex-col gap-(--spacing-xs)"
-        >
-          <h2 class="text-heading-xs">{{ t.related }}</h2>
-          <DocProse>
-            <RawHtml :html="related" />
-          </DocProse>
-        </div>
-      </section>
+      <TableOfContents
+        :items="toc"
+        compact
+      />
 
       <section
         id="preview"
@@ -274,6 +268,29 @@
           :src="`/frame/block/${block.id}/${state.slug}/`"
           :title="`${block.title}: ${state.name}`"
         />
+      </section>
+
+      <section
+        id="usage"
+        class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
+      >
+        <DocProse v-if="guidelines?.intro">
+          <RawHtml :html="guidelines.intro" />
+        </DocProse>
+        <DoDont
+          type="usage"
+          :do-html="useWhen"
+          :dont-html="avoidWhen"
+        />
+        <div
+          v-if="related"
+          class="flex flex-col gap-(--spacing-xs)"
+        >
+          <h2 class="text-heading-xs">{{ t.related }}</h2>
+          <DocProse>
+            <RawHtml :html="related" />
+          </DocProse>
+        </div>
       </section>
 
       <section

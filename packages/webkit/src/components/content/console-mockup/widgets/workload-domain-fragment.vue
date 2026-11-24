@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import Tag from '../../tag/tag.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'WorkloadDomainFragment' })
 
@@ -28,9 +28,8 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    :chrome="false"
+  <MockupFragment
+    fade="none"
     :active="active"
     :width="480"
     :mobile-width="360"
@@ -72,5 +71,5 @@
         </MockupElevator>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

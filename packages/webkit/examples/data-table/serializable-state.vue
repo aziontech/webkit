@@ -17,7 +17,6 @@
 
   const tableEl = ref(null)
   const saved = ref(null)
-  const snapshot = ref(null)
 
   const save = () => {
     saved.value = tableEl.value?.getSnapshot() ?? null
@@ -46,7 +45,6 @@
     </div>
     <DataTable
       ref="tableEl"
-      v-model:snapshot="snapshot"
       :data="rows"
       :columns="columns"
       row-key="id"

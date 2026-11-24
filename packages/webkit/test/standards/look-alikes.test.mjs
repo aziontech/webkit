@@ -2,7 +2,14 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import { BASELINE, compareBaseline, findCopies } from '../../scripts/check-look-alikes.mjs'
-import { baseUtility, compare, describe, jaccard, pairKey } from '../../scripts/lib/look-alikes.mjs'
+import {
+  baseUtility,
+  compare,
+  describe,
+  FAMILY_SIZE,
+  jaccard,
+  pairKey
+} from '../../scripts/lib/look-alikes.mjs'
 
 const sfc = (script, template) =>
   `<script setup lang="ts">\n${script}\n</script>\n<template>\n${template}\n</template>\n`
@@ -71,6 +78,29 @@ test('two components that copy the same job are a copy; one built on the other i
   assert.equal(compare(a, describe('card-grid', 'd.vue', UNRELATED)).verdict, 'distinct')
 })
 
+test('two components that import the same private part reuse it, unless the part is shared infrastructure', async () => {
+  const { mkdtempSync, mkdirSync, writeFileSync } = await import('node:fs')
+  const { tmpdir } = await import('node:os')
+  const { join } = await import('node:path')
+  const root = mkdtempSync(join(tmpdir(), 'look-alikes-'))
+  const parts = join(root, 'src/components/action/button/parts')
+  mkdirSync(parts, { recursive: true })
+  writeFileSync(join(parts, 'button-frame.vue'), '<template><slot /></template>')
+  const withPart = LINK_OR_BUTTON.replace(
+    'import Spinner',
+    "import ButtonFrame from '../button/parts/button-frame.vue'\nimport Spinner"
+  )
+  const fileA = join(root, 'src/components/action/a/a.vue')
+  const fileB = join(root, 'src/components/action/b/b.vue')
+  const a = describe('button', fileA, withPart)
+  const b = describe('icon-button', fileB, withPart)
+  const users = (n) => new Map([[join(parts, 'button-frame.vue'), n]])
+  a.moduleUsers = users(2)
+  assert.equal(compare(a, b).verdict, 'reuse')
+  a.moduleUsers = users(FAMILY_SIZE + 1)
+  assert.equal(compare(a, b).verdict, 'copy')
+})
+
 test('compareBaseline reports new pairs and pairs that no longer look alike', () => {
   const pairs = [
     { key: 'a::b', verdict: 'copy' },
@@ -88,7 +118,7 @@ test('compareBaseline reports new pairs and pairs that no longer look alike', ()
   assert.deepEqual(stale, ['x::y', 'z::w'])
 })
 
-test('the repository matches its baseline, and the Button family is a known copy', async () => {
+test('the repository matches its baseline and knows no look-alike pair', async () => {
   const { readFileSync } = await import('node:fs')
   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'))
   const { pairs } = findCopies()
@@ -98,7 +128,9 @@ test('the repository matches its baseline, and the Button family is a known copy
     []
   )
   assert.deepEqual(stale, [])
-  assert.ok(baseline.known.includes('button::icon-button'))
+  assert.deepEqual(baseline.known, [])
+  const icon = pairs.find((p) => p.key === 'button::icon-button')
+  assert.ok(!icon || icon.verdict !== 'copy')
   const split = pairs.find((p) => p.key === 'button::split-button')
   assert.ok(!split || split.verdict !== 'copy')
 })

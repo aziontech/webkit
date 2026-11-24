@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-scan-results/dashboard-scan-results.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-scan-results")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -93,7 +93,8 @@ an `aria-label`.
 ### M. Submissions — `DataTable` (required)
 
 Paginated: name, verdict, category, score, type, size, source, first submitter and last seen. Score,
-size and dates in tabular figures.
+size and dates in tabular figures. The table sets `stackable`: on a phone each submission becomes a
+card of label and value lines, so the verdict is never cut off.
 
 ### N. Empty regions — `EmptyState` (required)
 
@@ -106,26 +107,25 @@ The verdict of each row, in the same hue as its donut slice.
 
 ### P. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what did
-not load (`Couldn't load verdicts.`); the tiles read as a dash.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `ScanResultsSubmission`, `ScanResultsSummary`, `ScanResultsVerdict`, `ScanResultsSource` and `ScanResultsDashboardProps` are exported from `dashboard-scan-results.vue`, and `sample.ts` holds the sample figures, splits and submissions the block renders when a data prop is left out (and never while `loading` or `error` is set).
 
-| Prop           | Type                      | What it does                                                                                                  |
-| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `summary`      | `ScanResultsSummary`      | The six tiles and the Held and flagged card. All zeros is the nothing-submitted state.                        |
-| `verdictSplit` | `ChartSeries[]`           | One donut slice per verdict, each with its status color. `[]` shows `No verdict yet`.                         |
-| `sources`      | `BarListItem[]`           | One bar per source. `[]` shows `No items yet`.                                                                |
-| `submissions`  | `ScanResultsSubmission[]` | The Submissions rows; the search and the filters run on them in the browser. `[]` shows `No items yet`.       |
-| `loading`      | `boolean`                 | The period is loading: every region shows its Skeleton.                                                       |
-| `error`        | `string`                  | Why the request failed, shown after `Couldn't load verdicts.` (sources, submissions…) in each danger `Alert`. |
+| Prop           | Type                      | What it does                                                                                                                   |
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `summary`      | `ScanResultsSummary`      | The six tiles and the Held and flagged card. All zeros is the nothing-submitted state.                                         |
+| `verdictSplit` | `ChartSeries[]`           | One donut slice per verdict, each with its status color. `[]` shows `No verdict yet`.                                          |
+| `sources`      | `BarListItem[]`           | One bar per source. `[]` shows `No items yet`.                                                                                 |
+| `submissions`  | `ScanResultsSubmission[]` | The Submissions rows; the search and the filters run on them in the browser. `[]` shows `No items yet`.                        |
+| `loading`      | `boolean`                 | The period is loading: every region shows its Skeleton.                                                                        |
+| `error`        | `string`                  | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
 
-| Event     | Payload   | When                              |
-| --------- | --------- | --------------------------------- |
-| `refresh` | `(event)` | Refresh in the page heading.      |
-| `retry`   | `(event)` | Retry in any of the error alerts. |
+| Event     | Payload   | When                             |
+| --------- | --------- | -------------------------------- |
+| `refresh` | `(event)` | Refresh in the page heading.     |
+| `retry`   | `(event)` | Retry in the page's error alert. |
 
 The `Held deliveries` and `Early delivery alerts` links point at `#held` and `#alerts`; point them at your pages. To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -186,7 +186,7 @@ Then delete `sample.ts` and its import.
 - Default: results with verdicts, exceptions and the submissions table.
 - Loading: `loading`; tiles, donut and bar list render their own `Skeleton`, the summary card holds Skeleton lines and the table shows Skeleton rows.
 - Empty: nothing submitted yet (a zero `summary`, `[]` splits and `submissions`); tiles read zero, verdicts and sources keep their box with an `EmptyState`, and the Submissions card drops the filters and the table for one `EmptyState`.
-- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -199,7 +199,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the results load, the tiles, the donut and the bar list render their own Skeleton, the summary holds Skeleton lines and the table shows Skeleton rows, so the page does not reflow when data arrives.
 - `Empty` — Nothing has been sent for analysis yet. The tiles read zero, the verdicts and sources keep their box with an EmptyState, and the Submissions card drops the filters and the table for one EmptyState that says what fills it.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-scan-results", { variant })`, or the file under `blocks/dashboard/dashboard-scan-results/variants/`.
 
@@ -209,27 +209,21 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Card from '@aziontech/webkit/card'
-  import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
+  import type { ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
 
+  import HeldFlaggedCard from './parts/held-flagged-card.vue'
+  import SubmissionsTable from './parts/submissions-table.vue'
   import { sampleSources, sampleSubmissions, sampleSummary, sampleVerdictSplit } from './sample'
-
+  import { scanFigures } from './scan-results-config'
   /** The verdict an item received; pending while its analysis runs. */
   export type ScanResultsVerdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
   /** Where an item came from. */
@@ -318,249 +312,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const sourceItems = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
   const submissions = computed(() => props.submissions ?? (blocked.value ? [] : sampleSubmissions))
 
-  const search = ref('')
-  const status = ref('all')
-  const verdict = ref('all')
-  const source = ref('all')
-
-  const figures: {
-    key: keyof ScanResultsSummary
-    label: string
-    description: string
-  }[] = [
-    {
-      key: 'submitted',
-      label: 'Submitted',
-      description: 'Items sent for analysis in the selected period.'
-    },
-    {
-      key: 'analyzing',
-      label: 'In analysis',
-      description: 'Items waiting for a verdict right now.'
-    },
-    {
-      key: 'last24h',
-      label: 'Last 24 hours',
-      description: 'Items submitted in the last 24 hours.'
-    },
-    {
-      key: 'flagged',
-      label: 'Flagged',
-      description: 'Items whose verdict marks them as harmful.'
-    },
-    {
-      key: 'held',
-      label: 'Held for a verdict',
-      description: 'Deliveries paused until their analysis finishes.'
-    },
-    {
-      key: 'alertsOpen',
-      label: 'Open alerts',
-      description: 'Items delivered before they were flagged that nobody has reviewed yet.'
-    }
-  ]
-
-  const verdicts: Record<
-    ScanResultsVerdict,
-    { label: string; severity: TagSeverity; color: ChartColor }
-  > = {
-    clean: {
-      label: 'Clean',
-      severity: 'success',
-      color: 'success'
-    },
-    suspicious: {
-      label: 'Suspicious',
-      severity: 'warning',
-      color: 'warning'
-    },
-    flagged: {
-      label: 'Flagged',
-      severity: 'danger',
-      color: 'danger'
-    },
-    pending: {
-      label: 'Pending',
-      severity: 'neutral',
-      color: 'other'
-    }
-  }
-
-  const sourceLabels: Record<ScanResultsSource, string> = {
-    inline: 'Inline scan',
-    api: 'API submission',
-    upload: 'Manual upload',
-    scheduled: 'Scheduled scan'
-  }
-
-  const statusOptions = [
-    {
-      value: 'all',
-      label: 'Any status'
-    },
-    {
-      value: 'analyzing',
-      label: 'In analysis'
-    },
-    {
-      value: 'completed',
-      label: 'Completed'
-    }
-  ]
-
-  const verdictOptions = [
-    {
-      value: 'all',
-      label: 'Any verdict'
-    },
-    {
-      value: 'clean',
-      label: 'Clean'
-    },
-    {
-      value: 'suspicious',
-      label: 'Suspicious'
-    },
-    {
-      value: 'flagged',
-      label: 'Flagged'
-    }
-  ]
-
-  const sourceOptions = [
-    {
-      value: 'all',
-      label: 'Any source'
-    },
-    {
-      value: 'inline',
-      label: 'Inline scan'
-    },
-    {
-      value: 'api',
-      label: 'API submission'
-    },
-    {
-      value: 'upload',
-      label: 'Manual upload'
-    },
-    {
-      value: 'scheduled',
-      label: 'Scheduled scan'
-    }
-  ]
-
-  const submissionColumns: TableColumn[] = [
-    {
-      accessorKey: 'name',
-      id: 'name',
-      header: 'Name',
-      align: 'start',
-      sortable: true,
-      principal: true,
-      grow: 2
-    },
-    {
-      accessorKey: 'verdict',
-      id: 'verdict',
-      header: 'Verdict',
-      align: 'start',
-      sortable: true,
-      minWidth: 112
-    },
-    {
-      accessorKey: 'category',
-      id: 'category',
-      header: 'Category',
-      align: 'start',
-      sortable: true,
-      minWidth: 112
-    },
-    {
-      accessorKey: 'score',
-      id: 'score',
-      header: 'Score',
-      align: 'end',
-      sortable: true,
-      minWidth: 80
-    },
-    {
-      accessorKey: 'type',
-      id: 'type',
-      header: 'Type',
-      align: 'start',
-      sortable: true,
-      minWidth: 128
-    },
-    {
-      accessorKey: 'size',
-      id: 'size',
-      header: 'Size',
-      align: 'end',
-      sortable: true,
-      minWidth: 88
-    },
-    {
-      accessorKey: 'source',
-      id: 'source',
-      header: 'Source',
-      align: 'start',
-      sortable: true,
-      minWidth: 128
-    },
-    {
-      accessorKey: 'submitter',
-      id: 'submitter',
-      header: 'First submitter',
-      align: 'start',
-      sortable: true,
-      minWidth: 128
-    },
-    {
-      accessorKey: 'lastSeen',
-      id: 'lastSeen',
-      header: 'Last seen',
-      align: 'start',
-      sortable: true,
-      minWidth: 136
-    }
-  ]
-
-  const rows = computed(() =>
-    submissions.value.filter(
-      (row) =>
-        (status.value === 'all' ||
-          (status.value === 'analyzing') === (row.verdict === 'pending')) &&
-        (verdict.value === 'all' || row.verdict === verdict.value) &&
-        (source.value === 'all' || row.source === source.value)
-    )
-  )
-
   const { formatNumber } = useLocale()
-  const fixed = (value: number, digits: number) =>
-    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
-  const count = (value: number) => formatNumber(value)
+  const formatCount = (value: number) => formatNumber(value)
 
-  const compact = (value: number) =>
+  const formatCompact = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
-
-  const UNITS = ['B', 'KB', 'MB', 'GB']
-
-  const formatters = {
-    count: (value: number) => count(value),
-    compact: (value: number) => compact(value),
-    score: (value: number | null) => (value === null ? '—' : String(value)),
-    size: (value: number) => {
-      let size = value
-      let unit = 0
-      while (size >= 1000 && unit < UNITS.length - 1) {
-        size /= 1000
-        unit += 1
-      }
-      return `${fixed(size, unit ? 1 : 0)} ${UNITS[unit]}`
-    }
-  }
 </script>
 
 <template>
@@ -580,20 +337,28 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the scan results. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-scan-results__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section aria-label="Summary">
         <ul
           class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
         >
           <li
-            v-for="figure in figures"
+            v-for="figure in scanFigures"
             :key="figure.key"
             class="flex min-w-0 flex-col"
           >
             <StatTile
               :label="figure.label"
               :value="error ? null : (summary?.[figure.key] ?? null)"
-              :format-value="formatters.compact"
+              :format-value="formatCompact"
               :loading="loading"
               :error="error"
             >
@@ -616,17 +381,16 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load verdicts. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <DonutChart
               v-else
               :series="verdictSplit"
-              :format-value="formatters.compact"
+              :format-value="formatCompact"
               size="small"
               total-label="Items"
               empty-title="No verdict yet"
@@ -647,17 +411,16 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load sources. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="sourceItems"
-              :format-value="formatters.compact"
+              :format-value="formatCompact"
               empty-title="No items yet"
               :loading="loading"
               aria-label="Sources"
@@ -665,69 +428,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </ChartCard.Content>
         </ChartCard>
 
-        <div class="lg:col-span-4">
-          <Card title="Held and flagged">
-            <template #default>
-              <Alert
-                v-if="error"
-                severity="danger"
-                :label="`Couldn't load held and flagged submissions. ${error}`"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-              <div
-                v-else-if="loading || !summary"
-                aria-busy="true"
-                class="flex flex-col gap-(--spacing-sm)"
-              >
-                <Skeleton
-                  width="90%"
-                  height="1rem"
-                />
-                <Skeleton
-                  width="30%"
-                  height="1rem"
-                />
-                <Skeleton
-                  width="80%"
-                  height="1rem"
-                />
-                <Skeleton
-                  width="40%"
-                  height="1rem"
-                />
-              </div>
-              <div
-                v-else
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <div class="flex flex-col items-start gap-(--spacing-2xs)">
-                  <p class="text-pretty text-body-sm text-(--text-default)">
-                    {{ formatters.count(summary.held) }} deliveries held for a verdict now,
-                    {{ formatters.count(summary.heldLast24h) }} in the last 24 hours.
-                  </p>
-                  <Link
-                    label="Held deliveries"
-                    href="#held"
-                    size="small"
-                  />
-                </div>
-                <div class="flex flex-col items-start gap-(--spacing-2xs)">
-                  <p class="text-pretty text-body-sm text-(--text-default)">
-                    {{ formatters.count(summary.alertsOpen) }} open alerts of
-                    {{ formatters.count(summary.alertsTotal) }} for items delivered before they were
-                    flagged.
-                  </p>
-                  <Link
-                    label="Early delivery alerts"
-                    href="#alerts"
-                    size="small"
-                  />
-                </div>
-              </div>
-            </template>
-          </Card>
-        </div>
+        <HeldFlaggedCard
+          :summary="summary"
+          :loading="loading"
+          :error="error"
+          :format-count="formatCount"
+        />
 
         <ChartCard :span="12">
           <ChartCard.Header>
@@ -739,154 +445,17 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load submissions. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <div
-              v-else-if="loading || submissions.length"
-              class="flex min-w-0 flex-col gap-(--spacing-sm)"
+              class="text-body-sm text-(--text-muted)"
             >
-              <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                <div class="min-w-36 grow basis-(--container-3xs)">
-                  <Input
-                    v-model="search"
-                    size="medium"
-                    placeholder="Search by name or submitter"
-                    aria-label="Search by name or submitter"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </div>
-                <div class="w-full sm:w-44">
-                  <Select
-                    v-model="status"
-                    size="medium"
-                    :display-value="
-                      (value) =>
-                        statusOptions.find((option) => option.value === value)?.label ??
-                        String(value)
-                    "
-                  >
-                    <Select.Trigger aria-label="Status" />
-                    <Select.Content>
-                      <Select.Item
-                        v-for="option in statusOptions"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Item>
-                    </Select.Content>
-                  </Select>
-                </div>
-                <div class="w-full sm:w-44">
-                  <Select
-                    v-model="verdict"
-                    size="medium"
-                    :display-value="
-                      (value) =>
-                        verdictOptions.find((option) => option.value === value)?.label ??
-                        String(value)
-                    "
-                  >
-                    <Select.Trigger aria-label="Verdict" />
-                    <Select.Content>
-                      <Select.Item
-                        v-for="option in verdictOptions"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Item>
-                    </Select.Content>
-                  </Select>
-                </div>
-                <div class="w-full sm:w-44">
-                  <Select
-                    v-model="source"
-                    size="medium"
-                    :display-value="
-                      (value) =>
-                        sourceOptions.find((option) => option.value === value)?.label ??
-                        String(value)
-                    "
-                  >
-                    <Select.Trigger aria-label="Source" />
-                    <Select.Content>
-                      <Select.Item
-                        v-for="option in sourceOptions"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Item>
-                    </Select.Content>
-                  </Select>
-                </div>
-              </div>
-              <DataTable
-                v-model:global-filter="search"
-                :data="rows"
-                :columns="submissionColumns"
-                row-key="id"
-                sortable
-                paginated
-                :page-size="10"
-                :page-size-options="[10, 25, 50]"
-                density="compact"
-                bordered
-                :loading="loading"
-              >
-                <template #empty>
-                  <EmptyState
-                    size="small"
-                    icon="az az-search"
-                    title="No matching items"
-                    description="Change the search or the filters."
-                  />
-                </template>
-                <template #cell-name="{ row }">
-                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <i
-                      class="az az-file shrink-0 text-body-lg text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <span class="truncate">{{ row.name }}</span>
-                  </div>
-                </template>
-                <template #cell-verdict="{ row }">
-                  <TableCellStatus
-                    :label="verdicts[row.verdict].label"
-                    :severity="verdicts[row.verdict].severity"
-                  />
-                </template>
-                <template #cell-score="{ row }">
-                  <span class="tabular-nums">{{ formatters.score(row.score) }}</span>
-                </template>
-                <template #cell-size="{ row }">
-                  <span class="tabular-nums">{{ formatters.size(row.size) }}</span>
-                </template>
-                <template #cell-source="{ row }">
-                  {{ sourceLabels[row.source] }}
-                </template>
-                <template #cell-lastSeen="{ row }">
-                  <time
-                    class="tabular-nums"
-                    :datetime="row.lastSeen"
-                    >{{ row.lastSeen }}</time
-                  >
-                </template>
-              </DataTable>
-            </div>
+              Not available.
+            </p>
+            <SubmissionsTable
+              v-else-if="loading || submissions.length"
+              :submissions="submissions"
+              :loading="loading"
+            />
             <EmptyState
               v-else
               size="small"
@@ -1128,4 +697,527 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
     lastSeen: '2026-11-10 08:54'
   }
 ]
+```
+
+## `parts/filter-select.vue`
+
+```ts
+<script setup lang="ts">
+  import Select from '@aziontech/webkit/select'
+
+  import type { ScanFilterOption } from '../scan-results-config'
+
+  export interface FilterSelectProps {
+    /** Accessible name of the filter. */
+    label: string
+    /** The options; the first one keeps every row. */
+    options: ScanFilterOption[]
+  }
+
+  const props = defineProps<FilterSelectProps>()
+
+  const value = defineModel<string>({ required: true })
+
+  const displayValue = (current: unknown) =>
+    props.options.find((option) => option.value === current)?.label ?? String(current)
+</script>
+
+<template>
+  <div class="w-full sm:w-44">
+    <Select
+      v-model="value"
+      size="medium"
+      :display-value="displayValue"
+    >
+      <Select.Trigger :aria-label="label" />
+      <Select.Content>
+        <Select.Item
+          v-for="option in options"
+          :key="option.value"
+          :value="option.value"
+        >
+          {{ option.label }}
+        </Select.Item>
+      </Select.Content>
+    </Select>
+  </div>
+</template>
+```
+
+## `parts/held-flagged-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import Link from '@aziontech/webkit/link'
+  import Skeleton from '@aziontech/webkit/skeleton'
+
+  import type { ScanResultsSummary } from '../dashboard-scan-results.vue'
+
+  export interface HeldFlaggedCardProps {
+    /** The summary figures; null holds the skeleton. */
+    summary: ScanResultsSummary | null
+    /** The period is loading. */
+    loading: boolean
+    /** Why the period could not load; shows a danger alert with Retry. */
+    error: string
+    /** Writes a count. */
+    formatCount: (value: number) => string
+  }
+
+  defineProps<HeldFlaggedCardProps>()
+</script>
+
+<template>
+  <div class="lg:col-span-4">
+    <Card title="Held and flagged">
+      <template #default>
+        <p
+          v-if="error"
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
+        <div
+          v-else-if="loading || !summary"
+          aria-busy="true"
+          class="flex flex-col gap-(--spacing-sm)"
+        >
+          <Skeleton
+            v-for="width in ['90%', '30%', '80%', '40%']"
+            :key="width"
+            :width="width"
+            height="1rem"
+          />
+        </div>
+        <div
+          v-else
+          class="flex flex-col gap-(--spacing-md)"
+        >
+          <div class="flex flex-col items-start gap-(--spacing-2xs)">
+            <p class="text-pretty text-body-sm text-(--text-default)">
+              {{ formatCount(summary.held) }} deliveries held for a verdict now,
+              {{ formatCount(summary.heldLast24h) }} in the last 24 hours.
+            </p>
+            <Link
+              label="Held deliveries"
+              href="#held"
+              size="small"
+            />
+          </div>
+          <div class="flex flex-col items-start gap-(--spacing-2xs)">
+            <p class="text-pretty text-body-sm text-(--text-default)">
+              {{ formatCount(summary.alertsOpen) }} open alerts of
+              {{ formatCount(summary.alertsTotal) }} for items delivered before they were flagged.
+            </p>
+            <Link
+              label="Early delivery alerts"
+              href="#alerts"
+              size="small"
+            />
+          </div>
+        </div>
+      </template>
+    </Card>
+  </div>
+</template>
+```
+
+## `parts/submissions-table.vue`
+
+```ts
+<script setup lang="ts">
+  import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Input from '@aziontech/webkit/input'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+  import { computed, ref } from 'vue'
+
+  import type { ScanResultsSubmission } from '../dashboard-scan-results.vue'
+  import {
+    formatScanScore,
+    formatScanSize,
+    scanColumns,
+    scanSourceLabels,
+    scanSourceOptions,
+    scanStatusOptions,
+    scanVerdictOptions,
+    scanVerdicts
+  } from '../scan-results-config'
+  import FilterSelect from './filter-select.vue'
+
+  export interface SubmissionsTableProps {
+    /** Every submission of the period, filtered here. */
+    submissions: ScanResultsSubmission[]
+    /** The period is loading. */
+    loading: boolean
+  }
+
+  const props = defineProps<SubmissionsTableProps>()
+
+  const { formatNumber } = useLocale()
+
+  const search = ref('')
+  const status = ref('all')
+  const verdict = ref('all')
+  const source = ref('all')
+
+  const rows = computed(() =>
+    props.submissions.filter(
+      (row) =>
+        (status.value === 'all' ||
+          (status.value === 'analyzing') === (row.verdict === 'pending')) &&
+        (verdict.value === 'all' || row.verdict === verdict.value) &&
+        (source.value === 'all' || row.source === source.value)
+    )
+  )
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        scanColumns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
+</script>
+
+<template>
+  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+    <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+      <div class="min-w-36 grow basis-(--container-3xs)">
+        <Input
+          v-model="search"
+          size="medium"
+          placeholder="Search by name or submitter"
+          aria-label="Search by name or submitter"
+        >
+          <template #leading>
+            <i
+              class="az az-search"
+              aria-hidden="true"
+            />
+          </template>
+        </Input>
+      </div>
+      <FilterSelect
+        v-model="status"
+        label="Status"
+        :options="scanStatusOptions"
+      />
+      <FilterSelect
+        v-model="verdict"
+        label="Verdict"
+        :options="scanVerdictOptions"
+      />
+      <FilterSelect
+        v-model="source"
+        label="Source"
+        :options="scanSourceOptions"
+      />
+    </div>
+    <DataTable
+      :data="matchingRows"
+      :columns="scanColumns"
+      row-key="id"
+      sortable
+      density="compact"
+      stackable
+      bordered
+      :loading="loading"
+    >
+      <template #empty>
+        <EmptyState
+          size="small"
+          icon="az az-search"
+          title="No matching items"
+          description="Change the search or the filters."
+        />
+      </template>
+      <template #cell-name="{ row }">
+        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+          <i
+            class="az az-file shrink-0 text-body-lg text-(--text-muted)"
+            aria-hidden="true"
+          />
+          <span class="truncate">{{ row.name }}</span>
+        </div>
+      </template>
+      <template #cell-verdict="{ row }">
+        <TableCellStatus
+          :label="scanVerdicts[row.verdict].label"
+          :severity="scanVerdicts[row.verdict].severity"
+        />
+      </template>
+      <template #cell-score="{ row }">
+        <span class="tabular-nums">{{ formatScanScore(row.score) }}</span>
+      </template>
+      <template #cell-size="{ row }">
+        <span class="tabular-nums">{{ formatScanSize(row.size, formatNumber) }}</span>
+      </template>
+      <template #cell-source="{ row }">
+        {{ scanSourceLabels[row.source] }}
+      </template>
+      <template #cell-lastSeen="{ row }">
+        <time
+          class="tabular-nums"
+          :datetime="row.lastSeen"
+          >{{ row.lastSeen }}</time
+        >
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="10"
+          :page-size-options="[10, 25, 50]"
+        />
+      </template>
+    </DataTable>
+  </div>
+</template>
+```
+
+## `scan-results-config.ts`
+
+```ts
+import type { ChartColor } from '@aziontech/webkit/chart'
+import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TagSeverity } from '@aziontech/webkit/tag'
+
+import type {
+  ScanResultsSource,
+  ScanResultsSummary,
+  ScanResultsVerdict
+} from './dashboard-scan-results.vue'
+
+/** One option of a Submissions filter. */
+export interface ScanFilterOption {
+  /** The value the filter writes. */
+  value: string
+  /** The label the filter shows. */
+  label: string
+}
+
+export const scanFigures: {
+  key: keyof ScanResultsSummary
+  label: string
+  description: string
+}[] = [
+  {
+    key: 'submitted',
+    label: 'Submitted',
+    description: 'Items sent for analysis in the selected period.'
+  },
+  {
+    key: 'analyzing',
+    label: 'In analysis',
+    description: 'Items waiting for a verdict right now.'
+  },
+  {
+    key: 'last24h',
+    label: 'Last 24 hours',
+    description: 'Items submitted in the last 24 hours.'
+  },
+  {
+    key: 'flagged',
+    label: 'Flagged',
+    description: 'Items whose verdict marks them as harmful.'
+  },
+  {
+    key: 'held',
+    label: 'Held for a verdict',
+    description: 'Deliveries paused until their analysis finishes.'
+  },
+  {
+    key: 'alertsOpen',
+    label: 'Open alerts',
+    description: 'Items delivered before they were flagged that nobody has reviewed yet.'
+  }
+]
+
+export const scanVerdicts: Record<
+  ScanResultsVerdict,
+  { label: string; severity: TagSeverity; color: ChartColor }
+> = {
+  clean: {
+    label: 'Clean',
+    severity: 'success',
+    color: 'success'
+  },
+  suspicious: {
+    label: 'Suspicious',
+    severity: 'warning',
+    color: 'warning'
+  },
+  flagged: {
+    label: 'Flagged',
+    severity: 'danger',
+    color: 'danger'
+  },
+  pending: {
+    label: 'Pending',
+    severity: 'neutral',
+    color: 'other'
+  }
+}
+
+export const scanSourceLabels: Record<ScanResultsSource, string> = {
+  inline: 'Inline scan',
+  api: 'API submission',
+  upload: 'Manual upload',
+  scheduled: 'Scheduled scan'
+}
+
+export const scanStatusOptions: ScanFilterOption[] = [
+  {
+    value: 'all',
+    label: 'Any status'
+  },
+  {
+    value: 'analyzing',
+    label: 'In analysis'
+  },
+  {
+    value: 'completed',
+    label: 'Completed'
+  }
+]
+
+export const scanVerdictOptions: ScanFilterOption[] = [
+  {
+    value: 'all',
+    label: 'Any verdict'
+  },
+  {
+    value: 'clean',
+    label: 'Clean'
+  },
+  {
+    value: 'suspicious',
+    label: 'Suspicious'
+  },
+  {
+    value: 'flagged',
+    label: 'Flagged'
+  }
+]
+
+export const scanSourceOptions: ScanFilterOption[] = [
+  {
+    value: 'all',
+    label: 'Any source'
+  },
+  {
+    value: 'inline',
+    label: 'Inline scan'
+  },
+  {
+    value: 'api',
+    label: 'API submission'
+  },
+  {
+    value: 'upload',
+    label: 'Manual upload'
+  },
+  {
+    value: 'scheduled',
+    label: 'Scheduled scan'
+  }
+]
+
+export const scanColumns: TableColumn[] = [
+  {
+    accessorKey: 'name',
+    id: 'name',
+    header: 'Name',
+    align: 'start',
+    sortable: true,
+    principal: true,
+    grow: 2
+  },
+  {
+    accessorKey: 'verdict',
+    id: 'verdict',
+    header: 'Verdict',
+    align: 'start',
+    sortable: true,
+    minWidth: 112
+  },
+  {
+    accessorKey: 'category',
+    id: 'category',
+    header: 'Category',
+    align: 'start',
+    sortable: true,
+    minWidth: 112
+  },
+  {
+    accessorKey: 'score',
+    id: 'score',
+    header: 'Score',
+    align: 'end',
+    sortable: true,
+    minWidth: 80
+  },
+  {
+    accessorKey: 'type',
+    id: 'type',
+    header: 'Type',
+    align: 'start',
+    sortable: true,
+    minWidth: 128
+  },
+  {
+    accessorKey: 'size',
+    id: 'size',
+    header: 'Size',
+    align: 'end',
+    sortable: true,
+    minWidth: 88
+  },
+  {
+    accessorKey: 'source',
+    id: 'source',
+    header: 'Source',
+    align: 'start',
+    sortable: true,
+    minWidth: 128
+  },
+  {
+    accessorKey: 'submitter',
+    id: 'submitter',
+    header: 'First submitter',
+    align: 'start',
+    sortable: true,
+    minWidth: 128
+  },
+  {
+    accessorKey: 'lastSeen',
+    id: 'lastSeen',
+    header: 'Last seen',
+    align: 'start',
+    sortable: true,
+    minWidth: 136
+  }
+]
+
+const sizeUnits = ['B', 'KB', 'MB', 'GB']
+
+export const formatScanSize = (
+  value: number,
+  formatNumber: (value: number, options?: Intl.NumberFormatOptions) => string
+): string => {
+  let size = value
+  let unit = 0
+  while (size >= 1000 && unit < sizeUnits.length - 1) {
+    size /= 1000
+    unit += 1
+  }
+  return `${formatNumber(size, { minimumFractionDigits: unit ? 1 : 0, maximumFractionDigits: unit ? 1 : 0 })} ${sizeUnits[unit]}`
+}
+
+export const formatScanScore = (value: number | null): string =>
+  value === null ? '—' : String(value)
 ```

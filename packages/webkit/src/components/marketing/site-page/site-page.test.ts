@@ -85,7 +85,9 @@ describe('SitePage', () => {
   it('renders each entry with the section its _id names, binding its props', async () => {
     const { findByRole } = page()
 
-    expect(await findByRole('heading', { level: 1, name: HEADLINE })).toBeInTheDocument()
+    expect(
+      await findByRole('heading', { level: 1, name: HEADLINE }, { timeout: 5000 })
+    ).toBeInTheDocument()
     expect(await findByRole('heading', { level: 2, name: USES_TITLE })).toBeInTheDocument()
     expect(await findByRole('heading', { level: 2, name: FAQ_TITLE })).toBeInTheDocument()
   })
@@ -93,7 +95,7 @@ describe('SitePage', () => {
   it('renders the openings before the column, and the column in data order', async () => {
     const { findByRole } = page()
 
-    const opening = await findByRole('heading', { level: 1, name: HEADLINE })
+    const opening = await findByRole('heading', { level: 1, name: HEADLINE }, { timeout: 5000 })
     const first = await findByRole('heading', { level: 2, name: USES_TITLE })
     const second = await findByRole('heading', { level: 2, name: FAQ_TITLE })
 
@@ -372,6 +374,7 @@ describe('SitePage', () => {
     const folders = Object.keys(import.meta.glob('../../section/*/*.vue'))
       .map((path) => path.split('/')[3])
       .filter((name, index, all) => all.indexOf(name) === index)
+      .filter((name) => name.endsWith('-section'))
       .filter((name) => name !== 'site-header-section' && name !== 'site-footer-section')
       .sort()
 

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: d1b18b23d1c6808b9ea1ef8287ca3c3ee1bf2e30e9da847bc0d18e90ab15983d
+checksum: 2a23771fa2400b93d1dea7eef07093f011e423d845f8423f73653747287a48b5
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -95,7 +95,7 @@ The register changes the weight and the arrangement, never the anatomy: every re
 | --------- | ----- | --------------------------------------------------------------------------------------------- |
 | `default` | —     | Quotation body; replaces the `text` prop when provided.                                       |
 | `mark`    | —     | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
-| `actions` | —     | A trailing control under the attribution, floored so a row of quotes aligns on it.            |
+| `actions` | —     | A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart. |
 
 ## States
 
@@ -125,9 +125,9 @@ _none_
 | quotation text (highlighted, outside a phrase)   | `var(--text-muted)`                                             |
 | highlighted phrase                               | `var(--text-default)`                                           |
 | quotation glyph                                  | `var(--text-muted)`                                             |
-| attribution name                                 | `var(--text-brand)`                                             |
+| attribution name                                 | `var(--text-default)` after a 2px start bar in `var(--primary)` |
 | attribution role                                 | `var(--text-muted)`                                             |
-| quotation measure (`highlight`)                  | `var(--container-2xl)`                                          |
+| quotation measure (every variant)                | `var(--container-2xl)`                                          |
 | spacing (mark to quotation, `inline`)            | `var(--spacing-lg)`                                             |
 | spacing (mark to quotation, `signed`)            | `var(--spacing-sm)` + `var(--spacing-md)`                       |
 | spacing (glyph to quotation, `signed`)           | `var(--spacing-xs)`                                             |
@@ -135,7 +135,8 @@ _none_
 | spacing (quotation to attribution)               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xl)` |
 | spacing (quotation to mark column, `highlight`)  | `var(--spacing-xl)`                                             |
 | spacing (attribution lines, `inline` / `signed`) | `var(--spacing-md)`                                             |
-| spacing (attribution inset)                      | `var(--spacing-2xs)`                                            |
+| spacing (attribution) | none: the name and the role start on the quotation's edge |
+| spacing (between actions) | `var(--spacing-sm)` |
 
 ## Theme gaps
 
@@ -148,7 +149,7 @@ _none_
 - Visible focus: not applicable — the quote is static copy and holds no interactive control.
 - Keyboard map: none of its own; the block contains no focusable element and is skipped by `Tab`.
 - ARIA: the quotation is a real `blockquote` inside a `figure`, and the attribution is its `figcaption`, so the statement and its source are announced as one unit; the mark carries `logoAlt`, falling back to `jobTitle`, and is never left with an empty accessible name while it conveys the company.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution name is `var(--text-brand)`, the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"); the job title uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution name is `var(--text-default)`, marked by a decorative start bar in the logo orange (`--primary`); the job title uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the block is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
 

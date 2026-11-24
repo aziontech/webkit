@@ -122,7 +122,7 @@ describe('SiteFooterSection', () => {
     const { getByRole } = footer()
 
     socials.forEach((social) => {
-      const button = getByRole('link', { name: social.label })
+      const button = getByRole('link', { name: `${social.label} (opens in a new tab)` })
       expect(button.getAttribute('href')).toBe(social.href)
       expect(button.getAttribute('target')).toBe('_blank')
     })
@@ -184,7 +184,7 @@ describe('SiteFooterSection', () => {
     await userEvent.click(getByRole('option', { name: 'Português (Brasil)' }))
 
     expect(trigger.textContent).toContain('Português (Brasil)')
-    expect(getByTestId('language-select__code').textContent).toBe('BR')
+    expect(getByTestId('language-select__code').textContent).toBe('PT-BR')
   })
 
   it('emits update:language with the chosen option', async () => {

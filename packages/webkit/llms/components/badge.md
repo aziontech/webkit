@@ -66,7 +66,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: none mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: the label renders `dir="auto"`, so a count or value in another script keeps its own direction.
+- Isolation: the label renders `dir="auto"`, so a value in another script keeps its own direction; a label with no letter (a count, `+3`, `-12%`) renders `dir="ltr"`, so its sign and unit stay in order in every engine.
 
 ## Examples
 
@@ -95,34 +95,55 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 <template>
   <div class="flex flex-wrap items-center gap-4">
-    <Badge
-      label="99"
-      variant="primary"
-    />
-    <Badge
-      label="99"
-      variant="secondary"
-    />
-    <Badge
-      label="99"
-      severity="success"
-    />
-    <Badge
-      label="99"
-      severity="info"
-    />
-    <Badge
-      label="99"
-      severity="warning"
-    />
-    <Badge
-      label="99"
-      severity="danger"
-    />
-    <Badge
-      label="99"
-      severity="neutral"
-    />
+    <span class="inline-flex items-center gap-2 text-body-sm text-(--text-default)">
+      Unread
+      <Badge
+        label="12"
+        variant="primary"
+      />
+    </span>
+    <span class="inline-flex items-center gap-2 text-body-sm text-(--text-default)">
+      Drafts
+      <Badge
+        label="4"
+        variant="secondary"
+      />
+    </span>
+    <span class="inline-flex items-center gap-2 text-body-sm text-(--text-default)">
+      Passed
+      <Badge
+        label="99"
+        severity="success"
+      />
+    </span>
+    <span class="inline-flex items-center gap-2 text-body-sm text-(--text-default)">
+      Updates
+      <Badge
+        label="7"
+        severity="info"
+      />
+    </span>
+    <span class="inline-flex items-center gap-2 text-body-sm text-(--text-default)">
+      Warnings
+      <Badge
+        label="3"
+        severity="warning"
+      />
+    </span>
+    <span class="inline-flex items-center gap-2 text-body-sm text-(--text-default)">
+      Errors
+      <Badge
+        label="2"
+        severity="danger"
+      />
+    </span>
+    <span class="inline-flex items-center gap-2 text-body-sm text-(--text-default)">
+      Archived
+      <Badge
+        label="18"
+        severity="neutral"
+      />
+    </span>
   </div>
 </template>
 ```

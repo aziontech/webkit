@@ -9,6 +9,9 @@
   import { LOCALES, settings } from '../lib/settings'
   import { resources } from '../lib/store'
 
+  const SUPPORT_TICKET = '4812'
+  const SUPPORT_CUSTOMER = 'alex-morgan'
+
   const router = useRouter()
   const expanded = ref(false)
   const panelId = useId()
@@ -28,6 +31,11 @@
       settings: 'Account settings',
       onboarding: 'Onboarding',
       assistant: 'AI assistant',
+      inbox: 'Support: ticket inbox',
+      newTicket: 'Support: create a ticket',
+      ticket: 'Support: ticket',
+      customer: 'Support: customer',
+      cannedResponses: 'Support: canned responses',
       light: 'Switch to light theme',
       dark: 'Switch to dark theme',
       rtl: 'Switch to right-to-left',
@@ -48,6 +56,11 @@
       settings: 'Configurações da conta',
       onboarding: 'Onboarding',
       assistant: 'Assistente de IA',
+      inbox: 'Suporte: caixa de tickets',
+      newTicket: 'Suporte: criar um ticket',
+      ticket: 'Suporte: ticket',
+      customer: 'Suporte: cliente',
+      cannedResponses: 'Suporte: respostas prontas',
       light: 'Mudar para o tema claro',
       dark: 'Mudar para o tema escuro',
       rtl: 'Mudar para direita para a esquerda',
@@ -73,7 +86,20 @@
     },
     { value: '/settings', label: t.value.settings, icon: 'az az-settings' },
     { value: '/onboarding', label: t.value.onboarding, icon: 'az az-flag' },
-    { value: '/assistant', label: t.value.assistant, icon: 'az az-ask-azion' }
+    { value: '/assistant', label: t.value.assistant, icon: 'az az-ask-azion' },
+    { value: '/support', label: t.value.inbox, icon: 'az az-ticket' },
+    { value: '/support/tickets/new', label: t.value.newTicket, icon: 'az az-plus' },
+    { value: `/support/tickets/${SUPPORT_TICKET}`, label: t.value.ticket, icon: 'az az-comments' },
+    {
+      value: `/support/customers/${SUPPORT_CUSTOMER}`,
+      label: t.value.customer,
+      icon: 'az az-user'
+    },
+    {
+      value: '/support/settings/canned-responses',
+      label: t.value.cannedResponses,
+      icon: 'az az-reply'
+    }
   ])
 
   const onFlow = (_event: unknown, value: unknown) => router.push(String(value))
@@ -85,7 +111,8 @@
 <template>
   <nav
     :aria-label="t.bar"
-    class="fixed start-(--spacing-md) bottom-[calc(var(--spacing-md)+var(--save-bar-inset,0rem))] z-40 flex max-w-[calc(100vw-2*var(--spacing-md))] items-end gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xs) shadow-(--shadow-lg)"
+    data-demo-bar
+    class="fixed inset-x-0 bottom-0 z-40 flex min-h-(--demo-bar-height) items-center gap-(--spacing-xs) border-t border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-xs)"
   >
     <Tooltip :content="expanded ? t.hide : t.show">
       <IconButton

@@ -10,11 +10,14 @@
 <template>
   <div class="flex max-w-(--container-xs) flex-col gap-(--spacing-md)">
     <Field required>
-      <Field.Label hint="Lowercase letters, numbers and hyphens.">Application name</Field.Label>
+      <Field.Label hint="The name appears in the console and in the application's default domain.">
+        Application name
+      </Field.Label>
       <Input
         v-model="name"
         placeholder="my-application"
       />
+      <Field.Description>Lowercase letters, numbers and hyphens.</Field.Description>
     </Field>
     <Field disabled>
       <Field.Label>Region</Field.Label>

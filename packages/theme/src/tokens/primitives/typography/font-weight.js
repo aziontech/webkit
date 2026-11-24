@@ -9,5 +9,3 @@ export const fontWeight = {
   extrabold: 800,
   black: 900
 }
-
-export default { fontWeight }

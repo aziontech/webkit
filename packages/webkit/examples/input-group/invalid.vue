@@ -3,7 +3,10 @@
 </script>
 
 <template>
-  <InputGroup :invalid="true">
+  <InputGroup
+    dir="ltr"
+    :invalid="true"
+  >
     <InputGroup.Addon>https://</InputGroup.Addon>
     <InputGroup.Input
       aria-label="Domain"

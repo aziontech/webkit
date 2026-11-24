@@ -78,6 +78,11 @@
     if (seconds.value === null) return t('reasoning.thoughtBriefly')
     return t('reasoning.thought', { count: seconds.value })
   })
+
+  const TRIGGER_CLASS =
+    'relative inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-body-sm text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance pointer-coarse:min-h-11 ' +
+    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -94,12 +99,12 @@
         :aria-expanded="isOpen ? 'true' : 'false'"
         :aria-controls="panelId"
         :data-testid="`${testId}__trigger`"
-        class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        :class="TRIGGER_CLASS"
         @click="toggle"
       >
         <i
           :data-streaming="streaming || null"
-          class="az az-sparkles data-[streaming]:animate-pulse motion-reduce:animate-none"
+          class="az az-sparkles data-[streaming]:animate-status-pulse motion-reduce:animate-none"
           aria-hidden="true"
         />
         <span :data-testid="`${testId}__label`">{{ label }}</span>
@@ -107,6 +112,11 @@
           :data-state="isOpen ? 'open' : 'closed'"
           class="az az-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
           aria-hidden="true"
+        />
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
         />
       </button>
       <Button
@@ -122,7 +132,7 @@
       v-show="isOpen"
       :id="panelId"
       :data-testid="`${testId}__content`"
-      class="flex flex-col gap-(--spacing-xs) border-s-2 border-(--border-default) ps-(--spacing-sm) text-body-sm text-(--text-muted)"
+      class="flex flex-col gap-(--spacing-xs) ms-(--spacing-xs) border-s border-(--border-default) ps-(--spacing-md) text-body-md text-(--text-muted)"
     >
       <slot />
     </div>

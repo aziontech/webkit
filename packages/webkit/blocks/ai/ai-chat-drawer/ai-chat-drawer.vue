@@ -1,133 +1,54 @@
 <script setup lang="ts">
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
   import Alert from '@aziontech/webkit/alert'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ChatMessage, {
-    type ChatMessageFeedbackValue,
-    type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
+  import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import FilePreview from '@aziontech/webkit/file-preview'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import McpAppFrame, {
+  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
+  import {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
-  import Reasoning from '@aziontech/webkit/reasoning'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Sources from '@aziontech/webkit/sources'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import Tag from '@aziontech/webkit/tag'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
+  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import VideoPlayer from '@aziontech/webkit/video-player'
-  import { computed, nextTick, ref, watch } from 'vue'
-
   import {
-    activitiesBefore,
-    type AiChatDrawerConnection,
-    type AiChatDrawerInterrupt,
-    type AiChatDrawerInterruptError,
-    type AiChatDrawerMessage,
-    type AiChatDrawerQuestion,
-    type AiChatDrawerQueuedMessage,
-    type AiChatDrawerSendContent,
-    type AiChatDrawerTool,
-    type AiChatDrawerToolAnswer,
-    type AiChatDrawerToolCallPart,
-    type AiChatDrawerUiResourcePart,
-    answerable,
-    answerInterrupt,
-    approvalOf,
+    type AiChatConnection,
+    type AiChatInterrupt,
+    type AiChatInterruptError,
+    type AiChatMessage,
+    type AiChatQueuedMessage,
+    type AiChatSendContent,
+    type AiChatTool,
+    type AiChatToolAnswer,
+    type AiChatToolCallPart,
+    type AiChatUiResourcePart,
     contentOf,
-    documentNameOf,
     hasAnswer,
     interruptErrorText,
-    isQuestion,
-    json,
-    needsApproval,
-    parsesAsJson,
-    questionOf,
-    queueItemOf,
-    resolveInterrupt,
-    segmentsOf,
-    skipInterrupt,
-    stopSubagent,
-    structuredOf,
-    subagentStatusOf,
-    subagentTextOf,
-    textOf,
-    toolContentOf,
-    toolQuestionOf,
-    toolStatusOf
-  } from './messages'
-  import { sampleSuggestions } from './sample'
+    queueItemOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, nextTick, ref, watch } from 'vue'
 
-  export type {
-    AiChatDrawerActivityPart,
-    AiChatDrawerAttachment,
-    AiChatDrawerAudioPart,
-    AiChatDrawerConnection,
-    AiChatDrawerContent,
-    AiChatDrawerDataSource,
-    AiChatDrawerDocumentPart,
-    AiChatDrawerImagePart,
-    AiChatDrawerInterrupt,
-    AiChatDrawerInterruptError,
-    AiChatDrawerMediaSource,
-    AiChatDrawerMessage,
-    AiChatDrawerMessageMetadata,
-    AiChatDrawerOtherPart,
-    AiChatDrawerPart,
-    AiChatDrawerQueuedMessage,
-    AiChatDrawerRole,
-    AiChatDrawerSendContent,
-    AiChatDrawerStructuredOutputPart,
-    AiChatDrawerSubagentPart,
-    AiChatDrawerSubagentStatus,
-    AiChatDrawerTextPart,
-    AiChatDrawerThinkingPart,
-    AiChatDrawerTool,
-    AiChatDrawerToolAnswer,
-    AiChatDrawerToolCallPart,
-    AiChatDrawerToolCallState,
-    AiChatDrawerToolResultPart,
-    AiChatDrawerUiResourcePart,
-    AiChatDrawerVideoPart
-  } from './messages'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatDrawerFeedback {
-    /** The rated response. */
-    message: AiChatDrawerMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
+  import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
+  import AiChatTurn from './parts/ai-chat-turn.vue'
+  import DrawerChatComposer from './parts/drawer-chat-composer.vue'
+  import DrawerChatHeader from './parts/drawer-chat-header.vue'
+  import DrawerChatStart from './parts/drawer-chat-start.vue'
+  import WorkloadOverview from './parts/workload-overview.vue'
+  import { sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
-    messages?: ReadonlyArray<AiChatDrawerMessage>
+    messages?: ReadonlyArray<AiChatMessage>
     /** Starter prompts under the empty state. Left out, the sample prompts render. */
     suggestions?: SuggestionGroupItem[]
     /** Follow-up questions shown under the last finished response. */
@@ -137,26 +58,26 @@
     /** Why the last response failed: a sentence, or the `error` of `useChat`, which shows the standard sentence. */
     error?: string | { message: string } | null
     /** How each tool reads, by tool name; a tool left out shows its name. */
-    tools?: Record<string, AiChatDrawerTool>
+    tools?: Record<string, AiChatTool>
     /** Pending requests, as `useChat` returns `interrupts`; Approve and Deny resolve the matching approval, a generic one asks its question, and an unbound one asks it for the app to route. */
-    interrupts?: ReadonlyArray<AiChatDrawerInterrupt>
+    interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the answers to pending requests were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
-    interruptErrors?: ReadonlyArray<AiChatDrawerInterruptError>
+    interruptErrors?: ReadonlyArray<AiChatInterruptError>
     /** Messages waiting to be sent, as `useChat` returns `queue`; given, the composer sends while a response runs. */
-    queue?: ReadonlyArray<AiChatDrawerQueuedMessage>
+    queue?: ReadonlyArray<AiChatQueuedMessage>
     /** Older messages exist, as `useChat` returns `hasOlderMessages`. */
     moreMessages?: boolean
     /** The older messages are loading. */
     loadingMore?: boolean
     /** The connection to the chat, as `useChat` returns `connectionStatus`. */
-    connection?: AiChatDrawerConnection
+    connection?: AiChatConnection
     /** The chat is rejoining a run after a reload, as `useChat` returns `resuming`. */
     resuming?: boolean
     /** The conversation is being restored, as `useChat` returns `isHydrating`; placeholders show in place of the empty state. */
     hydrating?: boolean
     /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
     sessionGenerating?: boolean
-    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    /** The reader may attach files from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
     attachable?: boolean
     /** The files the reader may attach, in the native accept syntax. */
     accept?: string
@@ -166,6 +87,8 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatDrawerProps>(), {
@@ -184,69 +107,71 @@
     resuming: false,
     hydrating: false,
     sessionGenerating: false,
-    attachable: false,
+    attachable: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
-    send: [event: MouseEvent | KeyboardEvent, content: AiChatDrawerSendContent]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiChatDrawerMessage]
+    retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatDrawerFeedback]
-    approve: [event: MouseEvent, call: AiChatDrawerToolCallPart, input?: unknown]
-    deny: [event: MouseEvent, call: AiChatDrawerToolCallPart]
-    'remove-queued': [event: MouseEvent, item: AiChatDrawerQueuedMessage]
+    feedback: [
+      value: ChatMessageFeedbackValue | null,
+      message: AiChatMessage,
+      reason?: FeedbackReasonDialogPayload
+    ]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
+    'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
     'app-message': [
       message: McpAppFrameMessage,
-      part: AiChatDrawerUiResourcePart,
+      part: AiChatUiResourcePart,
       reply: (message: McpAppFrameMessage) => void
     ]
     'load-more': [event: Event]
-    'answer-interrupt': [event: Event, interrupt: AiChatDrawerInterrupt, value: string]
-    'answer-tool': [event: Event, answer: AiChatDrawerToolAnswer]
+    'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
+    'answer-tool': [event: Event, answer: AiChatToolAnswer]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
-
-  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
-
-  function setAppFrame(key: string, el: unknown) {
-    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
-    else appFrames.delete(key)
-  }
-
-  function forwardAppMessage(
-    key: string,
-    part: AiChatDrawerUiResourcePart,
-    message: McpAppFrameMessage
-  ) {
-    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
-  }
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
+  const versions = useAiChatVersions(() => props.messages)
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
-  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+  const composerEl = ref<InstanceType<typeof DrawerChatComposer> | null>(null)
   const stoppedIds = ref<Set<string>>(new Set())
-  const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const askedAfter = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiChatDrawerQuestion>>({})
-  const routed = ref<Record<string, boolean>>({})
-  const toolAnswers = ref<Record<string, AiChatDrawerQuestion>>({})
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
+  const chatTools = useAiChatTools({
+    turns: () => turns.value,
+    interrupts: () => props.interrupts,
+    tools: () => props.tools,
+    onAnswerInterrupt: (event, interrupt, value) =>
+      emit('answer-interrupt', event, interrupt, value),
+    onAnswerTool: (event, answer) => emit('answer-tool', event, answer),
+    onApprove: (event, call, input) => emit('approve', event, call, input),
+    onDeny: (event, call) => emit('deny', event, call)
+  })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -257,7 +182,7 @@
     () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
   )
 
-  function statusOf(turn: AiChatDrawerMessage): ChatMessageStatus {
+  function statusOf(turn: AiChatMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
     if (props.loading) return hasAnswer(turn) ? 'streaming' : 'pending'
@@ -266,89 +191,14 @@
 
   const queueable = computed(() => props.queue !== undefined)
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
-  const wasConnected = ref(props.connection === 'connected')
-  watch(
-    () => props.connection,
-    (value) => {
-      if (value === 'connected') wasConnected.value = true
-    }
-  )
-  const reconnecting = computed(
-    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
-  )
-  const offline = computed(
-    () =>
-      !reconnecting.value &&
-      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
-  )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
-
-  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
-  watch(
-    pendingQuestions,
-    (now) => {
-      for (const interrupt of now) askedAfter.value[interrupt.id!] ??= last.value?.id ?? ''
-    },
-    { immediate: true }
-  )
-
-  const questions = computed(() => {
-    const live = pendingQuestions.value
-      .map(questionOf)
-      .map((question) =>
-        !question.bound && routed.value[question.id]
-          ? { ...question, status: 'running' as const }
-          : question
-      )
-    const ids = new Set(live.map((question) => question.id))
-    const known = new Set(turns.value.map((turn) => turn.id))
-    const groups: Record<string, AiChatDrawerQuestion[]> = {}
-    for (const question of [
-      ...live,
-      ...Object.values(settled.value).filter((question) => !ids.has(question.id))
-    ]) {
-      const after = askedAfter.value[question.id] ?? ''
-      ;(groups[known.has(after) ? after : (last.value?.id ?? '')] ??= []).push(question)
-    }
-    return groups
-  })
-
-  function answer(event: Event, question: AiChatDrawerQuestion, value: string) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'success', error: '' }
-    if (question.bound) {
-      answerInterrupt(interrupt, value)
-    } else {
-      routed.value[question.id] = true
-      if (interrupt) emit('answer-interrupt', event, interrupt, value)
-    }
-  }
-
-  function askOf(call: AiChatDrawerToolCallPart): AiChatDrawerQuestion {
-    return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
-  }
-
-  function answerTool(event: Event, call: AiChatDrawerToolCallPart, value: string) {
-    toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
-    emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
-  }
-
-  function skip(question: AiChatDrawerQuestion) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'skipped', error: '' }
-    skipInterrupt(interrupt)
-  }
-
-  function editOf(call: AiChatDrawerToolCallPart): string {
-    return edits.value[call.id] ?? json(call.input ?? call.arguments)
-  }
 
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
     return last.value?.role === 'assistant' && hasAnswer(last.value) ? 'streaming' : 'pending'
   })
 
-  function stopped(turn: AiChatDrawerMessage): boolean {
+  function stopped(turn: AiChatMessage): boolean {
     return Boolean(turn.metadata?.stopped) || stoppedIds.value.has(turn.id)
   }
 
@@ -359,12 +209,8 @@
       : null
   })
 
-  function timeOf(turn: AiChatDrawerMessage): string {
+  function timeOf(turn: AiChatMessage): string {
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
-
-  function toolOf(call: AiChatDrawerToolCallPart): AiChatDrawerTool {
-    return props.tools[call.name] ?? { title: '' }
   }
 
   watch(
@@ -390,7 +236,7 @@
     if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
     prompt.value = ''
     files.value = []
-    let content: AiChatDrawerSendContent
+    let content: AiChatSendContent
     try {
       content = await contentOf(text, picked)
     } catch {
@@ -410,85 +256,27 @@
     prompt.value = ''
     files.value = []
     stoppedIds.value.clear()
-    edits.value = {}
     answers.value = {}
-    askedAfter.value = {}
-    settled.value = {}
-    routed.value = {}
-    toolAnswers.value = {}
+    chatTools.reset()
+    versions.clear()
     emit('new-chat', event)
-  }
-
-  function rate(message: AiChatDrawerMessage, value: ChatMessageFeedbackValue | null) {
-    ratings.value[message.id] = value
-    emit('feedback', { message, value })
   }
 
   function removeQueued(event: MouseEvent, id: string) {
     const item = props.queue?.find((entry) => entry.id === id)
     if (item) emit('remove-queued', event, item)
   }
-
-  function approve(event: MouseEvent, call: AiChatDrawerToolCallPart, text: string) {
-    const edited =
-      toolOf(call).editable && text !== json(call.input ?? call.arguments)
-        ? (JSON.parse(text) as unknown)
-        : undefined
-    emit('approve', event, call, edited)
-    resolveInterrupt(props.interrupts, call, true, edited)
-  }
-
-  function deny(event: MouseEvent, call: AiChatDrawerToolCallPart) {
-    emit('deny', event, call)
-    resolveInterrupt(props.interrupts, call, false)
-  }
 </script>
 
 <template>
-  <div class="w-full">
-    <div class="layout-column layout-boundary flex min-w-0 flex-col">
-      <div class="layout-section-start flex flex-col gap-(--layout-section-gap)">
-        <PageHeader
-          title="storefront"
-          description="Workload · Production"
-        >
-          <template #actions>
-            <Button
-              label="Agent"
-              variant="outline"
-              size="medium"
-              icon="az az-ask-azion"
-              :aria-expanded="open ? 'true' : 'false'"
-              @click="open = true"
-            />
-          </template>
-        </PageHeader>
-        <Card>
-          <template #default>
-            <div class="p-(--spacing-md)">
-              <KeyValueList
-                :columns="3"
-                aria-label="Workload details"
-              >
-                <KeyValueList.Item label="Status">
-                  <StatusIndicator
-                    severity="danger"
-                    label="Errors above 30%"
-                  />
-                </KeyValueList.Item>
-                <KeyValueList.Item label="Domains"
-                  >www.example.com, shop.example.com</KeyValueList.Item
-                >
-                <KeyValueList.Item label="Origin">api.example.com</KeyValueList.Item>
-                <KeyValueList.Item label="Cache hit ratio">91%</KeyValueList.Item>
-                <KeyValueList.Item label="Last deployment">Today, 13:58</KeyValueList.Item>
-                <KeyValueList.Item label="Region">US East (Washington)</KeyValueList.Item>
-              </KeyValueList>
-            </div>
-          </template>
-        </Card>
-      </div>
-    </div>
+  <div
+    :data-drawer-open="open || null"
+    class="w-full lg:data-drawer-open:pe-[max(30vw,var(--container-md))]"
+  >
+    <WorkloadOverview
+      :open="open"
+      @open="open = true"
+    />
 
     <Drawer
       v-model:open="open"
@@ -498,436 +286,109 @@
     >
       <DrawerContent>
         <div class="flex min-h-0 flex-1 flex-col">
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <DrawerTitle>AI assistant</DrawerTitle>
-              <Tag
-                label="Preview"
-                severity="info"
-                size="small"
-              />
-            </div>
-            <div class="flex items-center gap-(--spacing-2xs)">
-              <IconButton
-                icon="az az-plus"
-                aria-label="New chat"
-                variant="ghost"
-                size="small"
-                :disabled="!turns.length"
-                @click="newChat"
-              />
-            </div>
-          </PanelHeader>
-          <div class="flex min-h-0 flex-1 flex-col">
-            <div
-              v-if="hydrating && !turns.length"
-              role="status"
-              aria-label="Loading the conversation"
-              class="flex flex-1 flex-col gap-(--spacing-lg) p-(--spacing-md)"
-            >
-              <div
-                v-for="row in 3"
-                :key="row"
-                class="flex gap-(--spacing-sm)"
-              >
-                <Skeleton
-                  variant="circle"
-                  width="2rem"
-                  height="2rem"
-                />
-                <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-                  <Skeleton width="25%" />
-                  <Skeleton :width="row === 2 ? '50%' : '85%'" />
-                </div>
-              </div>
-            </div>
-            <div
-              v-else-if="!turns.length"
-              class="flex flex-1 flex-col justify-center gap-(--spacing-lg) p-(--spacing-md)"
-            >
-              <EmptyState
-                title="Ask about storefront"
-                description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
-                icon="az az-ask-azion"
-                size="small"
-              />
-              <SuggestionGroup
-                :items="starters"
-                orientation="vertical"
-                @select="(event, item) => send(event, item.label)"
-              />
-            </div>
+          <DrawerChatHeader
+            :empty="!turns.length"
+            @new-chat="newChat"
+          />
+          <div
+            class="flex min-h-0 flex-1 flex-col [--conversation-composer-fade:var(--bg-surface)]"
+          >
             <Conversation
-              v-else
-              layout="start"
               aria-label="Conversation with the AI assistant"
               :more-messages="moreMessages"
               :loading-more="loadingMore"
               @load-more="emit('load-more', $event)"
             >
-              <template
+              <DrawerChatStart
+                v-if="!turns.length"
+                :hydrating="hydrating"
+                :starters="starters"
+                @select="(event, item) => send(event, item.label)"
+              />
+              <AiChatTurn
                 v-for="turn in turns"
                 :key="turn.id"
-              >
-                <ChatMessage
-                  :from="turn.role === 'user' ? 'user' : 'assistant'"
-                  :status="statusOf(turn)"
-                  :timestamp="timeOf(turn)"
-                  :error-message="statusOf(turn) === 'error' ? failure : undefined"
-                  @retry="emit('retry', $event, turn)"
-                >
-                  <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
-                  <template
-                    v-for="segment in segmentsOf(
-                      turn,
-                      turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
-                    )"
-                    :key="segment.key"
-                  >
-                    <template v-if="turn.role === 'user' && segment.type === 'text'" />
-                    <AgentActivity
-                      v-else-if="segment.type === 'activity'"
-                      :steps="segment.steps"
-                    />
-                    <Reasoning
-                      v-else-if="segment.type === 'reasoning'"
-                      :streaming="statusOf(turn) === 'pending'"
-                      :duration="
-                        statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
-                      "
-                    >
-                      <p class="whitespace-pre-line">{{ segment.content }}</p>
-                    </Reasoning>
-                    <StreamingResponse
-                      v-else-if="segment.type === 'text'"
-                      :content="segment.content"
-                      :streaming="statusOf(turn) === 'streaming'"
-                      :sources="turn.metadata?.sources ?? []"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                    <AgentQuestion
-                      v-else-if="
-                        segment.type === 'tool' &&
-                        answerable(toolOf(segment.call), segment.call, segment.result)
-                      "
-                      v-model="answers[segment.call.id]"
-                      :title="askOf(segment.call).title"
-                      :type="askOf(segment.call).options.length ? 'choice' : 'text'"
-                      :options="askOf(segment.call).options"
-                      :status="askOf(segment.call).status"
-                      @submit="(event, value) => answerTool(event, segment.call, value)"
-                    />
-                    <template v-else-if="segment.type === 'tool'">
-                      <ToolApproval
-                        v-if="needsApproval(segment.call)"
-                        :title="
-                          toolOf(segment.call).question ||
-                          toolOf(segment.call).title ||
-                          `Run ${segment.call.name}?`
-                        "
-                        :description="toolOf(segment.call).description"
-                        :approve-label="toolOf(segment.call).approveLabel"
-                        :variant="toolOf(segment.call).variant"
-                        :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
-                        :status="approvalOf(segment.call)"
-                        :loading="loading && turn === last"
-                        :editable="toolOf(segment.call).editable"
-                        :invalid="
-                          toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))
-                        "
-                        :model-value="editOf(segment.call)"
-                        @update:model-value="(text) => (edits[segment.call.id] = text)"
-                        @approve="(event, text) => approve(event, segment.call, text)"
-                        @deny="deny($event, segment.call)"
-                      >
-                        <CodeBlock
-                          v-if="
-                            !toolOf(segment.call).editable &&
-                            json(segment.call.input ?? segment.call.arguments)
-                          "
-                          :code="json(segment.call.input ?? segment.call.arguments)"
-                          language="json"
-                          :show-line-numbers="false"
-                        />
-                      </ToolApproval>
-                      <ToolCall
-                        v-if="
-                          !needsApproval(segment.call) || approvalOf(segment.call) === 'approved'
-                        "
-                        :name="segment.call.name"
-                        :title="toolOf(segment.call).title"
-                        :status="toolStatusOf(segment.call, segment.result)"
-                      >
-                        <template
-                          v-if="json(segment.call.input ?? segment.call.arguments)"
-                          #input
-                        >
-                          <CodeBlock
-                            :code="json(segment.call.input ?? segment.call.arguments)"
-                            language="json"
-                            :show-line-numbers="false"
-                          />
-                        </template>
-                        <template
-                          v-if="
-                            !segment.result?.error &&
-                            segment.call.output === undefined &&
-                            toolContentOf(segment.result?.content)
-                          "
-                          #output
-                        >
-                          <p
-                            v-if="toolContentOf(segment.result?.content)?.text"
-                            class="whitespace-pre-line text-body-sm text-(--text-default)"
-                          >
-                            {{ toolContentOf(segment.result?.content)?.text }}
-                          </p>
-                          <ImageGallery
-                            v-if="toolContentOf(segment.result?.content)?.images.length"
-                            :items="toolContentOf(segment.result?.content)?.images ?? []"
-                          />
-                        </template>
-                        <template
-                          v-else-if="
-                            json(
-                              segment.result?.error ||
-                                segment.call.output ||
-                                segment.result?.content
-                            )
-                          "
-                          #output
-                        >
-                          <CodeBlock
-                            :code="
-                              json(
-                                segment.result?.error ||
-                                  segment.call.output ||
-                                  segment.result?.content
-                              )
-                            "
-                            language="json"
-                            :show-line-numbers="false"
-                          />
-                        </template>
-                      </ToolCall>
-                    </template>
-                    <ImageGallery
-                      v-else-if="segment.type === 'gallery'"
-                      :items="segment.images"
-                    />
-                    <AudioPlayer
-                      v-else-if="segment.type === 'audio'"
-                      :src="segment.src"
-                    />
-                    <VideoPlayer
-                      v-else-if="segment.type === 'video'"
-                      :src="segment.src"
-                      :mime-type="segment.mimeType"
-                    />
-                    <FilePreview
-                      v-else-if="segment.type === 'document'"
-                      :file-name="documentNameOf(segment.part)"
-                      :mime-type="segment.part.source.mimeType"
-                      :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
-                      :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
-                    />
-                    <SubagentCard
-                      v-else-if="segment.type === 'subagent'"
-                      :name="segment.part.subagent.name"
-                      :title="segment.part.subagent.description"
-                      :description="segment.part.subagent.error?.message"
-                      :status="subagentStatusOf(segment.part)"
-                      :stoppable="typeof segment.part.subagent.stop === 'function'"
-                      @stop="stopSubagent(segment.part)"
-                    >
-                      <StreamingResponse
-                        v-if="subagentTextOf(segment.part)"
-                        :content="subagentTextOf(segment.part)"
-                      />
-                      <template
-                        v-if="json(segment.part.subagent.input)"
-                        #input
-                      >
-                        <CodeBlock
-                          :code="json(segment.part.subagent.input)"
-                          language="json"
-                          :show-line-numbers="false"
-                        />
-                      </template>
-                    </SubagentCard>
-                    <template v-else-if="segment.type === 'structured'">
-                      <Alert
-                        v-if="segment.part.status === 'error'"
-                        severity="danger"
-                        size="small"
-                        title="The structured answer failed"
-                      >
-                        {{
-                          segment.part.errorMessage ||
-                          'The answer did not match the expected format.'
-                        }}
-                      </Alert>
-                      <CodeBlock
-                        v-else-if="structuredOf(segment.part)"
-                        :code="structuredOf(segment.part)"
-                        language="json"
-                        :show-line-numbers="false"
-                        :aria-busy="segment.part.status === 'streaming' || undefined"
-                      />
-                    </template>
-                    <McpAppFrame
-                      v-else-if="segment.type === 'app'"
-                      :ref="(el) => setAppFrame(segment.key, el)"
-                      :resource="segment.part.resource"
-                      :title="
-                        (tools[segment.part.toolName] ?? { title: '' }).title ||
-                        segment.part.toolName
-                      "
-                      :resolve-url="resolveAppUrl"
-                      @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
-                    />
-                  </template>
-                  <template v-if="turn.role === 'assistant'">
-                    <p
-                      v-if="stopped(turn)"
-                      class="text-body-sm text-(--text-muted)"
-                    >
-                      You stopped this response.
-                    </p>
-                    <Sources
-                      v-if="statusOf(turn) === 'success' && !stopped(turn)"
-                      :items="turn.metadata?.sources ?? []"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                  </template>
-                  <template
-                    v-if="turn.role === 'assistant'"
-                    #actions
-                  >
-                    <ChatMessage.Actions>
-                      <CopyButton
-                        size="small"
-                        :value="textOf(turn)"
-                      />
-                      <IconButton
-                        icon="az az-refresh"
-                        aria-label="Regenerate response"
-                        variant="ghost"
-                        size="small"
-                        :disabled="state !== 'ready'"
-                        @click="emit('retry', $event, turn)"
-                      />
-                      <ChatMessage.Feedback
-                        :model-value="ratings[turn.id] ?? null"
-                        @update:model-value="(value) => rate(turn, value)"
-                      />
-                    </ChatMessage.Actions>
-                  </template>
-                </ChatMessage>
-                <ChatMessage
-                  v-if="questions[turn.id]?.length"
-                  from="assistant"
-                >
-                  <AgentQuestion
-                    v-for="question in questions[turn.id]"
-                    :key="question.id"
-                    v-model="answers[question.id]"
-                    :title="question.title"
-                    :type="question.options.length ? 'choice' : 'text'"
-                    :options="question.options"
-                    :status="question.status"
-                    :error="question.error"
-                    :skippable="question.bound"
-                    @submit="(event, value) => answer(event, question, value)"
-                    @skip="skip(question)"
-                  />
-                </ChatMessage>
-              </template>
+                v-model:answers="answers"
+                :turn="turn"
+                :messages="messages"
+                :status="statusOf(turn)"
+                :time="timeOf(turn)"
+                :failure="failure"
+                :tools="tools"
+                :busy="loading && turn === last"
+                :ready="state === 'ready'"
+                :stopped="stopped(turn)"
+                :questions="chatTools.questions.value[turn.id]"
+                :ask-of="chatTools.askOf"
+                :edit-of="chatTools.editOf"
+                :resolve-app-url="resolveAppUrl"
+                :versions="versions"
+                @retry="emit('retry', $event, turn)"
+                @rate="(value, reason) => emit('feedback', value, turn, reason)"
+                @share="(event) => emit('share', event, turn)"
+                @branch="(event) => emit('branch', event, turn)"
+                @edit-prompt="(event, text) => emit('edit', event, turn, text)"
+                @version-change="(next) => emit('version-change', next)"
+                @answer-tool="chatTools.answerTool"
+                @edit="chatTools.setEdit"
+                @approve="chatTools.approve"
+                @deny="chatTools.deny"
+                @answer="chatTools.answer"
+                @skip="chatTools.skip"
+                @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
+              />
               <ChatMessage
                 v-if="waiting && last"
                 :status="failure ? 'error' : 'pending'"
                 :error-message="failure || undefined"
                 @retry="emit('retry', $event, last)"
               />
-              <div
+              <SuggestionGroup
                 v-if="lastAnswer && followUps?.length"
-                class="ps-[calc(2rem+var(--spacing-sm))]"
-              >
-                <SuggestionGroup
-                  :items="followUps"
-                  aria-label="Follow-up questions"
-                  @select="(event, item) => send(event, item.label)"
+                :items="followUps"
+                aria-label="Follow-up questions"
+                @select="(event, item) => send(event, item.label)"
+              />
+              <template #composer>
+                <AiChatConnectionStatus
+                  :connection="connection"
+                  :resuming="resuming"
+                  :session-generating="sessionGenerating"
+                  :loading="loading"
                 />
-              </div>
-            </Conversation>
-          </div>
-          <div
-            class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
-          >
-            <StatusIndicator
-              v-if="reconnecting"
-              key="reconnecting"
-              severity="warning"
-              label="Reconnecting"
-              loading
-            />
-            <Alert
-              v-else-if="offline"
-              key="offline"
-              severity="danger"
-              size="small"
-              title="Connection lost"
-            >
-              Your messages send when the connection returns.
-            </Alert>
-            <StatusIndicator
-              v-else-if="sessionGenerating && !loading"
-              key="elsewhere"
-              severity="info"
-              label="Responding in another tab"
-              loading
-            />
-            <Alert
-              key="alert-2"
-              v-if="interruptErrors.length"
-              severity="danger"
-              size="small"
-              title="Your answer was not sent"
-              :action-label="retryable ? 'Retry' : ''"
-              @action="emit('retry-interrupts', $event)"
-            >
-              {{ interruptErrorText(interruptErrors) }}
-            </Alert>
-            <PromptQueue
-              v-if="queued.length"
-              :items="queued"
-              @remove="(event, item) => removeQueued(event, item.id)"
-            />
-            <PromptInput
-              ref="composerEl"
-              v-model="prompt"
-              v-model:files="files"
-              :status="state"
-              :queueable="queueable"
-              :disabled="hydrating"
-              :accept="accept"
-              :max-files="maxFiles"
-              :max-file-size="maxFileSize"
-              :max-rows="4"
-              placeholder="Ask about storefront"
-              @submit="(event, { value }) => send(event, value)"
-              @stop="stop"
-            >
-              <template
-                v-if="attachable"
-                #actions
-              >
-                <PromptInputAttachButton />
+                <Alert
+                  v-if="interruptErrors.length"
+                  severity="danger"
+                  size="small"
+                  title="Your answer was not sent"
+                  :action-label="retryable ? 'Retry' : ''"
+                  @action="emit('retry-interrupts', $event)"
+                >
+                  {{ interruptErrorText(interruptErrors) }}
+                </Alert>
+                <PromptQueue
+                  v-if="queued.length"
+                  :items="queued"
+                  @remove="(event, item) => removeQueued(event, item.id)"
+                />
+                <DrawerChatComposer
+                  ref="composerEl"
+                  v-model="prompt"
+                  v-model:files="files"
+                  v-model:tool-keys="toolKeys"
+                  :state="state"
+                  :queueable="queueable"
+                  :hydrating="hydrating"
+                  :accept="accept"
+                  :max-files="maxFiles"
+                  :max-file-size="maxFileSize"
+                  :attachable="attachable"
+                  :tools="composerTools"
+                  @submit="send"
+                  @stop="stop"
+                />
               </template>
-              <template #hint
-                >The AI assistant can make mistakes. Check important information.</template
-              >
-            </PromptInput>
+            </Conversation>
           </div>
         </div>
       </DrawerContent>

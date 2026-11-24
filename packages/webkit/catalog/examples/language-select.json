@@ -7,12 +7,12 @@
   },
   {
    "name": "Variants",
-   "summary": "`variant=\"ghost\"` is the compact switcher for a header or a toolbar: a round flag and the country code (`US`), no border until hover, so it sits beside the search and the outlined icon buttons without a second outline colour. The default `outline` is the full field for a form.",
+   "summary": "`variant=\"ghost\"` is the compact switcher for a header or a toolbar: a round flag and the language tag in capitals (`EN`, `PT-BR`), no border until hover, so it sits beside the search and the outlined icon buttons without a second outline colour. The default `outline` is the full field for a form.",
    "file": "examples/language-select/variants.vue"
   },
   {
    "name": "Options",
-   "summary": "`options` replaces the built-in languages with your own list, one locale per country as on a storefront. An option with no `label` is named in its own language (`fr-FR` → `Français (France)`); the flag comes from the tag's region, or from `country` (`ar` → `SA`). Two options in one country show the whole tag as the short code (`FR-CA`).",
+   "summary": "`options` replaces the built-in languages with your own list of BCP 47 tags: the bare language for its main variant (`en`, `es`) and the region for each regional one (`en-GB`, `en-CA`, `es-MX`). The compact switcher shows the tag in capitals (`EN`, `EN-GB`). An option with no `label` is named in its own language (`fr-FR` → `Français (France)`); the flag comes from the tag's region, its likely region (`en` → `US`), or `country` (`ar` → `SA`).",
    "file": "examples/language-select/options.vue"
   }
  ]

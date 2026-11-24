@@ -11,6 +11,7 @@
   import HeroTitle, {
     type HeroTitleEyebrowPrefix
   } from '../../marketing/hero/hero-title/hero-title.vue'
+  import { ART_BOUNDS, DEFAULT_BOUNDS } from './lib/art-bounds'
 
   defineOptions({
     name: 'HeroSection',
@@ -73,19 +74,14 @@
     description: string
   }
 
-  type ArtBounds = {
-    canvas: number
-    start: number
-    end: number
-    share?: number
-    top?: number
-    bottom?: number
-    rows?: number
-    centered?: boolean
-  }
-
   export interface HeroSectionProps {
-    /** Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
+    /**
+     * Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded
+     * band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a
+     * short site-wide band with the copy at the start, `copy-beside-art` sets an illustration or
+     * an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a
+     * scene in the `top` or `bottom` slot.
+     */
     variant?: HeroSectionVariant
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
     size?: HeroSectionSize
@@ -109,7 +105,11 @@
     illustration?: string
     /** Accessible description of the illustration. */
     illustrationAriaLabel?: string
-    /** Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given; `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width, centered, below `md`. */
+    /**
+     * Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given;
+     * `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width,
+     * centered, below `md`.
+     */
     image?: HeroSectionImage
     /** Mark set before the eyebrow (`//`, `<>`, `</>`, or empty for none); drawn only with an eyebrow. */
     eyebrowPrefix?: HeroTitleEyebrowPrefix
@@ -117,11 +117,19 @@
     anchor?: string
     /** Height of the site header above the band, taken out of a band that fills a screen; defaults to the SiteHeaderSection bar's token, any CSS length, empty for a page with no header above it. */
     headerOffset?: string
-    /** Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. */
+    /**
+     * Length of the headline: `short` sets it on the site's narrow headline measure in the
+     * centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the
+     * sentence under it keeps the full column; `long` lets the headline take the whole column.
+     */
     titleLength?: HeroSectionTitleLength
     /** Drops the dot texture of the `center` layout. */
     plain?: boolean
-    /** Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. */
+    /**
+     * Columns of the topology the `copy-on-top-art` layout draws under the copy when neither
+     * scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{
+     * eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped.
+     */
     levels?: HeroSectionLevel[]
     /** Arguments in a framed grid under the band, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. */
     items?: HeroSectionItem[]
@@ -167,57 +175,6 @@
     () => import('./parts/hero-section-arguments.vue')
   )
   const { t } = useTranslate({ heroSection: en.heroSection })
-
-  const COMPARISON: ArtBounds = {
-    canvas: 592,
-    start: 161,
-    end: 370,
-    share: 0.6,
-    top: 48,
-    bottom: 252,
-    rows: 300,
-    centered: true
-  }
-
-  const ART_BOUNDS: Record<string, ArtBounds> = {
-    'azion-to-akamai': COMPARISON,
-    'azion-to-aws': COMPARISON,
-    'azion-to-cloudflare': COMPARISON,
-    'azion-to-fastly': COMPARISON,
-    'azion-to-vercel': { ...COMPARISON, start: 209, end: 418 },
-    'retail-application-modernization': { canvas: 592, start: 51, end: 542 },
-    'protect-financial-applications': { canvas: 592, start: 58, end: 506 },
-    'implement-api-gateway-security': { canvas: 592, start: 0, end: 592 },
-    'combine-data-and-vector-search': {
-      canvas: 592,
-      start: 111,
-      end: 481,
-      top: 57,
-      bottom: 243,
-      rows: 300
-    },
-    'improve-application-performance-and-reliability': {
-      canvas: 592,
-      start: 131,
-      end: 461,
-      top: 18,
-      bottom: 282,
-      rows: 300
-    },
-    'fastest-path-to-live-website': { canvas: 592, start: 84, end: 510 },
-    'ddos-protection': { canvas: 186, start: -93, end: 279 },
-    'quick-start-with-templates': {
-      canvas: 592,
-      start: 127,
-      end: 465,
-      top: 67,
-      bottom: 233,
-      rows: 300
-    },
-    'low-latency': { canvas: 592, start: 39, end: 553 }
-  }
-
-  const DEFAULT_BOUNDS: ArtBounds = { canvas: 592, start: 131, end: 461 }
 
   const percent = (value: number) => `${(value * 100).toFixed(2)}%`
 
@@ -318,6 +275,10 @@
 
   const scene = () =>
     props.variant === 'copy-on-top-art' && !slots.top && !slots.bottom ? levelColumns.value : []
+
+  const SCENE_CLASS =
+    'flex animate-content-enter justify-center pb-(--spacing-2xl) [--content-enter-delay:120ms] ' +
+    'motion-reduce:animate-none'
 </script>
 
 <template>
@@ -397,9 +358,7 @@
         #bottom
       >
         <div class="@container">
-          <div
-            class="flex animate-content-enter justify-center pb-(--spacing-2xl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
-          >
+          <div :class="SCENE_CLASS">
             <slot name="bottom">
               <HeroSectionTopology :nodes="scene()" />
             </slot>

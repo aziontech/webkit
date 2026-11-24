@@ -1,6 +1,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import HeroDefault from '../../../../../examples/hero/default.vue'
 import Centered from '../../../../../examples/hero-title/centered.vue'
 import Default from '../../../../../examples/hero-title/default.vue'
 import Highlight from '../../../../../examples/hero-title/highlight.vue'
@@ -76,6 +77,21 @@ describe('HeroTitle', () => {
     const { container } = render(HeroTitle, { props: { ...props, size: 'medium' } })
 
     expect(container.querySelector('h1')).toHaveAttribute('data-size', 'medium')
+  })
+
+  it('sets a page-opening headline on the display rungs, never a body-sized heading', () => {
+    const { container } = render(HeroTitle, { props })
+    const h1 = container.querySelector('h1')
+
+    expect(h1?.className).toContain('data-[size=medium]:text-heading-2xl')
+    expect(h1?.className).toContain('data-[size=large]:text-heading-3xl')
+    expect(h1?.className).not.toMatch(/text-heading-(xl|lg|md)\b/)
+  })
+
+  it('ends the first hero example on its primary action', () => {
+    const { getByRole } = render(HeroDefault)
+
+    expect(getByRole('link', { name: 'Start for free' })).toBeInTheDocument()
   })
 
   it('caps the block at 4xl by default', () => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
@@ -22,25 +22,27 @@
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { onMounted, reactive, ref, watch } from 'vue'
 
-  /** The values of the Create Domain form. */
+  /** The values of the Create Resource form. */
   export interface CreatePageValues {
-    /** What the domain is called in the list. */
+    /** What the resource is called in the list. */
     name: string
-    /** The root hostname it answers for. */
+    /** The domain the resource serves. */
     domain: string
-    /** Whether DNSSEC signs its answers. */
+    /** Whether DNSSEC signs the DNS answers for its domain. */
     dnssec: boolean
-    /** Whether it answers authoritative DNS queries. */
+    /** Whether it serves traffic. */
     active: boolean
   }
 
   export interface CreatePageProps {
     /** The values the form starts from; each field falls back to empty, DNSSEC off and Active on. */
     defaultValues?: Partial<CreatePageValues>
-    /** The create request is in flight; the form locks and Save spins. */
+    /** The create request is in flight; the form locks and Create resource spins. */
     loading?: boolean
     /** Why the create request failed, shown in an error toast with Retry. */
     error?: string
+    /** Name of the signed-in account, shown by the account button. */
+    accountName?: string
   }
 
   interface FormErrors {
@@ -53,12 +55,14 @@
   const props = withDefaults(defineProps<CreatePageProps>(), {
     defaultValues: () => ({}),
     loading: false,
-    error: ''
+    error: '',
+    accountName: ''
   })
 
   const emit = defineEmits<{
     submit: [event: Event, values: CreatePageValues]
     cancel: [event: MouseEvent | KeyboardEvent]
+    account: [event: MouseEvent]
   }>()
 
   const breadcrumb = [{ label: 'Resources', href: '/resources' }, { label: 'Create Resource' }]
@@ -148,7 +152,7 @@
     () => props.error,
     (message) => {
       if (!message) return
-      toast.error('Could not create the domain.', {
+      toast.error('Could not create the resource.', {
         description: message,
         action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
       })
@@ -158,7 +162,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+  <div class="flex h-(--demo-viewport-height) flex-col bg-(--bg-canvas)">
     <AppHeader aria-label="Console">
       <AppHeader.Start>
         <IconButton
@@ -181,17 +185,11 @@
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          :name="accountName || 'name@example.com'"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
+          @click="(event: MouseEvent) => emit('account', event)"
+        />
       </AppHeader.End>
     </AppHeader>
 
@@ -199,7 +197,7 @@
       <form
         ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
-        aria-labelledby="create-domain-title"
+        aria-labelledby="create-resource-title"
         novalidate
         @submit.prevent="submit"
       >
@@ -209,9 +207,9 @@
           >
             <PageHeader
               title="Create Resource"
-              description="A domain holds the DNS records that answer authoritatively for a hostname."
+              description="A resource serves your app on its domains."
               size="small"
-              title-id="create-domain-title"
+              title-id="create-resource-title"
             />
 
             <fieldset
@@ -222,14 +220,14 @@
 
               <SettingsGroup
                 label="General"
-                hint="The two fields this endpoint requires: what the domain is called here, and the hostname it answers for."
+                hint="The two fields a resource needs: what it is called here, and the domain it serves."
               >
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
                       <SettingsRow
                         title="Name"
-                        description="Identifies the domain in this list. It is not the hostname."
+                        description="Identifies the resource in this list. It is not the domain."
                       >
                         <Input
                           ref="nameEl"
@@ -237,22 +235,24 @@
                           size="large"
                           class="w-full"
                           aria-label="Name"
-                          placeholder="My domain"
+                          placeholder="my-resource"
                           autocomplete="off"
                           required
                           :invalid="!!errors.name"
-                          :aria-describedby="errors.name ? 'create-domain-name-message' : undefined"
+                          :aria-describedby="
+                            errors.name ? 'create-resource-name-message' : undefined
+                          "
                           @update:model-value="errors.name = ''"
                         />
                         <FieldError
                           v-if="errors.name"
-                          id="create-domain-name-message"
+                          id="create-resource-name-message"
                           >{{ errors.name }}</FieldError
                         >
                       </SettingsRow>
                       <SettingsRow
                         title="Domain name"
-                        description="The root hostname this domain answers for, without a subdomain."
+                        description="The hostname the resource serves, such as example.com."
                       >
                         <Input
                           v-model="form.domain"
@@ -264,13 +264,13 @@
                           required
                           :invalid="!!errors.domain"
                           :aria-describedby="
-                            errors.domain ? 'create-domain-domain-message' : undefined
+                            errors.domain ? 'create-resource-domain-message' : undefined
                           "
                           @update:model-value="errors.domain = ''"
                         />
                         <FieldError
                           v-if="errors.domain"
-                          id="create-domain-domain-message"
+                          id="create-resource-domain-message"
                           >{{ errors.domain }}</FieldError
                         >
                       </SettingsRow>
@@ -290,7 +290,7 @@
                     <Item.List>
                       <SettingsRow
                         title="DNSSEC"
-                        description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
+                        description="Signs the DNS answers for the resource's domain so a resolver can detect spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
                         variant="compact"
                       >
                         <Switch
@@ -300,7 +300,7 @@
                       </SettingsRow>
                       <SettingsRow
                         title="Active"
-                        description="When active, the domain answers authoritative DNS queries for its hostname."
+                        description="When active, the resource serves traffic on its domain."
                         variant="compact"
                       >
                         <Switch
@@ -330,7 +330,7 @@
                 :loading="loading"
                 :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
               >
-                Save
+                Create resource
                 <Kbd
                   meta
                   key-name="enter"

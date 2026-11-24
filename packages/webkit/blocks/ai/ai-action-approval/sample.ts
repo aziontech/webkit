@@ -1,20 +1,20 @@
 import type {
-  AiActionApprovalMessage,
-  AiActionApprovalPart,
-  AiActionApprovalTool,
-  AiActionApprovalToolCallPart
-} from './messages'
+  AiChatMessage,
+  AiChatPart,
+  AiChatTool,
+  AiChatToolCallPart
+} from '@aziontech/webkit/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
-const request = (id: string, text: string): AiActionApprovalMessage => ({
+const request = (id: string, text: string): AiChatMessage => ({
   id,
   role: 'user',
   parts: [{ type: 'text', content: text }],
   createdAt: at('15:02')
 })
 
-const response = (id: string, parts: AiActionApprovalPart[]): AiActionApprovalMessage => ({
+const response = (id: string, parts: AiChatPart[]): AiChatMessage => ({
   id,
   role: 'assistant',
   parts,
@@ -23,7 +23,7 @@ const response = (id: string, parts: AiActionApprovalPart[]): AiActionApprovalMe
 
 const deployInput = { workload: 'storefront', build: 'b-4821', environment: 'production' }
 
-const readBuild: AiActionApprovalToolCallPart = {
+const readBuild: AiChatToolCallPart = {
   type: 'tool-call',
   id: 'call-build',
   name: 'get_build',
@@ -33,15 +33,12 @@ const readBuild: AiActionApprovalToolCallPart = {
   output: { build: 'b-4821', checks: 'passed', finishedAt: '14:56' }
 }
 
-const explanation: AiActionApprovalPart = {
+const explanation: AiChatPart = {
   type: 'text',
   content: 'Build `b-4821` passed its checks. Deploying it needs your approval.'
 }
 
-const deploy = (
-  state: AiActionApprovalToolCallPart['state'],
-  approved?: boolean
-): AiActionApprovalToolCallPart => ({
+const deploy = (state: AiChatToolCallPart['state'], approved?: boolean): AiChatToolCallPart => ({
   type: 'tool-call',
   id: 'call-deploy',
   name: 'deploy_workload',
@@ -53,7 +50,7 @@ const deploy = (
 
 const deployRequest = request('m1', 'Deploy the current build of storefront to production')
 
-export const sampleTools: Record<string, AiActionApprovalTool> = {
+export const sampleTools: Record<string, AiChatTool> = {
   get_build: { title: 'Reading the latest build of storefront' },
   deploy_workload: {
     title: 'Deploying storefront to production',
@@ -74,17 +71,17 @@ export const sampleTools: Record<string, AiActionApprovalTool> = {
   }
 }
 
-export const sampleMessages: AiActionApprovalMessage[] = [
+export const sampleMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [readBuild, explanation, deploy('approval-requested')])
 ]
 
-export const sampleRunningMessages: AiActionApprovalMessage[] = [
+export const sampleRunningMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [readBuild, explanation, deploy('approval-responded', true)])
 ]
 
-export const sampleApprovedMessages: AiActionApprovalMessage[] = [
+export const sampleApprovedMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [
     readBuild,
@@ -98,7 +95,7 @@ export const sampleApprovedMessages: AiActionApprovalMessage[] = [
   ])
 ]
 
-export const sampleDeniedMessages: AiActionApprovalMessage[] = [
+export const sampleDeniedMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [
     readBuild,
@@ -118,7 +115,7 @@ export const sampleDeniedMessages: AiActionApprovalMessage[] = [
   ])
 ]
 
-export const sampleFailedMessages: AiActionApprovalMessage[] = [
+export const sampleFailedMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [
     readBuild,
@@ -139,7 +136,7 @@ export const sampleFailedMessages: AiActionApprovalMessage[] = [
   ])
 ]
 
-export const sampleDeleteMessages: AiActionApprovalMessage[] = [
+export const sampleDeleteMessages: AiChatMessage[] = [
   request('m1', 'Delete the domain old.example.com, nobody uses it anymore'),
   response('m2', [
     {

@@ -12,7 +12,7 @@
   },
   {
    "name": "Error",
-   "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+   "summary": "The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
    "file": "blocks/dashboard/dashboard-security/variants/error.vue"
   },
   {
@@ -23,7 +23,13 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-security/dashboard-security.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-security/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-security/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/attention-card.vue",
+  "parts/matched-chart.vue",
+  "parts/security-card.vue",
+  "parts/security-dialog.vue",
+  "parts/source-ip-search.vue",
+  "security-cards.ts"
+ ]
 }

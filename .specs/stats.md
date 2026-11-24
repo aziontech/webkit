@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: db824db5da581eb9e924dec4fee1b81f50f5eaf09230838a373ed3fbbec42d8a
+checksum: 01fe10406626a0b356ee1c2afd883248a8efc83d750fe2a0e823af06db743765
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -105,7 +105,7 @@ _none_
 | figure fit (glyph count)    | `--text-big-number-characters` |
 | figure fit (gap width)      | `--text-big-number-inset`      |
 | figure text                 | `var(--text-default)`          |
-| prefix accent               | `var(--text-brand)`            |
+| prefix accent               | `var(--text-default)`          |
 | suffix text                 | `var(--text-muted)`            |
 | caption text                | `var(--text-muted)`            |
 | cell rules and marks        | `var(--border-default)`        |
@@ -124,9 +124,10 @@ _none_
 - Visible focus: not applicable — the band is static copy and holds no interactive control.
 - Keyboard map: none of its own; the band contains no focusable element and is skipped by `Tab`.
 - ARIA: each cell is a `<figure>` whose `<figcaption>` carries the caption, so the figure and what it measures are one unit for a screen reader; `prefix` and `suffix` are plain spans inside the figure's text, so the announced value is the whole expression.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--text-brand)` (the logo orange `#F3652B` in both themes) is large text (about 3:1 light, 6.71:1 dark; the light pair is the accepted `--text-brand` exception). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and so is the prefix (the logo orange is never a text colour, owner decision 2026-11-22). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
+- Right-to-left: the figure (prefix, value, suffix) is a left-to-right token in every locale, so it sits in an isolated `dir="ltr"` run: `< 15 ms` keeps its order and its `<` is never mirrored into `>`, which would invert the claim. The figure still starts on the page's start side, and the caption follows the page direction.
 - Reflow: a figure never breaks across lines; its prefix, value and suffix stay on one line, and the figure shrinks to fit its cell instead (see Best practices), so there is no horizontal scroll at 320 px or at 200% zoom.
 
 ## Examples

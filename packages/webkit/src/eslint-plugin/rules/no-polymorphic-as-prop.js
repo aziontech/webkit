@@ -12,7 +12,10 @@ export default {
     schema: [],
     messages: {
       polymorphic:
-        'Prop `{{name}}` makes the root element polymorphic by string or by slot. A component owns its root: switch anchor vs. button on a data prop (`href`) with `<component :is>`, and compose a child component instead of `asChild`. See .claude/rules/webkit-root-element.md (shipped by `npx @aziontech/webkit init`).'
+        'Prop `{{name}}` makes the root element polymorphic by string or by slot. A component ' +
+        'owns its root: switch anchor vs. button on a data prop (`href`) with `<component :is>`, ' +
+        'and compose a child component instead of `asChild`. See ' +
+        '.claude/rules/webkit-root-element.md (shipped by `npx @aziontech/webkit init`).'
     }
   },
   create(context) {

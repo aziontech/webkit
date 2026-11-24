@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: be4d982254e4b48bc7b3a7e2122505a8ca511e8a30454ea422eb8c9b2eab5252
+checksum: c6f9cadb15fafdf01512424f70878a923f83d920f54df010c3c180800f94ebd5
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -230,8 +230,8 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 - Default — the baseline Chip with `label`.
 - Types — composite story rendering `filled` (the grey applied-filter chip), `outline` and `dashed` side by side, justified because `variant` is a real axis with three values that carry different meanings (applied / available / adds one).
 - Sizes — composite story rendering `small` and `medium` side by side, justified because `size` is a real axis with two values.
-- Removable — args delta `removable: true`, wiring the `remove` event to the Actions panel; justified because `removable` is a real boolean state that changes the rendered anatomy (adds the trailing remove button) and the emitted event.
-- Clickable — args delta `clickable: true`, wiring the `click` event to the Actions panel; justified because `clickable` is a real boolean state that turns the chip body into an interactive `role="button"` and emits a distinct event.
+- Removable — `removable: true`, handling the `remove` event; justified because `removable` is a real boolean state that changes the rendered anatomy (adds the trailing remove button) and the emitted event.
+- Clickable — `clickable: true`, handling the `click` event; justified because `clickable` is a real boolean state that turns the chip body into an interactive `role="button"` and emits a distinct event.
 - Selectable — composite story of three `outline` filter chips, each bound with `v-model:selected` (one starting selected); justified because `selectable` is a distinct mode that holds a state across clicks and exposes `aria-pressed`, which a single args delta cannot show.
 - Disabled — a removable and a clickable chip with `disabled`, the state example for the `disabled` prop.
 

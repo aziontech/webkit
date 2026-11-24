@@ -36,6 +36,11 @@
    "file": "blocks/detail/detail-resource/variants/application.vue"
   },
   {
+   "name": "NoDeployment",
+   "summary": "The Overview of a resource that was created but never deployed: the summary reads Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status and no Visit, the state band names the three ways to deploy (drop the project, connect Git, or the CLI), and Get started follows.",
+   "file": "blocks/detail/detail-resource/variants/no-deployment.vue"
+  },
+  {
    "name": "FirstDeploy",
    "summary": "The summary cards before and during the first deploy: a resource never deployed (Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status, Not yet as its creation, Connect Git repository and Project upload under Source, and the state band naming the three ways to deploy), then two service cards whose Status reads Deploying · Build with a loading `StatusIndicator`, and Inactive.",
    "file": "blocks/detail/detail-resource/variants/first-deploy.vue"
@@ -53,7 +58,18 @@
  ],
  "sfcFile": "blocks/detail/detail-resource/detail-resource.vue",
  "guidelinesFile": "blocks/detail/detail-resource/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/detail/detail-resource/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "use-topology-staging.ts",
+  "parts/application-deployments-tab.vue",
+  "parts/application-versions-tab.vue",
+  "parts/resource-get-started.vue",
+  "parts/resource-summary-card.vue",
+  "parts/resource-tab-bar.vue",
+  "parts/summary-fact.vue",
+  "parts/summary-facts.vue",
+  "parts/summary-state-band.vue",
+  "parts/summary-subject-band.vue",
+  "parts/tab-route-empty.vue"
+ ]
 }

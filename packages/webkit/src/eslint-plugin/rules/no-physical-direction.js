@@ -5,30 +5,39 @@ const CLASS_HELPERS = new Set(['cn', 'clsx', 'classNames', 'cva', 'tv', 'twMerge
 const CLASS_ATTRS = new Set(['class', 'className', 'class:list'])
 const SKIP_KEYS = new Set(['parent', 'loc', 'range', 'tokens', 'comments', 'variables'])
 
+const isNode = (value) => value && typeof value.type === 'string'
+
+function leafString(node) {
+  if (node.type === 'Literal') {
+    return typeof node.value === 'string' ? [{ node, text: node.value }] : []
+  }
+  if (node.type === 'TemplateElement') return [{ node, text: node.value?.raw ?? '' }]
+  return null
+}
+
+function childNodes(node) {
+  return Object.keys(node)
+    .filter((key) => !SKIP_KEYS.has(key))
+    .flatMap((key) => (Array.isArray(node[key]) ? node[key] : [node[key]]))
+    .filter(isNode)
+}
+
 function collectStrings(node, out = []) {
   if (!node || typeof node !== 'object') return out
-  if (node.type === 'Literal') {
-    if (typeof node.value === 'string') out.push({ node, text: node.value })
+  const leaf = leafString(node)
+  if (leaf) {
+    out.push(...leaf)
     return out
   }
-  if (node.type === 'TemplateElement') {
-    out.push({ node, text: node.value?.raw ?? '' })
-    return out
-  }
-  if (node.type === 'CallExpression' && !isClassHelper(node)) {
-    return out
-  }
-  for (const key of Object.keys(node)) {
-    if (SKIP_KEYS.has(key)) continue
-    const value = node[key]
-    if (Array.isArray(value)) {
-      for (const child of value)
-        if (child && typeof child.type === 'string') collectStrings(child, out)
-    } else if (value && typeof value.type === 'string') {
-      collectStrings(value, out)
-    }
-  }
+  if (node.type === 'CallExpression' && !isClassHelper(node)) return out
+  for (const child of childNodes(node)) collectStrings(child, out)
   return out
+}
+
+function isClassBinding(node) {
+  if (node.key?.name?.name !== 'bind') return false
+  const arg = node.key.argument
+  return Boolean(arg) && arg.type === 'VIdentifier' && arg.name === 'class'
 }
 
 function calleeName(node) {
@@ -51,7 +60,11 @@ export default {
     fixable: 'code',
     docs: {
       description:
-        'Disallow physical direction utilities (ml-/mr-, pl-/pr-, left-/right-, text-left/right, border-l/r, rounded-l/r…) in class strings; use the logical ones so layouts mirror under dir="rtl". A horizontal gradient (bg-gradient-to-l/r, bg-linear-to-l/r and the diagonals) needs an rtl: pair in the same class string. The left-1/2 -translate-x-1/2 centering pattern is allowed.'
+        'Disallow physical direction utilities (ml-/mr-, pl-/pr-, left-/right-, text-left/right, ' +
+        'border-l/r, rounded-l/r…) in class strings; use the logical ones so layouts mirror ' +
+        'under dir="rtl". A horizontal gradient (bg-gradient-to-l/r, bg-linear-to-l/r and the ' +
+        'diagonals) needs an rtl: pair in the same class string. The left-1/2 -translate-x-1/2 ' +
+        'centering pattern is allowed.'
     },
     schema: [
       {
@@ -116,10 +129,7 @@ export default {
           if (node.key?.name === 'class' && node.value) check(node.value, node.value.value ?? '')
           return
         }
-        if (node.key?.name?.name !== 'bind') return
-        const arg = node.key.argument
-        if (!arg || arg.type !== 'VIdentifier' || arg.name !== 'class') return
-        if (node.value?.expression) checkExpression(node.value.expression)
+        if (isClassBinding(node) && node.value?.expression) checkExpression(node.value.expression)
       }
     }
 

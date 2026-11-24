@@ -1,5 +1,6 @@
 <script setup>
   import Faq from '@aziontech/webkit/faq'
+  import Link from '@aziontech/webkit/link'
 
   const items = [
     {
@@ -27,10 +28,10 @@
   >
     <template #answer="{ item }">
       {{ item.answer }}
-      <a
-        class="text-link"
+      <Link
+        inline
         :href="links[item.value].href"
-        >{{ links[item.value].label }}</a
+        >{{ links[item.value].label }}</Link
       >
     </template>
   </Faq>

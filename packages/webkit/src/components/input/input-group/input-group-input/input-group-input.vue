@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../../composables/use-field-attrs'
   import { passwordManagerHints } from '../../../../utils/autofill'
 
   defineOptions({ name: 'InputGroupInput', inheritAttrs: false })
@@ -38,19 +38,7 @@
 
   const attrs = useAttrs()
 
-  const {
-    controlId,
-    describedBy,
-    invalid: isInvalid,
-    disabled: isDisabled,
-    required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  const { controlId, describedBy, controlState } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group-input')
 
@@ -61,6 +49,10 @@
   const onInput = (event: globalThis.Event) => {
     model.value = (event.target as globalThis.HTMLInputElement).value
   }
+
+  const ROOT_CLASS =
+    'h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm ' +
+    'pointer-coarse:text-body-md text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>
@@ -71,14 +63,10 @@
     :value="model"
     :placeholder="placeholder"
     :autocomplete="autocomplete"
-    :disabled="isDisabled"
     :readonly="readonly"
-    :required="isRequired"
-    :aria-invalid="isInvalid || undefined"
-    :aria-required="isRequired || undefined"
     :data-testid="testId"
-    v-bind="{ ...autofillHints, ...$attrs }"
-    class="h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm pointer-coarse:text-body-md text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+    v-bind="{ ...controlState, ...autofillHints, ...$attrs }"
+    :class="ROOT_CLASS"
     @input="onInput"
   />
 </template>

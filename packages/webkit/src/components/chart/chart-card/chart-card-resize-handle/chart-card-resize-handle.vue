@@ -2,6 +2,7 @@
   import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
@@ -109,7 +110,15 @@
     ctx.endResize(event)
   }
 
+  useElementListener(handleEl, 'keydown', onKeydown)
+
   onScopeDispose(release)
+
+  const ROOT_CLASS =
+    "absolute bottom-0 end-0 z-1 flex size-6 before:absolute before:-inset-2 before:content-[''] " +
+    'cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    '@max-3xl/dashboard-grid:hidden'
 </script>
 
 <template>
@@ -125,12 +134,11 @@
     :aria-valuemax="ctx.maxSpan.value"
     :aria-valuetext="valueText"
     :data-testid="testId"
-    class="absolute bottom-0 end-0 z-1 flex size-6 before:absolute before:-inset-2 before:content-[''] cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+    :class="ROOT_CLASS"
     @pointerdown="onPointerdown"
     @pointermove="onPointermove"
     @pointerup="onPointerup"
     @pointercancel="onPointerup"
-    @keydown="onKeydown"
   >
     <svg
       viewBox="0 0 10 10"

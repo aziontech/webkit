@@ -59,14 +59,6 @@ const EXCEPTIONS = [
   },
   {
     status: 'accepted',
-    themes: ['light', 'dark'],
-    fg: '--text-brand',
-    bg: SURFACES,
-    reason:
-      'brand: the eyebrow matches the logo orange #F3652B in light and dark (light also under WCAG 4.5:1); owner decision 2026-11-16'
-  },
-  {
-    status: 'accepted',
     themes: ['light'],
     fg: '--border-muted',
     bg: ['--bg-canvas'],

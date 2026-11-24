@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: [Accordion](../../components/accordion.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`, `utils/radio-list`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -30,9 +30,9 @@ A focused page, outside the console shell, where the user turns a template into 
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
+The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `AppHeaderAccount` alone on the right. No sidebar, no search.
 
 ### B. Template and Git step — `Card`, `EmptyState`, `Button`, `Link` (required)
 
@@ -42,7 +42,7 @@ Above the step, a preview `Card` names the template, its one-sentence descriptio
 
 **Uploaded project (Upload only).** Reached from a dropped folder there is no Git: the form asks for the project name and a Build preset, then a Project files card shows the folder summary (name, file count and total size, formatted with `Intl.NumberFormat` from the files themselves) and a scrollable list with each file's glyph, monospace path and size. The list shows the first 100 files and an "and N more" line counts the rest; its scroll region is focusable so a keyboard can scroll it. A static project with no `index.html` adds a required Root (/) `Select` of the top-level files, and Deploy waits for it.
 
-**Where it runs (WhereItRuns).** When the project must be bound to a service, the flow opens on a `Card` headed Where it runs: a large search `Input` over the services, up to six small `clickable` `Item` rows (native `button`s with `aria-pressed`, a check on the chosen one), an "N more. Type to narrow the list." line or a no-match line, and a Create Service row that opens an inline New service `Field` with focus in it (Enter on a search with no match opens it prefilled). Continue without a service sits under the card as a transparent small `Button`. Picking a row answers the step; the Git step that follows names the service it deploys to.
+**Where it runs (WhereItRuns).** When the project must be bound to a service, the flow opens on a `Card` headed Where it runs: a large search `Input` over the services, up to six small `clickable` `Item` rows (native `button`s with `role="radio"` and `aria-checked` in a `radiogroup` named Services, a radio circle on every row, filled on the chosen one), an "N more. Type to narrow the list." line or a no-match line, and a Create Service row that opens an inline New service `Field` with focus in it (Enter on a search with no match opens it prefilled). Continue without a service sits under the card as a transparent small `Button`. Picking a row answers the step; the Git step that follows names the service it deploys to.
 
 **Integration template (InstallIntegration).** An integration template clones nothing and builds nothing: the preview card says which service it adds to, a Configure `Card` lists the template's settings as `Field`s (the required ones flagged only after the action is pressed), and a flush What gets added `Card` previews the origin record, the rule (an `Item` with a Request phase `Tag`) and its behaviors as `Tag`s, updating as the user types. The footer action names the service, e.g. Add to service-01.
 
@@ -52,7 +52,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 
 ## Data
 
-The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders the block: the header, the preview card, Back and Escape come from it, and the variant fills the default slot with the step it is on and keeps that step's own records.
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders a step from `parts/` that renders the block: the header, the preview card, Back and Escape come from it, and the step fills the default slot and keeps its own records.
 
 | Prop            | Type                     | What it does                                                                       |
 | --------------- | ------------------------ | ---------------------------------------------------------------------------------- |
@@ -139,7 +139,7 @@ Then delete `sample.ts` and its import.
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
 - Settings use `Field` labels and descriptions, so each input announces its name and constraint.
 - Required fields carry the Required marker; a failed Deploy puts each error in a `Field.Error` (`role="alert"`) tied to its input.
-- Each `Accordion` trigger is a button that announces its expanded state; the Value input is labelled by its Value label, the Key row by its Key label, and the show control is a toggle with `aria-pressed`.
+- Each `Accordion` trigger is a button that announces its expanded state; the Value input is labelled by its Value label, the Key row by its Key label (on a phone the key is a read-only line above a full-width Value field), and the show control is a toggle with `aria-pressed`.
 - The uploaded files list is a `ul` named by the folder, inside a focusable scroll region (`role="region"`, `tabindex="0"`) so it scrolls from the keyboard; while settings load the region is `aria-busy` with one status line.
 - The page enter animation stops under reduced motion.
 
@@ -186,7 +186,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 ```vue
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
@@ -301,18 +301,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          :name="currentAccount"
           aria-label="Account settings"
           @click="(event: MouseEvent) => emit('account', event)"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            :label="currentAccount"
-            size="medium"
-            variant="square"
-          />
-        </button>
+        />
       </AppHeader.End>
     </AppHeader>
 
@@ -454,6 +447,8 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 ## `sample.ts`
 
 ```ts
+import type { SelectOptionItem } from '@aziontech/webkit/select'
+
 import type { DeployTemplateTemplate } from './create-deploy-template.vue'
 
 export const sampleTemplate: DeployTemplateTemplate = {
@@ -491,4 +486,95 @@ export const sampleIntegration: DeployTemplateTemplate = {
     'Front an origin you already run. The service receives the traffic and passes it on.',
   icon: 'az az-arrow-right-left'
 }
+
+/** One text setting of the deploy form. */
+export interface DeployFormSetting {
+  /** The key its value is kept under. */
+  name: string
+  /** The field label, also named in its required message. */
+  label: string
+  /** The field placeholder. */
+  placeholder: string
+  /** The guidance under the field. */
+  description: string
+  /** Deploy flags the field while it is empty. */
+  required: boolean
+  /** The value the field starts with. */
+  defaultValue: string
+}
+
+/** One environment variable the template asks for. */
+export interface DeployFormVariable {
+  /** The key its value is kept under. */
+  name: string
+  /** The variable name, shown in the locked Key field. */
+  variable: string
+  /** The placeholder of the Value field. */
+  placeholder: string
+  /** Deploy flags the variable while its value is empty. */
+  required: boolean
+  /** The value is hidden until Show value is pressed. */
+  secret: boolean
+}
+
+export const sampleScopes: SelectOptionItem[] = [
+  { label: 'jane-doe', value: 'jane-doe' },
+  { label: 'acme', value: 'acme' },
+  { label: 'acme-templates', value: 'acme-templates' }
+]
+
+export const samplePresets: SelectOptionItem[] = [
+  { label: 'Nuxt', value: 'nuxt' },
+  { label: 'Next.js', value: 'next' },
+  { label: 'Vite', value: 'vite' },
+  { label: 'Astro', value: 'astro' },
+  { label: 'Static files', value: 'static' }
+]
+
+export const sampleSettings: DeployFormSetting[] = [
+  {
+    name: 'storeDomain',
+    label: 'Store domain',
+    placeholder: 'https://shop.example.com',
+    description: 'The domain your store answers on.',
+    required: false,
+    defaultValue: ''
+  }
+]
+
+export const sampleBuildSettings: DeployFormSetting[] = [
+  {
+    name: 'rootDirectory',
+    label: 'Root directory',
+    placeholder: '/',
+    description: "The folder that holds the project's package.json.",
+    required: true,
+    defaultValue: '/'
+  },
+  {
+    name: 'installCommand',
+    label: 'Install command',
+    placeholder: 'npm install',
+    description: "Installs the project's dependencies before the build runs.",
+    required: true,
+    defaultValue: 'npm install'
+  }
+]
+
+export const sampleVariables: DeployFormVariable[] = [
+  {
+    name: 'storeAccessToken',
+    variable: 'NUXT_STORE_ACCESS_TOKEN',
+    placeholder: 'Access token',
+    required: true,
+    secret: true
+  },
+  {
+    name: 'storeRevalidationSecret',
+    variable: 'NUXT_STORE_REVALIDATION_SECRET',
+    placeholder: 'Revalidation secret',
+    required: false,
+    secret: true
+  }
+]
 ```

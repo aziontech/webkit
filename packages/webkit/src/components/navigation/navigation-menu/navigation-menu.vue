@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, getCurrentInstance, ref, useAttrs } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
@@ -37,7 +37,7 @@
     ariaLabel: ''
   })
 
-  const emit = defineEmits<{
+  defineEmits<{
     'open-transition-end': [open: boolean]
   }>()
 
@@ -61,6 +61,11 @@
   const isControlled = computed(() => model.value !== undefined)
   const controlledValue = computed(() => (isControlled.value ? (model.value ?? null) : null))
 
+  const instance = getCurrentInstance()
+  const rootEmit: NavigationMenuRootEmit = (event: string, ...args: unknown[]) => {
+    instance?.emit(event, ...args)
+  }
+
   const rootState = useNavigationMenuRoot(
     controlledValue,
     isControlled,
@@ -71,7 +76,7 @@
       orientation: () => props.orientation,
       dir: useDirection()
     },
-    emit as unknown as NavigationMenuRootEmit
+    rootEmit
   )
 
   provideNavigationMenuContext(rootState)

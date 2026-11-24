@@ -116,6 +116,30 @@
   onBeforeUnmount(() => {
     if (resetTimer) clearTimeout(resetTimer)
   })
+
+  const BUTTON_CLASS =
+    'group/copy-prompt relative isolate inline-flex h-10 min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-(--shape-button) border ' +
+    'border-(length:--border-width-default) border-(--secondary-mask) p-px text-button-lg whitespace-nowrap transition-colors duration-fast-02 ease-productive-entrance ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed ' +
+    'disabled:border-transparent disabled:bg-(--bg-disabled) motion-reduce:transition-none pointer-coarse:min-h-11 forced-colors:border-[ButtonBorder]'
+
+  const BORDER_SWEEP_CLASS =
+    'pointer-events-none absolute inset-0 animate-spin-settle ' +
+    '[background:linear-gradient(90deg,var(--text-default),var(--brand-blue),var(--primary))] [filter:blur(12px)] ' +
+    'motion-reduce:animate-none group-disabled/copy-prompt:hidden'
+
+  const GRADIENT_FILL_CLASS =
+    'pointer-events-none absolute inset-px rounded-[inherit] ' +
+    '[background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ' +
+    'ease-out motion-reduce:transition-none group-enabled/copy-prompt:group-hover/copy-prompt:opacity-25 group-disabled/copy-prompt:hidden'
+
+  const BACKDROP_FILL_CLASS =
+    'pointer-events-none absolute inset-px rounded-[inherit] bg-(--bg-backdrop) transition-opacity duration-300 ease-out ' +
+    'motion-reduce:transition-none group-enabled/copy-prompt:group-hover/copy-prompt:opacity-25 group-disabled/copy-prompt:hidden'
+
+  const CONTENT_CLASS =
+    'relative z-1 inline-flex h-full w-full min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-md) pe-(--spacing-sm) text-(--text-default) ' +
+    'sm:gap-(--spacing-sm) group-disabled/copy-prompt:text-(--text-disabled)'
 </script>
 
 <template>
@@ -141,24 +165,22 @@
         :disabled="disabled"
         :aria-label="copied ? doneLabel : idleLabel"
         :aria-describedby="worksWith ? describedBy : undefined"
-        class="group/copy-prompt relative isolate inline-flex h-10 min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-(--shape-button) border border-(length:--border-width-default) border-(--secondary-mask) p-px text-button-lg whitespace-nowrap transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:border-transparent disabled:bg-(--bg-disabled) motion-reduce:transition-none pointer-coarse:min-h-11 forced-colors:border-[ButtonBorder]"
+        :class="BUTTON_CLASS"
         @click="onClick"
       >
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] [background:linear-gradient(90deg,var(--text-default),var(--brand-blue),var(--primary))] [filter:blur(12px)] motion-reduce:animate-none group-disabled/copy-prompt:hidden"
+          :class="BORDER_SWEEP_CLASS"
         />
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-px rounded-[inherit] [background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ease-out motion-reduce:transition-none group-enabled/copy-prompt:group-hover/copy-prompt:opacity-25 group-disabled/copy-prompt:hidden"
+          :class="GRADIENT_FILL_CLASS"
         />
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-px rounded-[inherit] bg-(--bg-backdrop) transition-opacity duration-300 ease-out motion-reduce:transition-none group-enabled/copy-prompt:group-hover/copy-prompt:opacity-25 group-disabled/copy-prompt:hidden"
+          :class="BACKDROP_FILL_CLASS"
         />
-        <span
-          class="relative z-1 inline-flex h-full w-full min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-md) pe-(--spacing-sm) text-(--text-default) sm:gap-(--spacing-sm) group-disabled/copy-prompt:text-(--text-disabled)"
-        >
+        <span :class="CONTENT_CLASS">
           <span class="grid min-w-0">
             <span
               :data-testid="`${testId}__label`"

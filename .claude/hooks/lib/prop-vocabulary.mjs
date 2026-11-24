@@ -10,7 +10,7 @@
 // them now and blocks them once the lead flips NAMING_STAGED_BLOCKS in
 // packages/webkit/scripts/lib/naming-rules.mjs. Pass { stage: 'all' } to see both.
 
-export const CONCEPTS = [
+const CONCEPTS = [
   {
     concept: 'visual variant (the look); a sort of part is `type`',
     canonical: 'variant',
@@ -29,6 +29,11 @@ export const CONCEPTS = [
     concept: 'severity (colour meaning: neutral | info | success | warning | danger)',
     canonical: 'severity',
     aliases: ['tone']
+  },
+  {
+    concept: 'priority of a ticket or task (urgent | high | medium | low | none)',
+    canonical: 'priority',
+    aliases: ['urgency', 'importance']
   },
   {
     concept: 'job or step status (pending | running | success | error | canceled | skipped)',
@@ -203,14 +208,14 @@ export const CONCEPTS = [
 ]
 
 // Group parts name their header text `label` (like DropdownMenu.Group, Select.Group).
-export const GROUP_LABEL = {
+const GROUP_LABEL = {
   canonical: 'label',
   staged: ['title', 'heading', 'header', 'groupLabel'],
   appliesTo: (component) => /-group$/.test(component || '')
 }
 
 // Prop-name shapes that read backwards or borrow another library's words.
-export const PATTERNS = [
+const PATTERNS = [
   {
     test: /^hide[A-Z]/,
     fix: (n) => `show${n.slice(4)}`,
@@ -230,13 +235,21 @@ export const PATTERNS = [
 
 // Shared value tokens: prop -> { banned value: canonical value }. `VALUES` blocks today;
 // `STAGED_VALUES` is the 6.0 standard. A prop matched by VALUE_PATTERNS uses that map.
-export const VALUES = {
+const VALUES = {
   severity: {
     error: 'danger',
     destructive: 'danger',
     default: 'neutral',
     secondary: 'neutral',
     alt: 'neutral'
+  },
+  priority: {
+    highest: 'urgent',
+    critical: 'urgent',
+    blocker: 'urgent',
+    normal: 'medium',
+    lowest: 'low',
+    'no-priority': 'none'
   },
   status: {
     done: 'success',
@@ -263,7 +276,7 @@ export const VALUES = {
   }
 }
 
-export const STAGED_VALUES = {}
+const STAGED_VALUES = {}
 
 const POSITION = {
   left: 'leading',
@@ -278,7 +291,7 @@ const POSITION = {
 const ALIGN = { left: 'start', right: 'end', top: 'start', bottom: 'end', centered: 'center' }
 const SIDE = { left: 'start', right: 'end' }
 
-export const VALUE_PATTERNS = [
+const VALUE_PATTERNS = [
   { test: /Position$/, map: POSITION, concept: 'position inside the component', enforced: true },
   { test: /^align$|Align$|^alignment$/, map: ALIGN, concept: 'alignment', enforced: true },
   { test: /^side$|Side$/, map: SIDE, concept: 'side', enforced: true },
@@ -299,21 +312,14 @@ export const VALUE_PATTERNS = [
 // component documents here (prop-vocabulary.md, "Closed value sets"). Extras are keyed by
 // the component's kebab name, or by "<component>.<prop>" for one prop. A `variant` union
 // made only of alignment words is the `align` axis, never a look.
-export const SHARED_VARIANTS = ['primary', 'secondary', 'outline', 'ghost', 'danger', 'link']
-export const SEVERITY_VALUES = ['neutral', 'info', 'success', 'warning', 'danger']
-export const STATUS_VALUES = [
-  'pending',
-  'running',
-  'success',
-  'error',
-  'canceled',
-  'skipped',
-  'streaming'
-]
-export const ORIENTATION_VALUES = ['horizontal', 'vertical']
-export const ALIGN_WORDS = ['start', 'center', 'end', 'split', 'left', 'right']
+const SHARED_VARIANTS = ['primary', 'secondary', 'outline', 'ghost', 'danger', 'link']
+const SEVERITY_VALUES = ['neutral', 'info', 'success', 'warning', 'danger']
+const STATUS_VALUES = ['pending', 'running', 'success', 'error', 'canceled', 'skipped', 'streaming']
+const ORIENTATION_VALUES = ['horizontal', 'vertical']
+const PRIORITY_VALUES = ['urgent', 'high', 'medium', 'low', 'none']
+const ALIGN_WORDS = ['start', 'center', 'end', 'split', 'left', 'right']
 
-export const VARIANT_EXTRAS = {
+const VARIANT_EXTRAS = {
   'app-header': ['content', 'site'],
   'article-index-section.rowVariant': ['byline', 'center'],
   avatar: ['circle', 'square'],
@@ -374,18 +380,18 @@ export const SEVERITY_EXTRAS = {
   chart: ['severity-critical', 'severity-high', 'severity-medium', 'severity-low', 'severity-info'],
   'severity-tag': ['critical', 'high', 'medium', 'low']
 }
-export const STATUS_EXTRAS = {
+const STATUS_EXTRAS = {
   'prompt-input': ['ready'],
   'tool-approval': ['approved', 'denied', 'expired'],
   'tool-call': ['denied']
 }
-export const ORIENTATION_EXTRAS = {
+const ORIENTATION_EXTRAS = {
   field: ['responsive'],
   'flow-diagram': ['responsive'],
   'scroll-area': ['both']
 }
 
-export const VALUE_SETS = [
+const VALUE_SETS = [
   {
     axis: 'variant',
     test: /^variant$|[a-z]Variant$/,
@@ -400,6 +406,12 @@ export const VALUE_SETS = [
   },
   { axis: 'status', test: /^status$|[a-z]Status$/, values: STATUS_VALUES, extras: STATUS_EXTRAS },
   {
+    axis: 'priority',
+    test: /^priority$|[a-z]Priority$/,
+    values: PRIORITY_VALUES,
+    extras: {}
+  },
+  {
     axis: 'orientation',
     test: /^orientation$|[a-z]Orientation$/,
     values: ORIENTATION_VALUES,
@@ -407,11 +419,11 @@ export const VALUE_SETS = [
   }
 ]
 
-export function valueSetFor(prop) {
+function valueSetFor(prop) {
   return VALUE_SETS.find((x) => x.test.test(prop)) || null
 }
 
-export function extrasFor(set, component, prop, root = component) {
+function extrasFor(set, component, prop, root = component) {
   return [
     ...(set.extras[`${component}.${prop}`] || []),
     ...(set.extras[component] || []),
@@ -474,13 +486,13 @@ export const MODELS = {
 }
 
 // Size scale: tiny and xlarge exist only for a component that truly needs a 4th step.
-export const SIZE = {
+const SIZE = {
   prop: 'size',
   canonical: ['tiny', 'small', 'medium', 'large', 'xlarge'],
   bannedTokens: ['xs', 'sm', 'md', 'lg', 'xl', '2xs', '2xl', 'xxs', 'xxl']
 }
 
-export const CLOSABLE = {
+const CLOSABLE = {
   prop: 'closable',
   defaultTrue: ['dialog', 'drawer'],
   default: false
@@ -488,7 +500,7 @@ export const CLOSABLE = {
 
 // Negated booleans that must be inverted (flip the default too). `disabled` / `readonly`
 // are the accepted exceptions.
-export const NEGATIVE_BOOLEANS = {
+const NEGATIVE_BOOLEANS = {
   hidden: 'show<Part>',
   closed: 'open',
   inactive: 'active',
@@ -497,7 +509,7 @@ export const NEGATIVE_BOOLEANS = {
 }
 
 // Slot names (6.0 standard, enforced): leading/trailing for adornments, start/end for sides.
-export const SLOTS = {
+const SLOTS = {
   prefix: 'leading',
   suffix: 'trailing',
   left: 'leading',
@@ -514,7 +526,7 @@ export const SLOTS = {
 }
 
 // Words inside an event name (6.0 standard, enforced).
-export const EVENT_WORDS = {
+const EVENT_WORDS = {
   dblclick: 'double-click',
   finish: 'complete',
   finished: 'complete',
@@ -526,7 +538,7 @@ export const EVENT_WORDS = {
 }
 
 // data-* attribute names (6.0 standard, staged).
-export const DATA_ATTRIBUTES = {
+const DATA_ATTRIBUTES = {
   'data-kind': 'data-variant (look) or data-type (sort of part)',
   'data-open': 'data-state="open|closed"',
   'data-expanded': 'data-state="open|closed"',
@@ -577,7 +589,7 @@ function membersOf(unionText) {
   return [...String(unionText).matchAll(/'([a-zA-Z0-9-]+)'/g)].map((m) => m[1])
 }
 
-export function valueMapFor(prop, stage = 'enforced') {
+function valueMapFor(prop, stage = 'enforced') {
   const out = { ...(VALUES[prop] || {}) }
   for (const p of VALUE_PATTERNS) if (p.enforced && p.test.test(prop)) Object.assign(out, p.map)
   if (stage !== 'all') return Object.keys(out).length ? out : null
@@ -683,7 +695,7 @@ export function checkPropVocabulary(props, opts = {}) {
  * Validate a prop's union STRING against its value map. Returns an error message or null
  * (also null when the text is not a string-literal union).
  */
-export function checkValueUnion(prop, unionText, stage = 'enforced') {
+function checkValueUnion(prop, unionText, stage = 'enforced') {
   const banned = valueMapFor(prop, stage)
   if (!banned) return null
   const bad = membersOf(unionText).filter((m) => Object.hasOwn(banned, m))
@@ -696,7 +708,7 @@ export function checkValueUnion(prop, unionText, stage = 'enforced') {
  * Validate a `size` union STRING: only the canonical tokens, in canonical order (a subset
  * is fine). Returns an error message or null.
  */
-export function checkSizeUnion(unionText) {
+function checkSizeUnion(unionText) {
   const members = membersOf(unionText)
   if (!members.length) return null
   const canon = SIZE.canonical

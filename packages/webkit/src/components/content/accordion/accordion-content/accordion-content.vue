@@ -93,6 +93,11 @@
     const node = el as globalThis.HTMLElement
     animateHeight(node, node.scrollHeight, 0, done)
   }
+
+  const BODY_CLASS =
+    'data-[padded]:px-[var(--accordion-inset,var(--spacing-md))] data-[padded]:pt-(--spacing-xs) data-[padded]:pb-(--spacing-md) ' +
+    'data-[padded]:data-[icon-position=leading]:data-[size=medium]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-sm-font-size)+var(--spacing-xs))] ' +
+    'data-[padded]:data-[icon-position=leading]:data-[size=large]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-md-font-size)+var(--spacing-xs))]'
 </script>
 
 <template>
@@ -117,7 +122,7 @@
         :data-padded="padded || null"
         :data-size="ctx.size.value"
         :data-icon-position="ctx.iconPosition.value"
-        class="data-[padded]:px-[var(--accordion-inset,var(--spacing-md))] data-[padded]:pt-(--spacing-xs) data-[padded]:pb-(--spacing-md) data-[padded]:data-[icon-position=leading]:data-[size=medium]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-sm-font-size)+var(--spacing-xs))] data-[padded]:data-[icon-position=leading]:data-[size=large]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-md-font-size)+var(--spacing-xs))]"
+        :class="BODY_CLASS"
       >
         <slot />
       </div>

@@ -84,6 +84,13 @@ describe('ConsoleApplicationScene', () => {
     expect(drawer(container)).toBeNull()
   })
 
+  it('drops the tab bar and the save hint below md, where the host already names the tab', () => {
+    const { getByTestId } = render(host({ tab: 'main-settings', animated: false }))
+
+    expect(getByTestId(`${TESTID}__tabs`).classList.contains('max-md:hidden')).toBe(true)
+    expect(getByTestId(`${TESTID}__save-bar-hint`).classList.contains('max-md:hidden')).toBe(true)
+  })
+
   it('renders every field of the Rules Engine drawer', () => {
     const { container } = render(host({ tab: 'rules-engine', animated: false }))
     const panel = drawer(container)

@@ -23,7 +23,7 @@
   "A fixed list of named intervals and nothing custom → use `select` or `toggle-group`."
  ],
  "related": [
-  "`date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.",
+  "`date-picker` — the trigger control, the panel, the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.",
   "`timestamp` — displays a moment in time; both read the `ConfigProvider` `timeZone`.",
   "`config-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.",
   "`field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
@@ -176,7 +176,7 @@
   {
    "name": "open",
    "type": "boolean",
-   "default": "undefined as never",
+   "default": "undefined",
    "required": "false",
    "doc": "Two-way value (`v-model:open`)."
   },

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: b906374612540b6e518be022a8000ff9d595503f20e8216dbf7d4be1cb060ee3
+checksum: 93a5b822bac355dc891e92625c50b17e1ebcbef27af83c8dba335d3e31a2e508
 created: 2026-09-22
 last_updated: 2026-11-16
 ---
@@ -57,7 +57,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 
 - `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
-- Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
+- Put the controls in the `actions` slot; the panel lays them out as a row right after the copy from `md` up (a `--spacing-2xl` gap, never pushed to the far edge of a wide band, so the eye goes from the promise to its action) and stacks them full-width below it.
 - Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
 - Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.

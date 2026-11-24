@@ -3,10 +3,10 @@ name: doc-prose
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: f97ed442df1bf775f81dd96a9a48c8be4d0cd0920c885f339f1bc0a4c1192230
+spec_version: 5
+checksum: 092b828929672ccdee415b21f6863073173edbc8eb05959a808f0eb8622b7cd8
 created: 2026-08-21
-last_updated: 2026-11-18
+last_updated: 2026-11-22
 ---
 
 # DocProse — Component Spec
@@ -22,7 +22,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ## When NOT to use
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).
+- To cap the whole column — `DocProse` caps only running text (see the reading measure under Tokens). The consumer sets the column width with `.layout-column-content` (`--layout-measure-content`, 876px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 
@@ -116,6 +116,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 | spacing (base rung)                        | `var(--spacing-md)`                                                                |
 | spacing (tightened rungs)                  | `var(--spacing-sm)` / `var(--spacing-xs)`                                          |
 | ring                                       | `var(--ring-color)`                                                                |
+| reading measure (p, ul, ol, blockquote)    | `max-w-(--container-xl)` (644px, about 75 to 80 characters of 16px text); code, tables, frames and other `[data-doc-block]` blocks keep the full width |
 | table                                      | block, `max-w-full`, `overflow-x-auto` (scrolls sideways when wider than the page) |
 | typography (table cell)                    | `.text-body-sm`                                                                    |
 | text (th / td)                             | `var(--text-default)` / `var(--text-muted)`                                        |
@@ -142,7 +143,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ## Examples
 
-- Default — the full ladder over semantic HTML: headings, paragraphs, links, inline code, both list kinds, a table, a blockquote, an `hr` and a fenced block. The markup is hand-written, which is also the proof that the contract is not tied to any renderer.
+- Default — the full ladder over the semantic HTML a Markdown source renders to: headings, paragraphs, links, inline code, both list kinds, a blockquote and an `hr`. The source goes through `DocMarkdown`, the way a documentation page reaches `DocProse`; the Chrome boundary example keeps hand-written markup, which shows the contract is not tied to that renderer.
 - Chrome boundary — the same prose wrapping a subtree marked `data-doc-chrome`, whose headings and paragraphs keep their own styling. Justified in writing here because "styles descendants, but stops at a component's edge" is the component's other core promise, and it is invisible in the Default story.
 
 ## Constraints — DO NOT

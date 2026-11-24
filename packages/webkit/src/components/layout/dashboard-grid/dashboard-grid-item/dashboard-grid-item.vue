@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onScopeDispose, provide, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { useDashboardGridContext } from '../composables/use-dashboard-grid-context'
   import {
     DashboardGridItemInjectionKey,
@@ -89,6 +90,10 @@
     board.drop(event, props.itemId)
   }
 
+  useElementListener(rootEl, 'dragover', onDragover)
+  useElementListener(rootEl, 'dragleave', onDragleave)
+  useElementListener(rootEl, 'drop', onDrop)
+
   provide(DashboardGridItemInjectionKey, {
     id: props.itemId,
     editing: board.editing,
@@ -113,6 +118,12 @@
     startResize: () => undefined,
     endResize: (event) => board.announceResize(event, props.itemId)
   })
+
+  const ROOT_CLASS =
+    'flex min-w-0 flex-col rounded-(--shape-card) [grid-column:span_min(var(--dashboard-grid-item-span),var(--dashboard-grid-grid-columns,1))] ' +
+    '[height:var(--dashboard-grid-item-height,auto)] transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[over]:ring-2 data-[over]:ring-(--ring-color) data-[over]:ring-offset-2 data-[over]:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -123,10 +134,7 @@
     :data-item-id="itemId"
     :data-over="over || null"
     :style="sizeVars"
-    class="flex min-w-0 flex-col rounded-(--shape-card) [grid-column:span_min(var(--dashboard-grid-item-span),var(--dashboard-grid-grid-columns,1))] [height:var(--dashboard-grid-item-height,auto)] transition-shadow duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[over]:ring-2 data-[over]:ring-(--ring-color) data-[over]:ring-offset-2 data-[over]:ring-offset-(--bg-canvas)"
-    @dragover="onDragover"
-    @dragleave="onDragleave"
-    @drop="onDrop"
+    :class="ROOT_CLASS"
   >
     <slot />
   </li>

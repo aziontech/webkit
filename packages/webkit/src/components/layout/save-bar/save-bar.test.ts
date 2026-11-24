@@ -258,13 +258,15 @@ describe('SaveBar', () => {
   describe('floating inset', () => {
     const documentStyle = () => document.documentElement.style
     const inset = () => documentStyle().getPropertyValue('--save-bar-inset')
-    const toastOffset = () => documentStyle().getPropertyValue('--toast-offset-bottom')
+    const toastOffset = () => documentStyle().getPropertyValue('--save-bar-height')
+    const appOffset = () => documentStyle().getPropertyValue('--toast-offset-bottom')
 
     it('publishes its height on the document root while mounted and clears it on unmount', async () => {
       const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
 
       await vi.waitFor(() => expect(inset()).toMatch(/^[1-9]\d*px$/))
       expect(toastOffset()).toBe(inset())
+      expect(appOffset()).toBe('')
 
       view.unmount()
       expect(inset()).toBe('')
@@ -272,18 +274,17 @@ describe('SaveBar', () => {
     })
 
     it.each(['docked', 'plain', 'fade', 'centered'] as const)(
-      'publishes nothing for variant=%s',
+      'lifts the toasts above variant=%s but reserves no inset',
       async (variant) => {
         const view = render(SaveBar, {
           props: { variant: variant },
           slots: { default: 'You have unsaved changes.' }
         })
-        await nextTick()
-        await nextTick()
 
+        await vi.waitFor(() => expect(toastOffset()).toMatch(/^[1-9]\d*px$/))
         expect(inset()).toBe('')
-        expect(toastOffset()).toBe('')
         view.unmount()
+        expect(toastOffset()).toBe('')
       }
     )
 
@@ -295,7 +296,7 @@ describe('SaveBar', () => {
       await nextTick()
 
       expect(inset()).toBe('')
-      expect(toastOffset()).toBe('')
+      await vi.waitFor(() => expect(toastOffset()).toMatch(/^[1-9]\d*px$/))
       view.unmount()
     })
 

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-table")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -51,9 +51,9 @@ Beside the filter, outlined medium `IconButton`s for Refresh (the button and the
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` opens a dialog that edits a draft and applies it on Confirm: the page size (10, 25, 50), the columns (shown, hidden and reordered), wrapped lines, striped rows and density. The Name and actions columns are `hideable: false`, so the panel locks them. `preferences.storageKey` saves the choice in localStorage per list; `defaults.columns` hides the ID column until someone shows it.
 
-### E. Resource table — `Card`, `DataTable` (required)
+### E. Resource table — `Card`, `DataTable`, `DataTablePagination` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, density, wrap and stripes, while `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot is the pagination footer; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. Status comes right after Name, so a phone shows the column people scan without scrolling. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
@@ -79,7 +79,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 ## Data
 
-The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set).
+The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set). The filter row (the `PropertyFilter`, Refresh, Download CSV and preferences) is the private part `parts/collection-controls.vue`; the Deployments state is `parts/deployments-page.vue`, which renders `parts/deployments-table.vue` with the columns, properties and statuses of `lib/deployments.ts` and the sample runs `sampleDeployments` of `sample.ts`.
 
 | Prop        | Type                  | What it does                                                                                                                                |
 | ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -116,7 +116,7 @@ To go live, render the block from a page that owns the request and pass what it 
 </template>
 ```
 
-Then delete `sample.ts` and its import. A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
+Then delete `sampleResources` and its import (keep `sample.ts` only if you copied the Deployments state, which reads `sampleDeployments` from it). A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
 
 ## Do
 
@@ -132,7 +132,7 @@ Then delete `sample.ts` and its import. A list too large for the browser moves t
 ## Don't
 
 - Don't add a search `Input`, a filter popover, a chip row or a row of `Select`s beside the `PropertyFilter`; one control narrows the list.
-- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, `paginated` and `v-model:globalFilter` by hand beside `tableProps`.
+- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, a non-manual `DataTablePagination` or a `TableSearch` `v-model` by hand beside `tableProps`; page with `<DataTablePagination v-bind="paginationProps" manual />` in the `footer` slot.
 - Don't build a columns popover of `Switch`es; column visibility and order belong to `CollectionPreferences`.
 - Don't wrap a bordered table in a padded card, or let the page scroll sideways for a wide table.
 - Don't add a second create button to the controls row.
@@ -146,7 +146,7 @@ Then delete `sample.ts` and its import. A list too large for the browser moves t
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter resources".
 - **Properties:** the column header's words, e.g. "Name", "Author", "Status", "Domain".
 - **Icon buttons:** a verb or noun in sentence case, e.g. "Refresh", "Download CSV", "Row actions". Preferences title: "Table preferences".
-- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last modified".
+- **Column headers:** one or two words without punctuation, e.g. "Name", "Status", "ID", "Domains", "Last modified".
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".
@@ -200,28 +200,26 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellId from '@aziontech/webkit/table-cell-id'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref, watch } from 'vue'
 
+  import CollectionControls from './parts/collection-controls.vue'
   import { sampleResources } from './sample'
 
   /** Whether a resource serves traffic. */
@@ -299,14 +297,15 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', type: 'action', hideable: false }
   ]
 
   const {
+    paginationProps,
     tableProps,
     propertyFilterProps,
     preferencesProps,
@@ -369,6 +368,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -386,49 +386,16 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
       </PageHeader>
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <header class="flex items-start gap-(--layout-group-gap)">
-            <div class="flex min-w-0 grow">
-              <PropertyFilter
-                v-bind="propertyFilterProps"
-                placeholder="Filter resources"
-                aria-label="Filter resources"
-                :disabled="blocked"
-              />
-            </div>
-            <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-              <Tooltip
-                content="Refresh"
-                class="shrink-0"
-              >
-                <IconButton
-                  icon="az az-refresh"
-                  variant="outline"
-                  size="medium"
-                  :loading="loading"
-                  aria-label="Refresh"
-                  @click="(event: MouseEvent) => emit('refresh', event)"
-                />
-              </Tooltip>
-              <Tooltip
-                content="Download CSV"
-                class="shrink-0"
-              >
-                <IconButton
-                  icon="az az-download"
-                  variant="outline"
-                  size="medium"
-                  :disabled="blocked || !matchingItems.length"
-                  aria-label="Download CSV"
-                  @click="exportCsv"
-                />
-              </Tooltip>
-              <CollectionPreferences
-                v-bind="preferencesProps"
-                title="Table preferences"
-                :disabled="blocked"
-              />
-            </div>
-          </header>
+          <CollectionControls
+            :property-filter-props="propertyFilterProps"
+            :preferences-props="preferencesProps"
+            label="Filter resources"
+            :loading="loading"
+            :disabled="blocked"
+            :download-disabled="blocked || !matchingItems.length"
+            @refresh="(event: MouseEvent) => emit('refresh', event)"
+            @download="exportCsv"
+          />
           <section class="flex min-h-0 flex-col">
             <Alert
               v-if="error"
@@ -460,6 +427,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
                       />
                       <Button
                         label="Documentation"
+                        aria-label="Documentation (opens in a new tab)"
                         icon="az az-book"
                         variant="outline"
                         size="small"
@@ -590,6 +558,12 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
                       </template>
                     </EmptyState>
                   </template>
+                  <template #footer>
+                    <DataTablePagination
+                      v-bind="paginationProps"
+                      manual
+                    />
+                  </template>
                 </DataTable>
               </template>
             </Card>
@@ -622,6 +596,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
 ## `sample.ts`
 
 ```ts
+import type { Deployment } from './lib/deployments'
 import type { TableViewResource, TableViewResourceStatus } from './view-table.vue'
 
 const referenceTime = Date.UTC(2026, 10, 10, 12)
@@ -661,4 +636,640 @@ export const sampleResources: TableViewResource[] = [
   resource(9, 'Ethan Brooks', 144, 'Inactive'),
   resource(10, 'Jordan Kim', 162)
 ]
+
+const minutesAgo = (minutes: number) => new Date(referenceTime - minutes * 60_000)
+
+export const deploymentsReferenceTime = referenceTime
+
+export const sampleDeployments: Deployment[] = [
+  {
+    id: '1048213',
+    version: 'AWPT11GA',
+    current: false,
+    status: 'Building',
+    duration: '',
+    project: 'acme-store',
+    projectId: '1020655',
+    environment: 'Preview',
+    author: 'Jane Doe',
+    deployedAt: minutesAgo(2)
+  },
+  {
+    id: '1048207',
+    version: 'AY3MQWWR',
+    current: true,
+    status: 'Ready',
+    duration: '48s',
+    project: 'acme-store',
+    projectId: '1020655',
+    environment: 'Production',
+    author: 'John Smith',
+    deployedAt: minutesAgo(95)
+  },
+  {
+    id: '1048199',
+    version: 'AZHGGSD8',
+    current: false,
+    status: 'Failed',
+    duration: '1m 12s',
+    project: 'docs-site',
+    projectId: '1020711',
+    environment: 'Staging',
+    author: 'Alex Morgan',
+    deployedAt: minutesAgo(260)
+  },
+  {
+    id: '1048184',
+    version: 'A1VA6NTP',
+    current: true,
+    status: 'Ready',
+    duration: '36s',
+    project: 'docs-site',
+    projectId: '1020711',
+    environment: 'Production',
+    author: 'Sam Lee',
+    deployedAt: minutesAgo(1_440)
+  },
+  {
+    id: '1048172',
+    version: 'A393WJA6',
+    current: false,
+    status: 'Queued',
+    duration: '',
+    project: 'site-assets',
+    projectId: '1020734',
+    environment: 'Preview',
+    author: 'Priya Patel',
+    deployedAt: minutesAgo(1_445)
+  },
+  {
+    id: '1048160',
+    version: 'ATNSEE8Y',
+    current: false,
+    status: 'Canceled',
+    duration: '9s',
+    project: 'site-assets',
+    projectId: '1020734',
+    environment: 'Staging',
+    author: 'Jane Doe',
+    deployedAt: minutesAgo(2_900)
+  },
+  {
+    id: '1048151',
+    version: 'AV1M49PF',
+    current: true,
+    status: 'Ready',
+    duration: '52s',
+    project: 'site-assets',
+    projectId: '1020734',
+    environment: 'Production',
+    author: 'John Smith',
+    deployedAt: minutesAgo(4_320)
+  }
+]
+```
+
+## `lib/deployments.ts`
+
+```ts
+import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { FilteringProperty } from '@aziontech/webkit/use-collection'
+
+/** Where a deployment run stands. */
+export type DeploymentStatus = 'Ready' | 'Building' | 'Failed' | 'Queued' | 'Canceled'
+
+/** One run of the deployments list. */
+export interface Deployment {
+  /** The run id, the row key. */
+  id: string
+  /** The version the run deployed. */
+  version: string
+  /** The run serves its project's environment now. */
+  current: boolean
+  /** Where the run stands. */
+  status: DeploymentStatus
+  /** How long the run took, empty while it has not finished. */
+  duration: string
+  /** The project name. */
+  project: string
+  /** The project id, for its link. */
+  projectId: string
+  /** The environment the run deployed to. */
+  environment: string
+  /** Who started the run. */
+  author: string
+  /** When the run started. */
+  deployedAt: Date
+}
+
+export const DEPLOYMENT_STATUS: Record<
+  DeploymentStatus,
+  { severity: StatusIndicatorSeverity; loading: boolean }
+> = {
+  Ready: { severity: 'success', loading: false },
+  Building: { severity: 'info', loading: true },
+  Failed: { severity: 'danger', loading: false },
+  Queued: { severity: 'neutral', loading: false },
+  Canceled: { severity: 'neutral', loading: false }
+}
+
+export const environmentSeverity = (environment: string): TagSeverity =>
+  environment === 'Production' ? 'info' : 'neutral'
+
+const authors = ['Jane Doe', 'John Smith', 'Alex Morgan', 'Sam Lee', 'Priya Patel']
+
+export const deploymentProperties: FilteringProperty[] = [
+  { key: 'version', label: 'Version' },
+  {
+    key: 'status',
+    label: 'Status',
+    options: (Object.keys(DEPLOYMENT_STATUS) as DeploymentStatus[]).map((value) => ({ value }))
+  },
+  { key: 'project', label: 'Project' },
+  {
+    key: 'environment',
+    label: 'Environment',
+    options: [{ value: 'Production' }, { value: 'Staging' }, { value: 'Preview' }]
+  },
+  { key: 'author', label: 'Author', options: authors.map((value) => ({ value })) }
+]
+
+export const deploymentColumns: TableColumn[] = [
+  {
+    accessorKey: 'version',
+    header: 'Version',
+    sortable: true,
+    principal: true,
+    hideable: false
+  },
+  { accessorKey: 'id', header: 'ID', minWidth: 80 },
+  { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 128 },
+  { accessorKey: 'project', header: 'Project', sortable: true, grow: 2 },
+  { accessorKey: 'environment', header: 'Environment', sortable: true, minWidth: 104 },
+  { accessorKey: 'deployedAt', header: 'Deployed', sortable: true, minWidth: 120 },
+  { id: 'actions', type: 'action', hideable: false }
+]
+```
+
+## `parts/collection-controls.vue`
+
+```ts
+<script setup lang="ts">
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import type {
+    CollectionPreferencesProps,
+    CollectionPropertyFilterProps
+  } from '@aziontech/webkit/use-collection'
+
+  withDefaults(
+    defineProps<{
+      propertyFilterProps: CollectionPropertyFilterProps
+      preferencesProps: CollectionPreferencesProps
+      label: string
+      loading?: boolean
+      disabled?: boolean
+      downloadDisabled?: boolean
+    }>(),
+    { loading: false, disabled: false, downloadDisabled: false }
+  )
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    download: [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <header class="flex items-start gap-(--layout-group-gap)">
+    <div class="flex min-w-0 grow">
+      <PropertyFilter
+        v-bind="propertyFilterProps"
+        :placeholder="label"
+        :aria-label="label"
+        :disabled="disabled"
+      />
+    </div>
+    <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+      <Tooltip
+        content="Refresh"
+        class="shrink-0"
+      >
+        <IconButton
+          icon="az az-refresh"
+          variant="outline"
+          size="medium"
+          :loading="loading"
+          aria-label="Refresh"
+          @click="(event: MouseEvent) => emit('refresh', event)"
+        />
+      </Tooltip>
+      <Tooltip
+        content="Download CSV"
+        class="shrink-0"
+      >
+        <IconButton
+          icon="az az-download"
+          variant="outline"
+          size="medium"
+          :disabled="downloadDisabled"
+          aria-label="Download CSV"
+          @click="(event: MouseEvent) => emit('download', event)"
+        />
+      </Tooltip>
+      <CollectionPreferences
+        v-bind="preferencesProps"
+        title="Table preferences"
+        :disabled="disabled"
+      />
+    </div>
+  </header>
+</template>
+```
+
+## `parts/deployments-page.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { toast } from '@aziontech/webkit/toast'
+  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { ref } from 'vue'
+
+  import { type Deployment, deploymentColumns, deploymentProperties } from '../lib/deployments'
+  import { deploymentsReferenceTime, sampleDeployments } from '../sample'
+  import CollectionControls from './collection-controls.vue'
+  import DeploymentsTable from './deployments-table.vue'
+
+  const items = ref<Deployment[]>(sampleDeployments)
+
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters,
+    loading: fetching
+  } = useCollection({
+    items,
+    columns: deploymentColumns,
+    filtering: { fields: ['version', 'id', 'project', 'environment', 'author', 'status'] },
+    propertyFiltering: { properties: deploymentProperties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: {
+      storageKey: 'deployments-table',
+      defaults: { columns: [{ id: 'id', visible: false }] }
+    },
+    url: true
+  })
+
+  const loading = ref(false)
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
+  const refresh = () => {
+    if (loading.value) return
+    loading.value = true
+    clearTimeout(refreshTimer)
+    refreshTimer = setTimeout(() => {
+      loading.value = false
+    }, 700)
+  }
+
+  const deploymentsTableEl = ref<InstanceType<typeof DeploymentsTable> | null>(null)
+  const exportCsv = () => deploymentsTableEl.value?.exportCsv('deployments.csv')
+
+  const openDeployment = (row: Deployment) => {
+    window.location.assign(`/deployments/${row.id}`)
+  }
+
+  let nextDeploymentId = Math.max(...sampleDeployments.map((row) => Number(row.id)))
+
+  const redeploy = (row: Deployment) => {
+    nextDeploymentId += 1
+    items.value = [
+      {
+        ...row,
+        id: String(nextDeploymentId),
+        current: false,
+        status: 'Queued',
+        duration: '',
+        deployedAt: new Date(deploymentsReferenceTime)
+      },
+      ...items.value
+    ]
+    toast.success(`${row.version} queued for redeploy.`, { description: row.project })
+  }
+
+  const pendingPromotion = ref<Deployment | null>(null)
+  const promoteOpen = ref(false)
+
+  const confirmPromote = () => {
+    const promoted = pendingPromotion.value
+    if (!promoted) return
+    items.value = items.value.map((row) => {
+      if (row.id === promoted.id) return { ...row, environment: 'Production', current: true }
+      if (row.project === promoted.project && row.environment === 'Production')
+        return { ...row, current: false }
+      return row
+    })
+    promoteOpen.value = false
+    toast.success(`${promoted.version} promoted to production.`, {
+      description: promoted.project
+    })
+  }
+
+  const onRowAction = (value: DropdownMenuItemValue, row: Deployment) => {
+    if (value === 'view') openDeployment(row)
+    if (value === 'redeploy') redeploy(row)
+    if (value === 'promote') {
+      pendingPromotion.value = row
+      promoteOpen.value = true
+    }
+  }
+</script>
+
+<template>
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
+      <PageHeader
+        title="Deployments"
+        description="Every deployment of your projects, newest first."
+      >
+        <template #actions>
+          <Button
+            label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
+            icon="az az-book"
+            variant="outline"
+            size="medium"
+            href="https://example.com/docs/deployments"
+            target="_blank"
+          />
+        </template>
+      </PageHeader>
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+          <CollectionControls
+            :property-filter-props="propertyFilterProps"
+            :preferences-props="preferencesProps"
+            label="Filter deployments"
+            :loading="loading"
+            :download-disabled="!matchingItems.length"
+            @refresh="refresh"
+            @download="exportCsv"
+          />
+          <section class="flex min-h-0 flex-col">
+            <Card
+              key="card-1"
+              v-if="status === 'empty'"
+              :padded="false"
+            >
+              <template #default>
+                <EmptyState
+                  size="medium"
+                  icon="az az-cloud-upload"
+                  title="No deployments yet"
+                  description="Deploy a project and every run shows up here, with its version, status and environment."
+                >
+                  <template #actions>
+                    <Button
+                      label="Documentation"
+                      aria-label="Documentation (opens in a new tab)"
+                      icon="az az-book"
+                      variant="outline"
+                      size="small"
+                      href="https://example.com/docs/deployments"
+                      target="_blank"
+                    />
+                  </template>
+                </EmptyState>
+              </template>
+            </Card>
+            <Card
+              key="card-2"
+              v-else
+              :padded="false"
+            >
+              <template #default>
+                <DeploymentsTable
+                  ref="deploymentsTableEl"
+                  :table-props="tableProps"
+                  :pagination-props="paginationProps"
+                  :loading="loading || fetching"
+                  @open="(_event, row) => openDeployment(row)"
+                  @action="(_event, { value, row }) => onRowAction(value, row)"
+                  @clear-filters="clearFilters"
+                />
+              </template>
+            </Card>
+          </section>
+        </section>
+      </section>
+    </div>
+    <ConfirmDialog
+      v-model:open="promoteOpen"
+      title="Promote to production"
+      variant="primary"
+      size="medium"
+      confirm-label="Promote"
+      @confirm="confirmPromote"
+    >
+      <p class="m-0 text-body-sm text-(--text-muted)">
+        {{ pendingPromotion?.version }} becomes the current production deployment of
+        {{ pendingPromotion?.project }}, in place of the one serving traffic now.
+      </p>
+    </ConfirmDialog>
+  </div>
+</template>
+```
+
+## `parts/deployments-table.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DataTable, {
+    type DropdownMenuItemValue,
+    type TableColumn,
+    type TableExposed
+  } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import TableCellId from '@aziontech/webkit/table-cell-id'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Tag from '@aziontech/webkit/tag'
+  import type {
+    CollectionPaginationProps,
+    CollectionTableProps
+  } from '@aziontech/webkit/use-collection'
+  import { ref } from 'vue'
+
+  import { type Deployment, DEPLOYMENT_STATUS, environmentSeverity } from '../lib/deployments'
+
+  defineProps<{
+    tableProps: CollectionTableProps<Deployment, TableColumn>
+    paginationProps: CollectionPaginationProps
+    loading: boolean
+  }>()
+
+  const emit = defineEmits<{
+    open: [event: MouseEvent | KeyboardEvent, row: Deployment]
+    action: [event: Event, payload: { value: DropdownMenuItemValue; row: Deployment }]
+    'clear-filters': [event: MouseEvent]
+  }>()
+
+  const tableEl = ref<TableExposed<Deployment> | null>(null)
+
+  defineExpose({
+    exportCsv: (filename: string) => tableEl.value?.exportCsv({ filename })
+  })
+</script>
+
+<template>
+  <DataTable
+    ref="tableEl"
+    v-bind="tableProps"
+    :loading="loading"
+    sortable
+    :bordered="false"
+    @row-click="(event, row) => emit('open', event, row)"
+  >
+    <template #cell-version="{ row }">
+      <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
+        <span class="truncate tabular-nums text-body-sm text-(--text-default)">
+          {{ row.version }}
+        </span>
+        <Tag
+          v-if="row.current"
+          label="Current"
+          severity="info"
+          size="small"
+          icon="az az-circle-arrow-up"
+          class="shrink-0"
+        />
+      </span>
+    </template>
+    <template #cell-id="{ value }">
+      <TableCellId
+        :value="value"
+        resource="deployment"
+      />
+    </template>
+    <template #cell-status="{ row }">
+      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <StatusIndicator
+          :severity="DEPLOYMENT_STATUS[row.status].severity"
+          :loading="DEPLOYMENT_STATUS[row.status].loading"
+          :label="row.status"
+        />
+        <span
+          v-if="row.duration"
+          class="shrink-0 tabular-nums text-body-xs text-(--text-muted)"
+        >
+          {{ row.duration }}
+        </span>
+      </span>
+    </template>
+    <template #cell-project="{ row }">
+      <TableCellLink
+        :label="row.project"
+        :to="`/projects/${row.projectId}`"
+        destination="Projects"
+        icon="az az-box"
+      />
+    </template>
+    <template #cell-environment="{ value }">
+      <Tag
+        :label="value"
+        :severity="environmentSeverity(value)"
+        size="medium"
+        rounded
+      />
+    </template>
+    <template #cell-deployedAt="{ row }">
+      <TableCellTime
+        :value="row.deployedAt"
+        :author="row.author"
+      />
+    </template>
+    <template #cell-actions="{ row }">
+      <TableCellActions
+        :name="row.version"
+        @select="(event, value) => emit('action', event, { value, row })"
+      >
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            value="view"
+            label="View details"
+          >
+            <template #leading
+              ><i
+                class="az az-eye"
+                aria-hidden="true"
+            /></template>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            value="redeploy"
+            label="Redeploy"
+          >
+            <template #leading
+              ><i
+                class="az az-refresh"
+                aria-hidden="true"
+            /></template>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            value="promote"
+            label="Promote to production"
+            :disabled="row.environment === 'Production' || row.status !== 'Ready'"
+          >
+            <template #leading
+              ><i
+                class="az az-circle-arrow-up"
+                aria-hidden="true"
+            /></template>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </TableCellActions>
+    </template>
+    <template #empty>
+      <EmptyState
+        size="medium"
+        icon="az az-filter-off"
+        title="No matching deployments"
+        description="No deployment matches these filters."
+      >
+        <template #actions>
+          <Button
+            label="Clear filters"
+            variant="outline"
+            size="small"
+            @click="(event: MouseEvent) => emit('clear-filters', event)"
+          />
+        </template>
+      </EmptyState>
+    </template>
+    <template #footer>
+      <DataTablePagination
+        v-bind="paginationProps"
+        manual
+      />
+    </template>
+  </DataTable>
+</template>
 ```

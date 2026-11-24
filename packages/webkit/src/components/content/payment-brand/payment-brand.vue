@@ -24,7 +24,11 @@
   })
 
   export interface PaymentBrandProps {
-    /** The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. */
+    /**
+     * The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American
+     * Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw
+     * the generic card glyph.
+     */
     brand?: string
     /** Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. */
     size?: PaymentBrandSize
@@ -94,6 +98,11 @@
     if (id.value === 'unknown') return t('paymentBrand.unknown')
     return NAMES[id.value]
   })
+
+  const ROOT_CLASS =
+    'inline-flex shrink-0 items-center justify-center overflow-clip rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
+    'data-[size=medium]:h-7 data-[size=medium]:w-10 data-[size=small]:h-5 data-[size=small]:w-8 ' +
+    '[&>svg]:block [&>svg]:h-auto [&>svg]:w-3/5 [&>svg]:max-h-4/5'
 </script>
 
 <template>
@@ -106,8 +115,7 @@
     :data-brand="id"
     :data-size="size"
     :data-glyph="glyph"
-    :class="attrs.class"
-    class="inline-flex shrink-0 items-center justify-center overflow-clip rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default) data-[size=medium]:h-7 data-[size=medium]:w-10 data-[size=small]:h-5 data-[size=small]:w-8 [&>svg]:block [&>svg]:h-auto [&>svg]:w-3/5 [&>svg]:max-h-4/5"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <svg
       v-if="id === 'visa'"

@@ -39,7 +39,14 @@
     "name": "Default",
     "file": "dashboard-home.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "home-metrics.ts",
+    "parts/home-domain-check.vue",
+    "parts/home-first-access.vue",
+    "parts/home-panels.vue",
+    "parts/home-usage-band.vue"
+  ],
   "variants": [
     {
       "name": "Empty",
@@ -48,7 +55,7 @@
     },
     {
       "name": "Error",
-      "summary": "Populated Home whose data could not load: the usage band and every resource panel show a danger `Alert` with Retry in place of their content; the greeting and the agent card stay.",
+      "summary": "Populated Home whose data could not load: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
       "file": "variants/error.vue"
     },
     {

@@ -183,6 +183,17 @@
                   title="Full name"
                   description="The name shown across your account."
                 >
+                  <template #title
+                    >Full name
+                    <span class="text-label-sm text-(--text-muted)"
+                      ><span
+                        aria-hidden="true"
+                        class="text-(--text-default)"
+                        >*</span
+                      >
+                      (Required)</span
+                    ></template
+                  >
                   <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                     <div class="flex w-full flex-col gap-(--spacing-xs)">
                       <Input
@@ -208,6 +219,17 @@
                   title="Email"
                   description="Used for sign-in and notifications."
                 >
+                  <template #title
+                    >Email
+                    <span class="text-label-sm text-(--text-muted)"
+                      ><span
+                        aria-hidden="true"
+                        class="text-(--text-default)"
+                        >*</span
+                      >
+                      (Required)</span
+                    ></template
+                  >
                   <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                     <div class="flex w-full flex-col gap-(--spacing-xs)">
                       <Input

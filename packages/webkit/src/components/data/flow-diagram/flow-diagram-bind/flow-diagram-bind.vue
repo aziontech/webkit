@@ -107,6 +107,7 @@
   <span
     ref="rootEl"
     v-bind="$attrs"
+    role="presentation"
     data-slot="flow-diagram-bind"
     :data-pending="pending || null"
     :data-testid="testId"

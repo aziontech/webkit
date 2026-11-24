@@ -7,5 +7,3 @@ export const spacing = {
   'spacing-xs': { _: '0.5rem' },
   'spacing-2xs': { _: '0.25rem' }
 }
-
-export default { spacing }

@@ -78,7 +78,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Applies the required border on the InputGroup and sets required on the input."
+   "doc": "Sets required and aria-required on the phone number input; it draws no border of its own."
   },
   {
    "name": "invalid",
@@ -141,6 +141,10 @@
   {
    "name": "DefaultCountry",
    "file": "examples/phone-input/default-country.vue"
+  },
+  {
+   "name": "Optional",
+   "file": "examples/phone-input/optional.vue"
   }
  ],
  "docs": "components/phone-input.md"

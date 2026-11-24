@@ -131,6 +131,16 @@ describe('ClientMosaicSection', () => {
     expect(container.querySelectorAll('[data-lead]')).toHaveLength(1)
   })
 
+  it('widens every story cell to two columns below the large breakpoint', () => {
+    const { container } = band()
+
+    const storyCells = container.querySelectorAll('[data-cell="story"]')
+    expect(storyCells.length).toBe(stories.length)
+    storyCells.forEach((cell) =>
+      expect(cell.classList.contains('max-lg:data-[cell=story]:col-span-2')).toBe(true)
+    )
+  })
+
   it('renders only the section when stories and logos are empty', () => {
     const { getByTestId, queryAllByRole, queryByRole } = render(ClientMosaicSection, {
       props: { ariaLabel: ARIA_LABEL, linkLabel: LINK_LABEL }

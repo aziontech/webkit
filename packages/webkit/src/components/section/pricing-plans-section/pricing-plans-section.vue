@@ -72,7 +72,13 @@
     periods?: PricingPlansSectionPeriod[]
     /** Accessible name of the billing-period toggle. */
     periodsAriaLabel?: string
-    /** The plan cards, in order; each is `{ name, description?, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; `description` stands in for a price without `details`, a plan without a name is dropped, and an action without a label or href is dropped. */
+    /**
+     * The plan cards, in order; each is `{ name, description?, highlighted?, tagLabel?, prices,
+     * featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?,
+     * details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`;
+     * `description` stands in for a price without `details`, a plan without a name is dropped,
+     * and an action without a label or href is dropped.
+     */
     plans?: PricingPlansSectionPlan[]
   }
 

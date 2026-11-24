@@ -132,6 +132,23 @@
       }
     }
   })
+
+  const USER_MESSAGE_CLASS =
+    'm-0 ms-(--spacing-xl) rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] ' +
+    '[background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] ' +
+    '[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] ' +
+    'px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-default)'
+
+  const TOOL_CARD_CLASS =
+    'ms-(--spacing-lg) flex flex-col overflow-hidden rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] ' +
+    '[background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] ' +
+    '[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)]'
+
+  const COMPOSER_CLASS =
+    'flex shrink-0 items-end gap-(--spacing-sm) rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] ' +
+    '[background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] ' +
+    '[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] ' +
+    'py-(--spacing-sm) ps-(--spacing-md) pe-(--spacing-sm)'
 </script>
 
 <template>
@@ -158,7 +175,7 @@
         >
           <p
             v-if="entry.kind === 'user'"
-            class="m-0 ms-(--spacing-xl) rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-default)"
+            :class="USER_MESSAGE_CLASS"
           >
             {{ entry.text }}
           </p>
@@ -177,7 +194,7 @@
 
           <div
             v-else
-            class="ms-(--spacing-lg) flex flex-col overflow-hidden rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)]"
+            :class="TOOL_CARD_CLASS"
           >
             <div class="flex items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)">
               <i
@@ -213,9 +230,7 @@
       </TransitionGroup>
     </div>
 
-    <div
-      class="flex shrink-0 items-end gap-(--spacing-sm) rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] py-(--spacing-sm) ps-(--spacing-md) pe-(--spacing-sm)"
-    >
+    <div :class="COMPOSER_CLASS">
       <p class="m-0 min-h-10 min-w-0 flex-1 self-center text-body-sm">
         <span
           v-if="draft"

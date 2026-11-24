@@ -4,7 +4,7 @@
   "title": "Blocks/Auth/AuthSignIn",
   "surface": "app",
   "keyboard": { "entry": "field" },
-  "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's WebKit locale (`useLocale`), so the screen translates with WebKit's own strings.",
+  "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); and on sign-up a 409 (address already registered) answers exactly like a new address, so the screen never reveals which addresses have an account. In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's WebKit locale (`useLocale`), so the screen translates with WebKit's own strings.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -103,7 +103,30 @@
     "name": "Login",
     "file": "auth-sign-in.vue"
   },
-  "files": ["token-sign-in.vue"],
+  "files": [
+    "sample.ts",
+    "token-sign-in.vue",
+    "lib/sign-in-copy.ts",
+    "lib/sign-in-rules.ts",
+    "composables/use-card-height.ts",
+    "composables/use-code-check.ts",
+    "parts/sign-in-frame.vue",
+    "parts/auth-card.vue",
+    "parts/email-field.vue",
+    "parts/password-field.vue",
+    "parts/last-used-tag.vue",
+    "parts/sign-in-providers.vue",
+    "parts/step-back.vue",
+    "parts/sent-step.vue",
+    "parts/sign-in-footer.vue",
+    "parts/signed-in-as.vue",
+    "parts/scope-list.vue",
+    "parts/sign-up-card.vue",
+    "parts/mfa-code-card.vue",
+    "parts/mfa-setup-card.vue",
+    "parts/oauth-consent-card.vue",
+    "parts/device-authorization-card.vue"
+  ],
   "variants": [
     {
       "name": "SignUp",
@@ -152,7 +175,7 @@
     },
     {
       "name": "EmailAlreadyRegistered",
-      "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.",
+      "summary": "409 on Sign up (the address already has an account): the card answers exactly as for a new address, Check your inbox, so nobody can test which addresses are registered; the email to the owner explains how to sign in.",
       "file": "variants/email-already-registered.vue"
     },
     {

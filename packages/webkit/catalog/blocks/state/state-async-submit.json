@@ -7,18 +7,18 @@
   },
   {
    "name": "Error",
-   "summary": "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs card stays open on the failed step with the Phased or Complete switch.",
+   "summary": "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, no toast repeats it while the page is on screen (a hidden page gets the permanent failure toast), and the logs card stays open on the failed step with the Phased or Complete switch.",
    "file": "blocks/state/state-async-submit/variants/error.vue"
   },
   {
    "name": "Success",
-   "summary": "The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.",
+   "summary": "The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, no toast repeats it while the page is on screen, and the logs card is gone.",
    "file": "blocks/state/state-async-submit/variants/success.vue"
   }
  ],
  "sfcFile": "blocks/state/state-async-submit/state-async-submit.vue",
  "guidelinesFile": "blocks/state/state-async-submit/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/state/state-async-submit/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
   import CodeBlock from '../../../code/code-block/code-block.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'AiInferenceFunctionFragment' })
 
@@ -47,11 +47,8 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:80%]"
-    :chrome="false"
     :active="active"
     :width="500"
     :mobile-width="480"
@@ -85,5 +82,5 @@
         </ConsoleMockupShellItem>
       </div>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

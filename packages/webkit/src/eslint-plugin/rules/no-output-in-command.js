@@ -23,23 +23,27 @@ function staticString(node) {
   return null
 }
 
-export function outputLine(code) {
-  const lines = code.split('\n').map((line) => line.trim())
-  const prompted = lines.some((line) => PROMPT.test(line))
-  if (prompted) {
-    let continues = false
-    for (const line of lines) {
-      if (PROMPT.test(line)) {
-        continues = line.endsWith('\\')
-        continue
-      }
-      if (continues) {
-        continues = line.endsWith('\\')
-        continue
-      }
-      if (line && !line.startsWith('#')) return line
+function promptedOutput(lines) {
+  let continues = false
+  for (const line of lines) {
+    if (PROMPT.test(line) || continues) {
+      continues = line.endsWith('\\')
+      continue
     }
+    if (line && !line.startsWith('#')) return line
   }
+  return null
+}
+
+function isOutputComment(line, lines, index) {
+  if (OUTPUT_COMMENT.test(line)) return true
+  return lines
+    .slice(index + 1)
+    .filter(Boolean)
+    .every((next) => next.startsWith('#'))
+}
+
+function commentedOutput(lines) {
   let commands = 0
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index]
@@ -49,11 +53,15 @@ export function outputLine(code) {
       continue
     }
     if (commands === 0 || line.startsWith('#!')) continue
-    if (OUTPUT_COMMENT.test(line)) return line
-    const rest = lines.slice(index + 1).filter(Boolean)
-    if (rest.every((next) => next.startsWith('#'))) return line
+    if (isOutputComment(line, lines, index)) return line
   }
   return null
+}
+
+function outputLine(code) {
+  const lines = code.split('\n').map((line) => line.trim())
+  const prompted = lines.some((line) => PROMPT.test(line)) ? promptedOutput(lines) : null
+  return prompted ?? commentedOutput(lines)
 }
 
 export default {
@@ -61,12 +69,16 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Warn when a shell code sample (CodeBlock tab, DocCodeGroup sample) mixes what the reader runs with what the command prints: a `# HTTP/2 200` comment after the command, or output lines in a `$`-prompted transcript.'
+        'Warn when a shell code sample (CodeBlock tab, DocCodeGroup sample) mixes what the ' +
+        'reader runs with what the command prints: a `# HTTP/2 200` comment after the command, ' +
+        'or output lines in a `$`-prompted transcript.'
     },
     schema: [],
     messages: {
       output:
-        "This shell sample holds expected output ('{{line}}'). A command block holds only what the reader runs, so the copy control copies exactly that: move the output to the sample's `output` field (DocCodeGroup), a `<CodeBlock kind=\"output\">`, or the prose."
+        "This shell sample holds expected output ('{{line}}'). A command block holds only what " +
+        'the reader runs, so the copy control copies exactly that: move the output to the ' +
+        'sample\'s `output` field (DocCodeGroup), a `<CodeBlock kind="output">`, or the prose.'
     }
   },
   create(context) {

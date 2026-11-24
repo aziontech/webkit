@@ -1,22 +1,17 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-export const codeBlockIndicatorMotion = {
+const codeBlockIndicatorMotion = {
   slide: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-export const codeBlockLineSwapMotion = {
+const codeBlockLineSwapMotion = {
   stagger: '24ms',
   maxSteps: 12,
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-export const codeBlockHeightMotion = {
-  resize: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
-} as const
-
-export const codeBlockLineEnterMotion = {
+const codeBlockLineEnterMotion = {
   stagger: '40ms',
-  offsetClass: '-translate-x-2',
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
@@ -58,9 +53,3 @@ export const getCodeBlockLineSwapTransitionStyle = (
     transitionDelay: `calc(${step} * ${codeBlockLineSwapMotion.stagger})`
   }
 }
-
-export const codeBlockEnterOffsetClasses = {
-  right: 'translate-x-(--spacing-md) rtl:-translate-x-(--spacing-md)',
-  left: '-translate-x-(--spacing-md) rtl:translate-x-(--spacing-md)',
-  none: 'translate-x-0'
-} as const

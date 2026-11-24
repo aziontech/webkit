@@ -2,7 +2,13 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { type Component, defineComponent, h, ref } from 'vue'
 
+import AvatarGroup from '../components/content/avatar-group/avatar-group.vue'
+import Badge from '../components/content/badge/badge.vue'
+import CurrencyAmount from '../components/content/currency-amount/currency-amount.vue'
+import OverflowCount from '../components/content/overflow-count/overflow-count.vue'
+import Tag from '../components/content/tag/tag.vue'
 import Pagination from '../components/data/pagination/pagination.vue'
+import TableCellTime from '../components/data/table/table-cell-time/table-cell-time.vue'
 import PhoneInput from '../components/input/phone-input/phone-input.vue'
 import SelectRoot from '../components/input/select/select.vue'
 import SelectContent from '../components/input/select/select-content/select-content.vue'
@@ -30,7 +36,10 @@ import { hostable } from './hostable'
 const Select = hostable(SelectRoot)
 
 const modules = {
-  ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
+  ...import.meta.glob<{ default: Component }>([
+    '../../blocks/**/*.vue',
+    '!../../blocks/**/parts/**'
+  ]),
   ...import.meta.glob<{ default: Component }>('../../examples/**/*.vue')
 }
 
@@ -165,7 +174,7 @@ const overlays = () => [
 
 const PANELS = {
   dialog: '[role="dialog"][aria-modal="true"]',
-  popover: '[data-testid="popover__panel"]',
+  popover: '[data-testid="popover-content"]',
   tooltip: '[role="tooltip"]',
   select: '[role="listbox"]',
   menu: '[role="menu"]'
@@ -233,5 +242,47 @@ describe('values keep their own direction inside an rtl trigger', () => {
     const isolate = getByTestId('select-trigger__value').querySelector('bdi')
     expect(isolate?.textContent).toBe('Alpha')
     expect(isolate?.hasAttribute('dir')).toBe(false)
+  })
+
+  it('CurrencyAmount and TableCellTime isolate their text, so 184.20 and 2 weeks ago keep their order', () => {
+    const amount = render(CurrencyAmount, {
+      props: { value: '184.20' },
+      container: rtlContainer('rtl')
+    })
+    const group = amount.getByTestId('currency-amount__amount')
+    expect(group.getAttribute('dir')).toBe('ltr')
+    expect(getComputedStyle(group).direction).toBe('ltr')
+    const time = render(TableCellTime, {
+      props: { value: new Date(Date.now() - 14 * 86_400_000) },
+      container: rtlContainer('rtl')
+    })
+    const text = time.getByTestId('table-cell-time__time')
+    expect(text.getAttribute('dir')).toBe('auto')
+    expect(getComputedStyle(text).direction).toBe('ltr')
+  })
+
+  it('Tag, Badge, OverflowCount and AvatarGroup keep a numeric label in its order, so +10.5% does not read 10.5%+', () => {
+    const tag = render(Tag, { props: { label: '+10.5%' }, container: rtlContainer('rtl') })
+    expect(tag.getByTestId('tag__label').getAttribute('dir')).toBe('ltr')
+    expect(getComputedStyle(tag.getByTestId('tag__label')).direction).toBe('ltr')
+    const word = render(Tag, { props: { label: 'مستقر' }, container: rtlContainer('rtl') })
+    expect(word.getByTestId('tag__label').getAttribute('dir')).toBe('auto')
+    expect(getComputedStyle(word.getByTestId('tag__label')).direction).toBe('rtl')
+    const badge = render(Badge, { props: { label: '-3' }, container: rtlContainer('rtl') })
+    expect(badge.getByTestId('badge__label').getAttribute('dir')).toBe('ltr')
+    const count = render(OverflowCount, {
+      props: { items: ['a', 'b', 'c'] },
+      container: rtlContainer('rtl')
+    })
+    expect(count.getByTestId('tag__label').getAttribute('dir')).toBe('ltr')
+    const group = render(AvatarGroup, {
+      props: {
+        items: ['Jane Doe', 'John Smith', 'Sam Lee', 'Alex Morgan'].map((name) => ({ name })),
+        max: 2
+      },
+      container: rtlContainer('rtl')
+    })
+    const more = group.getByTestId('avatar-group__overflow').querySelector('[dir="ltr"]')
+    expect(more?.textContent).toBe('+2')
   })
 })

@@ -38,7 +38,7 @@
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
 | `status` | `'pending' \| 'streaming' \| 'running' \| 'success' \| 'error' \| 'canceled' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 

@@ -3,13 +3,13 @@ name: skeleton
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 39d09cac4ddc560c4305086bb154a0fac3a1059c98e2698be99186923e062e06
+checksum: a003a01f749ea83a6b2886e2dd79b38d5f6e1cc201b895c62a228c004c74d084
 created: 2026-06-23
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # Skeleton — Component Spec
@@ -71,7 +71,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 | Prop       | Type                      | Default       | Required | JSDoc                                                            |
 | ---------- | ------------------------- | ------------- | -------- | ---------------------------------------------------------------- |
 | `variant`  | `'rectangle' \| 'circle'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
-| `width`    | `string`                  | `'100%'`      | false    | CSS width (any length).                                          |
+| `width`    | `string`                  | `'100%'`      | false    | CSS width (any length); a rectangle never grows past its container. |
 | `height`   | `string`                  | `'1rem'`      | false    | CSS height (any length); for a circle, set equal to `width`.     |
 | `animated` | `boolean`                 | `true`        | false    | Shimmer while loading; suppressed under reduced motion.          |
 

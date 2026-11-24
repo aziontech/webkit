@@ -29,6 +29,10 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'flow-diagram-title'
   )
+
+  const LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) text-label-md text-(--text-default) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -42,7 +46,7 @@
       v-if="safeHref(href)"
       :href="safeHref(href) ?? undefined"
       :data-testid="`${testId}__link`"
-      class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+      :class="LINK_CLASS"
     >
       <span
         dir="auto"

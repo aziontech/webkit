@@ -116,27 +116,26 @@ A timing has no "previous period" the reader acts on here, so these tiles carry 
 
 ### O. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each region's content, naming what
-did not load (`Couldn't load overall score.`); the score shows a dash with no band.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `HealthScoreOverall`, `HealthScoreHourlyRow`, `HealthScoreIncident`, `HealthScoreBand`, `HealthScorePeriod` and `HealthScoreDashboardProps` are exported from `dashboard-health-score.vue`, and `sample.ts` holds the sample score, rankings, hourly rows and incidents the block renders when a data prop is left out (and never while `loading` or `error` is set). The RealUser variant is a separate page and keeps its own sample figures.
 
-| Prop / model     | Type                     | What it does                                                                                                               |
-| ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `overall`        | `HealthScoreOverall`     | The score, its band, the top cause and the score line with its labels. `score: null` shows a dash, no band.                |
-| `applications`   | `BarListItem[]`          | Score per application, lowest first; the cause goes in the name (`Video calls · packet loss`).                             |
-| `locations`      | `BarListItem[]`          | Score per location, the same shape.                                                                                        |
-| `hourly`         | `HealthScoreHourlyRow[]` | One tracker row per application with one block per hour.                                                                   |
-| `incidents`      | `HealthScoreIncident[]`  | The incidents still open, each linking to `/incidents/<id>`. Pass `[]` for `No open incidents`.                            |
-| `loading`        | `boolean`                | The period is loading: every region shows its Skeleton.                                                                    |
-| `error`          | `string`                 | Why the request failed, shown after `Couldn't load overall score.` (hourly score, open incidents…) in each danger `Alert`. |
-| `v-model:period` | `HealthScorePeriod`      | The period every region reads and the empty states name; refetch when it changes. Defaults to `Last 24 hours`.             |
+| Prop / model     | Type                     | What it does                                                                                                                   |
+| ---------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `overall`        | `HealthScoreOverall`     | The score, its band, the top cause and the score line with its labels. `score: null` shows a dash, no band.                    |
+| `applications`   | `BarListItem[]`          | Score per application, lowest first; the cause goes in the name (`Video calls · packet loss`).                                 |
+| `locations`      | `BarListItem[]`          | Score per location, the same shape.                                                                                            |
+| `hourly`         | `HealthScoreHourlyRow[]` | One tracker row per application with one block per hour.                                                                       |
+| `incidents`      | `HealthScoreIncident[]`  | The incidents still open, each linking to `/incidents/<id>`. Pass `[]` for `No open incidents`.                                |
+| `loading`        | `boolean`                | The period is loading: every region shows its Skeleton.                                                                        |
+| `error`          | `string`                 | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:period` | `HealthScorePeriod`      | The period every region reads and the empty states name; refetch when it changes. Defaults to `Last 24 hours`.                 |
 
-| Event   | Payload   | When                              |
-| ------- | --------- | --------------------------------- |
-| `retry` | `(event)` | Retry in any of the error alerts. |
+| Event   | Payload   | When                             |
+| ------- | --------- | -------------------------------- |
+| `retry` | `(event)` | Retry in the page's error alert. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -202,7 +201,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading`; the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
 - Empty: a period with no samples (`overall.score: null`, every list `[]`); the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
 - RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
-- Error: `error`; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -215,7 +214,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the period loads, the chart, the rankings and the trackers render their own Skeleton and the incidents hold Skeleton rows, so the page does not reflow when data arrives.
 - `Empty` — A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
-- `Error` — The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `RealUser` — Real-user monitoring: a Period Select in the header drives four vitals StatTiles (page load time, largest contentful paint, first input delay, sessions) that read a median value beside its unit with no delta and a Hint on the label, over a two-column grid of trend StatTiles with the latest value, a sparkline of the period and the period name in the aside.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-health-score", { variant })`, or the file under `blocks/dashboard/dashboard-health-score/variants/`.
@@ -226,21 +225,19 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
-  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import Tracker, { type TrackerItem } from '@aziontech/webkit/tracker'
+  import type { TrackerItem } from '@aziontech/webkit/tracker'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
+  import HourlyScoreCard from './parts/hourly-score-card.vue'
+  import OpenIncidentsCard from './parts/open-incidents-card.vue'
   import {
     sampleApplications,
     sampleHourly,
@@ -408,6 +405,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </div>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the experience score. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-health-score__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
@@ -430,13 +435,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load overall score. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <div
               v-else
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
@@ -492,13 +496,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load score per application. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="applications"
@@ -519,13 +522,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Alert
+            <p
               v-if="error"
-              severity="danger"
-              :label="`Couldn't load score per location. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
+              class="text-body-sm text-(--text-muted)"
+            >
+              Not available.
+            </p>
             <BarList
               v-else
               :items="locations"
@@ -539,171 +541,20 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </ChartCard.Content>
         </ChartCard>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Hourly score</ChartCard.Title>
-              <Hint content="One block per hour for each application, colored by its band." />
-            </span>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load hourly score. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <ul
-              v-else-if="loading"
-              aria-busy="true"
-              class="flex flex-col gap-(--spacing-sm)"
-            >
-              <li
-                v-for="index in 4"
-                :key="index"
-                class="grid grid-cols-1 items-center gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
-              >
-                <Skeleton
-                  width="70%"
-                  height="1rem"
-                />
-                <Tracker
-                  :items="[]"
-                  loading
-                />
-                <Skeleton
-                  width="3rem"
-                  height="1.25rem"
-                />
-              </li>
-            </ul>
-            <ul
-              v-else-if="hourly.length"
-              class="flex flex-col gap-(--spacing-sm)"
-            >
-              <li
-                v-for="application in hourly"
-                :key="application.id"
-                class="grid grid-cols-1 items-center gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
-              >
-                <span class="truncate text-label-md text-(--text-default)">{{
-                  application.name
-                }}</span>
-                <Tracker
-                  :items="application.blocks"
-                  :aria-label="application.name + ', score per hour'"
-                />
-                <span class="flex md:justify-end">
-                  <Tag
-                    :label="application.band.label"
-                    :severity="application.band.severity"
-                    size="small"
-                  />
-                </span>
-              </li>
-            </ul>
-            <EmptyState
-              v-else
-              size="small"
-              icon="az az-chart-bar"
-              :title="'No samples in ' + phrase"
-              description="Each application gets a row once its first sample arrives. Select a longer period."
-            />
-          </ChartCard.Content>
-        </ChartCard>
+        <HourlyScoreCard
+          :hourly="hourly"
+          :loading="loading"
+          :error="error"
+          :phrase="phrase"
+        />
       </div>
 
-      <Card
-        title="Open incidents"
-        :padded="error !== ''"
-      >
-        <template #default>
-          <Alert
-            v-if="error"
-            severity="danger"
-            :label="`Couldn't load open incidents. ${error}`"
-            action-label="Retry"
-            @action="(event) => emit('retry', event)"
-          />
-          <Item.List
-            v-else-if="loading"
-            key="item.list-1"
-            aria-busy="true"
-          >
-            <Item
-              v-for="index in 3"
-              :key="index"
-              size="small"
-              role="listitem"
-            >
-              <Item.Media>
-                <Skeleton
-                  variant="rectangle"
-                  width="2rem"
-                  height="2rem"
-                />
-              </Item.Media>
-              <Item.Content>
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <Skeleton
-                    width="30%"
-                    height="1rem"
-                  />
-                  <Skeleton
-                    width="55%"
-                    height="0.75rem"
-                  />
-                </div>
-              </Item.Content>
-            </Item>
-          </Item.List>
-          <Item.List
-            key="item.list-2"
-            v-else-if="incidents.length"
-          >
-            <Item
-              v-for="incident in incidents"
-              :key="incident.id"
-              :href="`/incidents/${incident.id}`"
-              size="small"
-            >
-              <Item.Media type="icon">
-                <i
-                  :class="incident.icon"
-                  aria-hidden="true"
-                />
-              </Item.Media>
-              <Item.Content>
-                <Item.Title>{{ incident.name }} · {{ incident.cause }}</Item.Title>
-                <Item.Description>
-                  {{ incident.scope }} · {{ incident.devices }} devices, {{ incident.share }}% of
-                  samples · Opened
-                  <time :datetime="incident.opened">{{ incident.openedLabel }}</time>
-                </Item.Description>
-              </Item.Content>
-              <Item.Actions>
-                <Tag
-                  :label="incident.band.label"
-                  :severity="incident.band.severity"
-                  size="small"
-                />
-              </Item.Actions>
-            </Item>
-          </Item.List>
-          <div
-            v-else
-            class="p-(--spacing-md)"
-          >
-            <EmptyState
-              size="small"
-              icon="az az-circle-check"
-              :title="'No open incidents in ' + phrase"
-              description="An incident opens when an application or a location stays poor for several samples in a row."
-            />
-          </div>
-        </template>
-      </Card>
+      <OpenIncidentsCard
+        :incidents="incidents"
+        :loading="loading"
+        :error="error"
+        :phrase="phrase"
+      />
     </div>
   </div>
 </template>
@@ -1658,4 +1509,308 @@ export const sampleIncidents: HealthScoreIncident[] = [
     }
   }
 ]
+
+export interface RealUserVital {
+  id: string
+  label: string
+  value: number
+  unit: string
+  decimals: number
+  description: string
+}
+
+export interface RealUserTrend {
+  id: string
+  label: string
+  unit: string
+  range: [number, number]
+}
+
+export const sampleVitals: RealUserVital[] = [
+  {
+    id: 'page-load-time',
+    label: 'Page load time',
+    value: 1.24,
+    unit: 's',
+    decimals: 2,
+    description: 'Median time to load the page, as measured in the browser.'
+  },
+  {
+    id: 'largest-contentful-paint',
+    label: 'Largest contentful paint',
+    value: 1.86,
+    unit: 's',
+    decimals: 2,
+    description: 'Median time until the largest element on the page is painted, across sessions.'
+  },
+  {
+    id: 'first-input-delay',
+    label: 'First input delay',
+    value: 18,
+    unit: 'ms',
+    decimals: 0,
+    description: 'Median delay between the first interaction and the page responding to it.'
+  },
+  {
+    id: 'sessions',
+    label: 'Sessions',
+    value: 412,
+    unit: 'K',
+    decimals: 0,
+    description: 'Real-user sessions measured in the period.'
+  }
+]
+
+export const sampleTrends: RealUserTrend[] = [
+  { id: 'page-load-time', label: 'Page load time', unit: 's', range: [0.9, 2.4] },
+  {
+    id: 'largest-contentful-paint',
+    label: 'Largest contentful paint',
+    unit: 's',
+    range: [1.2, 3.1]
+  },
+  { id: 'first-input-delay', label: 'First input delay', unit: 'ms', range: [8, 46] },
+  { id: 'sessions', label: 'Sessions', unit: 'K', range: [8, 32] }
+]
+
+const hashSeed = (seed: string): number =>
+  [...seed].reduce(
+    (hash, char) => Math.imul(hash ^ char.charCodeAt(0), 0x01000193) >>> 0,
+    0x811c9dc5
+  )
+
+const nextState = (state: number): number => {
+  let next = state ^ (state << 13)
+  next ^= next >>> 17
+  next ^= next << 5
+  return next >>> 0
+}
+
+export const sampleFractions = (seed: string, count: number): number[] => {
+  let state = hashSeed(seed)
+  return Array.from({ length: count }, () => {
+    state = nextState(state)
+    return (state % 1000) / 1000
+  })
+}
+```
+
+## `parts/hourly-score-card.vue`
+
+```ts
+<script setup lang="ts">
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Hint from '@aziontech/webkit/hint'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag from '@aziontech/webkit/tag'
+  import Tracker from '@aziontech/webkit/tracker'
+
+  import type { HealthScoreHourlyRow } from '../dashboard-health-score.vue'
+
+  export interface HourlyScoreCardProps {
+    /** One tracker row per application. */
+    hourly: HealthScoreHourlyRow[]
+    /** The period is loading. */
+    loading: boolean
+    /** Why the period could not load. */
+    error: string
+    /** The period in words, for the empty state. */
+    phrase: string
+  }
+
+  defineProps<HourlyScoreCardProps>()
+</script>
+
+<template>
+  <ChartCard :span="12">
+    <ChartCard.Header>
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+        <ChartCard.Title>Hourly score</ChartCard.Title>
+        <Hint content="One block per hour for each application, colored by its band." />
+      </span>
+    </ChartCard.Header>
+    <ChartCard.Content>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <ul
+        v-else-if="loading"
+        aria-busy="true"
+        class="flex flex-col gap-(--spacing-sm)"
+      >
+        <li
+          v-for="index in 4"
+          :key="index"
+          class="grid grid-cols-1 items-center gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
+        >
+          <Skeleton
+            width="70%"
+            height="1rem"
+          />
+          <Tracker
+            :items="[]"
+            loading
+          />
+          <Skeleton
+            width="3rem"
+            height="1.25rem"
+          />
+        </li>
+      </ul>
+      <ul
+        v-else-if="hourly.length"
+        class="flex flex-col gap-(--spacing-sm)"
+      >
+        <li
+          v-for="application in hourly"
+          :key="application.id"
+          class="grid grid-cols-1 items-center gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
+        >
+          <span class="truncate text-label-md text-(--text-default)">{{ application.name }}</span>
+          <Tracker
+            :items="application.blocks"
+            :aria-label="application.name + ', score per hour'"
+          />
+          <span class="flex md:justify-end">
+            <Tag
+              :label="application.band.label"
+              :severity="application.band.severity"
+              size="small"
+            />
+          </span>
+        </li>
+      </ul>
+      <EmptyState
+        v-else
+        size="small"
+        icon="az az-chart-bar"
+        :title="'No samples in ' + phrase"
+        description="Each application gets a row once its first sample arrives. Select a longer period."
+      />
+    </ChartCard.Content>
+  </ChartCard>
+</template>
+```
+
+## `parts/open-incidents-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Item from '@aziontech/webkit/item'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type { HealthScoreIncident } from '../dashboard-health-score.vue'
+
+  export interface OpenIncidentsCardProps {
+    /** The incidents still open. */
+    incidents: HealthScoreIncident[]
+    /** The period is loading. */
+    loading: boolean
+    /** Why the period could not load. */
+    error: string
+    /** The period in words, for the empty state. */
+    phrase: string
+  }
+
+  defineProps<OpenIncidentsCardProps>()
+</script>
+
+<template>
+  <Card
+    title="Open incidents"
+    :padded="error !== ''"
+  >
+    <template #default>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <Item.List
+        v-else-if="loading"
+        key="item.list-1"
+        aria-busy="true"
+      >
+        <Item
+          v-for="index in 3"
+          :key="index"
+          size="small"
+          role="listitem"
+        >
+          <Item.Media>
+            <Skeleton
+              variant="rectangle"
+              width="2rem"
+              height="2rem"
+            />
+          </Item.Media>
+          <Item.Content>
+            <div class="flex flex-col gap-(--spacing-xs)">
+              <Skeleton
+                width="30%"
+                height="1rem"
+              />
+              <Skeleton
+                width="55%"
+                height="0.75rem"
+              />
+            </div>
+          </Item.Content>
+        </Item>
+      </Item.List>
+      <Item.List
+        key="item.list-2"
+        v-else-if="incidents.length"
+      >
+        <Item
+          v-for="incident in incidents"
+          :key="incident.id"
+          :href="`/incidents/${incident.id}`"
+          size="small"
+        >
+          <Item.Media type="icon">
+            <i
+              :class="incident.icon"
+              aria-hidden="true"
+            />
+          </Item.Media>
+          <Item.Content>
+            <Item.Title>{{ incident.name }} · {{ incident.cause }}</Item.Title>
+            <Item.Description>
+              {{ incident.scope }} · {{ incident.devices }} devices, {{ incident.share }}% of
+              samples · Opened
+              <time :datetime="incident.opened">{{ incident.openedLabel }}</time>
+            </Item.Description>
+          </Item.Content>
+          <Item.Actions>
+            <Tag
+              :label="incident.band.label"
+              :severity="incident.band.severity"
+              size="small"
+            />
+          </Item.Actions>
+        </Item>
+      </Item.List>
+      <div
+        v-else
+        class="p-(--spacing-md)"
+      >
+        <EmptyState
+          size="small"
+          icon="az az-circle-check"
+          :title="'No open incidents in ' + phrase"
+          description="An incident opens when an application or a location stays poor for several samples in a row."
+        />
+      </div>
+    </template>
+  </Card>
+</template>
 ```

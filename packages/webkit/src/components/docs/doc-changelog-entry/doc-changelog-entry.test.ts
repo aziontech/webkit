@@ -37,11 +37,11 @@ describe('DocChangelogEntry', () => {
 
     it('renders one Tag chip per entry in tags', () => {
       const { getAllByTestId, getByText } = render(DocChangelogEntry, {
-        props: { label: 'August 19, 2026', tags: ['Console', 'Edge Functions'] }
+        props: { label: 'August 19, 2026', tags: ['Console', 'Functions'] }
       })
       expect(getAllByTestId('tag')).toHaveLength(2)
       expect(getByText('Console')).toBeInTheDocument()
-      expect(getByText('Edge Functions')).toBeInTheDocument()
+      expect(getByText('Functions')).toBeInTheDocument()
     })
 
     it('renders no description line and no tag row when they are empty', () => {

@@ -7,7 +7,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { checkBlockCodeNames } from './lib/block-code-names.mjs'
 import { checkDataContract } from './lib/block-data.mjs'
 import { readBlocks } from './lib/blocks.mjs'
-import { checkGuidelines, checkToastRegion, primaryComponents } from './lib/guidelines.mjs'
+import {
+  checkGuidelines,
+  checkToastRegion,
+  partSfcs,
+  primaryComponents
+} from './lib/guidelines.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -15,6 +20,19 @@ const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
 const BASELINE_PATH = resolve(SCRIPT_DIR, 'blocks-baseline.json')
 const PENDING_PATH = resolve(SCRIPT_DIR, 'guidelines-baseline.json')
 const DATA_BASELINE_PATH = resolve(SCRIPT_DIR, 'blocks-data-baseline.json')
+const DATA_MESSAGES = {
+  'variant-copy':
+    'the VARIANT variant repeats 90 % or more of the primary SFC. Import the primary and pass it other props or slots.',
+  'variant-fork':
+    'the VARIANT variant copies 60 % or more of the primary SFC and adds its own code, so it misses every later fix to the primary. ' +
+    'Import the primary and give it the prop, slot or event the state needs.',
+  'variant-sibling-copy':
+    'the VARIANT variant repeats 80 % or more of another variant of the block. Move the shared screen into a part or the primary and render it with props.',
+  'no-props':
+    'the primary SFC declares no props. Take the records, loading and error through typed props and emit the actions.',
+  'inline-records':
+    'the primary SFC holds sample records. Move them to a sample file listed in block.json "files" and pass them in as props.'
+}
 const SKILL_DIRS = [resolve(REPO_ROOT, 'skills')]
 
 export function skillExists(name, dirs = SKILL_DIRS) {
@@ -43,13 +61,15 @@ export function checkSummaryComponents(blocks) {
   const errors = []
   for (const [id, p] of Object.entries(blocks)) {
     const imported = new Set(
-      [p.sfc, ...(p.variants || []).map((v) => v.sfc)].flatMap((sfc) => primaryComponents(sfc))
+      [p.sfc, ...(p.variants || []).map((v) => v.sfc), ...partSfcs(p)].flatMap((sfc) =>
+        primaryComponents(sfc)
+      )
     )
     const named = [...String(p.summary || '').matchAll(/`([A-Z][A-Za-z0-9]*)`/g)].map((m) => m[1])
     for (const name of new Set(named)) {
       if (!imported.has(name))
         errors.push(
-          `blocks/${id}/block.json: the summary names \`${name}\`, which neither the primary nor a variant SFC imports`
+          `blocks/${id}/block.json: the summary names \`${name}\`, which no SFC of the block (primary, variant or part) imports`
         )
     }
   }
@@ -115,10 +135,34 @@ async function consumerLinter() {
       },
       plugins: { webkit: plugin },
       rules
+    },
+    {
+      files: ['**/*.{ts,js,mjs}'],
+      languageOptions: { parser: tsParser, ecmaVersion: 2022, sourceType: 'module' },
+      plugins: { webkit: plugin },
+      rules
     }
   ]
   const linter = new Linter({ configType: 'flat' })
   return (sfc, filename) => linter.verify(sfc, config, { filename })
+}
+
+const LINTED_LOCAL = /\.(vue|ts|js|mjs)$/
+
+export function blockSources(id, p) {
+  const sources = [
+    { name: p.primary, file: `${id.replace(/\//g, '__')}__${p.primary}.vue`, sfc: p.sfc },
+    ...(p.variants || []).map((v) => ({
+      name: v.name,
+      file: `${id.replace(/\//g, '__')}__${v.name}.vue`,
+      sfc: v.sfc
+    }))
+  ]
+  const local = { ...(p.files || {}), ...(p.localSources || {}) }
+  for (const [file, sfc] of Object.entries(local).sort(([a], [b]) => a.localeCompare(b)))
+    if (LINTED_LOCAL.test(file))
+      sources.push({ name: file, file: resolve(SCRIPT_DIR, '..', 'blocks', id, file), sfc })
+  return sources
 }
 
 export async function lintBlocks(blocks) {
@@ -126,13 +170,13 @@ export async function lintBlocks(blocks) {
   const counts = {}
   const samples = {}
   for (const [id, p] of Object.entries(blocks)) {
-    for (const variant of [{ name: p.primary, sfc: p.sfc }, ...(p.variants || [])]) {
-      const messages = lint(variant.sfc, `${id.replace(/\//g, '__')}__${variant.name}.vue`)
+    for (const source of blockSources(id, p)) {
+      const messages = lint(source.sfc, source.file)
       for (const m of messages) {
         const rule = m.ruleId || 'parse-error'
         counts[id] ||= {}
         counts[id][rule] = (counts[id][rule] || 0) + 1
-        samples[id] ||= `${variant.name}: ${m.message}`
+        samples[id] ||= `${source.name}:${m.line}: ${m.message}`
       }
     }
   }
@@ -180,15 +224,7 @@ async function main() {
   } else {
     for (const key of data.introduced) {
       const [id, kind, variant] = key.split(':')
-      errors.push(
-        kind === 'variant-copy'
-          ? `blocks/${id}: the ${variant} variant repeats 90 % or more of the primary SFC. Import the primary and pass it other props or slots.`
-          : kind === 'variant-fork'
-            ? `blocks/${id}: the ${variant} variant copies 60 % or more of the primary SFC and adds its own code, so it misses every later fix to the primary. Import the primary and give it the prop, slot or event the state needs.`
-            : kind === 'no-props'
-              ? `blocks/${id}: the primary SFC declares no props. Take the records, loading and error through typed props and emit the actions.`
-              : `blocks/${id}: the primary SFC holds sample records. Move them to a sample file listed in block.json "files" and pass them in as props.`
-      )
+      errors.push(`blocks/${id}: ${DATA_MESSAGES[kind].replace('VARIANT', variant)}`)
     }
     if (data.fixed.length)
       process.stdout.write(
@@ -213,7 +249,7 @@ async function main() {
   for (const e of errors) process.stderr.write(`✖ ${e}\n`)
   for (const r of regressions) {
     process.stderr.write(
-      `✖ ${r.id}: ${r.count} × ${r.rule} in the block SFC (baseline allows ${r.allowed}). ${samples[r.id] ?? ''}\n`
+      `✖ ${r.id}: ${r.count} × ${r.rule} in the block page, variants and local files (baseline allows ${r.allowed}). ${samples[r.id] ?? ''}\n`
     )
   }
   if (fixed.length && !update) {
@@ -223,7 +259,7 @@ async function main() {
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, no Toaster outside an app root (blocks/shell), no block code name (AccountBilling) in text a person reads, and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
+      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, a page, variants and local parts, lib modules and composables that pass the consumer lint, no Toaster outside an app root (blocks/shell), no block code name (AccountBilling) in text a person reads, and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
     )
     process.exit(1)
   }

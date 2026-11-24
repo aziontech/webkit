@@ -1,15 +1,25 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { join, posix } from 'node:path'
 
-import { checksum } from '../../src/cli/blocks.js'
+import { checksum, planAdd } from '../../src/cli/blocks.js'
+import { catalogFor, resolveWebkit } from '../../src/cli/source.js'
 import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './lib/cli-project.mjs'
 
 const BLOCK = 'create/create-hub'
 const canonical = (file) => readFileSync(join(PKG_ROOT, 'blocks', BLOCK, file), 'utf8')
+const PRIMARY_IMPORTS = {
+  './parts/repository-list.vue': './create-hub-repository-list.vue',
+  './parts/template-gallery.vue': './create-hub-template-gallery.vue',
+  './sample': './create-hub.sample',
+  './types': './create-hub.types'
+}
 const copiedPrimary = () =>
-  canonical('create-hub.vue').replace("'./sample'", "'./create-hub.sample'")
+  Object.entries(PRIMARY_IMPORTS).reduce(
+    (text, [from, to]) => text.replaceAll(`'${from}'`, `'${to}'`),
+    canonical('create-hub.vue')
+  )
 const copiedVariant = (file) =>
   canonical(file)
     .replace("'../create-hub.vue'", "'./create-hub.vue'")
@@ -27,20 +37,29 @@ test('add copies the primary SFC into src/views and records it in the manifest',
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     const entry = manifest.blocks[BLOCK]
     assert.equal(entry.version, JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'))).version)
-    assert.deepEqual(entry.files, [
-      {
-        path: 'src/views/create-hub.sample.ts',
-        source: `blocks/${BLOCK}/sample.ts`,
-        variant: 'Data',
-        checksum: checksum(sample)
-      },
+    const sampleEntry = entry.files.find((f) => f.path === 'src/views/create-hub.sample.ts')
+    assert.deepEqual(sampleEntry, {
+      path: 'src/views/create-hub.sample.ts',
+      source: `blocks/${BLOCK}/sample.ts`,
+      variant: 'Data',
+      checksum: checksum(sample)
+    })
+    assert.deepEqual(
+      entry.files.find((f) => f.path === 'src/views/create-hub.vue'),
       {
         path: 'src/views/create-hub.vue',
         source: `blocks/${BLOCK}/create-hub.vue`,
         variant: 'Default',
-        imports: { './sample': './create-hub.sample' },
+        imports: PRIMARY_IMPORTS,
         checksum: checksum(copied)
       }
+    )
+    assert.deepEqual(entry.files.map((f) => f.path).sort(), [
+      'src/views/create-hub-repository-list.vue',
+      'src/views/create-hub-template-gallery.vue',
+      'src/views/create-hub.sample.ts',
+      'src/views/create-hub.types.ts',
+      'src/views/create-hub.vue'
     ])
     assert.match(r.stdout, /component: \(\) => import\('\.\/views\/create-hub\.vue'\)/)
     assert.match(r.stderr, /not installed in this project/)
@@ -64,6 +83,9 @@ test('add resolves a short name, copies the chosen variant and the guidelines si
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
+      'Data',
+      'Data',
+      'Data',
       'Data',
       'Default'
     ])
@@ -89,6 +111,9 @@ test('add --variant after the primary was added keeps the primary copy and adds 
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
+      'Data',
+      'Data',
+      'Data',
       'Data',
       'Default'
     ])
@@ -196,10 +221,15 @@ test('add copies the block data files beside the SFC and points every local impo
     assert.equal(r.code, 0, r.stderr)
     const primary = readFileSync(join(dir, 'src/views/view-table.vue'), 'utf8')
     assert.match(primary, /from '\.\/view-table\.sample'/)
-    assert.equal(primary, shipped('view-table.vue').replace("'./sample'", "'./view-table.sample'"))
+    assert.equal(
+      primary,
+      shipped('view-table.vue')
+        .replace("'./sample'", "'./view-table.sample'")
+        .replace("'./parts/collection-controls.vue'", "'./view-table-collection-controls.vue'")
+    )
     assert.equal(
       readFileSync(join(dir, 'src/views/view-table.sample.ts'), 'utf8'),
-      shipped('sample.ts')
+      shipped('sample.ts').replace("'./lib/deployments'", "'./view-table.deployments'")
     )
     const variant = readFileSync(join(dir, 'src/views/view-table-empty.vue'), 'utf8')
     assert.match(variant, /import ViewTable from '\.\/view-table\.vue'/)
@@ -208,9 +238,37 @@ test('add copies the block data files beside the SFC and points every local impo
     assert.deepEqual(
       files.map((f) => [f.path, f.variant, f.imports]),
       [
+        ['src/views/view-table-collection-controls.vue', 'Data', undefined],
+        [
+          'src/views/view-table-deployments-page.vue',
+          'Data',
+          {
+            '../lib/deployments': './view-table.deployments',
+            '../sample': './view-table.sample',
+            './collection-controls.vue': './view-table-collection-controls.vue',
+            './deployments-table.vue': './view-table-deployments-table.vue'
+          }
+        ],
+        [
+          'src/views/view-table-deployments-table.vue',
+          'Data',
+          { '../lib/deployments': './view-table.deployments' }
+        ],
         ['src/views/view-table-empty.vue', 'Empty', { '../view-table.vue': './view-table.vue' }],
-        ['src/views/view-table.sample.ts', 'Data', undefined],
-        ['src/views/view-table.vue', 'Default', { './sample': './view-table.sample' }]
+        ['src/views/view-table.deployments.ts', 'Data', undefined],
+        [
+          'src/views/view-table.sample.ts',
+          'Data',
+          { './lib/deployments': './view-table.deployments' }
+        ],
+        [
+          'src/views/view-table.vue',
+          'Default',
+          {
+            './parts/collection-controls.vue': './view-table-collection-controls.vue',
+            './sample': './view-table.sample'
+          }
+        ]
       ]
     )
     const diff = cliJson(dir, 'diff', 'view/view-table')
@@ -235,10 +293,23 @@ test('add renames the data files after a --dest name', () => {
     assert.equal(r.code, 0)
     assert.deepEqual(
       r.json.files.map((f) => f.path),
-      ['src/screens/Resources.vue', 'src/screens/Resources.sample.ts']
+      [
+        'src/screens/Resources.vue',
+        'src/screens/Resources.sample.ts',
+        'src/screens/Resources.deployments.ts',
+        'src/screens/ResourcesCollectionControls.vue',
+        'src/screens/ResourcesDeploymentsPage.vue',
+        'src/screens/ResourcesDeploymentsTable.vue'
+      ]
     )
-    assert.deepEqual(r.json.files[0].imports, { './sample': './Resources.sample' })
-    assert.deepEqual(r.json.files[1].imports, { './view-table.vue': './Resources.vue' })
+    assert.deepEqual(r.json.files[0].imports, {
+      './parts/collection-controls.vue': './ResourcesCollectionControls.vue',
+      './sample': './Resources.sample'
+    })
+    assert.deepEqual(r.json.files[1].imports, {
+      './lib/deployments': './Resources.deployments',
+      './view-table.vue': './Resources.vue'
+    })
   } finally {
     cleanup(dir)
   }
@@ -249,11 +320,158 @@ test('add copies a shared SFC from the block files with a variant that renders i
   try {
     const r = cli(dir, 'add', 'auth/auth-sign-in', '--variant', 'RejectedToken')
     assert.equal(r.code, 0, r.stderr)
-    const card = join(dir, 'src/views/auth-sign-in.token-sign-in.vue')
+    const card = join(dir, 'src/views/auth-sign-in-token-sign-in.vue')
     assert.ok(existsSync(card))
     const variant = readFileSync(join(dir, 'src/views/auth-sign-in-rejected-token.vue'), 'utf8')
-    assert.match(variant, /from '\.\/auth-sign-in\.token-sign-in\.vue'/)
+    assert.match(variant, /from '\.\/auth-sign-in-token-sign-in\.vue'/)
     assert.match(variant, /error="rejected"/)
+  } finally {
+    cleanup(dir)
+  }
+})
+
+const RELATIVE_IMPORT = /(?:\bfrom\s+|\bimport\s*\(\s*|\bimport\s+)['"](\.{1,2}\/[^'"]+)['"]/g
+const IMPORT_SUFFIXES = ['', '.ts', '.vue', '.js', '/index.ts']
+
+function unresolvedImports(files) {
+  const planned = new Set(files.map((f) => f.path))
+  const out = []
+  for (const file of files) {
+    for (const m of file.content.matchAll(RELATIVE_IMPORT)) {
+      const target = posix.normalize(
+        posix.join(posix.dirname(file.path), m[1].replace(/[?#].*$/, ''))
+      )
+      if (!IMPORT_SUFFIXES.some((s) => planned.has(target + s))) out.push(`${file.path} -> ${m[1]}`)
+    }
+  }
+  return out
+}
+
+function blockIds(dir = join(PKG_ROOT, 'blocks'), prefix = '') {
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) => {
+      const id = prefix ? `${prefix}/${entry.name}` : entry.name
+      const here = existsSync(join(dir, entry.name, 'block.json')) ? [id] : []
+      return here.length ? here : blockIds(join(dir, entry.name), id)
+    })
+}
+
+test('add copies the sibling variant a variant imports and points the import at the copy', () => {
+  const dir = makeProject()
+  const shipped = (file) =>
+    readFileSync(join(PKG_ROOT, 'blocks/settings/settings-form', file), 'utf8')
+  try {
+    const r = cli(dir, 'add', 'settings/settings-form', '--variant', 'SavingOneGroup')
+    assert.equal(r.code, 0, r.stderr)
+    const variant = readFileSync(join(dir, 'src/views/settings-form-saving-one-group.vue'), 'utf8')
+    assert.equal(
+      variant,
+      shipped('variants/saving-one-group.vue').replace(
+        "'./save-per-group.vue'",
+        "'./settings-form-save-per-group.vue'"
+      )
+    )
+    assert.ok(existsSync(join(dir, 'src/views/settings-form-save-per-group.vue')))
+    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const files = manifest.blocks['settings/settings-form'].files
+    assert.deepEqual(files.map((f) => f.variant).sort(), [
+      'Data',
+      'Data',
+      'Data',
+      'Data',
+      'SaveAll',
+      'SavePerGroup',
+      'SavingOneGroup'
+    ])
+    for (const part of [
+      'settings-form-general-group-card.vue',
+      'settings-form-notifications-group-card.vue',
+      'settings-form.use-card-save.ts'
+    ])
+      assert.ok(existsSync(join(dir, `src/views/${part}`)), part)
+    assert.deepEqual(files.find((f) => f.variant === 'SavingOneGroup').imports, {
+      './save-per-group.vue': './settings-form-save-per-group.vue'
+    })
+    assert.ok(!existsSync(join(dir, 'src/views/settings-form-save-per-card.vue')))
+    const diff = cliJson(dir, 'diff', 'settings/settings-form')
+    assert.ok(diff.json.files.every((f) => f.status === 'identical'))
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('add keeps a sibling variant that was copied before and edited', () => {
+  const dir = makeProject()
+  try {
+    assert.equal(cli(dir, 'add', 'settings/settings-form', '--variant', 'SavePerGroup').code, 0)
+    const sibling = join(dir, 'src/views/settings-form-save-per-group.vue')
+    const edited = `${readFileSync(sibling, 'utf8')}<!-- mine -->\n`
+    writeFileSync(sibling, edited)
+    const r = cli(dir, 'add', 'settings/settings-form', '--variant', 'SavingOneGroup')
+    assert.equal(r.code, 0, r.stderr)
+    assert.equal(readFileSync(sibling, 'utf8'), edited)
+    assert.ok(existsSync(join(dir, 'src/views/settings-form-saving-one-group.vue')))
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('add reaches a part through the sibling variant a variant imports', () => {
+  const dir = makeProject()
+  try {
+    const r = cli(dir, 'add', 'create/create-page', '--variant', 'RequiredFields')
+    assert.equal(r.code, 0, r.stderr)
+    const variant = readFileSync(join(dir, 'src/views/create-page-required-fields.vue'), 'utf8')
+    assert.match(variant, /import CreateService from '\.\/create-page-create-service\.vue'/)
+    const sibling = readFileSync(join(dir, 'src/views/create-page-create-service.vue'), 'utf8')
+    assert.match(sibling, /from '\.\/create-page-create-service-form\.vue'/)
+    const part = readFileSync(join(dir, 'src/views/create-page-create-service-form.vue'), 'utf8')
+    assert.match(part, /from '\.\/create-page-creation-header\.vue'/)
+    assert.match(part, /from '\.\/create-page-discard-dialog\.vue'/)
+    assert.match(part, /from '\.\/create-page\.use-create-form'/)
+    for (const file of [
+      'create-page-creation-header.vue',
+      'create-page-discard-dialog.vue',
+      'create-page.use-create-form.ts'
+    ]) {
+      assert.ok(existsSync(join(dir, `src/views/${file}`)), file)
+    }
+    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const paths = manifest.blocks['create/create-page'].files.map((f) => f.path)
+    assert.equal(new Set(paths).size, paths.length)
+    assert.ok(
+      !paths.some((path) => /create-page-create-(zone|purge|organization)\.vue$/.test(path))
+    )
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('every block and variant plans a copy whose relative imports all point at planned files', () => {
+  const dir = makeProject()
+  try {
+    const webkit = resolveWebkit(dir)
+    const catalog = catalogFor(webkit)
+    const problems = []
+    let plans = 0
+    for (const id of blockIds()) {
+      const meta = JSON.parse(readFileSync(join(PKG_ROOT, 'blocks', id, 'block.json'), 'utf8'))
+      for (const variant of [undefined, ...(meta.variants || []).map((v) => v.name)]) {
+        const label = `${id}${variant ? ` --variant ${variant}` : ''}`
+        const plan = planAdd(dir, webkit, catalog, id, { variant })
+        plans += 1
+        if (!plan.files) {
+          problems.push(`${label}: ${plan.errors.join(' ')}`)
+          continue
+        }
+        const paths = plan.files.map((f) => f.path)
+        if (new Set(paths).size !== paths.length) problems.push(`${label}: two files share a path`)
+        problems.push(...unresolvedImports(plan.files).map((miss) => `${label}: ${miss}`))
+      }
+    }
+    assert.ok(plans > 100, `${plans} plans`)
+    assert.deepEqual(problems, [])
   } finally {
     cleanup(dir)
   }

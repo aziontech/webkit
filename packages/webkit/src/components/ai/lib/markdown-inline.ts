@@ -1,69 +1,118 @@
-import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
+import { type Component, defineComponent, h, type PropType, type VNodeChild } from 'vue'
 
-import Citation from '../citation/citation.vue'
+import { useTranslate } from '../../../composables/use-translate'
+import * as en from '../../../locales/en'
 import type { SourcesItem } from '../sources/types'
-import { sourceAnchor } from '../sources/types'
 import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 
 const EXTERNAL = /^https?:/i
 
-function renderNodes(
-  nodes: MarkdownInlineNode[],
-  sources: SourcesItem[],
-  anchor: string
-): VNodeChild[] {
-  return nodes.map((node) => {
-    switch (node.type) {
-      case 'text':
-        return node.value
-      case 'break':
-        return h('br')
-      case 'strong':
-        return h('strong', { class: 'font-semibold' }, renderNodes(node.children, sources, anchor))
-      case 'em':
-        return h('em', renderNodes(node.children, sources, anchor))
-      case 'code':
-        return h(
-          'code',
-          {
-            dir: 'ltr',
-            class:
-              'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default)'
-          },
-          node.value
-        )
-      case 'link':
-        return h(
-          'a',
-          {
-            href: node.href,
-            target: EXTERNAL.test(node.href) ? '_blank' : undefined,
-            rel: EXTERNAL.test(node.href) ? 'noopener noreferrer' : undefined,
-            class:
-              'text-(--text-link) underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
-          },
-          renderNodes(node.children, sources, anchor)
-        )
-      case 'citation': {
-        const source = sources[node.index - 1]
-        return h(Citation, {
-          index: node.index,
-          title: source?.title ?? '',
-          href: anchor && source ? `#${sourceAnchor(anchor, node.index)}` : ''
+const CODE_CLASS =
+  'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default)'
+const EXTERNAL_ICON_CLASS =
+  'az az-external-link ms-0.5 inline-block text-body-xs leading-none no-underline'
+const LINK_CLASS =
+  'text-(--text-link) underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+
+type ContainerNode = Extract<MarkdownInlineNode, { children: MarkdownInlineNode[] }>
+type LeafNode = Exclude<MarkdownInlineNode, ContainerNode>
+
+interface RenderContext {
+  sources: SourcesItem[]
+  citation?: Component
+  newTab: string
+}
+
+function renderLink(href: string, children: VNodeChild[], newTab: string): VNodeChild {
+  if (!EXTERNAL.test(href)) return h('a', { href, class: LINK_CLASS }, children)
+  return h('a', { href, target: '_blank', rel: 'noopener noreferrer', class: LINK_CLASS }, [
+    ...children,
+    ' ',
+    h('span', { class: 'sr-only' }, newTab),
+    h('i', { class: EXTERNAL_ICON_CLASS, 'aria-hidden': 'true' })
+  ])
+}
+
+function renderContainer(node: ContainerNode, context: RenderContext): VNodeChild {
+  const children = renderNodes(node.children, context)
+  switch (node.type) {
+    case 'strong':
+      return h('strong', { class: 'font-semibold' }, children)
+    case 'em':
+      return h('em', children)
+    case 'link':
+      return renderLink(node.href, children, context.newTab)
+  }
+}
+
+function renderLeaf(node: LeafNode, { sources, citation }: RenderContext): VNodeChild {
+  switch (node.type) {
+    case 'text':
+      return node.value
+    case 'break':
+      return h('br')
+    case 'code':
+      return h('code', { dir: 'ltr', class: CODE_CLASS }, node.value)
+    case 'citation':
+      return citation
+        ? h(citation, { indexes: node.indexes, sources })
+        : `[${node.indexes.join('][')}]`
+  }
+}
+
+const CLOSING = /^\s+(?=[.,;:!?)\]])/
+const WORD_START = /^[\p{L}\p{N}]/u
+const OPEN_END = /[\s([{"'“‘]$/
+
+function citationSpacing(nodes: MarkdownInlineNode[]): MarkdownInlineNode[] {
+  if (!nodes.some((node) => node.type === 'citation')) return nodes
+  const out: MarkdownInlineNode[] = []
+  nodes.forEach((node, index) => {
+    const before = nodes[index - 1]
+    const after = nodes[index + 1]
+    if (node.type === 'citation') {
+      if (before?.type === 'citation') out.push({ type: 'text', value: ' ' })
+      out.push(node)
+      return
+    }
+    if (node.type !== 'text') {
+      out.push(node)
+      return
+    }
+    let value = node.value
+    if (before?.type === 'citation') {
+      value = value.replace(CLOSING, '')
+      if (WORD_START.test(value)) value = ` ${value}`
+    }
+    if (after?.type === 'citation' && !OPEN_END.test(value)) value = `${value} `
+    out.push({ type: 'text', value })
+  })
+  return out
+}
+
+function renderNodes(nodes: MarkdownInlineNode[], context: RenderContext): VNodeChild[] {
+  return citationSpacing(nodes).map((node) =>
+    'children' in node ? renderContainer(node, context) : renderLeaf(node, context)
+  )
+}
+
+export function createMarkdownInline(citation?: Component) {
+  return defineComponent({
+    name: 'MarkdownInline',
+    props: {
+      nodes: { type: Array as PropType<MarkdownInlineNode[]>, required: true },
+      sources: { type: Array as PropType<SourcesItem[]>, default: () => [] }
+    },
+    setup(props) {
+      const { t } = useTranslate({ common: en.common })
+      return () =>
+        renderNodes(props.nodes, {
+          sources: props.sources,
+          citation,
+          newTab: t('common.newTab')
         })
-      }
     }
   })
 }
 
-export default defineComponent({
-  name: 'MarkdownInline',
-  props: {
-    nodes: { type: Array as PropType<MarkdownInlineNode[]>, required: true },
-    sources: { type: Array as PropType<SourcesItem[]>, default: () => [] },
-    anchor: { type: String, default: '' }
-  },
-  setup(props) {
-    return () => renderNodes(props.nodes, props.sources, props.anchor)
-  }
-})
+export default createMarkdownInline()

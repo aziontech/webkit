@@ -26,6 +26,19 @@ describe('account-change-plan-drawer', () => {
       return dialog() as HTMLElement
     })
     expect(panel.querySelectorAll('[data-testid="plan-feature-list"]').length).toBe(3)
+    const grid = panel.querySelector('[data-slot="plan-grid"]')!
+    expect(grid.classList.contains('@md:grid-cols-2')).toBe(true)
+  })
+
+  it('opens the checkout at the top of its body, not on the first form field', async () => {
+    render(Checkout)
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    await waitFor(() =>
+      expect((document.activeElement as HTMLElement | null)?.hasAttribute('data-autofocus')).toBe(
+        true
+      )
+    )
+    expect(dialog()!.contains(document.activeElement)).toBe(true)
   })
 
   it('renders the plans it is given and emits plan-select and upgrade', async () => {
@@ -44,7 +57,7 @@ describe('account-change-plan-drawer', () => {
               monthly: {
                 value: '40',
                 prefix: '$',
-                suffix: '/ mon',
+                suffix: '/ month',
                 showPrefix: true,
                 showSuffix: true,
                 details: 'Billed monthly'
@@ -52,7 +65,7 @@ describe('account-change-plan-drawer', () => {
               yearly: {
                 value: '32',
                 prefix: '$',
-                suffix: '/ mon',
+                suffix: '/ month',
                 showPrefix: true,
                 showSuffix: true,
                 details: 'Billed annually'

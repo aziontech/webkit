@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, inject, ref, useAttrs } from 'vue'
 
   import { useDirection } from '../../../../composables/use-direction'
+  import { useElementListener } from '../../../../composables/use-element-listener'
+  import { usePointerDrag } from '../../../../composables/use-pointer-drag'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { ResizableInjectionKey, type ResizablePaneApi } from '../injection-key'
@@ -37,7 +39,7 @@
   const NUDGE_STEP = 24
 
   const handleEl = ref<globalThis.HTMLElement | null>(null)
-  const resizing = ref(false)
+  const { dragging: resizing, startDrag } = usePointerDrag()
   const dir = useDirection(handleEl)
 
   const target = (): { pane: ResizablePaneApi; sign: 1 | -1 } | null => {
@@ -65,8 +67,6 @@
   const valueMin = computed(() => current.value?.min() ?? 0)
   const valueMax = computed(() => current.value?.max() ?? 0)
 
-  let stopDrag: (() => void) | null = null
-
   const startResize = (event: globalThis.PointerEvent) => {
     if (props.disabled) return
     const hit = target()
@@ -76,34 +76,18 @@
     const origin = horizontal ? event.clientX : event.clientY
     const start = hit.pane.measure()
 
-    resizing.value = true
-    handleEl.value?.setPointerCapture?.(event.pointerId)
-    globalThis.document.body.style.userSelect = 'none'
-    globalThis.document.body.style.cursor = horizontal ? 'col-resize' : 'row-resize'
-
-    const onMove = (moveEvent: globalThis.PointerEvent) => {
-      const physical = (horizontal ? moveEvent.clientX : moveEvent.clientY) - origin
-      const delta = horizontal && dir.value === 'rtl' ? -physical : physical
-      hit.pane.setBasis(start + delta * hit.sign)
-    }
-
-    stopDrag = () => {
-      resizing.value = false
-      globalThis.document.body.style.removeProperty('user-select')
-      globalThis.document.body.style.removeProperty('cursor')
-      globalThis.window.removeEventListener('pointermove', onMove)
-      globalThis.window.removeEventListener('pointerup', stopDrag as () => void)
-      globalThis.window.removeEventListener('pointercancel', stopDrag as () => void)
-      stopDrag = null
-    }
-
-    globalThis.window.addEventListener('pointermove', onMove)
-    globalThis.window.addEventListener('pointerup', stopDrag)
-    globalThis.window.addEventListener('pointercancel', stopDrag)
-    event.preventDefault()
+    startDrag(event, {
+      captureEl: handleEl.value,
+      cursor: horizontal ? 'col-resize' : 'row-resize',
+      onMove: (moveEvent) => {
+        const physical = (horizontal ? moveEvent.clientX : moveEvent.clientY) - origin
+        const delta = horizontal && dir.value === 'rtl' ? -physical : physical
+        hit.pane.setBasis(start + delta * hit.sign)
+      }
+    })
   }
 
-  const nudge = (direction: -1 | 1) => {
+  const nudge = (direction: number) => {
     if (props.disabled) return
     const hit = target()
     if (!hit) return
@@ -124,7 +108,39 @@
     hit.pane.setBasis(hit.pane.collapsed() ? hit.pane.min() : 0)
   }
 
-  onScopeDispose(() => stopDrag?.())
+  const ARROW_STEPS: Partial<Record<string, ['horizontal' | 'vertical', number]>> = {
+    ArrowLeft: ['horizontal', -1],
+    ArrowRight: ['horizontal', 1],
+    ArrowUp: ['vertical', -1],
+    ArrowDown: ['vertical', 1]
+  }
+
+  const onKeydown = (event: globalThis.KeyboardEvent) => {
+    const arrow = ARROW_STEPS[event.key]
+    if (arrow) {
+      const [axis, step] = arrow
+      if (axis === orientation.value)
+        nudge(axis === 'horizontal' && dir.value === 'rtl' ? -step : step)
+    } else if (event.key === 'Home') toExtreme('min')
+    else if (event.key === 'End') toExtreme('max')
+    else if (event.key === 'Enter') toggleCollapse()
+    else return
+    event.preventDefault()
+  }
+
+  useElementListener(handleEl, 'keydown', onKeydown)
+
+  const ROOT_CLASS =
+    'relative z-10 shrink-0 touch-none bg-(--border-default) outline-none ' +
+    'data-[orientation=horizontal]:pointer-coarse:before:-inset-x-4.5 data-[orientation=vertical]:pointer-coarse:before:-inset-y-4.5 ' +
+    "transition-colors duration-fast-02 ease-productive-entrance before:absolute before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 " +
+    'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[orientation=horizontal]:w-(--spacing-2xs) data-[orientation=horizontal]:cursor-col-resize data-[orientation=horizontal]:before:inset-y-0 ' +
+    'data-[orientation=horizontal]:before:-inset-x-2 data-[orientation=vertical]:h-(--spacing-2xs) data-[orientation=vertical]:cursor-row-resize ' +
+    'data-[orientation=vertical]:before:inset-x-0 data-[orientation=vertical]:before:-inset-y-2 ' +
+    'data-[resizing]:bg-(--accent) ' +
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-default data-[disabled]:opacity-40 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -143,14 +159,7 @@
     :data-orientation="orientation"
     :data-resizing="resizing || null"
     :data-disabled="disabled || null"
-    class="relative z-10 shrink-0 touch-none bg-(--border-default) outline-none data-[orientation=horizontal]:pointer-coarse:before:-inset-x-4.5 data-[orientation=vertical]:pointer-coarse:before:-inset-y-4.5 transition-colors duration-fast-02 ease-productive-entrance before:absolute before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[orientation=horizontal]:w-(--spacing-2xs) data-[orientation=horizontal]:cursor-col-resize data-[orientation=horizontal]:before:inset-y-0 data-[orientation=horizontal]:before:-inset-x-2 data-[orientation=vertical]:h-(--spacing-2xs) data-[orientation=vertical]:cursor-row-resize data-[orientation=vertical]:before:inset-x-0 data-[orientation=vertical]:before:-inset-y-2 data-[resizing]:bg-(--accent) data-[disabled]:pointer-events-none data-[disabled]:cursor-default data-[disabled]:opacity-40 motion-reduce:transition-none"
+    :class="ROOT_CLASS"
     @pointerdown="startResize"
-    @keydown.left.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? 1 : -1)"
-    @keydown.right.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? -1 : 1)"
-    @keydown.up.prevent="orientation === 'vertical' && nudge(-1)"
-    @keydown.down.prevent="orientation === 'vertical' && nudge(1)"
-    @keydown.home.prevent="toExtreme('min')"
-    @keydown.end.prevent="toExtreme('max')"
-    @keydown.enter.prevent="toggleCollapse"
   />
 </template>

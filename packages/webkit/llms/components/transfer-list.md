@@ -66,7 +66,7 @@
 
 - `transfer-list-source/transfer-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `title` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls). Slots: `item` (`{ item, index, list }`) renders one option row; `title` overrides the heading content. Double-clicking an option moves it to the target (driven by the root via the injected context).
 - `transfer-list-target/transfer-list-target.vue` — The target listbox (the right/bottom list). Same anatomy, props, and slots as `transfer-list-source`, bound to the target side of the pair; double-clicking an option moves it back to the source.
-- `transfer-list-controls/transfer-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as icon-only buttons; reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point left/right when the lists are side by side and rotate to up/down when they stack on narrow viewports.
+- `transfer-list-controls/transfer-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as `IconButton`s (`ghost`, `large`) with the `az-arrow-right`, `az-arrow-right-to-line`, `az-arrow-left` and `az-arrow-left-to-line` glyphs; reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point toward the target list when the lists are side by side (mirrored in right-to-left, where the target list is on the left, like every directional glyph) and rotate to up/down when they stack on narrow viewports, in both reading directions.
 
 ## v-model
 
@@ -91,7 +91,7 @@
 - ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled` on both listboxes, and a disabled root becomes `role="group"` with `aria-disabled="true"`, so the titles dimmed by the root's `opacity-60` belong to a disabled control (WCAG 1.4.3 inactive-component exemption) instead of reading as low-contrast live text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
 - A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
-- Touch target ≥40×40 px for every move control (medium icon-button height).
+- Touch target ≥40×40 px for every move control (large icon-button height).
 
 ## Examples
 
@@ -104,7 +104,7 @@
 
   const model = ref([
     [
-      { id: 1, label: 'Edge Functions' },
+      { id: 1, label: 'Functions' },
       { id: 2, label: 'WAF' },
       { id: 3, label: 'Image Processor' }
     ],
@@ -139,7 +139,7 @@
 
   const model = ref([
     [
-      { id: 1, label: 'Edge Functions' },
+      { id: 1, label: 'Functions' },
       { id: 2, label: 'WAF' },
       { id: 3, label: 'Image Processor' }
     ],
@@ -175,7 +175,7 @@
 
   const model = ref([
     [
-      { id: 1, label: 'Edge Functions' },
+      { id: 1, label: 'Functions' },
       { id: 2, label: 'WAF' },
       { id: 3, label: 'Image Processor' }
     ],

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale'
-  import { useMediaQuery } from '../../../../composables/use-media-query'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'RealTimeEventsVolumeFragment' })
 
@@ -19,8 +18,6 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const { formatNumber } = useLocale()
 
   const LEVEL_ORDER = ['Error', 'Warning', 'Info', 'Debug'] as const
@@ -88,15 +85,10 @@
     { cursor: bar(SPIKE), hovered: SPIKE, forward: 320, back: 280 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const frame = computed(() => FRAMES[step.value])
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 
   const activeBucket = computed(() => BUCKETS[frame.value.hovered] ?? null)
 
@@ -111,177 +103,150 @@
     return 'center'
   })
 
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+  const BAR_SEGMENT_CLASS =
+    'w-full ' +
+    'data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)'
 
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
+  const BUCKET_CARD_CLASS =
+    'pointer-events-none absolute top-[calc(100%+var(--spacing-2xs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance ' +
+    'data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full ' +
+    'motion-reduce:transition-none'
 
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const LEGEND_SWATCH_CLASS =
+    'size-2 shrink-0 rounded-(--shape-control) ' +
+    'data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:84%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    stage-class="flex flex-col gap-(--spacing-sm) py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Jane"
   >
-    <div
-      ref="stageEl"
-      class="relative flex flex-col gap-(--spacing-sm) py-(--spacing-xs)"
-    >
-      <ConsoleMockupShellItem :order="0">
-        <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
-          <div class="flex flex-col">
-            <dt class="text-label-sm text-(--text-muted)">Events</dt>
-            <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-              {{ formatNumber(TOTAL) }}
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-label-sm text-(--text-muted)">Errors</dt>
-            <dd class="m-0 text-heading-xs tabular-nums text-(--danger-foreground)">
-              {{ formatNumber(ERRORS) }}
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
-            <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">518 ms</dd>
-          </div>
-        </dl>
-      </ConsoleMockupShellItem>
+    <ConsoleMockupShellItem :order="0">
+      <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
+        <div class="flex flex-col">
+          <dt class="text-label-sm text-(--text-muted)">Events</dt>
+          <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+            {{ formatNumber(TOTAL) }}
+          </dd>
+        </div>
+        <div class="flex flex-col">
+          <dt class="text-label-sm text-(--text-muted)">Errors</dt>
+          <dd class="m-0 text-heading-xs tabular-nums text-(--danger-foreground)">
+            {{ formatNumber(ERRORS) }}
+          </dd>
+        </div>
+        <div class="flex flex-col">
+          <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
+          <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">518 ms</dd>
+        </div>
+      </dl>
+    </ConsoleMockupShellItem>
 
-      <ConsoleMockupShellItem :order="1">
-        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-          <div class="relative z-30">
-            <div class="flex h-20 w-full items-end gap-px border-b border-(--border-default)">
+    <ConsoleMockupShellItem :order="1">
+      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+        <div class="relative z-30">
+          <div class="flex h-20 w-full items-end gap-px border-b border-(--border-default)">
+            <div
+              v-for="bucket in BUCKETS"
+              :key="bucket.index"
+              :data-cursor="`bar-${bucket.index}`"
+              :data-active="frame.hovered === bucket.index || null"
+              class="flex h-full min-w-0 flex-1 flex-col justify-end transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--bg-hover) motion-reduce:transition-none"
+            >
               <div
-                v-for="bucket in BUCKETS"
-                :key="bucket.index"
-                :data-cursor="`bar-${bucket.index}`"
-                :data-active="frame.hovered === bucket.index || null"
-                class="flex h-full min-w-0 flex-1 flex-col justify-end transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--bg-hover) motion-reduce:transition-none"
-              >
+                v-for="level in STACK_ORDER"
+                :key="level"
+                :data-level="level"
+                :class="BAR_SEGMENT_CLASS"
+                :style="{ height: share(bucket.levels[level]) }"
+              />
+            </div>
+          </div>
+
+          <Transition
+            enter-active-class="transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+            enter-from-class="opacity-0"
+            leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+            leave-to-class="opacity-0"
+          >
+            <div
+              v-if="activeBucket"
+              class="pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-(--border-strong) transition-[left] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+              :style="{ left: centre }"
+            />
+          </Transition>
+
+          <Transition
+            enter-active-class="transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+            enter-from-class="opacity-0"
+            leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+            leave-to-class="opacity-0"
+          >
+            <div
+              v-if="activeBucket"
+              :data-align="cardAlign"
+              :class="BUCKET_CARD_CLASS"
+              :style="{ left: centre }"
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                <p class="text-label-code-sm tabular-nums text-(--text-default)">
+                  {{ stamp(activeBucket.index) }}
+                </p>
+
+                <dl
+                  class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
+                >
+                  <template
+                    v-for="level in LEVEL_ORDER"
+                    :key="level"
+                  >
+                    <span
+                      :data-level="level"
+                      aria-hidden="true"
+                      :class="LEGEND_SWATCH_CLASS"
+                    />
+                    <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
+                      {{ level }}
+                    </dt>
+                    <dd class="m-0 text-label-code-sm tabular-nums text-(--text-default)">
+                      {{ activeBucket.levels[level] }}
+                    </dd>
+                  </template>
+                </dl>
+
                 <div
-                  v-for="level in STACK_ORDER"
-                  :key="level"
-                  :data-level="level"
-                  class="w-full data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)"
-                  :style="{ height: share(bucket.levels[level]) }"
-                />
+                  class="flex items-baseline justify-between gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-xs)"
+                >
+                  <span class="text-label-sm text-(--text-default)">Total</span>
+                  <span class="text-label-code-sm tabular-nums text-(--text-default)">
+                    {{ activeBucket.total }}
+                  </span>
+                </div>
+
+                <p class="text-body-sm text-(--text-muted)">
+                  Click to filter to this bucket, or drag to select a span.
+                </p>
               </div>
             </div>
-
-            <Transition
-              enter-active-class="transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="opacity-0"
-              leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="opacity-0"
-            >
-              <div
-                v-if="activeBucket"
-                class="pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-(--border-strong) transition-[left] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                :style="{ left: centre }"
-              />
-            </Transition>
-
-            <Transition
-              enter-active-class="transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="opacity-0"
-              leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="opacity-0"
-            >
-              <div
-                v-if="activeBucket"
-                :data-align="cardAlign"
-                class="pointer-events-none absolute top-[calc(100%+var(--spacing-2xs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full motion-reduce:transition-none"
-                :style="{ left: centre }"
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                  <p class="text-label-code-sm tabular-nums text-(--text-default)">
-                    {{ stamp(activeBucket.index) }}
-                  </p>
-
-                  <dl
-                    class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
-                  >
-                    <template
-                      v-for="level in LEVEL_ORDER"
-                      :key="level"
-                    >
-                      <span
-                        :data-level="level"
-                        aria-hidden="true"
-                        class="size-2 shrink-0 rounded-(--shape-control) data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)"
-                      />
-                      <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
-                        {{ level }}
-                      </dt>
-                      <dd class="m-0 text-label-code-sm tabular-nums text-(--text-default)">
-                        {{ activeBucket.levels[level] }}
-                      </dd>
-                    </template>
-                  </dl>
-
-                  <div
-                    class="flex items-baseline justify-between gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-xs)"
-                  >
-                    <span class="text-label-sm text-(--text-default)">Total</span>
-                    <span class="text-label-code-sm tabular-nums text-(--text-default)">
-                      {{ activeBucket.total }}
-                    </span>
-                  </div>
-
-                  <p class="text-body-sm text-(--text-muted)">
-                    Click to filter to this bucket, or drag to select a span.
-                  </p>
-                </div>
-              </div>
-            </Transition>
-          </div>
-
-          <div
-            class="flex items-center justify-between text-label-sm tabular-nums text-(--text-muted)"
-            aria-hidden="true"
-          >
-            <span
-              v-for="(label, index) in AXIS"
-              :key="index"
-              >{{ label }}</span
-            >
-          </div>
+          </Transition>
         </div>
-      </ConsoleMockupShellItem>
 
-      <MockupCursor
-        name="Jane"
-        :x="position.x"
-        :y="position.y"
-      />
-    </div>
-  </ConsoleMockupShell>
+        <div
+          class="flex items-center justify-between text-label-sm tabular-nums text-(--text-muted)"
+          aria-hidden="true"
+        >
+          <span
+            v-for="(label, index) in AXIS"
+            :key="index"
+            >{{ label }}</span
+          >
+        </div>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

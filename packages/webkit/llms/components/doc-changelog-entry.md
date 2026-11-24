@@ -81,7 +81,7 @@
     <DocChangelogEntry
       label="August 19, 2026"
       description="v2.4.0"
-      :tags="['Console', 'Edge Functions']"
+      :tags="['Console', 'Functions']"
     >
       <p>
         Rules Engine conditions now match on request headers, so a rule can branch on anything the
@@ -105,7 +105,7 @@
     <DocChangelogEntry
       label="August 19, 2026"
       description="v2.4.0"
-      :tags="['Console', 'Edge Functions']"
+      :tags="['Console', 'Functions']"
     >
       <h3>Header matching in Rules Engine</h3>
       <p>

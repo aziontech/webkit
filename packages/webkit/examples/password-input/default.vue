@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { ref } from 'vue'
 
@@ -6,9 +7,11 @@
 </script>
 
 <template>
-  <PasswordInput
-    v-model="password"
-    placeholder="Enter your password"
-    autocomplete="current-password"
-  />
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Password</Field.Label>
+    <PasswordInput
+      v-model="password"
+      autocomplete="current-password"
+    />
+  </Field>
 </template>

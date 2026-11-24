@@ -28,13 +28,30 @@
     if (ctx.levels.value.length) return ctx.levels.value
     return ctx.levelCounts.value.warn > 0 ? ['warn'] : []
   })
+
+  const ROOT_CLASS =
+    'flex shrink-0 flex-col gap-(--spacing-sm) border-b border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-sm) ' +
+    'sm:h-[48px] sm:flex-row sm:items-center sm:justify-between sm:py-0'
+
+  const LEVEL_CLASS =
+    'relative inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) ' +
+    'px-(--spacing-xs) text-label-sm text-(--text-muted) transition-colors duration-150 ease-out ' +
+    "before:absolute before:inset-0 before:content-[''] hover:border-(--border-strong) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 " +
+    'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 ' +
+    'data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) ' +
+    'motion-reduce:transition-none pointer-coarse:before:-inset-y-1.5'
+
+  const LEVEL_DOT_CLASS =
+    'size-2 shrink-0 rounded-full bg-(--text-muted) ' +
+    'data-[level=error]:bg-(--danger-mark) data-[level=info]:bg-(--info-mark) data-[level=warn]:bg-(--warning-mark) ' +
+    'forced-colors:bg-[CanvasText]'
 </script>
 
 <template>
   <header
     v-bind="attrs"
     :data-testid="testId"
-    class="flex shrink-0 flex-col gap-(--spacing-sm) border-b border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-sm) sm:h-[48px] sm:flex-row sm:items-center sm:justify-between sm:py-0"
+    :class="ROOT_CLASS"
   >
     <div
       :data-testid="`${testId}__start`"
@@ -45,7 +62,7 @@
           :data-testid="`${testId}__line-count`"
           class="shrink-0 whitespace-nowrap text-label-sm tabular-nums text-(--text-muted)"
         >
-          {{ ctx.lineCountLabel.value }}
+          <bdi>{{ ctx.lineCountLabel.value }}</bdi>
         </span>
 
         <div
@@ -67,13 +84,13 @@
             "
             :disabled="ctx.disabled.value"
             :data-testid="`${testId}__level`"
-            class="relative inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) text-label-sm text-(--text-muted) transition-colors duration-150 ease-out before:absolute before:inset-0 before:content-[''] hover:border-(--border-strong) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) motion-reduce:transition-none pointer-coarse:before:-inset-y-1.5"
+            :class="LEVEL_CLASS"
             @click="ctx.toggleLevel(name)"
           >
             <span
               :data-level="name"
               aria-hidden="true"
-              class="size-2 shrink-0 rounded-full bg-(--text-muted) data-[level=error]:bg-(--danger-foreground) data-[level=info]:bg-(--info-foreground) data-[level=warn]:bg-(--warning-foreground) forced-colors:bg-[CanvasText]"
+              :class="LEVEL_DOT_CLASS"
             />
             <span :data-testid="`${testId}__level-name`">{{ name }}</span>
             <span

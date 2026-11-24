@@ -1,7 +1,7 @@
 import { isCommentScoped, proseComments } from './comment-scan.js'
 
-export const isVue = (rel) => rel.endsWith('.vue')
-export const isComposable = (rel) => /(^|\/)use-[^/]*\.(ts|js)$/.test(rel)
+const isVue = (rel) => rel.endsWith('.vue')
+const isComposable = (rel) => /(^|\/)use-[^/]*\.(ts|js)$/.test(rel)
 export const isJsComposable = (rel) => /(^|\/)use-[^/]*\.js$/.test(rel)
 
 const SLOT_PRESENCE = /\b\$?slots(?:\.[\w$]+(?![\w$])|\[[^\]]+\])(?!\s*(?:\?\.)?\()/
@@ -108,7 +108,10 @@ export const CONTENT_CHECKS = [
     count: (t) => slotPresenceSites(t).length,
     locate: (t) => slotPresenceSites(t),
     message:
-      'Slot presence read inside `computed()`. `slots` is not reactive, so the cached value never sees a slot appear or disappear (a `v-if` slot, a server render that differs from the client) and leaves an empty band behind. Read it at render: `const hasX = () => Boolean(slots.x)` and `v-if="hasX()"`.'
+      'Slot presence read inside `computed()`. `slots` is not reactive, so the cached value never ' +
+      'sees a slot appear or disappear (a `v-if` slot, a server render that differs from the ' +
+      'client) and leaves an empty band behind. Read it at render: `const hasX = () => ' +
+      'Boolean(slots.x)` and `v-if="hasX()"`.'
   },
   {
     id: 'component-attr-double-slash',
@@ -117,7 +120,11 @@ export const CONTENT_CHECKS = [
     count: (t) => doubleSlashAttributeSites(t).length,
     locate: (t) => doubleSlashAttributeSites(t),
     message:
-      'An attribute value on a component tag contains `//` (a `"//"` eyebrow prefix, an `https://` URL). vue-tsc 3.3.9+ rewrites `//` in component props as a comment, so a consumer that type-checks the shipped `.vue` gets TS2304 for every `v-for` variable after it. Move the value into a script constant (`const EYEBROW_PREFIX = \'//\' as const`) and bind it (`:prefix="EYEBROW_PREFIX"`).'
+      'An attribute value on a component tag contains `//` (a `"//"` eyebrow prefix, an `https://` ' +
+      'URL). vue-tsc 3.3.9+ rewrites `//` in component props as a comment, so a consumer that ' +
+      'type-checks the shipped `.vue` gets TS2304 for every `v-for` variable after it. Move the ' +
+      "value into a script constant (`const EYEBROW_PREFIX = '//' as const`) and bind it " +
+      '(`:prefix="EYEBROW_PREFIX"`).'
   },
   {
     id: 'composable-return-reactive',
@@ -151,7 +158,10 @@ export const CONTENT_CHECKS = [
     count: (t, rel) => proseComments(rel, t).length,
     locate: (t, rel) => proseComments(rel, t).map((c) => c.start),
     message:
-      'Comment in implementation code. Only component API docs (JSDoc on props, emits, slots, models, exposed members and exported types) and tool directives are allowed. Name and structure the code so it needs no comment; rationale goes in the spec, a rules doc or the commit message.'
+      'Comment in implementation code. Only component API docs (JSDoc on props, emits, slots, ' +
+      'models, exposed members and exported types) and tool directives are allowed. Name and ' +
+      'structure the code so it needs no comment; rationale goes in the spec, a rules doc or the ' +
+      'commit message.'
   }
 ]
 

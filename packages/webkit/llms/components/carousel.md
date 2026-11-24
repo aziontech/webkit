@@ -74,7 +74,7 @@
 - `data-variant` (`strip` | `cards`) is on the root, the track and every item; under `cards` the track gaps its items by `var(--spacing-md)` and each item is rounded
 - The row above the track renders only when `header` or `controls` is filled; with a header it spreads the header to the start and the controls to the end, without one the controls sit at the start
 - `data-scrollable` is present on the root while the track overflows its row; a track that fits renders no controls to press
-- `data-can-scroll-prev` / `data-can-scroll-next` are on the root and the track while the track has content past its start / end edge. The track fades only the edge that continues, over 12% of its own width, so the row at rest fades on the right alone
+- `data-can-scroll-prev` / `data-can-scroll-next` are on the root and the track while the track has content past its start / end edge. The track fades only the edge that continues, over 12% of its own width (below `sm`, 8% at the end and none at the start), so the row at rest fades on the right alone
 - The fade stands down while the track has keyboard focus, so the focus ring it would otherwise mask is fully visible
 - The track carries `data-scrollable` too, which is what gives it the grab cursor; a track that fits shows the ordinary pointer, because there is nothing to drag
 - `data-dragging` is on the track for the length of a mouse drag: the cursor closes, snapping and smooth scrolling stand down so the row tracks the pointer exactly, and text selection is suppressed
@@ -105,7 +105,7 @@
 
 ## Responsive
 
-- The track scrolls at every width; below `sm` every item size is capped at 85% of the viewport, so one card fills a phone with the next one peeking.
+- The track scrolls at every width; below `sm` every item is 85% of the track's width, so one card fills a phone with the next one peeking, and the trailing fade narrows to 8% so it lies over that peek and never over the current card's text; the leading fade stands down there, since a snapped card starts at the track's edge.
 - The header row keeps the controls on the same line as the header at every width; a long header wraps inside its own cell.
 
 ## Examples

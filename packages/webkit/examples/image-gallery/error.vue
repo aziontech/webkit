@@ -5,6 +5,6 @@
 <template>
   <ImageGallery
     class="max-w-(--container-md)"
-    error="The image model is busy. Try again in a minute."
+    error="The image model was busy, so no images were generated."
   />
 </template>

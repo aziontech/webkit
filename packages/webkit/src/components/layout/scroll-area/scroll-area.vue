@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { cn } from '../../../utils/cn'
   import { useScrollFade } from './composables/use-scroll-fade'
 
@@ -37,8 +38,22 @@
 
   const tabIndex = computed(() => (attrs['tabindex'] as string | number | undefined) ?? 0)
 
+  const role = computed(() => {
+    const own = attrs['role']
+    if (typeof own === 'string') return own
+    return props.ariaLabel ? 'region' : undefined
+  })
+
   const ROOT_CLASS =
-    'relative min-h-0 min-w-0 [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] data-[orientation=vertical]:overflow-y-auto data-[orientation=vertical]:overflow-x-hidden data-[orientation=horizontal]:overflow-x-auto data-[orientation=horizontal]:overflow-y-hidden data-[orientation=both]:overflow-auto focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto data-[fade]:[mask-mode:alpha] data-[fade]:[scroll-padding:var(--scroll-area-fade-size)] data-[fade]:[mask-composite:intersect] data-[fade]:data-[orientation=vertical]:[mask-image:linear-gradient(to_bottom,black_0,black_var(--scroll-area-fade-cover),transparent_var(--scroll-area-fade-cover),black_calc(var(--scroll-area-fade-cover)+var(--scroll-area-fade-top)),black_calc(100%-var(--scroll-area-fade-bottom)),transparent_100%)] data-[fade]:data-[orientation=horizontal]:[mask-image:linear-gradient(to_right,transparent_0,black_var(--scroll-area-fade-left),black_calc(100%-var(--scroll-area-fade-right)),transparent_100%)] data-[fade]:data-[orientation=both]:[mask-image:linear-gradient(to_bottom,black_0,black_var(--scroll-area-fade-cover),transparent_var(--scroll-area-fade-cover),black_calc(var(--scroll-area-fade-cover)+var(--scroll-area-fade-top)),black_calc(100%-var(--scroll-area-fade-bottom)),transparent_100%),linear-gradient(to_right,transparent_0,black_var(--scroll-area-fade-left),black_calc(100%-var(--scroll-area-fade-right)),transparent_100%)] data-[fade]:focus-visible:ring-0 data-[fade]:focus-visible:inset-ring-1 data-[fade]:focus-visible:inset-ring-(--ring-color)'
+    'relative min-h-0 min-w-0 [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] ' +
+    'data-[orientation=vertical]:overflow-y-auto data-[orientation=vertical]:overflow-x-hidden data-[orientation=horizontal]:overflow-x-auto ' +
+    'data-[orientation=horizontal]:overflow-y-hidden data-[orientation=both]:overflow-auto ' +
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto ' +
+    'data-[fade]:[mask-mode:alpha] data-[fade]:[scroll-padding:var(--scroll-area-fade-size)] data-[fade]:[mask-composite:intersect] ' +
+    'data-[fade]:data-[orientation=vertical]:[mask-image:linear-gradient(to_bottom,black_0,black_var(--scroll-area-fade-cover),transparent_var(--scroll-area-fade-cover),black_calc(var(--scroll-area-fade-cover)+var(--scroll-area-fade-top)),black_calc(100%-var(--scroll-area-fade-bottom)),transparent_100%)] ' +
+    'data-[fade]:data-[orientation=horizontal]:[mask-image:linear-gradient(to_right,transparent_0,black_var(--scroll-area-fade-left),black_calc(100%-var(--scroll-area-fade-right)),transparent_100%)] ' +
+    'data-[fade]:data-[orientation=both]:[mask-image:linear-gradient(to_bottom,black_0,black_var(--scroll-area-fade-cover),transparent_var(--scroll-area-fade-cover),black_calc(var(--scroll-area-fade-cover)+var(--scroll-area-fade-top)),black_calc(100%-var(--scroll-area-fade-bottom)),transparent_100%),linear-gradient(to_right,transparent_0,black_var(--scroll-area-fade-left),black_calc(100%-var(--scroll-area-fade-right)),transparent_100%)] ' +
+    'data-[fade]:focus-visible:ring-0 data-[fade]:focus-visible:inset-ring-1 data-[fade]:focus-visible:inset-ring-(--ring-color)'
 
   const { fading, fadeStyle } = useScrollFade({
     target: viewportEl,
@@ -47,61 +62,37 @@
     horizontal: () => props.orientation !== 'vertical'
   })
 
-  const scrollStep = 40
+  const SCROLL_STEP = 40
+
+  const KEY_SCROLLS: Partial<
+    Record<string, ['scrollTop' | 'scrollLeft', (viewport: HTMLElement) => number]>
+  > = {
+    ArrowDown: ['scrollTop', (viewport) => viewport.scrollTop + SCROLL_STEP],
+    ArrowUp: ['scrollTop', (viewport) => viewport.scrollTop - SCROLL_STEP],
+    ArrowRight: ['scrollLeft', (viewport) => viewport.scrollLeft + SCROLL_STEP],
+    ArrowLeft: ['scrollLeft', (viewport) => viewport.scrollLeft - SCROLL_STEP],
+    PageDown: ['scrollTop', (viewport) => viewport.scrollTop + viewport.clientHeight],
+    PageUp: ['scrollTop', (viewport) => viewport.scrollTop - viewport.clientHeight],
+    Home: ['scrollTop', () => 0],
+    End: ['scrollTop', (viewport) => viewport.scrollHeight]
+  }
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     const viewport = viewportEl.value
-    if (!viewport) return
-
+    const scroll = KEY_SCROLLS[event.key]
+    if (!viewport || !scroll) return
+    const [axis, to] = scroll
     const { orientation } = props
-    const vertical = orientation === 'vertical' || orientation === 'both'
-    const horizontal = orientation === 'horizontal' || orientation === 'both'
-
-    switch (event.key) {
-      case 'ArrowDown':
-        if (!vertical) return
-        viewport.scrollTop += scrollStep
-        event.preventDefault()
-        break
-      case 'ArrowUp':
-        if (!vertical) return
-        viewport.scrollTop -= scrollStep
-        event.preventDefault()
-        break
-      case 'ArrowRight':
-        if (!horizontal) return
-        viewport.scrollLeft += scrollStep
-        event.preventDefault()
-        break
-      case 'ArrowLeft':
-        if (!horizontal) return
-        viewport.scrollLeft -= scrollStep
-        event.preventDefault()
-        break
-      case 'PageDown':
-        if (!vertical) return
-        viewport.scrollTop += viewport.clientHeight
-        event.preventDefault()
-        break
-      case 'PageUp':
-        if (!vertical) return
-        viewport.scrollTop -= viewport.clientHeight
-        event.preventDefault()
-        break
-      case 'Home':
-        if (!vertical) return
-        viewport.scrollTop = 0
-        event.preventDefault()
-        break
-      case 'End':
-        if (!vertical) return
-        viewport.scrollTop = viewport.scrollHeight
-        event.preventDefault()
-        break
-      default:
-        break
-    }
+    if (
+      orientation !== 'both' &&
+      orientation !== (axis === 'scrollTop' ? 'vertical' : 'horizontal')
+    )
+      return
+    viewport[axis] = to(viewport)
+    event.preventDefault()
   }
+
+  useElementListener(viewportEl, 'keydown', onKeydown)
 </script>
 
 <template>
@@ -113,9 +104,9 @@
     :data-fade="fading || null"
     :style="fadeStyle"
     :data-testid="testId"
+    :role="role"
     :aria-label="ariaLabel || undefined"
     :tabindex="tabIndex"
-    @keydown="onKeydown"
   >
     <slot />
   </div>

@@ -4,23 +4,19 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
-  import IconButton from '../../action/icon-button/icon-button.vue'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import Tag from '../../content/tag/tag.vue'
+  import Hint from '../../input/hint/hint.vue'
   import Input from '../../input/input/input.vue'
   import Select from '../../input/select/select.vue'
   import SelectContent from '../../input/select/select-content/select-content.vue'
   import SelectItem from '../../input/select/select-item/select-item.vue'
   import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import Link from '../../navigation/link/link.vue'
-  import Popover from '../../overlay/popover/popover.vue'
-  import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
-  import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'
-  import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
-  import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
+  import SectionBand from '../parts/section-band.vue'
+  import { bodiesOf, isCategory } from './lib/plan-bodies'
 
   defineOptions({
     name: 'PlanComparisonSection',
@@ -89,7 +85,12 @@
     excludedLabel?: string
     /** The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
     plans?: PlanComparisonSectionPlan[]
-    /** The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. */
+    /**
+     * The product bands, in order; each is `{ eyebrow, title, description, rows, action? }`
+     * (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?,
+     * tag? }` with one value per plan: `true` or a tick is included, a dash is not included,
+     * other text shows as written, empty is blank; `hint` defines the label in a popover.
+     */
     sections?: PlanComparisonSectionSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
     primaryAction?: ModuleHeaderAction
@@ -170,21 +171,6 @@
 
   const closingOf = (section: PlanComparisonSectionSection | undefined) => section?.action
 
-  const isCategory = (row: PlanComparisonSectionRow) =>
-    Boolean(row.group) && row.values.every((value) => value === '' || value === undefined)
-
-  const bodiesOf = (section: PlanComparisonSectionSection) =>
-    section.rows.reduce<
-      { start: number; rows: { row: PlanComparisonSectionRow; rowIndex: number }[] }[]
-    >(
-      (bodies, row, rowIndex) => {
-        if (isCategory(row)) bodies.push({ start: rowIndex, rows: [] })
-        bodies[bodies.length - 1]?.rows.push({ row, rowIndex })
-        return bodies
-      },
-      [{ start: -1, rows: [] }]
-    )
-
   const bands = computed(() =>
     props.sections.map((section) => ({ section, bodies: bodiesOf(section) }))
   )
@@ -194,255 +180,255 @@
     sectionIndex === props.sections.length - 1 &&
     !closingOf(props.sections[sectionIndex]) &&
     rowIndex === (props.sections[sectionIndex]?.rows.length ?? 0) - 1
+
+  const PLAN_HEADER_CELL_CLASS =
+    'sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top ' +
+    'lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden'
+
+  const ROW_HEADER_CELL_CLASS =
+    'border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle ' +
+    'lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) ' +
+    'group-data-lead/row:text-(--text-default) ' +
+    'group-data-ruled/row:border-t ' +
+    'group-data-closing/row:border-b'
+
+  const VALUE_CELL_CLASS =
+    'border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) ' +
+    'group-data-ruled/row:border-t ' +
+    'group-data-closing/row:border-b ' +
+    'max-lg:data-folded:hidden'
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :filled="columns.length > 0"
+    :framed="false"
   >
-    <Module
-      v-if="columns.length > 0"
-      :divided="false"
-      :padded="false"
-    >
-      <table class="w-full table-auto border-separate border-spacing-0 text-start lg:table-fixed">
-        <caption
-          v-if="caption"
-          class="sr-only"
-        >
-          {{
-            caption
-          }}
-        </caption>
-        <thead>
-          <tr>
-            <th
-              scope="col"
-              class="sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) text-start align-top lg:p-(--spacing-lg) font-normal"
+    <table class="w-full table-auto border-separate border-spacing-0 text-start lg:table-fixed">
+      <caption
+        v-if="caption"
+        class="sr-only"
+      >
+        {{
+          caption
+        }}
+      </caption>
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            class="sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) text-start align-top lg:p-(--spacing-lg) font-normal"
+          >
+            <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
+              columnLabel
+            }}</span>
+            <Select
+              v-model="visiblePlan"
+              :display-value="planName"
+              size="large"
+              class="w-full lg:hidden"
+              @update:open="resetPickerQuery"
             >
-              <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
-                columnLabel
-              }}</span>
-              <Select
-                v-model="visiblePlan"
-                :display-value="planName"
+              <SelectTrigger :aria-label="pickerAriaLabel || undefined" />
+              <SelectContent>
+                <template #search>
+                  <Input
+                    v-model="pickerQuery"
+                    size="small"
+                    :placeholder="t('planComparisonSection.search')"
+                    :aria-label="pickerSearchLabel"
+                  >
+                    <template #leading>
+                      <i
+                        class="az az-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </template>
+                <SelectItem
+                  v-for="{ plan } in matchingColumns"
+                  :key="plan.id"
+                  :value="plan.id"
+                >
+                  {{ plan.name }}
+                </SelectItem>
+                <p
+                  v-if="matchingColumns.length === 0"
+                  role="status"
+                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
+                >
+                  {{ t('planComparisonSection.noMatch') }}
+                </p>
+              </SelectContent>
+            </Select>
+          </th>
+          <th
+            v-for="{ plan } in columns"
+            :key="plan.id"
+            scope="col"
+            :data-folded="plan.id !== visiblePlan || null"
+            :data-highlighted="plan.highlighted || null"
+            :class="PLAN_HEADER_CELL_CLASS"
+          >
+            <span
+              v-if="plan.highlighted"
+              class="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-(--border-selected)"
+              aria-hidden="true"
+            />
+            <div class="flex h-full flex-col items-start gap-(--spacing-sm)">
+              <span class="flex flex-col gap-(--spacing-sm) max-lg:sr-only">
+                <span class="text-heading-md text-(--text-default)">{{ plan.name }}</span>
+                <span
+                  v-if="plan.description"
+                  class="text-body-sm text-(--text-muted)"
+                  >{{ plan.description }}</span
+                >
+              </span>
+              <Button
+                v-if="plan.action"
+                :label="plan.action.label"
+                :variant="plan.highlighted ? 'secondary' : 'outline'"
                 size="large"
-                class="w-full lg:hidden"
-                @update:open="resetPickerQuery"
-              >
-                <SelectTrigger :aria-label="pickerAriaLabel || undefined" />
-                <SelectContent>
-                  <template #search>
-                    <Input
-                      v-model="pickerQuery"
-                      size="small"
-                      :placeholder="t('planComparisonSection.search')"
-                      :aria-label="pickerSearchLabel"
-                    >
-                      <template #leading>
-                        <i
-                          class="az az-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Input>
-                  </template>
-                  <SelectItem
-                    v-for="{ plan } in matchingColumns"
-                    :key="plan.id"
-                    :value="plan.id"
-                  >
-                    {{ plan.name }}
-                  </SelectItem>
-                  <p
-                    v-if="matchingColumns.length === 0"
-                    role="status"
-                    class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
-                  >
-                    {{ t('planComparisonSection.noMatch') }}
-                  </p>
-                </SelectContent>
-              </Select>
-            </th>
-            <th
-              v-for="{ plan } in columns"
-              :key="plan.id"
-              scope="col"
-              :data-folded="plan.id !== visiblePlan || null"
-              :data-highlighted="plan.highlighted || null"
-              class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
-            >
-              <span
-                v-if="plan.highlighted"
-                class="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-(--border-selected)"
-                aria-hidden="true"
+                class="w-full max-lg:h-auto max-lg:min-h-10 max-lg:py-(--spacing-xs) max-lg:text-center max-lg:whitespace-normal"
+                :href="plan.action.href"
               />
-              <div class="flex h-full flex-col items-start gap-(--spacing-sm)">
-                <span class="flex flex-col gap-(--spacing-sm) max-lg:sr-only">
-                  <span class="text-heading-md text-(--text-default)">{{ plan.name }}</span>
-                  <span
-                    v-if="plan.description"
-                    class="text-body-sm text-(--text-muted)"
-                    >{{ plan.description }}</span
-                  >
-                </span>
-                <Button
-                  v-if="plan.action"
-                  :label="plan.action.label"
-                  :variant="plan.highlighted ? 'secondary' : 'outline'"
-                  size="large"
-                  class="w-full max-lg:h-auto max-lg:min-h-10 max-lg:py-(--spacing-xs) max-lg:text-center max-lg:whitespace-normal"
-                  :href="plan.action.href"
-                />
-              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <template
+        v-for="({ section, bodies }, sectionIndex) in bands"
+        :key="section.title"
+      >
+        <tbody
+          v-for="(body, bodyIndex) in bodies"
+          :key="body.start"
+        >
+          <tr v-if="bodyIndex === 0">
+            <th
+              scope="rowgroup"
+              :colspan="columns.length + 1"
+              :data-ruled="sectionIndex > 0 || null"
+              class="border-b border-(--border-default) p-(--spacing-sm) pt-(--spacing-xl) text-start lg:p-(--spacing-lg) lg:pt-(--spacing-xl) font-normal data-ruled:border-t"
+            >
+              <Eyebrow
+                v-if="section.eyebrow"
+                :prefix="EYEBROW_PREFIX"
+                class="mb-(--spacing-xs)"
+              >
+                {{ section.eyebrow }}
+              </Eyebrow>
+              <span class="block text-heading-lg text-(--text-default)">{{ section.title }}</span>
+              <span
+                v-if="section.description"
+                class="mt-(--spacing-xs) block max-w-md text-body-sm text-(--text-muted) md:text-body-md"
+              >
+                {{ section.description }}
+              </span>
             </th>
           </tr>
-        </thead>
-        <template
-          v-for="({ section, bodies }, sectionIndex) in bands"
-          :key="section.title"
-        >
-          <tbody
-            v-for="(body, bodyIndex) in bodies"
-            :key="body.start"
+          <tr
+            v-for="{ row, rowIndex } in body.rows"
+            :key="rowIndex"
+            :data-lead="row.group || null"
+            :data-ruled="(row.group && rowIndex > 0) || null"
+            :data-closing="isClosingRow(sectionIndex, rowIndex) || null"
+            class="group/row"
           >
-            <tr v-if="bodyIndex === 0">
-              <th
-                scope="rowgroup"
-                :colspan="columns.length + 1"
-                :data-ruled="sectionIndex > 0 || null"
-                class="border-b border-(--border-default) p-(--spacing-sm) pt-(--spacing-xl) text-start lg:p-(--spacing-lg) lg:pt-(--spacing-xl) font-normal data-ruled:border-t"
-              >
-                <Eyebrow
-                  v-if="section.eyebrow"
-                  :prefix="EYEBROW_PREFIX"
-                  class="mb-(--spacing-xs)"
-                >
-                  {{ section.eyebrow }}
-                </Eyebrow>
-                <span class="block text-heading-lg text-(--text-default)">{{ section.title }}</span>
-                <span
-                  v-if="section.description"
-                  class="mt-(--spacing-xs) block max-w-md text-body-sm text-(--text-muted) md:text-body-md"
-                >
-                  {{ section.description }}
-                </span>
-              </th>
-            </tr>
-            <tr
-              v-for="{ row, rowIndex } in body.rows"
-              :key="rowIndex"
-              :data-lead="row.group || null"
-              :data-ruled="(row.group && rowIndex > 0) || null"
-              :data-closing="isClosingRow(sectionIndex, rowIndex) || null"
-              class="group/row"
+            <th
+              :scope="isCategory(row) ? 'rowgroup' : 'row'"
+              :colspan="isCategory(row) ? columns.length + 1 : undefined"
+              :class="ROW_HEADER_CELL_CLASS"
             >
-              <th
-                :scope="isCategory(row) ? 'rowgroup' : 'row'"
-                :colspan="isCategory(row) ? columns.length + 1 : undefined"
-                class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b"
-              >
-                <span>
-                  <template v-if="row.hint">
-                    {{ labelHead(row.label)
-                    }}<span class="whitespace-nowrap"
-                      >{{ labelTail(row.label)
-                      }}<span
-                        class="-my-(--spacing-2xs) ms-(--spacing-2xs) inline-flex align-middle"
-                        ><Popover side="auto">
-                          <PopoverTrigger>
-                            <IconButton
-                              variant="ghost"
-                              size="small"
-                              icon="az az-circle-info"
-                              :aria-label="t('planComparisonSection.about', { label: row.label })"
-                            />
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
-                              <PopoverTitle>{{ row.label }}</PopoverTitle>
-                              <PopoverDescription>{{ row.hint }}</PopoverDescription>
-                            </div>
-                          </PopoverContent>
-                        </Popover></span
-                      ></span
-                    >
-                  </template>
-                  <template v-else>{{ row.label }}</template>
-                  <Tag
-                    v-if="row.tag"
-                    :label="row.tag"
-                    severity="neutral"
-                    size="small"
-                    class="ms-(--spacing-xs) align-middle"
-                  />
-                </span>
-              </th>
-              <template v-if="!isCategory(row)">
-                <td
-                  v-for="{ plan, index } in columns"
-                  :key="plan.id"
-                  :data-folded="plan.id !== visiblePlan || null"
-                  class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b max-lg:data-folded:hidden"
-                >
-                  <template v-if="isIncluded(row.values[index])">
-                    <Tooltip :content="includedText">
-                      <i
-                        class="az az-circle-check text-body-md text-(--success-foreground)"
-                        aria-hidden="true"
-                      />
-                    </Tooltip>
-                    <span class="sr-only">{{ includedText }}</span>
-                  </template>
-                  <template v-else-if="isExcluded(row.values[index])">
-                    <Tooltip :content="excludedText">
-                      <i
-                        class="az az-circle-minus text-body-md text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </Tooltip>
-                    <span class="sr-only">{{ excludedText }}</span>
-                  </template>
-                  <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
-                </td>
-              </template>
-            </tr>
-            <tr v-if="bodyIndex === bodies.length - 1 && closingOf(section)">
-              <td
-                :colspan="columns.length + 1"
-                class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
-              >
-                <Link
-                  :label="closingOf(section)?.label"
-                  :href="closingOf(section)?.href"
-                  target="_blank"
-                  icon="az az-arrow-right"
-                  size="medium"
+              <span>
+                <template v-if="row.hint">
+                  {{ labelHead(row.label)
+                  }}<span class="whitespace-nowrap"
+                    >{{ labelTail(row.label)
+                    }}<span class="ms-(--spacing-2xs) inline-flex align-middle"
+                      ><Hint
+                        :content="row.hint"
+                        side="auto"
+                        :aria-label="
+                          t('planComparisonSection.about', { label: row.label })
+                        " /></span
+                  ></span>
+                </template>
+                <template v-else>{{ row.label }}</template>
+                <Tag
+                  v-if="row.tag"
+                  :label="row.tag"
+                  severity="neutral"
+                  size="small"
+                  class="ms-(--spacing-xs) align-middle"
                 />
+              </span>
+            </th>
+            <template v-if="!isCategory(row)">
+              <td
+                v-for="{ plan, index } in columns"
+                :key="plan.id"
+                :data-folded="plan.id !== visiblePlan || null"
+                :class="VALUE_CELL_CLASS"
+              >
+                <template v-if="isIncluded(row.values[index])">
+                  <Tooltip :content="includedText">
+                    <i
+                      class="az az-circle-check text-body-md text-(--success-mark)"
+                      aria-hidden="true"
+                    />
+                  </Tooltip>
+                  <span class="sr-only">{{ includedText }}</span>
+                </template>
+                <template v-else-if="isExcluded(row.values[index])">
+                  <Tooltip :content="excludedText">
+                    <i
+                      class="az az-circle-minus text-body-md text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                  </Tooltip>
+                  <span class="sr-only">{{ excludedText }}</span>
+                </template>
+                <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
               </td>
-            </tr>
-          </tbody>
-        </template>
-        <tfoot v-if="primaryAction">
-          <tr>
+            </template>
+          </tr>
+          <tr v-if="bodyIndex === bodies.length - 1 && closingOf(section)">
             <td
               :colspan="columns.length + 1"
-              class="border-y border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
+              class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
             >
               <Link
-                :label="primaryAction.label"
-                :href="primaryAction.href"
+                :label="closingOf(section)?.label"
+                :href="closingOf(section)?.href"
                 target="_blank"
                 icon="az az-arrow-right"
                 size="medium"
               />
             </td>
           </tr>
-        </tfoot>
-      </table>
-    </Module>
-  </section>
+        </tbody>
+      </template>
+      <tfoot v-if="primaryAction">
+        <tr>
+          <td
+            :colspan="columns.length + 1"
+            class="border-y border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
+          >
+            <Link
+              :label="primaryAction.label"
+              :href="primaryAction.href"
+              target="_blank"
+              icon="az az-arrow-right"
+              size="medium"
+            />
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </SectionBand>
 </template>

@@ -65,7 +65,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ docTableOfContents: en.docTableOfContents })
+  const { t } = useTranslate({ docTableOfContents: en.docTableOfContents, common: en.common })
   const railTitle = computed(() => props.title || t('docTableOfContents.title'))
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-table-of-contents')
@@ -180,6 +180,23 @@
       remeasure()
     }
   )
+
+  const HIGHLIGHT_CLASS =
+    'pointer-events-none absolute z-0 rounded-(--shape-control) bg-(--bg-hover) transition-[top,left,width,height,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none'
+
+  const ITEM_LINK_CLASS =
+    'block w-full rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) pointer-coarse:min-h-11 pointer-coarse:content-center text-label-sm text-(--text-muted) no-underline ' +
+    'transition-colors duration-moderate-01 ' +
+    'ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) ' +
+    'data-[active]:text-(--text-default) ' +
+    'motion-reduce:transition-none'
+
+  const LINK_CLASS =
+    'flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) pointer-coarse:min-h-11 text-label-sm ' +
+    'text-(--text-muted) no-underline transition-colors ' +
+    'duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -231,7 +248,7 @@
           aria-hidden="true"
           :data-testid="`${testId}__highlight`"
           :style="highlightStyle"
-          class="pointer-events-none absolute z-0 rounded-(--shape-control) bg-(--bg-hover) transition-[top,left,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          :class="HIGHLIGHT_CLASS"
         />
 
         <ul
@@ -257,7 +274,7 @@
               :href="`#${item.id}`"
               :aria-current="item.id === activeId ? 'location' : undefined"
               :data-active="item.id === activeId || null"
-              class="block w-full rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) data-[active]:text-(--text-default) motion-reduce:transition-none"
+              :class="ITEM_LINK_CLASS"
               @click="emit('select', $event, item)"
             >
               {{ item.text }}
@@ -286,7 +303,7 @@
             :href="safeHref(link.href) ?? undefined"
             :target="isExternal(link.href) ? '_blank' : undefined"
             :rel="isExternal(link.href) ? 'noreferrer' : undefined"
-            class="flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+            :class="LINK_CLASS"
           >
             <i
               v-if="link.icon"
@@ -294,7 +311,12 @@
               class="shrink-0"
               aria-hidden="true"
             />
-            {{ link.label }}
+            {{ link.label
+            }}<span
+              v-if="isExternal(link.href)"
+              class="sr-only"
+              >{{ ` ${t('common.newTab')}` }}</span
+            >
           </a>
         </li>
       </ul>

@@ -10,7 +10,7 @@
     variant="contained"
     value="20"
     prefix="$"
-    suffix="/ mon"
-    action-label="Label"
+    suffix="/ month"
+    action-label="Start with Pro"
   />
 </template>

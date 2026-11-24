@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, nextTick, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import { TransferListInjectionKey } from '../injection-key'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import { TransferListInjectionKey, type TransferListMoveDirection } from '../injection-key'
 
   defineOptions({
     name: 'TransferListControls',
@@ -21,103 +22,101 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'transfer-list-controls'
   )
+
+  const rootEl = ref<HTMLElement | null>(null)
+
+  const locked = computed(() => ctx.disabled.value || ctx.anyLoading.value)
+
+  interface MoveControl {
+    key: string
+    icon: string
+    label: string
+    disabled: boolean
+    all: boolean
+    direction: TransferListMoveDirection
+  }
+
+  const controls = computed<MoveControl[]>(() => [
+    {
+      key: 'move-to-target',
+      icon: 'az az-arrow-right',
+      label: t('transferList.moveSelectedToTarget'),
+      disabled: locked.value || !ctx.hasSelection('source'),
+      all: false,
+      direction: 'to-target'
+    },
+    {
+      key: 'move-all-to-target',
+      icon: 'az az-arrow-right-to-line',
+      label: t('transferList.moveAllToTarget'),
+      disabled: locked.value || ctx.count('source') === 0,
+      all: true,
+      direction: 'to-target'
+    },
+    {
+      key: 'move-to-source',
+      icon: 'az az-arrow-left',
+      label: t('transferList.moveSelectedToSource'),
+      disabled: locked.value || !ctx.hasSelection('target'),
+      all: false,
+      direction: 'to-source'
+    },
+    {
+      key: 'move-all-to-source',
+      icon: 'az az-arrow-left-to-line',
+      label: t('transferList.moveAllToSource'),
+      disabled: locked.value || ctx.count('target') === 0,
+      all: true,
+      direction: 'to-source'
+    }
+  ])
+
+  const COUNTERPART: Record<string, string> = {
+    'move-to-target': 'move-to-source',
+    'move-all-to-target': 'move-all-to-source',
+    'move-to-source': 'move-to-target',
+    'move-all-to-source': 'move-all-to-target'
+  }
+
+  const controlEl = (key: string): HTMLButtonElement | null =>
+    rootEl.value?.querySelector<HTMLButtonElement>(`[data-testid="${testId.value}__${key}"]`) ??
+    null
+
+  async function keepFocus(key: string): Promise<void> {
+    await nextTick()
+    const clicked = controlEl(key)
+    if (!clicked?.disabled || document.activeElement !== document.body) return
+    const counterpart = controlEl(COUNTERPART[key] ?? '')
+    const next = counterpart && !counterpart.disabled ? counterpart : null
+    const fallback = rootEl.value?.querySelector<HTMLButtonElement>('button:not(:disabled)')
+    ;(next ?? fallback)?.focus()
+  }
+
+  function onClick(event: MouseEvent, control: MoveControl) {
+    if (control.all) ctx?.moveAll(event, control.direction)
+    else ctx?.move(event, control.direction)
+    void keepFocus(control.key)
+  }
 </script>
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     class="flex flex-row items-center justify-center gap-(--spacing-xs) md:flex-col"
   >
-    <button
-      type="button"
-      :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('source')"
-      :aria-label="t('transferList.moveSelectedToTarget')"
-      :data-testid="`${testId}__move-to-target`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.move($event, 'to-target')"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-        class="size-4 rotate-90 md:rotate-0"
-      >
-        <path d="M4 12h13" />
-        <path d="M11 6l6 6-6 6" />
-      </svg>
-    </button>
-    <button
-      type="button"
-      :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('source') === 0"
-      :aria-label="t('transferList.moveAllToTarget')"
-      :data-testid="`${testId}__move-all-to-target`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.moveAll($event, 'to-target')"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-        class="size-4 rotate-90 md:rotate-0"
-      >
-        <path d="M3 12h11" />
-        <path d="M9 7l5 5-5 5" />
-        <path d="M20 5v14" />
-      </svg>
-    </button>
-    <button
-      type="button"
-      :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('target')"
-      :aria-label="t('transferList.moveSelectedToSource')"
-      :data-testid="`${testId}__move-to-source`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.move($event, 'to-source')"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-        class="size-4 rotate-90 md:rotate-0"
-      >
-        <path d="M20 12H7" />
-        <path d="M13 6l-6 6 6 6" />
-      </svg>
-    </button>
-    <button
-      type="button"
-      :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('target') === 0"
-      :aria-label="t('transferList.moveAllToSource')"
-      :data-testid="`${testId}__move-all-to-source`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.moveAll($event, 'to-source')"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-        class="size-4 rotate-90 md:rotate-0"
-      >
-        <path d="M21 12H10" />
-        <path d="M15 7l-5 5 5 5" />
-        <path d="M4 5v14" />
-      </svg>
-    </button>
+    <IconButton
+      v-for="control in controls"
+      :key="control.key"
+      :icon="control.icon"
+      :aria-label="control.label"
+      variant="ghost"
+      size="large"
+      :disabled="control.disabled"
+      icon-class="max-md:rotate-90 max-md:rtl:-rotate-90"
+      :data-testid="`${testId}__${control.key}`"
+      @click="onClick($event, control)"
+    />
   </div>
 </template>

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -43,7 +43,7 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 `PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: the open tab's panel goes in the slot named after the tab (`#source`, `#device-groups`, `#cache-settings`, `#functions-instances`, `#rules-engine`), and a tab with no slot shows an `EmptyState` with an Open link to its own page.
 
-### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
+### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton`, `Link` (required)
 
 The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsGroup`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled. While `creating`, `Skeleton` wires take the sections' place.
 
@@ -213,35 +213,24 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
 
 ```vue
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
   import Resizable from '@aziontech/webkit/resizable'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Spinner from '@aziontech/webkit/spinner'
-  import SplitButton from '@aziontech/webkit/split-button'
-  import Switch from '@aziontech/webkit/switch'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
-  import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, reactive, ref, watch } from 'vue'
 
+  import { usePhoneWidth } from './composables/use-phone-width'
+  import { ADD_ENVIRONMENT, ADD_VERSION, VERSION_TABS as tabs } from './detail-version-states'
+  import CreatingWire from './parts/creating-wire.vue'
+  import EnvironmentSwitcher from './parts/environment-switcher.vue'
+  import SettingsPanel from './parts/settings-panel.vue'
+  import VersionBar from './parts/version-bar.vue'
+  import VersionHistory from './parts/version-history.vue'
+  import VersionSwitcher from './parts/version-switcher.vue'
+  import VersionTabBar from './parts/version-tab-bar.vue'
   import { sampleResource, sampleRevertDiff, sampleSettings, sampleVersions } from './sample'
 
   /** Where a version is in its life: an editable draft, the deployed one, or an earlier built one. */
@@ -386,63 +375,6 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     'rules-engine'?(props: { label: string }): unknown
   }>()
 
-  const tabs: { value: VersionDetailTab; label: string }[] = [
-    { value: 'main-settings', label: 'Settings' },
-    { value: 'source', label: 'Source' },
-    { value: 'device-groups', label: 'Device Groups' },
-    { value: 'cache-settings', label: 'Cache Settings' },
-    { value: 'functions-instances', label: 'Functions Instances' },
-    { value: 'rules-engine', label: 'Rules Engine' }
-  ]
-  const STATE_TAGS: Record<
-    VersionDetailState,
-    { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
-  > = {
-    draft: { label: 'Draft', severity: 'warning', icon: 'az az-file-pen' },
-    deployed: { label: 'Deployed', variant: 'primary', icon: '' },
-    ready: { label: 'Ready', severity: 'success', icon: '' }
-  }
-  const defaultModules = [
-    {
-      key: 'protocol_optimization',
-      title: 'Protocol Optimization',
-      description: 'Optimize protocols and manage dynamic content delivery.'
-    },
-    { key: 'cache', title: 'Cache', description: 'Customize advanced cache settings.' },
-    {
-      key: 'device_detection',
-      title: 'Device Detection',
-      description: 'Detect device types to configure responsive rules.'
-    },
-    {
-      key: 'custom_code',
-      title: 'Custom Code',
-      description: 'Run your own code on every request.'
-    },
-    {
-      key: 'image_optimization',
-      title: 'Image Optimization',
-      description: 'Enable dynamic image editing options.'
-    },
-    {
-      key: 'load_balancing',
-      title: 'Load Balancing',
-      description:
-        'Balance traffic to your origins ensuring reliability and network congestion control.'
-    }
-  ]
-  const saveOptions = [
-    { label: 'Save and deploy', value: 'deploy' },
-    { label: 'Save and build', value: 'build' },
-    { label: 'Save', value: 'save' }
-  ]
-  const wireSections = [
-    { id: 'general', rows: ['62%', '48%'] },
-    { id: 'modules', rows: ['54%', '66%', '44%'] }
-  ]
-  const ADD_VERSION = '__create-version__'
-  const ADD_ENVIRONMENT = '__create-environment__'
-
   const resource = computed(() => props.resource ?? sampleResource)
   const versions = computed(() => props.versions ?? sampleVersions)
   const revertDiff = computed(() => props.revertDiff ?? sampleRevertDiff)
@@ -467,43 +399,17 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
   const earlier = computed(() =>
     versions.value.slice(versions.value.findIndex((entry) => entry.id === version.value.id) + 1)
   )
-  const tagFor = (entry: VersionDetailVersion) => STATE_TAGS[entry.state]
   const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
-  const statusLabel = computed(() => {
-    if (props.creating) return 'Creating new version…'
-    if (props.reverting) return `Reverting to ${viewed.value.name}…`
-    if (isDraft.value) return 'Draft'
-    return viewed.value.state === 'deployed'
-      ? 'Viewing a deployed version'
-      : 'Viewing an earlier version'
-  })
-  const statusLine = computed(() => {
-    if (props.creating) return `Copying ${viewed.value.name} into a new draft.`
-    if (isDraft.value) return 'This version is open for editing. Deploy it when ready.'
-    return viewed.value.comment
-  })
 
   const query = ref('')
   const environmentQuery = ref('')
   const form = reactive<VersionDetailSettings>({ name: '', active: false, modules: {} })
-  const saveAction = ref<string | undefined>('deploy')
   const historyBasis = ref(348)
+  const phone = usePhoneWidth()
   const description = ref('')
   const draftText = ref('')
   const editing = ref(false)
-  const shown = ref(5)
-  const confirmOpen = ref(false)
 
-  const matches = computed(() =>
-    versions.value.filter((entry) =>
-      entry.name.toLowerCase().includes(query.value.trim().toLowerCase())
-    )
-  )
-  const environmentMatches = computed(() => {
-    const needle = environmentQuery.value.trim().toLowerCase()
-    if (!needle) return environments.value
-    return environments.value.filter((entry) => entry.name.toLowerCase().includes(needle))
-  })
   const environmentName = computed(() => environment.value || environments.value[0]?.name || '')
 
   watch(
@@ -523,8 +429,6 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     { immediate: true }
   )
 
-  const servedIn = (id: string) =>
-    environments.value.filter((entry) => entry.serves === id).map((entry) => entry.name)
   const pickVersion = (value: unknown) => {
     if (value !== ADD_VERSION && value !== undefined && value !== null)
       versionId.value = String(value)
@@ -550,18 +454,16 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     editing.value = false
     emit('save-description', event, description.value)
   }
-  const save = (event: MouseEvent) =>
+  const save = (event: MouseEvent, action: string) =>
     emit('save', event, {
-      action: saveAction.value ?? 'deploy',
+      action,
       settings: { ...form, modules: { ...form.modules } }
     })
-  const confirmRevert = (event: MouseEvent) => {
-    confirmOpen.value = false
-    emit('revert', event, viewed.value)
-  }
+  const confirmRevert = (event: MouseEvent) => emit('revert', event, viewed.value)
 
-  const relativeTime = useLocale().formatRelativeTime
-  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
+  const TAB_PANEL_CLASS =
+    'grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ' +
+    'ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -575,154 +477,26 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
         { label: resource.name, href: resource.href }
       ]"
     >
-      <Select
+      <EnvironmentSwitcher
         v-if="environments.length"
+        v-model:query="environmentQuery"
         variant="ghost"
         size="small"
-        :model-value="environmentName"
-        :display-value="(value) => String(value ?? '')"
-        @update:model-value="pickEnvironment"
-        @update:open="
-          (open) => {
-            if (!open) environmentQuery = ''
-          }
-        "
-      >
-        <Select.Trigger aria-label="Switch environment" />
-        <Select.Content>
-          <template #search>
-            <Input
-              v-model="environmentQuery"
-              size="small"
-              placeholder="Search environments"
-              aria-label="Search environments"
-              @keydown.stop
-            >
-              <template #leading>
-                <i
-                  class="az az-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </template>
-          <Select.Group label="Environments">
-            <Select.Item
-              v-for="entry in environmentMatches"
-              :key="entry.name"
-              :value="entry.name"
-            >
-              {{ entry.name }}
-              <template #tag>
-                <Tag
-                  :label="entry.policy"
-                  severity="neutral"
-                  size="small"
-                />
-              </template>
-            </Select.Item>
-            <p
-              v-if="!environmentMatches.length"
-              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
-            >
-              No environments match"{{ environmentQuery }}".
-            </p>
-          </Select.Group>
-          <template #footer>
-            <Select.Item
-              :value="ADD_ENVIRONMENT"
-              class="w-full"
-              @click="(event: MouseEvent) => emit('add-environment', event)"
-              @keydown.enter="(event: KeyboardEvent) => emit('add-environment', event)"
-            >
-              <span class="flex items-center gap-(--spacing-xs)">
-                <i
-                  class="az az-circle-plus"
-                  aria-hidden="true"
-                />
-                Add Environment
-              </span>
-            </Select.Item>
-          </template>
-        </Select.Content>
-      </Select>
-      <Select
+        :environments="environments"
+        :environment-name="environmentName"
+        @pick="pickEnvironment"
+        @add="(event) => emit('add-environment', event)"
+      />
+      <VersionSwitcher
+        v-model:query="query"
         variant="ghost"
         size="small"
-        :model-value="viewed.id"
-        @update:model-value="pickVersion"
-        :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
-        @update:open="
-          (open) => {
-            if (!open) query = ''
-          }
-        "
-      >
-        <Select.Trigger aria-label="Switch version" />
-        <Select.Content>
-          <template #search>
-            <Input
-              v-model="query"
-              size="small"
-              placeholder="Search versions"
-              aria-label="Search versions"
-              @keydown.stop
-            >
-              <template #leading>
-                <i
-                  class="az az-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </template>
-          <Select.Group label="Versions">
-            <Select.Item
-              v-for="entry in matches"
-              :key="entry.id"
-              :value="entry.id"
-            >
-              {{ entry.name }}
-              <span
-                v-if="servedIn(entry.id).length"
-                class="text-body-xs text-(--text-muted)"
-                >Live in {{ servedIn(entry.id).join(', ') }}</span
-              >
-              <template #tag>
-                <Tag
-                  :label="tagFor(entry).label"
-                  :variant="tagFor(entry).variant"
-                  :severity="tagFor(entry).severity"
-                  :icon="tagFor(entry).icon"
-                  size="small"
-                />
-              </template>
-            </Select.Item>
-            <p
-              v-if="!matches.length"
-              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
-            >
-              No versions match"{{ query }}".
-            </p>
-          </Select.Group>
-          <template #footer>
-            <Select.Item
-              :value="ADD_VERSION"
-              class="w-full"
-              @click="(event: MouseEvent) => emit('add-version', event)"
-              @keydown.enter="(event: KeyboardEvent) => emit('add-version', event)"
-            >
-              <span class="flex items-center gap-(--spacing-xs)">
-                <i
-                  class="az az-circle-plus"
-                  aria-hidden="true"
-                />
-                Add Version
-              </span>
-            </Select.Item>
-          </template>
-        </Select.Content>
-      </Select>
+        :versions="versions"
+        :environments="environments"
+        :viewed-id="viewed.id"
+        @pick="pickVersion"
+        @add="(event) => emit('add-version', event)"
+      />
     </ConsoleLayout.Breadcrumb>
     <nav
       aria-label="Breadcrumb"
@@ -741,446 +515,55 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
         v-if="environments.length"
         class="min-w-0 flex-1"
       >
-        <Select
-          :model-value="environmentName"
-          :display-value="(value) => String(value ?? '')"
+        <EnvironmentSwitcher
+          v-model:query="environmentQuery"
           class="w-full"
-          @update:model-value="pickEnvironment"
-          @update:open="
-            (open) => {
-              if (!open) environmentQuery = ''
-            }
-          "
-        >
-          <Select.Trigger aria-label="Switch environment" />
-          <Select.Content>
-            <template #search>
-              <Input
-                v-model="environmentQuery"
-                size="small"
-                placeholder="Search environments"
-                aria-label="Search environments"
-                @keydown.stop
-              >
-                <template #leading>
-                  <i
-                    class="az az-search"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Input>
-            </template>
-            <Select.Group label="Environments">
-              <Select.Item
-                v-for="entry in environmentMatches"
-                :key="entry.name"
-                :value="entry.name"
-              >
-                {{ entry.name }}
-                <template #tag>
-                  <Tag
-                    :label="entry.policy"
-                    severity="neutral"
-                    size="small"
-                  />
-                </template>
-              </Select.Item>
-              <p
-                v-if="!environmentMatches.length"
-                class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
-              >
-                No environments match"{{ environmentQuery }}".
-              </p>
-            </Select.Group>
-            <template #footer>
-              <Select.Item
-                :value="ADD_ENVIRONMENT"
-                class="w-full"
-                @click="(event: MouseEvent) => emit('add-environment', event)"
-                @keydown.enter="(event: KeyboardEvent) => emit('add-environment', event)"
-              >
-                <span class="flex items-center gap-(--spacing-xs)">
-                  <i
-                    class="az az-circle-plus"
-                    aria-hidden="true"
-                  />
-                  Add Environment
-                </span>
-              </Select.Item>
-            </template>
-          </Select.Content>
-        </Select>
+          :environments="environments"
+          :environment-name="environmentName"
+          @pick="pickEnvironment"
+          @add="(event) => emit('add-environment', event)"
+        />
       </div>
       <div class="min-w-0 flex-1">
-        <Select
-          :model-value="viewed.id"
-          @update:model-value="pickVersion"
-          :display-value="
-            (id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')
-          "
+        <VersionSwitcher
+          v-model:query="query"
           class="w-full"
-          @update:open="
-            (open) => {
-              if (!open) query = ''
-            }
-          "
-        >
-          <Select.Trigger aria-label="Switch version" />
-          <Select.Content>
-            <template #search>
-              <Input
-                v-model="query"
-                size="small"
-                placeholder="Search versions"
-                aria-label="Search versions"
-                @keydown.stop
-              >
-                <template #leading>
-                  <i
-                    class="az az-search"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Input>
-            </template>
-            <Select.Group label="Versions">
-              <Select.Item
-                v-for="entry in matches"
-                :key="entry.id"
-                :value="entry.id"
-              >
-                {{ entry.name }}
-                <span
-                  v-if="servedIn(entry.id).length"
-                  class="text-body-xs text-(--text-muted)"
-                  >Live in {{ servedIn(entry.id).join(', ') }}</span
-                >
-                <template #tag>
-                  <Tag
-                    :label="tagFor(entry).label"
-                    :variant="tagFor(entry).variant"
-                    :severity="tagFor(entry).severity"
-                    :icon="tagFor(entry).icon"
-                    size="small"
-                  />
-                </template>
-              </Select.Item>
-              <p
-                v-if="!matches.length"
-                class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
-              >
-                No versions match"{{ query }}".
-              </p>
-            </Select.Group>
-            <template #footer>
-              <Select.Item
-                :value="ADD_VERSION"
-                class="w-full"
-                @click="(event: MouseEvent) => emit('add-version', event)"
-                @keydown.enter="(event: KeyboardEvent) => emit('add-version', event)"
-              >
-                <span class="flex items-center gap-(--spacing-xs)">
-                  <i
-                    class="az az-circle-plus"
-                    aria-hidden="true"
-                  />
-                  Add Version
-                </span>
-              </Select.Item>
-            </template>
-          </Select.Content>
-        </Select>
+          :versions="versions"
+          :environments="environments"
+          :viewed-id="viewed.id"
+          @pick="pickVersion"
+          @add="(event) => emit('add-version', event)"
+        />
       </div>
     </nav>
     <div class="grid min-h-0 flex-1">
       <Resizable
-        orientation="horizontal"
+        :orientation="phone ? 'vertical' : 'horizontal'"
         aria-label="Version workspace"
       >
         <Resizable.Pane aria-label="Version settings">
           <div class="flex min-h-0 min-w-0 flex-1 flex-col">
-            <PageTabs v-model="activeTab">
-              <Tabs.Trigger
-                v-for="tab in tabs"
-                :key="tab.value"
-                :value="tab.value"
-                :label="tab.label"
-              />
-              <template #actions>
-                <span
-                  v-if="!isDraft && viewed.createdOn"
-                  class="hidden text-body-sm text-(--text-muted) md:inline"
-                >
-                  Created {{ viewed.createdOn }}
-                </span>
-                <Tag
-                  :label="tagFor(viewed).label"
-                  :variant="tagFor(viewed).variant"
-                  :severity="tagFor(viewed).severity"
-                  :icon="tagFor(viewed).icon"
-                  size="medium"
-                />
-                <DropdownMenu
-                  side="bottom"
-                  align="end"
-                  @select="openHistory"
-                >
-                  <DropdownMenu.Trigger>
-                    <IconButton
-                      icon="az az-ellipsis"
-                      variant="ghost"
-                      size="small"
-                      aria-label="Version actions"
-                    />
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Item
-                      v-if="isDraft"
-                      value="edit"
-                      label="Edit version info"
-                    >
-                      <template #leading>
-                        <i
-                          class="az az-pencil"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Item>
-                    <DropdownMenu.Item
-                      value="history"
-                      :label="historyExpanded ? 'Hide version history' : 'Show version history'"
-                    >
-                      <template #leading>
-                        <i
-                          class="az az-history"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Group>
-                </DropdownMenu>
-              </template>
-            </PageTabs>
+            <VersionTabBar
+              v-model:tab="activeTab"
+              :viewed="viewed"
+              :history-expanded="historyExpanded"
+              @select="openHistory"
+            />
 
-            <section
+            <SettingsPanel
               v-if="activeTab === 'main-settings' && !creating"
-              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
-            >
-              <ScrollArea
-                aria-label="Version settings"
-                fade
-              >
-                <div class="flex min-h-full flex-col">
-                  <fieldset
-                    :disabled="!isDraft"
-                    class="contents"
-                  >
-                    <legend class="sr-only">
-                      {{ resource.name }} {{ viewed.name }}{{ isDraft ? '' : ', read-only' }}
-                    </legend>
-                    <form
-                      class="flex min-h-full flex-col"
-                      aria-label="Main settings"
-                      novalidate
-                      @submit.prevent
-                    >
-                      <div
-                        class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
-                      >
-                        <PageHeader
-                          title="Settings"
-                          description="Core configuration for this resource."
-                          size="small"
-                        />
-
-                        <fieldset
-                          class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
-                        >
-                          <legend class="sr-only">Main settings</legend>
-
-                          <SettingsGroup
-                            label="General"
-                            hint="How this resource is identified across the console, and whether it is serving traffic."
-                            anchor="general"
-                          >
-                            <Card :padded="false">
-                              <template #default>
-                                <Item.List>
-                                  <SettingsRow
-                                    title="Name"
-                                    description="A unique and descriptive name to identify the resource."
-                                  >
-                                    <Input
-                                      v-model="form.name"
-                                      size="large"
-                                      class="w-full"
-                                      aria-label="Name"
-                                    />
-                                  </SettingsRow>
-                                  <SettingsRow
-                                    title="Active"
-                                    description="When disabled, the resource stops serving traffic."
-                                    variant="compact"
-                                  >
-                                    <Switch
-                                      v-model="form.active"
-                                      aria-label="Active"
-                                    />
-                                  </SettingsRow>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </SettingsGroup>
-
-                          <SettingsGroup
-                            label="Modules"
-                            hint="The capabilities this resource runs with, each of which can be toggled here."
-                            anchor="modules"
-                          >
-                            <Card :padded="false">
-                              <template #default>
-                                <Item.List>
-                                  <SettingsRow
-                                    v-for="mod in defaultModules"
-                                    :key="mod.key"
-                                    :title="mod.title"
-                                    :description="mod.description"
-                                    variant="compact"
-                                  >
-                                    <Switch
-                                      v-model="form.modules[mod.key]"
-                                      :aria-label="mod.title"
-                                    />
-                                  </SettingsRow>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </SettingsGroup>
-
-                          <SettingsGroup
-                            label="Subscription modules"
-                            hint="Paid add-ons that are activated with sales, not from this page."
-                            anchor="subscription-modules"
-                          >
-                            <Card :padded="false">
-                              <template #default>
-                                <Item.List>
-                                  <SettingsRow
-                                    title="WebSocket Proxy"
-                                    variant="compact"
-                                  >
-                                    <template #description>
-                                      Enhance real-time data exchange between your resource and
-                                      backend services using the WebSocket protocol.
-                                      <a
-                                        href="https://example.com/contact-sales"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                                      >
-                                        Contact sales
-                                        <i
-                                          class="az az-external-link shrink-0 text-body-sm leading-none"
-                                          aria-hidden="true"
-                                        />
-                                      </a>
-                                    </template>
-                                    <Tooltip content="Contact sales to activate this module.">
-                                      <Switch
-                                        v-model="form.modules.web_socket_proxy"
-                                        disabled
-                                        aria-label="WebSocket Proxy"
-                                      />
-                                    </Tooltip>
-                                  </SettingsRow>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </SettingsGroup>
-                        </fieldset>
-                      </div>
-                    </form>
-                  </fieldset>
-                </div>
-              </ScrollArea>
-            </section>
-            <section
+              :form="form"
+              :resource-name="resource.name"
+              :version-name="viewed.name"
+              :is-draft="isDraft"
+            />
+            <CreatingWire
               v-else-if="activeTab === 'main-settings'"
-              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
-            >
-              <ScrollArea
-                aria-label="Version settings"
-                fade
-              >
-                <div
-                  role="status"
-                  aria-busy="true"
-                  class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap) animate-fade-in motion-reduce:animate-none"
-                  data-testid="version-detail-wire"
-                >
-                  <span class="sr-only">Creating a new version from {{ viewed.name }}.</span>
-                  <div
-                    class="flex flex-col gap-(--spacing-xs)"
-                    aria-hidden="true"
-                  >
-                    <Skeleton
-                      width="8rem"
-                      height="1.25rem"
-                    />
-                    <Skeleton
-                      width="18rem"
-                      height="0.875rem"
-                    />
-                  </div>
-                  <div
-                    class="mt-(--layout-section-gap) flex flex-col gap-(--layout-section-gap)"
-                    aria-hidden="true"
-                  >
-                    <div
-                      v-for="section in wireSections"
-                      :key="section.id"
-                      class="flex flex-col gap-(--layout-group-gap)"
-                    >
-                      <Skeleton
-                        width="6rem"
-                        height="1rem"
-                      />
-                      <Card :padded="false">
-                        <template #default>
-                          <div class="flex flex-col divide-y divide-(--border-default)">
-                            <div
-                              v-for="(width, index) in section.rows"
-                              :key="index"
-                              class="flex items-center gap-(--spacing-md) p-(--spacing-md)"
-                            >
-                              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
-                                <Skeleton
-                                  width="7rem"
-                                  height="0.875rem"
-                                />
-                                <Skeleton
-                                  :width="width"
-                                  height="0.75rem"
-                                />
-                              </div>
-                              <span class="flex shrink-0">
-                                <Skeleton
-                                  width="2.25rem"
-                                  height="1.25rem"
-                                />
-                              </span>
-                            </div>
-                          </div>
-                        </template>
-                      </Card>
-                    </div>
-                  </div>
-                </div>
-              </ScrollArea>
-            </section>
+              :version-name="viewed.name"
+            />
             <section
               v-else-if="$slots[activeTab]"
-              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+              :class="TAB_PANEL_CLASS"
             >
               <slot
                 :name="activeTab"
@@ -1189,7 +572,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
             </section>
             <section
               v-else
-              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+              :class="TAB_PANEL_CLASS"
             >
               <div class="layout-column layout-boundary flex min-w-0 flex-col">
                 <div class="layout-section-start">
@@ -1212,154 +595,17 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
               </div>
             </section>
 
-            <Transition
-              appear
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-            >
-              <footer
-                class="flex min-h-14 shrink-0 flex-col border-t border-(--border-default) bg-(--bg-surface)"
-                data-testid="version-detail-bar"
-              >
-                <div
-                  class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
-                >
-                  <span
-                    v-if="creating || isDraft"
-                    class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
-                    aria-hidden="true"
-                  >
-                    <Spinner v-if="creating" />
-                    <i
-                      v-else
-                      class="az az-file-pen text-body-sm text-(--text-default)"
-                    />
-                  </span>
-                  <div
-                    class="flex min-w-0 flex-1 flex-col"
-                    role="status"
-                  >
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="truncate text-body-sm text-(--text-default)">{{
-                        statusLabel
-                      }}</span>
-                      <span
-                        v-if="!creating"
-                        class="hidden shrink-0 sm:inline-flex"
-                      >
-                        <Tag
-                          :label="isDraft ? 'Editable' : 'Read-only'"
-                          :severity="isDraft ? 'info' : 'neutral'"
-                          :icon="isDraft ? '' : 'az az-lock'"
-                          size="small"
-                        />
-                      </span>
-                    </div>
-                    <p
-                      class="hidden truncate text-body-xs text-(--text-muted) md:block"
-                      :title="statusLine"
-                    >
-                      {{ statusLine }}
-                    </p>
-                  </div>
-
-                  <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-                    <SplitButton
-                      v-if="isDraft && !creating"
-                      :label="saveOptions.find((option) => option.value === saveAction)?.label"
-                      :icon="saveAction === 'deploy' ? 'az az-cloud-upload' : ''"
-                      variant="primary"
-                      size="medium"
-                      :items="saveOptions"
-                      @click="save"
-                      @item-click="(_event, item) => (saveAction = item.value)"
-                    />
-                    <template v-else>
-                      <Button
-                        label="Add Version"
-                        variant="outline"
-                        size="medium"
-                        icon="az az-plus"
-                        :loading="creating"
-                        @click="(event: MouseEvent) => emit('add-version', event)"
-                      />
-                      <Button
-                        v-if="viewed.state !== 'ready'"
-                        label="Redeploy"
-                        variant="outline"
-                        size="medium"
-                        icon="az az-refresh"
-                        :disabled="creating"
-                        @click="(event: MouseEvent) => emit('redeploy', event)"
-                      />
-                      <ConfirmDialog
-                        v-else
-                        v-model:open="confirmOpen"
-                        :title="`Revert to ${viewed.name}?`"
-                        :description="`Reverting deploys ${viewed.name} to Production in place of ${version.name}. ${version.name} stays in the version history, so you can redeploy it later.`"
-                        :confirm-label="`Revert to ${viewed.name}`"
-                        variant="primary"
-                        size="medium"
-                        @confirm="confirmRevert"
-                      >
-                        <template #trigger>
-                          <Button
-                            :label="`Revert to ${viewed.name}`"
-                            variant="primary"
-                            size="medium"
-                            icon="az az-undo"
-                            :loading="reverting"
-                          />
-                        </template>
-                        <div class="flex min-w-0 flex-col gap-(--spacing-md) pt-(--spacing-md)">
-                          <section
-                            aria-labelledby="revert-settings-title"
-                            class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                          >
-                            <h3
-                              id="revert-settings-title"
-                              class="text-label-md text-(--text-default)"
-                            >
-                              What changes against {{ version.name }}
-                            </h3>
-                            <ul
-                              class="flex min-w-0 flex-col divide-y divide-(--border-muted) rounded-(--shape-control) border border-(--border-default)"
-                            >
-                              <li
-                                v-for="change in revertDiff.settings"
-                                :key="change.setting"
-                                class="flex min-w-0 items-center justify-between gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)"
-                              >
-                                <span class="truncate text-body-sm text-(--text-default)">{{
-                                  change.setting
-                                }}</span>
-                                <span class="sr-only">{{
-                                  `changes from ${change.from} to ${change.to}`
-                                }}</span>
-                                <span
-                                  class="flex shrink-0 items-center gap-(--spacing-xs) text-body-sm"
-                                  aria-hidden="true"
-                                >
-                                  <span class="text-(--text-muted) line-through">{{
-                                    change.from
-                                  }}</span>
-                                  <i class="az az-arrow-right text-body-xs text-(--text-muted)" />
-                                  <span class="text-(--text-default)">{{ change.to }}</span>
-                                </span>
-                              </li>
-                            </ul>
-                          </section>
-                          <p class="text-body-sm text-(--text-default)">
-                            Rules: {{ revertDiff.rulesAdded }} added,
-                            {{ revertDiff.rulesRemoved }} removed. {{ revertDiff.rulesNote }}
-                          </p>
-                        </div>
-                      </ConfirmDialog>
-                    </template>
-                  </div>
-                </div>
-              </footer>
-            </Transition>
+            <VersionBar
+              :viewed="viewed"
+              :version="version"
+              :revert-diff="revertDiff"
+              :creating="creating"
+              :reverting="reverting"
+              @save="save"
+              @add-version="(event) => emit('add-version', event)"
+              @redeploy="(event) => emit('redeploy', event)"
+              @revert="confirmRevert"
+            />
           </div>
         </Resizable.Pane>
         <Resizable.Handle
@@ -1373,241 +619,19 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
           :min="280"
           :max="560"
           aria-label="Version history"
+          @keydown.esc="historyExpanded = false"
         >
-          <aside
-            :inert="!historyExpanded"
-            aria-labelledby="version-history-title"
-            class="flex min-h-0 min-w-0 flex-1 flex-col bg-(--bg-surface)"
-            data-testid="version-detail-history"
-            @keydown.esc="historyExpanded = false"
-          >
-            <header
-              class="flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) py-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm)"
-            >
-              <h2
-                id="version-history-title"
-                class="truncate text-label-lg text-(--text-default)"
-              >
-                Version history
-              </h2>
-              <IconButton
-                icon="az az-x"
-                variant="ghost"
-                size="small"
-                aria-label="Close version history"
-                @click="historyExpanded = false"
-              />
-            </header>
-            <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain p-(--spacing-lg)">
-              <ol class="flex flex-col">
-                <li class="relative flex gap-(--spacing-sm) pb-(--spacing-lg)">
-                  <span
-                    class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
-                    aria-hidden="true"
-                  />
-                  <span
-                    class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-foreground)"
-                    aria-hidden="true"
-                  >
-                    <i
-                      :class="version.state === 'draft' ? 'az az-file-pen' : 'az az-code'"
-                      class="text-body-xs"
-                    />
-                  </span>
-                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="truncate text-label-md text-(--text-default)">
-                        {{ version.name }}
-                      </span>
-                      <span class="flex shrink-0">
-                        <Tag
-                          :label="tagFor(version).label"
-                          :variant="tagFor(version).variant"
-                          :severity="tagFor(version).severity"
-                          size="small"
-                        />
-                      </span>
-                      <span
-                        v-if="version.state === 'draft' && !editing"
-                        class="ms-auto shrink-0"
-                      >
-                        <IconButton
-                          icon="az az-pencil"
-                          variant="ghost"
-                          size="small"
-                          aria-label="Edit version info"
-                          @click="
-                            () => {
-                              draftText = description
-                              editing = true
-                            }
-                          "
-                        />
-                      </span>
-                    </div>
-                    <p class="text-label-sm text-(--text-muted)">Current version</p>
-
-                    <div
-                      v-if="version.state === 'draft' && editing"
-                      class="flex flex-col gap-(--spacing-sm) pt-(--spacing-xs)"
-                    >
-                      <Field>
-                        <Field.Label>Description</Field.Label>
-                        <Textarea
-                          v-model="draftText"
-                          placeholder="What changed in this version?"
-                        />
-                        <Field.Description
-                          >Shows in the version list and on the deployment.</Field.Description
-                        >
-                      </Field>
-                      <div class="flex justify-end gap-(--spacing-xs)">
-                        <Button
-                          label="Cancel"
-                          variant="outline"
-                          size="small"
-                          @click="editing = false"
-                        />
-                        <Button
-                          label="Save"
-                          variant="primary"
-                          size="small"
-                          @click="saveDescription"
-                        />
-                      </div>
-                    </div>
-                    <template v-else>
-                      <p
-                        :data-empty="!description || null"
-                        class="text-body-sm text-(--text-default) data-empty:text-(--text-muted)"
-                      >
-                        {{ description || 'No description' }}
-                      </p>
-                      <span
-                        class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
-                      >
-                        <span class="flex shrink-0">
-                          <Avatar
-                            :alt="version.author"
-                            :label="version.author"
-                            size="small"
-                            variant="square"
-                          />
-                        </span>
-                        <span class="truncate"
-                          >{{ version.author }} · {{ ago(version.createdAt) }}</span
-                        >
-                      </span>
-                    </template>
-                  </div>
-                </li>
-
-                <li
-                  v-if="version.state === 'draft'"
-                  class="relative flex flex-col pb-(--spacing-lg)"
-                >
-                  <span
-                    class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
-                    aria-hidden="true"
-                  />
-                  <p class="flex gap-(--spacing-sm)">
-                    <span
-                      class="relative flex size-7 shrink-0 items-center justify-center"
-                      aria-hidden="true"
-                    >
-                      <span
-                        class="size-2 rounded-full border border-(--border-strong) bg-(--bg-surface)"
-                      />
-                    </span>
-                    <span class="pt-1 text-body-sm text-(--text-muted)">
-                      No changes yet. Each change you save shows up here.
-                    </span>
-                  </p>
-                </li>
-
-                <li
-                  v-for="(entry, index) in earlier.slice(0, shown)"
-                  :key="entry.id"
-                  class="relative flex pb-(--spacing-lg) last:pb-0"
-                >
-                  <span
-                    v-if="index < earlier.slice(0, shown).length - 1"
-                    class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
-                    aria-hidden="true"
-                  />
-                  <a
-                    :href="`/resources/${resource.name}/versions/${entry.name}`"
-                    :aria-current="entry.id === viewed.id ? 'page' : undefined"
-                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                  >
-                    <span
-                      class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
-                      aria-hidden="true"
-                    >
-                      <i class="az az-code text-body-xs" />
-                    </span>
-                    <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
-                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <span
-                          class="truncate text-label-md text-(--text-default) group-hover:underline"
-                        >
-                          {{ entry.name }}
-                        </span>
-                        <span class="flex shrink-0">
-                          <Tag
-                            :label="tagFor(entry).label"
-                            :variant="tagFor(entry).variant"
-                            :severity="tagFor(entry).severity"
-                            size="small"
-                          />
-                        </span>
-                        <span
-                          v-if="entry.id === viewed.id"
-                          class="flex shrink-0"
-                        >
-                          <Tag
-                            label="Viewing"
-                            severity="info"
-                            size="small"
-                          />
-                        </span>
-                      </span>
-                      <span class="line-clamp-2 text-body-sm text-(--text-muted)">
-                        {{ entry.comment }}
-                      </span>
-                      <span
-                        class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
-                      >
-                        <span class="flex shrink-0">
-                          <Avatar
-                            :alt="entry.author"
-                            :label="entry.author"
-                            size="small"
-                            variant="square"
-                          />
-                        </span>
-                        <span class="truncate"
-                          >{{ entry.author }} · {{ ago(entry.createdAt) }}</span
-                        >
-                      </span>
-                    </span>
-                  </a>
-                </li>
-              </ol>
-
-              <div
-                v-if="earlier.length > shown"
-                class="pt-(--spacing-sm)"
-              >
-                <Button
-                  label="Show older"
-                  variant="ghost"
-                  size="small"
-                  @click="shown += 5"
-                />
-              </div>
-            </div>
-          </aside>
+          <VersionHistory
+            v-model:open="historyExpanded"
+            v-model:editing="editing"
+            v-model:draft-text="draftText"
+            :resource-name="resource.name"
+            :viewed-id="viewed.id"
+            :version="version"
+            :earlier="earlier"
+            :description="description"
+            @save="saveDescription"
+          />
         </Resizable.Pane>
       </Resizable>
     </div>
@@ -1618,6 +642,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
 ## `sample.ts`
 
 ```ts
+import type { SchemaFormSchema } from '@aziontech/webkit/schema-form'
+
 import type {
   VersionDetailEnvironment,
   VersionDetailResource,
@@ -1625,6 +651,7 @@ import type {
   VersionDetailSettings,
   VersionDetailVersion
 } from './detail-version.vue'
+import { blankSetting, type CacheSetting } from './detail-version-cache'
 
 export const sampleResource: VersionDetailResource = {
   name: 'web-app',
@@ -1732,4 +759,1495 @@ export const sampleEnvironments: VersionDetailEnvironment[] = [
   { name: 'Preview', policy: 'Versioned', serves: 'AG1VVDJP' },
   { name: 'Staging', policy: 'Versioned', serves: '' }
 ]
+
+export type DeviceGroup = {
+  id: string
+  name: string
+  userAgent: string
+  author: string
+  modifiedAt: string
+}
+
+export const sampleDeviceGroups: DeviceGroup[] = [
+  {
+    id: '3101',
+    name: 'mobile',
+    userAgent: '(Mobile|iP(hone|od)|Android|IEMobile)',
+    author: 'Jane Doe',
+    modifiedAt: '2026-11-08T12:00:00Z'
+  },
+  {
+    id: '3102',
+    name: 'tablet',
+    userAgent: '(iPad|Tablet|Kindle|Silk)',
+    author: 'Alex Morgan',
+    modifiedAt: '2026-11-03T12:00:00Z'
+  },
+  {
+    id: '3103',
+    name: 'crawlers',
+    userAgent: '(Googlebot|Bingbot|DuckDuckBot)',
+    author: 'Sam Lee',
+    modifiedAt: '2026-10-20T12:00:00Z'
+  }
+]
+
+export type FunctionOption = {
+  value: string
+  label: string
+  schema: SchemaFormSchema | null
+}
+
+export type FunctionInstance = {
+  id: string
+  name: string
+  functionId: string
+  args: Record<string, unknown>
+  active: boolean
+  author: string
+  modifiedAt: string
+}
+
+export const sampleFunctionOptions: FunctionOption[] = [
+  {
+    value: 'image-resizer',
+    label: 'image-resizer',
+    schema: {
+      type: 'object',
+      required: ['width'],
+      properties: {
+        width: {
+          type: 'integer',
+          title: 'Width',
+          description: 'The width in pixels images are resized to.',
+          minimum: 16,
+          maximum: 4096
+        },
+        quality: {
+          type: 'integer',
+          title: 'Quality',
+          description: 'JPEG and WebP quality, from 1 to 100.',
+          minimum: 1,
+          maximum: 100
+        },
+        format: {
+          type: 'string',
+          title: 'Format',
+          description: 'The format served to browsers that accept it.',
+          enum: ['webp', 'avif', 'jpeg']
+        }
+      }
+    }
+  },
+  {
+    value: 'maintenance-page',
+    label: 'maintenance-page',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          title: 'Message',
+          description: 'The text visitors read while the site is down.',
+          maxLength: 120
+        },
+        retryAfter: {
+          type: 'integer',
+          title: 'Retry after in seconds',
+          description: 'Sent in the Retry-After header.',
+          minimum: 0
+        }
+      }
+    }
+  },
+  { value: 'header-rewrite', label: 'header-rewrite', schema: null }
+]
+
+export const sampleFunctionInstances: FunctionInstance[] = [
+  {
+    id: '5201',
+    name: 'product-images',
+    functionId: 'image-resizer',
+    args: { width: 640, quality: 80, format: 'webp' },
+    active: true,
+    author: 'Priya Patel',
+    modifiedAt: '2026-11-10T07:00:00Z'
+  },
+  {
+    id: '5202',
+    name: 'security-headers',
+    functionId: 'header-rewrite',
+    args: { set: { 'strict-transport-security': 'max-age=31536000' } },
+    active: true,
+    author: 'John Smith',
+    modifiedAt: '2026-11-07T12:00:00Z'
+  },
+  {
+    id: '5203',
+    name: 'planned-maintenance',
+    functionId: 'maintenance-page',
+    args: { message: 'We are upgrading the store. Back soon.', retryAfter: 1800 },
+    active: false,
+    author: 'Alex Morgan',
+    modifiedAt: '2026-10-27T12:00:00Z'
+  }
+]
+
+type SourceFile = { size: string; ext: string; modifiedAt: string; author: string }
+type SourceFolder = { children: SourceTree }
+export type SourceTreeEntry = SourceFile | SourceFolder
+export interface SourceTree {
+  [name: string]: SourceTreeEntry
+}
+
+export const isSourceFolder = (entry: SourceTreeEntry | undefined): entry is SourceFolder =>
+  Boolean(entry && 'children' in entry)
+
+export const sampleBucket = 'web-app-assets'
+const file = (size: string, ext: string, author: string): SourceFile => ({
+  size,
+  ext,
+  modifiedAt: '2026-11-12T14:02:38Z',
+  author
+})
+export const sampleSourceTree: SourceTree = {
+  'assets/': {
+    children: {
+      'index-4f2a91.js': file('182.4 KB', 'js', 'Jane Doe'),
+      'index-8c03de.css': file('24.1 KB', 'css', 'Jane Doe'),
+      'logo.svg': file('3.2 KB', 'svg', 'Sam Lee')
+    }
+  },
+  'images/': {
+    children: {
+      'hero.webp': file('412.7 KB', 'webp', 'Sam Lee'),
+      'og-card.png': file('96.3 KB', 'png', 'Sam Lee')
+    }
+  },
+  '404.html': file('4.8 KB', 'html', 'Jane Doe'),
+  'favicon.svg': file('1.2 KB', 'svg', 'Jane Doe'),
+  'index.html': file('6.0 KB', 'html', 'Jane Doe'),
+  'robots.txt': file('64 B', 'txt', 'Alex Morgan')
+}
+
+export const sampleCacheSettings: CacheSetting[] = [
+  {
+    ...blankSetting(),
+    id: '7101',
+    name: 'static-assets',
+    browserBehavior: 'override',
+    browserMaxAge: 604800,
+    edgeMaxAge: 2592000,
+    staleCache: true,
+    tieredCache: true,
+    queryStringBehavior: 'allowlist',
+    queryStringFields: 'v, lang',
+    author: 'Jane Doe',
+    modifiedAt: '2026-11-09T22:00:00Z'
+  },
+  {
+    ...blankSetting(),
+    id: '7102',
+    name: 'product-pages',
+    edgeMaxAge: 3600,
+    deviceBehavior: 'allowlist',
+    deviceGroups: ['mobile', 'tablet'],
+    author: 'Priya Patel',
+    modifiedAt: '2026-11-08T12:00:00Z'
+  },
+  {
+    ...blankSetting(),
+    id: '7103',
+    name: 'api-bypass',
+    browserBehavior: 'no-cache',
+    edgeBehavior: 'honor',
+    author: 'Sam Lee',
+    modifiedAt: '2026-11-03T12:00:00Z'
+  }
+]
+```
+
+## `detail-version-cache.ts`
+
+```ts
+/** One cache setting of the version. */
+export type CacheSetting = {
+  id: string
+  name: string
+  browserBehavior: string
+  browserMaxAge: number
+  edgeBehavior: string
+  edgeMaxAge: number
+  staleCache: boolean
+  largeFileCache: boolean
+  largeFileOffset: number
+  tieredCache: boolean
+  tieredTopology: string
+  varyByMethod: string[]
+  queryStringBehavior: string
+  queryStringFields: string
+  cookieBehavior: string
+  cookieNames: string
+  deviceBehavior: string
+  deviceGroups: string[]
+  author: string
+  modifiedAt: string
+}
+
+/** The fields the drawer edits. */
+export type CacheSettingForm = Omit<CacheSetting, 'id' | 'author' | 'modifiedAt'>
+
+export const browserBehaviors = [
+  { value: 'honor', label: 'Honor origin cache headers' },
+  { value: 'override', label: 'Override cache settings' },
+  { value: 'no-cache', label: 'No cache' }
+]
+export const edgeBehaviors = [
+  { value: 'honor', label: 'Honor origin cache headers' },
+  { value: 'override', label: 'Override cache settings' }
+]
+export const topologies = [
+  { value: 'nearest-region', label: 'Nearest region' },
+  { value: 'north-america', label: 'North America' },
+  { value: 'europe', label: 'Europe' }
+]
+export const varyBehaviors = [
+  { value: 'ignore', label: 'Ignore all, best cache rate' },
+  { value: 'all', label: 'Vary by all' },
+  { value: 'allowlist', label: 'Vary by some (allowlist)' },
+  { value: 'denylist', label: 'Vary by all except some (denylist)' }
+]
+export const deviceBehaviors = [
+  { value: 'ignore', label: 'Ignore all, best cache rate' },
+  { value: 'allowlist', label: 'Vary by some device groups (allowlist)' }
+]
+export const methods = [
+  { value: 'POST', label: 'POST' },
+  { value: 'OPTIONS', label: 'OPTIONS' }
+]
+export const deviceGroupOptions = [
+  { value: 'mobile', label: 'mobile' },
+  { value: 'tablet', label: 'tablet' },
+  { value: 'crawlers', label: 'crawlers' }
+]
+
+export const labelOf = (options: { value: string; label: string }[]) => (value: unknown) =>
+  options.find((option) => option.value === value)?.label ?? String(value ?? '')
+export const methodsLabel = (values: unknown[] | undefined) =>
+  values?.length ? values.join(', ') : ''
+export const deviceGroupsLabel = (values: unknown[] | undefined) =>
+  values?.length ? values.join(', ') : ''
+
+export const cacheSummary = (behavior: string, maxAge: number) => {
+  if (behavior === 'honor') return 'Origin headers'
+  if (behavior === 'no-cache') return 'No cache'
+  if (maxAge % 86400 === 0) return `${maxAge / 86400} ${maxAge === 86400 ? 'day' : 'days'}`
+  if (maxAge % 3600 === 0) return `${maxAge / 3600} ${maxAge === 3600 ? 'hour' : 'hours'}`
+  return `${maxAge} seconds`
+}
+
+export const blankSetting = (): CacheSettingForm => ({
+  name: '',
+  browserBehavior: 'honor',
+  browserMaxAge: 0,
+  edgeBehavior: 'override',
+  edgeMaxAge: 60,
+  staleCache: false,
+  largeFileCache: false,
+  largeFileOffset: 1024,
+  tieredCache: false,
+  tieredTopology: 'nearest-region',
+  varyByMethod: [],
+  queryStringBehavior: 'ignore',
+  queryStringFields: '',
+  cookieBehavior: 'ignore',
+  cookieNames: '',
+  deviceBehavior: 'ignore',
+  deviceGroups: []
+})
+```
+
+## `detail-version-states.ts`
+
+```ts
+import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+
+import type {
+  VersionDetailState,
+  VersionDetailTab,
+  VersionDetailVersion
+} from './detail-version.vue'
+
+/** How a version state reads as a tag. */
+export interface VersionDetailStateTag {
+  /** Tag label. */
+  label: string
+  /** Tag severity. */
+  severity?: TagSeverity
+  /** Tag variant. */
+  variant?: TagVariant
+  /** Tag glyph, or an empty string. */
+  icon: string
+}
+
+const STATE_TAGS: Record<VersionDetailState, VersionDetailStateTag> = {
+  draft: { label: 'Draft', severity: 'warning', icon: 'az az-file-pen' },
+  deployed: { label: 'Deployed', variant: 'primary', icon: '' },
+  ready: { label: 'Ready', severity: 'success', icon: '' }
+}
+
+export const tagFor = (entry: VersionDetailVersion): VersionDetailStateTag =>
+  STATE_TAGS[entry.state]
+
+export const VERSION_TABS: { value: VersionDetailTab; label: string }[] = [
+  { value: 'main-settings', label: 'Settings' },
+  { value: 'source', label: 'Source' },
+  { value: 'device-groups', label: 'Device Groups' },
+  { value: 'cache-settings', label: 'Cache Settings' },
+  { value: 'functions-instances', label: 'Functions Instances' },
+  { value: 'rules-engine', label: 'Rules Engine' }
+]
+
+export const ADD_VERSION = '__create-version__'
+export const ADD_ENVIRONMENT = '__create-environment__'
+```
+
+## `parts/creating-wire.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import Skeleton from '@aziontech/webkit/skeleton'
+
+  export interface CreatingWireProps {
+    /** Name of the version being copied. */
+    versionName: string
+  }
+
+  defineProps<CreatingWireProps>()
+
+  const wireSections = [
+    { id: 'general', rows: ['62%', '48%'] },
+    { id: 'modules', rows: ['54%', '66%', '44%'] }
+  ]
+</script>
+
+<template>
+  <section
+    class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+  >
+    <ScrollArea
+      aria-label="Version settings"
+      fade
+    >
+      <div
+        role="status"
+        aria-busy="true"
+        class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap) animate-fade-in motion-reduce:animate-none"
+        data-testid="version-detail-wire"
+      >
+        <span class="sr-only">Creating a new version from {{ versionName }}.</span>
+        <div
+          class="flex flex-col gap-(--spacing-xs)"
+          aria-hidden="true"
+        >
+          <Skeleton
+            width="8rem"
+            height="1.25rem"
+          />
+          <Skeleton
+            width="18rem"
+            height="0.875rem"
+          />
+        </div>
+        <div
+          class="mt-(--layout-section-gap) flex flex-col gap-(--layout-section-gap)"
+          aria-hidden="true"
+        >
+          <div
+            v-for="section in wireSections"
+            :key="section.id"
+            class="flex flex-col gap-(--layout-group-gap)"
+          >
+            <Skeleton
+              width="6rem"
+              height="1rem"
+            />
+            <Card :padded="false">
+              <template #default>
+                <div class="flex flex-col divide-y divide-(--border-default)">
+                  <div
+                    v-for="(width, index) in section.rows"
+                    :key="index"
+                    class="flex items-center gap-(--spacing-md) p-(--spacing-md)"
+                  >
+                    <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+                      <Skeleton
+                        width="7rem"
+                        height="0.875rem"
+                      />
+                      <Skeleton
+                        :width="width"
+                        height="0.75rem"
+                      />
+                    </div>
+                    <span class="flex shrink-0">
+                      <Skeleton
+                        width="2.25rem"
+                        height="1.25rem"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </template>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </ScrollArea>
+  </section>
+</template>
+```
+
+## `parts/environment-switcher.vue`
+
+```ts
+<script setup lang="ts">
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
+
+  import type { VersionDetailEnvironment } from '../detail-version.vue'
+  import { ADD_ENVIRONMENT } from '../detail-version-states'
+
+  export interface EnvironmentSwitcherProps {
+    /** Every environment of the resource. */
+    environments: VersionDetailEnvironment[]
+    /** The environment the page is on. */
+    environmentName: string
+  }
+
+  const props = defineProps<EnvironmentSwitcherProps>()
+
+  const emit = defineEmits<{
+    pick: [value: unknown]
+    add: [event: MouseEvent | KeyboardEvent]
+  }>()
+
+  const environmentQuery = defineModel<string>('query', { required: true })
+
+  const environmentMatches = computed(() => {
+    const needle = environmentQuery.value.trim().toLowerCase()
+    if (!needle) return props.environments
+    return props.environments.filter((entry) => entry.name.toLowerCase().includes(needle))
+  })
+</script>
+
+<template>
+  <Select
+    :model-value="environmentName"
+    :display-value="(value) => String(value ?? '')"
+    @update:model-value="(value) => emit('pick', value)"
+    @update:open="
+      (open) => {
+        if (!open) environmentQuery = ''
+      }
+    "
+  >
+    <Select.Trigger aria-label="Switch environment" />
+    <Select.Content>
+      <template #search>
+        <Input
+          v-model="environmentQuery"
+          size="small"
+          placeholder="Search environments"
+          aria-label="Search environments"
+          @keydown.stop
+        >
+          <template #leading>
+            <i
+              class="az az-search"
+              aria-hidden="true"
+            />
+          </template>
+        </Input>
+      </template>
+      <Select.Group label="Environments">
+        <Select.Item
+          v-for="entry in environmentMatches"
+          :key="entry.name"
+          :value="entry.name"
+        >
+          {{ entry.name }}
+          <template #tag>
+            <Tag
+              :label="entry.policy"
+              severity="neutral"
+              size="small"
+            />
+          </template>
+        </Select.Item>
+        <p
+          v-if="!environmentMatches.length"
+          class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
+        >
+          No environments match"{{ environmentQuery }}".
+        </p>
+      </Select.Group>
+      <template #footer>
+        <Select.Item
+          :value="ADD_ENVIRONMENT"
+          class="w-full"
+          @click="(event: MouseEvent) => emit('add', event)"
+          @keydown.enter="(event: KeyboardEvent) => emit('add', event)"
+        >
+          <span class="flex items-center gap-(--spacing-xs)">
+            <i
+              class="az az-circle-plus"
+              aria-hidden="true"
+            />
+            Add Environment
+          </span>
+        </Select.Item>
+      </template>
+    </Select.Content>
+  </Select>
+</template>
+```
+
+## `parts/revert-diff.vue`
+
+```ts
+<script setup lang="ts">
+  import type { VersionDetailRevertDiff } from '../detail-version.vue'
+
+  export interface RevertDiffProps {
+    /** What the revert changes. */
+    revertDiff: VersionDetailRevertDiff
+    /** Name of the deployed version the diff is against. */
+    deployedName: string
+  }
+
+  defineProps<RevertDiffProps>()
+</script>
+
+<template>
+  <div class="flex min-w-0 flex-col gap-(--spacing-md) pt-(--spacing-md)">
+    <section
+      aria-labelledby="revert-settings-title"
+      class="flex min-w-0 flex-col gap-(--spacing-xs)"
+    >
+      <h3
+        id="revert-settings-title"
+        class="text-label-md text-(--text-default)"
+      >
+        What changes against {{ deployedName }}
+      </h3>
+      <ul
+        class="flex min-w-0 flex-col divide-y divide-(--border-muted) rounded-(--shape-control) border border-(--border-default)"
+      >
+        <li
+          v-for="change in revertDiff.settings"
+          :key="change.setting"
+          class="flex min-w-0 items-center justify-between gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)"
+        >
+          <span class="truncate text-body-sm text-(--text-default)">{{ change.setting }}</span>
+          <span class="sr-only">{{ `changes from ${change.from} to ${change.to}` }}</span>
+          <span
+            class="flex shrink-0 items-center gap-(--spacing-xs) text-body-sm"
+            aria-hidden="true"
+          >
+            <span class="text-(--text-muted) line-through">{{ change.from }}</span>
+            <i class="az az-arrow-right text-body-xs text-(--text-muted)" />
+            <span class="text-(--text-default)">{{ change.to }}</span>
+          </span>
+        </li>
+      </ul>
+    </section>
+    <p class="text-body-sm text-(--text-default)">
+      Rules: {{ revertDiff.rulesAdded }} added, {{ revertDiff.rulesRemoved }} removed.
+      {{ revertDiff.rulesNote }}
+    </p>
+  </div>
+</template>
+```
+
+## `parts/settings-panel.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  import type { VersionDetailSettings } from '../detail-version.vue'
+
+  export interface SettingsPanelProps {
+    /** Resource name, read in the fieldset legend. */
+    resourceName: string
+    /** Version name, read in the fieldset legend. */
+    versionName: string
+    /** Whether the version is an editable draft. */
+    isDraft: boolean
+  }
+
+  defineProps<SettingsPanelProps>()
+
+  const form = defineModel<VersionDetailSettings>('form', { required: true })
+
+  const defaultModules = [
+    {
+      key: 'protocol_optimization',
+      title: 'Protocol Optimization',
+      description: 'Optimize protocols and manage dynamic content delivery.'
+    },
+    { key: 'cache', title: 'Cache', description: 'Customize advanced cache settings.' },
+    {
+      key: 'device_detection',
+      title: 'Device Detection',
+      description: 'Detect device types to configure responsive rules.'
+    },
+    {
+      key: 'custom_code',
+      title: 'Custom Code',
+      description: 'Run your own code on every request.'
+    },
+    {
+      key: 'image_optimization',
+      title: 'Image Optimization',
+      description: 'Enable dynamic image editing options.'
+    },
+    {
+      key: 'load_balancing',
+      title: 'Load Balancing',
+      description:
+        'Balance traffic to your origins ensuring reliability and network congestion control.'
+    }
+  ]
+</script>
+
+<template>
+  <section
+    class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+  >
+    <ScrollArea
+      aria-label="Version settings"
+      fade
+    >
+      <div class="flex min-h-full flex-col">
+        <fieldset
+          :disabled="!isDraft"
+          class="contents"
+        >
+          <legend class="sr-only">
+            {{ resourceName }} {{ versionName }}{{ isDraft ? '' : ', read-only' }}
+          </legend>
+          <form
+            class="flex min-h-full flex-col"
+            aria-label="Main settings"
+            novalidate
+            @submit.prevent
+          >
+            <div
+              class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
+            >
+              <PageHeader
+                title="Settings"
+                description="Core configuration for this resource."
+                size="small"
+              />
+
+              <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
+                <legend class="sr-only">Main settings</legend>
+
+                <SettingsGroup
+                  label="General"
+                  hint="How this resource is identified across the console, and whether it is serving traffic."
+                  anchor="general"
+                >
+                  <Card :padded="false">
+                    <template #default>
+                      <Item.List>
+                        <SettingsRow
+                          title="Name"
+                          description="A unique and descriptive name to identify the resource."
+                        >
+                          <Input
+                            v-model="form.name"
+                            size="large"
+                            class="w-full"
+                            aria-label="Name"
+                          />
+                        </SettingsRow>
+                        <SettingsRow
+                          title="Active"
+                          description="When disabled, the resource stops serving traffic."
+                          variant="compact"
+                        >
+                          <Switch
+                            v-model="form.active"
+                            aria-label="Active"
+                          />
+                        </SettingsRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsGroup>
+
+                <SettingsGroup
+                  label="Modules"
+                  hint="The capabilities this resource runs with, each of which can be toggled here."
+                  anchor="modules"
+                >
+                  <Card :padded="false">
+                    <template #default>
+                      <Item.List>
+                        <SettingsRow
+                          v-for="mod in defaultModules"
+                          :key="mod.key"
+                          :title="mod.title"
+                          :description="mod.description"
+                          variant="compact"
+                        >
+                          <Switch
+                            v-model="form.modules[mod.key]"
+                            :aria-label="mod.title"
+                          />
+                        </SettingsRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsGroup>
+
+                <SettingsGroup
+                  label="Subscription modules"
+                  hint="Paid add-ons that are activated with sales, not from this page."
+                  anchor="subscription-modules"
+                >
+                  <Card :padded="false">
+                    <template #default>
+                      <Item.List>
+                        <SettingsRow
+                          title="WebSocket Proxy"
+                          variant="compact"
+                        >
+                          <template #description>
+                            Enhance real-time data exchange between your resource and backend
+                            services using the WebSocket protocol.
+                            <Link
+                              href="https://example.com/contact-sales"
+                              target="_blank"
+                              inline
+                              >Contact sales</Link
+                            >
+                          </template>
+                          <Tooltip content="Contact sales to activate this module.">
+                            <Switch
+                              v-model="form.modules.web_socket_proxy"
+                              disabled
+                              aria-label="WebSocket Proxy"
+                            />
+                          </Tooltip>
+                        </SettingsRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsGroup>
+              </fieldset>
+            </div>
+          </form>
+        </fieldset>
+      </div>
+    </ScrollArea>
+  </section>
+</template>
+```
+
+## `parts/version-bar.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Spinner from '@aziontech/webkit/spinner'
+  import SplitButton from '@aziontech/webkit/split-button'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed, ref } from 'vue'
+
+  import type { VersionDetailRevertDiff, VersionDetailVersion } from '../detail-version.vue'
+  import RevertDiff from './revert-diff.vue'
+
+  export interface VersionBarProps {
+    /** The version the page is on. */
+    viewed: VersionDetailVersion
+    /** The version a revert replaces: the deployed one. */
+    version: VersionDetailVersion
+    /** What the revert changes. */
+    revertDiff: VersionDetailRevertDiff
+    /** A new version is being copied from the viewed one. */
+    creating: boolean
+    /** A revert to the viewed version is running. */
+    reverting: boolean
+  }
+
+  const props = defineProps<VersionBarProps>()
+
+  const emit = defineEmits<{
+    save: [event: MouseEvent, action: string]
+    'add-version': [event: MouseEvent]
+    redeploy: [event: MouseEvent]
+    revert: [event: MouseEvent]
+  }>()
+
+  const saveOptions = [
+    { label: 'Save and deploy', value: 'deploy' },
+    { label: 'Save and build', value: 'build' },
+    { label: 'Save', value: 'save' }
+  ]
+
+  const saveAction = ref<string | undefined>('deploy')
+  const confirmOpen = ref(false)
+
+  const isDraft = computed(() => props.viewed.state === 'draft')
+  const statusLabel = computed(() => {
+    if (props.creating) return 'Creating new version…'
+    if (props.reverting) return `Reverting to ${props.viewed.name}…`
+    if (isDraft.value) return 'Draft'
+    return props.viewed.state === 'deployed'
+      ? 'Viewing a deployed version'
+      : 'Viewing an earlier version'
+  })
+  const statusLine = computed(() => {
+    if (props.creating) return `Copying ${props.viewed.name} into a new draft.`
+    if (isDraft.value) return 'This version is open for editing. Deploy it when ready.'
+    return props.viewed.comment
+  })
+
+  const save = (event: MouseEvent) => emit('save', event, saveAction.value ?? 'deploy')
+  const confirmRevert = (event: MouseEvent) => {
+    confirmOpen.value = false
+    emit('revert', event)
+  }
+</script>
+
+<template>
+  <Transition
+    appear
+    enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+    enter-from-class="translate-y-2 opacity-0"
+  >
+    <footer
+      class="flex min-h-14 shrink-0 flex-col border-t border-(--border-default) bg-(--bg-surface)"
+      data-testid="version-detail-bar"
+    >
+      <div
+        class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
+      >
+        <span
+          v-if="creating || isDraft"
+          class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
+          aria-hidden="true"
+        >
+          <span
+            v-if="creating"
+            class="flex size-4"
+          >
+            <Spinner class="w-full" />
+          </span>
+          <i
+            v-else
+            class="az az-file-pen text-body-sm text-(--text-default)"
+          />
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col"
+          role="status"
+        >
+          <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+            <span class="truncate text-body-sm text-(--text-default)">{{ statusLabel }}</span>
+            <span
+              v-if="!creating"
+              class="hidden shrink-0 sm:inline-flex"
+            >
+              <Tag
+                :label="isDraft ? 'Editable' : 'Read-only'"
+                :severity="isDraft ? 'info' : 'neutral'"
+                :icon="isDraft ? '' : 'az az-lock'"
+                size="small"
+              />
+            </span>
+          </div>
+          <p
+            class="hidden truncate text-body-xs text-(--text-muted) md:block"
+            :title="statusLine"
+          >
+            {{ statusLine }}
+          </p>
+        </div>
+
+        <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+          <SplitButton
+            v-if="isDraft && !creating"
+            :label="saveOptions.find((option) => option.value === saveAction)?.label"
+            :icon="saveAction === 'deploy' ? 'az az-cloud-upload' : ''"
+            variant="primary"
+            size="medium"
+            :items="saveOptions"
+            @click="save"
+            @item-click="(_event, item) => (saveAction = item.value)"
+          />
+          <template v-else>
+            <Button
+              label="Add Version"
+              variant="outline"
+              size="medium"
+              icon="az az-plus"
+              :loading="creating"
+              @click="(event: MouseEvent) => emit('add-version', event)"
+            />
+            <Button
+              v-if="viewed.state !== 'ready'"
+              label="Redeploy"
+              variant="outline"
+              size="medium"
+              icon="az az-refresh"
+              :disabled="creating"
+              @click="(event: MouseEvent) => emit('redeploy', event)"
+            />
+            <ConfirmDialog
+              v-else
+              v-model:open="confirmOpen"
+              :title="`Revert to ${viewed.name}?`"
+              :description="`Reverting deploys ${viewed.name} to Production in place of ${version.name}. ${version.name} stays in the version history, so you can redeploy it later.`"
+              :confirm-label="`Revert to ${viewed.name}`"
+              variant="primary"
+              size="medium"
+              @confirm="confirmRevert"
+            >
+              <template #trigger>
+                <Button
+                  :label="`Revert to ${viewed.name}`"
+                  variant="primary"
+                  size="medium"
+                  icon="az az-undo"
+                  :loading="reverting"
+                />
+              </template>
+              <RevertDiff
+                :revert-diff="revertDiff"
+                :deployed-name="version.name"
+              />
+            </ConfirmDialog>
+          </template>
+        </div>
+      </div>
+    </footer>
+  </Transition>
+</template>
+```
+
+## `parts/version-history.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Item from '@aziontech/webkit/item-root'
+  import Tag from '@aziontech/webkit/tag'
+  import Textarea from '@aziontech/webkit/textarea'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+  import { ref } from 'vue'
+
+  import type { VersionDetailVersion } from '../detail-version.vue'
+  import { tagFor } from '../detail-version-states'
+
+  export interface VersionHistoryProps {
+    /** Resource name, used in the version links. */
+    resourceName: string
+    /** Id of the version the page is on. */
+    viewedId: string
+    /** The current version the history starts on. */
+    version: VersionDetailVersion
+    /** The built versions older than the current one, newest first. */
+    earlier: VersionDetailVersion[]
+    /** The current version description. */
+    description: string
+  }
+
+  defineProps<VersionHistoryProps>()
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
+
+  const emit = defineEmits<{
+    save: [event: MouseEvent]
+  }>()
+
+  const historyExpanded = defineModel<boolean>('open', { required: true })
+  const editing = defineModel<boolean>('editing', { required: true })
+  const draftText = defineModel<string>('draftText', { required: true })
+
+  const shown = ref(5)
+
+  const VERSION_LINK_CLASS = 'flex w-full min-w-0 gap-(--spacing-sm) text-start'
+</script>
+
+<template>
+  <aside
+    :inert="!historyExpanded"
+    aria-labelledby="version-history-title"
+    class="flex min-h-0 min-w-0 flex-1 flex-col bg-(--bg-surface)"
+    data-testid="version-detail-history"
+  >
+    <header
+      class="flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) py-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm)"
+    >
+      <h2
+        id="version-history-title"
+        class="truncate text-label-lg text-(--text-default)"
+      >
+        Version history
+      </h2>
+      <IconButton
+        icon="az az-x"
+        variant="ghost"
+        size="small"
+        aria-label="Close version history"
+        @click="historyExpanded = false"
+      />
+    </header>
+    <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain p-(--spacing-lg)">
+      <ol class="flex flex-col">
+        <li class="relative flex gap-(--spacing-sm) pb-(--spacing-lg)">
+          <span
+            class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
+            aria-hidden="true"
+          />
+          <span
+            class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-foreground)"
+            aria-hidden="true"
+          >
+            <i
+              :class="version.state === 'draft' ? 'az az-file-pen' : 'az az-code'"
+              class="text-body-xs"
+            />
+          </span>
+          <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
+            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <span class="truncate text-label-md text-(--text-default)">
+                {{ version.name }}
+              </span>
+              <span class="flex shrink-0">
+                <Tag
+                  :label="tagFor(version).label"
+                  :variant="tagFor(version).variant"
+                  :severity="tagFor(version).severity"
+                  size="small"
+                />
+              </span>
+              <span
+                v-if="version.state === 'draft' && !editing"
+                class="ms-auto shrink-0"
+              >
+                <IconButton
+                  icon="az az-pencil"
+                  variant="ghost"
+                  size="small"
+                  aria-label="Edit version info"
+                  @click="
+                    () => {
+                      draftText = description
+                      editing = true
+                    }
+                  "
+                />
+              </span>
+            </div>
+            <p class="text-label-sm text-(--text-muted)">Current version</p>
+
+            <div
+              v-if="version.state === 'draft' && editing"
+              class="flex flex-col gap-(--spacing-sm) pt-(--spacing-xs)"
+            >
+              <Field>
+                <Field.Label>Description</Field.Label>
+                <Textarea
+                  v-model="draftText"
+                  placeholder="What changed in this version?"
+                />
+                <Field.Description
+                  >Shows in the version list and on the deployment.</Field.Description
+                >
+              </Field>
+              <div class="flex justify-end gap-(--spacing-xs)">
+                <Button
+                  label="Cancel"
+                  variant="outline"
+                  size="small"
+                  @click="editing = false"
+                />
+                <Button
+                  label="Save"
+                  variant="primary"
+                  size="small"
+                  @click="(event: MouseEvent) => emit('save', event)"
+                />
+              </div>
+            </div>
+            <template v-else>
+              <p
+                :data-empty="!description || null"
+                class="text-body-sm text-(--text-default) data-empty:text-(--text-muted)"
+              >
+                {{ description || 'No description' }}
+              </p>
+              <span
+                class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+              >
+                <span class="flex shrink-0">
+                  <Avatar
+                    :alt="version.author"
+                    :label="version.author"
+                    size="small"
+                    variant="square"
+                  />
+                </span>
+                <span class="truncate">{{ version.author }} · {{ ago(version.createdAt) }}</span>
+              </span>
+            </template>
+          </div>
+        </li>
+
+        <li
+          v-if="version.state === 'draft'"
+          class="relative flex flex-col pb-(--spacing-lg)"
+        >
+          <span
+            class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
+            aria-hidden="true"
+          />
+          <p class="flex gap-(--spacing-sm)">
+            <span
+              class="relative flex size-7 shrink-0 items-center justify-center"
+              aria-hidden="true"
+            >
+              <span class="size-2 rounded-full border border-(--border-strong) bg-(--bg-surface)" />
+            </span>
+            <span class="pt-1 text-body-sm text-(--text-muted)">
+              No changes yet. Each change you save shows up here.
+            </span>
+          </p>
+        </li>
+
+        <li
+          v-for="(entry, index) in earlier.slice(0, shown)"
+          :key="entry.id"
+          class="relative flex pb-(--spacing-lg) last:pb-0"
+        >
+          <span
+            v-if="index < earlier.slice(0, shown).length - 1"
+            class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
+            aria-hidden="true"
+          />
+          <Item
+            :href="`/resources/${resourceName}/versions/${entry.name}`"
+            :aria-current="entry.id === viewedId ? 'page' : undefined"
+            variant="inline"
+          >
+            <span :class="VERSION_LINK_CLASS">
+              <span
+                class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
+                aria-hidden="true"
+              >
+                <i class="az az-code text-body-xs" />
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <span
+                    class="truncate text-label-md text-(--text-default) group-hover/item:underline"
+                  >
+                    {{ entry.name }}
+                  </span>
+                  <span class="flex shrink-0">
+                    <Tag
+                      :label="tagFor(entry).label"
+                      :variant="tagFor(entry).variant"
+                      :severity="tagFor(entry).severity"
+                      size="small"
+                    />
+                  </span>
+                  <span
+                    v-if="entry.id === viewedId"
+                    class="flex shrink-0"
+                  >
+                    <Tag
+                      label="Viewing"
+                      severity="info"
+                      size="small"
+                    />
+                  </span>
+                </span>
+                <span class="line-clamp-2 text-body-sm text-(--text-muted)">
+                  {{ entry.comment }}
+                </span>
+                <span
+                  class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+                >
+                  <span class="flex shrink-0">
+                    <Avatar
+                      :alt="entry.author"
+                      :label="entry.author"
+                      size="small"
+                      variant="square"
+                    />
+                  </span>
+                  <span class="truncate">{{ entry.author }} · {{ ago(entry.createdAt) }}</span>
+                </span>
+              </span>
+            </span>
+          </Item>
+        </li>
+      </ol>
+
+      <div
+        v-if="earlier.length > shown"
+        class="pt-(--spacing-sm)"
+      >
+        <Button
+          label="Show older"
+          variant="ghost"
+          size="small"
+          @click="shown += 5"
+        />
+      </div>
+    </div>
+  </aside>
+</template>
+```
+
+## `parts/version-switcher.vue`
+
+```ts
+<script setup lang="ts">
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
+
+  import type { VersionDetailEnvironment, VersionDetailVersion } from '../detail-version.vue'
+  import { ADD_VERSION, tagFor } from '../detail-version-states'
+
+  export interface VersionSwitcherProps {
+    /** Every version, newest first. */
+    versions: VersionDetailVersion[]
+    /** The environments; each version names the ones it is live in. */
+    environments: VersionDetailEnvironment[]
+    /** Id of the version the page is on. */
+    viewedId: string
+  }
+
+  const props = defineProps<VersionSwitcherProps>()
+
+  const emit = defineEmits<{
+    pick: [value: unknown]
+    add: [event: MouseEvent | KeyboardEvent]
+  }>()
+
+  const query = defineModel<string>('query', { required: true })
+
+  const matches = computed(() =>
+    props.versions.filter((entry) =>
+      entry.name.toLowerCase().includes(query.value.trim().toLowerCase())
+    )
+  )
+  const servedIn = (id: string) =>
+    props.environments.filter((entry) => entry.serves === id).map((entry) => entry.name)
+</script>
+
+<template>
+  <Select
+    :model-value="viewedId"
+    @update:model-value="(value) => emit('pick', value)"
+    :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
+    @update:open="
+      (open) => {
+        if (!open) query = ''
+      }
+    "
+  >
+    <Select.Trigger aria-label="Switch version" />
+    <Select.Content>
+      <template #search>
+        <Input
+          v-model="query"
+          size="small"
+          placeholder="Search versions"
+          aria-label="Search versions"
+          @keydown.stop
+        >
+          <template #leading>
+            <i
+              class="az az-search"
+              aria-hidden="true"
+            />
+          </template>
+        </Input>
+      </template>
+      <Select.Group label="Versions">
+        <Select.Item
+          v-for="entry in matches"
+          :key="entry.id"
+          :value="entry.id"
+        >
+          {{ entry.name }}
+          <span
+            v-if="servedIn(entry.id).length"
+            class="text-body-xs text-(--text-muted)"
+            >Live in {{ servedIn(entry.id).join(', ') }}</span
+          >
+          <template #tag>
+            <Tag
+              :label="tagFor(entry).label"
+              :variant="tagFor(entry).variant"
+              :severity="tagFor(entry).severity"
+              :icon="tagFor(entry).icon"
+              size="small"
+            />
+          </template>
+        </Select.Item>
+        <p
+          v-if="!matches.length"
+          class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
+        >
+          No versions match"{{ query }}".
+        </p>
+      </Select.Group>
+      <template #footer>
+        <Select.Item
+          :value="ADD_VERSION"
+          class="w-full"
+          @click="(event: MouseEvent) => emit('add', event)"
+          @keydown.enter="(event: KeyboardEvent) => emit('add', event)"
+        >
+          <span class="flex items-center gap-(--spacing-xs)">
+            <i
+              class="az az-circle-plus"
+              aria-hidden="true"
+            />
+            Add Version
+          </span>
+        </Select.Item>
+      </template>
+    </Select.Content>
+  </Select>
+</template>
+```
+
+## `parts/version-tab-bar.vue`
+
+```ts
+<script setup lang="ts">
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import Tabs from '@aziontech/webkit/tabs'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
+
+  import type { VersionDetailTab, VersionDetailVersion } from '../detail-version.vue'
+  import { tagFor, VERSION_TABS as tabs } from '../detail-version-states'
+
+  export interface VersionTabBarProps {
+    /** The version the page is on. */
+    viewed: VersionDetailVersion
+    /** Whether Version history is open. */
+    historyExpanded: boolean
+  }
+
+  const props = defineProps<VersionTabBarProps>()
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
+  }>()
+
+  const activeTab = defineModel<VersionDetailTab>('tab', { required: true })
+
+  const isDraft = computed(() => props.viewed.state === 'draft')
+</script>
+
+<template>
+  <PageTabs v-model="activeTab">
+    <Tabs.Trigger
+      v-for="tab in tabs"
+      :key="tab.value"
+      :value="tab.value"
+      :label="tab.label"
+    />
+    <template #actions>
+      <span
+        v-if="!isDraft && viewed.createdOn"
+        class="hidden text-body-sm text-(--text-muted) md:inline"
+      >
+        Created {{ viewed.createdOn }}
+      </span>
+      <Tag
+        :label="tagFor(viewed).label"
+        :variant="tagFor(viewed).variant"
+        :severity="tagFor(viewed).severity"
+        :icon="tagFor(viewed).icon"
+        size="medium"
+      />
+      <DropdownMenu
+        side="bottom"
+        align="end"
+        @select="(event, value) => emit('select', event, value)"
+      >
+        <DropdownMenu.Trigger>
+          <IconButton
+            icon="az az-ellipsis"
+            variant="ghost"
+            size="small"
+            aria-label="Version actions"
+          />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Group>
+          <DropdownMenu.Item
+            v-if="isDraft"
+            value="edit"
+            label="Edit version info"
+          >
+            <template #leading>
+              <i
+                class="az az-pencil"
+                aria-hidden="true"
+              />
+            </template>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            value="history"
+            :label="historyExpanded ? 'Hide version history' : 'Show version history'"
+          >
+            <template #leading>
+              <i
+                class="az az-history"
+                aria-hidden="true"
+              />
+            </template>
+          </DropdownMenu.Item>
+        </DropdownMenu.Group>
+      </DropdownMenu>
+    </template>
+  </PageTabs>
+</template>
 ```

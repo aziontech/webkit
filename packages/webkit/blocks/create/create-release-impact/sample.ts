@@ -105,3 +105,94 @@ export const sampleImpact: ReleaseImpactSettings[] = [
     environments: []
   }
 ]
+
+export interface ReleaseImpactDeploymentSetting {
+  id: string
+  name: string
+  policy: string
+  environments: string[]
+  workloads: number | null
+  shared?: boolean
+  managed?: boolean
+}
+
+export interface ReleaseImpactSettingsGroup {
+  key: string
+  label: string
+  selectable: boolean
+  notice?: string
+  action?: string
+  href?: string
+  items: ReleaseImpactDeploymentSetting[]
+}
+
+export const sampleSettingsGroups: ReleaseImpactSettingsGroup[] = [
+  {
+    key: 'yours',
+    label: 'Your Deployment Settings',
+    selectable: true,
+    items: [
+      {
+        id: 'storefront-shared',
+        name: 'storefront-shared',
+        policy: 'Flexible binding · Deploys on release',
+        environments: ['Production', 'Staging', 'Preview', 'QA', 'Load test'],
+        workloads: 4,
+        shared: true
+      },
+      {
+        id: 'web-app-production',
+        name: 'web-app-production',
+        policy: 'Strict binding · Deploys on release',
+        environments: ['Production'],
+        workloads: 1
+      },
+      {
+        id: 'api-staging',
+        name: 'api-staging',
+        policy: 'Flexible binding · Manual approval',
+        environments: ['Staging'],
+        workloads: 0
+      },
+      {
+        id: 'docs-preview',
+        name: 'docs-preview',
+        policy: 'Flexible binding · Deploys on release',
+        environments: ['Preview'],
+        workloads: null
+      }
+    ]
+  },
+  {
+    key: 'managed',
+    label: 'Managed',
+    selectable: true,
+    items: [
+      {
+        id: 'default-settings',
+        name: 'default-settings',
+        policy: 'Flexible binding · Deploys on release',
+        environments: ['Production', 'Preview'],
+        workloads: 12,
+        managed: true
+      }
+    ]
+  },
+  {
+    key: 'inactive',
+    label: 'Inactive',
+    selectable: false,
+    notice: 'Activate this Deployment Setting before a release can deploy with it.',
+    action: 'Activate in Deployment Settings',
+    href: 'https://example.com/deployment-settings/legacy-checkout',
+    items: [
+      {
+        id: 'legacy-checkout',
+        name: 'legacy-checkout',
+        policy: 'Strict binding · Manual approval',
+        environments: ['Production'],
+        workloads: 2
+      }
+    ]
+  }
+]

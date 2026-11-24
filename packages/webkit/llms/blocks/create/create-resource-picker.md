@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-resource-picker/create-resource-picker.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-resource-picker")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [ToggleGroup](../../components/toggle-group.md), `utils/radio-list`
 - Skills: `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -51,7 +51,7 @@ A large `Input` with a search icon, placeholder and matching `aria-label`, shown
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 
-`Item.List` of small `clickable` `Item`s (native `button`s), one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a check in `Item.Actions` on the chosen row. The chosen row takes `aria-pressed`, which fills it. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
+`Item.List` of small `clickable` `Item`s (native `button`s), one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a radio circle in `Item.Actions`, filled on the chosen row. The rows are one named `radiogroup`; each row takes `role="radio"` and `aria-checked`, which fills the chosen one. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
 
 ### F. Load more — `Button` (optional)
 
@@ -105,7 +105,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 ## Do
 
 - Default to Existing when anything exists, and drop the toggle entirely when nothing does.
-- Mark the chosen row three ways: background, trailing check and `aria-pressed`.
+- Mark the chosen row three ways: background, filled trailing radio circle and `aria-checked`.
 - Keep the required message above the rows, under the search, so it is read before the list is scanned.
 - Offer the other mode in the no-match line, so an empty search leads to creating one.
 - Keep the chosen value when the user switches to New and back.
@@ -137,7 +137,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 ## Accessibility
 
 - The `ToggleGroup` has an `aria-label` that states the question, e.g. "Where the project comes from".
-- Each row is a native `button` with `aria-pressed` reflecting the selection; the check icon is `aria-hidden`.
+- Each row is a native `button` with `role="radio"` and `aria-checked` reflecting the selection, inside a `radiogroup` named for the list; the radio circle is `aria-hidden`.
 - Search has an `aria-label` that matches its placeholder.
 - A `role="status"` region announces the count after every search, load and no-match, e.g. "5 of 19 projects".
 - Skeleton rows are `aria-hidden`; the Load more `Button` carries `:loading` so its busy state is announced.
@@ -184,8 +184,10 @@ Each variant is the same screen in another state: `get_block("create/create-reso
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, reactive, ref } from 'vue'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
+  import { computed, reactive } from 'vue'
 
+  import { usePagedList } from './composables/use-paged-list'
   import { sampleProjects, sampleSelected } from './sample'
 
   /** One resource the user can bind. */
@@ -232,7 +234,6 @@ Each variant is the same screen in another state: `get_block("create/create-reso
     { label: 'Existing project', value: 'existing' },
     { label: 'New project', value: 'new' }
   ]
-  const PAGE_SIZE = 5
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
   const wireSubWidths = ['84%', '66%', '78%', '58%', '72%']
 
@@ -255,60 +256,17 @@ Each variant is the same screen in another state: `get_block("create/create-reso
   })
 
   const usePicker = (noun: string) => {
-    const query = ref('')
-    const shown = ref(PAGE_SIZE)
-
-    const chosenIndex = projects.value.findIndex((option) => option.value === chosen.value)
-    if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
-
     const loading = computed(() => props.loading)
     const message = computed(() => props.error)
-    const paged = computed(() => projects.value.length > PAGE_SIZE)
-    const matches = computed(() => {
-      const text = query.value.trim().toLowerCase()
-      if (!text) return projects.value
-      return projects.value.filter(
-        (option) =>
-          option.label.toLowerCase().includes(text) ||
-          String(option.description ?? '')
-            .toLowerCase()
-            .includes(text)
-      )
-    })
-    const visible = computed(() => matches.value.slice(0, shown.value))
-    const remaining = computed(() => Math.max(0, matches.value.length - visible.value.length))
-    const nextBatch = computed(() => Math.min(PAGE_SIZE, remaining.value))
-
-    const summary = computed(() => {
-      if (loading.value) return 'Loading ' + nextBatch.value + ' more ' + noun + 's'
-      if (query.value.trim() && !matches.value.length)
-        return 'No ' + noun + ' matches ' + query.value
-      if (remaining.value)
-        return visible.value.length + ' of ' + matches.value.length + ' ' + noun + 's'
-      return query.value.trim()
-        ? matches.value.length + ' of ' + projects.value.length + ' ' + noun + 's'
-        : projects.value.length + ' ' + noun + 's'
-    })
+    const { showMore, ...list } = usePagedList(projects, noun, loading, chosen)
 
     const loadMore = (event: MouseEvent) => {
-      if (loading.value || !remaining.value) return
-      shown.value += PAGE_SIZE
+      if (loading.value || !list.remaining.value) return
+      showMore()
       emit('load-more', event)
     }
 
-    return reactive({
-      query,
-      chosen,
-      message,
-      loading,
-      paged,
-      matches,
-      visible,
-      remaining,
-      nextBatch,
-      summary,
-      loadMore
-    })
+    return reactive({ ...list, chosen, message, loading, loadMore })
   }
 
   const projectPicker = usePicker('project')
@@ -398,14 +356,27 @@ Each variant is the same screen in another state: `get_block("create/create-reso
             <FieldError v-if="projectPicker.message">{{ projectPicker.message }}</FieldError>
           </div>
 
-          <div class="border-t border-(--border-default)">
+          <div
+            class="border-t border-(--border-default)"
+            role="radiogroup"
+            aria-label="Projects"
+          >
             <Item.List>
               <Item
                 v-for="option in projectPicker.visible"
                 :key="option.value"
                 size="small"
                 clickable
-                :aria-pressed="option.value === projectPicker.chosen"
+                role="radio"
+                @keydown="onRadioListKeydown"
+                :aria-checked="option.value === projectPicker.chosen"
+                :tabindex="
+                  radioListTabIndex(
+                    option.value,
+                    projectPicker.chosen,
+                    projectPicker.visible.map((entry) => entry.value)
+                  )
+                "
                 @click="projectPicker.chosen = option.value"
               >
                 <Item.Media>
@@ -425,7 +396,12 @@ Each variant is the same screen in another state: `get_block("create/create-reso
                 <Item.Actions>
                   <i
                     v-if="option.value === projectPicker.chosen"
-                    class="az az-check shrink-0 text-(--text-default)"
+                    class="az az-circle-on shrink-0 text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                  <i
+                    v-else
+                    class="az az-circle shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>
@@ -545,4 +521,135 @@ export const sampleProjects: ResourcePickerOption[] = [
 ]
 
 export const sampleSelected = 'web-app'
+
+/** A firewall the OptionalBinding variant can bind. */
+export interface ResourcePickerFirewall {
+  /** Stable key. */
+  value: string
+  /** Display name. */
+  label: string
+  /** Its rules and modules, already phrased. */
+  description?: string
+}
+
+export const sampleFirewalls: ResourcePickerFirewall[] = [
+  { value: 'production-firewall', label: 'production-firewall', description: '12 rules · WAF' },
+  { value: 'api-firewall', label: 'api-firewall', description: '4 rules · Rate limiting' },
+  { value: 'docs-firewall', label: 'docs-firewall', description: '1 rule · Bot Manager' },
+  { value: 'staging-firewall', label: 'staging-firewall', description: '3 rules · WAF' },
+  {
+    value: 'checkout-firewall',
+    label: 'checkout-firewall',
+    description: '8 rules · WAF, Bot Manager'
+  },
+  {
+    value: 'partner-api-firewall',
+    label: 'partner-api-firewall',
+    description: '2 rules · Network Shield'
+  },
+  { value: 'marketing-firewall', label: 'marketing-firewall', description: '1 rule · WAF' }
+]
+export const sampleFirewallModules = [
+  {
+    key: 'ddos',
+    title: 'DDoS Protection',
+    description: 'Absorbs volumetric attacks at the network layer. Always on.',
+    locked: true
+  },
+  {
+    key: 'waf',
+    title: 'WAF',
+    description: 'Inspects each request and blocks the OWASP Top 10 attack classes.'
+  },
+  {
+    key: 'networkShield',
+    title: 'Network Shield',
+    description: 'Blocks traffic by country, ASN or IP range using network lists.'
+  },
+  {
+    key: 'botManager',
+    title: 'Bot Manager',
+    description: 'Scores automated traffic and challenges the requests that fail.'
+  }
+]
+```
+
+## `composables/use-paged-list.ts`
+
+```ts
+import {
+  computed,
+  type ComputedRef,
+  type MaybeRefOrGetter,
+  ref,
+  toValue,
+  type WritableComputedRef
+} from 'vue'
+
+import type { ResourcePickerOption } from '../create-resource-picker.vue'
+
+const PAGE_SIZE = 5
+
+export interface UsePagedListReturn {
+  query: WritableComputedRef<string>
+  paged: ComputedRef<boolean>
+  matches: ComputedRef<ResourcePickerOption[]>
+  visible: ComputedRef<ResourcePickerOption[]>
+  remaining: ComputedRef<number>
+  nextBatch: ComputedRef<number>
+  summary: ComputedRef<string>
+  showMore: () => void
+}
+
+export const usePagedList = (
+  source: MaybeRefOrGetter<ResourcePickerOption[]>,
+  noun: string,
+  loading: MaybeRefOrGetter<boolean>,
+  chosen: MaybeRefOrGetter<string>
+): UsePagedListReturn => {
+  const options = computed(() => toValue(source))
+  const queryText = ref('')
+  const query = computed({
+    get: () => queryText.value,
+    set: (value: string) => {
+      queryText.value = value
+    }
+  })
+  const shown = ref(PAGE_SIZE)
+
+  const chosenIndex = options.value.findIndex((option) => option.value === toValue(chosen))
+  if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
+
+  const paged = computed(() => options.value.length > PAGE_SIZE)
+  const matches = computed(() => {
+    const text = query.value.trim().toLowerCase()
+    if (!text) return options.value
+    return options.value.filter(
+      (option) =>
+        option.label.toLowerCase().includes(text) ||
+        String(option.description ?? '')
+          .toLowerCase()
+          .includes(text)
+    )
+  })
+  const visible = computed(() => matches.value.slice(0, shown.value))
+  const remaining = computed(() => Math.max(0, matches.value.length - visible.value.length))
+  const nextBatch = computed(() => Math.min(PAGE_SIZE, remaining.value))
+
+  const summary = computed(() => {
+    if (toValue(loading)) return 'Loading ' + nextBatch.value + ' more ' + noun + 's'
+    if (query.value.trim() && !matches.value.length) return 'No ' + noun + ' matches ' + query.value
+    if (remaining.value)
+      return visible.value.length + ' of ' + matches.value.length + ' ' + noun + 's'
+    return query.value.trim()
+      ? matches.value.length + ' of ' + options.value.length + ' ' + noun + 's'
+      : options.value.length + ' ' + noun + 's'
+  })
+
+  const showMore = () => {
+    shown.value += PAGE_SIZE
+  }
+
+  return { query, paged, matches, visible, remaining, nextBatch, summary, showMore }
+}
 ```

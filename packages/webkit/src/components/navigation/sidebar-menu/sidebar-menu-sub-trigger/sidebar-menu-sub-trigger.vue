@@ -2,7 +2,6 @@
   import {
     type ComponentPublicInstance,
     computed,
-    type FunctionalComponent,
     inject,
     onMounted,
     shallowRef,
@@ -18,6 +17,7 @@
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useSidebarMenuSubContext } from '../composables/use-sidebar-menu-sub-context'
+  import { useSidebarMenuTip } from '../composables/use-sidebar-menu-tip'
   import type { SidebarMenuSubType } from '../injection-key'
 
   defineOptions({
@@ -72,18 +72,7 @@
 
   const showIcon = computed(() => Boolean(props.icon) && !isInline.value)
 
-  const rail = computed(() => sidebar?.rail === true)
-
-  const Passthrough: FunctionalComponent = (_, { slots: inner }) => inner['default']?.()
-
-  const tip = computed(() =>
-    rail.value && sidebar?.tooltip
-      ? {
-          is: sidebar.tooltip,
-          props: { content: props.label, side: 'end' }
-        }
-      : { is: Passthrough, props: {} }
-  )
+  const { rail, tip } = useSidebarMenuTip(() => props.label)
 
   const arrowAriaLabel = computed(() => {
     const name = props.label
@@ -103,8 +92,10 @@
     'group relative flex h-8 pointer-coarse:min-h-11 shrink-0 items-center gap-(--spacing-xs) ' +
     'rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 pe-(--spacing-xs) py-(--spacing-2xs) text-start ' +
     'text-(--text-default) ' +
-    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
-    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
+    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity " +
+    'before:duration-fast-02 before:ease-productive-entrance ' +
+    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity " +
+    'after:duration-fast-02 after:ease-productive-entrance ' +
     'hover:before:opacity-100 group-hover/row:before:opacity-100 active:after:opacity-100 ' +
     'motion-reduce:before:transition-none motion-reduce:after:transition-none ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--sidebar-menu-ring-offset,var(--bg-canvas))] ' +

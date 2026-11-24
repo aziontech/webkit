@@ -1,38 +1,21 @@
 <script setup lang="ts">
-  import {
-    computed,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    ref,
-    shallowRef,
-    useAttrs,
-    useId,
-    watch
-  } from 'vue'
+  import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import { diffLines } from '../../../utils/line-diff'
   import type { Severity } from '../../../utils/severity'
+  import { useCodeEditorMonaco } from './composables/use-code-editor-monaco'
   import {
-    applyThemeOnce,
-    CODE_EDITOR_THEME,
-    type CodeEditorDisposable,
-    type CodeEditorMonaco,
-    type CodeEditorMonacoDiffEditor,
-    type CodeEditorMonacoEditor,
-    type CodeEditorMonacoModel,
-    type CodeEditorMonacoModule,
-    fontFromTokens,
-    highlightCalls,
-    jsonDefaultsOf,
-    padLineNumber,
-    syncJsonSchema,
-    themeFromTokens,
-    toCodeEditorMarkers
-  } from './monaco'
+    changesBySide,
+    editorPanes,
+    monacoOptions,
+    withoutKeys,
+    worstSeverityByLine
+  } from './lib/editor-view'
+  import type { CodeEditorMonacoModule } from './monaco'
+  import CodeEditorPane from './parts/code-editor-pane.vue'
+  import CodeEditorProblems from './parts/code-editor-problems.vue'
 
   export type {
     CodeEditorMonaco,
@@ -137,9 +120,6 @@
     toolbar(): unknown
   }>()
 
-  const INDENT = '  '
-  const MARKER_OWNER = 'webkit'
-
   const attrs = useAttrs()
   const { t } = useTranslate({ codeEditor: en.codeEditor })
   const uid = useId()
@@ -162,47 +142,20 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-editor')
 
-  const rootAttrs = computed(() => {
-    const rest: Record<string, unknown> = {}
-    for (const [key, value] of Object.entries(attrs)) {
-      if (key === 'id' || key === 'aria-describedby' || key === 'data-testid') continue
-      rest[key] = value
-    }
-    return rest
-  })
+  const rootAttrs = computed(() => withoutKeys(attrs, ['id', 'aria-describedby', 'data-testid']))
 
   const rootEl = ref<HTMLElement | null>(null)
   const monacoHostEl = ref<HTMLElement | null>(null)
-  const textareaEls = ref<Record<string, HTMLTextAreaElement | null>>({})
-  const scrollerEls = ref<Record<string, HTMLElement | null>>({})
+  const paneEls: Record<string, InstanceType<typeof CodeEditorPane> | null> = {}
+  const setPane = (key: string, el: unknown) => {
+    paneEls[key] = (el as InstanceType<typeof CodeEditorPane> | null) ?? null
+  }
   const mode = ref<CodeEditorMode>('plain')
   const loadFailed = ref(false)
-  const escapeArmed = ref(false)
 
   const isReadonly = computed(() => props.readonly || isDisabled.value)
 
-  const markerByLine = computed(() => {
-    const rank = { danger: 3, warning: 2, info: 1 }
-    const map = new Map<number, CodeEditorMarkerSeverity>()
-    for (const marker of props.markers) {
-      const current = map.get(marker.line)
-      if (!current || rank[marker.severity] > rank[current]) map.set(marker.line, marker.severity)
-    }
-    return map
-  })
-
-  const sortedMarkers = computed(() =>
-    [...props.markers].sort((a, b) => a.line - b.line || (a.column ?? 1) - (b.column ?? 1))
-  )
-
-  const severityLabel = (severity: CodeEditorMarkerSeverity) =>
-    severity === 'danger'
-      ? t('codeEditor.error')
-      : severity === 'warning'
-        ? t('codeEditor.warning')
-        : t('codeEditor.info')
-
-  const problemCount = computed(() => t('codeEditor.problemCount', { count: props.markers.length }))
+  const markerByLine = computed(() => worstSeverityByLine(props.markers))
 
   const describedBy = computed(() =>
     [fieldDescribedBy.value, summaryId, isReadonly.value ? '' : hintId].filter(Boolean).join(' ')
@@ -210,170 +163,14 @@
 
   const plainLabel = computed(() => props.ariaLabel || (field ? undefined : t('codeEditor.label')))
 
-  const linesOf = (text: string) => text.split('\n')
+  const changes = computed(() => changesBySide(props.diff, props.original, model.value))
 
-  const lineLabel = (line: number) => (props.padLineNumbers ? padLineNumber(line) : String(line))
-
-  const changesBySide = computed(() => {
-    const removed = new Map<number, 'removed'>()
-    const added = new Map<number, 'added'>()
-    if (!props.diff) return { original: removed, modified: added }
-    for (const row of diffLines(props.original, model.value)) {
-      if (row.change === 'removed' && row.oldNumber !== null) removed.set(row.oldNumber, 'removed')
-      if (row.change === 'added' && row.newNumber !== null) added.set(row.newNumber, 'added')
-    }
-    return { original: removed, modified: added }
-  })
-
-  const panes = computed(() => {
-    const modified = {
-      key: 'modified',
-      value: model.value,
-      editable: !isReadonly.value,
-      label: t('codeEditor.modified'),
-      lines: linesOf(model.value),
-      main: true
-    }
-    if (!props.diff) return [modified]
-    return [
-      {
-        key: 'original',
-        value: props.original,
-        editable: false,
-        label: t('codeEditor.original'),
-        lines: linesOf(props.original),
-        main: false
-      },
-      modified
-    ]
-  })
-
-  const columnsOf = (lines: string[]) => {
-    let widest = 1
-    for (const line of lines) {
-      const width = line.includes('\t') ? line.replace(/\t/g, INDENT).length : line.length
-      if (width > widest) widest = width
-    }
-    return widest + 1
-  }
-
-  const setTextarea = (key: string, el: unknown) => {
-    textareaEls.value[key] = el instanceof HTMLTextAreaElement ? el : null
-  }
-
-  const setScroller = (key: string, el: unknown) => {
-    scrollerEls.value[key] = el instanceof HTMLElement ? el : null
-  }
-
-  const onInput = (event: Event) => {
-    model.value = (event.target as HTMLTextAreaElement).value
-  }
-
-  const replaceRange = (
-    el: HTMLTextAreaElement,
-    start: number,
-    end: number,
-    text: string,
-    selection: [number, number]
-  ) => {
-    const value = el.value
-    const next = value.slice(0, start) + text + value.slice(end)
-    el.value = next
-    model.value = next
-    el.setSelectionRange(selection[0], selection[1])
-  }
-
-  const indent = (el: HTMLTextAreaElement, outdent: boolean) => {
-    const { selectionStart, selectionEnd, value } = el
-    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1
-    const multiLine = value.slice(selectionStart, selectionEnd).includes('\n')
-    if (!outdent && !multiLine) {
-      replaceRange(el, selectionStart, selectionEnd, INDENT, [
-        selectionStart + INDENT.length,
-        selectionStart + INDENT.length
-      ])
-      return
-    }
-    const blockEnd = selectionEnd
-    const block = value.slice(lineStart, blockEnd)
-    const lines = block.split('\n')
-    let firstShift = 0
-    const changed = lines.map((line, index) => {
-      if (!outdent) {
-        if (index === 0) firstShift = INDENT.length
-        return INDENT + line
-      }
-      const remove = line.startsWith(INDENT) ? INDENT.length : line.startsWith(' ') ? 1 : 0
-      if (index === 0) firstShift = -remove
-      return line.slice(remove)
+  const panes = computed(() =>
+    editorPanes(model.value, props.diff ? props.original : null, !isReadonly.value, {
+      original: t('codeEditor.original'),
+      modified: t('codeEditor.modified')
     })
-    const text = changed.join('\n')
-    const start = Math.max(lineStart, selectionStart + firstShift)
-    replaceRange(el, lineStart, blockEnd, text, [
-      multiLine ? lineStart : start,
-      lineStart + text.length
-    ])
-  }
-
-  const onKeydown = (event: KeyboardEvent, editable: boolean) => {
-    if (event.key === 'Escape') {
-      escapeArmed.value = true
-      return
-    }
-    if (event.key !== 'Tab') {
-      if (event.key !== 'Shift') escapeArmed.value = false
-      return
-    }
-    if (escapeArmed.value || !editable || event.altKey || event.ctrlKey || event.metaKey) {
-      escapeArmed.value = false
-      return
-    }
-    event.preventDefault()
-    indent(event.currentTarget as HTMLTextAreaElement, event.shiftKey)
-  }
-
-  const onBlur = () => {
-    escapeArmed.value = false
-  }
-
-  const offsetOf = (text: string, line: number, column: number) => {
-    const lines = linesOf(text)
-    const target = Math.min(Math.max(line, 1), lines.length)
-    let offset = 0
-    for (let i = 0; i < target - 1; i += 1) offset += (lines[i] ?? '').length + 1
-    return offset + Math.min(Math.max(column - 1, 0), (lines[target - 1] ?? '').length)
-  }
-
-  let editor: CodeEditorMonacoEditor | null = null
-  let diffEditor: CodeEditorMonacoDiffEditor | null = null
-  let api: CodeEditorMonaco | null = null
-  let mainModel: CodeEditorMonacoModel | null = null
-  let editorValue: string | null = null
-  let originalModel: CodeEditorMonacoModel | null = null
-  const disposables: CodeEditorDisposable[] = []
-  const editorRef = shallowRef<CodeEditorMonacoEditor | null>(null)
-
-  const goTo = (marker: CodeEditorMarker) => {
-    const column = marker.column ?? 1
-    if (mode.value === 'monaco' && editor) {
-      editor.setPosition({ lineNumber: marker.line, column })
-      editor.revealLineInCenter(marker.line)
-      editor.focus()
-      return
-    }
-    const el = textareaEls.value['modified']
-    if (!el) return
-    const offset = offsetOf(el.value, marker.line, column)
-    el.focus()
-    el.setSelectionRange(offset, offset)
-    const scroller = scrollerEls.value['modified']
-    if (scroller) {
-      const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 20
-      const top = (marker.line - 1) * lineHeight
-      if (top < scroller.scrollTop || top > scroller.scrollTop + scroller.clientHeight - lineHeight)
-        scroller.scrollTop = Math.max(0, top - scroller.clientHeight / 2)
-    }
-  }
+  )
 
   const accessibleName = () => {
     if (props.ariaLabel) return props.ariaLabel
@@ -382,245 +179,76 @@
     return label?.textContent?.trim() || t('codeEditor.label')
   }
 
-  const editorOptions = () => ({
-    readOnly: isReadonly.value,
-    domReadOnly: isReadonly.value,
-    lineNumbers: props.showLineNumbers ? (props.padLineNumbers ? padLineNumber : 'on') : 'off',
-    minimap: { enabled: false },
-    renderFinalNewline: 'on' as const,
-    automaticLayout: true,
-    scrollBeyondLastLine: false,
-    fontLigatures: false,
-    renderLineHighlight: 'all',
-    tabFocusMode: true,
-    ariaLabel: accessibleName()
-  })
+  const editorOptions = () =>
+    monacoOptions(isReadonly.value, props.showLineNumbers, props.padLineNumbers, accessibleName())
 
-  const labelDiffSides = () => {
-    if (!diffEditor) return
-    const name = accessibleName()
-    diffEditor
-      .getOriginalEditor?.()
-      .updateOptions({ ariaLabel: `${name}, ${t('codeEditor.original')}` })
-    diffEditor
-      .getModifiedEditor()
-      .updateOptions({ ariaLabel: `${name}, ${t('codeEditor.modified')}` })
-  }
-
-  const applyTheme = () => {
-    if (!api || !rootEl.value) return
-    applyThemeOnce(api, CODE_EDITOR_THEME, themeFromTokens(rootEl.value))
-  }
-
-  const severityOf = (severity: CodeEditorMarkerSeverity) => {
-    if (!api) return 0
-    if (severity === 'danger') return api.MarkerSeverity.Error
-    if (severity === 'warning') return api.MarkerSeverity.Warning
-    return api.MarkerSeverity.Info
-  }
-
-  const applyMarkers = () => {
-    if (!api || !mainModel) return
-    const model = mainModel
-    api.editor.setModelMarkers(
-      model,
-      MARKER_OWNER,
-      props.markers.map((marker) => ({
-        startLineNumber: marker.line,
-        startColumn: marker.column ?? 1,
-        endLineNumber: marker.endLine ?? marker.line,
-        endColumn:
-          marker.endColumn ??
-          (marker.column ? marker.column + 1 : (model.getLineMaxColumn?.(marker.line) ?? 1000)),
-        severity: severityOf(marker.severity),
-        message: marker.message
-      }))
-    )
-  }
-
-  const applySchema = () => {
-    if (!api) return
-    const defaults = jsonDefaultsOf(api)
-    if (!defaults) return
-    const target = mainModel?.uri?.toString()
-    const active = props.schema && props.language === 'json' && target
-    syncJsonSchema(
-      defaults,
-      schemaUri,
-      active ? { fileMatch: target, schema: JSON.parse(JSON.stringify(props.schema)) } : null
-    )
-  }
-
-  const emitValidate = () => {
-    if (!api || !mainModel) return
-    const resource = mainModel.uri
-    const markers = resource ? (api.editor.getModelMarkers?.({ resource }) ?? []) : []
-    emit('markers-change', toCodeEditorMarkers(markers, api.MarkerSeverity, MARKER_OWNER))
-  }
-
-  const watchMarkers = () => {
-    const subscription = api?.editor.onDidChangeMarkers?.((resources) => {
-      const target = mainModel?.uri?.toString()
-      if (target && resources.some((resource) => String(resource) === target)) emitValidate()
-    })
-    if (subscription) disposables.push(subscription)
-  }
-
-  let themeObserver: MutationObserver | null = null
-  let schemeQuery: MediaQueryList | null = null
-  let themeFrame = 0
-  let unmounted = false
-
-  const scheduleTheme = () => {
-    cancelAnimationFrame(themeFrame)
-    themeFrame = requestAnimationFrame(applyTheme)
-  }
-
-  const watchTheme = () => {
-    themeObserver = new MutationObserver(scheduleTheme)
-    for (const target of [document.documentElement, document.body]) {
-      themeObserver.observe(target, { attributes: true, attributeFilter: ['class', 'data-theme'] })
-    }
-    schemeQuery = window.matchMedia?.('(prefers-color-scheme: dark)') ?? null
-    schemeQuery?.addEventListener('change', scheduleTheme)
-  }
-
-  const mountMonaco = async () => {
-    if (!props.loader) return
-    mode.value = 'loading'
-    let loaded: CodeEditorMonaco
-    try {
-      const module = await props.loader()
-      loaded = 'editor' in module ? module : module.default
-      if (!loaded?.editor) throw new Error('monaco-editor did not load')
-    } catch (error) {
-      if (unmounted) return
-      mode.value = 'plain'
-      loadFailed.value = true
-      emit('load-error', error)
-      return
-    }
-    if (unmounted) return
-    await highlightCalls(loaded)
-    if (unmounted) return
-    api = loaded
-    mode.value = 'monaco'
-    await nextTick()
-    try {
-      const host = monacoHostEl.value
-      if (!host || !rootEl.value) throw new Error('missing host')
-      applyTheme()
-      const font = fontFromTokens(rootEl.value)
-      const file = props.path || (props.schema ? 'model.json' : '')
-      const uri = file && api.Uri ? api.Uri.parse(`inmemory://webkit/${uid}/${file}`) : undefined
-      mainModel = api.editor.createModel(model.value, props.language, uri)
-      const options = { ...editorOptions(), ...font, theme: CODE_EDITOR_THEME }
-      if (props.diff) {
-        originalModel = api.editor.createModel(props.original, props.language)
-        diffEditor = api.editor.createDiffEditor(host, {
-          ...options,
-          originalEditable: false,
-          renderSideBySide: true,
-          useInlineViewWhenSpaceIsLimited: true
-        })
-        diffEditor.setModel({ original: originalModel, modified: mainModel })
-        editor = diffEditor.getModifiedEditor()
-        labelDiffSides()
-      } else {
-        editor = api.editor.create(host, { ...options, model: mainModel })
+  const { editor, refresh } = useCodeEditorMonaco({
+    rootEl,
+    hostEl: monacoHostEl,
+    model,
+    mode,
+    loadFailed,
+    uid,
+    schemaUri,
+    loader: () => props.loader,
+    language: () => props.language,
+    diff: () => props.diff,
+    original: () => props.original,
+    markers: () => props.markers,
+    path: () => props.path,
+    schema: () => props.schema,
+    options: editorOptions,
+    labels: () => {
+      const name = accessibleName()
+      return {
+        original: `${name}, ${t('codeEditor.original')}`,
+        modified: `${name}, ${t('codeEditor.modified')}`
       }
-      editorRef.value = editor
-      disposables.push(
-        mainModel.onDidChangeContent(() => {
-          const value = mainModel?.getValue() ?? ''
-          editorValue = value
-          if (value !== model.value) model.value = value
-        })
-      )
-      applyMarkers()
-      applySchema()
-      watchMarkers()
-      watchTheme()
-      emit('ready', diffEditor ?? editor)
-    } catch (error) {
-      disposeMonaco()
-      mode.value = 'plain'
-      loadFailed.value = true
-      emit('load-error', error)
-    }
-  }
-
-  const disposeMonaco = () => {
-    if (api) {
-      const defaults = jsonDefaultsOf(api)
-      if (defaults) syncJsonSchema(defaults, schemaUri, null)
-    }
-    disposables.splice(0).forEach((item) => item.dispose())
-    diffEditor?.dispose()
-    if (!diffEditor) editor?.dispose()
-    mainModel?.dispose()
-    originalModel?.dispose()
-    editor = null
-    diffEditor = null
-    editorValue = null
-    mainModel = null
-    originalModel = null
-    editorRef.value = null
-  }
-
-  watch(model, (value) => {
-    if (!mainModel || value === editorValue) return
-    if (mainModel.getValue() !== value) mainModel.setValue(value)
+    },
+    ready: (instance) => emit('ready', instance),
+    failed: (error) => emit('load-error', error),
+    changed: (markers) => emit('markers-change', markers)
   })
-
-  watch(
-    () => props.original,
-    (value) => {
-      if (originalModel && originalModel.getValue() !== value) originalModel.setValue(value)
-    }
-  )
-
-  watch(
-    () => props.language,
-    (language) => {
-      if (api && mainModel) api.editor.setModelLanguage?.(mainModel, language)
-      if (api && originalModel) api.editor.setModelLanguage?.(originalModel, language)
-      applySchema()
-    }
-  )
-
-  watch(() => props.schema, applySchema, { deep: true })
 
   watch(
     [isReadonly, () => props.showLineNumbers, () => props.padLineNumbers, () => props.ariaLabel],
-    () => {
-      ;(diffEditor ?? editor)?.updateOptions(editorOptions())
-      labelDiffSides()
-    }
+    refresh
   )
 
-  watch(() => props.markers, applyMarkers, { deep: true })
-
-  onMounted(() => {
-    void mountMonaco()
-  })
-
-  onBeforeUnmount(() => {
-    unmounted = true
-    cancelAnimationFrame(themeFrame)
-    themeObserver?.disconnect()
-    schemeQuery?.removeEventListener('change', scheduleTheme)
-    disposeMonaco()
-  })
+  const goTo = (marker: CodeEditorMarker) => {
+    const column = marker.column ?? 1
+    const live = editor.value
+    if (mode.value === 'monaco' && live) {
+      live.setPosition({ lineNumber: marker.line, column })
+      live.revealLineInCenter(marker.line)
+      live.focus()
+      return
+    }
+    paneEls['modified']?.reveal(marker.line, column)
+  }
 
   defineExpose({
     /** Focuses the live editor. */
-    focus: () => (editor ? editor.focus() : textareaEls.value['modified']?.focus()),
+    focus: () => (editor.value ? editor.value.focus() : paneEls['modified']?.focus()),
     /** Moves the caret to a marker's position. */
     goTo,
     /** The Monaco editor once mounted, for actions such as formatting. */
-    editor: editorRef
+    editor
   })
+
+  const AREA_CLASS =
+    'relative flex h-(--code-editor-height) min-h-0 min-w-0 flex-col data-[fill]:h-auto data-[fill]:flex-1 @lg/code-editor:flex-row ' +
+    'data-[diff]:h-[calc(var(--code-editor-height)*2)] @lg/code-editor:data-[diff]:h-(--code-editor-height)'
+
+  const ROOT_CLASS =
+    '@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
+    'focus-within:ring-2 focus-within:ring-(--ring-color) ' +
+    'not-data-[bordered]:focus-within:ring-inset data-[bordered]:rounded-(--shape-control) data-[bordered]:border data-[bordered]:focus-within:ring-offset-2 ' +
+    'data-[bordered]:focus-within:ring-offset-(--bg-canvas) ' +
+    'data-[disabled]:bg-(--bg-disabled) ' +
+    'data-[fill]:min-h-0 data-[fill]:flex-1 ' +
+    'data-[invalid]:border-(--danger-border) ' +
+    'motion-reduce:transition-none forced-colors:data-[bordered]:border-[CanvasText]'
 </script>
 
 <template>
@@ -636,7 +264,7 @@
     :data-fill="fill || null"
     :data-bordered="bordered || null"
     :aria-busy="mode === 'loading' || undefined"
-    class="@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out focus-within:ring-2 focus-within:ring-(--ring-color) not-data-[bordered]:focus-within:ring-inset data-[bordered]:rounded-(--shape-control) data-[bordered]:border data-[bordered]:focus-within:ring-offset-2 data-[bordered]:focus-within:ring-offset-(--bg-canvas) data-[disabled]:bg-(--bg-disabled) data-[fill]:min-h-0 data-[fill]:flex-1 data-[invalid]:border-(--danger-border) motion-reduce:transition-none forced-colors:data-[bordered]:border-[CanvasText]"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="$slots['toolbar']"
@@ -649,7 +277,8 @@
     <div
       :style="fill ? undefined : { '--code-editor-height': height }"
       :data-fill="fill || null"
-      class="relative flex h-(--code-editor-height) min-h-0 min-w-0 flex-col data-[fill]:h-auto data-[fill]:flex-1 @lg/code-editor:flex-row"
+      :data-diff="(diff && !fill) || null"
+      :class="AREA_CLASS"
       :data-testid="`${testId}__area`"
     >
       <div
@@ -660,78 +289,26 @@
         :data-testid="`${testId}__monaco`"
       />
       <template v-if="mode !== 'monaco'">
-        <div
+        <CodeEditorPane
           v-for="(pane, paneIndex) in panes"
           :key="pane.key"
-          class="flex min-h-0 min-w-0 flex-1 flex-col data-[second]:border-t data-[second]:border-(--border-default) @lg/code-editor:data-[second]:border-t-0 @lg/code-editor:data-[second]:border-s"
-          :data-second="paneIndex > 0 || null"
-          :data-testid="`${testId}__pane`"
-        >
-          <div
-            v-if="diff"
-            class="shrink-0 border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
-            :id="`${uid}-${pane.key}-label`"
-          >
-            {{ pane.label }}
-          </div>
-          <div
-            :ref="(el) => setScroller(pane.key, el)"
-            dir="ltr"
-            class="min-h-0 flex-1 overflow-auto overscroll-contain"
-          >
-            <div class="flex min-h-full w-max min-w-full">
-              <ol
-                v-if="showLineNumbers"
-                v-memo="[
-                  pane.lines.length,
-                  pane.main && markerByLine,
-                  padLineNumbers,
-                  testId,
-                  diff && changesBySide
-                ]"
-                aria-hidden="true"
-                class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm pointer-coarse:text-label-code-lg text-(--code-syntax-line-number) select-none"
-                :data-testid="`${testId}__gutter`"
-              >
-                <li
-                  v-for="(_, index) in pane.lines"
-                  :key="index"
-                  :data-severity="(pane.main && markerByLine.get(index + 1)) || null"
-                  :data-change="
-                    (diff && changesBySide[pane.main ? 'modified' : 'original'].get(index + 1)) ||
-                    null
-                  "
-                  class="relative min-w-[2ch] tabular-nums data-[change=added]:bg-(--success) data-[change=added]:text-(--success-foreground) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-foreground) data-[severity]:font-medium data-[severity=danger]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) forced-colors:data-[severity]:text-[Highlight]"
-                >
-                  {{ lineLabel(index + 1) }}
-                </li>
-              </ol>
-              <textarea
-                :ref="(el) => setTextarea(pane.key, el)"
-                :id="pane.main ? controlId : undefined"
-                :value="pane.value"
-                :rows="pane.lines.length"
-                :cols="columnsOf(pane.lines)"
-                wrap="off"
-                spellcheck="false"
-                autocapitalize="off"
-                autocomplete="off"
-                :readonly="!pane.editable || undefined"
-                :disabled="isDisabled || undefined"
-                :aria-label="diff ? undefined : plainLabel"
-                :aria-labelledby="diff ? `${uid}-${pane.key}-label` : undefined"
-                :aria-invalid="(pane.main && isInvalid) || undefined"
-                :aria-readonly="!pane.editable || undefined"
-                :aria-describedby="pane.main ? describedBy : undefined"
-                class="m-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm pointer-coarse:text-label-code-lg whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-                :data-testid="`${testId}__${pane.main ? 'input' : 'original'}`"
-                @input="onInput"
-                @keydown="onKeydown($event, pane.editable)"
-                @blur="onBlur"
-              />
-            </div>
-          </div>
-        </div>
+          :ref="(el) => setPane(pane.key, el)"
+          :pane="pane"
+          :second="paneIndex > 0"
+          :diff="diff"
+          :label-id="`${uid}-${pane.key}-label`"
+          :show-line-numbers="showLineNumbers"
+          :pad-line-numbers="padLineNumbers"
+          :severities="pane.main ? markerByLine : null"
+          :changes="diff ? changes[pane.main ? 'modified' : 'original'] : null"
+          :control-id="pane.main ? controlId : undefined"
+          :plain-label="plainLabel"
+          :described-by="describedBy"
+          :invalid="isInvalid"
+          :disabled="isDisabled"
+          :test-id="testId"
+          @update:model-value="(value: string) => (model = value)"
+        />
       </template>
     </div>
 
@@ -750,54 +327,11 @@
       {{ loadFailed ? t('codeEditor.loadFailed') : t('codeEditor.loading') }}
     </p>
 
-    <div
-      :data-empty="markers.length === 0 || null"
-      class="shrink-0 border-t border-(--border-default) bg-(--bg-surface-raised) data-[empty]:hidden"
-      :data-testid="`${testId}__problems`"
-    >
-      <p
-        :id="summaryId"
-        role="status"
-        class="m-0 px-(--spacing-sm) pt-(--spacing-xs) text-label-sm text-(--text-default)"
-      >
-        {{ problemCount }}
-      </p>
-      <ul
-        v-if="markers.length"
-        :aria-label="t('codeEditor.problems')"
-        class="m-0 flex max-h-32 list-none flex-col overflow-y-auto p-(--spacing-2xs)"
-      >
-        <li
-          v-for="(marker, index) in sortedMarkers"
-          :key="`${marker.line}-${marker.column ?? 0}-${index}`"
-        >
-          <button
-            type="button"
-            :data-severity="marker.severity"
-            class="flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) text-start text-body-xs text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11"
-            :data-testid="`${testId}__problem`"
-            @click="goTo(marker)"
-          >
-            <i
-              :data-severity="marker.severity"
-              :class="
-                marker.severity === 'danger'
-                  ? 'az az-circle-x'
-                  : marker.severity === 'warning'
-                    ? 'az az-triangle-alert'
-                    : 'az az-circle-info'
-              "
-              class="shrink-0 text-body-xs data-[severity=danger]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground)"
-              aria-hidden="true"
-            />
-            <span class="sr-only">{{ `${severityLabel(marker.severity)}: ` }}</span>
-            <span class="shrink-0 text-(--text-muted) tabular-nums">{{
-              `${t('codeEditor.line', { line: marker.line })} `
-            }}</span>
-            <bdi class="min-w-0 flex-1 truncate">{{ marker.message }}</bdi>
-          </button>
-        </li>
-      </ul>
-    </div>
+    <CodeEditorProblems
+      :markers="markers"
+      :summary-id="summaryId"
+      :test-id="testId"
+      @select="(_event: MouseEvent, marker: CodeEditorMarker) => goTo(marker)"
+    />
   </div>
 </template>

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/avatar/default.vue'
 import Pattern from '../../../../examples/avatar/pattern.vue'
+import Presence from '../../../../examples/avatar/presence.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Avatar from './avatar.vue'
 
@@ -59,12 +60,17 @@ describe('Avatar', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: 'herbert' } })
 
     const labelEl = getByTestId('avatar__label')
-    // slice(0,2).toUpperCase() => 'HE'
     expect(labelEl).toHaveTextContent('HE')
 
     // no image, no icon
     expect(queryByTestId('avatar__image')).toBeNull()
     expect(queryByTestId('avatar__icon')).toBeNull()
+  })
+
+  it('draws the initials of a full name from its first and last word', () => {
+    const { getByTestId } = render(Avatar, { props: { label: 'Jane Doe' } })
+
+    expect(getByTestId('avatar__label')).toHaveTextContent('JD')
   })
 
   it('exposes role="img" and an aria-label equal to the initials on the root when showing a label', () => {
@@ -268,6 +274,83 @@ describe('Avatar', () => {
     const { container, getAllByTestId } = render(Pattern)
 
     await waitFor(() => expect(getAllByTestId('avatar__pattern')).toHaveLength(6))
+    await expectNoA11yViolations(container)
+  })
+
+  it('draws no presence dot by default', () => {
+    const { getByTestId, queryByTestId } = render(Avatar, { props: { label: 'Jane Doe' } })
+
+    expect(queryByTestId('avatar__presence')).toBeNull()
+    expect(getByTestId('avatar')).not.toHaveAttribute('data-presence')
+    expect(getByTestId('avatar')).toHaveAttribute('aria-label', 'JD')
+  })
+
+  it.each([
+    ['online', 'Jane Doe, online'],
+    ['away', 'Jane Doe, away'],
+    ['busy', 'Jane Doe, busy'],
+    ['offline', 'Jane Doe, offline']
+  ] as const)('draws the %s dot and adds it to the accessible name', (presence, name) => {
+    const { getByTestId } = render(Avatar, {
+      props: { label: 'Jane Doe', alt: 'Jane Doe', presence }
+    })
+
+    const root = getByTestId('avatar')
+    const dot = getByTestId('avatar__presence')
+    expect(root).toHaveAttribute('data-presence', presence)
+    expect(root).toHaveAttribute('aria-label', name)
+    expect(dot).toHaveAttribute('data-presence', presence)
+    expect(dot).toHaveAttribute('data-slot', 'presence')
+    expect(dot).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('gives every value but online a cut-out glyph, so colour is not the only signal', () => {
+    for (const presence of ['away', 'busy', 'offline'] as const) {
+      const { getByTestId, unmount } = render(Avatar, { props: { label: 'JD', presence } })
+      const glyph = getByTestId('avatar__presence').firstElementChild
+      expect(glyph).not.toBeNull()
+      expect(glyph).toHaveAttribute('data-presence', presence)
+      unmount()
+    }
+    const { getByTestId } = render(Avatar, { props: { label: 'JD', presence: 'online' } })
+    expect(getByTestId('avatar__presence').firstElementChild).toBeNull()
+  })
+
+  it('adds the presence to the image alt and to the fallback name', () => {
+    const image = render(Avatar, { props: { src: SAMPLE_SRC, alt: 'Jane Doe', presence: 'busy' } })
+    expect(image.getByTestId('avatar__image')).toHaveAttribute('alt', 'Jane Doe, busy')
+    image.unmount()
+
+    const { getByTestId } = render(Avatar, { props: { presence: 'offline' } })
+    expect(getByTestId('avatar')).toHaveAttribute('aria-label', 'User avatar, offline')
+  })
+
+  it('draws the dot at every size and shape, under a consumer test id', () => {
+    for (const variant of VARIANTS) {
+      for (const size of SIZES) {
+        const { getByTestId, unmount } = render(Avatar, {
+          props: { label: 'JD', variant, size, presence: 'away' },
+          attrs: { 'data-testid': 'agent-avatar' }
+        })
+        expect(getByTestId('agent-avatar')).toHaveAttribute('data-size', size)
+        expect(getByTestId('agent-avatar')).toHaveAttribute('data-variant', variant)
+        expect(getByTestId('agent-avatar__presence')).toHaveAttribute('data-presence', 'away')
+        unmount()
+      }
+    }
+  })
+
+  it('pins the dot to the logical inline-end side, so it follows right-to-left', () => {
+    const { getByTestId } = render(Avatar, { props: { label: 'JD', presence: 'online' } })
+
+    expect(getByTestId('avatar__presence').classList.contains('end-0')).toBe(true)
+  })
+
+  it('has no accessibility violations for the presence example', async () => {
+    const { container, getAllByTestId } = render(Presence)
+
+    expect(getAllByTestId('avatar__presence')).toHaveLength(10)
+    expect(getAllByTestId('avatar')[1]).toHaveAttribute('aria-label', 'John Smith, away')
     await expectNoA11yViolations(container)
   })
 })

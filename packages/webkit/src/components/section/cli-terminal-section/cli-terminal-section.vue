@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
-  import Button from '../../action/button/button.vue'
   import CodeBlock from '../../code/code-block/code-block.vue'
   import Texture from '../../content/texture/texture.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'CliTerminalSection',
@@ -64,8 +64,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'cli-terminal-section'
   )
-
-  const hasHeader = computed(() => props.title.length > 0)
+  const headerActions = computed(() => sectionActions(props.primaryAction, undefined, 'outline'))
 
   const tabs = computed(() =>
     props.session.length > 0
@@ -98,88 +97,71 @@
   })
 
   onScopeDispose(() => arrival?.disconnect())
+
+  const BACKDROP_CLASS =
+    'relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-16) md:pt-(--spacing-32) ' +
+    '[--texture-wave-gain:1.8] [--texture-wave-pace:5] [--texture-pool-a:50%_100%] [--texture-pool-b:50%_0%]'
+
+  const STAGE_CLASS =
+    'relative z-10 mx-auto -mb-(--spacing-xs) h-(--size-72) w-full max-w-(--container-4xl) translate-y-(--spacing-xl) scale-95 rounded-(--shape-control) opacity-0 shadow-(--shadow-2xl) ' +
+    'transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance ' +
+    'data-entered:translate-y-0 data-entered:scale-100 data-entered:opacity-100 ' +
+    'md:h-(--size-96) motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none'
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :filled="hasTerminal"
+    :framed="false"
+    align="split"
+    header-padding="small"
+    class="[--module-header-headline-span:2] [--module-header-headline-max:var(--container-xl)]"
   >
-    <Module
-      v-if="hasTerminal"
-      :divided="false"
-      :padded="false"
+    <template
+      v-if="headerActions.length"
+      #header-actions
     >
-      <template
-        v-if="hasHeader"
-        #header
-      >
-        <div
-          class="contents [--module-header-headline-span:2] [--module-header-headline-max:var(--container-xl)]"
-        >
-          <ModuleHeader
-            align="split"
-            padding="small"
-            :eyebrow="eyebrow"
-            :title="title"
-            :description="description"
-          >
-            <template
-              v-if="primaryAction"
-              #actions
-            >
-              <Button
-                :label="primaryAction.label"
-                :href="primaryAction.href"
-                variant="outline"
-                size="large"
-                :target="primaryAction.target"
-                :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-                icon-position="trailing"
-                :animated="Boolean(primaryAction.trailing)"
-              />
-            </template>
-          </ModuleHeader>
-        </div>
-      </template>
+      <SectionActions :actions="headerActions" />
+    </template>
 
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
+    <RegistrationFrame
+      flush
+      borders="y"
+      marks="all"
+    >
+      <div :class="BACKDROP_CLASS">
+        <Texture
+          variant="pixelate"
+          size="small"
+          fade="none"
+        />
         <div
-          class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-16) md:pt-(--spacing-32) [--texture-wave-gain:1.8] [--texture-wave-pace:5] [--texture-pool-a:50%_100%] [--texture-pool-b:50%_0%]"
+          v-if="script"
+          ref="stageEl"
+          :data-entered="entered || null"
+          :class="STAGE_CLASS"
         >
-          <Texture
-            variant="pixelate"
-            size="small"
-            fade="none"
-          />
-          <div
-            v-if="script"
-            ref="stageEl"
-            :data-entered="entered || null"
-            class="relative z-10 mx-auto -mb-(--spacing-xs) h-(--size-72) w-full max-w-(--container-4xl) translate-y-(--spacing-xl) scale-95 rounded-(--shape-control) opacity-0 shadow-(--shadow-2xl) transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance data-entered:translate-y-0 data-entered:scale-100 data-entered:opacity-100 md:h-(--size-96) motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none"
-          >
-            <ConsoleMockup :name="widget" />
-          </div>
-          <div
-            v-else
-            class="relative z-10 mx-auto -mb-(--spacing-xs) w-full max-w-(--container-4xl) rounded-(--shape-control) shadow-(--shadow-2xl)"
-          >
-            <CodeBlock
-              :tabs="tabs"
-              :show-line-numbers="false"
-              v-bind="{ animateLines: true }"
-              :copy-aria-label="copyAriaLabel || undefined"
-            />
-          </div>
+          <ConsoleMockup :name="widget" />
         </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        <div
+          v-else
+          class="relative z-10 mx-auto -mb-(--spacing-xs) w-full max-w-(--container-4xl) rounded-(--shape-control) shadow-(--shadow-2xl)"
+        >
+          <CodeBlock
+            :tabs="tabs"
+            :show-line-numbers="false"
+            v-bind="{ animateLines: true }"
+            :copy-aria-label="copyAriaLabel || undefined"
+          />
+        </div>
+      </div>
+    </RegistrationFrame>
+  </SectionBand>
 </template>

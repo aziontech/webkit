@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, provide, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
+  import { useOpenState } from '../../../composables/use-open-state'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import type { PopoverAlign, PopoverSide, PopoverSize } from './injection-key'
@@ -28,7 +28,11 @@
     sideOffset?: number
     /** Prevents the trigger from opening the panel and applies disabled tokens. */
     disabled?: boolean
-    /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
+    /**
+     * Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'`
+     * (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between
+     * `--container-3xs` and `--container-xs`.
+     */
     size?: PopoverSize
     /** Initial open state when uncontrolled. */
     defaultOpen?: boolean
@@ -62,18 +66,11 @@
   const titleId = `${uid}-title`
   const descriptionId = `${uid}-description`
 
-  const openProp = computed<boolean | undefined>(() => openModel.value)
-
-  const isOpenState = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value) => {
-      openModel.value = value
-    }
-  })
-
-  const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
+  const { isOpen: isOpenRef, setOpen } = useOpenState(openModel, {
+    defaultOpen: props.defaultOpen,
+    disabled: disabledRef
+  })
   const sizeRef = computed(() => props.size)
 
   const hasTitle = ref(false)
@@ -93,11 +90,6 @@
     element: panelEl
   })
 
-  function setOpen(value: boolean) {
-    if (value && props.disabled) return
-    isOpenState.set(value)
-  }
-
   function focusTrigger() {
     const trigger = triggerEl.value
     if (!trigger) return
@@ -114,7 +106,7 @@
   }
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
-    if (!isOpenState.value) return
+    if (!isOpenRef.value) return
     if (!props.dismissible) return
     const target = event.target as globalThis.Node | null
     if (!target) return
@@ -140,51 +132,53 @@
     return after ?? (scope === globalThis.document?.body ? null : (all[0] ?? null))
   }
 
-  function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpenState.value || event.defaultPrevented) return
-
-    if (event.key === 'Escape') {
-      if (!isTop.value || !props.dismissible) return
+  function tabOutOfPanel(
+    event: globalThis.KeyboardEvent,
+    active: globalThis.HTMLElement,
+    items: globalThis.HTMLElement[]
+  ) {
+    if (event.shiftKey && (active === items[0] || items.length === 0)) {
       event.preventDefault()
-      setOpen(false)
       focusTrigger()
       return
     }
 
-    if (event.key === 'Tab') {
-      if (!isFocusTop.value) return
-      const trigger = triggerEl.value
-      const panel = panelEl.value
-      if (!trigger || !panel) return
+    if (!event.shiftKey && (active === items[items.length - 1] || items.length === 0)) {
+      event.preventDefault()
+      const next = tabbableAfterTrigger()
+      setOpen(false)
+      if (next) next.focus({ preventScroll: true })
+      else focusTrigger()
+    }
+  }
 
-      const focusables = getFocusable()
-      const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
-      const first = focusables[0]
-      const last = focusables[focusables.length - 1]
-      const inPanel = Boolean(active && panel.contains(active))
-      const onTrigger = Boolean(active && trigger.contains(active))
+  function onTabKey(event: globalThis.KeyboardEvent) {
+    if (!isFocusTop.value) return
+    const trigger = triggerEl.value
+    const panel = panelEl.value
+    if (!trigger || !panel) return
 
-      if (onTrigger && !event.shiftKey && first) {
-        event.preventDefault()
-        first.focus({ preventScroll: true })
-        return
-      }
+    const focusables = getFocusable()
+    const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
+    const first = focusables[0]
 
-      if (!inPanel) return
+    if (active && trigger.contains(active) && !event.shiftKey && first) {
+      event.preventDefault()
+      first.focus({ preventScroll: true })
+      return
+    }
 
-      if (event.shiftKey && (active === first || focusables.length === 0)) {
-        event.preventDefault()
-        focusTrigger()
-        return
-      }
+    if (active && panel.contains(active)) tabOutOfPanel(event, active, focusables)
+  }
 
-      if (!event.shiftKey && (active === last || focusables.length === 0)) {
-        event.preventDefault()
-        const next = tabbableAfterTrigger()
-        setOpen(false)
-        if (next) next.focus({ preventScroll: true })
-        else focusTrigger()
-      }
+  function onDocumentKeydown(event: globalThis.KeyboardEvent) {
+    if (!isOpenRef.value || event.defaultPrevented) return
+
+    if (event.key === 'Tab') onTabKey(event)
+    else if (event.key === 'Escape' && isTop.value && props.dismissible) {
+      event.preventDefault()
+      setOpen(false)
+      focusTrigger()
     }
   }
 

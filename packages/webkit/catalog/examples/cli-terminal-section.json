@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The band as the Functions page places it: the two-command deploy, then a curl to the domain the CLI hands back, under the headline and its install button. Edit the props in the Controls panel — an empty `session` renders nothing at all.",
+   "summary": "The band as the Functions page places it: the two-command deploy, then a curl to the domain the CLI hands back, under the headline and its install button. An empty `session` renders nothing at all.",
    "file": "examples/cli-terminal-section/default.vue"
   },
   {

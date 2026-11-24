@@ -79,7 +79,7 @@ The block takes its records through props and emits every action; it fetches not
 | `templates`      | `TemplateBrowserTemplate[]` | The catalog; the search, the properties and the category sections run on it in the browser.            |
 | `loading`        | `boolean`                   | The catalog is loading: the filter disables and two sections of skeleton tiles hold the layout.        |
 | `error`          | `string`                    | Why the catalog failed to load, shown in the danger `Alert` with Retry over the Import from Git state. |
-| `defaultText`    | `string`                    | Search text the filter starts with.                                                                    |
+| `defaultText`    | `string`                    | Search text the filter starts with, shown as a free-text token.                                        |
 | `defaultPreview` | `string`                    | Id of the template whose preview drawer starts open.                                                   |
 
 | Event    | Payload             | When                                     |
@@ -235,7 +235,7 @@ Each variant is the same screen in another state: `get_block("view/view-template
     loading?: boolean
     /** Why the catalog could not load, shown in the danger alert with Retry. */
     error?: string
-    /** Search text the filter starts with. */
+    /** Search text the filter starts with, shown as a free-text token. */
     defaultText?: string
     /** Id of the template whose preview starts open. */
     defaultPreview?: string
@@ -296,8 +296,14 @@ Each variant is the same screen in another state: `get_block("view/view-template
 
   const { items, propertyFilterProps, status, clearFilters } = useCollection({
     items: templates,
-    filtering: { fields: ['title', 'description'], defaultText: props.defaultText },
-    propertyFiltering: { properties },
+    filtering: { fields: ['title', 'description'] },
+    propertyFiltering: {
+      properties,
+      defaultQuery: {
+        tokens: props.defaultText ? [{ operator: ':', value: props.defaultText }] : [],
+        operation: 'and'
+      }
+    },
     url: true
   })
 
@@ -335,6 +341,7 @@ Each variant is the same screen in another state: `get_block("view/view-template
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -562,6 +569,7 @@ npm run dev</code></pre>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="View repository"
+              aria-label="View repository (opens in a new tab)"
               icon="az az-external-link"
               icon-position="trailing"
               variant="outline"

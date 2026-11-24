@@ -7,6 +7,7 @@
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import LogoWallImage from './parts/logo-wall-image.vue'
 
   defineOptions({
     name: 'LogoWall',
@@ -21,8 +22,10 @@
 
   /** One company mark in the wall, optionally linked. */
   export type LogoWallItem = {
-    /** URL of the mark rendered in the cell. */
+    /** URL of the mark rendered in the cell; the light-theme file when `srcDark` is set. */
     src: string
+    /** URL of the mark on the dark theme, such as the brand's reversed file, for a mark whose colours fade on a dark cell. */
+    srcDark?: string
     /** Alternative text naming the company the mark belongs to. */
     alt: string
     /** Destination the mark links to, such as that customer's success case. */
@@ -34,7 +37,11 @@
   export interface LogoWallProps {
     /** The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. */
     variant?: LogoWallVariant
-    /** The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. */
+    /**
+     * The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is
+     * the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape`
+     * sets a near-square mark taller than a wordmark.
+     */
     items?: LogoWallItem[]
     /** Accessible name for the group of marks, announced instead of an unnamed region. */
     ariaLabel?: string
@@ -74,6 +81,27 @@
   const onItemClick = (event: MouseEvent, item: LogoWallItem) => {
     emit('item-click', event, item)
   }
+
+  const GRID_CLASS =
+    'sm:grid-cols-3! lg:grid-cols-6! ' +
+    'group-data-[aside]/logo-wall:lg:grid-cols-2! group-data-[aside]/logo-wall:xl:grid-cols-3! ' +
+    'group-data-[variant=rectangle]/logo-wall:max-sm:grid-cols-3! group-data-[variant=rectangle]/logo-wall:group-data-[aside]/logo-wall:lg:grid-cols-3!'
+
+  const LOGO_LINK_CLASS =
+    'group/logo relative isolate flex aspect-square ' +
+    'group-data-[variant=rectangle]/logo-wall:aspect-3/2 ' +
+    'items-center justify-center px-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset before:pointer-events-none ' +
+    'before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance ' +
+    'hover:before:opacity-100 motion-reduce:before:transition-none'
+
+  const LOGO_MARK_CLASS =
+    'flex h-7 max-w-full items-center justify-center transition-[translate] duration-moderate-01 ease-productive-entrance ' +
+    'group-hover/logo:-translate-y-(--spacing-sm) group-focus-visible/logo:-translate-y-(--spacing-sm) motion-reduce:transition-none'
+
+  const LINK_HINT_CLASS =
+    'pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-xs) flex translate-y-1 items-center justify-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md uppercase ' +
+    'text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance ' +
+    'group-hover/logo:translate-y-0 group-hover/logo:opacity-100 group-focus-visible/logo:translate-y-0 group-focus-visible/logo:opacity-100 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -93,7 +121,7 @@
       :columns="3"
       :mobile-columns="2"
       role="list"
-      class="sm:grid-cols-3! lg:grid-cols-6! group-data-[aside]/logo-wall:lg:grid-cols-2! group-data-[aside]/logo-wall:xl:grid-cols-3! group-data-[variant=rectangle]/logo-wall:max-sm:grid-cols-3! group-data-[variant=rectangle]/logo-wall:group-data-[aside]/logo-wall:lg:grid-cols-3!"
+      :class="GRID_CLASS"
     >
       <CardGridCell
         v-for="(item, index) in items"
@@ -106,30 +134,21 @@
           v-if="item.href"
           :href="safeHref(item.href) ?? undefined"
           :aria-label="`${linkText}, ${item.alt}`"
-          class="group/logo relative isolate flex aspect-square group-data-[variant=rectangle]/logo-wall:aspect-3/2 items-center justify-center px-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance hover:before:opacity-100 motion-reduce:before:transition-none"
+          :class="LOGO_LINK_CLASS"
           @click="onItemClick($event, item)"
         >
-          <span
-            class="flex h-7 max-w-full items-center justify-center transition-[translate] duration-moderate-01 ease-productive-entrance group-hover/logo:-translate-y-(--spacing-sm) group-focus-visible/logo:-translate-y-(--spacing-sm) motion-reduce:transition-none"
-          >
+          <span :class="LOGO_MARK_CLASS">
             <slot
               name="mark"
               :item="item"
               :index="index"
             >
-              <img
-                :src="item.src"
-                :alt="item.alt"
-                :data-shape="item.shape ?? 'wide'"
-                loading="lazy"
-                decoding="async"
-                class="h-5 w-auto max-w-full object-contain data-[shape=compact]:h-7 sm:max-w-24"
-              />
+              <LogoWallImage :item="item" />
             </slot>
           </span>
           <span
             aria-hidden="true"
-            class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-xs) flex translate-y-1 items-center justify-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/logo:translate-y-0 group-hover/logo:opacity-100 group-focus-visible/logo:translate-y-0 group-focus-visible/logo:opacity-100 motion-reduce:transition-none"
+            :class="LINK_HINT_CLASS"
           >
             {{ linkText }}
             <i class="az az-arrow-up-right leading-none" />
@@ -145,14 +164,7 @@
               :item="item"
               :index="index"
             >
-              <img
-                :src="item.src"
-                :alt="item.alt"
-                :data-shape="item.shape ?? 'wide'"
-                loading="lazy"
-                decoding="async"
-                class="h-5 w-auto max-w-full object-contain data-[shape=compact]:h-7 sm:max-w-24"
-              />
+              <LogoWallImage :item="item" />
             </slot>
           </span>
         </div>

@@ -27,6 +27,7 @@
   const fields = [
     {
       name: 'firstname',
+      autocomplete: 'given-name',
       type: 'text',
       label: 'First name',
       half: true,
@@ -34,6 +35,7 @@
     },
     {
       name: 'lastname',
+      autocomplete: 'family-name',
       type: 'text',
       label: 'Last name',
       half: true,
@@ -98,6 +100,7 @@
     },
     {
       name: 'company',
+      autocomplete: 'organization',
       type: 'text',
       label: 'Company',
       half: true,
@@ -123,7 +126,8 @@
   const messages = {
     missing: 'This field is required.',
     invalidEmail: 'Enter a valid email address.',
-    success: 'We will be in touch.',
+    success: 'Thanks, we received your request.',
+    successDescription: 'A specialist will reply by email within one business day.',
     error: 'We could not send your message. Try again.'
   }
 

@@ -1,19 +1,44 @@
-/* Tailwind */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-body {
-  @apply bg-neutral-200 dark:bg-neutral-900;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  body {
+    @apply bg-neutral-200 dark:bg-neutral-900;
+  }
+  /* Inputs Custom */
+  select,
+  input {
+    @apply bg-neutral-100/60 dark:bg-neutral-800/60 cursor-pointer dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 placeholder:text-neutral-400 text-sm rounded-lg p-2.5 dark:placeholder:text-neutral-500;
+  }
+  input {
+    cursor: text;
+  }
+
+  /* Button Custom */
+  button {
+    @apply bg-neutral-100/60 dark:bg-neutral-800/60 rounded-lg border dark:border-neutral-700 hover:bg-white/70 hover:dark:bg-neutral-900/80 h-12 w-12 text-neutral-800 dark:text-gray-200;
+  }
 }
-/* Inputs Custom */
-select,
-input {
-  @apply bg-neutral-100/60 dark:bg-neutral-800/60 cursor-pointer dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 placeholder:text-neutral-400 text-sm rounded-lg p-2.5 dark:placeholder:text-neutral-500;
-}
-input {
-  cursor: text;
-}
+
 .input-container {
   @apply flex items-center text-neutral-800 dark:text-neutral-300;
 }
@@ -54,11 +79,6 @@ input[type='radio'] {
   @apply bg-neutral-900 dark:bg-neutral-100 text-neutral-100 dark:text-neutral-900;
 }
 
-/* Button Custom */
-button {
-  @apply bg-neutral-100/60 dark:bg-neutral-800/60 rounded-lg border dark:border-neutral-700 hover:bg-white/70 hover:dark:bg-neutral-900/80 h-12 w-12 text-neutral-800 dark:text-gray-200;
-}
-
 /* Custom Color Picker */
 .current-color,
 .vc-color-wrap {
@@ -74,7 +94,7 @@ button {
 .vc-color-input input,
 .vc-alpha-input,
 .vc-input-toggle {
-  @apply !text-black !bg-neutral-200 !rounded-sm;
+  @apply !text-black !bg-neutral-200 !rounded-xs;
 }
 .vc-color-input input,
 .vc-alpha-input input {

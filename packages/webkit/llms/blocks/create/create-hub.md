@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-hub")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), `use-file-picker`, `use-locale`
 - Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -32,13 +32,13 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 
 ## Building blocks
 
-### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
 
-The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
+The creation header from `top-bar/top-bar-creation`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `AppHeaderAccount` alone on the right. No sidebar.
 
 ### B. Page heading — `PageHeader` (required)
 
-`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker (a hidden file input, and one with `webkitdirectory` for a folder). Picking hands the files to the Upload a project flow (`create/create-deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/state-project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
+`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker through `useFilePicker` (one for files, one with `directory` for a folder). Picking hands the files to the Upload a project flow (`create/create-deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/state-project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
 
 ### C. Git connect — `EmptyState`, `Button`, `Alert`, `Link` (required until connected)
 
@@ -179,74 +179,31 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
-  import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref, watch } from 'vue'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import { computed, ref } from 'vue'
 
+  import RepositoryList from './parts/repository-list.vue'
+  import TemplateGallery from './parts/template-gallery.vue'
   import { sampleRepositories, sampleTemplates } from './sample'
+  import type { CreateHubAccount, CreateHubRepository, CreateHubTemplateSection } from './types'
 
-  /** A GitHub account or organization the person can import from. */
-  export interface CreateHubAccount {
-    /** The name shown in the scope Select. */
-    label: string
-    /** The scope key. */
-    value: string
-  }
-
-  /** One repository in the selected scope, most recently pushed first. */
-  export interface CreateHubRepository {
-    /** The repository name. */
-    name: string
-    /** When it was last pushed, as an ISO 8601 string. */
-    pushedAt: string
-    /** The framework or kind glyph, an icon class. */
-    icon: string
-  }
-
-  /** One template tile. */
-  export interface CreateHubTemplate {
-    /** The key of its deploy page. */
-    slug: string
-    /** The template name. */
-    title: string
-    /** One sentence on what it deploys. */
-    description: string
-    /** Who publishes it, shown beside the title on list tiles. */
-    vendor?: string
-    /** The framework or kind glyph, an icon class. */
-    icon: string
-    /** Extra classes on the glyph, such as the dark-theme invert. */
-    markClass: string
-  }
-
-  /** How a template section lays out its tiles. */
-  export type CreateHubTemplateSectionKind = 'cards' | 'list'
-
-  /** A group of templates under one heading. */
-  export interface CreateHubTemplateSection {
-    /** Stable key. */
-    id: string
-    /** The section heading. */
-    label: string
-    /** Recommended cards in three columns, or two-column integration tiles. */
-    kind: CreateHubTemplateSectionKind
-    /** The templates in the section. */
-    items: CreateHubTemplate[]
-  }
+  export type {
+    CreateHubAccount,
+    CreateHubRepository,
+    CreateHubTemplate,
+    CreateHubTemplateSection,
+    CreateHubTemplateSectionKind
+  } from './types'
 
   export interface CreateHubProps {
     /** The connected GitHub accounts; empty, the connect state shows. */
@@ -285,27 +242,17 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
   const scope = defineModel<string>('scope', { default: '' })
 
   const breadcrumb = [{ label: 'Creation Center', active: true }]
-  const REPO_PAGE = 10
-  const skeletonRows = 6
 
   const search = ref('')
-  const repoLimit = ref(REPO_PAGE)
-  const templateSearch = ref('')
-  const fileInputEl = ref<HTMLInputElement | null>(null)
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
 
   const accounts = computed(() => props.accounts)
   const activeScope = computed(() => scope.value || props.accounts[0]?.value || '')
-  const reposLoading = computed(() => props.loading)
-  const reposFailed = computed(() => props.error !== '')
   const repos = computed<CreateHubRepository[]>(
     () => props.repositories ?? (props.loading || props.error ? [] : sampleRepositories)
   )
   const sections = computed<CreateHubTemplateSection[]>(() => props.templates ?? sampleTemplates)
-
-  watch(activeScope, () => {
-    repoLimit.value = REPO_PAGE
-  })
 
   const onSelectScope = (value: string) => {
     if (!value || value === '__add-account__' || value === activeScope.value) return
@@ -317,50 +264,16 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
     if (!q) return repos.value
     return repos.value.filter((repo) => repo.name.toLowerCase().includes(q))
   })
-  const shownRepos = computed(() => filteredRepos.value.slice(0, repoLimit.value))
-  const hiddenRepoCount = computed(() => filteredRepos.value.length - shownRepos.value.length)
-
-  const showMoreRepos = () => {
-    repoLimit.value += REPO_PAGE
-  }
-
   const clearSearch = () => {
     search.value = ''
   }
 
-  const templateMatches = (item: CreateHubTemplate, query: string) =>
-    item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query)
-
-  const filteredSections = computed(() => {
-    const q = templateSearch.value.trim().toLowerCase()
-    if (!q) return sections.value
-    return sections.value
-      .map((section) => ({
-        ...section,
-        items: section.items.filter((item) => templateMatches(item, q))
-      }))
-      .filter((section) => section.items.length > 0)
-  })
-
-  const clearTemplateSearch = () => {
-    templateSearch.value = ''
+  const pickFrom = async (event: MouseEvent, picker: typeof filePicker) => {
+    const picked = await picker.open()
+    if (picked.length) emit('upload', event, picked)
   }
-
-  const templateHref = (item: CreateHubTemplate) => `/create/templates/${item.slug}`
-
-  const openFilePicker = () => fileInputEl.value?.click()
-  const openFolderPicker = () => folderInputEl.value?.click()
-
-  const onPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const picked = input.files ? Array.from(input.files) : []
-    if (!picked.length) return
-    emit('upload', event, picked)
-    input.value = ''
-  }
-
-  const relativeTime = useLocale().formatRelativeTime
-  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
+  const openFilePicker = (event: MouseEvent) => pickFrom(event, filePicker)
+  const openFolderPicker = (event: MouseEvent) => pickFrom(event, folderPicker)
 </script>
 
 <template>
@@ -386,17 +299,10 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          name="name@example.com"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
+        />
       </AppHeader.End>
     </AppHeader>
 
@@ -423,24 +329,6 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                 label="folder"
                 @click="openFolderPicker"
               />.
-              <input
-                ref="fileInputEl"
-                type="file"
-                multiple
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-                @change="onPick"
-              />
-              <input
-                ref="folderInputEl"
-                type="file"
-                webkitdirectory
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-                @change="onPick"
-              />
             </template>
           </PageHeader>
 
@@ -572,290 +460,24 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                     </div>
                   </div>
 
-                  <div class="flex lg:min-h-0">
-                    <Card
-                      :padded="false"
-                      class="w-full"
-                    >
-                      <template #default>
-                        <div class="overflow-y-auto overscroll-contain lg:min-h-0">
-                          <div
-                            v-if="reposFailed"
-                            key="repos-failed"
-                            class="p-(--spacing-md)"
-                          >
-                            <Alert
-                              severity="danger"
-                              :label="error"
-                              action-label="Retry"
-                              @action="(event: MouseEvent) => emit('retry', event)"
-                            />
-                          </div>
-                          <div
-                            v-else-if="reposLoading"
-                            key="repos-loading"
-                            aria-busy="true"
-                          >
-                            <p
-                              role="status"
-                              class="sr-only"
-                            >
-                              Loading repositories
-                            </p>
-                            <Item.List aria-hidden="true">
-                              <Item
-                                v-for="n in skeletonRows"
-                                :key="'repo-skeleton-' + n"
-                                size="small"
-                              >
-                                <Item.Media>
-                                  <Skeleton
-                                    variant="rectangle"
-                                    width="1.75rem"
-                                    height="1.75rem"
-                                  />
-                                </Item.Media>
-                                <Item.Content>
-                                  <div class="flex flex-col gap-(--spacing-xs)">
-                                    <Skeleton
-                                      width="40%"
-                                      height="0.875rem"
-                                    />
-                                    <Skeleton
-                                      width="25%"
-                                      height="0.75rem"
-                                    />
-                                  </div>
-                                </Item.Content>
-                                <Item.Actions>
-                                  <Skeleton
-                                    width="4.5rem"
-                                    height="1.75rem"
-                                  />
-                                </Item.Actions>
-                              </Item>
-                            </Item.List>
-                          </div>
-                          <div
-                            v-else-if="filteredRepos.length"
-                            key="repos-list"
-                          >
-                            <Item.List :aria-label="`Repositories in ${activeScope}`">
-                              <Item
-                                v-for="repo in shownRepos"
-                                :key="repo.name"
-                                size="small"
-                              >
-                                <Item.Media>
-                                  <span
-                                    class="flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                  >
-                                    <i
-                                      :class="repo.icon"
-                                      class="text-body-md leading-none text-(--text-default)"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                </Item.Media>
-                                <Item.Content>
-                                  <Item.Title>{{ repo.name }}</Item.Title>
-                                  <Item.Description>
-                                    <span
-                                      class="flex items-center gap-(--spacing-2xs) text-body-xs"
-                                    >
-                                      <i
-                                        class="az az-history"
-                                        aria-hidden="true"
-                                      />
-                                      {{ ago(repo.pushedAt) }}
-                                    </span>
-                                  </Item.Description>
-                                </Item.Content>
-                                <Item.Actions>
-                                  <Button
-                                    label="Import"
-                                    variant="secondary"
-                                    size="small"
-                                    :aria-label="`Import ${repo.name}`"
-                                    @click="(event: MouseEvent) => emit('import', event, repo)"
-                                  />
-                                </Item.Actions>
-                              </Item>
-                            </Item.List>
-                            <div
-                              v-if="hiddenRepoCount > 0"
-                              class="flex justify-center border-t border-(--border-muted) p-(--spacing-sm)"
-                            >
-                              <Button
-                                :label="`Load more (${hiddenRepoCount})`"
-                                variant="ghost"
-                                size="small"
-                                @click="showMoreRepos"
-                              />
-                            </div>
-                          </div>
-                          <EmptyState
-                            v-else
-                            size="small"
-                            icon="az az-search"
-                            title="No repositories match"
-                            :description="`Nothing in ${activeScope} is named like “${search}”.`"
-                          >
-                            <template #actions>
-                              <Button
-                                label="Clear search"
-                                variant="outline"
-                                size="small"
-                                @click="clearSearch"
-                              />
-                            </template>
-                          </EmptyState>
-                        </div>
-                      </template>
-                    </Card>
-                  </div>
+                  <RepositoryList
+                    :repositories="filteredRepos"
+                    :query="search"
+                    :scope="activeScope"
+                    :loading="loading"
+                    :error="error"
+                    @import="
+                      (event: MouseEvent, repository: CreateHubRepository) =>
+                        emit('import', event, repository)
+                    "
+                    @retry="(event: MouseEvent) => emit('retry', event)"
+                    @clear-search="clearSearch"
+                  />
                 </div>
               </div>
             </section>
 
-            <section
-              class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1"
-            >
-              <div class="flex flex-col gap-(--spacing-sm)">
-                <div
-                  class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)"
-                >
-                  <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
-                    Start from template
-                  </h2>
-
-                  <div class="flex w-full shrink-0 items-center sm:w-(--container-3xs)">
-                    <Input
-                      v-model="templateSearch"
-                      size="medium"
-                      placeholder="Search templates"
-                      aria-label="Search templates"
-                      class="w-full"
-                    >
-                      <template #leading>
-                        <i class="az az-search" />
-                      </template>
-                    </Input>
-                  </div>
-                </div>
-              </div>
-
-              <div class="lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
-                <div class="flex lg:min-h-0 lg:flex-1">
-                  <ScrollArea
-                    fade
-                    aria-label="Start from template results"
-                    class="w-full"
-                  >
-                    <div class="pb-(--spacing-2xs) pe-(--spacing-2xs)">
-                      <EmptyState
-                        v-if="!filteredSections.length"
-                        size="small"
-                        icon="az az-search"
-                        title="No templates match"
-                        :description="`Nothing is named like “${templateSearch}”.`"
-                      >
-                        <template #actions>
-                          <Button
-                            label="Clear search"
-                            variant="outline"
-                            size="small"
-                            @click="clearTemplateSearch"
-                          />
-                        </template>
-                      </EmptyState>
-                      <div
-                        v-else
-                        class="flex flex-col gap-(--layout-section-gap)"
-                      >
-                        <section
-                          v-for="section in filteredSections"
-                          :key="section.id"
-                          class="flex flex-col gap-(--layout-group-gap)"
-                        >
-                          <h3 class="px-(--spacing-xs) text-label-sm text-(--text-muted)">
-                            {{ section.label }}
-                          </h3>
-
-                          <div
-                            v-if="section.kind === 'list'"
-                            class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2"
-                          >
-                            <IntegrationCard
-                              v-for="item in section.items"
-                              :key="item.slug"
-                              :title="item.title"
-                              :logo="`${item.icon} ${item.markClass}`.trim()"
-                              :vendor="item.vendor ?? ''"
-                              :description="item.description"
-                              :href="templateHref(item)"
-                            />
-                          </div>
-
-                          <div
-                            v-else
-                            class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
-                          >
-                            <div
-                              v-for="item in section.items"
-                              :key="item.slug"
-                              class="flex group relative min-h-(--size-44)"
-                            >
-                              <Card class="w-full">
-                                <template #default>
-                                  <div class="isolate flex flex-1 flex-col">
-                                    <span
-                                      aria-hidden="true"
-                                      class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <i
-                                        :class="[item.icon, item.markClass]"
-                                        class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
-                                      />
-                                    </span>
-                                    <div
-                                      class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
-                                    >
-                                      <span
-                                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                      >
-                                        <i
-                                          :class="[item.icon, item.markClass]"
-                                          class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                                        <h4 class="text-label-md text-(--text-default)">
-                                          <a
-                                            :href="templateHref(item)"
-                                            class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:z-20 after:rounded-(--shape-card) after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
-                                          >
-                                            {{ item.title }}
-                                          </a>
-                                        </h4>
-                                        <p class="text-pretty text-body-sm text-(--text-muted)">
-                                          {{ item.description }}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </template>
-                              </Card>
-                            </div>
-                          </div>
-                        </section>
-                      </div>
-                    </div>
-                  </ScrollArea>
-                </div>
-              </div>
-            </section>
+            <TemplateGallery :sections="sections" />
           </div>
         </div>
       </div>
@@ -1220,4 +842,448 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
     ]
   }
 ]
+```
+
+## `parts/repository-list.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Item from '@aziontech/webkit/item'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+  import { computed, ref, watch } from 'vue'
+
+  import type { CreateHubRepository } from '../types'
+
+  export interface RepositoryListProps {
+    /** The repositories that match the search. */
+    repositories: CreateHubRepository[]
+    /** The search typed above the list. */
+    query: string
+    /** The scope the list shows; picking another one pages back to the start. */
+    scope: string
+    /** The repositories are loading; skeleton rows show. */
+    loading?: boolean
+    /** Why the repositories failed to load. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<RepositoryListProps>(), { loading: false, error: '' })
+
+  const emit = defineEmits<{
+    import: [event: MouseEvent, repository: CreateHubRepository]
+    retry: [event: MouseEvent]
+    'clear-search': []
+  }>()
+
+  const REPO_PAGE = 10
+  const skeletonRows = 6
+
+  const limit = ref(REPO_PAGE)
+
+  watch(
+    () => props.scope,
+    () => {
+      limit.value = REPO_PAGE
+    }
+  )
+
+  const failed = computed(() => props.error !== '')
+  const shown = computed(() => props.repositories.slice(0, limit.value))
+  const hidden = computed(() => props.repositories.length - shown.value.length)
+
+  const showMore = () => {
+    limit.value += REPO_PAGE
+  }
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
+</script>
+
+<template>
+  <div class="flex lg:min-h-0">
+    <Card
+      :padded="false"
+      class="w-full"
+    >
+      <template #default>
+        <div class="overflow-y-auto overscroll-contain lg:min-h-0">
+          <div
+            v-if="failed"
+            key="repos-failed"
+            class="p-(--spacing-md)"
+          >
+            <Alert
+              severity="danger"
+              :label="error"
+              action-label="Retry"
+              @action="(event: MouseEvent) => emit('retry', event)"
+            />
+          </div>
+          <div
+            v-else-if="loading"
+            key="repos-loading"
+            aria-busy="true"
+          >
+            <p
+              role="status"
+              class="sr-only"
+            >
+              Loading repositories
+            </p>
+            <Item.List aria-hidden="true">
+              <Item
+                v-for="n in skeletonRows"
+                :key="'repo-skeleton-' + n"
+                size="small"
+              >
+                <Item.Media>
+                  <Skeleton
+                    variant="rectangle"
+                    width="1.75rem"
+                    height="1.75rem"
+                  />
+                </Item.Media>
+                <Item.Content>
+                  <div class="flex flex-col gap-(--spacing-xs)">
+                    <Skeleton
+                      width="40%"
+                      height="0.875rem"
+                    />
+                    <Skeleton
+                      width="25%"
+                      height="0.75rem"
+                    />
+                  </div>
+                </Item.Content>
+                <Item.Actions>
+                  <Skeleton
+                    width="4.5rem"
+                    height="1.75rem"
+                  />
+                </Item.Actions>
+              </Item>
+            </Item.List>
+          </div>
+          <div
+            v-else-if="repositories.length"
+            key="repos-list"
+          >
+            <Item.List :aria-label="`Repositories in ${scope}`">
+              <Item
+                v-for="repo in shown"
+                :key="repo.name"
+                size="small"
+              >
+                <Item.Media>
+                  <span
+                    class="flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+                  >
+                    <i
+                      :class="repo.icon"
+                      class="text-body-md leading-none text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ repo.name }}</Item.Title>
+                  <Item.Description>
+                    <span class="flex items-center gap-(--spacing-2xs) text-body-xs">
+                      <i
+                        class="az az-history"
+                        aria-hidden="true"
+                      />
+                      {{ ago(repo.pushedAt) }}
+                    </span>
+                  </Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <Button
+                    label="Import"
+                    variant="secondary"
+                    size="small"
+                    :aria-label="`Import ${repo.name}`"
+                    @click="(event: MouseEvent) => emit('import', event, repo)"
+                  />
+                </Item.Actions>
+              </Item>
+            </Item.List>
+            <div
+              v-if="hidden > 0"
+              class="flex justify-center border-t border-(--border-muted) p-(--spacing-sm)"
+            >
+              <Button
+                :label="`Load more (${hidden})`"
+                variant="ghost"
+                size="small"
+                @click="showMore"
+              />
+            </div>
+          </div>
+          <EmptyState
+            v-else
+            size="small"
+            icon="az az-search"
+            title="No repositories match"
+            :description="`Nothing in ${scope} is named like “${query}”.`"
+          >
+            <template #actions>
+              <Button
+                label="Clear search"
+                variant="outline"
+                size="small"
+                @click="emit('clear-search')"
+              />
+            </template>
+          </EmptyState>
+        </div>
+      </template>
+    </Card>
+  </div>
+</template>
+```
+
+## `parts/template-gallery.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Input from '@aziontech/webkit/input'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import { computed, ref } from 'vue'
+
+  import type { CreateHubTemplate, CreateHubTemplateSection } from '../types'
+
+  export interface TemplateGalleryProps {
+    /** The template sections. */
+    sections: CreateHubTemplateSection[]
+  }
+
+  const props = defineProps<TemplateGalleryProps>()
+
+  const templateSearch = ref('')
+
+  const templateMatches = (item: CreateHubTemplate, query: string) =>
+    item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query)
+
+  const filteredSections = computed(() => {
+    const q = templateSearch.value.trim().toLowerCase()
+    if (!q) return props.sections
+    return props.sections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) => templateMatches(item, q))
+      }))
+      .filter((section) => section.items.length > 0)
+  })
+
+  const clear = () => {
+    templateSearch.value = ''
+  }
+
+  const templateHref = (item: CreateHubTemplate) => `/create/templates/${item.slug}`
+
+  const TEMPLATE_GLOW_CLASS =
+    'pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance ' +
+    'group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none'
+
+  const TEMPLATE_ICON_CLASS =
+    'text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance ' +
+    'group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none'
+</script>
+
+<template>
+  <section class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1">
+    <div class="flex flex-col gap-(--spacing-sm)">
+      <div class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)">
+        <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
+          Start from template
+        </h2>
+
+        <div class="flex w-full shrink-0 items-center sm:w-(--container-3xs)">
+          <Input
+            v-model="templateSearch"
+            size="medium"
+            placeholder="Search templates"
+            aria-label="Search templates"
+            class="w-full"
+          >
+            <template #leading>
+              <i class="az az-search" />
+            </template>
+          </Input>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
+      <div class="flex lg:min-h-0 lg:flex-1">
+        <ScrollArea
+          fade
+          aria-label="Start from template results"
+          class="w-full"
+        >
+          <div class="pb-(--spacing-2xs) pe-(--spacing-2xs)">
+            <EmptyState
+              v-if="!filteredSections.length"
+              size="small"
+              icon="az az-search"
+              title="No templates match"
+              :description="`Nothing is named like “${templateSearch}”.`"
+            >
+              <template #actions>
+                <Button
+                  label="Clear search"
+                  variant="outline"
+                  size="small"
+                  @click="clear"
+                />
+              </template>
+            </EmptyState>
+            <div
+              v-else
+              class="flex flex-col gap-(--layout-section-gap)"
+            >
+              <section
+                v-for="section in filteredSections"
+                :key="section.id"
+                class="flex flex-col gap-(--layout-group-gap)"
+              >
+                <h3 class="px-(--spacing-xs) text-label-sm text-(--text-muted)">
+                  {{ section.label }}
+                </h3>
+
+                <div
+                  v-if="section.kind === 'list'"
+                  class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2"
+                >
+                  <IntegrationCard
+                    v-for="item in section.items"
+                    :key="item.slug"
+                    :title="item.title"
+                    :logo="`${item.icon} ${item.markClass}`.trim()"
+                    :vendor="item.vendor ?? ''"
+                    :description="item.description"
+                    :href="templateHref(item)"
+                  />
+                </div>
+
+                <div
+                  v-else
+                  class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
+                >
+                  <div
+                    v-for="item in section.items"
+                    :key="item.slug"
+                    class="flex group relative min-h-(--size-44)"
+                  >
+                    <Card
+                      :href="templateHref(item)"
+                      class="w-full"
+                    >
+                      <template #default>
+                        <div class="isolate flex flex-1 flex-col">
+                          <span
+                            aria-hidden="true"
+                            :class="TEMPLATE_GLOW_CLASS"
+                          >
+                            <i
+                              :class="[item.icon, item.markClass]"
+                              class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
+                            />
+                          </span>
+                          <div
+                            class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
+                          >
+                            <span
+                              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+                            >
+                              <i
+                                :class="[TEMPLATE_ICON_CLASS, [item.icon, item.markClass]]"
+                                aria-hidden="true"
+                              />
+                            </span>
+                            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                              <h4 class="text-label-md text-(--text-default)">
+                                {{ item.title }}
+                              </h4>
+                              <p class="text-pretty text-body-sm text-(--text-muted)">
+                                {{ item.description }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </Card>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </ScrollArea>
+      </div>
+    </div>
+  </section>
+</template>
+```
+
+## `types.ts`
+
+```ts
+/** A GitHub account or organization the person can import from. */
+export interface CreateHubAccount {
+  /** The name shown in the scope Select. */
+  label: string
+  /** The scope key. */
+  value: string
+}
+
+/** One repository in the selected scope, most recently pushed first. */
+export interface CreateHubRepository {
+  /** The repository name. */
+  name: string
+  /** When it was last pushed, as an ISO 8601 string. */
+  pushedAt: string
+  /** The framework or kind glyph, an icon class. */
+  icon: string
+}
+
+/** One template tile. */
+export interface CreateHubTemplate {
+  /** The key of its deploy page. */
+  slug: string
+  /** The template name. */
+  title: string
+  /** One sentence on what it deploys. */
+  description: string
+  /** Who publishes it, shown beside the title on list tiles. */
+  vendor?: string
+  /** The framework or kind glyph, an icon class. */
+  icon: string
+  /** Extra classes on the glyph, such as the dark-theme invert. */
+  markClass: string
+}
+
+/** How a template section lays out its tiles. */
+export type CreateHubTemplateSectionKind = 'cards' | 'list'
+
+/** A group of templates under one heading. */
+export interface CreateHubTemplateSection {
+  /** Stable key. */
+  id: string
+  /** The section heading. */
+  label: string
+  /** Recommended cards in three columns, or two-column integration tiles. */
+  kind: CreateHubTemplateSectionKind
+  /** The templates in the section. */
+  items: CreateHubTemplate[]
+}
 ```

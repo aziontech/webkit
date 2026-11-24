@@ -2,7 +2,7 @@
 name: component-validate
 description: Run the project's pnpm checks (lint, type-check, type-coverage, server render of every example) on the freshly-written component. Pure runner; never edits code.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-11-23
 scope: webkit
 enforced_by: [props, dependencies]
 ---
@@ -24,7 +24,7 @@ Confirm the scaffolded component compiles, lints, types, and builds. Surfaces fa
 
 ## Workflow
 
-Run the four checks in this fixed order; stop on the first failure and surface it:
+Run the five checks in this fixed order; stop on the first failure and surface it:
 
 | # | Command | Failure means |
 |---|---|---|
@@ -32,6 +32,7 @@ Run the four checks in this fixed order; stop on the first failure and surface i
 | 2 | `pnpm typecheck:webkit` | `vue-tsc` reports a TypeScript error in the component, its sub-components, or the consuming exports. |
 | 3 | `pnpm check:webkit:type-coverage` | Type coverage below the threshold (project default: 95%). |
 | 4 | `pnpm --filter @aziontech/webkit test:ssr` | An example of the new component does not render (or compile) with `vue/server-renderer`. |
+| 5 | `pnpm --filter @aziontech/webkit run gates -- --only exports,naming,authoring,tests,maintainability,assertions,look-alikes` | The component breaks a gate that needs no catalog rebuild or baseline: untyped export entry (run `build:exports`), a naming or authoring violation, no test, a size or complexity limit of `CODE_QUALITY.md` § 3.1, a forbidden type assertion, or a new look-alike pair. |
 
 For each command, capture the exit code and the last 40 lines of stdout/stderr. Emit a table:
 
@@ -42,7 +43,10 @@ For each command, capture the exit code and the last 40 lines of stdout/stderr. 
 | `pnpm typecheck:webkit` | ✅ pass | — |
 | `pnpm check:webkit:type-coverage` | ✅ pass | 97.2% (threshold 95%) |
 | `pnpm --filter @aziontech/webkit test:ssr` | ✅ pass | every block and example rendered |
+| `gates --only …` | ✅ pass | 7 of 7 gates passed |
 ```
+
+This is the early check of a `/component-create` run. The full `pnpm --filter @aziontech/webkit run gates` (catalog, llms, size, complete, baselines and the rest) runs in step 6 of `/component-new`, after the examples, the size budget and the catalog rebuild exist.
 
 If any row is ❌, include the last 40 lines of the tool's output below the table and stop.
 

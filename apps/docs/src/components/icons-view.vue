@@ -128,7 +128,7 @@
         >
           <h3 class="text-label-md text-(--text-muted)">{{ category.title }}</h3>
           <div class="overflow-hidden rounded-(--shape-card) border border-(--border-default)">
-            <ul class="-me-px -mb-px grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8">
+            <ul class="-me-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))]">
               <li
                 v-for="icon in category.icons"
                 :key="icon.class"
@@ -147,7 +147,9 @@
                     :style="{ fontSize: `${size}px` }"
                     aria-hidden="true"
                   />
-                  <span class="w-full text-center wrap-break-word [hyphens:none] text-label-code-sm text-(--text-muted)"
+                  <span
+                    data-docs-icon-name
+                    class="w-full text-center wrap-normal [hyphens:none] text-label-code-sm text-(--text-muted)"
                     >{{ shortName(icon)
                     }}<template v-if="icon.set === 'color'"> · {{ t.iconsColor }}</template></span
                   >

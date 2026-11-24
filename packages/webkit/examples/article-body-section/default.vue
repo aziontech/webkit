@@ -1,13 +1,21 @@
 <script setup>
   import ArticleBodySection from '@aziontech/webkit/article-body-section'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+
+  const BODY =
+    '## Challenge\n\n' +
+    'Magalu is the most innovative retail company in LATAM.\n\n' +
+    '## Solution\n\n' +
+    'Magalu counts on Azion’s platform to evolve its security posture.\n\n' +
+    '## Results and Impact\n\n' +
+    'Magalu simplified security operations by blocking millions of threats per year.'
 </script>
 
 <template>
   <ArticleBodySection
     eyebrow="Blog"
     :banner="placeholderImage"
-    body="## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year."
+    :body="BODY"
     :article="{
       title: 'Magalu Ensures High Availability at Scale with Azion',
       description:

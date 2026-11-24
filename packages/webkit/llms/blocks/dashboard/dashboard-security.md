@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-security/dashboard-security.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-security")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FilterMenu](../../components/filter-menu.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FilterMenu](../../components/filter-menu.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -140,9 +140,7 @@ destination, method and the rule that decided it; outcome and severity are two d
 
 ### R. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what
-did not load (`Couldn't load matched requests over time.`); the card actions disable and the tiles
-read as a dash.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners. Expand and Export CSV disable.
 
 ### S. Loading placeholders — `Skeleton` (required)
 
@@ -156,25 +154,25 @@ The primary action of the empty state, linking to the rules page.
 
 The block takes its records through props and emits every action; it fetches nothing. `SecuritySummary`, `SecurityMetric`, `SecurityMatchedRequests`, `SecuritySourceIp`, `SecurityAttentionEntry`, `SecurityCardChanges`, `SecurityPeriodRange`, `SecurityPeriod`, `SecurityCardId` and `SecurityDashboardProps` are exported from `dashboard-security.vue`, and `sample.ts` holds the sample figures, series, breakdowns, IPs and attention entries the block renders when a data prop is left out (and never while `loading` or `error` is set). Export CSV and Copy query run in the browser on the data the block holds. The ByActor variant is a separate page and keeps its own sample log.
 
-| Prop / model      | Type                       | What it does                                                                                                |
-| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `summary`         | `SecuritySummary`          | The three tiles: value, change and sparkline. A `null` value shows a dash.                                  |
-| `matchedRequests` | `SecurityMatchedRequests`  | The Blocked and Logged series with their labels.                                                            |
-| `categories`      | `BarListItem[]`            | Blocked requests by attack category.                                                                        |
-| `countries`       | `BarListItem[]`            | Blocked requests by country.                                                                                |
-| `sourceIps`       | `SecuritySourceIp[]`       | The Top source IPs rows; the search runs on them in the browser.                                            |
-| `attention`       | `SecurityAttentionEntry[]` | The Needs attention list, each with the link that resolves it.                                              |
-| `changes`         | `SecurityCardChanges`      | Each card's change against the previous period, in percent; a rise is danger, a fall success.               |
-| `range`           | `SecurityPeriodRange`      | The start and end of the period, written into the copied query.                                             |
-| `loading`         | `boolean`                  | The period is loading: tiles, charts and the table show Skeletons, the card actions disable.                |
-| `error`           | `string`                   | Why the request failed, shown after `Couldn't load matched requests over time.` (…) in each danger `Alert`. |
-| `v-model:period`  | `SecurityPeriod`           | The period the tiles compare against; refetch when it changes. Defaults to `24h`.                           |
+| Prop / model      | Type                       | What it does                                                                                                                   |
+| ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `summary`         | `SecuritySummary`          | The three tiles: value, change and sparkline. A `null` value shows a dash.                                                     |
+| `matchedRequests` | `SecurityMatchedRequests`  | The Blocked and Logged series with their labels.                                                                               |
+| `categories`      | `BarListItem[]`            | Blocked requests by attack category.                                                                                           |
+| `countries`       | `BarListItem[]`            | Blocked requests by country.                                                                                                   |
+| `sourceIps`       | `SecuritySourceIp[]`       | The Top source IPs rows; the search runs on them in the browser.                                                               |
+| `attention`       | `SecurityAttentionEntry[]` | The Needs attention list, each with the link that resolves it.                                                                 |
+| `changes`         | `SecurityCardChanges`      | Each card's change against the previous period, in percent; a rise is danger, a fall success.                                  |
+| `range`           | `SecurityPeriodRange`      | The start and end of the period, written into the copied query.                                                                |
+| `loading`         | `boolean`                  | The period is loading: tiles, charts and the table show Skeletons, the card actions disable.                                   |
+| `error`           | `string`                   | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:period`  | `SecurityPeriod`           | The period the tiles compare against; refetch when it changes. Defaults to `24h`.                                              |
 
 Every region empty (`[]` lists and no series) is the no-rule-set state: one `EmptyState` with `Add rule set` replaces the grid.
 
-| Event   | Payload   | When                              |
-| ------- | --------- | --------------------------------- |
-| `retry` | `(event)` | Retry in any of the error alerts. |
+| Event   | Payload   | When                             |
+| ------- | --------- | -------------------------------- |
+| `retry` | `(event)` | Retry in the page's error alert. |
 
 To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -244,7 +242,7 @@ Then delete `sample.ts` and its import.
 - Loading: `loading`; every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
 - Empty: no rule set yet (every list `[]`, tiles with `null` values); tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
 - ByActor: request activity per actor with the rule that decided each request; NoMatch is a state of it.
-- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -258,7 +256,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — The first load: every tile, chart and the table hold a Skeleton, and Needs attention shows three placeholder rows.
 - `Empty` — No security rules set up yet: the tiles read as dashes, and one bordered EmptyState names the reason and offers Add rule set instead of a grid of empty charts.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `ByActor` — Request activity per actor: a Time range Select and a Refresh IconButton in the header over a FilterMenu (actor, outcome, category) with its chips and a destination Input; seven outcome StatTiles (requests, allowed, blocked, held, approved, denied, over budget), outcomes over time as stacked bars in status colors, three BarList breakdowns (actor, category, destination) and a request log DataTable with an outcome Tag, a SeverityTag and the rule that decided each request. A filter that matches nothing shows Clear filters.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-security", { variant })`, or the file under `blocks/dashboard/dashboard-security/variants/`.
@@ -270,35 +268,21 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Button from '@aziontech/webkit/button'
-  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { copyText } from '@aziontech/webkit/utils/clipboard'
-  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
+  import AttentionCard from './parts/attention-card.vue'
+  import MatchedChart from './parts/matched-chart.vue'
+  import SecurityCard from './parts/security-card.vue'
+  import SecurityDialog from './parts/security-dialog.vue'
+  import SourceIpSearch from './parts/source-ip-search.vue'
   import {
     sampleAttention,
     sampleCardChanges,
@@ -309,6 +293,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     sampleSourceIps,
     sampleSummary
   } from './sample'
+  import { runSecurityOption, securityCards, securityQuery } from './security-cards'
 
   /** The period every region reads. */
   export type SecurityPeriod = '1h' | '24h' | '7d' | '30d'
@@ -492,53 +477,10 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const fixed = (value: number, digits: number) =>
     formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
-  const compact = (value: number) =>
+  const formatCount = (value: number) =>
     formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
-  const formatCount = (value: number) => compact(value)
   const formatPercent = (value: number) => `${fixed(value, value >= 10 ? 0 : 1)}%`
 
-  const ipColumns: TableColumn[] = [
-    {
-      accessorKey: 'remoteAddress',
-      id: 'remoteAddress',
-      header: 'IP address',
-      align: 'start',
-      sortable: true,
-      principal: true
-    },
-    {
-      accessorKey: 'asn',
-      id: 'asn',
-      header: 'Network',
-      align: 'start',
-      sortable: true,
-      principal: false
-    },
-    {
-      accessorKey: 'country',
-      id: 'country',
-      header: 'Country',
-      align: 'start',
-      sortable: true,
-      principal: false
-    },
-    {
-      accessorKey: 'category',
-      id: 'category',
-      header: 'Main attack',
-      align: 'start',
-      sortable: true,
-      principal: false
-    },
-    {
-      accessorKey: 'requests',
-      id: 'requests',
-      header: 'Blocked requests',
-      align: 'end',
-      sortable: true,
-      principal: false
-    }
-  ]
   const forms = [
     { label: 'Line', value: 'line' },
     { label: 'Bar', value: 'bar' }
@@ -548,138 +490,45 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 
-  interface CardQuery {
-    dataset: string
-    fields: string[]
-    orderBy: string
-  }
-
-  const cardQuery = (report: CardQuery) =>
-    [
-      'query {',
-      `  ${report.dataset}(`,
-      '    limit: 5000',
-      '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${range.value.begin}", end: "${range.value.end}" } }`,
-      `    orderBy: [${report.orderBy}]`,
-      '  ) {',
-      ...report.fields.map((field) => `    ${field}`),
-      '  }',
-      '}'
-    ].join('\n')
-
-  const copyQuery = async (report: CardQuery) => {
-    if (!(await copyText(cardQuery(report)))) {
-      toast.error('The query could not be copied.')
-      return
-    }
-    toast.success('Query copied.', {
-      description: 'Paste it into any GraphQL client that sends your token.'
-    })
-  }
-
-  const queries: Record<SecurityCardId, CardQuery> = {
-    matched: {
-      dataset: 'securityMetrics',
-      fields: ['ts', 'action', 'requests'],
-      orderBy: 'ts_ASC'
-    },
-    categories: {
-      dataset: 'securityMetrics',
-      fields: ['attackCategory', 'requests'],
-      orderBy: 'requests_DESC'
-    },
-    countries: {
-      dataset: 'securityMetrics',
-      fields: ['country', 'requests'],
-      orderBy: 'requests_DESC'
-    },
-    ips: {
-      dataset: 'securityMetrics',
-      fields: ['remoteAddress', 'asn', 'country', 'attackCategory', 'requests'],
-      orderBy: 'requests_DESC'
-    }
-  }
-
-  interface CardReport extends CardQuery {
-    label: string
-    description: string
-    columns: CsvColumn[]
-    rows: () => object[]
-  }
-
   const seriesRows = (series: readonly ChartSeries[], axis: readonly ChartLabel[]) =>
     axis.map((label, index) => ({
       ts: label instanceof Date ? label.toISOString() : String(label),
       ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
     }))
 
+  const cardRows: Record<SecurityCardId, () => object[]> = {
+    matched: () => seriesRows(matched.value.series, matched.value.labels),
+    categories: () => categories.value,
+    countries: () => countries.value,
+    ips: () => sourceIps.value
+  }
+
   const expanded = ref(false)
   const expandedId = ref<SecurityCardId>('matched')
-  const expandedReport = computed(() => reports[expandedId.value])
 
   const openExpanded = (id: SecurityCardId) => {
     expandedId.value = id
     expanded.value = true
   }
 
-  const onCardOption = (id: SecurityCardId, value: string | number) => {
-    const report = reports[id]
-    if (value === 'query') {
-      copyQuery(report)
-      return
-    }
-    const filename = `${id}-${periodSlug.value}.csv`
-    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
-    toast.success('CSV exported.', { description: filename })
-  }
+  const card = (id: SecurityCardId) => ({
+    title: securityCards[id].label,
+    hint: securityCards[id].description,
+    subject: securityCards[id].subject,
+    change: changeTag(id),
+    blocked: blocked.value,
+    error: props.error
+  })
 
-  const reports: Record<SecurityCardId, CardReport> = {
-    matched: {
-      ...queries.matched,
-      label: 'Matched requests over time',
-      description: 'Requests that matched a rule: blocked, or logged and allowed through.',
-      columns: [
-        { header: 'Time', id: 'ts' },
-        { header: 'Blocked', id: 'blocked' },
-        { header: 'Logged', id: 'logged' }
-      ],
-      rows: () => seriesRows(matched.value.series, matched.value.labels)
-    },
-    categories: {
-      ...queries.categories,
-      label: 'Blocked requests by attack category',
-      description: 'Blocked requests, broken down by the attack category of the rule they matched.',
-      columns: [
-        { header: 'Attack category', id: 'name' },
-        { header: 'Blocked requests', id: 'value' }
-      ],
-      rows: () => categories.value
-    },
-    countries: {
-      ...queries.countries,
-      label: 'Blocked requests by country',
-      description: 'Blocked requests, broken down by the country they came from.',
-      columns: [
-        { header: 'Country', id: 'name' },
-        { header: 'Blocked requests', id: 'value' }
-      ],
-      rows: () => countries.value
-    },
-    ips: {
-      ...queries.ips,
-      label: 'Top source IPs by blocked requests',
-      description: 'The addresses blocked most often, with their network and main attack.',
-      columns: [
-        { header: 'IP address', id: 'remoteAddress' },
-        { header: 'Network', id: 'asn' },
-        { header: 'Country', id: 'country' },
-        { header: 'Main attack', id: 'category' },
-        { header: 'Blocked requests', id: 'requests' }
-      ],
-      rows: () => sourceIps.value
-    }
-  }
+  const onCardOption = (id: SecurityCardId, value: string | number) =>
+    runSecurityOption(value, {
+      query: securityQuery(securityCards[id], range.value),
+      filename: `${id}-${periodSlug.value}.csv`,
+      columns: securityCards[id].columns,
+      rows: cardRows[id]
+    })
+
+  const barCards = ['categories', 'countries'] as const
 </script>
 
 <template>
@@ -709,6 +558,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </Select>
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load security data. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-security__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3">
         <li class="flex min-w-0 flex-col">
           <StatTile
@@ -784,544 +641,71 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         v-else
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
-        <ChartCard :span="8">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Matched requests over time</ChartCard.Title>
-              <Hint
-                content="Requests that matched a rule: blocked, or logged and allowed through."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('matched')"
-                  :label="changeTag('matched')?.label"
-                  :severity="changeTag('matched')?.severity"
-                  :icon="changeTag('matched')?.icon"
-                  size="small"
-                />
-                <ToggleGroup
-                  v-model="form"
-                  :options="forms"
-                  size="small"
-                  aria-label="Chart form for Matched requests over time"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Matched requests over time"
-                  :disabled="blocked"
-                  @click="openExpanded('matched')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('matched', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Matched requests over time"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load matched requests over time. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <Chart
-              v-else
-              v-model:active-index="activeIndex"
-              :series="matched.series"
-              :labels="matched.labels"
-              :format-value="formatCount"
-              empty-title="No matched requests in this period"
-              empty-description="Nothing was recorded in this period."
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar
-                v-if="form === 'bar'"
-                stacked
-              />
-              <Chart.Line v-else />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend total />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="4">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Needs attention</ChartCard.Title>
-              <Hint content="Settings and traffic on your services that ask for a decision." />
-            </span>
-            <ChartCard.Action v-if="!blocked">
-              <Tag
-                :label="`${attention.length} open`"
-                severity="neutral"
-                size="small"
-              />
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load the attention list. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <div
-              v-else-if="loading"
-              class="flex flex-col gap-(--spacing-md)"
-            >
-              <div
-                v-for="row in 3"
-                :key="row"
-                class="flex flex-col gap-(--spacing-xs)"
-              >
-                <Skeleton
-                  width="60%"
-                  height="0.875rem"
-                />
-                <Skeleton
-                  width="90%"
-                  height="0.75rem"
-                />
-              </div>
-            </div>
-            <Item.List v-else>
-              <Item
-                v-for="entry in attention"
-                :key="entry.id"
-                role="listitem"
-                variant="inline"
-                size="small"
-              >
-                <Item.Media>
-                  <i
-                    :class="entry.icon"
-                    class="text-body-sm leading-none text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </Item.Media>
-                <Item.Content>
-                  <Item.Title>{{ entry.title }}</Item.Title>
-                  <Item.Description>{{ entry.description }}</Item.Description>
-                  <span class="flex flex-wrap items-center gap-(--spacing-xs)">
-                    <Tag
-                      :label="entry.tag"
-                      :severity="entry.severity"
-                      size="small"
-                    />
-                    <Link
-                      :label="entry.action.label"
-                      :href="entry.action.href"
-                      size="small"
-                    />
-                  </span>
-                </Item.Content>
-              </Item>
-            </Item.List>
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="6">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Blocked requests by attack category</ChartCard.Title>
-              <Hint
-                content="Blocked requests, broken down by the attack category of the rule they matched."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('categories')"
-                  :label="changeTag('categories')?.label"
-                  :severity="changeTag('categories')?.severity"
-                  :icon="changeTag('categories')?.icon"
-                  size="small"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Blocked requests by attack category"
-                  :disabled="blocked"
-                  @click="openExpanded('categories')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('categories', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Blocked requests by attack category"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load blocked requests by attack category. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <BarList
-              v-else
-              :items="categories"
-              :format-value="formatCount"
-              empty-title="No blocked requests in this period"
-              :loading="loading"
-              aria-label="Blocked requests by attack category"
-            />
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="6">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Blocked requests by country</ChartCard.Title>
-              <Hint content="Blocked requests, broken down by the country they came from." />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('countries')"
-                  :label="changeTag('countries')?.label"
-                  :severity="changeTag('countries')?.severity"
-                  :icon="changeTag('countries')?.icon"
-                  size="small"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Blocked requests by country"
-                  :disabled="blocked"
-                  @click="openExpanded('countries')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('countries', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Blocked requests by country"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load blocked requests by country. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <BarList
-              v-else
-              :items="countries"
-              :format-value="formatCount"
-              empty-title="No blocked requests in this period"
-              :loading="loading"
-              aria-label="Blocked requests by country"
-            />
-          </ChartCard.Content>
-        </ChartCard>
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
-              <Hint
-                content="The addresses blocked most often, with their network and main attack."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                data-wide
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="changeTag('ips')"
-                  :label="changeTag('ips')?.label"
-                  :severity="changeTag('ips')?.severity"
-                  :icon="changeTag('ips')?.icon"
-                  size="small"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Top source IPs by blocked requests"
-                  :disabled="blocked"
-                  @click="openExpanded('ips')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('ips', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Top source IPs by blocked requests"
-                    :disabled="blocked"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="error"
-              severity="danger"
-              :label="`Couldn't load top source IPs by blocked requests. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <div
-              v-else
-              class="flex min-w-0 flex-col gap-(--spacing-sm)"
-            >
-              <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                <div class="min-w-36 grow basis-(--container-3xs)">
-                  <Input
-                    v-model="search"
-                    size="medium"
-                    placeholder="Search addresses, networks or attacks"
-                    aria-label="Search addresses, networks or attacks"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </div>
-              </div>
-              <DataTable
-                v-model:global-filter="search"
-                :data="sourceIps"
-                :columns="ipColumns"
-                row-key="id"
-                sortable
-                paginated
-                :page-size="5"
-                :page-size-options="[5, 10, 25]"
-                density="compact"
-                bordered
-                :loading="loading"
-              >
-                <template #empty>
-                  <EmptyState
-                    size="small"
-                    icon="az az-search"
-                    title="No matching rows"
-                    description="Change the search."
-                  />
-                </template>
-                <template #cell-requests="{ row }">
-                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
-                </template>
-              </DataTable>
-            </div>
-          </ChartCard.Content>
-        </ChartCard>
+        <SecurityCard
+          v-model:form="form"
+          :span="8"
+          v-bind="card('matched')"
+          :forms="forms"
+          @expand="openExpanded('matched')"
+          @select="(_event, value) => onCardOption('matched', value)"
+        >
+          <MatchedChart
+            v-model:active-index="activeIndex"
+            :matched="matched"
+            :format-value="formatCount"
+            :bar="form === 'bar'"
+            :loading="loading"
+          />
+        </SecurityCard>
+        <AttentionCard
+          :attention="attention"
+          :blocked="blocked"
+          :loading="loading"
+          :error="error"
+        />
+        <SecurityCard
+          v-for="id in barCards"
+          :key="id"
+          :span="6"
+          v-bind="card(id)"
+          @expand="openExpanded(id)"
+          @select="(_event, value) => onCardOption(id, value)"
+        >
+          <BarList
+            :items="id === 'categories' ? categories : countries"
+            :format-value="formatCount"
+            empty-title="No blocked requests in this period"
+            :loading="loading"
+            :aria-label="securityCards[id].label"
+          />
+        </SecurityCard>
+        <SecurityCard
+          :span="12"
+          v-bind="card('ips')"
+          wide
+          @expand="openExpanded('ips')"
+          @select="(_event, value) => onCardOption('ips', value)"
+        >
+          <SourceIpSearch
+            v-model:search="search"
+            :rows="sourceIps"
+            :format-count="formatCount"
+            :loading="loading"
+          />
+        </SecurityCard>
       </div>
     </div>
-    <Dialog
+    <SecurityDialog
       v-model:open="expanded"
-      size="large"
-    >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>{{ expandedReport.label }}</DialogTitle>
-            <DialogDescription>{{ expandedReport.description }}</DialogDescription>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-            <template v-if="expandedId === 'matched'">
-              <div>
-                <ToggleGroup
-                  v-model="form"
-                  :options="forms"
-                  size="small"
-                  :aria-label="`Chart form for ${expandedReport.label}`"
-                />
-              </div>
-              <Chart
-                :series="matched.series"
-                :labels="matched.labels"
-                :format-value="formatCount"
-                :height="420"
-                empty-title="No matched requests in this period"
-                empty-description="Nothing was recorded in this period."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis type="y" />
-                <Chart.Axis type="x" />
-                <Chart.Bar
-                  v-if="form === 'bar'"
-                  stacked
-                />
-                <Chart.Line v-else />
-                <Chart.Crosshair />
-                <Chart.Tooltip />
-                <Chart.Legend total />
-              </Chart>
-            </template>
-            <BarList
-              v-else-if="expandedId === 'categories' || expandedId === 'countries'"
-              :items="expandedId === 'categories' ? categories : countries"
-              :format-value="formatCount"
-              empty-title="No blocked requests in this period"
-              :aria-label="expandedReport.label"
-            />
-            <DataTable
-              v-else
-              :data="sourceIps"
-              :columns="ipColumns"
-              row-key="id"
-              sortable
-              paginated
-              :page-size="10"
-              density="compact"
-              bordered
-            >
-              <template #empty>
-                <EmptyState
-                  size="small"
-                  icon="az az-shield"
-                  title="No blocked requests in this period"
-                  description="Nothing was recorded in this period."
-                />
-              </template>
-              <template #cell-requests="{ row }">
-                <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
-              </template>
-            </DataTable>
-          </div>
-        </PanelBody>
-      </DialogContent>
-    </Dialog>
+      v-model:form="form"
+      :card-id="expandedId"
+      :matched="matched"
+      :categories="categories"
+      :countries="countries"
+      :source-ips="sourceIps"
+      :forms="forms"
+      :format-count="formatCount"
+    />
   </div>
 </template>
 ```
@@ -1330,6 +714,10 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```ts
 import type { BarListItem } from '@aziontech/webkit/bar-list'
+import type { ChartSeries } from '@aziontech/webkit/chart'
+import type { FilterMenuField } from '@aziontech/webkit/filter-menu'
+import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
 
 import type {
   SecurityAttentionEntry,
@@ -1523,5 +911,1066 @@ export const sampleCardChanges: SecurityCardChanges = {
 export const samplePeriodRange: SecurityPeriodRange = {
   begin: '2026-11-09T00:00:00Z',
   end: '2026-11-09T23:59:59Z'
+}
+
+/** What a rule did with one request of the ByActor variant. */
+export type ActorOutcome = 'allowed' | 'blocked' | 'held' | 'approved' | 'denied'
+
+/** One row of the ByActor Requests table. */
+export interface ActorActivityRow {
+  /** Stable row key. */
+  id: string
+  /** When the request arrived. */
+  time: string
+  /** Who sent it. */
+  actor: string
+  /** What the rule did. */
+  outcome: ActorOutcome
+  /** The category of the action. */
+  category: string
+  /** How severe the action is. */
+  severity: SeverityTagSeverity
+  /** The host it went to. */
+  destination: string
+  /** The HTTP method. */
+  method: string
+  /** The rule that decided it. */
+  rule: string
+}
+
+/** One outcome tile of the ByActor variant. */
+export interface ActorFigure {
+  /** Stable key, the outcome for an outcome tile. */
+  id: string
+  /** The tile label. */
+  label: string
+  /** One sentence that defines the figure. */
+  description: string
+  /** The figure for the time range. */
+  value: number
+  /** Change against the previous day, in percent. */
+  delta: number
+  /** A rise is a regression. */
+  inverse: boolean
+}
+
+export const sampleActorTimeRanges: SelectOptionItem[] = [
+  {
+    value: 'Last hour',
+    label: 'Last hour'
+  },
+  {
+    value: 'Last 24 hours',
+    label: 'Last 24 hours'
+  },
+  {
+    value: 'Last 7 days',
+    label: 'Last 7 days'
+  },
+  {
+    value: 'Last 30 days',
+    label: 'Last 30 days'
+  }
+]
+
+export const sampleActorFilterFields: FilterMenuField[] = [
+  {
+    id: 'actor',
+    label: 'Actor',
+    options: [
+      'report-builder',
+      'ticket-triage',
+      'inventory-sync',
+      'invoice-reader',
+      'release-helper',
+      'data-export',
+      'calendar-sync'
+    ].map((name) => ({ value: name, label: name }))
+  },
+  {
+    id: 'outcome',
+    label: 'Outcome',
+    options: [
+      { value: 'allowed', label: 'Allowed' },
+      { value: 'blocked', label: 'Blocked' },
+      { value: 'held', label: 'Held' },
+      { value: 'approved', label: 'Approved' },
+      { value: 'denied', label: 'Denied' }
+    ]
+  },
+  {
+    id: 'category',
+    label: 'Category',
+    options: ['Read', 'Write', 'Search', 'Export', 'Delete', 'Admin'].map((name) => ({
+      value: name,
+      label: name
+    }))
+  }
+]
+
+export const sampleActorFigures: ActorFigure[] = [
+  {
+    id: 'requests',
+    label: 'Requests',
+    description: 'Every request the rules evaluated in the time range.',
+    value: 14489,
+    delta: 8.4,
+    inverse: false
+  },
+  {
+    id: 'allowed',
+    label: 'Allowed',
+    description: 'Requests a rule let through to their destination.',
+    value: 12913,
+    delta: 7.9,
+    inverse: false
+  },
+  {
+    id: 'blocked',
+    label: 'Blocked',
+    description: 'Requests a rule stopped before they reached their destination.',
+    value: 1348,
+    delta: 12.6,
+    inverse: true
+  },
+  {
+    id: 'held',
+    label: 'Held',
+    description: 'Requests a rule paused until someone approves or denies them.',
+    value: 228,
+    delta: 4.1,
+    inverse: true
+  },
+  {
+    id: 'approved',
+    label: 'Approved',
+    description: 'Held requests a reviewer approved.',
+    value: 186,
+    delta: 3.2,
+    inverse: false
+  },
+  {
+    id: 'denied',
+    label: 'Denied',
+    description: 'Held requests a reviewer denied.',
+    value: 41,
+    delta: -9.5,
+    inverse: true
+  },
+  {
+    id: 'over-budget',
+    label: 'Over budget',
+    description: 'Requests that went past the spending or volume budget set for their actor.',
+    value: 73,
+    delta: 21.7,
+    inverse: true
+  }
+]
+
+export const sampleActorOutcomes: ChartSeries[] = [
+  {
+    id: 'allowed',
+    name: 'Allowed',
+    color: 'success',
+    values: [
+      412, 386, 341, 318, 296, 305, 352, 448, 571, 664, 718, 742, 731, 756, 769, 748, 702, 655, 598,
+      541, 503, 476, 451, 430
+    ]
+  },
+  {
+    id: 'blocked',
+    name: 'Blocked',
+    color: 'danger',
+    values: [
+      38, 35, 31, 29, 33, 30, 36, 47, 62, 71, 84, 79, 76, 91, 88, 82, 74, 69, 61, 55, 49, 46, 42, 40
+    ]
+  },
+  {
+    id: 'held',
+    name: 'Held',
+    color: 'warning',
+    values: [6, 5, 4, 3, 4, 3, 5, 8, 11, 14, 16, 15, 13, 17, 18, 15, 13, 12, 10, 9, 8, 7, 6, 6]
+  }
+]
+
+export const sampleActors: BarListItem[] = [
+  {
+    id: 'report-builder',
+    name: 'report-builder',
+    value: 4494
+  },
+  {
+    id: 'ticket-triage',
+    name: 'ticket-triage',
+    value: 3187
+  },
+  {
+    id: 'inventory-sync',
+    name: 'inventory-sync',
+    value: 2463
+  },
+  {
+    id: 'invoice-reader',
+    name: 'invoice-reader',
+    value: 1738
+  },
+  {
+    id: 'release-helper',
+    name: 'release-helper',
+    value: 1304
+  },
+  {
+    id: 'data-export',
+    name: 'data-export',
+    value: 869
+  },
+  {
+    id: 'calendar-sync',
+    name: 'calendar-sync',
+    value: 434
+  }
+]
+
+export const sampleActorCategories: BarListItem[] = [
+  {
+    id: 'Read',
+    name: 'Read',
+    value: 7827
+  },
+  {
+    id: 'Write',
+    name: 'Write',
+    value: 3042
+  },
+  {
+    id: 'Search',
+    name: 'Search',
+    value: 1738
+  },
+  {
+    id: 'Export',
+    name: 'Export',
+    value: 869
+  },
+  {
+    id: 'Delete',
+    name: 'Delete',
+    value: 579
+  },
+  {
+    id: 'Admin',
+    name: 'Admin',
+    value: 434
+  }
+]
+
+export const sampleActorDestinations: BarListItem[] = [
+  {
+    id: 'api.example.com',
+    name: 'api.example.com',
+    value: 5508
+  },
+  {
+    id: 'storage.example.com',
+    name: 'storage.example.com',
+    value: 2752
+  },
+  {
+    id: 'crm.example.net',
+    name: 'crm.example.net',
+    value: 2318
+  },
+  {
+    id: 'billing.example.com',
+    name: 'billing.example.com',
+    value: 1593
+  },
+  {
+    id: 'mail.example.org',
+    name: 'mail.example.org',
+    value: 1304
+  },
+  {
+    id: 'docs.example.com',
+    name: 'docs.example.com',
+    value: 1014
+  }
+]
+
+export const sampleActorRows: ActorActivityRow[] = [
+  {
+    id: 'request-01',
+    time: '14:52:08',
+    actor: 'report-builder',
+    outcome: 'allowed',
+    category: 'Read',
+    severity: 'info',
+    destination: 'api.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-02',
+    time: '14:51:47',
+    actor: 'data-export',
+    outcome: 'blocked',
+    category: 'Export',
+    severity: 'critical',
+    destination: 'storage.example.com',
+    method: 'PUT',
+    rule: 'No bulk export'
+  },
+  {
+    id: 'request-03',
+    time: '14:51:12',
+    actor: 'ticket-triage',
+    outcome: 'held',
+    category: 'Write',
+    severity: 'medium',
+    destination: 'crm.example.net',
+    method: 'PATCH',
+    rule: 'Review customer changes'
+  },
+  {
+    id: 'request-04',
+    time: '14:50:39',
+    actor: 'invoice-reader',
+    outcome: 'allowed',
+    category: 'Read',
+    severity: 'low',
+    destination: 'billing.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-05',
+    time: '14:49:58',
+    actor: 'release-helper',
+    outcome: 'approved',
+    category: 'Admin',
+    severity: 'high',
+    destination: 'api.example.com',
+    method: 'POST',
+    rule: 'Approve admin actions'
+  },
+  {
+    id: 'request-06',
+    time: '14:49:21',
+    actor: 'inventory-sync',
+    outcome: 'blocked',
+    category: 'Delete',
+    severity: 'high',
+    destination: 'api.example.com',
+    method: 'DELETE',
+    rule: 'No deletes outside hours'
+  },
+  {
+    id: 'request-07',
+    time: '14:48:44',
+    actor: 'report-builder',
+    outcome: 'allowed',
+    category: 'Search',
+    severity: 'info',
+    destination: 'docs.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-08',
+    time: '14:48:03',
+    actor: 'ticket-triage',
+    outcome: 'denied',
+    category: 'Write',
+    severity: 'medium',
+    destination: 'mail.example.org',
+    method: 'POST',
+    rule: 'Review outbound mail'
+  },
+  {
+    id: 'request-09',
+    time: '14:47:26',
+    actor: 'calendar-sync',
+    outcome: 'allowed',
+    category: 'Write',
+    severity: 'low',
+    destination: 'api.example.com',
+    method: 'PUT',
+    rule: 'Scheduled writes'
+  },
+  {
+    id: 'request-10',
+    time: '14:46:50',
+    actor: 'data-export',
+    outcome: 'blocked',
+    category: 'Export',
+    severity: 'critical',
+    destination: 'storage.example.com',
+    method: 'PUT',
+    rule: 'No bulk export'
+  },
+  {
+    id: 'request-11',
+    time: '14:46:12',
+    actor: 'invoice-reader',
+    outcome: 'allowed',
+    category: 'Read',
+    severity: 'info',
+    destination: 'billing.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-12',
+    time: '14:45:37',
+    actor: 'release-helper',
+    outcome: 'held',
+    category: 'Admin',
+    severity: 'high',
+    destination: 'api.example.com',
+    method: 'POST',
+    rule: 'Approve admin actions'
+  }
+]
+```
+
+## `parts/attention-card.vue`
+
+```ts
+<script setup lang="ts">
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import Hint from '@aziontech/webkit/hint'
+  import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type { SecurityAttentionEntry } from '../dashboard-security.vue'
+
+  export interface AttentionCardProps {
+    /** The entries that need a decision. */
+    attention: SecurityAttentionEntry[]
+    /** The period is loading or failed; the open count is hidden. */
+    blocked: boolean
+    /** The period is loading. */
+    loading: boolean
+    /** Why the period could not load; shows a danger alert with Retry. */
+    error: string
+  }
+
+  defineProps<AttentionCardProps>()
+</script>
+
+<template>
+  <ChartCard :span="4">
+    <ChartCard.Header>
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+        <ChartCard.Title>Needs attention</ChartCard.Title>
+        <Hint content="Settings and traffic on your services that ask for a decision." />
+      </span>
+      <ChartCard.Action v-if="!blocked">
+        <Tag
+          :label="`${attention.length} open`"
+          severity="neutral"
+          size="small"
+        />
+      </ChartCard.Action>
+    </ChartCard.Header>
+    <ChartCard.Content>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <div
+        v-else-if="loading"
+        class="flex flex-col gap-(--spacing-md)"
+      >
+        <div
+          v-for="row in 3"
+          :key="row"
+          class="flex flex-col gap-(--spacing-xs)"
+        >
+          <Skeleton
+            width="60%"
+            height="0.875rem"
+          />
+          <Skeleton
+            width="90%"
+            height="0.75rem"
+          />
+        </div>
+      </div>
+      <Item.List v-else>
+        <Item
+          v-for="entry in attention"
+          :key="entry.id"
+          role="listitem"
+          variant="inline"
+          size="small"
+        >
+          <Item.Media>
+            <i
+              :class="entry.icon"
+              class="text-body-sm leading-none text-(--text-muted)"
+              aria-hidden="true"
+            />
+          </Item.Media>
+          <Item.Content>
+            <Item.Title>{{ entry.title }}</Item.Title>
+            <Item.Description>{{ entry.description }}</Item.Description>
+            <span class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <Tag
+                :label="entry.tag"
+                :severity="entry.severity"
+                size="small"
+              />
+              <Link
+                :label="entry.action.label"
+                :href="entry.action.href"
+                size="small"
+              />
+            </span>
+          </Item.Content>
+        </Item>
+      </Item.List>
+    </ChartCard.Content>
+  </ChartCard>
+</template>
+```
+
+## `parts/matched-chart.vue`
+
+```ts
+<script setup lang="ts">
+  import Chart from '@aziontech/webkit/chart'
+
+  import type { SecurityMatchedRequests } from '../dashboard-security.vue'
+
+  export interface MatchedChartProps {
+    /** The Blocked and Logged series with their labels. */
+    matched: SecurityMatchedRequests
+    /** Writes a request count. */
+    formatValue: (value: number) => string
+    /** Draws the series as stacked bars instead of lines. */
+    bar: boolean
+    /** Minimum plot height in pixels; left out, the chart default. */
+    height?: number
+    /** The period is loading. */
+    loading?: boolean
+    /** Accessible name of the chart. */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<MatchedChartProps>(), {
+    height: undefined,
+    loading: false,
+    ariaLabel: ''
+  })
+
+  const activeIndex = defineModel<number | null>('activeIndex', { default: null })
+</script>
+
+<template>
+  <Chart
+    v-model:active-index="activeIndex"
+    :series="matched.series"
+    :labels="matched.labels"
+    :format-value="formatValue"
+    :height="height"
+    empty-title="No matched requests in this period"
+    empty-description="Nothing was recorded in this period."
+    :loading="loading"
+    :aria-label="ariaLabel || undefined"
+  >
+    <Chart.Grid />
+    <Chart.Axis type="y" />
+    <Chart.Axis type="x" />
+    <Chart.Bar
+      v-if="bar"
+      stacked
+    />
+    <Chart.Line v-else />
+    <Chart.Crosshair />
+    <Chart.Tooltip />
+    <Chart.Legend total />
+  </Chart>
+</template>
+```
+
+## `parts/security-card.vue`
+
+```ts
+<script setup lang="ts">
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  /** The change tag beside the Sum tag. */
+  export interface SecurityCardChange {
+    /** The change, written with its sign. */
+    label: string
+    /** Danger for a rise, success for a fall. */
+    severity: TagSeverity
+    /** The arrow glyph. */
+    icon: string
+  }
+
+  export interface SecurityCardProps {
+    /** Columns of the 12-column grid the card spans. */
+    span: number
+    /** The card title. */
+    title: string
+    /** One sentence on what the card counts. */
+    hint: string
+    /** What did not load, written after Couldn't load in the alert. */
+    subject: string
+    /** The change tag; null hides it. */
+    change: SecurityCardChange | null
+    /** The chart forms of the toggle; empty hides it. */
+    forms?: ToggleGroupOption[]
+    /** Marks the header actions as the ones of a full-width card. */
+    wide?: boolean
+    /** The period is loading or failed; Expand and the menu are disabled. */
+    blocked: boolean
+    /** Why the period could not load; shows a danger alert with Retry. */
+    error: string
+  }
+
+  withDefaults(defineProps<SecurityCardProps>(), { forms: () => [], wide: false })
+
+  const emit = defineEmits<{
+    expand: [event: MouseEvent]
+    select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
+  }>()
+
+  const form = defineModel<string>('form', { default: '' })
+
+  defineSlots<{ default(): unknown }>()
+
+  const menuOptions = [
+    { value: 'query', label: 'Copy query' },
+    { value: 'export', label: 'Export CSV' }
+  ]
+</script>
+
+<template>
+  <ChartCard :span="span">
+    <ChartCard.Header>
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+        <ChartCard.Title>{{ title }}</ChartCard.Title>
+        <Hint :content="hint" />
+      </span>
+      <ChartCard.Action>
+        <span
+          :data-wide="wide ? '' : undefined"
+          class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+        >
+          <Tag
+            label="Sum"
+            severity="neutral"
+            size="small"
+            icon="az az-calculator"
+          />
+          <Tag
+            v-if="change"
+            :label="change.label"
+            :severity="change.severity"
+            :icon="change.icon"
+            size="small"
+          />
+          <ToggleGroup
+            v-if="forms.length"
+            v-model="form"
+            :options="forms"
+            size="small"
+            :aria-label="`Chart form for ${title}`"
+          />
+        </span>
+        <Tooltip content="Expand">
+          <IconButton
+            icon="az az-app-window"
+            variant="ghost"
+            size="small"
+            :aria-label="`Expand ${title}`"
+            :disabled="blocked"
+            @click="(event: MouseEvent) => emit('expand', event)"
+          />
+        </Tooltip>
+        <DropdownMenu
+          side="bottom"
+          align="end"
+          @select="(event, value) => emit('select', event, value)"
+        >
+          <DropdownMenu.Trigger>
+            <IconButton
+              icon="az az-ellipsis"
+              variant="ghost"
+              size="small"
+              :aria-label="`More options for ${title}`"
+              :disabled="blocked"
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item
+              v-for="option in menuOptions"
+              :key="option.value"
+              :value="option.value"
+              :label="option.label"
+            />
+          </DropdownMenu.Group>
+        </DropdownMenu>
+      </ChartCard.Action>
+    </ChartCard.Header>
+    <ChartCard.Content>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <slot v-else />
+    </ChartCard.Content>
+  </ChartCard>
+</template>
+```
+
+## `parts/security-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
+  import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+
+  import type {
+    SecurityCardId,
+    SecurityMatchedRequests,
+    SecuritySourceIp
+  } from '../dashboard-security.vue'
+  import { ipColumns, securityCards } from '../security-cards'
+  import MatchedChart from './matched-chart.vue'
+
+  export interface SecurityDialogProps {
+    /** The card shown expanded. */
+    cardId: SecurityCardId
+    /** The Matched requests chart. */
+    matched: SecurityMatchedRequests
+    /** Blocked requests by attack category. */
+    categories: BarListItem[]
+    /** Blocked requests by country. */
+    countries: BarListItem[]
+    /** The Top source IPs rows. */
+    sourceIps: SecuritySourceIp[]
+    /** The Line and Bar options of the toggle. */
+    forms: ToggleGroupOption[]
+    /** Writes a request count. */
+    formatCount: (value: number) => string
+  }
+
+  defineProps<SecurityDialogProps>()
+
+  const open = defineModel<boolean>('open', { default: false })
+  const form = defineModel<string>('form', { default: 'line' })
+</script>
+
+<template>
+  <Dialog
+    v-model:open="open"
+    size="large"
+  >
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <DialogTitle>{{ securityCards[cardId].label }}</DialogTitle>
+          <DialogDescription>{{ securityCards[cardId].description }}</DialogDescription>
+        </div>
+      </PanelHeader>
+      <PanelBody>
+        <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+          <template v-if="cardId === 'matched'">
+            <div>
+              <ToggleGroup
+                v-model="form"
+                :options="forms"
+                size="small"
+                :aria-label="`Chart form for ${securityCards[cardId].label}`"
+              />
+            </div>
+            <MatchedChart
+              :matched="matched"
+              :format-value="formatCount"
+              :bar="form === 'bar'"
+              :height="420"
+              :aria-label="securityCards[cardId].label"
+            />
+          </template>
+          <BarList
+            v-else-if="cardId === 'categories' || cardId === 'countries'"
+            :items="cardId === 'categories' ? categories : countries"
+            :format-value="formatCount"
+            empty-title="No blocked requests in this period"
+            :aria-label="securityCards[cardId].label"
+          />
+          <DataTable
+            v-else
+            :data="sourceIps"
+            :columns="ipColumns"
+            row-key="id"
+            sortable
+            density="compact"
+            bordered
+          >
+            <template #empty>
+              <EmptyState
+                size="small"
+                icon="az az-shield"
+                title="No blocked requests in this period"
+                description="Nothing was recorded in this period."
+              />
+            </template>
+            <template #cell-requests="{ row }">
+              <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+            </template>
+            <template #footer>
+              <DataTablePagination :page-size="10" />
+            </template>
+          </DataTable>
+        </div>
+      </PanelBody>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+
+## `parts/source-ip-search.vue`
+
+```ts
+<script setup lang="ts">
+  import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Input from '@aziontech/webkit/input'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { computed } from 'vue'
+
+  import type { SecuritySourceIp } from '../dashboard-security.vue'
+  import { ipColumns } from '../security-cards'
+
+  export interface SourceIpSearchProps {
+    /** The Top source IPs rows. */
+    rows: SecuritySourceIp[]
+    /** Writes a request count. */
+    formatCount: (value: number) => string
+    /** The period is loading. */
+    loading: boolean
+  }
+
+  const props = defineProps<SourceIpSearchProps>()
+
+  const search = defineModel<string>('search', { default: '' })
+  const matchingRows = computed(() =>
+    props.rows.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        ipColumns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
+</script>
+
+<template>
+  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+    <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+      <div class="min-w-36 grow basis-(--container-3xs)">
+        <Input
+          v-model="search"
+          size="medium"
+          placeholder="Search addresses, networks or attacks"
+          aria-label="Search addresses, networks or attacks"
+        >
+          <template #leading>
+            <i
+              class="az az-search"
+              aria-hidden="true"
+            />
+          </template>
+        </Input>
+      </div>
+    </div>
+    <DataTable
+      :data="matchingRows"
+      :columns="ipColumns"
+      row-key="id"
+      sortable
+      density="compact"
+      stackable
+      bordered
+      :loading="loading"
+    >
+      <template #empty>
+        <EmptyState
+          size="small"
+          icon="az az-search"
+          title="No matching rows"
+          description="Change the search."
+        />
+      </template>
+      <template #cell-requests="{ row }">
+        <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="5"
+          :page-size-options="[5, 10, 25]"
+        />
+      </template>
+    </DataTable>
+  </div>
+</template>
+```
+
+## `security-cards.ts`
+
+```ts
+import type { TableColumn } from '@aziontech/webkit/data-table'
+import { toast } from '@aziontech/webkit/toast'
+import { copyText } from '@aziontech/webkit/utils/clipboard'
+import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+
+import type { SecurityCardId, SecurityPeriodRange } from './dashboard-security.vue'
+
+/** The fixed part of one card: its title, its query and its CSV columns. */
+export interface SecurityCardSpec {
+  /** The card title. */
+  label: string
+  /** One sentence on what the card counts. */
+  description: string
+  /** What did not load, written in the error alert. */
+  subject: string
+  /** Fields the copied query returns. */
+  fields: string[]
+  /** Order of the rows of the copied query. */
+  orderBy: string
+  /** The CSV columns. */
+  columns: CsvColumn[]
+}
+
+/** What a card menu copies and exports. */
+export interface SecurityOption {
+  /** The query Copy query writes. */
+  query: string
+  /** The file Export CSV downloads. */
+  filename: string
+  /** The CSV columns. */
+  columns: CsvColumn[]
+  /** The CSV rows, read when the export runs. */
+  rows: () => object[]
+}
+
+const ipColumn = (id: string, header: string): TableColumn => ({
+  accessorKey: id,
+  id,
+  header,
+  align: id === 'requests' ? 'end' : 'start',
+  sortable: true,
+  principal: id === 'remoteAddress'
+})
+
+export const ipColumns: TableColumn[] = [
+  ipColumn('remoteAddress', 'IP address'),
+  ipColumn('asn', 'Network'),
+  ipColumn('country', 'Country'),
+  ipColumn('category', 'Main attack'),
+  ipColumn('requests', 'Blocked requests')
+]
+
+const blockedColumn: CsvColumn = { header: 'Blocked requests', id: 'value' }
+
+export const securityCards: Record<SecurityCardId, SecurityCardSpec> = {
+  matched: {
+    label: 'Matched requests over time',
+    description: 'Requests that matched a rule: blocked, or logged and allowed through.',
+    subject: 'matched requests over time',
+    fields: ['ts', 'action', 'requests'],
+    orderBy: 'ts_ASC',
+    columns: [
+      { header: 'Time', id: 'ts' },
+      { header: 'Blocked', id: 'blocked' },
+      { header: 'Logged', id: 'logged' }
+    ]
+  },
+  categories: {
+    label: 'Blocked requests by attack category',
+    description: 'Blocked requests, broken down by the attack category of the rule they matched.',
+    subject: 'blocked requests by attack category',
+    fields: ['attackCategory', 'requests'],
+    orderBy: 'requests_DESC',
+    columns: [{ header: 'Attack category', id: 'name' }, blockedColumn]
+  },
+  countries: {
+    label: 'Blocked requests by country',
+    description: 'Blocked requests, broken down by the country they came from.',
+    subject: 'blocked requests by country',
+    fields: ['country', 'requests'],
+    orderBy: 'requests_DESC',
+    columns: [{ header: 'Country', id: 'name' }, blockedColumn]
+  },
+  ips: {
+    label: 'Top source IPs by blocked requests',
+    description: 'The addresses blocked most often, with their network and main attack.',
+    subject: 'top source IPs by blocked requests',
+    fields: ['remoteAddress', 'asn', 'country', 'attackCategory', 'requests'],
+    orderBy: 'requests_DESC',
+    columns: ipColumns.map((column) => ({
+      header: String(column.header),
+      id: column.id ?? ''
+    }))
+  }
+}
+
+export const securityQuery = (card: SecurityCardSpec, range: SecurityPeriodRange): string => {
+  const lines = [
+    'query {',
+    '  securityMetrics(',
+    '    limit: 5000',
+    '    aggregate: { sum: requests }'
+  ]
+  lines.push(`    filter: { tsRange: { begin: "${range.begin}", end: "${range.end}" } }`)
+  lines.push(`    orderBy: [${card.orderBy}]`, '  ) {')
+  for (const field of card.fields) lines.push(`    ${field}`)
+  lines.push('  }', '}')
+  return lines.join('\n')
+}
+
+export const runSecurityOption = async (
+  value: string | number,
+  option: SecurityOption
+): Promise<void> => {
+  if (value !== 'query') {
+    downloadCsv(option.filename, toCsv({ columns: option.columns, rows: option.rows() }))
+    toast.success('CSV exported.', { description: option.filename })
+    return
+  }
+  if (await copyText(option.query)) {
+    toast.success('Query copied.', {
+      description: 'Paste it into any GraphQL client that sends your token.'
+    })
+  } else {
+    toast.error('The query could not be copied.')
+  }
 }
 ```

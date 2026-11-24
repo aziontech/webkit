@@ -28,7 +28,8 @@
  ],
  "sfcFile": "blocks/view/view-waf-tuning/view-waf-tuning.vue",
  "guidelinesFile": "blocks/view/view-waf-tuning/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/view/view-waf-tuning/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/allow-dialog.vue"
+ ]
 }

@@ -1,4 +1,5 @@
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import PageHeader from '@aziontech/webkit/page-header'
 </script>
 
@@ -10,19 +11,15 @@
     <template #description>
       Start from a repository or use a framework template. You can also drag and drop your project,
       or choose a
-      <button
-        type="button"
-        class="text-link cursor-pointer"
-      >
-        file
-      </button>
+      <Button
+        variant="link"
+        label="file"
+      />
       or a
-      <button
-        type="button"
-        class="text-link cursor-pointer"
-      >
-        folder</button
-      >.
+      <Button
+        variant="link"
+        label="folder"
+      />.
     </template>
   </PageHeader>
 </template>

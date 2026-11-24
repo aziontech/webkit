@@ -24,6 +24,7 @@
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
   import { TableInjectionKey } from '../table/injection-key'
+  import { applyToTable, moveColumn, seedColumns, tableColumns } from './lib/table-columns'
 
   export type {
     CollectionColumnPreference,
@@ -42,10 +43,7 @@
     locked?: boolean
   }
 
-  defineOptions({
-    name: 'CollectionPreferences',
-    inheritAttrs: false
-  })
+  defineOptions({ name: 'CollectionPreferences', inheritAttrs: false })
 
   /** Overlay the panel opens in. */
   export type CollectionPreferencesContainer = 'dialog' | 'drawer'
@@ -114,36 +112,9 @@
 
   const ctx = inject(TableInjectionKey, null)
   const table = computed(() => (props.columns.length ? null : (ctx?.table.value ?? null)))
-  type ColumnMeta = { type?: string; label?: string }
-  const columns = computed<CollectionPreferencesColumn[]>(() => {
-    if (!table.value) return props.columns
-    return table.value
-      .getAllLeafColumns()
-      .filter((column) => (column.columnDef.meta as ColumnMeta | undefined)?.type !== 'action')
-      .map((column) => {
-        const header = column.columnDef.header
-        return {
-          id: column.id,
-          label:
-            (column.columnDef.meta as ColumnMeta | undefined)?.label ??
-            (typeof header === 'string' ? header : column.id),
-          locked: !column.getCanHide()
-        }
-      })
-  })
-  const fromTable = (): CollectionColumnPreference[] | null => {
-    if (!table.value) return null
-    const ids = new Set(columns.value.map((c) => c.id))
-    return table.value
-      .getAllLeafColumns()
-      .filter((column) => ids.has(column.id))
-      .sort(
-        (a, b) =>
-          (table.value?.getState().columnOrder.indexOf(a.id) ?? -1) -
-          (table.value?.getState().columnOrder.indexOf(b.id) ?? -1)
-      )
-      .map((column) => ({ id: column.id, visible: column.getIsVisible() }))
-  }
+  const columns = computed<CollectionPreferencesColumn[]>(() =>
+    table.value ? tableColumns(table.value) : props.columns
+  )
 
   const shown = (section: CollectionPreferencesSection): boolean => {
     if (!props.sections.includes(section)) return false
@@ -155,28 +126,16 @@
 
   const draftColumns = ref<CollectionColumnPreference[]>([])
   const draftPageSize = ref<number>(0)
-  const draftWrap = ref<boolean>(false)
-  const draftStriped = ref<boolean>(false)
+  const draftSwitches = ref<Record<SwitchSection, boolean>>({ 'wrap-lines': false, striped: false })
   const draftDensity = ref<CollectionDensity>('comfortable')
 
-  const seedColumns = (): CollectionColumnPreference[] => {
-    const linked = fromTable()
-    if (linked) return linked
-    const saved = preferences.value.columns ?? []
-    const known = new Set(columns.value.map((c) => c.id))
-    const kept = saved.filter((c) => known.has(c.id))
-    const seen = new Set(kept.map((c) => c.id))
-    return [
-      ...kept,
-      ...columns.value.filter((c) => !seen.has(c.id)).map((c) => ({ id: c.id, visible: true }))
-    ]
-  }
-
   const reset = (): void => {
-    draftColumns.value = seedColumns()
+    draftColumns.value = seedColumns(table.value, preferences.value.columns ?? [], columns.value)
     draftPageSize.value = preferences.value.pageSize ?? props.pageSizeOptions[0] ?? 0
-    draftWrap.value = preferences.value.wrapLines ?? false
-    draftStriped.value = preferences.value.striped ?? false
+    draftSwitches.value = {
+      'wrap-lines': preferences.value.wrapLines ?? false,
+      striped: preferences.value.striped ?? false
+    }
     draftDensity.value = preferences.value.density ?? 'comfortable'
   }
 
@@ -208,12 +167,9 @@
   }
 
   const move = (index: number, step: -1 | 1): void => {
-    const target = index + step
-    if (target < 0 || target >= draftColumns.value.length) return
-    const next = [...draftColumns.value]
-    const [item] = next.splice(index, 1)
-    if (!item) return
-    next.splice(target, 0, item)
+    const next = moveColumn(draftColumns.value, index, index + step)
+    const item = next?.[index + step]
+    if (!next || !item) return
     draftColumns.value = next
     void nextTick(() => {
       const row = document.getElementById(`${uid}-column-${item.id}`)
@@ -223,6 +179,12 @@
       ;(button ?? row?.querySelector<HTMLButtonElement>('[data-move]:not(:disabled)'))?.focus()
     })
   }
+
+  type SwitchSection = 'wrap-lines' | 'striped'
+  const SWITCH_TEXT = {
+    'wrap-lines': ['collectionPreferences.wrapLines', 'collectionPreferences.wrapLinesDescription'],
+    striped: ['collectionPreferences.striped', 'collectionPreferences.stripedDescription']
+  } as const
 
   const densityOptions = computed(() => [
     { label: t('collectionPreferences.comfortable'), value: 'comfortable' },
@@ -236,16 +198,11 @@
     const value: CollectionPreferencesValue = {}
     if (shown('page-size')) value.pageSize = draftPageSize.value
     if (shown('columns')) value.columns = draftColumns.value.map((c) => ({ ...c }))
-    if (shown('wrap-lines')) value.wrapLines = draftWrap.value
-    if (shown('striped')) value.striped = draftStriped.value
+    if (shown('wrap-lines')) value.wrapLines = draftSwitches.value['wrap-lines']
+    if (shown('striped')) value.striped = draftSwitches.value.striped
     if (shown('density')) value.density = draftDensity.value
     preferences.value = value
-    if (table.value && value.columns) {
-      table.value.setColumnVisibility(
-        Object.fromEntries(value.columns.map((c) => [c.id, c.visible]))
-      )
-      table.value.setColumnOrder(value.columns.map((c) => c.id))
-    }
+    if (table.value && value.columns) applyToTable(table.value, value.columns)
     emit('confirm', event, value)
     open.value = false
   }
@@ -355,10 +312,12 @@
                     class="flex min-h-10 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-2xs)"
                   >
                     <label
+                      :for="`${uid}-column-${column.id}-switch`"
                       :data-locked="locked(column.id) || null"
                       class="flex min-w-0 flex-1 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) data-[locked]:cursor-default data-[locked]:text-(--text-muted)"
                     >
                       <Switch
+                        :id="`${uid}-column-${column.id}-switch`"
                         :model-value="locked(column.id) || column.visible"
                         :disabled="locked(column.id)"
                         @update:model-value="(value: boolean) => setVisible(column.id, value)"
@@ -397,33 +356,21 @@
               </fieldset>
 
               <label
-                v-else-if="section === 'wrap-lines'"
-                :data-testid="`${testId}__wrap-lines`"
+                v-else-if="section === 'wrap-lines' || section === 'striped'"
+                :for="`${uid}-${section}`"
+                :data-testid="`${testId}__${section}`"
                 class="flex cursor-pointer items-start gap-(--spacing-sm)"
               >
-                <Switch v-model="draftWrap" />
+                <Switch
+                  :id="`${uid}-${section}`"
+                  v-model="draftSwitches[section]"
+                />
                 <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="text-label-md text-(--text-default)">{{
-                    t('collectionPreferences.wrapLines')
+                    t(SWITCH_TEXT[section][0])
                   }}</span>
                   <span class="text-body-sm text-(--text-muted)">{{
-                    t('collectionPreferences.wrapLinesDescription')
-                  }}</span>
-                </span>
-              </label>
-
-              <label
-                v-else-if="section === 'striped'"
-                :data-testid="`${testId}__striped`"
-                class="flex cursor-pointer items-start gap-(--spacing-sm)"
-              >
-                <Switch v-model="draftStriped" />
-                <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                  <span class="text-label-md text-(--text-default)">{{
-                    t('collectionPreferences.striped')
-                  }}</span>
-                  <span class="text-body-sm text-(--text-muted)">{{
-                    t('collectionPreferences.stripedDescription')
+                    t(SWITCH_TEXT[section][1])
                   }}</span>
                 </span>
               </label>

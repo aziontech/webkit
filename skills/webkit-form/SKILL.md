@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit, and which control each kind of value takes (a date or date and time is DatePicker, a range DateRangePicker, a number NumberInput, a phone PhoneInput, a secret PasswordInput — never a text Input that asks for a format). Use for any field, even one. Also: one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-21
+last_updated: 2026-11-23
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -63,6 +63,9 @@ a control bare only when no label belongs next to it. Which control a value take
   points `for` at the control and shows the Required marker; `Field.Description` takes its tone
   (disabled → invalid → helper) from the Field. The accessible-name / error-association rules
   below are satisfied **by construction**.
+- **Extra help on a field:** `Field.Description` first (always visible); detail some people want goes in
+  `<Field.Label hint="…">`, a Hint glyph that opens a short note on click. Never a typed `?`, a boxed icon
+  button or a long `Tooltip` beside a label (`/webkit-in-product-help`).
 - **Checkbox, switch:** `<Field orientation="horizontal">` with the control first and a
   `<Field.Content>` holding `Field.Label` + `Field.Description`.
 - **One of a few (radios):** always `<RadioGroup v-model>` with a `RadioGroup.Item` per option
@@ -398,7 +401,11 @@ link on the left and Save on the right. Canonical pattern:
 
         <Alert severity="info">
           To use the toolbar in production your team members need the Chrome extension, or
-          <a href="/docs/toolbar">enable the toolbar for that domain</a>
+          <Link
+            inline
+            href="/docs/toolbar"
+            >enable the toolbar for that domain</Link
+          >
           in the toolbar menu.
         </Alert>
       </div>
@@ -818,7 +825,7 @@ matches the control `id`, the description is linked via `aria-describedby`, `req
 gives the `--spacing-lg` rhythm).
 
 `required` is **static** — set it on the `Field` from the first render. `Field.Label` shows the Required
-marker (`*` + "(Required)") from it and the control gets `required` / `aria-required`; it draws no
+marker (a lone `*`, hidden from screen readers) from it and the control gets `required` / `aria-required`; it draws no
 colour. A failed submit sets the Field's `:invalid` for any blocking problem, empty or malformed, and a
 `Field.Error` says what to enter. Canonical pattern:
 
@@ -853,6 +860,31 @@ colour. A failed submit sets the Field's `:invalid` for any blocking problem, em
 
 A `Field.Label` set apart from its control (no enclosing `Field`) takes its own `required` to show the
 marker.
+
+### Required and optional
+
+- **Mark the required fields, leave the optional ones plain.** `required` on the `Field` draws the `*`
+  after the label; an optional field has no `required` and no marker. Do not write "(optional)" or
+  "(required)" into the label text.
+- **Screen readers hear "required" from the control, not from the `*`.** The `*` is `aria-hidden`. A
+  text box, combobox, checkbox, switch or radio group carries `required` / `aria-required`; a control
+  whose role cannot (the `DatePicker` and `DateRangePicker` trigger buttons, the `FileDropzone` and
+  `TagEditor` groups) is described by the `Field`'s hidden "Required" text instead. Both come from the
+  `Field`; you wire nothing.
+- **Optional means "may be empty", not "anything goes".** A value that is filled in must still be valid.
+  For a `PhoneInput`, read the `phone-change` payload: a required phone is valid when `complete` is true;
+  an optional one when it is empty or complete (`!phone.digits || phone.complete`).
+
+### One errors object for the whole form
+
+The state of every field lives in **one place**: an `errors` object for the whole form, with one entry
+per field (`''` = valid). Each `Field` reads its own entry for `:invalid` and its `Field.Error`. You never
+set `invalid` on the control, the description or the label one by one: the `Field` passes it to all of
+them (red border, red description, `aria-invalid`, the error tied through `aria-describedby`).
+
+A form library gives you the same object: VeeValidate with a zod schema returns `errors` keyed by field
+name, and `z.string().optional()` is the optional field. Keep the schema in the app; the `Field` only
+shows the state it is given. The full example is the `Validation` example of `field` in the catalog.
 
 Parts of the `Field` compound (ask the webkit MCP `suggest_component`, or read
 `node_modules/@aziontech/webkit/catalog.json` (`imports`)): `Field.Label`, `Field.Description`,

@@ -141,7 +141,6 @@ describe('PricingCard', () => {
       expect(getByTestId(`${ROOT}__pricing`)).toBeInTheDocument()
       expect(getByTestId(`${ROOT}__pricing-details`)).toBeInTheDocument()
       expect(getByTestId(`${ROOT}__actions`)).toBeInTheDocument()
-      expect(getByTestId(`${ROOT}__slot`)).toBeInTheDocument()
       unmount()
     }
   })
@@ -230,11 +229,36 @@ describe('PricingCard', () => {
 
     const root = getByTestId(ROOT)
     expect(root).toBeInTheDocument()
-    // meta args: title "Pro", value "20", prefix "$", suffix "per month", actionLabel "Label"
     expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Pro')
     expect(getByTestId(`${ROOT}__currency__value`)).toHaveTextContent('20')
-    expect(getByTestId(`${ROOT}__action`)).toHaveTextContent('Label')
+    expect(getByTestId(`${ROOT}__action`)).toHaveTextContent('Start with Pro')
   })
+
+  it('leaves no empty band under the action when the default slot is empty', () => {
+    const { queryByTestId } = render(PricingCard, { props: { actionsPosition: 'bottom' } })
+
+    expect(queryByTestId(`${ROOT}__slot`)).toBeNull()
+  })
+
+  it('reserves the middle slot band only in an equal-height row', () => {
+    const lone = render(PricingCard, { props: { actionsPosition: 'middle' } })
+    expect(lone.getByTestId(`${ROOT}__slot`).classList.contains('min-h-40')).toBe(false)
+    lone.unmount()
+  })
+
+  it.each([
+    [false, 'bottom', 'outline'],
+    [false, 'middle', 'secondary'],
+    [true, 'bottom', 'primary'],
+    [true, 'middle', 'primary']
+  ] as const)(
+    'with showTag %s at %s, the default action is %s',
+    (showTag, actionsPosition, variant) => {
+      const { getByTestId } = render(PricingCard, { props: { showTag, actionsPosition } })
+
+      expect(getByTestId(`${ROOT}__action`).getAttribute('data-variant')).toBe(variant)
+    }
+  )
 
   it('leaves data-animated off by default', () => {
     const { getByTestId } = render(PricingCard, { props: {} })
@@ -243,7 +267,7 @@ describe('PricingCard', () => {
 
   it('swaps to the new price when animated and the price changes', async () => {
     const { getByTestId, rerender } = render(PricingCard, {
-      props: { animated: true, value: '20', suffix: '/ mon' }
+      props: { animated: true, value: '20', suffix: '/ month' }
     })
     expect(getByTestId(ROOT).getAttribute('data-animated')).toBe('true')
     expect(getByTestId(`${ROOT}__currency__value`)).toHaveTextContent('20')

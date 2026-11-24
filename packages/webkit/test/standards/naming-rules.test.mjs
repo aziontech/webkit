@@ -828,3 +828,24 @@ test('model-shape: templates never bind v-model:value or a banned model name', (
   assert.equal(checkTemplateModels(rel, tpl('<Tabs v-model="tab" />')).length, 0)
   assert.equal(checkTemplateModels(rel, tpl('<DataTable v-model:selected-keys="s" />')).length, 0)
 })
+
+test('testid: a public part that builds its test id from the parent context is flagged', () => {
+  const rel = `${C}/overlay/dialog/dialog-close.vue`
+  const bad = sfc(
+    'const ctx = inject(DialogInjectionKey)',
+    '<button :data-testid="`${ctx.testId}__close`" />'
+  )
+  const good = sfc(
+    "const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'dialog-close')",
+    '<button :data-testid="testId" />'
+  )
+  const inner = sfc('', '<div :data-testid="`${ctx.testId.value}__item`" />')
+  assert.ok(hits(rel, bad, 'testid').some((x) => x.message.includes("parent's context")))
+  const content = sfc(
+    "const testId = computed(() => ctx?.testId ?? 'dialog')",
+    '<div :data-testid="`${testId}__panel`" />'
+  )
+  assert.ok(hits(`${C}/overlay/dialog/dialog-content.vue`, content, 'testid').length > 0)
+  assert.deepEqual(hits(rel, good, 'testid'), [])
+  assert.deepEqual(hits(`${C}/data/tree/parts/tree-node.vue`, inner, 'testid'), [])
+})

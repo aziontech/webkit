@@ -18,7 +18,11 @@
   export type TimestampFormat = 'relative' | 'local' | 'utc'
 
   export interface TimestampProps {
-    /** The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with no panel. */
+    /**
+     * The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits
+     * or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with
+     * no panel.
+     */
     value?: string | number | Date
     /** What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form. */
     format?: TimestampFormat
@@ -125,6 +129,15 @@
     browserZone.value = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
     mounted.value = true
   })
+
+  const TEXT_CLASS =
+    'cursor-pointer rounded-(--shape-control) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out ' +
+    'hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'motion-reduce:transition-none'
+
+  const ROW_CLASS =
+    'flex items-center gap-(--spacing-sm) border-b-(length:--border-width-default) border-solid border-(--border-default) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) ' +
+    'last:border-b-0'
 </script>
 
 <template>
@@ -141,7 +154,7 @@
         ref="textEl"
         type="button"
         :data-testid="`${testId}__text`"
-        class="cursor-pointer rounded-(--shape-control) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+        :class="TEXT_CLASS"
       >
         <time
           :datetime="date.toISOString()"
@@ -150,7 +163,7 @@
         >
       </button>
     </PopoverTrigger>
-    <PopoverContent>
+    <PopoverContent :data-testid="`${testId}__panel`">
       <PopoverTitle class="sr-only">{{ t('timestamp.title') }}</PopoverTitle>
       <dl
         v-if="open"
@@ -162,7 +175,7 @@
           :key="row.id"
           :data-testid="`${testId}__row`"
           :data-row="row.id"
-          class="flex items-center gap-(--spacing-sm) border-b-(length:--border-width-default) border-solid border-(--border-default) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) last:border-b-0"
+          :class="ROW_CLASS"
         >
           <dt class="w-20 shrink-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
           <dd class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
@@ -203,7 +216,7 @@
       aria-haspopup="dialog"
       aria-expanded="false"
       :data-testid="`${testId}__text`"
-      class="cursor-pointer rounded-(--shape-control) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+      :class="TEXT_CLASS"
       @click="arm"
     >
       <time

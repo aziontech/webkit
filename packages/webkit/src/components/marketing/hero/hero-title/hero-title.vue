@@ -65,6 +65,18 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'hero-title')
+
+  const ROOT_CLASS =
+    'group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) ' +
+    'data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) ' +
+    'lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--hero-banner-offset,0rem)+var(--spacing-xl))] ' +
+    'data-[align=center]:mx-auto data-[align=center]:items-center data-[align=center]:text-center ' +
+    'max-md:data-[mobile-align=center]:mx-auto max-md:data-[mobile-align=center]:items-center max-md:data-[mobile-align=center]:text-center max-md:data-[mobile-align=start]:mx-0 ' +
+    'max-md:data-[mobile-align=start]:items-start max-md:data-[mobile-align=start]:text-start'
+
+  const ACTIONS_CLASS =
+    'flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @2xs:flex-row @2xs:flex-wrap @2xs:items-center @2xs:group-data-[align=center]:justify-center ' +
+    'max-md:@2xs:group-data-[mobile-align=center]:justify-center max-md:@2xs:group-data-[mobile-align=start]:justify-start @2xs:[&>*]:w-auto'
 </script>
 
 <template>
@@ -75,7 +87,7 @@
     :data-mobile-align="mobileAlign"
     :data-width="maxWidth"
     :data-sticky="sticky || null"
-    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--hero-banner-offset,0rem)+var(--spacing-xl))] data-[align=center]:mx-auto data-[align=center]:items-center data-[align=center]:text-center max-md:data-[mobile-align=center]:mx-auto max-md:data-[mobile-align=center]:items-center max-md:data-[mobile-align=center]:text-center max-md:data-[mobile-align=start]:mx-0 max-md:data-[mobile-align=start]:items-start max-md:data-[mobile-align=start]:text-start"
+    :class="ROOT_CLASS"
   >
     <Eyebrow
       v-if="eyebrow"
@@ -86,12 +98,12 @@
     >
     <h1
       :data-size="size"
-      class="m-0 text-balance text-(--text-default) data-[size=large]:text-heading-2xl data-[size=medium]:text-heading-xl"
+      class="m-0 text-balance text-(--text-default) data-[size=large]:text-heading-3xl data-[size=medium]:text-heading-2xl"
     >
       <span
         v-if="titleHighlight"
         :data-testid="`${testId}__highlight`"
-        class="text-(--text-brand) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+        class="rounded-(--shape-control) bg-(--primary) px-(--spacing-xs) text-(--primary-foreground) box-decoration-clone"
         >{{ titleHighlight }}</span
       >
       {{ title }}
@@ -106,9 +118,7 @@
       v-if="slots.actions"
       class="@container mt-(--spacing-xs) w-full"
     >
-      <div
-        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @2xs:flex-row @2xs:flex-wrap @2xs:items-center @2xs:group-data-[align=center]:justify-center max-md:@2xs:group-data-[mobile-align=center]:justify-center max-md:@2xs:group-data-[mobile-align=start]:justify-start @2xs:[&>*]:w-auto"
-      >
+      <div :class="ACTIONS_CLASS">
         <slot name="actions" />
       </div>
     </div>

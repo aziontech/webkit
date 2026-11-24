@@ -21,6 +21,16 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'diagram-layout')
+
+  const ROW_CLASS =
+    'flex flex-col items-center gap-(--spacing-xl) self-stretch ' +
+    'data-[stack=tree]:items-start ' +
+    '@5xl:flex-row @5xl:gap-(--spacing-xl) @5xl:self-auto @5xl:data-[align=center]:items-center @5xl:data-[align=start]:items-start @5xl:data-[gap=wide]:gap-(--spacing-2xl)'
+
+  const GROUP_BOX_CLASS =
+    'flex flex-col gap-(--spacing-md) rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) p-(--spacing-lg) ' +
+    'data-[fill=primary]:bg-(--primary-mask) data-[fill=secondary]:bg-(--secondary-mask) ' +
+    'data-[variant=dashed]:border-dashed'
 </script>
 
 <template>
@@ -36,7 +46,7 @@
     :data-align="item.align ?? 'center'"
     :data-gap="item.gap ?? 'default'"
     :data-stack="tree || item.row.some((child) => 'branches' in child) ? 'tree' : 'centre'"
-    class="flex flex-col items-center gap-(--spacing-xl) self-stretch data-[stack=tree]:items-start @5xl:flex-row @5xl:gap-(--spacing-xl) @5xl:self-auto @5xl:data-[align=center]:items-center @5xl:data-[align=start]:items-start @5xl:data-[gap=wide]:gap-(--spacing-2xl)"
+    :class="ROW_CLASS"
   >
     <DiagramLayout
       v-for="(child, index) in item.row"
@@ -93,7 +103,7 @@
       <div
         :data-variant="item.variant ?? 'solid'"
         :data-fill="item.fill ?? 'none'"
-        class="flex flex-col gap-(--spacing-md) rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) p-(--spacing-lg) data-[fill=primary]:bg-(--primary-mask) data-[fill=secondary]:bg-(--secondary-mask) data-[variant=dashed]:border-dashed"
+        :class="GROUP_BOX_CLASS"
       >
         <span class="text-label-sm text-(--text-muted)">{{ item.label }}</span>
         <DiagramLayout

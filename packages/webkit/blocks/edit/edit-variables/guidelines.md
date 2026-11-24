@@ -56,7 +56,7 @@ The JSON view replaces the rows with one `Textarea` labeled Variables JSON over 
 
 ### J. Scope — `SettingsGroup`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
 
-A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
+A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account, while no other scope is on" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
@@ -83,6 +83,8 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 ## Data
 
 The block takes its variables through props and emits every action; it fetches nothing and saves nothing. `VariablesVariable`, `VariablesScope`, `VariablesDraft`, `VariablesSavePayload` and `VariablesProps` are exported from `edit-variables.vue`, and `sample.ts` holds the sample variables the block renders when `variables` is left out (and never while `loading` is set).
+
+The block is a folder. `edit-variables.vue` is the wiring: the props, the list rows, the row actions and the save. `parts/` holds its regions: `variables-list.vue` (the controls row and the table, on `useCollection`), `variables-drawer-form.vue` (the drawer form with its header, alert, fieldset and Save), `variables-entries.vue` (the Variables section: rows, JSON view and import tools), `variables-scope-group.vue` (the Scope section), `paste-panel.vue` with `env-paste-panel.vue` (the inline paste panel), and `network-list-fields.vue` (the network list sections). `composables/use-variables-form.ts` owns the drawer form state and validation and provides it to the parts, `composables/use-network-list-form.ts` does the same for the network list, and `lib/` holds the pure helpers (the `.env` and JSON parsing, the scopes, the row updates, the network list rules). The PasteEnv and NetworkList variants render the same parts with their own sample text from `sample.ts`. `webkit add` copies every file listed in `block.json` `files`.
 
 | Prop          | Type                  | What it does                                                                                                      |
 | ------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -122,7 +124,7 @@ To go live, render the block from a page that owns the requests and pass what th
 </template>
 ```
 
-Then delete `sample.ts` and its import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
+Then delete the sample variables from `sample.ts` and their import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
 
 ## Do
 
@@ -164,7 +166,7 @@ Then delete `sample.ts` and its import. With no `saving` set during the `save` h
 - Every key and value field has a visible `label` in its addon; an invalid field sets `aria-invalid` and points to its `FieldError` through `aria-describedby`.
 - Icon-only controls (Remove variable, Show value, Hide value, row actions, toolbar) carry an `aria-label` that matches their `Tooltip`.
 - The Secret `Checkbox` and each scope `Switch` have an `aria-label` naming what they toggle, e.g. "Enable Project scope".
-- The `ToggleGroup` is labeled "Variables view"; the hidden file input is removed from the tab order and the Upload button triggers it.
+- The `ToggleGroup` is labeled "Variables view"; the Upload button opens the system file picker through `useFilePicker`, so no hidden input sits in the tab order.
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
 - The drawer traps focus while open and returns it to Create Variable on close.

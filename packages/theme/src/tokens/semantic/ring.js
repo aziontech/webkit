@@ -8,5 +8,3 @@ export const ring = {
     'ring-color': tokenRef('primitives.gray.500')
   }
 }
-
-export default { ring }

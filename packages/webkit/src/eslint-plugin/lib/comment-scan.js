@@ -1,3 +1,5 @@
+import { scanScript } from './script-scan.js'
+
 const CODE_EXT = /\.(vue|ts|tsx|js|jsx|mjs|cjs)$/
 const TEST_PATH = /\.(test|spec)\.[^/]+$|(^|\/)(test|tests|__tests__|fixtures?)\//
 const JS_EXT = /\.(js|jsx|mjs|cjs)$/
@@ -13,164 +15,7 @@ const JS_TYPE_TAG =
 const API_DECL = /^(export\s+)?(declare\s+)?(type|interface)\s/
 const API_MACRO =
   /^((export\s+)?(const|let)\s+[\w$]+(\s*:[^=]+)?\s*=\s*)?(withDefaults\s*\(\s*)?define(Props|Emits|Slots|Model|Expose|Options)\b/
-const REGEX_AFTER_WORD = new Set([
-  'return',
-  'typeof',
-  'instanceof',
-  'in',
-  'of',
-  'new',
-  'delete',
-  'void',
-  'throw',
-  'case',
-  'do',
-  'else',
-  'yield',
-  'await'
-])
-
 export const isCommentScoped = (rel) => CODE_EXT.test(rel) && !TEST_PATH.test(rel)
-
-function braceKind(code, parent) {
-  if (parent === 'type') return 'type'
-  const tail = code.slice(-300)
-  if (/\binterface\s+[\w$]+[^{};]*$/.test(tail)) return 'type'
-  if (/\btype\s+[\w$]+[^=;{}]*=[^;{}=]*$/.test(tail)) return 'type'
-  if (/define(Props|Emits|Slots|Model)\s*<\s*$/.test(tail)) return 'type'
-  if (/defineExpose\s*\(\s*$/.test(tail)) return 'expose'
-  return 'code'
-}
-
-function skipString(text, i, to, quote) {
-  let j = i + 1
-  while (j < to) {
-    const ch = text[j]
-    if (ch === '\\') j += 2
-    else if (ch === quote || ch === '\n') return j + 1
-    else j++
-  }
-  return to
-}
-
-function scanScript(text, from, to, js, out) {
-  const stack = []
-  let code = ''
-  let last = 'punct'
-  let lastWord = ''
-  let i = from
-  const top = () => stack[stack.length - 1]?.kind ?? 'code'
-
-  const scanTemplate = (pos) => {
-    let j = pos
-    while (j < to) {
-      const ch = text[j]
-      if (ch === '\\') j += 2
-      else if (ch === '`') {
-        code += '``'
-        last = 'close'
-        return j + 1
-      } else if (ch === '$' && text[j + 1] === '{') {
-        stack.push({ kind: 'tpl' })
-        code += '${'
-        last = 'punct'
-        return j + 2
-      } else j++
-    }
-    return to
-  }
-
-  if (text.startsWith('#!', i)) {
-    const eol = text.indexOf('\n', i)
-    i = eol < 0 ? to : eol
-  }
-
-  while (i < to) {
-    const c = text[i]
-    const n = text[i + 1]
-    if (c === '/' && n === '/') {
-      let j = text.indexOf('\n', i)
-      if (j < 0 || j > to) j = to
-      out.push({ start: i, end: j, ctx: top(), js, scanEnd: to })
-      i = j
-    } else if (c === '/' && n === '*') {
-      let j = text.indexOf('*/', i + 2)
-      j = j < 0 || j + 2 > to ? to : j + 2
-      out.push({ start: i, end: j, ctx: top(), js, scanEnd: to })
-      i = j
-    } else if (c === '"' || c === "'") {
-      i = skipString(text, i, to, c)
-      code += '""'
-      last = 'close'
-    } else if (c === '`') {
-      i = scanTemplate(i + 1)
-    } else if (c === '/') {
-      const division =
-        last === 'num' || last === 'close' || (last === 'word' && !REGEX_AFTER_WORD.has(lastWord))
-      let j = i + 1
-      if (!division) {
-        let inClass = false
-        while (j < to) {
-          const ch = text[j]
-          if (ch === '\\') {
-            j += 2
-            continue
-          }
-          if (ch === '\n' || (ch === '/' && !inClass)) break
-          if (ch === '[') inClass = true
-          else if (ch === ']') inClass = false
-          j++
-        }
-      }
-      if (!division && text[j] === '/') {
-        j++
-        while (j < to && /[a-z]/i.test(text[j])) j++
-        code += '/r/'
-        last = 'close'
-        i = j
-      } else {
-        code += '/'
-        last = 'punct'
-        i++
-      }
-    } else if (c === '{') {
-      stack.push({ kind: braceKind(code, top()) })
-      code += '{'
-      last = 'punct'
-      i++
-    } else if (c === '}') {
-      const popped = stack.pop()
-      if (popped?.kind === 'tpl') {
-        i = scanTemplate(i + 1)
-      } else {
-        code += '}'
-        last = 'close'
-        i++
-      }
-    } else if (/[A-Za-z_$]/.test(c)) {
-      let j = i + 1
-      while (j < to && /[\w$]/.test(text[j])) j++
-      lastWord = text.slice(i, j)
-      code += lastWord
-      last = 'word'
-      i = j
-    } else if (/[0-9]/.test(c)) {
-      let j = i + 1
-      while (j < to && /[\w.]/.test(text[j])) j++
-      code += text.slice(i, j)
-      last = 'num'
-      i = j
-    } else if (c === ')' || c === ']') {
-      code += c
-      last = 'close'
-      i++
-    } else {
-      code += c
-      if (!/\s/.test(c)) last = 'punct'
-      i++
-    }
-  }
-}
 
 function readBraced(s, from) {
   if (s[from] !== '{') return from
@@ -207,7 +52,7 @@ function keepTag(tag) {
   return parts.join(' ')
 }
 
-export function stripTypedJsdoc(body, indent = '') {
+function stripTypedJsdoc(body, indent = '') {
   const lines = body
     .replace(/^\/\*\*/, '')
     .replace(/\*\/$/, '')
@@ -234,10 +79,16 @@ export function stripTypedJsdoc(body, indent = '') {
 
 const squash = (s) => s.replace(/\s+/g, ' ').trim()
 
+function commentInner(body) {
+  const inner = body.startsWith('/*')
+    ? body.slice(2, -2).replace(/^\*+/, '')
+    : body.replace(/^\/+/, '')
+  return inner.trim()
+}
+
 function classify(text, cm) {
   const body = text.slice(cm.start, cm.end)
-  const block = body.startsWith('/*')
-  const inner = (block ? body.slice(2, -2).replace(/^\*+/, '') : body.replace(/^\/+/, '')).trim()
+  const inner = commentInner(body)
   if (DIRECTIVE.test(inner)) return 'directive'
   if (!body.startsWith('/**')) return 'prose'
   if (DEPRECATED_TAG.test(body)) return 'directive'

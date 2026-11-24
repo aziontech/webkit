@@ -7,9 +7,11 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -28,7 +30,7 @@
     name: string
     /** The live address, without the scheme; Visit and both address links open it. */
     domain: string
-    /** The deployment that serves the address, linked to its page. */
+    /** The deployment that serves the address, linked to its page; empty shows No deployment yet. */
     deploymentId: string
     /** The environment of that deployment, shown as a tag. */
     environment: string
@@ -40,7 +42,7 @@
     createdAt: Date
     /** Who created it, shown with an avatar. */
     createdBy: string
-    /** The framework preset label. */
+    /** The framework preset label; empty shows Not detected. */
     framework: string
     /** The framework icon class, a colored icon such as az-color az-nextjs. */
     frameworkIcon: string
@@ -199,6 +201,14 @@ jobs:
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
+    <div
+      class="layout-column layout-boundary-inline flex min-w-0 flex-col pt-(--layout-boundary-start)"
+    >
+      <PageHeader
+        :title="resource.name"
+        size="small"
+      />
+    </div>
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Trigger
@@ -233,27 +243,10 @@ jobs:
                         aria-hidden="true"
                       />
                       <div class="flex min-w-0">
-                        <Tooltip
-                          :content="`Open ${resource.domain} in a new tab`"
-                          class="w-full"
-                        >
-                          <a
-                            :href="address"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-link
-                            class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                          >
-                            <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                              resource.domain
-                            }}</span>
-                            <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                            <i
-                              class="az az-external-link shrink-0 text-body-xs leading-none"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </Tooltip>
+                        <TableCellLink
+                          :label="resource.domain"
+                          :href="address"
+                        />
                       </div>
                     </div>
 
@@ -320,7 +313,15 @@ jobs:
                     <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Deployment</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                        <div class="flex min-w-0">
+                        <span
+                          v-if="!resource.deploymentId"
+                          class="truncate text-body-sm text-(--text-muted)"
+                          >No deployment yet</span
+                        >
+                        <div
+                          v-else
+                          class="flex min-w-0"
+                        >
                           <Tooltip
                             :content="`Open ${resource.deploymentId} in Deployments`"
                             class="w-full"
@@ -333,6 +334,7 @@ jobs:
                           </Tooltip>
                         </div>
                         <Tag
+                          v-if="resource.deploymentId && resource.environment"
                           :label="resource.environment"
                           severity="neutral"
                           size="small"
@@ -345,28 +347,10 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Domains</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
-                          <Tooltip
-                            :content="`Open ${resource.domain} in a new tab`"
-                            class="w-full"
-                          >
-                            <a
-                              :href="address"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              data-link
-                              class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                            >
-                              <span
-                                class="truncate underline-offset-2 group-hover/link:underline"
-                                >{{ resource.domain }}</span
-                              >
-                              <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                              <i
-                                class="az az-external-link shrink-0 text-body-xs leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
-                          </Tooltip>
+                          <TableCellLink
+                            :label="resource.domain"
+                            :href="address"
+                          />
                         </div>
                       </div>
                     </div>
@@ -412,13 +396,22 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Framework</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <i
+                          v-if="resource.framework && resource.frameworkIcon"
                           :class="resource.frameworkIcon"
                           class="shrink-0 text-body-lg"
                           aria-hidden="true"
                         />
-                        <span class="truncate text-body-sm text-(--text-default)">
+                        <span
+                          v-if="resource.framework"
+                          class="truncate text-body-sm text-(--text-default)"
+                        >
                           {{ resource.framework }}
                         </span>
+                        <span
+                          v-else
+                          class="truncate text-body-sm text-(--text-muted)"
+                          >Not detected</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -458,12 +451,11 @@ jobs:
                   <template #description>
                     Two ways to build and deploy this resource. Select one and follow the steps, or
                     read the
-                    <a
+                    <Link
                       href="https://example.com/docs/cli"
                       target="_blank"
-                      rel="noopener noreferrer"
-                      class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                      >CLI docs</a
+                      inline
+                      >CLI docs</Link
                     >.
                   </template>
                   <template #actions>

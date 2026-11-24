@@ -1,5 +1,9 @@
 <script setup>
   import HeroSection from '@aziontech/webkit/hero-section'
+
+  const DESCRIPTION =
+    'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no ' +
+    'regions to pick.'
 </script>
 
 <template>
@@ -7,7 +11,7 @@
     variant="copy-on-top-art"
     eyebrow="Workloads"
     title="Put your application close to users in seconds"
-    description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick."
+    :description="DESCRIPTION"
     :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
     :secondary-action="{
       label: 'Docs',

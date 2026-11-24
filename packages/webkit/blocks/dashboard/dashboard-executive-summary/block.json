@@ -26,7 +26,12 @@
     "name": "Default",
     "file": "dashboard-executive-summary.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "executive-summary-metrics.ts",
+    "parts/commentary-card.vue",
+    "parts/goals-card.vue"
+  ],
   "variants": [
     {
       "name": "Loading",
@@ -40,7 +45,7 @@
     },
     {
       "name": "Error",
-      "summary": "The request for the quarter failed: the tiles read as dashes, and every trend card, the goals and the commentary keep their header with a danger Alert that names what did not load and offers Retry.",
+      "summary": "The request for the quarter failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
       "file": "variants/error.vue"
     }
   ]

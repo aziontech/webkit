@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 373e0558058d556d603239e71947043bcda4f523ea0464b04aa96a543036d8bd
+checksum: 0b2ba4a5a9b08588f1a3e73ec4684b3497000d7c01a1f681a1001fbd8d48f222
 created: 2026-11-19
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # AgentQuestion — Component Spec
@@ -152,14 +152,14 @@ _none_ — no motion of its own; `Button` handles its loading spinner and `Input
 
 ## Tokens
 
-| Region         | Token                                                                               |
-| -------------- | ----------------------------------------------------------------------------------- |
-| frame          | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`                   |
-| title          | `.text-heading-2xs`, `var(--text-default)`                                          |
-| description    | `.text-body-sm`, `var(--text-muted)`                                                |
-| question glyph | `az az-circle-help`, `var(--text-muted)`                                            |
-| error line     | `.text-body-sm`, `var(--text-danger)`                                               |
-| padding/gaps   | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)` |
+| Region         | Token                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| frame          | no fill (it sits in the assistant's plain column), a 1 px `var(--border-default)` border, `var(--shape-card)` |
+| title          | `.text-heading-2xs`, `var(--text-default)`                                                                    |
+| description    | `.text-body-sm`, `var(--text-muted)`                                                                          |
+| question glyph | `az az-circle-help`, `var(--text-muted)`                                                                      |
+| error line     | `.text-body-sm`, `var(--text-danger)`                                                                         |
+| padding/gaps   | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)`                           |
 
 ## Theme gaps
 

@@ -51,7 +51,20 @@
     "name": "ResourceOverview",
     "file": "detail-resource.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "use-topology-staging.ts",
+    "parts/application-deployments-tab.vue",
+    "parts/application-versions-tab.vue",
+    "parts/resource-get-started.vue",
+    "parts/resource-summary-card.vue",
+    "parts/resource-tab-bar.vue",
+    "parts/summary-fact.vue",
+    "parts/summary-facts.vue",
+    "parts/summary-state-band.vue",
+    "parts/summary-subject-band.vue",
+    "parts/tab-route-empty.vue"
+  ],
   "variants": [
     {
       "name": "Resource",
@@ -99,6 +112,11 @@
       "name": "Application",
       "summary": "An application page body with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `Subheader` over a `DataTable` each), and Topology, where `FlowDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the state-async-submit toast with Edit (back to Topology) and Redeploy.",
       "file": "variants/application.vue"
+    },
+    {
+      "name": "NoDeployment",
+      "summary": "The Overview of a resource that was created but never deployed: the summary reads Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status and no Visit, the state band names the three ways to deploy (drop the project, connect Git, or the CLI), and Get started follows.",
+      "file": "variants/no-deployment.vue"
     },
     {
       "name": "FirstDeploy",

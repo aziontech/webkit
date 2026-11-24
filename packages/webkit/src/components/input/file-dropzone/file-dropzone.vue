@@ -3,6 +3,7 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { useMediaQuery } from '../../../composables/use-media-query'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { matchesAccept } from '../../../utils/file-accept'
@@ -16,7 +17,7 @@
   export interface FileDropzoneProps {
     /** Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. */
     variant?: FileDropzoneVariant
-    /** Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). */
+    /** Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a touch screen. */
     title?: string
     /** Secondary line under the title, typically the accepted types and limits. Not rendered when empty. */
     description?: string
@@ -66,7 +67,9 @@
     describedBy: fieldDescribedBy,
     labelledBy: fieldLabelledBy,
     invalid: isInvalid,
-    disabled: isDisabled
+    disabled: isDisabled,
+    required: isRequired,
+    field
   } = useFieldControl({
     id: () => attrs['id'] as string | undefined,
     describedBy: () => attrs['aria-describedby'] as string | undefined,
@@ -76,6 +79,7 @@
   })
 
   const depth = ref(0)
+  const coarse = useMediaQuery('(pointer: coarse)')
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'file-dropzone'
@@ -83,11 +87,21 @@
   const isInline = computed(() => props.variant === 'inline')
   const isOverlayLive = computed(() => props.variant === 'overlay' && !isDisabled.value)
   const isActive = computed(() => !isDisabled.value && depth.value > 0)
+  const titleText = computed(
+    () =>
+      props.title ||
+      t(isInline.value && coarse.value ? 'fileDropzone.touchTitle' : 'fileDropzone.title')
+  )
   const labelIds = computed(() => [fieldLabelledBy.value, titleId].filter(Boolean).join(' '))
   const descriptionIds = computed(
     () =>
-      [props.description ? descriptionId : '', fieldDescribedBy.value].filter(Boolean).join(' ') ||
-      undefined
+      [
+        props.description ? descriptionId : '',
+        fieldDescribedBy.value,
+        isRequired.value && field?.requiredId
+      ]
+        .filter(Boolean)
+        .join(' ') || undefined
   )
 
   watch(
@@ -189,6 +203,24 @@
     if (!isOverlayLive.value || event.key !== 'Escape') return
     depth.value = 0
   }
+
+  const ROOT_CLASS =
+    'group flex flex-col rounded-(--shape-card) ' +
+    'data-[variant=inline]:w-full data-[variant=inline]:border data-[variant=inline]:border-dashed data-[variant=inline]:border-(--border-input) ' +
+    'data-[variant=inline]:data-[state=idle]:not-data-[disabled]:hover:border-(--border-strong) data-[variant=inline]:bg-(--bg-surface) data-[variant=inline]:p-(--spacing-lg) ' +
+    'data-[variant=inline]:transition-[background-color,border-color] data-[variant=inline]:duration-fast-02 data-[variant=inline]:ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[variant=inline]:data-[state=active]:border-(--border-selected) data-[variant=inline]:data-[state=active]:bg-(--bg-selected) ' +
+    'data-[variant=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[variant=inline]:data-[disabled]:border-(--border-default) ' +
+    'data-[variant=inline]:data-[disabled]:bg-(--bg-disabled) ' +
+    'data-[disabled]:cursor-not-allowed ' +
+    'data-[variant=overlay]:absolute data-[variant=overlay]:inset-0 data-[variant=overlay]:border-2 data-[variant=overlay]:border-dashed ' +
+    'data-[variant=overlay]:border-(--border-selected) data-[variant=overlay]:bg-(--bg-canvas) data-[variant=overlay]:data-[state=idle]:pointer-events-none'
+
+  const PROMPT_CLASS =
+    'flex w-full flex-col items-center justify-center gap-(--spacing-md) text-center ' +
+    'group-data-[variant=overlay]:sticky group-data-[variant=overlay]:top-0 group-data-[variant=overlay]:h-dvh group-data-[variant=overlay]:max-h-full ' +
+    'group-data-[variant=overlay]:p-(--spacing-lg)'
 </script>
 
 <template>
@@ -211,15 +243,13 @@
       :aria-labelledby="isInline ? labelIds : undefined"
       :aria-describedby="isInline ? descriptionIds : undefined"
       :aria-hidden="isInline ? undefined : 'true'"
-      class="group flex flex-col rounded-(--shape-card) data-[variant=inline]:w-full data-[variant=inline]:border data-[variant=inline]:border-dashed data-[variant=inline]:border-(--border-input) data-[variant=inline]:data-[state=idle]:not-data-[disabled]:hover:border-(--border-strong) data-[variant=inline]:bg-(--bg-surface) data-[variant=inline]:p-(--spacing-lg) data-[variant=inline]:transition-[background-color,border-color] data-[variant=inline]:duration-fast-02 data-[variant=inline]:ease-productive-entrance motion-reduce:transition-none data-[variant=inline]:data-[state=active]:border-(--border-selected) data-[variant=inline]:data-[state=active]:bg-(--bg-selected) data-[variant=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[variant=inline]:data-[disabled]:border-(--border-default) data-[variant=inline]:data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed data-[variant=overlay]:absolute data-[variant=overlay]:inset-0 data-[variant=overlay]:border-2 data-[variant=overlay]:border-dashed data-[variant=overlay]:border-(--border-selected) data-[variant=overlay]:bg-(--bg-canvas) data-[variant=overlay]:data-[state=idle]:pointer-events-none"
+      :class="ROOT_CLASS"
       @dragenter="onRootDragenter"
       @dragleave="onRootDragleave"
       @dragover="onRootDragover"
       @drop="onRootDrop"
     >
-      <div
-        class="flex w-full flex-col items-center justify-center gap-(--spacing-md) text-center group-data-[variant=overlay]:sticky group-data-[variant=overlay]:top-0 group-data-[variant=overlay]:h-dvh group-data-[variant=overlay]:max-h-full group-data-[variant=overlay]:p-(--spacing-lg)"
-      >
+      <div :class="PROMPT_CLASS">
         <span
           class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised)"
           aria-hidden="true"
@@ -236,7 +266,7 @@
             :id="titleId"
             class="m-0 text-heading-xs text-(--text-default) group-data-[disabled]:text-(--text-disabled)"
           >
-            {{ title || t('fileDropzone.title') }}
+            {{ titleText }}
           </p>
           <p
             v-if="description"

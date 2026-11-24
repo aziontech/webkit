@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
@@ -71,16 +71,37 @@
           :href="homeHref"
           aria-label="Azion home"
         >
-          <Brand
-            variant="default"
-            size="small"
-          />
+          <span class="flex max-sm:hidden">
+            <Brand
+              variant="default"
+              size="small"
+            />
+          </span>
+          <span class="flex sm:hidden">
+            <Brand
+              variant="reduced"
+              size="small"
+            />
+          </span>
         </AppHeader.Brand>
-        <Breadcrumb
+        <div
           v-if="breadcrumb.length > 0"
-          :items="breadcrumb"
-          @navigate="(event, href) => emit('navigate', event, href)"
-        />
+          class="min-w-0 max-sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
+        <div
+          v-if="breadcrumb.length > 0"
+          class="min-w-0 sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb.slice(-1)"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
@@ -90,17 +111,10 @@
           @select="(event, value) => emit('account-select', event, value)"
         >
           <DropdownMenu.Trigger>
-            <button
-              type="button"
+            <AppHeaderAccount
+              :name="account.name"
               aria-label="Account menu"
-              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-            >
-              <Avatar
-                :label="account.name"
-                size="medium"
-                variant="square"
-              />
-            </button>
+            />
           </DropdownMenu.Trigger>
           <DropdownMenu.Group>
             <template #header>

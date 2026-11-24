@@ -20,16 +20,19 @@
     {
       id: 'error',
       name: 'Error',
+      color: 'danger',
       values: [4, 6, 3, 12, 18, 9, 5, 4, 7, 3, 2, 5]
     },
     {
       id: 'warning',
       name: 'Warning',
+      color: 'warning',
       values: [20, 24, 18, 31, 40, 28, 22, 19, 25, 17, 16, 21]
     },
     {
       id: 'info',
       name: 'Info',
+      color: 'info',
       values: [210, 240, 220, 260, 280, 250, 230, 225, 245, 215, 205, 235]
     }
   ]
@@ -57,6 +60,7 @@
         stacked
       />
       <Chart.Tooltip />
+      <Chart.Legend />
     </Chart>
     <p class="text-body-sm text-(--text-muted)">{{ selected }}</p>
   </div>

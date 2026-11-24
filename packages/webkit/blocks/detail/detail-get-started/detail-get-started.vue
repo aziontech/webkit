@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import Link from '@aziontech/webkit/link'
   import Subheader from '@aziontech/webkit/subheader'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed } from 'vue'
@@ -142,12 +143,11 @@ jobs:
     <Subheader title="Get started">
       <template #description>
         Two ways to build and deploy this resource. Select one and follow the steps, or read the
-        <a
+        <Link
           href="https://example.com/docs/cli"
           target="_blank"
-          rel="noopener noreferrer"
-          class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-          >CLI docs</a
+          inline
+          >CLI docs</Link
         >.
       </template>
       <template #actions>

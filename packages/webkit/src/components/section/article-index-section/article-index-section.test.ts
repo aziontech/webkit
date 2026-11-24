@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { commands } from 'vitest/browser'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import ArticleIndexSection from './article-index-section.vue'
@@ -17,8 +18,8 @@ const items = [
     meta: 'Developers • SEP 25, 2026',
     title: 'How I Shipped My Portfolio',
     description: 'From template to live URL with two commands.',
-    authors: [{ name: 'Patrick Menoti' }],
-    byline: 'Patrick Menoti · 9 min read',
+    authors: [{ name: 'Jane Doe' }],
+    byline: 'Jane Doe · 9 min read',
     categories: ['Developers']
   },
   {
@@ -28,8 +29,8 @@ const items = [
     meta: 'Serverless • SEP 23, 2026',
     title: 'How Do You Reduce AI Agent Latency?',
     description: 'Where latency builds up in AI agents.',
-    authors: [{ name: 'Marilia Bafutto Costa' }],
-    byline: 'Marilia Bafutto Costa · 8 min read',
+    authors: [{ name: 'Priya Patel' }],
+    byline: 'Priya Patel · 8 min read',
     categories: ['Serverless']
   },
   {
@@ -58,6 +59,10 @@ const band = (props: Record<string, unknown> = {}) =>
       ...props
     }
   })
+
+afterEach(async () => {
+  await commands.emulateTouch(false)
+})
 
 const headlines = (getByRole: ReturnType<typeof band>['getByRole']) =>
   Array.from(getByRole('list', { name: LIST }).querySelectorAll('h3')).map((h) =>
@@ -104,10 +109,17 @@ describe('ArticleIndexSection', () => {
       expect(getByRole('link', { name: items[0]?.title }).getAttribute('href')).toBe(items[0]?.href)
     })
 
+    it('sets the cover beside the copy from the medium breakpoint', () => {
+      const { getByRole } = band()
+
+      const row = getByRole('list', { name: LIST }).querySelector('article')
+      expect(row?.classList.contains('md:grid-cols-[minmax(0,2fr)_minmax(0,5fr)]')).toBe(true)
+    })
+
     it('draws the writers and the byline only when the article has one', () => {
       const { getByText, getAllByTestId, queryByText } = band()
 
-      expect(getByText('Patrick Menoti · 9 min read')).toBeInTheDocument()
+      expect(getByText('Jane Doe · 9 min read')).toBeInTheDocument()
       expect(getAllByTestId('avatar')).toHaveLength(2)
       expect(queryByText(/Cloudflare Alternatives ·/)).toBeNull()
     })
@@ -120,6 +132,29 @@ describe('ArticleIndexSection', () => {
 
       await userEvent.click(getByRole('radio', { name: 'All articles' }))
       expect(headlines(getByRole)).toHaveLength(items.length)
+    })
+
+    it('announces the number of matches after a filter or a search changes them', async () => {
+      const { getByRole, getByTestId } = band()
+      const status = getByTestId(TESTID).querySelector('[data-slot="result-count"]')
+
+      expect(status).toHaveAttribute('role', 'status')
+      expect(status?.textContent?.trim()).toBe('')
+      await userEvent.click(getByRole('radio', { name: 'Serverless' }))
+      expect(status?.textContent?.trim()).toBe('1 result')
+      await userEvent.click(getByRole('radio', { name: 'All articles' }))
+      expect(status?.textContent?.trim()).toBe(`${items.length} results`)
+    })
+
+    it('draws the category picker and the search field at the large size on a touch screen', async () => {
+      await commands.emulateTouch(true)
+      const { getByRole, getByTestId } = band()
+
+      await expect
+        .poll(() => getByRole('radiogroup', { name: 'Category' }).getAttribute('data-size'))
+        .toBe('large')
+      const field = getByTestId(TESTID).querySelector('[role=search] [data-size]')
+      expect(field?.getAttribute('data-size')).not.toBe('medium')
     })
 
     it('narrows the list by search, combined with the category', async () => {
@@ -407,6 +442,14 @@ describe('ArticleIndexSection', () => {
         expect(getByRole('link', { name: items[1]?.title }).getAttribute('href')).toBe(
           items[1]?.href
         )
+      })
+
+      it('keeps the row description below the row title in the type scale', () => {
+        const { getByRole } = band()
+
+        const description = getByRole('list', { name: LIST }).querySelector('article p')
+        expect(description?.className).toContain('text-body-sm')
+        expect(description?.className).not.toContain('text-body-lg')
       })
 
       it('narrows the list by facets that combine', async () => {

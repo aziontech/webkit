@@ -76,14 +76,14 @@ describe('LanguageSelect', () => {
     await user.click(getByRole('combobox'))
     await waitFor(() => items().length === 3)
     expect(items().map((item) => item.querySelector('[lang]')?.textContent?.trim())).toEqual([
-      'English (United States)',
+      'English',
       'Português (Brasil)',
-      'Español (España)'
+      'Español'
     ])
     expect(items().map((item) => item.querySelector('[lang]')?.getAttribute('lang'))).toEqual([
-      'en-US',
+      'en',
       'pt-BR',
-      'es-ES'
+      'es'
     ])
     const flags = Array.from(
       document.body.querySelectorAll('[data-testid="language-select__flag"]')
@@ -100,7 +100,7 @@ describe('LanguageSelect', () => {
     await user.click(getByRole('combobox'))
     await waitFor(() => items().length === 3)
     await user.click(items()[2])
-    expect(emitted()['update:modelValue']).toEqual([['es-ES']])
+    expect(emitted()['update:modelValue']).toEqual([['es']])
   })
 
   it('filters by name, tag and country, and picks with Enter', async () => {
@@ -117,7 +117,7 @@ describe('LanguageSelect', () => {
     await waitFor(() => items().length === 1)
     expect(items()[0].textContent).toContain('Español')
     await user.keyboard('{Enter}')
-    expect(emitted()['update:modelValue']).toEqual([['es-ES']])
+    expect(emitted()['update:modelValue']).toEqual([['es']])
     await waitFor(() => document.activeElement === getByRole('combobox'))
     expect(document.activeElement).toBe(getByRole('combobox'))
   })
@@ -151,7 +151,7 @@ describe('LanguageSelect', () => {
   it('does not open or emit while disabled', async () => {
     const user = userEvent.setup()
     const { getByRole, emitted } = render(LanguageSelect, {
-      props: { disabled: true, modelValue: 'es-ES' }
+      props: { disabled: true, modelValue: 'es' }
     })
     const trigger = getByRole('combobox')
     await user.click(trigger)
@@ -201,7 +201,7 @@ describe('LanguageSelect', () => {
     expect(items()[0].textContent).toContain('Italiano (Italia)')
   })
 
-  it('shows the round flag and the country code in the ghost variant, and keeps the name for assistive tech', () => {
+  it('shows the round flag and the language tag in the ghost variant, and keeps the name for assistive tech', () => {
     const { getByRole, getByTestId } = render(LanguageSelect, {
       props: { variant: 'ghost', modelValue: 'pt-BR' }
     })
@@ -209,7 +209,7 @@ describe('LanguageSelect', () => {
     expect(trigger.dataset.variant).toBe('ghost')
     expect(getByTestId('language-select').dataset.variant).toBe('ghost')
     const code = getByTestId('language-select__code')
-    expect(code.textContent).toBe('BR')
+    expect(code.textContent).toBe('PT-BR')
     expect(code.getAttribute('aria-hidden')).toBe('true')
     expect(getByTestId('language-select__trigger__value').textContent).toContain(
       'Português (Brasil)'
@@ -217,18 +217,19 @@ describe('LanguageSelect', () => {
     expect(getByTestId('language-select__selected-flag').dataset.country).toBe('BR')
   })
 
-  it('shows the whole tag as the code when two options share a country', () => {
-    const { getByTestId } = render(LanguageSelect, {
-      props: {
-        variant: 'ghost',
-        modelValue: 'fr-CA',
-        options: [{ value: 'en-CA' }, { value: 'fr-CA' }, { value: 'eo', label: 'Esperanto' }]
-      }
-    })
-    expect(getByTestId('language-select__code').textContent).toBe('FR-CA')
+  it('shows the bare language for the main variant and the whole tag for a regional one', async () => {
+    const options = [{ value: 'en' }, { value: 'en-GB' }, { value: 'en_CA' }]
+    const view = render(LanguageSelect, { props: { variant: 'ghost', modelValue: 'en', options } })
+    expect(view.getByTestId('language-select__code').textContent).toBe('EN')
+    expect(view.getByTestId('language-select__selected-flag').dataset.country).toBe('US')
+    await view.rerender({ modelValue: 'en-GB' })
+    expect(view.getByTestId('language-select__code').textContent).toBe('EN-GB')
+    expect(view.getByTestId('language-select__selected-flag').dataset.country).toBe('GB')
+    await view.rerender({ modelValue: 'en_CA' })
+    expect(view.getByTestId('language-select__code').textContent).toBe('EN-CA')
   })
 
-  it('falls back to the language code when no country resolves', () => {
+  it('shows the tag with no flag when no country resolves', () => {
     const { getByTestId, queryByTestId } = render(LanguageSelect, {
       props: { variant: 'ghost', modelValue: 'eo', options: [{ value: 'eo', label: 'Esperanto' }] }
     })
@@ -237,7 +238,7 @@ describe('LanguageSelect', () => {
   })
 
   it('shows no code in the outline variant', () => {
-    const { queryByTestId, getByRole } = render(LanguageSelect, { props: { modelValue: 'en-US' } })
+    const { queryByTestId, getByRole } = render(LanguageSelect, { props: { modelValue: 'en' } })
     expect(getByRole('combobox').dataset.variant).toBe('outline')
     expect(queryByTestId('language-select__code')).toBeNull()
   })
@@ -269,7 +270,7 @@ describe('LanguageSelect', () => {
   it('round-trips v-model with ConfigProvider in the Default example', async () => {
     const user = userEvent.setup()
     const { getByRole, getByTestId } = render(Default)
-    expect(getByTestId('config-provider').getAttribute('lang')).toBe('en-US')
+    expect(getByTestId('config-provider').getAttribute('lang')).toBe('en')
     await user.click(getByRole('combobox', { name: 'Language' }))
     await waitFor(() => items().length === 3)
     await user.click(items()[1])
@@ -296,7 +297,7 @@ describe('LanguageSelect', () => {
 
   it('has no axe violations closed, open, and in the Default example', async () => {
     const user = userEvent.setup()
-    const closed = render(LanguageSelect, { props: { modelValue: 'en-US' } })
+    const closed = render(LanguageSelect, { props: { modelValue: 'en' } })
     await expectNoA11yViolations(closed.container)
     await user.click(closed.getByRole('combobox'))
     await waitFor(() => items().length === 3)

@@ -11,6 +11,7 @@
     stackValues
   } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
+  import ChartSeriesLayer from '../parts/chart-series-layer.vue'
 
   defineOptions({ name: 'ChartArea', inheritAttrs: false })
 
@@ -73,31 +74,21 @@
         color: entry.color,
         delay: `calc(${duration['fast-01']} * ${order})`,
         fill: areaPath(upper, lower, props.curve),
-        edge: linePath(upper, props.curve)
+        stroke: linePath(upper, props.curve)
       }
     })
   })
 
   const washOpacity = computed(() => (props.stacked ? 0.24 : 0.1))
-  const dimmed = (id: string) => ctx.emphasized.value !== null && ctx.emphasized.value !== id
 </script>
 
 <template>
-  <svg
+  <ChartSeriesLayer
     v-bind="$attrs"
     :data-testid="testId"
-    aria-hidden="true"
-    :width="ctx.size.value.width"
-    :height="ctx.size.value.height"
-    class="pointer-events-none col-start-1 row-start-1 overflow-visible"
+    :series="areas"
   >
-    <g
-      v-for="area in areas"
-      :key="area.id"
-      :data-series="area.id"
-      :data-dimmed="dimmed(area.id) || null"
-      class="transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30"
-    >
+    <template #under="{ item: area }">
       <path
         :d="area.fill"
         :fill="area.color"
@@ -106,18 +97,6 @@
         :style="{ transitionDelay: area.delay }"
         class="opacity-0 transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:opacity-100"
       />
-      <path
-        :d="area.edge"
-        fill="none"
-        :stroke="area.color"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        pathLength="1"
-        :data-entered="ctx.entered.value || null"
-        :style="{ transitionDelay: area.delay }"
-        class="[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dashoffset:0]"
-      />
-    </g>
-  </svg>
+    </template>
+  </ChartSeriesLayer>
 </template>

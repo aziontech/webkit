@@ -4,13 +4,13 @@
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import { PASSWORD_MANAGER_IGNORE } from '../../../../utils/autofill'
   import Button from '../../../action/button/button.vue'
   import CopyButton from '../../../action/copy-button/copy-button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
   import InputGroup from '../../../input/input-group/input-group.vue'
   import InputGroupAddon from '../../../input/input-group/input-group-addon/input-group-addon.vue'
+  import InputGroupInput from '../../../input/input-group/input-group-input/input-group-input.vue'
   import type { ClosingCallToActionSectionAudience } from '../closing-call-to-action-section.vue'
 
   defineOptions({
@@ -169,12 +169,11 @@
               aria-hidden="true"
               >$</InputGroupAddon
             >
-            <input
+            <InputGroupInput
               readonly
-              v-bind="PASSWORD_MANAGER_IGNORE"
-              :value="current.copy.text"
+              :model-value="current.copy.text"
               :aria-label="lineAriaLabel || undefined"
-              class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm pointer-coarse:text-label-code-lg text-(--text-default) outline-none"
+              class="px-(--spacing-md)! text-label-code-sm! pointer-coarse:text-label-code-lg!"
             />
             <CopyButton
               size="large"

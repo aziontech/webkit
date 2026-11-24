@@ -7,8 +7,10 @@
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, reactive, ref } from 'vue'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
+  import { computed, reactive } from 'vue'
 
+  import { usePagedList } from './composables/use-paged-list'
   import { sampleProjects, sampleSelected } from './sample'
 
   /** One resource the user can bind. */
@@ -55,7 +57,6 @@
     { label: 'Existing project', value: 'existing' },
     { label: 'New project', value: 'new' }
   ]
-  const PAGE_SIZE = 5
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
   const wireSubWidths = ['84%', '66%', '78%', '58%', '72%']
 
@@ -78,60 +79,17 @@
   })
 
   const usePicker = (noun: string) => {
-    const query = ref('')
-    const shown = ref(PAGE_SIZE)
-
-    const chosenIndex = projects.value.findIndex((option) => option.value === chosen.value)
-    if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
-
     const loading = computed(() => props.loading)
     const message = computed(() => props.error)
-    const paged = computed(() => projects.value.length > PAGE_SIZE)
-    const matches = computed(() => {
-      const text = query.value.trim().toLowerCase()
-      if (!text) return projects.value
-      return projects.value.filter(
-        (option) =>
-          option.label.toLowerCase().includes(text) ||
-          String(option.description ?? '')
-            .toLowerCase()
-            .includes(text)
-      )
-    })
-    const visible = computed(() => matches.value.slice(0, shown.value))
-    const remaining = computed(() => Math.max(0, matches.value.length - visible.value.length))
-    const nextBatch = computed(() => Math.min(PAGE_SIZE, remaining.value))
-
-    const summary = computed(() => {
-      if (loading.value) return 'Loading ' + nextBatch.value + ' more ' + noun + 's'
-      if (query.value.trim() && !matches.value.length)
-        return 'No ' + noun + ' matches ' + query.value
-      if (remaining.value)
-        return visible.value.length + ' of ' + matches.value.length + ' ' + noun + 's'
-      return query.value.trim()
-        ? matches.value.length + ' of ' + projects.value.length + ' ' + noun + 's'
-        : projects.value.length + ' ' + noun + 's'
-    })
+    const { showMore, ...list } = usePagedList(projects, noun, loading, chosen)
 
     const loadMore = (event: MouseEvent) => {
-      if (loading.value || !remaining.value) return
-      shown.value += PAGE_SIZE
+      if (loading.value || !list.remaining.value) return
+      showMore()
       emit('load-more', event)
     }
 
-    return reactive({
-      query,
-      chosen,
-      message,
-      loading,
-      paged,
-      matches,
-      visible,
-      remaining,
-      nextBatch,
-      summary,
-      loadMore
-    })
+    return reactive({ ...list, chosen, message, loading, loadMore })
   }
 
   const projectPicker = usePicker('project')
@@ -221,14 +179,27 @@
             <FieldError v-if="projectPicker.message">{{ projectPicker.message }}</FieldError>
           </div>
 
-          <div class="border-t border-(--border-default)">
+          <div
+            class="border-t border-(--border-default)"
+            role="radiogroup"
+            aria-label="Projects"
+          >
             <Item.List>
               <Item
                 v-for="option in projectPicker.visible"
                 :key="option.value"
                 size="small"
                 clickable
-                :aria-pressed="option.value === projectPicker.chosen"
+                role="radio"
+                @keydown="onRadioListKeydown"
+                :aria-checked="option.value === projectPicker.chosen"
+                :tabindex="
+                  radioListTabIndex(
+                    option.value,
+                    projectPicker.chosen,
+                    projectPicker.visible.map((entry) => entry.value)
+                  )
+                "
                 @click="projectPicker.chosen = option.value"
               >
                 <Item.Media>
@@ -248,7 +219,12 @@
                 <Item.Actions>
                   <i
                     v-if="option.value === projectPicker.chosen"
-                    class="az az-check shrink-0 text-(--text-default)"
+                    class="az az-circle-on shrink-0 text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                  <i
+                    v-else
+                    class="az az-circle shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

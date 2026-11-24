@@ -3,7 +3,8 @@
   "name": "AiChat",
   "title": "Blocks/Ai/AiChat",
   "surface": "app",
-  "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
+  "keyboard": { "entry": "prompt" },
+  "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -45,7 +46,18 @@
     "name": "Empty",
     "file": "ai-chat.vue"
   },
-  "files": ["messages.ts", "sample.ts"],
+  "files": [
+    "sample.ts",
+    "parts/ai-chat-composer.vue",
+    "parts/ai-chat-connection-status.vue",
+    "parts/ai-chat-header.vue",
+    "parts/ai-chat-history.vue",
+    "parts/ai-chat-media-segment.vue",
+    "parts/ai-chat-skeleton.vue",
+    "parts/ai-chat-start.vue",
+    "parts/ai-chat-tool-segment.vue",
+    "parts/ai-chat-turn.vue"
+  ],
   "variants": [
     {
       "name": "Streaming",
@@ -59,7 +71,7 @@
     },
     {
       "name": "LongThread",
-      "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread.",
+      "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response and its Sources pill, stops following when the reader scrolls up, and the round Scroll to the latest message button above the composer brings them back; follow-up questions close the thread.",
       "file": "variants/long-thread.vue"
     },
     {

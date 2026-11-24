@@ -54,6 +54,15 @@
     if (props.disabled) return
     emit('select', event, item)
   }
+
+  const ITEM_CLASS =
+    'inline-flex min-h-10 items-center gap-(--spacing-xs) rounded-(--shape-button) border border-(--border-default) bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] ' +
+    'px-(--spacing-md) py-(--spacing-xs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:not-disabled:border-(--border-strong) hover:not-disabled:bg-(--bg-selected) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
+    'data-[orientation=vertical]:w-full ' +
+    'pointer-coarse:min-h-11'
 </script>
 
 <template>
@@ -74,7 +83,7 @@
       :disabled="disabled"
       :data-orientation="orientation"
       :data-testid="`${testId}__item`"
-      class="inline-flex min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:border-(--border-strong) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-(--bg-surface) data-[orientation=vertical]:w-full pointer-coarse:min-h-11"
+      :class="ITEM_CLASS"
       @click="(event: MouseEvent) => choose(event, item)"
     >
       <i

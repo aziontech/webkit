@@ -1,17 +1,14 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import Input from '../../../input/input/input.vue'
   import NumberInput from '../../../input/number-input/number-input.vue'
   import Textarea from '../../../input/textarea/textarea.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
   import MockupSelect from '../parts/mockup-select.vue'
 
   defineOptions({ name: 'KvStoreKeyFragment' })
@@ -24,9 +21,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const VALUE = '{"userId":"user-123","role":"admin"}'
 
@@ -52,162 +46,115 @@
     { ...REST, cursor: SWITCH, expiring: true, added: true, forward: 220, back: 80 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:72%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :cursor="frame.cursor"
+    cursor-name="Sam"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
-    >
-      <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
-        <ConsoleMockupShellItem :order="0">
-          <div class="flex flex-col gap-(--spacing-xs)">
-            <FieldLabel
-              for="kv-key"
-              required
-              >Key</FieldLabel
-            >
-            <Input
-              id="kv-key"
-              model-value="session:user-123"
-              size="medium"
-              aria-label="Key"
-            />
-            <FieldDescription>Unique key in the namespace, up to 512 bytes.</FieldDescription>
-          </div>
-        </ConsoleMockupShellItem>
+    <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
+      <ConsoleMockupShellItem :order="0">
+        <div class="flex flex-col gap-(--spacing-xs)">
+          <FieldLabel
+            for="kv-key"
+            required
+            >Key</FieldLabel
+          >
+          <Input
+            id="kv-key"
+            model-value="session:user-123"
+            size="medium"
+            aria-label="Key"
+          />
+          <FieldDescription>Unique key in the namespace, up to 512 bytes.</FieldDescription>
+        </div>
+      </ConsoleMockupShellItem>
 
-        <ConsoleMockupShellItem :order="1">
-          <div class="flex flex-col">
-            <span class="flex items-start gap-(--spacing-sm)">
-              <LegacySwitch
-                :checked="frame.expiring"
-                data-cursor="expiration"
-              />
-              <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                <span class="text-label-md text-(--text-default)">Expiration</span>
-                <span class="text-body-xs text-(--text-muted)">
-                  Expire the key automatically after a set time.
-                </span>
+      <ConsoleMockupShellItem :order="1">
+        <div class="flex flex-col">
+          <span class="flex items-start gap-(--spacing-sm)">
+            <LegacySwitch
+              :checked="frame.expiring"
+              data-cursor="expiration"
+            />
+            <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+              <span class="text-label-md text-(--text-default)">Expiration</span>
+              <span class="text-body-xs text-(--text-muted)">
+                Expire the key automatically after a set time.
               </span>
             </span>
+          </span>
 
-            <Transition
-              enter-from-class="-translate-y-1 opacity-0"
-              enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              leave-to-class="-translate-y-1 opacity-0"
-              leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+          <Transition
+            enter-from-class="-translate-y-1 opacity-0"
+            enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+            leave-to-class="-translate-y-1 opacity-0"
+            leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+          >
+            <div
+              v-if="frame.added"
+              class="overflow-hidden [interpolate-size:allow-keywords]"
             >
-              <div
-                v-if="frame.added"
-                class="overflow-hidden [interpolate-size:allow-keywords]"
-              >
-                <div class="grid grid-cols-2 gap-(--spacing-sm) pt-(--spacing-md)">
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                    <FieldLabel for="kv-expiration-type">Type</FieldLabel>
-                    <MockupSelect
-                      value="EX"
-                      control-id="kv-expiration-type"
-                      aria-label="Expiration type"
-                    />
-                  </div>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                    <FieldLabel for="kv-expiration-value">Seconds</FieldLabel>
-                    <NumberInput
-                      id="kv-expiration-value"
-                      :model-value="3600"
-                      size="medium"
-                      aria-label="Expiration seconds"
-                    />
-                  </div>
+              <div class="grid grid-cols-2 gap-(--spacing-sm) pt-(--spacing-md)">
+                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                  <FieldLabel for="kv-expiration-type">Type</FieldLabel>
+                  <MockupSelect
+                    value="EX"
+                    control-id="kv-expiration-type"
+                    aria-label="Expiration type"
+                  />
+                </div>
+                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                  <FieldLabel for="kv-expiration-value">Seconds</FieldLabel>
+                  <NumberInput
+                    id="kv-expiration-value"
+                    :model-value="3600"
+                    size="medium"
+                    aria-label="Expiration seconds"
+                  />
                 </div>
               </div>
-            </Transition>
-          </div>
-        </ConsoleMockupShellItem>
-
-        <ConsoleMockupShellItem :order="2">
-          <div class="flex flex-col gap-(--spacing-xs)">
-            <FieldLabel
-              for="kv-value"
-              required
-              >Value</FieldLabel
-            >
-            <Textarea
-              id="kv-value"
-              :model-value="VALUE"
-              resize="none"
-              data-cursor="value"
-              aria-label="Value"
-            />
-            <FieldDescription>String, JSON, Buffer or Stream, up to 25 MB.</FieldDescription>
-          </div>
-        </ConsoleMockupShellItem>
-
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel for="kv-metadata">Metadata</FieldLabel>
-          <Textarea
-            id="kv-metadata"
-            model-value='{ "source": "login" }'
-            resize="none"
-            aria-label="Metadata"
-          />
+            </div>
+          </Transition>
         </div>
-      </div>
+      </ConsoleMockupShellItem>
 
-      <MockupCursor
-        name="Sam"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
+      <ConsoleMockupShellItem :order="2">
+        <div class="flex flex-col gap-(--spacing-xs)">
+          <FieldLabel
+            for="kv-value"
+            required
+            >Value</FieldLabel
+          >
+          <Textarea
+            id="kv-value"
+            :model-value="VALUE"
+            resize="none"
+            data-cursor="value"
+            aria-label="Value"
+          />
+          <FieldDescription>String, JSON, Buffer or Stream, up to 25 MB.</FieldDescription>
+        </div>
+      </ConsoleMockupShellItem>
+
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel for="kv-metadata">Metadata</FieldLabel>
+        <Textarea
+          id="kv-metadata"
+          model-value='{ "source": "login" }'
+          resize="none"
+          aria-label="Metadata"
+        />
+      </div>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

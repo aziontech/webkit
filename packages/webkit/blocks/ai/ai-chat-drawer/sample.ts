@@ -1,11 +1,11 @@
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-
-import type { AiChatDrawerMessage } from './messages'
+import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
-const user = (id: string, text: string, time: string): AiChatDrawerMessage => ({
+const user = (id: string, text: string, time: string): AiChatMessage => ({
   id,
   role: 'user',
   parts: [{ type: 'text', content: text }],
@@ -17,7 +17,7 @@ const assistant = (
   text: string,
   time: string,
   extra: { reasoning?: string; reasoningSeconds?: number; sources?: SourcesItem[] } = {}
-): AiChatDrawerMessage => ({
+): AiChatMessage => ({
   id,
   role: 'assistant',
   parts: [
@@ -53,7 +53,7 @@ const errorsAnswer = [
   'Renew the certificate at the origin, or let the origin accept plain HTTP from the edge while you renew it.'
 ].join('\n')
 
-export const sampleStreamingMessages: AiChatDrawerMessage[] = [
+export const sampleStreamingMessages: AiChatMessage[] = [
   user('m1', 'Why is storefront answering with 502 errors?', '14:12'),
   assistant('m2', errorsAnswer.slice(0, 120), '14:12', {
     reasoning:
@@ -69,7 +69,7 @@ export const sampleStreamingMessages: AiChatDrawerMessage[] = [
   })
 ]
 
-export const sampleInterruptedMessages: AiChatDrawerMessage[] = [
+export const sampleInterruptedMessages: AiChatMessage[] = [
   user('m1', 'How do I purge the cache of one URL?', '10:41'),
   assistant('m2', cacheAnswer.slice(0, 104), '10:41', {
     reasoning:
@@ -111,17 +111,36 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [3].'
   ]
 ]
 
-export const sampleLongThread: AiChatDrawerMessage[] = history.flatMap(
-  ([question, answer], index): AiChatDrawerMessage[] => [
+const cacheKeySources: SourcesItem[] = [
+  {
+    title: 'Cache settings',
+    href: 'https://www.azion.com/en/documentation/',
+    description: 'Azion documentation · Cache'
+  },
+  {
+    title: 'aziontech/azion',
+    href: 'https://github.com/aziontech/azion',
+    description: 'Azion CLI on GitHub',
+    icon: 'az az-github'
+  },
+  {
+    title: 'HTTP Caching',
+    href: 'https://www.w3.org/Protocols/',
+    description: 'W3C · HTTP'
+  }
+]
+
+export const sampleLongThread: AiChatMessage[] = history.flatMap(
+  ([question, answer], index): AiChatMessage[] => [
     user(`q${index}`, question, `09:${10 + index * 4}`),
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
-      sources: []
+      sources: index === history.length - 1 ? cacheKeySources : []
     })
   ]
 )
@@ -139,4 +158,10 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   },
   { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
+]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]

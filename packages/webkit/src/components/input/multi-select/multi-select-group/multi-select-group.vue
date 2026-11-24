@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, type ComputedRef, provide, shallowReactive, useAttrs } from 'vue'
 
+  import SelectGroup from '../../select/select-group/select-group.vue'
   import { MultiSelectGroupInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -44,22 +45,12 @@
 </script>
 
 <template>
-  <div
+  <SelectGroup
     v-show="visible"
     v-bind="$attrs"
-    role="group"
-    :aria-label="label || undefined"
+    :label="label"
     :data-testid="testId"
-    :class="attrs.class"
-    class="flex flex-col items-stretch [&:not(:first-child)]:mt-(--spacing-sm)"
   >
-    <div
-      v-if="label"
-      class="flex items-center px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
-      :data-testid="`${testId}__label`"
-    >
-      {{ label }}
-    </div>
     <slot />
-  </div>
+  </SelectGroup>
 </template>

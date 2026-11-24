@@ -6,20 +6,20 @@
 
 <template>
   <EmptyState
-    title="No resource yet"
-    description="Get started by creating your first resource."
+    title="No applications yet"
+    description="Create an application to start serving your site from Azion."
     icon="az az-inbox"
     bordered
   >
     <template #actions>
-      <div class="flex gap-(--spacing-3)">
+      <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
         <Button
-          variant="secondary"
-          label="Secondary Item"
+          variant="primary"
+          label="Create application"
         />
         <Button
           variant="outline"
-          label="Create Item"
+          label="Import from GitHub"
         />
       </div>
       <Link

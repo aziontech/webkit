@@ -1380,8 +1380,7 @@
     {
       "tool": "suggest",
       "query": "star rating",
-      "top1": "(none)",
-      "none": true
+      "top1": "rating"
     },
     {
       "tool": "suggest",

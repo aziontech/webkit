@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-schema")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-file-picker`, `utils/csv`
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -43,7 +43,7 @@ The Columns section is an `AttributeEditor` (`v-model:items`, large, `reorderabl
 
 ### D. CSV import and foreign keys — `FileDropzone`, `FileTokenGroup` (optional)
 
-Two optional sections in the Create Table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button over a hidden file input; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `DataTable` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: a second `AttributeEditor` named Foreign keys (no minimum, `No foreign keys.` when empty) with Column (the named columns), References table, References column (enabled once a table is picked) and On delete (No action, Cascade, Set null) cells as `Select`s; the editor owns Remove foreign key and Add foreign key. After Create, an incomplete row shows `Choose the column, the table and the column it references.` under its first empty cell. The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
+Two optional sections in the Create Table drawer. Import data from CSV: a `FileDropzone` (one .csv) with a Browse files button that opens the system picker through `useFilePicker`; once read, the file is a `FileTokenGroup` token (Remove clears it), the columns are rebuilt from the header with types guessed from the values (`int8`, `numeric`, `bool`, `timestamptz`, else `text`; `id` becomes the primary key) and stay editable, an empty name takes the file's, and a bordered `DataTable` previews the first five rows under a line that counts columns and rows. A header with an empty name or a non-CSV file is an error on the token and blocks Create. Foreign keys: a second `AttributeEditor` named Foreign keys (no minimum, `No foreign keys.` when empty) with Column (the named columns), References table, References column (enabled once a table is picked) and On delete (No action, Cascade, Set null) cells as `Select`s; the editor owns Remove foreign key and Add foreign key. After Create, an incomplete row shows `Choose the column, the table and the column it references.` under its first empty cell. The success toast counts the imported rows and the keys. The drawer imports into a new table; an existing empty table imports from its own page (M2.10 row).
 
 ### E. Add column drawer — `Switch` (required)
 
@@ -192,44 +192,18 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Switch from '@aziontech/webkit/switch'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import Tag from '@aziontech/webkit/tag'
+  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
+  import { createdDescription } from './lib/draft-table'
+  import AddColumnDrawer from './parts/add-column-drawer.vue'
+  import ChangeTypeDialog from './parts/change-type-dialog.vue'
+  import CreateTableDrawer from './parts/create-table-drawer.vue'
+  import InsertRowDrawer from './parts/insert-row-drawer.vue'
+  import SchemaColumnsTable from './parts/schema-columns-table.vue'
+  import TruncateTableDialog from './parts/truncate-table-dialog.vue'
   import { sampleDatabase, sampleTables } from './sample'
-
-  interface ColumnType {
-    value: string
-    description: string
-    glyph: string
-  }
 
   /** One column of an existing table. */
   export interface SchemaEditorColumn {
@@ -339,19 +313,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     defaultSubmitted?: boolean
   }
 
-  interface DraftColumn {
-    key: string
-    name: string
-    type: string
-    primaryKey: boolean
-    defaultValue: string
-  }
-  interface DraftTable {
-    name: string
-    columns: DraftColumn[]
-    relations: SchemaEditorRelation[]
-  }
-  type CsvRow = Record<string, string>
   type PendingChange = {
     kind: SchemaEditorDialog
     apply: () => void
@@ -402,54 +363,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     () => items.value.find((item) => item.name === tableName.value) ?? items.value[0]
   )
 
-  const TYPES: ColumnType[] = [
-    { value: 'int2', description: 'Signed two-byte integer', glyph: '#' },
-    { value: 'int4', description: 'Signed four-byte integer', glyph: '#' },
-    { value: 'int8', description: 'Signed eight-byte integer', glyph: '#' },
-    { value: 'float4', description: 'Single precision floating-point number', glyph: '#' },
-    { value: 'float8', description: 'Double precision floating-point number', glyph: '#' },
-    { value: 'numeric', description: 'Exact number of selectable precision', glyph: '#' },
-    { value: 'json', description: 'Textual JSON data', glyph: '{}' },
-    { value: 'jsonb', description: 'Binary JSON data, decomposed', glyph: '{}' },
-    { value: 'text', description: 'Variable-length character string', glyph: 'T' },
-    { value: 'varchar', description: 'Variable-length string with a limit', glyph: 'T' },
-    { value: 'uuid', description: 'Universally unique identifier', glyph: '#' },
-    { value: 'bool', description: 'Logical boolean, true or false', glyph: 'B' },
-    { value: 'date', description: 'Calendar date: year, month, day', glyph: '@' },
-    { value: 'timestamp', description: 'Date and time', glyph: '@' },
-    { value: 'timestamptz', description: 'Date and time, with time zone', glyph: '@' }
-  ]
-  const INTEGER_TYPES = ['int2', 'int4', 'int8']
-  const glyphOf = (value: string) => TYPES.find((type) => type.value === value)?.glyph ?? '#'
-  const filterTypes = (query: string) => {
-    const term = query.trim().toLowerCase()
-    if (!term) return TYPES
-    return TYPES.filter(
-      (type) => type.value.includes(term) || type.description.toLowerCase().includes(term)
-    )
-  }
-
-  const definitionColumns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
-    { accessorKey: 'type', header: 'Type', minWidth: 120 },
-    { accessorKey: 'constraints', header: 'Constraints', grow: 2 },
-    { id: 'actions', type: 'action', hideable: false }
-  ]
-  const definitionRows = computed(() =>
-    (table.value?.columns ?? []).map((column) => ({
-      name: column.name,
-      id: column.name,
-      type: column.type,
-      constraints: [
-        column.primaryKey ? 'PRIMARY KEY' : '',
-        column.notNull ? 'NOT NULL' : '',
-        column.defaultValue ? `DEFAULT ${column.defaultValue}` : ''
-      ]
-        .filter(Boolean)
-        .join(', ')
-    }))
-  )
-
   const SCHEMA_TOAST = 'schema-editor'
   const TOAST = { id: SCHEMA_TOAST }
   onBeforeUnmount(() => toast.dismiss(SCHEMA_TOAST))
@@ -470,245 +383,38 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
   const alterOpen = dialogOpen('alter')
   const truncateOpen = dialogOpen('truncate')
 
-  let uid = 0
-  const newColumn = (
-    name = '',
-    type = 'text',
-    primaryKey = false,
-    defaultValue = ''
-  ): DraftColumn => ({
-    key: `c-${(uid += 1)}`,
-    name,
-    type,
-    primaryKey,
-    defaultValue
-  })
-  const blankTable = (): DraftTable => ({
-    name: '',
-    columns: [
-      newColumn('id', 'int8', true),
-      newColumn('created_at', 'timestamptz', false, 'now()')
-    ],
-    relations: []
-  })
-
-  const createForm = reactive(blankTable())
-  if (props.defaultDraft.name !== undefined) createForm.name = props.defaultDraft.name
-  if (props.defaultDraft.relations)
-    createForm.relations = props.defaultDraft.relations.map((relation) => ({ ...relation }))
-  const createSubmitted = ref(props.defaultSubmitted && dialog.value === 'create')
-  const createSubmitting = submitting
-  const createServerError = ref(dialog.value === 'create' ? props.error : '')
   const typeQuery = ref('')
-  const filteredTypes = computed(() => filterTypes(typeQuery.value))
-
-  const namedColumns = computed(() => createForm.columns.filter((column) => column.name.trim()))
-  const duplicateNames = computed(() => {
-    const seen = new Map<string, number>()
-    for (const column of namedColumns.value) {
-      const name = column.name.trim().toLowerCase()
-      seen.set(name, (seen.get(name) ?? 0) + 1)
-    }
-    return new Set([...seen].filter(([, count]) => count > 1).map(([name]) => name))
-  })
-  const tableNameError = computed(() => {
-    if (createServerError.value) return createServerError.value
-    if (!createSubmitted.value) return ''
-    if (!createForm.name.trim()) return 'This field is required.'
-    if (!/^[a-z_][a-z0-9_]*$/i.test(createForm.name.trim())) {
-      return 'Start with a letter or an underscore; use letters, numbers and underscores.'
-    }
-    return ''
-  })
-  const columnError = (column: DraftColumn) =>
-    createSubmitted.value && duplicateNames.value.has(column.name.trim().toLowerCase())
-      ? `Another column is also named ${column.name.trim()}.`
-      : ''
-  const columnsError = computed(() =>
-    createSubmitted.value && !namedColumns.value.length ? 'Add at least one named column.' : ''
+  const createServerError = ref(dialog.value === 'create' ? props.error : '')
+  const columnDrawerEl = ref<InstanceType<typeof AddColumnDrawer> | null>(null)
+  const rowDrawerEl = ref<InstanceType<typeof InsertRowDrawer> | null>(null)
+  const createDrawerEl = ref<InstanceType<typeof CreateTableDrawer> | null>(null)
+  const alterColumn = ref(dialog.value === 'alter' ? props.defaultAlterColumn : '')
+  const alterType = ref('text')
+  const alterCurrent = computed(() =>
+    table.value?.columns.find((column) => column.name === alterColumn.value)
   )
 
-  watch(createOpen, (open) => {
-    if (!open) return
-    Object.assign(createForm, blankTable())
-    createSubmitted.value = false
-    createServerError.value = ''
-    clearCsv()
-  })
-
-  const columnDefinition = [
-    { key: 'name', label: 'Name', required: true },
-    { key: 'type', label: 'Type' },
-    { key: 'defaultValue', label: 'Default' },
-    { key: 'primaryKey', label: 'Primary' }
-  ]
-  const columnErrors = computed(() =>
-    createForm.columns.map((column) => {
-      const message = columnError(column)
-      return message ? { name: message } : undefined
-    })
-  )
-
-  const csvInputEl = ref<HTMLInputElement | null>(null)
-  const csvFile = ref<SchemaEditorCsvFile | null>(null)
-  const csvHeaders = ref<string[]>([])
-  const csvRows = ref<CsvRow[]>([])
-  const csvError = ref('')
-  const splitCsvLine = (line: string) => {
-    const cells: string[] = []
-    let cell = ''
-    let quoted = false
-    for (let i = 0; i < line.length; i += 1) {
-      const char = line[i]
-      if (quoted && char === '"' && line[i + 1] === '"') {
-        cell += '"'
-        i += 1
-      } else if (char === '"') quoted = !quoted
-      else if (char === ',' && !quoted) {
-        cells.push(cell.trim())
-        cell = ''
-      } else cell += char
-    }
-    cells.push(cell.trim())
-    return cells
+  const openColumn = () => {
+    columnOpen.value = true
   }
-  const inferType = (values: string[]) => {
-    const filled = values.filter((value) => value !== '')
-    if (!filled.length) return 'text'
-    if (filled.every((value) => /^-?\d+$/.test(value))) return 'int8'
-    if (filled.every((value) => /^-?\d+(\.\d+)?$/.test(value))) return 'numeric'
-    if (filled.every((value) => /^(true|false)$/i.test(value))) return 'bool'
-    if (filled.every((value) => /^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?.*)?$/.test(value)))
-      return 'timestamptz'
-    return 'text'
+  const openRow = () => {
+    rowOpen.value = true
   }
-  const clearCsv = () => {
-    csvFile.value = null
-    csvHeaders.value = []
-    csvRows.value = []
-    csvError.value = ''
+  const openAlter = (name: string) => {
+    alterColumn.value = name
+    alterType.value = table.value?.columns.find((column) => column.name === name)?.type ?? 'text'
+    typeQuery.value = ''
+    alterOpen.value = true
   }
-  const applyCsv = (file: SchemaEditorCsvFile, text: string) => {
-    clearCsv()
-    const lines = text.split(/\r?\n/).filter((line) => line.trim())
-    const headers = lines.length ? splitCsvLine(lines[0]) : []
-    if (!headers.length || headers.some((header) => !header)) {
-      csvFile.value = file
-      csvError.value = 'The first line must name every column.'
-      return
-    }
-    const rows = lines
-      .slice(1)
-      .map((line): CsvRow =>
-        Object.fromEntries(splitCsvLine(line).map((value, index) => [headers[index], value]))
-      )
-    csvFile.value = file
-    csvHeaders.value = headers
-    csvRows.value = rows
-    createForm.columns = headers.map((header) =>
-      newColumn(
-        header,
-        inferType(rows.map((row) => row[header] ?? '')),
-        header.toLowerCase() === 'id'
-      )
-    )
-    if (!createForm.name.trim()) createForm.name = file.name.replace(/\.csv$/i, '')
+  const openTruncate = () => {
+    truncateOpen.value = true
   }
-  const onCsvFiles = async (files: FileList | File[] | null) => {
-    const file = Array.from(files ?? [])[0]
-    if (!file) return
-    if (!/\.csv$/i.test(file.name)) {
-      clearCsv()
-      csvFile.value = { name: file.name, size: file.size, type: file.type }
-      csvError.value = 'Choose a .csv file.'
-      return
-    }
-    applyCsv({ name: file.name, size: file.size, type: 'text/csv' }, await file.text())
-  }
-  const onCsvPick = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    onCsvFiles(input.files)
-    input.value = ''
-  }
-  const csvTokens = computed(() =>
-    csvFile.value
-      ? [
-          {
-            file: csvFile.value,
-            error: csvError.value || undefined
-          }
-        ]
-      : []
-  )
-  const csvPreviewColumns = computed(() =>
-    csvHeaders.value.map((header): TableColumn => ({ accessorKey: header, header, minWidth: 120 }))
-  )
-  const csvPreview = computed(() =>
-    csvRows.value.slice(0, 5).map((row, index) => ({ __row: `r${index}`, ...row }))
-  )
 
-  const ON_DELETE = [
-    { value: 'NO ACTION', label: 'No action' },
-    { value: 'CASCADE', label: 'Cascade' },
-    { value: 'SET NULL', label: 'Set null' }
-  ]
-  const newRelation = (): SchemaEditorRelation => ({
-    key: `fk-${(uid += 1)}`,
-    column: '',
-    table: '',
-    references: '',
-    onDelete: 'NO ACTION'
-  })
-  const referenceColumns = (relation: SchemaEditorRelation) =>
-    items.value.find((item) => item.name === relation.table)?.columns ?? []
-  const relationDefinition = [
-    { key: 'column', label: 'Column', required: true },
-    { key: 'table', label: 'References table', required: true },
-    { key: 'references', label: 'References column', required: true },
-    { key: 'onDelete', label: 'On delete' }
-  ]
-  const relationErrors = computed(() =>
-    createForm.relations.map((relation) => {
-      if (!createSubmitted.value) return undefined
-      const missing = (['column', 'table', 'references'] as const).find((key) => !relation[key])
-      return missing
-        ? { [missing]: 'Choose the column, the table and the column it references.' }
-        : undefined
-    })
-  )
-  const relationsInvalid = computed(() =>
-    createForm.relations.some(
-      (relation) => !relation.column || !relation.table || !relation.references
-    )
-  )
-
-  if (props.defaultCsv) applyCsv(props.defaultCsv.file, props.defaultCsv.text)
-
-  const submitCreate = (event: Event) => {
-    createSubmitted.value = true
-    createServerError.value = ''
-    if (createSubmitting.value) return
-    if (
-      tableNameError.value ||
-      columnsError.value ||
-      duplicateNames.value.size ||
-      relationsInvalid.value ||
-      csvError.value
-    )
-      return
-    const name = createForm.name.trim()
-    const columns = namedColumns.value.map((column): SchemaEditorColumn => ({
-      name: column.name.trim(),
-      type: column.type,
-      primaryKey: column.primaryKey,
-      notNull: column.primaryKey,
-      defaultValue: column.defaultValue.trim()
-    }))
-    const rows = csvRows.value.map((row) => ({ ...row }))
-    const relations = createForm.relations.map((relation) => ({ ...relation }))
+  const submitCreate = (event: Event, created: SchemaEditorNewTable) => {
+    const { name, columns, relations, rows } = created
     pending.value = {
       kind: 'create',
-      retry: submitCreate,
+      retry: (retryEvent) => createDrawerEl.value?.submit(retryEvent),
       apply: () => {
         items.value = [
           ...items.value,
@@ -718,17 +424,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
         createOpen.value = false
         toast.success(`Table ${name} created.`, {
           ...TOAST,
-          description:
-            [
-              rows.length
-                ? `${rows.length} ${rows.length === 1 ? 'row' : 'rows'} imported from CSV.`
-                : '',
-              relations.length
-                ? `${relations.length} foreign ${relations.length === 1 ? 'key' : 'keys'} added.`
-                : ''
-            ]
-              .filter(Boolean)
-              .join(' ') || undefined,
+          description: createdDescription(rows.length, relations.length),
           actions: [
             { label: 'Insert row', onClick: () => openRow() },
             { label: 'Add column', onClick: () => openColumn() }
@@ -737,45 +433,15 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
       }
     }
     toast.dismiss(SCHEMA_TOAST)
-    emit('create-table', event, { name, columns, relations, rows })
+    emit('create-table', event, created)
   }
 
-  const blankColumn = (): SchemaEditorColumnForm => ({
-    name: '',
-    type: 'text',
-    defaultValue: '',
-    primaryKey: false,
-    notNull: false
-  })
-  const columnForm = reactive<SchemaEditorColumnForm>({ ...blankColumn(), ...props.defaultColumn })
-  const columnSubmitted = ref(props.defaultSubmitted && dialog.value === 'column')
-  const columnSubmitting = submitting
-  const columnNameError = computed(() => {
-    if (!columnSubmitted.value) return ''
-    const name = columnForm.name.trim()
-    if (!name) return 'This field is required.'
-    if (table.value?.columns.some((column) => column.name === name.toLowerCase())) {
-      return `${table.value.name} already has a column named ${name}.`
-    }
-    return ''
-  })
-  const openColumn = () => {
-    columnOpen.value = true
-  }
-  const submitColumn = (event: Event) => {
-    columnSubmitted.value = true
-    if (columnSubmitting.value || columnNameError.value || !table.value) return
+  const submitColumn = (event: Event, column: SchemaEditorColumn) => {
+    if (!table.value) return
     const target = table.value
-    const column: SchemaEditorColumn = {
-      name: columnForm.name.trim(),
-      type: columnForm.type,
-      primaryKey: columnForm.primaryKey,
-      notNull: columnForm.notNull || columnForm.primaryKey,
-      defaultValue: columnForm.defaultValue.trim()
-    }
     pending.value = {
       kind: 'column',
-      retry: submitColumn,
+      retry: (retryEvent) => columnDrawerEl.value?.submit(retryEvent),
       apply: () => {
         target.columns = [...target.columns, column]
         columnOpen.value = false
@@ -789,35 +455,12 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     emit('add-column', event, { table: target, column: { ...column } })
   }
 
-  const rowForm = reactive<Record<string, string>>({ ...props.defaultRow })
-  const rowSubmitted = ref(props.defaultSubmitted && dialog.value === 'row')
-  const rowSubmitting = submitting
-  const isAuto = (column: SchemaEditorColumn) =>
-    column.primaryKey && INTEGER_TYPES.includes(column.type)
-  const rowError = (column: SchemaEditorColumn) =>
-    rowSubmitted.value &&
-    column.notNull &&
-    !isAuto(column) &&
-    !column.defaultValue &&
-    !String(rowForm[column.name] ?? '').trim()
-      ? `${column.name} cannot be NULL. Enter a value.`
-      : ''
-  const rowHint = (column: SchemaEditorColumn) => {
-    if (isAuto(column)) return 'Generated by the database.'
-    if (column.defaultValue) return `Empty uses the default, ${column.defaultValue}.`
-    return column.notNull ? 'Required.' : 'Empty stores NULL.'
-  }
-  const openRow = () => {
-    rowOpen.value = true
-  }
-  const submitRow = (event: Event) => {
-    rowSubmitted.value = true
-    if (rowSubmitting.value || !table.value) return
-    if (table.value.columns.some((column) => rowError(column))) return
+  const submitRow = (event: Event, values: Record<string, string>) => {
+    if (!table.value) return
     const target = table.value
     pending.value = {
       kind: 'row',
-      retry: submitRow,
+      retry: (retryEvent) => rowDrawerEl.value?.submit(retryEvent),
       apply: () => {
         target.rowCount += 1
         rowOpen.value = false
@@ -828,40 +471,11 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
       }
     }
     toast.dismiss(SCHEMA_TOAST)
-    emit('insert-row', event, { table: target, values: { ...rowForm } })
+    emit('insert-row', event, { table: target, values })
   }
 
-  const alterColumn = ref(dialog.value === 'alter' ? props.defaultAlterColumn : '')
-  const alterType = ref('text')
-  const alterSubmitting = submitting
-  const alterCurrent = computed(() =>
-    table.value?.columns.find((column) => column.name === alterColumn.value)
-  )
-  const alterSql = computed(() => {
-    if (!table.value || !alterCurrent.value) return ''
-    const name = table.value.name
-    const columns = table.value.columns.map((column) =>
-      column.name === alterColumn.value
-        ? `${column.name} ${alterType.value}`
-        : `${column.name} ${column.type}`
-    )
-    return [
-      'BEGIN;',
-      `CREATE TABLE ${name}_new (${columns.join(', ')});`,
-      `INSERT INTO ${name}_new SELECT * FROM ${name};`,
-      `DROP TABLE ${name};`,
-      `ALTER TABLE ${name}_new RENAME TO ${name};`,
-      'COMMIT;'
-    ].join('\n')
-  })
-  const openAlter = (name: string) => {
-    alterColumn.value = name
-    alterType.value = table.value?.columns.find((column) => column.name === name)?.type ?? 'text'
-    typeQuery.value = ''
-    alterOpen.value = true
-  }
   const confirmAlter = (event: Event) => {
-    if (alterSubmitting.value || !alterCurrent.value || !table.value) return
+    if (submitting.value || !alterCurrent.value || !table.value) return
     const target = table.value
     const column = alterCurrent.value
     const type = alterType.value
@@ -881,12 +495,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     emit('change-type', event, { table: target, column: { ...column }, type })
   }
 
-  const truncateSubmitting = submitting
-  const openTruncate = () => {
-    truncateOpen.value = true
-  }
   const confirmTruncate = (event: Event) => {
-    if (truncateSubmitting.value || !table.value) return
+    if (submitting.value || !table.value) return
     const target = table.value
     const removed = target.rowCount
     pending.value = {
@@ -907,19 +517,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     toast.dismiss(SCHEMA_TOAST)
     emit('truncate', event, target)
   }
-
-  watch(dialog, (next) => {
-    if (next === 'column') {
-      Object.assign(columnForm, blankColumn())
-      columnSubmitted.value = false
-      typeQuery.value = ''
-    }
-    if (next === 'row') {
-      for (const key of Object.keys(rowForm)) delete rowForm[key]
-      for (const column of table.value?.columns ?? []) rowForm[column.name] = ''
-      rowSubmitted.value = false
-    }
-  })
 
   const FAILURES: Partial<Record<SchemaEditorDialog, string>> = {
     column: "The column wasn't added.",
@@ -971,790 +568,65 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
 
 <template>
   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-    <Card :padded="false">
-      <template #default>
-        <DataTable
-          :data="definitionRows"
-          :columns="definitionColumns"
-          row-key="id"
-          :bordered="false"
-          :aria-label="`Columns of ${table?.name ?? ''}`"
-        >
-          <template #toolbar>
-            <div class="flex w-full flex-wrap items-center gap-(--spacing-xs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <i
-                  class="az az-table shrink-0 text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <span class="truncate text-heading-2xs text-(--text-default)">{{
-                  table?.name
-                }}</span>
-                <Tag
-                  :label="`${table?.rowCount ?? 0} ${table?.rowCount === 1 ? 'row' : 'rows'}`"
-                  severity="neutral"
-                  size="small"
-                />
-              </div>
-              <div class="ms-auto flex flex-wrap items-center gap-(--spacing-xs)">
-                <Button
-                  label="Add column"
-                  variant="outline"
-                  size="medium"
-                  icon="az az-plus"
-                  @click="openColumn"
-                />
-                <Button
-                  label="Insert row"
-                  variant="primary"
-                  size="medium"
-                  icon="az az-plus"
-                  @click="openRow"
-                />
-                <DropdownMenu
-                  side="bottom"
-                  align="end"
-                  @select="onTableAction"
-                >
-                  <DropdownMenu.Trigger>
-                    <Tooltip content="Table actions">
-                      <IconButton
-                        icon="az az-ellipsis"
-                        variant="outline"
-                        size="medium"
-                        aria-label="Table actions"
-                      />
-                    </Tooltip>
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Item
-                      value="create"
-                      label="Create Table"
-                    >
-                      <template #leading
-                        ><i
-                          class="az az-plus"
-                          aria-hidden="true"
-                      /></template>
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Item
-                      value="truncate"
-                      label="Truncate table"
-                    >
-                      <template #leading
-                        ><i
-                          class="az az-eraser"
-                          aria-hidden="true"
-                      /></template>
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Group>
-                </DropdownMenu>
-              </div>
-            </div>
-          </template>
-          <template #cell-name="{ value }">
-            <span class="min-w-0 truncate font-code text-label-code-sm">{{ value }}</span>
-          </template>
-          <template #cell-type="{ value }">
-            <Tag
-              :label="value"
-              severity="neutral"
-              size="medium"
-            />
-          </template>
-          <template #cell-constraints="{ value }">
-            <span class="text-body-sm text-(--text-muted)">{{ value || 'None' }}</span>
-          </template>
-          <template #cell-actions="{ row }">
-            <TableCellActions
-              :name="row.name"
-              @select="(_event, value) => onColumnAction(value, row)"
-            >
-              <DropdownMenu.Group>
-                <DropdownMenu.Item
-                  value="alter"
-                  label="Change type"
-                >
-                  <template #leading
-                    ><i
-                      class="az az-pencil"
-                      aria-hidden="true"
-                  /></template>
-                </DropdownMenu.Item>
-              </DropdownMenu.Group>
-            </TableCellActions>
-          </template>
-        </DataTable>
-      </template>
-    </Card>
+    <SchemaColumnsTable
+      :table="table"
+      @add-column="openColumn"
+      @insert-row="openRow"
+      @table-action="onTableAction"
+      @column-action="(_event, value, name) => onColumnAction(value, { name })"
+    />
 
-    <Drawer
+    <CreateTableDrawer
+      ref="createDrawerEl"
       v-model:open="createOpen"
-      size="large"
-      side="end"
-    >
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Create Table"
-          novalidate
-          @submit.prevent="submitCreate"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <DrawerTitle>Create Table</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                Define the table name and its columns in {{ database }}, or start from a CSV file.
-                Drag a column's grip, or focus it and use the arrow keys, to reorder.
-              </p>
-            </div>
-          </PanelHeader>
+      v-model:server-error="createServerError"
+      v-model:type-query="typeQuery"
+      :database="database"
+      :tables="items"
+      :submitting="submitting"
+      :default-draft="defaultDraft"
+      :default-csv="defaultCsv"
+      :default-submitted="defaultSubmitted && dialog === 'create'"
+      @submit="submitCreate"
+    />
 
-          <PanelBody>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="createSubmitting"
-            >
-              <legend class="sr-only">Create Table</legend>
-              <SettingsGroup
-                label="General"
-                hint="Names the table inside this database."
-              >
-                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                  <Alert
-                    v-if="createServerError"
-                    severity="danger"
-                    :label="`The table wasn't created. ${createServerError} Your columns are kept; pick another name and create it again.`"
-                  />
-                  <Field :invalid="!!tableNameError">
-                    <Field.Label>Name</Field.Label>
-                    <Input
-                      v-model="createForm.name"
-                      size="large"
-                      class="w-full"
-                      placeholder="users"
-                      autocomplete="off"
-                      @update:model-value="createServerError = ''"
-                    />
-                    <Field.Description
-                      >Every query addresses it, so it cannot be changed later without rewriting
-                      them.</Field.Description
-                    >
-                    <Field.Error v-if="tableNameError">{{ tableNameError }}</Field.Error>
-                  </Field>
-                </div>
-              </SettingsGroup>
-
-              <SettingsGroup
-                label="Import data from CSV"
-                hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
-              >
-                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                  <FileDropzone
-                    v-if="!csvFile"
-                    accept=".csv,text/csv"
-                    description="One .csv file, comma-separated, up to 10 MB."
-                    @drop="(_event, files) => onCsvFiles(files)"
-                  >
-                    <Button
-                      type="button"
-                      label="Browse files"
-                      variant="secondary"
-                      size="medium"
-                      @click="csvInputEl?.click()"
-                    />
-                  </FileDropzone>
-                  <input
-                    ref="csvInputEl"
-                    type="file"
-                    accept=".csv,text/csv"
-                    class="hidden"
-                    aria-hidden="true"
-                    tabindex="-1"
-                    @change="onCsvPick"
-                  />
-                  <FileTokenGroup
-                    v-if="csvFile"
-                    :items="csvTokens"
-                    @remove="clearCsv"
-                  />
-                  <template v-if="csvRows.length">
-                    <p class="m-0 text-body-sm text-(--text-muted)">
-                      {{ csvHeaders.length }} columns and {{ csvRows.length }}
-                      {{ csvRows.length === 1 ? 'row' : 'rows' }} read. The first
-                      {{ csvPreview.length }} below; the columns were filled from the header.
-                    </p>
-                    <DataTable
-                      :data="csvPreview"
-                      :columns="csvPreviewColumns"
-                      row-key="__row"
-                      :bordered="true"
-                      aria-label="CSV preview"
-                    />
-                  </template>
-                </div>
-              </SettingsGroup>
-
-              <SettingsGroup
-                label="Columns"
-                hint="The table's schema, created in this order. A primary key is NOT NULL."
-              >
-                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                    <Button
-                      type="button"
-                      label="About data types"
-                      variant="outline"
-                      size="small"
-                      icon="az az-external-link"
-                      href="https://www.azion.com/en/documentation/"
-                      target="_blank"
-                    />
-                  </div>
-                  <AttributeEditor
-                    v-model:items="createForm.columns"
-                    :definition="columnDefinition"
-                    :errors="columnErrors"
-                    :new-item="newColumn"
-                    :min-items="1"
-                    :disabled="createSubmitting"
-                    reorderable
-                    size="large"
-                    add-button-label="Add column"
-                    remove-button-label="Remove column"
-                    aria-label="Columns"
-                  >
-                    <template #cell-name="{ index, invalid }">
-                      <Input
-                        v-model="createForm.columns[index].name"
-                        size="large"
-                        class="w-full"
-                        placeholder="column_name"
-                        :invalid="invalid"
-                      />
-                    </template>
-                    <template #cell-type="{ index }">
-                      <Select
-                        v-model="createForm.columns[index].type"
-                        size="large"
-                        class="w-full"
-                        :display-value="(value: string) => value"
-                      >
-                        <Select.Trigger>
-                          <template #leading>
-                            <span
-                              class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
-                              aria-hidden="true"
-                              >{{ glyphOf(createForm.columns[index].type) }}</span
-                            >
-                          </template>
-                        </Select.Trigger>
-                        <Select.Content>
-                          <template #search>
-                            <Input
-                              v-model="typeQuery"
-                              size="medium"
-                              class="w-full"
-                              placeholder="Search types"
-                              aria-label="Search types"
-                              @keydown.stop
-                            />
-                          </template>
-                          <Select.Group label="Data types">
-                            <Select.Item
-                              v-for="type in filteredTypes"
-                              :key="type.value"
-                              :value="type.value"
-                            >
-                              <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                <span class="font-code text-label-code-sm">{{ type.value }}</span>
-                                <span class="truncate text-body-xs text-(--text-muted)">{{
-                                  type.description
-                                }}</span>
-                              </span>
-                            </Select.Item>
-                          </Select.Group>
-                        </Select.Content>
-                      </Select>
-                    </template>
-                    <template #cell-defaultValue="{ index }">
-                      <Input
-                        v-model="createForm.columns[index].defaultValue"
-                        size="large"
-                        class="w-full"
-                        placeholder="NULL"
-                      />
-                    </template>
-                    <template #cell-primaryKey="{ index }">
-                      <Checkbox v-model="createForm.columns[index].primaryKey" />
-                    </template>
-                  </AttributeEditor>
-                  <FieldError v-if="columnsError">{{ columnsError }}</FieldError>
-                </div>
-              </SettingsGroup>
-
-              <SettingsGroup
-                label="Foreign keys"
-                hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
-              >
-                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                  <AttributeEditor
-                    v-model:items="createForm.relations"
-                    :definition="relationDefinition"
-                    :errors="relationErrors"
-                    :new-item="newRelation"
-                    :disabled="createSubmitting"
-                    size="large"
-                    add-button-label="Add foreign key"
-                    remove-button-label="Remove foreign key"
-                    empty-title="No foreign keys."
-                    aria-label="Foreign keys"
-                  >
-                    <template #cell-column="{ index, invalid }">
-                      <Select
-                        v-model="createForm.relations[index].column"
-                        size="large"
-                        class="w-full"
-                        placeholder="Column"
-                        :invalid="invalid"
-                      >
-                        <Select.Trigger />
-                        <Select.Content>
-                          <Select.Item
-                            v-for="column in namedColumns"
-                            :key="column.key"
-                            :value="column.name.trim()"
-                            >{{ column.name.trim() }}</Select.Item
-                          >
-                        </Select.Content>
-                      </Select>
-                    </template>
-                    <template #cell-table="{ index, invalid }">
-                      <Select
-                        v-model="createForm.relations[index].table"
-                        size="large"
-                        class="w-full"
-                        placeholder="Table"
-                        :invalid="invalid"
-                        @update:model-value="createForm.relations[index].references = ''"
-                      >
-                        <Select.Trigger />
-                        <Select.Content>
-                          <Select.Item
-                            v-for="item in items"
-                            :key="item.name"
-                            :value="item.name"
-                            >{{ item.name }}</Select.Item
-                          >
-                        </Select.Content>
-                      </Select>
-                    </template>
-                    <template #cell-references="{ item, index, invalid }">
-                      <Select
-                        v-model="createForm.relations[index].references"
-                        size="large"
-                        class="w-full"
-                        placeholder="Column"
-                        :invalid="invalid"
-                        :disabled="!item.table"
-                      >
-                        <Select.Trigger />
-                        <Select.Content>
-                          <Select.Item
-                            v-for="column in referenceColumns(item)"
-                            :key="column.name"
-                            :value="column.name"
-                            >{{ column.name }}</Select.Item
-                          >
-                        </Select.Content>
-                      </Select>
-                    </template>
-                    <template #cell-onDelete="{ index }">
-                      <Select
-                        v-model="createForm.relations[index].onDelete"
-                        size="large"
-                        class="w-full"
-                      >
-                        <Select.Trigger />
-                        <Select.Content>
-                          <Select.Item
-                            v-for="option in ON_DELETE"
-                            :key="option.value"
-                            :value="option.value"
-                            >{{ option.label }}</Select.Item
-                          >
-                        </Select.Content>
-                      </Select>
-                    </template>
-                  </AttributeEditor>
-                </div>
-              </SettingsGroup>
-            </fieldset>
-          </PanelBody>
-
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                type="button"
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                :disabled="createSubmitting"
-                @click="createOpen = false"
-              />
-              <Button
-                type="submit"
-                label="Create Table"
-                variant="primary"
-                size="medium"
-                :loading="createSubmitting"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
-
-    <Drawer
+    <AddColumnDrawer
+      ref="columnDrawerEl"
       v-model:open="columnOpen"
-      size="large"
-      side="end"
-    >
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Add column"
-          novalidate
-          @submit.prevent="submitColumn"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <DrawerTitle>Add column</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                The column is added at the end of {{ table?.name }}.
-              </p>
-            </div>
-          </PanelHeader>
-          <PanelBody>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="columnSubmitting"
-            >
-              <legend class="sr-only">Add column</legend>
-              <SettingsGroup
-                label="Column"
-                hint="Its name, type and the value rows get when they leave it empty."
-              >
-                <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
-                  <Field :invalid="!!columnNameError">
-                    <Field.Label>Name</Field.Label>
-                    <Input
-                      v-model="columnForm.name"
-                      size="large"
-                      class="w-full"
-                      placeholder="column_name"
-                      autocomplete="off"
-                    />
-                    <Field.Error v-if="columnNameError">{{ columnNameError }}</Field.Error>
-                  </Field>
-                  <Field>
-                    <Field.Label>Type</Field.Label>
-                    <Select
-                      v-model="columnForm.type"
-                      size="large"
-                      class="w-full"
-                    >
-                      <Select.Trigger>
-                        <template #leading>
-                          <span
-                            class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
-                            aria-hidden="true"
-                            >{{ glyphOf(columnForm.type) }}</span
-                          >
-                        </template>
-                      </Select.Trigger>
-                      <Select.Content>
-                        <template #search>
-                          <Input
-                            v-model="typeQuery"
-                            size="medium"
-                            class="w-full"
-                            placeholder="Search types"
-                            aria-label="Search types"
-                            @keydown.stop
-                          />
-                        </template>
-                        <Select.Group label="Data types">
-                          <Select.Item
-                            v-for="type in filteredTypes"
-                            :key="type.value"
-                            :value="type.value"
-                          >
-                            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                              <span class="font-code text-label-code-sm">{{ type.value }}</span>
-                              <span class="truncate text-body-xs text-(--text-muted)">{{
-                                type.description
-                              }}</span>
-                            </span>
-                          </Select.Item>
-                        </Select.Group>
-                      </Select.Content>
-                    </Select>
-                  </Field>
-                  <Field>
-                    <Field.Label>Default value</Field.Label>
-                    <Input
-                      v-model="columnForm.defaultValue"
-                      size="large"
-                      class="w-full"
-                      placeholder="NULL"
-                      autocomplete="off"
-                    />
-                    <Field.Description
-                      >Applies to rows that do not supply a value. Leave it empty for NULL, or use
-                      an expression such as now().</Field.Description
-                    >
-                  </Field>
-                </div>
-              </SettingsGroup>
-              <SettingsGroup
-                label="Constraints"
-                hint="A primary key is always NOT NULL, so turning it on also turns on Not null."
-              >
-                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                  <Field orientation="horizontal">
-                    <Field.Content>
-                      <Field.Title>Primary key</Field.Title>
-                      <Field.Description
-                        >Use this column as the table's primary key.</Field.Description
-                      >
-                    </Field.Content>
-                    <Switch
-                      v-model="columnForm.primaryKey"
-                      aria-label="Primary key"
-                    />
-                  </Field>
-                  <Field orientation="horizontal">
-                    <Field.Content>
-                      <Field.Title>Not null</Field.Title>
-                      <Field.Description>Require a value in every row.</Field.Description>
-                    </Field.Content>
-                    <Switch
-                      :model-value="columnForm.notNull || columnForm.primaryKey"
-                      :disabled="columnForm.primaryKey"
-                      aria-label="Not null"
-                      @update:model-value="(value) => (columnForm.notNull = !!value)"
-                    />
-                  </Field>
-                </div>
-              </SettingsGroup>
-            </fieldset>
-          </PanelBody>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                type="button"
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                :disabled="columnSubmitting"
-                @click="columnOpen = false"
-              />
-              <Button
-                type="submit"
-                label="Add column"
-                variant="primary"
-                size="medium"
-                :loading="columnSubmitting"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
+      v-model:type-query="typeQuery"
+      :table="table"
+      :submitting="submitting"
+      :default-column="defaultColumn"
+      :default-submitted="defaultSubmitted && dialog === 'column'"
+      @submit="submitColumn"
+    />
 
-    <Drawer
+    <InsertRowDrawer
+      ref="rowDrawerEl"
       v-model:open="rowOpen"
-      size="large"
-      side="end"
-    >
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Insert row"
-          novalidate
-          @submit.prevent="submitRow"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <DrawerTitle>Insert row</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                One field per column of {{ table?.name }}, in the table's own order.
-              </p>
-            </div>
-          </PanelHeader>
-          <PanelBody>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
-              :disabled="rowSubmitting"
-            >
-              <legend class="sr-only">Insert row</legend>
-              <Field
-                v-for="column in table?.columns ?? []"
-                :key="column.name"
-                :invalid="!!rowError(column)"
-                :disabled="isAuto(column)"
-              >
-                <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                  <Field.Label
-                    ><span class="font-code">{{ column.name }}</span></Field.Label
-                  >
-                  <span class="shrink-0 font-code text-body-xs text-(--text-muted)">{{
-                    column.type
-                  }}</span>
-                </div>
-                <Input
-                  v-model="rowForm[column.name]"
-                  size="large"
-                  class="w-full"
-                  :placeholder="
-                    isAuto(column) ? 'Automatically generated' : column.defaultValue || 'NULL'
-                  "
-                  autocomplete="off"
-                />
-                <Field.Description>{{ rowHint(column) }}</Field.Description>
-                <Field.Error v-if="rowError(column)">{{ rowError(column) }}</Field.Error>
-              </Field>
-            </fieldset>
-          </PanelBody>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                type="button"
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                :disabled="rowSubmitting"
-                @click="rowOpen = false"
-              />
-              <Button
-                type="submit"
-                label="Insert row"
-                variant="primary"
-                size="medium"
-                :loading="rowSubmitting"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
+      :table="table"
+      :submitting="submitting"
+      :default-row="defaultRow"
+      :default-submitted="defaultSubmitted && dialog === 'row'"
+      @submit="submitRow"
+    />
 
-    <ConfirmDialog
+    <ChangeTypeDialog
       v-model:open="alterOpen"
-      :title="`Change the type of ${alterColumn}`"
-      size="medium"
-    >
-      <div class="flex flex-col gap-(--spacing-md)">
-        <Alert
-          severity="warning"
-          label="Changing a type rebuilds the table and copies every row. It can't be undone, and values that don't fit the new type make it fail."
-        />
-        <Field>
-          <Field.Label>New type</Field.Label>
-          <Select
-            v-model="alterType"
-            size="large"
-            class="w-full"
-          >
-            <Select.Trigger>
-              <template #leading>
-                <span
-                  class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
-                  aria-hidden="true"
-                  >{{ glyphOf(alterType) }}</span
-                >
-              </template>
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Group label="Data types">
-                <Select.Item
-                  v-for="type in TYPES"
-                  :key="type.value"
-                  :value="type.value"
-                >
-                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <span class="font-code text-label-code-sm">{{ type.value }}</span>
-                    <span class="truncate text-body-xs text-(--text-muted)">{{
-                      type.description
-                    }}</span>
-                  </span>
-                </Select.Item>
-              </Select.Group>
-            </Select.Content>
-          </Select>
-          <Field.Description
-            >Currently {{ alterCurrent?.type }}. Review the statements that will
-            run.</Field.Description
-          >
-        </Field>
-        <CodeEditor
-          :model-value="alterSql"
-          language="sql"
-          readonly
-          height="10rem"
-          aria-label="Statements that will run"
-        />
-      </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          :disabled="alterSubmitting"
-          @click="close"
-        />
-        <Button
-          label="Change type"
-          variant="primary"
-          size="medium"
-          :loading="alterSubmitting"
-          :disabled="alterType === alterCurrent?.type"
-          @click="confirmAlter"
-        />
-      </template>
-    </ConfirmDialog>
+      v-model:type="alterType"
+      :table="table"
+      :column="alterColumn"
+      :current="alterCurrent"
+      :submitting="submitting"
+      @confirm="confirmAlter"
+    />
 
-    <ConfirmDialog
+    <TruncateTableDialog
       v-model:open="truncateOpen"
-      :title="`Truncate ${table?.name ?? ''}`"
-      size="medium"
-      confirm-label="Truncate table"
-      :confirmation-phrase="table?.name ?? ''"
-      :loading="truncateSubmitting"
+      :table="table"
+      :submitting="submitting"
       @confirm="confirmTruncate"
-    >
-      <div class="flex flex-col gap-(--spacing-md)">
-        <Alert
-          severity="warning"
-          label="Once confirmed, this action can't be reversed."
-        />
-        <p class="m-0 text-body-sm text-(--text-muted)">
-          Every row of {{ table?.name }} is removed ({{ table?.rowCount }} now). The columns, their
-          types and constraints stay as they are.
-        </p>
-        <CodeEditor
-          :model-value="`TRUNCATE TABLE ${table?.name ?? ''};`"
-          language="sql"
-          readonly
-          height="3rem"
-          :show-line-numbers="false"
-          aria-label="Statement that will run"
-        />
-      </div>
-    </ConfirmDialog>
+    />
   </div>
 </template>
 ```
@@ -1816,4 +688,1542 @@ export const sampleRelations: SchemaEditorRelation[] = [
     onDelete: 'CASCADE'
   }
 ]
+```
+
+## `composables/use-csv-import.ts`
+
+```ts
+import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+import { computed, type ComputedRef, type DeepReadonly, readonly, type Ref, ref } from 'vue'
+
+import type { SchemaEditorCsvFile } from '../edit-schema.vue'
+import { type CsvRow, parseCsv } from '../lib/csv'
+
+/** A CSV file picked or dropped, parsed into headers and rows. */
+export interface UseCsvImportReturn {
+  /** The file picked, or nothing. */
+  file: DeepReadonly<Ref<SchemaEditorCsvFile | null>>
+  /** The column names of its first line. */
+  headers: DeepReadonly<Ref<string[]>>
+  /** Its rows. */
+  rows: DeepReadonly<Ref<CsvRow[]>>
+  /** Why it could not be read. */
+  error: DeepReadonly<Ref<string>>
+  /** The file token the dropzone shows. */
+  tokens: ComputedRef<{ file: SchemaEditorCsvFile; error: string | undefined }[]>
+  /** Forgets the file. */
+  clear: () => void
+  /** Reads a file's text. */
+  apply: (next: SchemaEditorCsvFile, text: string) => void
+  /** Takes the files picked or dropped. */
+  onFiles: (files: FileList | File[] | null) => Promise<void>
+  /** Opens the file picker. */
+  pick: () => Promise<void>
+}
+
+export function useCsvImport(
+  onRead: (file: SchemaEditorCsvFile, headers: string[], rows: CsvRow[]) => void
+): UseCsvImportReturn {
+  const picker = useFilePicker({ accept: '.csv,text/csv' })
+  const file = ref<SchemaEditorCsvFile | null>(null)
+  const headers = ref<string[]>([])
+  const rows = ref<CsvRow[]>([])
+  const error = ref('')
+  const clear = () => {
+    file.value = null
+    headers.value = []
+    rows.value = []
+    error.value = ''
+  }
+  const apply = (next: SchemaEditorCsvFile, text: string) => {
+    clear()
+    const parsed = parseCsv(text)
+    file.value = next
+    if (!parsed) {
+      error.value = 'The first line must name every column.'
+      return
+    }
+    headers.value = parsed.headers
+    rows.value = parsed.rows
+    onRead(next, parsed.headers, parsed.rows)
+  }
+  const onFiles = async (files: FileList | File[] | null) => {
+    const picked = Array.from(files ?? [])[0]
+    if (!picked) return
+    if (!/\.csv$/i.test(picked.name)) {
+      clear()
+      file.value = { name: picked.name, size: picked.size, type: picked.type }
+      error.value = 'Choose a .csv file.'
+      return
+    }
+    apply({ name: picked.name, size: picked.size, type: 'text/csv' }, await picked.text())
+  }
+  const pick = async () => onFiles(await picker.open())
+  const tokens = computed(() =>
+    file.value ? [{ file: file.value, error: error.value || undefined }] : []
+  )
+  return {
+    file: readonly(file),
+    headers: readonly(headers),
+    rows: readonly(rows),
+    error: readonly(error),
+    tokens,
+    clear,
+    apply,
+    onFiles,
+    pick
+  }
+}
+```
+
+## `lib/column-types.ts`
+
+```ts
+interface ColumnType {
+  value: string
+  description: string
+  glyph: string
+}
+
+export const TYPES: ColumnType[] = [
+  { value: 'int2', description: 'Signed two-byte integer', glyph: '#' },
+  { value: 'int4', description: 'Signed four-byte integer', glyph: '#' },
+  { value: 'int8', description: 'Signed eight-byte integer', glyph: '#' },
+  { value: 'float4', description: 'Single precision floating-point number', glyph: '#' },
+  { value: 'float8', description: 'Double precision floating-point number', glyph: '#' },
+  { value: 'numeric', description: 'Exact number of selectable precision', glyph: '#' },
+  { value: 'json', description: 'Textual JSON data', glyph: '{}' },
+  { value: 'jsonb', description: 'Binary JSON data, decomposed', glyph: '{}' },
+  { value: 'text', description: 'Variable-length character string', glyph: 'T' },
+  { value: 'varchar', description: 'Variable-length string with a limit', glyph: 'T' },
+  { value: 'uuid', description: 'Universally unique identifier', glyph: '#' },
+  { value: 'bool', description: 'Logical boolean, true or false', glyph: 'B' },
+  { value: 'date', description: 'Calendar date: year, month, day', glyph: '@' },
+  { value: 'timestamp', description: 'Date and time', glyph: '@' },
+  { value: 'timestamptz', description: 'Date and time, with time zone', glyph: '@' }
+]
+
+export const INTEGER_TYPES = ['int2', 'int4', 'int8']
+
+export const ON_DELETE = [
+  { value: 'NO ACTION', label: 'No action' },
+  { value: 'CASCADE', label: 'Cascade' },
+  { value: 'SET NULL', label: 'Set null' }
+]
+
+export const glyphOf = (value: string) => TYPES.find((type) => type.value === value)?.glyph ?? '#'
+
+export const filterTypes = (query: string) => {
+  const term = query.trim().toLowerCase()
+  if (!term) return TYPES
+  return TYPES.filter(
+    (type) => type.value.includes(term) || type.description.toLowerCase().includes(term)
+  )
+}
+```
+
+## `lib/csv.ts`
+
+```ts
+import { splitCsvLine } from '@aziontech/webkit/utils/csv'
+
+export type CsvRow = Record<string, string>
+
+export const inferType = (values: string[]) => {
+  const filled = values.filter((value) => value !== '')
+  if (!filled.length) return 'text'
+  if (filled.every((value) => /^-?\d+$/.test(value))) return 'int8'
+  if (filled.every((value) => /^-?\d+(\.\d+)?$/.test(value))) return 'numeric'
+  if (filled.every((value) => /^(true|false)$/i.test(value))) return 'bool'
+  if (filled.every((value) => /^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?.*)?$/.test(value)))
+    return 'timestamptz'
+  return 'text'
+}
+
+export const parseCsv = (text: string): { headers: string[]; rows: CsvRow[] } | null => {
+  const lines = text.split(/\r?\n/).filter((line) => line.trim())
+  const headers = lines.length ? splitCsvLine(lines[0]) : []
+  if (!headers.length || headers.some((header) => !header)) return null
+  const rows = lines
+    .slice(1)
+    .map((line): CsvRow =>
+      Object.fromEntries(splitCsvLine(line).map((value, index) => [headers[index], value]))
+    )
+  return { headers, rows }
+}
+```
+
+## `lib/draft-table.ts`
+
+```ts
+import type { SchemaEditorRelation } from '../edit-schema.vue'
+
+export interface DraftColumn {
+  key: string
+  name: string
+  type: string
+  primaryKey: boolean
+  defaultValue: string
+}
+
+export interface DraftTable {
+  name: string
+  columns: DraftColumn[]
+  relations: SchemaEditorRelation[]
+}
+
+export const columnDefinition = [
+  { key: 'name', label: 'Name', required: true },
+  { key: 'type', label: 'Type' },
+  { key: 'defaultValue', label: 'Default' },
+  { key: 'primaryKey', label: 'Primary' }
+]
+
+export const relationDefinition = [
+  { key: 'column', label: 'Column', required: true },
+  { key: 'table', label: 'References table', required: true },
+  { key: 'references', label: 'References column', required: true },
+  { key: 'onDelete', label: 'On delete' }
+]
+
+export const createDraftIds = () => {
+  let uid = 0
+  const newColumn = (
+    name = '',
+    type = 'text',
+    primaryKey = false,
+    defaultValue = ''
+  ): DraftColumn => ({
+    key: `c-${(uid += 1)}`,
+    name,
+    type,
+    primaryKey,
+    defaultValue
+  })
+  const newRelation = (): SchemaEditorRelation => ({
+    key: `fk-${(uid += 1)}`,
+    column: '',
+    table: '',
+    references: '',
+    onDelete: 'NO ACTION'
+  })
+  const blankTable = (): DraftTable => ({
+    name: '',
+    columns: [
+      newColumn('id', 'int8', true),
+      newColumn('created_at', 'timestamptz', false, 'now()')
+    ],
+    relations: []
+  })
+  return { newColumn, newRelation, blankTable }
+}
+
+export const duplicateNamesOf = (columns: DraftColumn[]) => {
+  const seen = new Map<string, number>()
+  for (const column of columns) {
+    const name = column.name.trim().toLowerCase()
+    seen.set(name, (seen.get(name) ?? 0) + 1)
+  }
+  return new Set([...seen].filter(([, count]) => count > 1).map(([name]) => name))
+}
+
+export const tableNameProblem = (name: string) => {
+  if (!name.trim()) return 'This field is required.'
+  if (!/^[a-z_][a-z0-9_]*$/i.test(name.trim())) {
+    return 'Start with a letter or an underscore; use letters, numbers and underscores.'
+  }
+  return ''
+}
+
+export const relationErrorOf = (relation: SchemaEditorRelation) => {
+  const missing = (['column', 'table', 'references'] as const).find((key) => !relation[key])
+  return missing
+    ? { [missing]: 'Choose the column, the table and the column it references.' }
+    : undefined
+}
+
+export const relationIncomplete = (relation: SchemaEditorRelation) =>
+  !relation.column || !relation.table || !relation.references
+
+export const createdDescription = (rows: number, relations: number) =>
+  [
+    rows ? `${rows} ${rows === 1 ? 'row' : 'rows'} imported from CSV.` : '',
+    relations ? `${relations} foreign ${relations === 1 ? 'key' : 'keys'} added.` : ''
+  ]
+    .filter(Boolean)
+    .join(' ') || undefined
+```
+
+## `parts/add-column-drawer.vue`
+
+```ts
+<script setup lang="ts">
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Switch from '@aziontech/webkit/switch'
+  import { computed, reactive, ref, watch } from 'vue'
+
+  import type {
+    SchemaEditorColumn,
+    SchemaEditorColumnForm,
+    SchemaEditorTable
+  } from '../edit-schema.vue'
+  import ColumnTypeSelect from './column-type-select.vue'
+  import DrawerFormFooter from './drawer-form-footer.vue'
+
+  const props = defineProps<{
+    table: SchemaEditorTable | undefined
+    submitting: boolean
+    defaultColumn: Partial<SchemaEditorColumnForm>
+    defaultSubmitted: boolean
+  }>()
+
+  const emit = defineEmits<{
+    submit: [event: Event, column: SchemaEditorColumn]
+  }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+  const typeQuery = defineModel<string>('typeQuery', { required: true })
+
+  const blankColumn = (): SchemaEditorColumnForm => ({
+    name: '',
+    type: 'text',
+    defaultValue: '',
+    primaryKey: false,
+    notNull: false
+  })
+  const columnForm = reactive<SchemaEditorColumnForm>({ ...blankColumn(), ...props.defaultColumn })
+  const columnSubmitted = ref(props.defaultSubmitted)
+  const columnNameError = computed(() => {
+    if (!columnSubmitted.value) return ''
+    const name = columnForm.name.trim()
+    if (!name) return 'This field is required.'
+    if (props.table?.columns.some((column) => column.name === name.toLowerCase())) {
+      return `${props.table.name} already has a column named ${name}.`
+    }
+    return ''
+  })
+
+  watch(open, (isOpen) => {
+    if (!isOpen) return
+    Object.assign(columnForm, blankColumn())
+    columnSubmitted.value = false
+    typeQuery.value = ''
+  })
+
+  const submit = (event: Event) => {
+    columnSubmitted.value = true
+    if (props.submitting || columnNameError.value || !props.table) return
+    emit('submit', event, {
+      name: columnForm.name.trim(),
+      type: columnForm.type,
+      primaryKey: columnForm.primaryKey,
+      notNull: columnForm.notNull || columnForm.primaryKey,
+      defaultValue: columnForm.defaultValue.trim()
+    })
+  }
+
+  defineExpose({ submit })
+</script>
+
+<template>
+  <Drawer
+    v-model:open="open"
+    size="large"
+    side="end"
+  >
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Add column"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <DrawerTitle>Add column</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              The column is added at the end of {{ table?.name }}.
+            </p>
+          </div>
+        </PanelHeader>
+        <PanelBody>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">Add column</legend>
+            <SettingsGroup
+              label="Column"
+              hint="Its name, type and the value rows get when they leave it empty."
+            >
+              <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
+                <Field :invalid="!!columnNameError">
+                  <Field.Label>Name</Field.Label>
+                  <Input
+                    v-model="columnForm.name"
+                    size="large"
+                    class="w-full"
+                    placeholder="column_name"
+                    autocomplete="off"
+                  />
+                  <Field.Error v-if="columnNameError">{{ columnNameError }}</Field.Error>
+                </Field>
+                <Field>
+                  <Field.Label>Type</Field.Label>
+                  <ColumnTypeSelect
+                    v-model:type="columnForm.type"
+                    v-model:query="typeQuery"
+                    searchable
+                  />
+                </Field>
+                <Field>
+                  <Field.Label>Default value</Field.Label>
+                  <Input
+                    v-model="columnForm.defaultValue"
+                    size="large"
+                    class="w-full"
+                    placeholder="NULL"
+                    autocomplete="off"
+                  />
+                  <Field.Description
+                    >Applies to rows that do not supply a value. Leave it empty for NULL, or use an
+                    expression such as now().</Field.Description
+                  >
+                </Field>
+              </div>
+            </SettingsGroup>
+            <SettingsGroup
+              label="Constraints"
+              hint="A primary key is always NOT NULL, so turning it on also turns on Not null."
+            >
+              <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                <Field orientation="horizontal">
+                  <Field.Content>
+                    <Field.Title>Primary key</Field.Title>
+                    <Field.Description
+                      >Use this column as the table's primary key.</Field.Description
+                    >
+                  </Field.Content>
+                  <Switch
+                    v-model="columnForm.primaryKey"
+                    aria-label="Primary key"
+                  />
+                </Field>
+                <Field orientation="horizontal">
+                  <Field.Content>
+                    <Field.Title>Not null</Field.Title>
+                    <Field.Description>{{
+                      columnForm.primaryKey
+                        ? 'Always on for a primary key.'
+                        : 'Require a value in every row.'
+                    }}</Field.Description>
+                  </Field.Content>
+                  <Switch
+                    :model-value="columnForm.notNull || columnForm.primaryKey"
+                    :disabled="columnForm.primaryKey"
+                    aria-label="Not null"
+                    @update:model-value="(value) => (columnForm.notNull = !!value)"
+                  />
+                </Field>
+              </div>
+            </SettingsGroup>
+          </fieldset>
+        </PanelBody>
+        <DrawerFormFooter
+          submit-label="Add column"
+          :submitting="submitting"
+          @cancel="open = false"
+        />
+      </form>
+    </DrawerContent>
+  </Drawer>
+</template>
+```
+
+## `parts/change-type-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import CodeEditor from '@aziontech/webkit/code-editor'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Field from '@aziontech/webkit/field'
+  import { computed } from 'vue'
+
+  import type { SchemaEditorColumn, SchemaEditorTable } from '../edit-schema.vue'
+  import ColumnTypeSelect from './column-type-select.vue'
+
+  const props = defineProps<{
+    table: SchemaEditorTable | undefined
+    column: string
+    current: SchemaEditorColumn | undefined
+    submitting: boolean
+  }>()
+
+  const emit = defineEmits<{
+    confirm: [event: MouseEvent]
+  }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+  const type = defineModel<string>('type', { required: true })
+
+  const sql = computed(() => {
+    if (!props.table || !props.current) return ''
+    const name = props.table.name
+    const columns = props.table.columns.map((column) =>
+      column.name === props.column
+        ? `${column.name} ${type.value}`
+        : `${column.name} ${column.type}`
+    )
+    return [
+      'BEGIN;',
+      `CREATE TABLE ${name}_new (${columns.join(', ')});`,
+      `INSERT INTO ${name}_new SELECT * FROM ${name};`,
+      `DROP TABLE ${name};`,
+      `ALTER TABLE ${name}_new RENAME TO ${name};`,
+      'COMMIT;'
+    ].join('\n')
+  })
+</script>
+
+<template>
+  <ConfirmDialog
+    v-model:open="open"
+    :title="`Change the type of ${column}`"
+    size="medium"
+  >
+    <div class="flex flex-col gap-(--spacing-md)">
+      <Alert
+        severity="warning"
+        label="Changing a type rebuilds the table and copies every row. It can't be undone, and values that don't fit the new type make it fail."
+      />
+      <Field>
+        <Field.Label>New type</Field.Label>
+        <ColumnTypeSelect v-model:type="type" />
+        <Field.Description
+          >Currently {{ current?.type }}. Review the statements that will run.</Field.Description
+        >
+      </Field>
+      <CodeEditor
+        :model-value="sql"
+        language="sql"
+        readonly
+        height="10rem"
+        aria-label="Statements that will run"
+      />
+    </div>
+    <template #actions="{ close }">
+      <Button
+        label="Cancel"
+        variant="outline"
+        size="medium"
+        :disabled="submitting"
+        @click="close"
+      />
+      <Button
+        label="Change type"
+        variant="primary"
+        size="medium"
+        :loading="submitting"
+        :disabled="type === current?.type"
+        @click="emit('confirm', $event)"
+      />
+    </template>
+  </ConfirmDialog>
+</template>
+```
+
+## `parts/column-type-select.vue`
+
+```ts
+<script setup lang="ts">
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import { computed } from 'vue'
+
+  import { filterTypes, glyphOf, TYPES } from '../lib/column-types'
+
+  const props = withDefaults(defineProps<{ searchable?: boolean }>(), { searchable: false })
+
+  const type = defineModel<string>('type', { required: true })
+  const query = defineModel<string>('query', { default: '' })
+
+  const typeName = (value: string) => value
+
+  const types = computed(() => (props.searchable ? filterTypes(query.value) : TYPES))
+</script>
+
+<template>
+  <Select
+    v-model="type"
+    size="large"
+    class="w-full"
+    :display-value="typeName"
+  >
+    <Select.Trigger>
+      <template #leading>
+        <span
+          class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
+          aria-hidden="true"
+          >{{ glyphOf(type) }}</span
+        >
+      </template>
+    </Select.Trigger>
+    <Select.Content>
+      <template
+        v-if="searchable"
+        #search
+      >
+        <Input
+          v-model="query"
+          size="medium"
+          class="w-full"
+          placeholder="Search types"
+          aria-label="Search types"
+          @keydown.home.stop
+          @keydown.end.stop
+        />
+      </template>
+      <Select.Group label="Data types">
+        <Select.Item
+          v-for="item in types"
+          :key="item.value"
+          :value="item.value"
+        >
+          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+            <span class="font-code text-label-code-sm">{{ item.value }}</span>
+            <span class="truncate text-body-xs text-(--text-muted)">{{ item.description }}</span>
+          </span>
+        </Select.Item>
+      </Select.Group>
+    </Select.Content>
+  </Select>
+</template>
+```
+
+## `parts/create-table-columns.vue`
+
+```ts
+<script setup lang="ts">
+  import AttributeEditor from '@aziontech/webkit/attribute-editor'
+  import Button from '@aziontech/webkit/button'
+  import Checkbox from '@aziontech/webkit/checkbox'
+  import FieldError from '@aziontech/webkit/field-error'
+  import Input from '@aziontech/webkit/input'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+
+  import { columnDefinition, type DraftColumn } from '../lib/draft-table'
+  import ColumnTypeSelect from './column-type-select.vue'
+
+  defineProps<{
+    errors: (Record<string, string> | undefined)[]
+    error: string
+    disabled: boolean
+    newItem: () => DraftColumn
+  }>()
+
+  const columns = defineModel<DraftColumn[]>('columns', { required: true })
+  const query = defineModel<string>('query', { required: true })
+</script>
+
+<template>
+  <SettingsGroup
+    label="Columns"
+    hint="The table's schema, created in this order. A primary key is NOT NULL."
+  >
+    <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+      <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+        <Button
+          type="button"
+          label="About data types"
+          aria-label="About data types (opens in a new tab)"
+          variant="outline"
+          size="small"
+          icon="az az-external-link"
+          href="https://www.azion.com/en/documentation/"
+          target="_blank"
+        />
+      </div>
+      <AttributeEditor
+        v-model:items="columns"
+        :definition="columnDefinition"
+        :errors="errors"
+        :new-item="newItem"
+        :min-items="1"
+        :disabled="disabled"
+        reorderable
+        size="large"
+        add-button-label="Add column"
+        remove-button-label="Remove column"
+        aria-label="Columns"
+      >
+        <template #cell-name="{ index, invalid }">
+          <Input
+            v-model="columns[index].name"
+            size="large"
+            class="w-full"
+            placeholder="column_name"
+            :invalid="invalid"
+          />
+        </template>
+        <template #cell-type="{ index }">
+          <ColumnTypeSelect
+            v-model:type="columns[index].type"
+            v-model:query="query"
+            searchable
+          />
+        </template>
+        <template #cell-defaultValue="{ index }">
+          <Input
+            v-model="columns[index].defaultValue"
+            size="large"
+            class="w-full"
+            placeholder="NULL"
+          />
+        </template>
+        <template #cell-primaryKey="{ index }">
+          <Checkbox v-model="columns[index].primaryKey" />
+        </template>
+      </AttributeEditor>
+      <FieldError v-if="error">{{ error }}</FieldError>
+    </div>
+  </SettingsGroup>
+</template>
+```
+
+## `parts/create-table-drawer.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import { computed, reactive, ref, watch } from 'vue'
+
+  import { useCsvImport } from '../composables/use-csv-import'
+  import type {
+    SchemaEditorColumn,
+    SchemaEditorCsv,
+    SchemaEditorNewTable,
+    SchemaEditorRelation,
+    SchemaEditorTable
+  } from '../edit-schema.vue'
+  import { inferType } from '../lib/csv'
+  import {
+    createDraftIds,
+    duplicateNamesOf,
+    relationErrorOf,
+    relationIncomplete,
+    tableNameProblem
+  } from '../lib/draft-table'
+  import CreateTableColumns from './create-table-columns.vue'
+  import CreateTableRelations from './create-table-relations.vue'
+  import CsvImport from './csv-import.vue'
+  import DrawerFormFooter from './drawer-form-footer.vue'
+
+  const props = defineProps<{
+    database: string
+    tables: SchemaEditorTable[]
+    submitting: boolean
+    defaultDraft: { name?: string; relations?: SchemaEditorRelation[] }
+    defaultCsv: SchemaEditorCsv | undefined
+    defaultSubmitted: boolean
+  }>()
+
+  const emit = defineEmits<{
+    submit: [event: Event, table: SchemaEditorNewTable]
+  }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+  const serverError = defineModel<string>('serverError', { required: true })
+  const typeQuery = defineModel<string>('typeQuery', { required: true })
+
+  const { newColumn, newRelation, blankTable } = createDraftIds()
+
+  const createForm = reactive(blankTable())
+  if (props.defaultDraft.name !== undefined) createForm.name = props.defaultDraft.name
+  if (props.defaultDraft.relations)
+    createForm.relations = props.defaultDraft.relations.map((relation) => ({ ...relation }))
+  const createSubmitted = ref(props.defaultSubmitted)
+
+  const csv = useCsvImport((file, headers, rows) => {
+    createForm.columns = headers.map((header) =>
+      newColumn(
+        header,
+        inferType(rows.map((row) => row[header] ?? '')),
+        header.toLowerCase() === 'id'
+      )
+    )
+    if (!createForm.name.trim()) createForm.name = file.name.replace(/\.csv$/i, '')
+  })
+
+  const namedColumns = computed(() => createForm.columns.filter((column) => column.name.trim()))
+  const duplicateNames = computed(() => duplicateNamesOf(namedColumns.value))
+  const tableNameError = computed(() => {
+    if (serverError.value) return serverError.value
+    if (!createSubmitted.value) return ''
+    return tableNameProblem(createForm.name)
+  })
+  const columnError = (name: string) =>
+    createSubmitted.value && duplicateNames.value.has(name.trim().toLowerCase())
+      ? `Another column is also named ${name.trim()}.`
+      : ''
+  const columnsError = computed(() =>
+    createSubmitted.value && !namedColumns.value.length ? 'Add at least one named column.' : ''
+  )
+  const columnErrors = computed(() =>
+    createForm.columns.map((column) => {
+      const message = columnError(column.name)
+      return message ? { name: message } : undefined
+    })
+  )
+  const relationErrors = computed(() =>
+    createForm.relations.map((relation) =>
+      createSubmitted.value ? relationErrorOf(relation) : undefined
+    )
+  )
+
+  watch(open, (isOpen) => {
+    if (!isOpen) return
+    Object.assign(createForm, blankTable())
+    createSubmitted.value = false
+    serverError.value = ''
+    csv.clear()
+  })
+
+  if (props.defaultCsv) csv.apply(props.defaultCsv.file, props.defaultCsv.text)
+
+  const submit = (event: Event) => {
+    createSubmitted.value = true
+    serverError.value = ''
+    if (props.submitting) return
+    if (
+      tableNameError.value ||
+      columnsError.value ||
+      duplicateNames.value.size ||
+      createForm.relations.some(relationIncomplete) ||
+      csv.error.value
+    )
+      return
+    const columns = namedColumns.value.map((column): SchemaEditorColumn => ({
+      name: column.name.trim(),
+      type: column.type,
+      primaryKey: column.primaryKey,
+      notNull: column.primaryKey,
+      defaultValue: column.defaultValue.trim()
+    }))
+    emit('submit', event, {
+      name: createForm.name.trim(),
+      columns,
+      relations: createForm.relations.map((relation) => ({ ...relation })),
+      rows: csv.rows.value.map((row) => ({ ...row }))
+    })
+  }
+
+  defineExpose({ submit })
+</script>
+
+<template>
+  <Drawer
+    v-model:open="open"
+    size="large"
+    side="end"
+  >
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Create Table"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <DrawerTitle>Create Table</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              Define the table name and its columns in {{ database }}, or start from a CSV file.
+              Drag a column's grip, or focus it and use the arrow keys, to reorder.
+            </p>
+          </div>
+        </PanelHeader>
+
+        <PanelBody>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">Create Table</legend>
+            <SettingsGroup
+              label="General"
+              hint="Names the table inside this database."
+            >
+              <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                <Alert
+                  v-if="serverError"
+                  severity="danger"
+                  :label="`The table wasn't created. ${serverError} Your columns are kept; pick another name and create it again.`"
+                />
+                <Field :invalid="!!tableNameError">
+                  <Field.Label>Name</Field.Label>
+                  <Input
+                    v-model="createForm.name"
+                    size="large"
+                    class="w-full"
+                    placeholder="users"
+                    autocomplete="off"
+                    @update:model-value="serverError = ''"
+                  />
+                  <Field.Description
+                    >Every query addresses it, so it cannot be changed later without rewriting
+                    them.</Field.Description
+                  >
+                  <Field.Error v-if="tableNameError">{{ tableNameError }}</Field.Error>
+                </Field>
+              </div>
+            </SettingsGroup>
+
+            <CsvImport
+              :file="csv.file.value"
+              :tokens="csv.tokens.value"
+              :headers="csv.headers.value"
+              :rows="csv.rows.value"
+              @files="csv.onFiles"
+              @pick="csv.pick"
+              @remove="csv.clear"
+            />
+
+            <CreateTableColumns
+              v-model:columns="createForm.columns"
+              v-model:query="typeQuery"
+              :errors="columnErrors"
+              :error="columnsError"
+              :disabled="submitting"
+              :new-item="newColumn"
+            />
+
+            <CreateTableRelations
+              v-model:relations="createForm.relations"
+              :tables="tables"
+              :columns="namedColumns"
+              :errors="relationErrors"
+              :disabled="submitting"
+              :new-item="newRelation"
+            />
+          </fieldset>
+        </PanelBody>
+
+        <DrawerFormFooter
+          submit-label="Create Table"
+          :submitting="submitting"
+          @cancel="open = false"
+        />
+      </form>
+    </DrawerContent>
+  </Drawer>
+</template>
+```
+
+## `parts/create-table-relations.vue`
+
+```ts
+<script setup lang="ts">
+  import AttributeEditor from '@aziontech/webkit/attribute-editor'
+  import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+
+  import type { SchemaEditorRelation, SchemaEditorTable } from '../edit-schema.vue'
+  import { ON_DELETE } from '../lib/column-types'
+  import { type DraftColumn, relationDefinition } from '../lib/draft-table'
+
+  const props = defineProps<{
+    tables: SchemaEditorTable[]
+    columns: DraftColumn[]
+    errors: (Record<string, string> | undefined)[]
+    disabled: boolean
+    newItem: () => SchemaEditorRelation
+  }>()
+
+  const relations = defineModel<SchemaEditorRelation[]>('relations', { required: true })
+
+  const referenceColumns = (relation: SchemaEditorRelation) =>
+    props.tables.find((item) => item.name === relation.table)?.columns ?? []
+</script>
+
+<template>
+  <SettingsGroup
+    label="Foreign keys"
+    hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
+  >
+    <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+      <AttributeEditor
+        v-model:items="relations"
+        :definition="relationDefinition"
+        :errors="errors"
+        :new-item="newItem"
+        :disabled="disabled"
+        size="large"
+        add-button-label="Add foreign key"
+        remove-button-label="Remove foreign key"
+        empty-title="No foreign keys."
+        aria-label="Foreign keys"
+      >
+        <template #cell-column="{ index, invalid }">
+          <Select
+            v-model="relations[index].column"
+            size="large"
+            class="w-full"
+            placeholder="Column"
+            :invalid="invalid"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Item
+                v-for="column in columns"
+                :key="column.key"
+                :value="column.name.trim()"
+                >{{ column.name.trim() }}</Select.Item
+              >
+            </Select.Content>
+          </Select>
+        </template>
+        <template #cell-table="{ index, invalid }">
+          <Select
+            v-model="relations[index].table"
+            size="large"
+            class="w-full"
+            placeholder="Table"
+            :invalid="invalid"
+            @update:model-value="relations[index].references = ''"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Item
+                v-for="item in tables"
+                :key="item.name"
+                :value="item.name"
+                >{{ item.name }}</Select.Item
+              >
+            </Select.Content>
+          </Select>
+        </template>
+        <template #cell-references="{ item, index, invalid }">
+          <Select
+            v-model="relations[index].references"
+            size="large"
+            class="w-full"
+            placeholder="Column"
+            :invalid="invalid"
+            :disabled="!item.table"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Item
+                v-for="column in referenceColumns(item)"
+                :key="column.name"
+                :value="column.name"
+                >{{ column.name }}</Select.Item
+              >
+            </Select.Content>
+          </Select>
+        </template>
+        <template #cell-onDelete="{ index }">
+          <Select
+            v-model="relations[index].onDelete"
+            size="large"
+            class="w-full"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Item
+                v-for="option in ON_DELETE"
+                :key="option.value"
+                :value="option.value"
+                >{{ option.label }}</Select.Item
+              >
+            </Select.Content>
+          </Select>
+        </template>
+      </AttributeEditor>
+    </div>
+  </SettingsGroup>
+</template>
+```
+
+## `parts/csv-import.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import { computed } from 'vue'
+
+  import type { SchemaEditorCsvFile } from '../edit-schema.vue'
+
+  const props = defineProps<{
+    file: SchemaEditorCsvFile | null
+    tokens: { file: SchemaEditorCsvFile; error: string | undefined }[]
+    headers: readonly string[]
+    rows: readonly Readonly<Record<string, string>>[]
+  }>()
+
+  const emit = defineEmits<{
+    files: [files: FileList | File[] | null]
+    pick: []
+    remove: []
+  }>()
+
+  const previewColumns = computed(() =>
+    props.headers.map((header): TableColumn => ({ accessorKey: header, header, minWidth: 120 }))
+  )
+  const preview = computed(() =>
+    props.rows.slice(0, 5).map((row, index) => ({ __row: `r${index}`, ...row }))
+  )
+</script>
+
+<template>
+  <SettingsGroup
+    label="Import data from CSV"
+    hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
+  >
+    <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+      <FileDropzone
+        v-if="!file"
+        accept=".csv,text/csv"
+        description="One .csv file, comma-separated, up to 10 MB."
+        @drop="(_event, files) => emit('files', files)"
+      >
+        <Button
+          type="button"
+          label="Browse files"
+          variant="secondary"
+          size="medium"
+          @click="emit('pick')"
+        />
+      </FileDropzone>
+      <FileTokenGroup
+        v-if="file"
+        :items="tokens"
+        @remove="emit('remove')"
+      />
+      <template v-if="rows.length">
+        <p class="m-0 text-body-sm text-(--text-muted)">
+          {{ headers.length }} columns and {{ rows.length }}
+          {{ rows.length === 1 ? 'row' : 'rows' }} read. The first {{ preview.length }} below; the
+          columns were filled from the header.
+        </p>
+        <DataTable
+          :data="preview"
+          :columns="previewColumns"
+          row-key="__row"
+          :bordered="true"
+          aria-label="CSV preview"
+        />
+      </template>
+    </div>
+  </SettingsGroup>
+</template>
+```
+
+## `parts/insert-row-drawer.vue`
+
+```ts
+<script setup lang="ts">
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import { reactive, ref, watch } from 'vue'
+
+  import type { SchemaEditorColumn, SchemaEditorTable } from '../edit-schema.vue'
+  import { INTEGER_TYPES } from '../lib/column-types'
+  import DrawerFormFooter from './drawer-form-footer.vue'
+
+  const props = defineProps<{
+    table: SchemaEditorTable | undefined
+    submitting: boolean
+    defaultRow: Record<string, string> | undefined
+    defaultSubmitted: boolean
+  }>()
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: Record<string, string>]
+  }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+
+  const rowForm = reactive<Record<string, string>>({ ...props.defaultRow })
+  const rowSubmitted = ref(props.defaultSubmitted)
+  const isAuto = (column: SchemaEditorColumn) =>
+    column.primaryKey && INTEGER_TYPES.includes(column.type)
+  const rowError = (column: SchemaEditorColumn) =>
+    rowSubmitted.value &&
+    column.notNull &&
+    !isAuto(column) &&
+    !column.defaultValue &&
+    !String(rowForm[column.name] ?? '').trim()
+      ? `${column.name} cannot be NULL. Enter a value.`
+      : ''
+  const rowHint = (column: SchemaEditorColumn) => {
+    if (isAuto(column)) return 'Generated by the database.'
+    if (column.defaultValue) return `Empty uses the default, ${column.defaultValue}.`
+    return column.notNull ? 'Required.' : 'Empty stores NULL.'
+  }
+
+  watch(open, (isOpen) => {
+    if (!isOpen) return
+    for (const key of Object.keys(rowForm)) delete rowForm[key]
+    for (const column of props.table?.columns ?? []) rowForm[column.name] = ''
+    rowSubmitted.value = false
+  })
+
+  const submit = (event: Event) => {
+    rowSubmitted.value = true
+    if (props.submitting || !props.table) return
+    if (props.table.columns.some((column) => rowError(column))) return
+    emit('submit', event, { ...rowForm })
+  }
+
+  defineExpose({ submit })
+</script>
+
+<template>
+  <Drawer
+    v-model:open="open"
+    size="large"
+    side="end"
+  >
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Insert row"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <DrawerTitle>Insert row</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              One field per column of {{ table?.name }}, in the table's own order.
+            </p>
+          </div>
+        </PanelHeader>
+        <PanelBody>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">Insert row</legend>
+            <Field
+              v-for="column in table?.columns ?? []"
+              :key="column.name"
+              :invalid="!!rowError(column)"
+              :disabled="isAuto(column)"
+            >
+              <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                <Field.Label
+                  ><span class="font-code">{{ column.name }}</span></Field.Label
+                >
+                <span class="shrink-0 font-code text-body-xs text-(--text-muted)">{{
+                  column.type
+                }}</span>
+              </div>
+              <Input
+                v-model="rowForm[column.name]"
+                size="large"
+                class="w-full"
+                :placeholder="
+                  isAuto(column) ? 'Automatically generated' : column.defaultValue || 'NULL'
+                "
+                autocomplete="off"
+              />
+              <Field.Description>{{ rowHint(column) }}</Field.Description>
+              <Field.Error v-if="rowError(column)">{{ rowError(column) }}</Field.Error>
+            </Field>
+          </fieldset>
+        </PanelBody>
+        <DrawerFormFooter
+          submit-label="Insert row"
+          :submitting="submitting"
+          @cancel="open = false"
+        />
+      </form>
+    </DrawerContent>
+  </Drawer>
+</template>
+```
+
+## `parts/schema-columns-table.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed } from 'vue'
+
+  import type { SchemaEditorTable } from '../edit-schema.vue'
+
+  const props = defineProps<{ table: SchemaEditorTable | undefined }>()
+
+  const emit = defineEmits<{
+    'add-column': []
+    'insert-row': []
+    'table-action': [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
+    'column-action': [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue, name: string]
+  }>()
+
+  const definitionColumns: TableColumn[] = [
+    { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
+    { accessorKey: 'type', header: 'Type', minWidth: 120 },
+    { accessorKey: 'constraints', header: 'Constraints', grow: 2 },
+    { id: 'actions', type: 'action', hideable: false }
+  ]
+  const definitionRows = computed(() =>
+    (props.table?.columns ?? []).map((column) => ({
+      name: column.name,
+      id: column.name,
+      type: column.type,
+      constraints: [
+        column.primaryKey ? 'PRIMARY KEY' : '',
+        column.notNull ? 'NOT NULL' : '',
+        column.defaultValue ? `DEFAULT ${column.defaultValue}` : ''
+      ]
+        .filter(Boolean)
+        .join(', ')
+    }))
+  )
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #default>
+      <DataTable
+        :data="definitionRows"
+        :columns="definitionColumns"
+        row-key="id"
+        :bordered="false"
+        :aria-label="`Columns of ${table?.name ?? ''}`"
+      >
+        <template #toolbar>
+          <div class="flex w-full flex-wrap items-center gap-(--spacing-xs)">
+            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <i
+                class="az az-table shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <span class="truncate text-heading-2xs text-(--text-default)">{{ table?.name }}</span>
+              <Tag
+                :label="`${table?.rowCount ?? 0} ${table?.rowCount === 1 ? 'row' : 'rows'}`"
+                severity="neutral"
+                size="small"
+              />
+            </div>
+            <div class="ms-auto flex flex-wrap items-center gap-(--spacing-xs)">
+              <Button
+                label="Add column"
+                variant="outline"
+                size="medium"
+                icon="az az-plus"
+                @click="emit('add-column')"
+              />
+              <Button
+                label="Insert row"
+                variant="primary"
+                size="medium"
+                icon="az az-plus"
+                @click="emit('insert-row')"
+              />
+              <DropdownMenu
+                side="bottom"
+                align="end"
+                @select="(event, value) => emit('table-action', event, value)"
+              >
+                <DropdownMenu.Trigger>
+                  <Tooltip content="Table actions">
+                    <IconButton
+                      icon="az az-ellipsis"
+                      variant="outline"
+                      size="medium"
+                      aria-label="Table actions"
+                    />
+                  </Tooltip>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Item
+                    value="create"
+                    label="Create Table"
+                  >
+                    <template #leading
+                      ><i
+                        class="az az-plus"
+                        aria-hidden="true"
+                    /></template>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Group>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Item
+                    value="truncate"
+                    label="Truncate table"
+                  >
+                    <template #leading
+                      ><i
+                        class="az az-eraser"
+                        aria-hidden="true"
+                    /></template>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </div>
+          </div>
+        </template>
+        <template #cell-name="{ value }">
+          <span class="min-w-0 truncate font-code text-label-code-sm">{{ value }}</span>
+        </template>
+        <template #cell-type="{ value }">
+          <Tag
+            :label="value"
+            severity="neutral"
+            size="medium"
+          />
+        </template>
+        <template #cell-constraints="{ value }">
+          <span class="text-body-sm text-(--text-muted)">{{ value || 'None' }}</span>
+        </template>
+        <template #cell-actions="{ row }">
+          <TableCellActions
+            :name="row.name"
+            @select="(event, value) => emit('column-action', event, value, row.name)"
+          >
+            <DropdownMenu.Group>
+              <DropdownMenu.Item
+                value="alter"
+                label="Change type"
+              >
+                <template #leading
+                  ><i
+                    class="az az-pencil"
+                    aria-hidden="true"
+                /></template>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          </TableCellActions>
+        </template>
+      </DataTable>
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/truncate-table-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import CodeEditor from '@aziontech/webkit/code-editor'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+
+  import type { SchemaEditorTable } from '../edit-schema.vue'
+
+  defineProps<{ table: SchemaEditorTable | undefined; submitting: boolean }>()
+
+  const emit = defineEmits<{
+    confirm: [event: Event]
+  }>()
+
+  const open = defineModel<boolean>('open', { required: true })
+</script>
+
+<template>
+  <ConfirmDialog
+    v-model:open="open"
+    :title="`Truncate ${table?.name ?? ''}`"
+    size="medium"
+    confirm-label="Truncate table"
+    :confirmation-phrase="table?.name ?? ''"
+    :loading="submitting"
+    @confirm="emit('confirm', $event)"
+  >
+    <div class="flex flex-col gap-(--spacing-md)">
+      <Alert
+        severity="warning"
+        label="Once confirmed, this action can't be reversed."
+      />
+      <p class="m-0 text-body-sm text-(--text-muted)">
+        Every row of {{ table?.name }} is removed ({{ table?.rowCount }} now). The columns, their
+        types and constraints stay as they are.
+      </p>
+      <CodeEditor
+        :model-value="`TRUNCATE TABLE ${table?.name ?? ''};`"
+        language="sql"
+        readonly
+        height="3rem"
+        :show-line-numbers="false"
+        aria-label="Statement that will run"
+      />
+    </div>
+  </ConfirmDialog>
+</template>
+```
+
+## `parts/drawer-form-footer.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+
+  defineProps<{ submitLabel: string; submitting: boolean }>()
+
+  const emit = defineEmits<{
+    cancel: []
+  }>()
+</script>
+
+<template>
+  <PanelFooter>
+    <div class="flex w-full justify-end gap-(--spacing-xs)">
+      <Button
+        type="button"
+        label="Cancel"
+        variant="outline"
+        size="medium"
+        :disabled="submitting"
+        @click="emit('cancel')"
+      />
+      <Button
+        type="submit"
+        :label="submitLabel"
+        variant="primary"
+        size="medium"
+        :loading="submitting"
+      />
+    </div>
+  </PanelFooter>
+</template>
 ```

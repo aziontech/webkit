@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: 1132558252697dbeccb7338a1491e7b80748bbc84ea3f6f7312241246f564279
+checksum: 2797b732ee34eaec9f2549c45f7036fb195adbc9579fbdbe867cf02fcf952e6d
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -144,7 +144,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 | `default` | —     | Description body; replaces the `description` prop when provided.                                                                                                                                                                                                  |
 | `content` | —     | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure.                                                                                                                                        |
 | `media`   | —     | The band's media; replaces the image built from `src`.                                                                                                                                                                                                            |
-| `actions` | —     | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
+| `actions` | —     | Optional controls under the copy, floored so consecutive bands align on them. Default-size (40px) buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
 
@@ -206,7 +206,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - ARIA: the headline is a real `h2` and the band is a `<section>` labelled by it; the image carries `alt`, and an image given no `alt` is marked `aria-hidden` rather than announced as an unnamed graphic.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
-- Touch target — the band composes no control of its own; the small buttons its `actions` pattern calls for stand 28 px tall, which clears WCAG 2.2 AA 2.5.8 (24×24 px) but is under this package's own 40×40 px house floor.
+- Touch target — the band composes no control of its own; the buttons its `actions` pattern calls for are the default 40 px size, the package's touch floor (never `small`, 28 px, in a marketing band).
 
 ## Right-to-left
 
@@ -223,7 +223,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - Orientations — composite story over the `orientation` axis: the horizontal band, then the vertical one in a narrow column with `variant="media-start"`, so the axis and what `variant` means on it are shown together
 - Undivided — state story pairing a band with its seam and the same band with `divided` off on a `surface` fill, which is the form that reads as one plate
 - MediaLink — state story pairing a plain band with one carrying `mediaHref` and an outlined link action, so the linked band's cursor, chevron affordance and action hover are shown against the band that has none
-- Actions — the band's action pattern, one band carrying a single `secondary` button and one carrying the `secondary` + `outline` pair, both `small`; the first band carries none, because the slot is optional and a band that ends on its copy is the common case
+- Actions — the band's action pattern, one band carrying a single `secondary` button and one carrying the `secondary` + `outline` pair, both at the default 40px size; the first band carries none, because the slot is optional and a band that ends on its copy is the common case
 
 ## Constraints — DO NOT
 

@@ -63,7 +63,8 @@
 - `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
 - Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same
 - Empty: when `marks` and `items` are both empty the row renders nothing, so a page with no marks to name shows no empty band
-- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate rows removed, so every mark stays reachable
+- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate rows removed, so every mark stays reachable; below `sm` a row of marks lays out on two equal columns, so the marks never fall into uneven pairs
+- Artwork is drawn once: each registered mark renders a single time as an SVG `symbol` in a hidden, `aria-hidden` drawing (`data-slot="marquee-symbols"`), and every cell of every copy is a small `svg` with a `use` reference to it, so a repeated strip costs one node per cell instead of the mark's whole drawing; the track holds its loop (`data-loading`) until each mark's box is measured
 
 ## Accessibility
 

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 290a60be70cd92c8c4c0edf5f4399a2e9c3c88a93a0c84ec39ae5874418d2775
+checksum: a311e0f289664bfba6f8819ba577912a434fd544bdc1f22f24c59bc8708df379
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # Reasoning — Component Spec
@@ -96,23 +96,25 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                           | Token     | Reduced-motion fallback         |
-| ------------------ | ---------------------------------------------------------------- | --------- | ------------------------------- |
-| streaming glyph    | `animate-pulse`                                                  | `pulse`   | `motion-reduce:animate-none`    |
-| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
-| label color hover  | `transition-colors`                                              | `fast-02` | `motion-reduce:transition-none` |
+| Trigger            | Animation / Transition                                           | Token          | Reduced-motion fallback         |
+| ------------------ | ---------------------------------------------------------------- | -------------- | ------------------------------- |
+| streaming glyph    | `animate-status-pulse`                                           | `status-pulse` | `motion-reduce:animate-none`    |
+| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02`      | `motion-reduce:transition-none` |
+| label color hover  | `transition-colors`                                              | `fast-02`      | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token                                                                                         |
-| ------ | --------------------------------------------------------------------------------------------- |
-| label  | `.text-label-sm`, `var(--text-muted)` → hover `var(--text-default)`                           |
-| trace  | `.text-body-sm`, `var(--text-muted)`, `border-s-2 var(--border-default)`, `var(--spacing-sm)` |
-| gaps   | `var(--spacing-xs)`, `var(--spacing-sm)`                                                      |
+| Region | Token                                                                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| label  | `.text-body-sm`, `var(--text-muted)` → hover `var(--text-default)`; at least 32 px tall, 40 px on coarse pointers; `var(--shape-control)` focus ring |
+| trace  | `.text-body-md`, `var(--text-muted)`, a 1 px `border-s var(--border-default)` rule, `var(--spacing-md)`                                              |
+| gaps   | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                                             |
 
 ## Theme gaps
 
-_None._
+| Figma variable         | Temporary primitive                       | Follow-up          |
+| ---------------------- | ----------------------------------------- | ------------------ |
+| status-pulse animation | added to primitives/animations/animate.js | done (this change) |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -143,7 +145,7 @@ _None._
 
 - Container queries: none.
 - Narrow: the trigger and Skip wrap.
-- Touch: the trigger is text-sized; Skip is a small `Button` (44 px on coarse pointers).
+- Touch: the trigger is at least 24 px tall, 44 px on coarse pointers; Skip is a small `Button` (44 px on coarse pointers).
 - Reflow: no horizontal scroll.
 
 ## Performance

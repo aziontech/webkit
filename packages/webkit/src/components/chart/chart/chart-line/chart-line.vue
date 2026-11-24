@@ -4,6 +4,7 @@
 
   import { type ChartCurve, isFiniteNumber, keepIds, linePath } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
+  import ChartSeriesLayer from '../parts/chart-series-layer.vue'
 
   defineOptions({ name: 'ChartLine', inheritAttrs: false })
 
@@ -43,13 +44,11 @@
         id: entry.id,
         color: entry.color,
         delay: `calc(${duration['fast-01']} * ${order})`,
-        d: linePath(points, props.curve),
+        stroke: linePath(points, props.curve),
         points
       }
     })
   })
-
-  const dimmed = (id: string) => ctx.emphasized.value !== null && ctx.emphasized.value !== id
 
   const markersOf = (points: ReadonlyArray<readonly [number, number] | null>) => {
     const active = ctx.activeIndex.value
@@ -62,33 +61,12 @@
 </script>
 
 <template>
-  <svg
+  <ChartSeriesLayer
     v-bind="$attrs"
     :data-testid="testId"
-    aria-hidden="true"
-    :width="ctx.size.value.width"
-    :height="ctx.size.value.height"
-    class="pointer-events-none col-start-1 row-start-1 overflow-visible"
+    :series="lines"
   >
-    <g
-      v-for="line in lines"
-      :key="line.id"
-      :data-series="line.id"
-      :data-dimmed="dimmed(line.id) || null"
-      class="transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30"
-    >
-      <path
-        :d="line.d"
-        fill="none"
-        :stroke="line.color"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        pathLength="1"
-        :data-entered="ctx.entered.value || null"
-        :style="{ transitionDelay: line.delay }"
-        class="[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dashoffset:0]"
-      />
+    <template #over="{ item: line }">
       <circle
         v-for="marker in markersOf(line.points)"
         :key="marker.index"
@@ -99,6 +77,6 @@
         stroke="var(--bg-surface)"
         stroke-width="2"
       />
-    </g>
-  </svg>
+    </template>
+  </ChartSeriesLayer>
 </template>

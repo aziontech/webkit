@@ -48,7 +48,16 @@
  ],
  "sfcFile": "blocks/view/view-query-editor/view-query-editor.vue",
  "guidelinesFile": "blocks/view/view-query-editor/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/view/view-query-editor/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "lib/sidebar-frame.ts",
+  "parts/editor-toolbar.vue",
+  "parts/history-sidebar.vue",
+  "parts/query-results.vue",
+  "parts/table-data-view.vue",
+  "parts/table-definition.vue",
+  "parts/tables-sidebar.vue",
+  "parts/templates-drawer.vue",
+  "types.ts"
+ ]
 }

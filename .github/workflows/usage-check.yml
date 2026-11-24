@@ -42,6 +42,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -55,8 +57,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install the Claude Code CLI
-        run: npm install -g @anthropic-ai/claude-code
+      - name: Install the pinned Claude Code CLI from its lockfile
+        run: |
+          npm ci --prefix .github/tools/claude-code --no-audit --no-fund
+          echo "$GITHUB_WORKSPACE/.github/tools/claude-code/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Run the usage check
         working-directory: packages/webkit

@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: 55c150e2ce6f32d683e7228e035eb216a63b0fa25bd04d6e3c7fa5dab066f87c
+checksum: b12da5a930285e89952cd1b6c0b6ba215be29f8861b6289d70af839cbaecd8a9
 created: 2026-09-24
 last_updated: 2026-11-18
 ---
@@ -133,29 +133,29 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Tokens
 
-| Region                              | Token (DESIGN.md)                              |
-| ----------------------------------- | ---------------------------------------------- |
-| block rules (the grid's gaps)       | `var(--border-default)`                        |
-| column surface                      | `var(--bg-canvas)`                             |
-| column heading rule                 | `var(--border-default)`                        |
-| typography (column heading)         | `.text-overline-md`                            |
-| column heading ink                  | `var(--text-brand)`                            |
-| typography (row title)              | `.text-label-md`                               |
-| row title ink                       | `var(--text-default)`                          |
-| typography (row description)        | `.text-body-sm`                                |
-| row description ink                 | `var(--text-muted)`                            |
-| typography (row glyph)              | `text-(length:--size-5)`                       |
-| row glyph box                       | `var(--size-5)`                                |
-| row hover plate                     | `var(--bg-hover)`                              |
-| row hover hairline                  | `var(--border-default)`                        |
-| row hover glyph ink                 | `var(--primary)`                               |
-| shape (row hover plate)             | `var(--shape-card)`                            |
-| spacing (column inset)              | `var(--spacing-lg)`                            |
-| spacing (glyph to text)             | `calc(var(--spacing-md) + var(--spacing-2xs))` |
-| spacing (row plate padding, inline) | `var(--spacing-md)`                            |
-| spacing (row plate padding, block)  | `var(--spacing-sm)`                            |
-| spacing (title to description)      | `calc(var(--spacing-2xs) / 2)`                 |
-| ring                                | `var(--ring-color)`                            |
+| Region                              | Token (DESIGN.md)                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------ |
+| block rules (the grid's gaps)       | `var(--border-default)`                                                        |
+| column surface                      | `var(--bg-canvas)`                                                             |
+| column heading rule                 | `var(--border-default)`                                                        |
+| typography (column heading)         | `.text-overline-md`                                                            |
+| column heading ink                  | `var(--text-default)`, underlined in `var(--primary)` (2px, a decorative mark) |
+| typography (row title)              | `.text-label-md`                                                               |
+| row title ink                       | `var(--text-default)`                                                          |
+| typography (row description)        | `.text-body-sm`                                                                |
+| row description ink                 | `var(--text-muted)`                                                            |
+| typography (row glyph)              | `text-(length:--size-5)`                                                       |
+| row glyph box                       | `var(--size-5)`                                                                |
+| row hover plate                     | `var(--bg-hover)`                                                              |
+| row hover hairline                  | `var(--border-default)`                                                        |
+| row hover glyph ink                 | `var(--primary)`                                                               |
+| shape (row hover plate)             | `var(--shape-card)`                                                            |
+| spacing (column inset)              | `var(--spacing-lg)`                                                            |
+| spacing (glyph to text)             | `calc(var(--spacing-md) + var(--spacing-2xs))`                                 |
+| spacing (row plate padding, inline) | `var(--spacing-md)`                                                            |
+| spacing (row plate padding, block)  | `var(--spacing-sm)`                                                            |
+| spacing (title to description)      | `calc(var(--spacing-2xs) / 2)`                                                 |
+| ring                                | `var(--ring-color)`                                                            |
 
 ## Theme gaps
 

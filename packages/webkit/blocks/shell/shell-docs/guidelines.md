@@ -48,9 +48,9 @@ One per section, with an `anchor`: an anchored level 2 or 3 heading is an outlin
 
 In the `footer` slot, `variant="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the brand, social, status and language slots. The footer lays the bottom bar out as one row (the brand and the social icons at the start, the status and the language at the end) and stacks it below `md`, in CSS.
 
-### J. Brand — `Brand` (required)
+### J. Brand — `Brand`, `Link` (required)
 
-In the footer only; the header mark belongs to the layout.
+In the footer only, as a home `Link inline` named `Azion home` around the mark; the header mark belongs to the layout.
 
 ### K. System status — `StatusIndicator` (required)
 
@@ -58,7 +58,11 @@ In the footer's status slot.
 
 ### L. Language — `LanguageSelect` (required)
 
-In the footer's language slot: `variant="ghost"`, the compact round flag and country code, named `Language` by its catalog. Never a field-sized `Select`: it would draw the field outline in the footer bar.
+In the footer's language slot: `variant="ghost"`, the compact round flag and language tag (`EN`, `PT-BR`), named `Language` by its catalog. Never a field-sized `Select`: it would draw the field outline in the footer bar.
+
+## Data
+
+The shell's data comes in through props (`ShellDocsProps`, `ShellDocsFooterColumn` and `ShellDocsSocial` are exported from `shell-docs.vue`): `sections`, `navigation`, `outline-groups`, `footer-columns` and `socials`. Left out, the sample docs tree, sections, outline links, footer columns and socials in `sample.ts` render; the app passes its own and deletes `sample.ts` and its import.
 
 ## Do
 

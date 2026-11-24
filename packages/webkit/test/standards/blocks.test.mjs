@@ -14,11 +14,13 @@ import { join } from 'node:path'
 import test from 'node:test'
 
 import {
+  blockSources,
   checkBlockGuidelines,
   checkBlockMetadata,
   checkSummaryComponents,
   checkToastRegions,
   compareToBaseline,
+  lintBlocks,
   parseCheckArgs
 } from '../../scripts/check-blocks.mjs'
 import {
@@ -293,6 +295,35 @@ test('checkSummaryComponents flags a backticked component the primary and varian
   )
 })
 
+test('checkSummaryComponents and checkGuidelines count a component only a part listed in files imports', () => {
+  const part = [
+    '<script setup>',
+    "import PropertyFilter from '@aziontech/webkit/property-filter'",
+    '</script>',
+    '<template><PropertyFilter /></template>'
+  ].join('\n')
+  const files = {
+    'parts/x-filters.vue': part,
+    'sample.ts': "import Hint from '@aziontech/webkit/hint'"
+  }
+  const summary = 'A `PageHeader` over `PropertyFilter` and `Hint`.'
+  assert.deepEqual(checkSummaryComponents({ 'platform/x': { summary, sfc: SFC, files } }), [
+    'blocks/platform/x/block.json: the summary names `Hint`, which no SFC of the block (primary, variant or part) imports'
+  ])
+  const named = guide({
+    blocks: [
+      '### A. Page heading — `PageHeader`',
+      'x',
+      '### B. Primary action — `Button`',
+      'x',
+      '### C. Filters — `PropertyFilter`',
+      'x'
+    ].join('\n')
+  })
+  assert.deepEqual(checkGuidelines('platform/x', { ...block(named), files }), [])
+  assert.equal(checkGuidelines('platform/x', block(named)).length, 1)
+})
+
 test('every block.json summary names only components its SFCs import', () => {
   const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
   assert.deepEqual(checkSummaryComponents(blocks), [])
@@ -375,6 +406,39 @@ test('checkToastRegion flags a page body that renders a Toaster and allows an ap
 test('no block outside shell/ renders a Toaster', () => {
   const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
   assert.deepEqual(checkToastRegions(blocks), [])
+})
+
+test('blockSources lints the page, every variant and every local part, lib module and composable', () => {
+  const block = {
+    primary: 'page',
+    sfc: '<template><div /></template>',
+    variants: [{ name: 'empty', sfc: '<template><p /></template>' }],
+    files: { 'data.ts': 'export const rows = []', 'notes.md': '# Notes' },
+    localSources: { 'parts/row.vue': '<template><span /></template>', 'lib/sort.ts': '' }
+  }
+  const sources = blockSources('view/view-list', block)
+  assert.deepEqual(
+    sources.map((s) => s.name),
+    ['page', 'empty', 'data.ts', 'lib/sort.ts', 'parts/row.vue']
+  )
+  assert.match(sources.at(-1).file, /blocks\/view\/view-list\/parts\/row\.vue$/)
+})
+
+test('lintBlocks reports a finding in a local part and a lib module, not only in the page', async () => {
+  const { counts } = await lintBlocks({
+    'view/view-list': {
+      primary: 'page',
+      sfc: '<template><div /></template>',
+      variants: [],
+      localSources: {
+        'parts/row.vue': '<template><button type="button">Open</button></template>',
+        'lib/data.ts':
+          "import { rows } from '@aziontech/webkit/no-such-export'\nexport const all = rows"
+      }
+    }
+  })
+  assert.equal(counts['view/view-list']['webkit/no-unowned-element'], 1)
+  assert.equal(counts['view/view-list']['webkit/no-unknown-import'], 1)
 })
 
 test('compareToBaseline only reports counts above the baseline', () => {
@@ -496,7 +560,10 @@ test('checkGuidelines fails on a component the SFC does not import, or one it im
     ].join('\n')
   })
   const [error] = checkGuidelines('platform/x', block(invented))
-  assert.match(error, /names `PropertyFilter`, which blocks\/platform\/x\/x.vue does not import/)
+  assert.match(
+    error,
+    /names `PropertyFilter`, which neither blocks\/platform\/x\/x.vue nor one of its parts imports/
+  )
   const uncovered = guide({ blocks: '### A. Page heading — `PageHeader`\nx' })
   assert.match(
     checkGuidelines('platform/x', block(uncovered))[0],
@@ -629,6 +696,18 @@ test('the data contract flags a primary with no props, inline records and copied
     ),
     ['view/x:variant-fork:Fork']
   )
+  const screen = Array.from({ length: 80 }, (_, line) => `<p>shared screen line ${line}</p>`)
+  const siblings = [
+    { name: 'Profile', sfc: ['<template>', ...screen, '</template>'].join('\n') },
+    { name: 'ProfileLoading', sfc: ['<template loading>', ...screen, '</template>'].join('\n') },
+    { name: 'Short', sfc: screen.slice(0, 10).join('\n') }
+  ]
+  assert.deepEqual(
+    dataContractKeys('view/x', { sfc: primary, variants: siblings }).filter((key) =>
+      key.includes(':variant-')
+    ),
+    ['view/x:variant-sibling-copy:ProfileLoading']
+  )
   assert.ok(sharedLineRatio('a\nb\nc', 'a\nb\nc') === 1)
   assert.ok(sharedLineRatio('a\nb\nc', 'x\ny') === 0)
 })
@@ -657,12 +736,18 @@ test('every block with "files" ships them and reads them into the catalog entry'
     for (const [file, text] of Object.entries(block.files || {})) {
       assert.ok(text.length > 0, `${id}: ${file} is empty`)
       if (!file.endsWith('.vue')) continue
-      const shared = block.variants.filter((variant) =>
-        new RegExp(`from '\\.\\./${file.replaceAll('.', '\\.')}'`).test(variant.sfc)
-      )
+      const name = file.split('/').pop().replaceAll('.', '\\.')
+      const importsIt = new RegExp(`from '\\.{1,2}/(?:[\\w-]+/)*${name}'`)
+      const users = [
+        block.sfc,
+        ...block.variants.map((variant) => variant.sfc),
+        ...Object.entries(block.files)
+          .filter(([other]) => other !== file && other.endsWith('.vue'))
+          .map(([, sfc]) => sfc)
+      ].filter((sfc) => importsIt.test(sfc))
       assert.ok(
-        shared.length > 0,
-        `${id}: ${file} is an SFC no variant renders; list it as a variant instead`
+        users.length > 0,
+        `${id}: ${file} is an SFC no primary, variant or part renders; list it as a variant instead`
       )
     }
   }

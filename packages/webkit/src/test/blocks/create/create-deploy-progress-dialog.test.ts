@@ -54,7 +54,7 @@ describe('create-deploy-progress-dialog', () => {
     ]
     const view = render(CreateDeployProgressDialog, { props: { items: one } })
     const dialog = await screen.findByRole('dialog')
-    expect(within(dialog).getByRole('heading', { name: 'Deploying 0 of 1…' })).toBeTruthy()
+    expect(within(dialog).getByRole('heading', { name: 'Deploying… 0 of 1 done' })).toBeTruthy()
     expect(within(dialog).queryByText(sampleRunningItems[0].name)).toBeNull()
     await view.rerender({ items: [{ ...one[0], status: 'done' as const }] })
     expect(
@@ -68,7 +68,7 @@ describe('create-deploy-progress-dialog', () => {
     expect(within(confirm).getByRole('list', { name: 'Dropped files' })).toBeTruthy()
     expect(screen.queryByText(/It keeps running if you leave/, visible)).toBeNull()
     await fireEvent.click(within(confirm).getByRole('button', { name: 'Deploy to Production' }))
-    const progress = await screen.findByRole('dialog', { name: /Deploying 0 of 2/ }, wait)
+    const progress = await screen.findByRole('dialog', { name: /Deploying… 0 of 2 done/ }, wait)
     expect(within(progress).getByRole('button', { name: 'Hide' })).toBeTruthy()
     expect(screen.queryByText(/It keeps running if you leave/, visible)).toBeNull()
     await fireEvent.click(within(progress).getByRole('button', { name: 'Hide' }))

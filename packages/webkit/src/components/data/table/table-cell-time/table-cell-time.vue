@@ -92,6 +92,7 @@
     >
       <time
         :datetime="date.toISOString()"
+        dir="auto"
         :data-testid="`${testId}__time`"
         class="truncate text-body-sm text-(--text-muted)"
         >{{ relative }}<span class="sr-only">{{ `, ${absolute}` }}</span></time

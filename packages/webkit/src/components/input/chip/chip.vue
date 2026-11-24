@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
@@ -54,6 +55,9 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ chip: en.chip })
 
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const bodyEl = ref<globalThis.HTMLElement | null>(null)
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chip')
 
   const interactive = computed(() => props.clickable || props.selectable)
@@ -87,19 +91,46 @@
   }
 
   function onKeydown(event: KeyboardEvent) {
-    if (!active.value || event.target !== event.currentTarget) {
+    const control = splitBody.value ? bodyEl.value : rootEl.value
+    if (!active.value || !control || event.target !== control) {
       return
     }
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      ;(event.currentTarget as globalThis.HTMLElement).click()
+      control.click()
     }
   }
+
+  useElementListener(rootEl, 'click', onClick)
+  useElementListener(rootEl, 'keydown', onKeydown)
+
+  const ROOT_CLASS =
+    'relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
+    'leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 ' +
+    "before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none " +
+    'data-[variant=filled]:bg-(--bg-selected) data-[variant=filled]:shadow-(--shadow-sm) data-[variant=dashed]:border-dashed ' +
+    'data-[size=small]:h-6 data-[size=small]:px-(--spacing-xs) data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=small]:data-[removable]:pe-(--spacing-2xs) ' +
+    'data-[size=medium]:data-[removable]:pe-(--spacing-2xs) ' +
+    'data-[clickable]:cursor-pointer data-[clickable]:hover:border-(--border-strong) data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 ' +
+    'data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 ' +
+    'data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas) ' +
+    'has-[[data-slot=chip-body]:focus-visible]:ring-2 has-[[data-slot=chip-body]:focus-visible]:ring-(--ring-color) has-[[data-slot=chip-body]:focus-visible]:ring-offset-2 ' +
+    'has-[[data-slot=chip-body]:focus-visible]:ring-offset-(--bg-canvas) ' +
+    'data-[selected]:bg-(--bg-selected) data-[selected]:border-(--border-selected) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)'
+
+  const REMOVE_CLASS =
+    'relative inline-flex shrink-0 items-center justify-center rounded-full text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:pointer-events-none disabled:text-(--text-disabled) ' +
+    'data-[size=medium]:size-6 data-[size=small]:size-4'
 </script>
 
 <template>
   <span
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-variant="variant"
@@ -112,16 +143,14 @@
     :tabindex="active && !splitBody ? 0 : undefined"
     :aria-pressed="selectable && !splitBody ? selected : undefined"
     :aria-disabled="disabled ? 'true' : undefined"
-    :class="attrs.class"
-    class="relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[variant=filled]:bg-(--bg-selected) data-[variant=filled]:shadow-(--shadow-sm) data-[variant=dashed]:border-dashed data-[size=small]:h-6 data-[size=small]:px-(--spacing-xs) data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=small]:data-[removable]:pe-(--spacing-2xs) data-[size=medium]:data-[removable]:pe-(--spacing-2xs) data-[clickable]:cursor-pointer data-[clickable]:hover:border-(--border-strong) data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas) has-[[data-slot=chip-body]:focus-visible]:ring-2 has-[[data-slot=chip-body]:focus-visible]:ring-(--ring-color) has-[[data-slot=chip-body]:focus-visible]:ring-offset-2 has-[[data-slot=chip-body]:focus-visible]:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) data-[selected]:border-(--border-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
-    @click="onClick"
-    @keydown="splitBody ? undefined : onKeydown($event)"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <span
       class="relative z-(--z-control) inline-flex min-w-0 items-center justify-center gap-(--spacing-2xs)"
     >
       <span
         v-if="splitBody"
+        ref="bodyEl"
         data-slot="chip-body"
         role="button"
         :tabindex="active ? 0 : undefined"
@@ -129,7 +158,6 @@
         :aria-disabled="disabled ? 'true' : undefined"
         :data-testid="`${testId}__body`"
         class="inline-flex min-w-0 items-center gap-(--spacing-2xs) outline-none"
-        @keydown="onKeydown"
       >
         <slot v-if="$slots['default']" />
         <span
@@ -160,7 +188,7 @@
           :disabled="disabled"
           :aria-label="removeLabel"
           :data-testid="`${testId}__remove`"
-          class="relative inline-flex shrink-0 items-center justify-center rounded-full text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:pointer-events-none disabled:text-(--text-disabled) data-[size=medium]:size-6 data-[size=small]:size-4"
+          :class="REMOVE_CLASS"
           :data-size="size"
           @click.stop="onRemove"
         >

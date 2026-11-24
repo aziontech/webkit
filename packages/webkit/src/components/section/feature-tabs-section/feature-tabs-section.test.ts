@@ -47,6 +47,10 @@ const band = (props: Record<string, unknown> = {}) =>
 const tabButtons = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLButtonElement>('li h3 button'))
 
+const isShown = (button?: Element) =>
+  button?.getAttribute('aria-selected') === 'true' ||
+  button?.getAttribute('aria-expanded') === 'true'
+
 describe('FeatureTabsSection', () => {
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
@@ -91,9 +95,9 @@ describe('FeatureTabsSection', () => {
   it('moves the active tab on click', async () => {
     const { container } = band()
 
-    expect(tabButtons(container as HTMLElement)[0]?.getAttribute('aria-current')).toBe('true')
+    expect(isShown(tabButtons(container as HTMLElement)[0])).toBe(true)
     await fireEvent.click(tabButtons(container as HTMLElement)[2] as HTMLButtonElement)
-    expect(tabButtons(container as HTMLElement)[2]?.getAttribute('aria-current')).toBe('true')
+    expect(isShown(tabButtons(container as HTMLElement)[2])).toBe(true)
   })
 
   it('links the primary action from the section title', () => {
@@ -149,18 +153,29 @@ describe('FeatureTabsSection', () => {
     expect(getByTestId(TESTID).querySelector('[data-code]')).toBeNull()
   })
 
-  it('draws the band scene as the media of every tab', async () => {
-    const { findAllByTestId } = band({
+  it('draws the band scene as the media of every tab from lg, and of the open tab only below it', async () => {
+    const sceneBand = {
       scene: { component: 'ConsoleMockup', props: { name: 'functions-start' } },
       tabs: [
         { title: 'Agents', description: 'Ask an agent.', value: 'agents' },
         { title: 'Console', description: 'Click through.', value: 'console' }
       ]
-    })
+    }
+    await page.viewport(1280, 800)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(true))
+    const wide = band(sceneBand)
 
-    const widgets = await findAllByTestId('console-mockup')
-    expect(widgets.length).toBeGreaterThanOrEqual(2)
+    const widgets = await wide.findAllByTestId('console-mockup')
+    await vi.waitFor(() => expect(wide.getAllByTestId('console-mockup')).toHaveLength(2))
     widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'functions-start'))
+    wide.unmount()
+
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const narrow = band(sceneBand)
+
+    await narrow.findAllByTestId('console-mockup')
+    await vi.waitFor(() => expect(narrow.getAllByTestId('console-mockup')).toHaveLength(1))
   })
 
   it('renders no link when no action is set', () => {
@@ -193,9 +208,7 @@ describe('FeatureTabsSection', () => {
       const { container } = band(props)
       vi.advanceTimersByTime(ms)
       await nextTick()
-      return tabButtons(container as HTMLElement).findIndex((button) =>
-        button.getAttribute('aria-current')
-      )
+      return tabButtons(container as HTMLElement).findIndex((button) => isShown(button))
     }
 
     it('holds each tab for autoplayInterval', async () => {

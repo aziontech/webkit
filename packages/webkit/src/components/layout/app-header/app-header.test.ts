@@ -1,12 +1,14 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { render, screen } from '@testing-library/vue'
+import { describe, expect, it, vi } from 'vitest'
 
 import ContentZone from '../../../../examples/app-header/content-zone.vue'
 import DefaultHeader from '../../../../examples/app-header/default.vue'
 import SitePlacement from '../../../../examples/app-header/site-placement.vue'
+import WithAccount from '../../../../examples/app-header/with-account.vue'
 import WithLabel from '../../../../examples/app-header/with-label.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import AppHeaderAccount from './app-header-account.vue'
 import AppHeader from './index.js'
 
 /**
@@ -80,11 +82,11 @@ describe('AppHeader', () => {
 
   describe('root rendering (grounded in app-header.vue)', () => {
     it('renders a <header> banner carrying the default data-testid', () => {
-      const { getByTestId } = render(AppHeader)
+      const { getByTestId, getByRole } = render(AppHeader)
       const root = getByTestId('app-header')
       expect(root.tagName).toBe('HEADER')
-      // Template: role="banner" is hardcoded on the <header>.
-      expect(root.getAttribute('role')).toBe('banner')
+      expect(root.hasAttribute('role')).toBe(false)
+      expect(getByRole('banner')).toBe(root)
     })
 
     it('exposes a banner landmark named from the default ariaLabel', () => {
@@ -397,6 +399,44 @@ describe('AppHeader', () => {
       const { container, getByRole, getByTestId } = render(WithLabel)
       expect(getByRole('link', { name: 'Azion Console home' })).toBeTruthy()
       expect(getByTestId('app-header-brand__label').textContent).toBe('Console')
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('Account — the account control at the end of the bar', () => {
+    it('is a named button drawing the account initials, and emits click', async () => {
+      const onClick = vi.fn()
+      const { getByRole, getByTestId } = render(AppHeaderAccount, {
+        props: { name: 'Jane Doe', onClick }
+      })
+      const control = getByRole('button', { name: 'Account menu' })
+      expect(control.getAttribute('data-testid')).toBe('app-header-account')
+      expect(getByTestId('avatar').textContent?.trim()).toBe('JD')
+      await userEvent.click(control)
+      expect(onClick).toHaveBeenCalledTimes(1)
+      expect(onClick.mock.calls[0]?.[0]).toBeInstanceOf(MouseEvent)
+    })
+
+    it('takes a consumer aria-label and data-testid', () => {
+      const { getByRole } = render(AppHeaderAccount, {
+        props: { name: 'Jane Doe', ariaLabel: 'Account settings' },
+        attrs: { 'data-testid': 'my-account' }
+      })
+      expect(getByRole('button', { name: 'Account settings' }).getAttribute('data-testid')).toBe(
+        'my-account'
+      )
+    })
+
+    it('opens the account menu from DropdownMenu.Trigger, with the trigger state on the button', async () => {
+      const { container } = render(WithAccount)
+      const control = screen.getByRole('button', { name: 'Account menu' })
+      expect(control.getAttribute('aria-haspopup')).toBe('menu')
+      expect(control.getAttribute('aria-expanded')).toBe('false')
+      await userEvent.click(control)
+      expect(control.getAttribute('aria-expanded')).toBe('true')
+      expect(screen.getByRole('menuitem', { name: 'Log out' })).toBeTruthy()
+      await userEvent.keyboard('{Escape}')
+      expect(control.getAttribute('aria-expanded')).toBe('false')
       await expectNoA11yViolations(container)
     })
   })

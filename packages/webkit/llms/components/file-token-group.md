@@ -101,11 +101,12 @@
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { ref } from 'vue'
 
   const LIMIT = 300 * 1024 * 1024
 
-  const inputEl = ref(null)
+  const picker = useFilePicker({ multiple: true })
   const items = ref([
     { file: { name: 'logo.svg', size: 4210, type: 'image/svg+xml' } },
     { file: { name: 'index.html', size: 18432, type: 'text/html' } },
@@ -123,10 +124,7 @@
     items.value = [...items.value, ...Array.from(files).map(toItem)]
   }
 
-  const onPick = (event) => {
-    add(event.target.files ?? [])
-    event.target.value = ''
-  }
+  const browse = async () => add(await picker.open())
 
   const remove = (index) => {
     items.value = items.value.filter((_, position) => position !== index)
@@ -143,18 +141,9 @@
         label="Browse files"
         variant="secondary"
         size="medium"
-        @click="inputEl?.click()"
+        @click="browse"
       />
     </FileDropzone>
-    <input
-      ref="inputEl"
-      type="file"
-      multiple
-      class="hidden"
-      aria-hidden="true"
-      tabindex="-1"
-      @change="onPick"
-    />
     <FileTokenGroup
       :items="items"
       @remove="(_event, { index }) => remove(index)"

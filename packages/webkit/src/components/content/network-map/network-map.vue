@@ -1,7 +1,14 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
-  import { NETWORK_MAP_LAND, NETWORK_MAP_REGIONS, NETWORK_MAP_TIERS } from './network-map-data'
+  import { networkMapMesh, type NetworkMapMeshRay } from './lib/network-map-mesh'
+  import {
+    NETWORK_MAP_ANCHOR,
+    NETWORK_MAP_DENSITY_TIERS,
+    NETWORK_MAP_LAND,
+    NETWORK_MAP_REGIONS,
+    NETWORK_MAP_TIERS
+  } from './network-map-data'
 
   defineOptions({ name: 'NetworkMap', inheritAttrs: false })
 
@@ -73,13 +80,6 @@
 
   const attrs = useAttrs()
 
-  const DENSITY_TIERS: Record<NetworkMapDensity, (keyof typeof NETWORK_MAP_TIERS)[]> = {
-    none: [],
-    low: ['core'],
-    medium: ['core', 'satellite'],
-    high: ['core', 'satellite', 'extra']
-  }
-
   const ALIGNMENT: Record<NetworkMapPosition, string> = {
     center: 'xMidYMid',
     top: 'xMidYMin',
@@ -92,18 +92,6 @@
     'bottom-right': 'xMaxYMax'
   }
 
-  const ANCHOR: Record<NetworkMapPosition, [number, number]> = {
-    center: [0.5, 0.5],
-    top: [0.5, 0],
-    bottom: [0.5, 1],
-    left: [0, 0.5],
-    right: [1, 0.5],
-    'top-left': [0, 0],
-    'top-right': [1, 0],
-    'bottom-left': [0, 1],
-    'bottom-right': [1, 1]
-  }
-
   const POP_CELL = /M(\d+) (\d+)h5v5h-5z/g
 
   const patternId = `network-map-${useId()}`
@@ -111,7 +99,7 @@
   const viewBox = computed(() => {
     const [x, y, width, height] = NETWORK_MAP_REGIONS.world.split(' ').map(Number)
     const factor = props.scale > 0 ? props.scale : 1
-    const [anchorX, anchorY] = ANCHOR[props.position]
+    const [anchorX, anchorY] = NETWORK_MAP_ANCHOR[props.position]
     const scaledWidth = width / factor
     const scaledHeight = height / factor
     const left = x - (scaledWidth - width) * anchorX - props.offsetX * width
@@ -123,7 +111,7 @@
     const [x, y, width, height] = NETWORK_MAP_REGIONS[props.region].split(' ').map(Number)
     const inRegion = (cellX: number, cellY: number) =>
       cellX >= x && cellX < x + width && cellY >= y && cellY < y + height
-    return DENSITY_TIERS[props.density]
+    return NETWORK_MAP_DENSITY_TIERS[props.density]
       .flatMap((tier) =>
         NETWORK_MAP_TIERS[tier].map((d, phase) => ({
           key: `${tier}-${phase}`,
@@ -137,93 +125,27 @@
       .filter((pop) => pop.d.length > 0)
   })
 
-  const MESH_SEED = 20260902
-  const MESH_PARTICIPANTS = 14
-  const MESH_DEGREE = { min: 2, max: 3 }
-  const MESH_MIN_CHORD = 60
-  const MESH_BOW = { min: 0.1, max: 0.18 }
-  const MESH_CYCLE = { min: 3400, max: 6200 }
   const PACKET_TRAVEL = 0.45
   const MOTION_LIMIT = 4800
 
-  interface MeshRay {
-    key: string
-    d: string
-    duration: number
-    delay: number
-  }
-
-  const meshRays = computed<MeshRay[]>(() => {
-    if (!props.traffic) return []
-    const points = popPhases.value.flatMap((pop) =>
-      Array.from(pop.d.matchAll(POP_CELL)).map(([, x, y]) => ({
-        x: Number(x) + 2.5,
-        y: Number(y) + 2.5
-      }))
-    )
-    if (points.length < 3) return []
-    let seed = MESH_SEED
-    const next = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648
-    const between = (range: { min: number; max: number }) =>
-      range.min + next() * (range.max - range.min)
-    const gap = (a: number, b: number) =>
-      Math.hypot(points[a].x - points[b].x, points[a].y - points[b].y)
-
-    const chosen = [Math.floor(next() * points.length)]
-    while (chosen.length < Math.min(MESH_PARTICIPANTS, points.length)) {
-      let best = -1
-      let bestGap = -1
-      points.forEach((_, index) => {
-        if (chosen.includes(index)) return
-        const nearest = Math.min(...chosen.map((other) => gap(index, other)))
-        if (nearest > bestGap) {
-          bestGap = nearest
-          best = index
-        }
-      })
-      if (best < 0) break
-      chosen.push(best)
-    }
-
-    const degree = new Map(chosen.map((index) => [index, 0]))
-    const edges: [number, number][] = []
-    const linked = (a: number, b: number) =>
-      edges.some(([x, y]) => (x === a && y === b) || (x === b && y === a))
-    for (const node of chosen) {
-      const candidates = chosen
-        .filter((other) => other !== node && gap(node, other) >= MESH_MIN_CHORD)
-        .sort((a, b) => gap(node, a) - gap(node, b))
-      for (const other of candidates) {
-        if ((degree.get(node) ?? 0) >= MESH_DEGREE.min) break
-        if ((degree.get(other) ?? 0) >= MESH_DEGREE.max || linked(node, other)) continue
-        edges.push([node, other])
-        degree.set(node, (degree.get(node) ?? 0) + 1)
-        degree.set(other, (degree.get(other) ?? 0) + 1)
-      }
-    }
-
-    return edges.map(([a, b], index) => {
-      const from = points[a]
-      const to = points[b]
-      const length = gap(a, b)
-      const bow = between(MESH_BOW) * (next() < 0.5 ? -1 : 1)
-      const cx = (from.x + to.x) / 2 - ((to.y - from.y) / length) * length * bow
-      const cy = (from.y + to.y) / 2 + ((to.x - from.x) / length) * length * bow
-      const duration = Math.round(between(MESH_CYCLE))
-      return {
-        key: `ray-${index}`,
-        d: `M${from.x} ${from.y}Q${cx.toFixed(1)} ${cy.toFixed(1)} ${to.x} ${to.y}`,
-        duration,
-        delay: Math.round(next() * duration)
-      }
-    })
-  })
+  const meshRays = computed<NetworkMapMeshRay[]>(() =>
+    props.traffic
+      ? networkMapMesh(
+          popPhases.value.flatMap((pop) =>
+            Array.from(pop.d.matchAll(POP_CELL)).map(([, x, y]) => ({
+              x: Number(x) + 2.5,
+              y: Number(y) + 2.5
+            }))
+          )
+        )
+      : []
+  )
 
   const packetEls = ref<SVGPathElement[]>([])
   let packetAnimations: Animation[] = []
   let reducedMotion: MediaQueryList | null = null
 
-  const packetIterations = (ray: MeshRay) => {
+  const packetIterations = (ray: NetworkMapMeshRay) => {
     const cycles = (MOTION_LIMIT + ray.delay) / ray.duration
     const landing = cycles - Math.floor(cycles)
     return landing >= PACKET_TRAVEL ? cycles : Math.floor(cycles)
@@ -274,6 +196,17 @@
   )
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'network-map')
+
+  const ROOT_CLASS =
+    'pointer-events-none absolute inset-0 z-0 overflow-hidden text-(--text-muted) ' +
+    'data-[fade=bottom]:[mask-image:linear-gradient(to_bottom,black_0,black_var(--network-map-fade-start,16%),transparent_var(--network-map-fade-end,55%))] ' +
+    'data-[fade=top]:[mask-image:linear-gradient(to_top,black_0,black_var(--network-map-fade-start,16%),transparent_var(--network-map-fade-end,55%))] ' +
+    'data-[fade=left]:[mask-image:linear-gradient(to_left,black_0,black_var(--network-map-fade-start,50%),transparent_var(--network-map-fade-end,80%))] ' +
+    'data-[fade=right]:[mask-image:linear-gradient(to_right,black_0,black_var(--network-map-fade-start,50%),transparent_var(--network-map-fade-end,80%))] ' +
+    'data-[fade=edges]:[mask-image:linear-gradient(to_right,transparent_0,black_var(--network-map-fade-start,12%),black_calc(100%-var(--network-map-fade-start,12%)),transparent_100%)] ' +
+    'data-[fade=vignette]:[mask-image:radial-gradient(closest-side,black_var(--network-map-fade-start,40%),transparent_var(--network-map-fade-end,100%))] ' +
+    'data-[fade=bottom]:[mask-mode:alpha] data-[fade=top]:[mask-mode:alpha] data-[fade=left]:[mask-mode:alpha] data-[fade=right]:[mask-mode:alpha] data-[fade=edges]:[mask-mode:alpha] ' +
+    'data-[fade=vignette]:[mask-mode:alpha]'
 </script>
 
 <template>
@@ -284,7 +217,7 @@
     :data-density="density"
     :data-fade="fade"
     aria-hidden="true"
-    class="pointer-events-none absolute inset-0 z-0 overflow-hidden text-(--text-muted) data-[fade=bottom]:[mask-image:linear-gradient(to_bottom,black_0,black_var(--network-map-fade-start,16%),transparent_var(--network-map-fade-end,55%))] data-[fade=top]:[mask-image:linear-gradient(to_top,black_0,black_var(--network-map-fade-start,16%),transparent_var(--network-map-fade-end,55%))] data-[fade=left]:[mask-image:linear-gradient(to_left,black_0,black_var(--network-map-fade-start,50%),transparent_var(--network-map-fade-end,80%))] data-[fade=right]:[mask-image:linear-gradient(to_right,black_0,black_var(--network-map-fade-start,50%),transparent_var(--network-map-fade-end,80%))] data-[fade=edges]:[mask-image:linear-gradient(to_right,transparent_0,black_var(--network-map-fade-start,12%),black_calc(100%-var(--network-map-fade-start,12%)),transparent_100%)] data-[fade=vignette]:[mask-image:radial-gradient(closest-side,black_var(--network-map-fade-start,40%),transparent_var(--network-map-fade-end,100%))] data-[fade=bottom]:[mask-mode:alpha] data-[fade=top]:[mask-mode:alpha] data-[fade=left]:[mask-mode:alpha] data-[fade=right]:[mask-mode:alpha] data-[fade=edges]:[mask-mode:alpha] data-[fade=vignette]:[mask-mode:alpha]"
+    :class="ROOT_CLASS"
   >
     <svg
       :viewBox="viewBox"

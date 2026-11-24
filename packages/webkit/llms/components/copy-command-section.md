@@ -1,6 +1,6 @@
 # Copy Command Section
 
-> A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` a `$` prompt leads the line. From the design sample's site `CopyCommandSection`.
+> A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` the command is one line in a large `InputGroup`, a `$` prompt leading it and an end fade when it scrolls; without it the prompt is a read-only block that wraps, so the reader sees every word they copy. From the design sample's site `CopyCommandSection`.
 
 - Import: `import CopyCommandSection from '@aziontech/webkit/copy-command-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -42,13 +42,13 @@
 ## Accessibility
 
 - The read-only input is named "Command" or "Prompt"; the copy button is named "Copy command" or "Copy prompt".
-- The `$` is decorative (`aria-hidden`).
+- The `$` is decorative (`aria-hidden`). The command is a read-only textbox named "Command"; the prompt is a group named "Prompt" holding its text and the copy button.
 - Keyboard: `Tab` reaches the field (text can be selected) and the copy button.
 
 ## Right-to-left
 
 - Layout: logical utilities.
-- The command is `dir="ltr"` so a shell line keeps its order inside right-to-left pages.
+- The command and the prompt are `dir="ltr"` so a shell line keeps its order inside right-to-left pages.
 - Keyboard: unchanged.
 
 ## Internationalization
@@ -64,7 +64,7 @@
 
 ## Responsive
 
-- Fills its column up to `--container-xs`; fixed at that width from large.
+- Fills its column up to `--container-md`; a command is fixed at that width from large, a prompt keeps the width of its column and grows in height.
 - Touch: the copy button is large; the read-only command field can take focus, so on coarse pointers (`pointer-coarse:`) its text steps up to 16 px (`text-label-code-lg`) and iOS Safari does not zoom the page.
 
 ## Examples

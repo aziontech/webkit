@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: a08e52c906abe3b02e0fd545b3e8bdb2fa273627ea23b7c48170656e320d5af8
+checksum: eb1ddc74ca63f82e0488c97648345bd103d0b6aad0077aeddacf397a9afb1f6e
 created: 2026-11-14
-last_updated: 2026-11-17
+last_updated: 2026-11-23
 ---
 
 # AvatarGroup — Component Spec
@@ -90,7 +90,7 @@ _No slots._
 - Visual states: `default`; each avatar `hover` (raised above its neighbours, `z-1`); the `+N` button `hover`, `focus-visible`, and `data-state="open|closed"` while its list is shown.
 - `data-orientation` on the root mirrors `orientation`: horizontal overlaps each avatar onto the previous one's end edge, vertical onto its bottom edge.
 - `data-size` on the root mirrors `size` and sets the overlap: `var(--spacing-2xs)` for `small` and `medium`, `var(--spacing-xs)` for `large`, so the initials of each avatar stay readable under the next.
-- Each avatar (`__avatar`) carries a `var(--bg-canvas)` ring so the overlap reads as separate circles on any surface. It shows the photo when `src` loads, else the initials from `label` or the first letters of the first and last words of `name`; a photo that fails to load falls back to the initials.
+- Each avatar (`__avatar`) carries a `var(--bg-canvas)` ring so the overlap reads as separate circles on any surface. It shows the photo when `src` loads, else the initials from `label` or the first letters of the first and last words of `name` (one letter at `small`, where a 24px circle under the next one's overlap has room for one); a photo that fails to load falls back to the initials. The `+N` button carries a hidden hit area (`data-slot="touch-target"`) that grows its target to 44px on a coarse pointer without changing its drawn size.
 - Overflow: when `max` is above 0 and `items` holds more than `max` people, the first `max` render and a `+N` button (`__overflow`) closes the stack. It toggles a native popover (`__list`) anchored below it that lists the names of the rest, scrolling past `var(--container-3xs)` of height. With `max` 0 or few enough items, no button renders.
 - Empty: with no `items` the group renders nothing but its empty `group` root.
 
@@ -145,6 +145,7 @@ _No slots._
 - Icons: none.
 - Keyboard: no horizontal arrow-key logic.
 - User data: names are text in the accessible name, the hint and the list; no wrapper needed.
+- Overflow count: the `+N` sits in a `dir="ltr"` span, so it never reads `N+`.
 
 ## Responsive
 

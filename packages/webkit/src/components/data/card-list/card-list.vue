@@ -98,6 +98,11 @@
 
   const headerId = (index: number): string => `${uid}-card-${index}`
   const SKELETONS = 6
+
+  const CARD_CLASS =
+    'flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none ' +
+    'data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)'
 </script>
 
 <script lang="ts">
@@ -182,7 +187,7 @@
             :data-testid="`${testId}__card`"
             :data-selected="on || null"
             :data-state="on ? 'selected' : 'unselected'"
-            class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) transition-colors duration-150 ease-out motion-reduce:transition-none data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)"
+            :class="CARD_CLASS"
           >
             <div class="flex min-w-0 items-start gap-(--spacing-sm)">
               <div

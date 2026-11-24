@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { useLocale } from '../../../../composables/use-locale'
   import Card from '../../card/card.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'RealTimeMetricsPanelFragment' })
 
@@ -79,12 +79,9 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    :chrome="false"
+  <MockupFragment
+    fade="none"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="flex h-full flex-col py-(--spacing-xs)">
       <ConsoleMockupShellItem
@@ -141,5 +138,5 @@
         </MockupElevator>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

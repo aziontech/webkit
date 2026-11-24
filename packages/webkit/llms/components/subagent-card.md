@@ -44,7 +44,7 @@
 | `duration` | `number` | `undefined` | false | Seconds the helper has worked, when the host knows it. Without it the card counts its own running time, held while `pending`, frozen once the run ends. |
 | `stoppable` | `boolean` | `false` | false | Offers `Stop` while the status is `running` or `pending`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; the helper's messages start collapsed. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -88,7 +88,7 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 - Status is conveyed in text, never by color alone.
 - Focus: when `Stop` leaves the DOM while it holds focus (the status becomes `canceled`), focus moves to the toggle, or to the card root (`tabindex="-1"`) when the row is static; the `role="status"` region announces `Stopped`.
 - Accessible name of the toggle: its text, the title and the helper name; the status is announced by the status region.
-- Contrast: `--text-default` and `--text-muted` on `--bg-surface`, and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
+- Contrast: `--text-default` and `--text-muted` on the canvas (`--bg-canvas`), and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
 
 ## Right-to-left
 

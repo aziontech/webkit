@@ -8,5 +8,3 @@ export const shape = {
   'shape-control': radius['md'],
   'border-width-default': borderWidth[1]
 }
-
-export default { shape }

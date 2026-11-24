@@ -25,7 +25,14 @@
     "name": "Default",
     "file": "edit-rule-builder.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "lib/rule-behavior-data.ts",
+    "lib/rule-catalog.ts",
+    "lib/rule-form.ts",
+    "parts/rule-behaviors.vue",
+    "parts/rule-criteria.vue"
+  ],
   "variants": [
     {
       "name": "Composed",

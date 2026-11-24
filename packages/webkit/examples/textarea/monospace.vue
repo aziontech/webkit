@@ -21,6 +21,8 @@
       placeholder="Paste a BIND zone file"
       :spellcheck="false"
       monospace
+      auto-resize
+      :max-rows="8"
     />
     <Field.Description
       >The records replace the ones in this zone when you import.</Field.Description

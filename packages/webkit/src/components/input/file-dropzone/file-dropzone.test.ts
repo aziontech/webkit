@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { defineComponent, nextTick } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { type Component, defineComponent, nextTick } from 'vue'
 
 import Folders from '../../../../examples/file-dropzone/folders.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -337,14 +337,26 @@ describe('FileDropzone', () => {
     })
 
     it('pairs the Folders example with a folder picker and lists picked paths', async () => {
+      const pickers: HTMLInputElement[] = []
+      const createElement = document.createElement.bind(document)
+      const spy = vi.spyOn(document, 'createElement').mockImplementation(((tag: string) => {
+        const el = createElement(tag)
+        if (tag === 'input') {
+          vi.spyOn(el as HTMLInputElement, 'click').mockImplementation(() => {})
+          pickers.push(el as HTMLInputElement)
+        }
+        return el
+      }) as typeof document.createElement)
       const view = render(Folders)
-      const picker = view.container.querySelector<HTMLInputElement>('input[webkitdirectory]')!
+      await fireEvent.click(view.getByRole('button', { name: 'Browse folder' }))
+      const picker = pickers[0]
       expect(picker.webkitdirectory).toBe(true)
       const file = new File(['x'], 'main.css', { type: 'text/css' })
       Object.defineProperty(file, 'webkitRelativePath', { value: 'site/css/main.css' })
       Object.defineProperty(picker, 'files', { value: [file], configurable: true })
-      await fireEvent.change(picker)
-      expect(view.getByRole('button', { name: 'Remove site/css/main.css' })).toBeTruthy()
+      picker.dispatchEvent(new Event('change'))
+      expect(await view.findByRole('button', { name: 'Remove site/css/main.css' })).toBeTruthy()
+      spy.mockRestore()
       await expectNoA11yViolations(view.container)
     })
 
@@ -496,5 +508,23 @@ describe('FileDropzone', () => {
       await waitFor(() => expect(getByTestId(TEST_ID).style.display).not.toBe('none'))
       await expectNoA11yViolations(container)
     })
+  })
+
+  describe('examples', () => {
+    const examples = import.meta.glob<{ default: Component }>(
+      '../../../../examples/file-dropzone/*.vue',
+      { eager: true }
+    )
+
+    it.each(Object.keys(examples))(
+      '%s gives every inline region a button, the non-drag path',
+      (path) => {
+        const { getAllByTestId } = render(examples[path]!.default)
+        const inline = getAllByTestId(TEST_ID).filter((el) => el.dataset['variant'] === 'inline')
+        for (const region of inline) {
+          expect(region.querySelector('button')).not.toBeNull()
+        }
+      }
+    )
   })
 })

@@ -2,7 +2,7 @@
  "variants": [],
  "sfcFile": "blocks/detail/detail-domains-card/detail-domains-card.vue",
  "guidelinesFile": "blocks/detail/detail-domains-card/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/detail/detail-domains-card/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

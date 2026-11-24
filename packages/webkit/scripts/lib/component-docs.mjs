@@ -1,4 +1,4 @@
-export const COMPONENT_DOC_FIELDS = [
+const COMPONENT_DOC_FIELDS = [
   ['purpose', 'Purpose'],
   ['useWhen', 'When to use'],
   ['avoidWhen', 'When NOT to use']

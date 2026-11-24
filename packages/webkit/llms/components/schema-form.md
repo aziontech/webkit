@@ -16,7 +16,7 @@
 ## Do
 
 - Give every property a `title` and a one-sentence `description`; the key is only the fallback label.
-- Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`, since the built-in message cannot name it.
+- Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`: the pattern message repeats it (`Check the format: …`), since the built-in message cannot name the rule on its own.
 - Keep the default `validate-on="blur"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.
 - Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
 - Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-validation rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
@@ -104,6 +104,7 @@
 | `schemaForm.minLength`            | Use at least {min} characters.                 | —                      |
 | `schemaForm.maxLength`            | Use at most {max} characters.                  | —                      |
 | `schemaForm.pattern`              | This value doesn't match the expected format.  | —                      |
+| `schemaForm.patternRule`          | Check the format: {rule}                       | —                      |
 | `schemaForm.minimum`              | Enter {min} or more.                           | —                      |
 | `schemaForm.maximum`              | Enter {max} or less.                           | —                      |
 | `schemaForm.number`               | Enter a number.                                | —                      |

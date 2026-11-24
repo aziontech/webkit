@@ -51,6 +51,12 @@
     }
     target.focus()
   }
+
+  const ROOT_CLASS =
+    'fixed start-(--spacing-sm) top-(--spacing-sm) z-(--z-control-overlay) inline-flex min-h-10 max-w-[calc(100vw_-_2*var(--spacing-sm))] items-center rounded-(--shape-button) border ' +
+    'border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-button-md text-(--text-default) shadow-(--shadow-md) underline-offset-4 ' +
+    'hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'pointer-coarse:min-h-11 not-focus:sr-only'
 </script>
 
 <template>
@@ -58,7 +64,7 @@
     :href="safeHref(href) ?? undefined"
     v-bind="$attrs"
     :data-testid="testId"
-    class="fixed start-(--spacing-sm) top-(--spacing-sm) z-(--z-control-overlay) inline-flex min-h-10 max-w-[calc(100vw_-_2*var(--spacing-sm))] items-center rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-button-md text-(--text-default) shadow-(--shadow-md) underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) pointer-coarse:min-h-11 not-focus:sr-only"
+    :class="ROOT_CLASS"
     @click="focusTarget"
   >
     <slot>{{ label || t('skipLink.label') }}</slot>

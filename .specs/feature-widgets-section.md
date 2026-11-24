@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: 9e96024370377ab662a809046f7088d0d4dfe17b049d9dd3aef618c2bb05a081
+checksum: 0ce5d46c6a387b69c9630e16670df9dd77427376f2dd032f36b04434e3437422
 ---
 
 # FeatureWidgetsSection — Component Spec
@@ -86,7 +86,7 @@ The "three ways to start" band of a product page: a centered section title with 
 | `titleAlign`      | `ModuleHeaderAlign`            | `'center'`  | false    | Alignment of the section title over the grid: `center`, `start` or `split`.                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `columns`         | `FeatureWidgetsSectionColumns` | `2`         | false    | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`.                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `copiedLabel`     | `string`                       | `''`        | false    | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`.                                                                                                                                                                                                                                                                                                                                                                                    |
-| `items`           | `FeatureWidgetsSectionItem[]`  | `[]`        | false    | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |
+| `items`           | `FeatureWidgetsSectionItem[]`  | `[]`        | false    | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both. |
 
 ## Events
 

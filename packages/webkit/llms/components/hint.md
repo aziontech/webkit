@@ -1,6 +1,6 @@
 # Hint
 
-> Small info affordance — a muted `az az-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
+> Click-open note (a "toggletip") on a small muted `az az-circle-info` glyph. A click, a tap, `Enter` or `Space` on the glyph opens a small panel, anchored below the glyph and aligned to its start, that holds one to three sentences and an optional "Learn more" link to the docs. It is level C of the in-product help standard: the way to attach a "why does this matter?" note to a field name, a setting or a column header without spending a line of vertical space on it. `Field.Label`, `SettingsRow` and `SettingsGroup` render it from their own `hint` prop.
 
 - Import: `import Hint from '@aziontech/webkit/hint'`
 - Category: input · Surface: app · Structure: monolithic
@@ -8,52 +8,74 @@
 
 ## When to use
 
-- Use Hint for the info glyph beside a field label or column header that explains it in one sentence. Guidance that must stay visible goes in Field.Description (inside Field) or FieldDescription.
 - A field, switch or setting whose name is clear but whose consequence is not (what "Sensitive" does to a stored value).
-- A short, self-contained sentence — one that reads fine in a tooltip and is not needed to complete the field.
-- Beside a label, a section heading, or a table column header, where a permanent line of helper text would add noise.
+- A note of one to three sentences that is useful but not needed to complete the task, optionally with a link to the docs page that explains more.
+- Beside a label, a heading, a stat or a column header, where a permanent line of helper text would add noise.
 
 ## Do
 
-- One sentence, ending in a period. If it needs two, it belongs in `field-description` or a `popover`.
-- Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.
-- The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
-- Place it immediately after the thing it explains, not at the end of a row.
+- One to three plain sentences, each ending in a period.
+- Place the glyph 4px after the label text, on the same line. Never at the end of the row, never on its own line.
+- One Hint per label. Never stack two glyphs, and never put a Hint inside a Tooltip or another Hint.
+- Never draw a typed "?" or a boxed icon button as a help trigger; Hint is the only help glyph.
+- Add `href` when a docs page explains more; leave `linkLabel` empty for the localized "Learn more".
+- Never hide required information behind a Hint.
 
 ## Don’t
 
-- Guidance the user needs while typing, or any validation message → use `field-error` (it stays on screen and is wired with `aria-describedby`).
-- More than a sentence, links, or formatted content → use `popover`, which is dismissible and can hold real content.
-- A plain description of an action already labelled by a control → use `tooltip` directly on that control.
+- Information needed to fill the field → `field-description`, which stays on screen.
+- Naming a control or expanding an abbreviation → `tooltip`.
+- Help longer than three sentences, steps or several links → `help-panel`.
+- Validation messages → `field-error`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [tooltip](tooltip.md) — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.
-- `field-description` — persistent guidance under a field; the right choice when the text must always be visible.
-- `Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component.
+- `field-description` — level A, the default: a short muted line under the field that is always visible.
+- [tooltip](tooltip.md) — level B: names a control or expands an abbreviation in a few words (about 80 characters at most).
+- [help-panel](help-panel.md) — level D: page-level help in the console's tools region, opened from an "Info" link after the page title.
+- [popover](popover.md) — the overlay Hint composes; use it for interactive content.
+- `Field.Label`, `settings-row`, `settings-group` — render a Hint from their `hint` prop.
+- `/webkit-in-product-help` — the consumer skill that picks the level of help.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `content` | `string` | `''` | true | Guidance text revealed on hover or focus; also the trigger's accessible name. |
-| `side` | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'` | false | Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction. |
+| `content` | `string` | `''` | true | The note, one to three sentences, shown when the glyph is clicked and read as the glyph's description. |
+| `side` | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'bottom'` | false | Side of the glyph the note opens on, flipped when it does not fit; `'auto'` picks the side with the most room. |
+| `href` | `string` | `''` | false | Docs URL linked under the note; empty renders no link. |
+| `linkLabel` | `string` | `''` | false | Text of the docs link; empty uses the locale catalog (`Learn more`). |
+| `target` | `'_blank' \| '_self'` | `'_blank'` | false | Where the docs link opens. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the glyph button; empty uses the locale catalog (`More information`). |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
+
+## v-model
+
+| Model          | Type      | Default | Emits         | Notes                                                                                                                                                            |
+| -------------- | --------- | ------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `false` | `update:open` | Open state via `defineModel('open')`. Fires on every open and close: glyph click, `Enter`, `Space`, `Esc`, outside click. Unbound, the Hint keeps its own state. |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`
-- `data-state` values (on the root, owned by `Tooltip`): `open` | `closed`
-- `data-side` (on the root, owned by `Tooltip`): `top` | `bottom` | `start` | `end`, the side the tooltip landed on
+- Visual states of the glyph: `default`, `hover`, `focus-visible`, open (`aria-expanded="true"`, the glyph takes `var(--text-default)`).
+- `data-state` values (on the root, owned by `Popover`): `open` | `closed`.
+- `data-side` (on the root and the panel, owned by `Popover`): the side the panel landed on.
 
 ## Accessibility
 
-- The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`).
-- The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `content` prop, so the hint is reachable by screen readers that never see the tooltip.
-- Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
-- The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.
-- Contrast ≥4.5:1 between `var(--text-muted)` and `var(--bg-canvas)`; the focus ring uses `var(--ring-color)` at 2px with an offset.
-- Touch target: the glyph is drawn at 20×20 px inline with 12 px label text; a `[data-slot=touch-target]` span extends the hit area to 24×24 px (WCAG 2.5.8), and to 44×44 px on a coarse pointer. It is an enhancement, never the only path to the information.
+- The trigger is a native `<button type="button">` named by `ariaLabel` (fallback `More information`, from the locale catalog). It carries `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` (from `Popover.Trigger`).
+- The note is also in an always-rendered `hidden` element the button points at with `aria-describedby`, so a screen reader reads the note on focus without opening the panel.
+- The panel is `role="dialog"` (non-modal), named by the trigger. It opens on activation only, never on hover.
+- Keyboard map: `Tab` focuses the glyph; `Enter` or `Space` opens and closes the note; opening moves focus to the docs link when there is one; `Esc` closes and returns focus to the glyph. A second click or an outside click also closes it.
+- The click default is prevented, so a Hint inside a `<label>` never toggles or focuses the labelled control.
+- The glyph is decorative (`aria-hidden="true"`); the focus ring uses `var(--ring-color)`.
+- Touch target: a `[data-slot=touch-target]` span extends the 20 px glyph's hit area to 24 px, and to 44 px on a coarse pointer.
+
+## Internationalization
+
+- The glyph's fallback name is `hint.label` (`More information`, `Mais informações`, `Más información`); the link's fallback text is `Link`'s `link.label` (`Learn more`).
+- `content` and `linkLabel` come translated from the consumer.
 
 ## Examples
 
@@ -95,5 +117,35 @@
       side="start"
     />
   </div>
+</template>
+```
+
+### WithLink
+
+```vue
+<script setup>
+  import Field from '@aziontech/webkit/field'
+  import Hint from '@aziontech/webkit/hint'
+  import Input from '@aziontech/webkit/input'
+  import { ref } from 'vue'
+
+  const ttl = ref('3600')
+</script>
+
+<template>
+  <Field class="max-w-(--container-xs)">
+    <Field.Label>
+      Cache TTL
+      <Hint
+        content="How many seconds the edge serves the cached copy before it asks the origin again."
+        href="https://example.com/docs/cache-settings"
+      />
+    </Field.Label>
+    <Input
+      v-model="ttl"
+      inputmode="numeric"
+    />
+    <Field.Description>In seconds.</Field.Description>
+  </Field>
 </template>
 ```

@@ -86,7 +86,7 @@ describe('CompetitorComparisonSection', () => {
   it('renders one category head and one row head per capability, in order', () => {
     const { getAllByRole } = band()
 
-    const heads = getAllByRole('rowheader').map((cell) => cell.textContent?.trim())
+    const heads = getAllByRole('rowheader').map((cell) => cell.innerText.trim())
     expect(heads).toEqual(['Bot management', 'Zero Trust', 'AI inference'])
     expect(getAllByRole('columnheader').length).toBeGreaterThanOrEqual(3)
   })
@@ -126,20 +126,41 @@ describe('CompetitorComparisonSection', () => {
     }
   )
 
-  it('aligns the capability column head to the start and draws category heads in the brand orange', () => {
+  it('keys the support glyphs in a visible legend above the table', () => {
+    const { getByTestId } = band()
+
+    const legend = getByTestId('competitor-comparison-section__legend')
+    const entries = Array.from(legend.querySelectorAll('li'))
+    expect(entries.map((entry) => entry.textContent?.trim())).toEqual([
+      'Full support',
+      'Partial support',
+      'Not available'
+    ])
+    expect(entries.map((entry) => entry.querySelector('i')?.getAttribute('data-level'))).toEqual([
+      'full',
+      'partial',
+      'none'
+    ])
+    expect(legend.nextElementSibling?.tagName).toBe('TABLE')
+  })
+
+  it('aligns the capability column head to the start and marks category heads with the brand orange bar', () => {
     const { getByRole, getByText } = band()
 
     expect(getByRole('columnheader', { name: 'Capability' }).classList.contains('text-start')).toBe(
       true
     )
-    expect(getByText('Security').classList.contains('text-(--text-brand)')).toBe(true)
+    expect(getByText('Security').classList.contains('text-(--text-default)')).toBe(true)
+    expect(getByText('Security').classList.contains('border-(--primary)')).toBe(true)
   })
 
-  it('renders an info button only for a capability with a definition', () => {
-    const { getByRole, queryByRole } = band()
+  it('renders a Hint only for a capability with a definition', () => {
+    const { getByRole } = band()
 
-    expect(getByRole('button', { name: 'About Bot management' })).toBeInTheDocument()
-    expect(queryByRole('button', { name: 'About Zero Trust' })).toBeNull()
+    const defined = getByRole('rowheader', { name: /Bot management/ })
+    expect(within(defined).getByTestId('hint__trigger').tagName).toBe('BUTTON')
+    const bare = getByRole('rowheader', { name: /Zero Trust/ })
+    expect(within(bare).queryByTestId('hint')).toBeNull()
   })
 
   it('renders both theme logos when both files are set', () => {

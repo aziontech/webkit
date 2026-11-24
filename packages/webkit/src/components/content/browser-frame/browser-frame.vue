@@ -3,6 +3,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import CopyButton from '../../action/copy-button/copy-button.vue'
@@ -60,6 +61,8 @@
   const { t } = useTranslate({ browserFrame: en.browserFrame })
   const sizerEl = ref<globalThis.HTMLElement | null>(null)
   const iframeEl = ref<globalThis.HTMLIFrameElement | null>(null)
+  const widthHandleEl = ref<globalThis.HTMLElement | null>(null)
+  const heightHandleEl = ref<globalThis.HTMLElement | null>(null)
   const { width: containerWidth } = useElementSize(sizerEl)
   const { bodyEl: frameBodyEl } = useFrameDocument(iframeEl)
   const viewportId = useId()
@@ -148,6 +151,9 @@
     height.value = clamp(next, props.minHeight, props.maxHeight)
   }
 
+  useElementListener(widthHandleEl, 'keydown', onWidthKeydown)
+  useElementListener(heightHandleEl, 'keydown', onHeightKeydown)
+
   const startResize = (event: globalThis.PointerEvent, axis: ResizeAxis) => {
     if (event.button !== 0) return
     const handle = event.currentTarget as globalThis.HTMLElement
@@ -187,6 +193,36 @@
   const stopResize = () => {
     dragAxis.value = null
   }
+
+  const FRAME_CLASS =
+    'relative mx-auto max-w-full rounded-(--shape-card) bg-(--bg-surface) after:pointer-events-none after:absolute after:inset-0 after:rounded-(--shape-card) after:border ' +
+    "after:border-(--border-default) after:content-['']"
+
+  const WIDTH_HANDLE_CLASS =
+    'group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-control) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
+
+  const WIDTH_GRIP_CLASS =
+    'h-8 w-1 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out ' +
+    'group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) ' +
+    'group-data-[resizing]:bg-(--text-default) ' +
+    'motion-reduce:transition-none'
+
+  const HEIGHT_HANDLE_CLASS =
+    'group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-control) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
+
+  const HEIGHT_GRIP_CLASS =
+    'h-1 w-8 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out ' +
+    'group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) ' +
+    'group-data-[resizing]:bg-(--text-default) ' +
+    'motion-reduce:transition-none'
+
+  const CORNER_GRIP_CLASS =
+    'size-2 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out ' +
+    'group-hover/handle:bg-(--text-default) ' +
+    'group-data-[resizing]:bg-(--text-default) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -203,7 +239,7 @@
       class="h-0 w-full"
     />
     <div
-      class="relative mx-auto max-w-full rounded-(--shape-card) bg-(--bg-surface) after:pointer-events-none after:absolute after:inset-0 after:rounded-(--shape-card) after:border after:border-(--border-default) after:content-['']"
+      :class="FRAME_CLASS"
       :style="frameStyle"
     >
       <div
@@ -275,9 +311,9 @@
         :aria-valuetext="t('browserFrame.widthValue', { value: String(widthValueNow) })"
         :aria-controls="viewportId"
         :aria-label="widthHandleAriaLabel || t('browserFrame.resizeWidth')"
+        ref="widthHandleEl"
         :data-testid="`${testId}__width-handle`"
-        class="group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
-        @keydown="onWidthKeydown"
+        :class="WIDTH_HANDLE_CLASS"
         @focus="focused = true"
         @blur="focused = false"
         @pointerdown="startResize($event, 'width')"
@@ -286,9 +322,7 @@
         @pointercancel="stopResize"
         @lostpointercapture="stopResize"
       >
-        <span
-          class="h-8 w-1 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
-        />
+        <span :class="WIDTH_GRIP_CLASS" />
       </div>
       <div
         role="separator"
@@ -300,9 +334,9 @@
         :aria-valuetext="t('browserFrame.heightValue', { value: String(heightValueNow) })"
         :aria-controls="viewportId"
         :aria-label="heightHandleAriaLabel || t('browserFrame.resizeHeight')"
+        ref="heightHandleEl"
         :data-testid="`${testId}__height-handle`"
-        class="group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
-        @keydown="onHeightKeydown"
+        :class="HEIGHT_HANDLE_CLASS"
         @focus="focused = true"
         @blur="focused = false"
         @pointerdown="startResize($event, 'height')"
@@ -311,9 +345,7 @@
         @pointercancel="stopResize"
         @lostpointercapture="stopResize"
       >
-        <span
-          class="h-1 w-8 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
-        />
+        <span :class="HEIGHT_GRIP_CLASS" />
       </div>
       <div
         aria-hidden="true"
@@ -325,9 +357,7 @@
         @pointercancel="stopResize"
         @lostpointercapture="stopResize"
       >
-        <span
-          class="size-2 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
-        />
+        <span :class="CORNER_GRIP_CLASS" />
       </div>
     </div>
     <Teleport

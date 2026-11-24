@@ -9,6 +9,7 @@
     "agent-question",
     "alert",
     "app-header",
+    "app-header-account",
     "app-header-root",
     "app-layout",
     "architecture-tabs-section",
@@ -471,6 +472,7 @@
     "console-layout",
     "console-layout-breadcrumb",
     "console-layout-root",
+    "console-layout-tools-trigger",
     "console-mockup",
     "console-showcase-section",
     "contact-hub-section",
@@ -484,6 +486,7 @@
     "copy-command-section",
     "copy-prompt-button",
     "copy-text",
+    "countdown",
     "currency-amount",
     "customer-use-cases-section",
     "dashboard-grid",
@@ -491,6 +494,8 @@
     "dashboard-grid-root",
     "data-grid",
     "data-table",
+    "data-table-load-more",
+    "data-table-pagination",
     "date-picker",
     "date-picker-clear",
     "date-picker-root",
@@ -657,6 +662,7 @@
     "logo-wall",
     "logo-wall-section",
     "map-chart",
+    "markdown-editor",
     "marquee",
     "mcp-app-frame",
     "media-scroll",
@@ -665,6 +671,10 @@
     "media-split-stack-section",
     "media-tabs",
     "media-tile",
+    "message-thread",
+    "message-thread-group",
+    "message-thread-item",
+    "message-thread-root",
     "module",
     "module-header",
     "multi-select",
@@ -703,6 +713,7 @@
     "panel-root",
     "password-input",
     "password-requirements",
+    "password-requirements-root",
     "payment-brand",
     "phone-input",
     "photo-marquee-section",
@@ -720,6 +731,7 @@
     "popover-trigger",
     "pricing-card",
     "pricing-plans-section",
+    "priority-tag",
     "process-scroll-section",
     "progress",
     "prompt-input",
@@ -737,6 +749,7 @@
     "radio-group",
     "radio-group-item",
     "radio-group-root",
+    "rating",
     "reasoning",
     "recognition-marquee-section",
     "registration-frame",
@@ -843,6 +856,10 @@
     "texture",
     "theme-switcher",
     "third-party-logo",
+    "timeline",
+    "timeline-group",
+    "timeline-item",
+    "timeline-root",
     "timestamp",
     "toast",
     "toast-action",
@@ -868,6 +885,8 @@
     "tutorial-panel-provider",
     "tutorial-panel-root",
     "upload-progress",
+    "use-ai-chat-tools",
+    "use-ai-chat-versions",
     "use-announcer",
     "use-collection",
     "use-color-mode",
@@ -875,6 +894,7 @@
     "use-controllable",
     "use-direction",
     "use-escape-to-cancel",
+    "use-file-picker",
     "use-focus-trap",
     "use-heading-navigation",
     "use-locale",
@@ -883,9 +903,14 @@
     "use-shortcuts",
     "use-time-range",
     "use-unsaved-changes",
+    "utils/ai-chat",
+    "utils/ai-chat-questions",
     "utils/clipboard",
     "utils/cn",
     "utils/csv",
+    "utils/focus-invalid",
+    "utils/leave-link",
+    "utils/radio-list",
     "video-player",
     "vite-plugin",
     "wizard",
@@ -918,6 +943,7 @@
     "create/create-page",
     "create/create-release-impact",
     "create/create-resource-picker",
+    "create/create-ticket",
     "create/create-wizard",
     "dashboard/dashboard-alerts",
     "dashboard/dashboard-analytics",
@@ -930,6 +956,7 @@
     "dashboard/dashboard-security",
     "dashboard/dashboard-service-monitoring",
     "dashboard/dashboard-switcher",
+    "detail/detail-customer",
     "detail/detail-deployment-logs",
     "detail/detail-dns-zone",
     "detail/detail-domains-card",
@@ -937,6 +964,7 @@
     "detail/detail-invocations",
     "detail/detail-production-checklist",
     "detail/detail-resource",
+    "detail/detail-ticket",
     "detail/detail-version",
     "edit/edit-delete-dialog",
     "edit/edit-function",
@@ -944,6 +972,7 @@
     "edit/edit-rule-builder",
     "edit/edit-schema",
     "edit/edit-variables",
+    "settings/settings-canned-responses",
     "settings/settings-form",
     "shell/shell-console",
     "shell/shell-docs",
@@ -965,6 +994,7 @@
     "view/view-rule-list",
     "view/view-table",
     "view/view-template-browser",
+    "view/view-ticket-inbox",
     "view/view-waf-tuning"
   ],
   "props": {
@@ -1069,6 +1099,7 @@
     },
     "chat-message": {
       "author": null,
+      "editing": null,
       "errorMessage": null,
       "from": [
         "assistant",
@@ -1087,6 +1118,7 @@
     },
     "chat-message-root": {
       "author": null,
+      "editing": null,
       "errorMessage": null,
       "from": [
         "assistant",
@@ -1104,9 +1136,8 @@
       "timestamp": null
     },
     "citation": {
-      "href": null,
-      "index": null,
-      "title": null
+      "indexes": null,
+      "sources": null
     },
     "feedback-reason-dialog": {
       "defaultOpen": null,
@@ -1126,11 +1157,13 @@
     },
     "conversation-history": {
       "ariaLabel": null,
+      "creatable": null,
       "items": null,
       "loading": null,
       "modelValue": null,
       "now": null,
-      "removable": null
+      "removable": null,
+      "searchable": null
     },
     "prompt-input": {
       "accept": null,
@@ -1194,14 +1227,12 @@
       "modelValue": null
     },
     "sources": {
-      "anchor": null,
       "defaultOpen": null,
       "items": null,
       "open": null,
       "title": null
     },
     "streaming-response": {
-      "anchor": null,
       "content": null,
       "sources": null,
       "streaming": null
@@ -1629,6 +1660,20 @@
         "primary"
       ]
     },
+    "priority-tag": {
+      "label": null,
+      "priority": [
+        "high",
+        "low",
+        "medium",
+        "none",
+        "urgent"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
     "severity-tag": {
       "label": null,
       "severity": [
@@ -1660,12 +1705,55 @@
       "timeZone": null,
       "value": null
     },
+    "timeline": {
+      "ariaLabel": null,
+      "loading": null,
+      "loadingLabel": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "timeFormat": [
+        "local",
+        "relative",
+        "utc"
+      ]
+    },
+    "timeline-root": {
+      "ariaLabel": null,
+      "loading": null,
+      "loadingLabel": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "timeFormat": [
+        "local",
+        "relative",
+        "utc"
+      ]
+    },
+    "countdown": {
+      "deadline": null,
+      "label": null,
+      "paused": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "type": [
+        "due",
+        "expiry"
+      ],
+      "warningThreshold": null
+    },
     "avatar": {
       "alt": null,
       "colors": null,
       "icon": null,
       "label": null,
       "pattern": null,
+      "presence": null,
       "size": null,
       "src": null,
       "variant": null
@@ -1764,6 +1852,7 @@
       ]
     },
     "card": {
+      "href": null,
       "padded": null,
       "title": null
     },
@@ -2102,6 +2191,16 @@
         "stacked"
       ]
     },
+    "message-thread": {
+      "ariaLabel": null,
+      "loading": null,
+      "timestampFormat": null
+    },
+    "message-thread-root": {
+      "ariaLabel": null,
+      "loading": null,
+      "timestampFormat": null
+    },
     "network-map": {
       "animated": null,
       "density": [
@@ -2230,41 +2329,24 @@
       "columns": null,
       "columnVisibility": null,
       "data": null,
-      "defaultSnapshot": null,
       "density": [
         "comfortable",
         "compact"
       ],
       "error": null,
-      "estimateRowHeight": null,
-      "exportFilename": null,
-      "exportRows": null,
-      "filterFields": null,
-      "filters": null,
       "getSubRows": null,
-      "globalFilter": null,
-      "live": null,
       "loading": null,
-      "loadingMore": null,
       "manualFiltering": null,
-      "manualPagination": null,
       "manualSorting": null,
       "maxHeight": null,
-      "moreRows": null,
       "openKeys": null,
-      "page": null,
-      "pageSize": null,
-      "pageSizeOptions": null,
-      "paginated": null,
       "reorderable": null,
-      "rowCount": null,
       "rowKey": null,
       "rowReorderable": null,
       "rowSelectable": null,
       "selectable": null,
       "selectedKeys": null,
       "selectOnRowClick": null,
-      "snapshot": null,
       "sortable": null,
       "sorting": null,
       "stackable": null,
@@ -2866,13 +2948,21 @@
       ]
     },
     "hint": {
+      "ariaLabel": null,
       "content": null,
+      "href": null,
+      "linkLabel": null,
+      "open": null,
       "side": [
         "auto",
         "bottom",
         "end",
         "start",
         "top"
+      ],
+      "target": [
+        "_blank",
+        "_self"
       ]
     },
     "otp-input": {
@@ -2961,6 +3051,11 @@
       "title": null,
       "value": null
     },
+    "password-requirements-root": {
+      "requirements": null,
+      "title": null,
+      "value": null
+    },
     "radio-group": {
       "disabled": null,
       "invalid": null,
@@ -2991,6 +3086,21 @@
       "variant": [
         "card",
         "default"
+      ]
+    },
+    "rating": {
+      "clearable": null,
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "modelValue": null,
+      "name": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
       ]
     },
     "chip": {
@@ -3066,6 +3176,18 @@
         "none",
         "vertical"
       ]
+    },
+    "markdown-editor": {
+      "ariaLabel": null,
+      "disabled": null,
+      "invalid": null,
+      "maxRows": null,
+      "mentions": null,
+      "minRows": null,
+      "modelValue": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null
     },
     "context-menu": {
       "ariaLabel": null,
@@ -3201,6 +3323,8 @@
     },
     "footer": {
       "ariaLabel": null,
+      "homeAriaLabel": null,
+      "homeHref": null,
       "variant": [
         "console",
         "content",
@@ -3209,6 +3333,8 @@
     },
     "footer-root": {
       "ariaLabel": null,
+      "homeAriaLabel": null,
+      "homeHref": null,
       "variant": [
         "console",
         "content",
@@ -3349,6 +3475,7 @@
       "depth": null,
       "description": null,
       "hint": null,
+      "required": null,
       "stackable": null,
       "title": null,
       "variant": [
@@ -3653,6 +3780,7 @@
       "disabled": null,
       "href": null,
       "icon": null,
+      "inline": null,
       "label": null,
       "size": [
         "large",
@@ -4636,5 +4764,26 @@
       "items": null,
       "title": null
     }
-  }
+  },
+  "preview": [
+    "countdown",
+    "markdown-editor",
+    "message-thread",
+    "message-thread-group",
+    "message-thread-item",
+    "message-thread-root",
+    "priority-tag",
+    "rating",
+    "timeline",
+    "timeline-group",
+    "timeline-item",
+    "timeline-root"
+  ],
+  "previewBlocks": [
+    "create/create-ticket",
+    "detail/detail-customer",
+    "detail/detail-ticket",
+    "settings/settings-canned-responses",
+    "view/view-ticket-inbox"
+  ]
 }

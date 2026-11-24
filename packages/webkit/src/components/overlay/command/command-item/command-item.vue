@@ -71,7 +71,11 @@
     matchCommand(ctx.query.value, itemText.value, [String(props.value), ...props.keywords])
   )
 
-  const isVisible = computed(() => ctx.page.value === itemPage && match.value.score > 0)
+  const matched = computed(() => ctx.page.value === itemPage && match.value.score > 0)
+
+  const hint = computed(() => ctx.ranking.value && matched.value && match.value.ranges.length === 0)
+
+  const isVisible = computed(() => matched.value && !ctx.isCapped(itemId))
 
   const order = computed(() => (ctx.ranking.value ? Math.round((1 - match.value.score) * 1000) : 0))
 
@@ -147,6 +151,8 @@
       groupId,
       disabled: disabledRef,
       isVisible,
+      matched,
+      hint,
       order,
       el: rootEl,
       activate
@@ -156,6 +162,13 @@
   onBeforeUnmount(() => {
     unregister?.()
   })
+
+  const ROOT_CLASS =
+    'flex min-h-8 pointer-coarse:min-h-11 items-center gap-(--spacing-xs) rounded-(--shape-button) border-y border-transparent bg-clip-padding ' +
+    'forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none ' +
+    'data-[active]:bg-(--bg-selected) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)'
 </script>
 
 <template>
@@ -172,11 +185,12 @@
     :data-active="active || undefined"
     :data-disabled="disabled || undefined"
     :style="ctx.ranking.value ? { order } : undefined"
-    class="flex min-h-8 pointer-coarse:min-h-11 items-center gap-(--spacing-xs) rounded-(--shape-button) border-y border-transparent bg-clip-padding forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none data-[active]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
+    :class="ROOT_CLASS"
     @click="!disabled && activate($event)"
     @keydown.enter.prevent="!disabled && activate($event)"
     @keydown.space.prevent="!disabled && activate($event)"
     @mouseenter="!disabled && ctx.setActive(value)"
+    @focus="!disabled && ctx.setActive(value)"
   >
     <span
       v-if="$slots['leading']"

@@ -8,7 +8,6 @@
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import AttributeEditor, {
-    type AttributeEditorItem,
     type AttributeEditorRowErrors
   } from '../attribute-editor/attribute-editor.vue'
   import Input from '../input/input.vue'
@@ -69,7 +68,9 @@
     describedBy,
     labelledBy,
     invalid: isInvalid,
-    disabled: isDisabled
+    disabled: isDisabled,
+    required: isRequired,
+    field
   } = useFieldControl({
     id: () => attrs['id'] as string | undefined,
     describedBy: () => attrs['aria-describedby'] as string | undefined,
@@ -127,10 +128,8 @@
     })
   )
 
-  const asTag = (item: AttributeEditorItem) => item as unknown as TagEditorTag
-
-  const setTags = (items: AttributeEditorItem[]) => {
-    tags.value = items.map(asTag)
+  const setTags = (items: TagEditorTag[]) => {
+    tags.value = items
   }
 
   const setRemoval = (index: number, markedForRemoval: boolean) => {
@@ -138,7 +137,7 @@
     tags.value = next
   }
 
-  const newTag = () => ({ key: '', value: '' })
+  const newTag = (): TagEditorTag => ({ key: '', value: '' })
 
   const valueKeys = computed(() => Object.keys(props.valueSuggestions))
 
@@ -170,7 +169,9 @@
     :id="controlId"
     role="group"
     :aria-labelledby="labelledBy"
-    :aria-describedby="describedBy"
+    :aria-describedby="
+      [describedBy, isRequired && field?.requiredId].filter(Boolean).join(' ') || undefined
+    "
     :aria-invalid="isInvalid || undefined"
     :data-invalid="isInvalid || null"
     :data-disabled="isDisabled || null"
@@ -195,8 +196,8 @@
         <Input
           :model-value="String(value ?? '')"
           :placeholder="t('tagEditor.keyPlaceholder')"
-          :disabled="isDisabled || Boolean(asTag(item).markedForRemoval)"
-          :readonly="Boolean(asTag(item).existing)"
+          :disabled="isDisabled || Boolean(item.markedForRemoval)"
+          :readonly="Boolean(item.existing)"
           :list="keySuggestions.length ? `${baseId}-keys` : undefined"
           autocomplete="off"
           :spellcheck="false"
@@ -207,14 +208,14 @@
         <Input
           :model-value="String(value ?? '')"
           :placeholder="t('tagEditor.valuePlaceholder')"
-          :disabled="isDisabled || Boolean(asTag(item).markedForRemoval)"
+          :disabled="isDisabled || Boolean(item.markedForRemoval)"
           :list="valueListId(item['key'])"
           autocomplete="off"
           :spellcheck="false"
           @update:model-value="update"
         />
         <span
-          v-if="asTag(item).markedForRemoval"
+          v-if="item.markedForRemoval"
           class="text-body-sm text-(--text-muted)"
           :data-testid="`${testId}__marked`"
           >{{ t('tagEditor.markedForRemoval') }}</span
@@ -222,7 +223,7 @@
       </template>
       <template #row-actions="{ item, index, remove, removable, removeLabel }">
         <Button
-          v-if="asTag(item).markedForRemoval"
+          v-if="item.markedForRemoval"
           :label="t('tagEditor.undo')"
           :aria-label="t('tagEditor.undoLabel', { index: index + 1 })"
           variant="ghost"
@@ -241,7 +242,7 @@
             size="medium"
             :ariaLabel="removeLabel"
             :data-testid="`${testId}__remove`"
-            @click="(event) => (asTag(item).existing ? setRemoval(index, true) : remove(event))"
+            @click="(event) => (item.existing ? setRemoval(index, true) : remove(event))"
           />
         </Tooltip>
       </template>

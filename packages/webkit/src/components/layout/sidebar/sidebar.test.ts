@@ -7,9 +7,11 @@ import Default from '../../../../examples/sidebar/default.vue'
 import IconRail from '../../../../examples/sidebar/icon-rail.vue'
 import Resizable from '../../../../examples/sidebar/resizable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
 import SidebarMenuGroup from '../../navigation/sidebar-menu/sidebar-menu-group/sidebar-menu-group.vue'
 import SidebarMenuItem from '../../navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue'
+import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import SidebarCompound from './index'
 import Sidebar from './sidebar.vue'
 import SidebarFooter from './sidebar-footer.vue'
@@ -89,20 +91,36 @@ describe('Sidebar', () => {
     })
   })
   describe('rendering (structure grounded in the template)', () => {
-    it('renders an <aside> root carrying the default data-testid and its nav/scroll regions', () => {
+    it('renders a root carrying the default data-testid and its nav/scroll regions', () => {
       const { getByTestId } = render(Sidebar)
 
       const root = getByTestId('sidebar')
-      expect(root.tagName).toBe('ASIDE')
+      expect(root.tagName).toBe('DIV')
 
       const nav = getByTestId('sidebar__nav')
       expect(nav.tagName).toBe('NAV')
       expect(getByTestId('sidebar__scroll')).toBeTruthy()
     })
 
-    it('exposes a navigation landmark', () => {
+    it('exposes a navigation landmark named like the sidebar', () => {
       const { getByRole } = render(Sidebar)
-      expect(getByRole('navigation')).toBeTruthy()
+      expect(getByRole('navigation', { name: 'Sidebar' })).toBeTruthy()
+    })
+
+    it.each([
+      ['es', 'Barra lateral'],
+      ['pt-BR', 'Barra lateral']
+    ])('names the navigation landmark from the %s catalog', (locale, name) => {
+      const { getByRole } = render(ConfigProvider, {
+        props: { locale, catalogs: LOCALES },
+        slots: { default: () => h(Sidebar) }
+      })
+      expect(getByRole('navigation', { name })).toBeTruthy()
+    })
+
+    it('names the navigation landmark from ariaLabel', () => {
+      const { getByRole } = render(Sidebar, { props: { ariaLabel: 'Console' } })
+      expect(getByRole('navigation', { name: 'Console' })).toBeTruthy()
     })
 
     it('does not render the header region when no header slot is provided', () => {
@@ -116,16 +134,18 @@ describe('Sidebar', () => {
     })
   })
 
-  describe('ariaLabel prop -> aria-label on the <aside> landmark', () => {
+  describe('ariaLabel prop -> aria-label on the nav landmark, the only landmark', () => {
     it('defaults the aria-label to "Sidebar"', () => {
       const { getByTestId } = render(Sidebar)
-      expect(getByTestId('sidebar').getAttribute('aria-label')).toBe('Sidebar')
+      expect(getByTestId('sidebar__nav').getAttribute('aria-label')).toBe('Sidebar')
     })
 
-    it('applies a custom ariaLabel to the root', () => {
-      const { getByTestId, getByRole } = render(Sidebar, { props: { ariaLabel: 'Application' } })
-      expect(getByTestId('sidebar').getAttribute('aria-label')).toBe('Application')
-      expect(getByRole('complementary', { name: 'Application' })).toBe(getByTestId('sidebar'))
+    it('applies a custom ariaLabel to the nav and adds no second landmark', () => {
+      const { getByTestId, getByRole, queryByRole } = render(Sidebar, {
+        props: { ariaLabel: 'Application' }
+      })
+      expect(getByRole('navigation', { name: 'Application' })).toBe(getByTestId('sidebar__nav'))
+      expect(queryByRole('complementary')).toBeNull()
     })
   })
 
@@ -139,7 +159,7 @@ describe('Sidebar', () => {
         }
       })
 
-      expect(getByTestId('my-sidebar').tagName).toBe('ASIDE')
+      expect(getByTestId('my-sidebar').tagName).toBe('DIV')
       expect(getByTestId('my-sidebar__header')).toBeTruthy()
       expect(getByTestId('my-sidebar__nav')).toBeTruthy()
       expect(getByTestId('my-sidebar__scroll')).toBeTruthy()
@@ -223,7 +243,7 @@ describe('Sidebar', () => {
   describe('documented example (the story fixtures run in-test)', () => {
     it('Default story renders the console rail: header, nav and footer regions', () => {
       const { getByTestId } = render(Default)
-      expect(getByTestId('sidebar').tagName).toBe('ASIDE')
+      expect(getByTestId('sidebar').tagName).toBe('DIV')
       expect(getByTestId('sidebar__header')).toBeTruthy()
       expect(getByTestId('sidebar__nav')).toBeTruthy()
       expect(getByTestId('sidebar__footer')).toBeTruthy()
@@ -231,7 +251,7 @@ describe('Sidebar', () => {
 
     it('Default story labels the landmark from its args (aria-label="Console")', () => {
       const { getByRole } = render(Default)
-      expect(getByRole('complementary', { name: 'Console' })).toBeTruthy()
+      expect(getByRole('navigation', { name: 'Console' })).toBeTruthy()
     })
 
     it('the navigation is a SidebarMenu that gives up the landmark to the sidebar', () => {
@@ -319,36 +339,41 @@ describe('Sidebar', () => {
 
       const root = getByTestId('sidebar')
       expect(root.getAttribute('data-state')).toBe('closed')
-      expect(root.getAttribute('aria-hidden')).toBe('true')
       expect(root.hasAttribute('inert')).toBe(true)
-      expect((getByTestId('sidebar__collapse-input') as HTMLInputElement).checked).toBe(true)
+      expect(getByTestId('sidebar__panel').getAttribute('data-state')).toBe('closed')
     })
 
-    it('renders a hidden checkbox whose checked state mirrors collapsed, CSS-only motion driver', () => {
+    it('the panel carries the collapsed state that drives the CSS motion, with no hidden control', () => {
       const { getByTestId } = render(Sidebar, {
         props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const input = getByTestId('sidebar__collapse-input') as HTMLInputElement
-      expect(input.type).toBe('checkbox')
-      expect(input.checked).toBe(true)
-      expect(input.getAttribute('aria-hidden')).toBe('true')
-      expect(input.getAttribute('tabindex')).toBe('-1')
+      const panel = getByTestId('sidebar__panel')
+      expect(panel.getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('sidebar').querySelector('input')).toBeNull()
     })
 
-    it('toggling the hidden checkbox drives the collapsed model, the same state the trigger drives', async () => {
-      const { getByTestId, emitted } = render(Sidebar, {
-        props: { collapsible: true },
+    it('the panel state follows the model both ways, the state the trigger drives', async () => {
+      const { getByTestId, rerender } = render(Sidebar, {
+        props: { collapsible: true, open: true },
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const input = getByTestId('sidebar__collapse-input') as HTMLInputElement
-      await fireEvent.click(input)
+      const panel = getByTestId('sidebar__panel')
+      expect(panel.getAttribute('data-state')).toBe('open')
+      await rerender({ collapsible: true, open: false })
+      expect(panel.getAttribute('data-state')).toBe('closed')
+      await rerender({ collapsible: true, open: true })
+      expect(panel.getAttribute('data-state')).toBe('open')
+    })
 
-      expect(input.checked).toBe(true)
-      expect(emitted()['update:open']?.at(-1)).toEqual([false])
-      expect(getByTestId('sidebar').getAttribute('data-state')).toBe('closed')
+    it('a rail that cannot collapse carries no panel state', () => {
+      const { getByTestId } = render(Sidebar, {
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      expect(getByTestId('sidebar__panel').hasAttribute('data-state')).toBe(false)
     })
 
     it('the way back is a sibling of the rail, because a collapsed rail would clip it', async () => {
@@ -407,7 +432,6 @@ describe('Sidebar', () => {
 
       expect(rail.style.width).toBe('40px')
       expect(rail.hasAttribute('inert')).toBe(true)
-      expect(rail.getAttribute('aria-hidden')).toBe('true')
       expect(rail.getAttribute('data-state')).toBe('closed')
     })
 

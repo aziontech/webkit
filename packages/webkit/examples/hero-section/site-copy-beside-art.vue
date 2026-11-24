@@ -18,6 +18,10 @@
     'itau',
     'magalu'
   ]
+
+  const DESCRIPTION =
+    'Every capability is a separate service with its own setup, limits, and bill. Azion delivers one platform, distributed by default. One configuration, one bill, security included, ' +
+    'and support in your language.'
 </script>
 
 <template>
@@ -25,7 +29,7 @@
     variant="copy-beside-art"
     eyebrow="AWS Alternative Comparison"
     title="AWS sells services. Your team becomes the integrator."
-    description="Every capability is a separate service with its own setup, limits, and bill. Azion delivers one platform, distributed by default. One configuration, one bill, security included, and support in your language."
+    :description="DESCRIPTION"
     :primary-action="primaryAction"
     illustration="global-network"
     illustration-aria-label="AWS sells services. Your team becomes the integrator."

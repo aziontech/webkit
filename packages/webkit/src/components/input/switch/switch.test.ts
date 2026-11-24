@@ -277,7 +277,7 @@ describe('Switch', () => {
       }
     )
 
-    it('renders the locked visual in both positions — the track never keeps the checked accent', () => {
+    it('keeps on and off apart when locked: a muted accent track when on', () => {
       // Each render() mounts into the SAME document, so scope every query to its
       // own container instead of the shared getByTestId.
       const trackOf = (props: { modelValue: boolean; disabled?: boolean }) => {
@@ -293,9 +293,7 @@ describe('Switch', () => {
       const onLocked = trackOf({ modelValue: true, disabled: true })
       const onEnabled = trackOf({ modelValue: true })
 
-      // Disabled wins over checked, so a locked switch reads the same either way...
-      expect(onLocked).toBe(offLocked)
-      // ...and the enabled checked track is genuinely a different colour.
+      expect(onLocked).not.toBe(offLocked)
       expect(onEnabled).not.toBe(onLocked)
     })
 

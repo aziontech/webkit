@@ -2,6 +2,7 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { safeHref } from '../../../utils/safe-href'
 
   defineOptions({
     name: 'Card',
@@ -13,11 +14,14 @@
     title?: string
     /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
     padded?: boolean
+    /** When set, the whole card is one link to this URL: the root renders as an anchor. Keep other interactive content out of a linked card. */
+    href?: string
   }
 
   const props = withDefaults(defineProps<CardProps>(), {
     title: '',
-    padded: true
+    padded: true,
+    href: ''
   })
 
   defineSlots<{
@@ -36,6 +40,8 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'card')
 
+  const link = computed(() => safeHref(props.href))
+
   const hasHeaderSlot = () => Boolean(slots['header'])
   const hasHeaderActionsSlot = () => Boolean(slots['header-actions'])
   const hasFooterSlot = () => Boolean(slots['footer'])
@@ -45,22 +51,30 @@
     hasHeaderSlot() || hasHeaderActionsSlot() || Boolean(props.title?.trim())
 
   const showDefaultHeader = () => showHeaderRegion() && !hasHeaderSlot()
+
+  const ROOT_CLASS =
+    'flex flex-col overflow-clip bg-(--bg-surface) border border-(length:--border-width-default) border-(--border-default) rounded-(--shape-card) ' +
+    'data-[link]:text-(--text-default) data-[link]:no-underline data-[link]:outline-none data-[link]:focus-visible:ring-2 data-[link]:focus-visible:ring-(--ring-color) ' +
+    'data-[link]:focus-visible:ring-offset-2 data-[link]:focus-visible:ring-offset-(--bg-canvas)'
+
+  const HEADER_CLASS =
+    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) ' +
+    '[&:has(+:empty:not([data-padded]))]:border-b-0 ' +
+    'px-(--spacing-md) py-(--spacing-sm)'
 </script>
 
 <template>
-  <section
+  <component
+    :is="link ? 'a' : 'section'"
     v-bind="$attrs"
-    :class="
-      cn(
-        'flex flex-col overflow-clip bg-(--bg-surface) border border-(length:--border-width-default) border-(--border-default) rounded-(--shape-card)',
-        attrs.class as string | undefined
-      )
-    "
+    :href="link ?? undefined"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
+    :data-link="link ? true : null"
   >
     <header
       v-if="showHeaderRegion()"
-      class="group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) [&:has(+:empty:not([data-padded]))]:border-b-0 px-(--spacing-md) py-(--spacing-sm)"
+      :class="HEADER_CLASS"
       :data-testid="`${testId}__header`"
     >
       <slot
@@ -100,5 +114,5 @@
     >
       <slot name="footer" />
     </footer>
-  </section>
+  </component>
 </template>

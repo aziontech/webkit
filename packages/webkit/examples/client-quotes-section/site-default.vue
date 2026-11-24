@@ -27,7 +27,9 @@
     {
       logo: magaluExtendedColor,
       clientName: 'Magalu',
-      text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',
+      text:
+        'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce ' +
+        'costs, and deliver the best shopping experiences to millions of customers across Latin America.',
       name: 'Allan Monteiro',
       jobTitle: 'CISO & Head of Technology at Magalu'
     },

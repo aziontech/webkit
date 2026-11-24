@@ -1,17 +1,11 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
-  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Progress from '@aziontech/webkit/progress'
   import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -19,6 +13,9 @@
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
+  import { scorecardTiles, trendCharts } from './executive-summary-metrics'
+  import CommentaryCard from './parts/commentary-card.vue'
+  import GoalsCard from './parts/goals-card.vue'
   import { sampleGoals, sampleKpis, sampleLabels, sampleNotes, sampleTrends } from './sample'
 
   /** A scorecard tile and its twelve-month trend. */
@@ -142,115 +139,6 @@
 
   const quarters = ['Q3 2026', 'Q2 2026', 'Q1 2026', 'Q4 2025', 'Q3 2025']
 
-  const tiles: {
-    metric: ExecutiveSummaryDashboardMetric
-    label: string
-    description: string
-    format: ExecutiveSummaryDashboardFormat
-    inverse: boolean
-  }[] = [
-    {
-      metric: 'revenue',
-      label: 'Revenue',
-      description: 'Recognized revenue for the quarter.',
-      format: 'currency',
-      inverse: false
-    },
-    {
-      metric: 'active-users',
-      label: 'Monthly active users',
-      description: 'People who signed in at least once in the last month of the quarter.',
-      format: 'count',
-      inverse: false
-    },
-    {
-      metric: 'retention',
-      label: 'Net revenue retention',
-      description: 'Revenue kept from existing customers, expansion included, over twelve months.',
-      format: 'percentage',
-      inverse: false
-    },
-    {
-      metric: 'nps',
-      label: 'NPS',
-      description: 'Net promoter score from the quarterly customer survey.',
-      format: 'score',
-      inverse: false
-    },
-    {
-      metric: 'uptime',
-      label: 'Uptime',
-      description: 'Share of minutes every public service answered, averaged over the quarter.',
-      format: 'uptime',
-      inverse: false
-    },
-    {
-      metric: 'cost-per-request',
-      label: 'Cost per request',
-      description: 'Infrastructure spend divided by requests served. A rise is a regression.',
-      format: 'cost',
-      inverse: true
-    }
-  ]
-
-  const charts: {
-    metric: ExecutiveSummaryDashboardMetric
-    title: string
-    description: string
-    mark: 'area' | 'line'
-    format: ExecutiveSummaryDashboardFormat
-    min: number
-  }[] = [
-    {
-      metric: 'revenue',
-      title: 'Revenue',
-      description: 'Recognized revenue per month.',
-      mark: 'area',
-      format: 'currency',
-      min: 0
-    },
-    {
-      metric: 'active-users',
-      title: 'Monthly active users',
-      description: 'People who signed in at least once in the month.',
-      mark: 'area',
-      format: 'count',
-      min: 0
-    },
-    {
-      metric: 'retention',
-      title: 'Net revenue retention',
-      description: 'Trailing twelve months, measured at month end.',
-      mark: 'line',
-      format: 'percentage',
-      min: 100
-    },
-    {
-      metric: 'nps',
-      title: 'NPS',
-      description: 'Net promoter score from the monthly pulse survey.',
-      mark: 'line',
-      format: 'score',
-      min: 0
-    },
-    {
-      metric: 'uptime',
-      title: 'Uptime',
-      description: 'Share of minutes every public service answered.',
-      mark: 'line',
-      format: 'uptime',
-      min: 99.8
-    },
-    {
-      metric: 'cost-per-request',
-      title: 'Cost per request',
-      description: 'Infrastructure spend divided by requests served.',
-      mark: 'line',
-      format: 'cost',
-      min: 0
-    }
-  ]
-
   const blocked = computed(() => props.loading || props.error !== '')
   const kpis = computed(() => props.kpis ?? (blocked.value ? {} : sampleKpis))
   const goals = computed(() => props.goals ?? (blocked.value ? [] : sampleGoals))
@@ -259,7 +147,7 @@
   const notes = computed(() => props.notes ?? (blocked.value ? [] : sampleNotes))
 
   const trendCards = computed(() =>
-    charts.map((chart) => {
+    trendCharts.map((chart) => {
       const data = trendData.value[chart.metric]
       const series: ChartSeries[] = data
         ? [{ id: chart.metric, name: chart.title, values: data.values }]
@@ -273,7 +161,6 @@
       !blocked.value &&
       (goals.value.length > 0 || Object.values(kpis.value).some((kpi) => kpi?.value != null))
   )
-  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
   const fixed = (value: number, digits: number) =>
@@ -307,7 +194,7 @@
   }).map(([id, header]) => ({ id, header }))
 
   const reportRows = () => [
-    ...tiles.map((tile) => {
+    ...scorecardTiles.map((tile) => {
       const kpi = kpis.value[tile.metric]
       return {
         section: 'Scorecard',
@@ -372,13 +259,21 @@
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the executive summary. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-executive-summary__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section aria-label="Scorecard">
         <ul
           class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
         >
           <li
-            v-for="tile in tiles"
+            v-for="tile in scorecardTiles"
             :key="tile.metric"
             class="flex min-w-0 flex-col"
           >
@@ -426,13 +321,12 @@
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="failed(trend.title.toLowerCase())"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 v-model:active-index="activeIndex"
@@ -461,166 +355,20 @@
         </section>
 
         <div class="flex min-w-0 flex-col gap-(--spacing-md) xl:col-span-4">
-          <Card :title="quarter + ' goals'">
-            <template #default>
-              <Alert
-                v-if="error"
-                severity="danger"
-                :label="failed(quarter + ' goals')"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-              <ul
-                v-else-if="loading"
-                aria-busy="true"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="index in 5"
-                  :key="index"
-                  class="flex flex-col gap-(--spacing-xs)"
-                >
-                  <Skeleton
-                    width="60%"
-                    height="1rem"
-                  />
-                  <Skeleton height="0.5rem" />
-                  <Skeleton
-                    width="40%"
-                    height="0.75rem"
-                  />
-                </li>
-              </ul>
-              <ul
-                v-else-if="goals.length"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="goal in goals"
-                  :key="goal.id"
-                  class="flex flex-col gap-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-sm)">
-                    <span class="truncate text-label-md text-(--text-default)">{{
-                      goal.label
-                    }}</span>
-                    <Tag
-                      :label="goal.status.label"
-                      :severity="goal.status.severity"
-                      size="small"
-                    />
-                  </div>
-                  <Progress
-                    :value="goal.current"
-                    :max="goal.target"
-                    size="small"
-                    :aria-label="goal.label"
-                    :aria-valuetext="
-                      formatters[goal.format](goal.current) +
-                      ' of ' +
-                      formatters[goal.format](goal.target)
-                    "
-                  />
-                  <div
-                    class="flex items-center justify-between gap-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    <span class="tabular-nums">
-                      {{ formatters[goal.format](goal.current) }} of
-                      {{ formatters[goal.format](goal.target) }}
-                    </span>
-                    <span class="tabular-nums"
-                      >{{ Math.round((goal.current / goal.target) * 100) }}%</span
-                    >
-                  </div>
-                </li>
-              </ul>
-              <EmptyState
-                v-else
-                size="small"
-                icon="az az-flag"
-                :title="'No goal results for ' + quarter"
-                description="Progress appears once the quarter reports its first month."
-              />
-            </template>
-          </Card>
+          <GoalsCard
+            :quarter="quarter"
+            :goals="goals"
+            :formatters="formatters"
+            :loading="loading"
+            :error="error"
+          />
 
-          <Card
-            title="Commentary"
-            :padded="error !== ''"
-          >
-            <template #default>
-              <Alert
-                v-if="error"
-                severity="danger"
-                :label="failed('commentary')"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-              <Item.List
-                v-else-if="loading"
-                key="item.list-1"
-                aria-busy="true"
-              >
-                <Item
-                  v-for="index in 3"
-                  :key="index"
-                  size="small"
-                  role="listitem"
-                >
-                  <Item.Media>
-                    <Skeleton
-                      variant="circle"
-                      width="2rem"
-                      height="2rem"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Skeleton
-                        width="45%"
-                        height="1rem"
-                      />
-                      <Skeleton height="2.5rem" />
-                    </div>
-                  </Item.Content>
-                </Item>
-              </Item.List>
-              <Item.List
-                key="item.list-2"
-                v-else-if="notes.length"
-              >
-                <Item
-                  v-for="note in notes"
-                  :key="note.id"
-                  size="small"
-                  role="listitem"
-                >
-                  <Item.Media>
-                    <Avatar
-                      :label="note.initials"
-                      size="medium"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ note.author }}</Item.Title>
-                    <Item.Description>
-                      {{ note.role }} · <time :datetime="note.date">{{ note.dateLabel }}</time>
-                    </Item.Description>
-                    <p class="mt-(--spacing-xs) text-pretty text-body-sm text-(--text-default)">
-                      {{ note.body }}
-                    </p>
-                  </Item.Content>
-                </Item>
-              </Item.List>
-              <EmptyState
-                v-else
-                size="small"
-                icon="az az-comment"
-                :title="'No notes for ' + quarter"
-                description="Leads add notes here when they review the quarter."
-              />
-            </template>
-          </Card>
+          <CommentaryCard
+            :quarter="quarter"
+            :notes="notes"
+            :loading="loading"
+            :error="error"
+          />
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the customers page places it: the overline and headline over a nine-mark logo wall, with one signed quote from Zoop in the aside and a link out to its case study. Edit the props in the Controls panel — a band with no logos and no quote renders only its title.",
+      "summary": "The band as the customers page places it: the overline and headline over a nine-mark logo wall, with one signed quote from Zoop in the aside and a link out to its case study. A band with no logos and no quote renders only its title.",
       "file": "default.vue"
     },
     {

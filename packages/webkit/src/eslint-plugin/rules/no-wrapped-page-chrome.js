@@ -40,12 +40,16 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a bordered or padded wrapper around SiteFooterSection or SiteHeaderSection: they draw their own rules and frame, so the wrapper doubles a rule or pulls the frame off the page column.'
+        'Disallow a bordered or padded wrapper around SiteFooterSection or SiteHeaderSection: ' +
+        'they draw their own rules and frame, so the wrapper doubles a rule or pulls the frame ' +
+        'off the page column.'
     },
     schema: [],
     messages: {
       wrapped:
-        "'<{{tag}}>' draws its own rules and frame; its wrapper's {{classes}} doubles a rule or moves the frame. Render it as a direct child of the page shell, or drop the border and padding from the wrapper."
+        "'<{{tag}}>' draws its own rules and frame; its wrapper's {{classes}} doubles a rule or " +
+        'moves the frame. Render it as a direct child of the page shell, or drop the border and ' +
+        'padding from the wrapper.'
     }
   },
   create(context) {

@@ -7,6 +7,7 @@ import AccountSwitch from '../../../../blocks/shell/shell-console/variants/accou
 import AccountSwitchError from '../../../../blocks/shell/shell-console/variants/account-switch-error.vue'
 import DetailPage from '../../../../blocks/shell/shell-console/variants/detail-page.vue'
 import Notifications from '../../../../blocks/shell/shell-console/variants/notifications.vue'
+import PageHelp from '../../../../blocks/shell/shell-console/variants/page-help.vue'
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
 
@@ -256,5 +257,31 @@ describe('shell/shell-console states render the shell', () => {
     const view = at(AccountSwitch, 1280)
     expect(view.getByRole('heading', { level: 1, name: 'Applications' })).toBeTruthy()
     expect(buttonByText('Create', view.container as HTMLElement)).toBeTruthy()
+  })
+})
+
+describe('shell/shell-console#PageHelp', () => {
+  it('opens the page help from the Info link after the title and closes it again', async () => {
+    const view = at(PageHelp, 1280)
+    const header = view.getByRole('heading', { level: 1, name: 'Applications' }).closest('header')
+    const info = within(header as HTMLElement).getByRole('button', {
+      name: 'Info about applications'
+    })
+
+    expect(view.getByTestId('page-header__meta')).toContainElement(info)
+    expect(info.getAttribute('aria-expanded')).toBe('true')
+    const panel = await view.findByRole('complementary', { name: 'Help: Applications' })
+    expect(panel.closest(`#${CSS.escape(info.getAttribute('aria-controls') ?? '')}`)).toBeTruthy()
+    await expectNoA11yViolations(view.container)
+
+    await fireEvent.click(info)
+    await waitFor(() =>
+      expect(view.queryByRole('complementary', { name: 'Help: Applications' })).toBeNull()
+    )
+    expect(info.getAttribute('aria-expanded')).toBe('false')
+    expect(info.hasAttribute('aria-controls')).toBe(false)
+
+    await fireEvent.click(info)
+    expect(await view.findByRole('complementary', { name: 'Help: Applications' })).toBeTruthy()
   })
 })

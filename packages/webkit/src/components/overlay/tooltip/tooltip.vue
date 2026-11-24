@@ -2,6 +2,7 @@
   import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale } from '../../../composables/use-translate'
@@ -61,6 +62,7 @@
   const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const pressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+  let escaped = false
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tooltip')
 
@@ -122,7 +124,7 @@
 
   function scheduleOpen() {
     clearCloseTimer()
-    if (props.disabled || !props.content) return
+    if (props.disabled || !props.content || escaped) return
     if (isOpen.value) return
     clearHoverTimer()
     hoverTimer.value = setTimeout(() => setOpen(true), props.delay)
@@ -136,6 +138,7 @@
   }
 
   function scheduleClose(wait: number = CLOSE_GRACE_MS) {
+    escaped = false
     clearHoverTimer()
     clearCloseTimer()
     closeTimer.value = setTimeout(closeTooltip, wait)
@@ -158,6 +161,7 @@
     if (!isOpen.value || !isTop.value || event.defaultPrevented) return
     if (event.key === 'Escape') {
       event.preventDefault()
+      escaped = true
       closeTooltip()
     }
   }
@@ -201,6 +205,14 @@
     { immediate: true }
   )
 
+  useElementListener(triggerEl, 'mouseenter', () => scheduleOpen())
+  useElementListener(triggerEl, 'mouseleave', () => scheduleClose())
+  useElementListener(triggerEl, 'pointerdown', onPointerdown)
+  useElementListener(triggerEl, 'pointerup', onPointerup)
+  useElementListener(triggerEl, 'pointercancel', onPointerup)
+  useElementListener(triggerEl, 'focusin', () => setOpen(true))
+  useElementListener(triggerEl, 'focusout', onFocusout)
+
   onBeforeUnmount(() => {
     clearHoverTimer()
     clearCloseTimer()
@@ -209,6 +221,12 @@
   })
 
   const portalLocale = usePortalLocale()
+
+  const PANEL_CLASS =
+    'flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-control) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs ' +
+    'text-(--text-contrast) [transform-origin:var(--popup-origin,center)] ' +
+    'data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -221,13 +239,6 @@
     :data-disabled="disabled || null"
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
-    @mouseenter="scheduleOpen"
-    @mouseleave="scheduleClose()"
-    @pointerdown="onPointerdown"
-    @pointerup="onPointerup"
-    @pointercancel="onPointerup"
-    @focusin="setOpen(true)"
-    @focusout="onFocusout"
   >
     <slot />
   </span>
@@ -252,8 +263,10 @@
         :aria-hidden="!isOpen"
         @mouseenter="clearCloseTimer"
         @mouseleave="scheduleClose()"
+        @focusin="clearCloseTimer"
+        @focusout="scheduleClose()"
         :style="panelStyle"
-        class="flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-control) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)] data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance motion-reduce:transition-none"
+        :class="PANEL_CLASS"
       >
         {{ content }}
       </div>

@@ -11,6 +11,11 @@
    "file": "blocks/shell/shell-console/variants/notifications.vue"
   },
   {
+   "name": "PageHelp",
+   "summary": "The ListPage rendered through `ConsoleLayout` with page help: `ConsoleLayout.ToolsTrigger` first in the `PageHeader`'s `meta` slot puts the `Info` link right after the title, and it opens and closes the layout's tools region (`v-model:tools-open`, titled Help, a drawer on a narrow screen), whose `tools` slot holds the page's `HelpPanel` topic (what an application is, when to create one, a Learn more link). The link carries `aria-expanded` and `aria-controls`; the region's close button closes it too.",
+   "file": "blocks/shell/shell-console/variants/page-help.vue"
+  },
+  {
    "name": "AccountSwitch",
    "summary": "The ListPage rendered through `ConsoleLayout` with the account switcher in its `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar`, the account name, a sort glyph; tooltip on the right; Ctrl+O or ⌘O), and in its `header-start` slot while compact (avatar and chevron only): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.",
    "file": "blocks/shell/shell-console/variants/account-switch.vue"
@@ -22,5 +27,8 @@
   }
  ],
  "sfcFile": "blocks/shell/shell-console/shell-console.vue",
- "guidelinesFile": "blocks/shell/shell-console/guidelines.md"
+ "guidelinesFile": "blocks/shell/shell-console/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
 }

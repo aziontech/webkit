@@ -8,8 +8,13 @@ import '@aziontech/webkit/styles/country-flags'
 import { ViteSSG } from 'vite-ssg'
 
 import App from './app.vue'
-import { preloadRoute } from './lib/data'
+import { loadDocsShell } from './lib/docs-shell-loader'
+import { preloadRoute } from './lib/route-data'
 import { routes } from './router'
+
+if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/frame/')) {
+  void loadDocsShell()
+}
 
 export const createApp = ViteSSG(
   App,

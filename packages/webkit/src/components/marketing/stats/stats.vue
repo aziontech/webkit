@@ -78,6 +78,10 @@
   const mobileColumns = computed<CardGridMobileColumns>(() =>
     emptyCells(props.items.length, 2) === 0 ? 2 : 1
   )
+
+  const FIGURE_CLASS =
+    'flex min-w-0 flex-nowrap items-baseline gap-(--spacing-2xs) ' +
+    'group-data-[size=large]:text-big-number-lg group-data-[size=medium]:text-big-number-md group-data-[size=small]:text-big-number-sm'
 </script>
 
 <template>
@@ -101,19 +105,25 @@
       >
         <div
           :data-testid="`${testId}__figure`"
-          class="flex min-w-0 flex-nowrap items-baseline gap-(--spacing-2xs) group-data-[size=large]:text-big-number-lg group-data-[size=medium]:text-big-number-md group-data-[size=small]:text-big-number-sm"
+          :class="FIGURE_CLASS"
         >
           <span
-            v-if="item.prefix"
-            class="text-(--text-brand)"
-            >{{ item.prefix }}</span
+            dir="ltr"
+            :data-testid="`${testId}__value`"
+            class="inline-flex min-w-0 flex-nowrap items-baseline gap-(--spacing-2xs) [unicode-bidi:isolate]"
           >
-          <span class="text-(--text-default)">{{ item.value }}</span>
-          <span
-            v-if="item.suffix"
-            class="text-(--text-muted)"
-            >{{ item.suffix }}</span
-          >
+            <span
+              v-if="item.prefix"
+              class="text-(--text-default)"
+              >{{ item.prefix }}</span
+            >
+            <span class="text-(--text-default)">{{ item.value }}</span>
+            <span
+              v-if="item.suffix"
+              class="text-(--text-muted)"
+              >{{ item.suffix }}</span
+            >
+          </span>
         </div>
         <figcaption class="text-overline-sm text-(--text-muted)">{{ item.label }}</figcaption>
       </figure>

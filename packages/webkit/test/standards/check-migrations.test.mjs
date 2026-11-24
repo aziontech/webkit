@@ -110,6 +110,33 @@ test('additions never fail and are counted', () => {
   assert.equal(additions, 2)
 })
 
+test('a preview part or block may be removed or reshaped without a codemod entry', () => {
+  const before = apiFromCatalog({
+    imports: {
+      ticket: {
+        kind: 'component',
+        stability: 'preview',
+        props: [{ name: 'size', type: "'small' | 'large'" }]
+      },
+      'ticket-row': { kind: 'subcomponent', stability: 'preview' },
+      button: { kind: 'component', props: [{ name: 'size', type: "'small' | 'large'" }] }
+    },
+    blocks: { 'view/view-ticket': { stability: 'preview' }, 'view/view-table': {} }
+  })
+  assert.deepEqual(before.preview, ['ticket', 'ticket-row'])
+  assert.deepEqual(before.previewBlocks, ['view/view-ticket'])
+  const after = api(['button', 'ticket'], { button: { size: ['large', 'small'] }, ticket: {} })
+  assert.deepEqual(diffApi(before, after, none).uncovered, [
+    'block view/view-table was removed or renamed (add it to v<N>-blocks.json)'
+  ])
+})
+
+test('apiFromCatalog adds no preview keys when nothing is preview', () => {
+  const out = apiFromCatalog({ imports: { button: { kind: 'component' } }, blocks: {} })
+  assert.equal('preview' in out, false)
+  assert.equal('previewBlocks' in out, false)
+})
+
 test('the recorded snapshot is covered by the shipped migrations', () => {
   const snapshot = JSON.parse(readFileSync(resolve(PKG, 'scripts/api-snapshot.json'), 'utf8'))
   const catalog = JSON.parse(readFileSync(resolve(PKG, 'catalog.json'), 'utf8'))

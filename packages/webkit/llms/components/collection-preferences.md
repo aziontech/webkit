@@ -41,7 +41,7 @@
 | `title` | `string` | `''` | false | Panel title and trigger label. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `preferences` | `CollectionPreferencesValue` | `—` | false | Two-way value (`v-model:preferences`). |
 
 ## Events

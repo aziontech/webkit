@@ -115,7 +115,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data."
+   "doc": "Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data."
   }
  ],
  "events": [],

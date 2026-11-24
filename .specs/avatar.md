@@ -3,26 +3,27 @@ name: avatar
 category: content
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 4ae030401b06c3a01ad791ba76ed80c79a45a968fd935176b49f0fb854127424
+checksum: 09d9a3dfd0cbc5ad727d515f60c18e3b8ce392c53dab90688c649f0e92407a55
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-23
 ---
 
 # Avatar — Component Spec
 
 ## Purpose
 
-Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread.
+Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread. An optional presence dot on its bottom inline-end edge says whether the person is online, away, busy or offline.
 
 ## When to use
 
 - Identify a person next to their name: comment threads, member lists, "Last modified" cells, quotes.
 - The user entry in a header or account menu.
+- Show whether a teammate or support agent is reachable now (`presence`): an assignee picker, a ticket's agent list, a conversation header.
 - The mark of an organization or account that has no logo: `pattern="marble"` draws a soft generated mark seeded by its name, the same for the same name everywhere (account switcher, create organization, onboarding).
 
 ## When NOT to use
@@ -30,6 +31,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 - The Azion logo → use `brand`.
 - A count or short status → use `badge`.
 - A loading placeholder → use `skeleton`.
+- The outcome of a job or a deploy → use `status-indicator`; `presence` is only whether a person is reachable.
 
 ## Related
 
@@ -39,10 +41,11 @@ Identifies a person, an account or an organization with a small visual mark: the
 
 ## Best practices
 
-- Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
+- Pass initials or the full name in `label`: a name of several words shows the first letter of its first and last word (`"Jane Doe"` shows `JD`), and one word keeps its first two characters (`"JD"` stays `JD`).
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
+- Set `presence` only when the value is live (`online`, `away`, `busy`, `offline`); leave it empty when the app does not know, rather than showing `offline`. The presence joins the accessible name ("Jane Doe, away"), so keep `alt` to the name alone.
 - `size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`.
 
 ## Usage
@@ -64,6 +67,11 @@ Identifies a person, an account or an organization with a small visual mark: the
     variant="square"
     size="small"
   />
+  <Avatar
+    label="Jane Doe"
+    alt="Jane Doe"
+    presence="away"
+  />
 </template>
 ```
 
@@ -73,12 +81,13 @@ Identifies a person, an account or an organization with a small visual mark: the
 | --------- | --------------- | ----------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
 | `src`     | `string`        | `''`                                                        | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                   |
 | `alt`     | `string`        | `''`                                                        | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
-| `label`   | `string`        | `''`                                                        | false    | Initials shown when no image (normalized to two uppercase characters).                                           |
+| `label`   | `string`        | `''`                                                        | false    | Initials shown when no image: the first letters of the first and last word, or the first two characters of one word, uppercased.                                           |
 | `icon`    | `string`        | `'az az-user'`                                              | false    | Icon class for the fallback when no image or label (Azion icon class).                                           |
 | `variant` | `AvatarVariant` | `'circle'`                                                  | false    | Visual shape of the avatar container.                                                                            |
 | `size`    | `AvatarSize`    | `'medium'`                                                  | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |
 | `pattern` | `AvatarPattern` | `undefined`                                                 | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
 | `colors`  | `string[]`      | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                   |
+| `presence` | `AvatarPresence \| ''` | `''`                                                       | false    | Whether the person is reachable now, drawn as a dot on the bottom inline-end edge and added to the accessible name; empty draws no dot. |
 
 ## Events
 
@@ -94,6 +103,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 - Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
 - Root attributes: `data-variant` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
 - Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
+- Presence: `presence` is `online`, `away`, `busy` or `offline` (`AvatarPresence`); `''` (default) renders nothing. When set, the root carries `data-presence` and a dot (`data-slot="presence"`, test id `${testId}__presence`) sits inside the avatar's box, in its bottom inline-end corner, overlapping only the picture, at 10 / 12 / 16 px for `small` / `medium` / `large` (its 2 px ring included), the same for `circle` and `square`. The content is clipped to the avatar shape by an inner box, so the dot is never clipped by the avatar itself, and a parent that clips its content never cuts it off. Each value has its own shape, so colour is not the only signal: `online` a filled dot, `away` a crescent, `busy` a dot with a horizontal bar, `offline` a hollow ring. A 2 px ring in `--avatar-presence-ring` (default `var(--bg-surface)`) separates the dot from the picture and from the background; an app on another background sets that variable on the avatar or an ancestor.
 - Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
 - Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
@@ -112,6 +122,11 @@ _none_
 | shape                    | `var(--shape-control)`                                    |
 | ring                     | `var(--ring-color)`                                       |
 | pattern colors (default) | `var(--primary)` · `var(--warning)` · `var(--brand-blue)` |
+| presence `online`        | `var(--success-mark)`                                     |
+| presence `away`          | `var(--warning-mark)`                                     |
+| presence `busy`          | `var(--danger-mark)`                                      |
+| presence `offline`       | `var(--text-muted)`                                       |
+| presence ring and cut-outs | `var(--avatar-presence-ring, var(--bg-surface))`        |
 
 ## Theme gaps
 
@@ -125,6 +140,7 @@ _none_
 - Keyboard map: none.
 - ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
 - Contrast ≥4.5:1 for the initials on `var(--bg-surface-raised)`; the generated pattern is decorative and carries no text.
+- Presence: the dot is presentational (`aria-hidden`); the presence joins the accessible name of the root (`aria-label`) or of the image (`alt`) through `avatar.withPresence`, for example "Jane Doe, away"; it wraps whichever name applies (`alt`, the label, the initials or the fallback, so "User avatar, away"). The dot colours are the documented `-mark` colours (`--text-muted` for `offline`, the neutral mark), solid marks at APCA Lc 30 and WCAG 3:1 on the surface, and each value differs in shape as well as colour (WCAG 1.4.1). A change of `presence` is not announced (no live region): the avatar is a label, and a live roster announces through the app.
 
 ## Internationalization
 
@@ -132,12 +148,17 @@ _none_
 | ---------------------- | -------------- | ------------- |
 | `avatar.imageAlt`      | Avatar         | `alt`         |
 | `avatar.fallbackLabel` | User avatar    | `alt`         |
+| `avatar.presenceOnline` | online        | —             |
+| `avatar.presenceAway`  | away           | —             |
+| `avatar.presenceBusy`  | busy           | —             |
+| `avatar.presenceOffline` | offline      | —             |
+| `avatar.withPresence`  | {name}, {presence} | —         |
 
 - Formatting: none. With `pattern`, the accessible name is `alt`, then the full `label`, then `avatar.fallbackLabel`.
 
 ## Right-to-left
 
-- Layout: none; the avatar is a square box with centred content.
+- Layout: the avatar is a square box with centred content; the presence dot sits on the inline-end corner (`end-0`), so it moves to the bottom left under `dir="rtl"`. The `away` crescent mirrors with it.
 - Icons: the fallback icon and the generated pattern are not mirrored (the pattern is a mark, not a direction).
 - Keyboard: none; the avatar is not interactive.
 - User data: the initials and the name in the accessible name come from the consumer; no wrapper is needed for a two-character label.
@@ -146,12 +167,13 @@ _none_
 
 - Container queries: none: fixed size (24 / 32 / 48 px from `size`).
 - Narrow (≤ 640 px or a narrow container): nothing changes; the avatar does not shrink (`shrink-0`).
+- Presence: the dot stays inside the 24 / 32 / 48 px box, so it changes neither the avatar's size nor its footprint.
 - Touch: not interactive; a parent control owns the target size.
 - Reflow: fixed size, no horizontal scroll.
 
 ## Performance
 
-- Bundle budget: 12 KB gzip for the initial chunk of `./avatar` (it carries the locale lookup) in `.size-limit.json`.
+- Bundle budget: 12.8 KB gzip for the initial chunk of `./avatar` (it carries the locale lookup) in `.size-limit.json`; the presence dot, its cut-out and its five strings added about 0.5 KB to every entry that renders an avatar (recorded in `packages/webkit/docs/reviews/size-budgets-v6.md`).
 - Runtime budget: none: static; the pattern is a three-layer inline SVG computed once per `label` and `colors` change.
 - Heavy parts: the marble drawing loads in its own async chunk the first time an avatar sets `pattern`, so an avatar without a pattern pays nothing for it. Server rendering resolves the chunk before it writes the HTML, so hydration finds the same SVG; on a client-only render the avatar's surface shows until the chunk arrives.
 
@@ -163,6 +185,7 @@ _none_
 - Fallbacks — the content precedence: photo, initials, icon.
 - VariantGrid — shapes and sizes across the content modes.
 - Pattern — generated marble marks for organizations with no logo, one per name and palette; justified because `pattern` replaces the initials with a different content mode.
+- Presence — each `presence` value on a photo, initials and a square avatar, at every size; justified because `presence` adds a mark and changes the accessible name.
 
 ## Constraints — DO NOT
 

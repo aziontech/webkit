@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, ref, useAttrs } from 'vue'
+  import { computed, inject, ref, useAttrs, watch } from 'vue'
 
   import { useShortcuts } from '../../../../composables/use-shortcuts'
   import { useTranslate } from '../../../../composables/use-translate'
@@ -24,6 +24,9 @@
     ariaLabel: ''
   })
 
+  /** Search text across every column (v-model); the table filters its rows by it. */
+  const model = defineModel<string>()
+
   const attrs = useAttrs()
   const { t } = useTranslate({ tableSearch: en.tableSearch })
   const ctx = inject(TableInjectionKey, null)
@@ -36,7 +39,13 @@
     const instance = ctx?.table.value
     return instance ? ((instance.getState().globalFilter as string | undefined) ?? '') : ''
   })
-  const setFilter = (value: string) => ctx?.table.value?.setGlobalFilter(value)
+  const setFilter = (value: string): void => {
+    model.value = value
+    ctx?.table.value?.setGlobalFilter(value)
+  }
+  if (model.value !== undefined && model.value !== globalFilter.value) setFilter(model.value)
+  watch(model, (next) => next !== undefined && next !== globalFilter.value && setFilter(next))
+  watch(globalFilter, (next) => next !== model.value && (model.value = next))
 
   const fieldEl = ref<InstanceType<typeof Input> | null>(null)
 

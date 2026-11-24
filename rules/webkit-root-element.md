@@ -11,8 +11,10 @@ inside class strings is enforced separately by the stylelint config and the
 
 ## Do
 
-- Switch the root element by **intent expressed as data**: an `href` prop drives
-  `<component :is="isLink ? 'a' : 'button'">` — anchor when there is a URL, button otherwise.
+- Switch the root element by **intent expressed as data**: an `href` prop, never an `as`
+  string. For a link-or-button root, render WebKit's `Button` and pass `href` on: it renders an
+  anchor when there is a URL and a button otherwise, so the raw `<a>` / `<button>` stay inside
+  their owners (`webkit/no-unowned-element`).
 - Set `inheritAttrs: false` in `defineOptions` and put `v-bind="$attrs"` on the **real**
   root, so attributes (including `class`) land on the element the consumer means.
 - Merge the consumer's `class` with `cn` from `@aziontech/webkit/utils/cn` (the only
@@ -36,35 +38,51 @@ inside class strings is enforced separately by the stylelint config and the
 
 ```vue
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
-  import { cn } from '@aziontech/webkit/utils/cn'
+  import Button from '@aziontech/webkit/button'
 
-  defineOptions({ name: 'ActionCard', inheritAttrs: false })
+  defineOptions({ name: 'DeployAction', inheritAttrs: false })
 
   interface Props {
-    /** When set, the root renders as an anchor link to this URL. */
+    /** The action's text. */
+    label: string
+    /** When set, the action renders as an anchor link to this URL. */
     href?: string
   }
-  const props = withDefaults(defineProps<Props>(), { href: '' })
+  withDefaults(defineProps<Props>(), { href: '' })
+</script>
+
+<template>
+  <Button
+    v-bind="$attrs"
+    :label="label"
+    :href="href"
+    variant="secondary"
+  />
+</template>
+```
+
+```vue
+<script setup lang="ts">
+  import { useAttrs } from 'vue'
+  import { cn } from '@aziontech/webkit/utils/cn'
+
+  defineOptions({ name: 'SummaryPanel', inheritAttrs: false })
 
   defineSlots<{
-    /** The card's content. */
+    /** The panel's content. */
     default(): unknown
   }>()
 
   const attrs = useAttrs()
-  const isLink = computed(() => props.href.length > 0)
 </script>
 
 <template>
-  <component
-    :is="isLink ? 'a' : 'button'"
+  <section
     v-bind="$attrs"
-    :href="isLink ? href : undefined"
     :class="cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)', attrs.class as string)"
   >
     <slot />
-  </component>
+  </section>
 </template>
 ```
 

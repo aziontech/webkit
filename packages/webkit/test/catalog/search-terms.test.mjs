@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
-import { COMPONENT_TERMS } from '../../src/catalog/search-lexicon.js'
+import { COMPONENT_TERMS } from '../../src/catalog/lexicon/component-terms.js'
 
 const catalog = JSON.parse(readFileSync(new URL('../../catalog.json', import.meta.url), 'utf-8'))
 
@@ -20,7 +20,7 @@ test('every app component has search terms, so a plain request finds it', () => 
   assert.deepEqual(
     missing,
     [],
-    `src/catalog/search-lexicon.js, COMPONENT_TERMS: add the words people type for ${missing.join(', ')} ` +
+    `src/catalog/lexicon/component-terms.js, COMPONENT_TERMS: add the words people type for ${missing.join(', ')} ` +
       '(what it is called elsewhere, the kind of value or job it handles). ' +
       'A component with no terms is found only by its exact name.'
   )

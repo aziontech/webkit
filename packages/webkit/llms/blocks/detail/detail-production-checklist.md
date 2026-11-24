@@ -215,6 +215,12 @@ Each variant is the same screen in another state: `get_block("detail/detail-prod
 
   const doneCount = computed(() => steps.value.filter((step) => step.done).length)
   const complete = computed(() => steps.value.length > 0 && doneCount.value === steps.value.length)
+
+  const STEP_MEDIA_CLASS =
+    'flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance ' +
+    'group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -325,7 +331,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-prod
           >
             <Item.Media>
               <span
-                class="flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
+                :class="STEP_MEDIA_CLASS"
                 aria-hidden="true"
               >
                 <i
@@ -339,9 +345,9 @@ Each variant is the same screen in another state: `get_block("detail/detail-prod
               <Item.Title>
                 {{ step.title }}
               </Item.Title>
-              <Item.Description>
+              <p class="text-pretty text-body-sm text-(--text-muted)">
                 {{ step.description }}
-              </Item.Description>
+              </p>
             </Item.Content>
 
             <Item.Footer>

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 3508d907df160df542ce66cc1b98fd74ec26af1d477ebf39df263320475e4174
+checksum: 0d9cffea8e6e2a16174b0bfc2e0b98895fc86e5ef101a1cf322ee41aac3fd975
 created: 2026-07-23
-last_updated: 2026-11-17
+last_updated: 2026-11-22
 ---
 
 # Kbd — Component Spec
@@ -136,6 +136,7 @@ _none_
 
 - A keycap never wraps inside itself (`inline-flex`); a `separate` sequence wraps between keycaps only where the surrounding text wraps.
 - No touch target and no hover affordance: Kbd is non-interactive.
+- Inside a button, the keycap hides on a coarse pointer (`pointer-coarse:in-[button]:hidden`): a touch phone has no keyboard to press it with. On a fine pointer it stays, and a disabled button greys it with its label (`in-[button:disabled]:text-(--text-disabled)`), so the button never reads half enabled.
 
 ## Performance
 

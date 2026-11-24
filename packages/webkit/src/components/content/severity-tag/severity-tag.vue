@@ -41,6 +41,24 @@
   const { t } = useTranslate({ severityTag: en.severityTag })
 
   const displayLabel = computed<string>(() => props.label || t(`severityTag.${props.severity}`))
+
+  const ROOT_CLASS =
+    'group inline-flex items-center whitespace-nowrap h-6 ' +
+    'data-[size=small]:h-5 ' +
+    'px-(--spacing-xs) ' +
+    'data-[size=small]:px-(--spacing-2xs) ' +
+    'gap-(--spacing-xs) ' +
+    'data-[size=small]:gap-(--spacing-2xs) ' +
+    'rounded-(--shape-control) border border-(length:--border-width-default) border-(--border-default) bg-(--bg-canvas) text-(--text-default) text-label-sm'
+
+  const FIRST_BAR_CLASS =
+    'block w-0.5 h-1 rounded-[1px] bg-(--border-default) ' +
+    'group-data-[severity=critical]:bg-(--severity-critical) group-data-[severity=high]:bg-(--severity-high) group-data-[severity=medium]:bg-(--severity-medium) ' +
+    'group-data-[severity=low]:bg-(--severity-low)'
+
+  const SECOND_BAR_CLASS =
+    'block w-0.5 h-1.5 rounded-[1px] bg-(--border-default) ' +
+    'group-data-[severity=critical]:bg-(--severity-critical) group-data-[severity=high]:bg-(--severity-high) group-data-[severity=medium]:bg-(--severity-medium)'
 </script>
 
 <template>
@@ -49,20 +67,15 @@
     :data-testid="testId"
     :data-severity="severity"
     :data-size="size"
-    :class="attrs.class"
-    class="group inline-flex items-center whitespace-nowrap h-6 data-[size=small]:h-5 px-(--spacing-xs) data-[size=small]:px-(--spacing-2xs) gap-(--spacing-xs) data-[size=small]:gap-(--spacing-2xs) rounded-(--shape-control) border border-(length:--border-width-default) border-(--border-default) bg-(--bg-canvas) text-(--text-default) text-label-sm"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <span
       aria-hidden="true"
       :data-testid="`${testId}__glyph`"
       class="inline-flex shrink-0 items-end gap-0.5"
     >
-      <span
-        class="block w-0.5 h-1 rounded-[1px] bg-(--border-default) group-data-[severity=critical]:bg-(--severity-critical) group-data-[severity=high]:bg-(--severity-high) group-data-[severity=medium]:bg-(--severity-medium) group-data-[severity=low]:bg-(--severity-low)"
-      />
-      <span
-        class="block w-0.5 h-1.5 rounded-[1px] bg-(--border-default) group-data-[severity=critical]:bg-(--severity-critical) group-data-[severity=high]:bg-(--severity-high) group-data-[severity=medium]:bg-(--severity-medium)"
-      />
+      <span :class="FIRST_BAR_CLASS" />
+      <span :class="SECOND_BAR_CLASS" />
       <span
         class="block w-0.5 h-2 rounded-[1px] bg-(--border-default) group-data-[severity=critical]:bg-(--severity-critical) group-data-[severity=high]:bg-(--severity-high)"
       />

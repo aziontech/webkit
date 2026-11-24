@@ -77,7 +77,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
+   "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`) with `wrap=\"off\"`: each line stays whole and the field scrolls sideways, so a record or a key never breaks across lines for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
   },
   {
    "name": "autoResize",

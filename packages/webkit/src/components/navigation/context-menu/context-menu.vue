@@ -5,9 +5,9 @@
   import { resolveDirection } from '../../../composables/use-direction'
   import { useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
-  import { usePortalLocale } from '../../../composables/use-translate'
   import type { DropdownMenuItemValue } from '../dropdown-menu/injection-key'
   import { DropdownMenuInjectionKey } from '../dropdown-menu/injection-key'
+  import DropdownMenuPanel from '../dropdown-menu/parts/dropdown-menu-panel.vue'
   import { ContextMenuInjectionKey } from './injection-key'
 
   export type { DropdownMenuItemType, DropdownMenuItemValue } from '../dropdown-menu/injection-key'
@@ -46,18 +46,9 @@
   const anchorEl = ref<globalThis.HTMLElement | null>(null)
   const areaEl = ref<globalThis.HTMLElement | null>(null)
   const panelEl = ref<globalThis.HTMLElement | null>(null)
-  const panelBodyEl = ref<globalThis.HTMLElement | null>(null)
   const bodyTargetEl = ref<globalThis.HTMLElement | null>(null)
   const point = ref<{ x: number; y: number } | null>(null)
   let returnFocus: globalThis.Element | null = null
-
-  watch(panelBodyEl, (el) => {
-    if (el) bodyTargetEl.value = el
-  })
-
-  function onPanelAfterLeave() {
-    bodyTargetEl.value = null
-  }
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'context-menu')
 
@@ -148,8 +139,6 @@
     areaEl,
     openAt
   })
-
-  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -161,43 +150,13 @@
   >
     <slot />
 
-    <Teleport to="body">
-      <span
-        v-if="isOpenRef"
-        ref="anchorEl"
-        aria-hidden="true"
-        :style="anchorStyle"
-        class="pointer-events-none fixed size-0"
-      />
-      <Transition
-        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
-        @after-leave="onPanelAfterLeave"
-      >
-        <div
-          v-if="isOpenRef"
-          ref="panelEl"
-          :dir="portalLocale.dir"
-          :lang="portalLocale.lang"
-          :data-testid="`${testId}__panel`"
-          :data-state="isOpenRef ? 'open' : 'closed'"
-          :data-side="resolvedSide"
-          :data-align="resolvedAlign"
-          :style="panelStyle"
-          class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
-          @keydown="onPanelKeydown"
-        >
-          <div
-            :id="`${uid}-panel`"
-            ref="panelBodyEl"
-            role="menu"
-            tabindex="-1"
-            :aria-label="ariaLabel || undefined"
-            :data-testid="`${testId}__body`"
-            class="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto"
-          />
-        </div>
-      </Transition>
-    </Teleport>
+    <DropdownMenuPanel
+      :panel-style="panelStyle"
+      anchored
+      :anchor-style="anchorStyle"
+      :aria-label="ariaLabel"
+      @keydown="onPanelKeydown"
+      @anchor="(el) => (anchorEl = el)"
+    />
   </div>
 </template>

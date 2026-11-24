@@ -28,7 +28,16 @@
  ],
  "sfcFile": "blocks/edit/edit-function/edit-function.vue",
  "guidelinesFile": "blocks/edit/edit-function/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/edit/edit-function/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "lib/function-editor.ts",
+  "composables/use-function-fields.ts",
+  "composables/use-function-test-run.ts",
+  "parts/function-arguments.vue",
+  "parts/function-field-item.vue",
+  "parts/function-field-settings.vue",
+  "parts/function-save-bar.vue",
+  "parts/function-settings-tab.vue",
+  "parts/function-test-run-pane.vue"
+ ]
 }

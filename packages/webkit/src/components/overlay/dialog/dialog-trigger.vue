@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
+  import { useDialogTrigger } from '../../../composables/use-dialog-trigger'
   import { TriggerHost } from '../parts/trigger-host'
   import { DialogInjectionKey } from './injection-key'
 
@@ -15,31 +16,9 @@
 
   const attrs = useAttrs()
   const ctx = inject(DialogInjectionKey)
+  const testId = computed(() => String(attrs['data-testid'] ?? 'dialog-trigger'))
 
-  const aria = computed(() => ({
-    'aria-haspopup': 'dialog',
-    'aria-expanded': String(Boolean(ctx?.isOpen.value))
-  }))
-
-  const activate = () => {
-    ctx?.open()
-  }
-
-  function onKeydown(event: globalThis.KeyboardEvent) {
-    if (event.target !== event.currentTarget) return
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      activate()
-    }
-  }
-
-  function onControl(el: globalThis.HTMLElement | null) {
-    if (ctx) ctx.triggerEl.value = el
-  }
-
-  onBeforeUnmount(() => {
-    if (ctx) ctx.triggerEl.value = null
-  })
+  const { aria, activate, onKeydown, onControl } = useDialogTrigger(ctx)
 </script>
 
 <template>
@@ -47,7 +26,7 @@
     :aria="aria"
     as-button
     :class="attrs.class"
-    :data-testid="`${ctx?.testId}__trigger`"
+    :data-testid="testId"
     @click="activate"
     @keydown="onKeydown"
     @control="onControl"

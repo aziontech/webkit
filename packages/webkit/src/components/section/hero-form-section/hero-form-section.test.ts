@@ -266,9 +266,11 @@ describe('HeroFormSection', () => {
   })
 
   it('marks required fields from the first render but holds the invalid state until a submit', () => {
-    const { getByLabelText, getAllByText } = band()
+    const { getByLabelText, getAllByTestId } = band()
 
-    expect(getAllByText('(Required)')).toHaveLength(2)
+    expect(
+      getAllByTestId('field-label__required').map((marker) => marker.textContent?.trim())
+    ).toEqual(['*', '*'])
     const firstName = getByLabelText(/First name/, { selector: 'input' })
     expect(firstName.getAttribute('aria-required')).toBe('true')
     expect(firstName.getAttribute('aria-invalid')).toBeNull()
@@ -313,6 +315,36 @@ describe('HeroFormSection', () => {
 
     expect(getByRole('status').textContent).toContain(messages.success)
     expect(queryByRole('button', { name: SUBMIT })).toBeNull()
+  })
+
+  it('draws the confirmation with its description in place of the form', () => {
+    const { getByTestId } = band({
+      submitted: true,
+      messages: { ...messages, successDescription: 'We reply within one business day.' }
+    })
+
+    const success = getByTestId(`${TESTID}__success`)
+    expect(success).toHaveAttribute('role', 'status')
+    expect(success.textContent).toContain('We reply within one business day.')
+  })
+
+  it('passes each text field its autocomplete hint', () => {
+    const { container } = band({
+      fields: [{ name: 'firstname', type: 'text', label: 'First name', autocomplete: 'given-name' }]
+    })
+
+    expect(container.querySelector('input[name="firstname"]')).toHaveAttribute(
+      'autocomplete',
+      'given-name'
+    )
+  })
+
+  it('renders the form before the highlights, so a phone reaches the fields first', () => {
+    const { container, getByText } = band()
+    const form = container.querySelector('form')!
+    const list = getByText('Build AI applications').closest('ul')
+    expect(list).not.toBeNull()
+    expect(form.compareDocumentPosition(list!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it('shows the error message under the form on error', () => {

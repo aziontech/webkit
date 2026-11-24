@@ -85,5 +85,3 @@ export const animateExtras = {
   'animate-popup-scale-in': { 'transform-origin': 'var(--popup-origin, center)' },
   'animate-popup-scale-out': { 'transform-origin': 'var(--popup-origin, center)' }
 }
-
-export default { keyframes, animateExtras }

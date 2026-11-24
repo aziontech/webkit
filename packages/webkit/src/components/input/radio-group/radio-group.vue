@@ -92,6 +92,13 @@
       model.value = value as TOption['value']
     }
   })
+
+  const ROOT_CLASS =
+    'group/radio-group flex ' +
+    'data-[orientation=vertical]:flex-col data-[orientation=vertical]:gap-(--spacing-sm) data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:flex-wrap ' +
+    'data-[orientation=horizontal]:gap-x-(--spacing-md) data-[orientation=horizontal]:gap-y-(--spacing-sm) ' +
+    'data-[variant=card]:data-[orientation=vertical]:gap-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:gap-x-(--spacing-xs) ' +
+    'data-[variant=card]:data-[orientation=horizontal]:gap-y-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:items-stretch'
 </script>
 
 <script lang="ts">
@@ -118,7 +125,7 @@
     :data-disabled="field.disabled.value || null"
     :data-required="field.required.value || null"
     :data-invalid="field.invalid.value || null"
-    class="group/radio-group flex data-[orientation=vertical]:flex-col data-[orientation=vertical]:gap-(--spacing-sm) data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:flex-wrap data-[orientation=horizontal]:gap-x-(--spacing-md) data-[orientation=horizontal]:gap-y-(--spacing-sm) data-[variant=card]:data-[orientation=vertical]:gap-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:gap-x-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:gap-y-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:items-stretch"
+    :class="ROOT_CLASS"
   >
     <slot v-if="!options.length" />
     <RadioGroupItem

@@ -1,4 +1,4 @@
-export const TOKEN_CHECKS = [
+const TOKEN_CHECKS = [
   {
     id: 'hex-color',
     regex: /#[0-9a-fA-F]{3,8}\b/g,
@@ -21,7 +21,9 @@ export const TOKEN_CHECKS = [
     id: 'typography-raw-size',
     regex: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\b(?!-)/g,
     message:
-      'Raw Tailwind text size. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, text-label-md, ...) — ask the webkit MCP: list_tokens (no category) returns every typography class.'
+      'Raw Tailwind text size. Use a generated typography class (text-heading-md, ' +
+      'text-body-sm, text-button-lg, text-label-md, ...) — ask the webkit MCP: list_tokens (no ' +
+      'category) returns every typography class.'
   },
   {
     id: 'typography-raw-length',
@@ -57,14 +59,14 @@ export const TOKEN_CHECKS = [
   {
     id: 'zero-with-unit',
     regex:
-      /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)0(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
+      /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\)|[\w-]+\()*)0(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
       'Zero with a unit. A zero length takes no unit — write `0`, not `0px` / `0rem` / `0em` (.claude/rules/styling.md).'
   },
   {
     id: 'zero-unit-in-calc',
     regex:
-      /(?<=(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)(?<![\w.])0(?!rem)(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
+      /(?<=(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\)|[\w-]+\()*)(?<![\w.])0(?!rem)(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
       'Zero with the wrong unit inside a math function. `calc()`/`min()`/`max()`/`clamp()` require a unit on the zero — write `0rem`, not `0px` / `0em` (.claude/rules/styling.md).'
   },
@@ -72,35 +74,63 @@ export const TOKEN_CHECKS = [
     id: 'dead-token-shorthand',
     regex: /-\((?=[^)]*--)[^)]*\s[^)]*\)|\[--\(/g,
     message:
-      'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space inside the parens; an inverted `[--(token)]` emits an invalid value the browser discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
+      'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space ' +
+      'inside the parens; an inverted `[--(token)]` emits an invalid value the browser ' +
+      'discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the ' +
+      'parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
   },
   {
     id: 'container-query-on-container',
     regex: /(["'`])(?=[^"'`]*@container\/([\w-]+)(?![\w-]))[^"'`]*@[^\s"'`/]*\/\2:/g,
     message:
-      'Container-query variant on the element that declares the container. A container query never matches its own container, so `@xl/name:` on the `@container/name` element NEVER applies. Put the variant on a child of the container (.claude/rules/styling.md).'
+      'Container-query variant on the element that declares the container. A container query ' +
+      'never matches its own container, so `@xl/name:` on the `@container/name` element NEVER ' +
+      'applies. Put the variant on a child of the container (.claude/rules/styling.md).'
   },
   {
     id: 'has-on-scroll-frame',
     regex: /(?<![\w-])(?:group|peer)-has-(?:\[[^\s"'`]*\]|[\w-]+)\/scroll:/g,
     message:
-      'A :has() variant read from the scroll frame (`group-has-[…]/scroll:`). The frame wraps every row, so Chromium re-checks the :has() whenever a row mounts and restyles the whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc). Get the result from the stacking order (the table scroll cue sits below the frozen cells), or measure the state in script, set a data attribute on the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
+      'A :has() variant read from the scroll frame (`group-has-[…]/scroll:`). The frame wraps ' +
+      'every row, so Chromium re-checks the :has() whenever a row mounts and restyles the ' +
+      'whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to ' +
+      '3,580 ms of style recalc). Get the result from the stacking order (the table scroll cue ' +
+      'sits below the frozen cells), or measure the state in script, set a data attribute on ' +
+      'the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
   },
   {
     id: 'rtl-double-flip',
     wide: true,
     regex:
-      /(["'`])(?=[^"'`]*(?<![\w-])az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
+      /(["'`])(?=[^"'`]*(?<![\w-])az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|arrow-(?:left|right)-to-line|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
     message:
-      'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, which sets the same scale) (.claude/rules/styling.md).'
+      'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every ' +
+      'directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with ' +
+      'it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, ' +
+      'which sets the same scale) (.claude/rules/styling.md).'
   },
   {
     id: 'off-brand-orange',
     wide: true,
     regex:
-      /(?<!\w)(?:--text-primary(?![\w-])|(?:--color-)?(?:alpha-orange|brand-primary|orange)-(?!500(?![\w-]))\d{2,3}(?![\w-]))/g,
+      /(?<!\w)(?:--text-(?:primary|brand)(?![\w-])|(?:--color-)?(?:alpha-orange|brand-primary|orange)-(?!500(?![\w-]))\d{2,3}(?![\w-]))/g,
     message:
-      'An orange that is not the logo orange. Content uses one orange, the logo orange #F3652B: var(--text-brand) for text, var(--primary) for fills, glyphs and glows. --text-primary was removed in 6.0 (use --text-brand), and the lighter and darker steps of the orange scale stay inside the theme (rules/webkit-tokens.md).'
+      'An orange text colour or an orange that is not the logo orange. Content uses one orange, ' +
+      'the logo orange #F3652B as var(--primary): a fill behind --primary-foreground text, or a ' +
+      'bar, underline, glyph or glow beside text in --text-default. It is never the colour of text, ' +
+      'which misses WCAG AA on light surfaces. --text-primary and --text-brand were removed in 6.0 ' +
+      '(use --text-default), and the other steps of the orange scale stay inside the theme ' +
+      '(rules/webkit-tokens.md).'
+  },
+  {
+    id: 'status-fill-as-text',
+    wide: true,
+    regex: /(?<![\w-])text-\((?:color:)?--(?:danger|success|warning|info)\)/g,
+    message:
+      'A status fill colour used as text or icon colour. --danger, --success, --warning and ' +
+      '--info are fills and vanish on a surface: a status icon on a surface is the -mark ' +
+      'token, error text is --text-danger, text on the fill is its -foreground ' +
+      '(rules/webkit-tokens.md).'
   },
   {
     id: 'class-in-defineprops',
@@ -162,7 +192,7 @@ export function tokenChecksApply(rel) {
 
 export const WIDE_TOKEN_DIRS = ['packages/webkit/blocks/', 'packages/webkit/examples/']
 
-export const WIDE_TOKEN_CHECKS = TOKEN_CHECKS.filter((c) => c.wide)
+const WIDE_TOKEN_CHECKS = TOKEN_CHECKS.filter((c) => c.wide)
 
 export function tokenChecksFor(rel, wideDirs = WIDE_TOKEN_DIRS) {
   if (tokenChecksApply(rel)) return TOKEN_CHECKS

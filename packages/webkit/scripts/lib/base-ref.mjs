@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..')
-export const DEFAULT_BASE = 'origin/feat/webkit-ai-ready'
+const DEFAULT_BASE = 'origin/feat/webkit-ai-ready'
 
 const git = (args) =>
   execFileSync('git', args, {

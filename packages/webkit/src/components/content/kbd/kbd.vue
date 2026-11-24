@@ -86,6 +86,19 @@
     props.keys.forEach((key, index) => list.push({ id: `key-${index}`, glyph: keyGlyph(key) }))
     return list
   })
+
+  const ROOT_CLASS =
+    'inline-flex items-center justify-center gap-(--spacing-2xs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) ' +
+    'rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) ' +
+    'data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5 ' +
+    'data-[variant=separate]:bg-transparent data-[variant=separate]:border-0 data-[variant=separate]:shadow-none data-[variant=separate]:px-0 data-[variant=separate]:min-w-0 ' +
+    'pointer-coarse:in-[button]:hidden in-[button:disabled]:text-(--text-disabled) in-[button:disabled]:shadow-none'
+
+  const KEY_CLASS =
+    'inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) ' +
+    'px-(--spacing-xs) ' +
+    'data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5 ' +
+    'in-[button:disabled]:text-(--text-disabled) in-[button:disabled]:shadow-none'
 </script>
 
 <template>
@@ -95,8 +108,7 @@
     :data-testid="testId"
     :data-size="size"
     :data-variant="variant"
-    :class="attrs.class"
-    class="inline-flex items-center justify-center gap-(--spacing-2xs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5 data-[variant=separate]:bg-transparent data-[variant=separate]:border-0 data-[variant=separate]:shadow-none data-[variant=separate]:px-0 data-[variant=separate]:min-w-0"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <template v-if="variant === 'separate'">
       <kbd
@@ -104,14 +116,14 @@
         :key="cap.id"
         :data-size="size"
         :data-testid="`${testId}__key`"
-        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
+        :class="KEY_CLASS"
         >{{ cap.glyph }}</kbd
       >
       <kbd
         v-if="$slots['default']"
         :data-size="size"
         :data-testid="`${testId}__key`"
-        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
+        :class="KEY_CLASS"
         ><slot
       /></kbd>
     </template>

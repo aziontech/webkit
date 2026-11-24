@@ -21,6 +21,11 @@
       "name": "SitePlacement",
       "summary": "The marketing placement: the bar's surface still spans the window, but its regions are capped at the site header measure (`--layout-measure-site-header`) and centred, so the brand answers to the page instead of drifting to the window edge as the viewport grows. That cap is one rung wider than the page frame the hero, sections and footer share (`--layout-measure-site`): a bar carries the brand at one end and the account actions at the other, so it is the one band deliberately outside the frame.",
       "file": "site-placement.vue"
+    },
+    {
+      "name": "WithAccount",
+      "summary": "The signed-in account at the end of the bar: `AppHeaderAccount` (a companion part, imported on its own from `@aziontech/webkit/app-header-account`) draws the account as a square avatar with its own focus ring and hover, and inside `DropdownMenu.Trigger` it opens the account menu. The control is named `Account menu` from the locale catalog.",
+      "file": "with-account.vue"
     }
   ]
 }

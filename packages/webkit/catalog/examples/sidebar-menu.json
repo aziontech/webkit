@@ -12,7 +12,7 @@
   },
   {
    "name": "Condensed",
-   "summary": "A three-level tree, the documentation-navigation case. Indentation is the nested list’s `padding-left`, and each nested list draws the connector rail on its rows — an elbow into the row it points at, plus a continuation line that stops at the last child. Expand \"Edge Functions\" to see a level open in place. Do not nest past three levels: the indent then eats the rail’s readable width, and a drill row is the right restructure.",
+   "summary": "A three-level tree, the documentation-navigation case. Indentation is the nested list’s `padding-left`, and each nested list draws the connector rail on its rows — an elbow into the row it points at, plus a continuation line that stops at the last child. Expand \"Functions\" to see a level open in place. Do not nest past three levels: the indent then eats the rail’s readable width, and a drill row is the right restructure.",
    "file": "examples/sidebar-menu/condensed.vue"
   }
  ]

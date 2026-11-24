@@ -7,8 +7,7 @@
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import Input from '../../input/input/input.vue'
   import RadioGroup from '../../input/radio-group/radio-group.vue'
-  import MarkdownInline from '../lib/markdown-inline'
-  import { parseInline } from '../lib/parse-markdown'
+  import AgentQuestionHeading from './parts/agent-question-heading.vue'
 
   defineOptions({
     name: 'AgentQuestion',
@@ -91,14 +90,12 @@
   const errorId = `${uid}-error`
 
   const rootEl = ref<HTMLElement | null>(null)
-  const headingEl = ref<HTMLElement | null>(null)
+  const headingEl = ref<InstanceType<typeof AgentQuestionHeading> | null>(null)
   const formEl = ref<HTMLFormElement | null>(null)
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'agent-question'
   )
-  const titleNodes = computed(() => parseInline(props.title))
-  const descriptionNodes = computed(() => parseInline(props.description))
   const asking = computed<boolean>(
     () => props.status === 'pending' || props.status === 'running' || props.status === 'error'
   )
@@ -197,31 +194,21 @@
     :data-testid="testId"
     :data-status="status"
     :data-type="type"
-    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
   >
     <div class="flex items-start gap-(--spacing-sm)">
       <i
         class="az az-circle-help mt-0.5 shrink-0 text-(--text-muted)"
         aria-hidden="true"
       />
-      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-        <h3
-          :id="titleId"
-          ref="headingEl"
-          tabindex="-1"
-          :data-testid="`${testId}__title`"
-          class="m-0 text-heading-2xs text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-        >
-          <MarkdownInline :nodes="titleNodes" />
-        </h3>
-        <p
-          v-if="description"
-          :id="descriptionId"
-          class="m-0 text-body-sm text-(--text-muted)"
-        >
-          <MarkdownInline :nodes="descriptionNodes" />
-        </p>
-      </div>
+      <AgentQuestionHeading
+        ref="headingEl"
+        :title-id="titleId"
+        :description-id="descriptionId"
+        :title="title"
+        :description="description"
+        :test-id="testId"
+      />
     </div>
     <div
       v-if="slots.default"

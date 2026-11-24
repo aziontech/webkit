@@ -944,3 +944,87 @@ export const sampleIncidents: HealthScoreIncident[] = [
     }
   }
 ]
+
+export interface RealUserVital {
+  id: string
+  label: string
+  value: number
+  unit: string
+  decimals: number
+  description: string
+}
+
+export interface RealUserTrend {
+  id: string
+  label: string
+  unit: string
+  range: [number, number]
+}
+
+export const sampleVitals: RealUserVital[] = [
+  {
+    id: 'page-load-time',
+    label: 'Page load time',
+    value: 1.24,
+    unit: 's',
+    decimals: 2,
+    description: 'Median time to load the page, as measured in the browser.'
+  },
+  {
+    id: 'largest-contentful-paint',
+    label: 'Largest contentful paint',
+    value: 1.86,
+    unit: 's',
+    decimals: 2,
+    description: 'Median time until the largest element on the page is painted, across sessions.'
+  },
+  {
+    id: 'first-input-delay',
+    label: 'First input delay',
+    value: 18,
+    unit: 'ms',
+    decimals: 0,
+    description: 'Median delay between the first interaction and the page responding to it.'
+  },
+  {
+    id: 'sessions',
+    label: 'Sessions',
+    value: 412,
+    unit: 'K',
+    decimals: 0,
+    description: 'Real-user sessions measured in the period.'
+  }
+]
+
+export const sampleTrends: RealUserTrend[] = [
+  { id: 'page-load-time', label: 'Page load time', unit: 's', range: [0.9, 2.4] },
+  {
+    id: 'largest-contentful-paint',
+    label: 'Largest contentful paint',
+    unit: 's',
+    range: [1.2, 3.1]
+  },
+  { id: 'first-input-delay', label: 'First input delay', unit: 'ms', range: [8, 46] },
+  { id: 'sessions', label: 'Sessions', unit: 'K', range: [8, 32] }
+]
+
+const hashSeed = (seed: string): number =>
+  [...seed].reduce(
+    (hash, char) => Math.imul(hash ^ char.charCodeAt(0), 0x01000193) >>> 0,
+    0x811c9dc5
+  )
+
+const nextState = (state: number): number => {
+  let next = state ^ (state << 13)
+  next ^= next >>> 17
+  next ^= next << 5
+  return next >>> 0
+}
+
+export const sampleFractions = (seed: string, count: number): number[] => {
+  let state = hashSeed(seed)
+  return Array.from({ length: count }, () => {
+    state = nextState(state)
+    return (state % 1000) / 1000
+  })
+}

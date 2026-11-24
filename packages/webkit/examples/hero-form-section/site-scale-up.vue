@@ -4,6 +4,7 @@
   const fields = [
     {
       name: 'firstname',
+      autocomplete: 'given-name',
       type: 'text',
       label: 'First name',
       half: true,
@@ -11,6 +12,7 @@
     },
     {
       name: 'lastname',
+      autocomplete: 'family-name',
       type: 'text',
       label: 'Last name',
       half: true
@@ -24,6 +26,7 @@
     },
     {
       name: 'company',
+      autocomplete: 'organization',
       type: 'text',
       label: 'Company',
       half: true,
@@ -42,17 +45,22 @@
   const messages = {
     missing: 'This field is required.',
     invalidEmail: 'Enter a valid email address.',
-    success: 'We will be in touch.',
+    success: 'Thanks, we received your request.',
+    successDescription: 'A specialist will reply by email within one business day.',
     error: 'We could not send your message. Try again.'
   }
 
   const onSubmit = (_event, _values) => {}
+
+  const DESCRIPTION =
+    'Up to $120,000 in service credits for your company. Azion Scale Up gives startups free credits, onboarding with Azion experts and 24/7 technical support while they build on the ' +
+    'platform.'
 </script>
 
 <template>
   <HeroFormSection
     title="Azion Scale Up Credit Program"
-    description="Up to $120,000 in service credits for your company. Azion Scale Up gives startups free credits, onboarding with Azion experts and 24/7 technical support while they build on the platform."
+    :description="DESCRIPTION"
     form-aria-label="Request immediate contact"
     :fields="fields"
     submit-label="Request immediate contact"

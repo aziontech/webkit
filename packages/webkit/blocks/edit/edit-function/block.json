@@ -45,7 +45,18 @@
     "name": "Code",
     "file": "edit-function.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "lib/function-editor.ts",
+    "composables/use-function-fields.ts",
+    "composables/use-function-test-run.ts",
+    "parts/function-arguments.vue",
+    "parts/function-field-item.vue",
+    "parts/function-field-settings.vue",
+    "parts/function-save-bar.vue",
+    "parts/function-settings-tab.vue",
+    "parts/function-test-run-pane.vue"
+  ],
   "variants": [
     {
       "name": "Arguments",

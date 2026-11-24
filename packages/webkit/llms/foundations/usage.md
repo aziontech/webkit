@@ -38,7 +38,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeaderSection` and `SiteFooterSection` data. The
   site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select (the compact
-  `LanguageSelect`, round flag and country code; `languages` are BCP 47 tags) with
+  `LanguageSelect`, round flag and language tag; `languages` are BCP 47 tags) with
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
   `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this
@@ -80,7 +80,8 @@ matches your case, switch to the block it names. Then change only the content of
 keeping to the guidelines. Only when no block fits, compose from components (below).
 
 A block takes its data through props and emits its actions; it fetches nothing. `add` copies its
-data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one). To go live,
+data files beside it (`<name>.sample.ts`, and an API adapter when the block ships one) and its parts
+as kebab SFCs (`<name>-<part>.vue`). To go live,
 do not rewrite the block: render it from the routed page that owns the request and pass what the
 request returns (its `## Data` guidelines list the props and events):
 `<TableView :resources="rows" :loading="pending" :error="message" @refresh="load" @retry="load" />`.
@@ -114,6 +115,8 @@ Structure and states first, polish last:
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
   levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
+- **Help on the screen** (a field, section or page explained in place; an info icon, a help
+  tooltip, contextual help): `/webkit-in-product-help`
 - **Foundation:** `/webkit-quick-cleanup` (tokens, typography, spacing rhythm)
 - **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-ai-surfaces` (AI chat
   and agent actions)

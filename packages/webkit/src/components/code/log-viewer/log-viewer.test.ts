@@ -12,6 +12,7 @@ import StepsExample from '../../../../examples/log-viewer/step-logs.vue'
 import StepsError from '../../../../examples/log-viewer/step-logs-error.vue'
 import StepsRunning from '../../../../examples/log-viewer/step-logs-running.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import Tag from '../../content/tag/tag.vue'
 import LogViewerCompound from './index'
 import type { LogViewerLine, LogViewerLineLevel, LogViewerStep } from './injection-key'
 import LogViewer from './log-viewer.vue'
@@ -969,10 +970,15 @@ describe('LogViewer', () => {
       expect(range.getBoundingClientRect().right).toBeCloseTo(right(longest), 0)
     })
 
-    it('keeps the columns aligned right to left', () => {
+    it('reads log lines left to right from their start inside a right-to-left page', () => {
       const view = renderLines(RAGGED, 'rtl')
-      const ends = view.getAllByTestId('log-viewer__line-message').map(right)
-      expect(new Set(ends).size).toBe(1)
+      const body = view.getByTestId('log-viewer-content__body')
+      expect(getComputedStyle(body).direction).toBe('ltr')
+      const messages = view.getAllByTestId('log-viewer__line-message')
+      expect(new Set(messages.map(left)).size).toBe(1)
+      const times = view.getAllByTestId('log-viewer__line-time')
+      expect(left(times[0]!)).toBeGreaterThanOrEqual(left(body) - 0.5)
+      expect(left(times[0]!)).toBeLessThan(left(messages[0]!))
     })
 
     it('drops the time and level columns when no line has them', () => {
@@ -980,5 +986,71 @@ describe('LogViewer', () => {
       expect(view.queryByTestId('log-viewer__line-time')).toBeNull()
       expect(view.queryByTestId('log-viewer__line-level')).toBeNull()
     })
+  })
+
+  describe('LogViewer level chips', () => {
+    it('paints each level dot in the mark colour meant for a mark on a surface', () => {
+      const view = render(Levels)
+      const probe = document.createElement('span')
+      document.body.appendChild(probe)
+      const colourOf = (token: string): string => {
+        probe.style.backgroundColor = `var(${token})`
+        return getComputedStyle(probe).backgroundColor
+      }
+      const marks: Record<string, string> = {
+        error: '--danger-mark',
+        warn: '--warning-mark',
+        info: '--info-mark'
+      }
+      let checked = 0
+      for (const chip of view.getAllByTestId('log-viewer-header__level')) {
+        const dot = chip.querySelector<HTMLElement>('[data-level]')!
+        const token = marks[dot.dataset['level'] ?? '']
+        if (!token) continue
+        expect(getComputedStyle(dot).backgroundColor, dot.dataset['level']).toBe(colourOf(token))
+        checked += 1
+      }
+      probe.remove()
+      expect(checked).toBeGreaterThan(0)
+    })
+  })
+
+  describe('steps on a narrow screen', () => {
+    const STEPS = [
+      {
+        id: 'install',
+        title: 'Install dependencies',
+        status: 'skipped' as const,
+        description: '478 packages installed and added to the CLI cache for the next run',
+        lines: []
+      }
+    ]
+    const renderSteps = (dir: 'ltr' | 'rtl') =>
+      render(
+        defineComponent({
+          setup: () => () =>
+            h('div', { dir, style: { width: '300px' } }, [
+              h(
+                LogViewerSteps,
+                { steps: STEPS, viewSwitch: false },
+                {
+                  'step-meta': () => h(Tag, { label: 'Skipped', 'data-testid': 'meta' })
+                }
+              )
+            ])
+        })
+      )
+
+    it.each(['ltr', 'rtl'] as const)(
+      'keeps the step-meta Tag whole and the summary in its own order (%s)',
+      (dir) => {
+        const view = renderSteps(dir)
+        const meta = view.getByTestId('meta')
+        expect(meta.scrollWidth).toBeLessThanOrEqual(meta.clientWidth + 0.5)
+        expect(meta.textContent?.trim()).toBe('Skipped')
+        const summary = view.getByText(/478 packages installed/)
+        expect(summary.getAttribute('dir')).toBe('auto')
+      }
+    )
   })
 })

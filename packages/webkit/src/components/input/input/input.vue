@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useSlots } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { passwordManagerHints } from '../../../utils/autofill'
+  import InputFrame from './parts/input-frame'
 
   export type InputSize = 'small' | 'medium' | 'large'
   export type InputType = 'text' | 'email'
@@ -25,8 +26,8 @@
      */
     autocomplete?: string
     /**
-     * Native spellcheck on the <input>. Set false for slugs, IDs, domains and code. Omitted when
-     * unset, so the browser keeps its own default.
+     * Native spellcheck on the <input>. Set false for slugs, IDs, domains and code; false also turns
+     * off phone autocapitalize and autocorrect. Omitted when unset, so the browser keeps its own default.
      */
     spellcheck?: boolean
     /** Size token; affects height only. Heights: small=28px, medium=32px, large=40px. */
@@ -67,89 +68,62 @@
   }>()
 
   const attrs = useAttrs()
-  const slots = useSlots()
 
   const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const {
     controlId,
     describedBy,
+    passthroughAttrs,
+    controlState,
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled,
-    required: () => props.required
-  })
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input')
 
-  const passthroughAttrs = computed(() => {
-    const rest: Record<string, unknown> = { ...attrs }
-    delete rest['class']
-    delete rest['data-testid']
-    return rest
-  })
-
-  const autofillHints = computed(() =>
-    passwordManagerHints({
-      autocomplete: props.autocomplete,
-      type: props.type,
-      readonly: props.readonly
-    })
+  const autofillHints = computed(() => passwordManagerHints(props))
+  const identifierHints = computed(() =>
+    props.spellcheck === false ? { autocapitalize: 'none', autocorrect: 'off' } : {}
   )
-
-  const hasLeading = () => Boolean(slots['leading'])
-  const hasTrailing = () => Boolean(slots['trailing'])
 
   const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
     model.value = target.value
   }
 
-  const onChromeMousedown = (event: globalThis.MouseEvent) => {
-    if (isDisabled.value) return
-    if (event.target === inputEl.value) return
-    event.preventDefault()
-    inputEl.value?.focus()
-  }
-
   defineExpose({
     /** Moves focus to the native field. */
     focus: (): void => inputEl.value?.focus()
   })
+
+  const ROOT_CLASS = 'group/input gap-(--spacing-xs) px-(--spacing-sm)'
+
+  const INPUT_CLASS =
+    'relative z-(--z-control) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm ' +
+    'group-data-[monospace]/input:text-label-code-sm ' +
+    'pointer-coarse:text-body-md pointer-coarse:group-data-[monospace]/input:text-label-code-lg ' +
+    'text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default'
 </script>
 
 <template>
-  <span
+  <InputFrame
     data-slot="input"
-    :data-size="size"
-    :data-disabled="isDisabled || null"
-    :data-readonly="readonly || null"
-    :data-invalid="isInvalid || null"
-    :data-required="isRequired || null"
+    :size="size"
+    :disabled="isDisabled"
+    :readonly="readonly"
+    :invalid="isInvalid"
+    :required="isRequired"
     :data-monospace="monospace || null"
-    :data-leading="hasLeading() || null"
-    :data-trailing="hasTrailing() || null"
-    class="group/input relative inline-flex items-center w-full cursor-text gap-(--spacing-xs) px-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[readonly]:cursor-default data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0"
-    :class="attrs.class"
-    @mousedown="onChromeMousedown"
+    :class="[ROOT_CLASS, attrs.class]"
   >
-    <span
-      aria-hidden="true"
-      data-slot="touch-target"
-      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-    />
-    <span
-      v-if="hasLeading()"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-      aria-hidden="true"
+    <template
+      v-if="$slots['leading']"
+      #leading
     >
       <slot name="leading" />
-    </span>
+    </template>
 
     <input
       ref="inputEl"
@@ -159,26 +133,21 @@
       :maxlength="maxLength"
       :autocomplete="autocomplete"
       :spellcheck="spellcheck"
-      :disabled="isDisabled"
       :readonly="readonly"
-      :required="isRequired"
-      :aria-invalid="isInvalid || undefined"
-      :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      class="relative z-(--z-control) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm group-data-[monospace]/input:text-label-code-sm pointer-coarse:text-body-md pointer-coarse:group-data-[monospace]/input:text-label-code-lg text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
-      v-bind="{ ...autofillHints, ...passthroughAttrs }"
+      :class="INPUT_CLASS"
+      v-bind="{ ...controlState, ...autofillHints, ...identifierHints, ...passthroughAttrs }"
       :id="controlId"
       :aria-describedby="describedBy"
       @input="onInput"
     />
 
-    <span
-      v-if="hasTrailing()"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
-      aria-hidden="true"
+    <template
+      v-if="$slots['trailing']"
+      #trailing
     >
       <slot name="trailing" />
-    </span>
-  </span>
+    </template>
+  </InputFrame>
 </template>

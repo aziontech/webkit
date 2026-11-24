@@ -79,6 +79,11 @@
       ? t('tableCellLink.openIn', { label: props.label, destination: props.destination })
       : t('tableCellLink.open', { label: props.label })
   })
+
+  const LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline outline-none ' +
+    'data-[link]:cursor-pointer ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -104,7 +109,7 @@
         v-bind="linkAttrs"
         :data-link="isLink || null"
         :data-testid="`${testId}__link`"
-        class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline outline-none data-[link]:cursor-pointer focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+        :class="LINK_CLASS"
         @click.stop
       >
         <span

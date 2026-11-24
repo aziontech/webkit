@@ -1,23 +1,12 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, shallowRef, useAttrs, useId, watch } from 'vue'
+  import { computed, proxyRefs, ref, useAttrs, useId } from 'vue'
 
   import {
     type AppNavGroup,
     type AppNavItem,
-    matchActiveId,
-    navLeaves,
-    navPaletteGroups,
-    navTrail,
-    toMenuGroups,
     useAppNavigation
   } from '../../../composables/use-app-navigation'
-  import {
-    type HeadingNavigationItem,
-    type HeadingOutlineItem,
-    provideHeadingNavigation,
-    provideHeadingOutline,
-    type RegisterHeading
-  } from '../../../composables/use-heading-navigation'
+  import { useAppNavigationMenu } from '../../../composables/use-app-navigation-menu'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
@@ -28,6 +17,7 @@
   import AppHeaderCenter from '../../layout/app-header/app-header-center.vue'
   import AppHeaderEnd from '../../layout/app-header/app-header-end.vue'
   import AppHeaderStart from '../../layout/app-header/app-header-start.vue'
+  import ConsoleLayoutPalette from '../../layout/console-layout/parts/console-layout-palette.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Sidebar from '../../layout/sidebar/sidebar.vue'
   import NavigationMenu from '../../navigation/navigation-menu/navigation-menu.vue'
@@ -38,21 +28,16 @@
   import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
   import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
   import SkipLink from '../../navigation/skip-link/skip-link.vue'
-  import Command from '../../overlay/command/command.vue'
-  import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
-  import CommandGroup from '../../overlay/command/command-group/command-group.vue'
-  import CommandInput from '../../overlay/command/command-input/command-input.vue'
-  import CommandItem from '../../overlay/command/command-item/command-item.vue'
-  import CommandList from '../../overlay/command/command-list/command-list.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
   import DocTableOfContents, {
-    type DocTableOfContentsGroup,
-    type DocTableOfContentsItem
+    type DocTableOfContentsGroup
   } from '../doc-table-of-contents/doc-table-of-contents.vue'
+  import { useDocLayoutOutline } from './composables/use-doc-layout-outline'
+  import DocLayoutOutlineDisclosure from './parts/doc-layout-outline-disclosure.vue'
 
   defineOptions({
     name: 'DocLayout',
@@ -134,16 +119,12 @@
     search(props: { query: string }): unknown
   }>()
 
-  const { currentPath, hrefOf, follow } = useAppNavigation()
-
   const attrs = useAttrs()
   const { t } = useTranslate({ docLayout: en.docLayout })
 
-  const query = ref('')
   const drawerOpen = ref(false)
   const menuExpanded = ref<string[]>([])
   const menuPath = ref<string[]>([])
-  const headingId = ref('')
   const headerEl = ref<globalThis.HTMLElement | null>(null)
 
   const NAV_VALUE = 'doc-layout:nav:'
@@ -151,20 +132,20 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'doc-layout')
   const mainId = `${useId()}-main`
 
-  const leaves = computed(
-    () =>
-      new Map(
-        navLeaves(props.navigation.flatMap((group) => group.items)).map((item) => [item.id, item])
-      )
+  const appNavigation = useAppNavigation()
+  const { hrefOf, follow } = appNavigation
+
+  const appMenu = proxyRefs(
+    useAppNavigationMenu(appNavigation, {
+      navigation: () => props.navigation,
+      activeId: () => props.activeId,
+      menuPath,
+      menuExpanded,
+      searchOpen,
+      valuePrefix: NAV_VALUE,
+      emit
+    })
   )
-
-  const currentId = computed(
-    () => props.activeId || matchActiveId(props.navigation, currentPath.value, hrefOf)
-  )
-
-  const menuGroups = computed(() => toMenuGroups(props.navigation, hrefOf))
-
-  const paletteGroups = computed(() => navPaletteGroups(props.navigation))
 
   const sectionLinks = computed(() =>
     props.sections.map((section) => ({ ...section, url: hrefOf(section) ?? '#' }))
@@ -174,117 +155,12 @@
     menuPath.value.length > 1 ? '' : props.rootLabel || t('docLayout.root')
   )
 
-  type RegisteredHeading = {
-    el: () => Element | null
-    item: () => HeadingOutlineItem | null
-  }
-
-  const headings = shallowRef<RegisteredHeading[]>([])
-
-  const registerHeading: RegisterHeading = (el, item) => {
-    const entry = { el, item }
-    headings.value = [...headings.value, entry]
-    return () => {
-      headings.value = headings.value.filter((heading) => heading !== entry)
-    }
-  }
-
-  provideHeadingOutline(registerHeading)
-
-  const outline = computed<DocTableOfContentsItem[]>(() =>
-    headings.value
-      .map((heading) => ({ el: heading.el(), item: heading.item() }))
-      .filter((heading): heading is { el: Element; item: HeadingOutlineItem } =>
-        Boolean(heading.el && heading.item)
-      )
-      .sort((a, b) => (a.el.compareDocumentPosition(b.el) & 4 ? -1 : 1))
-      .map((heading) => heading.item)
-  )
-
-  const activeHeading = computed(() => headingId.value || outline.value[0]?.id || '')
-
-  watch(
-    currentId,
-    (id) => {
-      const ancestors = navTrail(props.navigation, id).slice(0, -1)
-      menuPath.value = ancestors
-        .filter((item) => item.groups || item.type === 'drill')
-        .map((item) => item.id)
-      const inline = ancestors
-        .filter((item) => item.children && !item.groups && item.type !== 'drill')
-        .map((item) => item.id)
-      menuExpanded.value = [...new Set([...menuExpanded.value, ...inline])]
-    },
-    { immediate: true }
-  )
-
-  watch(searchOpen, () => {
-    query.value = ''
-  })
-
-  watch(outline, () => {
-    headingId.value = ''
-    onScroll()
-  })
-
-  const headerOffset = () => headerEl.value?.getBoundingClientRect().height ?? 0
-
-  let frame = 0
-
-  const readHeading = () => {
-    frame = 0
-    const line = headerOffset() + 8
-    let current = ''
-    for (const item of outline.value) {
-      const el = globalThis.document?.getElementById(item.id)
-      if (!el) continue
-      if (el.getBoundingClientRect().top <= line) current = item.id
-      else break
-    }
-    headingId.value = current
-  }
-
-  const onScroll = () => {
-    if (!frame) frame = globalThis.requestAnimationFrame(readHeading)
-  }
-
-  onMounted(() => {
-    readHeading()
-    globalThis.addEventListener('scroll', onScroll, { passive: true })
-  })
-
-  onScopeDispose(() => {
-    globalThis.removeEventListener?.('scroll', onScroll)
-    if (frame) globalThis.cancelAnimationFrame(frame)
-  })
-
-  const jumpTo = (event: globalThis.MouseEvent, item: HeadingNavigationItem) => {
-    const el = globalThis.document?.getElementById(item.id)
-    if (!el) return
-    event.preventDefault()
-    const reduce = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    const top = el.getBoundingClientRect().top + globalThis.scrollY - headerOffset() - 16
-    globalThis.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' })
-    globalThis.history?.replaceState(globalThis.history.state, '', `#${item.id}`)
-    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1')
-    el.focus({ preventScroll: true })
-    headingId.value = item.id
-  }
-
-  provideHeadingNavigation(jumpTo)
-
-  const activate = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    item: DocLayoutNavItem
-  ) => {
-    emit('navigate', event, item)
-    follow(event, item)
-  }
+  const { outline, activeHeading, jumpTo } = useDocLayoutOutline(headerEl)
 
   const onMenuNavigate = (event: globalThis.MouseEvent, node: SidebarMenuNode) => {
-    const item = leaves.value.get(node.id)
+    const item = appMenu.leaves.get(node.id)
     if (!item || node.groups || node.children) return
-    activate(event, item)
+    appMenu.activate(event, item)
     drawerOpen.value = false
   }
 
@@ -293,26 +169,8 @@
     drawerOpen.value = false
   }
 
-  const onQuery = (value: unknown) => {
-    query.value = typeof value === 'string' ? value : ''
-  }
-
-  const openSearch = () => {
-    searchOpen.value = true
-  }
-
-  const onPaletteSelect = (
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    value: string | number
-  ) => {
-    const key = String(value)
-    if (key.startsWith(NAV_VALUE)) {
-      const item = leaves.value.get(key.slice(NAV_VALUE.length))
-      if (item) activate(event, item)
-      return
-    }
-    emit('search-select', event, value)
-  }
+  const OUTLINE_CLASS =
+    'sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto p-(--spacing-md) pb-(--spacing-lg)'
 </script>
 
 <template>
@@ -345,6 +203,7 @@
               :href="home"
               :aria-label="t('docLayout.home')"
               :label="t('docLayout.badge')"
+              class="@max-sm:[&>[data-testid$=__label]]:hidden"
             >
               <Brand
                 variant="default"
@@ -377,7 +236,7 @@
             collapsible
             :label="t('docLayout.search')"
             :data-testid="`${testId}__search`"
-            @open="openSearch"
+            @open="appMenu.openSearch"
           />
           <slot name="actions" />
         </AppHeaderEnd>
@@ -407,8 +266,8 @@
             <SidebarMenu
               v-model:path="menuPath"
               v-model:open-keys="menuExpanded"
-              :groups="menuGroups"
-              :active-id="currentId"
+              :groups="appMenu.menuGroups"
+              :active-id="appMenu.currentId"
               role="presentation"
               @navigate="onMenuNavigate"
             >
@@ -425,6 +284,15 @@
       </div>
 
       <div class="flex min-w-0 flex-1 flex-col">
+        <DocLayoutOutlineDisclosure
+          v-if="outline.length"
+          :items="outline"
+          :groups="outlineGroups"
+          :active-id="activeHeading"
+          :data-testid="`${testId}__outline-disclosure`"
+          class="xl:hidden"
+          @select="jumpTo"
+        />
         <main
           :id="mainId"
           :data-testid="`${testId}__main`"
@@ -432,6 +300,13 @@
         >
           <slot />
         </main>
+        <div
+          v-if="outline.length && $slots['aside']"
+          :data-testid="`${testId}__aside-inline`"
+          class="px-(--layout-boundary-inline) pb-(--spacing-xl) xl:hidden"
+        >
+          <slot name="aside" />
+        </div>
         <slot name="footer" />
       </div>
 
@@ -440,9 +315,7 @@
         :data-testid="`${testId}__aside`"
         class="hidden w-(--container-3xs) shrink-0 border-s border-(--border-default) xl:block"
       >
-        <div
-          class="sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
-        >
+        <div :class="OUTLINE_CLASS">
           <DocTableOfContents
             :items="outline"
             :groups="outlineGroups"
@@ -488,8 +361,8 @@
           <SidebarMenu
             v-model:path="menuPath"
             v-model:open-keys="menuExpanded"
-            :groups="menuGroups"
-            :active-id="currentId"
+            :groups="appMenu.menuGroups"
+            :active-id="appMenu.currentId"
             :aria-label="ariaLabel || t('docLayout.navigation')"
             class="w-full p-(--spacing-md)"
             @navigate="onMenuNavigate"
@@ -506,34 +379,22 @@
       </DrawerContent>
     </Drawer>
 
-    <Command
+    <ConsoleLayoutPalette
       v-model:open="searchOpen"
-      @select="onPaletteSelect"
+      :placeholder="t('docLayout.search')"
+      :pages-label="t('docLayout.pages')"
+      :no-match-label="t('docLayout.noMatch')"
+      :groups="appMenu.paletteGroups"
+      :value-prefix="NAV_VALUE"
+      @select="appMenu.onPaletteSelect"
+      @query="appMenu.onQuery"
     >
-      <CommandInput
-        :placeholder="t('docLayout.search')"
-        @update:model-value="onQuery"
-      />
-      <CommandList>
+      <template #search>
         <slot
           name="search"
-          :query="query"
+          :query="appMenu.query"
         />
-        <CommandGroup
-          v-for="group in paletteGroups"
-          :key="group.key"
-          :label="group.heading || t('docLayout.pages')"
-        >
-          <CommandItem
-            v-for="item in group.items"
-            :key="item.id"
-            :value="NAV_VALUE + item.id"
-          >
-            {{ item.label }}
-          </CommandItem>
-        </CommandGroup>
-        <CommandEmpty>{{ t('docLayout.noMatch') }}</CommandEmpty>
-      </CommandList>
-    </Command>
+      </template>
+    </ConsoleLayoutPalette>
   </div>
 </template>

@@ -38,17 +38,49 @@ function insideHeader(node) {
   return false
 }
 
+function isHandRolledSearch(node, raw) {
+  if (TRIGGER.has(raw)) return false
+  const keys = staticAttr(node, 'aria-keyshortcuts')
+  return Boolean(keys) && SHORTCUT.test(keys)
+}
+
+function isSearchIconButton(node, raw) {
+  return ICON_BUTTONS.has(raw) && /\b(?:az|ai|pi)-search\b/.test(staticAttr(node, 'icon') ?? '')
+}
+
+function headerMissesSearch(node) {
+  const everything = [...descendants(templateRoot(node))]
+  const navigates =
+    [...descendants(node)].some((el) => NAVIGATION.has(el.rawName)) ||
+    everything.some((el) => el.rawName === 'Sidebar' || el.rawName === 'sidebar')
+  return navigates && !everything.some((el) => TRIGGER.has(el.rawName))
+}
+
+function headerFinding(node) {
+  const raw = node.rawName ?? ''
+  if (isHandRolledSearch(node, raw)) return 'handRolled'
+  if (isSearchIconButton(node, raw)) return insideHeader(node) ? 'bareIcon' : null
+  return HEADER.has(raw) && headerMissesSearch(node) ? 'missing' : null
+}
+
 export default {
   meta: {
     type: 'problem',
     docs: {
       description:
-        'Every app header offers search through SearchTrigger: flag a AppHeader that carries navigation (NavigationMenu or a Sidebar in the same template) without a SearchTrigger, a hand-rolled ⌘K field (aria-keyshortcuts Meta+K / Control+K on anything but SearchTrigger), and a bare magnifier button inside a AppHeader.'
+        'Every app header offers search through SearchTrigger: flag a AppHeader that carries ' +
+        'navigation (NavigationMenu or a Sidebar in the same template) without a SearchTrigger, ' +
+        'a hand-rolled ⌘K field (aria-keyshortcuts Meta+K / Control+K on anything but ' +
+        'SearchTrigger), and a bare magnifier button inside a AppHeader.'
     },
     schema: [],
     messages: {
       missing:
-        'This app header has navigation but no search. Add <SearchTrigger collapsible @open="open = true" /> (import SearchTrigger from \'@aziontech/webkit/search-trigger\') first in AppHeader.End, wire it to a <Command v-model:open="open">, and wrap the header in an @container. Focused task headers (sign-in, create flows) have no navigation and are not checked.',
+        'This app header has navigation but no search. Add <SearchTrigger collapsible ' +
+        '@open="open = true" /> (import SearchTrigger from \'@aziontech/webkit/search-trigger\') ' +
+        'first in AppHeader.End, wire it to a <Command v-model:open="open">, and wrap the header ' +
+        'in an @container. Focused task headers (sign-in, create flows) have no navigation and ' +
+        'are not checked.',
       handRolled:
         'Hand-rolled ⌘K search field. Use <SearchTrigger> (@aziontech/webkit/search-trigger): it draws the field, the OS-aware keycap, aria-keyshortcuts, the narrow fold, and binds ⌘K / Ctrl K.',
       bareIcon:
@@ -58,36 +90,10 @@ export default {
   create(context) {
     const factory = templateBodyVisitorFactory(context)
     if (!factory) return {}
-
     return factory({
       VElement(node) {
-        const raw = node.rawName ?? ''
-
-        if (!TRIGGER.has(raw)) {
-          const keys = staticAttr(node, 'aria-keyshortcuts')
-          if (keys && SHORTCUT.test(keys)) {
-            context.report({ node: node.startTag, messageId: 'handRolled' })
-            return
-          }
-        }
-
-        if (
-          ICON_BUTTONS.has(raw) &&
-          /\b(?:az|ai|pi)-search\b/.test(staticAttr(node, 'icon') ?? '')
-        ) {
-          if (insideHeader(node)) context.report({ node: node.startTag, messageId: 'bareIcon' })
-          return
-        }
-
-        if (!HEADER.has(raw)) return
-        const root = templateRoot(node)
-        const everything = [...descendants(root)]
-        const navigates =
-          [...descendants(node)].some((el) => NAVIGATION.has(el.rawName)) ||
-          everything.some((el) => el.rawName === 'Sidebar' || el.rawName === 'sidebar')
-        if (!navigates) return
-        if (everything.some((el) => TRIGGER.has(el.rawName))) return
-        context.report({ node: node.startTag, messageId: 'missing' })
+        const messageId = headerFinding(node)
+        if (messageId) context.report({ node: node.startTag, messageId })
       }
     })
   }

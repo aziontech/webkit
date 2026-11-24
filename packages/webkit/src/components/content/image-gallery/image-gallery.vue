@@ -164,6 +164,12 @@
     if (count === 0) open.value = false
     else if (activeIndex.value > count - 1) activeIndex.value = count - 1
   })
+
+  const ITEM_CLASS =
+    'relative flex aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-0 ' +
+    'transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 ' +
+    'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'in-data-[layout=single]:aspect-auto in-data-[layout=single]:data-[broken]:aspect-square'
 </script>
 
 <template>
@@ -220,7 +226,7 @@
           aria-haspopup="dialog"
           :data-testid="`${testId}__item`"
           :data-broken="isBroken(tile.source) ? '' : null"
-          class="relative flex aspect-square w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-0 transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) in-data-[layout=single]:aspect-auto in-data-[layout=single]:data-[broken]:aspect-square"
+          :class="ITEM_CLASS"
           @click="show(index)"
         >
           <template v-if="isBroken(tile.source)">
@@ -236,7 +242,7 @@
             :alt="nameOf(tile.alt, tile.position)"
             loading="lazy"
             decoding="async"
-            class="block size-full object-cover in-data-[layout=single]:h-auto"
+            class="block size-full object-contain in-data-[layout=single]:h-auto"
             @error="markBroken(tile.source)"
           />
         </button>
@@ -260,10 +266,13 @@
       size="large"
       :data-testid="`${testId}__viewer`"
     >
-      <DialogContent @keydown="onViewerKeydown">
+      <DialogContent
+        :data-testid="`${testId}__viewer__panel`"
+        @keydown="onViewerKeydown"
+      >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>
+            <DialogTitle :data-testid="`${testId}__viewer__title`">
               <bdi>{{ active ? nameOf(active.alt, active.position) : '' }}</bdi>
             </DialogTitle>
             <DialogDescription

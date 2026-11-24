@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, ref } from 'vue'
 
@@ -354,6 +354,28 @@ describe('Slider', () => {
       const view = render(Disabled)
       const slider = view.getAllByRole('slider')[0] as HTMLInputElement
       expect(slider.disabled || slider.getAttribute('aria-disabled') === 'true').toBe(true)
+    })
+  })
+
+  describe('examples', () => {
+    it('Default names the slider with a visible label and shows the value it moves to', async () => {
+      const { getByRole, getByText, getByTestId } = render(Default)
+      const input = inputOf(getByTestId)
+      expect(input.labels?.[0]?.textContent).toContain('Alert threshold')
+      expect(getByRole('slider', { name: 'Alert threshold' })).toBe(input)
+      expect(getByText('40%')).toBeTruthy()
+      await press(input, 'ArrowRight')
+      expect(getByText('41%')).toBeTruthy()
+    })
+
+    it('Invalid says what to change in a Field.Error tied to the slider', async () => {
+      const { getByTestId, getByText } = render(Invalid)
+      const message = getByText('Set the threshold to 50% or more.')
+      await vi.waitFor(() =>
+        expect(
+          (inputOf(getByTestId).getAttribute('aria-describedby') ?? '').split(/\s+/)
+        ).toContain(message.closest('[id]')?.id)
+      )
     })
   })
 })

@@ -12,17 +12,20 @@ upgrade with `npx @aziontech/webkit migrate v6`.
 
 ## Reporting a vulnerability
 
-Report it privately through GitHub. Do not open a public issue, pull request or discussion.
+Report it privately. Do not open a public issue, pull request or discussion.
 
-1. Open the repository's **Security** tab.
-2. Choose **Report a vulnerability** (GitHub private vulnerability reporting).
-3. Describe the problem: the affected package and version, how to reproduce it, and what an
-   attacker could do with it. A minimal reproduction helps most.
+Send an email to **security@azion.com**, the Azion security office, with:
 
-Only the maintainers and you can see the report. We aim to acknowledge it within three business
-days, agree a fix and a disclosure date with you, and publish a GitHub security advisory (with a
-CVE where it applies) when the fixed version is on npm. We credit you in the advisory unless you
-ask us not to.
+- the affected package and version, tag or commit;
+- the type of vulnerability and what an attacker could do with it;
+- the steps to reproduce it, and a proof of concept when you have one.
+
+When the repository's **Security** tab shows **Report a vulnerability** (GitHub private
+vulnerability reporting), you can report there instead; only the maintainers and you see it.
+
+We acknowledge the report within two business days and send a status update within five. We agree
+a fix and a disclosure date with you, and publish a GitHub security advisory (with a CVE where it
+applies) when the fixed version is on npm. We credit you in the advisory unless you ask us not to.
 
 ## Scope
 

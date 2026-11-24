@@ -19,7 +19,7 @@
 
 ## Don’t
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).
+- To cap the whole column — `DocProse` caps only running text (see the reading measure under Tokens). The consumer sets the column width with `.layout-column-content` (`--layout-measure-content`, 876px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -62,38 +62,39 @@
 
 ```vue
 <script setup>
+  import DocMarkdown from '@aziontech/webkit/doc-markdown'
   import DocProse from '@aziontech/webkit/doc-prose'
+
+  const source = [
+    '## Deploy an application',
+    '',
+    "Templates are ready-made projects that go live in a few clicks. You don't need any local tooling, and the [template's guide](https://www.azion.com/en/documentation/) lists what each one needs.",
+    '',
+    '### What you get',
+    '',
+    '- A **workload** bound to its own Azion domain',
+    '- An edge application built from your `azion.config.js`',
+    '- A certificate issued and renewed for you',
+    '',
+    '1. Pick a template',
+    '2. Fill in the fields it asks for',
+    '3. Deploy',
+    '',
+    '> The first request to a location is a cache miss. Warm-up is per location, not global.',
+    '',
+    '#### Build command',
+    '',
+    'An h4 is a label inside a section rather than a new section, so it shares the base gap of the prose around it and carries its level on weight instead.',
+    '',
+    '---',
+    '',
+    'A section break above resets the reader before the next part of the page.'
+  ].join('\n')
 </script>
 
 <template>
   <DocProse>
-    <h2>Deploy an application</h2>
-    <p>
-      Templates are ready-made projects that go live in a few clicks. You don't need any local
-      tooling, and the <a href="https://www.azion.com/en/documentation/">template's guide</a> lists
-      what each one needs.
-    </p>
-    <h3>What you get</h3>
-    <ul>
-      <li>A <strong>workload</strong> bound to its own Azion domain</li>
-      <li>An edge application built from your <code>azion.config.js</code></li>
-      <li>A certificate issued and renewed for you</li>
-    </ul>
-    <ol>
-      <li>Pick a template</li>
-      <li>Fill in the fields it asks for</li>
-      <li>Deploy</li>
-    </ol>
-    <blockquote>
-      <p>The first request to a location is a cache miss. Warm-up is per location, not global.</p>
-    </blockquote>
-    <h4>Build command</h4>
-    <p>
-      An h4 is a label inside a section rather than a new section, so it shares the base gap of the
-      prose around it and carries its level on weight instead.
-    </p>
-    <hr />
-    <p>A section break above resets the reader before the next part of the page.</p>
+    <DocMarkdown :source="source" />
   </DocProse>
 </template>
 ```

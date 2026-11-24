@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, inject, ref, useAttrs, watch } from 'vue'
+  import { computed, defineAsyncComponent, inject, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   import type { PropertyFilterQuery } from '../../../../composables/use-collection/lib/property-filter'
   import { useFilterMenuLabels } from '../../filter-menu/composables/use-filter-menu-labels'
@@ -26,7 +26,7 @@
   })
 
   export interface TableFilterProps {
-    /** Fields to filter on; empty uses the table's `filterFields`. */
+    /** Fields to filter on (id, label, value type, allowed operators, select options); `FilterMenu.ChipGroup` labels its chips with them. */
     fields?: TableFilterField[]
     /** Trigger text of the menu, accessible name of the property filter. Empty uses the locale catalog. */
     title?: string
@@ -44,6 +44,9 @@
     apply: [event: Event, filters: TableAppliedFilter[]]
   }>()
 
+  /** Committed structured filters (v-model); the table filters its rows by them, or only reports them under `manualFiltering`. */
+  const model = defineModel<TableAppliedFilter[]>()
+
   const attrs = useAttrs()
   const ctx = inject(TableInjectionKey, null)
 
@@ -51,16 +54,23 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'table-filter'
   )
 
-  const fields = computed<TableFilterField[]>(() =>
-    props.fields.length ? props.fields : (ctx?.filterFields.value ?? [])
-  )
-  const local = ref<TableAppliedFilter[]>([])
+  const fields = computed<TableFilterField[]>(() => props.fields)
+  const local = ref<TableAppliedFilter[]>(model.value ?? [])
   const applied = computed<TableAppliedFilter[]>(() => ctx?.appliedFilters.value ?? local.value)
   const commit = (event: Event, list: TableAppliedFilter[]): void => {
     local.value = list
+    model.value = list
     ctx?.applyFilters(event, list)
     emit('apply', event, list)
   }
+  if (ctx?.registerFilterFields) onScopeDispose(ctx.registerFilterFields(() => fields.value))
+  if (model.value && model.value !== applied.value) ctx?.setFilters?.(model.value)
+  watch(model, (next) => {
+    if (!next || next === applied.value) return
+    local.value = next
+    ctx?.setFilters?.(next)
+  })
+  watch(applied, (next) => next !== model.value && (model.value = next))
 
   const FilterMenu = defineAsyncComponent(() => import('../../filter-menu/filter-menu.vue'))
   const PropertyFilter = defineAsyncComponent(
@@ -90,7 +100,7 @@
     (filter) => {
       if (!filter || props.type !== 'menu') return
       menuEl.value?.open(filter.field)
-      if (ctx) ctx.editingFilter.value = null
+      ctx?.editFilter(null)
     }
   )
 </script>

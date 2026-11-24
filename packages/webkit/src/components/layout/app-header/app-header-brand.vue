@@ -45,6 +45,15 @@
   )
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'app-header-brand')
+
+  const ROOT_CLASS =
+    'flex shrink-0 items-center ' +
+    'data-[label]:gap-(--spacing-xs) ' +
+    '[&_svg]:block [&_svg]:h-[18px] [&_svg]:w-auto [&_svg]:max-w-full ' +
+    'data-[link]:min-h-10 data-[link]:self-center data-[link]:rounded-(--shape-control) data-[link]:transition-opacity data-[link]:duration-fast-02 data-[link]:ease-productive-entrance ' +
+    'data-[link]:hover:opacity-80 data-[link]:focus-visible:outline-none data-[link]:focus-visible:ring-2 data-[link]:focus-visible:ring-(--ring-color) ' +
+    'data-[link]:focus-visible:ring-offset-2 data-[link]:focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none pointer-coarse:data-[link]:min-h-11'
 </script>
 
 <template>
@@ -56,7 +65,7 @@
     :data-testid="testId"
     :data-link="isLink || null"
     :data-label="hasLabel || null"
-    class="flex shrink-0 items-center data-[label]:gap-(--spacing-xs) [&_svg]:block [&_svg]:h-[18px] [&_svg]:w-auto [&_svg]:max-w-full data-[link]:min-h-10 data-[link]:self-center data-[link]:rounded-(--shape-control) data-[link]:transition-opacity data-[link]:duration-fast-02 data-[link]:ease-productive-entrance data-[link]:hover:opacity-80 data-[link]:focus-visible:outline-none data-[link]:focus-visible:ring-2 data-[link]:focus-visible:ring-(--ring-color) data-[link]:focus-visible:ring-offset-2 data-[link]:focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none pointer-coarse:data-[link]:min-h-11"
+    :class="ROOT_CLASS"
   >
     <slot />
     <span

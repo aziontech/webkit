@@ -13,6 +13,10 @@
   import Brand from '../../brand/brand.vue'
   import Kbd from '../../kbd/kbd.vue'
   import { ConsoleMockupShellInjectionKey } from '../injection-key'
+  import {
+    CONSOLE_MOCKUP_SHELL_LEGACY_TOKENS,
+    CONSOLE_MOCKUP_SHELL_RAIL
+  } from '../lib/console-mockup-shell-data'
 
   defineOptions({ name: 'ConsoleMockupShell', inheritAttrs: false })
 
@@ -86,58 +90,6 @@
 
   const attrs = useAttrs()
 
-  const RAIL = [
-    {
-      key: 'start',
-      label: '',
-      entries: [
-        { key: 'overview', icon: 'az az-home', label: 'Overview' },
-        { key: 'workloads', icon: 'az az-workloads', label: 'Workloads' },
-        { key: 'deployments', icon: 'az az-deploy-pillar', label: 'Deployments' }
-      ]
-    },
-    {
-      key: 'build',
-      label: 'Build',
-      entries: [
-        { key: 'applications', icon: 'az az-applications', label: 'Applications' },
-        { key: 'functions', icon: 'az az-functions', label: 'Functions' },
-        { key: 'variables', icon: 'az az-variables', label: 'Variables' },
-        { key: 'connectors', icon: 'az az-connectors', label: 'Connectors' },
-        { key: 'custom-pages', icon: 'az az-custom-pages', label: 'Custom Pages' }
-      ]
-    },
-    {
-      key: 'secure',
-      label: 'Secure',
-      entries: [
-        { key: 'firewall', icon: 'az az-firewall', label: 'Firewall' },
-        { key: 'edge-dns', icon: 'az az-edge-dns', label: 'Edge DNS' },
-        { key: 'waf-rules', icon: 'az az-waf', label: 'WAF Rules' },
-        {
-          key: 'certificate-manager',
-          icon: 'az az-certificate-manager',
-          label: 'Certificate Manager'
-        }
-      ]
-    }
-  ]
-
-  const LEGACY_TOKENS = {
-    '--text-label-lg-font-weight': '500',
-    '--text-label-md-font-weight': '500',
-    '--text-label-sm-font-weight': '500',
-    '--text-button-lg-font-weight': '600',
-    '--text-button-md-font-weight': '600',
-    '--text-tag-sm-font-weight': '600',
-    '--text-tag-md-font-weight': '600',
-    '--text-tag-sm-font-size': '0.6875rem',
-    '--text-body-lg-line-height': '1.5',
-    '--text-body-md-line-height': '1.5',
-    '--text-body-sm-line-height': '1.5',
-    '--text-body-xs-line-height': '1.5'
-  }
-
   const rootEl = ref<globalThis.HTMLElement | null>(null)
   const frame = ref({ width: props.width, height: 600, scale: 1 })
 
@@ -164,7 +116,7 @@
     width: `${frame.value.width}px`,
     height: `${frame.value.height}px`,
     transform: `scale(${frame.value.scale})`,
-    ...(props.shell === 'legacy' ? LEGACY_TOKENS : {})
+    ...(props.shell === 'legacy' ? CONSOLE_MOCKUP_SHELL_LEGACY_TOKENS : {})
   }))
 
   onMounted(() => {
@@ -242,6 +194,23 @@
   }
 
   provide(ConsoleMockupShellInjectionKey, { entered: readonly(entered), beatStyle })
+
+  const ROOT_CLASS =
+    'relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none ' +
+    'data-interactive:pointer-events-auto data-interactive:select-auto ' +
+    'data-[variant=bare]:overflow-x-visible data-[variant=bare]:overflow-y-clip data-[variant=window]:rounded-(--shape-card) data-[variant=window]:bg-(--bg-canvas) ' +
+    'data-[variant=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] ' +
+    'data-[variant=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] ' +
+    'data-[variant=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] ' +
+    'data-[variant=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]'
+
+  const FADE_CLASS =
+    'pointer-events-none absolute inset-0 z-20 ' +
+    'data-[fade=bottom]:[background-image:linear-gradient(to_bottom,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=left]:[background-image:linear-gradient(to_left,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=right]:[background-image:linear-gradient(to_right,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=top]:[background-image:linear-gradient(to_top,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=y]:[background-image:linear-gradient(to_bottom,var(--console-mockup-fade-color,var(--bg-canvas))_0%,transparent_var(--console-mockup-fade-edge,22%),transparent_calc(100%-var(--console-mockup-fade-edge,22%)),var(--console-mockup-fade-color,var(--bg-canvas))_100%)]'
 </script>
 
 <template>
@@ -255,7 +224,7 @@
     :data-interactive="interactive || null"
     :data-variant="variant"
     :data-fade="fade"
-    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[variant=bare]:overflow-x-visible data-[variant=bare]:overflow-y-clip data-[variant=window]:rounded-(--shape-card) data-[variant=window]:bg-(--bg-canvas) data-[variant=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[variant=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[variant=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[variant=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]"
+    :class="ROOT_CLASS"
   >
     <div
       :data-variant="variant"
@@ -316,6 +285,7 @@
         />
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
+            tabindex="-1"
             label="Create"
             variant="primary"
             size="small"
@@ -327,6 +297,7 @@
             icon="az az-ask-azion"
           />
           <Button
+            tabindex="-1"
             label="Feedback"
             variant="outline"
             size="small"
@@ -364,7 +335,7 @@
             class="flex min-h-0 flex-1 flex-col gap-(--spacing-md) overflow-hidden p-(--spacing-sm)"
           >
             <div
-              v-for="group in RAIL"
+              v-for="group in CONSOLE_MOCKUP_SHELL_RAIL"
               :key="group.key"
               class="flex flex-col gap-(--spacing-2xs)"
             >
@@ -433,6 +404,7 @@
                 >
               </span>
               <Button
+                tabindex="-1"
                 label="Create"
                 variant="primary"
                 size="medium"
@@ -471,7 +443,7 @@
     <div
       v-if="fade !== 'none'"
       :data-fade="fade"
-      class="pointer-events-none absolute inset-0 z-20 data-[fade=bottom]:[background-image:linear-gradient(to_bottom,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=left]:[background-image:linear-gradient(to_left,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=right]:[background-image:linear-gradient(to_right,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=top]:[background-image:linear-gradient(to_top,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=y]:[background-image:linear-gradient(to_bottom,var(--console-mockup-fade-color,var(--bg-canvas))_0%,transparent_var(--console-mockup-fade-edge,22%),transparent_calc(100%-var(--console-mockup-fade-edge,22%)),var(--console-mockup-fade-color,var(--bg-canvas))_100%)]"
+      :class="FADE_CLASS"
     />
   </figure>
 </template>

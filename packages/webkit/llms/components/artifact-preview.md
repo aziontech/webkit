@@ -78,7 +78,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 ## Right-to-left
 
 - Layout: logical utilities; actions at the inline end.
-- Icons: external-link and download are not mirrored.
+- Icons: maximize (Open, which opens the in-page canvas, not a new tab) and download are not mirrored.
 - Keyboard: none.
 - User data: the title is `dir="auto"` (file names).
 
@@ -156,6 +156,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 ```vue
 <script setup>
   import ArtifactPreview from '@aziontech/webkit/artifact-preview'
+  import Table from '@aziontech/webkit/table'
 
   const rows = [
     { country: 'United States', requests: '1,204,330', hit: '92%' },
@@ -173,43 +174,29 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
       icon="az az-table"
       download-href="data:text/csv;charset=utf-8,country,requests,hit"
     >
-      <table class="w-full border-collapse text-body-sm">
-        <thead class="bg-(--bg-surface-raised)">
-          <tr>
-            <th
-              scope="col"
-              class="px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm"
-            >
-              Country
-            </th>
-            <th
-              scope="col"
-              class="px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm"
-            >
-              Requests
-            </th>
-            <th
-              scope="col"
-              class="px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm"
-            >
-              Hit ratio
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
+      <Table density="compact">
+        <Table.Header>
+          <Table.Row>
+            <Table.HeadCell principal>Country</Table.HeadCell>
+            <Table.HeadCell align="end">Requests</Table.HeadCell>
+            <Table.HeadCell align="end">Hit ratio</Table.HeadCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row
             v-for="row in rows"
             :key="row.country"
-            class="border-t border-(--border-muted)"
           >
-            <td class="px-(--spacing-sm) py-(--spacing-xs)">{{ row.country }}</td>
-            <td class="px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums">
-              {{ row.requests }}
-            </td>
-            <td class="px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums">{{ row.hit }}</td>
-          </tr>
-        </tbody>
-      </table>
+            <Table.Cell principal>{{ row.country }}</Table.Cell>
+            <Table.Cell align="end"
+              ><span class="tabular-nums">{{ row.requests }}</span></Table.Cell
+            >
+            <Table.Cell align="end"
+              ><span class="tabular-nums">{{ row.hit }}</span></Table.Cell
+            >
+          </Table.Row>
+        </Table.Body>
+      </Table>
     </ArtifactPreview>
   </div>
 </template>

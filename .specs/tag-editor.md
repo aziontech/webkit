@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 74d8ddd877308fc77a9a9bb0c0e8e5bdba8556175c0a72af7d482f2b124e926c
+checksum: aa4e5e79e29710ae6d9e1e1af50a16e6afbcf7a533f98c6d7acf6018931f0801
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -129,7 +129,7 @@ _none_
 - ARIA: rows, labels, errors and announcements come from `attribute-editor`; Undo is named "Undo removal of tag n"; a marked tag keeps a visible note ("This tag will be removed when you save.").
 - Contrast ≥4.5:1 from the semantic text tokens.
 - Touch target: Remove and Undo are 32 px buttons (`medium`).
-- Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error`, `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.
+- Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error` (plus `requiredId` when required), `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.
 
 ## Internationalization
 

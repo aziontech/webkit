@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "One claim and one picture of that claim, copy leading and media closing — the `media-end` default. The picture is an official `Illustration` scene: vector, drawn on the system's own canvas, and transparent, so it sits on the band's ground — a grid lattice that fades radially to nothing before the cell's edges. Type a URL into `src` in the Controls panel and the band swaps the scene for a plain image, which covers the ground instead; clear both and the copy column takes the full frame rather than leaving an empty half.",
+   "summary": "One claim and one picture of that claim, copy leading and media closing — the `media-end` default. The picture is an official `Illustration` scene: vector, drawn on the system's own canvas, and transparent, so it sits on the band's ground — a grid lattice that fades radially to nothing before the cell's edges. Set `src` to an image URL and the band swaps the scene for a plain image, which covers the ground instead; clear both and the copy column takes the full frame rather than leaving an empty half.",
    "file": "examples/media-split/default.vue"
   },
   {

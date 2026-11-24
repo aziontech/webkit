@@ -43,7 +43,17 @@
  ],
  "sfcFile": "blocks/create/create-deploy-drawer/create-deploy-drawer.vue",
  "guidelinesFile": "blocks/create/create-deploy-drawer/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-deploy-drawer/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "lib/list-format.ts",
+  "parts/build-item.vue",
+  "parts/deploy-loading.vue",
+  "parts/deploy-resources-card.vue",
+  "parts/domain-group-item.vue",
+  "parts/environment-choices.vue",
+  "parts/impacted-projects.vue",
+  "parts/project-card.vue",
+  "parts/version-picker.vue",
+  "types.ts"
+ ]
 }

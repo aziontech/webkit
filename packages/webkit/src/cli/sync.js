@@ -118,103 +118,99 @@ export function resolveBundleRoot(projectDir, { templatesDir = AI_TEMPLATES } = 
   return own
 }
 
+const COPY_STATES = new Set(['missing', 'stale', 'unstamped-identical'])
+const EDITED_STATES = new Set(['modified', 'unstamped-different'])
+
+function copyStamped(rel, templateContent, state, { version, forced }) {
+  const action = {
+    type: 'copy-stamped',
+    to: join('.claude', rel),
+    content: stamp(templateContent, { source: `claude/${rel}`, version }),
+    state
+  }
+  return forced ? { ...action, forced: true } : action
+}
+
+function bundleAction(rel, templateContent, state, { force, version }) {
+  if (COPY_STATES.has(state)) return copyStamped(rel, templateContent, state, { version })
+  if (!EDITED_STATES.has(state)) return null
+  if (force) return copyStamped(rel, templateContent, state, { version, forced: true })
+  return {
+    type: 'report',
+    rel,
+    state,
+    reportResult: 'skipped',
+    detail: `${join('.claude', rel)} was edited after sync stamped it — skipped (use --force to overwrite)`
+  }
+}
+
+function bundleEntries(claudeDir, bundleRels, options) {
+  return bundleRels.map((rel) => {
+    const templateContent = readOrNull(templateFile(options.templatesDir, rel)) ?? ''
+    const consumerContent = readOrNull(join(claudeDir, rel))
+    const state = classify(templateContent, consumerContent)
+    return { rel, state, action: bundleAction(rel, templateContent, state, options) }
+  })
+}
+
+const SYNC_MARKER = /^<!-- webkit-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->/m
+
+function orphanEntry(claudeDir, rel) {
+  const content = readOrNull(join(claudeDir, rel))
+  if (content === null) return null
+  const marker = content.match(SYNC_MARKER)
+  if (!marker) return null
+  const action = {
+    type: 'report',
+    rel,
+    state: 'orphan',
+    reportResult: 'skipped',
+    detail: `${join('.claude', rel)} carries a webkit-sync marker for "${marker[1]}", which no longer exists in the bundle — left in place`
+  }
+  return { rel, state: 'orphan', action }
+}
+
+function orphanEntries(claudeDir, bundleRelSet) {
+  return listConsumerClaudeFiles(claudeDir)
+    .filter((rel) => !bundleRelSet.has(rel) && isWebkitBundleName(rel))
+    .map((rel) => orphanEntry(claudeDir, rel))
+    .filter(Boolean)
+}
+
+function fenceFor(projectDir, path, fragmentBody) {
+  const content = readOrNull(join(projectDir, path))
+  const state = classifyFragment(content, fragmentBody)
+  const action =
+    state === 'current'
+      ? null
+      : { type: 'fence', path, start: FRAGMENT_START, end: FRAGMENT_END, content: fragmentBody }
+  return { state, action }
+}
+
+const isFragmentDrift = (state) => state === 'legacy' || state === 'stale' || state === 'missing'
+const isEntryDrift = (e) => e.state === 'missing' || e.state === 'stale' || e.state === 'orphan'
+
 export function planSync(
   projectDir,
   { force = false, templatesDir = AI_TEMPLATES, version = WEBKIT_VERSION } = {}
 ) {
   const claudeDir = join(projectDir, '.claude')
   const bundleRels = listBundle(templatesDir)
-  const bundleRelSet = new Set(bundleRels)
-
-  const entries = []
-  const actions = []
-
-  for (const rel of bundleRels) {
-    const templatePath = templateFile(templatesDir, rel)
-    const templateContent = readOrNull(templatePath) ?? ''
-    const consumerPath = join(claudeDir, rel)
-    const consumerContent = readOrNull(consumerPath)
-    const source = `claude/${rel}`
-    const state = classify(templateContent, consumerContent)
-
-    let action = null
-    if (state === 'missing' || state === 'stale' || state === 'unstamped-identical') {
-      action = {
-        type: 'copy-stamped',
-        to: join('.claude', rel),
-        content: stamp(templateContent, { source, version }),
-        state
-      }
-    } else if (state === 'modified' || state === 'unstamped-different') {
-      if (force) {
-        action = {
-          type: 'copy-stamped',
-          to: join('.claude', rel),
-          content: stamp(templateContent, { source, version }),
-          state,
-          forced: true
-        }
-      } else {
-        action = {
-          type: 'report',
-          rel,
-          state,
-          reportResult: 'skipped',
-          detail: `${join('.claude', rel)} was edited after sync stamped it — skipped (use --force to overwrite)`
-        }
-      }
-    }
-
-    entries.push({ rel, state, action })
-    if (action) actions.push(action)
-  }
-
-  for (const rel of listConsumerClaudeFiles(claudeDir)) {
-    if (bundleRelSet.has(rel)) continue
-    if (!isWebkitBundleName(rel)) continue
-    const content = readOrNull(join(claudeDir, rel))
-    if (content === null) continue
-    const marker = content.match(
-      /^<!-- webkit-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->/m
-    )
-    if (!marker) continue
-    const action = {
-      type: 'report',
-      rel,
-      state: 'orphan',
-      reportResult: 'skipped',
-      detail: `${join('.claude', rel)} carries a webkit-sync marker for "${marker[1]}", which no longer exists in the bundle — left in place`
-    }
-    entries.push({ rel, state: 'orphan', action })
-    actions.push(action)
-  }
-
+  const entries = [
+    ...bundleEntries(claudeDir, bundleRels, { force, templatesDir, version }),
+    ...orphanEntries(claudeDir, new Set(bundleRels))
+  ]
   const fragmentBody = readOrNull(fragmentFile(templatesDir)) || ''
-  const fenceFor = (path) => {
-    const content = readOrNull(join(projectDir, path))
-    const state = classifyFragment(content, fragmentBody)
-    const action =
-      state === 'current'
-        ? null
-        : { type: 'fence', path, start: FRAGMENT_START, end: FRAGMENT_END, content: fragmentBody }
-    if (action) actions.push(action)
-    return { state, action }
-  }
-  const agentsFragment = fenceFor('AGENTS.md')
-  const claudeFragment = fenceFor('CLAUDE.md')
-  const fragmentState = claudeFragment.state
-
-  const isDrift = (state) => state === 'legacy' || state === 'stale' || state === 'missing'
+  const agentsFragment = fenceFor(projectDir, 'AGENTS.md', fragmentBody)
+  const claudeFragment = fenceFor(projectDir, 'CLAUDE.md', fragmentBody)
+  const actions = [
+    ...entries.map((e) => e.action),
+    agentsFragment.action,
+    claudeFragment.action
+  ].filter(Boolean)
   const drift =
-    entries.some((e) => e.state === 'missing' || e.state === 'stale' || e.state === 'orphan') ||
-    isDrift(fragmentState) ||
-    isDrift(agentsFragment.state)
-
-  return {
-    entries,
-    fragment: claudeFragment,
-    agentsFragment,
-    actions,
-    drift
-  }
+    entries.some(isEntryDrift) ||
+    isFragmentDrift(claudeFragment.state) ||
+    isFragmentDrift(agentsFragment.state)
+  return { entries, fragment: claudeFragment, agentsFragment, actions, drift }
 }

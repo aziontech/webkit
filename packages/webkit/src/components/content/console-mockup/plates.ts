@@ -1,7 +1,8 @@
+import type { Component } from 'vue'
+
 import type { ConsoleMockupName } from './console-mockup.vue'
 import type { ConsoleMockupShellVariant } from './parts/console-mockup-shell.vue'
-
-export { default as ConsoleMockupPlate } from './parts/widget-plate.vue'
+import ConsoleMockupPlate from './parts/widget-plate.vue'
 
 export interface ConsoleMockupPlating {
   /** How the fragment is plated when the host leaves variant unset. */
@@ -10,7 +11,7 @@ export interface ConsoleMockupPlating {
   title: string
 }
 
-export const consoleMockupPlates = {
+const consoleMockupPlates = {
   'ai-inference-function': { variant: 'bare', title: 'AI Inference' },
   'ai-inference-model': { variant: 'bare', title: 'AI Inference' },
   'ai-inference-template': { variant: 'bare', title: 'AI Inference' },
@@ -68,3 +69,10 @@ export const consoleMockupPlates = {
   'workload-deploy': { variant: 'bare', title: 'Workloads' },
   'workload-domain': { variant: 'bare', title: 'Workloads' }
 } satisfies Partial<Record<ConsoleMockupName, ConsoleMockupPlating>>
+
+const plates: {
+  ConsoleMockupPlate: Component
+  consoleMockupPlates: typeof consoleMockupPlates
+} = { ConsoleMockupPlate, consoleMockupPlates }
+
+export default plates

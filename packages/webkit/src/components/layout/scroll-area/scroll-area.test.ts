@@ -127,6 +127,17 @@ describe('ScrollArea', () => {
       expect(area(view).getAttribute('aria-label')).toBe('Deployment log')
     })
 
+    it('exposes a named viewport as a region, so its name reaches a screen reader', async () => {
+      const view = render(host({ ariaLabel: 'Deployment log' }))
+      expect(view.getByRole('region', { name: 'Deployment log' })).toBe(area(view))
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('leaves an unnamed viewport without a role', () => {
+      const view = render(host())
+      expect(area(view).hasAttribute('role')).toBe(false)
+    })
+
     // ---- Keyboard scrolling: vertical ----------------------------------------------
     it('ArrowDown / ArrowUp scroll the viewport by the 40px step and prevent default', async () => {
       const view = render(host())

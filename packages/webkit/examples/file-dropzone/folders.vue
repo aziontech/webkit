@@ -2,19 +2,18 @@
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { ref } from 'vue'
 
-  const filesInputEl = ref(null)
-  const folderInputEl = ref(null)
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
   const items = ref([])
 
   const add = (files) => {
     items.value = [...items.value, ...Array.from(files, (file) => ({ file }))]
   }
-  const onPick = (event) => {
-    add(event.target.files ?? [])
-    event.target.value = ''
-  }
+  const browseFiles = async () => add(await filePicker.open())
+  const browseFolder = async () => add(await folderPicker.open())
   const remove = (index) => {
     items.value = items.value.filter((_, position) => position !== index)
   }
@@ -33,35 +32,17 @@
           label="Browse files"
           variant="secondary"
           size="medium"
-          @click="filesInputEl?.click()"
+          @click="browseFiles"
         />
         <Button
           label="Browse folder"
           variant="secondary"
           size="medium"
           icon="az az-folder-open"
-          @click="folderInputEl?.click()"
+          @click="browseFolder"
         />
       </div>
     </FileDropzone>
-    <input
-      ref="filesInputEl"
-      type="file"
-      multiple
-      class="hidden"
-      aria-hidden="true"
-      tabindex="-1"
-      @change="onPick"
-    />
-    <input
-      ref="folderInputEl"
-      type="file"
-      webkitdirectory
-      class="hidden"
-      aria-hidden="true"
-      tabindex="-1"
-      @change="onPick"
-    />
     <FileTokenGroup
       v-if="items.length"
       :items="items"

@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The band as the marketing site places it: the certifications headline and lead in the media split, five certification badges in a frame grid, and a closing \"See more\" cell linking to the compliance page. Edit the props in the Controls panel — a band with no title renders nothing at all.",
+   "summary": "The band as the marketing site places it: the certifications headline and lead in the media split, five certification badges in a frame grid, and a closing \"See more\" cell linking to the compliance page. A band with no title renders nothing at all.",
    "file": "examples/compliance-logos-section/default.vue"
   }
  ]

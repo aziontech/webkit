@@ -33,6 +33,7 @@ import {
   useWhen as themeAnimateUseWhen
 } from '../../theme/src/tokens/primitives/animations/animate.js'
 import { buildTokenExport } from '../../theme/src/tokens/token-export.js'
+import { illustrationFrame } from '../src/assets/illustrations/frames.ts'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -222,6 +223,7 @@ export function modelProps(target) {
     const opens = (fallback.match(/[([{]/g) ?? []).length
     const closes = (fallback.match(/[)\]}]/g) ?? []).length
     if (opens !== closes) fallback = '—'
+    if (fallback === 'undefined as never') fallback = 'undefined'
     models.push({
       name,
       type: match[1].replace(/\s+/g, ' ').trim(),
@@ -319,6 +321,7 @@ function _readSpec(subpath) {
         ? frontmatter.setup.trim()
         : null,
     styleSeam: frontmatter.style_seam === true,
+    stability: frontmatter.stability ?? null,
     purpose: firstProse(getSection(body, 'Purpose')),
     useWhen: bullets(getSection(body, 'When to use')),
     avoidWhen: bullets(getSection(body, 'When NOT to use')),
@@ -347,7 +350,15 @@ export async function build() {
     if (/^\.\/src\/components\/.+\/index\.(ts|js)$/.test(exportsMap[`./${s}`] || '')) return true
     return loadSpec(s)?.structure === 'composition'
   })
-  const compoundByLength = [...compoundRoots].sort((a, b) => b.length - a.length)
+  const companionRoots = subpaths.filter((s) => {
+    const target = exportsMap[`./${s}`] || ''
+    if (s.includes('/') || compoundRoots.includes(s) || !target.endsWith('.vue')) return false
+    const folder = `${dirname(target)}/`
+    return subpaths.some(
+      (o) => o.startsWith(`${s}-`) && (exportsMap[`./${o}`] || '').startsWith(folder)
+    )
+  })
+  const compoundByLength = [...compoundRoots, ...companionRoots].sort((a, b) => b.length - a.length)
 
   function compoundDir(c) {
     const target = exportsMap[`./${c}-root`] || exportsMap[`./${c}`] || ''
@@ -368,7 +379,7 @@ export async function build() {
   function attachedTargets(c) {
     if (attachedCache.has(c)) return attachedCache.get(c)
     const index = exportsMap[`./${c}`] || ''
-    let found = null
+    let found = companionRoots.includes(c) ? new Map() : null
     if (/\/index\.ts$/.test(index)) {
       const text = readFileSync(resolve(PKG_ROOT, index), 'utf-8')
       const dir = dirname(index)
@@ -428,6 +439,10 @@ export async function build() {
       entry.treeShakeableImport = importPath
     } else {
       entry.kind = kindFromTarget(target)
+      if (companionRoots.includes(subpath))
+        entry.subcomponents = subpaths
+          .filter((s) => parentCompound(s) === subpath)
+          .map((s) => `${PKG_NAME}/${s}`)
       if (isCompound) {
         entry.compoundRoot = true
         const rootKey = `${subpath}-root`
@@ -477,6 +492,11 @@ export async function build() {
       if (spec.setup) entry.setup = spec.setup
     } else if (entry.kind === 'component') {
       entry.category = categoryFromTarget(target)
+    }
+    if (['component', 'root', 'subcomponent'].includes(entry.kind)) {
+      const owner = entry.parent || entry.rootOf
+      const stability = loadSpec(subpath)?.stability ?? (owner ? loadSpec(owner)?.stability : null)
+      if (stability === 'preview') entry.stability = 'preview'
     }
     const deprecation = targetDeprecation(target)
     if (deprecation) {
@@ -556,8 +576,8 @@ const ASSET_KINDS = {
 
 function objectKeys(file, variable) {
   const src = readFileSync(resolve(PKG_ROOT, file), 'utf-8')
-  const start = src.search(new RegExp(`export const ${variable}\\b[^=]*= \\{`))
-  if (start === -1) throw new Error(`${file}: no "export const ${variable}" object`)
+  const start = src.search(new RegExp(`^(?:export )?const ${variable}\\b[^=]*= \\{`, 'm'))
+  if (start === -1) throw new Error(`${file}: no "const ${variable}" object`)
   const body = src.slice(src.indexOf('{', start) + 1, src.indexOf('\n}', start))
   const entries = []
   for (const m of body.matchAll(/^\s*'?([a-z0-9-]+)'?:\s*(?:'([^']*)')?/gm)) {
@@ -573,10 +593,9 @@ function quoted(src, key, from = 0) {
   return m ? m[2].replace(/\\'/g, "'").replace(/\s+/g, ' ').trim() : null
 }
 
-function viewBoxOf(file) {
-  const m = readFileSync(file, 'utf-8').match(/viewBox="([^"]+)"/)
-  const [, , w, h] = (m?.[1] ?? '').split(/[\s,]+/).map(Number)
-  return w > 0 && h > 0 ? `${Math.round(w)}x${Math.round(h)}` : null
+function canvasOf(name) {
+  const { width, height } = illustrationFrame(name)
+  return `${Math.round(width)}x${Math.round(height)}`
 }
 
 function importGraph() {
@@ -634,7 +653,7 @@ export function buildAssets(imports) {
     illustrations: objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets')
       .map(({ name }) => ({
         name,
-        canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${name}.svg`))
+        canvas: canvasOf(name)
       }))
       .sort((a, b) => a.name.localeCompare(b.name)),
     diagrams: objectKeys(ASSET_KINDS.diagrams.registry, 'diagrams')
@@ -793,8 +812,7 @@ export function splitCatalog(full) {
       part.guidelinesFile = `blocks/${id}/${GUIDELINE_FILE}`
     }
     if (part.files !== undefined) {
-      const dir = dirname(p.source)
-      part.fileSources = Object.fromEntries(Object.keys(part.files).map((f) => [f, `${dir}/${f}`]))
+      part.fileSources = Object.keys(part.files)
       delete part.files
     }
     part.variants = (p.variants || []).map(({ sfc, ...v }) => v)

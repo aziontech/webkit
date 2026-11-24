@@ -1,16 +1,13 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import Table from '../../../data/table/index'
   import Input from '../../../input/input/input.vue'
   import Accordion from '../../accordion/index'
   import Tag from '../../tag/tag.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'ApplicationsRulePhasesFragment' })
 
@@ -22,9 +19,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const PHASES = [
     {
@@ -71,155 +65,109 @@
     { cursor: TRIGGER, press: false, open: RESPONSE_ONLY, forward: 160, back: 220 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:76%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    stage-class="py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Alex"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative py-(--spacing-xs)"
-    >
-      <ConsoleMockupShellItem :order="0">
-        <div class="overflow-hidden rounded-(--shape-card) border border-(--border-default)">
-          <Table :bordered="false">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeadCell class="w-24 flex-none!">
-                  <span class="sr-only">Order</span>
-                </Table.HeadCell>
-                <Table.HeadCell principal>Name</Table.HeadCell>
-                <Table.HeadCell class="w-24 flex-none!">Status</Table.HeadCell>
-              </Table.Row>
-            </Table.Header>
+    <ConsoleMockupShellItem :order="0">
+      <div class="overflow-hidden rounded-(--shape-card) border border-(--border-default)">
+        <Table :bordered="false">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeadCell class="w-24 flex-none!">
+                <span class="sr-only">Order</span>
+              </Table.HeadCell>
+              <Table.HeadCell principal>Name</Table.HeadCell>
+              <Table.HeadCell class="w-24 flex-none!">Status</Table.HeadCell>
+            </Table.Row>
+          </Table.Header>
 
-            <Table.Body>
-              <Accordion
-                :model-value="frame.open"
-                type="multiple"
-                size="large"
-                icon-position="leading"
+          <Table.Body>
+            <Accordion
+              :model-value="frame.open"
+              type="multiple"
+              size="large"
+              icon-position="leading"
+            >
+              <Accordion.Item
+                v-for="phase in PHASES"
+                :key="phase.value"
+                :value="phase.value"
               >
-                <Accordion.Item
-                  v-for="phase in PHASES"
-                  :key="phase.value"
-                  :value="phase.value"
+                <Accordion.Trigger
+                  :data-cursor="phase.value"
+                  :class="[
+                    'bg-(--bg-canvas)! [&>span]:flex-1!',
+                    frame.open.includes(phase.value) ? 'border-b border-(--border-default)' : ''
+                  ]"
                 >
-                  <Accordion.Trigger
-                    :data-cursor="phase.value"
-                    :class="[
-                      'bg-(--bg-canvas)! [&>span]:flex-1!',
-                      frame.open.includes(phase.value) ? 'border-b border-(--border-default)' : ''
-                    ]"
-                  >
-                    <span class="flex min-w-0 items-center gap-(--spacing-sm)">
-                      <span class="truncate text-label-sm text-(--text-default)">
-                        {{ phase.label }}
-                      </span>
-                      <span class="shrink-0 text-body-xs text-(--text-muted) tabular-nums">
-                        {{ phase.rules.length }} rules
-                      </span>
+                  <span class="flex min-w-0 items-center gap-(--spacing-sm)">
+                    <span class="truncate text-label-sm text-(--text-default)">
+                      {{ phase.label }}
                     </span>
-                  </Accordion.Trigger>
+                    <span class="shrink-0 text-body-xs text-(--text-muted) tabular-nums">
+                      {{ phase.rules.length }} rules
+                    </span>
+                  </span>
+                </Accordion.Trigger>
 
-                  <Accordion.Content :padded="false">
-                    <div class="flex w-full flex-col [&>*:last-child]:border-b-0">
-                      <Table.Row
-                        v-for="(rule, index) in phase.rules"
-                        :key="rule.name"
-                      >
-                        <Table.Cell class="w-24 flex-none! gap-(--spacing-2xs)">
-                          <span class="w-12 shrink-0 [&>span]:w-full">
-                            <Input
-                              :model-value="String(index + 1)"
-                              size="small"
-                              :disabled="index === 0"
-                              class="[&_input]:text-center [&_input]:tabular-nums"
-                              :aria-label="`Position of ${rule.name} in the ${phase.label} phase`"
-                            />
-                          </span>
-                          <IconButton
-                            icon="az az-menu"
-                            variant="outline"
+                <Accordion.Content :padded="false">
+                  <div class="flex w-full flex-col [&>*:last-child]:border-b-0">
+                    <Table.Row
+                      v-for="(rule, index) in phase.rules"
+                      :key="rule.name"
+                    >
+                      <Table.Cell class="w-24 flex-none! gap-(--spacing-2xs)">
+                        <span class="w-12 shrink-0 [&>span]:w-full">
+                          <Input
+                            :model-value="String(index + 1)"
                             size="small"
                             :disabled="index === 0"
-                            :ariaLabel="`Reorder ${rule.name}`"
+                            class="[&_input]:text-center [&_input]:tabular-nums"
+                            :aria-label="`Position of ${rule.name} in the ${phase.label} phase`"
                           />
-                        </Table.Cell>
-                        <Table.Cell
-                          principal
-                          clickable
-                        >
-                          <span class="min-w-0 truncate">{{ rule.name }}</span>
-                        </Table.Cell>
-                        <Table.Cell class="w-24 flex-none!">
-                          <Tag
-                            :label="rule.status"
-                            :severity="rule.status === 'Active' ? 'success' : 'neutral'"
-                            size="medium"
-                          />
-                        </Table.Cell>
-                      </Table.Row>
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            </Table.Body>
-          </Table>
-        </div>
-      </ConsoleMockupShellItem>
-
-      <MockupCursor
-        name="Alex"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+                        </span>
+                        <IconButton
+                          icon="az az-menu"
+                          variant="outline"
+                          size="small"
+                          :disabled="index === 0"
+                          :ariaLabel="`Reorder ${rule.name}`"
+                        />
+                      </Table.Cell>
+                      <Table.Cell
+                        principal
+                        clickable
+                      >
+                        <span class="min-w-0 truncate">{{ rule.name }}</span>
+                      </Table.Cell>
+                      <Table.Cell class="w-24 flex-none!">
+                        <Tag
+                          :label="rule.status"
+                          :severity="rule.status === 'Active' ? 'success' : 'neutral'"
+                          size="medium"
+                        />
+                      </Table.Cell>
+                    </Table.Row>
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          </Table.Body>
+        </Table>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

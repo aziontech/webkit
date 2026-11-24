@@ -17,6 +17,27 @@ const STYLE_SOURCES = 'style, link[rel="stylesheet"]'
 
 const THEME_ATTRIBUTES = ['data-theme', 'class']
 
+const refresh = (existing: globalThis.Element, source: globalThis.Element) => {
+  if (source.tagName === 'STYLE' && existing.textContent !== source.textContent) {
+    existing.textContent = source.textContent
+  }
+  const href = source.getAttribute('href')
+  if (source.tagName === 'LINK' && href && existing.getAttribute('href') !== href) {
+    existing.setAttribute('href', href)
+  }
+}
+
+const copyTheme = (frameDocument: globalThis.Document | null) => {
+  const root = frameDocument?.documentElement
+  const hostRoot = globalThis.document?.documentElement
+  if (!root || !hostRoot) return
+  for (const name of THEME_ATTRIBUTES) {
+    const value = hostRoot.getAttribute(name)
+    if (value === null) root.removeAttribute(name)
+    else root.setAttribute(name, value)
+  }
+}
+
 export function useFrameDocument(
   iframe: MaybeRefOrGetter<globalThis.HTMLIFrameElement | null>
 ): UseFrameDocumentReturn {
@@ -33,13 +54,7 @@ export function useFrameDocument(
     for (const source of Array.from(hostHead.querySelectorAll(STYLE_SOURCES))) {
       const existing = clones.get(source)
       const clone = existing ?? frameDocument.importNode(source, true)
-      if (existing && source.tagName === 'STYLE' && existing.textContent !== source.textContent) {
-        existing.textContent = source.textContent
-      }
-      const href = source.getAttribute('href')
-      if (existing && source.tagName === 'LINK' && href && existing.getAttribute('href') !== href) {
-        existing.setAttribute('href', href)
-      }
+      if (existing) refresh(existing, source)
       if (!clone.isConnected) head.appendChild(clone)
       next.set(source, clone)
     }
@@ -49,16 +64,7 @@ export function useFrameDocument(
     clones = next
   }
 
-  const syncTheme = () => {
-    const root = frameDocument?.documentElement
-    const hostRoot = globalThis.document?.documentElement
-    if (!root || !hostRoot) return
-    for (const name of THEME_ATTRIBUTES) {
-      const value = hostRoot.getAttribute(name)
-      if (value === null) root.removeAttribute(name)
-      else root.setAttribute(name, value)
-    }
-  }
+  const syncTheme = () => copyTheme(frameDocument)
 
   const detach = () => {
     clones.forEach((clone) => clone.remove())

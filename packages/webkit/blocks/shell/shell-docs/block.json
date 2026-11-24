@@ -62,6 +62,7 @@
     "name": "Default",
     "file": "shell-docs.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Article",

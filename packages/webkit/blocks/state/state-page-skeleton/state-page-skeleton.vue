@@ -13,6 +13,10 @@
   })
 
   const panels = [1, 2, 3, 4]
+
+  const METRIC_CELL_CLASS =
+    'flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) ' +
+    'max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-s xl:[&:nth-child(n+2)]:border-s'
 </script>
 
 <template>
@@ -47,7 +51,7 @@
                 <div
                   v-for="metric in 4"
                   :key="metric"
-                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-s xl:[&:nth-child(n+2)]:border-s"
+                  :class="METRIC_CELL_CLASS"
                 >
                   <Skeleton
                     width="60%"

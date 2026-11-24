@@ -7,6 +7,7 @@ import Default from '../../../../examples/select/default.vue'
 import Disabled from '../../../../examples/select/disabled.vue'
 import Ghost from '../../../../examples/select/ghost.vue'
 import Groups from '../../../../examples/select/groups.vue'
+import WithSearchAndFooter from '../../../../examples/select/with-search-and-footer.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
 import SelectRoot, { SelectContent, SelectGroup, SelectItem, SelectTrigger } from './index'
@@ -1152,6 +1153,28 @@ describe('Select', () => {
       const anchor = trigger().getBoundingClientRect()
       expect(panel.width).toBeGreaterThan(anchor.width)
       expect(Math.abs(panel.right - anchor.right)).toBeLessThanOrEqual(1)
+    })
+  })
+
+  describe('search and footer', () => {
+    it('names the search field and lets Tab reach the footer before closing', async () => {
+      const { getByTestId } = render(WithSearchAndFooter)
+      await userEvent.click(getByTestId('select-trigger'))
+      const panel = await vi.waitFor(() => {
+        const found = document.querySelector<HTMLElement>('[data-testid="select-content"]')
+        expect(found).not.toBeNull()
+        return found as HTMLElement
+      })
+      const search = within(panel).getByRole('textbox', { name: 'Search options' })
+      search.focus()
+      const footer = within(panel).getByRole('button', { name: 'Create new item' })
+      for (let press = 0; press < 3 && document.activeElement !== footer; press += 1) {
+        await userEvent.keyboard('{Tab}')
+        expect(panel.contains(document.activeElement)).toBe(true)
+      }
+      expect(document.activeElement).toBe(footer)
+      await userEvent.keyboard('{Tab}')
+      await vi.waitFor(() => expect(panel.isConnected).toBe(false))
     })
   })
 })

@@ -1,11 +1,18 @@
 <script setup>
   import exameLogo from '@aziontech/webkit/assets/exame-extended-color.svg'
+  import exameLogoDark from '@aziontech/webkit/assets/exame-extended-reversed.svg'
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+  import ifoodLogoDark from '@aziontech/webkit/assets/ifood-extended-reversed.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+  import itauLogoDark from '@aziontech/webkit/assets/itau-extended-reversed.webp'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import magaluLogoDark from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
   import marisaLogo from '@aziontech/webkit/assets/marisa-extended-color.svg'
+  import marisaLogoDark from '@aziontech/webkit/assets/marisa-extended-reversed.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import netshoesLogoDark from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
   import rennerLogo from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import rennerLogoDark from '@aziontech/webkit/assets/renner-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
   import LogoWall from '@aziontech/webkit/logo-wall'
@@ -20,9 +27,15 @@
       variant="rectangle"
       aria-label="Clients running on Azion"
       :items="[
-        { src: magaluLogo, alt: 'Magalu', href: 'https://www.azion.com/en/success-case/magalu/' },
+        {
+          src: magaluLogo,
+          srcDark: magaluLogoDark,
+          alt: 'Magalu',
+          href: 'https://www.azion.com/en/success-case/magalu/'
+        },
         {
           src: ifoodLogo,
+          srcDark: ifoodLogoDark,
           alt: 'iFood',
           href: 'https://www.azion.com/en/success-case/ifood/',
           shape: 'compact'
@@ -30,18 +43,35 @@
         { src: stoneLogo, alt: 'Stone', href: 'https://www.azion.com/en/success-case/stone/' },
         {
           src: netshoesLogo,
+          srcDark: netshoesLogoDark,
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: exameLogo, alt: 'Exame', href: 'https://www.azion.com/en/success-case/exame/' },
+        {
+          src: exameLogo,
+          srcDark: exameLogoDark,
+          alt: 'Exame',
+          href: 'https://www.azion.com/en/success-case/exame/'
+        },
         {
           src: itauLogo,
+          srcDark: itauLogoDark,
           alt: 'Itaú',
           href: 'https://www.azion.com/en/success-case/itau/',
           shape: 'compact'
         },
-        { src: rennerLogo, alt: 'Renner', href: 'https://www.azion.com/en/success-case/renner/' },
-        { src: marisaLogo, alt: 'Marisa', href: 'https://www.azion.com/en/success-case/marisa/' },
+        {
+          src: rennerLogo,
+          srcDark: rennerLogoDark,
+          alt: 'Renner',
+          href: 'https://www.azion.com/en/success-case/renner/'
+        },
+        {
+          src: marisaLogo,
+          srcDark: marisaLogoDark,
+          alt: 'Marisa',
+          href: 'https://www.azion.com/en/success-case/marisa/'
+        },
         { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' }
       ]"
     >

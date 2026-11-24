@@ -1,6 +1,6 @@
 const claimed = new Map<string, number>()
 
-export function normalizeShortcut(shortcut: string): string {
+function normalizeShortcut(shortcut: string): string {
   return shortcut
     .toLowerCase()
     .split('+')

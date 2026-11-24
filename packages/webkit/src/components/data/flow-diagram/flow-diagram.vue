@@ -135,6 +135,40 @@
   const rootClass = computed(() =>
     cn('@container/flow-diagram w-full min-w-0 text-(--text-default)', attrs.class as string)
   )
+
+  const VIEWPORT_CLASS =
+    'w-full overflow-x-auto overscroll-x-contain p-(--spacing-md) outline-none [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset ' +
+    '[--flow-diagram-fade-direction:to_right] rtl:[--flow-diagram-fade-direction:to_left] ' +
+    'data-[overflow-start]:[--flow-diagram-fade-start:transparent] ' +
+    'data-[overflow-end]:[--flow-diagram-fade-end:transparent] ' +
+    '[&:is([data-overflow-start],[data-overflow-end])]:[mask-image:linear-gradient(var(--flow-diagram-fade-direction),var(--flow-diagram-fade-start,black)_0,black_var(--spacing-2xl),black_calc(100%-var(--spacing-2xl)),var(--flow-diagram-fade-end,black)_100%)]'
+
+  const EDGE_PATH_CLASS =
+    'animate-flow-dash-settle stroke-(--accent) ' +
+    'data-[severity=danger]:stroke-(--danger-mark) data-[severity=warning]:stroke-(--warning-mark) data-[severity=success]:stroke-(--success-mark) ' +
+    'data-[severity=info]:stroke-(--info-mark) data-[severity=neutral]:stroke-(--border-strong) ' +
+    'motion-reduce:animate-none ' +
+    'data-[faded]:animate-none data-[faded]:opacity-50'
+
+  const LIST_CLASS =
+    'relative flex w-full gap-(--spacing-xl) ' +
+    'data-[direction=column]:flex-col data-[direction=row]:w-fit data-[direction=row]:min-w-full data-[direction=row]:data-[align=start]:items-start ' +
+    'data-[direction=row]:data-[align=center]:items-center ' +
+    'data-[labelled]:gap-x-(--spacing-2xl) ' +
+    'data-[direction=row]:data-[uniform]:grid data-[direction=row]:data-[uniform]:auto-cols-fr data-[direction=row]:data-[uniform]:grid-flow-col ' +
+    'data-[direction=row]:data-[uniform]:*:self-stretch ' +
+    'data-[stacked]:[&_[data-slot=flow-diagram-port]]:hidden ' +
+    '[&_[data-slot=flow-diagram-node]:not([data-entry])_[data-slot=flow-diagram-port][data-side=end]]:hidden ' +
+    '[&_[data-slot=flow-diagram-node]:not([data-exit])_[data-slot=flow-diagram-port][data-side=start]]:hidden'
+
+  const EDGE_LABEL_CLASS =
+    'pointer-events-none absolute z-2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-control) border border-solid border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) ' +
+    'text-body-xs whitespace-nowrap text-(--text-muted) tabular-nums ' +
+    'data-[beside]:translate-x-0 ' +
+    'rtl:data-[beside]:-translate-x-full ' +
+    'data-[severity=danger]:border-(--danger-border) data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:border-(--warning-border) ' +
+    'data-[severity=warning]:text-(--warning-foreground) data-[severity=success]:border-(--success-border) data-[severity=success]:text-(--success-foreground)'
 </script>
 
 <template>
@@ -169,7 +203,7 @@
       :data-overflow-end="overflowEnd || null"
       :data-testid="`${testId}__viewport`"
       @scroll.passive="measureEdges"
-      class="w-full overflow-x-auto overscroll-x-contain p-(--spacing-md) outline-none [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset [--flow-diagram-fade-direction:to_right] rtl:[--flow-diagram-fade-direction:to_left] data-[overflow-start]:[--flow-diagram-fade-start:transparent] data-[overflow-end]:[--flow-diagram-fade-end:transparent] [&:is([data-overflow-start],[data-overflow-end])]:[mask-image:linear-gradient(var(--flow-diagram-fade-direction),var(--flow-diagram-fade-start,black)_0,black_var(--spacing-2xl),black_calc(100%-var(--spacing-2xl)),var(--flow-diagram-fade-end,black)_100%)]"
+      :class="VIEWPORT_CLASS"
     >
       <span
         v-if="loading"
@@ -194,7 +228,7 @@
             stroke-dasharray="4 4"
             :data-faded="path.faded || null"
             :data-severity="path.severity"
-            class="animate-flow-dash-settle stroke-(--accent) data-[severity=danger]:stroke-(--danger-mark) data-[severity=warning]:stroke-(--warning-mark) data-[severity=success]:stroke-(--success-mark) data-[severity=info]:stroke-(--info-mark) data-[severity=neutral]:stroke-(--border-strong) motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
+            :class="EDGE_PATH_CLASS"
           />
         </svg>
         <div
@@ -208,7 +242,7 @@
           :data-labelled="labelled || null"
           :data-stacked="vertical || null"
           :data-testid="`${testId}__list`"
-          class="relative flex w-full gap-(--spacing-xl) data-[direction=column]:flex-col data-[direction=row]:w-fit data-[direction=row]:min-w-full data-[direction=row]:data-[align=start]:items-start data-[direction=row]:data-[align=center]:items-center data-[labelled]:gap-x-(--spacing-2xl) data-[direction=row]:data-[uniform]:grid data-[direction=row]:data-[uniform]:auto-cols-fr data-[direction=row]:data-[uniform]:grid-flow-col data-[direction=row]:data-[uniform]:*:self-stretch data-[stacked]:[&_[data-slot=flow-diagram-port]]:hidden [&_[data-slot=flow-diagram-node]:not([data-entry])_[data-slot=flow-diagram-port][data-side=end]]:hidden [&_[data-slot=flow-diagram-node]:not([data-exit])_[data-slot=flow-diagram-port][data-side=start]]:hidden"
+          :class="LIST_CLASS"
         >
           <slot v-if="composed()" />
           <template v-else>
@@ -292,7 +326,7 @@
           :data-beside="mark.beside || null"
           :data-testid="`${testId}__edge-label`"
           :style="{ left: `${mark.x}px`, top: `${mark.y}px` }"
-          class="pointer-events-none absolute z-2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-control) border border-solid border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-body-xs whitespace-nowrap text-(--text-muted) tabular-nums data-[beside]:translate-x-0 rtl:data-[beside]:-translate-x-full data-[severity=danger]:border-(--danger-border) data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:text-(--warning-foreground) data-[severity=success]:border-(--success-border) data-[severity=success]:text-(--success-foreground)"
+          :class="EDGE_LABEL_CLASS"
           >{{ mark.text }}</span
         >
       </div>

@@ -165,7 +165,7 @@ describe('ArticleCardsSection', () => {
       name: /How Do You Reduce AI Agent Latency\? \(opens in a new tab\)/
     })
     expect(external.getAttribute('target')).toBe('_blank')
-    expect(external.getAttribute('rel')).toBe('noopener')
+    expect(external.getAttribute('rel')).toBe('noopener noreferrer')
 
     const internal = getByRole('link', { name: /Best Cloudflare Alternatives/ })
     expect(internal.hasAttribute('target')).toBe(false)

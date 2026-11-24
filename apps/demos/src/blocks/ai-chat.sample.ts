@@ -1,7 +1,8 @@
+import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-
-import type { AiChatInterrupt, AiChatMessage } from './ai-chat.messages'
+import type { AiChatInterrupt, AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
@@ -63,7 +64,9 @@ export const sampleStreamingMessages: AiChatMessage[] = [
       {
         title: 'Troubleshooting 502 responses',
         href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · Observe'
+        description: 'A 502 means the edge reached the origin but got no valid answer back.',
+        site: 'Azion',
+        icon: 'az az-azion'
       }
     ]
   })
@@ -79,12 +82,16 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
       {
         title: 'Real-Time Purge',
         href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · Cache'
+        description: 'Removes a cached object from every data center in a few seconds.',
+        site: 'Azion',
+        icon: 'az az-azion'
       },
       {
-        title: 'Azion CLI: purge',
-        href: 'https://www.azion.com/en/documentation/',
-        description: 'Azion documentation · CLI'
+        title: 'aziontech/azion: purge',
+        href: 'https://github.com/aziontech/azion',
+        description: 'Purge URLs, wildcards and cache keys from a terminal.',
+        site: 'GitHub',
+        image: 'https://github.com/favicon.ico'
       }
     ]
   })
@@ -104,6 +111,33 @@ const history: [string, string][] = [
     'Can it renew on its own?',
     'Yes. Automatic renewal is on for both domains, 30 days before expiry.'
   ],
+  [
+    'How do I check the certificate from a terminal?',
+    [
+      '### 1. Read the dates with OpenSSL',
+      '',
+      'Connect to the domain and print the validity window of `shop.example.com`:',
+      '',
+      '```bash',
+      'openssl s_client -connect shop.example.com:443 -servername shop.example.com </dev/null \\',
+      '  | openssl x509 -noout -dates',
+      '```',
+      '',
+      'The output has two lines:',
+      '',
+      '- `notBefore`: when the certificate became valid.',
+      '- `notAfter`: when it expires.',
+      '  - Renewal starts 30 days before this date.',
+      '',
+      '### 2. Check it with curl',
+      '',
+      '```bash',
+      'curl -vI https://shop.example.com 2>&1 | grep -i "expire date"',
+      '```',
+      '',
+      '**Important:** run both from outside your network, so you read the certificate the edge serves.'
+    ].join('\n')
+  ],
   ['What is the cache hit ratio today?', '**91%** over the last 24 hours, up from 87% last week.'],
   [
     'Which paths miss the cache most?',
@@ -111,8 +145,38 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [2][3].'
   ]
+]
+
+const cacheKeySources: SourcesItem[] = [
+  {
+    title: 'Cache settings',
+    href: 'https://www.azion.com/en/documentation/',
+    description: 'Choose which query string parameters build the cache key of each path.',
+    site: 'Azion',
+    icon: 'az az-azion'
+  },
+  {
+    title: 'aziontech/azion',
+    href: 'https://github.com/aziontech/azion',
+    description: 'Change the cache settings of an application from a terminal.',
+    site: 'GitHub',
+    image: 'https://github.com/favicon.ico'
+  },
+  {
+    title: 'HTTP Caching (RFC 9111)',
+    href: 'https://www.w3.org/Protocols/',
+    description: 'Every distinct URL, query string included, is a separate entry in a cache.',
+    site: 'W3C',
+    image: 'https://www.w3.org/favicon.ico'
+  },
+  {
+    title: 'cache-control',
+    href: 'https://www.npmjs.com/package/cache-control',
+    description: 'Writes Cache-Control headers from a route table.',
+    cited: false
+  }
 ]
 
 export const sampleLongThread: AiChatMessage[] = history.flatMap(
@@ -121,7 +185,7 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
-      sources: []
+      sources: index === history.length - 1 ? cacheKeySources : []
     })
   ]
 )
@@ -202,6 +266,7 @@ export const sampleAgentMessages: AiChatMessage[] = [
       {
         type: 'subagent',
         subagent: {
+          id: 'researcher-1',
           name: 'researcher',
           description: 'Comparing the two deployments',
           status: 'finished',
@@ -245,4 +310,27 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
     status: 'pending',
     errors: []
   }
+]
+
+export const sampleHistoryNow = '2026-11-19T12:00:00'
+
+export const sampleHistory: ConversationHistoryItem[] = [
+  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00' },
+  { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00' },
+  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00' },
+  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00' },
+  { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00' },
+  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00' }
+]
+
+export const sampleModels: PromptInputMenuOption[] = [
+  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
+  { value: 'fast', label: 'Fast', description: 'Answers right away' },
+  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]

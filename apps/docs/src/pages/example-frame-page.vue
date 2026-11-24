@@ -3,7 +3,7 @@
   import { type Component, computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import { cached, keys, preloadExample } from '../lib/data'
+  import { cached, keys, preloadExample } from '../lib/route-data'
   import { applyTheme, settings } from '../lib/settings'
 
   const route = useRoute()

@@ -35,8 +35,8 @@ const compoundComponents = {
 // status/language pair.
 const composedBands = `
     <FooterColumn title="Products">
-      <FooterLink href="/products/edge-application">Edge Application</FooterLink>
-      <FooterLink href="/products/edge-firewall">Edge Firewall</FooterLink>
+      <FooterLink href="/products/applications">Applications</FooterLink>
+      <FooterLink href="/products/firewall">Firewall</FooterLink>
     </FooterColumn>
     <FooterColumn title="Company">
       <FooterLink href="/about">About us</FooterLink>
@@ -340,8 +340,8 @@ describe('Footer', () => {
   describe('FooterLink — anchor root with href and attribute fallthrough', () => {
     it('renders an <a> pointing at href with the slot as its label', () => {
       const { getByRole } = renderComposed()
-      const link = getByRole('link', { name: 'Edge Application' })
-      expect(link.getAttribute('href')).toBe('/products/edge-application')
+      const link = getByRole('link', { name: 'Applications' })
+      expect(link.getAttribute('href')).toBe('/products/applications')
     })
 
     it('forwards consumer attributes (target, rel) onto the anchor root', () => {
@@ -397,6 +397,29 @@ describe('Footer', () => {
       expect(getByTestId('footer__brand')).toBeTruthy()
       expect(getByTestId('footer__status').textContent).toContain('All systems operational')
       await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('homeHref — the brand is the home link', () => {
+    it('wraps the brand slot in one named home link', async () => {
+      const { container, getByRole } = render(DefaultFooter)
+      const home = getByRole('link', { name: 'Azion home' })
+      expect(home.getAttribute('href')).toBe('/')
+      expect(home.getAttribute('data-testid')).toBe('footer__home')
+      expect(home.closest('[data-testid="footer__brand"]')).toBeTruthy()
+      await expectNoA11yViolations(container)
+    })
+
+    it('takes homeAriaLabel, and renders the brand alone without homeHref', () => {
+      const named = render(Footer, {
+        props: { homeHref: '/', homeAriaLabel: 'Azion console home' },
+        slots: { brand: '<svg data-testid="mark" />' }
+      })
+      expect(named.getByRole('link', { name: 'Azion console home' })).toBeTruthy()
+      named.unmount()
+      const plain = render(Footer, { slots: { brand: '<svg data-testid="mark" />' } })
+      expect(plain.queryByRole('link')).toBeNull()
+      expect(plain.getByTestId('mark')).toBeTruthy()
     })
   })
 })

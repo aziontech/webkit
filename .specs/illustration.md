@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: d92e19ce88fd397f91066243a88265665f993786ae43e66d9ecb7100f0644706
+checksum: 79d3562d3f9e9512ec57d735715b32abdc062ce4d4cf73b03913a9b73ab4dc22
 created: 2026-08-05
-last_updated: 2026-11-18
+last_updated: 2026-11-23
 ---
 
 # Illustration — Component Spec
@@ -118,10 +118,12 @@ import) when an image, not an inline themed scene, is wanted.
 ## States
 
 - Visual states: `default` — an illustration is decorative and has no `hover`, `focus-visible`, `disabled`, `loading`, or `active` state, and is never interactive.
-- Most scenes are drawn on the one 592×300 canvas, so they line up with each other in a grid; a few tiles and crops (`ai-gateway`, `azion-highlight`, `azion-rest-api`, `branches`, `ddos-protection`, `distributed-apis-tile`, `personal-tokens`, `real-time-metrics-error-rate`, `real-time-metrics-status-codes`, `usage-chart`) keep the canvas they were drawn on. The root declares 592×300 as its intrinsic `width`/`height` until the SVG loads, which reserves the box, then the scene's own canvas, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
+- Most scenes are drawn on the one 592×300 canvas, so they line up with each other in a grid; a few tiles and crops (listed with their canvas in `src/assets/illustrations/frames.ts`, which the component test checks against every SVG) keep the canvas they were drawn on. The root is in the page from the first render, before the scene's SVG loads, and declares the canvas that scene was drawn on as its intrinsic `width`/`height` from the start (592×300 for the placeholder and every scene on the shared canvas), so the box has its final size and nothing below it moves when the scene arrives. It renders at its container's width at that aspect ratio. Until a scene is painted the empty root stays decorative (`aria-hidden`), and takes its `ariaLabel` once the scene is drawn. A call site that wants it smaller caps it with a class.
 - A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`, on the 592×300 canvas. An unregistered `name` also warns in the console, naming where the valid names are listed; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
 - Theme: each colour of the export palette maps to one `--illustration-*` role (see § Tokens), resolved where the scene renders, so a scene inside a `[data-theme]` subtree follows that subtree. A translucent ground colour is a drop shadow and stays as drawn; colours that read the same in both themes (window controls, framework marks, the dot map) stay as drawn too. Masks, clip paths and filters are never repainted.
+- A dotted scene (a dot map, a pixel grid) is stored with the dots of one paint merged into one path, so it draws a few hundred nodes; a standards test caps every inline asset at 200 paths.
+- Every scene fills its frame: the asset's `viewBox` is cropped to the drawn artwork (glows included) with a small margin, at the frame's aspect ratio. Artwork that runs off an edge on purpose keeps the full frame.
 - Every instance scopes the SVG's internal ids, so two scenes — or two copies of one — on the same page never resolve each other's gradients, masks or filters.
 
 ## Motion & Animations

@@ -28,7 +28,7 @@ A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours,
 
 ### C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 
-A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
+A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Hits (tabular, grouped thousands; second, so a phone shows it without scrolling), Threat, Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
 ### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
@@ -40,7 +40,7 @@ Allow rules emits `allow`; the page sets `allowing` while the request runs. Succ
 
 ## Data
 
-The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `view-waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set).
+The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `view-waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set). The allow dialog is the private part `parts/allow-dialog.vue`; it keeps the reason and its validation, and the page keeps the outcome.
 
 | Prop                  | Type                    | What it does                                                                                                                                                   |
 | --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -50,6 +50,7 @@ The block takes its matches through props and emits every action; it fetches not
 | `error`               | `string`                | Why the matches failed to load, shown in the danger `Alert` with Retry that replaces the table.                                                                |
 | `defaultSelectedKeys` | `string[]`              | Rule ids checked when the block opens.                                                                                                                         |
 | `defaultOpen`         | `boolean`               | Opens the allow dialog on the checked rules.                                                                                                                   |
+| `defaultReason`       | `string`                | The reason the allow dialog opens with, as a failed submit keeps it.                                                                                           |
 | `allowing`            | `boolean`               | The allow request is in flight: the dialog locks and Allow rules spins. When it turns off with no `allowError`, the dialog closes and the success toast shows. |
 | `allowError`          | `string`                | Why the allowed rules were not created, shown at the top of the dialog; the submit reads Try again.                                                            |
 
@@ -131,7 +132,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the matches passed in `matches` (the sample when it is left out), minimum 100 hits.
 - Allow: `defaultSelectedKeys` checks two rules and `defaultOpen` opens the dialog.
-- AllowError: the same dialog with `allowError` set: the failure `Alert` and Try again.
+- AllowError: the same dialog with `allowError` set and the submitted reason kept (`defaultReason`): the failure `Alert` and Try again.
 - Empty: `matches` is `[]`: no match yet, no settings.
 - Loading: `loading`: settings disabled, skeleton rows.
 - LoadError: `error` set: a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.

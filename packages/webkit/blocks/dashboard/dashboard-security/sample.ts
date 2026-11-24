@@ -1,4 +1,8 @@
 import type { BarListItem } from '@aziontech/webkit/bar-list'
+import type { ChartSeries } from '@aziontech/webkit/chart'
+import type { FilterMenuField } from '@aziontech/webkit/filter-menu'
+import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
 
 import type {
   SecurityAttentionEntry,
@@ -193,3 +197,422 @@ export const samplePeriodRange: SecurityPeriodRange = {
   begin: '2026-11-09T00:00:00Z',
   end: '2026-11-09T23:59:59Z'
 }
+
+/** What a rule did with one request of the ByActor variant. */
+export type ActorOutcome = 'allowed' | 'blocked' | 'held' | 'approved' | 'denied'
+
+/** One row of the ByActor Requests table. */
+export interface ActorActivityRow {
+  /** Stable row key. */
+  id: string
+  /** When the request arrived. */
+  time: string
+  /** Who sent it. */
+  actor: string
+  /** What the rule did. */
+  outcome: ActorOutcome
+  /** The category of the action. */
+  category: string
+  /** How severe the action is. */
+  severity: SeverityTagSeverity
+  /** The host it went to. */
+  destination: string
+  /** The HTTP method. */
+  method: string
+  /** The rule that decided it. */
+  rule: string
+}
+
+/** One outcome tile of the ByActor variant. */
+export interface ActorFigure {
+  /** Stable key, the outcome for an outcome tile. */
+  id: string
+  /** The tile label. */
+  label: string
+  /** One sentence that defines the figure. */
+  description: string
+  /** The figure for the time range. */
+  value: number
+  /** Change against the previous day, in percent. */
+  delta: number
+  /** A rise is a regression. */
+  inverse: boolean
+}
+
+export const sampleActorTimeRanges: SelectOptionItem[] = [
+  {
+    value: 'Last hour',
+    label: 'Last hour'
+  },
+  {
+    value: 'Last 24 hours',
+    label: 'Last 24 hours'
+  },
+  {
+    value: 'Last 7 days',
+    label: 'Last 7 days'
+  },
+  {
+    value: 'Last 30 days',
+    label: 'Last 30 days'
+  }
+]
+
+export const sampleActorFilterFields: FilterMenuField[] = [
+  {
+    id: 'actor',
+    label: 'Actor',
+    options: [
+      'report-builder',
+      'ticket-triage',
+      'inventory-sync',
+      'invoice-reader',
+      'release-helper',
+      'data-export',
+      'calendar-sync'
+    ].map((name) => ({ value: name, label: name }))
+  },
+  {
+    id: 'outcome',
+    label: 'Outcome',
+    options: [
+      { value: 'allowed', label: 'Allowed' },
+      { value: 'blocked', label: 'Blocked' },
+      { value: 'held', label: 'Held' },
+      { value: 'approved', label: 'Approved' },
+      { value: 'denied', label: 'Denied' }
+    ]
+  },
+  {
+    id: 'category',
+    label: 'Category',
+    options: ['Read', 'Write', 'Search', 'Export', 'Delete', 'Admin'].map((name) => ({
+      value: name,
+      label: name
+    }))
+  }
+]
+
+export const sampleActorFigures: ActorFigure[] = [
+  {
+    id: 'requests',
+    label: 'Requests',
+    description: 'Every request the rules evaluated in the time range.',
+    value: 14489,
+    delta: 8.4,
+    inverse: false
+  },
+  {
+    id: 'allowed',
+    label: 'Allowed',
+    description: 'Requests a rule let through to their destination.',
+    value: 12913,
+    delta: 7.9,
+    inverse: false
+  },
+  {
+    id: 'blocked',
+    label: 'Blocked',
+    description: 'Requests a rule stopped before they reached their destination.',
+    value: 1348,
+    delta: 12.6,
+    inverse: true
+  },
+  {
+    id: 'held',
+    label: 'Held',
+    description: 'Requests a rule paused until someone approves or denies them.',
+    value: 228,
+    delta: 4.1,
+    inverse: true
+  },
+  {
+    id: 'approved',
+    label: 'Approved',
+    description: 'Held requests a reviewer approved.',
+    value: 186,
+    delta: 3.2,
+    inverse: false
+  },
+  {
+    id: 'denied',
+    label: 'Denied',
+    description: 'Held requests a reviewer denied.',
+    value: 41,
+    delta: -9.5,
+    inverse: true
+  },
+  {
+    id: 'over-budget',
+    label: 'Over budget',
+    description: 'Requests that went past the spending or volume budget set for their actor.',
+    value: 73,
+    delta: 21.7,
+    inverse: true
+  }
+]
+
+export const sampleActorOutcomes: ChartSeries[] = [
+  {
+    id: 'allowed',
+    name: 'Allowed',
+    color: 'success',
+    values: [
+      412, 386, 341, 318, 296, 305, 352, 448, 571, 664, 718, 742, 731, 756, 769, 748, 702, 655, 598,
+      541, 503, 476, 451, 430
+    ]
+  },
+  {
+    id: 'blocked',
+    name: 'Blocked',
+    color: 'danger',
+    values: [
+      38, 35, 31, 29, 33, 30, 36, 47, 62, 71, 84, 79, 76, 91, 88, 82, 74, 69, 61, 55, 49, 46, 42, 40
+    ]
+  },
+  {
+    id: 'held',
+    name: 'Held',
+    color: 'warning',
+    values: [6, 5, 4, 3, 4, 3, 5, 8, 11, 14, 16, 15, 13, 17, 18, 15, 13, 12, 10, 9, 8, 7, 6, 6]
+  }
+]
+
+export const sampleActors: BarListItem[] = [
+  {
+    id: 'report-builder',
+    name: 'report-builder',
+    value: 4494
+  },
+  {
+    id: 'ticket-triage',
+    name: 'ticket-triage',
+    value: 3187
+  },
+  {
+    id: 'inventory-sync',
+    name: 'inventory-sync',
+    value: 2463
+  },
+  {
+    id: 'invoice-reader',
+    name: 'invoice-reader',
+    value: 1738
+  },
+  {
+    id: 'release-helper',
+    name: 'release-helper',
+    value: 1304
+  },
+  {
+    id: 'data-export',
+    name: 'data-export',
+    value: 869
+  },
+  {
+    id: 'calendar-sync',
+    name: 'calendar-sync',
+    value: 434
+  }
+]
+
+export const sampleActorCategories: BarListItem[] = [
+  {
+    id: 'Read',
+    name: 'Read',
+    value: 7827
+  },
+  {
+    id: 'Write',
+    name: 'Write',
+    value: 3042
+  },
+  {
+    id: 'Search',
+    name: 'Search',
+    value: 1738
+  },
+  {
+    id: 'Export',
+    name: 'Export',
+    value: 869
+  },
+  {
+    id: 'Delete',
+    name: 'Delete',
+    value: 579
+  },
+  {
+    id: 'Admin',
+    name: 'Admin',
+    value: 434
+  }
+]
+
+export const sampleActorDestinations: BarListItem[] = [
+  {
+    id: 'api.example.com',
+    name: 'api.example.com',
+    value: 5508
+  },
+  {
+    id: 'storage.example.com',
+    name: 'storage.example.com',
+    value: 2752
+  },
+  {
+    id: 'crm.example.net',
+    name: 'crm.example.net',
+    value: 2318
+  },
+  {
+    id: 'billing.example.com',
+    name: 'billing.example.com',
+    value: 1593
+  },
+  {
+    id: 'mail.example.org',
+    name: 'mail.example.org',
+    value: 1304
+  },
+  {
+    id: 'docs.example.com',
+    name: 'docs.example.com',
+    value: 1014
+  }
+]
+
+export const sampleActorRows: ActorActivityRow[] = [
+  {
+    id: 'request-01',
+    time: '14:52:08',
+    actor: 'report-builder',
+    outcome: 'allowed',
+    category: 'Read',
+    severity: 'info',
+    destination: 'api.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-02',
+    time: '14:51:47',
+    actor: 'data-export',
+    outcome: 'blocked',
+    category: 'Export',
+    severity: 'critical',
+    destination: 'storage.example.com',
+    method: 'PUT',
+    rule: 'No bulk export'
+  },
+  {
+    id: 'request-03',
+    time: '14:51:12',
+    actor: 'ticket-triage',
+    outcome: 'held',
+    category: 'Write',
+    severity: 'medium',
+    destination: 'crm.example.net',
+    method: 'PATCH',
+    rule: 'Review customer changes'
+  },
+  {
+    id: 'request-04',
+    time: '14:50:39',
+    actor: 'invoice-reader',
+    outcome: 'allowed',
+    category: 'Read',
+    severity: 'low',
+    destination: 'billing.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-05',
+    time: '14:49:58',
+    actor: 'release-helper',
+    outcome: 'approved',
+    category: 'Admin',
+    severity: 'high',
+    destination: 'api.example.com',
+    method: 'POST',
+    rule: 'Approve admin actions'
+  },
+  {
+    id: 'request-06',
+    time: '14:49:21',
+    actor: 'inventory-sync',
+    outcome: 'blocked',
+    category: 'Delete',
+    severity: 'high',
+    destination: 'api.example.com',
+    method: 'DELETE',
+    rule: 'No deletes outside hours'
+  },
+  {
+    id: 'request-07',
+    time: '14:48:44',
+    actor: 'report-builder',
+    outcome: 'allowed',
+    category: 'Search',
+    severity: 'info',
+    destination: 'docs.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-08',
+    time: '14:48:03',
+    actor: 'ticket-triage',
+    outcome: 'denied',
+    category: 'Write',
+    severity: 'medium',
+    destination: 'mail.example.org',
+    method: 'POST',
+    rule: 'Review outbound mail'
+  },
+  {
+    id: 'request-09',
+    time: '14:47:26',
+    actor: 'calendar-sync',
+    outcome: 'allowed',
+    category: 'Write',
+    severity: 'low',
+    destination: 'api.example.com',
+    method: 'PUT',
+    rule: 'Scheduled writes'
+  },
+  {
+    id: 'request-10',
+    time: '14:46:50',
+    actor: 'data-export',
+    outcome: 'blocked',
+    category: 'Export',
+    severity: 'critical',
+    destination: 'storage.example.com',
+    method: 'PUT',
+    rule: 'No bulk export'
+  },
+  {
+    id: 'request-11',
+    time: '14:46:12',
+    actor: 'invoice-reader',
+    outcome: 'allowed',
+    category: 'Read',
+    severity: 'info',
+    destination: 'billing.example.com',
+    method: 'GET',
+    rule: 'Read-only access'
+  },
+  {
+    id: 'request-12',
+    time: '14:45:37',
+    actor: 'release-helper',
+    outcome: 'held',
+    category: 'Admin',
+    severity: 'high',
+    destination: 'api.example.com',
+    method: 'POST',
+    rule: 'Approve admin actions'
+  }
+]

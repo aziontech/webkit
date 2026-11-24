@@ -12,13 +12,20 @@ import DocItem from './doc-item.vue'
 
 describe('DocItem', () => {
   describe('rendering & testid', () => {
+    it('says a target="_blank" row opens in a new tab', () => {
+      const { getByRole } = render(DocItem, {
+        props: { title: 'Functions', href: 'https://example.com/functions', target: '_blank' }
+      })
+      expect(getByRole('link', { name: /^Functions ?\(opens in a new tab\)$/ })).toBeInTheDocument()
+    })
+
     it('renders the title and copy with the derived testid', () => {
       const { getByTestId, getByText } = render(DocItem, {
-        props: { title: 'Edge Functions' },
+        props: { title: 'Functions' },
         slots: { default: 'Build serverless applications.' }
       })
       expect(getByTestId('doc-item')).toBeInTheDocument()
-      expect(getByText('Edge Functions')).toBeInTheDocument()
+      expect(getByText('Functions')).toBeInTheDocument()
       expect(getByText('Build serverless applications.')).toBeInTheDocument()
     })
 
@@ -62,13 +69,13 @@ describe('DocItem', () => {
   describe('the whole row is the link, named by its title', () => {
     it('wraps only the title in the anchor, carrying the destination', () => {
       const { container } = render(DocItem, {
-        props: { title: 'Edge SQL', href: '/docs/edge-sql' },
+        props: { title: 'SQL Database', href: '/docs/sql-database' },
         slots: { default: 'Store relational data across the network.' }
       })
       const anchor = container.querySelector('a')
       expect(anchor).not.toBeNull()
-      expect(anchor?.getAttribute('href')).toBe('/docs/edge-sql')
-      expect(anchor?.textContent?.trim()).toBe('Edge SQL')
+      expect(anchor?.getAttribute('href')).toBe('/docs/sql-database')
+      expect(anchor?.textContent?.trim()).toBe('SQL Database')
       expect(anchor?.textContent).not.toContain('Store relational data')
     })
 

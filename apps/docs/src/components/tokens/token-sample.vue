@@ -56,17 +56,25 @@
   />
   <span
     v-else-if="sample === 'shadow'"
-    class="inline-flex size-12 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-canvas)"
+    class="inline-flex shrink-0 overflow-hidden rounded-(--shape-control) border border-(--border-default)"
     aria-hidden="true"
+    data-docs-shadow-sample
   >
     <span
-      class="size-7 rounded-(--shape-control) bg-(--bg-surface-raised)"
-      :style="
-        name.startsWith('--drop-shadow')
-          ? { filter: `drop-shadow(var(${name}))` }
-          : { boxShadow: `var(${name})` }
-      "
-    />
+      v-for="mode in ['light', 'dark'] as const"
+      :key="mode"
+      :data-theme="mode"
+      class="inline-flex size-12 items-center justify-center bg-(--bg-canvas)"
+    >
+      <span
+        class="size-7 rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised)"
+        :style="
+          name.startsWith('--drop-shadow')
+            ? { filter: `drop-shadow(var(${name}))` }
+            : { boxShadow: `var(${name})` }
+        "
+      />
+    </span>
   </span>
   <svg
     v-else-if="sample === 'ease' && curve"

@@ -24,13 +24,13 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 A full-bleed `PageTabs` with one `Tabs.Trigger` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
 
-### B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
+### B. Summary subject band — `Card`, `TableCellLink`, `Button`, `DropdownMenu`, `IconButton` (required)
 
-`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address that opens in a new tab and is named by a `Tooltip`, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
+`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address as a `TableCellLink`, which opens it in a new tab and names it in its tooltip, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
 
 ### C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
 
-A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links carry a `Tooltip` that says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
+A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links are `TableCellLink`s, whose tooltip says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
 
 ### D. Summary state band — `Button` (optional)
 
@@ -56,7 +56,7 @@ For a resource made from the CLI, the `detail/detail-get-started` section follow
 
 ## Data
 
-The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs) and keep their own records.
+The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs); their records are in `sample.ts` too.
 
 | Prop / model  | Type                     | What it does                                                                                                     |
 | ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
@@ -128,6 +128,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The body renders no landmark of its own: the layout's single `main` holds the tab bar and the tab content, and the rail and header are the layout's.
+- The page names itself with a visually hidden `h1` of the resource name (the layout's breadcrumb shows it), so the tab panels' headings sit under it.
 - The tab bar is a tablist; arrow keys move between tabs and the active tab is announced.
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; decorative icons are `aria-hidden`.
 - Every icon-only button has an `aria-label` and a `Tooltip` with the same words, e.g. "Resource actions", "Add domain".
@@ -142,6 +143,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 - ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
+- NoDeployment: the same page for a resource never deployed (`deploymentId: ''`): the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-  import { TriggerHost } from '../../../overlay/parts/trigger-host'
+  import OverlayTrigger from '../../../overlay/parts/overlay-trigger.vue'
   import { useDropdownContext } from '../composables/use-dropdown-context'
 
   defineOptions({
@@ -21,21 +21,9 @@
   )
 
   const isOpen = computed(() => ctx.isOpen.value)
-  const isDisabled = computed(() => ctx.disabled.value)
-
-  const aria = computed(() => ({
-    'aria-haspopup': 'menu',
-    'aria-expanded': String(isOpen.value),
-    'aria-controls': ctx.panelId,
-    'aria-disabled': isDisabled.value ? 'true' : undefined
-  }))
-
-  function onClick() {
-    if (!isDisabled.value) ctx.setOpen(!ctx.isOpen.value)
-  }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
-    if (isDisabled.value) return
+    if (ctx.disabled.value) return
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       ctx.setOpen(!ctx.isOpen.value)
@@ -51,31 +39,17 @@
       ctx.setOpen(false)
     }
   }
-
-  function onControl(el: globalThis.HTMLElement | null) {
-    ctx.triggerEl.value = el
-  }
-
-  onBeforeUnmount(() => {
-    ctx.triggerEl.value = null
-  })
 </script>
 
 <template>
-  <TriggerHost
+  <OverlayTrigger
     v-bind="attrs"
-    :aria="aria"
-    :control-id="ctx.triggerId"
-    :disabled="isDisabled"
-    as-button
+    :context="ctx"
+    haspopup="menu"
+    :controls="ctx.panelId"
     :data-testid="testId"
-    :data-state="isOpen ? 'open' : 'closed'"
-    :data-disabled="isDisabled || null"
-    class="inline-flex w-fit shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
-    @click="onClick"
     @keydown="onKeydown"
-    @control="onControl"
   >
     <slot :is-open="isOpen" />
-  </TriggerHost>
+  </OverlayTrigger>
 </template>

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../action/button/button.vue'
   import NumberInput from '../../../input/number-input/number-input.vue'
   import Badge from '../../badge/badge.vue'
   import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'FirewallRulesOrderFragment' })
 
@@ -21,9 +21,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const SAVED = ['qa-qc-fw-nl', 'qa-qc-fw-rl', 'qa-qc-fw-cr', 'qa-qc-fw-fn', 'qa-qc-fw-waf']
   const RAISED_ONCE = ['qa-qc-fw-nl', 'qa-qc-fw-rl', 'qa-qc-fw-cr', 'qa-qc-fw-waf', 'qa-qc-fw-fn']
@@ -57,12 +54,11 @@
     { cursor: REVIEW, press: false, order: RAISED_TWICE, review: true, forward: 520, back: 420 }
   ]
 
-  const LAST = FRAMES.length - 1
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 
   const stageEl = ref<globalThis.HTMLElement | null>(null)
 
@@ -72,45 +68,25 @@
 
   const alteredCount = computed(() => SAVED.filter(altered).length)
 
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+  const RULE_ROW_CLASS =
+    'grid h-11 grid-cols-[8.5rem_1fr_auto] items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) transition-colors duration-moderate-01 ' +
+    'ease-productive-entrance ' +
+    'data-altered:bg-(--bg-surface-raised) ' +
+    'motion-reduce:transition-none'
 
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const REVIEW_BAR_CLASS =
+    'flex h-14 items-center justify-end gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-sm) opacity-0 transition-opacity duration-moderate-01 ' +
+    'ease-productive-entrance ' +
+    'data-[state=open]:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
     :fade="frame.review ? 'y' : 'bottom'"
     class="[--console-mockup-fade-edge:12%] [--console-mockup-fade-start:88%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div
       ref="stageEl"
@@ -137,7 +113,7 @@
             v-for="(name, index) in frame.order"
             :key="name"
             :data-altered="altered(name) || null"
-            class="grid h-11 grid-cols-[8.5rem_1fr_auto] items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) transition-colors duration-moderate-01 ease-productive-entrance data-altered:bg-(--bg-surface-raised) motion-reduce:transition-none"
+            :class="RULE_ROW_CLASS"
           >
             <span class="flex items-center gap-(--spacing-sm)">
               <i
@@ -170,7 +146,7 @@
 
       <div
         :data-state="frame.review ? 'open' : 'closed'"
-        class="flex h-14 items-center justify-end gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-sm) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
+        :class="REVIEW_BAR_CLASS"
       >
         <Button
           label="Discard Changes"
@@ -202,5 +178,5 @@
         :pressed="frame.press"
       />
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

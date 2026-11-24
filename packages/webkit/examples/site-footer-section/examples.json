@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The site footer with its four link columns, social row, status line and language select. Edit the props in the Controls panel — clear `home` to drop the Azion mark, `statusLabel` to drop the status line, or `languages` to drop the select.",
+      "summary": "The site footer with its four link columns, social row, status line and language select. Clear `home` to drop the Azion mark, `statusLabel` to drop the status line, or `languages` to drop the select.",
       "file": "default.vue"
     },
     {

@@ -46,7 +46,6 @@ const CI_ONLY = {
   'pnpm install --frozen-lockfile': 'setup',
   'pnpm exec playwright install --with-deps chromium': 'setup',
   'pnpm run check:audit': 'needs the npm advisory service; run pnpm gates at the root',
-  'npx depcheck --ignores="@types/*,eslint-*"': 'downloads depcheck on every run',
   'pnpm run lint:webkit': 'about 25 s; pnpm lint:webkit, or pnpm gates at the root',
   'pnpm run typecheck:webkit': 'about 25 s; pnpm gates at the root',
   'pnpm run typecheck:docs': 'pnpm gates at the root',
@@ -56,10 +55,20 @@ const CI_ONLY = {
     'builds the icon font the styled browser tests load; build:docs builds it too',
   'pnpm build:docs': 'a full docs build',
   'pnpm check:docs:links': 'needs the docs build',
+  'pnpm test:docs:shell':
+    'needs the docs build and Chromium; pnpm test:docs:shell after pnpm build:docs',
+  'pnpm test:docs:smoke':
+    'needs the docs build and Chromium; pnpm test:docs:smoke after pnpm build:docs',
   'pnpm check:docs:editor-chunks': 'needs the docs build; pnpm test:docs covers its logic',
+  'pnpm --filter @aziontech/webkit-docs run check:external-links':
+    'needs the docs build, lychee and the network (it requests every external link)',
+  'pnpm --filter @aziontech/webkit-docs run check:lighthouse':
+    'needs both built sites, Chromium and the network (npx downloads Lighthouse); about 2 min',
   'pnpm build:demos': 'a full demos build',
   'pnpm --filter @aziontech/webkit test:ssr': 'about 35 s; renders every block and example',
   'pnpm --filter @aziontech/webkit run test:consume': 'installs and builds a consumer app',
+  'pnpm --filter @aziontech/webkit run check:package-lint':
+    'packs theme, icons and webkit and downloads publint and arethetypeswrong (about 40 s)',
   'pnpm --filter @aziontech/webkit run check:consumer-types': 'packs and builds a consumer app',
   'pnpm exec vitest run --shard=${{ matrix.shard }}/4': 'the browser suite, minutes long',
   'pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4':

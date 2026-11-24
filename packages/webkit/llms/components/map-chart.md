@@ -112,7 +112,7 @@
 
 ## Responsive
 
-- Container queries: none: the map takes the container width at the framed region's aspect ratio.
+- Container queries: none: the map takes the container width at the framed region's aspect ratio, up to `60dvh` tall; a tall region is fitted inside (`xMidYMid meet`), so the colour scale stays under the map.
 - Narrow (≤ 640 px or a narrow container): the map scales down; the tooltip caps at `--container-3xs`.
 - Touch: tapping a country or bubble activates it; every value is in the table twin and reachable from the keyboard.
 - Reflow: no horizontal scroll at 320 px.

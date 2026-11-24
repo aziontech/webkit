@@ -1,3 +1,9 @@
+:root {
+  --demo-bar-height: 4rem;
+  --demo-viewport-height: calc(100dvh - var(--demo-bar-height));
+  --toast-offset-bottom: var(--demo-bar-height);
+}
+
 html,
 body {
   min-height: 100%;

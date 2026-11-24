@@ -48,7 +48,7 @@
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
 | `confirmationPhrase` | `string` | `''` | false | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -78,7 +78,7 @@
 
 - Visible focus: owned by the buttons and `dialog`.
 - Keyboard map: with `confirmationPhrase`, focus lands on the phrase field (the confirm button is disabled until it matches), and `Enter` in the field confirms once the text matches. Otherwise, on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
-- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). Tests: `confirm-dialog.test.ts` › typed confirmation.
+- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). It turns off spellcheck, autocomplete, autocapitalize and autocorrect, so a phone keyboard never changes the case of a typed name the match then rejects. Tests: `confirm-dialog.test.ts` › typed confirmation.
 - ARIA: the panel is `role="alertdialog"` (it interrupts with a decision), named by its title and described by its description (`DialogTitle`, `DialogDescription`; `aria-describedby` only when a description renders).
 - Nested: opened from a `Drawer` or a `Dialog`, it is the top overlay layer, so `Esc` closes the confirm only, and while `loading` it closes nothing.
 - Contrast ≥4.5:1, owned by the composed parts.

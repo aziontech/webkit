@@ -32,7 +32,7 @@
           href="/applications"
         />
         <SidebarMenuItem
-          label="Edge Firewall"
+          label="Firewall"
           icon="az az-shield"
           href="/edge-firewall"
           tag-value="Beta"

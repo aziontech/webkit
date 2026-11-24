@@ -1,11 +1,7 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import AiActionApproval, {
-  type AiActionApprovalInterrupt,
-  type AiActionApprovalMessage,
-  type AiActionApprovalToolCallPart
-} from '../../../blocks/ai/ai-action-approval/ai-action-approval.vue'
+import AiActionApproval from '../../../blocks/ai/ai-action-approval/ai-action-approval.vue'
 import {
   sampleDeleteMessages,
   sampleFailedMessages,
@@ -13,22 +9,24 @@ import {
   sampleTools
 } from '../../../blocks/ai/ai-action-approval/sample'
 import AiChatDrawer from '../../../blocks/ai/ai-chat-drawer/ai-chat-drawer.vue'
+import type { AiChatInterrupt, AiChatMessage, AiChatToolCallPart } from '../../utils/ai-chat'
 
 afterEach(() => cleanup())
 describe('ai', () => {
-  it('ai-action-approval Error: says what failed and emits retry from Retry', async () => {
+  it('ai-action-approval Error: says what failed and names the action it re-runs', async () => {
     const view = render(AiActionApproval, {
       props: { messages: sampleFailedMessages, tools: sampleTools }
     })
     expect(view.container.textContent).toContain('still serves the previous version')
-    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    const [[event, message]] = view.emitted('retry') as [[Event, AiActionApprovalMessage]]
+    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
+    await fireEvent.click(view.getByRole('button', { name: 'Deploy again' }))
+    const [[event, message]] = view.emitted('retry') as [[Event, AiChatMessage]]
     expect(event).toBeInstanceOf(Event)
     expect(message.id).toBe('m2')
   })
 
   it('ai-action-approval renders the conversation it is given and emits approve', async () => {
-    const purge: AiActionApprovalToolCallPart = {
+    const purge: AiChatToolCallPart = {
       type: 'tool-call',
       id: 'call-purge',
       name: 'purge_urls',
@@ -67,7 +65,7 @@ describe('ai', () => {
     expect(view.container.textContent).toContain('Purge the cache of acme-store')
     expect(view.container.textContent).not.toContain('Deploy the current build')
     await fireEvent.click(view.getByRole('button', { name: 'Purge' }))
-    const [[event, call]] = view.emitted('approve') as [[Event, AiActionApprovalToolCallPart]]
+    const [[event, call]] = view.emitted('approve') as [[Event, AiChatToolCallPart]]
     expect(event).toBeInstanceOf(Event)
     expect(call.id).toBe('call-purge')
     expect(resolved).toEqual([true])
@@ -106,6 +104,43 @@ describe('ai', () => {
     expect(view.emitted('stop')).toHaveLength(1)
   })
 
+  it('ai-chat-drawer and ai-action-approval show Attach at the start and Dictate before Send', async () => {
+    for (const block of [AiChatDrawer, AiActionApproval]) {
+      const view = render(block)
+      const box = view.getByTestId('prompt-input__box')
+      const buttons = within(box).getAllByRole('button')
+      expect(buttons[0]).toHaveAccessibleName('Attach files')
+      expect(buttons.at(-1)).toHaveAccessibleName('Submit')
+      await waitFor(() =>
+        expect(within(box).getAllByRole('button').at(-2)).toHaveAccessibleName('Dictate')
+      )
+      cleanup()
+    }
+  })
+
+  it('ai-action-approval sends attached files as multimodal content', async () => {
+    const view = render(AiActionApproval, { props: { messages: [] } })
+    const input = view.container.querySelector<HTMLInputElement>(
+      '[data-testid="prompt-input-attach-button__input"]'
+    )!
+    const transfer = new DataTransfer()
+    transfer.items.add(new File(['hello'], 'notes.pdf', { type: 'application/pdf' }))
+    input.files = transfer.files
+    input.dispatchEvent(new Event('change', { bubbles: true }))
+    await waitFor(() => expect(view.getByTestId('prompt-input__files')).toBeTruthy())
+    await fireEvent.click(view.getByTestId('prompt-input__submit'))
+    await waitFor(() => expect(view.emitted('send')).toHaveLength(1))
+    expect(view.emitted<unknown[]>('send')?.[0]?.[1]).toEqual({
+      content: [
+        {
+          type: 'document',
+          source: { type: 'data', value: 'aGVsbG8=', mimeType: 'application/pdf' },
+          metadata: { name: 'notes.pdf' }
+        }
+      ]
+    })
+  })
+
   it('ai-chat-drawer renders the messages it is given and emits new-chat', async () => {
     const view = render(AiChatDrawer, {
       props: {
@@ -125,6 +160,10 @@ describe('ai', () => {
     })
     await waitFor(() => expect(document.body.textContent).toContain('Yes, at a 91% hit ratio.'))
     expect(document.body.textContent).not.toContain('reads this workload')
+    const log = document.querySelector<HTMLElement>('[role="log"]')!
+    const composer = document.querySelector<HTMLElement>('textarea[aria-label="Prompt"]')!
+    expect(log.contains(composer)).toBe(false)
+    expect(composer.closest('[data-testid="conversation__composer"]')).not.toBeNull()
     await fireEvent.click(document.querySelector<HTMLElement>('[aria-label="New chat"]')!)
     expect(view.emitted('new-chat')).toHaveLength(1)
   })
@@ -158,6 +197,11 @@ describe('ai', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Agent' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     expect(document.querySelector('[data-testid$="__backdrop"]')).toBeNull()
+    const page = view.container.firstElementChild as HTMLElement
+    expect(page.hasAttribute('data-drawer-open')).toBe(true)
+    expect(page.classList.contains('lg:data-drawer-open:pe-[max(30vw,var(--container-md))]')).toBe(
+      true
+    )
   })
 
   it('ai-action-approval passes the edited arguments of an editable tool', async () => {
@@ -307,7 +351,7 @@ describe('ai', () => {
   })
 
   it('ai-action-approval draws structured and rich tool results, unbound approvals and interrupt errors', async () => {
-    const workflow: AiActionApprovalInterrupt = {
+    const workflow: AiChatInterrupt = {
       kind: 'unbound',
       id: 'wf-2',
       message: 'Approve the change window?',

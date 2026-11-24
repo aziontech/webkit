@@ -20,7 +20,8 @@
  ],
  "related": [
   "`newsletter-section` — the other form section; same `submit` and state contract.",
-  "`alert` — renders the success and failure messages."
+  "`alert` — renders the failure message.",
+  "`empty-state` — renders the confirmation that replaces the form once the values are sent."
  ],
  "bestPractices": [
   "Give every field a unique `name`; it is the key of the submitted value.",
@@ -35,7 +36,7 @@
    "type": "HeroFormSectionMessages",
    "default": "—",
    "required": "true",
-   "doc": "Copy of the form outcomes: `{ missing, invalidEmail, success, error }`."
+   "doc": "Copy of the form outcomes: `{ missing, invalidEmail, success, successDescription?, error }`."
   },
   {
    "name": "eyebrow",
@@ -119,7 +120,7 @@
    "type": "HeroFormSectionField[]",
    "default": "[]",
    "required": "false",
-   "doc": "The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it."
+   "doc": "The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel?, autocomplete? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it, `autocomplete` is the autofill hint of a text control."
   },
   {
    "name": "submitLabel",
@@ -154,7 +155,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "The site sent the values: the form gives way to `messages.success`."
+   "doc": "The site sent the values: the form gives way to a confirmation of `messages.success`, in the form's footprint."
   },
   {
    "name": "failed",
@@ -189,8 +190,8 @@
    "file": "examples/hero-form-section/under-attack.vue"
   },
   {
-   "name": "Loading",
-   "file": "examples/hero-form-section/loading.vue"
+   "name": "ScaleUp",
+   "file": "examples/hero-form-section/scale-up.vue"
   }
  ],
  "docs": "components/hero-form-section.md"

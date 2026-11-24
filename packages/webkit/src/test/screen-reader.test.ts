@@ -201,7 +201,7 @@ describe('screen-reader smoke · form blocks', () => {
               - text: Name
               - paragraph: Give a unique and descriptive name to identify the service.
               - textbox "Name":
-                - /placeholder: My Service
+                - /placeholder: ""
                 - text: checkout-web
           - heading "Delivery settings" [level=2]
           - list:
@@ -288,7 +288,7 @@ describe('screen-reader smoke · form blocks', () => {
         - group "Create Domain":
           - text: Create Domain
           - heading "General" [level=2]
-          - 'button "The two fields this endpoint requires: what the domain is called here, and the hostname it answers for."'
+          - button "More information"
           - list:
             - listitem:
               - text: Name

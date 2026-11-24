@@ -89,6 +89,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 - A keycap never wraps inside itself (`inline-flex`); a `separate` sequence wraps between keycaps only where the surrounding text wraps.
 - No touch target and no hover affordance: Kbd is non-interactive.
+- Inside a button, the keycap hides on a coarse pointer (`pointer-coarse:in-[button]:hidden`): a touch phone has no keyboard to press it with. On a fine pointer it stays, and a disabled button greys it with its label (`in-[button:disabled]:text-(--text-disabled)`), so the button never reads half enabled.
 
 ## Examples
 

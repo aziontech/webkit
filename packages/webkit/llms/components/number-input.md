@@ -53,7 +53,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `leading` | — | Content rendered before the input (e.g. `$`). |
+| `leading` | — | Content rendered before the input (e.g. `$`). Both slots: `aria-hidden`. |
 | `trailing` | — | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## v-model
@@ -64,20 +64,22 @@
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `readonly`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
+- `data-readonly` mirrors the `readonly` prop (no hover border, default cursor, as on `Input`)
 - `data-size` mirrors the `size` prop
+- The frame, its states, adornments and touch target are the private frame `Input` renders
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2` on `var(--input-ring-offset, var(--bg-canvas))`, as on `Input`
 - Keyboard map: `Tab` focuses the input; `ArrowUp`/`ArrowDown` increment/decrement by `step`; `Home`/`End` jump to `min`/`max` when defined; `Enter` commits and emits `change`.
 - Direction: the `<input>` renders `dir="auto"` (digits resolve to left-to-right inside right-to-left UI); a `dir` attribute overrides it.
 - ARIA: `role="spinbutton"` on the input (native `<input type="number">` provides this); `aria-valuenow`, `aria-valuemin`, `aria-valuemax` mirror the props; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; spinner buttons have `aria-label` ("Increment" / "Decrement") and `tabindex="-1"` so keyboard users use arrow keys.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated state changes.
-- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction.
+- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction. The field also has `Input`'s touch target; a press on the frame focuses the input.
 
 ## Right-to-left
 
@@ -96,6 +98,7 @@
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import NumberInput from '@aziontech/webkit/number-input'
   import { ref } from 'vue'
 
@@ -103,15 +106,16 @@
 </script>
 
 <template>
-  <div class="w-full max-w-80">
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Quantity</Field.Label>
     <NumberInput
       v-model="value"
       :min="0"
       :max="100"
       :step="1"
-      placeholder="Quantity"
     />
-  </div>
+    <Field.Description>From 0 to 100.</Field.Description>
+  </Field>
 </template>
 ```
 

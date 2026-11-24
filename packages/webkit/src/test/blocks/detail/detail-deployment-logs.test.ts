@@ -78,6 +78,8 @@ describe('detail/detail-deployment-logs', () => {
     const view = render(InCreateFlow)
     expect(view.container.textContent).toContain('Cloning acme/web-app to acme')
     expect(view.container.textContent).toContain('Cloning')
+    expect(view.container.querySelector('template')).toBeNull()
+    expect(view.getByText('Cloning acme/web-app to acme').closest('template')).toBeNull()
   })
 
   it('InCreateFlowError ends a failure with Edit and Redeploy', async () => {

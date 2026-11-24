@@ -115,6 +115,26 @@ describe('Tooltip', () => {
         expect(panel()).toBeNull()
       })
 
+      it('stays closed after Escape when the pointer comes back over the trigger, until it leaves', async () => {
+        const { getByTestId } = render(composed())
+        await settle()
+
+        const trigger = getByTestId('tooltip')
+        await fireEvent.focusIn(trigger)
+        await settle()
+        await fireEvent.keyDown(document, { key: 'Escape' })
+        await settle()
+
+        await fireEvent.mouseEnter(trigger)
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        await settle()
+        expect(trigger.getAttribute('data-state')).toBe('closed')
+
+        await fireEvent.mouseLeave(trigger)
+        await fireEvent.mouseEnter(trigger)
+        await vi.waitFor(() => expect(trigger.getAttribute('data-state')).toBe('open'))
+      })
+
       it('inside an open Dialog, Escape closes only the tooltip', async () => {
         const { default: Dialog } = await import('../dialog/dialog.vue')
         const { default: DialogContent } = await import('../dialog/dialog-content.vue')

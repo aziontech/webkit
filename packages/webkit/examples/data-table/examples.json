@@ -4,12 +4,12 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s, per-row action menus, and pagination. The outer card border is drawn via the `border` prop — the table is borderless by default (it usually sits inside a surface that already frames it), so set `border` to draw the `var(--border-default)` outline; the internal row dividers are unaffected either way.",
+      "summary": "A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s and per-row action menus, and `DataTablePagination` in the `footer` slot pages the rows. The table has no outer border by default; set `bordered` to draw one.",
       "file": "default.vue"
     },
     {
       "name": "WithCheckboxes",
-      "summary": "A leading selection column (`selectable`): each row gets a checkbox and the header gets a select-all box that reflects the all/none/indeterminate state. Selection is exposed via `v-model:selected-keys`; changes log to the Actions panel.",
+      "summary": "A leading selection column (`selectable`): each row gets a checkbox and the header gets a select-all box that reflects the all/none/indeterminate state. Selection is exposed via `v-model:selected-keys`.",
       "file": "with-checkboxes.vue"
     },
     {
@@ -54,12 +54,12 @@
     },
     {
       "name": "VirtualRows",
-      "summary": "Ten thousand rows with `virtual`: only the rows in view render (plus a few above and below), the rest are space, so the table mounts and scrolls fast. The viewport scrolls within `max-height` (40rem when empty); `estimate-row-height` is the starting guess until a row is measured.",
+      "summary": "Ten thousand rows with `virtual`: only the rows in view render (plus a few above and below), the rest are space, so the table mounts and scrolls fast. The viewport scrolls within `max-height` (40rem when empty); a row counts 48 px until the first row is measured.",
       "file": "virtual-rows.vue"
     },
     {
       "name": "WithCollection",
-      "summary": "Server mode of `useCollection`: `fetch` receives the text, sort, page and page size (and an abort signal) and returns one page and the total; `tableProps` binds data, loading, sorting, pagination and selection in one `v-bind`, and selection survives paging.",
+      "summary": "Server mode of `useCollection`: `fetch` receives the text, sort, page and page size (and an abort signal) and returns one page and the total; `tableProps` binds data, loading, sorting and selection in one `v-bind`, `paginationProps` binds `DataTablePagination` (with `manual`) in the `footer` slot, and selection survives paging.",
       "file": "with-collection.vue"
     },
     {
@@ -109,22 +109,22 @@
     },
     {
       "name": "Export",
-      "summary": "`TableExportButton` in the toolbar writes the visible, ordered and filtered rows as CSV, named by `export-filename`.",
+      "summary": "`TableExportButton` in the toolbar writes the visible, ordered and filtered rows as CSV, named by its `filename`.",
       "file": "export.vue"
     },
     {
       "name": "SerializableState",
-      "summary": "`getSnapshot()` saves the sort, page, visible columns and filters as a plain object and `setSnapshot()` restores it, while `v-model:snapshot` mirrors every change; the app keeps the snapshot in the URL or storage.",
+      "summary": "`getSnapshot()` saves the sort, page, visible columns and filters as a plain object and `setSnapshot()` restores it; the app keeps the snapshot in the URL or storage.",
       "file": "serializable-state.vue"
     },
     {
       "name": "InfiniteLoading",
-      "summary": "`more-rows` with `@load-more` in a `virtual` table: as the end of the requests nears the viewport the table asks for the next page, shows `Loading more rows` while `loading-more` is true, offers a Load more button for keyboard users, and reads `No more rows` after the last page.",
+      "summary": "`DataTableLoadMore` in the `load-more` slot, with `more-rows` and `@load-more`, in a `virtual` table: as the end of the requests nears the viewport the table asks for the next page, shows `Loading more rows` while its `loading` is true, offers a Load more button for keyboard users, and reads `No more rows` after the last page.",
       "file": "infinite-loading.vue"
     },
     {
       "name": "LiveTail",
-      "summary": "`TableLiveButton` toggles `v-model:live`: while live the app prepends new requests, the table stays on the newest row and a line marks the first request older than the moment live started.",
+      "summary": "`TableLiveButton` toggles its `v-model`: while live the app prepends new requests, the table stays on the newest row and a line marks the first request older than the moment live started.",
       "file": "live-tail.vue"
     }
   ]

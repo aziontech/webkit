@@ -2,7 +2,11 @@ import { createRequire } from 'node:module'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
-import { collectNavigation, NAVIGATION_RULE, navigationFindings } from './navigation-levels.js'
+import {
+  COLLECT_NAVIGATION_SCRIPT,
+  NAVIGATION_RULE,
+  navigationFindings
+} from './navigation-levels.js'
 import { PACKAGE_NAME } from './source.js'
 
 const finding = (message, extra = {}) => ({
@@ -29,16 +33,39 @@ async function loadChromium(projectDir) {
   }
 }
 
+const firstLine = (error) => String(error?.message || error).split('\n')[0]
+
+async function checkRoute(browser, url, timeout) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } })
+  try {
+    await page.goto(url, { waitUntil: 'networkidle', timeout })
+    const snapshot = await page.evaluate(COLLECT_NAVIGATION_SCRIPT)
+    return navigationFindings(snapshot).map((f) =>
+      finding(f.message, { file: url, rule: f.rule, route: f.route })
+    )
+  } catch (error) {
+    return [
+      finding(`could not check the navigation levels of this route: ${firstLine(error)}`, {
+        file: url,
+        rule: NAVIGATION_RULE
+      })
+    ]
+  } finally {
+    await page.close()
+  }
+}
+
+const NO_PLAYWRIGHT = () =>
+  finding(
+    `--url drives the routes in a browser and needs Playwright in this project: install it with ` +
+      `\`npm i -D playwright && npx playwright install chromium\`, then run \`npx ${PACKAGE_NAME} ` +
+      `check --url <url>\` again.`
+  )
+
 export async function runNavigationCheck(projectDir, urls, { timeout = 30000, chromium } = {}) {
   if (!urls.length) return []
   const engine = chromium ?? (await loadChromium(projectDir))
-  if (!engine) {
-    return [
-      finding(
-        `--url drives the routes in a browser and needs Playwright in this project: install it with \`npm i -D playwright && npx playwright install chromium\`, then run \`npx ${PACKAGE_NAME} check --url <url>\` again.`
-      )
-    ]
-  }
+  if (!engine) return [NO_PLAYWRIGHT()]
 
   let browser
   try {
@@ -46,32 +73,14 @@ export async function runNavigationCheck(projectDir, urls, { timeout = 30000, ch
   } catch (error) {
     return [
       finding(
-        `Chromium did not start (${String(error?.message || error).split('\n')[0]}): run \`npx playwright install chromium\`.`
+        `Chromium did not start (${firstLine(error)}): run \`npx playwright install chromium\`.`
       )
     ]
   }
 
   const findings = []
   try {
-    for (const url of urls) {
-      const page = await browser.newPage({ viewport: { width: 1280, height: 900 } })
-      try {
-        await page.goto(url, { waitUntil: 'networkidle', timeout })
-        const snapshot = await page.evaluate(collectNavigation)
-        for (const f of navigationFindings(snapshot)) {
-          findings.push(finding(f.message, { file: url, rule: f.rule, route: f.route }))
-        }
-      } catch (error) {
-        findings.push(
-          finding(
-            `could not check the navigation levels of this route: ${String(error?.message || error).split('\n')[0]}`,
-            { file: url, rule: NAVIGATION_RULE }
-          )
-        )
-      } finally {
-        await page.close()
-      }
-    }
+    for (const url of urls) findings.push(...(await checkRoute(browser, url, timeout)))
   } finally {
     await browser.close()
   }

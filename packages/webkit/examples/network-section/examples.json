@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the site places it: the region overline, the headline and lead over the world map, four claim chips, and a floor of four client outcomes with their marks. Edit the props in the Controls panel — a band with no title renders nothing at all.",
+      "summary": "The band as the site places it: the region overline, the headline and lead over the world map, four claim chips, and a floor of four client outcomes with their marks. A band with no title renders nothing at all.",
       "file": "default.vue"
     },
     {

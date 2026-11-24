@@ -31,7 +31,11 @@
     marks?: RegistrationFrameMarks
     /** Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture`'s `lines` kind for a ruled ground; `spacer` composes that instead. */
     hatch?: boolean
-    /** Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top` (a vertical stack); use `left` for a horizontal row, or a list for a grid cell. */
+    /**
+     * Which sides a neighbouring frame already draws, so this one does not draw them again. `true`
+     * is shorthand for `top` (a vertical stack); use `left` for a horizontal row, or a list for a
+     * grid cell.
+     */
     flush?: boolean | RegistrationFrameSides
   }
 
@@ -102,6 +106,16 @@
   const hasCorner = (corner: RegistrationFrameCorner) => markCorners.value.has(corner)
 
   const MARK_CLASS = 'pointer-events-none absolute z-20 m-1 block size-1.5 bg-(--border-default)'
+
+  const ROOT_CLASS =
+    'relative border-(--border-default) ' +
+    'data-[borders~=bottom]:border-b data-[borders~=left]:border-s data-[borders~=right]:border-e data-[borders~=top]:border-t ' +
+    '[[data-frame-edges]>&]:border-x-0! [[data-frame-edges]>&]:border-t-0!'
+
+  const HATCH_CLASS =
+    'pointer-events-none absolute inset-0 ' +
+    '[background-image:repeating-linear-gradient(to_right,var(--border-default)_0,var(--border-default)_1px,transparent_1px,transparent_var(--spacing-lg))] ' +
+    'mask-[radial-gradient(ellipse_at_center,black_35%,transparent_90%)]'
 </script>
 
 <template>
@@ -112,12 +126,12 @@
     :data-marks="marksAttr"
     :data-hatch="hatchAttr"
     :data-flush="flushAttr"
-    class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-s data-[borders~=right]:border-e data-[borders~=top]:border-t [[data-frame-edges]>&]:border-x-0! [[data-frame-edges]>&]:border-t-0!"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="hatch"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 [background-image:repeating-linear-gradient(to_right,var(--border-default)_0,var(--border-default)_1px,transparent_1px,transparent_var(--spacing-lg))] mask-[radial-gradient(ellipse_at_center,black_35%,transparent_90%)]"
+      :class="HATCH_CLASS"
     />
 
     <span

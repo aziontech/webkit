@@ -23,7 +23,14 @@
  ],
  "sfcFile": "blocks/create/create-wizard/create-wizard.vue",
  "guidelinesFile": "blocks/create/create-wizard/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-wizard/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "lib/access-list.ts",
+  "lib/service-wizard.ts",
+  "parts/discard-dialog.vue",
+  "parts/policy-picker-step.vue",
+  "parts/review-step.vue",
+  "parts/wizard-frame.vue",
+  "types.ts"
+ ]
 }

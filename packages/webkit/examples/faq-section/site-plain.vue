@@ -7,7 +7,9 @@
     {
       question: 'What are Functions?',
       answer:
-        'Azion Functions runs JavaScript and TypeScript in the request flow of an application or a firewall, across 100+ data centers, with no cold starts. A Rules Engine rule calls the function, and it answers with a Response. There is no server to provision or scale.'
+        'Azion Functions runs JavaScript and TypeScript in the request flow of an application or a firewall, across ' +
+        '100+ data centers, with no cold starts. A Rules Engine rule calls the function, and it answers with a ' +
+        'Response. There is no server to provision or scale.'
     },
     {
       question: 'Are there cold starts?',
@@ -17,7 +19,9 @@
     {
       question: 'Which languages and frameworks are supported?',
       answer:
-        'JavaScript and TypeScript, plus WebAssembly through the WebAssembly API. The runtime follows web standards such as fetch, Streams and Web Crypto, and can import 68 Node.js modules. azion init ships 25 presets, including Next.js, Nuxt, React, Vue, Astro, Angular, Svelte, Qwik and Hono.'
+        'JavaScript and TypeScript, plus WebAssembly through the WebAssembly API. The runtime follows web standards ' +
+        'such as fetch, Streams and Web Crypto, and can import 68 Node.js modules. azion init ships 25 presets, ' +
+        'including Next.js, Nuxt, React, Vue, Astro, Angular, Svelte, Qwik and Hono.'
     }
   ]
 </script>

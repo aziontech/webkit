@@ -1,8 +1,10 @@
 export type Highlighted = { code: string; html: string }
 export type PairType = 'usage' | 'guidance'
 export type DocPair = { type: PairType; level: number; do: string; dont: string }
-export type DocPart = { html: string } | { pair: DocPair }
-export type MarkdownDoc = { parts: DocPart[]; title: string }
+export type DocCode = Highlighted & { lang: string }
+export type DocPart = { html: string } | { pair: DocPair } | { code: DocCode }
+export type DocHeading = { id: string; text: string; depth: number }
+export type MarkdownDoc = { parts: DocPart[]; title: string; toc?: DocHeading[] }
 export type GuidelinesDoc = {
   title: string
   lead: string
@@ -38,6 +40,7 @@ export type ComponentIndexItem = {
   title: string
   category: string
   surface: string
+  stability: 'preview' | 'ga'
   purpose: string
   import: string
   exampleDir: string | null
@@ -53,6 +56,7 @@ export type BlockIndexItem = {
   title: string
   group: string
   surface: string
+  stability: 'preview' | 'ga'
   summary: string
   states: { name: string; slug: string; file: string }[]
   dir: string

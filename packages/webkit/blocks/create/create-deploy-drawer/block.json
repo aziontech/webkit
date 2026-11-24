@@ -24,7 +24,19 @@
     "name": "Service",
     "file": "create-deploy-drawer.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "lib/list-format.ts",
+    "parts/build-item.vue",
+    "parts/deploy-loading.vue",
+    "parts/deploy-resources-card.vue",
+    "parts/domain-group-item.vue",
+    "parts/environment-choices.vue",
+    "parts/impacted-projects.vue",
+    "parts/project-card.vue",
+    "parts/version-picker.vue",
+    "types.ts"
+  ],
   "variants": [
     {
       "name": "Building",

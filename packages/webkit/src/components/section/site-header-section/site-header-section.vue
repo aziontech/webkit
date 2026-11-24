@@ -90,7 +90,11 @@
   export interface SiteHeaderSectionProps {
     /** Where the Azion mark links. */
     home?: string
-    /** The mega-menus, in bar order; each is `{ value, label, columns }` where `columns` is an array of columns, each holding groups of `{ label, href?, items }` and each item `{ label, description?, href?, icon? }`. */
+    /**
+     * The mega-menus, in bar order; each is `{ value, label, columns }` where `columns` is an
+     * array of columns, each holding groups of `{ label, href?, items }` and each item `{ label,
+     * description?, href?, icon? }`.
+     */
     menus: SiteHeaderSectionMenu[]
     /** Bar entries that open no panel, after the menus; each is `{ label, href }`. */
     links?: SiteHeaderSectionLink[]
@@ -194,6 +198,16 @@
   })
 
   onScopeDispose(() => globalThis.removeEventListener('resize', readColumnInset))
+
+  const HOME_LINK_CLASS =
+    'relative inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'motion-reduce:transition-none'
+
+  const MENU_COLUMNS_CLASS =
+    'grid gap-x-0 gap-y-(--spacing-md) ' +
+    'data-[columns=1]:grid-cols-1 data-[columns=2]:grid-cols-2 data-[columns=4]:grid-cols-4 ' +
+    'data-[columns=4]:w-[calc(min(var(--layout-measure-site-header),100vw)_-_2*var(--layout-boundary-inline)_-_2*var(--spacing-md)_-_2px)]'
 </script>
 
 <template>
@@ -222,7 +236,7 @@
           <a
             :href="safeHref(home) ?? undefined"
             :aria-label="t('siteHeaderSection.home')"
-            class="relative inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+            :class="HOME_LINK_CLASS"
           >
             <span
               aria-hidden="true"
@@ -260,7 +274,7 @@
               <NavigationMenuContent class="w-full">
                 <div
                   :data-columns="menu.columns.length"
-                  class="grid gap-x-0 gap-y-(--spacing-md) data-[columns=1]:grid-cols-1 data-[columns=2]:grid-cols-2 data-[columns=4]:grid-cols-4 data-[columns=4]:w-[calc(min(var(--layout-measure-site-header),100vw)_-_2*var(--layout-boundary-inline)_-_2*var(--spacing-md)_-_2px)]"
+                  :class="MENU_COLUMNS_CLASS"
                 >
                   <div
                     v-for="(column, index) in menu.columns"

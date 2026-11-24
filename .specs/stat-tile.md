@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: c3972afbba42c9aaa7e644cc6c0fd702c007f33aec58f40dcb22164a12f5a353
+checksum: 9e93be505d50a1d60fb9fa601f7e0f39fc63fb367e06f7c1c778a48fe05002ad
 spec_version: 8
 created: 2026-10-20
 last_updated: 2026-11-19
@@ -95,7 +95,7 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 | `inverse`     | `boolean`                   | `false`         | false    | A rise is bad for this metric; flips the delta between success and danger.                                                         |
 | `trend`       | `(number \| null)[]`        | `[]`            | false    | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline.                               |
 | `loading`     | `boolean`                   | `false`         | false    | Renders Skeleton lines in place of the figure, delta and sparkline.                                                                |
-| `error`       | `string`                    | `''`            | false    | Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data.        |
+| `error`       | `string`                    | `''`            | false    | Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data.       |
 
 ## Events
 
@@ -110,13 +110,14 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `danger` "Couldn't load" `Tag` in place of "No data"; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
+- `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its border, radius and surface; use an unpadded `ChartCard.Content`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
-- Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
+- Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value. The figure box keeps the final figure's width (an invisible copy of it sizes the box), so the count-up never rewraps the row or moves the sparkline.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
@@ -131,7 +132,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 | Region       | Token (DESIGN.md)                                                                                                                       |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| surface      | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; grouped: no surface, `var(--border-default)` end and bottom dividers |
+| surface      | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; grouped: no surface, `var(--border-default)` end and bottom dividers; in a ChartCard: no border, radius or surface |
 | label        | `.text-label-sm`, `var(--text-muted)`                                                                                                   |
 | figure       | `mono`: `.text-big-number-sm`; `sans`: `.text-heading-lg`; `var(--text-default)`                                                        |
 | unit         | `mono`: `.text-body-xs`; `sans`: `.text-body-md`; `var(--text-muted)`                                                                   |
@@ -153,6 +154,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
 - The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.
 - Proportional figures on the big number; `tabular-nums` on the delta.
+- Right-to-left: the figure with its unit and the signed delta are left-to-right isolates (`dir="ltr"`), so `110 GB` and `+10.5%` keep their order inside a right-to-left page.
 - Text contrast at least 4.5:1 in both themes.
 
 ## Examples

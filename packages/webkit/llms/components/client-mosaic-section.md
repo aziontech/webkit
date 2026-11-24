@@ -74,6 +74,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 - Container queries: none of its own; `bento-grid` sets four columns, two below `md`.
 - Narrow: a two-column span fills the phone row; cells keep a minimum height of `clamp(180px, 18vw, 240px)`.
+- Below `lg` a story cell spans two columns (the full row on a phone, half the four-column grid on a tablet), so its claim and its link never squeeze into one narrow column.
 - Touch: every mark cell is a full-cell link; story links are `link` targets.
 - Reflow: no horizontal scroll at 320 px.
 

@@ -3,6 +3,7 @@
 
   import { brandMarkLabel, resolveBrandMark } from '../../../assets/brands/registry'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import { useMarqueeMarkSymbols } from './composables/use-marquee-mark-symbols'
   import MarqueeLoop from './marquee-loop.vue'
 
   defineOptions({ name: 'Marquee', inheritAttrs: false })
@@ -110,6 +111,45 @@
     },
     { immediate: true }
   )
+
+  const drawn = computed(() => resolved.value.filter((mark) => mark.art))
+
+  const { defsEl, viewBoxes, measured, symbolId } = useMarqueeMarkSymbols(
+    () => drawn.value.map((mark) => mark.name),
+    ready
+  )
+
+  const setDefsEl = (el: unknown) => {
+    defsEl.value = el instanceof SVGSVGElement ? el : null
+  }
+
+  const ROOT_CLASS =
+    'group/strip relative flex flex-col items-center gap-(--spacing-xl) ' +
+    'data-[variant=band]:w-full data-[variant=band]:bg-(--bg-canvas) data-[variant=band]:py-(--spacing-xl) ' +
+    'data-[size=medium]:[--marquee-brand-cell:150px] data-[size=medium]:[--marquee-brand-mark:32px] data-[size=small]:[--marquee-brand-cell:120px] ' +
+    'data-[size=small]:[--marquee-brand-mark:24px] ' +
+    'md:data-[size=medium]:[--marquee-brand-cell:200px] md:data-[size=medium]:[--marquee-brand-mark:40px] lg:data-[size=medium]:[--marquee-brand-cell:240px] ' +
+    'lg:data-[size=medium]:[--marquee-brand-mark:48px]'
+
+  const STRIP_CLASS =
+    'm-0 flex w-max shrink-0 list-none items-center p-0 ' +
+    'data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pe-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pe-(--spacing-10) ' +
+    'md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pe-(--spacing-8) ' +
+    'data-[content=items]:data-[size]:gap-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pe-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] ' +
+    'motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap ' +
+    'motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden ' +
+    'max-sm:motion-reduce:data-[content=marks]:grid max-sm:motion-reduce:data-[content=marks]:grid-cols-2 max-sm:motion-reduce:data-[content=marks]:justify-items-center'
+
+  const ITEM_CLASS =
+    'flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) ' +
+    'group-data-[size=small]/strip:text-body-sm ' +
+    'motion-reduce:max-w-full motion-reduce:shrink motion-reduce:whitespace-normal motion-reduce:text-center'
+
+  const MARK_CLASS =
+    'flex w-(--marquee-brand-cell) shrink-0 items-center ' +
+    'group-data-[size=small]/strip:w-auto ' +
+    'justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-100 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -119,7 +159,7 @@
     :data-size="size"
     :data-variant="variant"
     :data-content="isItems ? 'items' : 'marks'"
-    class="group/strip flex flex-col items-center gap-(--spacing-xl) data-[variant=band]:w-full data-[variant=band]:bg-(--bg-canvas) data-[variant=band]:py-(--spacing-xl) data-[size=medium]:[--marquee-brand-cell:150px] data-[size=medium]:[--marquee-brand-mark:32px] data-[size=small]:[--marquee-brand-cell:120px] data-[size=small]:[--marquee-brand-mark:24px] md:data-[size=medium]:[--marquee-brand-cell:200px] md:data-[size=medium]:[--marquee-brand-mark:40px] lg:data-[size=medium]:[--marquee-brand-cell:240px] lg:data-[size=medium]:[--marquee-brand-mark:48px]"
+    :class="ROOT_CLASS"
   >
     <Eyebrow
       v-if="label"
@@ -128,11 +168,34 @@
       >{{ label }}</Eyebrow
     >
 
+    <svg
+      v-if="drawn.length"
+      :ref="setDefsEl"
+      data-slot="marquee-symbols"
+      width="0"
+      height="0"
+      aria-hidden="true"
+      focusable="false"
+      class="absolute overflow-hidden"
+    >
+      <symbol
+        v-for="mark in drawn"
+        :id="symbolId(mark.name)"
+        :key="mark.name"
+      >
+        <component
+          :is="mark.art"
+          width="100%"
+          height="100%"
+        />
+      </symbol>
+    </svg>
+
     <MarqueeLoop
       v-if="resolved.length || isItems"
       v-slot="{ copy, duplicate }"
       :duration="passDuration"
-      :loading="!ready"
+      :loading="!ready || !measured"
       fill
       faded
       reduced="wrap"
@@ -143,12 +206,12 @@
         :data-duplicate="duplicate || null"
         :aria-label="!duplicate && ariaLabel ? ariaLabel : undefined"
         :aria-hidden="duplicate ? 'true' : undefined"
-        class="m-0 flex w-max shrink-0 list-none items-center p-0 data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pe-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pe-(--spacing-10) md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pe-(--spacing-8) data-[content=items]:data-[size]:gap-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pe-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+        :class="STRIP_CLASS"
       >
         <li
           v-for="(item, index) in items"
           :key="`${copy}-item-${index}`"
-          class="flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) group-data-[size=small]/strip:text-body-sm motion-reduce:max-w-full motion-reduce:shrink motion-reduce:whitespace-normal motion-reduce:text-center"
+          :class="ITEM_CLASS"
         >
           <span
             v-if="item.icon"
@@ -161,16 +224,21 @@
           v-for="mark in resolved"
           :key="`${copy}-${mark.name}`"
           :title="mark.label"
-          class="flex w-(--marquee-brand-cell) shrink-0 items-center group-data-[size=small]/strip:w-auto justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-100 motion-reduce:transition-none"
+          :class="MARK_CLASS"
         >
-          <component
-            :is="mark.art"
-            v-if="mark.art"
+          <svg
+            v-if="mark.art && viewBoxes.has(mark.name)"
             :data-mark="mark.name"
-            class="h-(--marquee-brand-mark) w-auto max-w-(--marquee-brand-cell) object-contain"
-          />
+            :viewBox="viewBoxes.get(mark.name)"
+            fill="currentColor"
+            aria-hidden="true"
+            focusable="false"
+            class="h-(--marquee-brand-mark) w-auto max-w-(--marquee-brand-cell)"
+          >
+            <use :href="`#${symbolId(mark.name)}`" />
+          </svg>
           <span
-            v-else
+            v-else-if="!mark.art"
             class="whitespace-nowrap text-heading-2xs"
             >{{ mark.label }}</span
           >

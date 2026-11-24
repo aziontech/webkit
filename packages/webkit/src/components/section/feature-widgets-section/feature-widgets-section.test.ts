@@ -159,6 +159,13 @@ describe('FeatureWidgetsSection', () => {
     expect(writeText).toHaveBeenCalledWith(copy.text)
   })
 
+  it('shows the text the copy button copies, so the reader sees the prompt first', () => {
+    const { container } = band()
+
+    const shown = container.querySelector('[data-slot="copy-text"]')
+    expect(shown?.textContent?.trim()).toBe(copy.text)
+  })
+
   it('reads Copied for two seconds after a copy, then its label again', async () => {
     stubClipboard()
     vi.useFakeTimers()

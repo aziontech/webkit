@@ -64,7 +64,13 @@
     "name": "Default",
     "file": "view-table.vue"
   },
-  "files": ["sample.ts"],
+  "files": [
+    "sample.ts",
+    "lib/deployments.ts",
+    "parts/collection-controls.vue",
+    "parts/deployments-page.vue",
+    "parts/deployments-table.vue"
+  ],
   "variants": [
     {
       "name": "Empty",

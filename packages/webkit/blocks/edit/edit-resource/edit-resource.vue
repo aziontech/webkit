@@ -6,11 +6,9 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
@@ -19,7 +17,13 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
-  import { sampleProject } from './sample'
+  import SettingsSaveBar from './parts/settings-save-bar.vue'
+  import {
+    sampleProject,
+    sampleProjectModules,
+    sampleProjectTabs,
+    sampleSubscriptionModules
+  } from './sample'
 
   /** The saved project settings, and the values a save sends. */
   export interface EditResourceProject {
@@ -63,56 +67,6 @@
     /** Sections after Subscription modules, inside the form, such as the Danger zone. */
     sections(): unknown
   }>()
-
-  const tabs = [
-    { value: 'overview', label: 'Overview' },
-    { value: 'build', label: 'Build' },
-    { value: 'deployments', label: 'Deployments' },
-    { value: 'variables', label: 'Variables' },
-    { value: 'caching', label: 'Caching' },
-    { value: 'integrations', label: 'Integrations' },
-    { value: 'rules', label: 'Rules' },
-    { value: 'main-settings', label: 'Settings' }
-  ]
-
-  const defaultModules = [
-    {
-      key: 'compression',
-      title: 'Compression',
-      description: 'Compress responses with gzip and Brotli before they are sent.'
-    },
-    { key: 'caching', title: 'Caching', description: 'Customize advanced cache settings.' },
-    {
-      key: 'device_detection',
-      title: 'Device Detection',
-      description: 'Expose device variables to build responsive rules.'
-    },
-    {
-      key: 'custom_code',
-      title: 'Custom Code',
-      description: 'Run your own code on each request, close to the user.'
-    },
-    {
-      key: 'image_optimization',
-      title: 'Image Optimization',
-      description: 'Resize and convert images on the fly.'
-    },
-    {
-      key: 'load_balancing',
-      title: 'Load Balancing',
-      description:
-        'Balance traffic across your upstreams for reliability and network congestion control.'
-    }
-  ]
-
-  const subscriptionModules = [
-    {
-      key: 'web_socket_proxy',
-      title: 'WebSocket Proxy',
-      description:
-        'Enhance real-time data exchange between your project and its backends using the WebSocket protocol.'
-    }
-  ]
 
   const copyOf = (project: EditResourceProject) =>
     JSON.parse(JSON.stringify(project)) as EditResourceProject
@@ -196,11 +150,6 @@
     submit(event)
   }
 
-  const onSaveShortcut = (event: KeyboardEvent) => {
-    if (!dirty.value || saving.value) return
-    save(event)
-  }
-
   const showFailure = () => {
     toast.error("The project settings weren't saved.", {
       id: SAVE_TOAST,
@@ -242,7 +191,7 @@
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Trigger
-          v-for="tab in tabs"
+          v-for="tab in sampleProjectTabs"
           :key="tab.value"
           :value="tab.value"
           :label="tab.label"
@@ -379,7 +328,7 @@
                     <template #default>
                       <Item.List>
                         <SettingsRow
-                          v-for="mod in defaultModules"
+                          v-for="mod in sampleProjectModules"
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"
@@ -405,7 +354,7 @@
                     <template #default>
                       <Item.List>
                         <SettingsRow
-                          v-for="mod in subscriptionModules"
+                          v-for="mod in sampleSubscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"
@@ -437,54 +386,25 @@
               </fieldset>
             </div>
 
-            <Transition
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="translate-y-2 opacity-0"
+            <SettingsSaveBar
+              :visible="dirty || saving"
+              :saving="saving"
+              :discard-label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
+              @save="save"
+              @discard="discard"
             >
-              <SaveBar
-                v-if="dirty || saving"
-                @save="onSaveShortcut"
+              Project settings changed.
+              <span
+                v-if="freshness === 'conflict'"
+                class="text-(--text-muted)"
+                >Saving overwrites the version saved elsewhere.</span
               >
-                Project settings changed.
-                <span
-                  v-if="freshness === 'conflict'"
-                  class="text-(--text-muted)"
-                  >Saving overwrites the version saved elsewhere.</span
-                >
-                <span
-                  v-else
-                  class="text-(--text-muted)"
-                  >Saving publishes them on the next deployment.</span
-                >
-                <template #actions>
-                  <Button
-                    type="button"
-                    :label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
-                    variant="outline"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    variant="primary"
-                    size="medium"
-                    :loading="saving"
-                    @click="save"
-                    aria-keyshortcuts="Meta+S Control+S"
-                  >
-                    Save
-                    <Kbd
-                      meta
-                      size="small"
-                      aria-hidden="true"
-                      >S</Kbd
-                    >
-                  </Button>
-                </template>
-              </SaveBar>
-            </Transition>
+              <span
+                v-else
+                class="text-(--text-muted)"
+                >Saving publishes them on the next deployment.</span
+              >
+            </SettingsSaveBar>
           </form>
 
           <ConfirmDialog

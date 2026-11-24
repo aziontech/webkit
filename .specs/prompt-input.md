@@ -3,11 +3,11 @@ name: prompt-input
 category: ai
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 9
 template: 2
-checksum: b14f378fc9b1b94a8d3eb61a759bca41b7f829af470e1c0632011e063197705e
+checksum: cf370ac1a0e4731d6f1ef0c7bdb8f506b547b103e66bfe3228443b88e6606501
 created: 2026-11-11
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # PromptInput — Component Spec
@@ -20,7 +20,8 @@ toolbar under it, files attached by a button, by dropping them on the box or by 
 model and mode picker, dictation, a voice-conversation control that stands in for Submit while the
 prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row
 under the box (a context picker, tools, links), an optional character limit with a counter, and
-constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never
+constraint text under it all. Enter submits on a fine pointer; Shift+Enter adds a line; on a
+coarse pointer (a phone keyboard) Enter adds a line and Submit sends; an IME composition never
 submits.
 
 It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt,
@@ -34,6 +35,11 @@ The anatomy is composed by the app: the root draws the box, the text area, Submi
 the file tokens; the controls the app wants (attach, dictate, model, context, tools) are
 sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through
 `provide` / `inject`, so the app wires nothing but its own values.
+
+At rest it is one floating bar (Attach `+`, the text, the `end` controls, Submit, voice or
+Stop) on a translucent raised surface with a shadow and a backdrop blur, so a thread can scroll
+under it. A second line, attached files or references, or an open shortcut menu stack it into
+two rows (text on its own row) until the prompt is cleared.
 
 ## When to use
 
@@ -65,7 +71,8 @@ sub-components it places in the `actions`, `end` and `footer` slots. Each reads 
 - Set `queueable` only when the owner queues what is sent while a response runs, and shows the
   queue (`PromptQueue` above the composer) so the reader can remove a prompt before it is sent.
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
-- Use `maxLength` only when the backend has a limit; the counter is the warning.
+- Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden
+  until the prompt reaches 80% of the limit, so a resting composer shows no number.
 - Compose only the controls the product has. Attach first at the inline start; model, dictate and
   Submit at the inline end, in that order; the secondary row holds what is not about this prompt
   (where the chat lives, the tools, a link to the desktop app).
@@ -178,7 +185,7 @@ Compound API through `index.ts` (`PromptInput.AttachButton`, `PromptInput.Dictat
 `prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`. The root provides
 the composer context (`injection-key.ts`): `disabled`, `accept`, `maxFiles`, `maxFileSize`,
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
-`registerAttach(handlers)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
+`registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
 Every part disables with the composer. The compound attaches the three pickers as async
 components, so `@aziontech/webkit/prompt-input` does not carry `DropdownMenu` until a picker
 renders; their standalone paths are static.
@@ -189,8 +196,18 @@ renders; their standalone paths are static.
   it registers drag and paste handlers with the root on setup and takes them back on dispose, sorts
   every picked, dropped or pasted batch against `accept`, `maxFileSize` and `maxFiles`, appends the
   accepted files and reports the rest through the root (`reject`, the line under the box). A
-  composer that offers no way to attach does not take files silently.
-  - Props: `ariaLabel?: string` (default `''` — empty uses `Attach files`); `icon?: string` (default `''` — empty uses `az az-plus`).
+  composer that offers no way to attach does not take files silently. With `tools` the control is
+  the composer's "+" menu: after mount it loads a private part (`parts/prompt-input-add-menu.vue`,
+  a lazy chunk with `DropdownMenu` and `Chip`) whose `DropdownMenu` opens above the control with an
+  `Add` group (Camera on coarse pointers, Photos while `accept` takes images, Files) and a `Tools`
+  group of checkbox options. Camera opens a file input with `accept="image/*"` and
+  `capture="environment"`, Photos one with `accept="image/*"`, Files the control's own input; every
+  pick goes through the same sorting against `accept`, `maxFileSize` and `maxFiles`. The turned-on
+  tools follow the control as removable `Chip`s (their icon before the label) in a list named
+  `Enabled tools`, and while one shows the box stacks (the root's `setChips`), so the text keeps the
+  full width. Until the part has loaded the control is the plain attach `IconButton`.
+  - Props: `ariaLabel?: string` (default `''` — empty uses `Attach files`); `icon?: string` (default `''` — empty uses `az az-plus`); `tools?: PromptInputMenuOption[]` (default `[]` — given, the control opens the "+" menu).
+  - v-model: `v-model` `string[]` (default `[]`; emits `update:modelValue`) — the turned-on tools, in `tools` order.
   - Events: _none_ (picked files go through the root: `update:files` / `reject`).
   - Slots: _none_.
   - `data-testid` fallback: `prompt-input-attach-button`.
@@ -253,6 +270,7 @@ packages/webkit/src/components/ai/prompt-input/
 ├── injection-key.ts
 ├── composables/use-prompt-input-context.ts
 ├── parts/prompt-input-references.vue
+├── parts/prompt-input-add-menu.vue
 ├── prompt-input-attach-button/prompt-input-attach-button.vue
 ├── prompt-input-dictate-button/prompt-input-dictate-button.vue
 ├── prompt-input-model-picker/prompt-input-model-picker.vue
@@ -266,10 +284,10 @@ packages/webkit/src/components/ai/prompt-input/
 | ------------- | ------------------------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `placeholder` | `string`                              | `''`      | false    | Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`).                                                                        |
 | `ariaLabel`   | `string`                              | `''`      | false    | Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`).                                                                                    |
-| `maxLength`   | `number`                              | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                                                                                       |
+| `maxLength`   | `number`                              | `0`       | false    | Character limit; an `n/max` counter shows from 80% of it and submit is blocked over it. `0` means no limit.                                                                                    |
 | `minRows`     | `number`                              | `1`       | false    | Rows shown while empty.                                                                                                                                                                        |
 | `maxRows`     | `number`                              | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                                                                                 |
-| `status`      | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed.                                                          |
+| `status`      | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed.                                                         |
 | `disabled`    | `boolean`                             | `false`   | false    | Disables the text area, the submit control and every control in the slots' rows.                                                                                                               |
 | `menus`       | `PromptInputMenu[]`                   | `[]`      | false    | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 | `accept`      | `string`                              | `''`      | false    | File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file.                                                    |
@@ -290,29 +308,31 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## Events
 
-| Event         | Payload                                                                                                                          | When                                                                                                                                                                                                                                                                                                                                                                               |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event         | Payload                                                                                                                          | When                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `submit`      | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })` | Enter (without Shift, outside an IME composition) or Submit, while `status` is `ready` (or any status with `queueable`), the prompt is within the limit, it has text or files, and no file is loading or failed. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text; `payload.files` is `files`. |
-| `stop`        | `(event: MouseEvent)`                                                                                                            | Stop pressed while `pending` or `streaming`.                                                                                                                                                                                                                                                                                                                                       |
-| `voice-start` | `(event: MouseEvent)`                                                                                                            | The Start voice conversation control was pressed (`voice`, nothing to send, `status` `ready`). The app opens and owns the audio session.                                                                                                                                                                                                                                           |
-| `reject`      | `(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })`                                                    | Picked, dropped or pasted files were not attached: they do not match `accept`, are larger than `maxFileSize`, or are past `maxFiles`. Once per reason; `event` is the change, drop or paste event. The composer also shows the reason under the box.                                                                                                                               |
+| `stop`        | `(event: MouseEvent)`                                                                                                            | Stop pressed while `pending` or `streaming`.                                                                                                                                                                                                                                                                                                                                                                        |
+| `voice-start` | `(event: MouseEvent)`                                                                                                            | The Start voice conversation control was pressed (`voice`, nothing to send, `status` `ready`). The app opens and owns the audio session.                                                                                                                                                                                                                                                                            |
+| `reject`      | `(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })`                                                    | Picked, dropped or pasted files were not attached: they do not match `accept`, are larger than `maxFileSize`, or are past `maxFiles`. Once per reason; `event` is the change, drop or paste event. The composer also shows the reason under the box.                                                                                                                                                                |
 
 ## Slots
 
-| Slot          | Scope | Notes                                                                                                                                        |
-| ------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `attachments` | —     | Attached context the app draws itself, above the text, before the file tokens and the references.                                            |
-| `actions`     | —     | Controls at the inline start of the toolbar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input.                       |
-| `end`         | —     | Controls at the inline end of the toolbar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input.  |
-| `footer`      | —     | The secondary row under the box (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. |
-| `hint`        | —     | Constraint text under everything; referenced by `aria-describedby`.                                                                          |
+| Slot          | Scope | Notes                                                                                                                                                                                                                         |
+| ------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `attachments` | —     | Attached context the app draws itself, above the text, before the file tokens and the references.                                                                                                                             |
+| `actions`     | —     | Controls at the inline start of the bar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input.                                                                                                            |
+| `end`         | —     | Controls at the inline end of the bar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input.                                                                                       |
+| `footer`      | —     | A secondary row under the bar (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input. Optional: for the single-bar look, place the pickers in `actions` / `end` instead. |
+| `hint`        | —     | Constraint text under everything; referenced by `aria-describedby`.                                                                                                                                                           |
 
 ## States
 
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
-- `ready`: Submit (primary `IconButton`, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
+- `data-multiline` on the root and the box while the composer is stacked (text on its own row): the prompt took a second line (kept until it is cleared), `minRows` is above 1, files, references, the `attachments` slot or a turned-on tool chip of the `AttachButton` are shown, or a shortcut menu is open. Absent, it is the single bar.
+- `ready`: Submit (primary `IconButton`, large, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
 - `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
+- Near the limit (the prompt holds 80% of `maxLength` or more): the `n/max` counter shows before Submit and the text area is described by it; below 80% it is not rendered.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 - Dragging files over the box: a dashed `--border-selected` panel on `--bg-selected` covers the box and reads `Drop files to attach`.
 - Rejected files: a danger line under the box says how many were not added and why (`not an accepted type`, `larger than 10 MB`, `up to 3 files`), in a polite live region; it clears on the next accepted file, a removal or a submit.
@@ -327,33 +347,35 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## Tokens
 
-| Region                   | Token                                                                                                                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| container                | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; focus `var(--border-strong)` + `var(--ring-color)` |
-| invalid border           | `var(--danger-border)`                                                                                                |
-| disabled surface         | `var(--bg-disabled)`                                                                                                  |
-| drop panel               | `var(--bg-selected)`, dashed `var(--border-selected)`, `.text-label-md`, `var(--text-default)`                        |
-| text                     | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`                                               |
-| counter, hint            | `.text-body-xs`, `var(--text-muted)`; over limit and rejected files `var(--danger-foreground)`                        |
-| mode label               | `var(--text-muted)` inside the model `Button`                                                                         |
-| padding / gaps           | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                        |
-| row fill inset (2px gap) | `border-y border-transparent bg-clip-padding`                                                                         |
+| Region                   | Token                                                                                                                                                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| container                | `var(--bg-surface-raised)` at 88 % (`color-mix`), `backdrop-blur-md`, `var(--shadow-lg)`, `var(--border-default)`; `var(--shape-card)`, single row and stacked; focus `var(--border-strong)` + `var(--ring-color)` |
+| invalid border           | `var(--danger-border)`                                                                                                                                                                                             |
+| disabled surface         | `var(--bg-disabled)`                                                                                                                                                                                               |
+| drop panel               | `var(--bg-selected)`, dashed `var(--border-selected)`, `.text-label-md`, `var(--text-default)`                                                                                                                     |
+| text                     | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`; 40 px minimum row                                                                                                                         |
+| Submit, Stop, voice      | large `IconButton` (40 px), `var(--shape-button)`; Attach, Dictate and the pickers' triggers keep their own `var(--shape-button)` too                                                                              |
+| counter, hint            | `.text-body-xs`, `var(--text-muted)`; over limit and rejected files `var(--danger-foreground)`                                                                                                                     |
+| mode label               | `var(--text-muted)` inside the model `Button`                                                                                                                                                                      |
+| padding / gaps           | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                                                                                                                     |
+| row fill inset (2px gap) | `border-y border-transparent bg-clip-padding`                                                                                                                                                                      |
 
 ## Theme gaps
 
-_None._
+- None.
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
-- Keyboard map: `Enter` submits (while a response runs only with `queueable`); `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
-- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
+- Keyboard map: `Enter` submits on a fine pointer (while a response runs only with `queueable`), and adds a line on a coarse pointer, where Submit sends; `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
+- Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"` or `aria-expanded`, so it carries `aria-autocomplete="list"` while `menus` is set); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - Files: the tokens are `FileTokenGroup`'s list (named `Files`) with a named remove button each; focus moves as that component defines. The drop panel is decorative (`aria-hidden`); the attach button is the keyboard path. Rejections are announced politely and shown as text.
+- "+" menu (`AttachButton` with `tools`): a `DropdownMenu` like the pickers; Camera, Photos and Files are `menuitem`s that open the system picker, the tools `menuitemcheckbox`es that keep the menu open. The trigger keeps the name `Attach files`.
 - Pickers: each opens a `DropdownMenu` (`menu` with `menuitemradio` / `menuitemcheckbox`), so arrows, typeahead, `Escape` and focus return come from it. The model trigger's name is its visible text (model and mode). Enabled tools are a list named `Enabled tools` of removable `Chip`s.
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
 - Queue: with `queueable`, Stop and Submit are two named buttons in tab order (Stop first); the owner announces the queued prompt through `PromptQueue`'s list, so the composer adds no live region of its own.
 - Focus: Submit, Stop and Start voice conversation share one place, except with `queueable` while `pending` / `streaming`, when Stop and Submit sit side by side. When the control that has focus is swapped, removed or disabled (the owner clears the prompt after a submit, which hides a queue Submit; a request starts or ends), focus moves to the text area instead of falling to the page.
-- ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
+- ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter (while it shows) and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.
 
@@ -388,14 +410,18 @@ _None._
 | `promptInput.contextRemove`    | `Remove context`                                           | —                             |
 | `promptInput.tools`            | `Tools`                                                    | `label` (Tools)               |
 | `promptInput.toolsEnabled`     | `Enabled tools`                                            | —                             |
+| `promptInput.addMenu`          | `Add`                                                      | —                             |
+| `promptInput.camera`           | `Camera`                                                   | —                             |
+| `promptInput.photos`           | `Photos`                                                   | —                             |
+| `promptInput.files`            | `Files`                                                    | —                             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting); the size limit through `formatFileSize` from `useLocale`.
 - Dictation listens in `lang`, else the provider locale.
 
 ## Right-to-left
 
-- Layout: logical utilities; actions at the inline start, the end slot and Submit at the inline end; the footer row starts at the inline start.
-- Icons: the arrow-up, stop, plus, microphone, headphones, folder, wrench and chevron glyphs are not mirrored.
+- Layout: logical utilities; actions at the inline start, the end slot and Submit at the inline end (`ms-auto` when stacked); the footer row starts at the inline start.
+- Icons: the arrow-up, stop, plus, microphone, headphones, folder, wrench, camera, image, paperclip and chevron glyphs are not mirrored.
 - Keyboard: arrows move in the shortcut menu only while it is open; vertical, so not mirrored. The pickers' arrow keys come from `DropdownMenu`.
 - User data: the text area follows the document direction; mixed prompts render with the browser's bidi. File names render in `FileTokenGroup`'s `<bdi>`.
 
@@ -403,17 +429,18 @@ _None._
 
 - Container queries: none; full width of its host. Every row is a wrapping flex row, so the line
   breaks where its controls stop fitting, at any width, with no breakpoint to keep in step.
-- Narrow: the toolbar wraps its slot controls; Submit stays at the inline end. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
+- Narrow: the bar's row wraps its slot controls; Submit stays at the inline end; once the text wraps the composer stacks, so the text gets the full width. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
 - Shortcut menu (`/`, `@`): opens above the box, and below it when the space above the box in the visible viewport (the on-screen keyboard excluded) is shorter than the list and the space below is larger, so a composer at the top of a page or a panel never draws its list off-screen; the list carries `data-side="top|bottom"`.
-- Touch: `enterkeyhint="send"` on mobile keyboards; targets 44 px on coarse pointers.
+- Height: the text area measures its height again whenever its own width changes (a resize observer, released when the component unmounts), so a composer mounted in a pane that starts near zero width (a split view opening on a phone) settles to one row once the pane has its width.
+- Touch: `enterkeyhint="send"` on a fine pointer and `enterkeyhint="enter"` on a coarse pointer, where Enter adds a line so a multi-line prompt can be typed on a soft keyboard; targets 44 px on coarse pointers, shortcut menu rows included.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance
 
-- Bundle budget (gzip, entry and its static imports, `.size-limit.json`): `prompt-input` 12.4 KB
-  (the compound; pickers lazy), `prompt-input-root` 9.25 KB (was 7.15 KB as `prompt-input`; the
+- Bundle budget (gzip, entry and its static imports, `.size-limit.json`): `prompt-input` 15.1 KB
+  (the compound; pickers and the "+" menu lazy), `prompt-input-root` 9.25 KB (was 7.15 KB as `prompt-input`; the
   raise carries files, drop and paste wiring, voice, the end and footer rows), `prompt-input-attach-button`
-  5.6 KB, `prompt-input-dictate-button` 5.55 KB, `prompt-input-model-picker` 14.05 KB,
+  6.7 KB (the "+" menu part loads after mount), `prompt-input-dictate-button` 5.55 KB, `prompt-input-model-picker` 14.05 KB,
   `prompt-input-context-picker` 13.95 KB, `prompt-input-tools` 16.25 KB (each picker includes
   `DropdownMenu` and `Button`, shared when several are used).
 - Runtime budget: one layout read per input event (auto-size); a drag over the box reads `dataTransfer.types` only.
@@ -479,6 +506,15 @@ model and effort `DropdownMenu`s, send that becomes stop, IME-safe Enter).
   blocking a submit while busy. The name is the capability adjective of `prop-vocabulary.md`.
 - **Names.** `ModelPicker` and `ContextPicker`, not `…Select`: they open a `DropdownMenu`, not the
   `select` listbox, and `ContextMenu` is already the right-click menu's name.
+
+- "+" menu (2026-11-22, chat look round 2): ChatGPT's "+" opens a bottom sheet on a phone and a
+  menu on desktop with Camera, Photos, Files and then the tools, and a chosen tool rides in the bar as
+  a removable chip. `AttachButton` takes `tools` and a `v-model` of the turned-on tools instead of a
+  second control, so the composer keeps one "+" at its start. The menu is a `DropdownMenu` above the
+  control at every width: `Drawer` has no bottom side, and a menu above a composer at the foot of a
+  phone screen already sits where the sheet would. The part loads after mount so the attach entry
+  stays small; until then the control is the plain attach button. The voice control keeps
+  `az az-headphones`: the icon set has no audio-wave glyph (`az-wave-pulse` is a chart line in a box).
 
 ## Spec review
 

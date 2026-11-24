@@ -1,10 +1,12 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
+  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -45,9 +47,9 @@
   ]
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', frozen: 'start', width: 260 },
-    { accessorKey: 'id', header: 'ID', sortable: false, width: 170 },
+    { accessorKey: 'name', header: 'Name', frozen: 'start', width: 160 },
     { accessorKey: 'status', header: 'Status', width: 140 },
+    { accessorKey: 'id', header: 'ID', sortable: false, width: 170 },
     { accessorKey: 'protocol', header: 'Protocol', sortable: false, width: 170 },
     { accessorKey: 'domains', header: 'Domains', align: 'end', width: 130 },
     { accessorKey: 'origins', header: 'Origins', align: 'end', width: 130 },
@@ -81,17 +83,15 @@
     :columns="columns"
     row-key="id"
     sortable
-    paginated
-    :page-size="5"
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >
     <template #cell-name="{ row, value }">
-      <a
-        :href="'/workloads/' + row.id"
-        class="cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline"
-        >{{ value }}</a
-      >
+      <TableCellLink
+        :label="value"
+        :to="`/workloads/${row.id}`"
+        destination="Workloads"
+      />
     </template>
     <template #cell-status="{ value }">
       <Tag :severity="statusSeverity(value)">{{ value }}</Tag>
@@ -104,7 +104,7 @@
         <DropdownMenuTrigger>
           <IconButton
             icon="az az-ellipsis-vertical"
-            aria-label="Row actions"
+            :aria-label="`Actions for ${row.name}`"
             variant="ghost"
             size="small"
           />
@@ -127,6 +127,9 @@
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuRoot>
+    </template>
+    <template #footer>
+      <DataTablePagination :page-size="5" />
     </template>
   </DataTable>
 </template>

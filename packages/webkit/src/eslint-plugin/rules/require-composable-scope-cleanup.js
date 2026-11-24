@@ -39,7 +39,12 @@ export default {
     schema: [],
     messages: {
       missingDispose:
-        '`{{what}}` in a composable with no `onScopeDispose` in the file. Tear it down in `onScopeDispose` (it also fires in a detached `effectScope()`; `onUnmounted` alone does not), or use the VueUse primitive that owns its cleanup (`useEventListener`, `useIntervalFn`, `useRafFn`, `useResizeObserver`, `useIntersectionObserver`, `useMutationObserver`). See .claude/rules/webkit-composables.md (shipped by `npx @aziontech/webkit init`).'
+        '`{{what}}` in a composable with no `onScopeDispose` in the file. Tear it down in ' +
+        '`onScopeDispose` (it also fires in a detached `effectScope()`; `onUnmounted` alone does ' +
+        'not), or use the VueUse primitive that owns its cleanup (`useEventListener`, ' +
+        '`useIntervalFn`, `useRafFn`, `useResizeObserver`, `useIntersectionObserver`, ' +
+        '`useMutationObserver`). See .claude/rules/webkit-composables.md (shipped by `npx ' +
+        '@aziontech/webkit init`).'
     }
   },
   create(context) {

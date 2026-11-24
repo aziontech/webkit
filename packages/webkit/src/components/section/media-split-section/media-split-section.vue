@@ -1,13 +1,14 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
+  import { computed, ref, useAttrs, watch } from 'vue'
 
-  import { resolveScene, type SceneName } from '../../../assets/scene-registry'
+  import type { SceneName } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
-  import Illustration from '../../content/illustration/illustration.vue'
   import type { TextureVariant } from '../../content/texture/texture.vue'
-  import Module from '../../layout/module/module.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
+  import SectionBand from '../parts/section-band.vue'
+  import { resolveMedia } from './lib/media-split-media'
+  import MediaSplitSectionMedia from './parts/media-split-section-media.vue'
 
   defineOptions({
     name: 'MediaSplitSection',
@@ -75,7 +76,11 @@
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
-    /** First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it; `variant` overrides the drawn variant. */
+    /**
+     * First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When
+     * it is the only action it renders outlined with a trailing chevron, and the whole band links
+     * to it; `variant` overrides the drawn variant.
+     */
     primaryAction?: MediaSplitSectionAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked. */
     secondaryAction?: MediaSplitSectionAction
@@ -98,10 +103,6 @@
     secondaryAction: undefined
   })
 
-  const ConsoleMockup = defineAsyncComponent(
-    () => import('../../content/console-mockup/console-mockup.vue')
-  )
-
   const attrs = useAttrs()
 
   const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
@@ -112,27 +113,18 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'media-split-section'
   )
 
-  const sceneComponent = computed(() =>
-    props.scene && props.scene.component !== ('Diagram' as SceneName)
-      ? resolveScene(props.scene.component)
-      : null
-  )
+  const source = computed(() => ({
+    scene: props.scene,
+    widget: props.widget,
+    illustration: props.illustration
+  }))
 
-  const media = computed(() => {
-    if (sceneComponent.value) return 'scene'
-    if (props.widget) return 'widget'
-    if (props.illustration.length > 0) return 'illustration'
-    return null
-  })
+  const media = computed(() => resolveMedia(source.value))
 
-  const hasMedia = computed(() => media.value !== null)
+  const hasMedia = computed(() => media.value.kind !== null)
 
-  const mediaPadded = computed(() => media.value === 'widget')
-
-  const mockup = computed(
-    () =>
-      media.value === 'widget' ||
-      (media.value === 'scene' && props.scene?.component === 'ConsoleMockup')
+  const mediaPadded = computed(
+    () => media.value.kind === 'widget' || media.value.kind === 'illustration'
   )
 
   const primary = computed(() =>
@@ -156,7 +148,9 @@
       (bare) => {
         if (bare)
           console.warn(
-            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. Give it an illustration, a widget or a scene; code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.`
+            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. ` +
+              'Give it an illustration, a widget or a scene; ' +
+              'code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.'
           )
       },
       { immediate: true }
@@ -167,108 +161,82 @@
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :filled="Boolean(title)"
+    :framed="false"
   >
-    <Module
-      v-if="title"
-      :divided="false"
-      :padded="false"
+    <MediaSplit
+      framed
+      :orientation="orientation"
+      :align="size === 'large' ? 'center' : 'start'"
+      :size="size"
+      media-fill="surface"
+      :texture="texture"
+      texture-size="small"
+      texture-fade="top"
+      :eyebrow="eyebrow"
+      :title="title"
+      :description="description"
+      :media-href="bandHref"
+      :media-padded="mediaPadded"
+      @pointerenter="hovered = true"
+      @pointerleave="hovered = false"
     >
-      <MediaSplit
-        framed
-        :orientation="orientation"
-        :align="size === 'large' ? 'center' : 'start'"
-        :size="size"
-        media-fill="surface"
-        :texture="texture"
-        texture-size="small"
-        texture-fade="top"
-        :eyebrow="eyebrow"
-        :title="title"
-        :description="description"
-        :media-href="bandHref"
-        :media-padded="mediaPadded"
-        @pointerenter="hovered = true"
-        @pointerleave="hovered = false"
+      <template
+        v-if="hasMedia"
+        #media
       >
-        <template
-          v-if="hasMedia"
-          #media
-        >
-          <div
-            v-if="mockup"
-            :data-orientation="orientation"
-            class="flex w-full self-stretch max-lg:min-h-(--size-80) data-[orientation=vertical]:min-h-(--size-80)"
-          >
-            <component
-              :is="sceneComponent"
-              v-if="media === 'scene'"
-              v-bind="scene?.props ?? {}"
-            />
-            <ConsoleMockup
-              v-else-if="widget"
-              :name="widget"
-              :hover="hovered"
-              :cursor="false"
-            />
-          </div>
-          <component
-            :is="sceneComponent"
-            v-else-if="media === 'scene'"
-            v-bind="scene?.props ?? {}"
-          />
-          <Illustration
-            v-else-if="media === 'illustration'"
-            :name="illustration"
-            :aria-label="illustrationAriaLabel"
-          />
-        </template>
-        <template
-          v-if="primary || secondary"
-          #actions
-        >
-          <Button
-            key="button-1"
-            v-if="lone"
-            :label="lone.label"
-            :href="lone.href"
-            :target="lone.target"
-            :variant="lone.variant ?? 'outline'"
-            size="medium"
-            :icon="lone.icon && !lone.trailing ? lone.icon : 'az az-chevron-right'"
-            :icon-position="lone.icon && !lone.trailing ? 'leading' : 'trailing'"
-            :animated="!(lone.icon && !lone.trailing)"
-          />
-          <Button
-            key="button-2"
-            v-else-if="primary"
-            :label="primary.label"
-            :href="primary.href"
-            :target="primary.target"
-            :variant="primary.variant ?? 'secondary'"
-            size="medium"
-            :icon="actionIcon(primary)"
-            :icon-position="primary.trailing ? 'trailing' : 'leading'"
-            :animated="Boolean(primary.trailing)"
-          />
-          <Button
-            key="button-3"
-            v-if="secondary && !lone"
-            :label="secondary.label"
-            :href="secondary.href"
-            :target="secondary.target"
-            :variant="secondary.variant ?? 'outline'"
-            size="medium"
-            :icon="actionIcon(secondary)"
-            :icon-position="secondary.trailing ? 'trailing' : 'leading'"
-            :animated="Boolean(secondary.trailing)"
-          />
-        </template>
-      </MediaSplit>
-    </Module>
-  </div>
+        <MediaSplitSectionMedia
+          :source="source"
+          :illustration-aria-label="illustrationAriaLabel"
+          :hovered="hovered"
+          :orientation="orientation"
+        />
+      </template>
+      <template
+        v-if="primary || secondary"
+        #actions
+      >
+        <Button
+          key="button-1"
+          v-if="lone"
+          :label="lone.label"
+          :href="lone.href"
+          :target="lone.target"
+          :variant="lone.variant ?? 'outline'"
+          size="large"
+          :icon="lone.icon && !lone.trailing ? lone.icon : 'az az-chevron-right'"
+          :icon-position="lone.icon && !lone.trailing ? 'leading' : 'trailing'"
+          :animated="!(lone.icon && !lone.trailing)"
+        />
+        <Button
+          key="button-2"
+          v-else-if="primary"
+          :label="primary.label"
+          :href="primary.href"
+          :target="primary.target"
+          :variant="primary.variant ?? 'secondary'"
+          size="large"
+          :icon="actionIcon(primary)"
+          :icon-position="primary.trailing ? 'trailing' : 'leading'"
+          :animated="Boolean(primary.trailing)"
+        />
+        <Button
+          key="button-3"
+          v-if="secondary && !lone"
+          :label="secondary.label"
+          :href="secondary.href"
+          :target="secondary.target"
+          :variant="secondary.variant ?? 'outline'"
+          size="large"
+          :icon="actionIcon(secondary)"
+          :icon-position="secondary.trailing ? 'trailing' : 'leading'"
+          :animated="Boolean(secondary.trailing)"
+        />
+      </template>
+    </MediaSplit>
+  </SectionBand>
 </template>

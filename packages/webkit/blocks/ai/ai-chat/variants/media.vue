@@ -2,8 +2,9 @@
   import branches from '@aziontech/webkit/assets/branches.svg'
   import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
   import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
+  import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
 
-  import AiChat, { type AiChatMessage } from '../ai-chat.vue'
+  import AiChat from '../ai-chat.vue'
   import { sampleReportCsv } from '../sample'
 
   const messages: AiChatMessage[] = [

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-  import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../locales/en'
+  import { useAutoplayProgress } from '../../../composables/use-autoplay-progress'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Texture, {
     type TextureFade,
@@ -11,6 +9,7 @@
     type TextureVariant
   } from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { useMediaTabsAria } from './composables/use-media-tabs-aria'
 
   defineOptions({
     name: 'MediaTabs',
@@ -37,7 +36,11 @@
   export type MediaTabsSize = 'small' | 'medium' | 'large'
 
   export interface MediaTabsProps {
-    /** The tabs, in order, at most three when the tabs side is start or end and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
+    /**
+     * The tabs, in order, at most three when the tabs side is start or end and five when it is top or
+     * bottom; each item is a title, its description, and the image shown while it is active. Items past
+     * the limit are not rendered.
+     */
     items?: MediaTabsItem[]
     /** Which side of the media the tabs sit on. Below the large breakpoint every side stacks, with the active tab's media inside its row. */
     tabsSide?: MediaTabsSide
@@ -81,17 +84,7 @@
   }>()
 
   const attrs = useAttrs()
-  const reducedMotion = usePreferredReducedMotion()
-  const { t } = useTranslate({ common: en.common })
-
-  const PROGRESS_TICK_MS = 100
   const MAX_TABS = { vertical: 3, horizontal: 5 } as const
-
-  const elapsed = ref(0)
-  const paused = ref(false)
-  const pointerInside = ref(false)
-  const focusInside = ref(false)
-  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-tabs')
 
@@ -109,35 +102,34 @@
   const onWideChange = () => {
     sideBySide.value = Boolean(wideQuery?.matches)
   }
+  const hydrated = ref(false)
 
-  const autoplayEnabled = computed(
-    () =>
-      props.autoplay &&
-      sideBySide.value &&
-      tabs.value.length > 1 &&
-      reducedMotion.value !== 'reduce'
-  )
-
-  const autoplayRunning = computed(
-    () => autoplayEnabled.value && !paused.value && !pointerInside.value && !focusInside.value
-  )
-
-  const pauseLabel = computed(() =>
-    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
-  )
-
-  const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
-  )
-
-  watch(autoplayRunning, (running) => (running ? start() : stop()))
+  const {
+    autoplayEnabled,
+    autoplayRunning,
+    paused,
+    pauseLabel,
+    progress,
+    restartProgress,
+    togglePause,
+    enterPointer,
+    leavePointer,
+    enterFocus,
+    leaveFocus
+  } = useAutoplayProgress({
+    enabled: () => props.autoplay && sideBySide.value && tabs.value.length > 1,
+    interval: () => props.autoplayInterval,
+    onAdvance: () => {
+      activeIndex.value = (activeIndex.value + 1) % tabs.value.length
+    }
+  })
 
   watch(
     () => tabs.value.length,
     (length) => {
       if (activeIndex.value < length) return
       activeIndex.value = 0
-      elapsed.value = 0
+      restartProgress()
     }
   )
 
@@ -145,55 +137,17 @@
     wideQuery = globalThis.matchMedia?.(WIDE) ?? null
     wideQuery?.addEventListener('change', onWideChange)
     onWideChange()
-    if (autoplayRunning.value) start()
+    hydrated.value = true
   })
 
-  onScopeDispose(() => {
-    stop()
-    wideQuery?.removeEventListener('change', onWideChange)
-  })
+  onScopeDispose(() => wideQuery?.removeEventListener('change', onWideChange))
 
   function isActive(index: number): boolean {
     return activeIndex.value === index
   }
 
-  function stop(): void {
-    if (marquee === null) return
-    globalThis.clearInterval(marquee)
-    marquee = null
-  }
-
-  function start(): void {
-    stop()
-    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
-  }
-
-  function tick(): void {
-    elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoplayInterval) return
-    elapsed.value = 0
-    activeIndex.value = (activeIndex.value + 1) % tabs.value.length
-  }
-
-  function enterPointer(): void {
-    pointerInside.value = true
-  }
-
-  function leavePointer(): void {
-    pointerInside.value = false
-  }
-
-  function enterFocus(event: globalThis.FocusEvent): void {
-    const target = event.target as globalThis.Element
-    focusInside.value = target.matches(':focus-visible')
-  }
-
-  function leaveFocus(): void {
-    focusInside.value = false
-  }
-
   function move(index: number): void {
-    elapsed.value = 0
+    restartProgress()
     if (index === activeIndex.value) return
     activeIndex.value = index
   }
@@ -203,14 +157,73 @@
     move(index)
   }
 
-  function togglePause(): void {
-    paused.value = !paused.value
-  }
-
   function select(index: number): void {
-    pointerInside.value = false
+    leavePointer()
     move(index)
   }
+
+  const { tabId, panelId, rowMediaId, tabAttrs, onTabKeydown } = useMediaTabsAria({
+    tabbed: sideBySide,
+    count: () => tabs.value.length,
+    isActive,
+    select
+  })
+
+  const ROOT_CLASS =
+    'group/media-tabs relative [--media-tabs-row:calc(var(--spacing-xl)*4.5)] ' +
+    'data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]'
+
+  const TAB_LIST_CLASS =
+    'flex flex-col ' +
+    'group-data-[orientation=horizontal]/media-tabs:lg:flex-row group-data-[orientation=vertical]/media-tabs:lg:w-[calc(50%+var(--spacing-xl))] ' +
+    'group-data-[orientation=vertical]/media-tabs:lg:shrink-0'
+
+  const TAB_ROW_CLASS =
+    'group/row flex flex-col lg:min-h-(--media-tabs-row) ' +
+    'group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 ' +
+    'group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 ' +
+    'group-data-[tabs-side=end]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0'
+
+  const TAB_FRAME_CLASS =
+    'relative flex flex-1 flex-col justify-center bg-(--bg-surface) transition-colors duration-moderate-01 ease-out ' +
+    'group-data-[active]/row:bg-(--bg-surface-raised) ' +
+    'before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance ' +
+    "before:content-[''] hover:before:opacity-100 " +
+    'group-data-[active]/row:before:hidden ' +
+    'motion-reduce:transition-none motion-reduce:before:transition-none'
+
+  const TAB_COPY_CLASS =
+    'flex flex-col gap-(--spacing-md) p-(--spacing-xl) ' +
+    'group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) ' +
+    'group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-2xs)'
+
+  const TAB_TITLE_CLASS =
+    'm-0 text-heading-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-hover/row:text-(--text-default) ' +
+    'group-data-[active]/row:text-(--text-default) ' +
+    'motion-reduce:transition-none ' +
+    'group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs'
+
+  const TAB_BUTTON_CLASS =
+    "m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 " +
+    'focus-visible:ring-offset-(--bg-canvas)'
+
+  const TAB_DESCRIPTION_CLASS =
+    'm-0 text-body-md text-(--text-muted) ' +
+    'group-data-[orientation=horizontal]/media-tabs:lg:text-body-sm group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-body-xs'
+
+  const TAB_MEDIA_CLASS =
+    'relative flex aspect-video min-h-[var(--media-tabs-media-min,0)] w-full ' +
+    'group-data-[orientation=horizontal]/media-tabs:aspect-auto ' +
+    'items-center justify-center overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] ' +
+    'lg:hidden'
+
+  const MEDIA_PANEL_CLASS =
+    'z-10 col-start-1 row-start-1 flex min-w-0 ' +
+    'group-data-[orientation=vertical]/media-tabs:absolute group-data-[orientation=vertical]/media-tabs:inset-0 ' +
+    'translate-y-(--spacing-lg) items-center justify-center opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'data-[active]:translate-y-0 data-[active]:opacity-100 ' +
+    'motion-reduce:translate-y-0 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -223,7 +236,7 @@
     :data-select-on="selectOn"
     :data-autoplay="autoplayRunning || null"
     :data-paused="(autoplayEnabled && paused) || null"
-    class="group/media-tabs relative [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
+    :class="ROOT_CLASS"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
     @focusin="enterFocus"
@@ -234,48 +247,53 @@
       class="flex flex-col group-data-[tabs-side=start]/media-tabs:lg:flex-row group-data-[tabs-side=end]/media-tabs:lg:flex-row-reverse group-data-[tabs-side=bottom]/media-tabs:lg:flex-col-reverse"
     >
       <ul
-        class="flex flex-col group-data-[orientation=horizontal]/media-tabs:lg:flex-row group-data-[orientation=vertical]/media-tabs:lg:w-[calc(50%+var(--spacing-xl))] group-data-[orientation=vertical]/media-tabs:lg:shrink-0"
+        ref="listEl"
+        :role="sideBySide ? 'tablist' : undefined"
+        :aria-orientation="sideBySide ? orientation : undefined"
+        :class="TAB_LIST_CLASS"
       >
         <li
           v-for="(item, index) in tabs"
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
-          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[tabs-side=end]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
+          :role="sideBySide ? 'presentation' : undefined"
+          :class="TAB_ROW_CLASS"
           @pointerenter="point(index)"
         >
           <RegistrationFrame
             borders="all"
             marks="all"
             flush="top"
-            class="relative flex flex-1 flex-col justify-center bg-(--bg-surface) transition-colors duration-moderate-01 ease-out group-data-[active]/row:bg-(--bg-surface-raised) before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 group-data-[active]/row:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
+            :class="TAB_FRAME_CLASS"
           >
-            <div
-              class="flex flex-col gap-(--spacing-md) p-(--spacing-xl) group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-2xs)"
-            >
+            <div :class="TAB_COPY_CLASS">
               <h3
-                class="m-0 text-heading-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/row:text-(--text-default) group-data-[active]/row:text-(--text-default) motion-reduce:transition-none group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs"
+                :role="sideBySide ? 'presentation' : undefined"
+                :class="TAB_TITLE_CLASS"
               >
                 <button
+                  :id="tabId(index)"
                   type="button"
-                  :aria-current="isActive(index) ? 'true' : undefined"
-                  class="m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                  v-bind="tabAttrs(index)"
+                  :class="TAB_BUTTON_CLASS"
                   @click="select(index)"
                   @focus="point(index)"
+                  @keydown="onTabKeydown($event, index)"
                 >
                   {{ item.title }}
                 </button>
               </h3>
 
-              <p
-                class="m-0 text-body-md text-(--text-muted) group-data-[orientation=horizontal]/media-tabs:lg:text-body-sm group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-body-xs"
-              >
+              <p :class="TAB_DESCRIPTION_CLASS">
                 {{ item.description }}
               </p>
             </div>
 
             <div
-              v-if="isActive(index)"
-              class="relative flex aspect-video min-h-[var(--media-tabs-media-min,0)] w-full group-data-[orientation=horizontal]/media-tabs:aspect-auto items-center justify-center overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] lg:hidden"
+              v-if="isActive(index) && !(hydrated && sideBySide)"
+              :id="rowMediaId(index)"
+              :hidden="sideBySide || undefined"
+              :class="TAB_MEDIA_CLASS"
             >
               <slot
                 name="media"
@@ -322,15 +340,19 @@
         />
 
         <div
+          v-if="sideBySide || !hydrated"
           class="contents group-data-[orientation=horizontal]/media-tabs:grid group-data-[orientation=horizontal]/media-tabs:min-h-[var(--media-tabs-media-min-lg,24rem)]"
         >
           <div
             v-for="(item, index) in tabs"
             :key="`${item.title}-${index}`"
+            :id="panelId(index)"
+            role="tabpanel"
+            :aria-labelledby="tabId(index)"
             :data-active="isActive(index) || null"
             :aria-hidden="!isActive(index) || undefined"
             :inert="!isActive(index) || undefined"
-            class="z-10 col-start-1 row-start-1 flex min-w-0 group-data-[orientation=vertical]/media-tabs:absolute group-data-[orientation=vertical]/media-tabs:inset-0 translate-y-(--spacing-lg) items-center justify-center opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-[active]:translate-y-0 data-[active]:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
+            :class="MEDIA_PANEL_CLASS"
           >
             <slot
               name="media"

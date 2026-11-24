@@ -90,7 +90,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - `data-variant` (`strip` | `cards`) is on the root, the track and every item; under `cards` the track gaps its items by `var(--spacing-md)` and each item is rounded
 - The row above the track renders only when `header` or `controls` is filled; with a header it spreads the header to the start and the controls to the end, without one the controls sit at the start
 - `data-scrollable` is present on the root while the track overflows its row; a track that fits renders no controls to press
-- `data-can-scroll-prev` / `data-can-scroll-next` are on the root and the track while the track has content past its start / end edge. The track fades only the edge that continues, over 12% of its own width, so the row at rest fades on the right alone
+- `data-can-scroll-prev` / `data-can-scroll-next` are on the root and the track while the track has content past its start / end edge. The track fades only the edge that continues, over 12% of its own width (below `sm`, 8% at the end and none at the start), so the row at rest fades on the right alone
 - The fade stands down while the track has keyboard focus, so the focus ring it would otherwise mask is fully visible
 - The track carries `data-scrollable` too, which is what gives it the grab cursor; a track that fits shows the ordinary pointer, because there is nothing to drag
 - `data-dragging` is on the track for the length of a mouse drag: the cursor closes, snapping and smooth scrolling stand down so the row tracks the pointer exactly, and text selection is suppressed
@@ -827,6 +827,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Examples
 
@@ -839,7 +840,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 <template>
   <DocCard
-    title="Edge Application"
+    title="Applications"
     icon="az az-server"
     href="/docs/edge-application"
     link-label="Read the guide"
@@ -1029,7 +1030,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
     <DocChangelogEntry
       label="August 19, 2026"
       description="v2.4.0"
-      :tags="['Console', 'Edge Functions']"
+      :tags="['Console', 'Functions']"
     >
       <p>
         Rules Engine conditions now match on request headers, so a rule can branch on anything the
@@ -1280,15 +1281,19 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ```vue
 <script setup>
   import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocProse from '@aziontech/webkit/doc-prose'
 </script>
 
 <template>
-  <DocHeading
-    anchor="purge-by-url"
-    :level="2"
-  >
-    Purge by URL
-  </DocHeading>
+  <DocProse>
+    <DocHeading
+      anchor="purge-by-url"
+      :level="2"
+    >
+      Purge by URL
+    </DocHeading>
+    <p>Remove one cached object by its full URL, query string included.</p>
+  </DocProse>
 </template>
 ```
 
@@ -1461,6 +1466,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - A row that leaves the documentation carries `rel="noreferrer"` on `target="_blank"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the full row is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Examples
 
@@ -1477,7 +1483,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
   <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
-        title="Edge Functions"
+        title="Functions"
         icon="az az-code"
         href="#edge-functions"
       >
@@ -1485,7 +1491,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
         natively, through a binding.
       </DocItem>
       <DocItem
-        title="Edge SQL"
+        title="SQL Database"
         icon="az az-database"
         href="#edge-sql"
       >
@@ -1493,7 +1499,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
         the request.
       </DocItem>
       <DocItem
-        title="Edge Cache"
+        title="Cache"
         icon="az az-bolt"
         href="#edge-cache"
       >
@@ -1591,7 +1597,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## States
 
-- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); the palette `open` / `closed`.
+- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); below `xl` the same outline is a collapsed "On this page" disclosure (a native `details`, `open` / closed) above the article that closes when an entry is chosen, and the `aside` content renders under the article; the palette `open` / `closed`.
 - Outline: built from the headings the page registers, in document order, updated as a page mounts, changes or leaves (a route change swaps the entries); no heading registers on the server, so the server render and the first client render carry no outline rail and it appears once the page mounts. The entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
 - Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
@@ -1930,6 +1936,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The ISO date is parsed and rendered in **UTC** on purpose: read as local time, a bare `2026-06-30` becomes the 29th for every reader west of Greenwich.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.
+- An action with `target: '_blank'` gets an `aria-label` of its label plus ` (opens in a new tab)` (`common.newTab`), so it announces that it opens a new tab.
 
 ## Examples
 
@@ -2173,7 +2180,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Don’t
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).
+- To cap the whole column — `DocProse` caps only running text (see the reading measure under Tokens). The consumer sets the column width with `.layout-column-content` (`--layout-measure-content`, 876px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 
@@ -2215,38 +2222,39 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ```vue
 <script setup>
+  import DocMarkdown from '@aziontech/webkit/doc-markdown'
   import DocProse from '@aziontech/webkit/doc-prose'
+
+  const source = [
+    '## Deploy an application',
+    '',
+    "Templates are ready-made projects that go live in a few clicks. You don't need any local tooling, and the [template's guide](https://www.azion.com/en/documentation/) lists what each one needs.",
+    '',
+    '### What you get',
+    '',
+    '- A **workload** bound to its own Azion domain',
+    '- An edge application built from your `azion.config.js`',
+    '- A certificate issued and renewed for you',
+    '',
+    '1. Pick a template',
+    '2. Fill in the fields it asks for',
+    '3. Deploy',
+    '',
+    '> The first request to a location is a cache miss. Warm-up is per location, not global.',
+    '',
+    '#### Build command',
+    '',
+    'An h4 is a label inside a section rather than a new section, so it shares the base gap of the prose around it and carries its level on weight instead.',
+    '',
+    '---',
+    '',
+    'A section break above resets the reader before the next part of the page.'
+  ].join('\n')
 </script>
 
 <template>
   <DocProse>
-    <h2>Deploy an application</h2>
-    <p>
-      Templates are ready-made projects that go live in a few clicks. You don't need any local
-      tooling, and the <a href="https://www.azion.com/en/documentation/">template's guide</a> lists
-      what each one needs.
-    </p>
-    <h3>What you get</h3>
-    <ul>
-      <li>A <strong>workload</strong> bound to its own Azion domain</li>
-      <li>An edge application built from your <code>azion.config.js</code></li>
-      <li>A certificate issued and renewed for you</li>
-    </ul>
-    <ol>
-      <li>Pick a template</li>
-      <li>Fill in the fields it asks for</li>
-      <li>Deploy</li>
-    </ol>
-    <blockquote>
-      <p>The first request to a location is a cache miss. Warm-up is per location, not global.</p>
-    </blockquote>
-    <h4>Build command</h4>
-    <p>
-      An h4 is a label inside a section rather than a new section, so it shares the base gap of the
-      prose around it and carries its level on weight instead.
-    </p>
-    <hr />
-    <p>A section break above resets the reader before the next part of the page.</p>
+    <DocMarkdown :source="source" />
   </DocProse>
 </template>
 ```
@@ -2309,7 +2317,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - Visible focus: the column is not focusable; `Tab` reaches only interactive content nested inside a step's body.
 - Keyboard map: none of its own.
-- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
+- ARIA: the column is an ordered list (`ol`, its markers removed) and each `DocSteps.Step` a list item (`li`), so assistive tech announces the step count and each step's position ("2 of 5"). The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`): the list position already says the number, so it is not read twice. The step title stays text, not a heading: a heading level would need a new prop.
 - Contrast: inherited from `DocSteps.Step`; the column paints nothing.
 - Touch target: not applicable; the component is not interactive.
 
@@ -2398,6 +2406,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
+- A link that opens a new tab (every external `href` in a link group) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
 ## Examples
 
@@ -2457,7 +2466,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.
 - Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.
 - Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.
-- Give a cell `variant="none"` + `padded="false"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.
+- Give a cell `variant="none"` + `padded="false"` when its own content paints the cell — a media layer or a brand fill.
+- Set `href` on a cell when the whole tile is one link, instead of composing a hand-made anchor inside it; the cell then owns the link's focus ring.
 - Inside a framed page column, set `flush` so the column's rules stay one hairline each.
 
 ## Don’t
@@ -2497,7 +2507,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - `bento-grid-cell/bento-grid-cell.vue` — one cell of the mosaic; owns its own frame, and takes the tracks it claims (`span`, `rows`), the fill it carries (`variant`) and whether it pads its content (`padded`).
 
-Cell props: `span` (`'1' | '2' | '3' | '4' | 'full'`, default `'1'`) — columns claimed from the medium breakpoint up; `rows` (`'1' | '2'`, default `'1'`) — rows claimed from the medium breakpoint up; `variant` (`'surface' | 'canvas' | 'none'`, default `'surface'`) — the cell's fill, where `none` leaves the surface to the composed content; `padded` (`boolean`, default `true`) — off for a cell whose content reaches its edges.
+Cell props: `span` (`'1' | '2' | '3' | '4' | 'full'`, default `'1'`) — columns claimed from the medium breakpoint up; `rows` (`'1' | '2'`, default `'1'`) — rows claimed from the medium breakpoint up; `variant` (`'surface' | 'canvas' | 'none'`, default `'surface'`) — the cell's fill, where `none` leaves the surface to the composed content; `padded` (`boolean`, default `true`) — off for a cell whose content reaches its edges; `href` (`string`, default `''`) — when set (a safe URL), the whole tile is one link: the cell's content box renders as an anchor (`data-link`, `${testId}__link`) with the text in `--text-default`, no underline, and an inset `--ring-color` focus ring; empty or unsafe keeps the plain box.
 
 The compound `index.ts` annotates the `Object.assign` result with an explicit `typeof BentoGrid & { Cell: typeof BentoGridCell }` type. Without it, declaration emit expands the root's private `Props` interface and `vue-tsc` fails with TS4082 ("default export of the module has or is using private name"). Do not simplify it back to a bare `Object.assign`.
 
@@ -2508,17 +2518,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-flush` on the grid mirrors `flush`, and is what withholds its own outer rules
 - `data-span` and `data-rows` on each cell mirror its props and drive the tracks it claims from `md` up
 - `data-variant` and `data-padded` on the cell's content box mirror its fill and its padding
+- `data-link` on the cell's content box when `href` makes it an anchor; `focus-visible` draws the inset ring
 - Below `md` every cell claims one of the mobile columns — only `span="full"` still takes the whole row — and no cell claims a second row
 - Empty: a grid with no cells renders no rules, so an unfilled grid leaves no empty frame on the page
 
 ## Accessibility
 
-- Visible focus: the grid and its cells are containers and are not focusable; controls composed inside a cell keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
+- Visible focus: a cell with `href` is a native anchor with an inset `focus-visible:ring-2 focus-visible:ring-(--ring-color)` ring, drawn inside the cell so the shared rules stay one line. Otherwise the grid and its cells are containers and are not focusable; controls composed inside a cell keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` follows DOM order through whatever the cells contain. The grid is not a composite widget, so it declares no arrow-key model.
 - ARIA: the grid is a plain container named by `ariaLabel` when set; cells add no role, so headings composed inside them keep the document outline the page intends.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the cells provide `var(--bg-surface)` or `var(--bg-canvas)`; a `variant="none"` cell hands both the fill and its contrast to the composed content.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the grid is static.
-- Touch target ≥40×40 px — not applicable; the grid holds no interactive target of its own.
+- Touch target ≥40×40 px: a linked cell is the whole tile; otherwise the grid holds no interactive target of its own.
+- A linked cell's name is its text, so put the claim first.
 
 ## Examples
 
@@ -3596,7 +3608,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
-- Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
+- Put the controls in the `actions` slot; the panel lays them out as a row right after the copy from `md` up (a `--spacing-2xl` gap, never pushed to the far edge of a wide band, so the eye goes from the promise to its action) and stacks them full-width below it.
 - Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
 - Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
@@ -3755,7 +3767,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - **Active.** An `active` edge, its ports and its label chip are drawn in the accent colour and painted above the rest; an `active` node is part of the highlighted path.
 - **Lit.** A `lit` card, item or pill gets a primary edge and a primary-and-accent glow; a `lit` tile gets a primary edge.
 - **Groups.** A `group` draws its content inside a registration frame with a small label above it; `variant: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
-- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
+- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon cell inside a registration frame, its title written as a caption under it (never hover-only, so touch and keyboard readers see the name). `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
 - **Test ids.** Root fallback `diagram` (consumer override wins); `${testId}__canvas` on the measured canvas.
 
 ## Accessibility
@@ -3927,7 +3939,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.
 - Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.
 - Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own "Learn more" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.
-- A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band.
+- A linked claim is its own positioned box: its hover and click target is the claim, grown by `var(--spacing-xs)` above and below, so it never spreads over whatever positioned ancestor holds it and never pushes past the column it sits in. For a whole cell that links, use `BentoGrid.Cell`'s own `link`.
 
 ## Don’t
 
@@ -3971,15 +3983,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-described` mirrors whether a description is rendered, from either the prop or the slot
 - `data-linked` present when the claim carries an `href`
 - The root element switches between `<a>` and `<div>` on the `href` data prop, never on an `as` string — so the whole claim is the target, not a control composed under it
-- A linked root lays an `::after` over its positioned cell, so hovering anywhere in the cell hovers the claim
+- A linked root is `relative` and lays an `::after` a `var(--spacing-xs)` beyond its top and bottom edges, so the target is the claim and a little air around it; the inline edges stay on the claim, so a claim that fills a phone-width column causes no horizontal scroll
 - The heading element follows `headingLevel`; its size does not change with it
 
 ## Accessibility
 
-- Visible focus: the linked root draws an inset `focus-visible` ring in `var(--ring-color)` on its `::after`, so the ring outlines the whole cell it covers. Without an `href` the topic holds no interactive control of its own.
+- Visible focus: the linked root draws a 2px `focus-visible` outline in `var(--ring-color)`, offset by `var(--spacing-xs)`, so the ring outlines the claim with air on every side; an outline adds no scrollable width. Without an `href` the topic holds no interactive control of its own.
 - Keyboard map: `Tab` reaches the linked claim and `Enter` follows it — the anchor's own behaviour, no handler of our own. Unlinked, the topic is static content and `Tab` passes through whatever the description slot contains.
 - ARIA: both glyphs are decorative and carry `aria-hidden="true"` — the leading icon and the trailing arrow — so the link's accessible name is the headline and the sentence, the copy a reader sees. `headingLevel` is what keeps the document outline in order (axe `heading-order`); the heading stays a heading inside the anchor.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-brand)`, the logo orange, for the hovered headline (an owner-accepted brand exception in light) — all against the fill the surrounding cell provides.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and for the underline of the hovered headline (a decorative mark) — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
 
@@ -4073,7 +4085,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `align` | `HeroAlign` | `'center'` | false | Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom). |
 | `mediaAlign` | `HeroMediaAlign` | `'center'` | false | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
 | `offset` | `string` | `''` | false | Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length. |
-| `bottomHeight` | `string` | `''` | false | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. |
+| `bottomHeight` | `string` | `''` | false | Height of the window under the content, where the brand strip and the floor texture stand; a CSS length, never a percentage (it collapses the window). |
 | `marquee` | `boolean` | `false` | false | Stand the brand marquee on the band's floor, under the `bottom` window. |
 | `marqueeMarks` | `string[]` | `[]` | false | Registry names of the marks the marquee shows, in order. |
 | `marqueeLabel` | `string` | `''` | false | Eyebrow above the brand marquee, stating the claim the marks make. |
@@ -4120,7 +4132,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--hero-banner-top-height` / `--hero-banner-bottom-height` size the window, and `--hero-banner-top-x` / `-y`, `--hero-banner-bottom-x` / `-y`, `--hero-banner-background-x` / `-y` move the asset inside it
 - Texture behind text only: the backdrop (`data-slot="hero-backdrop"`, under the `texture` prop and the `background` slot) spans the content and the floor by default, so dots run under a console window or a command in the `bottom` window. When a window holds content marked `data-plain-ground` (a chart, `FlowDiagram`, `StatTile`, `Tracker` or a page-JSON content scene) outside an opaque `data-opaque` ground, the backdrop keeps clear of it: with the mark in the `bottom` window (`data-slot="hero-bottom"`) it stops at that window's top edge, so the dots stay behind the copy and end above the diagram; with the mark in the `top` window (`data-slot="hero-top"`) or the `media` cell (`data-slot="hero-media"`), which share the content's area, the band draws no backdrop at all. The floor texture drops itself beside the same mark (see `texture`)
 - The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
-- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--hero-banner-bottom-height` overrides either, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
+- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. Below `md`, when the brand `marquee` stands under the floor, the default drops to `clamp(4rem, 12dvh, 8rem)` so the customer proof is not pushed below the first screen of a phone. `--hero-banner-bottom-height` (or `bottomHeight`) overrides either; it is a length (`clamp(8rem, 22dvh, 16rem)`), never a percentage, which resolves against the band's own auto height and collapses the window onto its content, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
 - The floor holds the `bottom` window and the `marquee` strip in one block, so a single ground covers both: `--hero-banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
 - The `marquee` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--hero-banner-floor-bg` plinth replaces that ground so the floor still reads as one block
 - `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
@@ -4141,6 +4153,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import Hero from '@aziontech/webkit/hero'
 </script>
 
@@ -4152,7 +4165,19 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
       eyebrow-prefix="//"
       title="A global network built for fast applications"
       description="Run closer to users with low-latency delivery and stable routing."
-    />
+    >
+      <template #actions>
+        <Button
+          label="Start for free"
+          href="https://console.azion.com/signup"
+        />
+        <Button
+          variant="outline"
+          label="Talk to sales"
+          href="https://www.azion.com/en/contact-sales/"
+        />
+      </template>
+    </Hero.Title>
   </Hero>
 </template>
 ```
@@ -4404,7 +4429,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `LogoWallVariant` | `'square'` | false | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. |
-| `items` | `LogoWallItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `items` | `LogoWallItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the group of marks, announced instead of an unnamed region. |
 | `linkLabel` | `string` | `''` | false | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`). |
 
@@ -4447,9 +4472,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ```vue
 <script setup>
   import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+  import ifoodLogoDark from '@aziontech/webkit/assets/ifood-extended-reversed.svg'
   import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+  import itauLogoDark from '@aziontech/webkit/assets/itau-extended-reversed.webp'
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import magaluLogoDark from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import netshoesLogoDark from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
   import LogoWall from '@aziontech/webkit/logo-wall'
@@ -4463,9 +4492,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     <LogoWall
       aria-label="Clients running on Azion"
       :items="[
-        { src: magaluLogo, alt: 'Magalu', href: 'https://www.azion.com/en/success-case/magalu/' },
+        {
+          src: magaluLogo,
+          srcDark: magaluLogoDark,
+          alt: 'Magalu',
+          href: 'https://www.azion.com/en/success-case/magalu/'
+        },
         {
           src: ifoodLogo,
+          srcDark: ifoodLogoDark,
           alt: 'iFood',
           href: 'https://www.azion.com/en/success-case/ifood/',
           shape: 'compact'
@@ -4473,12 +4508,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         { src: stoneLogo, alt: 'Stone', href: 'https://www.azion.com/en/success-case/stone/' },
         {
           src: netshoesLogo,
+          srcDark: netshoesLogoDark,
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
         { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
         {
           src: itauLogo,
+          srcDark: itauLogoDark,
           alt: 'Itaú',
           href: 'https://www.azion.com/en/success-case/itau/',
           shape: 'compact'
@@ -4574,7 +4611,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
 - Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same
 - Empty: when `marks` and `items` are both empty the row renders nothing, so a page with no marks to name shows no empty band
-- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate rows removed, so every mark stays reachable
+- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate rows removed, so every mark stays reachable; below `sm` a row of marks lays out on two equal columns, so the marks never fall into uneven pairs
+- Artwork is drawn once: each registered mark renders a single time as an SVG `symbol` in a hidden, `aria-hidden` drawing (`data-slot="marquee-symbols"`), and every cell of every copy is a small `svg` with a `use` reference to it, so a repeated strip costs one node per cell instead of the mark's whole drawing; the track holds its loop (`data-loading`) until each mark's box is measured
 
 ## Accessibility
 
@@ -4834,7 +4872,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `default` | — | Description body; replaces the `description` prop when provided. |
 | `content` | — | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure. |
 | `media` | — | The band's media; replaces the image built from `src`. |
-| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
+| `actions` | — | Optional controls under the copy, floored so consecutive bands align on them. Default-size (40px) buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="az az-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
 
@@ -4863,7 +4901,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - ARIA: the headline is a real `h2` and the band is a `<section>` labelled by it; the image carries `alt`, and an image given no `alt` is marked `aria-hidden` rather than announced as an unnamed graphic.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
-- Touch target — the band composes no control of its own; the small buttons its `actions` pattern calls for stand 28 px tall, which clears WCAG 2.2 AA 2.5.8 (24×24 px) but is under this package's own 40×40 px house floor.
+- Touch target — the band composes no control of its own; the buttons its `actions` pattern calls for are the default 40 px size, the package's touch floor (never `small`, 28 px, in a marketing band).
 
 ## Examples
 
@@ -4973,6 +5011,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - The band holds at most three tabs when the side is `start` or `end` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
 - Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
 - With the tabs in a row, the media of every tab sits stacked in one cell, so the frame is as tall as the tallest medium and no shorter than `--media-tabs-media-min-lg` (`24rem` unless set); `--media-tabs-media-min` floors the active tab's media inside its row below `lg`; `--media-tabs-media-bg` sets the media's fill (`--bg-canvas` unless set)
+- The server renders the side media cell and the open row's inline medium both (CSS shows the one that fits the width); once mounted only the one that matches the width stays in the document, so a slotted scene, illustration or code sample is never drawn twice
 - `data-tabs-side` carries the side and `data-orientation` the axis it implies (`vertical` for `start` and `end`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `end` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every side keeps one hairline at the seam between the tabs and the media
 - The media column is grounded on a `texture` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
 - Empty: when `items` is empty the band renders nothing
@@ -4980,9 +5019,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Accessibility
 
 - Visible focus: each row's title is a real `<button>` carrying `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
-- Keyboard map: `Tab` moves between rows and `Enter` / `Space` selects one — the rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
-- ARIA: the rows are a `<ul>` of `<li>`, each holding the button; the active button carries `aria-current="true"`. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` and `inert` so the frame announces one picture rather than all of them, and a control inside a hidden scene (a play button, a code tab, a copy button) is out of the tab order.
-- **Not `role="tablist"`.** A tab's label here is a heading and a paragraph — the copy is the content, and the media only illustrates it. Real tabs promise a roving `tabindex` and arrow-key navigation over short labels; this band is a list of claims a reader tabs through one at a time, so it is announced as the list it is rather than as a tab set whose keyboard contract it does not honour.
+- Keyboard map: from the large breakpoint `Tab` enters the tab set on the selected tab, the arrow keys move and select (wrapping), `Home` / `End` jump to the ends, and `Tab` leaves for the medium; below it `Tab` moves between the row buttons and `Enter` / `Space` opens one. The rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
+- ARIA: from the large breakpoint, where the media sit beside the rows, the rows follow the tab pattern: the `<ul>` is a `tablist` (`aria-orientation` follows the tabs side), each `<li>` and its `<h3>` are presentational, each button is a `tab` with `aria-selected`, a roving `tabindex` and `aria-controls` naming its medium, and each medium is a `tabpanel` labelled by its tab. Arrow keys move the selection (wrapping, mirrored under right-to-left), Home and End jump to the first and last tab. Below the large breakpoint, where each row holds its own medium, every button is a disclosure: `aria-expanded` and `aria-controls` naming the medium inside its row. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` and `inert` so the frame announces one picture rather than all of them, and a control inside a hidden scene (a play button, a code tab, a copy button) is out of the tab order.
+- **A tab set beside the media, disclosures when stacked.** Each row switches the medium a sighted reader sees beside it, so a screen-reader user must learn that a medium changed and where it is: the tab pattern ties each title to its medium (`aria-controls`, `aria-labelledby`) and honours its keyboard contract. The row's description stays a paragraph next to its tab, read as the tab's neighbour. Below `lg` the medium opens inside the row, which is a disclosure, not a tab set (decision A5-F08-1).
 - **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. While the timer can run, a visible outlined `IconButton` at the band's top end pauses it ("Pause rotation") and resumes it ("Resume rotation"), for touch and screen-reader users alike; the rotation also pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion` or below `lg` (the pause control renders only while the timer can run). A click selects a tab and restarts the count from that tab; it does not end the rotation.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `stats`); every other text region is `var(--text-default)`.
 - Touch target ≥40×40 px — each row's button spans the whole row, well past the minimum.
@@ -5201,7 +5240,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | --- | --- | --- |
 | `default` | — | Quotation body; replaces the `text` prop when provided. |
 | `mark` | — | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
-| `actions` | — | A trailing control under the attribution, floored so a row of quotes aligns on it. |
+| `actions` | — | A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart. |
 
 ## States
 
@@ -5220,7 +5259,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visible focus: not applicable — the quote is static copy and holds no interactive control.
 - Keyboard map: none of its own; the block contains no focusable element and is skipped by `Tab`.
 - ARIA: the quotation is a real `blockquote` inside a `figure`, and the attribution is its `figcaption`, so the statement and its source are announced as one unit; the mark carries `logoAlt`, falling back to `jobTitle`, and is never left with an empty accessible name while it conveys the company.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution name is `var(--text-brand)`, the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"); the job title uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution name is `var(--text-default)`, marked by a decorative start bar in the logo orange (`--primary`); the job title uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the block is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
 
@@ -5426,7 +5465,6 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           variant="secondary"
           size="large"
           href="https://www.azion.com/en/success-case/"
-          target="_blank"
           icon="az az-chevron-right"
           icon-position="trailing"
           animated
@@ -5445,7 +5483,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Site Page
 
-> The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `Container max-width="site"` with a hatched `Spacer` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently. It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it. **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, which `shell/shell-site` owns) to a `() => import('../../section/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry. **Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-section`; `'closing-call-to-action-agents'` → `closing-call-to-action-section` `variant: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery-section` `closing: true`; `'customer-spotlight'` → `client-story-columns-section` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll-section` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll-section`; `'compare-support-tiers'` → `plan-comparison-section` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index-section` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid-section`; `'code-split'` → `media-split-section`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. Renamed props travel the same way: before any alias transform, `resolveSectionEntry` translates the section's old prop names and values from the 6.0 rename map (`src/cli/migrations/v6-props.json`, copied into the same file and kept in step by the component test), for every entry whether its `_id` is retired or current, so `{ _id: 'hero-band', props: { kind: 'centered' } }` renders `hero-section` with `variant: 'center'`; an old name is dropped only when its new name is not already set. Layouts and media removed in 6.0 are translated after the renames: a hero `variant` (or v5 `kind`) `pixel-floor` renders as `title-band`; a closing band's `split` renders as `panel`, with `titleMuted` joined onto `title`; a media stack drops its old `variant` and each band's `diagram`; and a media band (`media-split-section`, or a retired `'code-split'` or `'media-split-band'` entry) with no picture is routed to the section that now shows its media, so code (`codeTabs`) renders as a `feature-scroll-section` with one step per file and a request-flow `diagram` as a `console-showcase-section` with `variant: 'diagram'` and the diagram in its `scene` slot (`resolveSectionEntry` hands back that `scenes` entry, and a scene the page JSON sets for the slot wins); a band that has a picture keeps it and drops the retired media props. This is the only alias the package keeps: no retired export or prop is re-exported. **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-section` drew from a private map) and with `Diagram`, `ConsoleMockup` and `Illustration`, the components a scene slot already takes; `FlowDiagram` joined it for decision RV-F2-1, so a band places a diagram from data (`nodes`, `edges`), and the charts joined it for decision RV-C2-1 (`BarList`, `Chart` and its marks `ChartGrid`, `ChartAxis`, `ChartArea`, `ChartBar`, `ChartLine`, `ChartScatter`, `ChartReference`, `ChartCrosshair`, `ChartTooltip`, `ChartLegend`, `DonutChart`, `GaugeChart`, `MapChart`, `SparkChart`, `StatTile`, `StatTileGroup`, `Tracker`), then the content components for decision RV-K2-1 (`KeyValueList` with `KeyValueListItem` and `KeyValueListGroup`, `Accordion` with `AccordionItem`, `AccordionTrigger` and `AccordionContent`, `Card`, `CodeBlock`, `Embed`, `IntegrationCard`, `PlanFeatureList`). A scene may list `children`, scenes or plain strings drawn in its default slot in order, so a `Chart` names its marks, a `StatTileGroup` its tiles and a `KeyValueListItem` its value as text in plain JSON; a mark used outside a `Chart` throws, as it does in Vue. `media-split-section` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there. **Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `site-page`.
+> The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `Container max-width="site"` with a hatched `Spacer` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently. It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it. **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, which `shell/shell-site` owns) to a `() => import('../../section/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry. **Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-section`; `'closing-call-to-action-agents'` → `closing-call-to-action-section` `variant: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery-section` `closing: true`; `'customer-spotlight'` → `client-story-columns-section` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll-section` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll-section`; `'compare-support-tiers'` → `plan-comparison-section` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index-section` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid-section`; `'code-split'` → `media-split-section`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. Renamed props travel the same way: before any alias transform, `resolveSectionEntry` translates the section's old prop names and values from the 6.0 rename map (`src/cli/migrations/v6-props.json`, copied into `lib/legacy-entries.ts` beside it and kept in step by the component test), for every entry whether its `_id` is retired or current, so `{ _id: 'hero-band', props: { kind: 'centered' } }` renders `hero-section` with `variant: 'center'`; an old name is dropped only when its new name is not already set. Layouts and media removed in 6.0 are translated after the renames: a hero `variant` (or v5 `kind`) `pixel-floor` renders as `title-band`; a closing band's `split` renders as `panel`, with `titleMuted` joined onto `title`; a media stack drops its old `variant` and each band's `diagram`; and a media band (`media-split-section`, or a retired `'code-split'` or `'media-split-band'` entry) with no picture is routed to the section that now shows its media, so code (`codeTabs`) renders as a `feature-scroll-section` with one step per file and a request-flow `diagram` as a `console-showcase-section` with `variant: 'diagram'` and the diagram in its `scene` slot (`resolveSectionEntry` hands back that `scenes` entry, and a scene the page JSON sets for the slot wins); a band that has a picture keeps it and drops the retired media props. This is the only alias the package keeps: no retired export or prop is re-exported. **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-section` drew from a private map) and with `Diagram`, `ConsoleMockup` and `Illustration`, the components a scene slot already takes; `FlowDiagram` joined it for decision RV-F2-1, so a band places a diagram from data (`nodes`, `edges`), and the charts joined it for decision RV-C2-1 (`BarList`, `Chart` and its marks `ChartGrid`, `ChartAxis`, `ChartArea`, `ChartBar`, `ChartLine`, `ChartScatter`, `ChartReference`, `ChartCrosshair`, `ChartTooltip`, `ChartLegend`, `DonutChart`, `GaugeChart`, `MapChart`, `SparkChart`, `StatTile`, `StatTileGroup`, `Tracker`), then the content components for decision RV-K2-1 (`KeyValueList` with `KeyValueListItem` and `KeyValueListGroup`, `Accordion` with `AccordionItem`, `AccordionTrigger` and `AccordionContent`, `Card`, `CodeBlock`, `Embed`, `IntegrationCard`, `PlanFeatureList`). A scene may list `children`, scenes or plain strings drawn in its default slot in order, so a `Chart` names its marks, a `StatTileGroup` its tiles and a `KeyValueListItem` its value as text in plain JSON; a mark used outside a `Chart` throws, as it does in Vue. `media-split-section` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there. **Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `site-page`.
 
 - Import: `import SitePage from '@aziontech/webkit/site-page'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -5677,9 +5715,10 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visible focus: not applicable — the band is static copy and holds no interactive control.
 - Keyboard map: none of its own; the band contains no focusable element and is skipped by `Tab`.
 - ARIA: each cell is a `<figure>` whose `<figcaption>` carries the caption, so the figure and what it measures are one unit for a screen reader; `prefix` and `suffix` are plain spans inside the figure's text, so the announced value is the whole expression.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--text-brand)` (the logo orange `#F3652B` in both themes) is large text (about 3:1 light, 6.71:1 dark; the light pair is the accepted `--text-brand` exception). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and so is the prefix (the logo orange is never a text colour, owner decision 2026-11-22). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
+- Right-to-left: the figure (prefix, value, suffix) is a left-to-right token in every locale, so it sits in an isolated `dir="ltr"` run: `< 15 ms` keeps its order and its `<` is never mirrored into `>`, which would invert the claim. The figure still starts on the page's start side, and the caption follows the page direction.
 - Reflow: a figure never breaks across lines; its prefix, value and suffix stay on one line, and the figure shrinks to fit its cell instead (see Best practices), so there is no horizontal scroll at 320 px or at 200% zoom.
 
 ## Examples
@@ -5841,7 +5880,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Article Body Section
 
-> The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `container`, `module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-table-of-contents`; copying to the clipboard is local behaviour, confirmed by a toast.
+> The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header from `lg`; below it the column stands alone with the outline folded into an "On this page" disclosure over the prose and the share, community and copy-page groups after it. The section opens the page itself, so it carries its own `container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `container`, `module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-table-of-contents`; copying to the clipboard is local behaviour, confirmed by a toast.
 
 - Import: `import ArticleBodySection from '@aziontech/webkit/article-body-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -5898,7 +5937,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visible focus: every link and button shows a `focus-visible` ring.
 - Feedback: copy results are announced by the `Toaster`'s live region; the outline's active entry carries `aria-current` (owned by `doc-table-of-contents`).
 - Keyboard map: `Tab` moves through the breadcrumb, the rails and the prose links; the split button owns its menu keyboard map.
-- ARIA: the root is a plain `div` so the page keeps its own landmarks; the headline is the page `h1` (from `hero-title`); the prose is an `article`; the two rails are `aside` landmarks, the left one named by the share title, the right one by the outline's own navigation; the share and community groups are named `section`s; icon-only share buttons are named by their labels and carry a tooltip; the banner is decorative (`aria-hidden`, `alt=""`); heading ids are slugged from their text.
+- ARIA: the root is a plain `div` so the page keeps its own landmarks; the headline is the page `h1` (from `hero-title`); the prose is an `article`; the two rails are `aside` landmarks (below `lg` the outline is a native `details`/`summary` disclosure whose summary is the outline's title), the left one named by the share title, the right one by the outline's own navigation; the share and community groups are named `section`s; icon-only share buttons are named by their labels and carry a tooltip; the banner is decorative (`aria-hidden`, `alt=""`); heading ids are slugged from their text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `split-button`.
@@ -5912,13 +5951,21 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <script setup>
   import ArticleBodySection from '@aziontech/webkit/article-body-section'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+
+  const BODY =
+    '## Challenge\n\n' +
+    'Magalu is the most innovative retail company in LATAM.\n\n' +
+    '## Solution\n\n' +
+    'Magalu counts on Azion’s platform to evolve its security posture.\n\n' +
+    '## Results and Impact\n\n' +
+    'Magalu simplified security operations by blocking millions of threats per year.'
 </script>
 
 <template>
   <ArticleBodySection
     eyebrow="Blog"
     :banner="placeholderImage"
-    body="## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year."
+    :body="BODY"
     :article="{
       title: 'Magalu Ensures High Availability at Scale with Azion',
       description:
@@ -6281,7 +6328,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Filtered (`category-search`): the selected category keeps the entries whose `categories` hold it, the show-all segment keeps every one; the search matches the title and the description; both combine
 - Filtered (`facets`): each facet keeps the entries whose `facets[id]` holds the selected value; its `allLabel` option keeps every one; the facets combine
 - Option search (`facets`): a dropdown whose `options` number more than seven renders a search field above its options; shorter lists render none
-- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing a filter returns to the first page
+- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize` and moves keyboard focus to the link of the first revealed item, so focus never drops to the page when the button leaves and a screen reader reads the new item; changing a filter returns to the first page
 - Leading: until a filter applies, the first `leading` entries are skipped
 - Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
 - `data-variant` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
@@ -6328,8 +6375,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'How I Shipped My Portfolio in Just Two Commands',
         description:
           'See how a portfolio site went from template to live URL with just azion init and azion deploy.',
-        authors: [{ name: 'Patrick Menoti' }],
-        byline: 'Patrick Menoti · 9 min read',
+        authors: [{ name: 'Jane Doe' }],
+        byline: 'Jane Doe · 9 min read',
         categories: ['Developers']
       },
       {
@@ -6340,8 +6387,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'How Do You Reduce AI Agent Latency?',
         description:
           'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',
-        authors: [{ name: 'Marilia Bafutto Costa' }],
-        byline: 'Marilia Bafutto Costa · 8 min read',
+        authors: [{ name: 'Priya Patel' }],
+        byline: 'Priya Patel · 8 min read',
         categories: ['Serverless']
       },
       {
@@ -6352,8 +6399,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Best Cloudflare Alternatives and Competitors',
         description:
           'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',
-        authors: [{ name: 'Vitor Eltz' }],
-        byline: 'Vitor Eltz · 13 min read',
+        authors: [{ name: 'Alex Morgan' }],
+        byline: 'Alex Morgan · 13 min read',
         categories: ['Security']
       }
     ]"
@@ -6534,7 +6581,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Links: on a linked card the `h3` holds the anchor, so the link's name is the card title; a stretched `::after` makes the whole card its hit area. The link label and its arrow are `aria-hidden` decoration.
 - Keyboard map: `Tab` reaches the previous control, the next control, the track (arrow keys scroll it natively) and each card link in order; `Enter` / `Space` on a control steps one card; `Enter` on a card link follows it. A card that scrolls into focus is brought into view by the browser.
 - Visible focus: card links draw `focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)` around the whole card; the controls and track carry the carousel's ring.
-- Contrast ≥4.5:1: copy is `var(--text-muted)` on `var(--bg-surface)`; the link label is `var(--text-muted)` at rest; the arrow is `var(--text-brand)`, the logo orange (≥3:1 as a decorative graphic).
+- Contrast ≥4.5:1: copy is `var(--text-muted)` on `var(--bg-surface)`; the link label is `var(--text-muted)` at rest; the arrow is `var(--primary)`, the logo orange as a decorative glyph.
 - `motion-reduce:transition-none` on every transition; the track never auto-advances (WCAG 2.2.2 does not apply).
 - Touch target ≥40×40 px: the controls are 40×40; a card link spans its whole card.
 
@@ -6955,7 +7002,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     {
       logo: magaluExtendedColor,
       clientName: 'Magalu',
-      text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',
+      text:
+        'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce ' +
+        'costs, and deliver the best shopping experiences to millions of customers across Latin America.',
       name: 'Allan Monteiro',
       jobTitle: 'CISO & Head of Technology at Magalu'
     },
@@ -7010,7 +7059,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Do
 
-- Three cells for `reveal="always"` (the grid is three columns from the large breakpoint); three or four for `reveal="hover"`, which shares the row between them.
+- Three cells for `reveal="always"` (the grid is three columns from the medium breakpoint); three or four for `reveal="hover"`, which shares the row between them.
 - With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
 - Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
 - Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.
@@ -7039,14 +7088,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`, `hover` on each column (the face reveals the link line, the story fill rises)
 - The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`, or from the client registry by `name` when `brand` is left out; `data-treatment` on every mark drives its ink
-- `reveal="hover"`: each list item carries `data-state=open|closed`; one card is open at a time on large screens, every card is open below the large breakpoint
+- `reveal="hover"`: each list item carries `data-state=open|closed`; one card is open at a time on large screens, every card is open below the large breakpoint; a closed card on large screens shows the link label ("Read story") at its foot, so a visitor at rest knows each card holds a story
 - Empty: when `cells` is empty the band renders nothing
 
 ## Accessibility
 
 - Visible focus: the mark link is `logo-wall`'s, with its ring; the story panel is a duplicate link hidden from the tab order and from assistive technology.
 - Keyboard map: `Tab` moves between the three mark links; `Enter` follows.
-- ARIA: the band is a `<section>`; the grid is a list named by `ariaLabel` whose items are the columns; each mark carries the client `name` as `alt`; the story panel is `aria-hidden` with `tabindex="-1"` so the case is reachable once.
+- ARIA: the band is a `<section>`; the grid is a list named by `ariaLabel` whose items are the columns; each mark carries the client `name` as `alt`, and the one focusable link per column is named "<link label>, <client>: <story>" so the story is read with it; the story panel is `aria-hidden` with `tabindex="-1"` so the case is reachable once.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the link line ink follows `brand.ink`; the story text is `var(--text-default)` on `var(--bg-canvas)`.
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
@@ -7223,7 +7272,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Competitor Comparison Section
 
-> The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text, and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `brand`, `popover`, `icon-button` and `tooltip`.
+> The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text and keyed in a one-line legend above the table (each glyph with its label, for touch and keyboard readers who never see the tooltip), and a capability with a definition carries a `hint` glyph that opens it as a short note. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `brand`, `hint` and `tooltip`.
 
 - Import: `import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -7234,7 +7283,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Do
 
-- Give every row a `definition`; the info popover is where a reader learns what the capability means.
+- Give every row a `definition`; the hint note is where a reader learns what the capability means.
 - Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
 - With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.
 - For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.
@@ -7261,9 +7310,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty. |
 | `caption` | `string` | `''` | false | Screen-reader caption naming the table. |
 | `columnLabel` | `string` | `''` | false | Heading of the capability column. |
-| `fullLabel` | `string` | `''` | false | Tooltip and screen-reader text of a full-support cell. |
-| `partialLabel` | `string` | `''` | false | Tooltip and screen-reader text of a partial-support cell. |
-| `noneLabel` | `string` | `''` | false | Tooltip and screen-reader text of an unsupported cell. |
+| `fullLabel` | `string` | `''` | false | Legend entry, tooltip and screen-reader text of a full-support cell. |
+| `partialLabel` | `string` | `''` | false | Legend entry, tooltip and screen-reader text of a partial-support cell. |
+| `noneLabel` | `string` | `''` | false | Legend entry, tooltip and screen-reader text of an unsupported cell. |
 | `competitor` | `CompetitorComparisonSectionCompetitor` | `—` | true | The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the competitor registry once the page is interactive, and the name is the column head until then or when the registry has no entry. |
 | `groups` | `CompetitorComparisonSectionGroup[]` | `[]` | false | The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`). |
 
@@ -7281,18 +7330,18 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   Partial support is a property of the platform, not a problem that needs action, so it never takes the warning colour; an unsupported capability is a quiet dash, not a red cross.
 
 - The competitor head is a `ThirdPartyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
-- Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
+- Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (each hint owns its open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
 ## Accessibility
 
-- Visible focus: owned by the composed `icon-button` and `tooltip` triggers.
-- Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
+- Visible focus: owned by the composed `hint` and `tooltip` triggers.
+- Keyboard map: `Tab` reaches each definition's hint glyph; `Enter` / `Space` opens its note and `Esc` closes it (owned by `hint`).
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `ThirdPartyLogo` named by the platform, inside a head cell that carries the same name.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface` are `--text-brand`, the logo orange in both themes: Lc 44.1 / 6.32:1 in dark, and about 3:1 in light, the accepted `--text-brand` pairs of `rules/webkit-tokens.md` (owner decision 2026-11-18, superseding the darker light-theme orange).
-- Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
-- Touch target ≥40×40 px — the info button is a small `icon-button`, a secondary affordance next to the capability name.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads are `--text-default` with a decorative bar in the logo orange (`--primary`); every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
+- Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text, and the legend above the table pairs each glyph with its label for every reader.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the hint and tooltip carry their own reduced-motion fallback; this band adds no motion.
+- Touch target ≥40×40 px — the hint glyph is small and extends its touch target to the pointer size, a secondary affordance next to the capability name.
 
 ## Examples
 
@@ -7841,7 +7890,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Copy Command Section
 
-> A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` a `$` prompt leads the line. From the design sample's site `CopyCommandSection`.
+> A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` the command is one line in a large `InputGroup`, a `$` prompt leading it and an end fade when it scrolls; without it the prompt is a read-only block that wraps, so the reader sees every word they copy. From the design sample's site `CopyCommandSection`.
 
 - Import: `import CopyCommandSection from '@aziontech/webkit/copy-command-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -7881,7 +7930,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Accessibility
 
 - The read-only input is named "Command" or "Prompt"; the copy button is named "Copy command" or "Copy prompt".
-- The `$` is decorative (`aria-hidden`).
+- The `$` is decorative (`aria-hidden`). The command is a read-only textbox named "Command"; the prompt is a group named "Prompt" holding its text and the copy button.
 - Keyboard: `Tab` reaches the field (text can be selected) and the copy button.
 
 ## Examples
@@ -8079,12 +8128,16 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       {
         question: 'What types of storefronts can I build and deploy on Azion?',
         answer:
-          'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a distributed architecture.'
+          'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app ' +
+          'or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a ' +
+          'distributed architecture.'
       },
       {
         question: 'Which frameworks are compatible?',
         answer:
-          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility list](/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'
+          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and ' +
+          'others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility ' +
+          'list](/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'
       },
       {
         question: 'How do preview deployments work?',
@@ -8148,6 +8201,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
+- The server renders both layouts (CSS shows the right one); once mounted only the layout that matches the width stays in the document, so the band never carries two copies of every scene and illustration
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
 - Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
 
@@ -8505,7 +8559,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `titleAlign` | `ModuleHeaderAlign` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
 | `columns` | `FeatureWidgetsSectionColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
-| `items` | `FeatureWidgetsSectionItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |
+| `items` | `FeatureWidgetsSectionItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both. |
 
 ## Assets
 
@@ -8612,13 +8666,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Related
 
 - `newsletter-section` — the other form section; same `submit` and state contract.
-- `alert` — renders the success and failure messages.
+- `alert` — renders the failure message.
+- `empty-state` — renders the confirmation that replaces the form once the values are sent.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `messages` | `HeroFormSectionMessages` | `—` | true | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`. |
+| `messages` | `HeroFormSectionMessages` | `—` | true | Copy of the form outcomes: `{ missing, invalidEmail, success, successDescription?, error }`. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
 | `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
@@ -8630,12 +8685,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `items` | `HeroFormSectionItem[]` | `[]` | false | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
 | `formAriaLabel` | `string` | `''` | false | Accessible name of the field group, read as its legend. |
-| `fields` | `HeroFormSectionField[]` | `[]` | false | The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
+| `fields` | `HeroFormSectionField[]` | `[]` | false | The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel?, autocomplete? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it, `autocomplete` is the autofill hint of a text control. |
 | `submitLabel` | `string` | `''` | false | Label of the submit button. |
 | `marqueeLabel` | `string` | `''` | false | Eyebrow above the client marquee. |
 | `marqueeMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the marquee renders only when there are marks. |
 | `loading` | `boolean` | `false` | false | The site is sending the values: the button shows its loading state and a submit is ignored. |
-| `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to `messages.success`. |
+| `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to a confirmation of `messages.success`, in the form's footprint. |
 | `failed` | `boolean` | `false` | false | The site could not send the values: `messages.error` shows under the form. |
 
 ## Events
@@ -8653,7 +8708,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `failed`
 - `invalid`: on submit, an empty required field shows `messages.missing` and a malformed email `messages.invalidEmail` under the field; focus moves to the first field in error; editing the field clears it; nothing is emitted
 - `loading` (prop): the button shows its loading state, every field is disabled (the scope locks off the one flag) and a submit emits nothing; `data-loading` on the root
-- `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`, which takes focus when focus was in the form; `data-submitted` on the root
+- `submitted` (prop): the form is replaced by a bordered `EmptyState` (success icon, `messages.success` as its title, `messages.successDescription` under it) that keeps at least the height the form had, so the band does not collapse; it takes focus when focus was in the form; `data-submitted` on the root
 - `failed` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-failed` on the root
 - A field with `visuallyHiddenLabel` renders its `Field.Label` visually hidden (`sr-only`), so the control keeps its accessible name and the page shows only the placeholder
 - The headline caps at `--container-md` while the description and highlights keep the `lg` column
@@ -8666,7 +8721,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visible focus: owned by the field controls and `button`.
 - Keyboard map: `Tab` reaches the inline description link and the actions under the copy, then walks the fields in order and the button; `Enter` in a text field or on the button submits.
-- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`. Validation runs on submit only: a required field carries `required` and `aria-required` from the first render, and a submit that finds it empty or malformed sets the red `invalid` state (`aria-invalid`); the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
+- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; a text field takes its `autocomplete` hint (`given-name`, `family-name`, `organization`, `url`) so phone autofill fills the form. Validation runs on submit only: a required field carries `required` and `aria-required` from the first render, and a submit that finds it empty or malformed sets the red `invalid` state (`aria-invalid`); the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the inline description link's colour transition; the composed components carry their own fallback.
 - Touch target ≥40×40 px — the text fields and the button are large.
@@ -8705,6 +8760,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   const fields = [
     {
       name: 'firstname',
+      autocomplete: 'given-name',
       type: 'text',
       label: 'First name',
       half: true,
@@ -8712,6 +8768,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     },
     {
       name: 'lastname',
+      autocomplete: 'family-name',
       type: 'text',
       label: 'Last name',
       half: true,
@@ -8776,6 +8833,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     },
     {
       name: 'company',
+      autocomplete: 'organization',
       type: 'text',
       label: 'Company',
       half: true,
@@ -8801,7 +8859,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   const messages = {
     missing: 'This field is required.',
     invalidEmail: 'Enter a valid email address.',
-    success: 'We will be in touch.',
+    success: 'Thanks, we received your request.',
+    successDescription: 'A specialist will reply by email within one business day.',
     error: 'We could not send your message. Try again.'
   }
 
@@ -9129,7 +9188,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `failed` (prop): a danger `Alert` with `messages.error` shows under the submit button; the form stays editable; `data-failed` on the root
 - File field: an inline `file-dropzone` with a browse button takes one file; once picked, the file shows in a `file-token-group` whose remove button clears it and brings the dropzone back
 - Description: each section row after the first draws a rule above it (`data-ruled`); a `list` block is a bulleted list
-- Rail: shown from the large breakpoint up, sticky under the site header while the description scrolls; the apply button renders only when `applyLabel` is set
+- Rail: beside the description and sticky under the site header from the large breakpoint up, a block above the description below it; the apply button renders only when `applyLabel` is set
 - Disabled, readonly: not states of the band; `loading` is the only lock
 - Empty: when `title` is empty the band renders nothing but its root; with no `sections` the description column is empty and the rail still renders; with no `facets` the facet list is left out
 
@@ -9185,7 +9244,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       blocks: [
         {
           type: 'text',
-          text: 'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: automation, internal tools and standards that remove manual steps from the delivery cycle.'
+          text:
+            'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: ' +
+            'automation, internal tools and standards that remove manual steps from the delivery cycle.'
         },
         {
           type: 'text',
@@ -9823,7 +9884,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - With exactly one action the band is a link to that action's `href` (unless `linked` is `false`), and that lone action renders as an outlined button closed by the trailing chevron; with two the first is secondary, the second outlined, and the band is not a link
 - `size="medium"` aligns the copy to the top of the media, `size="large"` centres it
 - `orientation` and `texture` are forwarded to the media split
-- Media precedence: `scene`, `widget`, `illustration`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`); a scene and an illustration run flush
+- Media precedence: `scene`, `widget`, `illustration`. A widget and an illustration are inset from the cell's edges (`media-split`'s `mediaPadded`), so a drawn window never lies on the band's frame and scales inside the cell on a phone; a scene runs flush
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes and the widget load on demand (`defineAsyncComponent`)
 - An action's `variant` (`secondary`, `outline`, `ghost`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
@@ -9835,7 +9896,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
-- Touch target ≥40×40 px — the medium buttons meet it.
+- Touch target ≥40×40 px — the actions are `large` (40 px) buttons.
 
 ## Examples
 
@@ -9844,13 +9905,18 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ```vue
 <script setup>
   import MediaSplitSection from '@aziontech/webkit/media-split-section'
+
+  const DESCRIPTION =
+    'Quality, Drive, Accountability, and Innovation. They guide how we work every ' +
+    'day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in ' +
+    'new ways. Together, they help us earn and keep the trust of our customers.'
 </script>
 
 <template>
   <MediaSplitSection
     eyebrow="Our values"
     title="Four values shape every role at Azion"
-    description="Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers."
+    :description="DESCRIPTION"
     size="large"
     :scene="{ component: 'BrandGlobeScene' }"
   />
@@ -10312,12 +10378,16 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <script setup>
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import PhotoMarqueeSection from '@aziontech/webkit/photo-marquee-section'
+
+  const DESCRIPTION =
+    'The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across ' +
+    "countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
 </script>
 
 <template>
   <PhotoMarqueeSection
     title="Work at Azion"
-    description="The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
+    :description="DESCRIPTION"
     description-width="wide"
     aria-label="Azion offices"
     :photos="[
@@ -10368,7 +10438,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Plan Comparison Section
 
-> The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `eyebrow`, `tag` and `link`.
+> The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `select`, `input`, `button`, `hint`, `tooltip`, `eyebrow`, `tag` and `link`.
 
 - Import: `import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -10382,7 +10452,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Give every plan a stable `id`; the narrow-screen picker selects by it.
 - Mark one plan `highlighted`; it gets the accent bar, the secondary button and opens the picker.
 - Give every row's `values` one entry per plan, in plan order.
-- Use a row's `hint` to define the term its label names; it opens in a popover titled with the label, so it can run to a sentence or two.
+- Use a row's `hint` to define the term its label names; it opens in a `hint` note beside the label, so it can run to a sentence or two.
 - Set `includedLabel` and `excludedLabel` to the page's words; left empty, the marks read the locale's Included and Not included.
 
 ## Don’t
@@ -10406,7 +10476,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `includedLabel` | `string` | `''` | false | Tooltip and screen-reader text of an included cell; empty uses the locale catalog (`Included`). |
 | `excludedLabel` | `string` | `''` | false | Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`). |
 | `plans` | `PlanComparisonSectionPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
-| `sections` | `PlanComparisonSectionSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
+| `sections` | `PlanComparisonSectionSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a `hint` note. |
 | `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
 
 ## States
@@ -10416,7 +10486,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Below the large breakpoint only the picked plan's column shows (`data-folded` on the others); the picker opens on the highlighted plan, or the first
 - Picker search: the picker's list carries a search field that narrows the plans by name; with no match it shows a `role="status"` line from the locale catalog (`No results found.`); the query clears each time the list opens or closes
 - Cells: an included cell is a `az az-circle-check` mark and a not-included cell an `az az-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
-- Hint: a row with `hint` ends its label with an info icon button that opens a popover titled with the label and described by the hint
+- Hint: a row with `hint` ends its label with a `hint` glyph, 4px after the last word and on its line, that opens the hint as a short note
 - Closing rule: when neither the last band nor the table carries a closing link, the last row draws a bottom rule (`data-closing`) so the table never ends open
 - Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
@@ -10427,9 +10497,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Accessibility
 
-- Visible focus: owned by the composed `select`, `input`, `button`, `icon-button` and `link`.
-- Keyboard map: `Tab` reaches the picker (below `lg`), each plan button, each hint button and the closing link; the picker's keyboard map is `select`'s and its search field takes typing while the list is open; `Enter` or `Space` on a hint button opens its popover and `Escape` closes it, returning focus to the button (`popover`'s map).
-- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="rowgroup"` head opening each band `tbody` and each category `tbody`, and a `scope="row"` head per feature, so each value is announced with its row and plan. The included and not-included marks are `aria-hidden` and carry their label as `sr-only` text (the tooltip repeats it for pointer users); each hint button is named `About <label>` from the locale catalog and its popover is titled by the label; the picker's search field is named `Search <picker name>` and its no-match line is a `status`; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
+- Visible focus: owned by the composed `select`, `input`, `button`, `hint` and `link`.
+- Keyboard map: `Tab` reaches the picker (below `lg`), each plan button, each hint glyph and the closing link; the picker's keyboard map is `select`'s and its search field takes typing while the list is open; `Enter` or `Space` on a hint glyph opens its note and `Escape` closes it, returning focus to the glyph (`hint`'s map).
+- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="rowgroup"` head opening each band `tbody` and each category `tbody`, and a `scope="row"` head per feature, so each value is announced with its row and plan. The included and not-included marks are `aria-hidden` and carry their label as `sr-only` text (the tooltip repeats it for pointer users); each hint glyph is named `About <label>` from the locale catalog; the picker's search field is named `Search <picker name>` and its no-match line is a `status`; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the composed controls carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the plan buttons and the picker are `large`.
@@ -10895,7 +10965,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Renders nothing without a title or steps.
 - Cards are `data-theme="dark"` in both themes (the sample's design).
-- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` or under `prefers-reduced-motion` the band does not pin and the row scrolls inside itself. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
+- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` the band does not pin and the row scrolls inside itself; from `lg` under `prefers-reduced-motion` the band does not pin and every card shares one row in equal columns, as the unpinned band does, so no card sits off-screen without a scrollbar. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
 
 ## Accessibility
 
@@ -11056,7 +11126,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         logoLight: gigaomExtendedColor
       },
       {
-        text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
+        text:
+          'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, ' +
+          'WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
         reportName: 'G2 Reports',
         date: 'March 2026',
         firmName: 'G2',
@@ -11119,7 +11191,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `home` | `string` | `''` | false | Destination of the Azion mark; the mark is not rendered when empty. |
 | `homeAriaLabel` | `string` | `''` | false | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). |
 | `columns` | `SiteFooterSectionColumn[]` | `[]` | false | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph. |
-| `socials` | `SiteFooterSectionSocial[]` | `[]` | false | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. |
+| `socials` | `SiteFooterSectionSocial[]` | `[]` | false | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab, and each name ends with the `common.newTab` notice. |
 | `statusLabel` | `string` | `''` | false | Line of the system status indicator; the indicator is not rendered when empty. |
 | `languages` | `string[]` | `[]` | false | BCP 47 tags of the languages offered (`EN`, `PT-BR`, `ES`); each shows its round flag and its name in its own language, and the first one is selected until `v-model:language` holds another. The language select is not rendered when empty. |
 | `languageAriaLabel` | `string` | `''` | false | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`). |
@@ -11417,7 +11489,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
@@ -11426,38 +11500,231 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   import { ref } from 'vue'
 
   const searchOpen = ref(false)
+
+  const searchPages = ['Functions', 'Applications', 'Firewall', 'Pricing', 'Documentation']
+
+  const menus = [
+    {
+      value: 'solutions',
+      label: 'Solutions',
+      columns: [
+        [
+          {
+            label: 'By Need',
+            items: [
+              { label: 'Application Development', description: 'Build and run applications' },
+              {
+                label: 'Performance and Reliability',
+                description: 'Improve application performance and reliability'
+              },
+              { label: 'Artificial Intelligence (AI)', description: 'Build and run AI workloads' },
+              { label: 'Application Security', description: 'Secure applications and networks' },
+              { label: 'Media and Streaming', description: 'Deliver media and streaming content' }
+            ]
+          }
+        ],
+        [
+          {
+            label: 'By Industry',
+            items: [
+              { label: 'Financial Services', description: 'Speed up digital financial services' },
+              { label: 'Technology', description: 'Build high-performance applications' },
+              { label: 'Retail', description: 'Build high-performance shopping experiences' }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      value: 'products',
+      label: 'Products',
+      columns: [
+        [
+          {
+            label: 'Build',
+            items: [
+              { label: 'Workloads', description: 'Serve an application on your domain, globally' },
+              { label: 'Applications', description: 'Deliver and configure web applications' },
+              {
+                label: 'Functions',
+                description: 'Run code globally with low latency and no cold starts'
+              },
+              { label: 'Cache', description: 'Speed up delivery and reduce origin load' },
+              {
+                label: 'Application Accelerator',
+                description: 'Speed up dynamic content and APIs'
+              },
+              {
+                label: 'Image Processor',
+                description: 'Resize, crop, and convert images on the fly'
+              },
+              { label: 'AI Inference', description: 'Run AI inference close to users' },
+              { label: 'AI Gateway', description: 'Route, secure and log every model call' },
+              { label: 'Durable Objects', description: 'Run stateful code worldwide' },
+              {
+                label: 'Orchestrator',
+                description: 'Deploy, manage, monitor and automate workloads'
+              }
+            ]
+          }
+        ],
+        [
+          {
+            label: 'Store',
+            items: [
+              { label: 'SQL Database', description: 'Store relational and structured data' },
+              { label: 'Object Storage', description: 'Store and deliver data globally' },
+              { label: 'KV Store', description: 'Store key-value data with low latency' }
+            ]
+          }
+        ],
+        [
+          {
+            label: 'Secure',
+            items: [
+              {
+                label: 'Web Application Firewall (WAF)',
+                description: 'Block common attacks, enforce policies'
+              },
+              {
+                label: 'Firewall',
+                description: 'Filter every request before it reaches your code'
+              },
+              { label: 'DDoS Protection', description: 'Stop volumetric attacks automatically' },
+              { label: 'Bot Manager', description: 'Block bots and protect traffic' },
+              {
+                label: 'Network Shield',
+                description: 'Stop network attacks before they reach you'
+              },
+              { label: 'Edge DNS', description: 'Resolve DNS quickly and securely' },
+              {
+                label: 'Load Balancer',
+                description: 'Spread traffic across origins and drop unhealthy ones'
+              }
+            ]
+          }
+        ],
+        [
+          {
+            label: 'Observe',
+            items: [
+              {
+                label: 'Data Stream',
+                description: 'Stream event data to your tools as it happens'
+              },
+              { label: 'Real-Time Events', description: 'Query request-level logs in real time' },
+              {
+                label: 'Real-Time Metrics',
+                description: 'See traffic and performance as they happen'
+              },
+              { label: 'Edge Pulse', description: 'Measure real user performance in the browser' }
+            ]
+          },
+          {
+            label: 'Platform',
+            items: [
+              { label: 'Our Network', description: 'Global delivery across 100+ data centers' }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      value: 'developer',
+      label: 'Developer',
+      columns: [
+        [
+          {
+            label: 'Docs',
+            items: [
+              { label: 'Azion Docs', description: 'Documentation and technical references' },
+              { label: 'Guides', description: 'Practical, step-by-step guides' },
+              { label: 'Dev Tools', description: 'CLI, API, and Terraform tools' },
+              { label: 'Release Notes', description: 'Product updates and new features' }
+            ]
+          }
+        ],
+        [
+          {
+            label: 'API',
+            items: [{ label: 'API Reference', description: 'Automate Azion with the API' }]
+          },
+          {
+            label: 'Community',
+            items: [
+              {
+                label: 'Join our community',
+                description: 'Developers and the Azion team on Discord',
+                icon: 'az-color az-discord'
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      value: 'resources',
+      label: 'Resources',
+      columns: [
+        [
+          {
+            label: 'Content',
+            items: [
+              { label: 'Blog', description: 'Insights and industry trends' },
+              { label: 'Learning', description: 'Fundamentals, subject by subject' },
+              { label: 'Resource Hub', description: 'Useful materials in one place' },
+              { label: 'Success Stories', description: 'Real results from our customers' },
+              { label: 'Partners', description: 'Let’s build together' },
+              { label: 'Marketplace', description: 'Ready-made apps and solutions' }
+            ]
+          }
+        ],
+        [
+          {
+            label: 'Services',
+            items: [
+              { label: 'Support', description: 'Expert help when you need it' },
+              { label: 'Professional Services', description: 'Specialist guidance to move faster' }
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+
+  const links = [{ label: 'Pricing', href: '#' }]
+
+  const contact = { label: 'Contact', href: '#' }
+
+  const primaryAction = { label: 'Start for free', href: '#' }
+
+  const secondaryAction = { label: 'Login', href: '#' }
 </script>
 
 <template>
   <SiteHeaderSection
-    home="/"
-    :menus="[
-      {
-        value: 'developer',
-        label: 'Developer',
-        columns: [
-          [
-            {
-              label: 'Docs',
-              items: [
-                {
-                  label: 'Azion Docs',
-                  description: 'Documentation and technical references',
-                  href: '/docs'
-                }
-              ]
-            }
-          ]
-        ]
-      }
-    ]"
-    :links="[{ label: 'Pricing', href: '/pricing' }]"
-    :contact="{ label: 'Contact', href: '/contact' }"
-    :primary-action="{ label: 'Start for free', href: '/signup' }"
-    :secondary-action="{ label: 'Login', href: '/login' }"
+    home="#"
+    :menus="menus"
+    :links="links"
+    :contact="contact"
+    :primary-action="primaryAction"
+    :secondary-action="secondaryAction"
     @search="searchOpen = true"
   />
-  <Command v-model:open="searchOpen"></Command>
+  <Command v-model:open="searchOpen">
+    <Command.Input placeholder="Search azion.com" />
+    <Command.List>
+      <Command.Empty>No page matches your search.</Command.Empty>
+      <Command.Group label="Pages">
+        <Command.Item
+          v-for="page in searchPages"
+          :key="page"
+          :value="page"
+          >{{ page }}</Command.Item
+        >
+      </Command.Group>
+    </Command.List>
+  </Command>
 </template>
 ```
 
@@ -11590,7 +11857,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`, `hover` (a card lifts to the raised surface, the read cue brightens and its arrow nudges), `focus-visible` (inset ring)
 - Filtered: the search matches the client name and the description; each facet keeps the stories whose `facets[id]` holds the selected value; all filters combine
-- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing the search or a facet returns to the first page
+- Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize` and moves keyboard focus to the link of the first revealed item, so focus never drops to the page when the button leaves and a screen reader reads the new item; changing the search or a facet returns to the first page
 - Clearing one facet: every select starts with an option labelled by its `allLabel` that clears that facet
 - Folded toolbar (below `lg`): a filter button (`aria-expanded`, `aria-controls`) beside the search field shows or hides the selects, stacked (the panel carries `data-state="open|closed"`); its label carries the number of applied facets; every facet set to a value renders a removable `chip` (`<facet label>: <option label>`) whose remove clears it; the field shows `searchShortPlaceholder` when set. From `lg` the selects sit on the toolbar row and the button and chips are hidden (CSS only for the layout; the placeholder switches after mount, so server and client markup match)
 - Option search: a select with more than seven options renders a search field above its options and a `status` line when nothing matches
@@ -11695,7 +11962,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Subject Grid Section
 
-> A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
+> A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans every cell left in the grid's last row so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
 
 - Import: `import SubjectGridSection from '@aziontech/webkit/subject-grid-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -11708,7 +11975,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.
-- Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.
+- Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell takes two thirds of the last row on desktop; any other count still ends flush, with the closing cell across one cell or a full row.
 - Keep each subject's articles to a handful; the card grows with its list.
 
 ## Don’t
@@ -11728,13 +11995,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page `id` of the band, the target of a `#hash` link. |
 | `subjects` | `SubjectGridSectionSubject[]` | `[]` | false | The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped. |
-| `closing` | `SubjectGridSectionClosing` | `undefined` | false | Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `closing` | `SubjectGridSectionClosing` | `undefined` | false | Call to action across the cells left in the grid's last row; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the band; empty leaves the section unnamed. Set it so the band is a named region landmark. |
 
 ## States
 
 - Visual states: `default`
-- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell really spans two columns from the small breakpoint up and takes two thirds of the last row on desktop, as on azion.com's learning page
+- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell spans the cells the subjects leave in the last row (`3 - count % 3` from the large breakpoint, `2 - count % 2` from the small one), never leaving a divider-coloured empty cell; with a count of three times n plus one it takes two thirds of the last row on desktop, as on azion.com's learning page
 - Empty: when no subject carries a title and a linked article the band renders nothing — not the grid, not the closing cell
 
 ## Accessibility
@@ -11807,7 +12074,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Template Gallery Section
 
-> The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
+> The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a two-column wall, scrolling once the band splits, of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
 
 - Import: `import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'`
 - Category: section · Surface: site · Structure: monolithic

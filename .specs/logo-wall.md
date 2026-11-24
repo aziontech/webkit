@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 70fc3176a49456a48f505ac84e5ad43d9d9e7a853c2007eb0d987997344946df
+checksum: 76016172af6a60360815657c51253d778370b0987fc556c0c37987cfdd1ab51d
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -91,11 +91,11 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 | Prop        | Type              | Default    | Required | JSDoc                                                                                                                                                                                                                                                    |
 | ----------- | ----------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `variant`   | `LogoWallVariant` | `'square'` | false    | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`.                                                                                                             |
-| `items`     | `LogoWallItem[]`  | `[]`       | false    | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `items`     | `LogoWallItem[]`  | `[]`       | false    | The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
 | `ariaLabel` | `string`          | `''`       | false    | Accessible name for the group of marks, announced instead of an unnamed region.                                                                                                                                                                          |
 | `linkLabel` | `string`          | `''`       | false    | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`).                                                                                                        |
 
-`LogoWallItem` is `{ src: string; alt: string; href?: string; shape?: LogoWallShape }`, `LogoWallShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallVariant` is `'square' | 'rectangle'`. All three types are exported.
+`LogoWallItem` is `{ src: string; srcDark?: string; alt: string; href?: string; shape?: LogoWallShape }`; with `srcDark` set the cell renders both files and the theme (`data-theme="dark"`) reveals one, so a full-colour mark whose ink fades on a dark cell (a deep purple wordmark) ships its reversed file instead, `LogoWallShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallVariant` is `'square' | 'rectangle'`. All three types are exported.
 
 ## Events
 

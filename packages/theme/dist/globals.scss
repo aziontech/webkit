@@ -257,6 +257,7 @@
   --animate-spin-settle: spin 4200ms cubic-bezier(0.4, 0, 0.2, 1);
   --animate-ping-settle: ping 1s cubic-bezier(0, 0, 0.2, 1) 3;
   --animate-pulse-settle: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2;
+  --animate-status-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-blink-settle: blink 1s step-end 4;
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
@@ -382,7 +383,7 @@
   --shape-button: 6px;
   --shape-control: 6px;
   --border-width-default: 0.8px;
-  --font-sans: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --font-code: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-display: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-xs: 0.75rem;
@@ -476,6 +477,7 @@
   --animate-spin-settle: spin 4200ms cubic-bezier(0.4, 0, 0.2, 1);
   --animate-ping-settle: ping 1s cubic-bezier(0, 0, 0.2, 1) 3;
   --animate-pulse-settle: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2;
+  --animate-status-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-blink-settle: blink 1s step-end 4;
   --animate-fade-in: fadeIn 220ms ease-in-out;
   --animate-fade-out: fadeOut 220ms ease-in-out;
@@ -683,12 +685,12 @@
   --text-overline-xs-line-height: 1.375;
   --text-overline-xs-letter-spacing: 0.1rem;
   --text-overline-xs-text-transform: uppercase;
-  --text-button-lg-font-family: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --text-button-lg-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-button-lg-font-size: 0.875rem;
   --text-button-lg-font-weight: 400;
   --text-button-lg-line-height: 1.25;
   --text-button-lg-letter-spacing: 0;
-  --text-button-md-font-family: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --text-button-md-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-button-md-font-size: 0.75rem;
   --text-button-md-font-weight: 400;
   --text-button-md-line-height: 1.25;
@@ -779,7 +781,6 @@
   --text-default: #141414;
   --text-muted: #535353;
   --text-disabled: #999999;
-  --text-brand: #F3652B;
   --text-link: #005FCC;
   --text-link-hover: #004799;
   --text-danger: #B71515;
@@ -909,7 +910,6 @@
   --text-default: #FAFAFA;
   --text-muted: #B2B2B2;
   --text-disabled: #4D4D4D;
-  --text-brand: #F3652B;
   --text-link: #99C9FF;
   --text-link-hover: #99C9FF;
   --text-danger: #F3A5A5;
@@ -1047,7 +1047,6 @@
     --text-default: #FAFAFA;
     --text-muted: #B2B2B2;
     --text-disabled: #4D4D4D;
-    --text-brand: #F3652B;
     --text-link: #99C9FF;
     --text-link-hover: #99C9FF;
     --text-danger: #F3A5A5;
@@ -1703,7 +1702,6 @@
 @utility text-default { color: var(--text-default); }
 @utility text-muted { color: var(--text-muted); }
 @utility text-disabled { color: var(--text-disabled); }
-@utility text-brand { color: var(--text-brand); }
 @utility text-link-hover { color: var(--text-link-hover); }
 @utility text-danger { color: var(--text-danger); }
 @utility text-contrast { color: var(--text-contrast); }

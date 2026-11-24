@@ -3,11 +3,11 @@ name: app-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 0d81a45dca49d6833979e0e68e52f997f70c80d51d644cbeb4ed28b9a557092b
+checksum: 3c63f0961863f0955cb0b28ba665fc20fc2bda54545bdb37cb0effcb4a86e4dd
 created: 2026-11-11
-last_updated: 2026-11-19
+last_updated: 2026-11-23
 ---
 
 # AppLayout — Component Spec
@@ -50,7 +50,7 @@ keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame t
 - One `AppLayout` per page, at the root. Do not nest them.
 - Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.
 - Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
-- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.
+- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button. In the console, `ConsoleLayout` wraps this layout and a page opens its own help from `ConsoleLayout.ToolsTrigger`, the `Info` link after the page title.
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
 - Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
 - Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.
@@ -178,18 +178,18 @@ The only events are the `update:*` of the models above.
 
 ## Tokens
 
-| Region                        | Token (DESIGN.md)                        |
-| ----------------------------- | ---------------------------------------- |
-| canvas                        | `var(--bg-canvas)`                       |
-| tools / split panel surface   | `var(--bg-surface)`                      |
-| region borders, separator     | `var(--border-default)`                  |
-| separator hover               | `var(--border-strong)`                   |
-| separator focus / drag        | `var(--accent)`                          |
-| region header title           | `.text-heading-2xs`                      |
-| region header height          | `var(--spacing-2xl)`                     |
-| region header padding         | `var(--spacing-md)`                      |
-| notifications gap and padding | `var(--spacing-xs)`, `var(--spacing-md)` |
-| ring                          | `var(--ring-color)`                      |
+| Region                        | Token (DESIGN.md)                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| canvas                        | `var(--bg-canvas)`                                                                                           |
+| tools / split panel surface   | `var(--bg-surface)`                                                                                          |
+| region borders, separator     | `var(--border-default)`                                                                                      |
+| separator hover               | `var(--border-strong)`                                                                                       |
+| separator focus / drag        | `var(--accent)`                                                                                              |
+| region header title           | `.text-heading-2xs`                                                                                          |
+| region header height          | `h-14` (56px, the rail header and `PanelHeader` row; never a spacing gap token, which grows with the window) |
+| region header padding         | `var(--spacing-md)`                                                                                          |
+| notifications gap and padding | `var(--spacing-xs)`, `var(--spacing-md)`                                                                     |
+| ring                          | `var(--ring-color)`                                                                                          |
 
 ## Theme gaps
 
@@ -232,6 +232,7 @@ The only events are the `update:*` of the models above.
 ## Responsive
 
 - Container queries: the root is `@container/app-layout`; a `ResizeObserver` on the root switches to compact when its own width is under `compactBelow` (768 px by default), so the layout also goes compact inside a narrow host, not only on a narrow viewport.
+- First paint: with the default `compactBelow` (768 px) the navigation rail and the tools region also carry a container query (`@max-3xl/app-layout:hidden`), so a server-rendered page never paints the rail on a phone before the script measures the root.
 - Narrow (compact): navigation renders in a `Drawer` from the inline end (the design sample's phone menu), the tools in a `Drawer`, the split panel is forced to the bottom and its position toggle hides; the split panel's maximum is 70 % of the layout height.
 - Touch: region buttons are `IconButton`; the separator has a 16 px hit area and pointer drag works with touch (pointer events).
 - Reflow: the content scrolls on its own; no horizontal scroll at 320 px.

@@ -12,7 +12,7 @@
   },
   {
    "name": "SavePerGroup",
-   "summary": "A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `Subheader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `Subheader`, `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.",
+   "summary": "A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `Subheader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only, disabled until that group changes; Save emits `submit(event, { group, values })` and each group takes its own `loading` and `error`. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `Subheader`, `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.",
    "file": "blocks/settings/settings-form/variants/save-per-group.vue"
   },
   {
@@ -22,7 +22,7 @@
   },
   {
    "name": "SavePerCard",
-   "summary": "A long configuration page split into titled cards that each own their save: a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`.",
+   "summary": "A long configuration page split into titled cards that each own their save: a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`; Save is disabled until that card changes and emits `submit(event, { card, values })`, and each card takes its own `loading` and `error`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`.",
    "file": "blocks/settings/settings-form/variants/save-per-card.vue"
   },
   {
@@ -32,7 +32,7 @@
   },
   {
    "name": "Profile",
-   "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsGroup`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `account/account-mfa-settings`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. A save that fails with no field to blame raises an error toast with Retry and keeps the changes.",
+   "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsGroup`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `account/account-mfa-settings`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. The page fetches nothing: `loading`/`error` drive the first load (Retry emits `retry`), `saving`/`saveError` the save (Save emits `submit`), and `deleting` the deletion (the dialog emits `delete`); a failed save raises an error toast with Retry and keeps the changes.",
    "file": "blocks/settings/settings-form/variants/profile.vue"
   },
   {
@@ -48,7 +48,7 @@
  ],
  "sfcFile": "blocks/settings/settings-form/settings-form.vue",
  "guidelinesFile": "blocks/settings/settings-form/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/settings/settings-form/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 8
-checksum: f182a5874103d3fa79c79fde5da96e5c10e5239e93e86964637015a382bf2437
+checksum: ad427b54d28baf80277eb0120f8bc3161d2dcbe2ead75477dd0eebecee3524da
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -78,9 +78,10 @@ Tree-shaking: `@aziontech/webkit/panel-root` is the root alone, and `panel-heade
 ## Sub-components
 
 - `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
-- `panel-body.vue` — Public sub-component `panel-body`.
+- `panel-body.vue` — Public sub-component `panel-body`. Inside a drawer it wraps its content in a `ScrollArea` (`panel-body`) around the padded region (`panel-body__content`).
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`. Inside `DialogContent` / `DrawerContent` it appends the overlay's close button after its content (the content then sits in one flex row that keeps its own start/end spread), while the overlay's `closable` is true; a `PanelHeader` of a nested `Panel` gets nothing. Standalone it renders only its slot.
+- Test ids: each region falls back to its own name (`panel-header`, `panel-body`, `panel-footer`) and a `data-testid` passed to the region wins; the shell's `data-testid` does not rename the regions.
 
 ## Props
 
@@ -104,7 +105,7 @@ Tree-shaking: `@aziontech/webkit/panel-root` is the root alone, and `panel-heade
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
 - `data-width` on the root carries the resolved width: `small` | `medium` | `large`, the same with `-md` when `sizeAtMd` is set, or `fluid` when the internal `data-fluid` attribute is passed (Drawer). Tailwind `data-[width=…]:` variants map it to the container tokens; there is no JS class map.
-- Responsive: `PanelBody` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`.
+- Responsive: `PanelBody` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`. A footer the consumer stacks as a column (`flex-col`) keeps every child at its own height (`max-sm:[&.flex-col]:*:flex-none`), so stacked buttons never collapse below their drawn height.
 
 ## Motion & Animations
 

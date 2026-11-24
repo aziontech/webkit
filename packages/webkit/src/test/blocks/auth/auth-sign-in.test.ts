@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Login from '../../../../blocks/auth/auth-sign-in/auth-sign-in.vue'
@@ -21,7 +21,10 @@ import Submitting from '../../../../blocks/auth/auth-sign-in/variants/submitting
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
 
-afterEach(() => cleanup())
+afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
+})
 
 useToastRegion()
 
@@ -68,6 +71,54 @@ describe('auth/auth-sign-in#Login', () => {
 
     await waitFor(() => expect(view.getByLabelText(/^Password\b/)).toBeTruthy())
     await expectNoA11yViolations(view.container)
+  })
+})
+
+describe('auth/auth-sign-in focus and password managers', () => {
+  it('focuses the email on entry and the password after Continue', async () => {
+    const view = render(Login)
+    await waitFor(() => expect(document.activeElement?.id).toBe('login-email'))
+    await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(document.activeElement?.id).toBe('login-password'))
+  })
+
+  it('keeps the email in the password step as the username field', async () => {
+    const view = render(Login)
+    await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
+    await waitFor(() => expect(view.getByLabelText(/^Password\b/)).toBeTruthy())
+    const username = view.container.querySelector<HTMLInputElement>(
+      'input[autocomplete~="username"]'
+    )
+    expect(username?.value).toBe('jane.doe@example.com')
+    expect(username?.form).toBe(view.getByLabelText(/^Password\b/).closest('form'))
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('focuses the token field and the MFA setup code on entry, on a fine pointer', async () => {
+    const realMatchMedia = window.matchMedia.bind(window)
+    const fine = (query: string) =>
+      query === '(pointer: fine)'
+        ? { ...realMatchMedia(query), matches: true }
+        : realMatchMedia(query)
+    vi.spyOn(window, 'matchMedia').mockImplementation(fine)
+    render(PersonalToken)
+    await waitFor(() => expect(document.activeElement?.id).toBe('personal-token'))
+    cleanup()
+    render(MfaSetup)
+    await waitFor(() => expect(document.activeElement?.id).toBe('mfa-setup-code'))
+  })
+
+  it('MfaSetup offers the otpauth link for an authenticator on the same device', () => {
+    const view = render(MfaSetup)
+    const link = view.getByRole('link', { name: 'Open in authenticator app' })
+    expect(link.getAttribute('href')).toMatch(/^otpauth:\/\/totp\//)
+  })
+
+  it('ServiceUnavailable claims nothing the server did not check', () => {
+    const view = render(Login, { props: { error: 'service-unavailable' } })
+    expect(view.queryByText(/credentials are fine/)).toBeNull()
   })
 })
 
@@ -354,24 +405,22 @@ describe('auth/auth-sign-in', () => {
     expect(view.getByRole('button', { name: 'Retry' })).toBeTruthy()
   })
 
-  it('EmailAlreadyRegistered: the exits are real links', () => {
-    const view = render(EmailAlreadyRegistered)
-    expect(view.getByRole('link', { name: 'reset your password' }).getAttribute('href')).toBe(
-      '/login?reset=1'
-    )
-    expect(view.container.querySelector('a[href="#"]')).toBeNull()
-  })
-
-  it('EmailAlreadyRegistered: keeps the email and answers a new submit with the same notice', async () => {
-    const view = render(EmailAlreadyRegistered)
-    const email = view.getByRole('textbox', { name: /Work email/ }) as HTMLInputElement
+  it('EmailAlreadyRegistered: answers exactly like a new address, revealing nothing', async () => {
+    const taken = render(EmailAlreadyRegistered)
+    const email = taken.getByRole('textbox', { name: /Work email/ }) as HTMLInputElement
     expect(email.value).toBe('jane.doe@example.com')
-    expect(view.getByText(/This email is already registered/)).toBeTruthy()
-    await fireEvent.update(view.getByLabelText(/^Password/), 'Correct-horse-9!')
-    await fireEvent.click(view.getByRole('button', { name: 'Sign up' }))
-    expect(view.queryByText(/This email is already registered/)).toBeNull()
-    await waitFor(() => expect(view.getByText(/This email is already registered/)).toBeTruthy())
-    expect(view.queryByText(/Account created/)).toBeNull()
+    expect(taken.queryByText(/already registered/)).toBeNull()
+    await fireEvent.update(taken.getByLabelText(/^Password/), 'Correct-horse-9!')
+    await fireEvent.click(taken.getByRole('button', { name: 'Sign up' }))
+    await waitFor(() => expect(taken.getByText(/Check your inbox at/)).toBeTruthy())
+    const takenText = taken.getByText(/Check your inbox at/).textContent
+    cleanup()
+    const fresh = render(SignUp)
+    await fireEvent.update(fresh.getByLabelText(/^Work email/), 'jane.doe@example.com')
+    await fireEvent.update(fresh.getByLabelText(/^Password/), 'Correct-horse-9!')
+    await fireEvent.click(fresh.getByRole('button', { name: 'Sign up' }))
+    await waitFor(() => expect(fresh.getByText(/Check your inbox at/)).toBeTruthy())
+    expect(fresh.getByText(/Check your inbox at/).textContent).toBe(takenText)
   })
 
   it('SignUp: the provider buttons emit provider-click', async () => {
@@ -406,7 +455,9 @@ describe('auth/auth-sign-in#PersonalToken', () => {
     expect(input.getAttribute('autocomplete')).toBe('off')
     await fireEvent.click(view.getByRole('button', { name: 'Show password' }))
     expect(input.type).toBe('text')
-    const link = view.getByRole('link', { name: 'How to create a personal token' })
+    const link = view.getByRole('link', {
+      name: 'How to create a personal token (opens in a new tab)'
+    })
     expect(link.getAttribute('href')).toContain('azion.com')
     await expectNoA11yViolations(view.container)
   })

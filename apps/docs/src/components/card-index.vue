@@ -2,15 +2,28 @@
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
+  import { BLOCK_THUMBNAIL } from '../lib/block-thumbnails'
   import { messages } from '../lib/i18n'
+  import CategoryJump from './category-jump.vue'
 
   const props = defineProps<{
     title: string
     description: string
-    groups: { label: string; items: { title: string; to: string; text: string }[] }[]
+    groups: {
+      label: string
+      items: {
+        title: string
+        to: string
+        text: string
+        preview?: boolean
+        image?: { light: string; dark: string }
+      }[]
+    }[]
   }>()
 
   const t = messages
@@ -26,6 +39,16 @@
       }))
       .filter((group) => group.items.length)
   })
+
+  const groupId = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
+  const jumps = computed(() =>
+    filtered.value.map((group) => ({
+      id: groupId(group.label),
+      label: group.label,
+      count: group.items.length
+    }))
+  )
 </script>
 
 <template>
@@ -51,12 +74,17 @@
         </template>
       </Input>
     </div>
+    <CategoryJump :groups="jumps" />
     <section
       v-for="group in filtered"
       :key="group.label"
-      class="flex flex-col gap-(--spacing-sm)"
+      class="flex scroll-mt-20 flex-col gap-(--spacing-sm) md:scroll-mt-40"
+      :aria-labelledby="`category-${groupId(group.label)}`"
     >
-      <h2 class="text-heading-sm">
+      <h2
+        :id="`category-${groupId(group.label)}`"
+        class="text-heading-sm"
+      >
         {{ group.label }}
         <span class="text-body-sm text-(--text-muted)">{{ group.items.length }}</span>
       </h2>
@@ -67,9 +95,48 @@
           :title="item.title"
           :href="item.to"
         >
-          {{ item.text }}
+          <span
+            v-if="item.image"
+            data-docs-thumbnail
+            class="mb-(--spacing-sm) block overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
+          >
+            <img
+              :src="item.image.light"
+              alt=""
+              :width="BLOCK_THUMBNAIL.width"
+              :height="BLOCK_THUMBNAIL.height"
+              loading="lazy"
+              decoding="async"
+              class="block aspect-[8/5] h-auto w-full dark:hidden"
+            />
+            <img
+              :src="item.image.dark"
+              alt=""
+              :width="BLOCK_THUMBNAIL.width"
+              :height="BLOCK_THUMBNAIL.height"
+              loading="lazy"
+              decoding="async"
+              class="hidden aspect-[8/5] h-auto w-full dark:block"
+            />
+          </span>
+          <span class="flex flex-col items-start gap-(--spacing-2xs)">
+            <Tag
+              v-if="item.preview"
+              :label="t.stabilityPreview"
+              severity="info"
+              size="small"
+            />
+            <span class="line-clamp-2">{{ item.text }}</span>
+          </span>
         </DocCard>
       </DocCardGroup>
     </section>
+    <EmptyState
+      v-if="!filtered.length"
+      :title="t.noResults"
+      icon="az az-filter"
+      bordered
+      data-docs-empty
+    />
   </div>
 </template>

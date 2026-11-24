@@ -13,15 +13,22 @@
   })
 
   export interface TableExportButtonProps {
-    /** Download filename; falls back to the table's `exportFilename`. */
+    /** Download filename; empty writes `export.csv`. */
     filename?: string
     /** Which rows to export. */
     scope?: TableExportButtonScope
+    /**
+     * Rows the `filtered` and `all` scopes write in place of the rows the table holds:
+     * `useCollection().exportItems` writes every match, not only the page. A promise is awaited
+     * before the `export` event and the download.
+     */
+    rows?: (scope: 'filtered' | 'all') => object[] | Promise<object[]>
   }
 
   const props = withDefaults(defineProps<TableExportButtonProps>(), {
     filename: '',
-    scope: 'filtered'
+    scope: 'filtered',
+    rows: undefined
   })
 
   defineSlots<{
@@ -37,8 +44,19 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'table-export-button'
   )
 
+  const rowsFor = (scope: TableExportButtonScope): Promise<object[] | undefined> =>
+    Promise.resolve(props.rows && scope !== 'page' ? props.rows(scope) : undefined)
   const onExport = (event?: Event): void =>
-    void ctx?.exportCsv({ filename: props.filename || undefined, scope: props.scope }, event)
+    void rowsFor(props.scope).then((rows) =>
+      ctx?.exportCsv(
+        {
+          filename: props.filename || undefined,
+          scope: props.scope,
+          rows: rows as Record<string, unknown>[] | undefined
+        },
+        event
+      )
+    )
 </script>
 
 <template>

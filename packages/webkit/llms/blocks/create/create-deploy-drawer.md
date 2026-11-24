@@ -227,36 +227,18 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
 ```vue
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
-  import Link from '@aziontech/webkit/link'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Popover from '@aziontech/webkit/popover'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Separator from '@aziontech/webkit/separator'
   import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { computed, reactive, ref, useId, watch } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
+  import BuildItem from './parts/build-item.vue'
+  import DeployDrawerFrame from './parts/deploy-drawer-frame.vue'
+  import DeployLoading from './parts/deploy-loading.vue'
+  import DeployResourcesCard from './parts/deploy-resources-card.vue'
+  import EnvironmentChoices from './parts/environment-choices.vue'
+  import ImpactedProjects from './parts/impacted-projects.vue'
+  import ProjectCard from './parts/project-card.vue'
   import {
     sampleDefaultValues,
     sampleEnvironments,
@@ -265,149 +247,34 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     sampleProjectGroups,
     sampleResources
   } from './sample'
+  import type {
+    DeployDrawerBuild,
+    DeployDrawerDependency,
+    DeployDrawerEnvironment,
+    DeployDrawerImpact,
+    DeployDrawerProject,
+    DeployDrawerProjectGroup,
+    DeployDrawerProjectMode,
+    DeployDrawerResource,
+    DeployDrawerValues,
+    DeployDrawerVersion
+  } from './types'
 
-  /** One Ready version of a resource. */
-  export interface DeployDrawerVersion {
-    /** Stable key, the version id. */
-    id: string
-    /** The version name. */
-    name: string
-    /** Who built it. */
-    author: string
-    /** When it was built, as an ISO 8601 string. */
-    createdAt: string
-    /** Whether it is the version live now. */
-    active?: boolean
-  }
-
-  /** A resource the deployment sends live, or one it references. */
-  export interface DeployDrawerDependency {
-    /** Stable key; picked versions are keyed by it. */
-    key: string
-    /** The kind of resource (Service, Module, Integration). */
-    label: string
-    /** The resource name. */
-    name: string
-    /** The kind glyph, an icon class. */
-    icon: string
-    /** A note shown instead of the version picker; empty for a pickable resource. */
-    note: string
-    /** Other services that reference it; set, it carries a Shared tag and deploys at one version for all of them. */
-    sharedWith?: string[]
-    /** How many Ready versions exist; the list may hold only the most recent. */
-    total: number
-    /** The most recent Ready versions, newest first. */
-    versions: DeployDrawerVersion[]
-  }
-
-  /** A top-level resource with the resources it references. */
-  export interface DeployDrawerResource extends DeployDrawerDependency {
-    /** Whether the project owns it. */
-    owner: boolean
-    /** The modules and integrations it references. */
-    dependencies: DeployDrawerDependency[]
-  }
-
-  /** The domains of a project in one environment. */
-  export interface DeployDrawerDomainGroup {
-    /** The environment they answer in. */
-    environment: string
-    /** How many domains there are. */
-    total: number
-    /** The count, already phrased (10 of 22 domains). */
-    summary: string
-    /** The first domains. */
-    domains: string[]
-  }
-
-  /** A project the deployment can go live on. */
-  export interface DeployDrawerProject {
-    /** Stable key; absent for the project Create new makes. */
-    id?: string
-    /** The project name. */
-    name: string
-    /** The domain a new project answers on. */
-    domain?: string
-    /** One line on what the project serves. */
-    detail?: string
-    /** Its domains per environment. */
-    domains?: DeployDrawerDomainGroup[]
-  }
-
-  /** A project that already exists. */
-  export interface DeployDrawerExistingProject extends DeployDrawerProject {
-    /** Stable key. */
-    id: string
-  }
-
-  /** A group of projects in the project picker. */
-  export interface DeployDrawerProjectGroup {
-    /** Stable key. */
-    key: string
-    /** The group heading. */
-    label: string
-    /** The projects in it. */
-    projects: DeployDrawerExistingProject[]
-  }
-
-  /** An environment the deployment can go live in. */
-  export interface DeployDrawerEnvironment {
-    /** The environment name, also its value. */
-    name: string
-    /** One sentence on what deploying there does. */
-    description: string
-    /** A short tag beside the name (Last used); empty for none. */
-    tag: string
-    /** The color of the tag; info when left out. */
-    tagSeverity?: TagSeverity
-    /** Locked: the choice card shows but cannot be picked. */
-    disabled?: boolean
-  }
-
-  /** A project the deployment reaches through shared Deployment Settings. */
-  export interface DeployDrawerImpactedProject {
-    /** Stable key. */
-    id: string
-    /** The project name. */
-    name: string
-    /** Whether it is the project picked above. */
-    selected?: boolean
-    /** Its domains per environment. */
-    domains: DeployDrawerDomainGroup[]
-  }
-
-  /** The projects reached in one environment. */
-  export interface DeployDrawerImpact {
-    /** The environment name. */
-    environment: string
-    /** The projects reached there. */
-    projects: DeployDrawerImpactedProject[]
-  }
-
-  /** A build in progress before the deployment can go live. */
-  export interface DeployDrawerBuild {
-    /** The resource being built. */
-    name: string
-    /** The version being built. */
-    version: string
-    /** Seconds since the build started. */
-    elapsed: number
-  }
-
-  /** Whether the deployment uses an existing project or creates one. */
-  export type DeployDrawerProjectMode = 'existing' | 'new'
-
-  /** What the form holds, and what submit sends. */
-  export interface DeployDrawerValues {
-    /** The picked version id per resource key. */
-    versions: Record<string, string>
-    /** Use an existing project or create one. */
-    projectMode: DeployDrawerProjectMode
-    /** The existing project picked. */
-    projectId: string
-    /** The environment it goes live in. */
-    environment: string
-  }
+  export type {
+    DeployDrawerBuild,
+    DeployDrawerDependency,
+    DeployDrawerDomainGroup,
+    DeployDrawerEnvironment,
+    DeployDrawerExistingProject,
+    DeployDrawerImpact,
+    DeployDrawerImpactedProject,
+    DeployDrawerProject,
+    DeployDrawerProjectGroup,
+    DeployDrawerProjectMode,
+    DeployDrawerResource,
+    DeployDrawerValues,
+    DeployDrawerVersion
+  } from './types'
 
   export interface DeployDrawerProps {
     /** The resources and their dependencies. Left out, the sample renders. */
@@ -496,17 +363,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     ...(props.defaultValues ?? (props.resources ? {} : sampleDefaultValues))
   }))
 
-  const projectModes = [
-    { value: 'existing', label: 'Use existing' },
-    { value: 'new', label: 'Create new' }
-  ]
-
   type Dependency = DeployDrawerDependency
   type ProjectView = DeployDrawerProject
 
   picks.value = { ...initial.value.versions }
   environment.value = initial.value.environment
-  const versionOpen = reactive<Record<string, boolean>>({})
   const projectMode = ref<DeployDrawerProjectMode>(initial.value.projectMode)
   const projectId = ref(initial.value.projectId)
 
@@ -521,11 +382,6 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
   const versionOf = (row: Dependency): DeployDrawerVersion | undefined =>
     row.versions.find((entry) => entry.id === picks.value[row.key]) ?? row.versions[0]
-
-  const versionSummary = (row: Dependency) =>
-    row.total > row.versions.length
-      ? `${row.versions.length} of ${row.total} Ready versions`
-      : `${row.total} Ready versions`
 
   const liveVersionId = (row: Dependency) =>
     (row.versions.find((entry) => entry.active) ?? row.versions[0])?.id ?? ''
@@ -542,32 +398,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
       `${changeCount.value} ${changeCount.value === 1 ? 'change goes' : 'changes go'} live in ${environment.value}.`
   )
 
-  const pickVersion = (row: Dependency, id: string) => {
-    picks.value = { ...picks.value, [row.key]: id }
-    versionOpen[row.key] = false
-  }
-
-  const listFormat = (names: string[]) =>
-    names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : (names[0] ?? '')
-
-  const sharedDependency = (row: DeployDrawerResource) =>
-    row.dependencies.find((dependency) => dependency.sharedWith?.length)
-
-  const dependenciesLoading = (row: DeployDrawerResource) =>
-    props.dependenciesLoadingKeys.includes(row.key)
-
-  const impactedCount = computed(() =>
-    impacted.value.reduce((total, group) => total + group.projects.length, 0)
-  )
-
-  const projectsLabel = (count: number) => `${count} ${count === 1 ? 'project' : 'projects'}`
-
   const blockerId = useId()
 
   const reset = () => {
     const values = initial.value
     picks.value = { ...values.versions }
-    Object.keys(versionOpen).forEach((key) => delete versionOpen[key])
     projectMode.value = values.projectMode
     projectId.value = values.projectId
     environment.value = values.environment
@@ -603,1035 +438,137 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     })
     open.value = false
   }
-
-  const formEl = ref<HTMLFormElement | null>(null)
-
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Deploy',
-    group: 'Drawer',
-    element: formEl,
-    when: () => open.value && !blocked.value,
-    handler: () => formEl.value?.requestSubmit()
-  })
-
-  const relativeTime = useLocale().formatRelativeTime
-  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
 </script>
 
 <template>
-  <Drawer
+  <DeployDrawerFrame
     v-model:open="open"
-    size="large"
-    side="end"
+    :title="title"
+    :blocked="blocked"
+    :reason-id="blocker ? blockerId : ''"
+    @submit="submit"
   >
-    <DrawerTrigger>
-      <Button
-        label="Deploy"
-        variant="outline"
-        size="medium"
-        icon="az az-cloud-upload"
-      />
-    </DrawerTrigger>
+    <DeployLoading v-if="loading" />
 
-    <DrawerContent>
-      <form
-        ref="formEl"
-        class="flex min-h-0 flex-1 flex-col"
-        :aria-label="title"
-        novalidate
-        @submit.prevent="submit"
+    <SettingsGroup
+      v-else-if="error"
+      label="Deploy targets"
+    >
+      <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
+        <Alert
+          severity="danger"
+          :label="error"
+        />
+        <Button
+          label="Retry"
+          variant="outline"
+          size="small"
+          icon="az az-refresh"
+          @click="(event: MouseEvent) => emit('retry', event)"
+        />
+      </div>
+    </SettingsGroup>
+
+    <fieldset
+      v-else
+      class="m-0 flex min-w-0 flex-col border-0 p-0"
+    >
+      <legend class="sr-only">{{ title }}</legend>
+      <SettingsGroup
+        label="Resources"
+        hint="The service version this deployment sends live, and the version of every module and integration it references."
       >
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>{{ title }}</DrawerTitle>
-          </div>
-        </PanelHeader>
+        <BuildItem
+          v-if="build"
+          :build="build"
+        />
+        <DeployResourcesCard
+          v-else
+          v-model:picks="picks"
+          :resources="resources"
+          :dependencies-open="dependenciesOpen"
+          :dependencies-loading-keys="dependenciesLoadingKeys"
+        />
+      </SettingsGroup>
 
-        <PanelBody>
-          <div
-            v-if="loading"
-            class="flex min-w-0 flex-col"
-            aria-busy="true"
-          >
-            <SettingsGroup
-              label="Resources"
-              hint="The service version this deployment sends live, and the version of every module and integration it references."
-            >
-              <div aria-hidden="true">
-                <Skeleton height="var(--size-40)" />
-              </div>
-            </SettingsGroup>
+      <SettingsGroup
+        :inert="!!build || undefined"
+        :data-pending="build ? 'true' : undefined"
+        label="Project"
+        hint="The project whose domains serve the service. Create one to deploy it on a new domain."
+      >
+        <ProjectCard
+          v-model:project-mode="projectMode"
+          v-model:project-id="projectId"
+          :project="project"
+          :project-groups="projectGroups"
+        />
+      </SettingsGroup>
 
-            <SettingsGroup
-              label="Environment"
-              hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
-            >
-              <div
-                class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                aria-hidden="true"
-              >
-                <Skeleton
-                  v-for="row in 2"
-                  :key="row"
-                  height="var(--size-16)"
-                />
-              </div>
-            </SettingsGroup>
+      <SettingsGroup
+        :inert="!!build || undefined"
+        :data-pending="build ? 'true' : undefined"
+        label="Environment"
+        hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
+      >
+        <EnvironmentChoices
+          v-model="environment"
+          :environments="environmentChoices"
+          name="service-deploy-environment"
+        />
 
-            <span
-              class="sr-only"
-              role="status"
-            >
-              Loading the resources and environments for this deployment.
-            </span>
-          </div>
+        <slot
+          name="environment-alerts"
+          :environment="environment"
+          :project="project"
+        />
+      </SettingsGroup>
 
-          <SettingsGroup
-            v-else-if="error"
-            label="Deploy targets"
-          >
-            <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
-              <Alert
-                severity="danger"
-                :label="error"
-              />
-              <Button
-                label="Retry"
-                variant="outline"
-                size="small"
-                icon="az az-refresh"
-                @click="(event: MouseEvent) => emit('retry', event)"
-              />
-            </div>
-          </SettingsGroup>
+      <SettingsGroup
+        v-if="impacted.length"
+        :inert="!!build || undefined"
+        :data-pending="build ? 'true' : undefined"
+        label="Projects impacted"
+        hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
+      >
+        <ImpactedProjects
+          :impacted="impacted"
+          :loading="impactedLoading"
+        />
+      </SettingsGroup>
 
-          <fieldset
-            v-else
-            class="m-0 flex min-w-0 flex-col border-0 p-0"
-          >
-            <legend class="sr-only">{{ title }}</legend>
-            <SettingsGroup
-              label="Resources"
-              hint="The service version this deployment sends live, and the version of every module and integration it references."
-            >
-              <Item
-                v-if="build"
-                variant="outline"
-                size="small"
-                aria-live="polite"
-              >
-                <Item.Media>
-                  <span
-                    class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                  >
-                    <i
-                      class="az az-server text-body-xs text-(--text-default)"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </Item.Media>
-                <Item.Content>
-                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <Item.Title>{{ build.name }}</Item.Title>
-                    <Tag
-                      :label="build.version"
-                      severity="neutral"
-                      size="small"
-                      class="shrink-0"
-                    />
-                  </span>
-                  <Item.Description>Building…</Item.Description>
-                </Item.Content>
-                <Item.Actions>
-                  <span
-                    class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)"
-                  >
-                    {{ build.elapsed }} s
-                  </span>
-                  <div class="contents text-(--text-default)">
-                    <Spinner class="shrink-0" />
-                  </div>
-                </Item.Actions>
-              </Item>
-              <Card
-                v-else
-                :padded="false"
-              >
-                <template #default>
-                  <template
-                    v-for="(row, index) in resources"
-                    :key="row.key"
-                  >
-                    <Separator v-if="index" />
-                    <Item
-                      variant="inline"
-                      size="small"
-                    >
-                      <Item.Media>
-                        <span
-                          class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                        >
-                          <i
-                            :class="row.icon"
-                            class="text-body-xs text-(--text-default)"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Item.Media>
-                      <Item.Content>
-                        <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                          <span class="shrink-0 text-body-sm text-(--text-muted)">
-                            {{ row.label }}
-                          </span>
-                          <Item.Title>{{ row.name }}</Item.Title>
-                          <Tag
-                            v-if="!row.note"
-                            :label="row.versions.length ? 'Ready' : 'No ready version'"
-                            :severity="row.versions.length ? 'success' : 'warning'"
-                            size="small"
-                            class="shrink-0"
-                          />
-                        </span>
-                        <Item.Description>
-                          {{ row.note || versionOf(row)?.name }}
-                        </Item.Description>
-                      </Item.Content>
-                      <Item.Actions
-                        v-if="!row.note"
-                        class="basis-full sm:basis-auto"
-                      >
-                        <DropdownMenu
-                          v-model:open="versionOpen[row.key]"
-                          side="bottom"
-                          align="end"
-                          @select="(_event, id) => pickVersion(row, String(id))"
-                        >
-                          <DropdownMenu.Trigger>
-                            <Button
-                              label="Change version"
-                              :aria-label="`Change version of ${row.name}`"
-                              variant="outline"
-                              size="small"
-                              icon="az az-chevron-down"
-                              icon-position="trailing"
-                              :disabled="!row.versions.length"
-                            />
-                          </DropdownMenu.Trigger>
-                          <template #header>
-                            <div
-                              class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
-                            >
-                              <p class="text-label-sm text-(--text-muted)">
-                                {{ versionSummary(row) }}
-                              </p>
-                              <Input
-                                v-if="row.total > row.versions.length"
-                                size="medium"
-                                placeholder="Search versions"
-                                aria-label="Search versions"
-                              >
-                                <template #leading>
-                                  <i
-                                    class="az az-search"
-                                    aria-hidden="true"
-                                  />
-                                </template>
-                              </Input>
-                            </div>
-                          </template>
-                          <DropdownMenu.Group>
-                            <DropdownMenu.Item
-                              v-for="entry in row.versions"
-                              :key="entry.id"
-                              :value="entry.id"
-                              :label="entry.name"
-                              :selected="entry.id === versionOf(row)?.id"
-                              :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
-                            >
-                              <template #leading>
-                                <Avatar
-                                  :alt="entry.author"
-                                  :label="entry.author"
-                                  size="small"
-                                  variant="square"
-                                />
-                              </template>
-                              <span class="inline-flex min-w-0 items-center gap-(--spacing-xs)">
-                                <span class="truncate">{{ entry.name }}</span>
-                                <Tag
-                                  v-if="entry.active"
-                                  label="Active"
-                                  severity="success"
-                                  size="small"
-                                  class="shrink-0"
-                                />
-                              </span>
-                              <template #trailing>
-                                <span class="text-body-xs text-(--text-muted)">{{
-                                  ago(entry.createdAt)
-                                }}</span>
-                              </template>
-                            </DropdownMenu.Item>
-                          </DropdownMenu.Group>
-                          <template
-                            v-if="row.total > row.versions.length"
-                            #bottom
-                          >
-                            <div
-                              class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
-                            >
-                              <Button
-                                :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
-                                variant="ghost"
-                                size="small"
-                                class="w-full"
-                              />
-                            </div>
-                          </template>
-                        </DropdownMenu>
-                      </Item.Actions>
-                    </Item>
-                    <template v-if="row.owner">
-                      <Separator />
-                      <Accordion
-                        type="single"
-                        collapsible
-                        size="medium"
-                        :default-value="dependenciesOpen ? 'dependencies' : undefined"
-                      >
-                        <Accordion.Item value="dependencies">
-                          <Accordion.Trigger>
-                            <span class="text-label-sm text-(--text-default)">Dependencies</span>
-                          </Accordion.Trigger>
-                          <Accordion.Content>
-                            <div class="min-w-0">
-                              <div
-                                v-if="dependenciesLoading(row)"
-                                aria-busy="true"
-                                class="flex flex-col gap-(--spacing-sm)"
-                              >
-                                <div
-                                  v-for="line in row.dependencies.length"
-                                  :key="line"
-                                  aria-hidden="true"
-                                  class="flex min-w-0 items-center gap-(--spacing-sm)"
-                                >
-                                  <Skeleton
-                                    variant="circle"
-                                    width="var(--size-4)"
-                                    height="var(--size-4)"
-                                  />
-                                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
-                                    <Skeleton
-                                      width="40%"
-                                      height="var(--size-3)"
-                                    />
-                                    <Skeleton
-                                      width="70%"
-                                      height="var(--size-3)"
-                                    />
-                                  </div>
-                                  <Skeleton
-                                    width="var(--size-24)"
-                                    height="var(--size-7)"
-                                  />
-                                </div>
-                              </div>
-                              <p
-                                v-else-if="!row.dependencies.length"
-                                class="text-body-sm text-(--text-muted)"
-                              >
-                                {{ row.name }} references no other resources.
-                              </p>
-                              <div
-                                v-else
-                                class="flex flex-col gap-(--spacing-sm)"
-                              >
-                                <Alert
-                                  v-if="sharedDependency(row)"
-                                  severity="info"
-                                  size="small"
-                                  :label="`${sharedDependency(row)?.name} is shared, so it deploys at one version. Changing it here changes it for ${listFormat(sharedDependency(row)?.sharedWith ?? [])} too.`"
-                                />
-                                <Item.Group>
-                                  <Item
-                                    v-for="dependency in row.dependencies"
-                                    :key="dependency.key"
-                                    variant="inline"
-                                    size="small"
-                                  >
-                                    <Item.Media>
-                                      <span class="flex size-5 items-center justify-center">
-                                        <i
-                                          :class="dependency.icon"
-                                          class="text-body-xs text-(--text-muted)"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    </Item.Media>
-                                    <Item.Content>
-                                      <span
-                                        class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-                                      >
-                                        <span class="shrink-0 text-body-sm text-(--text-muted)">
-                                          {{ dependency.label }}
-                                        </span>
-                                        <Item.Title>{{ dependency.name }}</Item.Title>
-                                        <Tooltip
-                                          v-if="dependency.sharedWith?.length"
-                                          :content="`Also referenced by ${listFormat(dependency.sharedWith ?? [])}.`"
-                                        >
-                                          <span
-                                            tabindex="0"
-                                            class="inline-flex shrink-0 rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                                            :aria-label="`Shared, also referenced by ${listFormat(dependency.sharedWith ?? [])}`"
-                                          >
-                                            <Tag
-                                              label="Shared"
-                                              severity="info"
-                                              size="small"
-                                              icon="az az-link"
-                                            />
-                                          </span>
-                                        </Tooltip>
-                                        <Tag
-                                          v-if="!dependency.note"
-                                          :label="
-                                            dependency.versions.length
-                                              ? 'Ready'
-                                              : 'No ready version'
-                                          "
-                                          :severity="
-                                            dependency.versions.length ? 'success' : 'warning'
-                                          "
-                                          size="small"
-                                          class="shrink-0"
-                                        />
-                                      </span>
-                                      <Item.Description>
-                                        {{
-                                          dependency.note ||
-                                          versionOf(dependency)?.name ||
-                                          'Build a version to deploy it.'
-                                        }}
-                                      </Item.Description>
-                                    </Item.Content>
-                                    <Item.Actions v-if="!dependency.note">
-                                      <DropdownMenu
-                                        v-model:open="versionOpen[dependency.key]"
-                                        side="bottom"
-                                        align="end"
-                                        @select="
-                                          (_event, id) => pickVersion(dependency, String(id))
-                                        "
-                                      >
-                                        <DropdownMenu.Trigger>
-                                          <Button
-                                            label="Change version"
-                                            :aria-label="`Change version of ${dependency.name}`"
-                                            variant="outline"
-                                            size="small"
-                                            icon="az az-chevron-down"
-                                            icon-position="trailing"
-                                            :disabled="!dependency.versions.length"
-                                          />
-                                        </DropdownMenu.Trigger>
-                                        <template #header>
-                                          <div
-                                            class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
-                                          >
-                                            <p class="text-label-sm text-(--text-muted)">
-                                              {{ versionSummary(dependency) }}
-                                            </p>
-                                            <Input
-                                              v-if="dependency.total > dependency.versions.length"
-                                              size="medium"
-                                              placeholder="Search versions"
-                                              aria-label="Search versions"
-                                            >
-                                              <template #leading>
-                                                <i
-                                                  class="az az-search"
-                                                  aria-hidden="true"
-                                                />
-                                              </template>
-                                            </Input>
-                                          </div>
-                                        </template>
-                                        <DropdownMenu.Group>
-                                          <DropdownMenu.Item
-                                            v-for="entry in dependency.versions"
-                                            :key="entry.id"
-                                            :value="entry.id"
-                                            :label="entry.name"
-                                            :selected="entry.id === versionOf(dependency)?.id"
-                                            :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
-                                          >
-                                            <template #leading>
-                                              <Avatar
-                                                :alt="entry.author"
-                                                :label="entry.author"
-                                                size="small"
-                                                variant="square"
-                                              />
-                                            </template>
-                                            <span
-                                              class="inline-flex min-w-0 items-center gap-(--spacing-xs)"
-                                            >
-                                              <span class="truncate">{{ entry.name }}</span>
-                                              <Tag
-                                                v-if="entry.active"
-                                                label="Active"
-                                                severity="success"
-                                                size="small"
-                                                class="shrink-0"
-                                              />
-                                            </span>
-                                            <template #trailing>
-                                              <span class="text-body-xs text-(--text-muted)">{{
-                                                ago(entry.createdAt)
-                                              }}</span>
-                                            </template>
-                                          </DropdownMenu.Item>
-                                        </DropdownMenu.Group>
-                                        <template
-                                          v-if="dependency.total > dependency.versions.length"
-                                          #bottom
-                                        >
-                                          <div
-                                            class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
-                                          >
-                                            <Button
-                                              :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                              variant="ghost"
-                                              size="small"
-                                              class="w-full"
-                                            />
-                                          </div>
-                                        </template>
-                                      </DropdownMenu>
-                                    </Item.Actions>
-                                  </Item>
-                                </Item.Group>
-                              </div>
-                              <span
-                                class="sr-only"
-                                role="status"
-                              >
-                                {{ dependenciesLoading(row) ? 'Loading dependencies' : '' }}
-                              </span>
-                            </div>
-                          </Accordion.Content>
-                        </Accordion.Item>
-                      </Accordion>
-                    </template>
-                  </template>
-                </template>
-              </Card>
-            </SettingsGroup>
-
-            <SettingsGroup
-              :inert="!!build || undefined"
-              :data-pending="build ? 'true' : undefined"
-              label="Project"
-              hint="The project whose domains serve the service. Create one to deploy it on a new domain."
-            >
-              <Card :padded="false">
-                <template #header>
-                  <ToggleGroup
-                    v-model="projectMode"
-                    :options="projectModes"
-                    size="medium"
-                    fluid
-                    aria-label="Project"
-                    class="w-full"
-                  />
-                </template>
-                <template #default>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
-                    <Item
-                      variant="outline"
-                      size="small"
-                    >
-                      <Item.Media>
-                        <span
-                          class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                        >
-                          <i
-                            class="az az-box text-body-xs text-(--text-default)"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Item.Media>
-                      <Item.Content>
-                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                          <Item.Title>{{ project.name }}</Item.Title>
-                          <Tag
-                            v-if="projectMode === 'new'"
-                            label="New"
-                            severity="success"
-                            size="small"
-                            class="shrink-0"
-                          />
-                        </span>
-                        <Item.Description v-if="projectMode === 'new'">
-                          Gets its domains on the first deploy.
-                        </Item.Description>
-                        <ul
-                          v-else
-                          class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-2xs) p-0"
-                        >
-                          <li
-                            v-for="domainGroup in project.domains"
-                            :key="domainGroup.environment"
-                            class="flex min-w-0 items-center gap-(--spacing-xs)"
-                          >
-                            <Tag
-                              :label="domainGroup.environment"
-                              severity="neutral"
-                              size="small"
-                              class="shrink-0"
-                            />
-                            <div class="flex min-w-0">
-                              <Tooltip
-                                :content="`Open ${domainGroup.domains[0]} in a new tab`"
-                                class="w-full"
-                              >
-                                <Link
-                                  class="max-w-full"
-                                  :href="`https://${domainGroup.domains[0]}`"
-                                  target="_blank"
-                                  size="small"
-                                >
-                                  <span class="grid grid-cols-1">
-                                    <span class="truncate">{{ domainGroup.domains[0] }}</span>
-                                  </span>
-                                </Link>
-                              </Tooltip>
-                            </div>
-                            <Popover
-                              v-if="domainGroup.total > 1"
-                              side="bottom"
-                              align="start"
-                              size="small"
-                            >
-                              <Popover.Trigger
-                                :aria-label="`${domainGroup.total - 1} more domains`"
-                              >
-                                <div class="shrink-0 cursor-pointer">
-                                  <Tag
-                                    :label="`+${domainGroup.total - 1}`"
-                                    severity="neutral"
-                                    size="small"
-                                  />
-                                </div>
-                              </Popover.Trigger>
-                              <Popover.Content>
-                                <div
-                                  class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
-                                >
-                                  <p class="text-label-sm text-(--text-muted)">
-                                    {{ domainGroup.summary }}
-                                  </p>
-                                  <Input
-                                    v-if="domainGroup.total > 10"
-                                    size="medium"
-                                    placeholder="Search domains"
-                                    aria-label="Search domains"
-                                  >
-                                    <template #leading>
-                                      <i
-                                        class="az az-search"
-                                        aria-hidden="true"
-                                      />
-                                    </template>
-                                  </Input>
-                                </div>
-
-                                <div
-                                  class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)"
-                                >
-                                  <div
-                                    v-for="domain in domainGroup.domains"
-                                    :key="domain"
-                                    class="flex min-w-0 px-(--spacing-xs) py-(--spacing-2xs)"
-                                  >
-                                    <Link
-                                      :label="domain"
-                                      :href="`https://${domain}`"
-                                      target="_blank"
-                                      size="small"
-                                    />
-                                  </div>
-                                </div>
-
-                                <div
-                                  v-if="domainGroup.total > domainGroup.domains.length"
-                                  class="border-t border-(--border-default) p-(--spacing-2xs)"
-                                >
-                                  <Button
-                                    :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                    variant="ghost"
-                                    size="small"
-                                    class="w-full"
-                                  />
-                                </div>
-
-                                <span
-                                  class="sr-only"
-                                  role="status"
-                                >
-                                  {{ domainGroup.summary }}
-                                </span>
-                              </Popover.Content>
-                            </Popover>
-                          </li>
-                        </ul>
-                      </Item.Content>
-                      <Item.Actions
-                        v-if="projectMode === 'existing'"
-                        class="basis-full sm:basis-auto"
-                      >
-                        <DropdownMenu
-                          side="bottom"
-                          align="end"
-                          @select="(_event, id) => (projectId = String(id))"
-                        >
-                          <DropdownMenu.Trigger>
-                            <Button
-                              label="Change"
-                              variant="outline"
-                              size="small"
-                              icon="az az-chevron-down"
-                              icon-position="trailing"
-                            />
-                          </DropdownMenu.Trigger>
-                          <DropdownMenu.Group
-                            v-for="group in projectGroups"
-                            :key="group.key"
-                            :label="group.label"
-                          >
-                            <DropdownMenu.Item
-                              v-for="entry in group.projects"
-                              :key="entry.id"
-                              :value="entry.id"
-                              :label="entry.name"
-                              :selected="entry.id === project.id"
-                            >
-                              <template #trailing>
-                                <span class="truncate text-body-xs text-(--text-muted)">
-                                  {{ entry.detail }}
-                                </span>
-                              </template>
-                            </DropdownMenu.Item>
-                          </DropdownMenu.Group>
-                        </DropdownMenu>
-                      </Item.Actions>
-                    </Item>
-                  </div>
-                </template>
-              </Card>
-            </SettingsGroup>
-
-            <SettingsGroup
-              :inert="!!build || undefined"
-              :data-pending="build ? 'true' : undefined"
-              label="Environment"
-              hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
-            >
-              <RadioGroup
-                v-model="environment"
-                variant="card"
-                name="service-deploy-environment"
-                aria-label="Environment"
-              >
-                <RadioGroup.Item
-                  v-for="entry in environmentChoices"
-                  :key="entry.name"
-                  :value="entry.name"
-                  :description="entry.description"
-                  :disabled="entry.disabled"
-                >
-                  {{ entry.name }}
-                  <template
-                    v-if="entry.tag"
-                    #tag
-                  >
-                    <Tag
-                      :label="entry.tag"
-                      :severity="entry.tagSeverity ?? 'info'"
-                      size="small"
-                    />
-                  </template>
-                </RadioGroup.Item>
-              </RadioGroup>
-
-              <slot
-                name="environment-alerts"
-                :environment="environment"
-                :project="project"
-              />
-            </SettingsGroup>
-
-            <SettingsGroup
-              v-if="impacted.length"
-              :inert="!!build || undefined"
-              :data-pending="build ? 'true' : undefined"
-              label="Projects impacted"
-              hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
-            >
-              <div
-                v-if="impactedLoading"
-                aria-busy="true"
-                class="flex min-w-0 flex-col gap-(--spacing-xs)"
-              >
-                <div
-                  v-for="row in impactedCount"
-                  :key="row"
-                  aria-hidden="true"
-                  class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)"
-                >
-                  <Skeleton
-                    width="var(--size-7)"
-                    height="var(--size-7)"
-                  />
-                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
-                    <Skeleton
-                      width="40%"
-                      height="var(--size-3)"
-                    />
-                    <Skeleton
-                      width="70%"
-                      height="var(--size-3)"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                v-else
-                class="flex min-w-0 flex-col gap-(--spacing-md)"
-              >
-                <div
-                  v-for="group in impacted"
-                  :key="group.environment"
-                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                >
-                  <p
-                    v-if="impacted.length > 1"
-                    class="flex items-center gap-(--spacing-xs) text-label-sm text-(--text-muted)"
-                  >
-                    <i
-                      class="az az-sitemap text-body-xs"
-                      aria-hidden="true"
-                    />
-                    <span
-                      >{{ group.environment }} · {{ projectsLabel(group.projects.length) }}</span
-                    >
-                  </p>
-                  <ul
-                    class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xs) p-0"
-                    :aria-label="`Projects impacted in ${group.environment} (${group.projects.length})`"
-                  >
-                    <li
-                      v-for="target in group.projects"
-                      :key="target.id"
-                      class="min-w-0"
-                    >
-                      <Item
-                        variant="outline"
-                        size="small"
-                      >
-                        <Item.Media>
-                          <span
-                            class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                          >
-                            <i
-                              class="az az-box text-body-xs text-(--text-default)"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Item.Media>
-                        <Item.Content>
-                          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                            <Item.Title>{{ target.name }}</Item.Title>
-                            <Tag
-                              v-if="target.selected"
-                              label="Selected"
-                              severity="neutral"
-                              size="small"
-                              class="shrink-0"
-                            />
-                          </span>
-                          <ul class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-2xs) p-0">
-                            <li
-                              v-for="domainGroup in target.domains"
-                              :key="domainGroup.environment"
-                              class="flex min-w-0 items-center gap-(--spacing-xs)"
-                            >
-                              <Tag
-                                :label="domainGroup.environment"
-                                severity="neutral"
-                                size="small"
-                                class="shrink-0"
-                              />
-                              <div class="flex min-w-0">
-                                <Tooltip
-                                  :content="`Open ${domainGroup.domains[0]} in a new tab`"
-                                  class="w-full"
-                                >
-                                  <Link
-                                    class="max-w-full"
-                                    :href="`https://${domainGroup.domains[0]}`"
-                                    target="_blank"
-                                    size="small"
-                                  >
-                                    <span class="grid grid-cols-1">
-                                      <span class="truncate">{{ domainGroup.domains[0] }}</span>
-                                    </span>
-                                  </Link>
-                                </Tooltip>
-                              </div>
-                              <Popover
-                                v-if="domainGroup.total > 1"
-                                side="bottom"
-                                align="start"
-                                size="small"
-                              >
-                                <Popover.Trigger
-                                  :aria-label="`${domainGroup.total - 1} more domains`"
-                                >
-                                  <div class="shrink-0 cursor-pointer">
-                                    <Tag
-                                      :label="`+${domainGroup.total - 1}`"
-                                      severity="neutral"
-                                      size="small"
-                                    />
-                                  </div>
-                                </Popover.Trigger>
-                                <Popover.Content>
-                                  <div
-                                    class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
-                                  >
-                                    <p class="text-label-sm text-(--text-muted)">
-                                      {{ domainGroup.summary }}
-                                    </p>
-                                    <Input
-                                      v-if="domainGroup.total > 10"
-                                      size="medium"
-                                      placeholder="Search domains"
-                                      aria-label="Search domains"
-                                    >
-                                      <template #leading>
-                                        <i
-                                          class="az az-search"
-                                          aria-hidden="true"
-                                        />
-                                      </template>
-                                    </Input>
-                                  </div>
-
-                                  <div
-                                    class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)"
-                                  >
-                                    <div
-                                      v-for="domain in domainGroup.domains"
-                                      :key="domain"
-                                      class="flex min-w-0 px-(--spacing-xs) py-(--spacing-2xs)"
-                                    >
-                                      <Link
-                                        :label="domain"
-                                        :href="`https://${domain}`"
-                                        target="_blank"
-                                        size="small"
-                                      />
-                                    </div>
-                                  </div>
-
-                                  <div
-                                    v-if="domainGroup.total > domainGroup.domains.length"
-                                    class="border-t border-(--border-default) p-(--spacing-2xs)"
-                                  >
-                                    <Button
-                                      :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                      variant="ghost"
-                                      size="small"
-                                      class="w-full"
-                                    />
-                                  </div>
-
-                                  <span
-                                    class="sr-only"
-                                    role="status"
-                                  >
-                                    {{ domainGroup.summary }}
-                                  </span>
-                                </Popover.Content>
-                              </Popover>
-                            </li>
-                          </ul>
-                        </Item.Content>
-                      </Item>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </SettingsGroup>
-
-            <span
-              class="sr-only"
-              role="status"
-            >
-              {{ impactedLoading ? 'Loading the projects this deployment reaches' : '' }}
-            </span>
-          </fieldset>
-        </PanelBody>
-
-        <PanelFooter>
-          <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-            <p
-              v-if="blocker"
-              :id="blockerId"
-              class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
-            >
-              <i
-                class="az az-triangle-alert mt-0.5 shrink-0 text-body-xs"
-                aria-hidden="true"
-              />
-              <span>{{ blocker }}</span>
-            </p>
-            <p
-              v-else-if="changeCount && !build"
-              class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
-            >
-              <i
-                class="az az-circle-info shrink-0"
-                aria-hidden="true"
-              />
-              <span class="truncate">{{ changeSummary }}</span>
-            </p>
-            <span v-else />
-            <Button
-              variant="primary"
-              size="medium"
-              :disabled="blocked"
-              type="submit"
-              :aria-describedby="blocker ? blockerId : undefined"
-              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
-            >
-              Deploy
-              <Kbd
-                meta
-                key-name="enter"
-                size="small"
-                aria-hidden="true"
-              />
-            </Button>
-          </div>
-        </PanelFooter>
-      </form>
-    </DrawerContent>
-  </Drawer>
+      <span
+        class="sr-only"
+        role="status"
+      >
+        {{ impactedLoading ? 'Loading the projects this deployment reaches' : '' }}
+      </span>
+    </fieldset>
+    <template #footer-start>
+      <p
+        v-if="blocker"
+        :id="blockerId"
+        class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
+      >
+        <i
+          class="az az-triangle-alert mt-0.5 shrink-0 text-body-xs"
+          aria-hidden="true"
+        />
+        <span>{{ blocker }}</span>
+      </p>
+      <p
+        v-else-if="changeCount && !build"
+        class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
+      >
+        <i
+          class="az az-circle-info shrink-0"
+          aria-hidden="true"
+        />
+        <span class="truncate">{{ changeSummary }}</span>
+      </p>
+      <span v-else />
+    </template>
+  </DeployDrawerFrame>
 </template>
 ```
 
@@ -2236,7 +1173,7 @@ const geoRedirect = (prefix: string, ready: boolean): DeployDrawerDependency => 
     : []
 })
 
-export const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
+const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
   const prefix = `service@${id}`
   return [authGateway(prefix), geoRedirect(prefix, id !== 'AG1VVDJP'), paymentsApi(prefix)]
 }
@@ -2278,4 +1215,1251 @@ export const sampleDependencyResources = (serviceVersion: string): DeployDrawerR
     ...row,
     dependencies: row.key === 'service' ? sampleDependenciesByVersion(serviceVersion) : []
   }))
+
+export const sampleProjectResources: DeployDrawerResource[] = [
+  {
+    key: 'service',
+    label: 'Service',
+    name: 'project-01-web',
+    icon: 'az az-server',
+    note: '',
+    total: 12,
+    versions: [
+      {
+        id: 'AWPT11GA',
+        name: 'AWPT11GA',
+        author: 'Taylor Reed',
+        createdAt: '2026-11-09T15:00:00Z',
+        active: true
+      },
+      {
+        id: 'AY3MQWWR',
+        name: 'AY3MQWWR',
+        author: 'John Smith',
+        createdAt: '2026-11-08T12:00:00Z'
+      },
+      {
+        id: 'AZHGGSD8',
+        name: 'AZHGGSD8',
+        author: 'Sam Lee',
+        createdAt: '2026-11-06T12:00:00Z'
+      },
+      {
+        id: 'A1VA6NTP',
+        name: 'A1VA6NTP',
+        author: 'Priya Patel',
+        createdAt: '2026-11-06T12:00:00Z'
+      },
+      {
+        id: 'A393WJA6',
+        name: 'A393WJA6',
+        author: 'Chris Taylor',
+        createdAt: '2026-11-04T12:00:00Z'
+      }
+    ],
+    owner: true,
+    dependencies: [
+      {
+        key: 'service@AWPT11GA:module-image-optimizer',
+        label: 'Module',
+        name: 'image-optimizer',
+        icon: 'az az-code',
+        note: '',
+        total: 6,
+        versions: [
+          {
+            id: 'ATNSEE8Y',
+            name: 'ATNSEE8Y',
+            author: 'Taylor Reed',
+            createdAt: '2026-11-08T12:00:00Z'
+          },
+          {
+            id: 'AV1M49PF',
+            name: 'AV1M49PF',
+            author: 'John Smith',
+            createdAt: '2026-11-07T12:00:00Z'
+          },
+          {
+            id: 'AWFFU55W',
+            name: 'AWFFU55W',
+            author: 'Sam Lee',
+            createdAt: '2026-11-06T12:00:00Z'
+          },
+          {
+            id: 'AXT9K0MD',
+            name: 'AXT9K0MD',
+            author: 'Priya Patel',
+            createdAt: '2026-11-04T12:00:00Z'
+          },
+          {
+            id: 'AZ739W2U',
+            name: 'AZ739W2U',
+            author: 'Chris Taylor',
+            createdAt: '2026-11-04T12:00:00Z'
+          }
+        ]
+      },
+      {
+        key: 'service@AWPT11GA:integration-search-index',
+        label: 'Integration',
+        name: 'search-index',
+        icon: 'az az-link',
+        note: '',
+        total: 3,
+        versions: [
+          {
+            id: 'AHMVCHSJ',
+            name: 'AHMVCHSJ',
+            author: 'John Smith',
+            createdAt: '2026-11-08T12:00:00Z'
+          },
+          {
+            id: 'AJ0P2D90',
+            name: 'AJ0P2D90',
+            author: 'Sam Lee',
+            createdAt: '2026-11-06T12:00:00Z'
+          },
+          {
+            id: 'AKEIS8PH',
+            name: 'AKEIS8PH',
+            author: 'Priya Patel',
+            createdAt: '2026-11-06T12:00:00Z'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'storage',
+    label: 'Storage',
+    name: 'project-01-storage',
+    icon: 'az az-database',
+    note: 'Not versioned',
+    total: 0,
+    versions: [],
+    owner: false,
+    dependencies: []
+  }
+]
+
+/** An environment of the Project variant, with the Deployment Settings it goes live with. */
+export interface DeployDrawerProjectEnvironment extends DeployDrawerEnvironment {
+  /** The Deployment Settings and the projects that share them. */
+  setting: { name: string; shared: boolean; projects: string[] }
+}
+
+export const sampleProjectEnvironments: DeployDrawerProjectEnvironment[] = [
+  {
+    name: 'Production',
+    description: 'Live traffic. One version serves the domain, and deploying replaces it.',
+    tag: 'Last used',
+    setting: { name: 'shared-storefront', shared: true, projects: ['project-05', 'project-09'] }
+  },
+  {
+    name: 'Preview',
+    description:
+      'Every other branch. Each version keeps its own URL, so a build can be read before it is live.',
+    tag: '',
+    setting: { name: 'project-01-preview', shared: false, projects: [] }
+  }
+]
+
+/** A project the service is already bound to. */
+export interface DeployDrawerBoundProject extends DeployDrawerProject {
+  /** Stable key. */
+  id: string
+  /** The environment it last deployed to; empty for none. */
+  environment: string
+}
+
+export const sampleBoundProjects: DeployDrawerBoundProject[] = [
+  {
+    id: '1020655',
+    name: 'project-01',
+    domain: 'project-1.example.com',
+    environment: 'Production'
+  }
+]
+
+export const sampleServiceEnvironments: DeployDrawerEnvironment[] = [
+  ...sampleEnvironments,
+  {
+    name: 'Stage',
+    description: 'A rehearsal before Production. Each version keeps its own URL.',
+    tag: ''
+  }
+]
+```
+
+## `lib/list-format.ts`
+
+```ts
+export function listFormat(names: string[]): string {
+  return names.length > 1
+    ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`
+    : (names[0] ?? '')
+}
+```
+
+## `parts/build-item.vue`
+
+```ts
+<script setup lang="ts">
+  import Item from '@aziontech/webkit/item'
+  import Spinner from '@aziontech/webkit/spinner'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type { DeployDrawerBuild } from '../types'
+
+  export interface BuildItemProps {
+    /** The build in progress. */
+    build: DeployDrawerBuild
+  }
+
+  defineProps<BuildItemProps>()
+</script>
+
+<template>
+  <Item
+    variant="outline"
+    size="small"
+    aria-live="polite"
+  >
+    <Item.Media>
+      <span
+        class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+      >
+        <i
+          class="az az-server text-body-xs text-(--text-default)"
+          aria-hidden="true"
+        />
+      </span>
+    </Item.Media>
+    <Item.Content>
+      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <Item.Title>{{ build.name }}</Item.Title>
+        <Tag
+          :label="build.version"
+          severity="neutral"
+          size="small"
+          class="shrink-0"
+        />
+      </span>
+      <Item.Description>Building…</Item.Description>
+    </Item.Content>
+    <Item.Actions>
+      <span class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)">
+        {{ build.elapsed }} s
+      </span>
+      <span class="flex size-4 shrink-0 text-(--text-default)">
+        <Spinner class="w-full" />
+      </span>
+    </Item.Actions>
+  </Item>
+</template>
+```
+
+## `parts/deploy-loading.vue`
+
+```ts
+<script setup lang="ts">
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Skeleton from '@aziontech/webkit/skeleton'
+</script>
+
+<template>
+  <div
+    class="flex min-w-0 flex-col"
+    aria-busy="true"
+  >
+    <SettingsGroup
+      label="Resources"
+      hint="The service version this deployment sends live, and the version of every module and integration it references."
+    >
+      <div aria-hidden="true">
+        <Skeleton height="var(--size-40)" />
+      </div>
+    </SettingsGroup>
+
+    <SettingsGroup
+      label="Environment"
+      hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
+    >
+      <div
+        class="flex min-w-0 flex-col gap-(--spacing-xs)"
+        aria-hidden="true"
+      >
+        <Skeleton
+          v-for="row in 2"
+          :key="row"
+          height="var(--size-16)"
+        />
+      </div>
+    </SettingsGroup>
+
+    <span
+      class="sr-only"
+      role="status"
+    >
+      Loading the resources and environments for this deployment.
+    </span>
+  </div>
+</template>
+```
+
+## `parts/deploy-resources-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Accordion from '@aziontech/webkit/accordion'
+  import Alert from '@aziontech/webkit/alert'
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
+  import Separator from '@aziontech/webkit/separator'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { reactive } from 'vue'
+
+  import { listFormat } from '../lib/list-format'
+  import type { DeployDrawerDependency, DeployDrawerResource } from '../types'
+  import VersionPicker from './version-picker.vue'
+
+  export interface DeployResourcesCardProps {
+    /** The resources the deployment sends live, each with the resources it references. */
+    resources: DeployDrawerResource[]
+    /** Opens every Dependencies disclosure. */
+    dependenciesOpen?: boolean
+    /** Keys of the resources whose dependencies are reloading; skeleton rows stand in. */
+    dependenciesLoadingKeys?: string[]
+  }
+
+  const props = withDefaults(defineProps<DeployResourcesCardProps>(), {
+    dependenciesOpen: false,
+    dependenciesLoadingKeys: () => []
+  })
+
+  /** The picked version id per resource key; a resource with no pick shows its first version. */
+  const picks = defineModel<Record<string, string>>('picks', { default: () => ({}) })
+
+  const versionOpen = reactive<Record<string, boolean>>({})
+
+  const versionOf = (row: DeployDrawerDependency) =>
+    row.versions.find((entry) => entry.id === picks.value[row.key]) ?? row.versions[0]
+
+  const pickVersion = (row: DeployDrawerDependency, id: string) => {
+    picks.value = { ...picks.value, [row.key]: id }
+    versionOpen[row.key] = false
+  }
+
+  const sharedDependency = (row: DeployDrawerResource) =>
+    row.dependencies.find((dependency) => dependency.sharedWith?.length)
+
+  const sharedDependencyLabel = (row: DeployDrawerResource) => {
+    const shared = sharedDependency(row)
+    return (
+      `${shared?.name} is shared, so it deploys at one version. ` +
+      `Changing it here changes it for ${listFormat(shared?.sharedWith ?? [])} too.`
+    )
+  }
+
+  const dependenciesLoading = (row: DeployDrawerResource) =>
+    props.dependenciesLoadingKeys.includes(row.key)
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #default>
+      <template
+        v-for="(row, index) in resources"
+        :key="row.key"
+      >
+        <Separator v-if="index" />
+        <Item
+          variant="inline"
+          size="small"
+        >
+          <Item.Media>
+            <span
+              class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+            >
+              <i
+                :class="row.icon"
+                class="text-body-xs text-(--text-default)"
+                aria-hidden="true"
+              />
+            </span>
+          </Item.Media>
+          <Item.Content>
+            <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+              <span class="shrink-0 text-body-sm text-(--text-muted)">
+                {{ row.label }}
+              </span>
+              <Item.Title>{{ row.name }}</Item.Title>
+              <Tag
+                v-if="!row.note"
+                :label="row.versions.length ? 'Ready' : 'No ready version'"
+                :severity="row.versions.length ? 'success' : 'warning'"
+                size="small"
+                class="shrink-0"
+              />
+            </span>
+            <Item.Description>
+              {{ row.note || versionOf(row)?.name }}
+            </Item.Description>
+          </Item.Content>
+          <Item.Actions
+            v-if="!row.note"
+            class="basis-full sm:basis-auto"
+          >
+            <VersionPicker
+              v-model:open="versionOpen[row.key]"
+              :row="row"
+              :selected-id="versionOf(row)?.id"
+              @pick="(id: string) => pickVersion(row, id)"
+            />
+          </Item.Actions>
+        </Item>
+        <template v-if="row.owner">
+          <Separator />
+          <Accordion
+            type="single"
+            collapsible
+            size="medium"
+            :default-value="dependenciesOpen ? 'dependencies' : undefined"
+          >
+            <Accordion.Item value="dependencies">
+              <Accordion.Trigger>
+                <span class="text-label-sm text-(--text-default)">Dependencies</span>
+              </Accordion.Trigger>
+              <Accordion.Content>
+                <div class="min-w-0">
+                  <div
+                    v-if="dependenciesLoading(row)"
+                    aria-busy="true"
+                    class="flex flex-col gap-(--spacing-sm)"
+                  >
+                    <div
+                      v-for="line in row.dependencies.length"
+                      :key="line"
+                      aria-hidden="true"
+                      class="flex min-w-0 items-center gap-(--spacing-sm)"
+                    >
+                      <Skeleton
+                        variant="circle"
+                        width="var(--size-4)"
+                        height="var(--size-4)"
+                      />
+                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+                        <Skeleton
+                          width="40%"
+                          height="var(--size-3)"
+                        />
+                        <Skeleton
+                          width="70%"
+                          height="var(--size-3)"
+                        />
+                      </div>
+                      <Skeleton
+                        width="var(--size-24)"
+                        height="var(--size-7)"
+                      />
+                    </div>
+                  </div>
+                  <p
+                    v-else-if="!row.dependencies.length"
+                    class="text-body-sm text-(--text-muted)"
+                  >
+                    {{ row.name }} references no other resources.
+                  </p>
+                  <div
+                    v-else
+                    class="flex flex-col gap-(--spacing-sm)"
+                  >
+                    <Alert
+                      v-if="sharedDependency(row)"
+                      severity="info"
+                      size="small"
+                      :label="sharedDependencyLabel(row)"
+                    />
+                    <Item.Group>
+                      <Item
+                        v-for="dependency in row.dependencies"
+                        :key="dependency.key"
+                        variant="inline"
+                        size="small"
+                      >
+                        <Item.Media>
+                          <span class="flex size-5 items-center justify-center">
+                            <i
+                              :class="dependency.icon"
+                              class="text-body-xs text-(--text-muted)"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </Item.Media>
+                        <Item.Content>
+                          <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                            <span class="shrink-0 text-body-sm text-(--text-muted)">
+                              {{ dependency.label }}
+                            </span>
+                            <Item.Title>{{ dependency.name }}</Item.Title>
+                            <Tooltip
+                              v-if="dependency.sharedWith?.length"
+                              :content="`Also referenced by ${listFormat(dependency.sharedWith ?? [])}.`"
+                            >
+                              <span
+                                tabindex="0"
+                                class="inline-flex shrink-0 rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                                :aria-label="`Shared, also referenced by ${listFormat(dependency.sharedWith ?? [])}`"
+                              >
+                                <Tag
+                                  label="Shared"
+                                  severity="info"
+                                  size="small"
+                                  icon="az az-link"
+                                />
+                              </span>
+                            </Tooltip>
+                            <Tag
+                              v-if="!dependency.note"
+                              :label="dependency.versions.length ? 'Ready' : 'No ready version'"
+                              :severity="dependency.versions.length ? 'success' : 'warning'"
+                              size="small"
+                              class="shrink-0"
+                            />
+                          </span>
+                          <Item.Description>
+                            {{
+                              dependency.note ||
+                              versionOf(dependency)?.name ||
+                              'Build a version to deploy it.'
+                            }}
+                          </Item.Description>
+                        </Item.Content>
+                        <Item.Actions v-if="!dependency.note">
+                          <VersionPicker
+                            v-model:open="versionOpen[dependency.key]"
+                            :row="dependency"
+                            :selected-id="versionOf(dependency)?.id"
+                            @pick="(id: string) => pickVersion(dependency, id)"
+                          />
+                        </Item.Actions>
+                      </Item>
+                    </Item.Group>
+                  </div>
+                  <span
+                    class="sr-only"
+                    role="status"
+                  >
+                    {{ dependenciesLoading(row) ? 'Loading dependencies' : '' }}
+                  </span>
+                </div>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+        </template>
+      </template>
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/domain-group-item.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
+  import Popover from '@aziontech/webkit/popover'
+  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  import type { DeployDrawerDomainGroup } from '../types'
+
+  export interface DomainGroupItemProps {
+    /** The domains of a project in one environment. */
+    group: DeployDrawerDomainGroup
+  }
+
+  defineProps<DomainGroupItemProps>()
+</script>
+
+<template>
+  <li class="flex min-w-0 items-center gap-(--spacing-xs)">
+    <Tag
+      :label="group.environment"
+      severity="neutral"
+      size="small"
+      class="shrink-0"
+    />
+    <div class="flex min-w-0">
+      <Tooltip
+        :content="`Open ${group.domains[0]} in a new tab`"
+        class="w-full"
+      >
+        <Link
+          class="max-w-full"
+          :href="`https://${group.domains[0]}`"
+          target="_blank"
+          size="small"
+        >
+          <span class="grid grid-cols-1">
+            <span class="truncate">{{ group.domains[0] }}</span>
+          </span>
+        </Link>
+      </Tooltip>
+    </div>
+    <Popover
+      v-if="group.total > 1"
+      side="bottom"
+      align="start"
+      size="small"
+    >
+      <Popover.Trigger :aria-label="`${group.total - 1} more domains`">
+        <div class="relative shrink-0 cursor-pointer">
+          <span
+            aria-hidden="true"
+            data-slot="touch-target"
+            class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+          />
+          <Tag
+            :label="`+${group.total - 1}`"
+            severity="neutral"
+            size="small"
+          />
+        </div>
+      </Popover.Trigger>
+      <Popover.Content>
+        <div
+          class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
+        >
+          <p class="text-label-sm text-(--text-muted)">
+            {{ group.summary }}
+          </p>
+          <Input
+            v-if="group.total > 10"
+            size="medium"
+            placeholder="Search domains"
+            aria-label="Search domains"
+          >
+            <template #leading>
+              <i
+                class="az az-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+        </div>
+
+        <div class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)">
+          <div
+            v-for="domain in group.domains"
+            :key="domain"
+            class="flex min-w-0 px-(--spacing-xs) py-(--spacing-2xs)"
+          >
+            <Link
+              :label="domain"
+              :href="`https://${domain}`"
+              target="_blank"
+              size="small"
+            />
+          </div>
+        </div>
+
+        <div
+          v-if="group.total > group.domains.length"
+          class="border-t border-(--border-default) p-(--spacing-2xs)"
+        >
+          <Button
+            :label="`Load ${Math.min(10, group.total - group.domains.length)} more`"
+            variant="ghost"
+            size="small"
+            class="w-full"
+          />
+        </div>
+
+        <span
+          class="sr-only"
+          role="status"
+        >
+          {{ group.summary }}
+        </span>
+      </Popover.Content>
+    </Popover>
+  </li>
+</template>
+```
+
+## `parts/environment-choices.vue`
+
+```ts
+<script setup lang="ts">
+  import RadioGroup from '@aziontech/webkit/radio-group'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type { DeployDrawerEnvironment } from '../types'
+
+  export interface EnvironmentChoicesProps {
+    /** The environments to go live in. */
+    environments: DeployDrawerEnvironment[]
+    /** The name of the radio group. */
+    name: string
+  }
+
+  defineProps<EnvironmentChoicesProps>()
+
+  /** The environment it goes live in. */
+  const environment = defineModel<string>({ required: true })
+</script>
+
+<template>
+  <RadioGroup
+    v-model="environment"
+    variant="card"
+    :name="name"
+    aria-label="Environment"
+  >
+    <RadioGroup.Item
+      v-for="entry in environments"
+      :key="entry.name"
+      :value="entry.name"
+      :description="entry.description"
+      :disabled="entry.disabled"
+    >
+      {{ entry.name }}
+      <template
+        v-if="entry.tag"
+        #tag
+      >
+        <Tag
+          :label="entry.tag"
+          :severity="entry.tagSeverity ?? 'info'"
+          size="small"
+        />
+      </template>
+    </RadioGroup.Item>
+  </RadioGroup>
+</template>
+```
+
+## `parts/impacted-projects.vue`
+
+```ts
+<script setup lang="ts">
+  import Item from '@aziontech/webkit/item'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
+
+  import type { DeployDrawerImpact } from '../types'
+  import DomainGroupItem from './domain-group-item.vue'
+  import ProjectMedia from './project-media.vue'
+
+  export interface ImpactedProjectsProps {
+    /** The projects reached through shared Deployment Settings, per environment. */
+    impacted: DeployDrawerImpact[]
+    /** The projects are reloading; skeleton rows stand in. */
+    loading?: boolean
+  }
+
+  const props = withDefaults(defineProps<ImpactedProjectsProps>(), { loading: false })
+
+  const impactedCount = computed(() =>
+    props.impacted.reduce((total, group) => total + group.projects.length, 0)
+  )
+
+  const projectsLabel = (count: number) => `${count} ${count === 1 ? 'project' : 'projects'}`
+</script>
+
+<template>
+  <div
+    v-if="loading"
+    aria-busy="true"
+    class="flex min-w-0 flex-col gap-(--spacing-xs)"
+  >
+    <div
+      v-for="row in impactedCount"
+      :key="row"
+      aria-hidden="true"
+      class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)"
+    >
+      <Skeleton
+        width="var(--size-7)"
+        height="var(--size-7)"
+      />
+      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+        <Skeleton
+          width="40%"
+          height="var(--size-3)"
+        />
+        <Skeleton
+          width="70%"
+          height="var(--size-3)"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    v-else
+    class="flex min-w-0 flex-col gap-(--spacing-md)"
+  >
+    <div
+      v-for="group in impacted"
+      :key="group.environment"
+      class="flex min-w-0 flex-col gap-(--spacing-xs)"
+    >
+      <p
+        v-if="impacted.length > 1"
+        class="flex items-center gap-(--spacing-xs) text-label-sm text-(--text-muted)"
+      >
+        <i
+          class="az az-sitemap text-body-xs"
+          aria-hidden="true"
+        />
+        <span>{{ group.environment }} · {{ projectsLabel(group.projects.length) }}</span>
+      </p>
+      <ul
+        class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xs) p-0"
+        :aria-label="`Projects impacted in ${group.environment} (${group.projects.length})`"
+      >
+        <li
+          v-for="target in group.projects"
+          :key="target.id"
+          class="min-w-0"
+        >
+          <Item
+            variant="outline"
+            size="small"
+          >
+            <ProjectMedia />
+            <Item.Content>
+              <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <Item.Title>{{ target.name }}</Item.Title>
+                <Tag
+                  v-if="target.selected"
+                  label="Selected"
+                  severity="neutral"
+                  size="small"
+                  class="shrink-0"
+                />
+              </span>
+              <ul class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-2xs) p-0">
+                <DomainGroupItem
+                  v-for="domainGroup in target.domains"
+                  :key="domainGroup.environment"
+                  :group="domainGroup"
+                />
+              </ul>
+            </Item.Content>
+          </Item>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+```
+
+## `parts/project-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import Item from '@aziontech/webkit/item'
+  import Tag from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+
+  import type {
+    DeployDrawerProject,
+    DeployDrawerProjectGroup,
+    DeployDrawerProjectMode
+  } from '../types'
+  import DomainGroupItem from './domain-group-item.vue'
+  import ProjectMedia from './project-media.vue'
+
+  export interface ProjectCardProps {
+    /** The project the deployment goes live on. */
+    project: DeployDrawerProject
+    /** The projects to pick from, in groups. */
+    projectGroups: DeployDrawerProjectGroup[]
+  }
+
+  defineProps<ProjectCardProps>()
+
+  /** Use an existing project or create one. */
+  const projectMode = defineModel<DeployDrawerProjectMode>('projectMode', { required: true })
+
+  /** The existing project picked. */
+  const projectId = defineModel<string>('projectId', { required: true })
+
+  const projectModes = [
+    { value: 'existing', label: 'Use existing' },
+    { value: 'new', label: 'Create new' }
+  ]
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #header>
+      <ToggleGroup
+        v-model="projectMode"
+        :options="projectModes"
+        size="medium"
+        fluid
+        aria-label="Project"
+        class="w-full"
+      />
+    </template>
+    <template #default>
+      <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
+        <Item
+          variant="outline"
+          size="small"
+        >
+          <ProjectMedia />
+          <Item.Content>
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <Item.Title>{{ project.name }}</Item.Title>
+              <Tag
+                v-if="projectMode === 'new'"
+                label="New"
+                severity="success"
+                size="small"
+                class="shrink-0"
+              />
+            </span>
+            <Item.Description v-if="projectMode === 'new'">
+              Gets its domains on the first deploy.
+            </Item.Description>
+            <ul
+              v-else
+              class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-2xs) p-0"
+            >
+              <DomainGroupItem
+                v-for="domainGroup in project.domains"
+                :key="domainGroup.environment"
+                :group="domainGroup"
+              />
+            </ul>
+          </Item.Content>
+          <Item.Actions
+            v-if="projectMode === 'existing'"
+            class="basis-full sm:basis-auto"
+          >
+            <DropdownMenu
+              side="bottom"
+              align="end"
+              @select="(_event, id) => (projectId = String(id))"
+            >
+              <DropdownMenu.Trigger>
+                <Button
+                  label="Change"
+                  variant="outline"
+                  size="small"
+                  icon="az az-chevron-down"
+                  icon-position="trailing"
+                />
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group
+                v-for="group in projectGroups"
+                :key="group.key"
+                :label="group.label"
+              >
+                <DropdownMenu.Item
+                  v-for="entry in group.projects"
+                  :key="entry.id"
+                  :value="entry.id"
+                  :label="entry.name"
+                  :selected="entry.id === project.id"
+                >
+                  <template #trailing>
+                    <span class="truncate text-body-xs text-(--text-muted)">
+                      {{ entry.detail }}
+                    </span>
+                  </template>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </DropdownMenu>
+          </Item.Actions>
+        </Item>
+      </div>
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/version-picker.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import Input from '@aziontech/webkit/input'
+  import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+
+  import type { DeployDrawerDependency } from '../types'
+
+  export interface VersionPickerProps {
+    /** The resource whose Ready versions the menu lists. */
+    row: DeployDrawerDependency
+    /** The version picked now, marked selected. */
+    selectedId?: string
+  }
+
+  withDefaults(defineProps<VersionPickerProps>(), { selectedId: '' })
+
+  const emit = defineEmits<{
+    pick: [id: string]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+
+  const versionSummary = (row: DeployDrawerDependency) =>
+    row.total > row.versions.length
+      ? `${row.versions.length} of ${row.total} Ready versions`
+      : `${row.total} Ready versions`
+
+  const relativeTime = useLocale().formatRelativeTime
+  const ago = (value: Date | string) => (value ? relativeTime(new Date(value)) : '')
+</script>
+
+<template>
+  <DropdownMenu
+    v-model:open="open"
+    side="bottom"
+    align="end"
+    @select="(_event, id) => emit('pick', String(id))"
+  >
+    <DropdownMenu.Trigger>
+      <Button
+        label="Change version"
+        :aria-label="`Change version of ${row.name}`"
+        variant="outline"
+        size="small"
+        icon="az az-chevron-down"
+        icon-position="trailing"
+        :disabled="!row.versions.length"
+      />
+    </DropdownMenu.Trigger>
+    <template #header>
+      <div class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)">
+        <p class="text-label-sm text-(--text-muted)">
+          {{ versionSummary(row) }}
+        </p>
+        <Input
+          v-if="row.total > row.versions.length"
+          size="medium"
+          placeholder="Search versions"
+          aria-label="Search versions"
+        >
+          <template #leading>
+            <i
+              class="az az-search"
+              aria-hidden="true"
+            />
+          </template>
+        </Input>
+      </div>
+    </template>
+    <DropdownMenu.Group>
+      <DropdownMenu.Item
+        v-for="entry in row.versions"
+        :key="entry.id"
+        :value="entry.id"
+        :label="entry.name"
+        :selected="entry.id === selectedId"
+        :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${ago(entry.createdAt)}`"
+      >
+        <template #leading>
+          <Avatar
+            :alt="entry.author"
+            :label="entry.author"
+            size="small"
+            variant="square"
+          />
+        </template>
+        <span class="inline-flex min-w-0 items-center gap-(--spacing-xs)">
+          <span class="truncate">{{ entry.name }}</span>
+          <Tag
+            v-if="entry.active"
+            label="Active"
+            severity="success"
+            size="small"
+            class="shrink-0"
+          />
+        </span>
+        <template #trailing>
+          <span class="text-body-xs text-(--text-muted)">{{ ago(entry.createdAt) }}</span>
+        </template>
+      </DropdownMenu.Item>
+    </DropdownMenu.Group>
+    <template
+      v-if="row.total > row.versions.length"
+      #bottom
+    >
+      <div class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)">
+        <Button
+          :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
+          variant="ghost"
+          size="small"
+          class="w-full"
+        />
+      </div>
+    </template>
+  </DropdownMenu>
+</template>
+```
+
+## `types.ts`
+
+```ts
+import type { TagSeverity } from '@aziontech/webkit/tag'
+
+/** One Ready version of a resource. */
+export interface DeployDrawerVersion {
+  /** Stable key, the version id. */
+  id: string
+  /** The version name. */
+  name: string
+  /** Who built it. */
+  author: string
+  /** When it was built, as an ISO 8601 string. */
+  createdAt: string
+  /** Whether it is the version live now. */
+  active?: boolean
+}
+
+/** A resource the deployment sends live, or one it references. */
+export interface DeployDrawerDependency {
+  /** Stable key; picked versions are keyed by it. */
+  key: string
+  /** The kind of resource (Service, Module, Integration). */
+  label: string
+  /** The resource name. */
+  name: string
+  /** The kind glyph, an icon class. */
+  icon: string
+  /** A note shown instead of the version picker; empty for a pickable resource. */
+  note: string
+  /** Other services that reference it; set, it carries a Shared tag and deploys at one version for all of them. */
+  sharedWith?: string[]
+  /** How many Ready versions exist; the list may hold only the most recent. */
+  total: number
+  /** The most recent Ready versions, newest first. */
+  versions: DeployDrawerVersion[]
+}
+
+/** A top-level resource with the resources it references. */
+export interface DeployDrawerResource extends DeployDrawerDependency {
+  /** Whether the project owns it. */
+  owner: boolean
+  /** The modules and integrations it references. */
+  dependencies: DeployDrawerDependency[]
+}
+
+/** The domains of a project in one environment. */
+export interface DeployDrawerDomainGroup {
+  /** The environment they answer in. */
+  environment: string
+  /** How many domains there are. */
+  total: number
+  /** The count, already phrased (10 of 22 domains). */
+  summary: string
+  /** The first domains. */
+  domains: string[]
+}
+
+/** A project the deployment can go live on. */
+export interface DeployDrawerProject {
+  /** Stable key; absent for the project Create new makes. */
+  id?: string
+  /** The project name. */
+  name: string
+  /** The domain a new project answers on. */
+  domain?: string
+  /** One line on what the project serves. */
+  detail?: string
+  /** Its domains per environment. */
+  domains?: DeployDrawerDomainGroup[]
+}
+
+/** A project that already exists. */
+export interface DeployDrawerExistingProject extends DeployDrawerProject {
+  /** Stable key. */
+  id: string
+}
+
+/** A group of projects in the project picker. */
+export interface DeployDrawerProjectGroup {
+  /** Stable key. */
+  key: string
+  /** The group heading. */
+  label: string
+  /** The projects in it. */
+  projects: DeployDrawerExistingProject[]
+}
+
+/** An environment the deployment can go live in. */
+export interface DeployDrawerEnvironment {
+  /** The environment name, also its value. */
+  name: string
+  /** One sentence on what deploying there does. */
+  description: string
+  /** A short tag beside the name (Last used); empty for none. */
+  tag: string
+  /** The color of the tag; info when left out. */
+  tagSeverity?: TagSeverity
+  /** Locked: the choice card shows but cannot be picked. */
+  disabled?: boolean
+}
+
+/** A project the deployment reaches through shared Deployment Settings. */
+export interface DeployDrawerImpactedProject {
+  /** Stable key. */
+  id: string
+  /** The project name. */
+  name: string
+  /** Whether it is the project picked above. */
+  selected?: boolean
+  /** Its domains per environment. */
+  domains: DeployDrawerDomainGroup[]
+}
+
+/** The projects reached in one environment. */
+export interface DeployDrawerImpact {
+  /** The environment name. */
+  environment: string
+  /** The projects reached there. */
+  projects: DeployDrawerImpactedProject[]
+}
+
+/** A build in progress before the deployment can go live. */
+export interface DeployDrawerBuild {
+  /** The resource being built. */
+  name: string
+  /** The version being built. */
+  version: string
+  /** Seconds since the build started. */
+  elapsed: number
+}
+
+/** Whether the deployment uses an existing project or creates one. */
+export type DeployDrawerProjectMode = 'existing' | 'new'
+
+/** What the form holds, and what submit sends. */
+export interface DeployDrawerValues {
+  /** The picked version id per resource key. */
+  versions: Record<string, string>
+  /** Use an existing project or create one. */
+  projectMode: DeployDrawerProjectMode
+  /** The existing project picked. */
+  projectId: string
+  /** The environment it goes live in. */
+  environment: string
+}
 ```

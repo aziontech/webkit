@@ -98,7 +98,7 @@ export function surfaceTypes(script) {
 function vueFiles(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name)
-    if (entry.isDirectory()) return vueFiles(path)
+    if (entry.isDirectory()) return entry.name === 'parts' ? [] : vueFiles(path)
     return entry.name.endsWith('.vue') ? [path] : []
   })
 }

@@ -50,7 +50,7 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb')
 
   const navEl = ref<globalThis.HTMLElement | null>(null)
-  const isCollapsed = useBreadcrumbCollapse(navEl)
+  const { collapsed: isCollapsed, compact: isCompact } = useBreadcrumbCollapse(navEl)
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
@@ -67,14 +67,16 @@
 
   const firstItem = computed(() => resolvedItems.value[0])
   const lastItem = computed(() => resolvedItems.value[resolvedItems.value.length - 1])
-  const middleItems = computed(() =>
-    resolvedItems.value.length > 2 ? resolvedItems.value.slice(1, -1) : []
-  )
-
-  const hasMiddleItems = computed(() => middleItems.value.length > 0)
   const showDistinctEnds = computed(
     () => resolvedItems.value.length > 1 && firstItem.value !== lastItem.value
   )
+  const showFirst = computed(() => !isCompact.value || !showDistinctEnds.value)
+  const middleItems = computed(() => {
+    if (!showFirst.value) return resolvedItems.value.slice(0, -1)
+    return resolvedItems.value.length > 2 ? resolvedItems.value.slice(1, -1) : []
+  })
+
+  const hasMiddleItems = computed(() => middleItems.value.length > 0)
 
   const onItemClick = (event: MouseEvent, href: string) => {
     emit('navigate', event, href)
@@ -89,6 +91,10 @@
       onItemClick(event as MouseEvent, href)
     }
   }
+
+  const OVERFLOW_TRIGGER_CLASS =
+    'relative h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -97,7 +103,7 @@
     v-bind="attrs"
     :class="
       cn(
-        '-ms-(--spacing-xs) inline-flex w-full min-w-0 items-center',
+        '-ms-(--spacing-xs) inline-flex w-[calc(100%+var(--spacing-xs))] min-w-0 items-center',
         attrs.class as string | undefined
       )
     "
@@ -134,6 +140,7 @@
 
         <template v-else-if="firstItem">
           <li
+            v-if="showFirst"
             class="inline-flex items-center"
             :data-testid="`${testId}__segment-0-mobile`"
           >
@@ -149,7 +156,10 @@
           </li>
 
           <template v-if="hasMiddleItems">
-            <BreadcrumbSeparator :data-testid="`${testId}__separator-overflow-before`" />
+            <BreadcrumbSeparator
+              v-if="showFirst"
+              :data-testid="`${testId}__separator-overflow-before`"
+            />
 
             <li
               class="inline-flex items-center"
@@ -162,7 +172,7 @@
                 <DropdownMenu.Trigger
                   :aria-label="t('breadcrumb.showHidden')"
                   :data-testid="`${testId}__overflow-trigger`"
-                  class="relative h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
+                  :class="OVERFLOW_TRIGGER_CLASS"
                 >
                   <i
                     class="az az-ellipsis size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"

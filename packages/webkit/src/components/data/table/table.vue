@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, useAttrs } from 'vue'
 
   import { useScrollEdges } from '../../../composables/use-scroll-edges'
+  import { useTableFrame } from './composables/use-table-frame'
   import { type TableAppliedFilter, type TableDensity, TableInjectionKey } from './injection-key'
+  import TableToolbarBand from './parts/table-toolbar-band.vue'
 
   defineOptions({
     name: 'Table',
@@ -42,24 +44,7 @@
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'table')
 
-  const captionId = `${useId()}-caption`
-  const captions = ref<number>(0)
-  const registerCaption = (): (() => void) => {
-    captions.value++
-    return () => captions.value--
-  }
-  const splitAttrs = computed<Record<string, unknown>[]>(() => {
-    const frame: Record<string, unknown> = {}
-    const own: Record<string, unknown> = {}
-    for (const name in attrs) (name.startsWith('aria-') ? own : frame)[name] = attrs[name]
-    return [frame, own]
-  })
-  const tableAttrs = computed<Record<string, unknown>>(() => {
-    const own = splitAttrs.value[1]
-    return captions.value && !own['aria-label'] && !own['aria-labelledby']
-      ? { ...own, 'aria-labelledby': captionId }
-      : own
-  })
+  const { captionId, registerCaption, frameAttrs, tableAttrs } = useTableFrame(attrs, () => false)
 
   const viewportHeightVar = computed<Record<string, string> | undefined>(() =>
     props.maxHeight ? { '--table-viewport-height': props.maxHeight } : undefined
@@ -90,39 +75,52 @@
   const {
     start: overflowStart,
     end: overflowEnd,
+    endInset: overflowEndInset,
     measure: measureEdges
-  } = useScrollEdges(viewportEl)
+  } = useScrollEdges(viewportEl, { columns: '[role=columnheader]' })
+
+  const ROOT_CLASS =
+    '@container/table ' +
+    'data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) ' +
+    'data-[wrap]:[&_[role=cell]]:whitespace-normal ' +
+    'data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:whitespace-normal ' +
+    'data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:break-words ' +
+    'data-[wrap]:[&_[role=cell]_:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])]:whitespace-nowrap ' +
+    'flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm ' +
+    'data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)'
+
+  const VIEWPORT_CLASS =
+    'relative min-h-0 min-w-0 max-h-(--table-viewport-height) overflow-x-auto overflow-y-hidden ' +
+    'data-[scroll=both]:overflow-y-auto ' +
+    '[scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] ' +
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto'
+
+  const FADE_START_CLASS =
+    'pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) ' +
+    'group-data-[overflow-start]/scroll:block ' +
+    'rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
+
+  const FADE_END_CLASS =
+    'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) to-[min(1.5rem,100%)] ' +
+    'group-data-[overflow-end]/scroll:block ' +
+    'rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
 </script>
 
 <template>
   <div
-    v-bind="splitAttrs[0]"
+    v-bind="frameAttrs"
     :data-testid="testId"
     :data-bordered="bordered || null"
     :data-density="density"
     :data-wrap="wrapLines || null"
     :style="viewportHeightVar"
-    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:break-words data-[wrap]:[&_[role=cell]_:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])]:whitespace-nowrap flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)"
+    :class="ROOT_CLASS"
   >
-    <div
-      v-if="$slots['title'] || $slots['toolbar']"
-      role="presentation"
-      :data-testid="`${testId}__toolbar`"
-      class="flex flex-wrap items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-sm)"
-    >
-      <div
-        v-if="$slots['title']"
-        class="text-label-md text-(--text-default)"
-      >
-        <slot name="title" />
-      </div>
-      <div
-        v-if="$slots['toolbar']"
-        class="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-(--spacing-xs) @max-md/table:basis-full @max-md/table:justify-start"
-      >
-        <slot name="toolbar" />
-      </div>
-    </div>
+    <TableToolbarBand
+      :test-id="testId"
+      :title="$slots['title']"
+      :toolbar="$slots['toolbar']"
+    />
 
     <div
       :data-testid="`${testId}__scroll`"
@@ -135,12 +133,12 @@
         tabindex="0"
         :data-scroll="maxHeight ? 'both' : 'horizontal'"
         :data-testid="`${testId}__viewport`"
-        class="relative min-h-0 min-w-0 max-h-(--table-viewport-height) overflow-x-auto overflow-y-hidden data-[scroll=both]:overflow-y-auto [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto"
+        :class="VIEWPORT_CLASS"
         @scroll.passive="measureEdges"
       >
         <div class="flex w-max min-w-full flex-col">
           <div
-            v-bind="tableAttrs"
+            v-bind="tableAttrs()"
             role="table"
             :data-testid="`${testId}__table`"
             class="flex w-full flex-col"
@@ -153,13 +151,13 @@
         aria-hidden="true"
         :data-testid="`${testId}__fade-start`"
         :style="{ width: `${overflowStart}px` }"
-        class="pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :class="FADE_START_CLASS"
       />
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
-        :style="{ width: `${overflowEnd}px` }"
-        class="pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :style="{ insetInlineEnd: `${overflowEndInset}px`, width: `${overflowEnd}px` }"
+        :class="FADE_END_CLASS"
       />
     </div>
 

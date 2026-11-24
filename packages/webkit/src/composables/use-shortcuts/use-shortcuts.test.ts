@@ -8,7 +8,7 @@ import {
   toAriaKeyshortcuts,
   useShortcutList,
   useShortcuts
-} from './use-shortcuts'
+} from './index'
 
 const apple = /mac/i.test(navigator.platform || navigator.userAgent || '')
 

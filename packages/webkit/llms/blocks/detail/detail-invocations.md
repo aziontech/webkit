@@ -156,24 +156,21 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
+  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import LogViewerContent from '@aziontech/webkit/log-viewer-content'
   import LogViewer, { type LogViewerLine } from '@aziontech/webkit/log-viewer-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Subheader from '@aziontech/webkit/subheader'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref } from 'vue'
 
+  import { formatInvocationDuration, formatInvocationTime } from './invocations-format'
+  import InvocationRequestPath, {
+    type InvocationPathNode as PathNode
+  } from './parts/invocation-request-path.vue'
+  import InvocationSummaryCard from './parts/invocation-summary-card.vue'
   import { sampleFunction, sampleInvocations } from './sample'
 
   /** How an invocation ended, or that it is still running. */
@@ -240,17 +237,6 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
     originHost: string
   }
 
-  interface PathNode {
-    key: string
-    eyebrow: string
-    icon: string
-    title: string
-    label: string
-    severity: TagSeverity
-    spanId: string
-    fields: { label: string; value: string }[]
-  }
-
   export interface InvocationsProps {
     /** The function and its request path. Left out, the sample renders. */
     edgeFunction?: InvocationsFunction
@@ -284,21 +270,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
   }
 
   const { formatDate, formatNumber } = useLocale()
-  const fixed = (value: number, digits: number) =>
-    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
-  const formatTime = (value: Date) =>
-    `${formatDate(value, {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hourCycle: 'h23',
-      timeZone: 'UTC'
-    })} UTC`
-
-  const formatDuration = (ms: number) =>
-    ms >= 1000 ? `${fixed(ms / 1000, 2)} s` : `${Math.round(ms)} ms`
+  const formatTime = (value: Date) => formatInvocationTime(formatDate, value)
+  const formatDuration = (ms: number) => formatInvocationDuration(formatNumber, ms)
 
   const run = computed<InvocationsInvocation | undefined>(
     () => runs.value.find((entry) => entry.id === invocationId.value) ?? runs.value[0]
@@ -390,7 +363,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
       type:
         index === current.logs.length - 1 && current.status === 'Completed' ? 'success' : 'text',
       level: entry.level,
-      message: `${entry.level.toUpperCase()} ${entry.message}`
+      message: entry.message
     }))
   })
 
@@ -422,277 +395,24 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
       />
 
       <div class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-        <Card
+        <InvocationSummaryCard
           v-if="run"
-          :padded="false"
-        >
-          <template #default>
-            <div
-              class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
-            >
-              <div
-                class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
-              >
-                <i
-                  class="az az-functions shrink-0 text-body-lg text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <div class="flex min-w-0">
-                  <Tooltip
-                    :content="`Open ${fn.name} in Functions`"
-                    class="w-full"
-                  >
-                    <Link
-                      :label="fn.name"
-                      :href="`/functions/${fn.id}`"
-                      size="small"
-                    />
-                  </Tooltip>
-                </div>
-                <span
-                  class="shrink-0 text-(--text-muted)"
-                  aria-hidden="true"
-                  >/</span
-                >
-                <span class="truncate text-label-code-sm text-(--text-muted)">{{ run.id }}</span>
-                <CopyButton
-                  variant="outline"
-                  :value="run.id"
-                  aria-label="Copy invocation ID"
-                  class="shrink-0"
-                  size="small"
-                />
-                <StatusIndicator
-                  :severity="severity"
-                  :loading="running"
-                  :label="run.status"
-                  class="shrink-0"
-                />
-              </div>
+          :run="run"
+          :fn="fn"
+          :runs="runs"
+          :severity="severity"
+          :running="running"
+          :facts="facts"
+          @replay="replay"
+          @pick="pickRun"
+          @invocation-action="(event, value) => emit('invocation-action', event, value)"
+        />
 
-              <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
-                <Button
-                  label="Replay"
-                  variant="secondary"
-                  size="medium"
-                  icon="az az-replay"
-                  :disabled="running"
-                  @click="replay"
-                />
-
-                <DropdownMenu
-                  side="bottom"
-                  align="end"
-                  @select="(_event, value) => pickRun(String(value))"
-                >
-                  <DropdownMenu.Trigger>
-                    <Tooltip content="Pick another invocation of this function">
-                      <Button
-                        label="Recent"
-                        variant="outline"
-                        size="medium"
-                        icon="az az-history"
-                      />
-                    </Tooltip>
-                  </DropdownMenu.Trigger>
-
-                  <DropdownMenu.Group label="Recent invocations">
-                    <DropdownMenu.Item
-                      v-for="option in runs"
-                      :key="option.id"
-                      :value="option.id"
-                      :label="option.id"
-                      :selected="option.id === run.id"
-                    >
-                      <template #trailing>
-                        <span class="text-label-sm text-(--text-muted)">
-                          {{ option.status }} · {{ formatTime(option.startedAt) }}
-                        </span>
-                      </template>
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Group>
-                </DropdownMenu>
-
-                <DropdownMenu
-                  side="bottom"
-                  align="end"
-                  @select="(event, value) => emit('invocation-action', event, value)"
-                >
-                  <DropdownMenu.Trigger>
-                    <Tooltip content="Invocation actions">
-                      <IconButton
-                        icon="az az-ellipsis"
-                        variant="outline"
-                        size="medium"
-                        aria-label="Invocation actions"
-                      />
-                    </Tooltip>
-                  </DropdownMenu.Trigger>
-
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Item
-                      value="events"
-                      label="Open in Real-Time Events"
-                    >
-                      <template #leading>
-                        <i
-                          class="az az-real-time-events"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Item>
-                    <DropdownMenu.Item
-                      value="settings"
-                      label="Function settings"
-                    >
-                      <template #leading>
-                        <i
-                          class="az az-settings"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Group>
-                </DropdownMenu>
-              </div>
-            </div>
-
-            <div
-              class="grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) sm:grid-cols-4"
-            >
-              <div
-                v-for="fact in facts"
-                :key="fact.label"
-                class="flex min-w-0 flex-col gap-(--spacing-2xs)"
-              >
-                <span class="text-label-sm text-(--text-muted)">{{ fact.label }}</span>
-                <div class="flex min-h-7 min-w-0 items-center">
-                  <span class="truncate text-body-sm tabular-nums text-(--text-default)">
-                    {{ fact.value }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs)"
-            >
-              <div
-                class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
-              >
-                <i
-                  :data-severity="severity"
-                  class="az az-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
-                  aria-hidden="true"
-                />
-                <span class="truncate text-label-code-sm text-(--text-muted)">{{
-                  run.trigger
-                }}</span>
-                <CopyButton
-                  variant="outline"
-                  :value="run.trigger"
-                  aria-label="Copy the request that triggered this invocation"
-                  class="shrink-0"
-                  size="small"
-                />
-              </div>
-              <span
-                :data-severity="severity"
-                class="min-w-0 text-body-xs text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
-              >
-                {{ run.outcome }}
-              </span>
-            </div>
-          </template>
-        </Card>
-
-        <section
+        <InvocationRequestPath
           v-if="run"
-          aria-label="Request path"
-          class="flex min-w-0 flex-col gap-(--layout-group-gap)"
-        >
-          <Subheader
-            title="Request path"
-            description="The resources this invocation travelled, and the time it spent in each one."
-            size="small"
-          />
-          <div
-            class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
-          >
-            <FlowDiagram
-              align="start"
-              aria-label="Request path"
-            >
-              <FlowDiagram.Node
-                v-for="node in path"
-                :key="node.key"
-                unstyled
-                :terminal="node.key === 'origin'"
-              >
-                <div
-                  class="flex w-full min-w-0 flex-col in-data-[direction=row]:w-(--size-56) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
-                >
-                  <FlowDiagram.Anchor>
-                    <div
-                      class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
-                    >
-                      <i
-                        :class="node.icon"
-                        aria-hidden="true"
-                        class="shrink-0 text-label-sm leading-none text-(--text-muted)"
-                      />
-                      <span class="truncate text-label-sm text-(--text-muted)">{{
-                        node.eyebrow
-                      }}</span>
-                      <span class="ms-auto flex shrink-0">
-                        <Tag
-                          :severity="node.severity"
-                          :label="node.label"
-                          size="small"
-                        />
-                      </span>
-                    </div>
-                  </FlowDiagram.Anchor>
-                  <div
-                    class="flex min-h-8 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
-                  >
-                    <span class="min-w-0 truncate text-label-sm text-(--text-default)">{{
-                      node.title
-                    }}</span>
-                    <span
-                      v-if="node.spanId"
-                      class="ms-auto flex shrink-0 items-center"
-                    >
-                      <Tooltip :content="`Show ${node.title} in the trace`">
-                        <IconButton
-                          icon="az az-align-left"
-                          variant="outline"
-                          size="small"
-                          :aria-label="`Show ${node.title} in the trace`"
-                          @click="showSpan(node.spanId)"
-                        />
-                      </Tooltip>
-                    </span>
-                  </div>
-                  <dl
-                    class="m-0 flex flex-col gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md)"
-                  >
-                    <div
-                      v-for="field in node.fields"
-                      :key="field.label"
-                      class="flex min-w-0 flex-col gap-(--spacing-2xs)"
-                    >
-                      <dt class="text-label-sm text-(--text-muted)">{{ field.label }}</dt>
-                      <dd class="m-0 truncate text-body-xs text-(--text-default)">
-                        {{ field.value }}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              </FlowDiagram.Node>
-            </FlowDiagram>
-          </div>
-        </section>
+          :path="path"
+          @show-span="showSpan"
+        />
 
         <section
           v-if="run"
@@ -997,4 +717,388 @@ export const sampleInvocations: InvocationsInvocation[] = [
     ]
   }
 ]
+```
+
+## `invocations-format.ts`
+
+```ts
+import type { UseLocaleReturn } from '@aziontech/webkit/use-locale'
+
+export const formatInvocationTime = (formatDate: UseLocaleReturn['formatDate'], value: Date) =>
+  `${formatDate(value, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+    timeZone: 'UTC'
+  })} UTC`
+
+export const formatInvocationDuration = (
+  formatNumber: UseLocaleReturn['formatNumber'],
+  ms: number
+) =>
+  ms >= 1000
+    ? `${formatNumber(ms / 1000, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} s`
+    : `${Math.round(ms)} ms`
+```
+
+## `parts/invocation-request-path.vue`
+
+```ts
+<script setup lang="ts">
+  import FlowDiagram from '@aziontech/webkit/flow-diagram'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Subheader from '@aziontech/webkit/subheader'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  /** One resource on the request path. */
+  export interface InvocationPathNode {
+    /** Identifies the node. */
+    key: string
+    /** The kind of resource, above its title. */
+    eyebrow: string
+    /** Icon of the resource kind. */
+    icon: string
+    /** The resource name. */
+    title: string
+    /** Its state on this run. */
+    label: string
+    /** Color of the state. */
+    severity: TagSeverity
+    /** The trace span the node opens; empty when it has none. */
+    spanId: string
+    /** The facts listed under the node. */
+    fields: { label: string; value: string }[]
+  }
+
+  export interface InvocationRequestPathProps {
+    /** The resources the request travelled, in order. */
+    path: InvocationPathNode[]
+  }
+
+  defineProps<InvocationRequestPathProps>()
+
+  const emit = defineEmits<{
+    'show-span': [spanId: string]
+  }>()
+
+  const FLOW_NODE_CARD_CLASS =
+    'flex w-full min-w-0 flex-col ' +
+    'in-data-[direction=row]:w-(--size-56) ' +
+    'rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance ' +
+    'hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none'
+</script>
+
+<template>
+  <section
+    aria-label="Request path"
+    class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+  >
+    <Subheader
+      title="Request path"
+      description="The resources this invocation travelled, and the time it spent in each one."
+      size="small"
+    />
+    <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
+      <FlowDiagram
+        align="start"
+        aria-label="Request path"
+      >
+        <FlowDiagram.Node
+          v-for="node in path"
+          :key="node.key"
+          unstyled
+          :terminal="node.key === 'origin'"
+        >
+          <div :class="FLOW_NODE_CARD_CLASS">
+            <FlowDiagram.Anchor>
+              <div
+                class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
+              >
+                <i
+                  :class="node.icon"
+                  aria-hidden="true"
+                  class="shrink-0 text-label-sm leading-none text-(--text-muted)"
+                />
+                <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
+                <span class="ms-auto flex shrink-0">
+                  <Tag
+                    :severity="node.severity"
+                    :label="node.label"
+                    size="small"
+                  />
+                </span>
+              </div>
+            </FlowDiagram.Anchor>
+            <div
+              class="flex min-h-8 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
+            >
+              <span class="min-w-0 truncate text-label-sm text-(--text-default)">{{
+                node.title
+              }}</span>
+              <span
+                v-if="node.spanId"
+                class="ms-auto flex shrink-0 items-center"
+              >
+                <Tooltip :content="`Show ${node.title} in the trace`">
+                  <IconButton
+                    icon="az az-align-left"
+                    variant="outline"
+                    size="small"
+                    :aria-label="`Show ${node.title} in the trace`"
+                    @click="emit('show-span', node.spanId)"
+                  />
+                </Tooltip>
+              </span>
+            </div>
+            <dl
+              class="m-0 flex flex-col gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md)"
+            >
+              <div
+                v-for="field in node.fields"
+                :key="field.label"
+                class="flex min-w-0 flex-col gap-(--spacing-2xs)"
+              >
+                <dt class="text-label-sm text-(--text-muted)">{{ field.label }}</dt>
+                <dd class="m-0 truncate text-body-xs text-(--text-default)">
+                  {{ field.value }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </FlowDiagram.Node>
+      </FlowDiagram>
+    </div>
+  </section>
+</template>
+```
+
+## `parts/invocation-summary-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+
+  import type { InvocationsFunction, InvocationsInvocation } from '../detail-invocations.vue'
+  import { formatInvocationTime } from '../invocations-format'
+
+  export interface InvocationSummaryCardProps {
+    /** The invocation the card describes. */
+    run: InvocationsInvocation
+    /** The function that ran. */
+    fn: InvocationsFunction
+    /** Recent invocations the Recent menu lists. */
+    runs: InvocationsInvocation[]
+    /** Color of the invocation status. */
+    severity: StatusIndicatorSeverity
+    /** The invocation is still running. */
+    running: boolean
+    /** The started, completed, duration and location facts. */
+    facts: { label: string; value: string }[]
+  }
+
+  defineProps<InvocationSummaryCardProps>()
+
+  const emit = defineEmits<{
+    replay: [event: MouseEvent]
+    pick: [id: string]
+    'invocation-action': [
+      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+      value: DropdownMenuItemValue
+    ]
+  }>()
+
+  const { formatDate } = useLocale()
+  const formatTime = (value: Date) => formatInvocationTime(formatDate, value)
+
+  const FOOTER_BAND_CLASS =
+    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
+    'py-(--spacing-xs)'
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #default>
+      <div
+        class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
+      >
+        <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
+          <i
+            class="az az-functions shrink-0 text-body-lg text-(--text-muted)"
+            aria-hidden="true"
+          />
+          <div class="flex min-w-0">
+            <Tooltip
+              :content="`Open ${fn.name} in Functions`"
+              class="w-full"
+            >
+              <Link
+                :label="fn.name"
+                :href="`/functions/${fn.id}`"
+                size="small"
+              />
+            </Tooltip>
+          </div>
+          <span
+            class="shrink-0 text-(--text-muted)"
+            aria-hidden="true"
+            >/</span
+          >
+          <span class="truncate text-label-code-sm text-(--text-muted)">{{ run.id }}</span>
+          <CopyButton
+            variant="outline"
+            :value="run.id"
+            aria-label="Copy invocation ID"
+            class="shrink-0"
+            size="small"
+          />
+          <StatusIndicator
+            :severity="severity"
+            :loading="running"
+            :label="run.status"
+            class="shrink-0"
+          />
+        </div>
+
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+          <Button
+            label="Replay"
+            variant="secondary"
+            size="medium"
+            icon="az az-replay"
+            :disabled="running"
+            @click="(event: MouseEvent) => emit('replay', event)"
+          />
+
+          <DropdownMenu
+            side="bottom"
+            align="end"
+            @select="(_event, value) => emit('pick', String(value))"
+          >
+            <DropdownMenu.Trigger>
+              <Tooltip content="Pick another invocation of this function">
+                <Button
+                  label="Recent"
+                  variant="outline"
+                  size="medium"
+                  icon="az az-history"
+                />
+              </Tooltip>
+            </DropdownMenu.Trigger>
+
+            <DropdownMenu.Group label="Recent invocations">
+              <DropdownMenu.Item
+                v-for="option in runs"
+                :key="option.id"
+                :value="option.id"
+                :label="option.id"
+                :selected="option.id === run.id"
+              >
+                <template #trailing>
+                  <span class="text-label-sm text-(--text-muted)">
+                    {{ option.status }} · {{ formatTime(option.startedAt) }}
+                  </span>
+                </template>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          </DropdownMenu>
+
+          <DropdownMenu
+            side="bottom"
+            align="end"
+            @select="(event, value) => emit('invocation-action', event, value)"
+          >
+            <DropdownMenu.Trigger>
+              <Tooltip content="Invocation actions">
+                <IconButton
+                  icon="az az-ellipsis"
+                  variant="outline"
+                  size="medium"
+                  aria-label="Invocation actions"
+                />
+              </Tooltip>
+            </DropdownMenu.Trigger>
+
+            <DropdownMenu.Group>
+              <DropdownMenu.Item
+                value="events"
+                label="Open in Real-Time Events"
+              >
+                <template #leading>
+                  <i
+                    class="az az-real-time-events"
+                    aria-hidden="true"
+                  />
+                </template>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
+                value="settings"
+                label="Function settings"
+              >
+                <template #leading>
+                  <i
+                    class="az az-settings"
+                    aria-hidden="true"
+                  />
+                </template>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      <div
+        class="grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) sm:grid-cols-4"
+      >
+        <div
+          v-for="fact in facts"
+          :key="fact.label"
+          class="flex min-w-0 flex-col gap-(--spacing-2xs)"
+        >
+          <span class="text-label-sm text-(--text-muted)">{{ fact.label }}</span>
+          <div class="flex min-h-7 min-w-0 items-center">
+            <span class="truncate text-body-sm tabular-nums text-(--text-default)">
+              {{ fact.value }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div :class="FOOTER_BAND_CLASS">
+        <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
+          <i
+            :data-severity="severity"
+            class="az az-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
+            aria-hidden="true"
+          />
+          <span class="truncate text-label-code-sm text-(--text-muted)">{{ run.trigger }}</span>
+          <CopyButton
+            variant="outline"
+            :value="run.trigger"
+            aria-label="Copy the request that triggered this invocation"
+            class="shrink-0"
+            size="small"
+          />
+        </div>
+        <span
+          :data-severity="severity"
+          class="min-w-0 text-body-xs text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
+        >
+          {{ run.outcome }}
+        </span>
+      </div>
+    </template>
+  </Card>
+</template>
 ```

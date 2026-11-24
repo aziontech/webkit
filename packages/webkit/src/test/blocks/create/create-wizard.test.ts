@@ -17,6 +17,30 @@ afterEach(() => {
   document.documentElement.style.overflow = ''
   document.body.style.overflow = ''
 })
+describe('create-wizard pick lists', () => {
+  it('reads the policy list as one named group of radios with a mark on every row', () => {
+    render(MultipageCreate)
+    const group = screen.getByRole('radiogroup', { name: 'Policies' })
+    const rows = within(group).getAllByRole('radio')
+    expect(rows.length).toBeGreaterThan(1)
+    expect(rows.length).toBeLessThanOrEqual(5)
+    for (const row of rows) {
+      expect(row.hasAttribute('aria-pressed')).toBe(false)
+      expect(row.getAttribute('aria-checked')).toMatch(/^(true|false)$/)
+      expect(row.querySelector('.az-circle, .az-circle-on')).not.toBeNull()
+    }
+  })
+
+  it('reads the project list of CreateAndDeploy as a named group of radios', async () => {
+    render(MultipageCreateAndDeploy)
+    const group = screen.getByRole('radiogroup', { name: 'Projects' })
+    const row = within(group).getByRole('radio', { name: /web-app/ })
+    expect(row.getAttribute('aria-checked')).toBe('false')
+    await fireEvent.click(row)
+    expect(row.getAttribute('aria-checked')).toBe('true')
+  })
+})
+
 describe('create-wizard#CreateAndDeploy', () => {
   it('gates Next on the project, then shows the loading state on Create and deploy', async () => {
     render(MultipageCreateAndDeploy)
@@ -25,7 +49,7 @@ describe('create-wizard#CreateAndDeploy', () => {
     expect(
       await screen.findByText('Select the project this service serves, or create a new one.')
     ).toBeTruthy()
-    await fireEvent.click(screen.getByRole('button', { name: /web-app/ }))
+    await fireEvent.click(screen.getByRole('radio', { name: /web-app/ }))
     await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(
       await screen.findByRole('heading', { level: 2, name: 'Domain and deployment' })
@@ -51,7 +75,7 @@ describe('create-wizard#CreateAndDeploy', () => {
     await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
     view.unmount()
     const dirty = render(MultipageCreateAndDeploy)
-    await fireEvent.click(screen.getByRole('button', { name: /web-app/ }))
+    await fireEvent.click(screen.getByRole('radio', { name: /web-app/ }))
     await userEvent.keyboard('{Escape}')
     const confirm = await screen.findByRole('alertdialog')
     await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
@@ -61,7 +85,7 @@ describe('create-wizard#CreateAndDeploy', () => {
 
   it('asks before Cancel or Back to Services discards the answers', async () => {
     const view = render(MultipageCreateAndDeploy)
-    await fireEvent.click(screen.getByRole('button', { name: /web-app/ }))
+    await fireEvent.click(screen.getByRole('radio', { name: /web-app/ }))
     await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
     const confirm = await screen.findByRole('alertdialog')
     expect(within(confirm).getByText('Unsaved changes')).toBeTruthy()
@@ -118,7 +142,7 @@ describe('create-wizard', () => {
     await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
     view.unmount()
     const dirty = render(MultipageCreate)
-    await fireEvent.click(screen.getByRole('button', { name: /acme-staging/ }))
+    await fireEvent.click(screen.getByRole('radio', { name: /acme-staging/ }))
     await userEvent.keyboard('{Escape}')
     const confirm = await screen.findByRole('alertdialog')
     await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
@@ -128,7 +152,7 @@ describe('create-wizard', () => {
 
   it('asks before Cancel discards the answers, and stays on Keep editing', async () => {
     const view = render(MultipageCreate)
-    await fireEvent.click(screen.getByRole('button', { name: /acme-staging/ }))
+    await fireEvent.click(screen.getByRole('radio', { name: /acme-staging/ }))
     await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
     const confirm = await screen.findByRole('alertdialog')
     await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
@@ -148,8 +172,8 @@ describe('create-wizard', () => {
         ]
       }
     })
-    expect(screen.getByRole('button', { name: /docs-site/ })).toBeTruthy()
-    expect(screen.queryByRole('button', { name: /acme-staging/ })).toBeNull()
+    expect(screen.getByRole('radio', { name: /docs-site/ })).toBeTruthy()
+    expect(screen.queryByRole('radio', { name: /acme-staging/ })).toBeNull()
     view.unmount()
     const busy = render(MultipageCreate, {
       props: {
@@ -170,7 +194,7 @@ describe('create-wizard', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Create Access List' })).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(await screen.findByText('Select a policy, or continue without one.')).toBeTruthy()
-    await fireEvent.click(screen.getByRole('button', { name: /acme-staging/ }))
+    await fireEvent.click(screen.getByRole('radio', { name: /acme-staging/ }))
     expect(await screen.findByRole('heading', { level: 2, name: 'IP filtering' })).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'General' })).toBeTruthy()

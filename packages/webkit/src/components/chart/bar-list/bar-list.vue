@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { usePreferredReducedMotion } from '@vueuse/core'
-  import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, onMounted, useAttrs } from 'vue'
 
+  import { useChartEntrance } from '../../../composables/use-chart-entrance'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
@@ -85,9 +85,7 @@
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)
       : props.formatValue(value)
-  const reducedMotion = usePreferredReducedMotion()
-  const entered = ref(false)
-  let frame = 0
+  const { entered, scheduleEnter } = useChartEntrance()
 
   const SKELETON_WIDTHS = ['100%', '72%', '48%', '30%', '16%']
 
@@ -129,22 +127,19 @@
     emit('item-click', event, item)
   }
 
-  onMounted(() => {
-    if (reducedMotion.value === 'reduce') {
-      entered.value = true
-      return
-    }
-    frame = globalThis.requestAnimationFrame(() => {
-      frame = globalThis.requestAnimationFrame(() => {
-        frame = 0
-        entered.value = true
-      })
-    })
-  })
+  onMounted(scheduleEnter)
 
-  onScopeDispose(() => {
-    if (frame) globalThis.cancelAnimationFrame(frame)
-  })
+  const ROW_CLASS =
+    'relative flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-control) pe-(--spacing-xs) ' +
+    "data-[interactive]:before:absolute data-[interactive]:before:inset-x-0 data-[interactive]:before:-inset-y-1 data-[interactive]:before:content-[''] " +
+    'text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) ' +
+    'data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)'
+
+  const BAR_CLASS =
+    'absolute inset-y-0 start-0 rounded-(--shape-control) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] ' +
+    'border-e-2 border-solid border-(--bar-list-fill) forced-color-adjust-none transition-[width] duration-slow-01 ' +
+    'ease-productive-entrance motion-reduce:transition-none'
 </script>
 
 <template>
@@ -226,7 +221,7 @@
           :type="row.tag === 'button' ? 'button' : undefined"
           :data-interactive="row.interactive || null"
           :data-testid="`${testId}__row`"
-          class="relative flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-control) pe-(--spacing-xs) data-[interactive]:before:absolute data-[interactive]:before:inset-x-0 data-[interactive]:before:-inset-y-1 data-[interactive]:before:content-[''] text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
+          :class="ROW_CLASS"
           @click="onRowClick($event, row.item, row.interactive)"
         >
           <span class="relative flex h-8 min-w-0 flex-1 items-center">
@@ -234,7 +229,7 @@
               aria-hidden="true"
               :data-testid="`${testId}__bar`"
               :style="{ width: row.width }"
-              class="absolute inset-y-0 start-0 rounded-(--shape-control) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] forced-color-adjust-none transition-[width] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+              :class="BAR_CLASS"
             />
             <span class="relative min-w-0 truncate px-(--spacing-xs) text-label-md">
               {{ row.item.name }}

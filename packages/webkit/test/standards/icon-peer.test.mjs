@@ -24,5 +24,5 @@ test('webkit declares the icon package its components render as a peer, at the w
     ),
     `${range} does not accept the workspace version ${icons.version}`
   )
-  assert.equal(webkit.devDependencies?.['@aziontech/icons'], 'workspace:^')
+  assert.equal(webkit.devDependencies?.['@aziontech/icons'], 'workspace:*')
 })

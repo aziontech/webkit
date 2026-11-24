@@ -51,6 +51,19 @@
     if (props.status === 'success') return t('tutorialPanel.taskComplete')
     return t('tutorialPanel.taskNotStarted')
   })
+
+  const MARKER_CLASS =
+    'flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors ' +
+    'duration-fast-02 ease-productive-entrance ' +
+    'group-data-[active]/task:border-(--secondary) group-data-[active]/task:text-(--text-default) ' +
+    'group-data-[status=success]/task:border-(--secondary) group-data-[status=success]/task:bg-(--secondary) group-data-[status=success]/task:text-(--secondary-foreground) ' +
+    'motion-reduce:transition-none'
+
+  const TITLE_CLASS =
+    'flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-data-[active]/task:text-(--text-default) ' +
+    'group-data-[status=success]/task:text-(--text-default) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -65,7 +78,7 @@
   >
     <span
       aria-hidden="true"
-      class="flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[active]/task:border-(--secondary) group-data-[active]/task:text-(--text-default) group-data-[status=success]/task:border-(--secondary) group-data-[status=success]/task:bg-(--secondary) group-data-[status=success]/task:text-(--secondary-foreground) motion-reduce:transition-none"
+      :class="MARKER_CLASS"
     >
       <span
         v-if="status === 'success' && !active"
@@ -74,10 +87,7 @@
       <span v-else>{{ index }}</span>
     </span>
     <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
-      <span
-        class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[active]/task:text-(--text-default) group-data-[status=success]/task:text-(--text-default) motion-reduce:transition-none"
-        >{{ title }}</span
-      >
+      <span :class="TITLE_CLASS">{{ title }}</span>
       <span class="sr-only">{{ statusLabel }}</span>
       <div
         v-if="$slots['default']"

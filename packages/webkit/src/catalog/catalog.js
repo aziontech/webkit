@@ -1,13 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
-import { dirname, join } from 'node:path'
+import { dirname, join, posix } from 'node:path'
 
 const CANDIDATE_PKGS = ['@aziontech/webkit']
 const DEFAULT_PKG = CANDIDATE_PKGS[0]
-
-export function isWebkitBare(src) {
-  return typeof src === 'string' && CANDIDATE_PKGS.includes(src)
-}
 
 let cache = null
 let warned = false
@@ -76,9 +72,11 @@ export function hydratePart(part, readText) {
   const { sfcFile, guidelinesFile, fileSources, ...out } = part
   if (sfcFile) out.sfc = readText(sfcFile)
   if (fileSources) {
-    out.files = Object.fromEntries(
-      Object.entries(fileSources).map(([name, file]) => [name, readText(file)])
-    )
+    const dir = posix.dirname(sfcFile || '')
+    const sources = Array.isArray(fileSources)
+      ? fileSources.map((name) => [name, `${dir}/${name}`])
+      : Object.entries(fileSources)
+    out.files = Object.fromEntries(sources.map(([name, file]) => [name, readText(file)]))
   }
   if (guidelinesFile) out.guidelines = readText(guidelinesFile)
   for (const key of ['variants', 'examples']) {
@@ -90,25 +88,8 @@ export function hydratePart(part, readText) {
   return out
 }
 
-function build(json, baseDir) {
-  const source = (file) => readSource(baseDir, file)
-  const imports = json.imports || {}
-  const blocks = json.blocks || {}
-  const blockCache = new Map()
-  const exampleCache = new Map()
-  const detailCache = new Map()
-  const assetCache = new Map()
-  const assets = json.assets || {}
-  const subpaths = Object.keys(imports)
-  const set = new Set(subpaths)
-  const tokenRules = (json.tokenRules || []).map((r) => ({
-    id: r.id,
-    re: new RegExp(r.pattern, (r.flags || '').replace('g', '')),
-    message: r.message
-  }))
-
+function catalogFields(json) {
   const pkg = json.package || DEFAULT_PKG
-
   return {
     available: true,
     package: pkg,
@@ -116,58 +97,71 @@ function build(json, baseDir) {
     bare: pkg,
     version: json.webkitVersion || null,
     deniedPrefixes: json.deniedPrefixes || [],
-    tokenRules,
+    tokenRules: (json.tokenRules || []).map((r) => ({
+      id: r.id,
+      re: new RegExp(r.pattern, (r.flags || '').replace('g', '')),
+      message: r.message
+    })),
     tokens: json.tokens || { cssVars: [], typography: [], groups: {} },
     vocabulary: json.vocabulary || null,
     aliases: json.aliases || {},
     renamed: json.renamed || {},
-    removed: json.removed || {},
-    subpaths,
-    imports,
-    blocks,
-    blockAliases: json.blockAliases || {},
-    assets,
+    removed: json.removed || {}
+  }
+}
+
+function cached(cache, key, load) {
+  if (!cache.has(key)) cache.set(key, load())
+  return cache.get(key)
+}
+
+function partReaders(imports, blocks, assets, baseDir) {
+  const source = (file) => readSource(baseDir, file)
+  const blockCache = new Map()
+  const exampleCache = new Map()
+  const detailCache = new Map()
+  const assetCache = new Map()
+  return {
     assetItems(kind) {
       const meta = assets[kind]
       if (!meta) return []
       if (!meta.file) return meta.items || []
-      if (!assetCache.has(kind)) assetCache.set(kind, readPart(baseDir, meta.file)?.items || [])
-      return assetCache.get(kind)
+      return cached(assetCache, kind, () => readPart(baseDir, meta.file)?.items || [])
     },
-    has: (sub) => set.has(sub),
-    getEntry: (sub) => imports[sub] || null,
     getDetails(sub) {
       const e = imports[sub]
       if (!e) return null
       if (!e.docsFile) return e
-      if (!detailCache.has(sub)) {
-        const { docsFile, ...rest } = e
-        detailCache.set(sub, { ...rest, ...(readPart(baseDir, docsFile) || {}) })
-      }
-      return detailCache.get(sub)
+      const { docsFile, ...rest } = e
+      return cached(detailCache, sub, () => ({ ...rest, ...(readPart(baseDir, docsFile) || {}) }))
     },
     block(id) {
       const meta = blocks[id]
       if (!meta) return null
       if (!meta.file) return meta
-      if (!blockCache.has(id)) {
-        const { file, ...rest } = meta
-        blockCache.set(id, { ...rest, ...(hydratePart(readPart(baseDir, file), source) || {}) })
-      }
-      return blockCache.get(id)
+      const { file, ...rest } = meta
+      return cached(blockCache, id, () => ({
+        ...rest,
+        ...(hydratePart(readPart(baseDir, file), source) || {})
+      }))
     },
     examples(sub) {
       const e = imports[sub]
       if (!e) return []
       if (!e.examplesFile) return e.examples || []
-      if (!exampleCache.has(sub)) {
-        exampleCache.set(
-          sub,
-          hydratePart(readPart(baseDir, e.examplesFile), source)?.examples || []
-        )
-      }
-      return exampleCache.get(sub)
-    },
+      return cached(
+        exampleCache,
+        sub,
+        () => hydratePart(readPart(baseDir, e.examplesFile), source)?.examples || []
+      )
+    }
+  }
+}
+
+function subpathLookups(subpaths) {
+  const set = new Set(subpaths)
+  return {
+    has: (sub) => set.has(sub),
     nearestPublishedPrefix(sub) {
       if (!sub.includes('/')) return null
       const parts = sub.split('/')
@@ -188,6 +182,24 @@ function build(json, baseDir) {
         .slice(0, 3)
         .map((x) => x[1])
     }
+  }
+}
+
+function build(json, baseDir) {
+  const imports = json.imports || {}
+  const blocks = json.blocks || {}
+  const assets = json.assets || {}
+  const subpaths = Object.keys(imports)
+  return {
+    ...catalogFields(json),
+    subpaths,
+    imports,
+    blocks,
+    blockAliases: json.blockAliases || {},
+    assets,
+    getEntry: (sub) => imports[sub] || null,
+    ...partReaders(imports, blocks, assets, baseDir),
+    ...subpathLookups(subpaths)
   }
 }
 
@@ -252,6 +264,3 @@ export function _resetCatalogCache() {
   cache = null
   warned = false
 }
-
-export const WEBKIT_PREFIX = `${DEFAULT_PKG}/`
-export const WEBKIT_BARE = DEFAULT_PKG

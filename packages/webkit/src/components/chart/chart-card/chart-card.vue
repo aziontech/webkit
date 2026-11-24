@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, provide, readonly, ref, useAttrs, useId } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { DashboardGridItemInjectionKey } from '../../layout/dashboard-grid/injection-key'
   import {
     ChartCardInjectionKey,
@@ -135,6 +136,9 @@
     emit('drag-end', event)
   }
 
+  useElementListener(rootEl, 'dragstart', onDragstart)
+  useElementListener(rootEl, 'dragend', onDragend)
+
   provide(ChartCardInjectionKey, {
     testId: testId.value,
     titleId,
@@ -175,6 +179,12 @@
       emit('resize-end', event)
     }
   })
+
+  const ROOT_CLASS =
+    '@container/chart-card relative flex min-w-0 flex-col overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) ' +
+    '[grid-column:span_min(var(--chart-card-span),var(--chart-grid-columns,12))] [height:var(--chart-card-height,auto)] transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[dragging]:opacity-50'
 </script>
 
 <template>
@@ -192,9 +202,7 @@
     :aria-labelledby="labelledBy"
     :aria-describedby="describedBy"
     :style="sizeVars"
-    class="@container/chart-card relative flex min-w-0 flex-col overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) [grid-column:span_min(var(--chart-card-span),var(--chart-grid-columns,12))] [height:var(--chart-card-height,auto)] transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[dragging]:opacity-50"
-    @dragstart="onDragstart"
-    @dragend="onDragend"
+    :class="ROOT_CLASS"
   >
     <slot />
   </div>

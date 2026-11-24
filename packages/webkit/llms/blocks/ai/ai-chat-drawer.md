@@ -1,11 +1,11 @@
 # AiChatDrawer (`ai/ai-chat-drawer`)
 
-> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal="false"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
+> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal="false"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with the feedback thumbs, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
 
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputDictateButton`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -40,31 +40,31 @@ An outlined Agent `Button` with the assistant mark in the page header actions, `
 
 ### C. Drawer frame — `Drawer`, `DrawerContent`
 
-A medium right-side `Drawer` with no so the resource page beside it stays undimmed and readable while the reader asks about it. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
+A medium end-side `Drawer` with no backdrop (`:modal="false"`), so the resource page beside it stays undimmed and readable while the reader asks about it. From the `lg` breakpoint the page reserves the drawer's width while it is open (`data-drawer-open` on the block root sets `padding-inline-end` to the medium drawer width), so nothing on the page sits under the conversation; below `lg` the drawer overlays the page. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
 
 ### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`
 
-`DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton`, then the drawer's own close button.
+A `PanelHeader` on the drawer's surface over the canvas of the thread: `DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton`, then the drawer's own close button. The drawer has no history panel; the full-page `ai/ai-chat` keeps the history.
 
 ### E. Empty state — `EmptyState`, `SuggestionGroup`
 
-A small `EmptyState` titled with the resource ("Ask about storefront") and three support prompts about it, stacked.
+A small `EmptyState` titled with the resource ("Ask about storefront") and three support prompts about it, stacked, centered inside the log so the composer stays mounted when the thread starts.
 
 ### F. Message log — `Conversation`
 
-`layout="start"`: every message at the inline start, distinguished by avatar and author line, as Cloudscape asks for dense side panels. It is the only part of the drawer that scrolls.
+The same layout as the full page: the reader's prompts in a bubble at the inline end, responses as plain text across the panel, no avatars. It is the only part of the drawer that scrolls, and it sits on the drawer's own surface: the body sets `--conversation-composer-fade` to `--bg-surface` so the fade under the composer matches it, and the prompt bubbles (`--bg-selected`) stand apart from it in both themes; the composer floats over its foot.
 
-### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
+### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `ResponseBranches`, `FeedbackReasonDialog`
 
-The same prompt and response anatomy as the full page: loading, thinking, streaming with citations, sources, and `ChatMessage.Actions` with `CopyButton`, Regenerate and feedback. The files a reader attached draw under their prompt as media does in a response (section K).
+The same prompt and response anatomy as the full page: loading, thinking, streaming with site-name citation chips, and `ChatMessage.Actions` with Copy, Good response, Bad response, Read aloud, Share, Try again and More (in the drawer's narrow column the thumbs and Try again sit in More), the Sources pill at its end on the same line, a `ResponseBranches` pager after Try again, and Copy and Edit under each prompt. The files a reader attached draw under their prompt as media does in a response (section K).
 
 ### H. Follow-up questions — `SuggestionGroup`
 
 After the last complete response, aligned with its text.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 
-At the foot of the drawer above a divider: four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. With `attachable`, a `PromptInputAttachButton` (and drop and paste) attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions`; a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys` (pass it as `sendMessage(content, { body: { tools: toolKeys } })`). It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -96,7 +96,7 @@ While `hydrating` (`isHydrating` of `useChat`) and no message is in place yet, t
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatDrawerMessage`, `AiChatDrawerPart`, `AiChatDrawerTool`, `AiChatDrawerInterrupt`, `AiChatDrawerSendContent`, re-exported from `ai-chat-drawer.vue`), so any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/webkit/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, `AiChatSendContent`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 An activity step reads, by convention, `content.title` (else its `activityType`), `content.status` (`pending`, `running`, `success` or `complete`, `error`, `canceled` or `cancelled`, `skipped`; left out, running) and `content.detail` as the line under it.
 
@@ -104,12 +104,12 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 
 | Prop                | Type                                      | What it does                                                                                                                                                                                                                   |
 | ------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `messages`          | `AiChatDrawerMessage[]`                   | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                                                                                       |
+| `messages`          | `AiChatMessage[]`                         | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                                                                                       |
 | `suggestions`       | `SuggestionGroupItem[]`                   | The starter prompts under the empty state.                                                                                                                                                                                     |
 | `followUps`         | `SuggestionGroupItem[]`                   | Follow-up questions under the last finished response.                                                                                                                                                                          |
 | `loading`           | `boolean`                                 | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                                                                               |
 | `error`             | `string \| Error`                         | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                                                                                  |
-| `tools`             | `Record<string, AiChatDrawerTool>`        | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` `confirmationPhrase` and `editable` for its approval card.; `answerable` and `options` for a tool the reader answers. |
+| `tools`             | `Record<string, AiChatTool>`              | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` `confirmationPhrase` and `editable` for its approval card.; `answerable` and `options` for a tool the reader answers. |
 | `interrupts`        | `interrupts` of `useChat`                 | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, a generic one asks its question, and an unbound one asks it for the app to route.                        |
 | `interruptErrors`   | `interruptErrors` of `useChat`            | Answers that were not sent: an alert with the reason, and Retry when one is retryable.                                                                                                                                         |
 | `queue`             | `queue` of `useChat`                      | The messages waiting to be sent, shown above the composer; given, the composer sends while a response runs.                                                                                                                    |
@@ -119,28 +119,33 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `resuming`          | `boolean`                                 | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                                                                                 |
 | `hydrating`         | `boolean`                                 | `isHydrating` of `useChat`: placeholders stand in for the conversation and the composer waits.                                                                                                                                 |
 | `sessionGenerating` | `boolean`                                 | `sessionGenerating` of `useChat`: Responding in another tab while this tab is not loading.                                                                                                                                     |
-| `attachable`        | `boolean`                                 | The reader may attach files; `send` then hands over multimodal content.                                                                                                                                                        |
+| `attachable`        | `boolean`                                 | The Attach "+" at the start of the composer; `send` then hands over multimodal content. Default `true`.                                                                                                                        |
 | `accept`            | `string`                                  | The files the reader may attach; default `image/*,application/pdf`.                                                                                                                                                            |
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                          |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                          |
 | `resolveAppUrl`     | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                                                                                          |
+| `toolOptions`       | `PromptInputMenuOption[]`                 | The tools the composer's "+" menu turns on; left out, the sample tools. The turned-on ones are `v-model:toolKeys`.                                                                                                             |
 | `v-model:open`      | `boolean`                                 | Whether the drawer is open (open by default); Agent opens it and its close button closes it.                                                                                                                                   |
 
-| Event              | Payload                     | When                                                                                                                                              |
-| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.      |
-| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                         |
-| `feedback`         | `({ message, value })`      | The reader rated a response.                                                                                                                      |
-| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
-| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
-| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
-| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
-| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                          |
-| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                       |
-| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                |
+| Event              | Payload                     | When                                                                                                                                                                |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`             | `(event, content)`          | The composer, a starter prompt or a follow-up: call `sendMessage(content)`. `content` is the text, or with attachments `{ content: parts }`.                        |
+| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                                               |
+| `retry`            | `(event, message)`          | Try again: call `reload()`. The block keeps the earlier answer as a version.                                                                                        |
+| `edit`             | `(event, message, text)`    | The reader sent an edited prompt: call `setMessages` with the messages before `message`, then `sendMessage(text)`. The block keeps the earlier prompt as a version. |
+| `version-change`   | `(messages)`                | The reader paged to another version of a prompt or an answer: call `setMessages(messages)`.                                                                         |
+| `share`            | `(event, message)`          | Share on a response: make a link to it.                                                                                                                             |
+| `branch`           | `(event, message)`          | Branch in new chat: start a new chat with the messages up to `message`.                                                                                             |
+| `new-chat`         | `(event)`                   | New chat: call `clear()`.                                                                                                                                           |
+| `feedback`         | `(value, message, reason?)` | The reader rated a response (`value` is `null` when cleared); after Bad response a second `feedback` carries `reason` (`{ reason, details }`) from the dialog.      |
+| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt.                   |
+| `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                                           |
+| `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                                         |
+| `load-more`        | `(event)`                   | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                                   |
+| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                                        |
+| `answer-tool`      | `(event, answer)`           | The reader answered an `answerable` tool: call `addToolResult(answer)` (`{ toolCallId, tool, output }`).                                                            |
+| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                                         |
+| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                                  |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -177,6 +182,7 @@ export async function POST(request: Request) {
     retryInterrupts,
     stop,
     reload,
+    setMessages,
     clear,
     cancelQueued,
     loadOlderMessages
@@ -184,6 +190,11 @@ export async function POST(request: Request) {
     connection: fetchServerSentEvents('/api/chat'),
     threadId: 'assistant'
   })
+
+  function edit(message, text) {
+    setMessages(messages.value.slice(0, messages.value.findIndex((entry) => entry.id === message.id)))
+    sendMessage(text)
+  }
 </script>
 
 <template>
@@ -207,6 +218,8 @@ export async function POST(request: Request) {
     @load-more="loadOlderMessages()"
     @stop="stop()"
     @retry="reload()"
+    @edit="(_event, message, text) => edit(message, text)"
+    @version-change="(next) => setMessages(next)"
     @new-chat="clear()"
   />
 </template>
@@ -277,135 +290,56 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
 ```vue
 <script setup lang="ts">
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
   import Alert from '@aziontech/webkit/alert'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ChatMessage, {
-    type ChatMessageFeedbackValue,
-    type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
+  import ChatMessage from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import FilePreview from '@aziontech/webkit/file-preview'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import McpAppFrame, {
+  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
+  import {
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
-  import Reasoning from '@aziontech/webkit/reasoning'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Sources from '@aziontech/webkit/sources'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import Tag from '@aziontech/webkit/tag'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
+  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import VideoPlayer from '@aziontech/webkit/video-player'
-  import { computed, nextTick, ref, watch } from 'vue'
-
   import {
-    activitiesBefore,
-    type AiChatDrawerConnection,
-    type AiChatDrawerInterrupt,
-    type AiChatDrawerInterruptError,
-    type AiChatDrawerMessage,
-    type AiChatDrawerQuestion,
-    type AiChatDrawerQueuedMessage,
-    type AiChatDrawerSendContent,
-    type AiChatDrawerTool,
-    type AiChatDrawerToolAnswer,
-    type AiChatDrawerToolCallPart,
-    type AiChatDrawerUiResourcePart,
-    answerable,
-    answerInterrupt,
-    approvalOf,
+    type AiChatConnection,
+    type AiChatInterrupt,
+    type AiChatInterruptError,
+    type AiChatMessage,
+    type AiChatQueuedMessage,
+    type AiChatSendContent,
+    type AiChatTool,
+    type AiChatToolAnswer,
+    type AiChatToolCallPart,
+    type AiChatUiResourcePart,
     contentOf,
-    documentNameOf,
     hasAnswer,
     interruptErrorText,
-    isQuestion,
-    json,
-    needsApproval,
-    parsesAsJson,
-    questionOf,
-    queueItemOf,
-    resolveInterrupt,
-    segmentsOf,
-    skipInterrupt,
-    stopSubagent,
-    structuredOf,
-    subagentStatusOf,
-    subagentTextOf,
-    textOf,
-    toolContentOf,
-    toolQuestionOf,
-    toolStatusOf
-  } from './messages'
-  import { sampleSuggestions } from './sample'
+    queueItemOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, nextTick, ref, watch } from 'vue'
 
-  export type {
-    AiChatDrawerActivityPart,
-    AiChatDrawerAttachment,
-    AiChatDrawerAudioPart,
-    AiChatDrawerConnection,
-    AiChatDrawerContent,
-    AiChatDrawerDataSource,
-    AiChatDrawerDocumentPart,
-    AiChatDrawerImagePart,
-    AiChatDrawerInterrupt,
-    AiChatDrawerInterruptError,
-    AiChatDrawerMediaSource,
-    AiChatDrawerMessage,
-    AiChatDrawerMessageMetadata,
-    AiChatDrawerOtherPart,
-    AiChatDrawerPart,
-    AiChatDrawerQueuedMessage,
-    AiChatDrawerRole,
-    AiChatDrawerSendContent,
-    AiChatDrawerStructuredOutputPart,
-    AiChatDrawerSubagentPart,
-    AiChatDrawerSubagentStatus,
-    AiChatDrawerTextPart,
-    AiChatDrawerThinkingPart,
-    AiChatDrawerTool,
-    AiChatDrawerToolAnswer,
-    AiChatDrawerToolCallPart,
-    AiChatDrawerToolCallState,
-    AiChatDrawerToolResultPart,
-    AiChatDrawerUiResourcePart,
-    AiChatDrawerVideoPart
-  } from './messages'
-
-  /** A rating the reader gave a response. */
-  export interface AiChatDrawerFeedback {
-    /** The rated response. */
-    message: AiChatDrawerMessage
-    /** Helpful, not helpful, or cleared. */
-    value: ChatMessageFeedbackValue | null
-  }
+  import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
+  import AiChatTurn from './parts/ai-chat-turn.vue'
+  import DrawerChatComposer from './parts/drawer-chat-composer.vue'
+  import DrawerChatHeader from './parts/drawer-chat-header.vue'
+  import DrawerChatStart from './parts/drawer-chat-start.vue'
+  import WorkloadOverview from './parts/workload-overview.vue'
+  import { sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
-    messages?: ReadonlyArray<AiChatDrawerMessage>
+    messages?: ReadonlyArray<AiChatMessage>
     /** Starter prompts under the empty state. Left out, the sample prompts render. */
     suggestions?: SuggestionGroupItem[]
     /** Follow-up questions shown under the last finished response. */
@@ -415,26 +349,26 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     /** Why the last response failed: a sentence, or the `error` of `useChat`, which shows the standard sentence. */
     error?: string | { message: string } | null
     /** How each tool reads, by tool name; a tool left out shows its name. */
-    tools?: Record<string, AiChatDrawerTool>
+    tools?: Record<string, AiChatTool>
     /** Pending requests, as `useChat` returns `interrupts`; Approve and Deny resolve the matching approval, a generic one asks its question, and an unbound one asks it for the app to route. */
-    interrupts?: ReadonlyArray<AiChatDrawerInterrupt>
+    interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the answers to pending requests were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
-    interruptErrors?: ReadonlyArray<AiChatDrawerInterruptError>
+    interruptErrors?: ReadonlyArray<AiChatInterruptError>
     /** Messages waiting to be sent, as `useChat` returns `queue`; given, the composer sends while a response runs. */
-    queue?: ReadonlyArray<AiChatDrawerQueuedMessage>
+    queue?: ReadonlyArray<AiChatQueuedMessage>
     /** Older messages exist, as `useChat` returns `hasOlderMessages`. */
     moreMessages?: boolean
     /** The older messages are loading. */
     loadingMore?: boolean
     /** The connection to the chat, as `useChat` returns `connectionStatus`. */
-    connection?: AiChatDrawerConnection
+    connection?: AiChatConnection
     /** The chat is rejoining a run after a reload, as `useChat` returns `resuming`. */
     resuming?: boolean
     /** The conversation is being restored, as `useChat` returns `isHydrating`; placeholders show in place of the empty state. */
     hydrating?: boolean
     /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
     sessionGenerating?: boolean
-    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    /** The reader may attach files from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
     attachable?: boolean
     /** The files the reader may attach, in the native accept syntax. */
     accept?: string
@@ -444,6 +378,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    toolOptions?: PromptInputMenuOption[]
   }
 
   const props = withDefaults(defineProps<AiChatDrawerProps>(), {
@@ -462,69 +398,71 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     resuming: false,
     hydrating: false,
     sessionGenerating: false,
-    attachable: false,
+    attachable: true,
     accept: 'image/*,application/pdf',
     maxFiles: 4,
     maxFileSize: 10485760,
-    resolveAppUrl: undefined
+    resolveAppUrl: undefined,
+    toolOptions: undefined
   })
 
   const emit = defineEmits<{
-    send: [event: MouseEvent | KeyboardEvent, content: AiChatDrawerSendContent]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiChatDrawerMessage]
+    retry: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    share: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    branch: [event: MouseEvent | KeyboardEvent, message: AiChatMessage]
+    edit: [event: MouseEvent | KeyboardEvent, message: AiChatMessage, text: string]
+    'version-change': [messages: AiChatMessage[]]
     'new-chat': [event: MouseEvent]
-    feedback: [feedback: AiChatDrawerFeedback]
-    approve: [event: MouseEvent, call: AiChatDrawerToolCallPart, input?: unknown]
-    deny: [event: MouseEvent, call: AiChatDrawerToolCallPart]
-    'remove-queued': [event: MouseEvent, item: AiChatDrawerQueuedMessage]
+    feedback: [
+      value: ChatMessageFeedbackValue | null,
+      message: AiChatMessage,
+      reason?: FeedbackReasonDialogPayload
+    ]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
+    'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
     'app-message': [
       message: McpAppFrameMessage,
-      part: AiChatDrawerUiResourcePart,
+      part: AiChatUiResourcePart,
       reply: (message: McpAppFrameMessage) => void
     ]
     'load-more': [event: Event]
-    'answer-interrupt': [event: Event, interrupt: AiChatDrawerInterrupt, value: string]
-    'answer-tool': [event: Event, answer: AiChatDrawerToolAnswer]
+    'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
+    'answer-tool': [event: Event, answer: AiChatToolAnswer]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
-
-  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
-
-  function setAppFrame(key: string, el: unknown) {
-    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
-    else appFrames.delete(key)
-  }
-
-  function forwardAppMessage(
-    key: string,
-    part: AiChatDrawerUiResourcePart,
-    message: McpAppFrameMessage
-  ) {
-    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
-  }
+  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
+  const versions = useAiChatVersions(() => props.messages)
 
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
-  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+  const composerEl = ref<InstanceType<typeof DrawerChatComposer> | null>(null)
   const stoppedIds = ref<Set<string>>(new Set())
-  const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const askedAfter = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiChatDrawerQuestion>>({})
-  const routed = ref<Record<string, boolean>>({})
-  const toolAnswers = ref<Record<string, AiChatDrawerQuestion>>({})
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
   )
+  const chatTools = useAiChatTools({
+    turns: () => turns.value,
+    interrupts: () => props.interrupts,
+    tools: () => props.tools,
+    onAnswerInterrupt: (event, interrupt, value) =>
+      emit('answer-interrupt', event, interrupt, value),
+    onAnswerTool: (event, answer) => emit('answer-tool', event, answer),
+    onApprove: (event, call, input) => emit('approve', event, call, input),
+    onDeny: (event, call) => emit('deny', event, call)
+  })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const composerTools = computed(() => props.toolOptions ?? sampleTools)
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => {
     if (!props.error) return ''
@@ -535,7 +473,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
   )
 
-  function statusOf(turn: AiChatDrawerMessage): ChatMessageStatus {
+  function statusOf(turn: AiChatMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
     if (props.loading) return hasAnswer(turn) ? 'streaming' : 'pending'
@@ -544,89 +482,14 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   const queueable = computed(() => props.queue !== undefined)
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
-  const wasConnected = ref(props.connection === 'connected')
-  watch(
-    () => props.connection,
-    (value) => {
-      if (value === 'connected') wasConnected.value = true
-    }
-  )
-  const reconnecting = computed(
-    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
-  )
-  const offline = computed(
-    () =>
-      !reconnecting.value &&
-      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
-  )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
-
-  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
-  watch(
-    pendingQuestions,
-    (now) => {
-      for (const interrupt of now) askedAfter.value[interrupt.id!] ??= last.value?.id ?? ''
-    },
-    { immediate: true }
-  )
-
-  const questions = computed(() => {
-    const live = pendingQuestions.value
-      .map(questionOf)
-      .map((question) =>
-        !question.bound && routed.value[question.id]
-          ? { ...question, status: 'running' as const }
-          : question
-      )
-    const ids = new Set(live.map((question) => question.id))
-    const known = new Set(turns.value.map((turn) => turn.id))
-    const groups: Record<string, AiChatDrawerQuestion[]> = {}
-    for (const question of [
-      ...live,
-      ...Object.values(settled.value).filter((question) => !ids.has(question.id))
-    ]) {
-      const after = askedAfter.value[question.id] ?? ''
-      ;(groups[known.has(after) ? after : (last.value?.id ?? '')] ??= []).push(question)
-    }
-    return groups
-  })
-
-  function answer(event: Event, question: AiChatDrawerQuestion, value: string) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'success', error: '' }
-    if (question.bound) {
-      answerInterrupt(interrupt, value)
-    } else {
-      routed.value[question.id] = true
-      if (interrupt) emit('answer-interrupt', event, interrupt, value)
-    }
-  }
-
-  function askOf(call: AiChatDrawerToolCallPart): AiChatDrawerQuestion {
-    return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
-  }
-
-  function answerTool(event: Event, call: AiChatDrawerToolCallPart, value: string) {
-    toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
-    emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
-  }
-
-  function skip(question: AiChatDrawerQuestion) {
-    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
-    settled.value[question.id] = { ...question, status: 'skipped', error: '' }
-    skipInterrupt(interrupt)
-  }
-
-  function editOf(call: AiChatDrawerToolCallPart): string {
-    return edits.value[call.id] ?? json(call.input ?? call.arguments)
-  }
 
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
     return last.value?.role === 'assistant' && hasAnswer(last.value) ? 'streaming' : 'pending'
   })
 
-  function stopped(turn: AiChatDrawerMessage): boolean {
+  function stopped(turn: AiChatMessage): boolean {
     return Boolean(turn.metadata?.stopped) || stoppedIds.value.has(turn.id)
   }
 
@@ -637,12 +500,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
       : null
   })
 
-  function timeOf(turn: AiChatDrawerMessage): string {
+  function timeOf(turn: AiChatMessage): string {
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
-
-  function toolOf(call: AiChatDrawerToolCallPart): AiChatDrawerTool {
-    return props.tools[call.name] ?? { title: '' }
   }
 
   watch(
@@ -668,7 +527,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
     prompt.value = ''
     files.value = []
-    let content: AiChatDrawerSendContent
+    let content: AiChatSendContent
     try {
       content = await contentOf(text, picked)
     } catch {
@@ -688,85 +547,27 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     prompt.value = ''
     files.value = []
     stoppedIds.value.clear()
-    edits.value = {}
     answers.value = {}
-    askedAfter.value = {}
-    settled.value = {}
-    routed.value = {}
-    toolAnswers.value = {}
+    chatTools.reset()
+    versions.clear()
     emit('new-chat', event)
-  }
-
-  function rate(message: AiChatDrawerMessage, value: ChatMessageFeedbackValue | null) {
-    ratings.value[message.id] = value
-    emit('feedback', { message, value })
   }
 
   function removeQueued(event: MouseEvent, id: string) {
     const item = props.queue?.find((entry) => entry.id === id)
     if (item) emit('remove-queued', event, item)
   }
-
-  function approve(event: MouseEvent, call: AiChatDrawerToolCallPart, text: string) {
-    const edited =
-      toolOf(call).editable && text !== json(call.input ?? call.arguments)
-        ? (JSON.parse(text) as unknown)
-        : undefined
-    emit('approve', event, call, edited)
-    resolveInterrupt(props.interrupts, call, true, edited)
-  }
-
-  function deny(event: MouseEvent, call: AiChatDrawerToolCallPart) {
-    emit('deny', event, call)
-    resolveInterrupt(props.interrupts, call, false)
-  }
 </script>
 
 <template>
-  <div class="w-full">
-    <div class="layout-column layout-boundary flex min-w-0 flex-col">
-      <div class="layout-section-start flex flex-col gap-(--layout-section-gap)">
-        <PageHeader
-          title="storefront"
-          description="Workload · Production"
-        >
-          <template #actions>
-            <Button
-              label="Agent"
-              variant="outline"
-              size="medium"
-              icon="az az-ask-azion"
-              :aria-expanded="open ? 'true' : 'false'"
-              @click="open = true"
-            />
-          </template>
-        </PageHeader>
-        <Card>
-          <template #default>
-            <div class="p-(--spacing-md)">
-              <KeyValueList
-                :columns="3"
-                aria-label="Workload details"
-              >
-                <KeyValueList.Item label="Status">
-                  <StatusIndicator
-                    severity="danger"
-                    label="Errors above 30%"
-                  />
-                </KeyValueList.Item>
-                <KeyValueList.Item label="Domains"
-                  >www.example.com, shop.example.com</KeyValueList.Item
-                >
-                <KeyValueList.Item label="Origin">api.example.com</KeyValueList.Item>
-                <KeyValueList.Item label="Cache hit ratio">91%</KeyValueList.Item>
-                <KeyValueList.Item label="Last deployment">Today, 13:58</KeyValueList.Item>
-                <KeyValueList.Item label="Region">US East (Washington)</KeyValueList.Item>
-              </KeyValueList>
-            </div>
-          </template>
-        </Card>
-      </div>
-    </div>
+  <div
+    :data-drawer-open="open || null"
+    class="w-full lg:data-drawer-open:pe-[max(30vw,var(--container-md))]"
+  >
+    <WorkloadOverview
+      :open="open"
+      @open="open = true"
+    />
 
     <Drawer
       v-model:open="open"
@@ -776,436 +577,109 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     >
       <DrawerContent>
         <div class="flex min-h-0 flex-1 flex-col">
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <DrawerTitle>AI assistant</DrawerTitle>
-              <Tag
-                label="Preview"
-                severity="info"
-                size="small"
-              />
-            </div>
-            <div class="flex items-center gap-(--spacing-2xs)">
-              <IconButton
-                icon="az az-plus"
-                aria-label="New chat"
-                variant="ghost"
-                size="small"
-                :disabled="!turns.length"
-                @click="newChat"
-              />
-            </div>
-          </PanelHeader>
-          <div class="flex min-h-0 flex-1 flex-col">
-            <div
-              v-if="hydrating && !turns.length"
-              role="status"
-              aria-label="Loading the conversation"
-              class="flex flex-1 flex-col gap-(--spacing-lg) p-(--spacing-md)"
-            >
-              <div
-                v-for="row in 3"
-                :key="row"
-                class="flex gap-(--spacing-sm)"
-              >
-                <Skeleton
-                  variant="circle"
-                  width="2rem"
-                  height="2rem"
-                />
-                <div class="flex flex-1 flex-col gap-(--spacing-xs)">
-                  <Skeleton width="25%" />
-                  <Skeleton :width="row === 2 ? '50%' : '85%'" />
-                </div>
-              </div>
-            </div>
-            <div
-              v-else-if="!turns.length"
-              class="flex flex-1 flex-col justify-center gap-(--spacing-lg) p-(--spacing-md)"
-            >
-              <EmptyState
-                title="Ask about storefront"
-                description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
-                icon="az az-ask-azion"
-                size="small"
-              />
-              <SuggestionGroup
-                :items="starters"
-                orientation="vertical"
-                @select="(event, item) => send(event, item.label)"
-              />
-            </div>
+          <DrawerChatHeader
+            :empty="!turns.length"
+            @new-chat="newChat"
+          />
+          <div
+            class="flex min-h-0 flex-1 flex-col [--conversation-composer-fade:var(--bg-surface)]"
+          >
             <Conversation
-              v-else
-              layout="start"
               aria-label="Conversation with the AI assistant"
               :more-messages="moreMessages"
               :loading-more="loadingMore"
               @load-more="emit('load-more', $event)"
             >
-              <template
+              <DrawerChatStart
+                v-if="!turns.length"
+                :hydrating="hydrating"
+                :starters="starters"
+                @select="(event, item) => send(event, item.label)"
+              />
+              <AiChatTurn
                 v-for="turn in turns"
                 :key="turn.id"
-              >
-                <ChatMessage
-                  :from="turn.role === 'user' ? 'user' : 'assistant'"
-                  :status="statusOf(turn)"
-                  :timestamp="timeOf(turn)"
-                  :error-message="statusOf(turn) === 'error' ? failure : undefined"
-                  @retry="emit('retry', $event, turn)"
-                >
-                  <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
-                  <template
-                    v-for="segment in segmentsOf(
-                      turn,
-                      turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
-                    )"
-                    :key="segment.key"
-                  >
-                    <template v-if="turn.role === 'user' && segment.type === 'text'" />
-                    <AgentActivity
-                      v-else-if="segment.type === 'activity'"
-                      :steps="segment.steps"
-                    />
-                    <Reasoning
-                      v-else-if="segment.type === 'reasoning'"
-                      :streaming="statusOf(turn) === 'pending'"
-                      :duration="
-                        statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
-                      "
-                    >
-                      <p class="whitespace-pre-line">{{ segment.content }}</p>
-                    </Reasoning>
-                    <StreamingResponse
-                      v-else-if="segment.type === 'text'"
-                      :content="segment.content"
-                      :streaming="statusOf(turn) === 'streaming'"
-                      :sources="turn.metadata?.sources ?? []"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                    <AgentQuestion
-                      v-else-if="
-                        segment.type === 'tool' &&
-                        answerable(toolOf(segment.call), segment.call, segment.result)
-                      "
-                      v-model="answers[segment.call.id]"
-                      :title="askOf(segment.call).title"
-                      :type="askOf(segment.call).options.length ? 'choice' : 'text'"
-                      :options="askOf(segment.call).options"
-                      :status="askOf(segment.call).status"
-                      @submit="(event, value) => answerTool(event, segment.call, value)"
-                    />
-                    <template v-else-if="segment.type === 'tool'">
-                      <ToolApproval
-                        v-if="needsApproval(segment.call)"
-                        :title="
-                          toolOf(segment.call).question ||
-                          toolOf(segment.call).title ||
-                          `Run ${segment.call.name}?`
-                        "
-                        :description="toolOf(segment.call).description"
-                        :approve-label="toolOf(segment.call).approveLabel"
-                        :variant="toolOf(segment.call).variant"
-                        :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
-                        :status="approvalOf(segment.call)"
-                        :loading="loading && turn === last"
-                        :editable="toolOf(segment.call).editable"
-                        :invalid="
-                          toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))
-                        "
-                        :model-value="editOf(segment.call)"
-                        @update:model-value="(text) => (edits[segment.call.id] = text)"
-                        @approve="(event, text) => approve(event, segment.call, text)"
-                        @deny="deny($event, segment.call)"
-                      >
-                        <CodeBlock
-                          v-if="
-                            !toolOf(segment.call).editable &&
-                            json(segment.call.input ?? segment.call.arguments)
-                          "
-                          :code="json(segment.call.input ?? segment.call.arguments)"
-                          language="json"
-                          :show-line-numbers="false"
-                        />
-                      </ToolApproval>
-                      <ToolCall
-                        v-if="
-                          !needsApproval(segment.call) || approvalOf(segment.call) === 'approved'
-                        "
-                        :name="segment.call.name"
-                        :title="toolOf(segment.call).title"
-                        :status="toolStatusOf(segment.call, segment.result)"
-                      >
-                        <template
-                          v-if="json(segment.call.input ?? segment.call.arguments)"
-                          #input
-                        >
-                          <CodeBlock
-                            :code="json(segment.call.input ?? segment.call.arguments)"
-                            language="json"
-                            :show-line-numbers="false"
-                          />
-                        </template>
-                        <template
-                          v-if="
-                            !segment.result?.error &&
-                            segment.call.output === undefined &&
-                            toolContentOf(segment.result?.content)
-                          "
-                          #output
-                        >
-                          <p
-                            v-if="toolContentOf(segment.result?.content)?.text"
-                            class="whitespace-pre-line text-body-sm text-(--text-default)"
-                          >
-                            {{ toolContentOf(segment.result?.content)?.text }}
-                          </p>
-                          <ImageGallery
-                            v-if="toolContentOf(segment.result?.content)?.images.length"
-                            :items="toolContentOf(segment.result?.content)?.images ?? []"
-                          />
-                        </template>
-                        <template
-                          v-else-if="
-                            json(
-                              segment.result?.error ||
-                                segment.call.output ||
-                                segment.result?.content
-                            )
-                          "
-                          #output
-                        >
-                          <CodeBlock
-                            :code="
-                              json(
-                                segment.result?.error ||
-                                  segment.call.output ||
-                                  segment.result?.content
-                              )
-                            "
-                            language="json"
-                            :show-line-numbers="false"
-                          />
-                        </template>
-                      </ToolCall>
-                    </template>
-                    <ImageGallery
-                      v-else-if="segment.type === 'gallery'"
-                      :items="segment.images"
-                    />
-                    <AudioPlayer
-                      v-else-if="segment.type === 'audio'"
-                      :src="segment.src"
-                    />
-                    <VideoPlayer
-                      v-else-if="segment.type === 'video'"
-                      :src="segment.src"
-                      :mime-type="segment.mimeType"
-                    />
-                    <FilePreview
-                      v-else-if="segment.type === 'document'"
-                      :file-name="documentNameOf(segment.part)"
-                      :mime-type="segment.part.source.mimeType"
-                      :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
-                      :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
-                    />
-                    <SubagentCard
-                      v-else-if="segment.type === 'subagent'"
-                      :name="segment.part.subagent.name"
-                      :title="segment.part.subagent.description"
-                      :description="segment.part.subagent.error?.message"
-                      :status="subagentStatusOf(segment.part)"
-                      :stoppable="typeof segment.part.subagent.stop === 'function'"
-                      @stop="stopSubagent(segment.part)"
-                    >
-                      <StreamingResponse
-                        v-if="subagentTextOf(segment.part)"
-                        :content="subagentTextOf(segment.part)"
-                      />
-                      <template
-                        v-if="json(segment.part.subagent.input)"
-                        #input
-                      >
-                        <CodeBlock
-                          :code="json(segment.part.subagent.input)"
-                          language="json"
-                          :show-line-numbers="false"
-                        />
-                      </template>
-                    </SubagentCard>
-                    <template v-else-if="segment.type === 'structured'">
-                      <Alert
-                        v-if="segment.part.status === 'error'"
-                        severity="danger"
-                        size="small"
-                        title="The structured answer failed"
-                      >
-                        {{
-                          segment.part.errorMessage ||
-                          'The answer did not match the expected format.'
-                        }}
-                      </Alert>
-                      <CodeBlock
-                        v-else-if="structuredOf(segment.part)"
-                        :code="structuredOf(segment.part)"
-                        language="json"
-                        :show-line-numbers="false"
-                        :aria-busy="segment.part.status === 'streaming' || undefined"
-                      />
-                    </template>
-                    <McpAppFrame
-                      v-else-if="segment.type === 'app'"
-                      :ref="(el) => setAppFrame(segment.key, el)"
-                      :resource="segment.part.resource"
-                      :title="
-                        (tools[segment.part.toolName] ?? { title: '' }).title ||
-                        segment.part.toolName
-                      "
-                      :resolve-url="resolveAppUrl"
-                      @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
-                    />
-                  </template>
-                  <template v-if="turn.role === 'assistant'">
-                    <p
-                      v-if="stopped(turn)"
-                      class="text-body-sm text-(--text-muted)"
-                    >
-                      You stopped this response.
-                    </p>
-                    <Sources
-                      v-if="statusOf(turn) === 'success' && !stopped(turn)"
-                      :items="turn.metadata?.sources ?? []"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                  </template>
-                  <template
-                    v-if="turn.role === 'assistant'"
-                    #actions
-                  >
-                    <ChatMessage.Actions>
-                      <CopyButton
-                        size="small"
-                        :value="textOf(turn)"
-                      />
-                      <IconButton
-                        icon="az az-refresh"
-                        aria-label="Regenerate response"
-                        variant="ghost"
-                        size="small"
-                        :disabled="state !== 'ready'"
-                        @click="emit('retry', $event, turn)"
-                      />
-                      <ChatMessage.Feedback
-                        :model-value="ratings[turn.id] ?? null"
-                        @update:model-value="(value) => rate(turn, value)"
-                      />
-                    </ChatMessage.Actions>
-                  </template>
-                </ChatMessage>
-                <ChatMessage
-                  v-if="questions[turn.id]?.length"
-                  from="assistant"
-                >
-                  <AgentQuestion
-                    v-for="question in questions[turn.id]"
-                    :key="question.id"
-                    v-model="answers[question.id]"
-                    :title="question.title"
-                    :type="question.options.length ? 'choice' : 'text'"
-                    :options="question.options"
-                    :status="question.status"
-                    :error="question.error"
-                    :skippable="question.bound"
-                    @submit="(event, value) => answer(event, question, value)"
-                    @skip="skip(question)"
-                  />
-                </ChatMessage>
-              </template>
+                v-model:answers="answers"
+                :turn="turn"
+                :messages="messages"
+                :status="statusOf(turn)"
+                :time="timeOf(turn)"
+                :failure="failure"
+                :tools="tools"
+                :busy="loading && turn === last"
+                :ready="state === 'ready'"
+                :stopped="stopped(turn)"
+                :questions="chatTools.questions.value[turn.id]"
+                :ask-of="chatTools.askOf"
+                :edit-of="chatTools.editOf"
+                :resolve-app-url="resolveAppUrl"
+                :versions="versions"
+                @retry="emit('retry', $event, turn)"
+                @rate="(value, reason) => emit('feedback', value, turn, reason)"
+                @share="(event) => emit('share', event, turn)"
+                @branch="(event) => emit('branch', event, turn)"
+                @edit-prompt="(event, text) => emit('edit', event, turn, text)"
+                @version-change="(next) => emit('version-change', next)"
+                @answer-tool="chatTools.answerTool"
+                @edit="chatTools.setEdit"
+                @approve="chatTools.approve"
+                @deny="chatTools.deny"
+                @answer="chatTools.answer"
+                @skip="chatTools.skip"
+                @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
+              />
               <ChatMessage
                 v-if="waiting && last"
                 :status="failure ? 'error' : 'pending'"
                 :error-message="failure || undefined"
                 @retry="emit('retry', $event, last)"
               />
-              <div
+              <SuggestionGroup
                 v-if="lastAnswer && followUps?.length"
-                class="ps-[calc(2rem+var(--spacing-sm))]"
-              >
-                <SuggestionGroup
-                  :items="followUps"
-                  aria-label="Follow-up questions"
-                  @select="(event, item) => send(event, item.label)"
+                :items="followUps"
+                aria-label="Follow-up questions"
+                @select="(event, item) => send(event, item.label)"
+              />
+              <template #composer>
+                <AiChatConnectionStatus
+                  :connection="connection"
+                  :resuming="resuming"
+                  :session-generating="sessionGenerating"
+                  :loading="loading"
                 />
-              </div>
-            </Conversation>
-          </div>
-          <div
-            class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
-          >
-            <StatusIndicator
-              v-if="reconnecting"
-              key="reconnecting"
-              severity="warning"
-              label="Reconnecting"
-              loading
-            />
-            <Alert
-              v-else-if="offline"
-              key="offline"
-              severity="danger"
-              size="small"
-              title="Connection lost"
-            >
-              Your messages send when the connection returns.
-            </Alert>
-            <StatusIndicator
-              v-else-if="sessionGenerating && !loading"
-              key="elsewhere"
-              severity="info"
-              label="Responding in another tab"
-              loading
-            />
-            <Alert
-              key="alert-2"
-              v-if="interruptErrors.length"
-              severity="danger"
-              size="small"
-              title="Your answer was not sent"
-              :action-label="retryable ? 'Retry' : ''"
-              @action="emit('retry-interrupts', $event)"
-            >
-              {{ interruptErrorText(interruptErrors) }}
-            </Alert>
-            <PromptQueue
-              v-if="queued.length"
-              :items="queued"
-              @remove="(event, item) => removeQueued(event, item.id)"
-            />
-            <PromptInput
-              ref="composerEl"
-              v-model="prompt"
-              v-model:files="files"
-              :status="state"
-              :queueable="queueable"
-              :disabled="hydrating"
-              :accept="accept"
-              :max-files="maxFiles"
-              :max-file-size="maxFileSize"
-              :max-rows="4"
-              placeholder="Ask about storefront"
-              @submit="(event, { value }) => send(event, value)"
-              @stop="stop"
-            >
-              <template
-                v-if="attachable"
-                #actions
-              >
-                <PromptInputAttachButton />
+                <Alert
+                  v-if="interruptErrors.length"
+                  severity="danger"
+                  size="small"
+                  title="Your answer was not sent"
+                  :action-label="retryable ? 'Retry' : ''"
+                  @action="emit('retry-interrupts', $event)"
+                >
+                  {{ interruptErrorText(interruptErrors) }}
+                </Alert>
+                <PromptQueue
+                  v-if="queued.length"
+                  :items="queued"
+                  @remove="(event, item) => removeQueued(event, item.id)"
+                />
+                <DrawerChatComposer
+                  ref="composerEl"
+                  v-model="prompt"
+                  v-model:files="files"
+                  v-model:tool-keys="toolKeys"
+                  :state="state"
+                  :queueable="queueable"
+                  :hydrating="hydrating"
+                  :accept="accept"
+                  :max-files="maxFiles"
+                  :max-file-size="maxFileSize"
+                  :attachable="attachable"
+                  :tools="composerTools"
+                  @submit="send"
+                  @stop="stop"
+                />
               </template>
-              <template #hint
-                >The AI assistant can make mistakes. Check important information.</template
-              >
-            </PromptInput>
+            </Conversation>
           </div>
         </div>
       </DrawerContent>
@@ -1214,740 +688,17 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 </template>
 ```
 
-## `messages.ts`
-
-```ts
-import type { AgentActivityStatus, AgentActivityStep } from '@aziontech/webkit/agent-activity'
-import type { AgentQuestionOption, AgentQuestionStatus } from '@aziontech/webkit/agent-question'
-import type { ImageGalleryItem } from '@aziontech/webkit/image-gallery'
-import type { PromptQueueItem } from '@aziontech/webkit/prompt-queue'
-import type { SourcesItem } from '@aziontech/webkit/sources'
-import type { SubagentCardStatus } from '@aziontech/webkit/subagent-card'
-import type { ToolApprovalVariant } from '@aziontech/webkit/tool-approval'
-import type { ToolCallStatus } from '@aziontech/webkit/tool-call'
-
-/** Who wrote a message; the conversation draws the reader's and the assistant's. */
-export type AiChatDrawerRole = 'system' | 'user' | 'assistant' | 'activity'
-
-/** Text of a message: plain for the reader, Markdown for the assistant. */
-export interface AiChatDrawerTextPart {
-  type: 'text'
-  content: string
-}
-
-/** How the assistant reached the answer, shown in the collapsible Reasoning. */
-export interface AiChatDrawerThinkingPart {
-  type: 'thinking'
-  content: string
-}
-
-/** Where a tool call stands. */
-export type AiChatDrawerToolCallState =
-  | 'awaiting-input'
-  | 'input-streaming'
-  | 'input-complete'
-  | 'approval-requested'
-  | 'approval-responded'
-  | 'complete'
-  | 'error'
-
-/** A tool the assistant calls; one that needs approval carries `approval`. */
-export interface AiChatDrawerToolCallPart {
-  type: 'tool-call'
-  id: string
-  name: string
-  arguments: string
-  input?: unknown
-  state: AiChatDrawerToolCallState
-  output?: unknown
-  approval?: {
-    id: string
-    needsApproval: boolean
-    approved?: boolean
-  }
-}
-
-/** What a tool returned, matched to its call by `toolCallId`. */
-export interface AiChatDrawerToolResultPart {
-  type: 'tool-result'
-  toolCallId: string
-  content: unknown
-  state: 'streaming' | 'complete' | 'error'
-  outcome?: 'cancelled' | 'denied'
-  error?: string
-}
-
-/** Where the bytes of an image, audio, video or document come from: a URL, base64 data, or a provider file the block cannot draw. */
-export interface AiChatDrawerMediaSource {
-  type: 'url' | 'data' | 'file'
-  value: string
-  mimeType?: string
-}
-
-/** An image the message carries; consecutive images draw as one gallery. */
-export interface AiChatDrawerImagePart {
-  type: 'image'
-  id?: string
-  source: AiChatDrawerMediaSource
-  metadata?: unknown
-}
-
-/** An audio clip the message carries. */
-export interface AiChatDrawerAudioPart {
-  type: 'audio'
-  id?: string
-  source: AiChatDrawerMediaSource
-  metadata?: unknown
-}
-
-/** A video the message carries. */
-export interface AiChatDrawerVideoPart {
-  type: 'video'
-  id?: string
-  source: AiChatDrawerMediaSource
-  metadata?: unknown
-}
-
-/** A document the message carries, such as a PDF; `metadata.name` names it. */
-export interface AiChatDrawerDocumentPart {
-  type: 'document'
-  id?: string
-  source: AiChatDrawerMediaSource
-  metadata?: unknown
-}
-
-/** A step the agent reports; `content.title`, `content.status` and `content.detail` draw it. */
-export interface AiChatDrawerActivityPart {
-  type: 'activity'
-  activityType: string
-  content: Record<string, unknown>
-}
-
-/** Where a helper agent stands. */
-export type AiChatDrawerSubagentStatus = 'running' | 'finished' | 'error' | 'suspended'
-
-/** A helper agent the assistant started, with its own messages. */
-export interface AiChatDrawerSubagentPart {
-  type: 'subagent'
-  subagent: {
-    name: string
-    description?: string
-    status: AiChatDrawerSubagentStatus
-    messages: ReadonlyArray<AiChatDrawerMessage>
-    input?: unknown
-    error?: { message: string }
-    stop?: unknown
-  }
-}
-
-/** An interactive widget a tool returned (an MCP app), drawn in a sandboxed frame. */
-export interface AiChatDrawerUiResourcePart {
-  type: 'ui-resource'
-  resource: { uri: string; mimeType: string; text?: string; blob?: string }
-  toolCallId: string
-  toolName: string
-  serverId?: string
-}
-
-/** A typed answer the assistant returned against a schema; `data` is set once it is complete. */
-export interface AiChatDrawerStructuredOutputPart {
-  type: 'structured-output'
-  status: 'streaming' | 'complete' | 'error'
-  raw: string
-  data?: unknown
-  partial?: unknown
-  reasoning?: string
-  errorMessage?: string
-}
-
-/** A part the conversation does not draw. */
-export interface AiChatDrawerOtherPart {
-  type: string
-}
-
-/** One piece of a message, in the order it arrived. */
-export type AiChatDrawerPart =
-  | AiChatDrawerTextPart
-  | AiChatDrawerThinkingPart
-  | AiChatDrawerToolCallPart
-  | AiChatDrawerToolResultPart
-  | AiChatDrawerImagePart
-  | AiChatDrawerAudioPart
-  | AiChatDrawerVideoPart
-  | AiChatDrawerDocumentPart
-  | AiChatDrawerActivityPart
-  | AiChatDrawerSubagentPart
-  | AiChatDrawerUiResourcePart
-  | AiChatDrawerStructuredOutputPart
-  | AiChatDrawerOtherPart
-
-/** What the app adds to a message beside its parts. */
-export interface AiChatDrawerMessageMetadata {
-  /** The documents the response cites, numbered in order. */
-  sources?: SourcesItem[]
-  /** How long the assistant thought, in seconds; left out, the block measures it while it streams. */
-  reasoningSeconds?: number
-  /** The reader stopped this response; the block also marks the response Stop ends. */
-  stopped?: boolean
-}
-
-/** One message, in the shape TanStack AI's `useChat` returns. */
-export interface AiChatDrawerMessage {
-  /** Stable key. */
-  id: string
-  /** Who wrote it; `system` and `activity` messages are not drawn. */
-  role: AiChatDrawerRole
-  /** The text, reasoning and tool calls, in order. */
-  parts: ReadonlyArray<AiChatDrawerPart>
-  /** When it was written. */
-  createdAt?: Date
-  /** Sources, the thinking time and the stopped flag. */
-  metadata?: AiChatDrawerMessageMetadata & Record<string, unknown>
-}
-
-/** How a tool reads in the conversation and on its approval card. */
-export interface AiChatDrawerTool {
-  /** What the call does, in plain words. */
-  title: string
-  /** The question on the approval card, naming the action; left out, the title. */
-  question?: string
-  /** What changes and what stays, on the approval card. */
-  description?: string
-  /** The approve button label, the verb of the title. */
-  approveLabel?: string
-  /** Danger for an irreversible action. */
-  variant?: ToolApprovalVariant
-  /** The phrase the reader types before an irreversible action enables. */
-  confirmationPhrase?: string
-  /** The reader may edit the call's arguments, as JSON, before approving. */
-  editable?: boolean
-  /** The reader answers this tool in the chat: the block asks `question` (else the title) and hands the answer back for `addToolResult`. */
-  answerable?: boolean
-  /** The answers the reader picks from when `answerable`; left out, the reader types one. */
-  options?: AgentQuestionOption[]
-}
-
-/** A pending request from the chat, as TanStack AI's `useChat` returns it in `interrupts`. */
-export interface AiChatDrawerInterrupt {
-  kind: string
-  id?: string
-  toolCallId?: string
-  message?: string
-  metadata?: Readonly<Record<string, unknown>>
-  payload?: unknown
-  status?: string
-  errors?: ReadonlyArray<{ message: string }>
-  resolveInterrupt?: unknown
-  cancel?: unknown
-}
-
-/** A failed attempt to send the answers to pending requests, as `useChat` returns it in `interruptErrors`. */
-export interface AiChatDrawerInterruptError {
-  message: string
-  retryable?: boolean
-  code?: string
-}
-
-/** The answer to a tool the reader answers, in the shape `addToolResult` takes. */
-export interface AiChatDrawerToolAnswer {
-  toolCallId: string
-  tool: string
-  output: unknown
-}
-
-/** Inline base64 bytes of a file the reader attached. */
-export interface AiChatDrawerDataSource {
-  type: 'data'
-  value: string
-  mimeType: string
-}
-
-/** A file the reader attached to a message, as a TanStack AI content part. */
-export interface AiChatDrawerAttachment {
-  type: 'image' | 'audio' | 'video' | 'document'
-  source: AiChatDrawerDataSource
-  metadata: { name: string }
-}
-
-/** A message with attachments, as `sendMessage` takes it. */
-export interface AiChatDrawerContent {
-  content: Array<AiChatDrawerTextPart | AiChatDrawerAttachment>
-}
-
-/** What the reader sent: the text alone, or the text with its attachments. */
-export type AiChatDrawerSendContent = string | AiChatDrawerContent
-
-/** A message waiting to be sent, as `useChat` returns it in `queue`. */
-export interface AiChatDrawerQueuedMessage {
-  id: string
-  content: unknown
-}
-
-/** The state of the connection to the chat, as `useChat` returns `connectionStatus`. */
-export type AiChatDrawerConnection = 'disconnected' | 'connecting' | 'connected' | 'error'
-
-/** A question the agent asked through a generic interrupt, as the block draws it. */
-export interface AiChatDrawerQuestion {
-  id: string
-  title: string
-  options: AgentQuestionOption[]
-  status: AgentQuestionStatus
-  error: string
-  bound: boolean
-}
-
-/** A rendered piece of an assistant message. */
-export type AiChatDrawerSegment =
-  | { type: 'activity'; key: string; steps: AgentActivityStep[] }
-  | { type: 'reasoning'; key: string; content: string }
-  | { type: 'text'; key: string; content: string }
-  | {
-      type: 'tool'
-      key: string
-      call: AiChatDrawerToolCallPart
-      result?: AiChatDrawerToolResultPart
-    }
-  | { type: 'gallery'; key: string; images: ImageGalleryItem[] }
-  | { type: 'audio'; key: string; src: string }
-  | { type: 'video'; key: string; src: string; mimeType: string }
-  | { type: 'document'; key: string; part: AiChatDrawerDocumentPart }
-  | { type: 'subagent'; key: string; part: AiChatDrawerSubagentPart }
-  | { type: 'app'; key: string; part: AiChatDrawerUiResourcePart }
-  | { type: 'structured'; key: string; part: AiChatDrawerStructuredOutputPart }
-
-export const isUiResourcePart = (part: AiChatDrawerPart): part is AiChatDrawerUiResourcePart =>
-  part.type === 'ui-resource'
-
-export const isStructuredOutputPart = (
-  part: AiChatDrawerPart
-): part is AiChatDrawerStructuredOutputPart => part.type === 'structured-output'
-
-export const isTextPart = (part: AiChatDrawerPart): part is AiChatDrawerTextPart =>
-  part.type === 'text'
-
-export const isThinkingPart = (part: AiChatDrawerPart): part is AiChatDrawerThinkingPart =>
-  part.type === 'thinking'
-
-export const isToolCallPart = (part: AiChatDrawerPart): part is AiChatDrawerToolCallPart =>
-  part.type === 'tool-call'
-
-export const isToolResultPart = (part: AiChatDrawerPart): part is AiChatDrawerToolResultPart =>
-  part.type === 'tool-result'
-
-export const isImagePart = (part: AiChatDrawerPart): part is AiChatDrawerImagePart =>
-  part.type === 'image'
-
-export const isAudioPart = (part: AiChatDrawerPart): part is AiChatDrawerAudioPart =>
-  part.type === 'audio'
-
-export const isVideoPart = (part: AiChatDrawerPart): part is AiChatDrawerVideoPart =>
-  part.type === 'video'
-
-export const isDocumentPart = (part: AiChatDrawerPart): part is AiChatDrawerDocumentPart =>
-  part.type === 'document'
-
-export const isActivityPart = (part: AiChatDrawerPart): part is AiChatDrawerActivityPart =>
-  part.type === 'activity'
-
-export const isSubagentPart = (part: AiChatDrawerPart): part is AiChatDrawerSubagentPart =>
-  part.type === 'subagent'
-
-export function mediaUrl(source: AiChatDrawerMediaSource): string {
-  if (source.type === 'url') return source.value
-  if (source.type !== 'data') return ''
-  if (source.value.startsWith('data:')) return source.value
-  return `data:${source.mimeType ?? 'application/octet-stream'};base64,${source.value}`
-}
-
-function metadataText(metadata: unknown, key: string): string {
-  if (!metadata || typeof metadata !== 'object' || !(key in metadata)) return ''
-  const value = (metadata as Record<string, unknown>)[key]
-  return typeof value === 'string' ? value : ''
-}
-
-export function imageOf(part: AiChatDrawerImagePart, index: number): ImageGalleryItem | null {
-  const key = part.id ?? `image-${index}`
-  const alt = metadataText(part.metadata, 'alt')
-  if (part.source.type === 'url') return { key, src: part.source.value, alt }
-  if (part.source.type === 'data')
-    return { key, data: part.source.value, mimeType: part.source.mimeType, alt }
-  return null
-}
-
-export function documentNameOf(part: AiChatDrawerDocumentPart): string {
-  return metadataText(part.metadata, 'name') || 'Document'
-}
-
-const ACTIVITY_STATUS: Record<string, AgentActivityStatus> = {
-  pending: 'pending',
-  running: 'running',
-  success: 'success',
-  complete: 'success',
-  error: 'error',
-  canceled: 'canceled',
-  cancelled: 'canceled',
-  skipped: 'skipped'
-}
-
-export function activityStepOf(part: AiChatDrawerActivityPart, key: string): AgentActivityStep {
-  const { title, status, detail } = part.content
-  return {
-    key,
-    title: typeof title === 'string' && title ? title : part.activityType,
-    status: (typeof status === 'string' && ACTIVITY_STATUS[status]) || 'running',
-    description: typeof detail === 'string' && detail ? detail : undefined
-  }
-}
-
-export function activitiesBefore(
-  messages: ReadonlyArray<AiChatDrawerMessage>,
-  turn: AiChatDrawerMessage
-): AiChatDrawerActivityPart[] {
-  const parts: AiChatDrawerActivityPart[] = []
-  for (let index = messages.indexOf(turn) - 1; index >= 0; index--) {
-    const message = messages[index]!
-    if (message.role === 'user' || message.role === 'assistant') break
-    if (message.role === 'activity') parts.unshift(...message.parts.filter(isActivityPart))
-  }
-  return parts
-}
-
-export function subagentStatusOf(part: AiChatDrawerSubagentPart): SubagentCardStatus {
-  const { status, error } = part.subagent
-  if (status === 'finished') return 'success'
-  if (status === 'suspended') return 'pending'
-  if (status === 'error') return error?.message === 'Stopped' ? 'canceled' : 'error'
-  return 'running'
-}
-
-export function subagentTextOf(part: AiChatDrawerSubagentPart): string {
-  return part.subagent.messages
-    .filter((message) => message.role === 'assistant')
-    .map((message) => textOf(message))
-    .filter(Boolean)
-    .join('\n\n')
-}
-
-export function stopSubagent(part: AiChatDrawerSubagentPart): void {
-  const stop = part.subagent.stop
-  if (typeof stop === 'function') stop.call(part.subagent)
-}
-
-export function textOf(message: AiChatDrawerMessage, separator = '\n\n'): string {
-  return message.parts
-    .filter(isTextPart)
-    .map((part) => part.content)
-    .filter(Boolean)
-    .join(separator)
-}
-
-export function hasText(message: AiChatDrawerMessage): boolean {
-  return message.parts.some((part) => isTextPart(part) && part.content.length > 0)
-}
-
-export function hasAnswer(message: AiChatDrawerMessage): boolean {
-  return (
-    hasText(message) ||
-    message.parts.some((part) => isStructuredOutputPart(part) && part.raw.length > 0)
-  )
-}
-
-export function hasThinking(message: AiChatDrawerMessage): boolean {
-  return message.parts.some(isThinkingPart)
-}
-
-export function segmentsOf(
-  message: AiChatDrawerMessage,
-  activities: ReadonlyArray<AiChatDrawerActivityPart> = []
-): AiChatDrawerSegment[] {
-  const results = new Map<string, AiChatDrawerToolResultPart>()
-  for (const part of message.parts) {
-    if (isToolResultPart(part)) results.set(part.toolCallId, part)
-  }
-  const steps = [...activities, ...message.parts.filter(isActivityPart)].map((part, index) =>
-    activityStepOf(part, `step-${index}`)
-  )
-  const segments: AiChatDrawerSegment[] = steps.length
-    ? [{ type: 'activity', key: 'activity', steps }]
-    : []
-  const thinking = message.parts
-    .flatMap((part) =>
-      isThinkingPart(part)
-        ? [part.content]
-        : isStructuredOutputPart(part) && part.reasoning
-          ? [part.reasoning]
-          : []
-    )
-    .join('\n\n')
-  if (thinking) segments.push({ type: 'reasoning', key: 'reasoning', content: thinking })
-  message.parts.forEach((part, index) => {
-    const previous = segments[segments.length - 1]
-    if (isTextPart(part)) {
-      if (!part.content) return
-      if (previous?.type === 'text') previous.content = `${previous.content}\n\n${part.content}`
-      else segments.push({ type: 'text', key: `text-${index}`, content: part.content })
-    } else if (isToolCallPart(part)) {
-      segments.push({ type: 'tool', key: part.id, call: part, result: results.get(part.id) })
-    } else if (isImagePart(part)) {
-      const image = imageOf(part, index)
-      if (!image) return
-      if (previous?.type === 'gallery') previous.images.push(image)
-      else segments.push({ type: 'gallery', key: `gallery-${index}`, images: [image] })
-    } else if (isAudioPart(part)) {
-      const src = mediaUrl(part.source)
-      if (src) segments.push({ type: 'audio', key: part.id ?? `audio-${index}`, src })
-    } else if (isVideoPart(part)) {
-      const src = mediaUrl(part.source)
-      if (src)
-        segments.push({
-          type: 'video',
-          key: part.id ?? `video-${index}`,
-          src,
-          mimeType: part.source.mimeType ?? ''
-        })
-    } else if (isDocumentPart(part)) {
-      if (part.source.type === 'url' || part.source.type === 'data')
-        segments.push({ type: 'document', key: part.id ?? `document-${index}`, part })
-    } else if (isSubagentPart(part)) {
-      segments.push({ type: 'subagent', key: `subagent-${index}`, part })
-    } else if (isUiResourcePart(part)) {
-      segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
-    } else if (isStructuredOutputPart(part)) {
-      segments.push({ type: 'structured', key: `structured-${index}`, part })
-    }
-  })
-  return segments
-}
-
-export function toolStatusOf(
-  call: AiChatDrawerToolCallPart,
-  result?: AiChatDrawerToolResultPart
-): ToolCallStatus {
-  if (result?.outcome === 'denied' || call.approval?.approved === false) return 'denied'
-  if (result?.outcome === 'cancelled') return 'canceled'
-  if (call.state === 'error' || result?.state === 'error') return 'error'
-  if (call.state === 'complete' || result?.state === 'complete') return 'success'
-  if (call.state === 'awaiting-input' || call.state === 'input-streaming') return 'streaming'
-  return 'running'
-}
-
-export function structuredOf(part: AiChatDrawerStructuredOutputPart): string {
-  if (part.status === 'complete') return json(part.data)
-  return json(part.partial) || part.raw
-}
-
-export interface AiChatDrawerToolContent {
-  text: string
-  images: ImageGalleryItem[]
-}
-
-export function toolContentOf(content: unknown): AiChatDrawerToolContent | null {
-  if (!Array.isArray(content) || !content.length) return null
-  const texts: string[] = []
-  const images: ImageGalleryItem[] = []
-  for (const [index, part] of (content as AiChatDrawerPart[]).entries()) {
-    if (!part || typeof part !== 'object') return null
-    if (isTextPart(part)) texts.push(part.content)
-    else if (isImagePart(part)) {
-      const image = imageOf(part, index)
-      if (image) images.push(image)
-    } else return null
-  }
-  return { text: texts.filter(Boolean).join('\n\n'), images }
-}
-
-export function answerable(
-  tool: AiChatDrawerTool | undefined,
-  call: AiChatDrawerToolCallPart,
-  result?: AiChatDrawerToolResultPart
-): boolean {
-  return Boolean(tool?.answerable) && call.output === undefined && !result && call.state !== 'error'
-}
-
-export function toolQuestionOf(
-  call: AiChatDrawerToolCallPart,
-  tool: AiChatDrawerTool
-): AiChatDrawerQuestion {
-  return {
-    id: call.id,
-    title: tool.question || tool.title || `Answer ${call.name}`,
-    options: tool.options ?? [],
-    status: 'pending',
-    error: '',
-    bound: true
-  }
-}
-
-export function needsApproval(call: AiChatDrawerToolCallPart): boolean {
-  return call.state === 'approval-requested' || Boolean(call.approval?.needsApproval)
-}
-
-export function approvalOf(call: AiChatDrawerToolCallPart): 'pending' | 'approved' | 'denied' {
-  if (call.approval?.approved === true) return 'approved'
-  if (call.approval?.approved === false) return 'denied'
-  return 'pending'
-}
-
-export function json(value: unknown): string {
-  if (value === undefined || value === null || value === '') return ''
-  if (typeof value === 'string') {
-    try {
-      return JSON.stringify(JSON.parse(value), null, 2)
-    } catch {
-      return value
-    }
-  }
-  try {
-    return JSON.stringify(value, null, 2)
-  } catch {
-    return String(value)
-  }
-}
-
-export function parsesAsJson(text: string): boolean {
-  try {
-    JSON.parse(text)
-    return true
-  } catch {
-    return false
-  }
-}
-
-export function resolveInterrupt(
-  interrupts: ReadonlyArray<AiChatDrawerInterrupt> | undefined,
-  call: AiChatDrawerToolCallPart,
-  approved: boolean,
-  editedArgs?: unknown
-): void {
-  const interrupt = interrupts?.find(
-    (item) => item.kind === 'tool-approval' && item.toolCallId === call.id
-  )
-  const resolve = interrupt?.resolveInterrupt
-  if (typeof resolve !== 'function') return
-  if (editedArgs === undefined) resolve.call(interrupt, approved)
-  else resolve.call(interrupt, approved, { editedArgs })
-}
-
-export function isQuestion(interrupt: AiChatDrawerInterrupt): boolean {
-  return (interrupt.kind === 'generic' || interrupt.kind === 'unbound') && Boolean(interrupt.id)
-}
-
-function optionsIn(value: unknown): AgentQuestionOption[] {
-  if (!value || typeof value !== 'object' || !('options' in value)) return []
-  const options = (value as { options?: unknown }).options
-  if (!Array.isArray(options)) return []
-  return options.flatMap((option): AgentQuestionOption[] => {
-    if (typeof option === 'string') return [{ value: option, label: option }]
-    if (option && typeof option === 'object' && 'value' in option) {
-      const { value: answer, label } = option as { value?: unknown; label?: unknown }
-      if (typeof answer !== 'string') return []
-      return [{ value: answer, label: typeof label === 'string' ? label : answer }]
-    }
-    return []
-  })
-}
-
-const QUESTION_STATUS: Record<string, AgentQuestionStatus> = {
-  validating: 'running',
-  staged: 'running',
-  submitting: 'running',
-  error: 'error'
-}
-
-export function questionOf(interrupt: AiChatDrawerInterrupt): AiChatDrawerQuestion {
-  const options = optionsIn(interrupt.metadata)
-  return {
-    id: interrupt.id ?? '',
-    title: interrupt.message || 'The agent needs an answer to continue.',
-    options: options.length ? options : optionsIn(interrupt.payload),
-    status: QUESTION_STATUS[interrupt.status ?? ''] ?? 'pending',
-    error: interrupt.errors?.[0]?.message ?? '',
-    bound: interrupt.kind !== 'unbound'
-  }
-}
-
-export function answerInterrupt(interrupt: AiChatDrawerInterrupt | undefined, value: string): void {
-  const resolve = interrupt?.resolveInterrupt
-  if (typeof resolve === 'function') resolve.call(interrupt, value)
-}
-
-export function skipInterrupt(interrupt: AiChatDrawerInterrupt | undefined): void {
-  const cancel = interrupt?.cancel
-  if (typeof cancel === 'function') cancel.call(interrupt)
-}
-
-export function interruptErrorText(errors: ReadonlyArray<AiChatDrawerInterruptError>): string {
-  return [...new Set(errors.map((error) => error.message).filter(Boolean))].join(' ')
-}
-
-const ATTACHMENT_KINDS = ['image', 'audio', 'video'] as const
-
-export function attachmentKindOf(mimeType: string): AiChatDrawerAttachment['type'] {
-  return ATTACHMENT_KINDS.find((kind) => mimeType.startsWith(`${kind}/`)) ?? 'document'
-}
-
-function base64Of(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const url = typeof reader.result === 'string' ? reader.result : ''
-      resolve(url.slice(url.indexOf(',') + 1))
-    }
-    reader.onerror = () => reject(reader.error)
-    reader.readAsDataURL(file)
-  })
-}
-
-export async function attachmentOf(file: File): Promise<AiChatDrawerAttachment> {
-  const mimeType = file.type || 'application/octet-stream'
-  return {
-    type: attachmentKindOf(mimeType),
-    source: { type: 'data', value: await base64Of(file), mimeType },
-    metadata: { name: file.name }
-  }
-}
-
-export async function contentOf(
-  text: string,
-  files: ReadonlyArray<File>
-): Promise<AiChatDrawerSendContent> {
-  if (!files.length) return text
-  const attachments = await Promise.all(files.map(attachmentOf))
-  return {
-    content: [...(text.trim() ? [{ type: 'text' as const, content: text }] : []), ...attachments]
-  }
-}
-
-export function queueItemOf(message: AiChatDrawerQueuedMessage): PromptQueueItem {
-  const content =
-    message.content && typeof message.content === 'object' && 'content' in message.content
-      ? (message.content as { content: unknown }).content
-      : message.content
-  if (typeof content === 'string') return { id: message.id, text: content }
-  const parts: unknown[] = Array.isArray(content) ? content : []
-  const texts = parts.flatMap((part) =>
-    part &&
-    typeof part === 'object' &&
-    (part as { type?: unknown }).type === 'text' &&
-    typeof (part as { content?: unknown }).content === 'string'
-      ? [(part as { content: string }).content]
-      : []
-  )
-  return { id: message.id, text: texts.join(' '), attachmentCount: parts.length - texts.length }
-}
-```
-
 ## `sample.ts`
 
 ````ts
+import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-
-import type { AiChatDrawerMessage } from './messages'
+import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
-const user = (id: string, text: string, time: string): AiChatDrawerMessage => ({
+const user = (id: string, text: string, time: string): AiChatMessage => ({
   id,
   role: 'user',
   parts: [{ type: 'text', content: text }],
@@ -1959,7 +710,7 @@ const assistant = (
   text: string,
   time: string,
   extra: { reasoning?: string; reasoningSeconds?: number; sources?: SourcesItem[] } = {}
-): AiChatDrawerMessage => ({
+): AiChatMessage => ({
   id,
   role: 'assistant',
   parts: [
@@ -1995,7 +746,7 @@ const errorsAnswer = [
   'Renew the certificate at the origin, or let the origin accept plain HTTP from the edge while you renew it.'
 ].join('\n')
 
-export const sampleStreamingMessages: AiChatDrawerMessage[] = [
+export const sampleStreamingMessages: AiChatMessage[] = [
   user('m1', 'Why is storefront answering with 502 errors?', '14:12'),
   assistant('m2', errorsAnswer.slice(0, 120), '14:12', {
     reasoning:
@@ -2011,7 +762,7 @@ export const sampleStreamingMessages: AiChatDrawerMessage[] = [
   })
 ]
 
-export const sampleInterruptedMessages: AiChatDrawerMessage[] = [
+export const sampleInterruptedMessages: AiChatMessage[] = [
   user('m1', 'How do I purge the cache of one URL?', '10:41'),
   assistant('m2', cacheAnswer.slice(0, 104), '10:41', {
     reasoning:
@@ -2053,17 +804,36 @@ const history: [string, string][] = [
   ],
   [
     'How do I fix that?',
-    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page`.'
+    'Set *Cache by query string* to **Allowlist** and keep only `q` and `page` [1]. Campaign parameters such as `utm_source` then stop creating new cache keys [3].'
   ]
 ]
 
-export const sampleLongThread: AiChatDrawerMessage[] = history.flatMap(
-  ([question, answer], index): AiChatDrawerMessage[] => [
+const cacheKeySources: SourcesItem[] = [
+  {
+    title: 'Cache settings',
+    href: 'https://www.azion.com/en/documentation/',
+    description: 'Azion documentation · Cache'
+  },
+  {
+    title: 'aziontech/azion',
+    href: 'https://github.com/aziontech/azion',
+    description: 'Azion CLI on GitHub',
+    icon: 'az az-github'
+  },
+  {
+    title: 'HTTP Caching',
+    href: 'https://www.w3.org/Protocols/',
+    description: 'W3C · HTTP'
+  }
+]
+
+export const sampleLongThread: AiChatMessage[] = history.flatMap(
+  ([question, answer], index): AiChatMessage[] => [
     user(`q${index}`, question, `09:${10 + index * 4}`),
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
-      sources: []
+      sources: index === history.length - 1 ? cacheKeySources : []
     })
   ]
 )
@@ -2082,4 +852,799 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'az az-bolt' },
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
 ]
+
+export const sampleTools: PromptInputMenuOption[] = [
+  { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
+  { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
+  { value: 'create-image', label: 'Create image', icon: 'az az-image' }
+]
 ````
+
+## `parts/ai-chat-connection-status.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import type { AiChatConnection } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref, watch } from 'vue'
+
+  const props = defineProps<{
+    connection: AiChatConnection
+    resuming: boolean
+    sessionGenerating: boolean
+    loading: boolean
+  }>()
+
+  const wasConnected = ref(props.connection === 'connected')
+  watch(
+    () => props.connection,
+    (value) => {
+      if (value === 'connected') wasConnected.value = true
+    }
+  )
+  const reconnecting = computed(
+    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
+  )
+  const offline = computed(
+    () =>
+      !reconnecting.value &&
+      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
+  )
+</script>
+
+<template>
+  <StatusIndicator
+    v-if="reconnecting"
+    key="reconnecting"
+    severity="warning"
+    label="Reconnecting"
+    loading
+  />
+  <Alert
+    v-else-if="offline"
+    key="offline"
+    severity="danger"
+    size="small"
+    title="Connection lost"
+  >
+    Your messages send when the connection returns.
+  </Alert>
+  <StatusIndicator
+    v-else-if="sessionGenerating && !loading"
+    key="elsewhere"
+    severity="info"
+    label="Responding in another tab"
+    loading
+  />
+</template>
+```
+
+## `parts/ai-chat-media-segment.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import FilePreview from '@aziontech/webkit/file-preview'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import {
+    type AiChatSegment,
+    documentNameOf,
+    json,
+    stopSubagent,
+    structuredOf,
+    subagentStatusOf,
+    subagentTextOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import VideoPlayer from '@aziontech/webkit/video-player'
+
+  defineProps<{ segment: AiChatSegment }>()
+</script>
+
+<template>
+  <ImageGallery
+    v-if="segment.type === 'gallery'"
+    :items="segment.images"
+  />
+  <AudioPlayer
+    v-else-if="segment.type === 'audio'"
+    :src="segment.src"
+  />
+  <VideoPlayer
+    v-else-if="segment.type === 'video'"
+    :src="segment.src"
+    :mime-type="segment.mimeType"
+  />
+  <FilePreview
+    v-else-if="segment.type === 'document'"
+    :file-name="documentNameOf(segment.part)"
+    :mime-type="segment.part.source.mimeType"
+    :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
+    :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
+  />
+  <SubagentCard
+    v-else-if="segment.type === 'subagent'"
+    :name="segment.part.subagent.name"
+    :title="segment.part.subagent.description"
+    :description="segment.part.subagent.error?.message"
+    :status="subagentStatusOf(segment.part)"
+    :stoppable="typeof segment.part.subagent.stop === 'function'"
+    @stop="stopSubagent(segment.part)"
+  >
+    <StreamingResponse
+      v-if="subagentTextOf(segment.part)"
+      :content="subagentTextOf(segment.part)"
+    />
+    <template
+      v-if="json(segment.part.subagent.input)"
+      #input
+    >
+      <CodeBlock
+        :code="json(segment.part.subagent.input)"
+        language="json"
+        :show-line-numbers="false"
+      />
+    </template>
+  </SubagentCard>
+  <template v-else-if="segment.type === 'structured'">
+    <Alert
+      v-if="segment.part.status === 'error'"
+      severity="danger"
+      size="small"
+      title="The structured answer failed"
+    >
+      {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
+    </Alert>
+    <CodeBlock
+      v-else-if="structuredOf(segment.part)"
+      :code="structuredOf(segment.part)"
+      language="json"
+      :show-line-numbers="false"
+      :aria-busy="segment.part.status === 'streaming' || undefined"
+    />
+  </template>
+</template>
+```
+
+## `parts/ai-chat-tool-segment.vue`
+
+```ts
+<script setup lang="ts">
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolCall from '@aziontech/webkit/tool-call'
+  import {
+    type AiChatQuestion,
+    type AiChatTool,
+    type AiChatToolCallPart,
+    type AiChatToolResultPart,
+    answerable,
+    approvalOf,
+    json,
+    needsApproval,
+    parsesAsJson,
+    toolContentOf,
+    toolStatusOf
+  } from '@aziontech/webkit/utils/ai-chat'
+
+  defineProps<{
+    call: AiChatToolCallPart
+    result?: AiChatToolResultPart
+    tool: AiChatTool
+    ask: AiChatQuestion
+    edit: string
+    busy: boolean
+  }>()
+
+  const emit = defineEmits<{
+    answer: [event: Event, value: string]
+    edit: [text: string]
+    approve: [event: MouseEvent, text: string]
+    deny: [event: MouseEvent]
+  }>()
+
+  const answer = defineModel<string>('answer')
+</script>
+
+<template>
+  <AgentQuestion
+    v-if="answerable(tool, call, result)"
+    v-model="answer"
+    :title="ask.title"
+    :type="ask.options.length ? 'choice' : 'text'"
+    :options="ask.options"
+    :status="ask.status"
+    @submit="(event, value) => emit('answer', event, value)"
+  />
+  <template v-else>
+    <ToolApproval
+      v-if="needsApproval(call)"
+      :title="tool.question || tool.title || `Run ${call.name}?`"
+      :description="tool.description"
+      :approve-label="tool.approveLabel"
+      :variant="tool.variant"
+      :confirmation-phrase="tool.confirmationPhrase"
+      :status="approvalOf(call)"
+      :loading="busy"
+      :editable="tool.editable"
+      :invalid="tool.editable && !parsesAsJson(edit)"
+      :model-value="edit"
+      @update:model-value="(text) => emit('edit', text)"
+      @approve="(event, text) => emit('approve', event, text)"
+      @deny="emit('deny', $event)"
+    >
+      <CodeBlock
+        v-if="!tool.editable && json(call.input ?? call.arguments)"
+        :code="json(call.input ?? call.arguments)"
+        language="json"
+        :show-line-numbers="false"
+      />
+    </ToolApproval>
+    <ToolCall
+      v-if="!needsApproval(call) || approvalOf(call) === 'approved'"
+      :name="call.name"
+      :title="tool.title"
+      :status="toolStatusOf(call, result)"
+    >
+      <template
+        v-if="json(call.input ?? call.arguments)"
+        #input
+      >
+        <CodeBlock
+          :code="json(call.input ?? call.arguments)"
+          language="json"
+          :show-line-numbers="false"
+        />
+      </template>
+      <template
+        v-if="!result?.error && call.output === undefined && toolContentOf(result?.content)"
+        #output
+      >
+        <p
+          v-if="toolContentOf(result?.content)?.text"
+          class="whitespace-pre-line text-body-sm text-(--text-default)"
+        >
+          {{ toolContentOf(result?.content)?.text }}
+        </p>
+        <ImageGallery
+          v-if="toolContentOf(result?.content)?.images.length"
+          :items="toolContentOf(result?.content)?.images ?? []"
+        />
+      </template>
+      <template
+        v-else-if="json(result?.error || call.output || result?.content)"
+        #output
+      >
+        <CodeBlock
+          :code="json(result?.error || call.output || result?.content)"
+          language="json"
+          :show-line-numbers="false"
+        />
+      </template>
+    </ToolCall>
+  </template>
+</template>
+```
+
+## `parts/ai-chat-turn.vue`
+
+```ts
+<script setup lang="ts">
+  import AgentActivity from '@aziontech/webkit/agent-activity'
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import ChatMessage, {
+    type ChatMessageFeedbackValue,
+    type ChatMessageStatus
+  } from '@aziontech/webkit/chat-message'
+  import FeedbackReasonDialog, {
+    type FeedbackReasonDialogPayload
+  } from '@aziontech/webkit/feedback-reason-dialog'
+  import McpAppFrame, {
+    type McpAppFrameMessage,
+    type McpAppFrameResource
+  } from '@aziontech/webkit/mcp-app-frame'
+  import Reasoning from '@aziontech/webkit/reasoning'
+  import ResponseBranches from '@aziontech/webkit/response-branches'
+  import Sources from '@aziontech/webkit/sources'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import { toast } from '@aziontech/webkit/toast'
+  import type { UseAiChatVersionsReturn } from '@aziontech/webkit/use-ai-chat-versions'
+  import {
+    activitiesBefore,
+    type AiChatMessage,
+    type AiChatQuestion,
+    type AiChatSegment,
+    type AiChatTool,
+    type AiChatToolCallPart,
+    type AiChatUiResourcePart,
+    segmentsOf,
+    textOf
+  } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref } from 'vue'
+
+  import AiChatMediaSegment from './ai-chat-media-segment.vue'
+  import AiChatToolSegment from './ai-chat-tool-segment.vue'
+
+  const props = defineProps<{
+    turn: AiChatMessage
+    messages: ReadonlyArray<AiChatMessage>
+    status: ChatMessageStatus
+    time: string
+    failure: string
+    tools: Record<string, AiChatTool>
+    busy: boolean
+    ready: boolean
+    stopped: boolean
+    versions: UseAiChatVersionsReturn
+    questions?: AiChatQuestion[]
+    askOf: (call: AiChatToolCallPart) => AiChatQuestion
+    editOf: (call: AiChatToolCallPart) => string
+    resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
+  }>()
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent | KeyboardEvent]
+    rate: [value: ChatMessageFeedbackValue | null, reason?: FeedbackReasonDialogPayload]
+    share: [event: MouseEvent]
+    branch: [event: MouseEvent | KeyboardEvent]
+    'edit-prompt': [event: MouseEvent | KeyboardEvent, text: string]
+    'version-change': [messages: AiChatMessage[]]
+    'answer-tool': [event: Event, call: AiChatToolCallPart, value: string]
+    edit: [call: AiChatToolCallPart, text: string]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, text: string]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
+    answer: [event: Event, question: AiChatQuestion, value: string]
+    skip: [question: AiChatQuestion]
+    'app-message': [
+      message: McpAppFrameMessage,
+      part: AiChatUiResourcePart,
+      reply: (message: McpAppFrameMessage) => void
+    ]
+  }>()
+
+  const answers = defineModel<Record<string, string>>('answers', { required: true })
+
+  const reasonOpen = ref(false)
+  const rating = ref<ChatMessageFeedbackValue | null>(null)
+  const versionsOfTurn = computed(() => props.versions.versionsOf(props.turn))
+
+  function regenerate(event: MouseEvent | KeyboardEvent) {
+    props.versions.fork(props.turn)
+    emit('retry', event)
+  }
+
+  function editPrompt(event: MouseEvent | KeyboardEvent, text: string) {
+    props.versions.fork(props.turn)
+    emit('edit-prompt', event, text)
+  }
+
+  function page(index: number) {
+    const next = props.versions.select(props.turn, index)
+    if (next) emit('version-change', next)
+  }
+
+  function rate(value: ChatMessageFeedbackValue | null) {
+    rating.value = value
+    emit('rate', value)
+    if (value === 'up') toast('Thanks for your feedback')
+    if (value === 'down') reasonOpen.value = true
+  }
+
+  function sendReason(reason: FeedbackReasonDialogPayload) {
+    reasonOpen.value = false
+    emit('rate', 'down', reason)
+    toast('Thanks for your feedback')
+  }
+
+  const MEDIA_TYPES = new Set(['gallery', 'audio', 'video', 'document', 'subagent', 'structured'])
+  const isMedia = (segment: AiChatSegment) => MEDIA_TYPES.has(segment.type)
+
+  function toolOf(call: AiChatToolCallPart): AiChatTool {
+    return props.tools[call.name] ?? { title: '' }
+  }
+
+  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
+
+  function setAppFrame(key: string, el: unknown) {
+    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
+    else appFrames.delete(key)
+  }
+
+  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
+    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
+  }
+</script>
+
+<template>
+  <ChatMessage
+    :from="turn.role === 'user' ? 'user' : 'assistant'"
+    :status="status"
+    :timestamp="time"
+    :error-message="status === 'error' ? failure : undefined"
+    @retry="emit('retry', $event)"
+    @edit="editPrompt"
+  >
+    <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
+    <template
+      v-for="segment in segmentsOf(
+        turn,
+        turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
+      )"
+      :key="segment.key"
+    >
+      <template v-if="turn.role === 'user' && segment.type === 'text'" />
+      <AgentActivity
+        v-else-if="segment.type === 'activity'"
+        :steps="segment.steps"
+      />
+      <Reasoning
+        v-else-if="segment.type === 'reasoning'"
+        :streaming="status === 'pending'"
+        :duration="status === 'pending' ? undefined : turn.metadata?.reasoningSeconds"
+      >
+        <p class="whitespace-pre-line">{{ segment.content }}</p>
+      </Reasoning>
+      <StreamingResponse
+        v-else-if="segment.type === 'text'"
+        :content="segment.content"
+        :streaming="status === 'streaming'"
+        :sources="turn.metadata?.sources ?? []"
+      />
+      <AiChatToolSegment
+        v-else-if="segment.type === 'tool'"
+        v-model:answer="answers[segment.call.id]"
+        :call="segment.call"
+        :result="segment.result"
+        :tool="toolOf(segment.call)"
+        :ask="askOf(segment.call)"
+        :edit="editOf(segment.call)"
+        :busy="busy"
+        @answer="(event, value) => emit('answer-tool', event, segment.call, value)"
+        @edit="(text) => emit('edit', segment.call, text)"
+        @approve="(event, text) => emit('approve', event, segment.call, text)"
+        @deny="(event) => emit('deny', event, segment.call)"
+      />
+      <AiChatMediaSegment
+        v-else-if="isMedia(segment)"
+        :segment="segment"
+      />
+      <McpAppFrame
+        v-else-if="segment.type === 'app'"
+        :ref="(el) => setAppFrame(segment.key, el)"
+        :resource="segment.part.resource"
+        :title="(tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName"
+        :resolve-url="resolveAppUrl"
+        @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
+      />
+    </template>
+    <template v-if="turn.role === 'assistant'">
+      <p
+        v-if="stopped"
+        class="text-body-sm text-(--text-muted)"
+      >
+        You stopped this response.
+      </p>
+    </template>
+    <template
+      v-if="turn.role === 'user'"
+      #actions
+    >
+      <ChatMessage.Actions
+        copyable
+        editable
+        :copy-text="textOf(turn, '\n')"
+        :disabled="!ready"
+      >
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            aria-label="Prompt versions"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
+      </ChatMessage.Actions>
+    </template>
+    <template
+      v-else
+      #actions
+    >
+      <ChatMessage.Actions
+        copyable
+        show-feedback
+        show-read-aloud
+        shareable
+        retryable
+        branchable
+        :copy-text="textOf(turn)"
+        :read-aloud-text="textOf(turn)"
+        :feedback="rating"
+        :disabled="!ready"
+        @update:feedback="rate"
+        @share="emit('share', $event)"
+        @retry="regenerate"
+        @branch="emit('branch', $event)"
+      >
+        <template
+          v-if="versionsOfTurn"
+          #leading
+        >
+          <ResponseBranches
+            :model-value="versionsOfTurn.index"
+            :count="versionsOfTurn.count"
+            :disabled="!ready"
+            @update:model-value="page"
+          />
+        </template>
+        <template
+          v-if="!stopped && turn.metadata?.sources?.length"
+          #trailing
+        >
+          <Sources :items="turn.metadata.sources" />
+        </template>
+      </ChatMessage.Actions>
+    </template>
+  </ChatMessage>
+  <ChatMessage
+    v-if="questions?.length"
+    from="assistant"
+  >
+    <AgentQuestion
+      v-for="question in questions"
+      :key="question.id"
+      v-model="answers[question.id]"
+      :title="question.title"
+      :type="question.options.length ? 'choice' : 'text'"
+      :options="question.options"
+      :status="question.status"
+      :error="question.error"
+      :skippable="question.bound"
+      @submit="(event, value) => emit('answer', event, question, value)"
+      @skip="emit('skip', question)"
+    />
+  </ChatMessage>
+  <FeedbackReasonDialog
+    v-if="turn.role === 'assistant'"
+    v-model:open="reasonOpen"
+    @submit="(_event, reason) => sendReason(reason)"
+  />
+</template>
+```
+
+## `parts/drawer-chat-composer.vue`
+
+```ts
+<script setup lang="ts">
+  import type {
+    PromptInputFile,
+    PromptInputMenuOption,
+    PromptInputStatus
+  } from '@aziontech/webkit/prompt-input'
+  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import { ref } from 'vue'
+
+  defineProps<{
+    state: PromptInputStatus
+    queueable: boolean
+    hydrating: boolean
+    accept: string
+    maxFiles: number
+    maxFileSize: number
+    attachable: boolean
+    tools: PromptInputMenuOption[]
+  }>()
+
+  const emit = defineEmits<{
+    submit: [event: MouseEvent | KeyboardEvent, value: string]
+    stop: [event: MouseEvent]
+  }>()
+
+  const prompt = defineModel<string>({ required: true })
+  const files = defineModel<PromptInputFile[]>('files', { required: true })
+  const toolKeys = defineModel<string[]>('toolKeys', { required: true })
+
+  const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
+
+  defineExpose({ focus: () => inputEl.value?.focus() })
+</script>
+
+<template>
+  <PromptInput
+    ref="inputEl"
+    v-model="prompt"
+    v-model:files="files"
+    :status="state"
+    :queueable="queueable"
+    :disabled="hydrating"
+    :accept="accept"
+    :max-files="maxFiles"
+    :max-file-size="maxFileSize"
+    :max-rows="4"
+    placeholder="Ask about storefront"
+    @submit="(event, { value }) => emit('submit', event, value)"
+    @stop="emit('stop', $event)"
+  >
+    <template
+      v-if="attachable"
+      #actions
+    >
+      <PromptInputAttachButton
+        v-model="toolKeys"
+        :tools="tools"
+      />
+    </template>
+    <template #end>
+      <PromptInputDictateButton />
+    </template>
+    <template #hint>The AI assistant can make mistakes. Check important information.</template>
+  </PromptInput>
+</template>
+```
+
+## `parts/drawer-chat-header.vue`
+
+```ts
+<script setup lang="ts">
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Tag from '@aziontech/webkit/tag'
+
+  defineProps<{ empty: boolean }>()
+
+  const emit = defineEmits<{ 'new-chat': [event: MouseEvent] }>()
+</script>
+
+<template>
+  <PanelHeader class="w-full">
+    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+      <DrawerTitle>AI assistant</DrawerTitle>
+      <Tag
+        label="Preview"
+        severity="info"
+        size="small"
+      />
+    </div>
+    <div class="flex items-center gap-(--spacing-2xs)">
+      <IconButton
+        icon="az az-square-pen"
+        aria-label="New chat"
+        variant="ghost"
+        size="medium"
+        :disabled="empty"
+        @click="emit('new-chat', $event)"
+      />
+    </div>
+  </PanelHeader>
+</template>
+```
+
+## `parts/drawer-chat-start.vue`
+
+```ts
+<script setup lang="ts">
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+
+  defineProps<{ hydrating: boolean; starters: SuggestionGroupItem[] }>()
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent | KeyboardEvent, item: SuggestionGroupItem]
+  }>()
+</script>
+
+<template>
+  <div
+    v-if="hydrating"
+    role="status"
+    aria-label="Loading the conversation"
+    class="flex flex-col gap-(--spacing-xl)"
+  >
+    <template
+      v-for="row in 2"
+      :key="row"
+    >
+      <Skeleton
+        width="55%"
+        height="2.75rem"
+        class="self-end"
+      />
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <Skeleton width="90%" />
+        <Skeleton :width="row === 2 ? '40%' : '70%'" />
+      </div>
+    </template>
+  </div>
+  <div
+    v-else
+    class="my-auto flex flex-col gap-(--spacing-lg) py-(--spacing-md)"
+  >
+    <EmptyState
+      title="Ask about storefront"
+      description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
+      icon="az az-ask-azion"
+      size="small"
+    />
+    <SuggestionGroup
+      :items="starters"
+      orientation="vertical"
+      @select="(event, item) => emit('select', event, item)"
+    />
+  </div>
+</template>
+```
+
+## `parts/workload-overview.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+
+  defineProps<{ open: boolean }>()
+
+  const emit = defineEmits<{ open: [] }>()
+</script>
+
+<template>
+  <div class="layout-column layout-boundary flex min-w-0 flex-col">
+    <div class="layout-section-start flex flex-col gap-(--layout-section-gap)">
+      <PageHeader
+        title="storefront"
+        description="Workload · Production"
+      >
+        <template #actions>
+          <Button
+            label="Agent"
+            variant="outline"
+            size="medium"
+            icon="az az-ask-azion"
+            :aria-expanded="open ? 'true' : 'false'"
+            @click="emit('open')"
+          />
+        </template>
+      </PageHeader>
+      <Card>
+        <template #default>
+          <div class="p-(--spacing-md)">
+            <KeyValueList
+              :columns="3"
+              aria-label="Workload details"
+            >
+              <KeyValueList.Item label="Status">
+                <StatusIndicator
+                  severity="danger"
+                  label="Errors above 30%"
+                />
+              </KeyValueList.Item>
+              <KeyValueList.Item label="Domains"
+                >www.example.com, shop.example.com</KeyValueList.Item
+              >
+              <KeyValueList.Item label="Origin">api.example.com</KeyValueList.Item>
+              <KeyValueList.Item label="Cache hit ratio">91%</KeyValueList.Item>
+              <KeyValueList.Item label="Last deployment">Today, 13:58</KeyValueList.Item>
+              <KeyValueList.Item label="Region">US East (Washington)</KeyValueList.Item>
+            </KeyValueList>
+          </div>
+        </template>
+      </Card>
+    </div>
+  </div>
+</template>
+```

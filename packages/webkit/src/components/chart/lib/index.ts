@@ -1,5 +1,6 @@
 export type { ChartDateSpan } from './format'
 export { dateSpan, formatCompact, formatLabel, formatShare, formatSignedPercent } from './format'
+export { STEP_BACKWARD, STEP_FORWARD, stepIndex } from './keyboard'
 export type { BarEnd } from './path'
 export { areaPath, barPath, linePath } from './path'
 export type { CategoryLayout, LinearScale, NiceTicks } from './scale'
@@ -20,12 +21,11 @@ export {
   isFiniteNumber,
   keepIds,
   normalizeSeries,
-  OTHER_SERIES_ID,
-  seriesTotal,
   thresholdToken
 } from './series'
 export type { StackLayer } from './stack'
 export { stackedMax, stackValues } from './stack'
+export { CHART_STATE_SLOTS } from './state'
 export type {
   ChartColor,
   ChartCurve,

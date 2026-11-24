@@ -1,5 +1,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
+import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import StatTile from './stat-tile.vue'
@@ -132,6 +133,7 @@ describe('StatTile', () => {
     expect(root.hasAttribute('data-error')).toBe(true)
     expect(view.getByTestId('stat-tile__value').textContent?.trim()).toBe('–')
     expect(view.getByTestId('stat-tile__empty-label').textContent).toContain("Couldn't load")
+    expect(view.getByTestId('stat-tile__empty-label').getAttribute('data-severity')).toBe('neutral')
     expect(view.getByTestId('stat-tile__empty').textContent).not.toContain('No data')
     expect(view.queryByTestId('stat-tile__delta')).toBeNull()
     expect(view.queryByTestId('stat-tile__sparkline')).toBeNull()
@@ -172,6 +174,32 @@ describe('StatTile', () => {
 
       expect(root.className).toContain('@container/stat-tile')
       expect(root.firstElementChild?.className).toContain('@max-3xs/stat-tile:p-(--spacing-sm)')
+    })
+  })
+
+  it('keeps the figure, its unit and the signed delta in left-to-right order under rtl', () => {
+    const view = render({
+      render: () =>
+        h('div', { dir: 'rtl' }, [
+          h(StatTile, { label: 'Data transferred', value: 110, unit: 'GB', delta: 10.5 })
+        ])
+    })
+    const run = view.getByTestId('stat-tile__value').closest('[dir]')
+    expect(run?.getAttribute('dir')).toBe('ltr')
+    expect(run?.contains(view.getByTestId('stat-tile__unit'))).toBe(true)
+    const signed = view.getByTestId('stat-tile__delta-tag').querySelector('[dir="ltr"]')
+    expect(signed?.textContent).toMatch(/^\+10\.5/)
+  })
+
+  describe('StatTile inside a ChartCard', () => {
+    it('lets the card own the only frame', async () => {
+      const MetricPanel = (await import('../../../../examples/chart-card/metric-panel.vue')).default
+      const view = render(MetricPanel)
+      const tiles = view.getAllByTestId('stat-tile')
+      expect(tiles.length).toBeGreaterThan(0)
+      for (const tile of tiles) expect(tile.hasAttribute('data-carded')).toBe(true)
+      const alone = render(StatTile, { props: { label: 'Requests', value: 1 } })
+      expect(alone.getAllByTestId('stat-tile').at(-1)?.hasAttribute('data-carded')).toBe(false)
     })
   })
 })

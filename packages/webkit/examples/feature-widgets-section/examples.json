@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the Functions page places it: the overline, headline and lead centered over two calls to action, then three illustrated cells in a three-column bento grid — a copy button that puts a prompt on the clipboard for the agent path, and outlined link buttons for the Console and terminal paths. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "summary": "The band as the Functions page places it: the overline, headline and lead centered over two calls to action, then three illustrated cells in a three-column bento grid — a copy button that puts a prompt on the clipboard for the agent path, and outlined link buttons for the Console and terminal paths. A band with no items renders nothing at all.",
       "file": "default.vue"
     },
     {

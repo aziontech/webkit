@@ -55,6 +55,37 @@ describe('create-page', () => {
     await waitFor(() => expect(screen.getByText('The service did not answer.')).toBeTruthy(), wait)
   })
 
+  it('moves focus to the first invalid field after a failed Save', async () => {
+    render(SinglePageCreate)
+    const save = screen.getByRole('button', { name: 'Save' })
+    save.focus()
+    await userEvent.click(save)
+    const name = screen.getByRole('textbox', { name: 'Name' })
+    await waitFor(() => expect(document.activeElement).toBe(name), wait)
+    expect(name.getAttribute('aria-invalid')).toBe('true')
+  })
+
+  it('reports a failed create inline with Retry and announces a repeated failure again', async () => {
+    const view = render(SinglePageCreate, {
+      props: { defaultValues: { name: 'docs-site', domain: 'example.org' } }
+    })
+    await view.rerender({ loading: true })
+    await view.rerender({ loading: false, error: 'The service did not answer.' })
+    const outcome = async () =>
+      (await screen.findByText('The service did not answer.')).closest(
+        '[role="alert"]'
+      ) as HTMLElement
+    const first = await outcome()
+    expect(first.textContent).toContain('Could not create the domain.')
+    await userEvent.click(within(first).getByRole('button', { name: 'Retry' }))
+    expect(view.emitted<unknown[]>('submit')).toHaveLength(1)
+    await view.rerender({ loading: true })
+    await view.rerender({ loading: false })
+    const second = await outcome()
+    expect(second).not.toBe(first)
+    expect(first.isConnected).toBe(false)
+  })
+
   it('leaves at once on Cancel while the form is clean', async () => {
     const view = render(SinglePageCreate)
     await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
@@ -116,6 +147,19 @@ describe('create-page', () => {
     const view = render(SinglePageCreate, { props: { loading: true } })
     await userEvent.keyboard('{Escape}')
     expect(view.emitted('cancel')).toBeUndefined()
+  })
+
+  it.each([
+    ['CreateService', CreateService],
+    ['CreatePurge', CreatePurge],
+    ['CreateOrganization', CreateOrganization]
+  ])('puts every card choice of %s under its row copy at the full measure', (_, page) => {
+    const { container } = render(page as Component)
+    const rows = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-testid="settings-row"]')
+    ).filter((row) => row.querySelector('[role="radiogroup"][data-variant="card"]'))
+    expect(rows.length).toBeGreaterThan(0)
+    for (const row of rows) expect(row.getAttribute('data-row-variant')).toBe('stacked')
   })
 
   it('gives Create Service a page heading and one h2 per group', () => {

@@ -112,6 +112,29 @@ export const GATES = [
     steps: [['node', 'scripts/check-look-alikes.mjs']]
   },
   {
+    id: 'duplication',
+    label: 'No copy-pasted code in components or inside a block',
+    steps: [['node', 'scripts/check-duplication.mjs']]
+  },
+  {
+    id: 'maintainability',
+    label:
+      'No file, script block, function, line, prop or model count over the CODE_QUALITY.md 3.1 limits',
+    steps: [['node', 'scripts/check-maintainability.mjs']]
+  },
+  {
+    id: 'assertions',
+    label: 'No as never or as unknown as, and the type assertion count does not grow',
+    steps: [['node', 'scripts/check-assertions.mjs']]
+  },
+  {
+    id: 'quality-lint',
+    label:
+      'No line over 200 characters and no accessibility lint finding in components, blocks and examples',
+    root: true,
+    steps: [['pnpm', '--filter', '@aziontech/webkit', 'run', 'lint:quality']]
+  },
+  {
     id: 'hooks',
     label: 'Hook tests',
     steps: [['node', '../../.claude/hooks/test/run.mjs']]
@@ -161,6 +184,30 @@ export const GATES = [
     label: 'Prettier check',
     root: true,
     steps: [['pnpm', 'run', 'check:webkit:format']]
+  },
+  {
+    id: 'unused',
+    label: 'No unused file, export or dependency (knip)',
+    root: true,
+    steps: [['pnpm', 'run', 'check:unused']]
+  },
+  {
+    id: 'versions',
+    label: 'One version of each shared dependency, no lockfile duplicate (syncpack, pnpm dedupe)',
+    root: true,
+    steps: [['pnpm', 'run', 'check:versions']]
+  },
+  {
+    id: 'spelling',
+    label: 'No spelling mistake (typos)',
+    root: true,
+    steps: [['pnpm', 'run', 'check:spelling']]
+  },
+  {
+    id: 'workflows',
+    label: 'Workflow linters (actionlint, zizmor)',
+    root: true,
+    steps: [['npm', 'run', 'check:workflows']]
   }
 ]
 

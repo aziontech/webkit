@@ -240,12 +240,17 @@
     /** Sends a message to the current widget's window with the target origin star; dropped before the widget is ready, while blocked and after it navigated away. */
     post
   })
+
+  const ROOT_CLASS =
+    'relative w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) ' +
+    'focus-within:ring-2 focus-within:ring-(--ring-color) ' +
+    'data-[error]:overflow-visible data-[error]:border-0 data-[error]:bg-transparent'
 </script>
 
 <template>
   <div
     v-bind="$attrs"
-    class="relative w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-within:ring-2 focus-within:ring-(--ring-color) data-[error]:overflow-visible data-[error]:border-0 data-[error]:bg-transparent"
+    :class="ROOT_CLASS"
     :style="viewStyle"
     :data-testid="testId"
     :data-loading="phase === 'loading' || null"

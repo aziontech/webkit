@@ -8,7 +8,7 @@
  ],
  "sfcFile": "blocks/detail/detail-get-started/detail-get-started.vue",
  "guidelinesFile": "blocks/detail/detail-get-started/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/detail/detail-get-started/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

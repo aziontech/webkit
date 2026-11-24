@@ -27,6 +27,15 @@ describe('dashboard/dashboard-service-monitoring', () => {
     expect(link.getAttribute('href')).toBe('/alerts/stage-5xx')
   })
 
+  it('links to the open alerts from under the header, where a phone sees it first', () => {
+    const view = render(ServiceMonitoring)
+    const jump = view.getByRole('link', { name: /^\d+ open alerts?$/ })
+    expect(jump.getAttribute('href')).toBe('#open-alerts')
+    expect(document.getElementById('open-alerts')?.tagName).toBe('ASIDE')
+    const header = view.getByRole('heading', { level: 1, name: 'Service monitoring' })
+    expect(header.compareDocumentPosition(jump) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('renders the services and alerts it is given instead of the sample', () => {
     const services: ServiceMonitoringService[] = [
       {
@@ -49,7 +58,7 @@ describe('dashboard/dashboard-service-monitoring', () => {
       props: { error: 'Check your connection and retry.' }
     })
     expect(view.container.textContent).toContain(
-      "Couldn't load open alerts. Check your connection and retry."
+      "Couldn't load service monitoring. Check your connection and retry."
     )
     expect(view.container.textContent).not.toContain('web-app-prod')
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])

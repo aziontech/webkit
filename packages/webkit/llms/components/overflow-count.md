@@ -53,6 +53,7 @@
 ## Accessibility
 
 - The trigger is a button named `Show all <count> <noun>` (the visible `+N` alone does not say what it counts); `aria-expanded` and `aria-controls` come from `Popover`.
+- On a coarse pointer the trigger answers a tap across 44px (an invisible `data-slot="touch-target"` layer, as `Button` has), while the chip keeps its drawn size.
 - Keyboard: `Enter`/`Space` opens, `Esc` closes and returns focus to the chip, `Tab` moves through the search box, the links and Load more.
 - A polite `role="status"` region announces the summary after a search or Load more.
 - A link that opens a new tab carries a visually hidden `(opens in a new tab)`.
@@ -85,7 +86,7 @@
 
 - Container queries: none; the popover is `width="small"` (`--container-xs`).
 - Narrow: the popover keeps its width and flips to fit (from `Popover`).
-- Touch: the chip sits in a 24 px row; the popover entries are 28 px tall with their own padding.
+- Touch: the chip sits in a 24 px row, and a hidden hit area (`data-slot="touch-target"`) grows its target to 44 px on a coarse pointer without changing its drawn size; the popover entries are 28 px tall with their own padding. A touch that opens the popover moves focus to the panel, not the search box, so the on-screen keyboard does not rise over the list; a keyboard or mouse open still focuses the search box.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples
@@ -94,6 +95,7 @@
 
 ```vue
 <script setup>
+  import Link from '@aziontech/webkit/link'
   import OverflowCount from '@aziontech/webkit/overflow-count'
 
   const domains = ['shop.example.com', 'api.example.com', 'img.example.com', 'docs.example.com']
@@ -101,13 +103,12 @@
 
 <template>
   <div class="flex w-full max-w-(--container-xs) min-w-0 items-center gap-(--spacing-xs)">
-    <a
+    <Link
       :href="`https://${domains[0]}`"
+      :label="domains[0]"
       target="_blank"
-      rel="noopener noreferrer"
-      class="min-w-0 truncate text-body-sm text-(--text-default) underline-offset-2 hover:underline"
-      >{{ domains[0] }}</a
-    >
+      size="small"
+    />
     <OverflowCount
       :items="domains.slice(1).map((label) => ({ label, href: `https://${label}` }))"
       :noun="{ one: 'domain', other: 'domains' }"

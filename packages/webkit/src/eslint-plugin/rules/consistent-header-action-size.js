@@ -50,11 +50,16 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Every Button, IconButton and SplitButton in the actions slot of a PageHeader is size="medium", so the actions sit at one height; the create action stands out by variant="primary", never by size.'
+        'Every Button, IconButton and SplitButton in the actions slot of a PageHeader is ' +
+        'size="medium", so the actions sit at one height; the create action stands out by ' +
+        'variant="primary", never by size.'
     },
     schema: [],
     messages: {
-      size: '{{control}} in the PageHeader actions is size="{{size}}": every heading action is size="medium" (32px), so the row keeps one height. Set size="medium"; give the create action variant="primary" and the others variant="outline" (rule `webkit-page-layout`).'
+      size:
+        '{{control}} in the PageHeader actions is size="{{size}}": every heading action is ' +
+        'size="medium" (32px), so the row keeps one height. Set size="medium"; give the create ' +
+        'action variant="primary" and the others variant="outline" (rule `webkit-page-layout`).'
     }
   },
   create(context) {

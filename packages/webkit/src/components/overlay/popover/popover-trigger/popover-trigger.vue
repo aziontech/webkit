@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-  import { TriggerHost } from '../../parts/trigger-host'
+  import OverlayTrigger from '../../parts/overlay-trigger.vue'
   import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
@@ -19,53 +19,27 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover-trigger')
 
   const isOpen = computed(() => ctx.isOpen.value)
-  const isDisabled = computed(() => ctx.disabled.value)
-
-  const aria = computed(() => ({
-    'aria-haspopup': 'dialog',
-    'aria-expanded': String(isOpen.value),
-    'aria-controls': ctx.contentId,
-    'aria-disabled': isDisabled.value ? 'true' : undefined
-  }))
-
-  function toggle() {
-    if (isDisabled.value) return
-    ctx.setOpen(!ctx.isOpen.value)
-  }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
     if (event.target !== event.currentTarget) return
-    if (isDisabled.value) return
+    if (ctx.disabled.value) return
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      toggle()
+      ctx.setOpen(!ctx.isOpen.value)
     }
   }
-
-  function onControl(el: globalThis.HTMLElement | null) {
-    ctx.triggerEl.value = el
-  }
-
-  onBeforeUnmount(() => {
-    ctx.triggerEl.value = null
-  })
 </script>
 
 <template>
-  <TriggerHost
+  <OverlayTrigger
     v-bind="attrs"
-    :aria="aria"
-    :control-id="ctx.triggerId"
-    :disabled="isDisabled"
-    as-button
+    :context="ctx"
+    haspopup="dialog"
+    :controls="ctx.contentId"
     :data-testid="testId"
-    :data-state="isOpen ? 'open' : 'closed'"
-    :data-disabled="isDisabled || null"
-    class="inline-flex w-fit shrink-0 cursor-pointer rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
-    @click="toggle"
+    class="cursor-pointer rounded-(--shape-control)"
     @keydown="onKeydown"
-    @control="onControl"
   >
     <slot :is-open="isOpen" />
-  </TriggerHost>
+  </OverlayTrigger>
 </template>

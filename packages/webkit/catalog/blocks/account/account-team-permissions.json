@@ -28,7 +28,7 @@
  ],
  "sfcFile": "blocks/account/account-team-permissions/account-team-permissions.vue",
  "guidelinesFile": "blocks/account/account-team-permissions/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-team-permissions/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

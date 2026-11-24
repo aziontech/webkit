@@ -79,6 +79,7 @@
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on interactive rows (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - `aria-busy` on the root while `loading` or `refetching`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
+- The bar ends on a 2px inline-end cap in the full hue (a solid mark, APCA Lc 30 or more on the surface in both themes), so the length reads in dark, where the tint alone stays under the mark target.
 - Interactive rows are 32px tall and full width; a transparent hit area (`before:` pseudo-element, 4px above and below) makes the pointer target 40px without changing the look.
 - Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 

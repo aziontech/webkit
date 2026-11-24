@@ -155,27 +155,21 @@ function lintFindings(projectDir) {
   return { ran: true, findings }
 }
 
-export function runCheck(projectDir, webkit, { lint = true } = {}) {
-  const findings = []
-
-  for (const c of planDoctor(projectDir)) {
-    if (c.status === 'ok') continue
-    findings.push({
+function doctorFindings(projectDir) {
+  return planDoctor(projectDir)
+    .filter((c) => c.status !== 'ok')
+    .map((c) => ({
       source: 'doctor',
       severity: c.status === 'fail' ? 'error' : 'warn',
       check: c.check,
       message: c.detail
-    })
-  }
+    }))
+}
 
+function fileFindings(projectDir, files, webkit, linted) {
   const migration = loadMigration(MIGRATION_MAJOR)
   const renamed = new Set([...Object.keys(migration.components), ...Object.keys(migration.removed)])
-  const files = sourceFiles(projectDir)
-  const linted = lint ? lintFindings(projectDir) : { ran: false, reason: '--no-lint', findings: [] }
-  const styled = lint
-    ? stylelintFindings(projectDir)
-    : { ran: false, reason: '--no-lint', findings: [] }
-
+  const findings = []
   for (const file of files) {
     const rel = toPosix(relative(projectDir, file))
     const source = readFileSync(file, 'utf8')
@@ -184,30 +178,52 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
     findings.push(...importFindings(rel, source, webkit.exports, renamed))
     if (!linted.ran) findings.push(...styleFindings(rel, source))
   }
+  return findings
+}
 
-  findings.push(...linted.findings)
-  if (!linted.ran) {
-    findings.push({
+function eslintOutcome(linted) {
+  if (linted.ran) return linted.findings
+  return [
+    ...linted.findings,
+    {
       source: 'lint',
       severity: 'warn',
       message: `ESLint did not run (${linted.reason}): only the built-in colour and direction scan covered the templates. Run \`npx ${PACKAGE_NAME} init\` to wire the full rule set.`
-    })
-  }
+    }
+  ]
+}
 
-  findings.push(...styled.findings)
-  if (!styled.ran) {
-    findings.push(...cssScanFindings(projectDir).findings)
-    findings.push({
+function stylelintOutcome(projectDir, styled) {
+  if (styled.ran) return styled.findings
+  return [
+    ...styled.findings,
+    ...cssScanFindings(projectDir).findings,
+    {
       source: 'stylelint',
       severity: 'warn',
-      message: `Stylelint did not run (${styled.reason}): only the built-in CSS scan (the ${PACKAGE_NAME}/stylelint-config rules) covered the styles. Run \`npx ${PACKAGE_NAME} init\` to wire it; the pre-commit hook runs it.`
-    })
-  }
+      message:
+        `Stylelint did not run (${styled.reason}): only the built-in CSS scan (the ` +
+        `${PACKAGE_NAME}/stylelint-config rules) covered the styles. Run \`npx ${PACKAGE_NAME} ` +
+        `init\` to wire it; the pre-commit hook runs it.`
+    }
+  ]
+}
 
-  for (const f of blockDrift(projectDir, webkit)) findings.push({ source: 'blocks', ...f })
+const NOT_LINTED = { ran: false, reason: '--no-lint', findings: [] }
 
+export function runCheck(projectDir, webkit, { lint = true } = {}) {
+  const doctor = doctorFindings(projectDir)
+  const files = sourceFiles(projectDir)
+  const linted = lint ? lintFindings(projectDir) : NOT_LINTED
+  const styled = lint ? stylelintFindings(projectDir) : NOT_LINTED
+  const findings = [
+    ...doctor,
+    ...fileFindings(projectDir, files, webkit, linted),
+    ...eslintOutcome(linted),
+    ...stylelintOutcome(projectDir, styled),
+    ...blockDrift(projectDir, webkit).map((f) => ({ source: 'blocks', ...f }))
+  ]
   const errors = findings.filter((f) => f.severity === 'error').length
-  const warnings = findings.length - errors
   return {
     package: PACKAGE_NAME,
     version: webkit.version,
@@ -216,7 +232,7 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
     stylelint: styled.ran,
     scanned: files.length,
     errors,
-    warnings,
+    warnings: findings.length - errors,
     findings
   }
 }
@@ -240,34 +256,48 @@ export function exitCodeFor(result, maxWarnings) {
   return 0
 }
 
+const SOURCE_ORDER = [
+  'doctor',
+  'migration',
+  'imports',
+  'lint',
+  'style',
+  'stylelint',
+  'css',
+  'blocks',
+  'navigation'
+]
+
+function findingPlace(f) {
+  if (f.check) return f.check
+  if (!f.file) return ''
+  return `${f.file}${f.line ? `:${f.line}` : ''}`
+}
+
+function findingLines(f) {
+  const where = findingPlace(f)
+  const [head, ...rest] = f.message.split('\n')
+  return [
+    `${f.severity === 'error' ? 'ERROR' : 'WARN '} ${where ? `${where} — ` : ''}${head}`,
+    ...rest.map((line) => `      ${line}`)
+  ]
+}
+
+function hasLimit(maxWarnings) {
+  return maxWarnings != null && maxWarnings >= 0
+}
+
 export function formatCheck(result, maxWarnings) {
   const out = [`@aziontech/webkit check — ${PACKAGE_NAME}@${result.version}`, '']
-  const order = [
-    'doctor',
-    'migration',
-    'imports',
-    'lint',
-    'style',
-    'stylelint',
-    'css',
-    'blocks',
-    'navigation'
-  ]
-  for (const source of order) {
+  for (const source of SOURCE_ORDER) {
     const group = result.findings.filter((f) => f.source === source)
     if (!group.length) continue
-    out.push(`[${source}]`)
-    for (const f of group) {
-      const where = f.check || (f.file ? `${f.file}${f.line ? `:${f.line}` : ''}` : '')
-      const [head, ...rest] = f.message.split('\n')
-      out.push(`${f.severity === 'error' ? 'ERROR' : 'WARN '} ${where ? `${where} — ` : ''}${head}`)
-      for (const line of rest) out.push(`      ${line}`)
-    }
-    out.push('')
+    out.push(`[${source}]`, ...group.flatMap(findingLines), '')
   }
-  const limit = maxWarnings != null && maxWarnings >= 0 ? ` (max ${maxWarnings})` : ''
+  const limit = hasLimit(maxWarnings) ? ` (max ${maxWarnings})` : ''
+  const routes = result.routes?.length ? ` and ${result.routes.length} route(s)` : ''
   out.push(
-    `${result.errors} error(s), ${result.warnings} warning(s)${limit} in ${result.scanned} source file(s)${result.routes?.length ? ` and ${result.routes.length} route(s)` : ''}.`,
+    `${result.errors} error(s), ${result.warnings} warning(s)${limit} in ${result.scanned} source file(s)${routes}.`,
     ''
   )
   return out.join('\n')

@@ -22,6 +22,7 @@
 - `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
 - `icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
 - `meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
+- Page help: put `ConsoleLayout.ToolsTrigger` first in `meta`, so the `Info` link sits right after the title on the same line and opens the page's `HelpPanel` in the console's tools region. One per page. Never a boxed `IconButton`, a typed `?` or a `Tooltip` beside the title; a one-line explanation is the `description`.
 - `tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
 
 ## Don’t
@@ -37,6 +38,7 @@
 - [page-tabs](page-tabs.md) — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - [breadcrumb](breadcrumb.md) — the usual content of the `breadcrumbs` slot.
 - [tag](tag.md) — the usual content of the `meta` slot (a status, an environment, a version).
+- [console-layout](console-layout.md) — `ConsoleLayout.ToolsTrigger`, the page's `Info` link, goes first in the `meta` slot and opens the page's `HelpPanel` in the layout's tools region.
 - [button](button.md) — the usual content of the `actions` slot (`size="medium"`; the create action primary, the others outlined).
 
 ## Props
@@ -56,7 +58,7 @@
 | `actions` | — | The actions the page owns, Documentation first and the create action on the outer edge. |
 | `breadcrumbs` | — | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`. |
 | `icon` | — | A leading glyph or square avatar before the title, decorative (`aria-hidden`). |
-| `meta` | — | Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow. |
+| `meta` | — | Short facts beside the title, such as a status `Tag`, and the page's `Info` link (`ConsoleLayout.ToolsTrigger`, first); wraps under the title when the row is narrow. |
 | `tabs` | — | The tabs of the page's sections, across the full width under the title and actions. |
 
 ## States

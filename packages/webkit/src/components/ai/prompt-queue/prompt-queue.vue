@@ -78,6 +78,10 @@
   function onRemove(event: MouseEvent, item: PromptQueueItem): void {
     emit('remove', event, item)
   }
+
+  const BOX_CLASS =
+    'flex flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) ' +
+    'bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)] backdrop-blur-md'
 </script>
 
 <template>
@@ -96,7 +100,7 @@
     </p>
     <div
       v-if="items.length"
-      class="flex flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
+      :class="BOX_CLASS"
     >
       <p
         class="flex items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"

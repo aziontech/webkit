@@ -1,13 +1,13 @@
 import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
+import { createSSRApp, defineComponent, h, inject, nextTick, ref } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
 import CustomMessages from '../../../../examples/config-provider/custom-messages.vue'
 import Default from '../../../../examples/config-provider/default.vue'
 import DeviceLocale from '../../../../examples/config-provider/device-locale.vue'
 import Rtl from '../../../../examples/config-provider/rtl.vue'
-import { useLocale } from '../../../composables/use-locale'
+import { LocaleInjectionKey, useLocale } from '../../../composables/use-locale'
 import { ptBR } from '../../../locales/pt-BR'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Pagination from '../../data/pagination/pagination.vue'
@@ -17,6 +17,7 @@ import Dialog from '../../overlay/dialog/dialog.vue'
 import DialogClose from '../../overlay/dialog/dialog-close.vue'
 import DialogContent from '../../overlay/dialog/dialog-content.vue'
 import DialogTitle from '../../overlay/dialog/dialog-title.vue'
+import Drawer from '../../overlay/drawer/index'
 import ConfigProvider from './config-provider.vue'
 
 const catalogs = { 'pt-BR': ptBR }
@@ -44,10 +45,65 @@ describe('ConfigProvider', () => {
       expect(root.getAttribute('dir')).toBe('ltr')
     })
 
-    it('defaults to the device locale (pinned to en-US in this suite), left to right', () => {
+    it('defaults to the device locale (pinned to en-US in this suite) and sets no direction', () => {
       const { getByTestId } = render(ConfigProvider)
       expect(getByTestId('config-provider').getAttribute('lang')).toBe('en-US')
-      expect(getByTestId('config-provider').getAttribute('dir')).toBe('ltr')
+      expect(getByTestId('config-provider').hasAttribute('dir')).toBe(false)
+    })
+
+    it('inherits a right-to-left page when it sets only now or timeZone', () => {
+      const Probe = defineComponent({
+        setup: () => {
+          const { dir } = useLocale()
+          return () => h('span', { 'data-testid': 'probe' }, dir.value)
+        }
+      })
+      const { getAllByTestId, getByTestId } = render(
+        withProvider({ dir: 'rtl' }, () =>
+          h(ConfigProvider, { timeZone: 'UTC', now: 0 }, { default: () => h(Probe) })
+        )
+      )
+      const inner = getAllByTestId('config-provider')[1]!
+      expect(inner.hasAttribute('dir')).toBe(false)
+      expect(inner.closest('[dir]')?.getAttribute('dir')).toBe('rtl')
+      expect(getByTestId('probe').textContent).toBe('rtl')
+    })
+
+    it('lets a nested provider inherit the locale, catalogs, messages and now it does not set', () => {
+      const Probe = defineComponent({
+        setup: () => {
+          const { locale, t, formatRelativeTime } = useLocale()
+          return () =>
+            h(
+              'span',
+              { 'data-testid': 'probe' },
+              [
+                locale.value,
+                t('chip.remove'),
+                t('toolApproval.deny'),
+                t('toolApproval.approve'),
+                formatRelativeTime(new Date('2026-11-11T14:00:00Z'))
+              ].join('|')
+            )
+        }
+      })
+      const { getAllByTestId, getByTestId } = render(
+        withProvider(
+          {
+            locale: 'pt-BR',
+            messages: { toolApproval: { deny: 'Recusar' } },
+            now: '2026-11-11T15:00:00Z'
+          },
+          () =>
+            h(
+              ConfigProvider,
+              { messages: { toolApproval: { approve: 'Confirmar' } } },
+              { default: () => h(Probe) }
+            )
+        )
+      )
+      expect(getAllByTestId('config-provider')[1]!.getAttribute('lang')).toBe('pt-BR')
+      expect(getByTestId('probe').textContent).toBe('pt-BR|Remover|Recusar|Confirmar|há 1 hora')
     })
 
     it('derives dir="rtl" from an Arabic, Hebrew, Persian or Urdu locale', () => {
@@ -117,7 +173,7 @@ describe('ConfigProvider', () => {
       })
       render(withProvider({ locale: 'pt-BR' }, () => h(Tree)))
       await settle()
-      const close = document.body.querySelector('[data-testid="dialog__close"]')
+      const close = document.body.querySelector('[data-testid="dialog-close"]')
       expect(close?.getAttribute('aria-label')).toBe('Fechar')
     })
 
@@ -291,6 +347,170 @@ describe('ConfigProvider', () => {
       now.value = undefined
       await nextTick()
       expect(l.formatRelativeTime(new Date(Date.now() - 86_400_000))).toBe('yesterday')
+    })
+  })
+
+  describe('inheritance', () => {
+    const NOW = Date.UTC(2026, 10, 10, 12)
+
+    const DirProbe = defineComponent({
+      setup: () => {
+        const { dir } = useLocale()
+        return () => h('span', { 'data-testid': 'probe' }, dir.value)
+      }
+    })
+
+    const ValueProbe = defineComponent({
+      setup: () => {
+        const context = inject(LocaleInjectionKey, null)
+        const { locale, t, formatRelativeTime } = useLocale()
+        return () =>
+          h(
+            'span',
+            { 'data-testid': 'probe' },
+            [
+              locale.value,
+              context?.timeZone?.value ?? '',
+              t('pagination.next'),
+              formatRelativeTime(new Date(NOW - 3 * 86_400_000))
+            ].join('|')
+          )
+      }
+    })
+
+    const drawer = () =>
+      h(Drawer, { open: true, side: 'end' }, () =>
+        h(Drawer.Content, null, () => h(Drawer.Title, null, () => 'Ticket details'))
+      )
+
+    const panelDir = () =>
+      document.body
+        .querySelector('[data-testid="drawer-content"]')
+        ?.closest('[dir]')
+        ?.getAttribute('dir')
+
+    const onPage = async (dir: 'rtl', run: () => Promise<void>) => {
+      document.documentElement.setAttribute('dir', dir)
+      try {
+        await run()
+      } finally {
+        document.documentElement.removeAttribute('dir')
+      }
+    }
+
+    it('a root provider with no dir or locale leaves a teleported Drawer to the page direction', () =>
+      onPage('rtl', async () => {
+        const { getByTestId } = render(withProvider({}, () => h('div', [h(DirProbe), drawer()])))
+        await settle()
+        const portal = document.body.querySelector('[data-testid="drawer-content__portal"]')
+        expect(portal?.hasAttribute('dir')).toBe(false)
+        expect(panelDir()).toBe('rtl')
+        expect(getByTestId('probe').textContent).toBe('rtl')
+      }))
+
+    it('follows the page when its direction changes after mount', () =>
+      onPage('rtl', async () => {
+        const { getByTestId } = render(withProvider({}, () => h(DirProbe)))
+        await settle()
+        expect(getByTestId('probe').textContent).toBe('rtl')
+        document.documentElement.setAttribute('dir', 'ltr')
+        await settle()
+        expect(getByTestId('probe').textContent).toBe('ltr')
+      }))
+
+    it('an explicit dir or locale still writes its direction on the teleported panel', () =>
+      onPage('rtl', async () => {
+        const ltr = render(withProvider({ dir: 'ltr' }, () => drawer()))
+        await settle()
+        expect(panelDir()).toBe('ltr')
+        ltr.unmount()
+        document.documentElement.removeAttribute('dir')
+        render(withProvider({ locale: 'ar' }, () => drawer()))
+        await settle()
+        expect(panelDir()).toBe('rtl')
+      }))
+
+    it('renders no dir on the server under a right-to-left page and hydrates without mismatches', () =>
+      onPage('rtl', async () => {
+        const App = withProvider({}, () => h(DirProbe))
+        const html = await renderToString(createSSRApp(App))
+        expect(html).not.toContain('dir=')
+        expect(html).toContain('>ltr<')
+        const host = document.createElement('div')
+        host.innerHTML = html
+        document.body.appendChild(host)
+        const messages: string[] = []
+        const collect = (...args: unknown[]) => messages.push(args.map(String).join(' '))
+        const warn = vi.spyOn(console, 'warn').mockImplementation(collect)
+        const error = vi.spyOn(console, 'error').mockImplementation(collect)
+        try {
+          const app = createSSRApp(App)
+          app.mount(host)
+          await settle()
+          expect(messages.filter((m) => /hydration/i.test(m))).toEqual([])
+          expect(host.querySelector('[data-testid="probe"]')?.textContent).toBe('rtl')
+          app.unmount()
+        } finally {
+          warn.mockRestore()
+          error.mockRestore()
+          host.remove()
+        }
+      }))
+
+    it('a nested provider that sets only now keeps the locale, catalogs, overrides and time zone above it', () => {
+      const { getAllByTestId, getByLabelText, getByTestId } = render(
+        withProvider(
+          {
+            locale: 'pt-BR',
+            timeZone: 'America/New_York',
+            messages: { pagination: { previous: 'Voltar' } }
+          },
+          () =>
+            h(
+              ConfigProvider,
+              { now: NOW },
+              { default: () => h('div', [h(ValueProbe), h(Pagination, { total: 50 })]) }
+            )
+        )
+      )
+      expect(getByTestId('probe').textContent).toBe(
+        'pt-BR|America/New_York|Próxima página|há 3 dias'
+      )
+      expect(getByLabelText('Voltar')).toBeTruthy()
+      expect(getAllByTestId('config-provider')[1]?.getAttribute('lang')).toBe('pt-BR')
+    })
+
+    it('a nested provider inherits now and adds its own catalogs and overrides', () => {
+      const { getByTestId } = render(
+        withProvider({ now: NOW }, () =>
+          h(
+            ConfigProvider,
+            { locale: 'pt-BR', catalogs: {}, messages: { pagination: { next: 'Seguinte' } } },
+            { default: () => h(ValueProbe) }
+          )
+        )
+      )
+      expect(getByTestId('probe').textContent).toBe('pt-BR||Seguinte|há 3 dias')
+    })
+
+    it('explicit props on the nested provider win over the ones above', () => {
+      const { getAllByTestId, getByTestId } = render(
+        withProvider({ locale: 'pt-BR', timeZone: 'America/New_York', now: 0 }, () =>
+          h(
+            ConfigProvider,
+            {
+              locale: 'en',
+              timeZone: 'UTC',
+              now: NOW,
+              dir: 'rtl',
+              messages: { pagination: { next: 'Forward' } }
+            },
+            { default: () => h(ValueProbe) }
+          )
+        )
+      )
+      expect(getByTestId('probe').textContent).toBe('en|UTC|Forward|3 days ago')
+      expect(getAllByTestId('config-provider')[1]?.getAttribute('dir')).toBe('rtl')
     })
   })
 

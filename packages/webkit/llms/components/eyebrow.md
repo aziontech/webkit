@@ -1,6 +1,6 @@
 # Eyebrow
 
-> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in `--text-default`, optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
@@ -17,6 +17,8 @@
 - Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.
 - Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.
 - Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden="true"`), so never put meaning in it.
+- `//` marks marketing section headers (`module-header`, `call-to-action`, `media-split`, `hero-section`); `<>` / `</>` only for a band about code. No prefix in app or docs.
+- No colour mark (dash, bar) before the eyebrow (EB-1).
 - Use `cursor` for one eyebrow per view at most; it blinks four times and then stays solid, and never blinks under reduced motion.
 - Keep the semantic heading in the element after the Eyebrow; the Eyebrow itself carries no heading role.
 
@@ -54,7 +56,7 @@
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
 - Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
-- Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
+- Cursor: a decorative, `aria-hidden` `span` (`${testId}__cursor`) is rendered only when `cursor` is set, inline at the end of the label, so a wrapped label keeps it after its last word; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `eyebrow` (consumer `data-testid` wins); the label `<root>__label`.
@@ -65,7 +67,7 @@
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast: the prefix uses `var(--text-default)` (≥4.5:1). The label uses `var(--text-brand)`, the logo orange `primary-500` in both themes: 5.5:1 or more on every dark surface, but about 2.9–3.1:1 on the light surfaces, under WCAG 2 AA 4.5:1 and APCA Lc 60. This is an owner-accepted brand exception (the eyebrow matches the logo orange; owner decision 2026-11-16), recorded in `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"; the automated axe checks skip `color-contrast` on the `<root>__label` part in light only.
+- Contrast: the prefix and the label use `var(--text-default)` (≥4.5:1 on every surface); every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
 - `motion-reduce:animate-none` on the cursor's `animate-blink-settle`.
 - Pause, Stop, Hide (WCAG 2.2.2): the cursor blinks four times and stops by itself after 4 seconds, resting solid, so it needs no pause control.
 - Touch target: not applicable (non-interactive).

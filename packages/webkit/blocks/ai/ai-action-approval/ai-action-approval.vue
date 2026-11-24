@@ -5,23 +5,20 @@
   import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import ToolCall from '@aziontech/webkit/tool-call'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
-
   import {
-    type AiActionApprovalInterrupt,
-    type AiActionApprovalInterruptError,
-    type AiActionApprovalMessage,
-    type AiActionApprovalQuestion,
-    type AiActionApprovalTool,
-    type AiActionApprovalToolCallPart,
+    type AiChatInterrupt,
+    type AiChatInterruptError,
+    type AiChatMessage,
+    type AiChatQuestion,
+    type AiChatSendContent,
+    type AiChatTool,
+    type AiChatToolCallPart,
     answerInterrupt,
     approvalOf,
     hasAnswer,
@@ -41,39 +38,27 @@
     textOf,
     toolContentOf,
     toolStatusOf
-  } from './messages'
-  import { sampleMessages, sampleTools } from './sample'
+  } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref } from 'vue'
 
-  export type {
-    AiActionApprovalInterrupt,
-    AiActionApprovalInterruptError,
-    AiActionApprovalMessage,
-    AiActionApprovalMessageMetadata,
-    AiActionApprovalOtherPart,
-    AiActionApprovalPart,
-    AiActionApprovalRole,
-    AiActionApprovalStructuredOutputPart,
-    AiActionApprovalTextPart,
-    AiActionApprovalThinkingPart,
-    AiActionApprovalTool,
-    AiActionApprovalToolCallPart,
-    AiActionApprovalToolCallState,
-    AiActionApprovalToolResultPart
-  } from './messages'
+  import AiActionApprovalComposer from './parts/ai-action-approval-composer.vue'
+  import { sampleMessages, sampleTools } from './sample'
 
   export interface AiActionApprovalProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Left out, the sample deployment renders. */
-    messages?: ReadonlyArray<AiActionApprovalMessage>
+    messages?: ReadonlyArray<AiChatMessage>
     /** The assistant is responding or an approved call runs, as `useChat` returns `isLoading`. */
     loading?: boolean
     /** Why the last response failed: a sentence, or the `error` of `useChat`, which shows the standard sentence. */
     error?: string | { message: string } | null
     /** How each tool reads, by tool name: the call's title, the approval question, its verb and whether it is irreversible. */
-    tools?: Record<string, AiActionApprovalTool>
+    tools?: Record<string, AiChatTool>
     /** Pending requests, as `useChat` returns `interrupts`; the approve button and Deny resolve the matching one, a generic one asks its question, and an unbound one asks it for the app to route. */
-    interrupts?: ReadonlyArray<AiActionApprovalInterrupt>
+    interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the decisions were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
-    interruptErrors?: ReadonlyArray<AiActionApprovalInterruptError>
+    interruptErrors?: ReadonlyArray<AiChatInterruptError>
+    /** The reader may attach images and PDFs (up to 4, 10 MB each) from the Attach control at the start of the composer; `send` then hands over the multimodal content `sendMessage` takes. */
+    attachable?: boolean
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
@@ -82,25 +67,25 @@
     error: '',
     tools: undefined,
     interrupts: () => [],
-    interruptErrors: () => []
+    interruptErrors: () => [],
+    attachable: true
   })
 
   const emit = defineEmits<{
-    approve: [event: MouseEvent, call: AiActionApprovalToolCallPart, input?: unknown]
-    deny: [event: MouseEvent, call: AiActionApprovalToolCallPart]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
     stop: [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiActionApprovalMessage]
-    send: [event: MouseEvent | KeyboardEvent, text: string]
-    'answer-interrupt': [event: Event, interrupt: AiActionApprovalInterrupt, value: string]
+    retry: [event: MouseEvent, message: AiChatMessage]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
+    'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
   const { formatDate } = useLocale()
 
-  const prompt = ref('')
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiActionApprovalQuestion>>({})
+  const settled = ref<Record<string, AiChatQuestion>>({})
   const routed = ref<Record<string, boolean>>({})
 
   const turns = computed(() =>
@@ -116,14 +101,14 @@
     return 'The connection was interrupted before the response finished.'
   })
 
-  function statusOf(turn: AiActionApprovalMessage): ChatMessageStatus {
+  function statusOf(turn: AiChatMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
     if (props.loading && !runs(turn)) return hasAnswer(turn) ? 'streaming' : 'pending'
     return 'success'
   }
 
-  function runs(turn: AiActionApprovalMessage): boolean {
+  function runs(turn: AiChatMessage): boolean {
     return turn.parts.some(
       (part) =>
         isToolCallPart(part) &&
@@ -132,16 +117,22 @@
     )
   }
 
-  function failed(turn: AiActionApprovalMessage): boolean {
+  function failedCall(turn: AiChatMessage): AiChatToolCallPart | undefined {
     const results = turn.parts.filter(isToolResultPart)
-    return turn.parts.some(
-      (part) =>
+    return turn.parts.find(
+      (part): part is AiChatToolCallPart =>
         isToolCallPart(part) &&
         toolStatusOf(
           part,
           results.find((result) => result.toolCallId === part.id)
         ) === 'error'
     )
+  }
+
+  function retryLabelOf(turn: AiChatMessage): string {
+    const call = failedCall(turn)
+    const verb = call ? toolOf(call).approveLabel : ''
+    return verb ? `${verb} again` : 'Retry'
   }
 
   const state = computed<PromptInputStatus>(() => {
@@ -151,19 +142,19 @@
       : 'pending'
   })
 
-  function timeOf(turn: AiActionApprovalMessage): string {
+  function timeOf(turn: AiChatMessage): string {
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
   }
 
-  function toolOf(call: AiActionApprovalToolCallPart): AiActionApprovalTool {
+  function toolOf(call: AiChatToolCallPart): AiChatTool {
     return toolLabels.value[call.name] ?? { title: '' }
   }
 
-  function editOf(call: AiActionApprovalToolCallPart): string {
+  function editOf(call: AiChatToolCallPart): string {
     return edits.value[call.id] ?? json(call.input ?? call.arguments)
   }
 
-  function approve(event: MouseEvent, call: AiActionApprovalToolCallPart, text: string) {
+  function approve(event: MouseEvent, call: AiChatToolCallPart, text: string) {
     const edited =
       toolOf(call).editable && text !== json(call.input ?? call.arguments)
         ? (JSON.parse(text) as unknown)
@@ -172,7 +163,7 @@
     resolveInterrupt(props.interrupts, call, true, edited)
   }
 
-  function deny(event: MouseEvent, call: AiActionApprovalToolCallPart) {
+  function deny(event: MouseEvent, call: AiChatToolCallPart) {
     emit('deny', event, call)
     resolveInterrupt(props.interrupts, call, false)
   }
@@ -192,7 +183,7 @@
     return [...live, ...Object.values(settled.value).filter((question) => !ids.has(question.id))]
   })
 
-  function answer(event: Event, question: AiActionApprovalQuestion, value: string) {
+  function answer(event: Event, question: AiChatQuestion, value: string) {
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'success', error: '' }
     if (question.bound) {
@@ -203,16 +194,10 @@
     }
   }
 
-  function skip(question: AiActionApprovalQuestion) {
+  function skip(question: AiChatQuestion) {
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'skipped', error: '' }
     skipInterrupt(interrupt)
-  }
-
-  function send(event: MouseEvent | KeyboardEvent, value: string) {
-    if (!value.trim() || state.value !== 'ready') return
-    prompt.value = ''
-    emit('send', event, value)
   }
 </script>
 
@@ -221,10 +206,10 @@
     aria-labelledby="ai-approval-title"
     class="flex min-h-0 w-full grow basis-0 flex-col"
   >
-    <header class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)">
+    <header class="px-(--spacing-md) py-(--spacing-sm)">
       <h1
         id="ai-approval-title"
-        class="text-heading-xs text-(--text-default)"
+        class="text-label-md text-(--text-default)"
       >
         AI assistant
       </h1>
@@ -360,14 +345,15 @@
           "
           #actions
         >
-          <ChatMessage.Actions>
-            <CopyButton
-              size="small"
-              :value="textOf(turn)"
-            />
+          <ChatMessage.Actions
+            copyable
+            show-read-aloud
+            :copy-text="textOf(turn)"
+            :read-aloud-text="textOf(turn)"
+          >
             <Button
-              v-if="turn === last && failed(turn)"
-              label="Retry"
+              v-if="turn === last && failedCall(turn)"
+              :label="retryLabelOf(turn)"
               variant="outline"
               size="small"
               icon="az az-refresh"
@@ -394,30 +380,24 @@
           @skip="skip(question)"
         />
       </ChatMessage>
+      <template #composer>
+        <Alert
+          v-if="interruptErrors.length"
+          severity="danger"
+          size="small"
+          title="Your decision was not sent"
+          :action-label="retryable ? 'Retry' : ''"
+          @action="emit('retry-interrupts', $event)"
+        >
+          {{ interruptErrorText(interruptErrors) }}
+        </Alert>
+        <AiActionApprovalComposer
+          :state="state"
+          :attachable="attachable"
+          @send="(event, content) => emit('send', event, content)"
+          @stop="emit('stop', $event)"
+        />
+      </template>
     </Conversation>
-    <footer
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
-    >
-      <Alert
-        v-if="interruptErrors.length"
-        severity="danger"
-        size="small"
-        title="Your decision was not sent"
-        :action-label="retryable ? 'Retry' : ''"
-        @action="emit('retry-interrupts', $event)"
-      >
-        {{ interruptErrorText(interruptErrors) }}
-      </Alert>
-      <PromptInput
-        v-model="prompt"
-        :status="state"
-        @submit="(event, { value }) => send(event, value)"
-        @stop="emit('stop', $event)"
-      >
-        <template #hint>
-          The assistant runs nothing in your account without your approval.
-        </template>
-      </PromptInput>
-    </footer>
   </section>
 </template>

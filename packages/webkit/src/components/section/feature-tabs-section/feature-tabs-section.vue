@@ -2,15 +2,16 @@
   import { computed, useAttrs } from 'vue'
 
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
-  import Button from '../../action/button/button.vue'
-  import CodeBlock, { type CodeBlockTab } from '../../code/code-block/code-block.vue'
+  import type { CodeBlockTab } from '../../code/code-block/code-block.vue'
   import Illustration from '../../content/illustration/illustration.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import Link from '../../navigation/link/link.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
+  import SectionCodeWindow from '../parts/section-code-window.vue'
 
   defineOptions({
     name: 'FeatureTabsSection',
@@ -50,7 +51,12 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the key handed to the band scene as its `tab`, `code` is the file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. */
+    /**
+     * The features, in order, at most three; each is `{ title, description, value?, code?, illustration?,
+     * illustrationLabel? }` where `value` is the key handed to the band scene as its `tab`, `code` is the
+     * file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code
+     * and the band no scene, and `illustrationLabel` its accessible name.
+     */
     tabs?: FeatureTabsSectionTab[]
     /** Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. */
     scene?: FeatureTabsSectionScene
@@ -82,8 +88,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-tabs-section'
   )
-
-  const hasTabs = computed(() => props.tabs.length > 0)
+  const headerActions = computed(() => sectionActions(props.primaryAction, undefined))
 
   const hasHeader = computed(() => props.title.length > 0)
 
@@ -99,105 +104,81 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :filled="tabs.length > 0"
+    :framed="false"
+    align="split"
   >
-    <Module
-      v-if="hasTabs"
-      :divided="false"
-      :padded="false"
+    <template
+      v-if="headerActions.length"
+      #header-actions
     >
-      <template
-        v-if="hasHeader"
-        #header
+      <SectionActions :actions="headerActions" />
+    </template>
+
+    <RegistrationFrame
+      flush
+      :borders="primaryAction && !hasHeader ? 'y' : 'none'"
+      marks="bottom"
+    >
+      <div
+        :data-code="hasCode || null"
+        class="-mx-px [--media-tabs-media-min:24rem] data-[code]:[--media-tabs-media-min:30rem]"
       >
-        <ModuleHeader
-          align="split"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
+        <MediaTabs
+          :items="items"
+          size="medium"
+          :texture="hasCode ? 'pixelate' : 'none'"
+          texture-size="small"
+          texture-fade="top"
+          :autoplay="autoplay"
+          :autoplay-interval="autoplayInterval"
         >
-          <template
-            v-if="primaryAction"
-            #actions
-          >
-            <Button
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              :target="primaryAction.target"
-              variant="secondary"
-              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(primaryAction.trailing)"
+          <template #media="{ index, active }">
+            <div
+              v-if="codeFiles[index]?.length"
+              class="w-full min-w-0 p-(--spacing-xl)"
+            >
+              <SectionCodeWindow
+                :tabs="codeFiles[index]"
+                :animated="active"
+                :copy-aria-label="copyAriaLabel"
+              />
+            </div>
+            <component
+              :is="sceneComponent"
+              v-else-if="sceneComponent"
+              v-bind="{ ...scene?.props, tab: tabs[index]?.value, active }"
+              class="size-full"
+            />
+            <Illustration
+              v-else-if="tabs[index]?.illustration"
+              :name="tabs[index]?.illustration ?? ''"
+              :aria-label="tabs[index]?.illustrationLabel ?? ''"
+              class="size-full"
             />
           </template>
-        </ModuleHeader>
-      </template>
+        </MediaTabs>
+      </div>
 
-      <RegistrationFrame
-        flush
-        :borders="primaryAction && !hasHeader ? 'y' : 'none'"
-        marks="bottom"
+      <div
+        v-if="primaryAction && !hasHeader"
+        class="p-(--spacing-xl)"
       >
-        <div
-          :data-code="hasCode || null"
-          class="-mx-px [--media-tabs-media-min:24rem] data-[code]:[--media-tabs-media-min:30rem]"
-        >
-          <MediaTabs
-            :items="items"
-            size="medium"
-            :texture="hasCode ? 'pixelate' : 'none'"
-            texture-size="small"
-            texture-fade="top"
-            :autoplay="autoplay"
-            :autoplay-interval="autoplayInterval"
-          >
-            <template #media="{ index, active }">
-              <div
-                v-if="codeFiles[index]?.length"
-                class="w-full min-w-0 p-(--spacing-xl)"
-              >
-                <div class="min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)">
-                  <CodeBlock
-                    :tabs="codeFiles[index]"
-                    show-line-numbers
-                    v-bind="{ animateLines: active }"
-                    :copy-aria-label="copyAriaLabel || undefined"
-                  />
-                </div>
-              </div>
-              <component
-                :is="sceneComponent"
-                v-else-if="sceneComponent"
-                v-bind="{ ...scene?.props, tab: tabs[index]?.value, active }"
-                class="size-full"
-              />
-              <Illustration
-                v-else-if="tabs[index]?.illustration"
-                :name="tabs[index]?.illustration ?? ''"
-                :aria-label="tabs[index]?.illustrationLabel ?? ''"
-                class="size-full"
-              />
-            </template>
-          </MediaTabs>
-        </div>
-
-        <div
-          v-if="primaryAction && !hasHeader"
-          class="p-(--spacing-xl)"
-        >
-          <Link
-            :label="primaryAction.label"
-            :href="primaryAction.href"
-            :target="primaryAction.target"
-            :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-          />
-        </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        <Link
+          :label="primaryAction.label"
+          :href="primaryAction.href"
+          :target="primaryAction.target"
+          :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
+        />
+      </div>
+    </RegistrationFrame>
+  </SectionBand>
 </template>

@@ -137,24 +137,23 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 
 ```vue
 <template>
-  <button
+  <section
     v-bind="$attrs"
     :data-variant="variant"
     :data-size="size"
-    :data-disabled="disabled || null"
-    :disabled="disabled"
+    :data-selected="selected || null"
     class="
-      inline-flex items-center justify-center rounded-(--shape-button)
+      flex flex-col rounded-(--shape-card)
       transition-colors duration-150 ease-out motion-reduce:transition-none
-      data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+      data-[variant=filled]:bg-(--bg-surface) data-[variant=filled]:text-(--text-default)
       data-[variant=outline]:border data-[variant=outline]:border-(--border-default) data-[variant=outline]:bg-transparent
-      data-[size=small]:h-7 data-[size=small]:px-(--spacing-xs)
-      data-[size=large]:h-10 data-[size=large]:px-(--spacing-md)
-      data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled)
+      data-[size=small]:gap-(--spacing-xs) data-[size=small]:p-(--spacing-sm)
+      data-[size=large]:gap-(--spacing-sm) data-[size=large]:p-(--spacing-md)
+      data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)
     "
   >
     <slot />
-  </button>
+  </section>
 </template>
 ```
 

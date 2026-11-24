@@ -53,7 +53,12 @@
  ],
  "sfcFile": "blocks/create/create-drawer/create-drawer.vue",
  "guidelinesFile": "blocks/create/create-drawer/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-drawer/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "composables/use-drawer-guard.ts",
+  "lib/certificate-match.ts",
+  "parts/form-drawer.vue",
+  "parts/submit-button.vue",
+  "parts/unsaved-changes-dialog.vue"
+ ]
 }

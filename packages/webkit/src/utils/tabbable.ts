@@ -1,6 +1,6 @@
 const FOCUSABLE_SELECTOR = 'a[href], button, textarea, input, select, [tabindex]'
 
-export function isTabbable(el: globalThis.HTMLElement): boolean {
+function isTabbable(el: globalThis.HTMLElement): boolean {
   return (
     el.tabIndex >= 0 &&
     !(el as globalThis.HTMLButtonElement).disabled &&

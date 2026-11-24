@@ -2,7 +2,7 @@
 name: structure-decide
 description: Decide `monolithic` vs `composition` using the shadcn-vue criterion. Pure decision; never writes code.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-11-23
 scope: webkit
 enforced_by: [compound-api, component-structure]
 ---
@@ -36,9 +36,10 @@ When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinn
    - If the component has props + slots but fixed layout → `monolithic`.
    - Otherwise → `monolithic` (default when in doubt).
 2. **Reference the canonicals** to confirm:
-   - Composition: Dialog, Tabs, Accordion, composed Card, DropdownMenu, Sheet/Drawer, Form fields.
-   - Monolithic with slots: `pricing-card.vue` (fixed layout, slot inversions).
-   - Atomic: `button.vue`, `icon-button.vue`.
+   - Composition: Dialog, Tabs, Accordion, composed Card, DropdownMenu, Drawer, Form fields.
+   - Monolithic with slots: PricingCard (fixed layout, slot inversions).
+   - Atomic: Button, IconButton.
+   - Look each one up through the webkit MCP (`get_component`) rather than by file name.
 3. **Emit** a single line with the verdict and a one-sentence rationale:
    ```
    structure: composition

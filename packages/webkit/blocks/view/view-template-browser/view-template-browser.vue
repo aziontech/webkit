@@ -54,7 +54,7 @@
     loading?: boolean
     /** Why the catalog could not load, shown in the danger alert with Retry. */
     error?: string
-    /** Search text the filter starts with. */
+    /** Search text the filter starts with, shown as a free-text token. */
     defaultText?: string
     /** Id of the template whose preview starts open. */
     defaultPreview?: string
@@ -115,8 +115,14 @@
 
   const { items, propertyFilterProps, status, clearFilters } = useCollection({
     items: templates,
-    filtering: { fields: ['title', 'description'], defaultText: props.defaultText },
-    propertyFiltering: { properties },
+    filtering: { fields: ['title', 'description'] },
+    propertyFiltering: {
+      properties,
+      defaultQuery: {
+        tokens: props.defaultText ? [{ operator: ':', value: props.defaultText }] : [],
+        operation: 'and'
+      }
+    },
     url: true
   })
 
@@ -154,6 +160,7 @@
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -381,6 +388,7 @@ npm run dev</code></pre>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="View repository"
+              aria-label="View repository (opens in a new tab)"
               icon="az az-external-link"
               icon-position="trailing"
               variant="outline"

@@ -1,7 +1,8 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
+import States from '../../../../examples/gauge-chart/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import GaugeChart from './gauge-chart.vue'
 
@@ -102,5 +103,24 @@ describe('GaugeChart', () => {
       await expectNoA11yViolations(view.container)
       view.unmount()
     }
+  })
+
+  it('sets a unit word in the sans text face, not the display figure face', async () => {
+    const Sizes = (await import('../../../../examples/gauge-chart/sizes.vue')).default
+    const view = render(Sizes)
+    const figures = view.getAllByTestId('gauge-chart__figure').map((el) => el.textContent?.trim())
+    const units = view.getAllByTestId('gauge-chart__unit').map((el) => el.textContent?.trim())
+    expect(figures.every((figure) => /^[\d.,]+$/.test(figure ?? ''))).toBe(true)
+    expect(units.length).toBe(figures.length)
+    expect(new Set(units)).toEqual(new Set(['ms']))
+  })
+
+  it('offers Retry in the States example error and draws the data once it is pressed', async () => {
+    const view = render(States)
+    const retry = view.getByRole('button', { name: 'Retry' })
+    expect(view.getByText('Could not load the cache hit ratio.')).toBeTruthy()
+    await fireEvent.click(retry)
+    expect(view.queryByText('Could not load the cache hit ratio.')).toBeNull()
+    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
 })

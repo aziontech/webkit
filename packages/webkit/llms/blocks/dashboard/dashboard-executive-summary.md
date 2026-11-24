@@ -103,7 +103,7 @@ The author's initials beside each note.
 
 ### O. Load failure — `Alert` (required)
 
-When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
 
 ## Data
 
@@ -117,12 +117,12 @@ The block takes its figures and records through props and emits every action; it
 | `trends`          | `ExecutiveSummaryDashboardTrends` | Each trend card's monthly values and change tag, by metric. A metric left out shows the card's empty state.                                                             |
 | `notes`           | `ExecutiveSummaryDashboardNote[]` | The notes from the leads, newest first. `[]` shows No notes.                                                                                                            |
 | `loading`         | `boolean`                         | The quarter is loading; tiles and charts show their skeleton, goals and commentary hold skeleton rows, Export disables.                                                 |
-| `error`           | `string`                          | Why the quarter could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                                                |
+| `error`           | `string`                          | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                                          |
 | `v-model:quarter` | `string`                          | The selected quarter (`Q3 2026` down to `Q3 2025`); default `Q3 2026`. Refetch when it changes.                                                                         |
 
 | Event            | Payload   | When                                                                      |
 | ---------------- | --------- | ------------------------------------------------------------------------- |
-| `retry`          | `(event)` | Retry in any card's error alert.                                          |
+| `retry`          | `(event)` | Retry in the page's error alert.                                          |
 | `export`         | `(event)` | Export in the header; the block downloads the scorecard and goals as CSV. |
 | `update:quarter` | `(value)` | The reader picked another quarter.                                        |
 
@@ -187,7 +187,7 @@ Then delete `sample.ts` and its import.
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
 - Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
-- Error: the request for the quarter failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -199,7 +199,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Loading` — While the quarter loads, the tiles and charts render their own Skeleton and the goals and commentary hold Skeleton rows, so the page does not reflow when data arrives.
 - `Empty` — A quarter with nothing reported. The tiles show a dash with no delta, every trend card keeps its box with an EmptyState that names the quarter and points to a later one, and the goals and commentary each say what fills them.
-- `Error` — The request for the quarter failed: the tiles read as dashes, and every trend card, the goals and the commentary keep their header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the quarter failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-executive-summary", { variant })`, or the file under `blocks/dashboard/dashboard-executive-summary/variants/`.
 
@@ -208,18 +208,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ```vue
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
-  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Progress from '@aziontech/webkit/progress'
   import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -227,6 +221,9 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
+  import { scorecardTiles, trendCharts } from './executive-summary-metrics'
+  import CommentaryCard from './parts/commentary-card.vue'
+  import GoalsCard from './parts/goals-card.vue'
   import { sampleGoals, sampleKpis, sampleLabels, sampleNotes, sampleTrends } from './sample'
 
   /** A scorecard tile and its twelve-month trend. */
@@ -350,115 +347,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
   const quarters = ['Q3 2026', 'Q2 2026', 'Q1 2026', 'Q4 2025', 'Q3 2025']
 
-  const tiles: {
-    metric: ExecutiveSummaryDashboardMetric
-    label: string
-    description: string
-    format: ExecutiveSummaryDashboardFormat
-    inverse: boolean
-  }[] = [
-    {
-      metric: 'revenue',
-      label: 'Revenue',
-      description: 'Recognized revenue for the quarter.',
-      format: 'currency',
-      inverse: false
-    },
-    {
-      metric: 'active-users',
-      label: 'Monthly active users',
-      description: 'People who signed in at least once in the last month of the quarter.',
-      format: 'count',
-      inverse: false
-    },
-    {
-      metric: 'retention',
-      label: 'Net revenue retention',
-      description: 'Revenue kept from existing customers, expansion included, over twelve months.',
-      format: 'percentage',
-      inverse: false
-    },
-    {
-      metric: 'nps',
-      label: 'NPS',
-      description: 'Net promoter score from the quarterly customer survey.',
-      format: 'score',
-      inverse: false
-    },
-    {
-      metric: 'uptime',
-      label: 'Uptime',
-      description: 'Share of minutes every public service answered, averaged over the quarter.',
-      format: 'uptime',
-      inverse: false
-    },
-    {
-      metric: 'cost-per-request',
-      label: 'Cost per request',
-      description: 'Infrastructure spend divided by requests served. A rise is a regression.',
-      format: 'cost',
-      inverse: true
-    }
-  ]
-
-  const charts: {
-    metric: ExecutiveSummaryDashboardMetric
-    title: string
-    description: string
-    mark: 'area' | 'line'
-    format: ExecutiveSummaryDashboardFormat
-    min: number
-  }[] = [
-    {
-      metric: 'revenue',
-      title: 'Revenue',
-      description: 'Recognized revenue per month.',
-      mark: 'area',
-      format: 'currency',
-      min: 0
-    },
-    {
-      metric: 'active-users',
-      title: 'Monthly active users',
-      description: 'People who signed in at least once in the month.',
-      mark: 'area',
-      format: 'count',
-      min: 0
-    },
-    {
-      metric: 'retention',
-      title: 'Net revenue retention',
-      description: 'Trailing twelve months, measured at month end.',
-      mark: 'line',
-      format: 'percentage',
-      min: 100
-    },
-    {
-      metric: 'nps',
-      title: 'NPS',
-      description: 'Net promoter score from the monthly pulse survey.',
-      mark: 'line',
-      format: 'score',
-      min: 0
-    },
-    {
-      metric: 'uptime',
-      title: 'Uptime',
-      description: 'Share of minutes every public service answered.',
-      mark: 'line',
-      format: 'uptime',
-      min: 99.8
-    },
-    {
-      metric: 'cost-per-request',
-      title: 'Cost per request',
-      description: 'Infrastructure spend divided by requests served.',
-      mark: 'line',
-      format: 'cost',
-      min: 0
-    }
-  ]
-
   const blocked = computed(() => props.loading || props.error !== '')
   const kpis = computed(() => props.kpis ?? (blocked.value ? {} : sampleKpis))
   const goals = computed(() => props.goals ?? (blocked.value ? [] : sampleGoals))
@@ -467,7 +355,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const notes = computed(() => props.notes ?? (blocked.value ? [] : sampleNotes))
 
   const trendCards = computed(() =>
-    charts.map((chart) => {
+    trendCharts.map((chart) => {
       const data = trendData.value[chart.metric]
       const series: ChartSeries[] = data
         ? [{ id: chart.metric, name: chart.title, values: data.values }]
@@ -481,7 +369,6 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       !blocked.value &&
       (goals.value.length > 0 || Object.values(kpis.value).some((kpi) => kpi?.value != null))
   )
-  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
   const fixed = (value: number, digits: number) =>
@@ -515,7 +402,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   }).map(([id, header]) => ({ id, header }))
 
   const reportRows = () => [
-    ...tiles.map((tile) => {
+    ...scorecardTiles.map((tile) => {
       const kpi = kpis.value[tile.metric]
       return {
         section: 'Scorecard',
@@ -580,13 +467,21 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           />
         </template>
       </PageHeader>
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the executive summary. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-executive-summary__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section aria-label="Scorecard">
         <ul
           class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
         >
           <li
-            v-for="tile in tiles"
+            v-for="tile in scorecardTiles"
             :key="tile.metric"
             class="flex min-w-0 flex-col"
           >
@@ -634,13 +529,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="failed(trend.title.toLowerCase())"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 v-model:active-index="activeIndex"
@@ -669,166 +563,20 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         </section>
 
         <div class="flex min-w-0 flex-col gap-(--spacing-md) xl:col-span-4">
-          <Card :title="quarter + ' goals'">
-            <template #default>
-              <Alert
-                v-if="error"
-                severity="danger"
-                :label="failed(quarter + ' goals')"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-              <ul
-                v-else-if="loading"
-                aria-busy="true"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="index in 5"
-                  :key="index"
-                  class="flex flex-col gap-(--spacing-xs)"
-                >
-                  <Skeleton
-                    width="60%"
-                    height="1rem"
-                  />
-                  <Skeleton height="0.5rem" />
-                  <Skeleton
-                    width="40%"
-                    height="0.75rem"
-                  />
-                </li>
-              </ul>
-              <ul
-                v-else-if="goals.length"
-                class="flex flex-col gap-(--spacing-md)"
-              >
-                <li
-                  v-for="goal in goals"
-                  :key="goal.id"
-                  class="flex flex-col gap-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-sm)">
-                    <span class="truncate text-label-md text-(--text-default)">{{
-                      goal.label
-                    }}</span>
-                    <Tag
-                      :label="goal.status.label"
-                      :severity="goal.status.severity"
-                      size="small"
-                    />
-                  </div>
-                  <Progress
-                    :value="goal.current"
-                    :max="goal.target"
-                    size="small"
-                    :aria-label="goal.label"
-                    :aria-valuetext="
-                      formatters[goal.format](goal.current) +
-                      ' of ' +
-                      formatters[goal.format](goal.target)
-                    "
-                  />
-                  <div
-                    class="flex items-center justify-between gap-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    <span class="tabular-nums">
-                      {{ formatters[goal.format](goal.current) }} of
-                      {{ formatters[goal.format](goal.target) }}
-                    </span>
-                    <span class="tabular-nums"
-                      >{{ Math.round((goal.current / goal.target) * 100) }}%</span
-                    >
-                  </div>
-                </li>
-              </ul>
-              <EmptyState
-                v-else
-                size="small"
-                icon="az az-flag"
-                :title="'No goal results for ' + quarter"
-                description="Progress appears once the quarter reports its first month."
-              />
-            </template>
-          </Card>
+          <GoalsCard
+            :quarter="quarter"
+            :goals="goals"
+            :formatters="formatters"
+            :loading="loading"
+            :error="error"
+          />
 
-          <Card
-            title="Commentary"
-            :padded="error !== ''"
-          >
-            <template #default>
-              <Alert
-                v-if="error"
-                severity="danger"
-                :label="failed('commentary')"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
-              <Item.List
-                v-else-if="loading"
-                key="item.list-1"
-                aria-busy="true"
-              >
-                <Item
-                  v-for="index in 3"
-                  :key="index"
-                  size="small"
-                  role="listitem"
-                >
-                  <Item.Media>
-                    <Skeleton
-                      variant="circle"
-                      width="2rem"
-                      height="2rem"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Skeleton
-                        width="45%"
-                        height="1rem"
-                      />
-                      <Skeleton height="2.5rem" />
-                    </div>
-                  </Item.Content>
-                </Item>
-              </Item.List>
-              <Item.List
-                key="item.list-2"
-                v-else-if="notes.length"
-              >
-                <Item
-                  v-for="note in notes"
-                  :key="note.id"
-                  size="small"
-                  role="listitem"
-                >
-                  <Item.Media>
-                    <Avatar
-                      :label="note.initials"
-                      size="medium"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ note.author }}</Item.Title>
-                    <Item.Description>
-                      {{ note.role }} · <time :datetime="note.date">{{ note.dateLabel }}</time>
-                    </Item.Description>
-                    <p class="mt-(--spacing-xs) text-pretty text-body-sm text-(--text-default)">
-                      {{ note.body }}
-                    </p>
-                  </Item.Content>
-                </Item>
-              </Item.List>
-              <EmptyState
-                v-else
-                size="small"
-                icon="az az-comment"
-                :title="'No notes for ' + quarter"
-                description="Leads add notes here when they review the quarter."
-              />
-            </template>
-          </Card>
+          <CommentaryCard
+            :quarter="quarter"
+            :notes="notes"
+            :loading="loading"
+            :error="error"
+          />
         </div>
       </div>
     </div>
@@ -1024,4 +772,345 @@ export const sampleNotes: ExecutiveSummaryDashboardNote[] = [
     body: 'Cost per request fell 7.1% after batch jobs moved to off-peak capacity. Uptime held at 99.97%, with one 14-minute incident on Aug 21.'
   }
 ]
+```
+
+## `executive-summary-metrics.ts`
+
+```ts
+import type {
+  ExecutiveSummaryDashboardFormat,
+  ExecutiveSummaryDashboardMetric
+} from './dashboard-executive-summary.vue'
+
+export const scorecardTiles: {
+  metric: ExecutiveSummaryDashboardMetric
+  label: string
+  description: string
+  format: ExecutiveSummaryDashboardFormat
+  inverse: boolean
+}[] = [
+  {
+    metric: 'revenue',
+    label: 'Revenue',
+    description: 'Recognized revenue for the quarter.',
+    format: 'currency',
+    inverse: false
+  },
+  {
+    metric: 'active-users',
+    label: 'Monthly active users',
+    description: 'People who signed in at least once in the last month of the quarter.',
+    format: 'count',
+    inverse: false
+  },
+  {
+    metric: 'retention',
+    label: 'Net revenue retention',
+    description: 'Revenue kept from existing customers, expansion included, over twelve months.',
+    format: 'percentage',
+    inverse: false
+  },
+  {
+    metric: 'nps',
+    label: 'NPS',
+    description: 'Net promoter score from the quarterly customer survey.',
+    format: 'score',
+    inverse: false
+  },
+  {
+    metric: 'uptime',
+    label: 'Uptime',
+    description: 'Share of minutes every public service answered, averaged over the quarter.',
+    format: 'uptime',
+    inverse: false
+  },
+  {
+    metric: 'cost-per-request',
+    label: 'Cost per request',
+    description: 'Infrastructure spend divided by requests served. A rise is a regression.',
+    format: 'cost',
+    inverse: true
+  }
+]
+
+export const trendCharts: {
+  metric: ExecutiveSummaryDashboardMetric
+  title: string
+  description: string
+  mark: 'area' | 'line'
+  format: ExecutiveSummaryDashboardFormat
+  min: number
+}[] = [
+  {
+    metric: 'revenue',
+    title: 'Revenue',
+    description: 'Recognized revenue per month.',
+    mark: 'area',
+    format: 'currency',
+    min: 0
+  },
+  {
+    metric: 'active-users',
+    title: 'Monthly active users',
+    description: 'People who signed in at least once in the month.',
+    mark: 'area',
+    format: 'count',
+    min: 0
+  },
+  {
+    metric: 'retention',
+    title: 'Net revenue retention',
+    description: 'Trailing twelve months, measured at month end.',
+    mark: 'line',
+    format: 'percentage',
+    min: 100
+  },
+  {
+    metric: 'nps',
+    title: 'NPS',
+    description: 'Net promoter score from the monthly pulse survey.',
+    mark: 'line',
+    format: 'score',
+    min: 0
+  },
+  {
+    metric: 'uptime',
+    title: 'Uptime',
+    description: 'Share of minutes every public service answered.',
+    mark: 'line',
+    format: 'uptime',
+    min: 99.8
+  },
+  {
+    metric: 'cost-per-request',
+    title: 'Cost per request',
+    description: 'Infrastructure spend divided by requests served.',
+    mark: 'line',
+    format: 'cost',
+    min: 0
+  }
+]
+```
+
+## `parts/commentary-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Item from '@aziontech/webkit/item'
+  import Skeleton from '@aziontech/webkit/skeleton'
+
+  import type { ExecutiveSummaryDashboardNote } from '../dashboard-executive-summary.vue'
+
+  export interface CommentaryCardProps {
+    /** The quarter the notes belong to. */
+    quarter: string
+    /** The notes from the leads, newest first. */
+    notes: ExecutiveSummaryDashboardNote[]
+    /** The notes are loading. */
+    loading: boolean
+    /** Why the notes could not load. */
+    error: string
+  }
+
+  defineProps<CommentaryCardProps>()
+</script>
+
+<template>
+  <Card
+    title="Commentary"
+    :padded="error !== ''"
+  >
+    <template #default>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <Item.List
+        v-else-if="loading"
+        key="item.list-1"
+        aria-busy="true"
+      >
+        <Item
+          v-for="index in 3"
+          :key="index"
+          size="small"
+          role="listitem"
+        >
+          <Item.Media>
+            <Skeleton
+              variant="circle"
+              width="2rem"
+              height="2rem"
+            />
+          </Item.Media>
+          <Item.Content>
+            <div class="flex flex-col gap-(--spacing-xs)">
+              <Skeleton
+                width="45%"
+                height="1rem"
+              />
+              <Skeleton height="2.5rem" />
+            </div>
+          </Item.Content>
+        </Item>
+      </Item.List>
+      <Item.List
+        key="item.list-2"
+        v-else-if="notes.length"
+      >
+        <Item
+          v-for="note in notes"
+          :key="note.id"
+          size="small"
+          role="listitem"
+        >
+          <Item.Media>
+            <Avatar
+              :label="note.initials"
+              size="medium"
+            />
+          </Item.Media>
+          <Item.Content>
+            <Item.Title>{{ note.author }}</Item.Title>
+            <Item.Description>
+              {{ note.role }} · <time :datetime="note.date">{{ note.dateLabel }}</time>
+            </Item.Description>
+            <p class="mt-(--spacing-xs) text-pretty text-body-sm text-(--text-default)">
+              {{ note.body }}
+            </p>
+          </Item.Content>
+        </Item>
+      </Item.List>
+      <EmptyState
+        v-else
+        size="small"
+        icon="az az-comment"
+        :title="'No notes for ' + quarter"
+        description="Leads add notes here when they review the quarter."
+      />
+    </template>
+  </Card>
+</template>
+```
+
+## `parts/goals-card.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Progress from '@aziontech/webkit/progress'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag from '@aziontech/webkit/tag'
+
+  import type {
+    ExecutiveSummaryDashboardFormat,
+    ExecutiveSummaryDashboardGoal
+  } from '../dashboard-executive-summary.vue'
+
+  export interface GoalsCardProps {
+    /** The quarter the goals belong to. */
+    quarter: string
+    /** The quarter goals. */
+    goals: ExecutiveSummaryDashboardGoal[]
+    /** Writes a figure in each format. */
+    formatters: Record<ExecutiveSummaryDashboardFormat, (value: number) => string>
+    /** The goals are loading. */
+    loading: boolean
+    /** Why the goals could not load. */
+    error: string
+  }
+
+  defineProps<GoalsCardProps>()
+</script>
+
+<template>
+  <Card :title="quarter + ' goals'">
+    <template #default>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <ul
+        v-else-if="loading"
+        aria-busy="true"
+        class="flex flex-col gap-(--spacing-md)"
+      >
+        <li
+          v-for="index in 5"
+          :key="index"
+          class="flex flex-col gap-(--spacing-xs)"
+        >
+          <Skeleton
+            width="60%"
+            height="1rem"
+          />
+          <Skeleton height="0.5rem" />
+          <Skeleton
+            width="40%"
+            height="0.75rem"
+          />
+        </li>
+      </ul>
+      <ul
+        v-else-if="goals.length"
+        class="flex flex-col gap-(--spacing-md)"
+      >
+        <li
+          v-for="goal in goals"
+          :key="goal.id"
+          class="flex flex-col gap-(--spacing-xs)"
+        >
+          <div class="flex min-w-0 items-center justify-between gap-(--spacing-sm)">
+            <span class="truncate text-label-md text-(--text-default)">{{ goal.label }}</span>
+            <Tag
+              :label="goal.status.label"
+              :severity="goal.status.severity"
+              size="small"
+            />
+          </div>
+          <Progress
+            :value="goal.current"
+            :max="goal.target"
+            size="small"
+            :aria-label="goal.label"
+            :aria-valuetext="
+              formatters[goal.format](goal.current) + ' of ' + formatters[goal.format](goal.target)
+            "
+          />
+          <div
+            class="flex items-center justify-between gap-(--spacing-sm) text-body-sm text-(--text-muted)"
+          >
+            <span
+              class="tabular-nums"
+              dir="auto"
+            >
+              {{ formatters[goal.format](goal.current) }} of
+              {{ formatters[goal.format](goal.target) }}
+            </span>
+            <span
+              class="tabular-nums"
+              dir="ltr"
+              >{{ Math.round((goal.current / goal.target) * 100) }}%</span
+            >
+          </div>
+        </li>
+      </ul>
+      <EmptyState
+        v-else
+        size="small"
+        icon="az az-flag"
+        :title="'No goal results for ' + quarter"
+        description="Progress appears once the quarter reports its first month."
+      />
+    </template>
+  </Card>
+</template>
 ```

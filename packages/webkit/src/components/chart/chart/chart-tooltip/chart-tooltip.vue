@@ -5,6 +5,7 @@
   import * as en from '../../../../locales/en'
   import { isFiniteNumber } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
+  import ChartTooltipPanel from '../parts/chart-tooltip-panel.vue'
 
   defineOptions({ name: 'ChartTooltip', inheritAttrs: false })
 
@@ -33,6 +34,22 @@
       moving.value = next !== null && previous !== null
     }
   )
+
+  const rootEl = ref<HTMLElement | null>(null)
+  const boxEl = ref<HTMLElement | null>(null)
+  const nudge = ref(0)
+
+  function keepInside(x: number): void {
+    const box = boxEl.value
+    const panel = box?.firstElementChild
+    const width = rootEl.value?.clientWidth ?? 0
+    if (!box || !panel || !width) return
+    const shape = panel.getBoundingClientRect()
+    const start = x + shape.left - box.getBoundingClientRect().left
+    if (start < 0 || shape.width >= width) nudge.value = -start
+    else if (start + shape.width > width) nudge.value = width - start - shape.width
+    else nudge.value = 0
+  }
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-tooltip')
 
@@ -75,10 +92,19 @@
       })
     }
   })
+
+  watch(
+    () => readout.value && `${readout.value.x}:${readout.value.y}:${readout.value.side}`,
+    () => {
+      if (readout.value) keepInside(readout.value.x)
+    },
+    { flush: 'post' }
+  )
 </script>
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     aria-hidden="true"
@@ -86,19 +112,15 @@
   >
     <div
       v-if="readout"
+      ref="boxEl"
       :data-moving="moving || null"
-      :style="{ left: '0', translate: `${readout.x}px ${readout.y}px` }"
+      :style="{ left: '0', translate: `${readout.x + nudge}px ${readout.y}px` }"
       class="absolute top-0 data-[moving]:transition-[translate] data-[moving]:duration-fast-02 data-[moving]:ease-productive-entrance motion-reduce:transition-none"
     >
-      <div
-        :data-side="readout.side"
-        class="flex w-max max-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
+      <ChartTooltipPanel
+        :title="readout.title"
+        :side="readout.side"
       >
-        <span
-          class="border-b border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs) text-label-md"
-        >
-          {{ readout.title }}
-        </span>
         <span class="flex flex-col gap-(--spacing-2xs) px-(--spacing-sm) py-(--spacing-xs)">
           <span
             v-for="row in readout.rows"
@@ -134,7 +156,7 @@
         >
           <slot name="footer" />
         </span>
-      </div>
+      </ChartTooltipPanel>
     </div>
   </div>
 </template>

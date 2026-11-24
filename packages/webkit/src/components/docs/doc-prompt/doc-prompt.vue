@@ -7,6 +7,7 @@
     onUpdated,
     ref,
     useAttrs,
+    useId,
     useSlots
   } from 'vue'
 
@@ -55,6 +56,7 @@
 
   const promptEl = ref<globalThis.HTMLElement | null>(null)
   const expanded = ref(false)
+  const promptId = useId()
   const capped = ref(false)
   const overflow = ref<'start' | 'end' | 'both' | ''>('')
   const blockFitsOneLine = ref(false)
@@ -169,6 +171,25 @@
     observer?.disconnect()
     releaseMove?.()
   })
+
+  const BODY_CLASS =
+    'flex items-start gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--doc-prompt-background:var(--bg-surface)] ' +
+    'data-[single-line]:items-center ' +
+    'data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--doc-prompt-background:var(--bg-canvas)]'
+
+  const PROMPT_CLASS =
+    'm-0 text-body-code-sm text-(--text-default) motion-reduce:transition-none ' +
+    'data-[variant=block]:max-h-[3.5lh] data-[variant=block]:overflow-hidden data-[variant=block]:whitespace-pre-wrap data-[variant=block]:transition-[max-height] ' +
+    'data-[variant=block]:duration-moderate-02 data-[variant=block]:ease-productive-exit data-[variant=line]:overflow-x-auto data-[variant=line]:whitespace-nowrap ' +
+    'data-[variant=line]:rounded-(--shape-control) data-[variant=line]:[scrollbar-width:none] data-[variant=block]:data-[state=open]:max-h-none ' +
+    'data-[variant=block]:data-[state=open]:ease-productive-entrance data-[variant=line]:focus-visible:outline-2 data-[variant=line]:focus-visible:outline-offset-2 ' +
+    'data-[variant=line]:focus-visible:outline-(--ring-color) data-[variant=line]:[&::-webkit-scrollbar]:hidden'
+
+  const FADE_CLASS =
+    'pointer-events-none absolute inset-x-0 bottom-0 h-(--spacing-lg) bg-gradient-to-b from-transparent to-(--doc-prompt-background) transition-opacity duration-moderate-01 ' +
+    'ease-productive-exit ' +
+    'data-[hidden]:opacity-0 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -198,18 +219,19 @@
     <div
       :data-titled="title ? '' : undefined"
       :data-single-line="singleLine ? '' : undefined"
-      class="flex items-start gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--doc-prompt-background:var(--bg-surface)] data-[single-line]:items-center data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--doc-prompt-background:var(--bg-canvas)]"
+      :class="BODY_CLASS"
     >
       <div class="min-w-0 flex-1">
         <div class="relative">
           <p
+            :id="promptId"
             ref="promptEl"
             :data-variant="variant"
             :data-state="variant === 'block' ? (expanded ? 'open' : 'closed') : undefined"
             :data-overflow="variant === 'line' && overflow ? overflow : undefined"
             :tabindex="variant === 'line' ? 0 : undefined"
             :style="{ maxHeight: capOverride || undefined }"
-            class="m-0 text-body-code-sm text-(--text-default) motion-reduce:transition-none data-[variant=block]:max-h-[3.5lh] data-[variant=block]:overflow-hidden data-[variant=block]:whitespace-pre-wrap data-[variant=block]:transition-[max-height] data-[variant=block]:duration-moderate-02 data-[variant=block]:ease-productive-exit data-[variant=line]:overflow-x-auto data-[variant=line]:whitespace-nowrap data-[variant=line]:rounded-(--shape-control) data-[variant=line]:[scrollbar-width:none] data-[variant=block]:data-[state=open]:max-h-none data-[variant=block]:data-[state=open]:ease-productive-entrance data-[variant=line]:focus-visible:outline-2 data-[variant=line]:focus-visible:outline-offset-2 data-[variant=line]:focus-visible:outline-(--ring-color) data-[variant=line]:[&::-webkit-scrollbar]:hidden"
+            :class="PROMPT_CLASS"
             @scroll="measure"
           >
             <slot>{{ label }}</slot>
@@ -218,7 +240,7 @@
           <div
             v-if="variant === 'block' && capped"
             :data-hidden="expanded ? '' : undefined"
-            class="pointer-events-none absolute inset-x-0 bottom-0 h-(--spacing-lg) bg-gradient-to-b from-transparent to-(--doc-prompt-background) transition-opacity duration-moderate-01 ease-productive-exit data-[hidden]:opacity-0 motion-reduce:transition-none"
+            :class="FADE_CLASS"
             aria-hidden="true"
           />
           <div
@@ -242,6 +264,8 @@
             :icon="expanded ? 'az az-chevron-up' : 'az az-chevron-down'"
             variant="outline"
             size="small"
+            :aria-expanded="expanded"
+            :aria-controls="promptId"
             @click="toggle"
           />
         </div>

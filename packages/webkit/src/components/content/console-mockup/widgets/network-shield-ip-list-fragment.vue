@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import Input from '../../../input/input/input.vue'
   import RadioGroup from '../../../input/radio-group/radio-group.vue'
   import RadioGroupItem from '../../../input/radio-group/radio-group-item/radio-group-item.vue'
   import Textarea from '../../../input/textarea/textarea.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
 
   defineOptions({ name: 'NetworkShieldIpListFragment' })
 
@@ -21,9 +21,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const TYPES = [
     {
@@ -67,28 +64,11 @@
     }))
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 20
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const offsets = ref<number[]>([0, 0])
-
-  const measure = () => {
-    const anchors = columnEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
-    if (!anchors?.length) return
-    offsets.value = [...anchors].map((anchor) => anchor.offsetTop)
-  }
-
-  const atRest = computed(() => frame.value.anchor === 0)
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${atRest.value ? 0 : LEAD - (offsets.value[frame.value.anchor] ?? 0)}px`
-  }))
+  const { frame, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 
   const listValue = computed(() =>
     [...ITEMS, ...(frame.value.typed ? [ENTRY.slice(0, frame.value.typed)] : [])].join('\n')
@@ -96,134 +76,94 @@
 
   const typing = computed(() => frame.value.typed > 0)
 
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-  let observer: globalThis.ResizeObserver | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(() => {
-    observer = new globalThis.ResizeObserver(measure)
-    if (columnEl.value) observer.observe(columnEl.value)
-    measure()
-  })
-
-  onScopeDispose(() => {
-    halt()
-    observer?.disconnect()
-  })
+  const FIELD_RING_CLASS =
+    'flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'data-focused:ring-2 data-focused:ring-offset-2 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupScrollColumn
+    :ref="bindColumn"
     shell="legacy"
-    :fade="atRest ? 'bottom' : 'y'"
     class="[--console-mockup-fade-edge:16%] [--console-mockup-fade-start:74%]"
-    :chrome="false"
+    column-class="flex flex-col gap-(--spacing-lg)"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.anchor || null"
+    :lead="20"
+    observe
   >
-    <div
-      ref="columnEl"
-      :style="scrollStyle"
-      class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+    <ConsoleMockupShellItem
+      :order="0"
+      data-anchor
     >
-      <ConsoleMockupShellItem
-        :order="0"
-        data-anchor
-      >
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel
-            for="network-list-name"
-            required
-            >Name</FieldLabel
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel
+          for="network-list-name"
+          required
+          >Name</FieldLabel
+        >
+        <Input
+          id="network-list-name"
+          model-value="qa-p-nl-ip"
+          size="medium"
+          aria-label="Name"
+        />
+        <FieldDescription
+          >Give a unique and descriptive name to identify the network list.</FieldDescription
+        >
+      </div>
+    </ConsoleMockupShellItem>
+
+    <ConsoleMockupShellItem :order="1">
+      <div class="flex flex-col gap-(--spacing-sm)">
+        <RadioGroup
+          model-value="ip_cidr"
+          variant="card"
+          name="network-list-type"
+          aria-label="Type"
+        >
+          <RadioGroupItem
+            v-for="type in TYPES"
+            :key="type.value"
+            :value="type.value"
+            :description="type.description"
+            >{{ type.label }}</RadioGroupItem
           >
-          <Input
-            id="network-list-name"
-            model-value="qa-p-nl-ip"
-            size="medium"
-            aria-label="Name"
+        </RadioGroup>
+      </div>
+    </ConsoleMockupShellItem>
+
+    <ConsoleMockupShellItem
+      :order="2"
+      data-anchor
+    >
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <FieldLabel
+          for="network-list-items"
+          required
+          >List</FieldLabel
+        >
+        <span
+          :data-focused="typing || null"
+          :class="FIELD_RING_CLASS"
+        >
+          <Textarea
+            id="network-list-items"
+            :model-value="listValue"
+            rows="7"
+            resize="none"
+            aria-label="List"
           />
-          <FieldDescription
-            >Give a unique and descriptive name to identify the network list.</FieldDescription
-          >
-        </div>
-      </ConsoleMockupShellItem>
-
-      <ConsoleMockupShellItem :order="1">
-        <div class="flex flex-col gap-(--spacing-sm)">
-          <RadioGroup
-            model-value="ip_cidr"
-            variant="card"
-            name="network-list-type"
-            aria-label="Type"
-          >
-            <RadioGroupItem
-              v-for="type in TYPES"
-              :key="type.value"
-              :value="type.value"
-              :description="type.description"
-              >{{ type.label }}</RadioGroupItem
-            >
-          </RadioGroup>
-        </div>
-      </ConsoleMockupShellItem>
-
-      <ConsoleMockupShellItem
-        :order="2"
-        data-anchor
-      >
-        <div class="flex flex-col gap-(--spacing-xs)">
-          <FieldLabel
-            for="network-list-items"
-            required
-            >List</FieldLabel
-          >
-          <span
-            :data-focused="typing || null"
-            class="flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
-          >
-            <Textarea
-              id="network-list-items"
-              :model-value="listValue"
-              rows="7"
-              resize="none"
-              aria-label="List"
-            />
-          </span>
-          <FieldDescription
-            >Enter one IP address or CIDR per line. Optionally, add an expiration date in UTC with
-            --LT (format YYYY-MM-DDTHH:MM:SSZ), followed by a comment with #. The comment must
-            always be the last item on the line, e.g., 192.0.2.1 --LT2027-01-01T00:00:00Z #comment.
-            --LT is reserved and can't be used in comments. Duplicated entries are automatically
-            removed.</FieldDescription
-          >
-        </div>
-      </ConsoleMockupShellItem>
-    </div>
-  </ConsoleMockupShell>
+        </span>
+        <FieldDescription
+          >Enter one IP address or CIDR per line. Optionally, add an expiration date in UTC with
+          --LT (format YYYY-MM-DDTHH:MM:SSZ), followed by a comment with #. The comment must always
+          be the last item on the line, e.g., 192.0.2.1 --LT2027-01-01T00:00:00Z #comment. --LT is
+          reserved and can't be used in comments. Duplicated entries are automatically
+          removed.</FieldDescription
+        >
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupScrollColumn>
 </template>

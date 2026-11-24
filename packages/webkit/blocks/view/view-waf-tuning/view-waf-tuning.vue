@@ -3,27 +3,22 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
-  import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { matchesText } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, ref, watch } from 'vue'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { computed, ref, watch } from 'vue'
 
+  import AllowDialog from './parts/allow-dialog.vue'
   import { sampleMatches } from './sample'
 
   /** A time range the matches are counted over. */
@@ -64,6 +59,8 @@
     defaultSelectedKeys?: string[]
     /** Opens the allow dialog on the checked rules when the block opens. */
     defaultOpen?: boolean
+    /** The reason the allow dialog opens with, as a failed submit keeps it. */
+    defaultReason?: string
     /** The allow request is in flight: the dialog locks and Allow rules spins. */
     allowing?: boolean
     /** Why the allowed rules were not created, shown at the top of the dialog. */
@@ -76,6 +73,7 @@
     error: '',
     defaultSelectedKeys: () => [],
     defaultOpen: false,
+    defaultReason: '',
     allowing: false,
     allowError: ''
   })
@@ -102,8 +100,8 @@
       principal: true,
       hideable: false
     },
-    { accessorKey: 'threat', header: 'Threat', grow: 2 },
     { accessorKey: 'hits', header: 'Hits', sortable: true, minWidth: 80 },
+    { accessorKey: 'threat', header: 'Threat', grow: 2 },
     { accessorKey: 'ips', header: 'Top IP addresses', grow: 3 },
     { accessorKey: 'countries', header: 'Top countries', grow: 2 },
     { accessorKey: 'paths', header: 'Top paths', grow: 3 }
@@ -118,6 +116,14 @@
 
   const threshold = ref(100)
   const search = ref('')
+  const searchEl = ref<InstanceType<typeof Input> | null>(null)
+  useShortcuts({
+    keys: '/',
+    label: 'Focus search',
+    element: () => (searchEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    when: () => !props.loading,
+    handler: () => searchEl.value?.focus()
+  })
   const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const sorting = ref([{ id: 'hits', desc: true }])
 
@@ -138,46 +144,21 @@
   const exportCsv = () => tuningTableEl.value?.exportCsv({ filename: 'waf-tuning.csv' })
 
   const allowOpen = ref(props.defaultOpen)
-  const allowFailed = ref(props.allowError !== '')
-  const reason = ref('')
-  const submitted = ref(false)
   const allowing = computed(() => props.allowing)
-  const reasonMissing = computed(() => submitted.value && !reason.value.trim())
-  const reasonFieldEl = ref<HTMLElement | null>(null)
 
   const openAllow = () => {
-    reason.value = ''
-    submitted.value = false
-    allowFailed.value = false
     allowOpen.value = true
   }
 
-  const allow = (event: Event) => {
-    submitted.value = true
-    if (allowing.value) return
-    if (!reason.value.trim()) {
-      nextTick(() => reasonFieldEl.value?.querySelector('textarea')?.focus())
-      return
-    }
-    allowFailed.value = false
-    emit('allow', event, { matches: [...selected.value], reason: reason.value.trim() })
+  const allow = (event: Event, reason: string) => {
+    emit('allow', event, { matches: [...selected.value], reason })
   }
-
-  watch(
-    () => props.allowError,
-    (next) => {
-      allowFailed.value = next !== ''
-    }
-  )
 
   watch(
     () => props.allowing,
     (now, before) => {
       if (!before || now) return
-      if (props.allowError) {
-        allowFailed.value = true
-        return
-      }
+      if (props.allowError) return
       const created = pathCount.value
       allowOpen.value = false
       selectedKeys.value = []
@@ -186,6 +167,15 @@
         description: 'Requests that match them are no longer blocked by this rule set.'
       })
     }
+  )
+  const matchingRows = computed(() =>
+    rows.value.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        columns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
   )
 </script>
 
@@ -262,9 +252,11 @@
           </div>
           <div class="min-w-36 grow basis-(--container-2xs)">
             <Input
+              ref="searchEl"
               v-model="search"
               size="medium"
               placeholder="Search by rule, IP, country or path"
+              aria-keyshortcuts="/"
               aria-label="Search matched requests"
               class="w-full"
               :disabled="loading"
@@ -310,17 +302,15 @@
             <DataTable
               v-else
               ref="tuningTableEl"
-              v-model:global-filter="search"
               v-model:selected-keys="selectedKeys"
               v-model:sorting="sorting"
-              :data="rows"
+              :data="matchingRows"
               :columns="columns"
               row-key="ruleId"
               selectable
               sortable
               :bordered="false"
               :loading="loading"
-              export-filename="waf-tuning.csv"
             >
               <template #cell-ruleId="{ value }">
                 <span class="min-w-0 truncate font-code tabular-nums">{{ value }}</span>
@@ -378,95 +368,14 @@
       </section>
     </div>
 
-    <Dialog
+    <AllowDialog
       v-model:open="allowOpen"
-      :dismissible="!allowing"
-      :closable="!allowing"
-      size="medium"
-    >
-      <DialogContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          novalidate
-          aria-labelledby="waf-allow-title"
-          @submit.prevent="allow"
-        >
-          <PanelHeader class="w-full">
-            <DialogTitle id="waf-allow-title">
-              Allow {{ selected.length }} {{ selected.length === 1 ? 'rule' : 'rules' }}
-            </DialogTitle>
-          </PanelHeader>
-          <PanelBody>
-            <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-              <Alert
-                v-if="allowFailed"
-                severity="danger"
-                :label="allowError"
-              />
-              <DialogDescription>
-                Requests these rules matched on their paths will no longer be blocked. One allowed
-                rule is created for each rule and path:
-                {{ pathCount }} in all.
-              </DialogDescription>
-              <ul class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0">
-                <li
-                  v-for="row in selected"
-                  :key="row.ruleId"
-                  class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
-                >
-                  <span class="shrink-0 font-code text-(--text-default)">{{ row.ruleId }}</span>
-                  <span class="min-w-0 truncate"
-                    >{{ row.threat }} on {{ row.paths.length }}
-                    {{ row.paths.length === 1 ? 'path' : 'paths' }}</span
-                  >
-                </li>
-              </ul>
-              <div ref="reasonFieldEl">
-                <Field
-                  required
-                  :invalid="reasonMissing"
-                  :disabled="allowing"
-                >
-                  <Field.Label>Reason</Field.Label>
-                  <Textarea
-                    v-model="reason"
-                    :rows="4"
-                    placeholder="Search accepts quotes in free-text queries."
-                  />
-                  <Field.Description
-                    >Kept with the allowed rules, so the next person knows why.</Field.Description
-                  >
-                  <Field.Error v-if="reasonMissing"
-                    >Enter why these requests are legitimate.</Field.Error
-                  >
-                </Field>
-              </div>
-            </div>
-          </PanelBody>
-          <PanelFooter
-            ><div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  type="button"
-                  label="Cancel"
-                  variant="outline"
-                  :disabled="allowing"
-                  @click="allowOpen = false"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  type="submit"
-                  :label="allowFailed ? 'Try again' : 'Allow rules'"
-                  variant="primary"
-                  :loading="allowing"
-                />
-              </div></div
-          ></PanelFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+      :selected="selected"
+      :path-count="pathCount"
+      :allowing="allowing"
+      :allow-error="allowError"
+      :default-reason="defaultReason"
+      @allow="allow"
+    />
   </div>
 </template>

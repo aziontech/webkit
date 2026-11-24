@@ -55,7 +55,7 @@
           ref="openerEl"
           class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
         >
-          <p class="m-0 text-body-sm text-(--text-default)">
+          <p class="m-0 text-body-lg text-(--text-default)">
             Here are the ten biggest orders of the last seven days.
           </p>
           <ArtifactPreview

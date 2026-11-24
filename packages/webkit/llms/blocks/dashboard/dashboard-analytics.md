@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-analytics")`
-- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/clipboard`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -148,7 +148,8 @@ products, then six highlight cards in two columns. Each card keeps the full head
 Bar, Expand, the more-options menu) and ends in a `ChartCard.Footer` holding one medium `Link`
 without icon, `Open <Product> dashboard`, to the product dashboard and view the card came from.
 The header actions hold the `Period` `Select` and an outlined Refresh `IconButton` in a `Tooltip`;
-Refresh holds the charts at reduced opacity (`refetching`) while the data reloads.
+Refresh emits `refresh` and fakes no reload: the page fetches again and passes `refetching`, which
+holds the charts at reduced opacity until the new figures arrive.
 
 ### Q. Usage — `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Hint`, `Input`, `EmptyState` (optional)
 
@@ -166,9 +167,7 @@ transferred per project. The empty copy is `No usage yet` /
 
 ### R. Failure — `Alert` (required)
 
-When the period cannot load (`error`), every card keeps its header and shows a danger `Alert` with
-Retry in place of its chart or table, naming what did not load
-(`Couldn't load top hosts. Check your connection and retry.`); Expand and Export CSV disable.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners. Expand and Export CSV disable.
 
 ## Data
 
@@ -187,13 +186,13 @@ The block takes its figures through props and emits its actions; it fetches noth
 | `range`           | `AnalyticsDashboardRange`        | The period's window as ISO timestamps, written into the query each card menu copies.                                                                   |
 | `defaultExpanded` | `AnalyticsDashboardCardId \| ''` | The card whose expanded dialog is open on first render.                                                                                                |
 | `loading`         | `boolean`                        | The period is loading: every tile, chart and the table hold a `Skeleton`, Expand and Export CSV disable.                                               |
-| `error`           | `string`                         | Why the period could not load; each card shows `Couldn't load <card>.` and the message in a danger `Alert`.                                            |
+| `error`           | `string`                         | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.`                         |
 | `refetching`      | `boolean`                        | The period is reloading over figures already shown: the data stays and every chart holds its previous render at reduced opacity.                       |
 
 | Event           | Payload   | When                             |
 | --------------- | --------- | -------------------------------- |
 | `update:period` | `(value)` | The Period `Select` changed.     |
-| `retry`         | `(event)` | Retry in any card's error alert. |
+| `retry`         | `(event)` | Retry in the page's error alert. |
 
 The queries the card menus copy run as-is against the Azion Real-Time Metrics API
 (`POST /v4/metrics/graphql`). What the API expects, so a live page asks for the right shapes:
@@ -297,7 +296,7 @@ Then delete `sample.ts` and its import.
 - Expanded: `defaultExpanded="requests"`; the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
 - Usage: the Data usage page, consumption per meter and per project against the previous period.
-- Error: `error` holds the message; the request for the period failed, tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 
@@ -316,7 +315,7 @@ Then delete `sample.ts` and its import.
 - `Loading` — While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.
 - `Refetching` — The period reloads over figures already shown (a new period, a Refresh): the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity, so nothing jumps to a Skeleton.
 - `Empty` — No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.
-- `Error` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 - `Metrics` — Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair. Products with more than one dashboard add a ToggleGroup under the tabs: Applications switches between Overview, Status codes (the status card over a status and upstream status table with search and an All, 2xx, 3xx, 4xx, 5xx status-class filter) and Request breakdown (an IP address table with search); Firewall adds Denied sources. Every card menu copies its GraphQL query and exports its rows as CSV.
 - `Expanded` — The Requests over time card opened from its Expand button: a large Dialog with the card title and its description, the Line or Bar ToggleGroup shared with the card, and the chart at a 420px plot (the table card opens with ten rows per page). Closing it returns focus to Expand. Every card's menu works: Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast.
 - `MetricsOverview` — The real-time metrics landing page across products: a Period Select and a Refresh button in the page header, six StatTiles (requests, data transferred, cache offload, status 5xx, requests denied, function invocations) with sparkline and change, and six highlight ChartCards from Applications, Firewall and Functions. Each card keeps the full header (Sum Tag, Line or Bar ToggleGroup, Expand into a large Dialog, Copy query and Export CSV) and ends in a footer Link to its product dashboard (Open Applications dashboard).
@@ -329,33 +328,31 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ```vue
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
   import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { copyText } from '@aziontech/webkit/utils/clipboard'
-  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
+  import { type FigureFormat, hostColumns, trafficCards, trafficFigures } from './analytics-cards'
+  import {
+    chartForms,
+    comparedPeriod,
+    comparedPeriods,
+    fixedFormatter,
+    metricFormatters,
+    metricQuery,
+    periodSlug,
+    runCardOption,
+    seriesRows
+  } from './analytics-report'
+  import ExpandedDialog from './parts/expanded-dialog.vue'
+  import ExpandedTable from './parts/expanded-table.vue'
+  import MetricCard, { type MetricCardVariation } from './parts/metric-card.vue'
+  import PeriodHeader from './parts/period-header.vue'
+  import SearchTable from './parts/search-table.vue'
+  import SeriesChart from './parts/series-chart.vue'
   import {
     sampleChanges,
     sampleCountries,
@@ -471,79 +468,16 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
   const period = defineModel<string>('period', { default: '24h' })
 
-  const fallbackPeriod = {
-    value: '24h',
-    label: 'Last 24 hours',
-    comparison: 'vs previous 24 hours'
-  }
-  const periods = [
-    { value: '1h', label: 'Last hour', comparison: 'vs previous hour' },
-    fallbackPeriod,
-    { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
-    { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
-  ]
-  const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
-  const currentPeriod = computed(
-    () => periods.find((entry) => entry.value === period.value) ?? fallbackPeriod
-  )
-  const periodComparison = computed(() => currentPeriod.value.comparison)
-  const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
-
-  type FigureFormat = 'count' | 'bytes' | 'percentage'
-
-  interface FigureDefinition {
-    id: AnalyticsDashboardKpiId
-    label: string
-    description: string
-    format: FigureFormat
-    inverse: boolean
-  }
-
-  interface Variation {
-    label: string
-    severity: TagSeverity
-    icon: string
-  }
+  const currentPeriod = computed(() => comparedPeriod(period.value))
 
   const failed = computed(() => props.error !== '')
   const blank = computed(() => props.loading || failed.value)
   const fallback = <T,>(value: T | undefined, sample: T, empty: T): T =>
     value ?? (blank.value ? empty : sample)
 
-  const definitions: FigureDefinition[] = [
-    {
-      label: 'Requests',
-      id: 'requests',
-      description: 'Sum of requests served by every service in the period.',
-      format: 'count',
-      inverse: false
-    },
-    {
-      label: 'Data transferred',
-      id: 'data-transferred',
-      description: 'Sum of data delivered to users by every service in the period.',
-      format: 'bytes',
-      inverse: false
-    },
-    {
-      label: 'Success rate',
-      id: 'success-rate',
-      description: 'Share of requests that ended in a 2xx or 3xx status.',
-      format: 'percentage',
-      inverse: false
-    },
-    {
-      label: 'Status 5xx',
-      id: 'status-5xx',
-      description: 'Requests that ended in a server error. A rise is a regression.',
-      format: 'count',
-      inverse: true
-    }
-  ]
-
   const kpiValues = computed(() => fallback(props.kpis, sampleKpis, {}))
   const figures = computed(() =>
-    definitions.map((definition) => ({
+    trafficFigures.map((definition) => ({
       ...definition,
       ...(kpiValues.value[definition.id] ?? { value: null, delta: null, trend: [] })
     }))
@@ -568,7 +502,10 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const hosts = computed(() => fallback(props.hosts, sampleHosts, []))
   const range = computed(() => props.range ?? sampleRange)
 
-  const variation = (change: number | null): Variation | null =>
+  const { formatNumber } = useLocale()
+  const fixed = fixedFormatter(formatNumber)
+
+  const variation = (change: number | null): MetricCardVariation | null =>
     change === null
       ? null
       : {
@@ -581,61 +518,10 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     return { requests: variation(changes.requests), statusCodes: variation(changes.statusCodes) }
   })
 
-  const hostColumns: TableColumn[] = [
-    {
-      accessorKey: 'host',
-      id: 'host',
-      header: 'Host',
-      align: 'start',
-      sortable: true,
-      principal: true
-    },
-    {
-      accessorKey: 'service',
-      id: 'service',
-      header: 'Service',
-      align: 'start',
-      sortable: true
-    },
-    {
-      accessorKey: 'requests',
-      id: 'requests',
-      header: 'Requests',
-      align: 'end',
-      sortable: true
-    }
-  ]
-
-  const forms: ToggleGroupOption[] = [
-    {
-      label: 'Line',
-      value: 'line'
-    },
-    {
-      label: 'Bar',
-      value: 'bar'
-    }
-  ]
-
-  const { formatNumber } = useLocale()
-  const fixed = (value: number, digits: number) =>
-    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
-
-  const compact = (value: number) =>
-    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
-
+  const metric = metricFormatters(formatNumber)
   const formatters: Record<FigureFormat, (value: number) => string> = {
-    count: (value) => compact(value),
-    bytes: (value) => {
-      const steps = ['B', 'KB', 'MB', 'GB', 'TB']
-      let current = value
-      let index = 0
-      while (current >= 1000 && index < steps.length - 1) {
-        current /= 1000
-        index += 1
-      }
-      return `${fixed(current, current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
-    },
+    count: metric.count,
+    bytes: metric.bytes,
     percentage: (value) => `${fixed(value, 0)}%`
   }
 
@@ -644,147 +530,57 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 
-  interface CardQuery {
-    dataset: string
-    limit: number
-    groupBy: string[]
-    orderBy: string
+  const cardRows: Record<AnalyticsDashboardCardId, () => object[]> = {
+    requests: () => seriesRows(requests.value, labels.value),
+    'status-codes': () => seriesRows(statusCodes.value, labels.value),
+    countries: () => countryRows.value,
+    hosts: () => hosts.value
   }
+  const cardEmpty = (id: AnalyticsDashboardCardId) =>
+    ({ requests, 'status-codes': statusCodes, countries: countryRows, hosts })[id].value.length ===
+    0
 
-  const apiTime = (iso: string) => iso.replace(/(\.\d+)?Z$/, '')
+  const card = (id: AnalyticsDashboardCardId) => ({
+    title: trafficCards[id].label,
+    hint: trafficCards[id].description,
+    blank: blank.value,
+    exportDisabled: blank.value || cardEmpty(id),
+    error: props.error
+  })
 
-  const cardQuery = (report: CardQuery) =>
-    [
-      'query {',
-      `  ${report.dataset}(`,
-      `    limit: ${report.limit}`,
-      `    filter: { tsRange: { begin: "${apiTime(range.value.begin)}", end: "${apiTime(range.value.end)}" } }`,
-      '    aggregate: { sum: requests }',
-      `    groupBy: [${report.groupBy.join(', ')}]`,
-      `    orderBy: [${report.orderBy}]`,
-      '  ) {',
-      ...[...report.groupBy, 'sum'].map((field) => `    ${field}`),
-      '  }',
-      '}'
-    ].join('\n')
-
-  const copyQuery = async (report: CardQuery) => {
-    if (!(await copyText(cardQuery(report)))) {
-      toast.error('The query could not be copied.')
-      return
-    }
-    toast.success('Query copied.', {
-      description: 'Paste it into any GraphQL client that sends your token.'
-    })
+  const empty = {
+    emptyTitle: 'No traffic yet',
+    emptyDescription: 'Metrics appear here once a service serves requests.'
   }
-
-  const queries: Record<AnalyticsDashboardCardId, CardQuery> = {
-    requests: { dataset: 'workloadMetrics', limit: 10000, groupBy: ['ts'], orderBy: 'ts_ASC' },
-    'status-codes': {
-      dataset: 'workloadMetrics',
-      limit: 10000,
-      groupBy: ['ts', 'status'],
-      orderBy: 'ts_ASC'
-    },
-    countries: {
-      dataset: 'workloadMetrics',
-      limit: 10,
-      groupBy: ['geolocCountryName'],
-      orderBy: 'sum_DESC'
-    },
-    hosts: {
-      dataset: 'workloadMetrics',
-      limit: 1000,
-      groupBy: ['host', 'configurationId'],
-      orderBy: 'sum_DESC'
-    }
-  }
-
-  interface CardReport extends CardQuery {
-    label: string
-    description: string
-    columns: CsvColumn[]
-    rows: () => object[]
-    empty: () => boolean
-  }
-
-  const seriesRows = (series: readonly ChartSeries[], axis: readonly ChartLabel[]) =>
-    axis.map((label, index) => ({
-      ts: label instanceof Date ? label.toISOString() : label,
-      ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
-    }))
 
   const expanded = ref(props.defaultExpanded !== '')
   const expandedId = ref<AnalyticsDashboardCardId>(props.defaultExpanded || 'requests')
-  const expandedReport = computed(() => reports[expandedId.value])
+  const expandedReport = computed(() => trafficCards[expandedId.value])
+  const expandedForms = computed(() =>
+    expandedId.value === 'requests' || expandedId.value === 'status-codes' ? chartForms : []
+  )
 
   const openExpanded = (id: AnalyticsDashboardCardId) => {
     expandedId.value = id
     expanded.value = true
   }
 
-  const exportDisabled = (id: AnalyticsDashboardCardId) => blank.value || reports[id].empty()
-
   const onCardOption = (id: AnalyticsDashboardCardId, value: string | number) => {
-    const report = reports[id]
-    if (value === 'query') {
-      copyQuery(report)
-      return
-    }
-    const filename = `${id}-${periodSlug.value}.csv`
-    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
-    toast.success('CSV exported.', { description: filename })
-  }
-
-  const reports: Record<AnalyticsDashboardCardId, CardReport> = {
-    requests: {
-      ...queries.requests,
-      label: 'Requests over time',
-      description: 'Sum of requests served by every service, per interval.',
-      columns: [
-        { header: 'Time', id: 'ts' },
-        { header: 'Requests', id: 'requests' }
-      ],
-      rows: () => seriesRows(requests.value, labels.value),
-      empty: () => requests.value.length === 0
-    },
-    'status-codes': {
-      ...queries['status-codes'],
-      label: 'Status codes',
-      description: 'Sum of requests per status class. Switch to Bar to stack the classes.',
-      columns: [
-        { header: 'Time', id: 'ts' },
-        { header: 'Status 2xx', id: '2xx' },
-        { header: 'Status 3xx', id: '3xx' },
-        { header: 'Status 4xx', id: '4xx' },
-        { header: 'Status 5xx', id: '5xx' }
-      ],
-      rows: () => seriesRows(statusCodes.value, labels.value),
-      empty: () => statusCodes.value.length === 0
-    },
-    countries: {
-      ...queries.countries,
-      label: 'Requests by country',
-      description: 'Sum of requests per country of origin, top countries first.',
-      columns: [
-        { header: 'Country', id: 'country' },
-        { header: 'Requests', id: 'requests' }
-      ],
-      rows: () => countryRows.value,
-      empty: () => countryRows.value.length === 0
-    },
-    hosts: {
-      ...queries.hosts,
-      label: 'Top hosts',
-      description: 'Hosts that served the most requests in the period, with their service.',
-      columns: [
-        { header: 'Host', id: 'host' },
-        { header: 'Service', id: 'service' },
-        { header: 'Requests', id: 'requests' }
-      ],
-      rows: () => hosts.value,
-      empty: () => hosts.value.length === 0
-    }
+    const report = trafficCards[id]
+    runCardOption(value, {
+      query: metricQuery({
+        dataset: 'workloadMetrics',
+        measure: 'requests',
+        limit: report.limit,
+        groupBy: report.groupBy,
+        orderBy: report.orderBy,
+        begin: range.value.begin,
+        end: range.value.end
+      }),
+      filename: `${id}-${periodSlug(currentPeriod.value)}.csv`,
+      columns: report.columns,
+      rows: cardRows[id]
+    })
   }
 
   const expandedForm = computed({
@@ -799,31 +595,25 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 <template>
   <div class="layout-boundary">
     <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
-      <PageHeader
+      <PeriodHeader
+        v-model:period="period"
         title="Analytics"
         description="Requests, data transferred and errors your services handled in the period."
+        :options="comparedPeriods"
+        :refetching="refetching"
+      />
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load analytics. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-analytics__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
+      <StatTileGroup
+        aria-label="Key figures"
+        :aria-busy="refetching || undefined"
       >
-        <template #actions>
-          <Select
-            variant="ghost"
-            v-model="period"
-            size="medium"
-            :display-value="periodLabel"
-          >
-            <Select.Trigger aria-label="Period" />
-            <Select.Content>
-              <Select.Item
-                v-for="option in periods"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </Select.Item>
-            </Select.Content>
-          </Select>
-        </template>
-      </PageHeader>
-      <StatTileGroup aria-label="Key figures">
         <StatTile
           v-for="figure in figures"
           :key="figure.id"
@@ -831,7 +621,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :value="figure.value"
           :format-value="formatters[figure.format]"
           :delta="figure.delta"
-          :delta-label="periodComparison"
+          :delta-label="currentPeriod.comparison"
           :inverse="figure.inverse"
           :trend="figure.trend"
           :loading="loading"
@@ -846,532 +636,142 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Requests over time</ChartCard.Title>
-              <Hint content="Sum of requests served by every service, per interval." />
-            </span>
-            <ChartCard.Action>
-              <span
-                data-wide
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="variations.requests"
-                  :label="variations.requests.label"
-                  :severity="variations.requests.severity"
-                  :icon="variations.requests.icon"
-                  size="small"
-                />
-                <ToggleGroup
-                  v-model="requestsForm"
-                  :options="forms"
-                  size="small"
-                  aria-label="Chart form for Requests over time"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Requests over time"
-                  :disabled="blank"
-                  @click="openExpanded('requests')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('requests', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Requests over time"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                    :disabled="exportDisabled('requests')"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="failed"
-              severity="danger"
-              :label="`Couldn't load requests over time. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <Chart
-              v-else
-              v-model:active-index="activeIndex"
-              :series="requests"
-              :labels="labels"
-              :format-value="formatters.count"
-              empty-title="No traffic yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :loading="loading"
-              :refetching="refetching"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar v-if="requestsForm === 'bar'" />
-              <Chart.Area v-else />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend total />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+        <MetricCard
+          v-model:form="requestsForm"
+          :span="12"
+          v-bind="card('requests')"
+          :variation="variations.requests"
+          :forms="chartForms"
+          wide
+          @expand="openExpanded('requests')"
+          @select="(_event, value) => onCardOption('requests', value)"
+        >
+          <SeriesChart
+            v-model:active-index="activeIndex"
+            :series="requests"
+            :labels="labels"
+            :format-value="formatters.count"
+            :bar="requestsForm === 'bar'"
+            shape="area"
+            :loading="loading"
+            :refetching="refetching"
+            v-bind="empty"
+          />
+        </MetricCard>
 
-        <ChartCard :span="6">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Status codes</ChartCard.Title>
-              <Hint
-                content="Sum of requests per status class. Switch to Bar to stack the classes."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-                <Tag
-                  v-if="variations.statusCodes"
-                  :label="variations.statusCodes.label"
-                  :severity="variations.statusCodes.severity"
-                  :icon="variations.statusCodes.icon"
-                  size="small"
-                />
-                <ToggleGroup
-                  v-model="statusForm"
-                  :options="forms"
-                  size="small"
-                  aria-label="Chart form for Status codes"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Status codes"
-                  :disabled="blank"
-                  @click="openExpanded('status-codes')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('status-codes', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Status codes"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                    :disabled="exportDisabled('status-codes')"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="failed"
-              severity="danger"
-              :label="`Couldn't load status codes. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <Chart
-              v-else
-              v-model:active-index="activeIndex"
-              :series="statusCodes"
-              :labels="labels"
-              :format-value="formatters.count"
-              empty-title="No traffic yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :loading="loading"
-              :refetching="refetching"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar
-                v-if="statusForm === 'bar'"
-                stacked
-              />
-              <Chart.Line v-else />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend total />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+        <MetricCard
+          v-model:form="statusForm"
+          :span="6"
+          v-bind="card('status-codes')"
+          :variation="variations.statusCodes"
+          :forms="chartForms"
+          @expand="openExpanded('status-codes')"
+          @select="(_event, value) => onCardOption('status-codes', value)"
+        >
+          <SeriesChart
+            v-model:active-index="activeIndex"
+            :series="statusCodes"
+            :labels="labels"
+            :format-value="formatters.count"
+            :bar="statusForm === 'bar'"
+            stacked
+            :loading="loading"
+            :refetching="refetching"
+            v-bind="empty"
+          />
+        </MetricCard>
 
-        <ChartCard :span="6">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Requests by country</ChartCard.Title>
-              <Hint content="Sum of requests per country of origin, top countries first." />
-            </span>
-            <ChartCard.Action>
-              <span
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Requests by country"
-                  :disabled="blank"
-                  @click="openExpanded('countries')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('countries', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Requests by country"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                    :disabled="exportDisabled('countries')"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="failed"
-              severity="danger"
-              :label="`Couldn't load requests by country. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <Chart
-              v-else
-              :series="countryRequests"
-              :labels="countryLabels"
-              orientation="horizontal"
-              :format-value="formatters.count"
-              :height="240"
-              empty-title="No traffic yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :loading="loading"
-              :refetching="refetching"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar show-labels />
-              <Chart.Tooltip />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+        <MetricCard
+          :span="6"
+          v-bind="card('countries')"
+          @expand="openExpanded('countries')"
+          @select="(_event, value) => onCardOption('countries', value)"
+        >
+          <SeriesChart
+            ranking
+            :series="countryRequests"
+            :labels="countryLabels"
+            :format-value="formatters.count"
+            :height="240"
+            :loading="loading"
+            :refetching="refetching"
+            v-bind="empty"
+          />
+        </MetricCard>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
-              <ChartCard.Title>Top hosts</ChartCard.Title>
-              <Hint
-                content="Hosts that served the most requests in the period, with their service."
-              />
-            </span>
-            <ChartCard.Action>
-              <span
-                data-wide
-                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-              >
-                <Tag
-                  label="Sum"
-                  severity="neutral"
-                  size="small"
-                  icon="az az-calculator"
-                />
-              </span>
-              <Tooltip content="Expand">
-                <IconButton
-                  icon="az az-app-window"
-                  variant="ghost"
-                  size="small"
-                  aria-label="Expand Top hosts"
-                  :disabled="blank"
-                  @click="openExpanded('hosts')"
-                />
-              </Tooltip>
-              <DropdownMenu
-                side="bottom"
-                align="end"
-                @select="(_event, value) => onCardOption('hosts', value)"
-              >
-                <DropdownMenu.Trigger>
-                  <IconButton
-                    icon="az az-ellipsis"
-                    variant="ghost"
-                    size="small"
-                    aria-label="More options for Top hosts"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    value="query"
-                    label="Copy query"
-                  />
-                  <DropdownMenu.Item
-                    value="export"
-                    label="Export CSV"
-                    :disabled="exportDisabled('hosts')"
-                  />
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </ChartCard.Action>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Alert
-              v-if="failed"
-              severity="danger"
-              :label="`Couldn't load top hosts. ${error}`"
-              action-label="Retry"
-              @action="(event) => emit('retry', event)"
-            />
-            <div
-              v-else
-              class="flex min-w-0 flex-col gap-(--spacing-sm)"
-            >
-              <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                <div class="min-w-36 grow basis-(--container-3xs)">
-                  <Input
-                    v-model="search"
-                    size="medium"
-                    placeholder="Search hosts or services"
-                    aria-label="Search hosts or services"
-                  >
-                    <template #leading>
-                      <i
-                        class="az az-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </div>
-              </div>
-
-              <DataTable
-                v-model:global-filter="search"
-                :data="hosts"
-                :columns="hostColumns"
-                row-key="id"
-                sortable
-                paginated
-                :page-size="5"
-                :page-size-options="[5, 10, 25]"
-                density="compact"
-                bordered
-                :loading="loading"
-              >
-                <template #empty>
-                  <EmptyState
-                    key="empty-state-1"
-                    v-if="!hosts.length"
-                    size="small"
-                    icon="az az-chart-line"
-                    title="No traffic yet"
-                    description="Metrics appear here once a service serves requests."
-                  />
-                  <EmptyState
-                    key="empty-state-2"
-                    v-else
-                    size="small"
-                    icon="az az-search"
-                    title="No matching rows"
-                    description="Change the search."
-                  />
-                </template>
-
-                <template #cell-requests="{ row }">
-                  <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
-                </template>
-              </DataTable>
-            </div>
-          </ChartCard.Content>
-        </ChartCard>
+        <MetricCard
+          :span="12"
+          v-bind="card('hosts')"
+          wide
+          @expand="openExpanded('hosts')"
+          @select="(_event, value) => onCardOption('hosts', value)"
+        >
+          <SearchTable
+            v-model:search="search"
+            :rows="hosts"
+            :columns="hostColumns"
+            search-label="Search hosts or services"
+            :format-count="formatters.count"
+            :loading="loading"
+            :aria-busy="refetching || undefined"
+            v-bind="empty"
+          />
+        </MetricCard>
       </div>
     </div>
-    <Dialog
+    <ExpandedDialog
       v-model:open="expanded"
-      size="large"
+      v-model:form="expandedForm"
+      :title="expandedReport.label"
+      :description="expandedReport.description"
+      :forms="expandedForms"
     >
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DialogTitle>{{ expandedReport.label }}</DialogTitle>
-            <DialogDescription>{{ expandedReport.description }}</DialogDescription>
-          </div>
-        </PanelHeader>
-        <PanelBody>
-          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-            <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
-              <ToggleGroup
-                v-model="expandedForm"
-                :options="forms"
-                size="small"
-                :aria-label="`Chart form for ${expandedReport.label}`"
-              />
-            </div>
-            <Chart
-              key="chart-1"
-              v-if="expandedId === 'requests'"
-              :series="requests"
-              :labels="labels"
-              :format-value="formatters.count"
-              :height="420"
-              :refetching="refetching"
-              empty-title="No traffic yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :aria-label="expandedReport.label"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar v-if="requestsForm === 'bar'" />
-              <Chart.Area v-else />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend total />
-            </Chart>
-            <Chart
-              key="chart-2"
-              v-else-if="expandedId === 'status-codes'"
-              :series="statusCodes"
-              :labels="labels"
-              :format-value="formatters.count"
-              :height="420"
-              :refetching="refetching"
-              empty-title="No traffic yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :aria-label="expandedReport.label"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar
-                v-if="statusForm === 'bar'"
-                stacked
-              />
-              <Chart.Line v-else />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend total />
-            </Chart>
-            <Chart
-              key="chart-3"
-              v-else-if="expandedId === 'countries'"
-              :series="countryRequests"
-              :labels="countryLabels"
-              orientation="horizontal"
-              :format-value="formatters.count"
-              :height="420"
-              :refetching="refetching"
-              empty-title="No traffic yet"
-              empty-description="Metrics appear here once a service serves requests."
-              :aria-label="expandedReport.label"
-            >
-              <Chart.Grid />
-              <Chart.Axis type="y" />
-              <Chart.Axis type="x" />
-              <Chart.Bar show-labels />
-              <Chart.Tooltip />
-            </Chart>
-            <DataTable
-              v-else
-              :data="hosts"
-              :columns="hostColumns"
-              row-key="id"
-              sortable
-              paginated
-              :page-size="10"
-              density="compact"
-              bordered
-            >
-              <template #empty>
-                <EmptyState
-                  size="small"
-                  icon="az az-chart-line"
-                  title="No traffic yet"
-                  description="Metrics appear here once a service serves requests."
-                />
-              </template>
-
-              <template #cell-requests="{ row }">
-                <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
-              </template>
-            </DataTable>
-          </div>
-        </PanelBody>
-      </DialogContent>
-    </Dialog>
+      <SeriesChart
+        key="chart-1"
+        v-if="expandedId === 'requests'"
+        :series="requests"
+        :labels="labels"
+        :format-value="formatters.count"
+        :bar="requestsForm === 'bar'"
+        shape="area"
+        :height="420"
+        :refetching="refetching"
+        :aria-label="expandedReport.label"
+        v-bind="empty"
+      />
+      <SeriesChart
+        key="chart-2"
+        v-else-if="expandedId === 'status-codes'"
+        :series="statusCodes"
+        :labels="labels"
+        :format-value="formatters.count"
+        :bar="statusForm === 'bar'"
+        stacked
+        :height="420"
+        :refetching="refetching"
+        :aria-label="expandedReport.label"
+        v-bind="empty"
+      />
+      <SeriesChart
+        key="chart-3"
+        v-else-if="expandedId === 'countries'"
+        ranking
+        :series="countryRequests"
+        :labels="countryLabels"
+        :format-value="formatters.count"
+        :height="420"
+        :refetching="refetching"
+        :aria-label="expandedReport.label"
+        v-bind="empty"
+      />
+      <ExpandedTable
+        v-else
+        :rows="hosts"
+        :columns="hostColumns"
+        :format-count="formatters.count"
+        v-bind="empty"
+      />
+    </ExpandedDialog>
   </div>
 </template>
 ```
@@ -1453,6 +853,7 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '2xx',
     name: 'Status 2xx',
+    color: 1,
     values: [
       1970768, 2045431, 2207447, 2043392, 1792162, 1894493, 1522523, 1327714, 1397824, 1400013,
       1662309, 1853957
@@ -1461,6 +862,7 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '3xx',
     name: 'Status 3xx',
+    color: 2,
     values: [
       262040, 267609, 285424, 281518, 253458, 243622, 188475, 157518, 160801, 163438, 201094, 240161
     ]
@@ -1468,11 +870,13 @@ export const sampleStatusSeries: ChartSeries[] = [
   {
     id: '4xx',
     name: 'Status 4xx',
+    color: 'warning',
     values: [41015, 49733, 50969, 54872, 61252, 68657, 75390, 80334, 73837, 63741, 63809, 45030]
   },
   {
     id: '5xx',
     name: 'Status 5xx',
+    color: 'danger',
     values: [4785, 5447, 4587, 5964, 5280, 7973, 8616, 9609, 8368, 7191, 6381, 5146]
   }
 ]
@@ -1505,4 +909,1139 @@ export const sampleChanges: AnalyticsDashboardChanges = {
   requests: 10.03,
   statusCodes: 10.03
 }
+
+/** One usage tile of the Usage variant. */
+export interface UsageFigure {
+  /** Stable key. */
+  id: string
+  /** The tile label. */
+  label: string
+  /** One sentence that defines the figure. */
+  description: string
+  /** The unit the figure is written in. */
+  unit: 'count' | 'bytes'
+  /** The figure for the period. */
+  value: number
+  /** Change against the previous period, in percent. */
+  delta: number
+  /** The sparkline, one value per interval. */
+  trend: number[]
+}
+
+/** One row of the Usage by project table. */
+export interface UsageProject {
+  /** Stable row key. */
+  id: string
+  /** The project name. */
+  project: string
+  /** Requests served in the period. */
+  requests: number
+  /** Data transferred in the period, written. */
+  dataTransferred: string
+}
+
+/** Labels and series of one usage chart. */
+export interface UsageSeries {
+  /** One label per interval or bar. */
+  labels: string[]
+  /** The series. */
+  series: ChartSeries[]
+}
+
+export const sampleUsageFigures: UsageFigure[] = [
+  {
+    id: 'requests',
+    label: 'Requests',
+    description: 'Requests served by every project in the period.',
+    unit: 'count',
+    value: 49330393,
+    delta: -1.83,
+    trend: [
+      1806444, 1576992, 1869283, 1891454, 1893374, 2012867, 2036776, 1980797, 2313210, 2444662,
+      2507165, 2238034, 2315013, 2246445, 2351171, 2177971, 2295207, 2157832, 1993248, 2027048,
+      1952960, 1940554, 1585246, 1716640
+    ]
+  },
+  {
+    id: 'data-transferred',
+    label: 'Data transferred',
+    description: 'Data delivered to clients, in and out, by every project in the period.',
+    unit: 'bytes',
+    value: 821729544000,
+    delta: 8.98,
+    trend: [
+      37987787300, 41596689512, 40096114032, 42509594088, 39693463193, 38541437265, 34997200644,
+      32832653647, 35896619893, 34695695753, 32560234611, 29835955559, 26447312700, 29730754488,
+      27630321968, 25403501912, 30485256807, 28642766735, 30894459356, 31267070353, 35973056107,
+      35248016247, 39016905389, 39746676441
+    ]
+  },
+  {
+    id: 'jobs-run',
+    label: 'Jobs run',
+    description: 'Background jobs that ran to completion in the period.',
+    unit: 'count',
+    value: 14546636,
+    delta: 18.58,
+    trend: [
+      578482, 549084, 505643, 524549, 522829, 541220, 532059, 511331, 558322, 540484, 616959,
+      622771, 614122, 697060, 666023, 646019, 673706, 678263, 739613, 667428, 662645, 668657,
+      596124, 633243
+    ]
+  },
+  {
+    id: 'images-processed',
+    label: 'Images processed',
+    description: 'Images resized, cropped or converted in the period.',
+    unit: 'count',
+    value: 2002933,
+    delta: 16.72,
+    trend: [
+      93274, 93157, 98234, 94141, 104108, 92749, 86064, 94234, 87803, 85279, 79578, 69276, 71356,
+      63808, 62459, 74165, 76690, 67994, 79899, 83824, 78724, 85140, 92196, 88781
+    ]
+  },
+  {
+    id: 'requests-inspected',
+    label: 'Requests inspected',
+    description: 'Requests checked against security rules in the period.',
+    unit: 'count',
+    value: 30771941,
+    delta: 2.78,
+    trend: [
+      1502207, 1457618, 1405860, 1393149, 1339849, 1286141, 1261605, 1252293, 1140520, 1185385,
+      992858, 963099, 1082325, 1160330, 1160070, 1229994, 1202329, 1187616, 1405599, 1445636,
+      1385091, 1402142, 1447647, 1482578
+    ]
+  },
+  {
+    id: 'logs-exported',
+    label: 'Logs exported',
+    description: 'Log data sent to external destinations in the period.',
+    unit: 'bytes',
+    value: 61800164400,
+    delta: -7.73,
+    trend: [
+      2810255726, 2418807359, 2364529874, 2399632871, 2117725975, 1965392203, 2243329246,
+      1954529809, 2216724649, 2190530044, 2115350572, 2338212538, 2503000274, 2614725041,
+      2827373726, 2886198329, 3127436025, 3201613797, 2880012354, 3108954591, 2945086551,
+      2856059556, 2936199828, 2778483462
+    ]
+  }
+]
+
+export const sampleUsageComparison: UsageSeries & { delta: number | null } = {
+  delta: 8.98,
+  labels: [
+    '00:00',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00'
+  ],
+  series: [
+    {
+      id: 'current',
+      name: 'This period',
+      values: [
+        37987787300, 41596689512, 40096114032, 42509594088, 39693463193, 38541437265, 34997200644,
+        32832653647, 35896619893, 34695695753, 32560234611, 29835955559, 26447312700, 29730754488,
+        27630321968, 25403501912, 30485256807, 28642766735, 30894459356, 31267070353, 35973056107,
+        35248016247, 39016905389, 39746676441
+      ]
+    },
+    {
+      id: 'previous',
+      name: 'Previous period',
+      values: [
+        36311824255, 36364065729, 35671651702, 38220818870, 34170491149, 39019034176, 35328541542,
+        37510349711, 33962134894, 30438098447, 29382417841, 27076008841, 29470299745, 28487872271,
+        27983934298, 25646807130, 25926728851, 25537721824, 27160266458, 25172084289, 28466967106,
+        30258971553, 33662716159, 32759509159
+      ]
+    }
+  ]
+}
+
+export const sampleUsageRanking: UsageSeries = {
+  labels: [
+    'web-app-prod',
+    'web-app-eu-prod',
+    'storefront-checkout',
+    'marketing-site',
+    'payments-api',
+    'campaign-landing',
+    'status-page',
+    'web-app-staging'
+  ],
+  series: [
+    {
+      id: 'requests',
+      name: 'Data transferred by project',
+      values: [
+        340000000000, 190000000000, 120000000000, 76000000000, 41000000000, 23000000000, 9800000000,
+        3200000000
+      ]
+    }
+  ]
+}
+
+export const sampleUsageProjects: UsageProject[] = [
+  {
+    id: 'web-app-prod',
+    project: 'web-app-prod',
+    requests: 18420000,
+    dataTransferred: '340 GB'
+  },
+  {
+    id: 'web-app-eu-prod',
+    project: 'web-app-eu-prod',
+    requests: 11730000,
+    dataTransferred: '190 GB'
+  },
+  {
+    id: 'storefront-checkout',
+    project: 'storefront-checkout',
+    requests: 7910000,
+    dataTransferred: '120 GB'
+  },
+  {
+    id: 'marketing-site',
+    project: 'marketing-site',
+    requests: 4380000,
+    dataTransferred: '76.0 GB'
+  },
+  {
+    id: 'payments-api',
+    project: 'payments-api',
+    requests: 6240000,
+    dataTransferred: '41.0 GB'
+  },
+  {
+    id: 'campaign-landing',
+    project: 'campaign-landing',
+    requests: 1570000,
+    dataTransferred: '23.0 GB'
+  },
+  { id: 'status-page', project: 'status-page', requests: 860000, dataTransferred: '9.8 GB' },
+  {
+    id: 'web-app-staging',
+    project: 'web-app-staging',
+    requests: 210000,
+    dataTransferred: '3.2 GB'
+  }
+]
+```
+
+## `analytics-cards.ts`
+
+```ts
+import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { CsvColumn } from '@aziontech/webkit/utils/csv'
+
+import type { AnalyticsDashboardCardId, AnalyticsDashboardKpiId } from './dashboard-analytics.vue'
+
+export type FigureFormat = 'count' | 'bytes' | 'percentage'
+
+export interface FigureDefinition {
+  id: AnalyticsDashboardKpiId
+  label: string
+  description: string
+  format: FigureFormat
+  inverse: boolean
+}
+
+export const trafficFigures: FigureDefinition[] = [
+  {
+    label: 'Requests',
+    id: 'requests',
+    description: 'Sum of requests served by every service in the period.',
+    format: 'count',
+    inverse: false
+  },
+  {
+    label: 'Data transferred',
+    id: 'data-transferred',
+    description: 'Sum of data delivered to users by every service in the period.',
+    format: 'bytes',
+    inverse: false
+  },
+  {
+    label: 'Success rate',
+    id: 'success-rate',
+    description: 'Share of requests that ended in a 2xx or 3xx status.',
+    format: 'percentage',
+    inverse: false
+  },
+  {
+    label: 'Status 5xx',
+    id: 'status-5xx',
+    description: 'Requests that ended in a server error. A rise is a regression.',
+    format: 'count',
+    inverse: true
+  }
+]
+
+const hostColumn = (id: string, header: string, align: 'start' | 'end'): TableColumn => ({
+  accessorKey: id,
+  id,
+  header,
+  align,
+  sortable: true,
+  ...(id === 'host' ? { principal: true } : {})
+})
+export const hostColumns: TableColumn[] = [
+  hostColumn('host', 'Host', 'start'),
+  hostColumn('service', 'Service', 'start'),
+  hostColumn('requests', 'Requests', 'end')
+]
+
+export interface TrafficCard {
+  label: string
+  description: string
+  limit: number
+  groupBy: string[]
+  orderBy: string
+  columns: CsvColumn[]
+}
+
+const timeColumn: CsvColumn = { header: 'Time', id: 'ts' }
+
+export const trafficCards: Record<AnalyticsDashboardCardId, TrafficCard> = {
+  requests: {
+    label: 'Requests over time',
+    description: 'Sum of requests served by every service, per interval.',
+    limit: 10000,
+    groupBy: ['ts'],
+    orderBy: 'ts_ASC',
+    columns: [timeColumn, { header: 'Requests', id: 'requests' }]
+  },
+  'status-codes': {
+    label: 'Status codes',
+    description: 'Sum of requests per status class. Switch to Bar to stack the classes.',
+    limit: 10000,
+    groupBy: ['ts', 'status'],
+    orderBy: 'ts_ASC',
+    columns: [
+      timeColumn,
+      ...['2xx', '3xx', '4xx', '5xx'].map((id) => ({ header: `Status ${id}`, id }))
+    ]
+  },
+  countries: {
+    label: 'Requests by country',
+    description: 'Sum of requests per country of origin, top countries first.',
+    limit: 10,
+    groupBy: ['geolocCountryName'],
+    orderBy: 'sum_DESC',
+    columns: [
+      { header: 'Country', id: 'country' },
+      { header: 'Requests', id: 'requests' }
+    ]
+  },
+  hosts: {
+    label: 'Top hosts',
+    description: 'Hosts that served the most requests in the period, with their service.',
+    limit: 1000,
+    groupBy: ['host', 'configurationId'],
+    orderBy: 'sum_DESC',
+    columns: [
+      { header: 'Host', id: 'host' },
+      { header: 'Service', id: 'service' },
+      { header: 'Requests', id: 'requests' }
+    ]
+  }
+}
+```
+
+## `analytics-report.ts`
+
+```ts
+import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
+import { toast } from '@aziontech/webkit/toast'
+import { copyText } from '@aziontech/webkit/utils/clipboard'
+import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+
+/** The unit a figure is written in. */
+export type MetricFormat = 'count' | 'bytes' | 'percentage' | 'ms' | 'seconds'
+
+/** The parts of a Real-Time Metrics API query a card copies. */
+export interface MetricQuery {
+  /** Dataset the query reads. */
+  dataset: string
+  /** Field the query sums. */
+  measure: string
+  /** Most rows returned. */
+  limit: number
+  /** Fields the rows are grouped by. */
+  groupBy: string[]
+  /** Order of the rows. */
+  orderBy: string
+  /** Start of the window, as an ISO timestamp. */
+  begin: string
+  /** End of the window, as an ISO timestamp. */
+  end: string
+}
+
+/** What a card menu copies and exports. */
+export interface CardExport {
+  /** The query Copy query writes to the clipboard. */
+  query: string
+  /** The file name Export CSV downloads. */
+  filename: string
+  /** The CSV columns. */
+  columns: CsvColumn[]
+  /** The CSV rows, read when the export runs. */
+  rows: () => object[]
+}
+
+const byteUnits = ['B', 'KB', 'MB', 'GB', 'TB']
+
+const apiTime = (iso: string): string => iso.replace(/(\.\d+)?Z$/, '')
+
+export const metricQuery = (query: MetricQuery): string =>
+  [
+    'query {',
+    `  ${query.dataset}(`,
+    `    limit: ${query.limit}`,
+    `    filter: { tsRange: { begin: "${apiTime(query.begin)}", end: "${apiTime(query.end)}" } }`,
+    `    aggregate: { sum: ${query.measure} }`,
+    `    groupBy: [${query.groupBy.join(', ')}]`,
+    `    orderBy: [${query.orderBy}]`,
+    '  ) {',
+    ...[...query.groupBy, 'sum'].map((field) => `    ${field}`),
+    '  }',
+    '}'
+  ].join('\n')
+
+export const copyQuery = async (query: string): Promise<void> => {
+  if (!(await copyText(query))) {
+    toast.error('The query could not be copied.')
+    return
+  }
+  toast.success('Query copied.', {
+    description: 'Paste it into any GraphQL client that sends your token.'
+  })
+}
+
+export const exportCsv = (filename: string, columns: CsvColumn[], rows: object[]): void => {
+  downloadCsv(filename, toCsv({ columns, rows }))
+  toast.success('CSV exported.', { description: filename })
+}
+
+export const runCardOption = (value: string | number, card: CardExport): void => {
+  if (value === 'query') {
+    copyQuery(card.query)
+    return
+  }
+  exportCsv(card.filename, card.columns, card.rows())
+}
+
+export const seriesRows = (
+  series: readonly ChartSeries[],
+  axis: readonly ChartLabel[]
+): Record<string, string | number | null>[] =>
+  axis.map((label, index) => ({
+    ts: label instanceof Date ? label.toISOString() : label,
+    ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+  }))
+
+export const seriesColumns = (series: readonly ChartSeries[]): CsvColumn[] => [
+  { id: 'ts', header: 'Time' },
+  ...series.map((entry) => ({ id: entry.id, header: entry.name }))
+]
+
+type FormatNumber = (value: number, options?: Intl.NumberFormatOptions) => string
+
+export type FormatFixed = (value: number, digits: number) => string
+
+export const fixedFormatter =
+  (formatNumber: FormatNumber): FormatFixed =>
+  (value, digits) =>
+    formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+
+export const formatBytes = (
+  value: number,
+  fixed: FormatFixed,
+  units: readonly string[] = byteUnits
+): string => {
+  let current = value
+  let index = 0
+  while (current >= 1000 && index < units.length - 1) {
+    current /= 1000
+    index += 1
+  }
+  return `${fixed(current, current >= 100 || index === 0 ? 0 : 1)} ${units[index]}`
+}
+
+export const metricFormatters = (
+  formatNumber: FormatNumber
+): Record<MetricFormat, (value: number) => string> => {
+  const fixed = fixedFormatter(formatNumber)
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+  return {
+    count: (value) => compact(value),
+    bytes: (value) => formatBytes(value, fixed),
+    percentage: (value) => `${fixed(value, 1)}%`,
+    ms: (value) => `${formatNumber(value, { maximumFractionDigits: 1 })} ms`,
+    seconds: (value) => `${compact(value)} s`
+  }
+}
+
+/** A period of the Period Select, with the comparison label of its deltas. */
+export interface ComparedPeriod {
+  /** The period key. */
+  value: string
+  /** The label the Select shows. */
+  label: string
+  /** The comparison label of every delta. */
+  comparison: string
+}
+
+export const comparedPeriods: ComparedPeriod[] = [
+  { value: '1h', label: 'Last hour', comparison: 'vs previous hour' },
+  { value: '24h', label: 'Last 24 hours', comparison: 'vs previous 24 hours' },
+  { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
+  { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
+]
+
+export const comparedPeriod = (value: string): ComparedPeriod =>
+  comparedPeriods.find((entry) => entry.value === value) ?? comparedPeriods[1]!
+
+export const periodSlug = (period: ComparedPeriod): string =>
+  period.label.toLowerCase().replaceAll(' ', '-')
+
+export const chartForms = [
+  { label: 'Line', value: 'line' },
+  { label: 'Bar', value: 'bar' }
+]
+```
+
+## `parts/expanded-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+
+  export interface ExpandedDialogProps {
+    /** Title of the expanded card. */
+    title: string
+    /** Description of the expanded card. */
+    description: string
+    /** The chart forms of the toggle; empty hides it. */
+    forms?: ToggleGroupOption[]
+  }
+
+  withDefaults(defineProps<ExpandedDialogProps>(), { forms: () => [] })
+
+  const open = defineModel<boolean>('open', { default: false })
+  const form = defineModel<string>('form', { default: '' })
+
+  defineSlots<{ default(): unknown }>()
+</script>
+
+<template>
+  <Dialog
+    v-model:open="open"
+    size="large"
+  >
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <DialogTitle>{{ title }}</DialogTitle>
+          <DialogDescription>{{ description }}</DialogDescription>
+        </div>
+      </PanelHeader>
+      <PanelBody>
+        <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+          <div v-if="forms.length">
+            <ToggleGroup
+              v-model="form"
+              :options="forms"
+              size="small"
+              :aria-label="`Chart form for ${title}`"
+            />
+          </div>
+          <slot />
+        </div>
+      </PanelBody>
+    </DialogContent>
+  </Dialog>
+</template>
+```
+
+## `parts/expanded-table.vue`
+
+```ts
+<script setup lang="ts">
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import EmptyState from '@aziontech/webkit/empty-state'
+
+  export interface ExpandedTableProps {
+    /** The rows; each has an id and a requests count. */
+    rows: object[]
+    /** The table columns. */
+    columns: TableColumn[]
+    /** Writes the requests count of a row. */
+    formatCount: (value: number) => string
+    /** Title of the empty state. */
+    emptyTitle: string
+    /** Description of the empty state. */
+    emptyDescription: string
+  }
+
+  defineProps<ExpandedTableProps>()
+</script>
+
+<template>
+  <DataTable
+    :data="rows"
+    :columns="columns"
+    row-key="id"
+    sortable
+    density="compact"
+    bordered
+  >
+    <template #empty>
+      <EmptyState
+        size="small"
+        icon="az az-chart-line"
+        :title="emptyTitle"
+        :description="emptyDescription"
+      />
+    </template>
+
+    <template #cell-requests="{ row }">
+      <span class="tabular-nums">{{
+        formatCount('requests' in row ? Number(row.requests) : 0)
+      }}</span>
+    </template>
+    <template #footer>
+      <DataTablePagination :page-size="10" />
+    </template>
+  </DataTable>
+</template>
+```
+
+## `parts/metric-card.vue`
+
+```ts
+<script setup lang="ts">
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  /** The change tag in a card header. */
+  export interface MetricCardVariation {
+    /** The change, written with its sign. */
+    label: string
+    /** Success for a rise, danger for a fall. */
+    severity: TagSeverity
+    /** The arrow glyph. */
+    icon: string
+  }
+
+  /** From which width the header tags and the form toggle show. */
+  export type MetricCardFit = 'wide' | 'xl' | 'sm'
+
+  export interface MetricCardProps {
+    /** Columns of the 12-column grid the card spans. */
+    span: number
+    /** The card title. */
+    title: string
+    /** One sentence that defines the metric. */
+    hint: string
+    /** The aggregation tag. */
+    aggregation?: string
+    /** The change tag; null hides it. */
+    variation?: MetricCardVariation | null
+    /** The chart forms of the toggle; empty hides it. */
+    forms?: ToggleGroupOption[]
+    /** Marks the header actions as the ones of a full-width card. */
+    wide?: boolean
+    /** From which width the header tags and the toggle show. */
+    fit?: MetricCardFit
+    /** Shows the Expand button. */
+    expandable?: boolean
+    /** Disables the Expand button. */
+    blank?: boolean
+    /** Disables Export CSV. */
+    exportDisabled?: boolean
+    /** Why the card could not load; shows a danger alert with Retry. */
+    error?: string
+    /** Text of the footer link; empty hides the footer. */
+    footerLabel?: string
+    /** Target of the footer link. */
+    footerHref?: string
+  }
+
+  withDefaults(defineProps<MetricCardProps>(), {
+    aggregation: 'Sum',
+    variation: null,
+    forms: () => [],
+    wide: false,
+    fit: 'wide',
+    expandable: true,
+    blank: false,
+    exportDisabled: false,
+    error: '',
+    footerLabel: '',
+    footerHref: ''
+  })
+
+  const emit = defineEmits<{
+    expand: [event: MouseEvent]
+    select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
+  }>()
+
+  const form = defineModel<string>('form', { default: '' })
+
+  defineSlots<{ default(): unknown }>()
+</script>
+
+<template>
+  <ChartCard :span="span">
+    <ChartCard.Header>
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+        <ChartCard.Title>{{ title }}</ChartCard.Title>
+        <Hint :content="hint" />
+      </span>
+      <ChartCard.Action>
+        <span
+          :data-wide="wide ? '' : undefined"
+          class="hidden items-center gap-(--spacing-xs) sm:flex"
+          :class="{ 'lg:hidden xl:flex': fit !== 'sm', 'data-wide:lg:flex': fit === 'wide' }"
+        >
+          <Tag
+            :label="aggregation"
+            severity="neutral"
+            size="small"
+            icon="az az-calculator"
+          />
+          <Tag
+            v-if="variation"
+            :label="variation.label"
+            :severity="variation.severity"
+            :icon="variation.icon"
+            size="small"
+          />
+          <ToggleGroup
+            v-if="forms.length"
+            v-model="form"
+            :options="forms"
+            size="small"
+            :aria-label="`Chart form for ${title}`"
+          />
+        </span>
+        <Tooltip
+          v-if="expandable"
+          content="Expand"
+        >
+          <IconButton
+            icon="az az-app-window"
+            variant="ghost"
+            size="small"
+            :aria-label="`Expand ${title}`"
+            :disabled="blank"
+            @click="(event: MouseEvent) => emit('expand', event)"
+          />
+        </Tooltip>
+        <DropdownMenu
+          side="bottom"
+          align="end"
+          @select="(event, value) => emit('select', event, value)"
+        >
+          <DropdownMenu.Trigger>
+            <IconButton
+              icon="az az-ellipsis"
+              variant="ghost"
+              size="small"
+              :aria-label="`More options for ${title}`"
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item
+              value="query"
+              label="Copy query"
+            />
+            <DropdownMenu.Item
+              value="export"
+              label="Export CSV"
+              :disabled="exportDisabled"
+            />
+          </DropdownMenu.Group>
+        </DropdownMenu>
+      </ChartCard.Action>
+    </ChartCard.Header>
+    <ChartCard.Content>
+      <p
+        v-if="error"
+        class="text-body-sm text-(--text-muted)"
+      >
+        Not available.
+      </p>
+      <slot v-else />
+    </ChartCard.Content>
+    <ChartCard.Footer v-if="footerLabel">
+      <Link
+        :label="footerLabel"
+        :href="footerHref"
+        size="medium"
+      />
+    </ChartCard.Footer>
+  </ChartCard>
+</template>
+```
+
+## `parts/period-header.vue`
+
+```ts
+<script setup lang="ts">
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import Select from '@aziontech/webkit/select'
+  import Spinner from '@aziontech/webkit/spinner'
+  import Tooltip from '@aziontech/webkit/tooltip'
+
+  /** One entry of the Period Select. */
+  export interface PeriodOption {
+    /** The period key the Select writes. */
+    value: string
+    /** The label the Select shows. */
+    label: string
+  }
+
+  export interface PeriodHeaderProps {
+    /** The page title. */
+    title: string
+    /** One sentence on what the page shows. */
+    description: string
+    /** The periods the Select offers. */
+    options: PeriodOption[]
+    /** Adds a Refresh button after the Select. */
+    refreshable?: boolean
+    /** The page is reloading; the Refresh button shows its spinner. */
+    refetching?: boolean
+  }
+
+  const props = withDefaults(defineProps<PeriodHeaderProps>(), {
+    refreshable: false,
+    refetching: false
+  })
+
+  const emit = defineEmits<{ refresh: [event: MouseEvent] }>()
+
+  const period = defineModel<string>('period', { required: true })
+
+  const periodLabel = (value: string) =>
+    props.options.find((entry) => entry.value === value)?.label ?? ''
+</script>
+
+<template>
+  <PageHeader
+    :title="title"
+    :description="description"
+  >
+    <template #actions>
+      <span
+        v-if="refetching && !refreshable"
+        class="inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-muted)"
+        role="status"
+        data-testid="period-header__updating"
+      >
+        <Spinner class="size-4" />
+        Updating
+      </span>
+      <Select
+        variant="ghost"
+        v-model="period"
+        size="medium"
+        :display-value="periodLabel"
+      >
+        <Select.Trigger aria-label="Period" />
+        <Select.Content>
+          <Select.Item
+            v-for="option in options"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </Select.Item>
+        </Select.Content>
+      </Select>
+      <Tooltip
+        v-if="refreshable"
+        content="Refresh"
+      >
+        <IconButton
+          icon="az az-refresh"
+          variant="outline"
+          size="medium"
+          aria-label="Refresh metrics"
+          :loading="refetching"
+          @click="(event: MouseEvent) => emit('refresh', event)"
+        />
+      </Tooltip>
+    </template>
+  </PageHeader>
+</template>
+```
+
+## `parts/search-table.vue`
+
+```ts
+<script setup lang="ts">
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Input from '@aziontech/webkit/input'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import { matchesText } from '@aziontech/webkit/use-collection'
+  import { computed } from 'vue'
+
+  export interface SearchTableProps {
+    /** The rows; each has an id and a requests count. */
+    rows: object[]
+    /** The table columns. */
+    columns: TableColumn[]
+    /** Placeholder and accessible name of the search field. */
+    searchLabel: string
+    /** Writes the requests count of a row. */
+    formatCount: (value: number) => string
+    /** The rows are loading. */
+    loading?: boolean
+    /** Title of the empty state when there are no rows; empty never shows it. */
+    emptyTitle?: string
+    /** Description of the empty state when there are no rows. */
+    emptyDescription?: string
+    /** The options of the filter toggle beside the search; empty hides it. */
+    filters?: ToggleGroupOption[]
+    /** Accessible name of the filter toggle. */
+    filterLabel?: string
+  }
+
+  const props = withDefaults(defineProps<SearchTableProps>(), {
+    loading: false,
+    emptyTitle: '',
+    emptyDescription: '',
+    filters: () => [],
+    filterLabel: ''
+  })
+
+  const search = defineModel<string>('search', { default: '' })
+  const filter = defineModel<string>('filter', { default: 'all' })
+
+  const onFilter = (value: string | number | undefined) => {
+    filter.value = value === undefined ? 'all' : String(value)
+  }
+
+  const noMatch = () =>
+    props.filters.length ? 'Change the search or the status class.' : 'Change the search.'
+  const matchingRows = computed(() =>
+    props.rows.filter((row) =>
+      matchesText(
+        row,
+        search.value,
+        props.columns.flatMap((column) => column.accessorKey ?? [])
+      )
+    )
+  )
+</script>
+
+<template>
+  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+    <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+      <div class="min-w-36 grow basis-(--container-3xs)">
+        <Input
+          v-model="search"
+          size="medium"
+          :placeholder="searchLabel"
+          :aria-label="searchLabel"
+        >
+          <template #leading>
+            <i
+              class="az az-search"
+              aria-hidden="true"
+            />
+          </template>
+        </Input>
+      </div>
+      <ToggleGroup
+        v-if="filters.length"
+        :model-value="filter"
+        :options="filters"
+        size="medium"
+        :aria-label="filterLabel"
+        @update:model-value="onFilter"
+      />
+    </div>
+
+    <DataTable
+      :data="matchingRows"
+      :columns="columns"
+      row-key="id"
+      sortable
+      density="compact"
+      stackable
+      bordered
+      :loading="loading"
+    >
+      <template #empty>
+        <EmptyState
+          key="empty-state-1"
+          v-if="emptyTitle && !rows.length"
+          size="small"
+          icon="az az-chart-line"
+          :title="emptyTitle"
+          :description="emptyDescription"
+        />
+        <EmptyState
+          key="empty-state-2"
+          v-else
+          size="small"
+          icon="az az-search"
+          title="No matching rows"
+          :description="noMatch()"
+        />
+      </template>
+
+      <template #cell-requests="{ row }">
+        <span class="tabular-nums">{{
+          formatCount('requests' in row ? Number(row.requests) : 0)
+        }}</span>
+      </template>
+      <template #footer>
+        <DataTablePagination
+          :page-size="5"
+          :page-size-options="[5, 10, 25]"
+        />
+      </template>
+    </DataTable>
+  </div>
+</template>
+```
+
+## `parts/series-chart.vue`
+
+```ts
+<script setup lang="ts">
+  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
+
+  /** How the series draw while the chart is not in its bar form. */
+  export type SeriesChartShape = 'area' | 'line'
+
+  export interface SeriesChartProps {
+    /** The series, one value per interval or per bar. */
+    series: ChartSeries[]
+    /** One label per interval. */
+    labels: ChartLabel[]
+    /** Writes a value in the axis, the tooltip and the legend. */
+    formatValue: (value: number) => string
+    /** Draws one labeled horizontal bar per label, a ranking. */
+    ranking?: boolean
+    /** Draws the series as bars. */
+    bar?: boolean
+    /** Stacks the bars. */
+    stacked?: boolean
+    /** How the series draw while not in bars. */
+    shape?: SeriesChartShape
+    /** Shows the total in the legend. */
+    total?: boolean
+    /** Minimum plot height in pixels; left out, the chart default. */
+    height?: number
+    /** The data is loading. */
+    loading?: boolean
+    /** The data is reloading over the previous render. */
+    refetching?: boolean
+    /** Accessible name of the chart. */
+    ariaLabel?: string
+    /** Title of the empty state. */
+    emptyTitle: string
+    /** Description of the empty state. */
+    emptyDescription: string
+  }
+
+  withDefaults(defineProps<SeriesChartProps>(), {
+    ranking: false,
+    bar: false,
+    stacked: false,
+    shape: 'line',
+    total: true,
+    height: undefined,
+    loading: false,
+    refetching: false,
+    ariaLabel: ''
+  })
+
+  const activeIndex = defineModel<number | null>('activeIndex', { default: null })
+</script>
+
+<template>
+  <Chart
+    v-model:active-index="activeIndex"
+    :series="series"
+    :labels="labels"
+    :orientation="ranking ? 'horizontal' : undefined"
+    :format-value="formatValue"
+    :height="height"
+    :loading="loading"
+    :refetching="refetching"
+    :aria-label="ariaLabel || undefined"
+    :empty-title="emptyTitle"
+    :empty-description="emptyDescription"
+  >
+    <Chart.Grid />
+    <Chart.Axis type="y" />
+    <Chart.Axis type="x" />
+    <Chart.Bar
+      key="ranking-bar"
+      v-if="ranking"
+      show-labels
+    />
+    <Chart.Bar
+      key="series-bar"
+      v-else-if="bar"
+      :stacked="stacked"
+    />
+    <Chart.Area v-else-if="shape === 'area'" />
+    <Chart.Line v-else />
+    <Chart.Crosshair v-if="!ranking" />
+    <Chart.Tooltip />
+    <Chart.Legend
+      v-if="!ranking"
+      :total="total"
+    />
+  </Chart>
+</template>
 ```

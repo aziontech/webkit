@@ -3,11 +3,11 @@ name: suggestion-group
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: b7def84fcd046f31eb9a903e9b202f2d8f4676dd285d2954db485a1d0baf11ae
+checksum: 6357f59e2afbf1e73dc90bd14cfae7fb7f6f472311d6afc98ccc46b5383db0b8
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # SuggestionGroup — Component Spec
@@ -98,11 +98,11 @@ _No slots._
 
 ## Tokens
 
-| Region | Token                                                                                                                  |
-| ------ | ---------------------------------------------------------------------------------------------------------------------- |
-| prompt | `var(--bg-surface)`, `var(--border-default)` → hover `var(--border-strong)` / `var(--bg-hover)`, `var(--shape-button)` |
-| text   | `.text-label-sm`, `var(--text-default)`; icon `var(--text-muted)`; disabled `var(--text-disabled)`                     |
-| gaps   | `var(--spacing-xs)`, padding `var(--spacing-sm)` / `var(--spacing-2xs)`                                                |
+| Region | Token                                                                                                                                                                               |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| prompt | `var(--shape-button)` (a suggestion is a button): `var(--bg-surface-raised)` at 88 % over the canvas, `var(--border-default)` → hover `var(--border-strong)` / `var(--bg-selected)` |
+| text   | `.text-body-sm`, `var(--text-default)`; icon `var(--text-muted)`; disabled `var(--text-disabled)`                                                                                   |
+| gaps   | `var(--spacing-xs)`, padding `var(--spacing-md)` / `var(--spacing-xs)`                                                                                                              |
 
 ## Theme gaps
 
@@ -113,7 +113,7 @@ _None._
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` moves between prompts (each is a native button; five at most keeps the tab order short); `Enter` / `Space` chooses.
 - ARIA: `role="group"` with `aria-label`; icons `aria-hidden`; native `disabled`.
-- Touch target: 32 px rows, 44 px on coarse pointers.
+- Touch target: 40 px rows, 44 px on coarse pointers.
 
 ## Internationalization
 

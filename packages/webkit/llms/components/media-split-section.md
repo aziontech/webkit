@@ -67,7 +67,7 @@
 - With exactly one action the band is a link to that action's `href` (unless `linked` is `false`), and that lone action renders as an outlined button closed by the trailing chevron; with two the first is secondary, the second outlined, and the band is not a link
 - `size="medium"` aligns the copy to the top of the media, `size="large"` centres it
 - `orientation` and `texture` are forwarded to the media split
-- Media precedence: `scene`, `widget`, `illustration`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`); a scene and an illustration run flush
+- Media precedence: `scene`, `widget`, `illustration`. A widget and an illustration are inset from the cell's edges (`media-split`'s `mediaPadded`), so a drawn window never lies on the band's frame and scales inside the cell on a phone; a scene runs flush
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes and the widget load on demand (`defineAsyncComponent`)
 - An action's `variant` (`secondary`, `outline`, `ghost`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
@@ -79,7 +79,7 @@
 - ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an illustration is named by `illustrationAriaLabel`, and is decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
-- Touch target ≥40×40 px — the medium buttons meet it.
+- Touch target ≥40×40 px — the actions are `large` (40 px) buttons.
 
 ## Right-to-left
 
@@ -96,6 +96,7 @@
 ## Responsive
 
 - Container queries: none; `media-split` stacks the media under the copy below `lg`.
+- Vertical: a console picture under the copy is at most `var(--container-3xl)` wide, centred, so a wide band never grows its cards past the frame's height and the whole scene stays inside the frame.
 - Narrow (≤ 640 px): one column; a widget and an illustration scale down with the cell.
 - Touch: a widget shows its finished state instead of the hover beat.
 - Reflow: no horizontal scroll at 320 px.
@@ -107,13 +108,18 @@
 ```vue
 <script setup>
   import MediaSplitSection from '@aziontech/webkit/media-split-section'
+
+  const DESCRIPTION =
+    'Quality, Drive, Accountability, and Innovation. They guide how we work every ' +
+    'day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in ' +
+    'new ways. Together, they help us earn and keep the trust of our customers.'
 </script>
 
 <template>
   <MediaSplitSection
     eyebrow="Our values"
     title="Four values shape every role at Azion"
-    description="Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers."
+    :description="DESCRIPTION"
     size="large"
     :scene="{ component: 'BrandGlobeScene' }"
   />

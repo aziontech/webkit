@@ -596,7 +596,7 @@ const geoRedirect = (prefix: string, ready: boolean): DeployDrawerDependency => 
     : []
 })
 
-export const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
+const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
   const prefix = `service@${id}`
   return [authGateway(prefix), geoRedirect(prefix, id !== 'AG1VVDJP'), paymentsApi(prefix)]
 }
@@ -638,3 +638,177 @@ export const sampleDependencyResources = (serviceVersion: string): DeployDrawerR
     ...row,
     dependencies: row.key === 'service' ? sampleDependenciesByVersion(serviceVersion) : []
   }))
+
+export const sampleProjectResources: DeployDrawerResource[] = [
+  {
+    key: 'service',
+    label: 'Service',
+    name: 'project-01-web',
+    icon: 'az az-server',
+    note: '',
+    total: 12,
+    versions: [
+      {
+        id: 'AWPT11GA',
+        name: 'AWPT11GA',
+        author: 'Taylor Reed',
+        createdAt: '2026-11-09T15:00:00Z',
+        active: true
+      },
+      {
+        id: 'AY3MQWWR',
+        name: 'AY3MQWWR',
+        author: 'John Smith',
+        createdAt: '2026-11-08T12:00:00Z'
+      },
+      {
+        id: 'AZHGGSD8',
+        name: 'AZHGGSD8',
+        author: 'Sam Lee',
+        createdAt: '2026-11-06T12:00:00Z'
+      },
+      {
+        id: 'A1VA6NTP',
+        name: 'A1VA6NTP',
+        author: 'Priya Patel',
+        createdAt: '2026-11-06T12:00:00Z'
+      },
+      {
+        id: 'A393WJA6',
+        name: 'A393WJA6',
+        author: 'Chris Taylor',
+        createdAt: '2026-11-04T12:00:00Z'
+      }
+    ],
+    owner: true,
+    dependencies: [
+      {
+        key: 'service@AWPT11GA:module-image-optimizer',
+        label: 'Module',
+        name: 'image-optimizer',
+        icon: 'az az-code',
+        note: '',
+        total: 6,
+        versions: [
+          {
+            id: 'ATNSEE8Y',
+            name: 'ATNSEE8Y',
+            author: 'Taylor Reed',
+            createdAt: '2026-11-08T12:00:00Z'
+          },
+          {
+            id: 'AV1M49PF',
+            name: 'AV1M49PF',
+            author: 'John Smith',
+            createdAt: '2026-11-07T12:00:00Z'
+          },
+          {
+            id: 'AWFFU55W',
+            name: 'AWFFU55W',
+            author: 'Sam Lee',
+            createdAt: '2026-11-06T12:00:00Z'
+          },
+          {
+            id: 'AXT9K0MD',
+            name: 'AXT9K0MD',
+            author: 'Priya Patel',
+            createdAt: '2026-11-04T12:00:00Z'
+          },
+          {
+            id: 'AZ739W2U',
+            name: 'AZ739W2U',
+            author: 'Chris Taylor',
+            createdAt: '2026-11-04T12:00:00Z'
+          }
+        ]
+      },
+      {
+        key: 'service@AWPT11GA:integration-search-index',
+        label: 'Integration',
+        name: 'search-index',
+        icon: 'az az-link',
+        note: '',
+        total: 3,
+        versions: [
+          {
+            id: 'AHMVCHSJ',
+            name: 'AHMVCHSJ',
+            author: 'John Smith',
+            createdAt: '2026-11-08T12:00:00Z'
+          },
+          {
+            id: 'AJ0P2D90',
+            name: 'AJ0P2D90',
+            author: 'Sam Lee',
+            createdAt: '2026-11-06T12:00:00Z'
+          },
+          {
+            id: 'AKEIS8PH',
+            name: 'AKEIS8PH',
+            author: 'Priya Patel',
+            createdAt: '2026-11-06T12:00:00Z'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'storage',
+    label: 'Storage',
+    name: 'project-01-storage',
+    icon: 'az az-database',
+    note: 'Not versioned',
+    total: 0,
+    versions: [],
+    owner: false,
+    dependencies: []
+  }
+]
+
+/** An environment of the Project variant, with the Deployment Settings it goes live with. */
+export interface DeployDrawerProjectEnvironment extends DeployDrawerEnvironment {
+  /** The Deployment Settings and the projects that share them. */
+  setting: { name: string; shared: boolean; projects: string[] }
+}
+
+export const sampleProjectEnvironments: DeployDrawerProjectEnvironment[] = [
+  {
+    name: 'Production',
+    description: 'Live traffic. One version serves the domain, and deploying replaces it.',
+    tag: 'Last used',
+    setting: { name: 'shared-storefront', shared: true, projects: ['project-05', 'project-09'] }
+  },
+  {
+    name: 'Preview',
+    description:
+      'Every other branch. Each version keeps its own URL, so a build can be read before it is live.',
+    tag: '',
+    setting: { name: 'project-01-preview', shared: false, projects: [] }
+  }
+]
+
+/** A project the service is already bound to. */
+export interface DeployDrawerBoundProject extends DeployDrawerProject {
+  /** Stable key. */
+  id: string
+  /** The environment it last deployed to; empty for none. */
+  environment: string
+}
+
+export const sampleBoundProjects: DeployDrawerBoundProject[] = [
+  {
+    id: '1020655',
+    name: 'project-01',
+    domain: 'project-1.example.com',
+    environment: 'Production'
+  }
+]
+
+export const sampleServiceEnvironments: DeployDrawerEnvironment[] = [
+  ...sampleEnvironments,
+  {
+    name: 'Stage',
+    description: 'A rehearsal before Production. Each version keeps its own URL.',
+    tag: ''
+  }
+]

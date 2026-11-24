@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import ScanResults, {
@@ -48,10 +48,21 @@ describe('dashboard/dashboard-scan-results', () => {
   it('names what failed in each card and emits retry', async () => {
     const view = render(ScanResults, { props: { error: 'Check your connection and retry.' } })
     expect(view.container.textContent).toContain(
-      "Couldn't load submissions. Check your connection and retry."
+      "Couldn't load the scan results. Check your connection and retry."
     )
     expect(view.container.textContent).not.toContain('quarterly-report.pdf')
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
     expect(view.emitted('retry')).toHaveLength(1)
+  })
+
+  it('stacks each submission as a card on a phone instead of scrolling sideways', async () => {
+    const host = document.createElement('div')
+    host.style.width = '360px'
+    document.body.appendChild(host)
+    const view = render(ScanResults, { props: { submissions: [submission] }, container: host })
+    await waitFor(() =>
+      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(true)
+    )
+    host.remove()
   })
 })

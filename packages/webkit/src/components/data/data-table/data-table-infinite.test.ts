@@ -10,6 +10,7 @@ import { hostable } from '../../../test/hostable'
 import Table from '../table/index'
 import TableLiveButton from '../table/table-live-button/table-live-button.vue'
 import DataTableRoot from './data-table.vue'
+import DataTableLoadMore from './data-table-load-more/data-table-load-more.vue'
 
 const DataTable = hostable(DataTableRoot)
 
@@ -30,19 +31,22 @@ function infiniteHost(initial: Item[], props: Record<string, unknown> = {}) {
   const events: Event[] = []
   const Host = defineComponent({
     setup: () => () =>
-      h(DataTable, {
-        columns,
-        data: data.value,
-        moreRows: moreRows.value,
-        loadingMore: loadingMore.value,
-        ariaLabel: 'Items',
-        onLoadMore: (event: Event) => {
-          events.push(event)
-          calls.value += 1
-          loadingMore.value = true
-        },
-        ...props
-      })
+      h(
+        DataTable,
+        { columns, data: data.value, ariaLabel: 'Items', ...props },
+        {
+          'load-more': () =>
+            h(DataTableLoadMore, {
+              moreRows: moreRows.value,
+              loading: loadingMore.value,
+              onLoadMore: (event: Event) => {
+                events.push(event)
+                calls.value += 1
+                loadingMore.value = true
+              }
+            })
+        }
+      )
   })
   return { Host, data, moreRows, loadingMore, calls, events }
 }
@@ -56,9 +60,9 @@ describe('DataTable', () => {
       await waitFor(() => expect(host.calls.value).toBe(1))
       expect(host.events[0]?.type).toBe('load-more')
       await nextTick()
-      expect(getByTestId('data-table__more-loading')).toHaveTextContent('Loading more rows')
+      expect(getByTestId('data-table-load-more__loading')).toHaveTextContent('Loading more rows')
       expect(getByTestId('data-table__table')).toHaveAttribute('aria-busy', 'true')
-      expect(queryByTestId('data-table__more-sentinel')).toBeNull()
+      expect(queryByTestId('data-table-load-more__sentinel')).toBeNull()
 
       host.data.value = [...host.data.value, ...make(5, 5)]
       host.loadingMore.value = false
@@ -73,26 +77,27 @@ describe('DataTable', () => {
       host.loadingMore.value = false
       host.moreRows.value = false
       await nextTick()
-      expect(queryByTestId('data-table__more-button')).toBeNull()
-      expect(getByTestId('data-table__more-end')).toHaveTextContent('No more rows')
-      expect(getByTestId('data-table__more').querySelector('[role="status"]')).not.toBeNull()
+      expect(queryByTestId('data-table-load-more__load')).toBeNull()
+      expect(getByTestId('data-table-load-more__end')).toHaveTextContent('No more rows')
+      expect(getByTestId('data-table-load-more').querySelector('[role="status"]')).not.toBeNull()
 
       host.moreRows.value = true
       await nextTick()
-      await fireEvent.click(getByTestId('data-table__more-button'))
+      await fireEvent.click(getByTestId('data-table-load-more__load'))
       expect(host.calls.value).toBeGreaterThanOrEqual(2)
       expect(host.events.some((event) => event instanceof MouseEvent)).toBe(true)
     })
 
     it('renders no load-more band without more rows and none while the table is loading', async () => {
       const plain = render(DataTable, { props: { columns, data: make(0, 3) } })
-      expect(plain.queryByTestId('data-table__more')).toBeNull()
+      expect(plain.queryByTestId('data-table-load-more')).toBeNull()
       plain.unmount()
 
       const loading = render(DataTable, {
-        props: { columns, data: make(0, 3), moreRows: true, loading: true }
+        props: { columns, data: make(0, 3), loading: true },
+        slots: { 'load-more': () => h(DataTableLoadMore, { moreRows: true }) }
       })
-      expect(loading.queryByTestId('data-table__more')).toBeNull()
+      expect(loading.queryByTestId('data-table-load-more')).toBeNull()
     })
 
     it('works with virtual rows over 1,000 records: asks only once scrolled near the end', async () => {
@@ -128,11 +133,15 @@ describe('DataTable', () => {
               columns,
               data: data.value,
               loading: loading.value,
-              live: live.value,
-              'onUpdate:live': (value: boolean) => (live.value = value),
               maxHeight: '300px'
             },
-            { toolbar: () => h(TableLiveButton) }
+            {
+              toolbar: () =>
+                h(TableLiveButton, {
+                  modelValue: live.value,
+                  'onUpdate:modelValue': (value: boolean) => (live.value = value)
+                })
+            }
           )
       })
       return { Host, data, live, loading }

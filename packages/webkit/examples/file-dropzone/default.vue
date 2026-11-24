@@ -1,10 +1,9 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import { ref } from 'vue'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
 
-  const inputEl = ref(null)
-  const browse = () => inputEl.value?.click()
+  const picker = useFilePicker({ multiple: true })
 </script>
 
 <template>
@@ -14,14 +13,8 @@
         label="Browse files"
         variant="secondary"
         size="medium"
-        @click="browse"
+        @click="picker.open()"
       />
     </FileDropzone>
-    <input
-      ref="inputEl"
-      type="file"
-      multiple
-      class="hidden"
-    />
   </div>
 </template>

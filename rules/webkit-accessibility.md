@@ -10,8 +10,11 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 
 ## Do
 
-- Use the **native element** whose semantics match before reaching for `role`
-  (`<button>`, `<a href>`, `<input>`); add `role` only when no native element fits.
+- Use the **native element** whose semantics match before reaching for `role`, through the
+  WebKit component that renders it: `Button` / `IconButton` for a `<button>`, `Link` for an
+  `<a href>` (`Link inline` inside a sentence), `Input` and its family for an `<input>`. A raw
+  one outside its owner is flagged by `webkit/no-unowned-element`. Add `role` only when no
+  native element fits.
 - Mirror ARIA state with the element's `data-*` state (`aria-expanded` with
   `data-state="open"`, `aria-disabled` with `data-disabled`, `aria-invalid` with
   `data-invalid`).
@@ -29,6 +32,11 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   `Esc` closes). Anything clickable must be reachable and operable by keyboard.
   The screen around the pieces follows one console-wide contract (focus on open, `Esc`,
   `⌘ S`, `/`, `?`, list keys): rule [`webkit-keyboard`](./webkit-keyboard.md).
+- Put help beside a label in a **`Hint`** (the small info glyph that opens a short note on click),
+  a short explanation in the field or section description, and a long one in a `HelpPanel`. A
+  `Tooltip` only names a control in a few words. A typed `?`, an info icon inside a `Tooltip` or
+  `Popover` trigger, a `Tooltip` over 80 characters and a `Hint` over 280 are flagged by
+  `webkit/prefer-hint`.
 - Generate ids with Vue's **`useId()`** for every `for` / `aria-labelledby` /
   `aria-describedby` association — stable across SSR.
 - Style focus with a **`focus-visible`** ring using the ring token
@@ -67,10 +75,10 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   and marks) and APCA: Lc 75 body text, Lc 60 other text, Lc 45 icons, Lc 30 solid marks, Lc 15
   borders. Use the theme's token pairs (they pass); the few accepted exceptions are listed in
   `webkit-tokens.md` § "Contrast: APCA and WCAG 2".
-- Never strip the underline from a link inside a sentence (`text-link`, `no-underline`): the link blue is
-  only 1.1–1.3:1 against muted body text and 3:1 against default text, so color alone fails WCAG 1.4.1.
-  `text-link` keeps a quiet underline at rest and strengthens it on hover. A standalone `Link` (not in a
-  sentence) underlines on hover only.
+- Never strip the underline from a link inside a sentence (`no-underline` on a `Link inline`): the link
+  blue is only 1.1–1.3:1 against muted body text and 3:1 against default text, so color alone fails
+  WCAG 1.4.1. `Link inline` renders the `text-link` style, which keeps a quiet underline at rest and
+  strengthens it on hover. A standalone `Link` (not in a sentence) underlines on hover only.
 
 ## Example
 
@@ -78,24 +86,28 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 
 ```vue
 <script setup>
-import { useId } from 'vue'
+import Button from '@aziontech/webkit/button'
+import Input from '@aziontech/webkit/input'
+import { ref, useId } from 'vue'
+const open = ref(false)
 const hintId = useId() // stable id for the ARIA association
 </script>
 
 <template>
-  <!-- native semantics, tokenized focus ring, reduced-motion fallback -->
-  <button
-    class="inline-flex items-center gap-(--spacing-xs)
-           transition-colors duration-150 motion-reduce:transition-none
-           focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+  <!-- a native button with the token focus ring and the reduced-motion fallback built in;
+       the ARIA state mirrors what the toggle shows -->
+  <Button
+    label="Show details"
+    variant="secondary"
     :aria-expanded="open"
-    :data-state="open ? 'open' : 'closed'"
-    @click="toggle"
-  >
-    Save changes
-  </button>
+    @click="open = !open"
+  />
 
-  <input type="email" :aria-describedby="hintId" />
+  <Input
+    type="email"
+    aria-label="Email"
+    :aria-describedby="hintId"
+  />
   <p :id="hintId">We never share your email.</p>
 </template>
 ```

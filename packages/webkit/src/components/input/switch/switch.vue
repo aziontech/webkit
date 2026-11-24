@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
-  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useFieldAttrs } from '../../../composables/use-field-attrs'
   import { FormValue } from '../parts/form-value'
 
   defineOptions({
@@ -43,23 +43,11 @@
     labelledBy,
     invalid: isInvalid,
     disabled: isDisabled,
-    required: isRequired
-  } = useFieldControl({
-    id: () => attrs['id'] as string | undefined,
-    describedBy: () => attrs['aria-describedby'] as string | undefined,
-    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
-    invalid: () => props.invalid,
-    disabled: () => props.disabled
-  })
+    required: isRequired,
+    passthroughAttrs
+  } = useFieldAttrs(props)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'switch')
-
-  const passthroughAttrs = computed(() => {
-    const rest = { ...attrs }
-    delete rest.class
-    delete rest['data-testid']
-    return rest
-  })
 
   const isChecked = computed(() => model.value === true)
 
@@ -81,6 +69,26 @@
       onToggle()
     }
   }
+
+  const ROOT_CLASS =
+    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-0.5 transition-colors ' +
+    'duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] ' +
+    'data-[invalid]:not-data-[checked]:border-(--danger-border) ' +
+    'data-[checked]:border-transparent data-[checked]:bg-(--accent) ' +
+    'forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] ' +
+    'disabled:cursor-not-allowed disabled:border-(--border-input) disabled:bg-(--bg-disabled) disabled:hover:shadow-none ' +
+    'disabled:data-[checked]:border-transparent disabled:data-[checked]:bg-(--accent-mask) ' +
+    'after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
+
+  const HANDLE_CLASS =
+    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out ' +
+    'motion-reduce:transition-none motion-reduce:transform-none ' +
+    'group-data-[checked]:translate-x-3.5 ' +
+    'rtl:group-data-[checked]:-translate-x-3.5 ' +
+    'group-data-[checked]:bg-(--accent-foreground) ' +
+    'group-disabled:bg-(--text-disabled) group-disabled:group-data-[checked]:bg-(--text-disabled) ' +
+    'forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-disabled:bg-[GrayText]'
 </script>
 
 <template>
@@ -101,15 +109,14 @@
     :data-checked="isChecked || null"
     :data-disabled="isDisabled || null"
     :data-invalid="isInvalid || null"
-    :class="attrs.class"
-    class="group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[invalid]:not-data-[checked]:border-(--danger-border) data-[checked]:border-transparent data-[checked]:bg-(--accent) forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]"
+    :class="[ROOT_CLASS, attrs.class]"
     v-bind="passthroughAttrs"
     @click="onToggle"
     @keydown="onKeydown"
   >
     <span
       aria-hidden="true"
-      class="pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 rtl:group-data-[checked]:-translate-x-3.5 group-data-[checked]:bg-(--accent-foreground) group-data-[disabled]:bg-(--text-disabled) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]"
+      :class="HANDLE_CLASS"
       :data-testid="`${testId}__handle`"
     >
       <template v-if="variant === 'privacy'">

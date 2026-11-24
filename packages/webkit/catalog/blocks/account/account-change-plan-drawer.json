@@ -8,7 +8,14 @@
  ],
  "sfcFile": "blocks/account/account-change-plan-drawer/account-change-plan-drawer.vue",
  "guidelinesFile": "blocks/account/account-change-plan-drawer/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-change-plan-drawer/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "change-plan-card.ts",
+  "parts/change-plan-compare.vue",
+  "parts/upgrade-address-card.vue",
+  "parts/upgrade-charge-card.vue",
+  "parts/upgrade-included.vue",
+  "parts/upgrade-payment-card.vue",
+  "parts/upgrade-terms-field.vue"
+ ]
 }

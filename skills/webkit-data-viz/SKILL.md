@@ -228,7 +228,6 @@ card, the grid or the `nth-child` dividers.
       :value="70"
       unit="%"
       :delta="-1.5"
-      inverse
     />
   </StatTileGroup>
 </template>

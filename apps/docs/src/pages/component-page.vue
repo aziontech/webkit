@@ -5,12 +5,11 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import Tag from '@aziontech/webkit/tag'
   import { useHead } from '@unhead/vue'
-  import { computed } from 'vue'
+  import { computed, defineAsyncComponent, hydrateOnIdle } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import ApiTable from '../components/api-table.vue'
-  import DoDont from '../components/do-dont.vue'
   import ExampleCard from '../components/example-card.vue'
+  import PreviewNote from '../components/preview-note.vue'
   import RawHtml from '../components/raw-html.vue'
   import TableOfContents from '../components/table-of-contents.vue'
   import { componentMarkdown, copyText } from '../lib/copy'
@@ -19,6 +18,19 @@
   import { categoryLabel } from '../lib/nav'
   import type { ComponentDoc } from '../lib/types'
   import NotFound from './not-found-page.vue'
+
+  const ApiTable = defineAsyncComponent({
+    loader: () => import('../components/api-table.vue'),
+    hydrate: hydrateOnIdle()
+  })
+  const DoDont = defineAsyncComponent({
+    loader: () => import('../components/do-dont.vue'),
+    hydrate: hydrateOnIdle()
+  })
+  const LaterExampleCard = defineAsyncComponent({
+    loader: () => import('../components/example-card.vue'),
+    hydrate: hydrateOnIdle()
+  })
 
   const route = useRoute()
   const t = messages
@@ -111,7 +123,9 @@
     v-else
     class="flex w-full gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-lg) lg:px-(--spacing-xl)"
   >
-    <article class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl)">
+    <article
+      class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) xl:max-w-[calc(100%-var(--container-3xs)-var(--spacing-xl))]"
+    >
       <DocPageHeader
         :title="item.title"
         :description="item.purpose"
@@ -123,18 +137,29 @@
         @action-click="onMetaAction"
       >
         <template #details>
-          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-            <Tag
-              :label="item.surface"
-              severity="neutral"
-              size="small"
-            />
-            <Tag
-              v-if="doc.structure"
-              :label="doc.structure"
-              severity="neutral"
-              size="small"
-            />
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <Tag
+                v-if="item.stability === 'preview'"
+                key="stability"
+                :label="t.stabilityPreview"
+                severity="info"
+                size="small"
+              />
+              <Tag
+                :label="item.surface"
+                severity="neutral"
+                size="small"
+              />
+              <Tag
+                v-if="doc.structure"
+                key="structure"
+                :label="doc.structure"
+                severity="neutral"
+                size="small"
+              />
+            </div>
+            <PreviewNote v-if="item.stability === 'preview'" />
           </div>
         </template>
       </DocPageHeader>
@@ -145,6 +170,11 @@
           default-value="import"
         />
       </div>
+
+      <TableOfContents
+        :items="toc"
+        compact
+      />
 
       <ExampleCard
         v-if="firstExample && doc.exampleDir"
@@ -185,7 +215,7 @@
         class="flex scroll-mt-20 flex-col gap-(--spacing-xl)"
       >
         <h2 class="text-heading-md">{{ t.moreExamples }}</h2>
-        <ExampleCard
+        <LaterExampleCard
           v-for="example in moreExamples"
           :key="example.file"
           :dir="doc.exampleDir"

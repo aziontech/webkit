@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import Card from '../../card/card.vue'
   import Item from '../../item/index'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'ApplicationsCreateMethodFragment' })
 
@@ -38,14 +38,9 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:80%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="py-(--spacing-xs)">
       <ConsoleMockupShellItem :order="0">
@@ -87,5 +82,5 @@
         </Card>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

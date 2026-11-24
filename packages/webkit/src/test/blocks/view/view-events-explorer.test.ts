@@ -133,6 +133,31 @@ describe('view/view-events-explorer block', () => {
     await waitFor(() => expect(view.container.textContent).toContain('Matched on the server'))
   })
 
+  it('never counts 0 values while the events load or after they fail to load', async () => {
+    await page.viewport(1280, 900)
+    const loading = render(ViewEventsExplorer, { props: { loading: true } })
+    await waitFor(() =>
+      expect(loading.getAllByTestId('field-row__count-loading').length).toBeGreaterThan(0)
+    )
+    expect(loading.queryAllByLabelText('0 distinct values')).toHaveLength(0)
+    loading.unmount()
+    const failed = render(ViewEventsExplorer, { props: { error: 'The API answered 503.' } })
+    await waitFor(() =>
+      expect(failed.getAllByLabelText(/values unknown$/).length).toBeGreaterThan(0)
+    )
+    expect(failed.queryAllByLabelText('0 distinct values')).toHaveLength(0)
+    await page.viewport(414, 896)
+  })
+
+  it('focuses Search events on / with nothing focused', async () => {
+    const view = render(ViewEventsExplorer)
+    const field = await waitFor(() => view.getByRole('textbox', { name: 'Search events' }))
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await fireEvent.keyDown(document.body, { key: '/' })
+    await waitFor(() => expect(document.activeElement).toBe(field))
+    expect(field.getAttribute('aria-keyshortcuts')).toBe('/')
+  })
+
   it('replaces the log with a danger alert whose Retry emits retry', async () => {
     const failed = render(EventsExplorerFailed)
     expect(failed.container.textContent).toContain("Couldn't load events.")
@@ -217,6 +242,17 @@ describe('view/view-events-explorer block', () => {
       expect(view.queryByRole('columnheader', { name: /^Level/ })).toBeNull()
       view.unmount()
     }
+  })
+
+  it('opens the event drawer on a phone without focusing a search field', async () => {
+    await page.viewport(390, 844)
+    const view = render(ViewEventsExplorer)
+    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    await fireEvent.click(open!)
+    const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
+    await waitFor(() => expect(drawer.contains(document.activeElement)).toBe(true))
+    expect(['INPUT', 'TEXTAREA']).not.toContain(document.activeElement?.tagName)
+    await page.viewport(414, 896)
   })
 
   it('states the time zone in the toolbar of the EventDocument variant', () => {

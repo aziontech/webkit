@@ -20,7 +20,7 @@
     },
     keywords: {
       type: String,
-      required: false
+      default: ''
     },
     color: {
       type: String,
@@ -220,11 +220,11 @@
 </script>
 <template>
   <li
-    class="border border-neutral-200 dark:border-neutral-700 rounded-lg overflow-hidden bg-white/60 dark:bg-neutral-800/60 group md:gradient-mask-bl-70"
+    class="border border-neutral-200 dark:border-neutral-700 rounded-lg overflow-hidden bg-white/60 dark:bg-neutral-800/60 group md:[mask-image:linear-gradient(to_bottom_left,#000_70%,transparent)]"
   >
     <div class="relative min-h-40">
       <p
-        class="absolute z-10 top-4 left-4 text-neutral-500 dark:text-neutral-400 text-ellipsis max-w-20 text-xs"
+        class="absolute z-10 top-4 start-4 text-neutral-500 dark:text-neutral-400 text-ellipsis max-w-20 text-xs"
       >
         {{ name }}
       </p>
@@ -237,12 +237,12 @@
         <slot></slot>
       </a>
       <div
-        class="absolute bottom-0 right-0 flex items-center opacity-0 group-hover:opacity-100 transition-all duration-200"
+        class="absolute bottom-0 end-0 flex items-center opacity-0 group-hover:opacity-100 transition-all duration-200"
       >
         <button
           title="Copy code"
           @click="copyCode"
-          class="rounded-none rounded-tl-md border-none bg-transparent h-10 w-10 text-xs"
+          class="rounded-none rounded-ss-md border-none bg-transparent hover:bg-white/70 hover:dark:bg-neutral-900/80 h-10 w-10 text-xs"
         >
           <i
             v-if="!showCheckIcon"
@@ -256,7 +256,7 @@
         <button
           :title="'Copy Image ' + downloadFormat.toUpperCase()"
           @click="copyImage"
-          class="rounded-none border-none bg-transparent h-10 w-10 text-xs"
+          class="rounded-none border-none bg-transparent hover:bg-white/70 hover:dark:bg-neutral-900/80 h-10 w-10 text-xs"
         >
           <i
             v-if="!showImageCheckIcon"
@@ -270,7 +270,7 @@
         <button
           :title="'Download ' + downloadFormat.toUpperCase()"
           @click="downloadIcon"
-          class="rounded-none border-none bg-transparent h-10 w-10 text-xs"
+          class="rounded-none border-none bg-transparent hover:bg-white/70 hover:dark:bg-neutral-900/80 h-10 w-10 text-xs"
         >
           <i class="az az-download"></i>
         </button>

@@ -240,52 +240,29 @@ function applyReportOnly(action) {
   return { action, result: action.reportResult || 'skipped', detail: action.detail }
 }
 
+const APPLIERS = {
+  'add-dep': applyAddDep,
+  write: applyWrite,
+  'merge-json': applyMergeJson,
+  append: applyAppend,
+  copy: applyCopy,
+  'copy-stamped': applyCopyStamped,
+  'patch-entry': applyPatchEntry,
+  'remove-starter': applyRemoveStarter,
+  fence: applyFence,
+  'activate-hooks': applyActivateHooks,
+  advise: (projectDir, action) => ({ action, result: 'advised', detail: action.message }),
+  report: (projectDir, action) => applyReportOnly(action)
+}
+
+function applyAction(projectDir, action) {
+  const apply = Object.hasOwn(APPLIERS, action.type) ? APPLIERS[action.type] : null
+  if (!apply) return { action, result: 'skipped', detail: `unknown action type: ${action.type}` }
+  return apply(projectDir, action)
+}
+
 export function applyPlan(projectDir, plan) {
-  const results = []
-  for (const action of plan) {
-    switch (action.type) {
-      case 'add-dep':
-        results.push(applyAddDep(projectDir, action))
-        break
-      case 'write':
-        results.push(applyWrite(projectDir, action))
-        break
-      case 'merge-json':
-        results.push(applyMergeJson(projectDir, action))
-        break
-      case 'append':
-        results.push(applyAppend(projectDir, action))
-        break
-      case 'copy':
-        results.push(applyCopy(projectDir, action))
-        break
-      case 'copy-stamped':
-        results.push(applyCopyStamped(projectDir, action))
-        break
-      case 'patch-entry':
-        results.push(applyPatchEntry(projectDir, action))
-        break
-      case 'remove-starter':
-        results.push(applyRemoveStarter(projectDir, action))
-        break
-      case 'fence':
-        results.push(applyFence(projectDir, action))
-        break
-      case 'activate-hooks':
-        results.push(applyActivateHooks(projectDir, action))
-        break
-      case 'advise':
-        results.push({ action, result: 'advised', detail: action.message })
-        break
-      case 'report':
-        results.push(applyReportOnly(action))
-        break
-      default:
-        results.push({ action, result: 'skipped', detail: `unknown action type: ${action.type}` })
-    }
-  }
-  return results
+  return plan.map((action) => applyAction(projectDir, action))
 }
 
 export { readJsonStrict }
-export const _internals = { mergePreserve }

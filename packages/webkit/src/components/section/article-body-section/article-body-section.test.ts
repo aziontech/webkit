@@ -146,10 +146,29 @@ describe('ArticleBodySection', () => {
   })
 
   it('feeds the outline from the headings, the first one active', () => {
-    const { getByRole } = band()
+    const { getAllByRole } = band()
 
-    const outline = getByRole('navigation', { name: 'On this page' })
+    const outline = getAllByRole('navigation', { name: 'On this page' }).at(-1) as HTMLElement
+    expect(outline.closest('aside')).not.toBeNull()
     const links = Array.from(outline.querySelectorAll('a'))
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '#challenge',
+      '#results-and-impact',
+      '#in-numbers'
+    ])
+  })
+
+  it('folds the outline into a closed disclosure above the body on small screens', async () => {
+    const { getByTestId } = band()
+
+    const disclosure = getByTestId('article-body-section').querySelector('[data-slot="outline"]')
+    expect(disclosure?.tagName).toBe('DETAILS')
+    expect(disclosure?.hasAttribute('open')).toBe(false)
+    expect(disclosure?.classList.contains('lg:hidden')).toBe(true)
+    const summary = disclosure?.querySelector('summary') as HTMLElement
+    expect(summary.textContent?.trim()).toBe('On this page')
+    await userEvent.click(summary)
+    const links = Array.from(disclosure?.querySelectorAll('nav a') ?? [])
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '#challenge',
       '#results-and-impact',
@@ -353,6 +372,14 @@ describe('ArticleBodySection', () => {
 
     expect(getByRole('complementary', { name: share.title })).toBeInTheDocument()
     expect(getByRole('region', { name: community.title })).toBeInTheDocument()
+  })
+
+  it('keeps the share rail in the page on small screens, after the body', () => {
+    const { getByRole } = band()
+
+    const rail = getByRole('complementary', { name: share.title })
+    expect(rail.classList.contains('hidden')).toBe(false)
+    expect(rail.previousElementSibling?.tagName).toBe('ARTICLE')
   })
 
   it('omits the left rail when no group is set', () => {

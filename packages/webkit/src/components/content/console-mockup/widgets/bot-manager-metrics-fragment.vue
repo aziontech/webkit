@@ -4,8 +4,8 @@
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
   import Card from '../../card/card.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'BotManagerMetricsFragment' })
 
@@ -58,18 +58,23 @@
   const dashboard = computed(() =>
     props.active && (props.hovered || !canHover.value) ? 'breakdown' : 'overview'
   )
+
+  const OVERVIEW_PANEL_CLASS =
+    'col-start-1 row-start-1 grid translate-y-1 grid-cols-2 gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'data-active:translate-y-0 data-active:opacity-100 ' +
+    'motion-reduce:transition-none'
+
+  const BREAKDOWN_PANEL_CLASS =
+    'col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'data-active:translate-y-0 data-active:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:80%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="flex flex-col gap-(--spacing-md) py-(--spacing-xs)">
       <ConsoleMockupShellItem :order="0">
@@ -86,7 +91,7 @@
         <div class="grid">
           <div
             :data-active="dashboard === 'overview' || null"
-            class="col-start-1 row-start-1 grid translate-y-1 grid-cols-2 gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-active:translate-y-0 data-active:opacity-100 motion-reduce:transition-none"
+            :class="OVERVIEW_PANEL_CLASS"
           >
             <Card
               v-for="metric in BIG_NUMBERS"
@@ -112,7 +117,7 @@
 
           <div
             :data-active="dashboard === 'breakdown' || null"
-            class="col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-active:translate-y-0 data-active:opacity-100 motion-reduce:transition-none"
+            :class="BREAKDOWN_PANEL_CLASS"
           >
             <Card>
               <template #default>
@@ -158,5 +163,5 @@
         </div>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

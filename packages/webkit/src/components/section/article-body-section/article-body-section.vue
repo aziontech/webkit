@@ -2,17 +2,10 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../locales/en'
-  import { copyText } from '../../../utils/clipboard'
-  import { safeHref } from '../../../utils/safe-href'
-  import IconButton from '../../action/icon-button/icon-button.vue'
   import type { SplitButtonItem } from '../../action/split-button/split-button.vue'
-  import SplitButton from '../../action/split-button/split-button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import DocProse from '../../docs/doc-prose/doc-prose.vue'
   import DocTableOfContents from '../../docs/doc-table-of-contents/doc-table-of-contents.vue'
-  import { toast } from '../../feedback/toast/composables/use-toast-store'
   import Container from '../../layout/container/container.vue'
   import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
@@ -20,7 +13,9 @@
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
   import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
-  import Tooltip from '../../overlay/tooltip/tooltip.vue'
+  import { parseArticleBody } from './lib/parse-article-body'
+  import ArticleBodySectionOutline from './parts/article-body-section-outline.vue'
+  import ArticleBodySectionShareRail from './parts/article-body-section-share-rail.vue'
 
   defineOptions({
     name: 'ArticleBodySection',
@@ -152,8 +147,6 @@
 
   const attrs = useAttrs()
 
-  const { t } = useTranslate({ articleBodySection: en.articleBodySection })
-
   const TRIP_LINE = 120
 
   const proseEl = ref<HTMLElement | null>(null)
@@ -164,96 +157,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'article-body-section'
   )
 
-  const slug = (text: string): string =>
-    text
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-
-  const INLINE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*|`([^`]+)`|\*([^*]+)\*/g
-
-  const runsOf = (text: string): ArticleBodySectionRun[] => {
-    const runs: ArticleBodySectionRun[] = []
-    let last = 0
-    for (const match of text.matchAll(INLINE)) {
-      const index = match.index ?? 0
-      if (index > last) runs.push({ kind: 'text', text: text.slice(last, index) })
-      const linkHref = match[1] === undefined ? null : safeHref(match[2])
-      if (match[1] !== undefined && linkHref !== null) {
-        runs.push({ kind: 'link', text: match[1], href: linkHref })
-      } else if (match[1] !== undefined) runs.push({ kind: 'text', text: match[1] })
-      else if (match[3] !== undefined) runs.push({ kind: 'strong', text: match[3] })
-      else if (match[4] !== undefined) runs.push({ kind: 'code', text: match[4] })
-      else runs.push({ kind: 'em', text: match[5] ?? '' })
-      last = index + match[0].length
-    }
-    if (last < text.length) runs.push({ kind: 'text', text: text.slice(last) })
-    return runs
-  }
-
-  const plainOf = (runs: ArticleBodySectionRun[]): string => runs.map((run) => run.text).join('')
-
-  const FENCE = /^```(\w*)\s*$/
-  const HEADING = /^(#{2,3})\s+(.+)$/
-  const BULLET = /^[-*]\s+(.*)$/
-  const NUMBERED = /^\d+\.\s+(.*)$/
-
-  const startsBlock = (line: string): boolean =>
-    FENCE.test(line) || HEADING.test(line) || BULLET.test(line) || NUMBERED.test(line)
-
-  const blocks = computed<ArticleBodySectionBlock[]>(() => {
-    const lines = props.body.split('\n').map((line) => line.trimEnd())
-    const out: ArticleBodySectionBlock[] = []
-    let index = 0
-    while (index < lines.length) {
-      const line = (lines[index] ?? '').trim()
-      if (!line) {
-        index += 1
-        continue
-      }
-      const fence = FENCE.exec(line)
-      if (fence) {
-        const code: string[] = []
-        index += 1
-        while (index < lines.length && !/^```\s*$/.test((lines[index] ?? '').trim())) {
-          code.push(lines[index] ?? '')
-          index += 1
-        }
-        index += 1
-        out.push({ kind: 'code', text: code.join('\n'), lang: fence[1] || undefined })
-        continue
-      }
-      const heading = HEADING.exec(line)
-      if (heading) {
-        const text = (heading[2] ?? '').trim()
-        out.push({ kind: 'heading', depth: heading[1] === '###' ? 3 : 2, id: slug(text), text })
-        index += 1
-        continue
-      }
-      const pattern = BULLET.test(line) ? BULLET : NUMBERED.test(line) ? NUMBERED : null
-      if (pattern) {
-        const runs: ArticleBodySectionRun[][] = []
-        while (index < lines.length) {
-          const item = pattern.exec((lines[index] ?? '').trim())
-          if (!item) break
-          runs.push(runsOf(item[1] ?? ''))
-          index += 1
-        }
-        out.push({ kind: 'list', items: runs.map(plainOf), ordered: pattern === NUMBERED, runs })
-        continue
-      }
-      const paragraph: string[] = []
-      while (index < lines.length) {
-        const next = (lines[index] ?? '').trim()
-        if (!next || (paragraph.length > 0 && startsBlock(next))) break
-        paragraph.push(next)
-        index += 1
-      }
-      const runs = runsOf(paragraph.join(' '))
-      out.push({ kind: 'paragraph', text: plainOf(runs), runs })
-    }
-    return out
-  })
+  const blocks = computed<ArticleBodySectionBlock[]>(() => parseArticleBody(props.body))
 
   const headings = computed(() =>
     blocks.value.flatMap((block) =>
@@ -269,73 +173,9 @@
     [props.article.date, props.article.readTime].filter((part) => part).join(' • ')
   )
 
-  const shareX = computed(
-    () => `https://x.com/intent/tweet?url=${props.article.href}&via=aziontech`
-  )
-
-  const shareLinkedIn = computed(
-    () =>
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(props.article.href)}`
-  )
-
-  const hasRail = computed(() => Boolean(props.share || props.community || props.copyPage))
-
-  const hasFeed = computed(() => Boolean(props.share?.copyFeed && props.share?.feed))
-
-  const isExternal = (href: string): boolean => !href.startsWith('/')
-
   const isRemote = (href: string): boolean => /^https?:/.test(href)
 
-  const pageUrl = (): string => globalThis.location?.href || props.article.href
-
-  const pageMarkdown = (): string =>
-    [`# ${props.article.title}`, props.article.description ?? '', props.body]
-      .filter((part) => part)
-      .join('\n\n')
-
-  const copy = async (message: string, text: string): Promise<void> => {
-    if (!(await copyText(text))) {
-      toast.error(t('articleBodySection.copyFailed'), {
-        description: t('articleBodySection.copyFailedHint')
-      })
-      return
-    }
-    toast.success(message)
-  }
-
-  const copyLink = (): void => {
-    void copy(props.share?.copiedLink || t('articleBodySection.linkCopied'), pageUrl())
-  }
-
-  const copyFeed = (): void => {
-    void copy(
-      props.share?.copiedFeed || t('articleBodySection.copiedFeed'),
-      props.share?.feed ?? ''
-    )
-  }
-
-  const copyBody = (): void => {
-    void copy(props.share?.copiedPage || t('articleBodySection.copiedPage'), pageMarkdown())
-  }
-
-  const viewMarkdown = (): void => {
-    const url = URL.createObjectURL(new Blob([pageMarkdown()], { type: 'text/plain' }))
-    window.open(url, '_blank', 'noopener')
-    setTimeout(() => URL.revokeObjectURL(url), 10000)
-  }
-
-  const onMenu = (_event: MouseEvent | KeyboardEvent, item: SplitButtonItem): void => {
-    const value = item.value ?? item.label
-    if (value === 'link') return copyLink()
-    if (value === 'markdown') return viewMarkdown()
-    const template = typeof value === 'string' ? props.assistants[value] : undefined
-    if (!template) return
-    const prompt = encodeURIComponent(
-      t('articleBodySection.assistantPrompt', { url: props.article.href })
-    )
-    const url = safeHref(template.replace('{prompt}', prompt))
-    if (url) window.open(url, '_blank', 'noopener')
-  }
+  const hasRail = computed(() => Boolean(props.share || props.community || props.copyPage))
 
   const spy = (): void => {
     const nodes = proseEl.value?.querySelectorAll<HTMLElement>('h2[id], h3[id]') ?? []
@@ -360,6 +200,10 @@
   useEventListener(globalThis.window, 'scroll', spy, { passive: true })
 
   onMounted(spy)
+
+  const ARTICLE_GRID_CLASS =
+    'grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(var(--size-44),1fr)_minmax(0,var(--container-2xl))_minmax(var(--size-44),1fr)] ' +
+    'lg:grid-rows-[auto_auto_1fr]'
 </script>
 
 <template>
@@ -398,9 +242,7 @@
           borders="y"
           marks="all"
         >
-          <div
-            class="grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(var(--size-44),1fr)_minmax(0,var(--container-2xl))_minmax(var(--size-44),1fr)] lg:grid-rows-[auto_auto_1fr]"
-          >
+          <div :class="ARTICLE_GRID_CLASS">
             <header class="flex min-w-0 flex-col gap-(--spacing-lg) lg:col-start-2">
               <Breadcrumb
                 v-if="trail.length > 0"
@@ -450,6 +292,13 @@
             </header>
 
             <Separator class="lg:col-start-2" />
+
+            <ArticleBodySectionOutline
+              v-if="headings.length > 0"
+              :items="headings"
+              :active-id="activeId"
+              @select="goToHeading"
+            />
 
             <article
               ref="proseEl"
@@ -526,109 +375,15 @@
               </DocProse>
             </article>
 
-            <aside
+            <ArticleBodySectionShareRail
               v-if="hasRail"
-              :aria-label="share?.title || community?.title || copyPage?.label"
-              class="hidden lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:block"
-            >
-              <div
-                class="sticky top-[calc(3.5rem+var(--spacing-xl))] flex max-h-[calc(100dvh-3.5rem-var(--spacing-xl))] flex-col gap-(--spacing-xl) overflow-y-auto pb-(--spacing-lg)"
-              >
-                <section
-                  v-if="share"
-                  class="flex flex-col gap-(--spacing-sm)"
-                  :aria-label="share.title"
-                >
-                  <p class="m-0 text-heading-xs text-(--text-default)">{{ share.title }}</p>
-                  <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-                    <Tooltip :content="share.copyLink">
-                      <IconButton
-                        variant="outline"
-                        size="medium"
-                        icon="az az-link"
-                        :ariaLabel="share.copyLink"
-                        @click="copyLink"
-                      />
-                    </Tooltip>
-                    <Tooltip
-                      v-if="hasFeed"
-                      :content="share.copyFeed ?? ''"
-                    >
-                      <IconButton
-                        variant="outline"
-                        size="medium"
-                        icon="az az-rss"
-                        :ariaLabel="share.copyFeed ?? ''"
-                        @click="copyFeed"
-                      />
-                    </Tooltip>
-                    <Tooltip :content="share.shareX">
-                      <IconButton
-                        variant="outline"
-                        size="medium"
-                        icon="az az-x-brand"
-                        :ariaLabel="share.shareX"
-                        :href="shareX"
-                        target="_blank"
-                      />
-                    </Tooltip>
-                    <Tooltip :content="share.shareLinkedIn">
-                      <IconButton
-                        variant="outline"
-                        size="medium"
-                        icon="az az-linkedin"
-                        :ariaLabel="share.shareLinkedIn"
-                        :href="shareLinkedIn"
-                        target="_blank"
-                      />
-                    </Tooltip>
-                  </div>
-                </section>
-
-                <section
-                  v-if="community"
-                  class="flex flex-col gap-(--spacing-sm)"
-                  :aria-label="community.title"
-                >
-                  <p class="m-0 text-heading-xs text-(--text-default)">{{ community.title }}</p>
-                  <ul
-                    role="list"
-                    class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
-                  >
-                    <li
-                      v-for="link in community.links"
-                      :key="link.href"
-                    >
-                      <a
-                        :href="safeHref(link.href) ?? undefined"
-                        :target="isExternal(link.href) ? '_blank' : undefined"
-                        :rel="isExternal(link.href) ? 'noopener' : undefined"
-                        class="flex items-center gap-(--spacing-sm) rounded-(--shape-flat) py-(--spacing-2xs) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
-                      >
-                        <i
-                          :class="link.icon"
-                          class="w-4 shrink-0 text-center leading-none"
-                          aria-hidden="true"
-                        />
-                        {{ link.label }}
-                      </a>
-                    </li>
-                  </ul>
-                </section>
-
-                <SplitButton
-                  v-if="copyPage"
-                  variant="outline"
-                  size="medium"
-                  icon="az az-copy"
-                  :label="copyPage.label"
-                  :items="copyPage.menu"
-                  class="self-start"
-                  @click="copyBody"
-                  @item-click="onMenu"
-                />
-              </div>
-            </aside>
+              :article="article"
+              :body="body"
+              :share="share"
+              :community="community"
+              :copy-page="copyPage"
+              :assistants="assistants"
+            />
 
             <aside
               v-if="headings.length > 0"

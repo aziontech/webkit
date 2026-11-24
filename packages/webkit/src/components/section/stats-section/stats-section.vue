@@ -1,9 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Module from '../../layout/module/module.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Stats from '../../marketing/stats/stats.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'StatsSection',
@@ -23,7 +22,11 @@
   }
 
   export interface StatsSectionProps {
-    /** The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. */
+    /**
+     * The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }`
+     * where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and
+     * unit set beside it.
+     */
     items?: StatsSectionItem[]
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
@@ -42,24 +45,13 @@
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
+    :anchor="anchor"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :filled="hasItems"
+    marks="bottom"
   >
-    <Module
-      v-if="hasItems"
-      :divided="false"
-      :padded="false"
-    >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <Stats :items="items" />
-      </RegistrationFrame>
-    </Module>
-  </div>
+    <Stats :items="items" />
+  </SectionBand>
 </template>

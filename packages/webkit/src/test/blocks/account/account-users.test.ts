@@ -36,6 +36,38 @@ describe('account/account-users', () => {
     expect(view.getByRole('button', { name: 'Actions for new.person@example.com' })).toBeTruthy()
   })
 
+  it('commits a Teams change once, when the picker closes, with one toast', async () => {
+    const view = render(AccountUsers)
+    const trigger = view.getByRole('combobox', { name: 'Teams of Priya Nair' })
+    await fireEvent.click(trigger)
+    const option = (name: string) =>
+      Array.from(document.querySelectorAll<HTMLElement>('[role="option"]')).find((item) =>
+        item.textContent?.includes(name)
+      )!
+    await waitFor(() => expect(option('Security')).toBeTruthy())
+    await fireEvent.click(option('Security'))
+    await fireEvent.click(option('Finance'))
+    await fireEvent.click(option('Support'))
+    expect(view.emitted('teams-change')).toBeUndefined()
+    await fireEvent.keyDown(trigger, { key: 'Escape' })
+    await waitFor(() => expect(view.emitted('teams-change')).toHaveLength(1))
+    const [[payload]] = view.emitted('teams-change') as [[{ teams: string[] }]]
+    expect(payload.teams).toEqual(['developers', 'security', 'finance', 'support'])
+    const shown = () =>
+      Array.from(document.querySelectorAll('[data-testid="toast-title"]')).filter((title) =>
+        title.textContent?.includes('Teams updated for Priya Nair')
+      )
+    await waitFor(() => expect(shown()).toHaveLength(1))
+  })
+
+  it('asks for the role in the invite form and shows its hint', async () => {
+    render(Invite)
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    const role = dialog()!.querySelector<HTMLElement>('#invite-role')!
+    expect(role.textContent).toContain('Developer')
+    expect(dialog()!.textContent).toContain('Works on the resources their teams reach')
+  })
+
   it('changes a role in the Edit role dialog and shows it in the Role column', async () => {
     const view = render(EditRole)
     await waitFor(() => expect(dialog()?.textContent).toContain('Edit role'))
@@ -94,7 +126,11 @@ describe('account/account-users', () => {
     await waitFor(() => expect(view.emitted('invite')).toHaveLength(1))
     const [event, values] = view.emitted('invite')![0] as [Event, unknown]
     expect(event).toBeInstanceOf(Event)
-    expect(values).toEqual({ email: 'john.smith@example.com', teams: ['developers'] })
+    expect(values).toEqual({
+      email: 'john.smith@example.com',
+      role: 'Developer',
+      teams: ['developers']
+    })
   })
 
   it('emits refresh and retry, and shows the error message in place of the table', async () => {

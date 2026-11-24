@@ -42,6 +42,10 @@
       height: 1066
     }
   ]
+
+  const DESCRIPTION =
+    'The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across ' +
+    "countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
 </script>
 
 <template>
@@ -50,7 +54,7 @@
 
     <PhotoMarqueeSection
       title="Work at Azion"
-      description="The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
+      :description="DESCRIPTION"
       description-width="wide"
       aria-label="Azion offices"
       :photos="photos"

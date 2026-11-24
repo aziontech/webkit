@@ -35,11 +35,11 @@ A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) wi
 
 ### B. Key card — `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator` (required)
 
-A `Subheader` at `size="small"` (an `h2`) over a flush `Card :padded="false"` whose `Item.List` holds three `SettingsRow`s; their controls stack under the copy below the row's `md` container. Provider is a large full-width `Select` of the providers the app supports. API key is a large full-width `PasswordInput` in the code face (`monospace`) with its reveal toggle, `autocomplete="off"` and no placeholder; it starts empty, is never filled from the saved key, and clears once the saved key's masked tail changes (the app confirmed the save). Its row description is the storage note, tied to the field with `aria-describedby`; the field's own `dir="auto"` keeps a pasted key in order in right-to-left. Save key with an empty field emits nothing: the field turns `invalid`, a `FieldError` under it says `Enter an API key.` (tied through `aria-describedby`) and focus moves to the field; typing clears the error. Status is a row whose `StatusIndicator`, starting on the controls' column, says what is in place for the picked provider (No key saved, Saved, Testing, Connected, Connection failed) next to the masked tail in the code face (in a `bdi` with `dir="ltr"`, so its dots and characters keep their order in right-to-left), inside a `role="status"` region so a test result is announced.
+A `Subheader` at `size="small"` (an `h2`) over a flush `Card :padded="false"` whose `Item.List` holds three `SettingsRow`s; their controls stack under the copy below the row's `md` container. Provider is a large full-width `Select` of the providers the app supports. API key is a large full-width `PasswordInput` in the code face (`monospace`) with its reveal toggle and `autocomplete="off"`; it has no placeholder until a key is saved, then `Paste a new key to replace ••••3f9a` (the saved tail), so the empty field reads as kept, not missing; it starts empty, is never filled from the saved key, and clears once the saved key's masked tail changes (the app confirmed the save). Its row description is the storage note, tied to the field with `aria-describedby`; the field's own `dir="auto"` keeps a pasted key in order in right-to-left. Save key with an empty field emits nothing: the field turns `invalid`, a `FieldError` under it says `Enter an API key.` (tied through `aria-describedby`) and focus moves to the field; typing clears the error. Status is a row whose `StatusIndicator`, starting on the controls' column, says what is in place for the picked provider (No key saved, Saved, Testing, Connected, Connection failed) next to the masked tail in the code face (in a `bdi` with `dir="ltr"`, so its dots and characters keep their order in right-to-left), inside a `role="status"` region so a test result is announced.
 
 ### C. Actions — `Button` (required)
 
-The card footer carries Remove key (outline) at the inline start (`me-auto`), and Test connection (outline) and Save key (primary) at the end, all medium. The footer wraps: in a narrow card Remove key takes its own row and nothing scrolls sideways at 320 px. Save key is never pre-disabled: with an empty field it shows the field error instead of saving. It spins while `loading`, keeping focus; while saving, the Provider Select and the API key field lock, and Test connection and Remove key lock too. Test connection and Remove key show only when a key is saved for the picked provider. While a test runs, Test connection spins and Remove key and the Provider Select lock; Save key stays available for a replacement key.
+The card footer carries Remove key (outline) at the inline start (`me-auto`), and Test connection (outline) and Save key (primary) at the end, all medium. Once a key is saved for the picked provider the submit reads `Replace key` and is outline while the field is empty, turning primary when a new key is typed, so a saved screen never looks unsaved and a replacement is named before it happens. The footer wraps: in a narrow card Remove key takes its own row and nothing scrolls sideways at 320 px. Save key is never pre-disabled: with an empty field it shows the field error instead of saving. It spins while `loading`, keeping focus; while saving, the Provider Select and the API key field lock, and Test connection and Remove key lock too. Test connection and Remove key show only when a key is saved for the picked provider. While a test runs, Test connection spins and Remove key and the Provider Select lock; Save key stays available for a replacement key.
 
 ### D. Failure — `Alert` (Error only)
 
@@ -173,7 +173,7 @@ To go live with TanStack AI, map the `useByok` snapshot to `savedKeys` and call 
 - **Title:** `Model provider keys`; description: `Run the AI features on your own model provider account.`
 - **Card heading:** `Connection`. **Rows:** `Provider` — `The model provider the key belongs to.`; `API key` — the storage note, by default `Saved in this browser only and sent with your own requests to the provider.`; `Status` — `Whether a key is saved for this provider and if it works.`
 - **Status:** `No key saved`, `Saved`, `Testing`, `Connected`, `Connection failed`; the masked tail as given, e.g. `••••3f9a`.
-- **Actions:** `Save key`, `Test connection`, `Remove key`; in the `Alert`, `Test again`.
+- **Actions:** `Save key` (`Replace key` once a key is saved), `Test connection`, `Remove key`; in the `Alert`, `Test again`.
 - **Field error:** `Enter an API key.`
 - **Failure:** title `The key didn't work.` with the provider's message and the action `Test again` (test); title `The key wasn't saved.` with the message and no action (save).
 - **Remove:** title `Remove the <provider> key?`; description `AI features that use <provider> stop working until you save a new key.`; confirm `Remove key`.
@@ -338,6 +338,11 @@ Each variant is the same screen in another state: `get_block("ai/ai-api-key", { 
     return { severity: 'info', label: 'Saved', loading: false }
   })
 
+  const keyPlaceholder = computed(() =>
+    saved.value ? `Paste a new key to replace ${saved.value.masked}` : ''
+  )
+  const replacing = computed(() => Boolean(saved.value))
+
   const focusKey = () => nextTick(() => keyInputEl.value?.focus())
 
   watch(
@@ -441,6 +446,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-api-key", { 
                     autocomplete="off"
                     aria-label="API key"
                     required
+                    :placeholder="keyPlaceholder"
                     :aria-describedby="submitted && draftEmpty ? `${noteId} ${errorId}` : noteId"
                     :invalid="submitted && draftEmpty"
                     :disabled="saving"
@@ -499,8 +505,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-api-key", { 
               </template>
               <Button
                 type="submit"
-                label="Save key"
-                variant="primary"
+                :label="replacing ? 'Replace key' : 'Save key'"
+                :variant="replacing && draftEmpty ? 'outline' : 'primary'"
                 size="medium"
                 :loading="saving"
               />

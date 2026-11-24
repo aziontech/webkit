@@ -27,7 +27,8 @@
       icon: 'az az-move-vertical',
       title: 'Zero-ops autoscaling and failover',
       description:
-        'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
+        'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, ' +
+        'no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
     }
   ]
 </script>

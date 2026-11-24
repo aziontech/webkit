@@ -3,11 +3,11 @@ name: conversation
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 7136368085e1d1b86c7ea560b3d936c297968a472945a2812cad317b7af70e2d
+checksum: 17bed936fd2e8d714d7ecd4911760d42e8fbdf3040b6dd9d45e7791eb6e85204
 created: 2026-11-11
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # Conversation — Component Spec
@@ -27,6 +27,11 @@ With `moreMessages`, a Load earlier messages button opens the thread and the log
 It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page,
 `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
 
+The thread is a centred reading column (`--layout-measure-content`) with a 16 px gutter on a phone,
+and a larger gap before each user turn. The `composer` slot floats the composer over the bottom of
+the column: the thread scrolls under it behind a fade and is padded by its height; the Scroll
+to latest button floats just above it.
+
 ## When to use
 
 - Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.
@@ -42,14 +47,14 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 ## Related
 
 - `chat-message` — the item the log holds; announces itself through this component.
-- `prompt-input` — the composer pinned under the log (outside it; only the log scrolls).
+- `prompt-input` — the composer, floated over the bottom of the log through the `composer` slot (outside the log; only the log scrolls).
 - `suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.
-- `empty-state` — what the panel shows before the first message (the block renders it instead of the log).
+- `empty-state` — what the panel shows before the first message; render it in the default slot (the thread column is at least the log's height, so `my-auto` centres it) so the composer in `composer` never remounts when the first message is sent.
 - `log-viewer` — machine logs, not conversations.
 
 ## Best practices
 
-- Pin the prompt input under the conversation; only the log scrolls.
+- Put the prompt input in the `composer` slot; only the log scrolls, and the thread scrolls under the composer.
 - Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.
 - Use `layout="start"` in drawers and side panels, `split` on a full page.
 - Keep one conversation per surface; a second thread is a second page or a history list.
@@ -117,14 +122,16 @@ never read as new.
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                                 |
-| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | —     | The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card). |
+| Slot       | Scope | Notes                                                                                                                                                                                         |
+| ---------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`  | —     | The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card), or the empty state before the first message.            |
+| `composer` | —     | The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. Rendered outside the log, after it in the reading order. |
 
 ## States
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
 - `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
+- With the `composer` slot, the root sets `--conversation-composer-height` (the measured height of the composer area, its fade included); the thread's bottom padding and the Scroll to latest button's offset read it. `--conversation-composer-fade` is the colour the fade blends into; the root does not set it and falls back to `var(--bg-canvas)`, so a host on another surface sets it on any ancestor (a panel or a drawer body: `class="[--conversation-composer-fade:var(--bg-surface)]"`) and the fade matches that surface.
 - `data-loading-more` on the root and `aria-busy` on the log while `loadingMore`; the button is in its `loading` state.
 - With `moreMessages` or `loadingMore` the first row (`__older`, observed by an `IntersectionObserver`) holds the button (`__load-more`).
 - Scroll anchoring: while not pinned, the first message in view (or the button, while it has focus) is the anchor; growth above it is offset in the scroll position. Native `overflow-anchor` is off.
@@ -143,13 +150,14 @@ never read as new.
 
 ## Tokens
 
-| Region                | Token                                   |
-| --------------------- | --------------------------------------- |
-| gap between messages  | `var(--spacing-lg)`                     |
-| padding of the thread | `var(--spacing-md)`                     |
-| reading width         | `var(--layout-measure-content)`         |
-| scroll button surface | `var(--bg-surface)`, `var(--shadow-sm)` |
-| focus ring of the log | `var(--ring-color)`                     |
+| Region                | Token                                                                                                                                |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| gap between messages  | `var(--spacing-lg)`; a user message that starts a turn adds `var(--spacing-lg)` above it                                             |
+| padding of the thread | `var(--spacing-md)`; bottom `var(--conversation-composer-height)` + `var(--spacing-md)`                                              |
+| reading width         | `var(--layout-measure-content)`                                                                                                      |
+| scroll button surface | large `IconButton` (`var(--shape-button)`): `var(--bg-surface-raised)` at 88 %, `backdrop-blur-md`, `var(--shadow-md)`               |
+| composer area         | fade `linear-gradient` from `var(--conversation-composer-fade, var(--bg-canvas))`; padding `var(--spacing-lg)` / `var(--spacing-md)` |
+| focus ring of the log | `var(--ring-color)`                                                                                                                  |
 
 ## Theme gaps
 
@@ -163,7 +171,8 @@ _None._
 - ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them). It also says `Loading earlier messages`, then `Earlier messages loaded` once older messages were prepended.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on both buttons, idle and loading (`Button`'s own colors).
 - Reduced motion: smooth scrolling is replaced by a jump.
-- Touch target: the scroll button is a medium `IconButton` (≥32 px, 44 px on coarse pointers through `IconButton`).
+- Touch target: the scroll button is a large `IconButton` (40 px, 44 px on coarse pointers through `IconButton`).
+- Reading order: the composer area follows the log in the DOM, so `Tab` leaves the log's last control and reaches the composer.
 
 ## Internationalization
 
@@ -187,9 +196,10 @@ _None._
 
 ## Responsive
 
-- Container queries: none; the thread centers at `--layout-measure-content` and fills narrower hosts.
+- Container queries: none; the thread and the composer centre at `--layout-measure-content` and fill narrower hosts with the `--spacing-md` gutter.
 - Narrow (≤ 640 px or a drawer): full width; the owner should pass `layout="start"`.
 - Touch: the scroll button and the Load earlier messages button meet 44 px on coarse pointers (both through their own `pointer-coarse` hit area).
+- Safe area: the composer row keeps at least the bottom safe-area inset (`env(safe-area-inset-bottom)`) under it, so on a phone with a home indicator the composer stays above it while the thread scrolls behind.
 - Reflow: no horizontal scroll at 320 px; wide code and tables scroll inside their own blocks; the Load earlier messages label fits at 320 px and 200 % zoom without horizontal scroll.
 
 ## Performance
@@ -200,7 +210,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/conversation/`: Default (a short thread), Drawer layout (`start`), Long thread (scroll to latest), Earlier messages (`more-messages` + `@load-more` prepending three turns after a simulated delay; justified: a distinct behavior with its own loading state)._
+_Examples in `packages/webkit/examples/conversation/`: Default (a short thread with the composer in `composer`), Drawer layout (`start`), Long thread (scroll to latest above the floating composer), Earlier messages (`more-messages` + `@load-more` prepending three turns after a simulated delay; justified: a distinct behavior with its own loading state)._
 
 ## Constraints — DO NOT
 

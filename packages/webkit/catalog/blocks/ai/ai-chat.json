@@ -12,7 +12,7 @@
   },
   {
    "name": "LongThread",
-   "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread.",
+   "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response and its Sources pill, stops following when the reader scrolls up, and the round Scroll to the latest message button above the composer brings them back; follow-up questions close the thread.",
    "file": "blocks/ai/ai-chat/variants/long-thread.vue"
   },
   {
@@ -33,8 +33,16 @@
  ],
  "sfcFile": "blocks/ai/ai-chat/ai-chat.vue",
  "guidelinesFile": "blocks/ai/ai-chat/guidelines.md",
- "fileSources": {
-  "messages.ts": "blocks/ai/ai-chat/messages.ts",
-  "sample.ts": "blocks/ai/ai-chat/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/ai-chat-composer.vue",
+  "parts/ai-chat-connection-status.vue",
+  "parts/ai-chat-header.vue",
+  "parts/ai-chat-history.vue",
+  "parts/ai-chat-media-segment.vue",
+  "parts/ai-chat-skeleton.vue",
+  "parts/ai-chat-start.vue",
+  "parts/ai-chat-tool-segment.vue",
+  "parts/ai-chat-turn.vue"
+ ]
 }

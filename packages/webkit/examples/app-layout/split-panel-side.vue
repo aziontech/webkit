@@ -1,5 +1,6 @@
 <script setup>
   import AppLayout from '@aziontech/webkit/app-layout'
+  import Item from '@aziontech/webkit/item'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -42,18 +43,23 @@
             v-for="service in services"
             :key="service.id"
           >
-            <button
-              type="button"
+            <Item
+              variant="outline"
+              size="small"
+              clickable
               :aria-pressed="selectedId === service.id"
-              class="flex w-full items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-pressed:border-(--accent) motion-reduce:transition-none"
               @click="selectedId = service.id"
             >
-              <span class="min-w-0 truncate">{{ service.id }}</span>
-              <StatusIndicator
-                :severity="service.status"
-                :label="service.label"
-              />
-            </button>
+              <Item.Content>
+                <Item.Title>{{ service.id }}</Item.Title>
+              </Item.Content>
+              <Item.Actions>
+                <StatusIndicator
+                  :severity="service.status"
+                  :label="service.label"
+                />
+              </Item.Actions>
+            </Item>
           </li>
         </ul>
       </main>

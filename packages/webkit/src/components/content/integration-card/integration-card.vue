@@ -78,27 +78,44 @@
   const hasActionsSlot = () => Boolean(slots['actions'])
 
   const onSelect = (event: MouseEvent) => emit('select', event)
+
+  const ROOT_CLASS =
+    'group/card relative flex flex-col overflow-clip bg-(--bg-surface) border border-(length:--border-width-default) border-(--border-default) rounded-(--shape-card) p-(--spacing-md) ' +
+    'transition-colors ' +
+    'not-data-[featured]:hover:bg-(--bg-hover) ' +
+    'motion-reduce:transition-none ' +
+    'data-[featured]:isolate data-[featured]:bg-(--bg-surface-raised) data-[featured]:hover:border-(--border-strong)'
+
+  const BODY_CLASS =
+    'flex min-w-0 flex-1 flex-col gap-(--spacing-md) ' +
+    'group-data-[featured]/card:items-center group-data-[featured]/card:px-(--spacing-sm) group-data-[featured]/card:py-(--spacing-lg) group-data-[featured]/card:text-center'
+
+  const GLOW_CLASS =
+    'pointer-events-none absolute inset-x-0 top-0 -z-1 h-24 bg-[radial-gradient(120%_90%_at_50%_0%,var(--primary),transparent_62%)] opacity-10 transition-opacity ' +
+    'group-hover/card:opacity-20 motion-reduce:transition-none'
+
+  const TITLE_LINK_CLASS =
+    "text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset " +
+    'focus-visible:after:ring-(--ring-color)'
+
+  const TITLE_BUTTON_CLASS =
+    'cursor-pointer border-0 bg-transparent p-0 text-start text-(--text-default) ' +
+    'group-data-[featured]/card:text-center ' +
+    "outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
 </script>
 
 <template>
   <section
     v-bind="$attrs"
-    :class="
-      cn(
-        'group/card relative flex flex-col overflow-clip bg-(--bg-surface) border border-(length:--border-width-default) border-(--border-default) rounded-(--shape-card) p-(--spacing-md) transition-colors not-data-[featured]:hover:bg-(--bg-hover) motion-reduce:transition-none data-[featured]:isolate data-[featured]:bg-(--bg-surface-raised) data-[featured]:hover:border-(--border-strong)',
-        attrs.class as string | undefined
-      )
-    "
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-featured="props.featured || null"
     :data-testid="testId"
   >
-    <div
-      class="flex min-w-0 flex-1 flex-col gap-(--spacing-md) group-data-[featured]/card:items-center group-data-[featured]/card:px-(--spacing-sm) group-data-[featured]/card:py-(--spacing-lg) group-data-[featured]/card:text-center"
-    >
+    <div :class="BODY_CLASS">
       <span
         v-if="featured"
         aria-hidden="true"
-        class="pointer-events-none absolute inset-x-0 top-0 -z-1 h-24 bg-[radial-gradient(120%_90%_at_50%_0%,var(--primary),transparent_62%)] opacity-10 transition-opacity group-hover/card:opacity-20 motion-reduce:transition-none"
+        :class="GLOW_CLASS"
         :data-testid="`${testId}__glow`"
       />
       <div
@@ -143,13 +160,13 @@
               <a
                 v-if="safeHref(href)"
                 :href="safeHref(href) ?? undefined"
-                class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                :class="TITLE_LINK_CLASS"
                 ><bdi>{{ title }}</bdi></a
               >
               <button
                 v-else
                 type="button"
-                class="cursor-pointer border-0 bg-transparent p-0 text-start text-(--text-default) group-data-[featured]/card:text-center outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                :class="TITLE_BUTTON_CLASS"
                 @click="onSelect"
               >
                 <bdi>{{ title }}</bdi>

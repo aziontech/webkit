@@ -15,7 +15,11 @@
     description?: string
     /** Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. */
     icon?: string
-    /** Size token; scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. */
+    /**
+     * Size token; scales the whole block on one harmonic ramp — the adornment size, the title and
+     * description typography, the surrounding padding, and the gaps between adornment, text, and
+     * actions all step up together.
+     */
     size?: EmptyStateSize
     /** When true, wraps the content in a bordered surface card; otherwise renders on a transparent background. */
     bordered?: boolean
@@ -36,6 +40,25 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'empty-state')
+
+  const ROOT_CLASS =
+    'flex w-full flex-col items-center justify-center text-center ' +
+    'data-[bordered]:rounded-(--shape-button) data-[bordered]:border data-[bordered]:border-dashed data-[bordered]:border-[length:var(--border-width-default,1px)] ' +
+    'data-[bordered]:border-(--border-default) data-[bordered]:bg-(--bg-surface) ' +
+    'data-[size=small]:gap-(--spacing-4) data-[size=small]:px-(--spacing-6) data-[size=small]:py-(--spacing-8) data-[size=medium]:gap-(--spacing-6) data-[size=medium]:px-(--spacing-8) ' +
+    'data-[size=medium]:py-(--spacing-12)'
+
+  const ICON_HALO_OUTER_CLASS =
+    'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-5 ' +
+    'group-data-[size=small]:size-12 group-data-[size=medium]:size-14'
+
+  const ICON_HALO_INNER_CLASS =
+    'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10 ' +
+    'group-data-[size=small]:size-10 group-data-[size=medium]:size-12'
+
+  const ICON_TILE_CLASS =
+    'relative flex items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) ' +
+    'group-data-[size=small]:size-8 group-data-[size=medium]:size-10'
 </script>
 
 <template>
@@ -45,7 +68,7 @@
     :data-testid="testId"
     :data-size="size"
     :data-bordered="bordered || null"
-    class="flex w-full flex-col items-center justify-center text-center data-[bordered]:rounded-(--shape-button) data-[bordered]:border data-[bordered]:border-dashed data-[bordered]:border-[length:var(--border-width-default,1px)] data-[bordered]:border-(--border-default) data-[bordered]:bg-(--bg-surface) data-[size=small]:gap-(--spacing-4) data-[size=small]:px-(--spacing-6) data-[size=small]:py-(--spacing-8) data-[size=medium]:gap-(--spacing-6) data-[size=medium]:px-(--spacing-8) data-[size=medium]:py-(--spacing-12)"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="$slots['icon'] || icon"
@@ -58,15 +81,9 @@
         <span
           class="relative flex items-center justify-center group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
         >
-          <span
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-5 group-data-[size=small]:size-12 group-data-[size=medium]:size-14"
-          />
-          <span
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10 group-data-[size=small]:size-10 group-data-[size=medium]:size-12"
-          />
-          <span
-            class="relative flex items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
-          >
+          <span :class="ICON_HALO_OUTER_CLASS" />
+          <span :class="ICON_HALO_INNER_CLASS" />
+          <span :class="ICON_TILE_CLASS">
             <i
               :class="icon"
               class="leading-none text-(--text-default) group-data-[size=small]:text-[length:0.875rem] group-data-[size=medium]:text-[length:1rem]"

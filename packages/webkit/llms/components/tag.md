@@ -10,7 +10,7 @@
 
 - Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
 - Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.
-- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints.
+- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the logo orange as a fill with `--primary-foreground` text, like the success, info and warning tags.
 
 ## Do
 
@@ -61,7 +61,7 @@
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2").
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is `--primary-foreground` on the logo orange fill (6.7:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
@@ -70,7 +70,7 @@
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: a directional `icon` is the consumer's choice and does not mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI.
+- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI; a label with no letter (a count, `+10.5%`, `#1024`) renders `dir="ltr"`, so its sign and unit stay in order in every engine.
 
 ## Examples
 
@@ -100,39 +100,39 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Tag
-      label="Label"
+      label="Neutral"
       severity="neutral"
     />
     <Tag
-      label="Label"
+      label="Primary"
       variant="primary"
     />
     <Tag
-      label="Label"
+      label="Accent"
       variant="accent"
     />
     <Tag
-      label="Label"
+      label="Success"
       severity="success"
     />
     <Tag
-      label="Label"
+      label="Warning"
       severity="warning"
     />
     <Tag
-      label="Label"
+      label="Danger"
       severity="danger"
     />
     <Tag
-      label="Label"
+      label="Info"
       severity="info"
     />
     <Tag
-      label="Label"
+      label="Contrast"
       variant="contrast"
     />
     <Tag
-      label="Label"
+      label="Highlight"
       variant="highlight"
     />
   </div>
@@ -150,53 +150,53 @@
   <div class="flex flex-col gap-4">
     <div class="flex flex-wrap items-center gap-4">
       <Tag
-        label="Label"
+        label="Medium"
         variant="primary"
         size="medium"
       />
       <Tag
-        label="Label"
+        label="Medium pill"
         variant="primary"
         size="medium"
         rounded
       />
       <Tag
-        label="Label"
+        label="Medium icon"
         variant="primary"
+        icon="az az-tag"
         size="medium"
-        icon="az az-box"
       />
       <Tag
-        label="Label"
+        label="Medium icon pill"
         variant="primary"
+        icon="az az-tag"
         size="medium"
-        icon="az az-box"
         rounded
       />
     </div>
     <div class="flex flex-wrap items-center gap-4">
       <Tag
-        label="Label"
+        label="Small"
         variant="primary"
         size="small"
       />
       <Tag
-        label="Label"
+        label="Small pill"
         variant="primary"
         size="small"
         rounded
       />
       <Tag
-        label="Label"
+        label="Small icon"
         variant="primary"
+        icon="az az-tag"
         size="small"
-        icon="az az-box"
       />
       <Tag
-        label="Label"
+        label="Small icon pill"
         variant="primary"
+        icon="az az-tag"
         size="small"
-        icon="az az-box"
         rounded
       />
     </div>

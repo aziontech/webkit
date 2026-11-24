@@ -3,17 +3,17 @@ name: password-requirements
 category: input
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 6171f0a061a1e82c16051667f05bab940e561e90e31674163523b4c991ae6b5f
+spec_version: 4
+checksum: 104b4254090f74617f1851b80cbc00ea292a07c697c996b463c8935b56a6e0d5
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-21
 ---
 
 # PasswordRequirements — Component Spec
 
 ## Purpose
 
-Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate.
+Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate. `@aziontech/webkit/password-requirements-root` points straight at the component, for an app that only renders the checklist; the rules and types stay on `@aziontech/webkit/password-requirements`.
 
 ## When to use
 

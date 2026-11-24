@@ -43,7 +43,7 @@
       <span
         :id="headingId"
         :data-testid="`${testId}__title`"
-        class="text-overline-md font-medium uppercase text-(--text-brand)"
+        class="text-overline-md font-medium uppercase text-(--text-default) underline decoration-(color:--primary) decoration-2 underline-offset-4"
         >{{ title }}</span
       >
     </div>

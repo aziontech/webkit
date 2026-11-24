@@ -1,28 +1,26 @@
 <script setup lang="ts">
-  import {
-    computed,
-    markRaw,
-    onMounted,
-    onScopeDispose,
-    provide,
-    ref,
-    useAttrs,
-    useSlots
-  } from 'vue'
+  import { computed, markRaw, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
-  import { logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import ScrollArea from '../scroll-area/scroll-area.vue'
-  import {
-    SIDEBAR_ICON_RAIL_TOKEN,
-    SIDEBAR_NUDGE_STEP,
-    useSidebarRail
-  } from './composables/use-sidebar-rail'
+  import { useSidebarKeys } from './composables/use-sidebar-keys'
+  import { SIDEBAR_ICON_RAIL_TOKEN, useSidebarRail } from './composables/use-sidebar-rail'
   import { SidebarInjectionKey } from './injection-key'
+  import {
+    EXPAND_CLASS,
+    EXPAND_HINT_CLASS,
+    INNER_MOTION_CLASS,
+    NAV_CLASS,
+    RAIL_MOTION_CLASS,
+    RESIZE_INDICATOR_CLASS,
+    sidebarFooterBandClass,
+    sidebarFooterSlotClass,
+    sidebarScrollClass
+  } from './lib/sidebar-classes'
 
   defineOptions({
     name: 'Sidebar',
@@ -139,39 +137,26 @@
     }
   })
 
-  const isEditable = (target: EventTarget | null) => {
-    if (!(target instanceof globalThis.HTMLElement)) return false
-    if (target.isContentEditable) return true
-    return ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
-  }
-
-  const shortcutActive = computed(() => props.shortcut && collapseMode.value !== null)
-
-  const onShortcut = (event: globalThis.KeyboardEvent) => {
-    if (!shortcutActive.value || event.defaultPrevented) return
-    if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return
-    if (event.key.toLowerCase() !== 'b' || isEditable(event.target)) return
-    event.preventDefault()
-    collapsed.value = !collapsed.value
-  }
-
-  onMounted(() => globalThis.document.addEventListener('keydown', onShortcut))
-
-  onScopeDispose(() => globalThis.document?.removeEventListener('keydown', onShortcut))
-
-  const keyShortcuts = computed(() => (shortcutActive.value ? 'Control+B Meta+B' : undefined))
-
-  const onHandleKey = (event: globalThis.KeyboardEvent, expandOnly = false) => {
-    const key = logicalArrowKey(event.key, dir.value)
-    if (key === 'ArrowRight') nudge(SIDEBAR_NUDGE_STEP)
-    else if (key === 'ArrowLeft' && !expandOnly) nudge(-SIDEBAR_NUDGE_STEP)
-    else return
-    event.preventDefault()
-  }
+  const handleEl = ref<globalThis.HTMLElement | null>(null)
+  const expandHandleEl = ref<globalThis.HTMLElement | null>(null)
+  const keyShortcuts = useSidebarKeys(
+    handleEl,
+    expandHandleEl,
+    () => props.shortcut && collapseMode.value !== null,
+    collapsed,
+    dir,
+    nudge,
+    tapToExpand
+  )
 
   defineExpose({ measure })
 
   const isCollapsed = computed(() => collapsed.value && railEnabled.value && !resizing.value)
+
+  const panelState = computed(() => {
+    if (!railEnabled.value) return undefined
+    return collapsed.value ? 'closed' : 'open'
+  })
 
   const isOut = computed(() => isCollapsed.value && !iconMode.value)
 
@@ -179,23 +164,18 @@
 
   const settled = ref(false)
 
+  const settle = () => {
+    settled.value = true
+  }
+
   onMounted(() => {
     hydrated.value = true
     const raf = globalThis.requestAnimationFrame
-    if (typeof raf !== 'function') {
-      settled.value = true
-      return
-    }
-    raf(() =>
-      raf(() => {
-        settled.value = true
-      })
-    )
+    if (typeof raf === 'function') raf(() => raf(settle))
+    else settle()
   })
 
-  const setRailEl = (el: unknown) => {
-    railEl.value = (el as globalThis.HTMLElement | null) ?? null
-  }
+  const setRailEl = (el: unknown) => (railEl.value = (el as globalThis.HTMLElement | null) ?? null)
 
   const cssVars = computed(() => {
     if (!railEnabled.value) return {}
@@ -209,9 +189,6 @@
 
   const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
 
-  const RAIL_MOTION_CLASS =
-    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance has-[>div>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none'
-
   const rootClass = computed(() =>
     cn(
       'flex h-full min-h-0 w-full min-w-0 flex-col',
@@ -220,8 +197,9 @@
         ? cn(
             'relative shrink-0 overflow-hidden',
             iconMode.value
-              ? 'w-(--sidebar-width) has-[>div>input:checked]:w-(--sidebar-rail-width) min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-(--sidebar-rail-width)'
-              : 'data-[state=closed]:border-e-0 has-[>div>input:checked]:border-e-0 w-(--sidebar-width) has-[>div>input:checked]:w-0 min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0',
+              ? 'w-(--sidebar-width) has-[>div[data-state=closed]]:w-(--sidebar-rail-width) min-w-(--sidebar-min-width) has-[>div[data-state=closed]]:min-w-(--sidebar-rail-width)'
+              : 'data-[state=closed]:border-e-0 has-[>div[data-state=closed]]:border-e-0 w-(--sidebar-width) ' +
+                  'has-[>div[data-state=closed]]:w-0 min-w-(--sidebar-min-width) has-[>div[data-state=closed]]:min-w-0',
             'data-[resizing]:min-w-0 max-w-(--sidebar-max-width)',
             RAIL_MOTION_CLASS,
             props.resizable ? 'resize-x data-[hydrated]:resize-none' : undefined
@@ -231,9 +209,6 @@
     )
   )
 
-  const NAV_CLASS =
-    'flex h-full min-h-0 flex-1 flex-col [--sidebar-menu-item-ring-offset:var(--bg-surface)] [--sidebar-menu-ring-offset:var(--bg-surface)]'
-
   const headerRegionClass = computed(() =>
     cn(
       'w-full shrink-0 p-(--spacing-md)',
@@ -241,16 +216,13 @@
     )
   )
 
-  const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-[>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
-
   const innerClass = computed(() =>
     cn(
       'flex h-full min-h-0 w-full flex-col',
       iconMode.value
-        ? 'w-[calc(var(--sidebar-width)-1px)] has-[>input:checked]:w-[calc(var(--sidebar-rail-width)-1px)]'
+        ? 'w-[calc(var(--sidebar-width)-1px)] data-[state=closed]:w-[calc(var(--sidebar-rail-width)-1px)]'
         : cn(
-            'w-[calc(var(--sidebar-width)-1px)] translate-x-0 has-[>input:checked]:-translate-x-full rtl:has-[>input:checked]:translate-x-full opacity-100 has-[>input:checked]:opacity-20',
+            'w-[calc(var(--sidebar-width)-1px)] translate-x-0 data-[state=closed]:-translate-x-full rtl:data-[state=closed]:translate-x-full opacity-100 data-[state=closed]:opacity-20',
             INNER_MOTION_CLASS
           )
     )
@@ -262,39 +234,20 @@
       : 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
   )
 
-  const footerBandClass = () => {
-    if (collapseMode.value === null) return undefined
-    if (rail.value) {
-      return 'flex flex-col items-center gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-xs) py-(--spacing-sm)'
-    }
-    return cn(
-      'flex h-14 items-center gap-(--spacing-xs)',
-      'border-t border-(--border-muted) px-(--spacing-md)',
-      !slots['footer'] ? 'justify-end' : undefined
-    )
-  }
+  const footerBandClass = () =>
+    sidebarFooterBandClass(collapseMode.value !== null, rail.value, Boolean(slots['footer']))
 
-  const footerSlotClass = () => {
-    if (collapseMode.value === null) return undefined
-    return rail.value ? 'flex min-w-0 justify-center' : 'min-w-0 flex-1'
-  }
+  const footerSlotClass = () => sidebarFooterSlotClass(collapseMode.value !== null, rail.value)
 
-  const scrollClass = () =>
-    cn(
-      'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
-      'scroll-py-(--spacing-2xs)',
-      slots['header'] ? 'pt-(--spacing-2xs)' : undefined,
-      rail.value ? 'px-(--spacing-xs)' : undefined
-    )
+  const scrollClass = () => sidebarScrollClass(Boolean(slots['header']), rail.value)
 </script>
 
 <template>
-  <aside
+  <div
     :ref="setRailEl"
     v-bind="$attrs"
     :class="rootClass"
     :style="asideStyle"
-    :aria-label="labels.root"
     :data-testid="testId"
     :data-state="isCollapsed ? 'closed' : 'open'"
     :data-rail="rail ? '' : undefined"
@@ -302,24 +255,15 @@
     :data-hydrated="hydrated ? '' : undefined"
     :data-settled="settled ? '' : undefined"
     :inert="isOut ? true : undefined"
-    :aria-hidden="isOut ? 'true' : undefined"
   >
     <div
       :class="innerClass"
       :style="innerStyle"
       :data-resizing="resizing ? '' : undefined"
       :data-settled="settled ? '' : undefined"
+      :data-state="panelState"
       :data-testid="`${testId}__panel`"
     >
-      <input
-        v-if="railEnabled"
-        v-model="collapsed"
-        type="checkbox"
-        class="sr-only"
-        tabindex="-1"
-        aria-hidden="true"
-        :data-testid="`${testId}__collapse-input`"
-      />
       <div
         v-if="$slots['header']"
         :class="headerRegionClass"
@@ -332,6 +276,7 @@
       </div>
       <nav
         :class="NAV_CLASS"
+        :aria-label="labels.root"
         :data-testid="`${testId}__nav`"
       >
         <ScrollArea
@@ -388,17 +333,14 @@
       :aria-valuemax="valueMax"
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
+      ref="handleEl"
       :data-testid="`${testId}__handle`"
       class="group absolute inset-y-0 end-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
       @pointerdown="startResize"
-      @keydown="onHandleKey($event)"
-      @dblclick="collapsed = true"
     >
-      <span
-        class="pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
-      />
+      <span :class="RESIZE_INDICATOR_CLASS" />
     </div>
-  </aside>
+  </div>
 
   <Transition
     enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
@@ -411,7 +353,7 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
-      class="group absolute inset-y-0 start-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none"
+      :class="EXPAND_CLASS"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -421,6 +363,7 @@
         v-if="resizable"
         role="separator"
         aria-orientation="vertical"
+        ref="expandHandleEl"
         :aria-label="t('sidebar.expandByDragging', { label: labels.expand })"
         tabindex="0"
         :aria-valuenow="valueNow"
@@ -428,13 +371,9 @@
         :aria-valuemax="valueMax"
         class="absolute inset-y-0 start-0 w-full cursor-col-resize touch-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
         @pointerdown="startResize"
-        @click="tapToExpand"
-        @keydown="onHandleKey($event, true)"
       />
 
-      <div
-        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
-      >
+      <div :class="EXPAND_HINT_CLASS">
         <Tooltip
           :content="labels.expand"
           side="end"

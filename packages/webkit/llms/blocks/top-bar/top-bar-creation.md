@@ -1,11 +1,11 @@
 # TopBarCreation (`top-bar/top-bar-creation`)
 
-> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the Creation Center (`create/create-hub`) render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.
+> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the Creation Center (`create/create-hub`) render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `AppHeaderAccount`, `DropdownMenu` and `Brand`.
 
 - Surface: app
 - Source: `blocks/top-bar/top-bar-creation/top-bar-creation.vue` in `@aziontech/webkit`
 - MCP: `get_block("top-bar/top-bar-creation")`
-- Components: [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [DropdownMenu](../../components/dropdown-menu.md), [IconButton](../../components/icon-button.md), [Tooltip](../../components/tooltip.md)
+- Components: [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [DropdownMenu](../../components/dropdown-menu.md), [IconButton](../../components/icon-button.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -38,13 +38,13 @@ Small, outlined, chevron icon, a link (`href`) to the list the flow started from
 
 ### C. Brand — `Brand` (required)
 
-Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria-label="Azion home"`.
+Inside `AppHeader.Brand`, linked to the home route through its `href` with `aria-label="Azion home"`. Below `sm` it is the reduced "A" glyph (`variant="reduced"`) and the breadcrumb shows only the current page, which the back button already pairs with its parent, so a 320px phone reads it in full.
 
 ### D. Breadcrumb — `Breadcrumb` (required until the flow is terminal)
 
 Where the flow lives: the module with an `href`, then the current page with none (`Resources › Create Resource`). The crumb links are a way out alongside the back button. A step of a wizard is not a crumb.
 
-### E. Account — `DropdownMenu` + `Avatar` (required)
+### E. Account — `DropdownMenu` + `AppHeaderAccount` (required)
 
 The signed-in user, inside a button labelled `Account menu` that opens the account `DropdownMenu`: name and email on top, Account settings, then Docs and Log out. It stays on every screen of the flow, including terminal ones, so the user never looks signed out.
 
@@ -143,7 +143,7 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-cr
 ```vue
 <script setup lang="ts">
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
@@ -214,16 +214,37 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-cr
           :href="homeHref"
           aria-label="Azion home"
         >
-          <Brand
-            variant="default"
-            size="small"
-          />
+          <span class="flex max-sm:hidden">
+            <Brand
+              variant="default"
+              size="small"
+            />
+          </span>
+          <span class="flex sm:hidden">
+            <Brand
+              variant="reduced"
+              size="small"
+            />
+          </span>
         </AppHeader.Brand>
-        <Breadcrumb
+        <div
           v-if="breadcrumb.length > 0"
-          :items="breadcrumb"
-          @navigate="(event, href) => emit('navigate', event, href)"
-        />
+          class="min-w-0 max-sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
+        <div
+          v-if="breadcrumb.length > 0"
+          class="min-w-0 sm:hidden"
+        >
+          <Breadcrumb
+            :items="breadcrumb.slice(-1)"
+            @navigate="(event, href) => emit('navigate', event, href)"
+          />
+        </div>
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
@@ -233,17 +254,10 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-cr
           @select="(event, value) => emit('account-select', event, value)"
         >
           <DropdownMenu.Trigger>
-            <button
-              type="button"
+            <AppHeaderAccount
+              :name="account.name"
               aria-label="Account menu"
-              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-            >
-              <Avatar
-                :label="account.name"
-                size="medium"
-                variant="square"
-              />
-            </button>
+            />
           </DropdownMenu.Trigger>
           <DropdownMenu.Group>
             <template #header>

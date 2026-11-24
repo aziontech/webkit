@@ -102,7 +102,7 @@ describe('SidebarHeader', () => {
       // The Default story mounts <Sidebar> with its default testId ("sidebar");
       // no <SidebarHeader> is composed in this story, so only the Sidebar root is asserted.
       const { getByTestId } = render(Default)
-      expect(getByTestId('sidebar').tagName).toBe('ASIDE')
+      expect(getByTestId('sidebar').tagName).toBe('DIV')
     })
   })
 })

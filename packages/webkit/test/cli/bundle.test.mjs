@@ -6,10 +6,10 @@ import { join, sep } from 'node:path'
 
 import {
   agentsDir,
+  AI_TEMPLATES,
   bodyHash,
   fragmentFile,
   classify,
-  CLAUDE_TEMPLATES,
   FRAGMENT_END,
   FRAGMENT_START,
   LEGACY_MARKER,
@@ -44,7 +44,7 @@ function walkMarkdownRelative(dir, base = dir) {
 test('every .md under the templates dir is in the bundle (nothing is silently dropped)', () => {
   const expected = []
   for (const sub of ['rules', 'skills', 'agents']) {
-    const abs = sub === 'agents' ? agentsDir(CLAUDE_TEMPLATES) : join(CLAUDE_TEMPLATES, sub)
+    const abs = sub === 'agents' ? agentsDir(AI_TEMPLATES) : join(AI_TEMPLATES, sub)
     for (const rel of walkMarkdownRelative(abs)) {
       expected.push(`${sub}/${rel}`)
     }
@@ -62,7 +62,7 @@ test('listBundle includes webkit-comments.md (the file the hand-maintained list 
 
 test('listBundle includes every skill SKILL.md', () => {
   const bundle = listBundle()
-  const skillDirs = readdirSync(join(CLAUDE_TEMPLATES, 'skills'), { withFileTypes: true })
+  const skillDirs = readdirSync(join(AI_TEMPLATES, 'skills'), { withFileTypes: true })
     .filter((e) => e.isDirectory())
     .map((e) => e.name)
   assert.ok(skillDirs.length > 0, 'expected at least one skill directory on disk')
@@ -355,8 +355,8 @@ test('classify: unstamped-different for an unmarked copy that diverged from the 
 })
 
 test('the bundle is read from the repo-root layout: skills/, rules/, adapters/', () => {
-  assert.ok(agentsDir(CLAUDE_TEMPLATES).endsWith(join('adapters', 'claude', 'agents')))
-  assert.ok(fragmentFile(CLAUDE_TEMPLATES).endsWith(join('adapters', 'AGENTS_FRAGMENT.md')))
+  assert.ok(agentsDir(AI_TEMPLATES).endsWith(join('adapters', 'claude', 'agents')))
+  assert.ok(fragmentFile(AI_TEMPLATES).endsWith(join('adapters', 'AGENTS_FRAGMENT.md')))
   const bundle = listBundle()
   assert.ok(bundle.includes('rules/webkit-sections.md'))
   assert.ok(bundle.includes('rules/webkit-page-layout.md'))
@@ -366,7 +366,7 @@ test('the bundle is read from the repo-root layout: skills/, rules/, adapters/',
   assert.ok(bundle.includes('rules/webkit-strings.md'))
   assert.ok(bundle.includes('rules/webkit-keyboard.md'))
   assert.ok(bundle.includes('agents/webkit-advisor.md'))
-  assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 23)
+  assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 24)
 })
 
 test('copyAiBundle writes skills/, rules/ and adapters/ only — no legacy cli-templates/ copy', () => {

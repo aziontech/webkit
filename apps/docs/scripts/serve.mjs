@@ -1,7 +1,9 @@
-import { createReadStream, existsSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
+import { createSecureServer } from 'node:http2'
 import { dirname, extname, join, normalize, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { brotliCompressSync, constants, gzipSync } from 'node:zlib'
 
 const DIST = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
 
@@ -23,30 +25,92 @@ const TYPES = {
   '.woff2': 'font/woff2'
 }
 
-function locate(pathname) {
-  const file = normalize(join(DIST, decodeURIComponent(pathname)))
-  if (!file.startsWith(DIST)) return null
-  if (existsSync(file) && statSync(file).isFile()) return file
-  const page = join(file, 'index.html')
-  if (existsSync(page)) return page
-  if (existsSync(`${file}.html`)) return `${file}.html`
-  if (pathname.startsWith(EXAMPLE_FRAME)) return locate(EXAMPLE_FRAME)
-  return null
+const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.md', '.txt', '.svg'])
+
+const ENCODERS = {
+  br: (raw) =>
+    brotliCompressSync(raw, {
+      params: {
+        [constants.BROTLI_PARAM_QUALITY]: 5,
+        [constants.BROTLI_PARAM_SIZE_HINT]: raw.length
+      }
+    }),
+  gzip: (raw) => gzipSync(raw, { level: 6 })
 }
 
-export function serve(port = Number(process.env.PORT ?? 4173)) {
-  const server = createServer((req, res) => {
+function pickEncoding(header) {
+  const accepted = String(header ?? '')
+    .split(',')
+    .map((part) => part.trim().split(';')[0])
+  return Object.keys(ENCODERS).find((name) => accepted.includes(name)) ?? null
+}
+
+function tlsFromEnv() {
+  const { TLS_KEY: key, TLS_CERT: cert } = process.env
+  return key && cert ? { key: readFileSync(key), cert: readFileSync(cert) } : null
+}
+
+function locator(root, spa) {
+  const locate = (pathname) => {
+    const file = normalize(join(root, decodeURIComponent(pathname)))
+    if (!file.startsWith(root)) return null
+    if (existsSync(file) && statSync(file).isFile()) return file
+    const page = join(file, 'index.html')
+    if (existsSync(page)) return page
+    if (existsSync(`${file}.html`)) return `${file}.html`
+    if (pathname.startsWith(EXAMPLE_FRAME)) return locate(EXAMPLE_FRAME)
+    if (spa && !extname(pathname)) return join(root, 'index.html')
+    return null
+  }
+  return locate
+}
+
+function responder(root, spa) {
+  const locate = locator(root, spa)
+  const encoded = new Map()
+  const body = (file, encoding) => {
+    const key = `${encoding}:${file}`
+    if (!encoded.has(key)) {
+      const raw = readFileSync(file)
+      encoded.set(key, encoding ? ENCODERS[encoding](raw) : raw)
+    }
+    return encoded.get(key)
+  }
+  return (req, res) => {
     const { pathname } = new URL(req.url ?? '/', 'http://localhost')
     const file = locate(pathname)
-    const status = file ? 200 : 404
-    const target = file ?? join(DIST, '404/index.html')
-    res.writeHead(status, { 'Content-Type': TYPES[extname(target)] ?? 'application/octet-stream' })
-    createReadStream(target).pipe(res)
-  })
+    const target = file ?? join(root, '404/index.html')
+    if (!existsSync(target)) {
+      res.writeHead(404, { 'Content-Type': TYPES['.txt'] })
+      res.end('Not found')
+      return
+    }
+    const type = extname(target)
+    const encoding = COMPRESSIBLE.has(type) ? pickEncoding(req.headers['accept-encoding']) : null
+    const payload = body(target, encoding)
+    res.writeHead(file ? 200 : 404, {
+      'Content-Type': TYPES[type] ?? 'application/octet-stream',
+      'Content-Length': payload.length,
+      Vary: 'Accept-Encoding',
+      ...(encoding ? { 'Content-Encoding': encoding } : {})
+    })
+    res.end(req.method === 'HEAD' ? undefined : payload)
+  }
+}
+
+export function serve(
+  port = Number(process.env.PORT ?? 4173),
+  { root = DIST, spa = false, tls = tlsFromEnv() } = {}
+) {
+  const respond = responder(resolve(root), spa)
+  const server = tls
+    ? createSecureServer({ ...tls, allowHTTP1: true }, respond)
+    : createServer(respond)
   return new Promise((done) => server.listen(port, () => done(server)))
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const server = await serve()
-  console.log(`WebKit docs on http://localhost:${server.address().port}`)
+  const scheme = tlsFromEnv() ? 'https' : 'http'
+  console.log(`WebKit docs on ${scheme}://localhost:${server.address().port}`)
 }

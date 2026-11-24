@@ -4,7 +4,7 @@ Composable `@aziontech/webkit/use-locale`. The signatures and option tables belo
 
 ```ts
 import { useLocale, usePortalLocale, createTranslator, directionOf, mergeMessages, pickCatalog, provideLocale, BUILT_IN_CATALOGS } from '@aziontech/webkit/use-locale'
-import type { UseLocaleReturn, Direction, MessageKey, MessageParams, Messages, PartialMessages, PluralMessage, PortalLocaleAttrs, DirectionSetting, FileSizeUnit, PluralForms, ProvideLocaleOptions } from '@aziontech/webkit/use-locale'
+import type { UseLocaleReturn, Direction, MessageKey, MessageParams, Messages, PartialMessages, PluralMessage, PortalLocaleAttrs, DirectionSetting, FileSizeUnit, PluralForms, ProvidedLocale, ProvideLocaleOptions } from '@aziontech/webkit/use-locale'
 ```
 
 ## `useLocale`
@@ -50,7 +50,7 @@ function directionOf(locale: string): Direction
 ## `mergeMessages`
 
 ```ts
-function mergeMessages(base: Messages, overrides?: PartialMessages): Messages
+function mergeMessages<T extends PartialMessages = Messages>(base: T, overrides?: PartialMessages): T
 ```
 
 ## `pickCatalog`
@@ -62,7 +62,7 @@ function pickCatalog(locale: string, catalogs: Record<string, Messages>): Messag
 ## `provideLocale`
 
 ```ts
-function provideLocale(options: ProvideLocaleOptions): LocaleContext
+function provideLocale(options: ProvideLocaleOptions): ProvidedLocale
 ```
 
 ## `BUILT_IN_CATALOGS`
@@ -126,7 +126,7 @@ One message per CLDR plural category; `other` is required, the rest are optional
 
 ## `PortalLocaleAttrs`
 
-`dir` and `lang` of the nearest `ConfigProvider`, for an element teleported out of it (empty with no provider).
+`dir` and `lang` of the nearest `ConfigProvider`, for an element teleported out of it (empty with no provider; no `dir` when the providers inherit the page's direction).
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -157,15 +157,26 @@ Plural forms passed to `plural`; `{count}` in a form is replaced by the formatte
 type PluralForms = PluralMessage
 ```
 
-## `ProvideLocaleOptions`
+## `ProvidedLocale`
 
-Options accepted by `provideLocale`.
+What `provideLocale` returns: the provided context, plus the direction the provider sets itself.
+
+Extends `LocaleContext`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `locale` | `MaybeRefOrGetter<string>` | yes | BCP 47 locale tag; empty follows the device locale (`en-US` until mount). |
-| `messages` | `MaybeRefOrGetter<PartialMessages \| undefined>` | no | Partial catalog deep-merged over the built-in one. |
-| `dir` | `MaybeRefOrGetter<DirectionSetting \| undefined>` | no | Explicit direction, or `auto` to derive it from the locale. |
-| `catalogs` | `MaybeRefOrGetter<Record<string, Messages>>` | yes | Catalogs the provider can pick from, keyed by locale tag; English must be one of them. |
-| `now` | `MaybeRefOrGetter<string \| number \| Date \| undefined>` | no | Reference time for relative times below the provider; undefined reads the real clock. |
-| `timeZone` | `MaybeRefOrGetter<string \| undefined>` | no | IANA time zone for absolute times below the provider; empty or undefined reads the browser's zone. |
+| `ownDir` | `ComputedRef<Direction \| undefined>` | yes | Direction from an explicit `dir` or `locale`; undefined when the provider inherits the direction around it. |
+
+## `ProvideLocaleOptions`
+
+Options accepted by `provideLocale`; every option left empty comes from the provider above, and at the root from the device and the page.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `locale` | `MaybeRefOrGetter<string>` | yes | BCP 47 locale tag; empty inherits the parent provider's, at the root the device locale (`en-US` until mount). |
+| `messages` | `MaybeRefOrGetter<PartialMessages \| undefined>` | no | Partial catalog deep-merged over the built-in one and over the parent provider's overrides. |
+| `dir` | `MaybeRefOrGetter<DirectionSetting \| undefined>` | no | Explicit direction, or `auto` to derive it from the locale and otherwise inherit it. |
+| `catalogs` | `MaybeRefOrGetter<Record<string, Messages>>` | yes | Catalogs the provider can pick from, keyed by locale tag, added to the parent provider's; English must be one of them at the root. |
+| `now` | `MaybeRefOrGetter<string \| number \| Date \| undefined>` | no | Reference time for relative times below the provider; undefined inherits the parent provider's, at the root the real clock. |
+| `timeZone` | `MaybeRefOrGetter<string \| undefined>` | no | IANA time zone for absolute times below the provider; empty inherits the parent provider's, at the root the browser's zone. |
+| `pageDir` | `MaybeRefOrGetter<Direction \| undefined>` | no | Direction of the page around a root provider that sets none of its own; undefined reads `ltr` (the server render and hydration). |

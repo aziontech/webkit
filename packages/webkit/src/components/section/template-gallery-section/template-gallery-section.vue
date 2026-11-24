@@ -3,7 +3,6 @@
 
   import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
-  import Texture from '../../content/texture/texture.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import Module from '../../layout/module/module.vue'
@@ -12,6 +11,8 @@
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Marquee from '../../marketing/marquee/marquee.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
+  import SectionBand from '../parts/section-band.vue'
+  import SectionHatch from '../parts/section-hatch.vue'
 
   defineOptions({
     name: 'TemplateGallerySection',
@@ -90,164 +91,170 @@
   const hasCards = computed(() => cards.value.length > 0)
 
   const hasActions = computed(() => Boolean(props.primaryAction || props.secondaryAction))
+
+  const DEPLOY_BUTTON_CLASS =
+    'z-1 mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 ' +
+    'rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5'
+
+  const SCROLL_AREA_CLASS =
+    '@min-[60rem]/template-gallery:absolute @min-[60rem]/template-gallery:inset-0 ' +
+    '@min-[60rem]/template-gallery:mask-t-from-[calc(100%_-_2rem)] @min-[60rem]/template-gallery:mask-b-from-[calc(100%_-_6rem)]'
+
+  const CARD_LINK_CLASS =
+    'absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    class="@container/template-gallery scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :filled="hasCards"
+    :framed="false"
+    class="@container/template-gallery"
   >
-    <Module
-      v-if="hasCards"
-      :divided="false"
-      :padded="false"
+    <MediaSplit
+      framed
+      :heading-level="2"
+      align="center"
+      :eyebrow="eyebrow"
+      size="large"
+      texture="none"
+      :title="title"
+      :description="description"
     >
-      <MediaSplit
-        framed
-        :heading-level="2"
-        align="center"
-        :eyebrow="eyebrow"
-        size="large"
-        texture="none"
-        :title="title"
-        :description="description"
-      >
-        <template #media>
-          <div
-            class="relative min-h-[36rem] w-full self-stretch @min-[60rem]/template-gallery:min-h-[44rem]"
+      <template #media>
+        <div class="relative w-full self-stretch @min-[60rem]/template-gallery:min-h-[44rem]">
+          <ScrollArea
+            :aria-label="templatesAriaLabel || undefined"
+            :class="SCROLL_AREA_CLASS"
           >
-            <ScrollArea
-              :aria-label="templatesAriaLabel || undefined"
-              class="absolute inset-0 mask-t-from-[calc(100%_-_2rem)] mask-b-from-[calc(100%_-_6rem)]"
+            <CardGrid
+              flush
+              variant="frame"
+              :columns="2"
             >
-              <CardGrid
-                flush
-                variant="frame"
-                :columns="2"
+              <CardGridCell
+                v-for="(template, index) in cards"
+                :key="`${template.title}-${index}`"
+                variant="none"
+                :padded="false"
               >
-                <CardGridCell
-                  v-for="(template, index) in cards"
-                  :key="`${template.title}-${index}`"
-                  variant="none"
-                  :padded="false"
+                <div
+                  :data-linked="template.href ? true : null"
+                  class="group/template relative flex h-full min-w-0 flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl) data-[linked]:cursor-pointer"
                 >
-                  <div
-                    :data-linked="template.href ? true : null"
-                    class="group/template relative flex h-full min-w-0 flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl) data-[linked]:cursor-pointer"
+                  <span
+                    class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
-                    <span
-                      class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                    >
-                      <i
-                        v-if="template.icon"
-                        aria-hidden="true"
-                        :data-invert="template.invertInDark || null"
-                        :class="template.icon"
-                        class="text-[1.25rem] leading-none text-(--text-default) data-[invert]:[[data-theme=dark]_&]:invert"
-                      />
-                    </span>
-                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                      <span class="text-body-md text-(--text-default)">{{ template.title }}</span>
-                      <span
-                        v-if="template.description"
-                        class="text-pretty text-body-sm text-(--text-muted)"
-                      >
-                        {{ template.description }}
-                      </span>
-                    </div>
-                    <a
-                      v-if="template.href"
-                      :href="safeHref(template.href) ?? undefined"
-                      :tabindex="deployLabel ? -1 : undefined"
-                      :aria-hidden="deployLabel ? 'true' : undefined"
-                      :aria-label="deployLabel ? undefined : template.title"
-                      :data-testid="`${testId}__card-link`"
-                      class="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                    <i
+                      v-if="template.icon"
+                      aria-hidden="true"
+                      :data-invert="template.invertInDark || null"
+                      :class="template.icon"
+                      class="text-[1.25rem] leading-none text-(--text-default) data-[invert]:[[data-theme=dark]_&]:invert"
                     />
-                    <Button
-                      v-if="deployLabel && template.href"
-                      :label="deployLabel"
-                      variant="outline"
-                      size="medium"
-                      icon="az az-chevron-right"
-                      icon-position="trailing"
-                      animated
-                      :href="template.href"
-                      class="z-1 mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5"
+                  </span>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                    <span class="text-body-md text-(--text-default)">{{ template.title }}</span>
+                    <span
+                      v-if="template.description"
+                      class="text-pretty text-body-sm text-(--text-muted)"
                     >
-                      <template #leading>
-                        <i
-                          class="az az-azion text-(--primary)"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Button>
+                      {{ template.description }}
+                    </span>
                   </div>
-                </CardGridCell>
-              </CardGrid>
-              <div
-                aria-hidden="true"
-                class="h-16"
-              />
-            </ScrollArea>
-          </div>
-        </template>
-        <template
-          v-if="hasActions"
-          #actions
-        >
-          <Button
-            key="primaryAction"
-            v-if="primaryAction"
-            :label="primaryAction.label"
-            :href="primaryAction.href"
-            :target="primaryAction.target"
-            variant="secondary"
-            size="large"
-            :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-            icon-position="trailing"
-            :animated="Boolean(primaryAction.trailing)"
-          />
-          <Button
-            key="secondaryAction"
-            v-if="secondaryAction"
-            :label="secondaryAction.label"
-            :href="secondaryAction.href"
-            :target="secondaryAction.target"
-            variant="outline"
-            size="large"
-            :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
-            icon-position="trailing"
-            :animated="Boolean(secondaryAction.trailing)"
-          />
-        </template>
-      </MediaSplit>
-
-      <RegistrationFrame
-        v-if="marqueeMarks.length > 0"
-        flush
-        borders="y"
-        marks="all"
+                  <a
+                    v-if="template.href && deployLabel"
+                    :href="safeHref(template.href) ?? undefined"
+                    tabindex="-1"
+                    aria-hidden="true"
+                    :aria-label="template.title"
+                    :data-testid="`${testId}__card-link`"
+                    :class="CARD_LINK_CLASS"
+                  />
+                  <a
+                    v-else-if="template.href"
+                    :href="safeHref(template.href) ?? undefined"
+                    :aria-label="template.title"
+                    :data-testid="`${testId}__card-link`"
+                    :class="CARD_LINK_CLASS"
+                  />
+                  <Button
+                    v-if="deployLabel && template.href"
+                    :label="deployLabel"
+                    variant="outline"
+                    size="medium"
+                    icon="az az-chevron-right"
+                    icon-position="trailing"
+                    animated
+                    :href="template.href"
+                    :class="DEPLOY_BUTTON_CLASS"
+                  >
+                    <template #leading>
+                      <i
+                        class="az az-azion text-(--primary)"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Button>
+                </div>
+              </CardGridCell>
+            </CardGrid>
+            <div
+              aria-hidden="true"
+              class="h-16"
+            />
+          </ScrollArea>
+        </div>
+      </template>
+      <template
+        v-if="hasActions"
+        #actions
       >
-        <Module :divided="false">
-          <Marquee
-            size="small"
-            :label="marqueeLabel"
-            :marks="marqueeMarks"
-          />
-        </Module>
-      </RegistrationFrame>
-    </Module>
+        <Button
+          key="primaryAction"
+          v-if="primaryAction"
+          :label="primaryAction.label"
+          :href="primaryAction.href"
+          :target="primaryAction.target"
+          variant="secondary"
+          size="large"
+          :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
+          icon-position="trailing"
+          :animated="Boolean(primaryAction.trailing)"
+        />
+        <Button
+          key="secondaryAction"
+          v-if="secondaryAction"
+          :label="secondaryAction.label"
+          :href="secondaryAction.href"
+          :target="secondaryAction.target"
+          variant="outline"
+          size="large"
+          :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
+          icon-position="trailing"
+          :animated="Boolean(secondaryAction.trailing)"
+        />
+      </template>
+    </MediaSplit>
+
     <RegistrationFrame
-      v-if="hasCards && closing && hatch"
-      borders="none"
+      v-if="marqueeMarks.length > 0"
+      flush
+      borders="y"
       marks="all"
-      data-hatch="true"
-      class="h-[calc(var(--spacing-2xl)*2)]"
     >
-      <Texture variant="lines" />
+      <Module :divided="false">
+        <Marquee
+          size="small"
+          :label="marqueeLabel"
+          :marks="marqueeMarks"
+        />
+      </Module>
     </RegistrationFrame>
-  </div>
+    <template #after>
+      <SectionHatch v-if="hasCards && closing && hatch" />
+    </template>
+  </SectionBand>
 </template>

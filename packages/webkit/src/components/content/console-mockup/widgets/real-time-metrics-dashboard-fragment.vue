@@ -1,12 +1,9 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import SidebarMenu from '../../../navigation/sidebar-menu/index'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
 
   defineOptions({ name: 'RealTimeMetricsDashboardFragment' })
 
@@ -18,9 +15,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const GROUPS = [
     { label: '', items: [{ id: 'overview', label: 'Overview' }] },
@@ -87,106 +81,40 @@
     { ...LIFTED, cursor: row('bot-manager'), selected: 'bot-manager', forward: 160, back: 120 }
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 12
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const anchorTop = ref(0)
-
-  const measure = () => {
-    anchorTop.value =
-      columnEl.value?.querySelector<globalThis.HTMLElement>('[data-anchor]')?.offsetTop ?? 0
-  }
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor, columnEl)
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${frame.value.lifted ? LEAD - anchorTop.value : 0}px`
-  }))
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(measure)
-
-  onScopeDispose(halt)
+  const { frame, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
+  })
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    :fade="frame.lifted ? 'y' : 'bottom'"
+  <MockupScrollColumn
+    :ref="bindColumn"
     class="[--console-mockup-fade-edge:14%] [--console-mockup-fade-start:76%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.lifted ? 0 : null"
+    :lead="12"
+    :cursor="frame.cursor"
+    cursor-name="John"
+    :pressed="frame.press"
   >
-    <div
-      ref="stageEl"
-      class="relative"
-    >
-      <div
-        ref="columnEl"
-        :style="scrollStyle"
-        class="relative py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+    <SidebarMenu aria-label="Real-Time Metrics">
+      <ConsoleMockupShellItem
+        v-for="(group, index) in GROUPS"
+        :key="group.label || 'overview'"
+        :order="index"
+        :data-anchor="group.label === 'Secure' || undefined"
       >
-        <SidebarMenu aria-label="Real-Time Metrics">
-          <ConsoleMockupShellItem
-            v-for="(group, index) in GROUPS"
-            :key="group.label || 'overview'"
-            :order="index"
-            :data-anchor="group.label === 'Secure' || undefined"
-          >
-            <SidebarMenu.Group :label="group.label">
-              <SidebarMenu.Item
-                v-for="item in group.items"
-                :key="item.id"
-                :label="item.label"
-                :active="frame.selected === item.id"
-                :data-cursor="item.id"
-              />
-            </SidebarMenu.Group>
-          </ConsoleMockupShellItem>
-        </SidebarMenu>
-      </div>
-
-      <MockupCursor
-        name="John"
-        :x="position.x"
-        :y="position.y"
-        :pressed="frame.press"
-      />
-    </div>
-  </ConsoleMockupShell>
+        <SidebarMenu.Group :label="group.label">
+          <SidebarMenu.Item
+            v-for="item in group.items"
+            :key="item.id"
+            :label="item.label"
+            :active="frame.selected === item.id"
+            :data-cursor="item.id"
+          />
+        </SidebarMenu.Group>
+      </ConsoleMockupShellItem>
+    </SidebarMenu>
+  </MockupScrollColumn>
 </template>

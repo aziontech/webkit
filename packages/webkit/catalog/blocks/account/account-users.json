@@ -28,7 +28,12 @@
  ],
  "sfcFile": "blocks/account/account-users/account-users.vue",
  "guidelinesFile": "blocks/account/account-users/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-users/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "account-users-format.ts",
+  "parts/invite-user-drawer.vue",
+  "parts/user-profile-dialog.vue",
+  "parts/user-role-dialog.vue",
+  "parts/users-table.vue"
+ ]
 }

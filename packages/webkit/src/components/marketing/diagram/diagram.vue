@@ -106,6 +106,17 @@
   )
 
   const at = (x: number, y: number) => ({ left: `${x}px`, top: `${y}px` })
+
+  const PORT_CLASS =
+    'absolute size-(--size-2) rounded-(--radius-sm) border-(length:--border-width-default) border-(--border-muted) bg-(--border-default) ' +
+    'data-[active]:bg-(--accent) ' +
+    'data-[side=bottom]:-translate-x-1/2 data-[side=left]:-translate-x-full data-[side=left]:-translate-y-1/2 data-[side=right]:-translate-y-1/2 data-[side=top]:-translate-x-1/2 ' +
+    'data-[side=top]:-translate-y-full'
+
+  const LABEL_CLASS =
+    'absolute -translate-1/2 rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-label-code-sm ' +
+    'whitespace-nowrap text-(--text-muted) ' +
+    'data-[active]:text-(--text-default)'
 </script>
 
 <template>
@@ -151,7 +162,7 @@
         :key="port.key"
         :data-active="port.active || null"
         :data-side="port.side"
-        class="absolute size-(--size-2) rounded-(--radius-sm) border-(length:--border-width-default) border-(--border-muted) bg-(--border-default) data-[active]:bg-(--accent) data-[side=bottom]:-translate-x-1/2 data-[side=left]:-translate-x-full data-[side=left]:-translate-y-1/2 data-[side=right]:-translate-y-1/2 data-[side=top]:-translate-x-1/2 data-[side=top]:-translate-y-full"
+        :class="PORT_CLASS"
         :style="at(port.x, port.y)"
       />
 
@@ -159,7 +170,7 @@
         v-for="chip in labels"
         :key="chip.key"
         :data-active="chip.active || null"
-        class="absolute -translate-1/2 rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-label-code-sm whitespace-nowrap text-(--text-muted) data-[active]:text-(--text-default)"
+        :class="LABEL_CLASS"
         :style="at(chip.x, chip.y)"
       >
         {{ chip.label }}

@@ -8,7 +8,12 @@
  ],
  "sfcFile": "blocks/edit/edit-rule-builder/edit-rule-builder.vue",
  "guidelinesFile": "blocks/edit/edit-rule-builder/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/edit/edit-rule-builder/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "lib/rule-behavior-data.ts",
+  "lib/rule-catalog.ts",
+  "lib/rule-form.ts",
+  "parts/rule-behaviors.vue",
+  "parts/rule-criteria.vue"
+ ]
 }

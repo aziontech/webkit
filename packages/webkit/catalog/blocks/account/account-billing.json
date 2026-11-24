@@ -28,7 +28,12 @@
  ],
  "sfcFile": "blocks/account/account-billing/account-billing.vue",
  "guidelinesFile": "blocks/account/account-billing/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/account/account-billing/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "billing-format.ts",
+  "parts/billing-invoices.vue",
+  "parts/billing-payment-details.vue",
+  "parts/billing-payment-methods.vue",
+  "parts/billing-plan-cards.vue"
+ ]
 }

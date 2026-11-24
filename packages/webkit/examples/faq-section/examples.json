@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Retail page questions. The second answer carries a markdown link inside its sentence; open it to see the link rendered in place. Edit the props in the Controls panel — a band with no items renders nothing.",
+      "summary": "The Retail page questions. The second answer carries a markdown link inside its sentence; open it to see the link rendered in place. A band with no items renders nothing.",
       "file": "default.vue"
     }
   ],

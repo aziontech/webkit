@@ -1,6 +1,6 @@
 # Article Body Section
 
-> The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `container`, `module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-table-of-contents`; copying to the clipboard is local behaviour, confirmed by a toast.
+> The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header from `lg`; below it the column stands alone with the outline folded into an "On this page" disclosure over the prose and the share, community and copy-page groups after it. The section opens the page itself, so it carries its own `container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `container`, `module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-table-of-contents`; copying to the clipboard is local behaviour, confirmed by a toast.
 
 - Import: `import ArticleBodySection from '@aziontech/webkit/article-body-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -59,7 +59,7 @@
 - Visible focus: every link and button shows a `focus-visible` ring.
 - Feedback: copy results are announced by the `Toaster`'s live region; the outline's active entry carries `aria-current` (owned by `doc-table-of-contents`).
 - Keyboard map: `Tab` moves through the breadcrumb, the rails and the prose links; the split button owns its menu keyboard map.
-- ARIA: the root is a plain `div` so the page keeps its own landmarks; the headline is the page `h1` (from `hero-title`); the prose is an `article`; the two rails are `aside` landmarks, the left one named by the share title, the right one by the outline's own navigation; the share and community groups are named `section`s; icon-only share buttons are named by their labels and carry a tooltip; the banner is decorative (`aria-hidden`, `alt=""`); heading ids are slugged from their text.
+- ARIA: the root is a plain `div` so the page keeps its own landmarks; the headline is the page `h1` (from `hero-title`); the prose is an `article`; the two rails are `aside` landmarks (below `lg` the outline is a native `details`/`summary` disclosure whose summary is the outline's title), the left one named by the share title, the right one by the outline's own navigation; the share and community groups are named `section`s; icon-only share buttons are named by their labels and carry a tooltip; the banner is decorative (`aria-hidden`, `alt=""`); heading ids are slugged from their text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `split-button`.
@@ -89,7 +89,7 @@
 ## Responsive
 
 - Container queries: none; from `lg` the grid has three columns with sticky rails.
-- Narrow (< `lg`): both rails fold away and the column stands alone; code blocks scroll sideways inside themselves.
+- Narrow (< `lg`): the column stands alone; the outline is a closed `details` disclosure ("On this page") between the byline and the prose, and the share rail follows the prose under a divider, so no control is dropped; code blocks scroll sideways inside themselves.
 - Touch: owned by `icon-button` and `split-button`.
 - Reflow: no horizontal page scroll at 320 px; only a code block scrolls.
 
@@ -101,13 +101,21 @@
 <script setup>
   import ArticleBodySection from '@aziontech/webkit/article-body-section'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+
+  const BODY =
+    '## Challenge\n\n' +
+    'Magalu is the most innovative retail company in LATAM.\n\n' +
+    '## Solution\n\n' +
+    'Magalu counts on Azion’s platform to evolve its security posture.\n\n' +
+    '## Results and Impact\n\n' +
+    'Magalu simplified security operations by blocking millions of threats per year.'
 </script>
 
 <template>
   <ArticleBodySection
     eyebrow="Blog"
     :banner="placeholderImage"
-    body="## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year."
+    :body="BODY"
     :article="{
       title: 'Magalu Ensures High Availability at Scale with Azion',
       description:

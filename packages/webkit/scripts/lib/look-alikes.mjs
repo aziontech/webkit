@@ -3,7 +3,7 @@ import { basename, dirname, join, relative, resolve } from 'node:path'
 
 import { parse } from 'vue/compiler-sfc'
 
-export const WEIGHTS = {
+const WEIGHTS = {
   props: 0.25,
   behaviour: 0.3,
   classes: 0.2,
@@ -12,9 +12,9 @@ export const WEIGHTS = {
   name: 0.1
 }
 export const COPY_AT = 0.35
-export const CHECK_AT = 0.28
+const CHECK_AT = 0.28
 
-export const FEATURES = {
+const FEATURES = {
   'link-or-button': /\bisAnchor\b|\bisLink\b|'a' : 'button'|<a[\s\S]*v-if[\s\S]*<button/,
   spinner: /\bSpinner\b/,
   'inert-state': /isInert|data-inert/,
@@ -31,7 +31,7 @@ const STOP = new Set(
   )
 )
 
-export function listComponents(pkgDir) {
+function listComponents(pkgDir) {
   const exportsMap = JSON.parse(readFileSync(join(pkgDir, 'package.json'), 'utf8')).exports
   const components = new Map()
   const seen = new Set()
@@ -47,7 +47,7 @@ export function listComponents(pkgDir) {
   return components
 }
 
-export function propNames(script) {
+function propNames(script) {
   const named = script.match(/interface\s+\w*Props\s*\{([\s\S]*?)\n\s*\}/)
   const body = named ? named[1] : (script.match(/defineProps<\{([\s\S]*?)\}>\(\)/) || [])[1] || ''
   return new Set([...body.matchAll(/^\s*([a-zA-Z]\w*)\??\s*:/gm)].map((m) => m[1]))
@@ -67,11 +67,35 @@ function imports(script, file, nameByFile) {
   return out
 }
 
+const PRIVATE_DIR = /\/src\/(components\/.+\/(parts|lib|composables)|composables)\//
+export const FAMILY_SIZE = 8
+
+function resolveModule(abs) {
+  for (const candidate of [
+    abs,
+    `${abs}.ts`,
+    `${abs}.vue`,
+    join(abs, 'index.ts'),
+    join(abs, basename(abs) + '.ts')
+  ])
+    if (existsSync(candidate) && !candidate.endsWith('/')) return candidate
+  return null
+}
+
+function privateModules(script, file, nameByFile) {
+  const out = new Set()
+  for (const [, spec] of script.matchAll(/from\s+'(\.[^']+)'/g)) {
+    const found = resolveModule(resolve(dirname(file), spec))
+    if (found && !nameByFile.has(found) && PRIVATE_DIR.test(found)) out.add(found)
+  }
+  return out
+}
+
 function splitClasses(text, into) {
   for (const c of text.split(/\s+/)) if (c) into.add(c)
 }
 
-export function walkTemplate(ast) {
+function walkTemplate(ast) {
   const tags = []
   const classes = new Set()
   const attrs = new Set()
@@ -98,10 +122,17 @@ export function walkTemplate(ast) {
   return { tags, classes, attrs }
 }
 
+const CLASS_CONSTANT = /const [A-Z0-9_]*CLASS\b[^=\n]*=((?:\s*(?:'[^'\n]*'|"[^"\n]*")\s*\+?)+)/g
+const STRING_PIECE = /'([^'\n]*)'|"([^"\n]*)"/g
+
 function scriptClasses(script) {
   const out = new Set()
   for (const [, lit] of script.matchAll(/'([^'\n]{40,})'/g)) {
     if (/\b(flex|inline-flex|rounded|bg-|text-|data-\[)/.test(lit)) splitClasses(lit, out)
+  }
+  for (const [, body] of script.matchAll(CLASS_CONSTANT)) {
+    for (const [, single, double] of body.matchAll(STRING_PIECE))
+      splitClasses(single ?? double, out)
   }
   return out
 }
@@ -146,6 +177,7 @@ export function describe(name, file, src, { nameByFile = new Map(), words = [], 
     classes: new Set([...tpl.classes, ...scriptClasses(script)].map(baseUtility)),
     structure: shingles(tpl.tags),
     imports: imports(script, file, nameByFile),
+    modules: privateModules(script, file, nameByFile),
     words,
     head: name.split('-').pop()
   }
@@ -163,11 +195,16 @@ export function describeAll(pkgDir, root) {
   )
   weighWords(all)
   const weights = weighSets(all)
-  for (const c of all) c.weights = weights
+  const moduleUsers = new Map()
+  for (const c of all) for (const m of c.modules) moduleUsers.set(m, (moduleUsers.get(m) || 0) + 1)
+  for (const c of all) {
+    c.weights = weights
+    c.moduleUsers = moduleUsers
+  }
   return all
 }
 
-export function weighWords(all) {
+function weighWords(all) {
   const df = new Map()
   for (const c of all) for (const w of new Set(c.words)) df.set(w, (df.get(w) || 0) + 1)
   for (const c of all) {
@@ -178,7 +215,7 @@ export function weighWords(all) {
   }
 }
 
-export const PRIOR = { props: 2, behaviour: 3, classes: 8, structure: 2 }
+const PRIOR = { props: 2, behaviour: 3, classes: 8, structure: 2 }
 
 const SET_SIGNALS = ['props', 'behaviour', 'classes', 'structure']
 
@@ -195,7 +232,7 @@ export const jaccard = (a, b, prior = 0, weight = () => 1) => {
   return shared / (union + prior)
 }
 
-export function weighSets(all) {
+function weighSets(all) {
   const weights = {}
   for (const signal of SET_SIGNALS) {
     const df = new Map()
@@ -232,7 +269,10 @@ export function compare(a, b) {
     name: a.head === b.head ? 1 : 0
   }
   const score = Object.entries(WEIGHTS).reduce((t, [k, w]) => t + w * signals[k], 0)
-  const reuse = a.imports.has(b.name) || b.imports.has(a.name)
+  const shared = [...(a.modules || [])].filter(
+    (m) => b.modules?.has(m) && (a.moduleUsers?.get(m) ?? 0) <= FAMILY_SIZE
+  )
+  const reuse = a.imports.has(b.name) || b.imports.has(a.name) || shared.length > 0
   let verdict = 'distinct'
   if (score >= COPY_AT) verdict = reuse ? 'reuse' : 'copy'
   else if (score >= CHECK_AT && !reuse) verdict = 'check'
@@ -243,6 +283,7 @@ export function compare(a, b) {
     score,
     signals,
     reuse,
+    sharedModules: shared,
     verdict,
     sharedProps: [...a.props].filter((p) => b.props.has(p)),
     sharedBehaviour: [...a.behaviour].filter((x) => x.startsWith('feat:') && b.behaviour.has(x))

@@ -13,10 +13,7 @@
     {
       id: 'case-gpa',
       href: '/site/success-cases/gpa',
-      client: {
-        name: 'GPA',
-        logo: gpaExtendedReversed
-      },
+      client: { name: 'GPA', logo: gpaExtendedReversed },
       category: 'Retail',
       description:
         'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',
@@ -29,26 +26,16 @@
     {
       id: 'case-axur',
       href: '/site/success-cases/axur',
-      client: {
-        name: 'Axur',
-        logo: axurExtendedReversed
-      },
+      client: { name: 'Axur', logo: axurExtendedReversed },
       category: 'Tech',
       description:
         'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',
-      facets: {
-        industry: ['Tech'],
-        solution: ['Build', 'Secure'],
-        product: ['AI Inference']
-      }
+      facets: { industry: ['Tech'], solution: ['Build', 'Secure'], product: ['AI Inference'] }
     },
     {
       id: 'case-exame',
       href: '/site/success-cases/exame',
-      client: {
-        name: 'Exame',
-        logo: exameExtendedReversed
-      },
+      client: { name: 'Exame', logo: exameExtendedReversed },
       category: 'Media',
       description:
         'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',
@@ -61,10 +48,7 @@
     {
       id: 'case-fourbank',
       href: '/site/success-cases/fourbank',
-      client: {
-        name: 'Fourbank',
-        logo: fourbankExtendedReversed
-      },
+      client: { name: 'Fourbank', logo: fourbankExtendedReversed },
       category: 'Tech',
       description:
         'FourBank strengthened the security of its financial services and increased resilience against DDoS attacks using the security capabilities of the Azion Platform.',
@@ -77,29 +61,20 @@
     {
       id: 'case-panvel',
       href: '/site/success-cases/panvel',
-      client: {
-        name: 'Panvel',
-        logo: panvelExtendedReversed
-      },
+      client: { name: 'Panvel', logo: panvelExtendedReversed },
       category: 'Retail',
       description:
         'Over 60% faster applications and 86% offloaded traffic allowed Panvel to scale its e-commerce using Azion’s distributed platform.',
-      facets: {
-        industry: ['Retail'],
-        solution: ['Build', 'Deploy'],
-        product: ['Applications']
-      }
+      facets: { industry: ['Retail'], solution: ['Build', 'Deploy'], product: ['Applications'] }
     },
     {
       id: 'case-marisa',
       href: '/site/success-cases/marisa',
-      client: {
-        name: 'Marisa',
-        logo: marisaExtendedReversed
-      },
+      client: { name: 'Marisa', logo: marisaExtendedReversed },
       category: 'Retail',
       description:
-        'Discover how Marisa improved e-commerce performance with the Azion Platform, delivering 85% of traffic through distributed infrastructure, reducing origin costs, and supporting 96% online sales growth.',
+        'Discover how Marisa improved e-commerce performance with the Azion Platform, delivering 85% of traffic ' +
+        'through distributed infrastructure, reducing origin costs, and supporting 96% online sales growth.',
       facets: {
         industry: ['Retail'],
         solution: ['Build', 'Deploy'],
@@ -114,18 +89,9 @@
       label: 'Industry',
       allLabel: 'All industries',
       options: [
-        {
-          value: 'Media',
-          label: 'Media'
-        },
-        {
-          value: 'Retail',
-          label: 'Retail'
-        },
-        {
-          value: 'Tech',
-          label: 'Tech'
-        }
+        { value: 'Media', label: 'Media' },
+        { value: 'Retail', label: 'Retail' },
+        { value: 'Tech', label: 'Tech' }
       ]
     },
     {
@@ -133,22 +99,10 @@
       label: 'Solution',
       allLabel: 'All solutions',
       options: [
-        {
-          value: 'Build',
-          label: 'Build'
-        },
-        {
-          value: 'Deploy',
-          label: 'Deploy'
-        },
-        {
-          value: 'Observe',
-          label: 'Observe'
-        },
-        {
-          value: 'Secure',
-          label: 'Secure'
-        }
+        { value: 'Build', label: 'Build' },
+        { value: 'Deploy', label: 'Deploy' },
+        { value: 'Observe', label: 'Observe' },
+        { value: 'Secure', label: 'Secure' }
       ]
     },
     {
@@ -156,54 +110,18 @@
       label: 'Product',
       allLabel: 'All products',
       options: [
-        {
-          value: 'AI Inference',
-          label: 'AI Inference'
-        },
-        {
-          value: 'Application Accelerator',
-          label: 'Application Accelerator'
-        },
-        {
-          value: 'Applications',
-          label: 'Applications'
-        },
-        {
-          value: 'Bot Manager',
-          label: 'Bot Manager'
-        },
-        {
-          value: 'Cache',
-          label: 'Cache'
-        },
-        {
-          value: 'Edge DNS',
-          label: 'Edge DNS'
-        },
-        {
-          value: 'Firewall',
-          label: 'Firewall'
-        },
-        {
-          value: 'Functions',
-          label: 'Functions'
-        },
-        {
-          value: 'Image Processor',
-          label: 'Image Processor'
-        },
-        {
-          value: 'Real-Time Events',
-          label: 'Real-Time Events'
-        },
-        {
-          value: 'Real-Time Metrics',
-          label: 'Real-Time Metrics'
-        },
-        {
-          value: 'WAF',
-          label: 'WAF'
-        }
+        { value: 'AI Inference', label: 'AI Inference' },
+        { value: 'Application Accelerator', label: 'Application Accelerator' },
+        { value: 'Applications', label: 'Applications' },
+        { value: 'Bot Manager', label: 'Bot Manager' },
+        { value: 'Cache', label: 'Cache' },
+        { value: 'Edge DNS', label: 'Edge DNS' },
+        { value: 'Firewall', label: 'Firewall' },
+        { value: 'Functions', label: 'Functions' },
+        { value: 'Image Processor', label: 'Image Processor' },
+        { value: 'Real-Time Events', label: 'Real-Time Events' },
+        { value: 'Real-Time Metrics', label: 'Real-Time Metrics' },
+        { value: 'WAF', label: 'WAF' }
       ]
     }
   ]

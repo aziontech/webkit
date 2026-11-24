@@ -39,12 +39,125 @@ function iconFindings(text, icons) {
   return out
 }
 
+const BOUND_DIRECTIVES = new Set(['bind', 'model'])
+
+function attributeName(attr) {
+  if (!attr.directive) return { name: attr.key?.name, value: attr.value?.value ?? null }
+  const directive = attr.key?.name?.name
+  const argument = attr.key?.argument
+  if (BOUND_DIRECTIVES.has(directive) && argument?.type === 'VIdentifier') {
+    return { name: argument.rawName ?? argument.name, value: null }
+  }
+  return { name: undefined, value: null }
+}
+
+function mapKey(map, name) {
+  if (Object.hasOwn(map, name)) return name
+  return Object.hasOwn(map, camel(name)) ? camel(name) : null
+}
+
+function propFinding(tag, key, rule, value) {
+  if (typeof rule === 'string') return { messageId: 'prop', data: { tag, old: key, next: rule } }
+  if (rule.removed) return { messageId: 'propRemoved', data: { tag, old: key, hint: rule.removed } }
+  if (rule.to && rule.to !== key) {
+    return { messageId: 'prop', data: { tag, old: key, next: rule.to } }
+  }
+  if (rule.values && value !== null && Object.hasOwn(rule.values, value)) {
+    return {
+      messageId: 'value',
+      data: { tag, prop: kebab(key), old: value, next: rule.values[value] }
+    }
+  }
+  return null
+}
+
+function checkAttribute(context, props, tag, sub, attr) {
+  const map = props[sub]
+  if (!map) return
+  const { name, value } = attributeName(attr)
+  if (!name) return
+  const key = mapKey(map, name)
+  if (!key) return
+  const finding = propFinding(tag, key, map[key], value)
+  if (finding) context.report({ node: attr, ...finding })
+}
+
+function checkSource(context, { components, removed }, node) {
+  const source = node?.value
+  if (typeof source !== 'string' || !source.startsWith(PREFIX)) return null
+  const sub = source.slice(PREFIX.length)
+  if (components[sub]) {
+    context.report({
+      node,
+      messageId: 'component',
+      data: { old: source, next: `${PREFIX}${components[sub].to}` }
+    })
+  } else if (removed[sub]) {
+    context.report({ node, messageId: 'removed', data: { old: source, hint: removed[sub] } })
+  }
+  return sub
+}
+
+function checkIcons(context, icons, node, text) {
+  for (const f of iconFindings(text, icons)) {
+    if (f.next) context.report({ node, messageId: 'icon', data: f })
+    else context.report({ node, messageId: 'iconRemoved', data: f })
+  }
+}
+
+function scriptVisitors(context, maps, bindings) {
+  const source = (node) => checkSource(context, maps, node)
+  const icons = (node, text) => checkIcons(context, maps.icons, node, text)
+  return {
+    ImportDeclaration(node) {
+      const sub = source(node.source)
+      if (!sub) return
+      for (const spec of node.specifiers || []) {
+        if (spec.type === 'ImportDefaultSpecifier') bindings.set(spec.local.name, sub)
+      }
+    },
+    ImportExpression: (node) => node.source?.type === 'Literal' && source(node.source),
+    ExportNamedDeclaration: (node) => node.source && source(node.source),
+    ExportAllDeclaration: (node) => node.source && source(node.source),
+    Literal(node) {
+      if (typeof node.value === 'string' && !node.value.startsWith(PREFIX)) icons(node, node.value)
+    },
+    TemplateElement(node) {
+      icons(node, node.value?.cooked ?? '')
+    }
+  }
+}
+
+function templateVisitors(context, maps, bindings) {
+  const icons = (node, text) => checkIcons(context, maps.icons, node, text)
+  return {
+    VElement(node) {
+      const raw = node.rawName ?? ''
+      const pascal = raw.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())
+      const resolved = bindings.get(raw) ?? bindings.get(pascal)
+      if (!resolved) return
+      for (const attr of node.startTag?.attributes ?? []) {
+        checkAttribute(context, maps.props, raw, resolved, attr)
+      }
+    },
+    VLiteral(node) {
+      icons(node, node.value)
+    },
+    Literal(node) {
+      if (typeof node.value === 'string') icons(node, node.value)
+    }
+  }
+}
+
 export default {
   meta: {
     type: 'problem',
     docs: {
       description:
-        'Flag a name WebKit 6.0 renamed or removed: an import of a retired component subpath, a renamed prop or value on a WebKit tag, a retired icon class. Reads the same maps `webkit migrate` applies (src/cli/migrations/v6*.json), so running `npx @aziontech/webkit migrate` fixes what this rule reports.'
+        'Flag a name WebKit 6.0 renamed or removed: an import of a retired component subpath, a ' +
+        'renamed prop or value on a WebKit tag, a retired icon class. Reads the same maps ' +
+        '`webkit migrate` applies (src/cli/migrations/v6*.json), so running `npx ' +
+        '@aziontech/webkit migrate` fixes what this rule reports.'
     },
     schema: [],
     messages: {
@@ -58,118 +171,11 @@ export default {
     }
   },
   create(context) {
-    const { components, removed, props, icons } = migration()
+    const maps = migration()
     const bindings = new Map()
-
-    function checkSource(node) {
-      const source = node?.value
-      if (typeof source !== 'string' || !source.startsWith(PREFIX)) return null
-      const sub = source.slice(PREFIX.length)
-      if (components[sub]) {
-        context.report({
-          node,
-          messageId: 'component',
-          data: { old: source, next: `${PREFIX}${components[sub].to}` }
-        })
-      } else if (removed[sub]) {
-        context.report({ node, messageId: 'removed', data: { old: source, hint: removed[sub] } })
-      }
-      return sub
-    }
-
-    function checkIcons(node, text) {
-      for (const f of iconFindings(text, icons)) {
-        if (f.next) context.report({ node, messageId: 'icon', data: f })
-        else context.report({ node, messageId: 'iconRemoved', data: f })
-      }
-    }
-
-    function checkAttribute(tag, sub, attr) {
-      const map = props[sub]
-      if (!map) return
-      let name
-      let value = null
-      if (!attr.directive) {
-        name = attr.key?.name
-        value = attr.value?.value ?? null
-      } else if (attr.key?.name?.name === 'bind' && attr.key.argument?.type === 'VIdentifier') {
-        name = attr.key.argument.rawName ?? attr.key.argument.name
-      } else if (attr.key?.name?.name === 'model' && attr.key.argument?.type === 'VIdentifier') {
-        name = attr.key.argument.rawName ?? attr.key.argument.name
-      }
-      if (!name) return
-      const key = Object.hasOwn(map, name)
-        ? name
-        : Object.hasOwn(map, camel(name))
-          ? camel(name)
-          : null
-      if (!key) return
-      const rule = map[key]
-      if (typeof rule === 'string') {
-        context.report({ node: attr, messageId: 'prop', data: { tag, old: key, next: rule } })
-        return
-      }
-      if (rule.removed) {
-        context.report({
-          node: attr,
-          messageId: 'propRemoved',
-          data: { tag, old: key, hint: rule.removed }
-        })
-        return
-      }
-      if (rule.to && rule.to !== key) {
-        context.report({ node: attr, messageId: 'prop', data: { tag, old: key, next: rule.to } })
-        return
-      }
-      if (rule.values && value !== null && Object.hasOwn(rule.values, value)) {
-        context.report({
-          node: attr,
-          messageId: 'value',
-          data: { tag, prop: kebab(key), old: value, next: rule.values[value] }
-        })
-      }
-    }
-
-    const script = {
-      ImportDeclaration(node) {
-        const sub = checkSource(node.source)
-        if (!sub) return
-        for (const spec of node.specifiers || []) {
-          if (spec.type === 'ImportDefaultSpecifier') bindings.set(spec.local.name, sub)
-        }
-      },
-      ImportExpression: (node) => node.source?.type === 'Literal' && checkSource(node.source),
-      ExportNamedDeclaration: (node) => node.source && checkSource(node.source),
-      ExportAllDeclaration: (node) => node.source && checkSource(node.source),
-      Literal(node) {
-        if (typeof node.value === 'string' && !node.value.startsWith(PREFIX))
-          checkIcons(node, node.value)
-      },
-      TemplateElement(node) {
-        checkIcons(node, node.value?.cooked ?? '')
-      }
-    }
-
+    const script = scriptVisitors(context, maps, bindings)
     const factory = templateBodyVisitorFactory(context)
     if (!factory) return script
-
-    return factory(
-      {
-        VElement(node) {
-          const raw = node.rawName ?? ''
-          const pascal = raw.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())
-          const resolved = bindings.get(raw) ?? bindings.get(pascal)
-          if (!resolved) return
-          for (const attr of node.startTag?.attributes ?? []) checkAttribute(raw, resolved, attr)
-        },
-        VLiteral(node) {
-          checkIcons(node, node.value)
-        },
-        Literal(node) {
-          if (typeof node.value === 'string') checkIcons(node, node.value)
-        }
-      },
-      script
-    )
+    return factory(templateVisitors(context, maps, bindings), script)
   }
 }

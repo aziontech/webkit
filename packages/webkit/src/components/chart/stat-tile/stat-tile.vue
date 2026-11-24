@@ -6,6 +6,7 @@
   import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Separator from '../../layout/separator/separator.vue'
+  import { ChartCardInjectionKey } from '../chart-card/injection-key'
   import { formatCompact, formatSignedPercent, isFiniteNumber } from '../lib'
   import SparkChart from '../spark-chart/spark-chart.vue'
   import { StatTileGroupInjectionKey } from '../stat-tile-group/injection-key'
@@ -38,7 +39,7 @@
     trend?: (number | null)[]
     /** Renders Skeleton lines in place of the figure, delta and sparkline. */
     loading?: boolean
-    /** Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data. */
+    /** Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data. */
     error?: string
   }
 
@@ -65,6 +66,7 @@
 
   const attrs = useAttrs()
   const group = inject(StatTileGroupInjectionKey, null)
+  const card = inject(ChartCardInjectionKey, null)
   const { t, locale } = useTranslate({ statTile: en.statTile })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
@@ -86,6 +88,9 @@
   const hasValue = computed(() => !failed.value && isFiniteNumber(props.value))
   const figure = computed(() =>
     failed.value || display.value === null ? '–' : valueText(display.value)
+  )
+  const sizeFigure = computed(() =>
+    !failed.value && isFiniteNumber(props.value) ? valueText(props.value) : figure.value
   )
   const finalFigure = computed(() => {
     if (failed.value) return `${t('statTile.loadError')}. ${props.error}`
@@ -113,6 +118,11 @@
   })
 
   const hasTrend = computed(() => props.trend.filter(isFiniteNumber).length > 1)
+
+  const ROOT_CLASS =
+    'group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) ' +
+    'not-data-[grouped]:not-data-[carded]:rounded-(--shape-card) not-data-[grouped]:not-data-[carded]:border not-data-[grouped]:not-data-[carded]:bg-(--bg-surface) ' +
+    'data-[grouped]:border-e data-[grouped]:border-b'
 </script>
 
 <template>
@@ -125,9 +135,10 @@
     :data-error="failed || null"
     :data-variant="variant"
     :data-grouped="group ? '' : null"
+    :data-carded="card && !group ? '' : null"
     :aria-labelledby="labelId"
     :aria-busy="loading || undefined"
-    class="group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) not-data-[grouped]:rounded-(--shape-card) not-data-[grouped]:border not-data-[grouped]:bg-(--bg-surface) data-[grouped]:border-e data-[grouped]:border-b"
+    :class="ROOT_CLASS"
   >
     <div
       class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-2xs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"
@@ -154,13 +165,18 @@
       >
         <span
           aria-hidden="true"
+          dir="ltr"
           class="inline-flex shrink-0 items-baseline gap-(--spacing-2xs) whitespace-nowrap"
         >
           <span
-            :data-testid="`${testId}__value`"
-            class="text-(--text-default) group-data-[variant=mono]/stat-tile:text-big-number-sm group-data-[variant=sans]/stat-tile:text-heading-lg"
+            class="relative text-(--text-default) group-data-[variant=mono]/stat-tile:text-big-number-sm group-data-[variant=sans]/stat-tile:text-heading-lg"
           >
-            {{ figure }}
+            <span class="invisible">{{ sizeFigure }}</span>
+            <span
+              :data-testid="`${testId}__value`"
+              class="absolute inset-y-0 start-0"
+              >{{ figure }}</span
+            >
           </span>
           <span
             v-if="unit && hasValue"
@@ -185,7 +201,7 @@
             :data-testid="`${testId}__delta-tag`"
             class="shrink-0 tabular-nums"
           >
-            {{ deltaText }}
+            <span dir="ltr">{{ deltaText }}</span>
             <span class="sr-only">{{ deltaMeaning }}</span>
           </Tag>
           <span
@@ -212,7 +228,7 @@
     >
       <Separator class="absolute inset-x-0 top-0" />
       <Tag
-        :severity="failed ? 'danger' : 'neutral'"
+        severity="neutral"
         size="small"
         rounded
         :label="failed ? t('statTile.loadError') : t('statTile.noData')"

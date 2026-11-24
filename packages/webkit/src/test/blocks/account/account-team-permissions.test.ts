@@ -99,6 +99,23 @@ describe('account-team-permissions#CreateTeam', () => {
     )
   })
 
+  it('asks before a link leaves Create Team with unsaved changes', async () => {
+    const view = render(CreateTeam)
+    const back = view.getByRole('link', { name: 'Back to Teams and permissions' })
+    await fireEvent.update(view.getByRole('textbox', { name: /Name/ }), 'Platform')
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true })
+    back.dispatchEvent(click)
+    expect(click.defaultPrevented).toBe(true)
+    await waitFor(() =>
+      expect(document.querySelector('[role="alertdialog"], [role="dialog"]')).not.toBeNull()
+    )
+    await fireEvent.click(buttonByText('Keep editing'))
+    await waitFor(() =>
+      expect(document.querySelector('[role="alertdialog"], [role="dialog"]')).toBeNull()
+    )
+    expect((view.getByRole('textbox', { name: /Name/ }) as HTMLInputElement).value).toBe('Platform')
+  })
+
   it('makes Edit imply View and marks a partly checked group as mixed', async () => {
     const view = render(CreateTeam)
     const editFirewall = view.getByRole('checkbox', { name: 'Edit Firewall' })
@@ -174,6 +191,29 @@ describe('account/account-team-permissions EditTeam', () => {
     await userEvent.click(view.getByRole('button', { name: 'Discard' }))
     expect(memberNames()).toEqual(['Ava Wilson', 'Brian Hughes', 'Chloe Park'])
     expect(view.getByRole('button', { name: 'Save changes' })).toBeDisabled()
+  })
+
+  it('asks before a link leaves Edit Team with unsaved changes, and lets it go when unchanged', async () => {
+    const view = render(EditTeam)
+    const breadcrumb = view.getByRole('link', { name: 'Teams and permissions' })
+    const clean = new MouseEvent('click', { bubbles: true, cancelable: true })
+    breadcrumb.dispatchEvent(clean)
+    expect(document.querySelector('[role="alertdialog"], [role="dialog"]')).toBeNull()
+
+    await fireEvent.update(view.getByLabelText(/^Name\b/), 'Platform')
+    const back = view.getByRole('link', { name: 'Back to Teams and permissions' })
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true })
+    back.dispatchEvent(click)
+    expect(click.defaultPrevented).toBe(true)
+    await waitFor(() =>
+      expect(document.querySelector('[role="alertdialog"], [role="dialog"]')).not.toBeNull()
+    )
+    expect(document.body.textContent).toContain('Unsaved changes')
+    await fireEvent.click(buttonByText('Keep editing'))
+    await waitFor(() =>
+      expect(document.querySelector('[role="alertdialog"], [role="dialog"]')).toBeNull()
+    )
+    expect((view.getByLabelText(/^Name\b/) as HTMLInputElement).value).toBe('Platform')
   })
 
   it('asks before deleting the team and says how many members lose access', async () => {

@@ -19,7 +19,7 @@
 - One `AppLayout` per page, at the root. Do not nest them.
 - Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.
 - Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
-- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.
+- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button. In the console, `ConsoleLayout` wraps this layout and a page opens its own help from `ConsoleLayout.ToolsTrigger`, the `Info` link after the page title.
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
 - Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
 - Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.
@@ -127,6 +127,7 @@ Unbound, each one keeps its own local state.
 ## Responsive
 
 - Container queries: the root is `@container/app-layout`; a `ResizeObserver` on the root switches to compact when its own width is under `compactBelow` (768 px by default), so the layout also goes compact inside a narrow host, not only on a narrow viewport.
+- First paint: with the default `compactBelow` (768 px) the navigation rail and the tools region also carry a container query (`@max-3xl/app-layout:hidden`), so a server-rendered page never paints the rail on a phone before the script measures the root.
 - Narrow (compact): navigation renders in a `Drawer` from the inline end (the design sample's phone menu), the tools in a `Drawer`, the split panel is forced to the bottom and its position toggle hides; the split panel's maximum is 70 % of the layout height.
 - Touch: region buttons are `IconButton`; the separator has a 16 px hit area and pointer drag works with touch (pointer events).
 - Reflow: the content scrolls on its own; no horizontal scroll at 320 px.
@@ -370,82 +371,79 @@ Unbound, each one keeps its own local state.
 </template>
 ```
 
-### SplitPanelSide
+### HelpOpen
 
 ```vue
 <script setup>
+  import AppHeader from '@aziontech/webkit/app-header'
   import AppLayout from '@aziontech/webkit/app-layout'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import HelpPanel from '@aziontech/webkit/help-panel'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import { computed, ref } from 'vue'
+  import { onMounted, ref } from 'vue'
 
-  const services = [
-    { id: 'web-app-prod', domain: 'shop.example.com', status: 'success', label: 'Active' },
-    { id: 'payments-api', domain: 'pay.example.com', status: 'success', label: 'Active' },
-    { id: 'status-page', domain: 'status.example.com', status: 'warning', label: 'Degraded' }
-  ]
+  const toolsOpen = ref(false)
 
-  const selectedId = ref('web-app-prod')
-  const selected = computed(() => services.find((service) => service.id === selectedId.value))
-  const splitPanelOpen = computed({
-    get: () => Boolean(selected.value),
-    set: (open) => {
-      if (!open) selectedId.value = ''
-    }
+  onMounted(() => {
+    toolsOpen.value = window.matchMedia('(min-width: 48rem)').matches
   })
+
+  const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Firewall' }]
 </script>
 
 <template>
   <div class="h-dvh">
     <AppLayout
-      v-model:split-panel-open="splitPanelOpen"
-      split-panel-position="side"
-      :split-panel-title="selected ? selected.id : ''"
-      storage-key="example-services-layout"
+      v-model:tools-open="toolsOpen"
+      tools-label="Help: Firewall"
     >
+      <template #header="{ toggleTools }">
+        <AppHeader aria-label="Console">
+          <AppHeader.Start />
+          <AppHeader.Center />
+          <AppHeader.End>
+            <IconButton
+              icon="az az-circle-help"
+              aria-label="Help"
+              variant="outline"
+              size="medium"
+              :aria-pressed="toolsOpen"
+              @click="toggleTools"
+            />
+          </AppHeader.End>
+        </AppHeader>
+      </template>
+
+      <template #breadcrumbs>
+        <Breadcrumb :items="crumbs" />
+      </template>
+
       <main class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
         <PageHeader
-          title="Services"
-          description="Select a service to see its details beside the list."
+          title="Firewall"
+          description="The rules that decide which requests reach your workloads."
         />
-        <ul
-          aria-label="Services"
-          class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
-        >
-          <li
-            v-for="service in services"
-            :key="service.id"
-          >
-            <button
-              type="button"
-              :aria-pressed="selectedId === service.id"
-              class="flex w-full items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-pressed:border-(--accent) motion-reduce:transition-none"
-              @click="selectedId = service.id"
-            >
-              <span class="min-w-0 truncate">{{ service.id }}</span>
-              <StatusIndicator
-                :severity="service.status"
-                :label="service.label"
-              />
-            </button>
-          </li>
-        </ul>
       </main>
 
-      <template #split-panel>
-        <KeyValueList
-          v-if="selected"
-          aria-label="Service details"
-        >
-          <KeyValueList.Item label="Status">
-            <StatusIndicator
-              :severity="selected.status"
-              :label="selected.label"
+      <template #tools>
+        <HelpPanel aria-label="Help: Firewall">
+          <HelpPanel.Header
+            title="Firewall"
+            description="Rules run in order, before the request reaches your code."
+          />
+          <HelpPanel.Group label="How rules are matched">
+            <p>The first rule whose criteria match the request runs its behaviors.</p>
+          </HelpPanel.Group>
+          <HelpPanel.Footer>
+            <Link
+              label="Firewall documentation"
+              href="https://example.com/docs"
+              target="_blank"
             />
-          </KeyValueList.Item>
-          <KeyValueList.Item label="Domain">{{ selected.domain }}</KeyValueList.Item>
-        </KeyValueList>
+          </HelpPanel.Footer>
+        </HelpPanel>
       </template>
     </AppLayout>
   </div>

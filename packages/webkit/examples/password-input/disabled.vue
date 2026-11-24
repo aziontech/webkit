@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { ref } from 'vue'
 
@@ -6,9 +7,14 @@
 </script>
 
 <template>
-  <PasswordInput
-    v-model="password"
+  <Field
     disabled
-    placeholder="Enter your password"
-  />
+    class="w-full max-w-(--container-xs)"
+  >
+    <Field.Label>Password</Field.Label>
+    <PasswordInput
+      v-model="password"
+      disabled
+    />
+  </Field>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -106,6 +106,31 @@
   watch(query, () => {
     shown.value = BATCH
   })
+
+  let openedByTouch = false
+
+  const onTriggerPointerdown = (event: PointerEvent): void => {
+    openedByTouch = event.pointerType === 'touch'
+  }
+
+  watch(
+    open,
+    async (isOpen) => {
+      if (!isOpen || !openedByTouch) return
+      openedByTouch = false
+      await nextTick()
+      const panel = globalThis.document?.querySelector<HTMLElement>(
+        `[data-testid="${testId.value}__popover__panel"]`
+      )
+      panel?.focus({ preventScroll: true })
+    },
+    { flush: 'post' }
+  )
+
+  const ENTRY_LINK_CLASS =
+    'flex min-h-7 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) no-underline transition-colors ' +
+    'duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -125,8 +150,9 @@
       <PopoverTrigger
         :aria-label="triggerLabel"
         :data-testid="`${testId}__trigger`"
-        class="rounded-(--shape-control)"
+        class="relative rounded-(--shape-control)"
         @click.stop
+        @pointerdown="onTriggerPointerdown"
       >
         <Tag
           :label="`+${total}`"
@@ -134,9 +160,15 @@
           size="small"
           class="shrink-0 cursor-pointer tabular-nums"
         />
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          :data-testid="`${testId}__touch-target`"
+          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+        />
       </PopoverTrigger>
 
-      <PopoverContent>
+      <PopoverContent :data-testid="`${testId}__popover__panel`">
         <div
           class="flex flex-col gap-(--spacing-xs) border-b-(length:--border-width-default) border-solid border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
         >
@@ -183,7 +215,7 @@
                 :href="safeHref(entry.href) ?? undefined"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex min-h-7 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                :class="ENTRY_LINK_CLASS"
               >
                 <span
                   dir="auto"

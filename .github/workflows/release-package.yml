@@ -1,0 +1,239 @@
+name: Release one package
+
+# Called by each publish-*.yml (the file name npm trusted publishing knows). The four
+# packages share one version and one vX.Y.Z tag. Builds the package from that tag, packs it once, and gates that exact tarball: an SBOM of
+# what a consumer installs (Syft, SPDX and CycloneDX), a Grype scan that blocks on high
+# and critical, a keyless Cosign signature, then npm publish with provenance. The SBOM,
+# the signature bundle and SHA256SUMS are attached to the GitHub Release.
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: 'npm package name, for example @aziontech/webkit'
+        required: true
+        type: string
+      directory:
+        description: 'Package folder, for example packages/webkit'
+        required: true
+        type: string
+      tag:
+        description: 'Release tag, for example v6.0.0'
+        required: true
+        type: string
+      build:
+        description: 'Build command run in the package folder before packing'
+        required: false
+        default: ''
+        type: string
+      test:
+        description: 'Test command run in the package folder before packing'
+        required: false
+        default: ''
+        type: string
+      with-packages:
+        description: 'Space-separated folders of workspace packages it depends on, packed and installed with it for the SBOM'
+        required: false
+        default: ''
+        type: string
+
+permissions: {}
+
+jobs:
+  release:
+    name: Build, scan, sign and publish to npm
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/${{ inputs.package }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Resolve release tag
+        id: tag
+        env:
+          TAG: ${{ inputs.tag }}
+          PACKAGE: ${{ inputs.package }}
+        run: |
+          case "$GITHUB_REF" in
+            refs/tags/*)
+              if [ "$GITHUB_REF" != "refs/tags/$TAG" ]; then
+                echo "Dispatched from $GITHUB_REF but asked to publish $TAG." >&2
+                exit 1
+              fi
+              ;;
+          esac
+          if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Not a release tag (vX.Y.Z): $TAG" >&2
+            exit 1
+          fi
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "slug=${PACKAGE#@aziontech/}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify the tag points at a commit on main
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          TAG_COMMIT="$(git rev-parse "refs/tags/$TAG^{commit}")"
+          if [ "$TAG_COMMIT" != "$(git rev-parse HEAD)" ]; then
+            echo "Checked-out commit does not match tag $TAG." >&2
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "$TAG_COMMIT" refs/remotes/origin/main; then
+            echo "Tag $TAG ($TAG_COMMIT) is not on main; refusing to publish." >&2
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          package-manager-cache: false
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify package.json matches the tag
+        working-directory: ${{ inputs.directory }}
+        env:
+          EXPECTED: ${{ steps.tag.outputs.version }}
+        run: |
+          ACTUAL="$(node -p "require('./package.json').version")"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "package.json version ($ACTUAL) does not match the tag version ($EXPECTED)." >&2
+            exit 1
+          fi
+
+      - name: Build
+        if: inputs.build != ''
+        working-directory: ${{ inputs.directory }}
+        env:
+          BUILD: ${{ inputs.build }}
+        run: bash -c "$BUILD"
+
+      - name: Test
+        if: inputs.test != ''
+        working-directory: ${{ inputs.directory }}
+        env:
+          TEST: ${{ inputs.test }}
+        run: bash -c "$TEST"
+
+      - name: Pack the tarball (prepack runs; pnpm rewrites workspace ranges)
+        id: pack
+        working-directory: ${{ inputs.directory }}
+        env:
+          WITH_PACKAGES: ${{ inputs.with-packages }}
+        run: |
+          out="$RUNNER_TEMP/release"
+          mkdir -p "$out" "$RUNNER_TEMP/with-packages"
+          pnpm pack --pack-destination "$out"
+          tarball="$(find "$out" -maxdepth 1 -name '*.tgz' | head -1)"
+          test -n "$tarball"
+          for dir in $WITH_PACKAGES; do
+            (cd "$GITHUB_WORKSPACE/$dir" && pnpm pack --pack-destination "$RUNNER_TEMP/with-packages")
+          done
+          echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
+          echo "dir=$out" >> "$GITHUB_OUTPUT"
+
+      - name: Install Syft, Grype and Cosign (pinned, checksum verified)
+        env:
+          SYFT_VERSION: 1.57.0
+          SYFT_SHA256: 9c077a7d43029b3b13e98a8db720661e700c4d58db6352153a06395ae4a2a704
+          GRYPE_VERSION: 0.121.3
+          GRYPE_SHA256: e9da18cc1429e786722e32161288103600efffd8e483c90761f90485bd1bec85
+          COSIGN_VERSION: 3.1.4
+          COSIGN_SHA256: 424e2c97d0b45fd7a6b608a87f090f35633f4c23ece5f092d48bba11aaf4bbfa
+        run: |
+          bin="$RUNNER_TEMP/supply-chain-tools"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/syft.tar.gz" "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_amd64.tar.gz"
+          echo "${SYFT_SHA256}  $RUNNER_TEMP/syft.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/syft.tar.gz" -C "$bin" syft
+          curl -fsSL -o "$RUNNER_TEMP/grype.tar.gz" "https://github.com/anchore/grype/releases/download/v${GRYPE_VERSION}/grype_${GRYPE_VERSION}_linux_amd64.tar.gz"
+          echo "${GRYPE_SHA256}  $RUNNER_TEMP/grype.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/grype.tar.gz" -C "$bin" grype
+          curl -fsSL -o "$bin/cosign" "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-amd64"
+          echo "${COSIGN_SHA256}  $bin/cosign" | sha256sum -c -
+          chmod +x "$bin/cosign"
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: SBOM of what a consumer installs (Syft, SPDX and CycloneDX)
+        env:
+          TARBALL: ${{ steps.pack.outputs.tarball }}
+          OUT: ${{ steps.pack.outputs.dir }}
+          SLUG: ${{ steps.tag.outputs.slug }}
+        run: | # zizmor: ignore[adhoc-packages] the tarball just built, as a consumer
+          consumer="$RUNNER_TEMP/consumer"
+          mkdir -p "$consumer"
+          echo '{"name":"sbom-consumer","private":true}' > "$consumer/package.json"
+          shopt -s nullglob
+          siblings=("$RUNNER_TEMP"/with-packages/*.tgz)
+          npm install --prefix "$consumer" --ignore-scripts --no-audit --no-fund "$TARBALL" "${siblings[@]}"
+          syft scan "dir:$consumer" -o "spdx-json=$OUT/sbom-$SLUG.spdx.json" -o "cyclonedx-json=$OUT/sbom-$SLUG.cdx.json"
+
+      - name: Vulnerability gate (Grype, blocks on high and critical)
+        env:
+          OUT: ${{ steps.pack.outputs.dir }}
+          SLUG: ${{ steps.tag.outputs.slug }}
+        run: grype "sbom:$OUT/sbom-$SLUG.spdx.json" --fail-on high
+
+      - name: Sign the tarball (Cosign keyless, Sigstore bundle) and write SHA256SUMS
+        env:
+          TARBALL: ${{ steps.pack.outputs.tarball }}
+          OUT: ${{ steps.pack.outputs.dir }}
+          SLUG: ${{ steps.tag.outputs.slug }}
+        run: |
+          cosign sign-blob --yes --bundle "$TARBALL.sigstore-bundle" "$TARBALL"
+          (cd "$OUT" && sha256sum ./*.tgz "./sbom-$SLUG.spdx.json" "./sbom-$SLUG.cdx.json" > "SHA256SUMS-$SLUG")
+
+      - name: Publish the signed tarball to npm (provenance)
+        env:
+          TARBALL: ${{ steps.pack.outputs.tarball }}
+          NPM_CONFIG_PROVENANCE: true
+        run: npm publish "$TARBALL" --provenance --access public
+
+      - name: Keep the SBOM, signature and checksums for the release job
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: supply-chain
+          path: |
+            ${{ steps.pack.outputs.dir }}/sbom-*.json
+            ${{ steps.pack.outputs.dir }}/*.sigstore-bundle
+            ${{ steps.pack.outputs.dir }}/SHA256SUMS-*
+          if-no-files-found: error
+          retention-days: 7
+
+  attach:
+    name: Attach the SBOM, signature and checksums to the GitHub Release
+    needs: release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download the supply-chain files
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: supply-chain
+          path: ${{ runner.temp }}/supply-chain
+
+      - name: Upload them to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ inputs.tag }}
+          FILES: ${{ runner.temp }}/supply-chain
+        run: gh release upload "$TAG" --clobber "$FILES"/*

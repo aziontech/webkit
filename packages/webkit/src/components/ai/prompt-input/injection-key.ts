@@ -34,6 +34,8 @@ export interface PromptInputContext {
   setDragging: (value: boolean) => void
   /** Hands the box's drag and paste events to the attach control; returns the function that takes them back. */
   registerAttach: (handlers: PromptInputAttachHandlers) => () => void
+  /** Tells the box how many chips a part shows in the bar; any chip stacks the text above the bar. */
+  setChips: (count: number) => void
   /** Moves focus to the text area. */
   focus: () => void
 }

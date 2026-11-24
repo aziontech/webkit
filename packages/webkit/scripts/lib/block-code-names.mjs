@@ -36,7 +36,7 @@ export function sfcUserText(sfc, names = []) {
   return parts.join('\n')
 }
 
-export function proseUserText(markdown, names = []) {
+function proseUserText(markdown, names = []) {
   return String(markdown)
     .replace(/^# .*$/m, '')
     .replace(/```[^\n]*\n([\s\S]*?)```/g, (_, code) =>
@@ -73,7 +73,7 @@ export function checkBlockCodeNames(blocks) {
       report(v.file.split(`blocks/${id}/`).pop(), sfcUserText(v.sfc, all))
       report(`block.json (${v.name} summary)`, v.summary)
     }
-    for (const [file, text] of Object.entries(p.files || {}))
+    for (const [file, text] of Object.entries({ ...(p.localSources || {}), ...(p.files || {}) }))
       report(file, file.endsWith('.vue') ? sfcUserText(text, all) : scriptText(text))
     report('block.json summary', p.summary)
     report('block.json intents', (p.intents || []).join('\n'))

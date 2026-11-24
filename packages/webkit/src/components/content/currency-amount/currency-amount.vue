@@ -30,6 +30,19 @@
   const attrs = useAttrs()
 
   const testId = computed(() => attrs['data-testid'] ?? 'currency-amount')
+
+  const ROOT_CLASS =
+    'group/currency-amount inline-flex items-center whitespace-nowrap ' +
+    'data-[size=small]:gap-(--spacing-2xs) data-[size=medium]:gap-(--spacing-xs) data-[size=large]:items-end data-[size=large]:gap-(--spacing-xs)'
+
+  const AMOUNT_CLASS =
+    'text-(--text-default) ' +
+    'group-data-[size=small]/currency-amount:text-amount-sm group-data-[size=medium]/currency-amount:text-amount-md group-data-[size=large]/currency-amount:text-amount-lg'
+
+  const SUFFIX_CLASS =
+    'text-(--text-muted) ' +
+    'group-data-[size=small]/currency-amount:text-label-code-sm group-data-[size=medium]/currency-amount:text-label-code-md group-data-[size=large]/currency-amount:text-label-code-md ' +
+    'group-data-[size=large]/currency-amount:pb-(--spacing-md)'
 </script>
 
 <template>
@@ -37,20 +50,22 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    class="group/currency-amount inline-flex items-center whitespace-nowrap data-[size=small]:gap-(--spacing-2xs) data-[size=medium]:gap-(--spacing-xs) data-[size=large]:items-end data-[size=large]:gap-(--spacing-xs)"
+    :class="ROOT_CLASS"
   >
     <span
+      dir="ltr"
       class="inline-flex items-center gap-(--spacing-2xs) group-data-[size=large]/currency-amount:gap-0"
+      :data-testid="`${testId}__amount`"
     >
       <span
         v-if="prefix"
-        class="text-(--text-default) group-data-[size=small]/currency-amount:text-amount-sm group-data-[size=medium]/currency-amount:text-amount-md group-data-[size=large]/currency-amount:text-amount-lg"
+        :class="AMOUNT_CLASS"
         :data-testid="`${testId}__prefix`"
       >
         {{ prefix }}
       </span>
       <span
-        class="text-(--text-default) group-data-[size=small]/currency-amount:text-amount-sm group-data-[size=medium]/currency-amount:text-amount-md group-data-[size=large]/currency-amount:text-amount-lg"
+        :class="AMOUNT_CLASS"
         :data-testid="`${testId}__value`"
       >
         {{ value }}
@@ -58,7 +73,7 @@
     </span>
     <span
       v-if="suffix"
-      class="text-(--text-muted) group-data-[size=small]/currency-amount:text-label-code-sm group-data-[size=medium]/currency-amount:text-label-code-md group-data-[size=large]/currency-amount:text-label-code-md group-data-[size=large]/currency-amount:pb-(--spacing-md)"
+      :class="SUFFIX_CLASS"
       :data-testid="`${testId}__suffix`"
     >
       {{ suffix }}

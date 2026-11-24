@@ -46,8 +46,7 @@
             "label": "Data offload",
             "value": 70,
             "unit": "%",
-            "delta": -1.5,
-            "inverse": true
+            "delta": -1.5
           }
         }
       ]

@@ -1,6 +1,9 @@
 <script setup>
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
   import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
+
+  const TILE_CLASS =
+    'flex h-full flex-col justify-between gap-(--spacing-lg) bg-(--bg-contrast) p-(--spacing-xl) text-(--bg-canvas)'
 </script>
 
 <template>
@@ -35,17 +38,15 @@
       rows="2"
       variant="none"
       :padded="false"
+      href="#pricing"
     >
-      <a
-        href="#pricing"
-        class="flex h-full flex-col justify-between gap-(--spacing-lg) bg-(--bg-contrast) p-(--spacing-xl) text-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
-      >
+      <div :class="TILE_CLASS">
         <span class="text-heading-xs">Pay for what you use</span>
         <span class="text-body-sm"
-          >An unpadded cell with no fill of its own: the link inside it paints the whole tile and
-          carries its own padding, so the target is the cell.</span
+          >An unpadded cell with no fill of its own and an href: the cell is the link, and the
+          content inside it paints the whole tile and carries its own padding.</span
         >
-      </a>
+      </div>
     </BentoGridCell>
     <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">One console</h3>

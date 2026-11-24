@@ -19,12 +19,12 @@
 </script>
 
 <template>
-  <div
+  <ol
     v-bind="$attrs"
     data-doc-block
     :data-testid="testId"
-    class="flex w-full flex-col items-start"
+    class="m-0 flex w-full list-none! flex-col items-start p-0!"
   >
     <slot />
-  </div>
+  </ol>
 </template>

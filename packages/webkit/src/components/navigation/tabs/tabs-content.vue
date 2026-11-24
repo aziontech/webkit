@@ -70,10 +70,17 @@
       }
     }
   )
+
+  const PANEL_CLASS =
+    'w-full translate-x-0 opacity-100 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none motion-safe:data-[motion=enter]:opacity-0 motion-safe:data-[slide=end]:translate-x-(--spacing-md) ' +
+    'motion-safe:data-[slide=start]:-translate-x-(--spacing-md) motion-safe:rtl:data-[slide=end]:-translate-x-(--spacing-md) ' +
+    'motion-safe:rtl:data-[slide=start]:translate-x-(--spacing-md)'
 </script>
 
 <template>
   <div
+    tabindex="0"
     v-bind="passthroughAttrs"
     role="tabpanel"
     :id="panelId"
@@ -87,14 +94,13 @@
     :data-state="isActive ? 'active' : 'inactive'"
     :aria-labelledby="tabId"
     :hidden="!isActive ? true : undefined"
-    tabindex="0"
   >
     <div
       v-if="isActive"
       :key="contentKey"
       :data-motion="motionReady ? undefined : 'enter'"
       :data-slide="motionReady ? undefined : slide"
-      class="w-full translate-x-0 opacity-100 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none motion-safe:data-[motion=enter]:opacity-0 motion-safe:data-[slide=end]:translate-x-(--spacing-md) motion-safe:data-[slide=start]:-translate-x-(--spacing-md) motion-safe:rtl:data-[slide=end]:-translate-x-(--spacing-md) motion-safe:rtl:data-[slide=start]:translate-x-(--spacing-md)"
+      :class="PANEL_CLASS"
     >
       <slot />
     </div>

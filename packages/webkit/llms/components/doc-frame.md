@@ -139,6 +139,7 @@
     <DocFrame caption="The same rule reaches a clip written by hand">
       <video
         autoplay
+        muted
         :src="placeholderClip"
         aria-label="Opening the Rules engine tab"
         class="block h-auto w-full rounded-(--shape-control)"

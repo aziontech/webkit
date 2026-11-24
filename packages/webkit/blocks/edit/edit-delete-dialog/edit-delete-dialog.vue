@@ -2,6 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Link from '@aziontech/webkit/link'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, watch } from 'vue'
 
@@ -85,10 +86,10 @@
       <p class="m-0 text-body-sm text-(--text-muted)">
         The selected resource will be deleted, along with all associated settings or instances.
         Check the
-        <a
+        <Link
           href="https://example.com/docs"
-          class="text-link"
-          >Help Center</a
+          inline
+          >Help Center</Link
         >
         for more details.
       </p>

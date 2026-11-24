@@ -49,7 +49,7 @@
 | `sideOffset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -103,7 +103,7 @@
   - Props: `label: string` default `''` — plain-text label; falls back to the default slot. `disabled: boolean` default `false` — the row cannot open its sub-menu and applies disabled tokens.
   - Events: _none_.
   - Slots: `default` (rich label), `leading` (icon before the label).
-- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `side="end"` + `align="start"` (the right side in ltr, the left side under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu.
+- `dropdown-menu-sub-content/dropdown-menu-sub-content.vue` — the nested panel. Teleported to `body` and positioned by the shared `usePlacement` against the sub-trigger at `side="end"` + `align="start"` (the right side in ltr, the left side under rtl), flipping to the other side when it does not fit; the same surface, border, shadow and motion as the top-level panel, `role="menu"` labelled by the sub-trigger. It is its own menu level: `Down` / `Up` / `Home` / `End` move inside it, `ArrowLeft` (`ArrowRight` under rtl) and `Esc` close it and return focus to the sub-trigger, `Tab` closes the whole menu. Clicks inside it never dismiss the menu. When neither side of the parent has room for it (a phone), it is not teleported: it opens inline under its sub-trigger, indented, without border or shadow (`data-inline`), its list a `role="group"` labelled by the sub-trigger inside the parent menu, so it never covers the row that opened it; the keyboard is unchanged.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Group>` (groups render into this panel exactly as they do at the top level), which may hold further `<DropdownMenu.Sub>`.

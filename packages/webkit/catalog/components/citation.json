@@ -1,19 +1,20 @@
 {
- "purpose": "An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL — with a tooltip naming the source and an accessible name of `Source 1: <title>`. `StreamingResponse` renders it for every `[n]`; use it directly when you build responses yourself.",
+ "purpose": "An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens a card with the site, the linked title and a snippet (`description`); with several sources a pager `‹ 1/3 ›` steps through them. `StreamingResponse` renders it for every run of `[n]` markers.",
  "useWhen": [
-  "A statement in a generated response that comes from a specific source."
+  "A statement in a generated response that comes from one or more specific sources."
  ],
  "avoidWhen": [
   "A link the reader is meant to follow as part of the prose → a normal link.",
   "Footnotes in documentation → `doc-prose` conventions."
  ],
  "related": [
-  "`sources` — the list citations point at.",
+  "`sources` — the pill and panel that list every source of the response.",
   "`streaming-response` — renders citations from `[n]` in Markdown.",
-  "`tooltip` — shows the source title."
+  "`hover-card` — the card a chip opens."
  ],
  "bestPractices": [
-  "Number in order of first use: [1], [2], [3].",
-  "Give every citation a `title`; a bare number tells a screen reader nothing."
+  "Number in order of first use: [1], [2], [3]; the numbers stay in the accessible name.",
+  "Give each web source a `site` name (`Azion`, `GitHub`) and, when you have one, its favicon as `image`; a bare host reads as a URL.",
+  "Keep `description` to a sentence or two of the page; the card cuts it at three lines."
  ]
 }

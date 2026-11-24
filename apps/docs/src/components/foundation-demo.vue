@@ -56,7 +56,7 @@
       data-example="auth/auth-sign-in"
       class="h-144 overflow-hidden rounded-(--shape-card) border border-(--border-default) *:h-full!"
     >
-      <AuthSignIn />
+      <AuthSignIn :autofocus="false" />
     </ConfigProvider>
   </section>
   <KeyboardShortcuts v-else-if="kind === 'keyboard'" />

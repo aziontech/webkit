@@ -4,7 +4,7 @@ export function stripToDigits(input: string): string {
   return input.replace(/\D/g, '')
 }
 
-export function applyMask(digits: string, mask: string): string {
+function applyMask(digits: string, mask: string): string {
   let result = ''
   let i = 0
   for (const ch of mask) {
@@ -19,7 +19,7 @@ export function applyMask(digits: string, mask: string): string {
   return result
 }
 
-export function slotCount(mask: string): number {
+function slotCount(mask: string): number {
   let n = 0
   for (const ch of mask) if (ch === '#') n += 1
   return n
@@ -35,7 +35,7 @@ export function maxDigits(country: PhoneInputCountry): number {
   return slotCount(masks[masks.length - 1])
 }
 
-export function maskFor(country: PhoneInputCountry, digits: string): string {
+function maskFor(country: PhoneInputCountry, digits: string): string {
   const masks = masksOf(country)
   return masks.find((mask) => slotCount(mask) >= digits.length) ?? masks[masks.length - 1]
 }

@@ -62,9 +62,8 @@ describe('dashboard/dashboard-executive-summary', () => {
       props: { error: 'The API answered 503.', quarter: 'Q2 2026' }
     })
     expect(view.container.textContent).toContain(
-      "Couldn't load Q2 2026 goals. The API answered 503."
+      "Couldn't load the executive summary. The API answered 503."
     )
-    expect(view.container.textContent).toContain("Couldn't load commentary. The API answered 503.")
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
     expect(view.emitted('retry')).toHaveLength(1)
   })

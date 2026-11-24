@@ -3,18 +3,18 @@ name: response-branches
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 38289932408aab46268d5da1066589b980c03d3337c34f02fbfe7c4473324ba5
+checksum: 16d13cf17a65b17305c462c11702bd9778b3a308d385377420e420b00c5ac81d
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-22
 ---
 
 # ResponseBranches — Component Spec
 
 ## Purpose
 
-Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
+Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
 
 ## When to use
 
@@ -82,9 +82,9 @@ _none_ besides `update:modelValue`.
 
 ## Slots
 
-| Slot      | Scope               | Notes                                                                         |
-| --------- | ------------------- | ----------------------------------------------------------------------------- |
-| `default` | `{ index: number }` | The active version. Rendered once; the owner switches its content by `index`. |
+| Slot      | Scope               | Notes                                                                                                                                                                   |
+| --------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | `{ index: number }` | Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot. |
 
 ## States
 
@@ -115,17 +115,18 @@ _none_ besides `update:modelValue`.
 ## Accessibility (WCAG 2.1 AA)
 
 - The pager is `role="group"` named by `ariaLabel` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
-- The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
-- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
+- The visible counter (`2/3`, `__position`) is `aria-hidden`; a visually hidden polite live region (`__status`, `Version 2 of 3`) announces the new position once; the slot is not live.
+- Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order. When the focused arrow reaches an end and turns disabled, focus moves to the other arrow instead of falling to the page.
 
 ## Internationalization
 
-| Key                         | English source         | Override prop |
-| --------------------------- | ---------------------- | ------------- |
-| `responseBranches.label`    | `Response versions`    | `ariaLabel`   |
-| `responseBranches.previous` | `Previous version`     | —             |
-| `responseBranches.next`     | `Next version`         | —             |
-| `responseBranches.position` | `{current} of {total}` | —             |
+| Key                              | English source                 | Override prop |
+| -------------------------------- | ------------------------------ | ------------- |
+| `responseBranches.label`         | `Response versions`            | `ariaLabel`   |
+| `responseBranches.previous`      | `Previous version`             | —             |
+| `responseBranches.next`          | `Next version`                 | —             |
+| `responseBranches.position`      | `{current}/{total}`            | —             |
+| `responseBranches.positionLabel` | `Version {current} of {total}` | —             |
 
 - Numbers in the counter use the locale's digits through the catalog template.
 
@@ -139,7 +140,7 @@ _none_ besides `update:modelValue`.
 ## Responsive
 
 - Container queries: none.
-- Narrow: the pager stays one row (two 28 px buttons and a short counter).
+- Narrow: the pager stays one row (two 28 px buttons and a short `2/3` counter, written left to right in every direction).
 - Touch: buttons are `IconButton` small, with the 40 px touch target from `IconButton`.
 - Reflow: no horizontal scroll at 320 px.
 

@@ -13,9 +13,16 @@
   export interface SearchTriggerProps {
     /** Visible muted text and accessible name; empty uses the catalog's `Search`. */
     label?: string
-    /** Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three. */
+    /**
+     * Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and
+     * bound on the window unless a mounted `Command` already listens for it; empty removes all three.
+     */
     shortcut?: string
-    /** Folds to the magnifier alone while the nearest container is narrower than 47rem (752px, the `--container-2xl` token); the label stays the accessible name and shows as a tooltip on hover and focus. */
+    /**
+     * Folds to the magnifier alone while the nearest container is narrower than 47rem (752px, the
+     * `--container-2xl` token); the label stays the accessible name and shows as a tooltip on hover and
+     * focus.
+     */
     collapsible?: boolean
     /** Disables the button and its shortcut; `open` is not emitted. */
     disabled?: boolean
@@ -68,6 +75,18 @@
     event.preventDefault()
     emit('open', event)
   })
+
+  const ROOT_CLASS =
+    'group/search-trigger relative inline-flex h-8 w-56 min-w-0 shrink cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none enabled:[&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) ' +
+    'data-[collapsible=true]:w-8 data-[collapsible=true]:shrink-0 data-[collapsible=true]:justify-center data-[collapsible=true]:px-0 data-[collapsible=true]:@2xl:w-56 ' +
+    'data-[collapsible=true]:@2xl:shrink data-[collapsible=true]:@2xl:justify-start data-[collapsible=true]:@2xl:px-(--spacing-sm)'
+
+  const LABEL_CLASS =
+    'min-w-0 flex-1 truncate text-label-sm text-(--text-muted) group-disabled/search-trigger:text-(--text-disabled) ' +
+    'group-data-[collapsible=true]/search-trigger:hidden group-data-[collapsible=true]/search-trigger:@2xl:inline'
 </script>
 
 <template>
@@ -93,7 +112,7 @@
       :data-disabled="disabled ? '' : undefined"
       :disabled="disabled"
       :aria-keyshortcuts="keyShortcuts"
-      class="group/search-trigger relative inline-flex h-8 w-56 min-w-0 shrink cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none enabled:[&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) data-[collapsible=true]:w-8 data-[collapsible=true]:shrink-0 data-[collapsible=true]:justify-center data-[collapsible=true]:px-0 data-[collapsible=true]:@2xl:w-56 data-[collapsible=true]:@2xl:shrink data-[collapsible=true]:@2xl:justify-start data-[collapsible=true]:@2xl:px-(--spacing-sm)"
+      :class="ROOT_CLASS"
       @click="onClick"
     >
       <span
@@ -111,7 +130,7 @@
       <span
         ref="labelEl"
         aria-hidden="true"
-        class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted) group-disabled/search-trigger:text-(--text-disabled) group-data-[collapsible=true]/search-trigger:hidden group-data-[collapsible=true]/search-trigger:@2xl:inline"
+        :class="LABEL_CLASS"
         :data-testid="`${testId}__label`"
         >{{ resolvedLabel }}</span
       >

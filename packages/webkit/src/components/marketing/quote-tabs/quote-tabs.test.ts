@@ -2,6 +2,7 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h, nextTick } from 'vue'
 
+import Default from '../../../../examples/quote-tabs/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import QuoteTabs, { type QuoteTabsItem } from './quote-tabs.vue'
 
@@ -120,6 +121,15 @@ afterEach(() => {
 })
 
 describe('QuoteTabs', () => {
+  it('opens its same-site action in the same tab, since Button carries no new-tab notice', () => {
+    const { getByRole } = render(Default)
+
+    expect(getByRole('link', { name: 'See success stories' })).not.toHaveAttribute(
+      'target',
+      '_blank'
+    )
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = render(QuoteTabs, { props: { items: ITEMS } })
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, shallowRef, useAttrs, useId, useTemplateRef, watch } from 'vue'
 
+  import { illustrationFrame } from '../../../assets/illustrations/frames'
   import type { IllustrationAssetLoader } from '../../../assets/illustrations/registry'
   import type { IllustrationScene } from '../../../assets/illustrations/scene'
 
@@ -26,7 +27,7 @@
   const rootEl = useTemplateRef<globalThis.SVGSVGElement>('rootEl')
 
   const scene = shallowRef<IllustrationScene | null>(null)
-  const placeheld = shallowRef(false)
+  const showPlaceholder = shallowRef(false)
 
   const paint = (load: IllustrationAssetLoader) =>
     Promise.all([load(), import('../../../assets/illustrations/scene')]).then(
@@ -53,7 +54,7 @@
           return paint(load ?? loadIllustrationPlaceholder).then((painted) => {
             if (props.name !== name) return
             scene.value = painted
-            placeheld.value = !load
+            showPlaceholder.value = !load
           })
         })
         .catch(warnUnloaded)
@@ -71,16 +72,15 @@
     { flush: 'post' }
   )
 
-  const viewBox = computed(() => scene.value?.viewBox || '0 0 592 300')
+  const frame = computed(() => illustrationFrame(props.name))
 
-  const frame = computed(() => {
-    const [, , width, height] = viewBox.value.split(/[\s,]+/).map(Number)
-    return placeheld.value || !(width > 0 && height > 0)
-      ? { width: 592, height: 300 }
-      : { width, height }
-  })
+  const viewBox = computed(
+    () => scene.value?.viewBox || `0 0 ${frame.value.width} ${frame.value.height}`
+  )
 
-  const decorative = computed(() => placeheld.value || props.ariaLabel.length === 0)
+  const decorative = computed(
+    () => !scene.value || showPlaceholder.value || props.ariaLabel.length === 0
+  )
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'illustration')
 
@@ -93,14 +93,13 @@
 
 <template>
   <svg
-    v-if="scene"
     ref="rootEl"
     :viewBox="viewBox"
     :role="decorative ? undefined : 'img'"
     :aria-label="decorative ? undefined : ariaLabel"
     :aria-hidden="decorative || undefined"
     :data-testid="testId"
-    :data-placeholder="placeheld || undefined"
+    :data-placeholder="showPlaceholder || undefined"
     :width="frame.width"
     :height="frame.height"
     fill="none"

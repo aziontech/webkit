@@ -4,8 +4,8 @@
   import Input from '../../../input/input/input.vue'
   import InputGroupRoot from '../../../input/input-group/input-group.vue'
   import Item from '../../item/index'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'EdgeDnsNameserverFragment' })
 
@@ -22,14 +22,9 @@
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
-    fade="bottom"
+  <MockupFragment
     class="[--console-mockup-fade-start:78%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
   >
     <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
       <ConsoleMockupShellItem :order="0">
@@ -94,5 +89,5 @@
         </Item>
       </ConsoleMockupShellItem>
     </div>
-  </ConsoleMockupShell>
+  </MockupFragment>
 </template>

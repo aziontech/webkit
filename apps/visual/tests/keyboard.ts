@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import type { Page } from '@playwright/test'
 
-export type KeyboardEntry = 'field' | 'page'
+export type KeyboardEntry = 'field' | 'page' | 'prompt'
 
 export type KeyboardTarget = {
   entry: KeyboardEntry
@@ -44,7 +44,7 @@ export const KEYBOARD_BASELINE = resolve(
   '../keyboard-baseline.json'
 )
 
-export const MAX_STOPS = 200
+const MAX_STOPS = 200
 
 export const DEMO_ROUTES: { name: string; path: string; target: KeyboardTarget }[] = [
   { name: 'resources', path: '/resources', target: { entry: 'page' } },
@@ -61,7 +61,7 @@ export const DEMO_ROUTES: { name: string; path: string; target: KeyboardTarget }
   { name: 'onboarding', path: '/onboarding', target: { entry: 'field' } },
   { name: 'onboarding-plan', path: '/onboarding/plan', target: { entry: 'field' } },
   { name: 'onboarding-profile', path: '/onboarding/profile', target: { entry: 'field' } },
-  { name: 'assistant', path: '/assistant', target: { entry: 'page' } },
+  { name: 'assistant', path: '/assistant', target: { entry: 'prompt' } },
   { name: 'ai-keys', path: '/settings/ai-keys', target: { entry: 'page' } }
 ]
 
@@ -100,7 +100,7 @@ export function newViolations(found: string[], allowed: string[] = []): string[]
   return out
 }
 
-export function keyboardStart(entry: KeyboardEntry): KeyboardStart {
+function keyboardStart(entry: KeyboardEntry): KeyboardStart {
   type Probe = {
     ids: WeakMap<Element, number>
     elements: Element[]
@@ -207,6 +207,19 @@ export function keyboardStart(entry: KeyboardEntry): KeyboardStart {
 
   const active = document.activeElement
   const inModal = Boolean(modal && active && modal.contains(active) && active !== modal)
+  if (entry === 'prompt') {
+    const ok = Boolean(
+      active && active.matches(FIELD) && active.closest('[data-testid*="prompt-input"]')
+    )
+    return {
+      entry: {
+        ok,
+        description: ok
+          ? ''
+          : `focus starts on ${active && active !== document.body ? describe(active) : 'the page'}, not the message box`
+      }
+    }
+  }
   if (entry === 'field') {
     const fields = Array.from(scope.querySelectorAll(FIELD)).filter(
       (field) => visible(field) && enabled(field)
@@ -240,7 +253,7 @@ export function keyboardStart(entry: KeyboardEntry): KeyboardStart {
   }
 }
 
-export function keyboardStop(): KeyboardStop {
+function keyboardStop(): KeyboardStop {
   type Probe = {
     ids: WeakMap<Element, number>
     elements: Element[]
@@ -386,7 +399,7 @@ export function keyboardStop(): KeyboardStop {
   }
 }
 
-export function keyboardReach(limited: boolean): KeyboardReach {
+function keyboardReach(limited: boolean): KeyboardReach {
   type Probe = {
     ids: WeakMap<Element, number>
     elements: Element[]
@@ -474,9 +487,17 @@ export function keyboardReach(limited: boolean): KeyboardReach {
     return `${tag}${role ? `[role=${role}]` : ''}${testId ? ` in ${testId}` : ''}${name ? ` "${name}"` : ''}`
   }
 
+  const controlled = (element: Element) =>
+    element.id !== '' &&
+    visited.some((stop) =>
+      ['aria-controls', 'aria-owns'].some((name) =>
+        (stop.getAttribute(name) ?? '').split(/\s+/).includes(element.id)
+      )
+    )
   const unreached: string[] = []
   for (const { members, first } of groups.values()) {
     if (members.some(reached)) continue
+    if (first.matches(ROVING) && controlled(first)) continue
     if (
       furthest &&
       members.every(

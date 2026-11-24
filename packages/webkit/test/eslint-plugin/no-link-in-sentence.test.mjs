@@ -20,7 +20,9 @@ test('no-link-in-sentence', () => {
       sfc('<nav><Link href="/docs" label="Docs" /></nav>'),
       sfc('<div><Link href="/a" label="A" /><Link href="/b" label="B" /></div>'),
       sfc('<p>Read the <a href="/terms" class="text-link">terms</a>.</p>'),
-      sfc('<label>I accept the <a class="text-link" href="/terms">Terms</a></label>')
+      sfc('<label>I accept the <a class="text-link" href="/terms">Terms</a></label>'),
+      sfc('<p>Read the <Link href="/terms" inline>terms</Link>.</p>'),
+      sfc('<p>Read the <Link href="/terms" :inline="true">terms</Link>.</p>')
     ],
     invalid: [
       bad(

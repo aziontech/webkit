@@ -1,5 +1,6 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/transfer-list/default.vue'
@@ -14,7 +15,7 @@ import TransferList, {
 // A small, stable dataset: three available (source), one selected (target).
 const makeModel = (): TransferListValue => [
   [
-    { id: 1, label: 'Edge Functions' },
+    { id: 1, label: 'Functions' },
     { id: 2, label: 'WAF' },
     { id: 3, label: 'Image Processor' }
   ],
@@ -108,7 +109,7 @@ describe('TransferList', () => {
         expect(sourceOptions).toHaveLength(3)
         expect(targetOptions).toHaveLength(1)
         expect(sourceOptions.map((o) => o.textContent?.trim())).toEqual([
-          'Edge Functions',
+          'Functions',
           'WAF',
           'Image Processor'
         ])
@@ -199,7 +200,7 @@ describe('TransferList', () => {
         expect(sourceOptions).toHaveLength(2)
         expect(targetOptions).toHaveLength(2)
         expect(sourceOptions.map((o) => o.textContent?.trim())).toEqual(['WAF', 'Image Processor'])
-        expect(targetOptions.map((o) => o.textContent?.trim())).toEqual(['Cache', 'Edge Functions'])
+        expect(targetOptions.map((o) => o.textContent?.trim())).toEqual(['Cache', 'Functions'])
       })
 
       it('moves within local state and still emits update:modelValue when no v-model is bound', async () => {
@@ -280,6 +281,20 @@ describe('TransferList', () => {
         ).toBe(true)
       })
 
+      it('keeps keyboard focus on the controls when a move disables the pressed button', async () => {
+        const { getByTestId } = render(Harness())
+        const moveAll = getByTestId(
+          'transfer-list-controls__move-all-to-target'
+        ) as HTMLButtonElement
+        moveAll.focus()
+        await userEvent.keyboard('{Enter}')
+        await vi.waitFor(() =>
+          expect(document.activeElement).toBe(
+            getByTestId('transfer-list-controls__move-all-to-source')
+          )
+        )
+      })
+
       it('move-all-to-source pulls every target item back', async () => {
         const { getByTestId } = render(Harness())
         await fireEvent.click(getByTestId('transfer-list-controls__move-all-to-source'))
@@ -336,7 +351,7 @@ describe('TransferList', () => {
         expect(moveEvent).toBeInstanceOf(MouseEvent)
         expect(payload).toBeDefined()
         expect(payload?.direction).toBe('to-target')
-        expect(payload?.items).toEqual([{ id: 1, label: 'Edge Functions' }])
+        expect(payload?.items).toEqual([{ id: 1, label: 'Functions' }])
       })
 
       it('fires item-double-click(event, { list, item, index }) and moves the item by default', async () => {
@@ -423,7 +438,7 @@ describe('TransferList', () => {
         const options = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
         await fireEvent.dblClick(options[0])
 
-        expect(dbl).toEqual({ list: 'source', item: { id: 1, label: 'Edge Functions' }, index: 0 })
+        expect(dbl).toEqual({ list: 'source', item: { id: 1, label: 'Functions' }, index: 0 })
         // No move: source keeps all three.
         expect(
           within(getByTestId('transfer-list-source__list')).getAllByRole('option')
@@ -577,7 +592,7 @@ describe('TransferList', () => {
         expect(getByTestId('transfer-list')).toBeTruthy()
         expect(getByTestId('transfer-list-source__header').textContent).toContain('Available')
         expect(getByTestId('transfer-list-target__header').textContent).toContain('Selected')
-        expect(getByText('Edge Functions')).toBeTruthy()
+        expect(getByText('Functions')).toBeTruthy()
         expect(getByText('Cache')).toBeTruthy()
       })
     })

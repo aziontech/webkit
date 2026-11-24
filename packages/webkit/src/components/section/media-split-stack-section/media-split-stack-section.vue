@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import { type Component, computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
+  import { computed, ref, useAttrs, watch } from 'vue'
 
-  import { resolveScene, type SceneName } from '../../../assets/scene-registry'
+  import type { SceneName } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
-  import Illustration from '../../content/illustration/illustration.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import SplitStack from '../../layout/split-stack/split-stack.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
+  import { resolveMedia } from '../media-split-section/lib/media-split-media'
+  import MediaSplitSectionMedia from '../media-split-section/parts/media-split-section-media.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'MediaSplitStackSection',
@@ -86,7 +86,14 @@
     title?: string
     /** Supporting sentence under the section title. */
     description?: string
-    /** The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. */
+    /**
+     * The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its
+     * required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`),
+     * where `eyebrow` is the band's overline, `href` the link the whole band follows (falling
+     * back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a
+     * `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{
+     * label, href }` the outlined button.
+     */
     bands?: MediaSplitStackSectionBand[]
   }
 
@@ -97,10 +104,6 @@
     description: '',
     bands: () => []
   })
-
-  const ConsoleMockup = defineAsyncComponent(
-    () => import('../../content/console-mockup/console-mockup.vue')
-  )
 
   const attrs = useAttrs()
 
@@ -118,18 +121,10 @@
 
   const views = computed<MediaSplitStackSectionBandFields[]>(() => props.bands)
 
-  const scenes = computed<(Component | null)[]>(() =>
-    views.value.map((band) =>
-      band.scene && band.scene.component !== ('Diagram' as SceneName)
-        ? resolveScene(band.scene.component)
-        : null
-    )
-  )
+  const media = computed(() => views.value.map((band) => resolveMedia(band)))
 
   const bare = computed(() =>
-    views.value
-      .filter((band, index) => !scenes.value[index] && !band.widget && !band.illustration)
-      .map((band) => band.title)
+    views.value.filter((_band, index) => !media.value[index]?.kind).map((band) => band.title)
   )
 
   if (dev)
@@ -138,117 +133,80 @@
       (titles) => {
         if (titles.length)
           console.warn(
-            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. Give every band an illustration, a widget or a scene; a request-flow diagram goes in ConsoleShowcaseSection.`
+            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. ` +
+              'Give every band an illustration, a widget or a scene; ' +
+              'a request-flow diagram goes in ConsoleShowcaseSection.'
           )
       },
       { immediate: true }
     )
 
   const bandHref = (band: MediaSplitStackSectionBandFields) => band.href || band.action?.href || ''
-
-  const isMockup = (band: MediaSplitStackSectionBandFields, index: number) =>
-    scenes.value[index] ? band.scene?.component === 'ConsoleMockup' : Boolean(band.widget)
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :filled="hasBands"
+    :framed="false"
+    align="center"
+    header-size="medium"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
   >
-    <template v-if="hasBands">
-      <ModuleHeader
-        v-if="hasHeader"
+    <SplitStack
+      sticky
+      flush
+    >
+      <MediaSplit
+        v-for="(band, index) in views"
+        :key="band.title"
+        variant="media-end"
+        divided
+        :heading-level="hasHeader ? 3 : 2"
         align="center"
-        size="medium"
-        :eyebrow="eyebrow"
-        :title="title"
-        :description="description"
-      />
-
-      <Module
-        :divided="false"
-        :padded="false"
+        size="large"
+        media-fill="canvas"
+        texture="pixelate"
+        texture-size="small"
+        texture-fade="top"
+        :eyebrow="band.eyebrow ?? ''"
+        :title="band.title"
+        :description="band.description"
+        :media-href="bandHref(band)"
+        :media-padded="media[index]?.mockup"
+        @pointerenter="hovered = index"
+        @pointerleave="hovered = null"
       >
-        <SplitStack
-          sticky
-          flush
+        <template
+          v-if="media[index]?.kind"
+          #media
         >
-          <MediaSplit
-            v-for="(band, index) in views"
-            :key="band.title"
-            variant="media-end"
-            divided
-            :heading-level="hasHeader ? 3 : 2"
-            align="center"
-            size="large"
-            media-fill="canvas"
-            texture="pixelate"
-            texture-size="small"
-            texture-fade="top"
-            :eyebrow="band.eyebrow ?? ''"
-            :title="band.title"
-            :description="band.description"
-            :media-href="bandHref(band)"
-            :media-padded="isMockup(band, index)"
-            @pointerenter="hovered = index"
-            @pointerleave="hovered = null"
-          >
-            <template
-              v-if="isMockup(band, index)"
-              #media
-            >
-              <div class="flex w-full self-stretch max-lg:min-h-(--size-80)">
-                <component
-                  :is="scenes[index]"
-                  v-if="scenes[index]"
-                  v-bind="band.scene?.props ?? {}"
-                />
-                <ConsoleMockup
-                  v-else-if="band.widget"
-                  :name="band.widget"
-                  :hover="hovered === index"
-                  :cursor="false"
-                />
-              </div>
-            </template>
-            <template
-              v-else-if="scenes[index]"
-              #media
-            >
-              <component
-                :is="scenes[index]"
-                v-bind="band.scene?.props ?? {}"
-              />
-            </template>
-            <template
-              v-else-if="band.illustration"
-              #media
-            >
-              <Illustration
-                :name="band.illustration"
-                :aria-label="band.illustrationLabel ?? ''"
-              />
-            </template>
-            <template
-              v-if="band.action"
-              #actions
-            >
-              <Button
-                :label="band.action.label"
-                :href="band.action.href"
-                variant="outline"
-                size="medium"
-                icon="az az-chevron-right"
-                icon-position="trailing"
-                animated
-              />
-            </template>
-          </MediaSplit>
-        </SplitStack>
-      </Module>
-    </template>
-  </section>
+          <MediaSplitSectionMedia
+            :source="band"
+            :illustration-aria-label="band.illustrationLabel ?? ''"
+            :hovered="hovered === index"
+          />
+        </template>
+        <template
+          v-if="band.action"
+          #actions
+        >
+          <Button
+            :label="band.action.label"
+            :href="band.action.href"
+            variant="outline"
+            size="medium"
+            icon="az az-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </MediaSplit>
+    </SplitStack>
+  </SectionBand>
 </template>

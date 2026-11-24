@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-mfa-settings/account-mfa-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-mfa-settings")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -33,7 +33,7 @@ Title `Multi-factor authentication` and one sentence on what the page holds. Act
 
 ### B. Require MFA — `Card`, `Item`, `SettingsRow`, `Switch`, `ConfirmDialog` (required)
 
-One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once. Either way the block updates `v-model:required` and the page saves it. While data loads or failed, the switch is disabled.
+One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off weakens a security policy, the riskier direction, so it asks too: a `ConfirmDialog` (`variant="danger"`, `Stop requiring MFA`) that says how many people without a factor can sign in again and that new people may sign in with a password only. Nothing changes until it is confirmed. Either way the block updates `v-model:required` and the page saves it. While data loads or failed, the switch is disabled.
 
 ### C. Password-only warning — `Alert` (conditional)
 
@@ -43,9 +43,9 @@ While MFA is optional and someone has no factor, a warning `Alert` counts them (
 
 The `view/view-table` controls row, as on every account list: a `PropertyFilter` over Name, Email, MFA status and Method (`v-bind="propertyFilterProps"`), then Refresh and Download CSV as outlined `IconButton`s in a `Tooltip`, and `CollectionPreferences` for page size and columns. Download CSV is disabled when no row matches.
 
-### E. People table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
+### E. People table — `DataTable`, `DataTablePagination`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `EmptyState`, `useCollection` (required)
 
-A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it, and below `sm` the MFA `TableCellStatus` under the email, hidden from assistive tech, so a phone shows who has MFA without scrolling past the pinned actions), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
+A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection` through `DataTablePagination` (`v-bind="paginationProps" manual`) in the `footer` slot: Name (square `Avatar`, name, email under it, and below `sm` the MFA `TableCellStatus` under the email, hidden from assistive tech, so a phone shows who has MFA without scrolling past the pinned actions), MFA as `TableCellStatus` (Enabled success, Not set up warning), Method, and Set up as `TableCellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
 
 ### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
@@ -66,13 +66,13 @@ The block takes its people through props and emits every action; it fetches noth
 | `error`    | `string`              | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table; the Switch disables.                  |
 | `required` | `boolean`             | `v-model:required`: whether the account requires MFA; on hides the password-only warning.                                                   |
 
-| Event             | Payload           | When                                                                 |
-| ----------------- | ----------------- | -------------------------------------------------------------------- |
-| `update:required` | `boolean`         | The require dialog was confirmed (`true`), or the Switch turned off. |
-| `refresh`         | `(event)`         | Refresh.                                                             |
-| `retry`           | `(event)`         | Retry in the error alert.                                            |
-| `remind`          | `(event, member)` | Send setup reminder in the row menu.                                 |
-| `reset`           | `(event, member)` | The reset dialog was confirmed; the row already reads Not set up.    |
+| Event             | Payload           | When                                                                                   |
+| ----------------- | ----------------- | -------------------------------------------------------------------------------------- |
+| `update:required` | `boolean`         | The require dialog was confirmed (`true`), or the stop dialog was confirmed (`false`). |
+| `refresh`         | `(event)`         | Refresh.                                                                               |
+| `retry`           | `(event)`         | Retry in the error alert.                                                              |
+| `remind`          | `(event, member)` | Send setup reminder in the row menu.                                                   |
+| `reset`           | `(event, member)` | The reset dialog was confirmed; the row already reads Not set up.                      |
 
 To go live, render the block from a page that owns the requests and pass what they return:
 
@@ -161,6 +161,7 @@ Each variant is the same screen in another state: `get_block("account/account-mf
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -237,6 +238,24 @@ Each variant is the same screen in another state: `get_block("account/account-mf
 
   const withoutMfa = computed(() => items.value.filter((member) => !member.enabled))
 
+  const relaxDescription = computed(() => {
+    const count = withoutMfa.value.length
+    const after = 'New people and anyone whose MFA is reset can then sign in with a password only.'
+    if (!count) return `Everyone keeps the MFA they set up. ${after}`
+    return `${count} ${count === 1 ? 'person' : 'people'} without MFA can sign in again. ${after}`
+  })
+
+  const requireDescription = computed(() => {
+    const count = withoutMfa.value.length
+    if (!count)
+      return 'Everyone in the account already uses MFA. New people set it up at their first sign-in.'
+    const names = withoutMfa.value.map((member) => member.name).join(', ')
+    return (
+      `${count} ${count === 1 ? 'person does' : 'people do'} not use MFA yet (${names}). ` +
+      'They are asked to set it up at their next sign-in and cannot use the account until they do.'
+    )
+  })
+
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'status', header: 'MFA', minWidth: 120 },
@@ -261,15 +280,21 @@ Each variant is the same screen in another state: `get_block("account/account-mf
     { key: 'method', label: 'Method', options: [{ value: 'Authenticator app' }] }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'email', 'status', 'method'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-mfa' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'email', 'status', 'method'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-mfa' }
+  })
 
   const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
   const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
@@ -277,12 +302,14 @@ Each variant is the same screen in another state: `get_block("account/account-mf
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const requireOpen = ref(false)
+  const relaxOpen = ref(false)
   const onRequire = (value: boolean) => {
-    if (value) {
-      requireOpen.value = true
-      return
-    }
+    if (value) requireOpen.value = true
+    else relaxOpen.value = true
+  }
+  const confirmRelax = () => {
     required.value = false
+    relaxOpen.value = false
   }
   const confirmRequire = () => {
     required.value = true
@@ -322,6 +349,7 @@ Each variant is the same screen in another state: `get_block("account/account-mf
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -518,6 +546,12 @@ Each variant is the same screen in another state: `get_block("account/account-mf
                     </template>
                   </EmptyState>
                 </template>
+                <template #footer>
+                  <DataTablePagination
+                    v-bind="paginationProps"
+                    manual
+                  />
+                </template>
               </DataTable>
             </template>
           </Card>
@@ -529,14 +563,20 @@ Each variant is the same screen in another state: `get_block("account/account-mf
       v-model:open="requireOpen"
       variant="primary"
       title="Require MFA"
-      :description="
-        withoutMfa.length
-          ? `${withoutMfa.length} ${withoutMfa.length === 1 ? 'person does' : 'people do'} not use MFA yet (${withoutMfa.map((member) => member.name).join(', ')}). They are asked to set it up at their next sign-in and cannot use the account until they do.`
-          : 'Everyone in the account already uses MFA. New people set it up at their first sign-in.'
-      "
+      :description="requireDescription"
       confirm-label="Require MFA"
       size="small"
       @confirm="confirmRequire"
+    />
+
+    <ConfirmDialog
+      v-model:open="relaxOpen"
+      variant="danger"
+      title="Stop requiring MFA"
+      :description="relaxDescription"
+      confirm-label="Stop requiring MFA"
+      size="small"
+      @confirm="confirmRelax"
     />
 
     <ConfirmDialog

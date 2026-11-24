@@ -5,6 +5,7 @@ import { type Component, defineComponent, h } from 'vue'
 import DetailsPage from '../../../../blocks/detail/detail-resource/detail-resource.vue'
 import Application from '../../../../blocks/detail/detail-resource/variants/application.vue'
 import ApplicationBuild from '../../../../blocks/detail/detail-resource/variants/application-build.vue'
+import NoDeployment from '../../../../blocks/detail/detail-resource/variants/no-deployment.vue'
 import Service from '../../../../blocks/detail/detail-resource/variants/service.vue'
 import ServiceOverview from '../../../../blocks/detail/detail-resource/variants/service-overview.vue'
 import ConsoleLayout from '../../../components/layout/console-layout/console-layout.vue'
@@ -96,6 +97,38 @@ describe('detail/detail-resource', () => {
     await view.rerender({ tab: 'build' })
     const open = await waitFor(() => view.getByRole('link', { name: 'Open Build' }))
     expect(open.getAttribute('href')).toBe('/resources/acme-store/build')
+  })
+
+  it('names the page with an h1 and shows a resource that was never deployed', () => {
+    const view = render(DetailsPage, {
+      props: {
+        resource: {
+          name: 'fresh-app',
+          domain: 'fresh-app.example.com',
+          deploymentId: '',
+          environment: 'Production',
+          status: 'Ready',
+          statusSeverity: 'success',
+          createdAt: new Date(0),
+          createdBy: 'Jane Doe',
+          framework: 'Nuxt',
+          frameworkIcon: 'az-color az-nuxt'
+        }
+      }
+    })
+    expect(view.getByRole('heading', { level: 1, name: 'fresh-app' })).toBeTruthy()
+    expect(view.getByText('Not deployed yet')).toBeTruthy()
+    expect(view.getByText('Not deployed')).toBeTruthy()
+    expect(view.getAllByText('None').length).toBe(2)
+    expect(view.queryByRole('link', { name: /Visit/ })).toBeNull()
+    expect(view.queryByText('Ready')).toBeNull()
+  })
+
+  it('renders the NoDeployment variant as the never-deployed Overview', () => {
+    const view = render(NoDeployment)
+    expect(view.getByRole('heading', { level: 1, name: 'docs-site' })).toBeTruthy()
+    expect(view.getByText('Not deployed yet')).toBeTruthy()
+    expect(view.queryByRole('link', { name: /Visit/ })).toBeNull()
   })
 
   it('adds a custom domain from an IconButton', () => {

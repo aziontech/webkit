@@ -52,7 +52,7 @@
 
 - Visible focus: the column is not focusable; `Tab` reaches only interactive content nested inside a step's body.
 - Keyboard map: none of its own.
-- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
+- ARIA: the column is an ordered list (`ol`, its markers removed) and each `DocSteps.Step` a list item (`li`), so assistive tech announces the step count and each step's position ("2 of 5"). The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`): the list position already says the number, so it is not read twice. The step title stays text, not a heading: a heading level would need a new prop.
 - Contrast: inherited from `DocSteps.Step`; the column paints nothing.
 - Touch target: not applicable; the component is not interactive.
 

@@ -65,7 +65,7 @@ The app's one toast region, at `bottom-end`, mounted once by the shell because i
 
 ## Data
 
-`navigation`, `account` and the recents are the shell's own constants, which the app replaces with its navigation file and signed-in user. The states render the shell and fill its slots instead of copying it:
+`navigation`, `account` and `recents` are props (`ShellConsoleProps`, `ShellConsoleRecent` are exported from `shell-console.vue`); left out, the console tree, the account and the recents in `sample.ts` render. The app passes its navigation file and signed-in user, then deletes `sample.ts` and its import. The states render the shell and fill its slots instead of copying it:
 
 | Slot             | Scope         | What goes in it                                                               |
 | ---------------- | ------------- | ----------------------------------------------------------------------------- |
@@ -74,7 +74,7 @@ The app's one toast region, at `bottom-end`, mounted once by the shell because i
 | `sidebar-header` | `{ compact }` | Content under the wordmark in the rail (the AccountSwitch switcher).          |
 | `header-leading` | `{ compact }` | Content before the breadcrumbs in the header (the switcher while compact).    |
 | `notifications`  |               | Flash messages above the page body.                                           |
-| `tools`          |               | The tools region beside the content (the notification list).                  |
+| `tools`          |               | The tools region beside the content (the notification list, a `HelpPanel`).   |
 
 `v-model:tools-open` opens and closes the tools region, and `tools-label` names it. It emits one event:
 
@@ -90,6 +90,7 @@ Handle it where the session lives: clear the token (`sessionStorage.removeItem`,
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
 - Give every row an `href` (never `to` or `path`); derive a static `breadcrumbs` trail from the route.
 - Let a detail page set its own trail, control crumb included, with `ConsoleLayout.Breadcrumb`.
+- Open a page's help from `ConsoleLayout.ToolsTrigger` in its `PageHeader` `meta` slot, with the `HelpPanel` in `tools`.
 - Frame a list or form body with `layout-boundary` + `layout-column`; open a detail body flush on `PageTabs`.
 
 ## Don't
@@ -102,6 +103,7 @@ Handle it where the session lives: clear the token (`sessionStorage.removeItem`,
 - Don't render the account switcher in both `sidebar-header` and `header-leading` at once; pick by the slots' `compact`.
 - Don't leave an empty account table when the list fails to load; show the danger `Alert` with Retry in its place.
 - Don't open the notifications region as a popover over the page; it is the layout's tools region beside the content.
+- Don't open page help from a boxed `IconButton`, a typed `?` or a `Tooltip` beside the title; the page's `Info` link is the one way in.
 
 ## Copy
 
@@ -125,6 +127,7 @@ Handle it where the session lives: clear the token (`sessionStorage.removeItem`,
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) over the page body. The controls row and the table belong to `view/view-table`, which builds them from the Table toolbar parts; the shell does not draw them.
 - DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as `items`, then the environment in its slot, a `Select` with `variant="ghost"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). While compact the header hides the crumbs but keeps the environment `Select` in place of the brand, so Deploy always has its target in view; the body repeats the rest of the trail under `md` in its own `nav` row named Application (a ghost back `IconButton` to Applications and the application name). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list as `Item.List` of `Item` rows (`Item.Media type="icon"` toned through `data-type`, title, description, time, `Item.Actions`), five at a time with `Show older` for the rest: unread items marked with a `New` tag (and a visually hidden `Unread:` prefix), Edit and Redeploy on each deploy, Mark all as read, Clear all (it empties the list and toasts `Notifications cleared.` with Undo, which brings them back), and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
+- PageHelp: the ListPage through `ConsoleLayout` with page help. `ConsoleLayout.ToolsTrigger` is first in the `PageHeader`'s `meta` slot, so the `Info` link (named `Info about applications`) sits right after the h1 on the same line; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Help"`, a drawer when narrow), carries `aria-expanded` and, while open, `aria-controls` on the region's body. The `tools` slot holds the `HelpPanel` topic: what an application is, when to create one, and the Learn more link to the documentation. The region's close button closes it as well; focus stays on the link.
 - AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-leading` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `TableCellStatus`, ID and client ID as `TableCellId`. Each name is a `Button` with `variant="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
 - AccountSwitchError: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Retry`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Retry loads the list again and shows the table.
 

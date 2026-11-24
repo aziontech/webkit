@@ -27,7 +27,12 @@
   }
 
   export interface AgentActivityProps {
-    /** The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending. */
+    /**
+     * The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared
+     * status set and an optional `description`. The current step is the first running one, else the
+     * first failed one, else the last canceled one of a stopped run, else the last one that is not
+     * pending.
+     */
     steps?: AgentActivityStep[]
     /** Initial open state of the step list when uncontrolled; collapsed shows only the current step. */
     defaultOpen?: boolean
@@ -130,6 +135,14 @@
           count: doneCount.value
         })
   }
+
+  const TOGGLE_CLASS =
+    'inline-flex min-h-8 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:min-h-10'
+
+  const STEP_TITLE_CLASS =
+    'text-start text-body-md text-(--text-default) wrap-anywhere ' +
+    'data-[status=canceled]:text-(--text-muted) data-[status=pending]:text-(--text-muted) data-[status=skipped]:text-(--text-muted)'
 </script>
 
 <template>
@@ -148,7 +161,7 @@
       :aria-expanded="isOpen ? 'true' : 'false'"
       :aria-controls="listId"
       :data-testid="`${testId}__toggle`"
-      class="inline-flex min-h-6 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:min-h-11"
+      :class="TOGGLE_CLASS"
       @click="onClick"
     >
       <span
@@ -176,7 +189,7 @@
         class="flex min-w-0 items-start gap-(--spacing-xs)"
       >
         <span
-          class="flex h-5 w-4 shrink-0 items-center justify-center"
+          class="flex h-5.5 w-4 shrink-0 items-center justify-center"
           aria-hidden="true"
         >
           <Spinner
@@ -208,7 +221,7 @@
           <span
             dir="auto"
             :data-status="step.status"
-            class="text-start text-body-sm text-(--text-default) wrap-anywhere data-[status=canceled]:text-(--text-muted) data-[status=pending]:text-(--text-muted) data-[status=skipped]:text-(--text-muted)"
+            :class="STEP_TITLE_CLASS"
           >
             {{ step.title }}<span class="sr-only">, {{ t(`agentActivity.${step.status}`) }}</span>
           </span>

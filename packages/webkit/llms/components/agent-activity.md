@@ -43,7 +43,7 @@
 | `steps` | `AgentActivityStep[]` | `[]` | false | The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state of the step list when uncontrolled; collapsed shows only the current step. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the activity. Empty uses the locale catalog (`Agent activity`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## v-model
 
@@ -81,19 +81,19 @@
 
 ## Internationalization
 
-| Key                       | English source                    | Override prop |
-| ------------------------- | --------------------------------- | ------------- |
-| `agentActivity.label`     | `Agent activity`                  | `ariaLabel`   |
-| `agentActivity.steps`     | `{count} step(s)` (plural)        | —             |
-| `agentActivity.finished`  | `Finished {count} step(s)` (plural) | —           |
-| `agentActivity.stopped`   | `Stopped after {count} step(s)` (plural) | —      |
-| `agentActivity.failed`    | `Failed: {title}`                 | —             |
-| `agentActivity.pending`   | `Pending`                         | —             |
-| `agentActivity.running`   | `Running`                         | —             |
-| `agentActivity.success`   | `Done`                            | —             |
-| `agentActivity.error`     | `Failed`                          | —             |
-| `agentActivity.canceled`  | `Canceled`                        | —             |
-| `agentActivity.skipped`   | `Skipped`                         | —             |
+| Key                      | English source                           | Override prop |
+| ------------------------ | ---------------------------------------- | ------------- |
+| `agentActivity.label`    | `Agent activity`                         | `ariaLabel`   |
+| `agentActivity.steps`    | `{count} step(s)` (plural)               | —             |
+| `agentActivity.finished` | `Finished {count} step(s)` (plural)      | —             |
+| `agentActivity.stopped`  | `Stopped after {count} step(s)` (plural) | —             |
+| `agentActivity.failed`   | `Failed: {title}`                        | —             |
+| `agentActivity.pending`  | `Pending`                                | —             |
+| `agentActivity.running`  | `Running`                                | —             |
+| `agentActivity.success`  | `Done`                                   | —             |
+| `agentActivity.error`    | `Failed`                                 | —             |
+| `agentActivity.canceled` | `Canceled`                               | —             |
+| `agentActivity.skipped`  | `Skipped`                                | —             |
 
 - Formatting: plural rules through `Intl.PluralRules` and the count through `Intl.NumberFormat`, both with the provider locale (the same locale the messages resolve from); a plural form the catalog lacks falls back to `other`. Step titles and descriptions come translated from the owner.
 

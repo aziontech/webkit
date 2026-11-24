@@ -20,7 +20,7 @@
 - Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.
 - Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.
 - Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own "Learn more" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.
-- A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band.
+- A linked claim is its own positioned box: its hover and click target is the claim, grown by `var(--spacing-xs)` above and below, so it never spreads over whatever positioned ancestor holds it and never pushes past the column it sits in. For a whole cell that links, use `BentoGrid.Cell`'s own `link`.
 
 ## Don’t
 
@@ -65,15 +65,15 @@
 - `data-described` mirrors whether a description is rendered, from either the prop or the slot
 - `data-linked` present when the claim carries an `href`
 - The root element switches between `<a>` and `<div>` on the `href` data prop, never on an `as` string — so the whole claim is the target, not a control composed under it
-- A linked root lays an `::after` over its positioned cell, so hovering anywhere in the cell hovers the claim
+- A linked root is `relative` and lays an `::after` a `var(--spacing-xs)` beyond its top and bottom edges, so the target is the claim and a little air around it; the inline edges stay on the claim, so a claim that fills a phone-width column causes no horizontal scroll
 - The heading element follows `headingLevel`; its size does not change with it
 
 ## Accessibility
 
-- Visible focus: the linked root draws an inset `focus-visible` ring in `var(--ring-color)` on its `::after`, so the ring outlines the whole cell it covers. Without an `href` the topic holds no interactive control of its own.
+- Visible focus: the linked root draws a 2px `focus-visible` outline in `var(--ring-color)`, offset by `var(--spacing-xs)`, so the ring outlines the claim with air on every side; an outline adds no scrollable width. Without an `href` the topic holds no interactive control of its own.
 - Keyboard map: `Tab` reaches the linked claim and `Enter` follows it — the anchor's own behaviour, no handler of our own. Unlinked, the topic is static content and `Tab` passes through whatever the description slot contains.
 - ARIA: both glyphs are decorative and carry `aria-hidden="true"` — the leading icon and the trailing arrow — so the link's accessible name is the headline and the sentence, the copy a reader sees. `headingLevel` is what keeps the document outline in order (axe `heading-order`); the heading stays a heading inside the anchor.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-brand)`, the logo orange, for the hovered headline (an owner-accepted brand exception in light) — all against the fill the surrounding cell provides.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and for the underline of the hovered headline (a decorative mark) — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
 
@@ -127,13 +127,11 @@
 </script>
 
 <template>
-  <div class="relative">
-    <FeatureItem
-      icon="az az-cache"
-      title="Accelerate API responses"
-      description="Cache API responses on a distributed architecture to reduce latency and origin load."
-      href="/products/cache"
-    />
-  </div>
+  <FeatureItem
+    icon="az az-cache"
+    title="Accelerate API responses"
+    description="Cache API responses on a distributed architecture to reduce latency and origin load."
+    href="/products/cache"
+  />
 </template>
 ```

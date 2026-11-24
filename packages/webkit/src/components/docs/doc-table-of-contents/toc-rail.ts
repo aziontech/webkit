@@ -1,5 +1,5 @@
 export const RAIL_INDENT = 8
-export const RAIL_CURVE = 10
+const RAIL_CURVE = 10
 export const RAIL_STROKE = 2
 const CRISP = RAIL_STROKE / 2
 
@@ -28,7 +28,7 @@ export interface RailMeasurement {
   bands: RailSpan[]
 }
 
-export const railX = (depth: number): number => (Math.max(2, depth) - 2) * RAIL_INDENT + CRISP
+const railX = (depth: number): number => (Math.max(2, depth) - 2) * RAIL_INDENT + CRISP
 
 export function buildRail(bands: RailBand[]): RailPath {
   const commands: string[] = []

@@ -9,7 +9,8 @@ export const ptBR: Messages = {
     expired: 'Pedido expirado',
     confirmLabel: 'Digite {phrase} para confirmar',
     arguments: 'Argumentos',
-    invalidArguments: 'Estes argumentos não são válidos. Corrija-os para aprovar.'
+    invalidArguments: 'Estes argumentos não são válidos. Corrija-os para aprovar.',
+    phraseMismatch: 'O texto não corresponde a {phrase}. Digite exatamente para confirmar.'
   },
   agentQuestion: {
     submit: 'Enviar',
@@ -52,15 +53,29 @@ export const ptBR: Messages = {
     actions: 'Ações da mensagem',
     error: 'Não foi possível gerar a resposta.',
     retry: 'Tentar novamente',
-    helpful: 'Útil',
-    notHelpful: 'Não foi útil',
+    goodResponse: 'Boa resposta',
+    badResponse: 'Resposta ruim',
     feedback: 'Avaliação da resposta',
     feedbackSubmitting: 'Enviando avaliação',
-    feedbackSubmitted: 'Avaliação enviada'
+    feedbackThanks: 'Obrigado pela sua avaliação',
+    readAloud: 'Ler em voz alta',
+    stopReading: 'Parar a leitura',
+    share: 'Compartilhar',
+    more: 'Mais ações',
+    branch: 'Ramificar em novo chat',
+    edit: 'Editar mensagem',
+    editField: 'Edite sua mensagem',
+    cancel: 'Cancelar',
+    send: 'Enviar'
   },
   citation: {
     label: 'Fonte {index}: {title}',
-    labelUntitled: 'Fonte {index}'
+    labelUntitled: 'Fonte {index}',
+    labelWithSite: 'Fonte {index}, {site}: {title}',
+    labelMany: '{site} +{more}, fontes {indexes}',
+    next: 'Próxima fonte',
+    page: '{current}/{total}',
+    previous: 'Fonte anterior'
   },
   conversation: {
     label: 'Conversa',
@@ -109,7 +124,11 @@ export const ptBR: Messages = {
     context: 'Escolher contexto',
     contextRemove: 'Remover contexto',
     tools: 'Ferramentas',
-    toolsEnabled: 'Ferramentas ativadas'
+    toolsEnabled: 'Ferramentas ativadas',
+    addMenu: 'Adicionar',
+    camera: 'Câmera',
+    photos: 'Fotos',
+    files: 'Arquivos'
   },
   agentActivity: {
     label: 'Atividade do agente',
@@ -144,6 +163,8 @@ export const ptBR: Messages = {
   },
   sources: {
     label: 'Fontes',
+    cited: 'Citações',
+    more: 'Mais',
     count: {
       one: '{count} fonte',
       other: '{count} fontes'
@@ -211,7 +232,11 @@ export const ptBR: Messages = {
   articleIndexSection: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    noMatch: 'Nenhum resultado encontrado.'
+    noMatch: 'Nenhum resultado encontrado.',
+    results: {
+      one: '{count} resultado',
+      other: '{count} resultados'
+    }
   },
   attributeEditor: {
     add: 'Adicionar item',
@@ -241,7 +266,12 @@ export const ptBR: Messages = {
   },
   avatar: {
     fallbackLabel: 'Avatar do usuário',
-    imageAlt: 'Avatar'
+    imageAlt: 'Avatar',
+    presenceOnline: 'online',
+    presenceAway: 'ausente',
+    presenceBusy: 'ocupado',
+    presenceOffline: 'offline',
+    withPresence: '{name}, {presence}'
   },
   avatarGroup: {
     people: {
@@ -314,6 +344,9 @@ export const ptBR: Messages = {
   chartCard: {
     resize: 'Redimensionar cartão',
     move: 'Mover cartão',
+    moveVerb: 'Mover',
+    moveHint: 'Use as setas para mover o cartão.',
+    moved: 'Movido para a posição {position} de {total}',
     columns: '{span} de {max} colunas',
     columnsAndHeight: '{columns}, {height} pixels de altura'
   },
@@ -409,11 +442,12 @@ export const ptBR: Messages = {
     home: 'Página inicial da Azion',
     openNavigation: 'Abrir navegação',
     accountMenu: 'Menu da conta',
-    accountMenuFor: '{initials}, menu da conta',
+    accountMenuFor: '{initials}, {name}, menu da conta',
     searchPlaceholder: 'Buscar páginas e comandos',
     noMatch: 'Nenhuma página ou comando corresponde à busca.',
     pages: 'Páginas',
-    searchShortcut: 'Buscar páginas e comandos'
+    searchShortcut: 'Buscar páginas e comandos',
+    info: 'Informações'
   },
   copyButton: {
     fallbackTitle: 'Copie manualmente',
@@ -427,7 +461,8 @@ export const ptBR: Messages = {
     label: 'Versões da resposta',
     previous: 'Versão anterior',
     next: 'Próxima versão',
-    position: '{current} de {total}'
+    position: '{current}/{total}',
+    positionLabel: 'Versão {current} de {total}'
   },
   feedbackReasonDialog: {
     title: 'O que deu errado?',
@@ -452,7 +487,10 @@ export const ptBR: Messages = {
     previous30: 'Últimos 30 dias',
     older: 'Mais antigas',
     emptyTitle: 'Nenhuma conversa ainda.',
-    delete: 'Excluir {title}'
+    delete: 'Excluir {title}',
+    newChat: 'Novo chat',
+    search: 'Buscar conversas',
+    noMatch: 'Nenhuma conversa corresponde a “{query}”.'
   },
   qrCode: {
     label: 'Código QR'
@@ -463,6 +501,7 @@ export const ptBR: Messages = {
     open: 'Abrir calendário',
     chooseDate: 'Escolher data',
     apply: 'Aplicar',
+    cancel: 'Cancelar',
     previousMonth: 'Mês anterior',
     nextMonth: 'Próximo mês',
     month: 'Mês',
@@ -643,10 +682,11 @@ export const ptBR: Messages = {
     retry: 'Tentar novamente'
   },
   field: {
-    required: '(Obrigatório)'
+    required: 'Obrigatório'
   },
   fileDropzone: {
-    title: 'Solte arquivos para enviar'
+    title: 'Solte arquivos para enviar',
+    touchTitle: 'Escolha arquivos para enviar'
   },
   audioPlayer: {
     label: 'Player de áudio',
@@ -770,16 +810,21 @@ export const ptBR: Messages = {
     itemProgress: 'Progresso de {name}'
   },
   footer: {
-    label: 'Rodapé'
+    label: 'Rodapé',
+    home: 'Página inicial da Azion'
   },
   appHeader: {
     label: 'Cabeçalho global',
     home: 'Página inicial da Azion',
-    productHome: 'Página inicial da Azion {product}'
+    productHome: 'Página inicial da Azion {product}',
+    account: 'Menu da conta'
   },
   helpPanel: {
     label: 'Ajuda',
     learnMore: 'Saiba mais'
+  },
+  hint: {
+    label: 'Mais informações'
   },
   heroSection: {
     carouselLabel: 'Comprovada em cargas de trabalho críticas'
@@ -862,6 +907,30 @@ export const ptBR: Messages = {
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
   },
+  messageThread: {
+    label: 'Conversa',
+    loading: 'Carregando conversa',
+    loaded: 'Conversa carregada',
+    customer: 'Cliente',
+    agent: 'Agente',
+    via: 'via {channel}',
+    email: 'E-mail',
+    chat: 'Chat',
+    phone: 'Telefone',
+    web: 'Formulário web',
+    api: 'API',
+    internalNote: 'Nota interna',
+    to: 'Para: {addresses}',
+    cc: 'Cc: {addresses}',
+    showQuoted: 'Mostrar texto citado',
+    hideQuoted: 'Ocultar texto citado',
+    showEarlier: {
+      one: 'Mostrar {count} mensagem anterior',
+      other: 'Mostrar {count} mensagens anteriores'
+    },
+    showEarlierAll: 'Mostrar mensagens anteriores',
+    earlier: 'Mensagens anteriores'
+  },
   multiSelect: {
     noMatch: 'Nenhum resultado',
     loading: 'Carregando opções',
@@ -917,7 +986,8 @@ export const ptBR: Messages = {
     number: 'Número',
     lowercase: 'Letra minúscula',
     met: 'atendido',
-    unmet: 'não atendido'
+    unmet: 'não atendido',
+    progress: '{met} de {total} requisitos atendidos'
   },
   phoneInput: {
     dialCode: 'Código de discagem do país',
@@ -937,6 +1007,14 @@ export const ptBR: Messages = {
   },
   popover: {
     close: 'Fechar'
+  },
+  priorityTag: {
+    prefix: 'Prioridade:',
+    urgent: 'Urgente',
+    high: 'Alta',
+    medium: 'Média',
+    low: 'Baixa',
+    none: 'Sem prioridade'
   },
   progress: {
     label: 'Progresso'
@@ -995,6 +1073,15 @@ export const ptBR: Messages = {
     danglingConnective: 'Adicione uma condição depois de {connective}.',
     unclosedQuote: 'Feche as aspas abertas no caractere {position}.'
   },
+  rating: {
+    star: {
+      one: '{count} estrela',
+      other: '{count} estrelas'
+    },
+    value: 'Avaliado em {value} de {max}',
+    empty: 'Sem avaliação',
+    clear: 'Limpar avaliação'
+  },
   resizable: {
     handle: 'Redimensionar painel'
   },
@@ -1003,6 +1090,7 @@ export const ptBR: Messages = {
     minLength: 'Use pelo menos {min} caracteres.',
     maxLength: 'Use no máximo {max} caracteres.',
     pattern: 'Este valor não segue o formato esperado.',
+    patternRule: 'Confira o formato: {rule}',
     minimum: 'Informe {min} ou mais.',
     maximum: 'Informe {max} ou menos.',
     number: 'Informe um número.',
@@ -1119,7 +1207,7 @@ export const ptBR: Messages = {
   },
   table: {
     selectAll: 'Selecionar todas as linhas',
-    selectRow: 'Selecionar linha',
+    selectRow: 'Selecionar a linha {row}',
     emptyTitle: 'Nenhum resultado ainda',
     emptyDescription: 'Comece criando seu primeiro recurso.',
     errorTitle: 'Não foi possível carregar os dados'
@@ -1128,7 +1216,6 @@ export const ptBR: Messages = {
     label: 'Exportar CSV'
   },
   tableHeadCell: {
-    resize: 'Redimensionar coluna',
     sortBy: 'Ordenar por'
   },
   tableRefreshButton: {
@@ -1202,6 +1289,22 @@ export const ptBR: Messages = {
     system: 'Sistema',
     dark: 'Escuro',
     light: 'Claro'
+  },
+  timeline: {
+    label: 'Atividade',
+    loading: 'Carregando atividade'
+  },
+
+  countdown: {
+    label: '{label}:',
+    dueIn: 'Vence em {duration}',
+    due: 'Vence {relative}',
+    overdue: 'Atrasado há {duration}',
+    duration: '{major} {minor}',
+    expiresIn: 'Expira em {duration}',
+    expires: 'Expira {relative}',
+    expired: 'Expirou {relative}',
+    paused: 'Pausado'
   },
   timestamp: {
     title: 'Detalhes do horário',
@@ -1424,7 +1527,27 @@ export const ptBR: Messages = {
     reorderMoved: '{name} movido para a posição {position} de {total}.',
     reorderDropped: '{name} solto na posição {position} de {total}.',
     reorderCancelled: 'Reordenação cancelada.'
+  },
+  markdownEditor: {
+    label: 'Mensagem',
+    write: 'Escrever',
+    preview: 'Visualizar',
+    toolbar: 'Formatação',
+    bold: 'Negrito',
+    italic: 'Itálico',
+    link: 'Link',
+    bulletedList: 'Lista com marcadores',
+    numberedList: 'Lista numerada',
+    quote: 'Citação',
+    code: 'Código',
+    shortcut: '{label} ({keys})',
+    linkPlaceholder: 'url',
+    emptyTitle: 'Nada para visualizar',
+    previewLoading: 'Carregando a visualização',
+    mentionMenu: 'Pessoas',
+    mentionResults: {
+      one: '{count} pessoa',
+      other: '{count} pessoas'
+    }
   }
 }
-
-export default ptBR

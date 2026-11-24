@@ -12,7 +12,7 @@
   },
   {
    "name": "Error",
-   "summary": "The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+   "summary": "The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
    "file": "blocks/dashboard/dashboard-health-score/variants/error.vue"
   },
   {
@@ -23,7 +23,9 @@
  ],
  "sfcFile": "blocks/dashboard/dashboard-health-score/dashboard-health-score.vue",
  "guidelinesFile": "blocks/dashboard/dashboard-health-score/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/dashboard/dashboard-health-score/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "parts/hourly-score-card.vue",
+  "parts/open-incidents-card.vue"
+ ]
 }

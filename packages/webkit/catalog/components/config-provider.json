@@ -17,10 +17,11 @@
  ],
  "bestPractices": [
   "Mount one `ConfigProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.",
+  "A nested provider changes only what it sets: every prop it leaves unset (`locale`, `catalogs`, `messages`, `now`, `timeZone`, `dir`) comes from the provider above it, and at the root from the device and the page. A provider placed only for `now` (a fixed sample clock) keeps the app's language, catalogs, overrides and time zone; `catalogs` adds to the ones above and `messages` merges over the overrides above.",
   "Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.",
   "Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.",
   "Override built-in strings through `messages` (partial, deep-merged), not by forking components.",
-  "Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left (a device locale does so only when its catalog is registered, so English text never reads right-to-left).",
+  "Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left (a device locale does so only when its catalog is registered, so English text never reads right-to-left). With no `locale` and `dir` on `auto` the provider sets no direction of its own: its root carries no `dir`, so a provider placed only for `now` or `timeZone` keeps the direction of the page or the provider around it, and its components read that provider's direction.",
   "Leave `now` unset in an app: relative times then read the real clock and `TableCellTime` re-renders every minute. Set it to a fixed moment where the text must not depend on when it renders: an example or a test (`const NOW = Date.UTC(2026, 10, 10, 12)`, sample dates counted back from it), or a server render whose markup the browser hydrates. Never compute that moment from `Date.now()` / `new Date()` in setup: the server and the browser read different clocks."
  ]
 }

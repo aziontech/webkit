@@ -5,7 +5,7 @@
 <template>
   <div class="grid gap-(--spacing-md) sm:grid-cols-2">
     <DocCard
-      title="Edge Application"
+      title="Applications"
       icon="az az-server"
       href="/docs/edge-application"
       link-label="Read the guide"

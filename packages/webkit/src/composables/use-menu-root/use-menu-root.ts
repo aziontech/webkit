@@ -1,18 +1,20 @@
-import { nextTick, onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
+import { nextTick, onScopeDispose, type Ref, watch } from 'vue'
 
 import { nextTabbableAfter } from '../../utils/tabbable'
 import { useOverlayLayer } from '../use-overlay-layer'
 import type { Align, Side } from '../use-placement'
+import { useMenuLevel } from './composables/use-menu-level'
+import { createTypeahead, focusMenuItem, type MenuFocusTarget } from './lib/menu-items'
 import { registerShortcut } from './lib/shortcut-registry'
+
+export type { MenuFocusTarget }
+export { focusMenuItem, useMenuLevel }
 
 /** Identifier an option emits on the root `select` event. */
 export type MenuOptionValue = string | number
 
 /** The pointer or keyboard event that activated a menu item. */
 export type MenuActivationEvent = globalThis.MouseEvent | globalThis.KeyboardEvent
-
-/** Which item a focus move lands on. */
-export type MenuFocusTarget = 'first' | 'last' | 'next' | 'prev'
 
 /** State shared by a menu root and every item part it renders. */
 export interface MenuContext {
@@ -93,58 +95,85 @@ export interface UseMenuRootReturn {
   onPanelKeydown: (event: globalThis.KeyboardEvent) => void
 }
 
-const ITEM_SELECTOR = '[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"]'
+type MenuKeyAction = MenuFocusTarget | 'Escape' | 'Tab' | 'type' | null
 
-const SUB_SWITCH_DELAY = 150
-
-export function menuItems(container: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
-  if (!container) return []
-  return Array.from(container.querySelectorAll<globalThis.HTMLElement>(ITEM_SELECTOR)).filter(
-    (el) => el.getAttribute('aria-disabled') !== 'true'
-  )
+function menuKeyAction(event: globalThis.KeyboardEvent, typing: boolean): MenuKeyAction {
+  const key = event.key
+  if (key === 'ArrowDown') return 'next'
+  if (key === 'ArrowUp') return 'prev'
+  if (key === 'Home' || key === 'End') {
+    if (typing) return null
+    return key === 'Home' ? 'first' : 'last'
+  }
+  if (key === 'Escape' || key === 'Tab') return key
+  return !typing && isPrintable(event) ? 'type' : null
 }
 
-export function focusMenuItem(
-  container: globalThis.HTMLElement | null,
-  target: MenuFocusTarget
+const isPrintable = (event: globalThis.KeyboardEvent): boolean =>
+  event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey
+
+function tabOut(panel: globalThis.HTMLElement | null): void {
+  const from = globalThis.document?.activeElement as globalThis.HTMLElement | null
+  if (!from || from === globalThis.document.body || panel?.contains(from)) return
+  nextTabbableAfter(from, panel)?.focus()
+}
+
+function panelKeydown(
+  event: globalThis.KeyboardEvent,
+  options: UseMenuRootOptions,
+  typeahead: (event: globalThis.KeyboardEvent) => void
 ): void {
-  const items = menuItems(container)
-  if (items.length === 0) return
-  const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
-  const index = active ? items.indexOf(active) : -1
-  let next: globalThis.HTMLElement
-  if (target === 'first') next = items[0]
-  else if (target === 'last') next = items[items.length - 1]
-  else if (target === 'next') next = items[(index + 1) % items.length]
-  else next = items[(index <= 0 ? items.length : index) - 1]
-  next.focus({ preventScroll: true })
+  const typing = (event.target as globalThis.HTMLElement | null)?.matches?.('input, textarea')
+  const action = menuKeyAction(event, Boolean(typing))
+  if (!action) return
+  if (action === 'type') return typeahead(event)
+  event.preventDefault()
+  const panel = options.panelEl.value
+  if (action !== 'Escape' && action !== 'Tab') return focusMenuItem(panel, action)
+  options.setOpen(false)
+  options.focusTrigger()
+  if (action === 'Tab' && !event.shiftKey) tabOut(panel)
 }
 
-export function useMenuLevel(): MenuLevel {
-  const activeSub = ref<string | null>(null)
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  function cancelSubClose() {
-    if (timer === undefined) return
-    clearTimeout(timer)
-    timer = undefined
+function outsidePress(
+  options: UseMenuRootOptions,
+  subPanels: Set<() => globalThis.HTMLElement | null>,
+  isInsideHigherLayer: (target: globalThis.Node) => boolean
+): (active: boolean) => void {
+  const onDocumentMousedown = (event: globalThis.MouseEvent) => {
+    if (!options.isOpen.value) return
+    const target = event.target as globalThis.Node | null
+    if (!target) return
+    if (options.triggerEl.value?.contains(target)) return
+    if (options.panelEl.value?.contains(target)) return
+    for (const panel of subPanels) if (panel()?.contains(target)) return
+    if (isInsideHigherLayer(target)) return
+    options.setOpen(false)
   }
-
-  function setActiveSub(id: string | null, delay = false) {
-    cancelSubClose()
-    if (delay && activeSub.value !== null && activeSub.value !== id) {
-      timer = setTimeout(() => {
-        timer = undefined
-        activeSub.value = id
-      }, SUB_SWITCH_DELAY)
-      return
-    }
-    activeSub.value = id
+  return (active) => {
+    if (active) globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
+    else globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
   }
+}
 
-  onScopeDispose(cancelSubClose)
+function shortcutPriority(options: UseMenuRootOptions): number {
+  if (options.isOpen.value) return 2
+  const focused = globalThis.document?.activeElement ?? null
+  return focused && options.triggerEl.value?.contains(focused) ? 1 : 0
+}
 
-  return { activeSub: readonly(activeSub), setActiveSub, cancelSubClose }
+function selectOption(
+  options: UseMenuRootOptions,
+  value: MenuOptionValue,
+  event: MenuActivationEvent,
+  close = true
+): void {
+  const wasOpen = options.isOpen.value
+  options.onSelect(event, value)
+  if (close && wasOpen) {
+    options.setOpen(false)
+    options.focusTrigger()
+  }
 }
 
 export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
@@ -154,122 +183,10 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
   const subPanels = new Set<() => globalThis.HTMLElement | null>()
 
   const focusFirstOption = () => focusMenuItem(panelEl.value, 'first')
-  const focusLastOption = () => focusMenuItem(panelEl.value, 'last')
-  const focusNextOption = () => focusMenuItem(panelEl.value, 'next')
-  const focusPrevOption = () => focusMenuItem(panelEl.value, 'prev')
-
-  function selectOption(value: MenuOptionValue, event: MenuActivationEvent, close = true) {
-    const wasOpen = isOpen.value
-    options.onSelect(event, value)
-    if (close && wasOpen) {
-      setOpen(false)
-      focusTrigger()
-    }
-  }
-
-  function registerCommand(
-    command: string,
-    activate: (event: globalThis.KeyboardEvent) => void
-  ): () => void {
-    return registerShortcut(command, () => !disabled.value, activate, shortcutPriority)
-  }
-
-  function shortcutPriority(): number {
-    if (isOpen.value) return 2
-    const focused = globalThis.document?.activeElement ?? null
-    return focused && triggerEl.value?.contains(focused) ? 1 : 0
-  }
-
-  function registerSubPanel(panel: () => globalThis.HTMLElement | null): () => void {
-    subPanels.add(panel)
-    return () => {
-      subPanels.delete(panel)
-    }
-  }
-
-  let typeaheadBuffer = ''
-  let typeaheadAt = 0
-
-  function typeahead(event: globalThis.KeyboardEvent) {
-    const items = menuItems(panelEl.value)
-    if (items.length === 0) return
-    typeaheadBuffer =
-      event.timeStamp - typeaheadAt > 500 ? event.key : `${typeaheadBuffer}${event.key}`
-    typeaheadAt = event.timeStamp
-    const typed = typeaheadBuffer.toLocaleLowerCase()
-    const query = Array.from(typed).every((char) => char === typed[0]) ? typed[0] : typed
-    const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
-    const start = active ? items.indexOf(active) : -1
-    const ordered =
-      query.length === 1
-        ? [...items.slice(start + 1), ...items.slice(0, start + 1)]
-        : [...items.slice(Math.max(start, 0)), ...items.slice(0, Math.max(start, 0))]
-    const match = ordered.find((item) =>
-      (item.textContent ?? '').trim().toLocaleLowerCase().startsWith(query)
-    )
-    if (match) {
-      event.preventDefault()
-      match.focus({ preventScroll: true })
-    }
-  }
-
-  function onPanelKeydown(event: globalThis.KeyboardEvent) {
-    const typing = (event.target as globalThis.HTMLElement | null)?.matches?.('input, textarea')
-    if (typing && (event.key === 'Home' || event.key === 'End')) return
-    if (event.key === 'ArrowDown') {
-      event.preventDefault()
-      focusNextOption()
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault()
-      focusPrevOption()
-    } else if (event.key === 'Home') {
-      event.preventDefault()
-      focusFirstOption()
-    } else if (event.key === 'End') {
-      event.preventDefault()
-      focusLastOption()
-    } else if (event.key === 'Escape') {
-      event.preventDefault()
-      setOpen(false)
-      focusTrigger()
-    } else if (event.key === 'Tab') {
-      event.preventDefault()
-      const panel = panelEl.value
-      setOpen(false)
-      focusTrigger()
-      if (event.shiftKey) return
-      const from = globalThis.document?.activeElement as globalThis.HTMLElement | null
-      if (!from || from === globalThis.document.body || panel?.contains(from)) return
-      nextTabbableAfter(from, panel)?.focus()
-    } else if (
-      !typing &&
-      event.key.length === 1 &&
-      event.key !== ' ' &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey
-    ) {
-      typeahead(event)
-    }
-  }
+  const typeahead = createTypeahead(panelEl)
 
   const { isInsideHigherLayer } = useOverlayLayer(isOpen, { element: panelEl })
-
-  function onDocumentMousedown(event: globalThis.MouseEvent) {
-    if (!isOpen.value) return
-    const target = event.target as globalThis.Node | null
-    if (!target) return
-    if (triggerEl.value?.contains(target)) return
-    if (panelEl.value?.contains(target)) return
-    for (const panel of subPanels) if (panel()?.contains(target)) return
-    if (isInsideHigherLayer(target)) return
-    setOpen(false)
-  }
-
-  function listenOutside(active: boolean) {
-    if (active) globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-    else globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-  }
+  const listenOutside = outsidePress(options, subPanels, isInsideHigherLayer)
 
   if (isOpen.value) listenOutside(true)
   onScopeDispose(() => listenOutside(false))
@@ -296,18 +213,27 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
     panelEl,
     panelBodyEl: options.panelBodyEl,
     setOpen,
-    selectOption,
-    registerCommand,
+    selectOption: (value, event, close) => selectOption(options, value, event, close),
+    registerCommand: (command, activate) =>
+      registerShortcut(
+        command,
+        () => !disabled.value,
+        activate,
+        () => shortcutPriority(options)
+      ),
     focusFirstOption,
-    focusLastOption,
-    focusNextOption,
-    focusPrevOption,
+    focusLastOption: () => focusMenuItem(panelEl.value, 'last'),
+    focusNextOption: () => focusMenuItem(panelEl.value, 'next'),
+    focusPrevOption: () => focusMenuItem(panelEl.value, 'prev'),
     focusTrigger,
     activeSub: level.activeSub,
     setActiveSub: level.setActiveSub,
     cancelSubClose: level.cancelSubClose,
-    registerSubPanel
+    registerSubPanel: (panel) => {
+      subPanels.add(panel)
+      return () => subPanels.delete(panel)
+    }
   }
 
-  return { context, onPanelKeydown }
+  return { context, onPanelKeydown: (event) => panelKeydown(event, options, typeahead) }
 }

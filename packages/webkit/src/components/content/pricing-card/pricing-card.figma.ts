@@ -27,7 +27,7 @@ const currency = instance.findInstance('Currency')
 const hasCurrency = currency.type === 'INSTANCE'
 const value = hasCurrency ? currency.getString('value') : '20'
 const prefix = hasCurrency ? currency.getString('prefix') : '$'
-const suffix = hasCurrency ? currency.getString('suffix') : '/ mon'
+const suffix = hasCurrency ? currency.getString('suffix') : '/ month'
 const showPrefix = hasCurrency ? currency.getBoolean('showPrefix') : true
 const showSuffix = hasCurrency ? currency.getBoolean('showSuffix') : true
 
@@ -66,7 +66,7 @@ export default {
       : figma.code`
   prefix="${prefix}"`
   }${
-    suffix === '/ mon'
+    suffix === '/ month'
       ? ''
       : figma.code`
   suffix="${suffix}"`

@@ -31,7 +31,10 @@ export type A11yPass = 'light' | 'dark' | 'media'
 export type A11yScope = 'blocks' | 'examples'
 
 const modules: Record<A11yScope, Record<string, () => Promise<{ default: Component }>>> = {
-  blocks: import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
+  blocks: import.meta.glob<{ default: Component }>([
+    '../../blocks/**/*.vue',
+    '!../../blocks/**/parts/**'
+  ]),
   examples: import.meta.glob<{ default: Component }>('../../examples/**/*.vue')
 }
 

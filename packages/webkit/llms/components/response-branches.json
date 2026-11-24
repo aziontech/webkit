@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.",
+ "purpose": "Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.",
  "setup": null,
  "useWhen": [
   "Use ResponseBranches to page through alternative versions of one AI response; rows of a table or list use Pagination.",
@@ -64,7 +64,7 @@
   {
    "name": "default",
    "scope": "{ index: number }",
-   "notes": "The active version. Rendered once; the owner switches its content by `index`."
+   "notes": "Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot."
   }
  ],
  "styleSeam": false,

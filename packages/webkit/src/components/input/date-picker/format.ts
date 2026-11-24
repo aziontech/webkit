@@ -91,41 +91,14 @@ const isWholeMonth = (start: Date, end: Date): boolean =>
   isDefaultStartTime(start) &&
   isDefaultEndTime(end)
 
-export const formatValueLabel = (
-  value: DatePickerDraft,
-  mode: DatePickerMode,
-  timezone = '',
-  locale = 'en-US'
+const closedRangeLabel = (
+  s: Date,
+  e: Date,
+  startTime: string,
+  endTime: string,
+  timezone: string,
+  locale: string
 ): string => {
-  if (mode !== 'range') {
-    const single = asSingle(value)
-    if (!single) {
-      return ''
-    }
-    const time = isDefaultStartTime(single) ? '' : `, ${labelClock(single, timezone, locale)}`
-    return `${formatDate(single, timezone, locale)}${time}`
-  }
-
-  const { start, end } = asRange(value)
-
-  if (!start && !end) {
-    return ''
-  }
-
-  const startTime =
-    start && !isDefaultStartTime(start) ? `, ${labelClock(start, timezone, locale)}` : ''
-  const endTime = end && !isDefaultEndTime(end) ? `, ${labelClock(end, timezone, locale)}` : ''
-
-  if (start && !end) {
-    return `${formatDate(start, timezone, locale)}${startTime} –`
-  }
-  if (!start && end) {
-    return `– ${formatDate(end, timezone, locale)}${endTime}`
-  }
-
-  const s = start as Date
-  const e = end as Date
-
   if (isWholeMonth(s, e)) {
     return monthYear(s, timezone, locale)
   }
@@ -147,33 +120,42 @@ export const formatValueLabel = (
   return `${formatDate(s, timezone, locale)}${startTime} – ${formatDate(e, timezone, locale)}${endTime}`
 }
 
-const formatClock = (date: Date, timezone = '', locale = 'en-US'): string =>
-  new Intl.DateTimeFormat(intlLocale(locale), {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: tzOption(timezone)
-  }).format(date)
+const rangeLabel = (value: DatePickerDraft, timezone: string, locale: string): string => {
+  const { start, end } = asRange(value)
 
-export const formatWindowLabel = (
+  if (!start && !end) {
+    return ''
+  }
+
+  const startTime =
+    start && !isDefaultStartTime(start) ? `, ${labelClock(start, timezone, locale)}` : ''
+  const endTime = end && !isDefaultEndTime(end) ? `, ${labelClock(end, timezone, locale)}` : ''
+
+  if (start && !end) {
+    return `${formatDate(start, timezone, locale)}${startTime} –`
+  }
+  if (!start && end) {
+    return `– ${formatDate(end, timezone, locale)}${endTime}`
+  }
+
+  return closedRangeLabel(start as Date, end as Date, startTime, endTime, timezone, locale)
+}
+
+export const formatValueLabel = (
   value: DatePickerDraft,
   mode: DatePickerMode,
   timezone = '',
   locale = 'en-US'
 ): string => {
-  if (mode !== 'range') {
-    const single = asSingle(value)
-    return single
-      ? `${formatDate(single, timezone, locale)}, ${formatClock(single, timezone, locale)}`
-      : ''
+  if (mode === 'range') {
+    return rangeLabel(value, timezone, locale)
   }
-
-  const { start, end } = asRange(value)
-  if (start && end && sameDay(start, end)) {
-    return `${formatClock(start, timezone, locale)} – ${formatClock(end, timezone, locale)}`
+  const single = asSingle(value)
+  if (!single) {
+    return ''
   }
-
-  return formatValueLabel(value, mode, timezone, locale)
+  const time = isDefaultStartTime(single) ? '' : `, ${labelClock(single, timezone, locale)}`
+  return `${formatDate(single, timezone, locale)}${time}`
 }
 
 export const localTimezone = (): string => {
@@ -213,10 +195,8 @@ export const formatTimezoneLabel = (timezone: string, localLabel = 'Local'): str
 
 export const defaultTimezones = (): string[] => {
   const local = localTimezone()
-  const supported = (Intl as unknown as { supportedValuesOf?: (key: string) => string[] })
-    .supportedValuesOf
-
-  const base = typeof supported === 'function' ? supported('timeZone') : []
+  const base =
+    typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : []
   const curated = [
     local,
     'UTC',

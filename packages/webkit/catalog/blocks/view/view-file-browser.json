@@ -28,8 +28,20 @@
  ],
  "sfcFile": "blocks/view/view-file-browser/view-file-browser.vue",
  "guidelinesFile": "blocks/view/view-file-browser/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/view/view-file-browser/sample.ts",
-  "azion-storage.ts": "blocks/view/view-file-browser/azion-storage.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "azion-storage.ts",
+  "lib/file-rows.ts",
+  "parts/delete-entry-dialog.vue",
+  "parts/file-name-cell.vue",
+  "parts/file-row-actions.vue",
+  "parts/folder-empty.vue",
+  "parts/folder-error-card.vue",
+  "parts/folder-search-row.vue",
+  "parts/move-dialog.vue",
+  "parts/selection-bar.vue",
+  "parts/storage-title.vue",
+  "parts/transfer-card.vue",
+  "parts/upload-dialog.vue"
+ ]
 }

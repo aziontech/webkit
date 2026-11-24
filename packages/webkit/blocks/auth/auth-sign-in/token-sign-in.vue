@@ -1,14 +1,15 @@
 <script setup lang="ts">
   import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
+
+  import SignInFrame from './parts/sign-in-frame.vue'
 
   /** Why the API did not let the token in, each with its own copy, severity and Retry rule. */
   export type TokenSignInFailure = 'rejected' | 'no-access' | 'rate-limited' | 'unreachable'
@@ -86,9 +87,7 @@
 
   const clearsEntry = (error: string) => error === 'rejected' || error === 'no-access'
 
-  onMounted(() => {
-    if (clearsEntry(props.error)) focusToken()
-  })
+  onMounted(focusToken)
 
   watch(
     () => [props.error, props.loading] as const,
@@ -115,141 +114,108 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <AppHeader
-      aria-label="Console"
-      class="shrink-0"
+  <SignInFrame
+    :home-href="homeHref"
+    :docs-href="docsHref"
+  >
+    <Card
+      class="w-full max-w-(--container-sm)"
+      :padded="false"
     >
-      <AppHeader.Brand
-        :href="homeHref"
-        aria-label="Azion home"
-      >
-        <Brand
-          variant="default"
-          size="small"
-        />
-      </AppHeader.Brand>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <Button
-          label="Documentation"
-          variant="outline"
-          size="medium"
-          icon="az az-book"
-          :href="docsHref"
-        />
-      </AppHeader.End>
-    </AppHeader>
-
-    <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
-      <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
-        <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-          <div
-            class="m-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none"
+      <template #default>
+        <div class="p-(--spacing-lg)">
+          <form
+            class="flex flex-col gap-(--spacing-lg)"
+            aria-label="Sign in with a personal token"
+            :aria-busy="loading || undefined"
+            novalidate
+            @submit.prevent="signIn"
           >
-            <Card
-              class="w-full max-w-(--container-sm)"
-              :padded="false"
+            <PageHeader
+              title="Sign in with a personal token"
+              description="Paste a personal token from your Azion account. It is sent only to the Azion API."
+              size="small"
+            />
+
+            <Alert
+              v-if="notice"
+              :key="notice.label"
+              :severity="notice.severity"
+              size="small"
+              :label="notice.label"
             >
-              <template #default>
-                <div class="p-(--spacing-lg)">
-                  <form
-                    class="flex flex-col gap-(--spacing-lg)"
-                    aria-label="Sign in with a personal token"
-                    :aria-busy="loading || undefined"
-                    novalidate
-                    @submit.prevent="signIn"
-                  >
-                    <PageHeader
-                      title="Sign in with a personal token"
-                      description="Paste a personal token from your Azion account. It is sent only to the Azion API."
-                      size="small"
-                    />
-
-                    <Alert
-                      v-if="notice"
-                      :key="notice.label"
-                      :severity="notice.severity"
-                      size="small"
-                      :label="notice.label"
-                    >
-                      <template
-                        v-if="notice.retry"
-                        #actions
-                      >
-                        <Button
-                          label="Retry"
-                          variant="secondary"
-                          size="small"
-                          @click="signIn"
-                        />
-                      </template>
-                    </Alert>
-
-                    <fieldset
-                      class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
-                      :disabled="loading"
-                    >
-                      <legend class="sr-only">Personal token</legend>
-                      <Field
-                        required
-                        :invalid="!!tokenError"
-                      >
-                        <Field.Label for="personal-token">Personal token</Field.Label>
-                        <PasswordInput
-                          id="personal-token"
-                          v-model="token"
-                          name="token"
-                          autocomplete="off"
-                          spellcheck="false"
-                          monospace
-                          placeholder="Paste your token"
-                          @update:model-value="tokenError = ''"
-                        />
-                        <Field.Description>
-                          Create one in Account settings, Personal tokens.
-                          <a
-                            class="text-link"
-                            :href="TOKEN_DOCS"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            >How to create a personal token</a
-                          >
-                        </Field.Description>
-                        <Field.Error v-if="tokenError">{{ tokenError }}</Field.Error>
-                      </Field>
-                      <Field orientation="horizontal">
-                        <Checkbox
-                          v-model="remember"
-                          name="remember"
-                        />
-                        <Field.Content>
-                          <Field.Label>Remember for this tab</Field.Label>
-                          <Field.Description>Closing the tab signs you out.</Field.Description>
-                        </Field.Content>
-                      </Field>
-                    </fieldset>
-
-                    <Button
-                      type="submit"
-                      label="Sign in"
-                      variant="primary"
-                      size="large"
-                      class="w-full"
-                      :loading="loading"
-                    />
-                  </form>
-                </div>
+              <template
+                v-if="notice.retry"
+                #actions
+              >
+                <Button
+                  label="Retry"
+                  variant="secondary"
+                  size="small"
+                  @click="signIn"
+                />
               </template>
-            </Card>
+            </Alert>
 
-            <p class="max-w-(--container-sm) text-center text-body-xs text-(--text-muted)">
-              Use a token with only the permissions this app needs, and revoke it in Personal tokens
-              when you are done.
-            </p>
-          </div>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
+              :disabled="loading"
+            >
+              <legend class="sr-only">Personal token</legend>
+              <Field
+                required
+                :invalid="!!tokenError"
+              >
+                <Field.Label for="personal-token">Personal token</Field.Label>
+                <PasswordInput
+                  id="personal-token"
+                  v-model="token"
+                  name="token"
+                  autocomplete="off"
+                  spellcheck="false"
+                  monospace
+                  placeholder="Paste your token"
+                  @update:model-value="tokenError = ''"
+                />
+                <Field.Description>
+                  Create one in Account settings, Personal tokens.
+                  <Link
+                    inline
+                    :href="TOKEN_DOCS"
+                    target="_blank"
+                    >How to create a personal token</Link
+                  >
+                </Field.Description>
+                <Field.Error v-if="tokenError">{{ tokenError }}</Field.Error>
+              </Field>
+              <Field orientation="horizontal">
+                <Checkbox
+                  v-model="remember"
+                  name="remember"
+                />
+                <Field.Content>
+                  <Field.Label>Remember for this tab</Field.Label>
+                  <Field.Description>Closing the tab signs you out.</Field.Description>
+                </Field.Content>
+              </Field>
+            </fieldset>
+
+            <Button
+              type="submit"
+              label="Sign in"
+              variant="primary"
+              size="large"
+              class="w-full"
+              :loading="loading"
+            />
+          </form>
         </div>
-      </div>
-    </main>
-  </div>
+      </template>
+    </Card>
+
+    <p class="max-w-(--container-sm) text-center text-body-xs text-(--text-muted)">
+      Use a token with only the permissions this app needs, and revoke it in Personal tokens when
+      you are done.
+    </p>
+  </SignInFrame>
 </template>

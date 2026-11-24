@@ -27,7 +27,7 @@ export const sampleResources: AccountHierarchyResource[] = [
     name: 'Checkout',
     type: 'workspace',
     parentId: 'grp-2101',
-    lastAccessed: 'Yesterday',
+    lastAccessed: '2026-11-09T12:00:00Z',
     status: 'Active',
     charges: 612.4,
     labels: ['production']

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 5eb9cb352678ce89539e8e54b1f41ddc0c3a278480654d339ba7ef21b36c5cc2
+checksum: 98ce4aff2a7ed24fb4f6f490b6a1c404bc2cc1b5ce484630bc6cf311c0238a28
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-23
 ---
 
 # ButtonGroup — Component Spec
@@ -172,7 +172,7 @@ _none_ — tooltips, menus and the loading spinner bring their own motion with `
 ## Responsive
 
 - The row wraps (`flex-wrap`) instead of overflowing a narrow container; use `visibleCount` to keep one line on small screens.
-- Touch: targets follow `IconButton` sizes; prefer `size="large"` on touch-first surfaces.
+- Touch: targets follow `IconButton` sizes; prefer `size="large"` on touch-first surfaces. Inside the group each button's touch-target span grows only vertically (44px tall on a coarse pointer), so a tap never lands on the neighbouring button.
 - No hover-only affordance: every label is the accessible name and is reachable by focus.
 
 ## Performance

@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import Slider from '@aziontech/webkit/slider'
   import { ref } from 'vue'
 
@@ -6,14 +7,25 @@
 </script>
 
 <template>
-  <div class="w-full max-w-(--container-xs)">
+  <Field
+    invalid
+    class="w-full max-w-(--container-xs)"
+  >
+    <div class="flex items-center justify-between gap-(--spacing-xs)">
+      <Field.Label>Alert threshold</Field.Label>
+      <span
+        class="text-body-sm text-(--text-default) tabular-nums"
+        aria-hidden="true"
+        >{{ value }}%</span
+      >
+    </div>
     <Slider
       v-model="value"
       :min="0"
       :max="100"
       :step="1"
-      invalid
-      aria-label="Alert threshold"
+      unit="%"
     />
-  </div>
+    <Field.Error>Set the threshold to 50% or more.</Field.Error>
+  </Field>
 </template>

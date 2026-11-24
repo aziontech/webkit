@@ -2,7 +2,7 @@
 name: webkit-ux-heuristics
 description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing az-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
 status: active
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 scope: general
 # prettier-ignore
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, webkit-keyboard, ui-verify, review]
@@ -52,7 +52,8 @@ component for the moment; don't re-derive the principle.
 | Empty state                       | `@aziontech/webkit/button` for the one next action + a one-line reason it's empty                                       | a dead-end "no results" string                        |
 | Contextual actions / menu         | `@aziontech/webkit/dropdown-menu`                                                                                       | a hand-rolled popover                                 |
 | Side surface                      | `@aziontech/webkit/panel`, `@aziontech/webkit/drawer`                                                                   | a fixed div without focus management                  |
-| Tooltip help                      | `@aziontech/webkit/tooltip`                                                                                             | `title` attribute only                                |
+| Name of an icon-only control      | `@aziontech/webkit/tooltip` (a few words)                                                                               | `title` attribute only                                |
+| Help beside a label or title      | a description first, then `@aziontech/webkit/hint`; page help: Info trigger + `HelpPanel` (`/webkit-in-product-help`)   | a typed `?`, a boxed icon button, a long tooltip      |
 | Field label                       | `Field.Label` from `@aziontech/webkit/field` (`@aziontech/webkit/field-label` beside a bare control)                    | placeholder-as-label                                  |
 | Link to an external resource      | `@aziontech/webkit/link` with `target="_blank"` (trailing `az-external-link`) — see rule 1 below                        | a bare `<a>`, a `ButtonMini`, or a silent new tab     |
 | More items than the space holds   | first item + `+N` `@aziontech/webkit/tag` opening a `@aziontech/webkit/popover` with search and Load more — rule 2      | a wrapped inline list, or every item rendered at once |
@@ -84,11 +85,11 @@ shrink-0`), never sized from the surrounding text. The mark is how the user know
 
 Pick the element by where the link sits:
 
-| Where                                       | Use                                                                                       |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Standalone (a domain, a repo, "Learn more") | `Link` with `target="_blank"` — it renders the mark and sets `rel` itself                 |
-| Inside running prose                        | an `<a>` with the `text-link` class, the same `target`/`rel`, and the mark after the text |
-| A resource name in a table cell or panel    | the shared cross-resource link from `/webkit-tables`                                      |
+| Where                                       | Use                                                                                                                                      |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Standalone (a domain, a repo, "Learn more") | `Link` with `target="_blank"` — it renders the mark and sets `rel` itself                                                                |
+| Inside running prose                        | `Link` with `inline` and the same `target`: it keeps the sentence's size and the underline, sets `rel` and draws the mark after the text |
+| A resource name in a table cell or panel    | the shared cross-resource link from `/webkit-tables`                                                                                     |
 
 ```vue
 <Link

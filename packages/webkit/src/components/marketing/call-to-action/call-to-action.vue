@@ -22,7 +22,13 @@
     description?: string
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
-    /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. */
+    /**
+     * Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a
+     * raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing
+     * alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving
+     * primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide
+     * leading column and the supporting note on a raised trailing column.
+     */
     variant?: CallToActionVariant
     /** Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. */
     framed?: boolean
@@ -61,6 +67,10 @@
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
+
+  const PANEL_COPY_CLASS =
+    'relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-2xl)*1.5)] ' +
+    'md:py-[calc(var(--spacing-2xl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)'
 </script>
 
 <template>
@@ -173,9 +183,7 @@
             <slot name="background" />
           </div>
 
-          <div
-            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-2xl)*1.5)] md:py-[calc(var(--spacing-2xl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)"
-          >
+          <div :class="PANEL_COPY_CLASS">
             <ModuleHeader
               :framed="false"
               align="center"
@@ -241,7 +249,7 @@
 
       <div
         v-else
-        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:flex-row md:items-center md:justify-between"
+        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:flex-row md:items-center md:justify-start md:gap-(--spacing-2xl)"
       >
         <ModuleHeader
           :framed="false"

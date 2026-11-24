@@ -15,20 +15,22 @@
 
   const attrs = useAttrs()
   const ctx = inject(PanelInjectionKey)
+  const testId = computed(() => String(attrs['data-testid'] ?? 'panel-header'))
   const headerEnd = inject(PanelHeaderEndInjectionKey, null)
   const endComponent = computed(() =>
     headerEnd && headerEnd.panelTestId === ctx?.testId ? headerEnd.component.value : null
   )
 
   const ROOT_CLASS =
-    'flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-0 border-b border-b-(length:--border-width-default) border-b-(--border-muted) bg-(--bg-surface) ps-(--spacing-lg) pe-(--spacing-md) py-(--spacing-md)'
+    'flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-0 border-b border-b-(length:--border-width-default) border-b-(--border-muted) bg-(--bg-surface) ' +
+    'ps-(--spacing-lg) pe-(--spacing-md) py-(--spacing-md)'
 </script>
 
 <template>
   <header
     role="none"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
-    :data-testid="`${ctx?.testId}__header`"
+    :data-testid="testId"
   >
     <template v-if="endComponent">
       <div class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">

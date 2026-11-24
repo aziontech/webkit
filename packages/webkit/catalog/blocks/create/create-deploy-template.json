@@ -38,7 +38,7 @@
  ],
  "sfcFile": "blocks/create/create-deploy-template/create-deploy-template.vue",
  "guidelinesFile": "blocks/create/create-deploy-template/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-deploy-template/sample.ts"
- }
+ "fileSources": [
+  "sample.ts"
+ ]
 }

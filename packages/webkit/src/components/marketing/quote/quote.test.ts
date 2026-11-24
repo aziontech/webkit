@@ -22,6 +22,17 @@ describe('Quote', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
   })
 
+  it.each(['inline', 'signed', 'highlight'] as const)(
+    'caps the %s quotation at a readable measure',
+    (variant) => {
+      const { container } = render(Quote, { props: { ...props, variant } })
+
+      expect(
+        container.querySelector('blockquote')?.classList.contains('max-w-(--container-2xl)')
+      ).toBe(true)
+    }
+  )
+
   it('lets a consumer data-testid win over the fallback', () => {
     const { getByTestId, queryByTestId } = render(Quote, {
       props,

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: d422970e362d8547327ae71b07e560d94afd9013653428d98fe70360d65e0961
+checksum: efd5a86c94484d88318efb77516b42338c515713846d0955d09ac18210a18554
 created: 2026-11-19
-last_updated: 2026-11-19
+last_updated: 2026-11-22
 ---
 
 # SubagentCard — Component Spec
@@ -129,15 +129,15 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ## Tokens
 
-| Region        | Token                                                                  |
-| ------------- | ---------------------------------------------------------------------- |
-| frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`      |
-| title         | `.text-label-sm`, `var(--text-default)`                                |
-| name          | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)` |
-| description   | `.text-body-sm`, `var(--text-muted)`                                   |
-| elapsed       | `.text-label-sm`, `tabular-nums`, `var(--text-muted)`                  |
-| section label | `.text-label-sm`, `var(--text-muted)`                                  |
-| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                               |
+| Region        | Token                                                                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| frame         | none: a quiet row in the assistant column, at least 40 px tall; the panel hangs under a 1 px `border-s var(--border-default)` rule, `var(--spacing-md)` |
+| title         | `.text-body-sm`, `var(--text-muted)` → hover `var(--text-default)`                                                                                      |
+| name          | `.text-body-code-sm` with a 1 px block padding (room for descenders), `var(--bg-surface-raised)`, `var(--text-muted)`                                   |
+| description   | `.text-body-sm`, `var(--text-muted)`, indented to the title's start                                                                                     |
+| elapsed       | `.text-label-sm`, `tabular-nums`, `var(--text-muted)`                                                                                                   |
+| section label | `.text-label-sm`, `var(--text-muted)`                                                                                                                   |
+| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                                                                                                                |
 
 ## Theme gaps
 
@@ -151,7 +151,7 @@ _None._
 - Status is conveyed in text, never by color alone.
 - Focus: when `Stop` leaves the DOM while it holds focus (the status becomes `canceled`), focus moves to the toggle, or to the card root (`tabindex="-1"`) when the row is static; the `role="status"` region announces `Stopped`.
 - Accessible name of the toggle: its text, the title and the helper name; the status is announced by the status region.
-- Contrast: `--text-default` and `--text-muted` on `--bg-surface`, and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
+- Contrast: `--text-default` and `--text-muted` on the canvas (`--bg-canvas`), and `--text-muted` on `--bg-surface-raised` (the name chip), pass WCAG 2.1 AA and their APCA targets; status colours come from `StatusIndicator`, and the status is always text. No disabled state.
 
 ## Internationalization
 

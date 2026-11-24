@@ -1,6 +1,8 @@
 export const STRING_MESSAGES = {
   'hardcoded-ui-string':
-    "Literal UI string in a template attribute (aria-label, title, placeholder, label…). Read it from the locale catalog: `useLocale().t('<component>.<key>')` with the key added to src/locales/en.ts and every other locale.",
+    'Literal UI string in a template attribute (aria-label, title, placeholder, label…). Read it ' +
+    "from the locale catalog: `useLocale().t('<component>.<key>')` with the key added to " +
+    'src/locales/en.ts and every other locale.',
   'hardcoded-default-string':
     "Prop default is an English UI string. Default the prop to '' and fall back to the locale catalog (`props.x || t('<component>.<key>')`), so the prop still wins."
 }

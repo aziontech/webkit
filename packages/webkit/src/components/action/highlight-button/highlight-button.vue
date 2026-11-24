@@ -1,8 +1,6 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
-
+  import { useButtonRoot } from '../../../composables/use-button-root'
   import { directionalIconClass } from '../../../utils/directional-icons'
-  import { safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type HighlightButtonSize = 'small' | 'medium' | 'large'
@@ -43,20 +41,12 @@
     click: [event: MouseEvent]
   }>()
 
-  const attrs = useAttrs()
-
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'highlight-button')
-
-  const loadingTestId = computed(() => `${testId.value}__loading`)
-
-  const isInert = computed(() => props.disabled || props.loading)
-
-  const linkHref = computed(() => safeHref(props.href))
-
-  const isAnchor = computed(() => linkHref.value !== null)
+  const { Root, rootAttrs, onClick } = useButtonRoot(props, 'highlight-button', (event) =>
+    emit('click', event)
+  )
 
   const ROOT_CLASS =
-    'group/highlight relative inline-flex items-center justify-center isolate overflow-hidden whitespace-nowrap p-px ' +
+    'group/highlight relative inline-flex items-center justify-center isolate whitespace-nowrap p-px ' +
     'rounded-(--shape-button) ' +
     'border border-(length:--border-width-default) border-(--secondary-mask) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
@@ -100,48 +90,26 @@
     'data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md ' +
     'data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
     'group-data-[inert]/highlight:text-(--text-disabled)'
-
-  const onClick = (event: MouseEvent) => {
-    if (isInert.value) {
-      event.preventDefault()
-      return
-    }
-
-    emit('click', event)
-  }
 </script>
 
 <template>
-  <a
-    v-if="isAnchor"
-    v-bind="$attrs"
-    :href="linkHref ?? undefined"
-    :target="target"
-    :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
+  <Root
+    v-bind="rootAttrs"
     :class="ROOT_CLASS"
-    :aria-disabled="isInert || undefined"
-    :aria-busy="loading || undefined"
-    :tabindex="isInert ? -1 : undefined"
     :data-size="size"
-    :data-disabled="disabled ? '' : undefined"
-    :data-loading="loading ? '' : undefined"
-    :data-inert="isInert ? '' : undefined"
-    :data-testid="testId"
     @click="onClick"
   >
     <span
       aria-hidden="true"
-      data-theme="dark"
-      :class="GLOW_CLASS"
-    />
-    <span
-      aria-hidden="true"
-      :class="BASE_CLASS"
-    />
-    <span
-      aria-hidden="true"
-      :class="SCRIM_CLASS"
-    />
+      class="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
+    >
+      <span
+        data-theme="dark"
+        :class="GLOW_CLASS"
+      />
+      <span :class="BASE_CLASS" />
+      <span :class="SCRIM_CLASS" />
+    </span>
     <span
       data-theme="dark"
       :class="CONTENT_CLASS"
@@ -150,7 +118,7 @@
       <Spinner
         v-if="loading"
         class="size-3 group-data-[size=large]/highlight:size-4"
-        :data-testid="loadingTestId"
+        :data-testid="`${rootAttrs['data-testid']}__loading`"
       />
       <i
         v-else-if="icon"
@@ -160,53 +128,10 @@
       />
       {{ label }}
     </span>
-  </a>
-
-  <button
-    v-else
-    v-bind="$attrs"
-    type="button"
-    :disabled="disabled"
-    :aria-disabled="isInert || undefined"
-    :aria-busy="loading || undefined"
-    :class="ROOT_CLASS"
-    :data-size="size"
-    :data-disabled="disabled ? '' : undefined"
-    :data-loading="loading ? '' : undefined"
-    :data-inert="isInert ? '' : undefined"
-    :data-testid="testId"
-    @click="onClick"
-  >
     <span
       aria-hidden="true"
-      data-theme="dark"
-      :class="GLOW_CLASS"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
     />
-    <span
-      aria-hidden="true"
-      :class="BASE_CLASS"
-    />
-    <span
-      aria-hidden="true"
-      :class="SCRIM_CLASS"
-    />
-    <span
-      data-theme="dark"
-      :class="CONTENT_CLASS"
-      :data-size="size"
-    >
-      <Spinner
-        v-if="loading"
-        class="size-3 group-data-[size=large]/highlight:size-4"
-        :data-testid="loadingTestId"
-      />
-      <i
-        v-else-if="icon"
-        :class="[icon, directionalIconClass(icon)]"
-        class="shrink-0 text-[length:inherit] leading-none"
-        aria-hidden="true"
-      />
-      {{ label }}
-    </span>
-  </button>
+  </Root>
 </template>

@@ -14,7 +14,7 @@
 
 ## Do
 
-- Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens a native `<input type="file">`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.
+- Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens the system file picker through `useFilePicker`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.
 - Pass the same `accept` string to the dropzone and to the native input behind your Browse button, so both paths filter the same way.
 - Handle `reject`. Tell the user which files were skipped and why (e.g. a `toast` naming the files and the accepted types). A silent rejection reads as a broken drop.
 - Announce the outcome of a drop yourself (a toast, or a live region on your file list). The dropzone does not announce drag states (see Accessibility).
@@ -44,7 +44,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'inline' \| 'overlay'` | `'inline'` | false | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. |
-| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). |
+| `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer. |
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
 | `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers). |
@@ -91,7 +91,7 @@
 - Keyboard map: none on the dropzone. Drag and drop from the OS is a pointer gesture with no keyboard equivalent on the target. The keyboard path is the consumer's Browse button, which opens a native file input and reaches the same outcome. `Escape` during a drag hides the overlay (window `keydown` fallback; browsers also cancel the drag natively).
 - No `@click` on the root: clicking the region does nothing, so there is no click-without-key handler. The Browse button is the click target.
 - ARIA, inline: the root is a `<div role="group">` with `aria-labelledby` pointing at the title and `aria-describedby` pointing at the description (only when `description` is non-empty), both ids from `useId()`. A screen reader therefore reads the slotted Browse button in context ("Drop files to upload, group, PNG or JPG, up to 5 MB each, Browse files, button"). The title is a `<p>`, not a heading: the page owns its heading outline. When `disabled`, the group carries `aria-disabled="true"`, so the dimmed title and description are announced as part of a disabled control and fall under the WCAG 1.4.3 exemption for inactive components.
-- Inside a `Field` (inline): the group reads the field through `useFieldControl` — it takes the field's `id`, prepends `Field.Title` to `aria-labelledby`, appends `Field.Description` / `Field.Error` to `aria-describedby`, sets `aria-invalid` from the field's (or its own) `invalid`, and the field's `disabled` disables it (`aria-disabled`, drops ignored).
+- Inside a `Field` (inline): the group reads the field through `useFieldControl` — it takes the field's `id`, prepends `Field.Title` to `aria-labelledby`, appends `Field.Description` / `Field.Error` to `aria-describedby`, sets `aria-invalid` from the field's (or its own) `invalid`, adds `requiredId` to `aria-describedby` when required, and the field's `disabled` disables it (`aria-disabled`, drops ignored).
 - ARIA, overlay: the root is `aria-hidden="true"`. It is a pointer-only duplicate of an affordance that must exist elsewhere on the page, and it renders no interactive content.
 - No `aria-live` in the component. Announcing every drag that crosses the window is noise, and the outcome that matters (files accepted or skipped) is the consumer's to announce from `drop` / `reject` (a `toast`, or a live region on its file list). `aria-dropeffect` / `aria-grabbed` are deprecated in WAI-ARIA 1.1 and are not used.
 - The icon is decorative: `aria-hidden="true"`.
@@ -108,10 +108,9 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import { ref } from 'vue'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
 
-  const inputEl = ref(null)
-  const browse = () => inputEl.value?.click()
+  const picker = useFilePicker({ multiple: true })
 </script>
 
 <template>
@@ -121,15 +120,9 @@
         label="Browse files"
         variant="secondary"
         size="medium"
-        @click="browse"
+        @click="picker.open()"
       />
     </FileDropzone>
-    <input
-      ref="inputEl"
-      type="file"
-      multiple
-      class="hidden"
-    />
   </div>
 </template>
 ```
@@ -141,19 +134,18 @@
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { ref } from 'vue'
 
-  const filesInputEl = ref(null)
-  const folderInputEl = ref(null)
+  const filePicker = useFilePicker({ multiple: true })
+  const folderPicker = useFilePicker({ directory: true })
   const items = ref([])
 
   const add = (files) => {
     items.value = [...items.value, ...Array.from(files, (file) => ({ file }))]
   }
-  const onPick = (event) => {
-    add(event.target.files ?? [])
-    event.target.value = ''
-  }
+  const browseFiles = async () => add(await filePicker.open())
+  const browseFolder = async () => add(await folderPicker.open())
   const remove = (index) => {
     items.value = items.value.filter((_, position) => position !== index)
   }
@@ -172,35 +164,17 @@
           label="Browse files"
           variant="secondary"
           size="medium"
-          @click="filesInputEl?.click()"
+          @click="browseFiles"
         />
         <Button
           label="Browse folder"
           variant="secondary"
           size="medium"
           icon="az az-folder-open"
-          @click="folderInputEl?.click()"
+          @click="browseFolder"
         />
       </div>
     </FileDropzone>
-    <input
-      ref="filesInputEl"
-      type="file"
-      multiple
-      class="hidden"
-      aria-hidden="true"
-      tabindex="-1"
-      @change="onPick"
-    />
-    <input
-      ref="folderInputEl"
-      type="file"
-      webkitdirectory
-      class="hidden"
-      aria-hidden="true"
-      tabindex="-1"
-      @change="onPick"
-    />
     <FileTokenGroup
       v-if="items.length"
       :items="items"
@@ -216,23 +190,46 @@
 
 ```vue
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import { ref } from 'vue'
+
+  const picker = useFilePicker({ multiple: true })
+  const files = ref([])
+  const add = (picked) => {
+    files.value = [...files.value, ...picked.map((file) => file.name)]
+  }
+  const upload = async () => add(await picker.open())
 </script>
 
 <template>
   <div class="relative w-full max-w-(--container-md)">
     <Card title="Project files">
       <template #default>
-        <div class="flex min-h-48 flex-col gap-(--spacing-xs)">
+        <div class="flex min-h-48 flex-col items-start gap-(--spacing-sm)">
           <p class="text-body-sm text-(--text-muted)">
-            Drag a file from your computer over this window. The drop target covers this card until
-            you drop the file, leave the window or press Escape.
+            Use Upload, or drag files from your computer over this card. The drop target covers the
+            card until you drop the files, leave the window or press Escape.
+          </p>
+          <Button
+            label="Upload"
+            icon="az az-upload"
+            variant="secondary"
+            size="medium"
+            @click="upload"
+          />
+          <p class="text-body-sm text-(--text-default)">
+            Files: {{ files.length ? files.join(', ') : 'none yet' }}
           </p>
         </div>
       </template>
     </Card>
-    <FileDropzone variant="overlay" />
+    <FileDropzone
+      variant="overlay"
+      @drop="(event, dropped) => add(dropped)"
+    />
   </div>
 </template>
 ```

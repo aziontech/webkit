@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useChartContext } from '../composables/use-chart-context'
+  import ChartLegendButton from '../parts/chart-legend-button.vue'
 
   defineOptions({ name: 'ChartLegend', inheritAttrs: false })
 
@@ -42,24 +43,17 @@
       v-for="entry in entries"
       :key="entry.id"
     >
-      <button
-        type="button"
-        :aria-pressed="!entry.hidden"
-        :data-hidden="entry.hidden || null"
+      <ChartLegendButton
+        :color="entry.color"
+        :pressed="!entry.hidden"
+        :dimmed="entry.dimmed"
         :data-testid="`${testId}__item`"
-        class="relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
         @click="ctx.toggleSeries($event, entry.id)"
         @pointerenter="ctx.setEmphasized(entry.hidden ? null : entry.id)"
         @pointerleave="ctx.setEmphasized(null)"
         @focus="ctx.setEmphasized(entry.hidden ? null : entry.id)"
         @blur="ctx.setEmphasized(null)"
       >
-        <span
-          :data-hidden="entry.hidden || null"
-          :data-dimmed="entry.dimmed || null"
-          :style="{ '--chart-legend-key': entry.color }"
-          class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--chart-legend-key) forced-color-adjust-none transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30 data-[hidden]:opacity-30"
-        />
         <span>{{ entry.name }}</span>
         <span
           v-if="total"
@@ -67,7 +61,7 @@
         >
           {{ entry.total }}
         </span>
-      </button>
+      </ChartLegendButton>
     </li>
   </ul>
 </template>

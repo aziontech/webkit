@@ -61,7 +61,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` moves between prompts (each is a native button; five at most keeps the tab order short); `Enter` / `Space` chooses.
 - ARIA: `role="group"` with `aria-label`; icons `aria-hidden`; native `disabled`.
-- Touch target: 32 px rows, 44 px on coarse pointers.
+- Touch target: 40 px rows, 44 px on coarse pointers.
 
 ## Right-to-left
 

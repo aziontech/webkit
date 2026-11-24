@@ -1,0 +1,44 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
+  "workspaces": {
+    ".": {
+      "entry": [".claude/hooks/*.mjs"],
+      "project": ["*.{js,mjs}", ".claude/hooks/**/*.mjs"]
+    },
+    "packages/webkit": {
+      "entry": [
+        "scripts/check-deprecated-usage.mjs",
+        "src/**/*.figma.ts",
+        "src/assets/asset-modules.ts",
+        "test/copyable/fixtures/*.vue",
+        "blocks/*/*/*.vue",
+        "blocks/*/*/variants/*.vue",
+        "examples/*/*.vue"
+      ],
+      "ignoreDependencies": ["figma", "jscpd"]
+    },
+    "packages/theme": {
+      "entry": ["src/tokens/primitives/fonts.css"]
+    },
+    "packages/icons": {
+      "entry": ["scripts/*.mjs"]
+    },
+    "apps/docs": {
+      "entry": ["scripts/lib/*.d.mts", "src/lib/virtual/*.d.ts"]
+    },
+    "apps/demos": {
+      "entry": ["src/blocks/*.{vue,ts}"]
+    },
+    "apps/visual": {
+      "entry": ["scripts/*.mjs"]
+    },
+    "apps/icons-gallery": {
+      "entry": ["azion.config.cjs"]
+    }
+  },
+  "ignoreBinaries": ["gh", "azion", "actionlint", "zizmor", "typos"]
+}

@@ -29,6 +29,10 @@
   })
 
   if (field) onBeforeUnmount(field.register('description', id.value))
+
+  const ROOT_CLASS =
+    'inline-flex items-center text-label-sm ' +
+    'data-[type=helper]:text-(--text-muted) data-[type=disabled]:text-(--text-muted) data-[type=invalid]:text-(--text-danger) data-[type=disabled]:gap-(--spacing-2xs)'
 </script>
 
 <template>
@@ -38,7 +42,7 @@
     data-slot="field-description"
     :data-type="type"
     :data-testid="testId"
-    class="inline-flex items-center text-label-sm data-[type=helper]:text-(--text-muted) data-[type=disabled]:text-(--text-muted) data-[type=invalid]:text-(--text-danger) data-[type=disabled]:gap-(--spacing-2xs)"
+    :class="ROOT_CLASS"
   >
     <i
       v-if="type === 'disabled'"

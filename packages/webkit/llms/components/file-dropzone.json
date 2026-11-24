@@ -29,7 +29,7 @@
   "`card`: a positioned container (`class=\"relative\"`) that hosts an `overlay` dropzone."
  ],
  "bestPractices": [
-  "Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens a native `<input type=\"file\">`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.",
+  "Always give the user a non-drag path. In `inline`, put a `Button` in the default slot that opens the system file picker through `useFilePicker`. In `overlay`, keep an upload button somewhere on the page. The drop target is pointer-only by design.",
   "Pass the same `accept` string to the dropzone and to the native input behind your Browse button, so both paths filter the same way.",
   "Handle `reject`. Tell the user which files were skipped and why (e.g. a `toast` naming the files and the accepted types). A silent rejection reads as a broken drop.",
   "Announce the outcome of a drop yourself (a toast, or a live region on your file list). The dropzone does not announce drag states (see Accessibility).",
@@ -51,7 +51,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`)."
+   "doc": "Instruction shown under the icon. Empty uses the locale catalog: `Drop files to upload`, or `Choose files to upload` inline on a coarse pointer."
   },
   {
    "name": "description",

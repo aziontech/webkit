@@ -6,5 +6,3 @@ export const dropShadow = {
   xl: '0 9px 7px rgb(0 0 0 / 0.1)',
   '2xl': '0 25px 25px rgb(0 0 0 / 0.15)'
 }
-
-export default { dropShadow }

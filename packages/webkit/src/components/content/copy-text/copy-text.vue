@@ -44,6 +44,11 @@
   function onCopy(event: MouseEvent, value: string) {
     emit('copy', event, value)
   }
+
+  const ROOT_CLASS =
+    'inline-flex max-w-full min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-xs) align-middle ' +
+    'text-(--text-default) ' +
+    'data-[size=medium]:text-label-code-md data-[size=small]:text-label-code-sm'
 </script>
 
 <template>
@@ -51,7 +56,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    class="inline-flex max-w-full min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-xs) align-middle text-(--text-default) data-[size=medium]:text-label-code-md data-[size=small]:text-label-code-sm"
+    :class="ROOT_CLASS"
   >
     <span
       dir="ltr"

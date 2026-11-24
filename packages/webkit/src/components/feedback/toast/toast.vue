@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import type { CSSProperties } from 'vue'
   import {
     computed,
     nextTick,
@@ -15,9 +14,19 @@
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Progress from '../progress/progress.vue'
+  import { useToastRegions } from './composables/use-toast-regions'
   import type { ToastEntry, ToastPosition } from './composables/use-toast-store'
   import { registerToaster, useToastStore } from './composables/use-toast-store'
   import { ToastInjectionKey } from './injection-key'
+  import { announceToasts } from './lib/toast-announcements'
+  import {
+    toastItemStyle,
+    type ToastRegion,
+    toastRegions,
+    toastRegionStyle,
+    type ToastView
+  } from './lib/toast-layout'
+  import { toastSnapshot } from './lib/toast-snapshot'
   import { TOAST_UNMOUNT_MS } from './presets/transitions'
   import ToastAction from './toast-action/toast-action.vue'
   import ToastClose from './toast-close/toast-close.vue'
@@ -89,19 +98,7 @@
   const actionsOf = (entry: ToastEntry) =>
     (entry.actions?.length ? entry.actions : entry.action ? [entry.action] : []).slice(0, 2)
 
-  const GAP = 14
-  const PEEK = 14
-
   const visibleCount = computed(() => Math.max(1, props.max))
-
-  const isTopPos = (p: ToastPosition) => p.startsWith('top')
-  const liftOf = (p: ToastPosition) => (isTopPos(p) ? 1 : -1)
-
-  interface ToastView {
-    entry: ToastEntry
-    mounted: boolean
-    removing: boolean
-  }
 
   const items = ref<ToastView[]>([])
 
@@ -109,31 +106,6 @@
   const assertiveText = ref('')
   const spoken = new Map<string, string>()
 
-  const speak = (channel: typeof politeText, texts: string[]) => {
-    if (!texts.length) return
-    channel.value = ''
-    nextTick(() => (channel.value = texts.join(' ')))
-  }
-
-  const announce = (next: ToastEntry[]) => {
-    const polite: string[] = []
-    const assertive: string[] = []
-    const ids = new Set<string>()
-    next.forEach((entry) => {
-      ids.add(entry.id)
-      const text = [entry.message, entry.description].filter(Boolean).join('. ')
-      const key = `${entry.severity}|${text}`
-      if (spoken.get(entry.id) === key) return
-      spoken.set(entry.id, key)
-      if (entry.severity === 'danger') assertive.push(text)
-      else polite.push(text)
-    })
-    spoken.forEach((_, id) => {
-      if (!ids.has(id)) spoken.delete(id)
-    })
-    speak(politeText, polite)
-    speak(assertiveText, assertive)
-  }
   const removalTimers = new Map<string, ReturnType<typeof setTimeout>>()
 
   const cardEls = new Map<string, HTMLElement>()
@@ -157,34 +129,18 @@
   }
 
   watch(
-    () =>
-      store.toasts.map((t) => ({
-        id: t.id,
-        severity: t.severity,
-        loading: t.loading,
-        message: t.message,
-        description: t.description,
-        action: t.action,
-        actions: t.actions,
-        duration: t.duration,
-        position: t.position,
-        closable: t.closable,
-        progress: t.progress
-      })),
+    () => store.toasts.map(toastSnapshot),
     (next) => {
-      announce(next as ToastEntry[])
+      announceToasts(next, spoken, politeText, assertiveText)
       const nextIds = new Set(next.map((t) => t.id))
       next.forEach((entry) => {
         const item = items.value.find((i) => i.entry.id === entry.id)
         if (item) {
-          item.entry = entry as ToastEntry
+          item.entry = entry
           item.removing = false
         } else {
           const id = entry.id
-          items.value = [
-            { entry: entry as ToastEntry, mounted: false, removing: false },
-            ...items.value
-          ]
+          items.value = [{ entry: entry, mounted: false, removing: false }, ...items.value]
           nextTick(() => {
             const fresh = items.value.find((i) => i.entry.id === id)
             if (fresh) fresh.mounted = true
@@ -220,40 +176,9 @@
     removalTimers.forEach((t) => clearTimeout(t))
   })
 
-  interface Region {
-    position: ToastPosition
-    all: ToastView[]
-    live: ToastView[]
-  }
-
-  const POSITIONS: ToastPosition[] = [
-    'top-start',
-    'top-center',
-    'top-end',
-    'bottom-start',
-    'bottom-center',
-    'bottom-end'
-  ]
-
-  const regions = computed<Region[]>(() => {
-    const map = new Map<ToastPosition, ToastView[]>(POSITIONS.map((position) => [position, []]))
-    items.value.forEach((item) => {
-      const pos = item.entry.position ?? props.position
-      const bucket = map.get(pos)
-      if (bucket) bucket.push(item)
-      else map.set(pos, [item])
-    })
-    return Array.from(map, ([position, all]) => ({
-      position,
-      all,
-      live: all.filter((i) => !i.removing)
-    }))
-  })
+  const regions = computed(() => toastRegions(items.value, props.position))
 
   const hoveredPosition = ref<ToastPosition | null>(null)
-  const isExpanded = (region: Region) =>
-    props.expand || (hoveredPosition.value === region.position && region.live.length > 1)
-
   const onEnter = (position: ToastPosition) => {
     hoveredPosition.value = position
     store.pause()
@@ -277,154 +202,41 @@
     if (hoveredPosition.value === null) store.resume()
   }
 
-  const regionEls = new Map<ToastPosition, HTMLElement>()
-  const setRegionEl = (position: ToastPosition, el: unknown) => {
-    if (el instanceof HTMLElement) regionEls.set(position, el)
-    else regionEls.delete(position)
-  }
+  const { setRegionEl } = useToastRegions(
+    store,
+    regions,
+    isActive,
+    onEnter,
+    onLeave,
+    onFocusin,
+    onFocusout
+  )
 
-  let returnFocus: HTMLElement | null = null
-
-  const focusFrontToast = () => {
-    const region = regions.value.find((r) => r.live.length > 0)
-    if (!region) return false
-    const front = regionEls.get(region.position)?.querySelector<HTMLElement>('[data-front]')
-    if (!front) return false
-    const control = front.querySelector<HTMLElement>(
-      'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
-    )
-    ;(control ?? front).focus()
-    return true
-  }
-
-  const onHotkey = (event: KeyboardEvent) => {
-    if (!event.altKey || event.code !== 'KeyT' || !isActive.value) return
-    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    if (focusFrontToast()) {
-      event.preventDefault()
-      if (previous && !previous.closest('[data-toast-region]')) returnFocus = previous
-    }
-  }
-
-  const onRegionKeydown = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape' || event.defaultPrevented) return
-    const card = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-toast-id]')
-    const id = card?.dataset['toastId']
-    if (!id) return
-    event.preventDefault()
-    event.stopPropagation()
-    dismiss(id)
-    const target = returnFocus
-    returnFocus = null
-    if (target?.isConnected) target.focus()
-  }
-
-  onMounted(() => document.addEventListener('keydown', onHotkey))
-  onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
+  const isExpanded = (region: ToastRegion) =>
+    props.expand || (hoveredPosition.value === region.position && region.live.length > 1)
 
   const dismiss = (id: string) => store.dismiss(id)
 
-  const regionStyle = (region: Region): CSSProperties => {
-    const pos = region.position
-    const top = isTopPos(pos)
-    const center = pos.endsWith('center')
-    const rtl = direction.value === 'rtl'
-    const leftSide = pos.endsWith(rtl ? 'end' : 'start')
-    const rightSide = pos.endsWith(rtl ? 'start' : 'end')
-    const vis = region.live.slice(0, visibleCount.value)
-    const frontHeight = heights.value[region.live[0]?.entry.id] ?? 0
+  const regionStyle = (region: ToastRegion) =>
+    toastRegionStyle(
+      region,
+      heights.value,
+      visibleCount.value,
+      isExpanded(region),
+      direction.value === 'rtl'
+    )
 
-    let height = '0'
-    if (vis.length) {
-      if (isExpanded(region)) {
-        let total = (vis.length - 1) * GAP
-        vis.forEach((i) => (total += heights.value[i.entry.id] ?? 0))
-        height = total ? `${total}px` : 'auto'
-      } else {
-        height = `${frontHeight + Math.min(vis.length - 1, 2) * 12}px`
-      }
-    }
-
-    return {
-      position: 'fixed',
-      zIndex: '1100',
-      width: '356px',
-      maxWidth: 'calc(100vw - 2 * var(--spacing-md))',
-      top: top ? 'var(--spacing-md)' : 'auto',
-      bottom: top ? 'auto' : 'calc(var(--spacing-md) + var(--toast-offset-bottom, 0%))',
-      left: center ? '50%' : leftSide ? 'var(--spacing-md)' : 'auto',
-      right: rightSide ? 'var(--spacing-md)' : 'auto',
-      transform: center ? 'translateX(-50%)' : 'none',
-      height
-    }
-  }
-
-  const toastStyle = (region: Region, item: ToastView, indexInAll: number): CSSProperties => {
-    const pos = region.position
-    const top = isTopPos(pos)
-    const lift = liftOf(pos)
-    const offEdge = `translateY(${top ? '-100%' : '100%'})`
-    const base: CSSProperties = {
-      position: 'absolute',
-      left: '0',
-      right: '0',
-      top: top ? '0' : 'auto',
-      bottom: top ? 'auto' : '0',
-      width: '100%',
-      zIndex: String(region.all.length - indexInAll),
-      transformOrigin: top ? 'top center' : 'bottom center'
-    }
-
-    if (!item.mounted || item.removing) {
-      return {
-        ...base,
-        transform: `${offEdge} scale(1)`,
-        opacity: '0',
-        pointerEvents: 'none'
-      }
-    }
-
-    const li = region.live.indexOf(item)
-    const hidden = li >= visibleCount.value
-    const front = li === 0
-    const frontHeight = heights.value[region.live[0]?.entry.id] ?? 0
-    const self = heights.value[item.entry.id] ?? 0
-
-    let translateY = 0
-    let scale = 1
-    let height = self ? `${self}px` : 'auto'
-    let overflow = 'visible'
-
-    if (hidden) {
-      translateY = lift * PEEK * visibleCount.value
-      scale = 1 - visibleCount.value * 0.05
-      height = frontHeight ? `${frontHeight}px` : 'auto'
-      overflow = 'hidden'
-    } else if (isExpanded(region)) {
-      let before = 0
-      for (let i = 0; i < li; i++) before += heights.value[region.live[i].entry.id] ?? 0
-      translateY = lift * (li * GAP + before)
-    } else if (front) {
-      translateY = 0
-    } else {
-      translateY = lift * PEEK * li
-      scale = 1 - li * 0.05
-      height = frontHeight ? `${frontHeight}px` : 'auto'
-      overflow = 'hidden'
-    }
-
-    return {
-      ...base,
-      transform: `translateY(${translateY}px) scale(${scale})`,
-      height,
-      overflow,
-      opacity: hidden ? '0' : '1',
-      pointerEvents: hidden ? 'none' : 'auto'
-    }
-  }
+  const toastStyle = (region: ToastRegion, item: ToastView, indexInAll: number) =>
+    toastItemStyle(region, item, indexInAll, heights.value, visibleCount.value, isExpanded(region))
 
   const { t } = useTranslate({ toast: en.toast })
   const regionLabel = computed(() => t('toast.region', { hotkey: 'Alt+T' }))
+
+  const ITEM_CLASS =
+    'will-change-transform rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance ' +
+    'data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -464,11 +276,6 @@
         :ref="(el) => setRegionEl(region.position, el)"
         :style="regionStyle(region)"
         class="transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-        @mouseenter="onEnter(region.position)"
-        @mouseleave="onLeave"
-        @focusin="onFocusin(region.position)"
-        @focusout="onFocusout"
-        @keydown="onRegionKeydown"
       >
         <div
           v-for="(item, indexInAll) in region.all"
@@ -479,7 +286,7 @@
           :data-removing="item.removing || null"
           :tabindex="region.live.indexOf(item) === 0 ? -1 : undefined"
           :style="toastStyle(region, item, indexInAll)"
-          class="will-change-transform rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit motion-reduce:transition-none"
+          :class="ITEM_CLASS"
         >
           <div :ref="(el) => setCardEl(item.entry.id, el)">
             <slot

@@ -1,22 +1,12 @@
 import {
   type FilteringProperty,
   operatorsOf,
-  PROPERTY_FILTER_OPERATORS,
   type PropertyFilterOperation,
   type PropertyFilterOperator,
   type PropertyFilterQuery,
   type PropertyFilterToken
 } from '../../../composables/use-collection/lib/property-filter'
-
-export type QueryLexeme = {
-  kind: 'word' | 'operator'
-  text: string
-  value: string
-  from: number
-  to: number
-  quoted: boolean
-  closed: boolean
-}
+import { lexQuery, type QueryLexeme } from './lib/query-lexer'
 
 /** A suggestion for the word at the caret in query mode; `insert` replaces that word. */
 export type PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }
@@ -57,82 +47,13 @@ export type QueryParse = {
   error: QueryError | null
 }
 
-const OPERATOR_CHARS = '!=:^<>'
-const OPERATORS_BY_LENGTH = [...PROPERTY_FILTER_OPERATORS].sort((a, b) => b.length - a.length)
-
-const isSpace = (char: string): boolean => /\s/.test(char)
-
-export function lexQuery(text: string): QueryLexeme[] {
-  const out: QueryLexeme[] = []
-  let index = 0
-  while (index < text.length) {
-    const char = text[index] as string
-    if (isSpace(char)) {
-      index += 1
-      continue
-    }
-    if (char === '"' || char === "'") {
-      const close = text.indexOf(char, index + 1)
-      const end = close === -1 ? text.length : close + 1
-      out.push({
-        kind: 'word',
-        text: text.slice(index, end),
-        value: text.slice(index + 1, close === -1 ? text.length : close),
-        from: index,
-        to: end,
-        quoted: true,
-        closed: close !== -1
-      })
-      index = end
-      continue
-    }
-    const operator = OPERATORS_BY_LENGTH.find((op) => text.startsWith(op, index))
-    if (operator) {
-      out.push({
-        kind: 'operator',
-        text: operator,
-        value: operator,
-        from: index,
-        to: index + operator.length,
-        quoted: false,
-        closed: true
-      })
-      index += operator.length
-      continue
-    }
-    let end = index
-    while (
-      end < text.length &&
-      !isSpace(text[end] as string) &&
-      !OPERATOR_CHARS.includes(text[end] as string) &&
-      text[end] !== '"' &&
-      text[end] !== "'"
-    ) {
-      end += 1
-    }
-    if (end === index) end += 1
-    const word = text.slice(index, end)
-    out.push({
-      kind: 'word',
-      text: word,
-      value: word,
-      from: index,
-      to: end,
-      quoted: false,
-      closed: true
-    })
-    index = end
-  }
-  return out
-}
-
 const connectiveOf = (lexeme: QueryLexeme | undefined): PropertyFilterOperation | null => {
   if (!lexeme || lexeme.kind !== 'word' || lexeme.quoted) return null
   const word = lexeme.value.toLowerCase()
   return word === 'and' || word === 'or' ? word : null
 }
 
-export const findProperty = (
+const findProperty = (
   properties: FilteringProperty[],
   name: string
 ): FilteringProperty | undefined => {
@@ -148,95 +69,128 @@ type Walk = QueryParse & {
   nextOperator: PropertyFilterOperator | undefined
 }
 
+type WalkState = {
+  tokens: PropertyFilterToken[]
+  connectives: PropertyFilterOperation[]
+  error: QueryError | null
+  expect: QueryRole
+  property: FilteringProperty | undefined
+  fieldName: string
+  operator: PropertyFilterOperator | undefined
+}
+
+type WalkOptions = { properties: FilteringProperty[]; freeText: boolean; openTail: boolean }
+
+const fail = (
+  state: WalkState,
+  code: QueryErrorCode,
+  lexeme: QueryLexeme,
+  params: Record<string, string | number> = {}
+): void => {
+  if (!state.error) state.error = { code, params, from: lexeme.from, to: lexeme.to }
+}
+
+const stepField = (
+  state: WalkState,
+  lexeme: QueryLexeme,
+  next: QueryLexeme | undefined,
+  options: WalkOptions
+): void => {
+  if (lexeme.kind === 'operator') {
+    fail(state, 'missingValue', lexeme, { operator: lexeme.value })
+    return
+  }
+  const known = findProperty(options.properties, lexeme.value)
+  const tailField = options.openTail && !next && !lexeme.quoted && Boolean(known)
+  if (next?.kind === 'operator' || tailField) {
+    state.fieldName = lexeme.value
+    state.property = known
+    if (!known) fail(state, 'unknownField', lexeme, { field: lexeme.value })
+    state.expect = 'operator'
+    return
+  }
+  if (!options.freeText) fail(state, 'missingOperator', lexeme, { field: lexeme.value })
+  state.tokens.push({ operator: ':', value: lexeme.value })
+  state.expect = 'connective'
+}
+
+const stepOperator = (state: WalkState, lexeme: QueryLexeme): void => {
+  const op = lexeme.value as PropertyFilterOperator
+  if (lexeme.kind !== 'operator') {
+    fail(state, 'missingOperator', lexeme, { field: state.fieldName })
+  } else if (state.property && !operatorsOf(state.property).includes(op)) {
+    fail(state, 'unknownOperator', lexeme, { operator: op, field: state.fieldName })
+  }
+  state.operator = op
+  state.expect = 'value'
+}
+
+const stepValue = (state: WalkState, lexeme: QueryLexeme): void => {
+  if (lexeme.kind === 'operator')
+    fail(state, 'missingValue', lexeme, { operator: state.operator ?? '' })
+  state.tokens.push({
+    propertyKey: state.property?.key ?? state.fieldName,
+    operator: state.operator ?? '=',
+    value: lexeme.value
+  })
+  state.property = undefined
+  state.expect = 'connective'
+}
+
+const stepConnective = (state: WalkState, lexeme: QueryLexeme): void => {
+  const connective = connectiveOf(lexeme)
+  if (connective) state.connectives.push(connective)
+  else fail(state, 'expectedConnective', lexeme, { word: lexeme.value })
+  state.expect = 'field'
+}
+
+const failIncomplete = (state: WalkState, last: QueryLexeme | undefined): void => {
+  if (!last || state.error) return
+  if (state.expect === 'operator') fail(state, 'missingOperator', last, { field: state.fieldName })
+  else if (state.expect === 'value')
+    fail(state, 'missingValue', last, { operator: state.operator ?? '' })
+  else if (state.expect === 'field')
+    fail(state, 'danglingConnective', last, { connective: last.value })
+}
+
 function walk(
   lexemes: QueryLexeme[],
   properties: FilteringProperty[],
   freeText: boolean,
   openTail = false
 ): Walk {
-  const tokens: PropertyFilterToken[] = []
-  const connectives: PropertyFilterOperation[] = []
+  const options: WalkOptions = { properties, freeText, openTail }
+  const state: WalkState = {
+    tokens: [],
+    connectives: [],
+    error: null,
+    expect: 'field',
+    property: undefined,
+    fieldName: '',
+    operator: undefined
+  }
   const roles: QueryRole[] = []
   const owners: (FilteringProperty | undefined)[] = []
-  let error: QueryError | null = null
-  let expect = 'field' as QueryRole
-  let property: FilteringProperty | undefined
-  let fieldName = ''
-  let operator: PropertyFilterOperator | undefined
-  const fail = (code: QueryErrorCode, lexeme: QueryLexeme, params = {}): void => {
-    if (!error) error = { code, params, from: lexeme.from, to: lexeme.to }
-  }
   lexemes.forEach((lexeme, index) => {
-    roles.push(expect)
-    owners.push(property)
+    roles.push(state.expect)
+    owners.push(state.property)
     if (lexeme.quoted && !lexeme.closed)
-      fail('unclosedQuote', lexeme, { position: lexeme.from + 1 })
-    if (expect === 'field') {
-      const next = lexemes[index + 1]
-      if (lexeme.kind === 'operator') {
-        fail('missingValue', lexeme, { operator: lexeme.value })
-        return
-      }
-      const tailField =
-        openTail && !next && !lexeme.quoted && Boolean(findProperty(properties, lexeme.value))
-      if (next?.kind === 'operator' || tailField) {
-        fieldName = lexeme.value
-        property = findProperty(properties, lexeme.value)
-        if (!property) fail('unknownField', lexeme, { field: lexeme.value })
-        expect = 'operator'
-        return
-      }
-      if (!freeText) fail('missingOperator', lexeme, { field: lexeme.value })
-      tokens.push({ operator: ':', value: lexeme.value })
-      expect = 'connective'
-      return
-    }
-    if (expect === 'operator') {
-      const op = lexeme.value as PropertyFilterOperator
-      if (lexeme.kind !== 'operator') {
-        fail('missingOperator', lexeme, { field: fieldName })
-      } else if (property && !operatorsOf(property).includes(op)) {
-        fail('unknownOperator', lexeme, { operator: op, field: fieldName })
-      }
-      operator = op
-      expect = 'value'
-      return
-    }
-    if (expect === 'value') {
-      if (lexeme.kind === 'operator') fail('missingValue', lexeme, { operator: operator ?? '' })
-      tokens.push({
-        propertyKey: property?.key ?? fieldName,
-        operator: operator ?? '=',
-        value: lexeme.value
-      })
-      property = undefined
-      expect = 'connective'
-      return
-    }
-    const connective = connectiveOf(lexeme)
-    if (connective) {
-      connectives.push(connective)
-      expect = 'field'
-      return
-    }
-    fail('expectedConnective', lexeme, { word: lexeme.value })
-    expect = 'field'
+      fail(state, 'unclosedQuote', lexeme, { position: lexeme.from + 1 })
+    if (state.expect === 'field') stepField(state, lexeme, lexemes[index + 1], options)
+    else if (state.expect === 'operator') stepOperator(state, lexeme)
+    else if (state.expect === 'value') stepValue(state, lexeme)
+    else stepConnective(state, lexeme)
   })
-  const last = lexemes.at(-1)
-  if (last && !error) {
-    if (expect === 'operator') fail('missingOperator', last, { field: fieldName })
-    else if (expect === 'value') fail('missingValue', last, { operator: operator ?? '' })
-    else if (expect === 'field') fail('danglingConnective', last, { connective: last.value })
-  }
+  failIncomplete(state, lexemes.at(-1))
   return {
-    tokens,
-    connectives,
-    error,
+    tokens: state.tokens,
+    connectives: state.connectives,
+    error: state.error,
     roles,
     owners,
-    next: expect,
-    nextProperty: property,
-    nextOperator: expect === 'value' ? operator : undefined
+    next: state.expect,
+    nextProperty: state.property,
+    nextOperator: state.expect === 'value' ? state.operator : undefined
   }
 }
 

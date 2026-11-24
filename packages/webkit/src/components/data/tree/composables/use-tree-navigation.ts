@@ -35,35 +35,47 @@ export interface UseTreeNavigationReturn<T> {
 const hasChildren = <T extends TreeNavigationItem<T>>(item: T): boolean =>
   item.lazy === true || (Array.isArray(item.children) && item.children.length > 0)
 
+const isParentEntry = <T extends TreeNavigationItem<T>>(
+  found: TreeNavigationEntry<T> | undefined
+): boolean => (found ? hasChildren(found.item) : false)
+
+const indexTree = <T extends TreeNavigationItem<T>>(
+  items: T[]
+): Map<string, TreeNavigationEntry<T>> => {
+  const map = new Map<string, TreeNavigationEntry<T>>()
+  const walk = (nodes: T[], level: number, parentId: string) => {
+    for (const item of nodes) {
+      map.set(item.id, { item, level, parentId })
+      if (hasChildren(item)) walk(item.children ?? [], level + 1, item.id)
+    }
+  }
+  walk(items, 1, '')
+  return map
+}
+
+const visibleIds = <T extends TreeNavigationItem<T>>(items: T[], expanded: string[]): string[] => {
+  const open = new Set(expanded)
+  const ids: string[] = []
+  const walk = (nodes: T[]) => {
+    for (const item of nodes) {
+      ids.push(item.id)
+      if (hasChildren(item) && open.has(item.id)) walk(item.children ?? [])
+    }
+  }
+  walk(items)
+  return ids
+}
+
 export function useTreeNavigation<T extends TreeNavigationItem<T>>(
   options: UseTreeNavigationOptions<T>
 ): UseTreeNavigationReturn<T> {
   const focused = ref('')
 
-  const index = computed(() => {
-    const map = new Map<string, TreeNavigationEntry<T>>()
-    const walk = (nodes: T[], level: number, parentId: string) => {
-      for (const item of nodes) {
-        map.set(item.id, { item, level, parentId })
-        if (hasChildren(item)) walk(item.children ?? [], level + 1, item.id)
-      }
-    }
-    walk(toValue(options.items), 1, '')
-    return map
-  })
+  const index = computed(() => indexTree(toValue(options.items)))
 
-  const visible = computed<readonly string[]>(() => {
-    const open = new Set(toValue(options.expanded))
-    const ids: string[] = []
-    const walk = (nodes: T[]) => {
-      for (const item of nodes) {
-        ids.push(item.id)
-        if (hasChildren(item) && open.has(item.id)) walk(item.children ?? [])
-      }
-    }
-    walk(toValue(options.items))
-    return ids
-  })
+  const visible = computed<readonly string[]>(() =>
+    visibleIds(toValue(options.items), toValue(options.expanded))
+  )
 
   const visibleSet = computed(() => new Set(visible.value))
 
@@ -92,10 +104,7 @@ export function useTreeNavigation<T extends TreeNavigationItem<T>>(
 
   const entry = (id: string) => index.value.get(id)
 
-  const isParent = (id: string) => {
-    const found = index.value.get(id)
-    return found ? hasChildren(found.item) : false
-  }
+  const isParent = (id: string) => isParentEntry(index.value.get(id))
 
   const setFocused = (id: string) => {
     focused.value = index.value.has(id) ? id : ''
@@ -115,8 +124,7 @@ export function useTreeNavigation<T extends TreeNavigationItem<T>>(
 
   const firstChildOf = (id: string) => {
     const found = index.value.get(id)
-    if (!found || !hasChildren(found.item)) return ''
-    return found.item.children?.[0]?.id ?? ''
+    return found && isParentEntry(found) ? (found.item.children?.[0]?.id ?? '') : ''
   }
 
   return {

@@ -37,9 +37,9 @@ Three roles, never more on one step:
 - **Continue with Google / GitHub** on the email step: `variant="outline"`, `size="large"`, full width, `type="button"` so they never submit the form.
 - **The primary action** at the foot of the card, `type="submit"`, full width, `size="large"`. Its label follows the step: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`. On the `sent` step it drops to `variant="secondary"` with `Return to sign in`, because nothing is left to submit.
 
-### D. The card — `Card` (required)
+### D. The card — `Card`, `Link` (required)
 
-One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it.
+One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it; their links are `Link inline`, so they take the size of the sentence and keep the underline.
 
 ### E. Card notice — `Alert` (conditional)
 
@@ -49,7 +49,7 @@ The one place every outcome lands. It sits under the card heading and above **bo
 - **401** (`IncorrectCredentials`): `danger`, no action. The fields under it are the recovery. The password is cleared and takes focus.
 - **503** (`ServiceUnavailable`) and **no response** (`Timeout`): `warning`, with **Retry** in the `#actions` slot. Severity follows certainty: a timeout is an unknown.
 - **500** (`ServerError`): `danger`, with **Retry**. Tied to no field, so where the console would toast, the card keeps it.
-- **409** (`EmailAlreadyRegistered`): `danger`, carrying the two exits as links in the default slot: Sign in or reset your password. The address stays in the field.
+- **409** (`EmailAlreadyRegistered`): no error on screen. The card answers with the same `success` Check your inbox notice as a new sign-up, so the form never tells anyone which addresses have an account (account enumeration); the server emails the owner how to sign in or reset the password.
 - **Success** (signed in, account created, password updated, link resent): `success`, no action. Sign up reads `Account created. We sent a verification link to jane.doe@example.com.`
 
 Put the copy in the default slot when it carries links; animate the entrance on a wrapper, not on the `Alert` itself.
@@ -260,10 +260,10 @@ To go live, render the block from the route that owns the session and pass what 
 - **Links:** sentence case: `Forgot your password?`, `Resend email`.
 - **Field errors:** what is wrong, with a period: `This field is required.`, `Enter a valid email address.`, `Passwords don't match.`
 - **401 notice:** `Incorrect email or password. Check both and try again.`
-- **503 notice:** says what is down and what is not lost: `Sign-in is unavailable right now. Your credentials are fine.`
+- **503 notice:** says what is down and what is not lost, never a claim the server did not check (it never read the credentials): `Sign-in is unavailable right now. What you entered is kept; retry in a few minutes.`
 - **500 notice:** says what failed and what state the user is in, code last: `Sign-in failed on our side. You are still signed out. Error 500.`
 - **Timeout notice:** names the unknown, never a failure: `The server did not answer in time. Your session may already be open.`
-- **409 notice:** the fact plus the two exits as links: `This email is already registered. Sign in or reset your password.`
+- **409 on sign-up:** never said on screen, because it tells anyone which addresses have an account. The card answers exactly as for a new address, and the email sent to the owner explains how to sign in: `Check your inbox at jane.doe@example.com to finish. If this address already has an account, the email explains how to sign in instead.`
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
 - **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
 - **Action in a notice:** `Retry`, never "Try again" (the console and assistant blocks use the same word).
@@ -303,7 +303,7 @@ To go live, render the block from the route that owns the session and pass what 
 - ServiceUnavailable: `error="service-unavailable"`; 503 on Sign in; a warning notice with Retry, credentials kept.
 - ServerError: `error="server-error"`; 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: `error="timeout"`; no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
-- EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
+- EmailAlreadyRegistered: 409 on Sign up; the same Check your inbox notice as a new address, so the screen reveals nothing.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice, then the recovery codes the API issues once: eight 8-character codes in a monospace list with Download and Copy, and an `I saved these codes` checkbox that Continue to Console waits for, so the recovery path MfaCode offers always has codes behind it.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.

@@ -34,9 +34,17 @@
   }
 
   export interface LanguageSelectProps {
-    /** Languages offered, in order: value is a BCP 47 tag, label the language named in itself (derived from the tag when omitted), and country the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). */
+    /**
+     * Languages offered, in order: value is a BCP 47 tag, label the language named in itself (derived from
+     * the tag when omitted), and country the ISO 3166-1 alpha-2 code of the flag (taken from the tag's
+     * region, else its likely region, when omitted).
+     */
     options?: LanguageSelectOption[]
-    /** Trigger look: outline is the full field (round flag and name) for forms and settings; ghost is the compact switcher (round flag and short code, no border until hover) for a header, a toolbar or a footer. */
+    /**
+     * Trigger look: outline is the full field (round flag and name) for forms and settings; ghost is the
+     * compact switcher (round flag and the BCP 47 tag in capitals, such as EN or PT-BR, no border until
+     * hover) for a header, a toolbar or a footer.
+     */
     variant?: LanguageSelectVariant
     /** Trigger text while no language is picked. Empty uses the locale catalog (`Language`). */
     placeholder?: string
@@ -53,9 +61,9 @@
   }
   const props = withDefaults(defineProps<LanguageSelectProps>(), {
     options: () => [
-      { value: 'en-US', label: 'English (United States)' },
+      { value: 'en', label: 'English' },
       { value: 'pt-BR', label: 'Português (Brasil)' },
-      { value: 'es-ES', label: 'Español (España)' }
+      { value: 'es', label: 'Español' }
     ],
     variant: 'outline',
     placeholder: '',
@@ -121,14 +129,9 @@
     selectedOption.value ? countryOf(selectedOption.value) : ''
   )
 
-  const shortCode = computed(() => {
-    const option = selectedOption.value
-    if (!option) return ''
-    const country = selectedCountry.value
-    if (!country) return option.value.split(/[-_]/)[0]?.toUpperCase() ?? ''
-    const shared = props.options.some((o) => o.value !== option.value && countryOf(o) === country)
-    return shared ? option.value.toUpperCase() : country
-  })
+  const shortCode = computed(() =>
+    (selectedOption.value?.value ?? '').replace(/_/g, '-').toUpperCase()
+  )
 
   const namers = (type: 'language' | 'region') =>
     [...new Set(['en', locale.value])].flatMap((tag) => {

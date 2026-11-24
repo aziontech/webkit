@@ -1,0 +1,8 @@
+{
+  "name": "usage-check-tools",
+  "private": true,
+  "description": "Pinned Claude Code CLI for the usage-check workflow, installed with npm ci.",
+  "dependencies": {
+    "@anthropic-ai/claude-code": "2.1.319"
+  }
+}

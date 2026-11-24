@@ -43,6 +43,17 @@
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
   const isLink = computed<boolean>(() => safeHref(props.href) !== null)
+
+  const ROOT_CLASS =
+    'group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none ' +
+    'data-[linked]:relative data-[linked]:rounded-(--shape-control) data-[linked]:after:absolute ' +
+    'data-[linked]:after:inset-x-0 data-[linked]:after:-inset-y-(--spacing-xs) data-[linked]:focus-visible:outline-2 ' +
+    'data-[linked]:focus-visible:outline-offset-(--spacing-xs) data-[linked]:focus-visible:outline-(--ring-color)'
+
+  const LINK_ARROW_CLASS =
+    'az az-arrow-up-right ms-(--spacing-2xs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
+    'motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
 </script>
 
 <template>
@@ -54,7 +65,7 @@
     :data-icon="icon ? true : null"
     :data-described="hasDescription() || null"
     :data-linked="isLink || null"
-    class="group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out motion-reduce:transition-none data-[linked]:hover:text-(--text-brand) data-[linked]:after:absolute data-[linked]:after:inset-0 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 data-[linked]:focus-visible:after:ring-inset data-[linked]:focus-visible:after:ring-(--ring-color)"
+    :class="ROOT_CLASS"
   >
     <div class="flex items-start gap-(--spacing-xs)">
       <span
@@ -68,19 +79,19 @@
       </span>
       <component
         :is="`h${headingLevel}`"
-        class="m-0 text-balance text-heading-xs"
+        class="m-0 text-balance text-heading-xs decoration-(color:--primary) decoration-2 underline-offset-4 group-data-[linked]:group-hover:underline"
       >
         {{ title }}
         <i
           v-if="isLink"
           aria-hidden="true"
-          class="az az-arrow-up-right ms-(--spacing-2xs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
+          :class="LINK_ARROW_CLASS"
         />
       </component>
     </div>
     <p
       v-if="hasDescription()"
-      class="m-0 text-pretty text-body-md text-(--text-muted)"
+      class="m-0 max-w-(--container-2xl) text-pretty text-body-md text-(--text-muted)"
     >
       <slot>{{ description }}</slot>
     </p>

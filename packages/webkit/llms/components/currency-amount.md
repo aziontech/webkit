@@ -9,7 +9,7 @@
 ## When to use
 
 - Any monetary amount in the product: a price in a table row or list cell (`small`), an amount stated on a card (`medium`), the headline figure of a pricing card (`large`).
-- An amount followed by a period or unit (`/ mon`, `/ GB`) that should read as secondary to the figure.
+- An amount followed by a period or unit (`/ month`, `/ GB`) that should read as secondary to the figure.
 
 ## Do
 
@@ -51,6 +51,11 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Right-to-left: the prefix and the value sit in one group with `dir="auto"`, so `$184.20` keeps its order on a right-to-left page; the suffix follows the page direction.
+
+## Right-to-left
+
+- The symbol and the figure sit in one `dir="ltr"` group (`currency-amount__amount`), so `$20` never flips to `20$` in a right-to-left page. The suffix stays outside the group and follows the amount in the page's reading order.
 
 ## Examples
 

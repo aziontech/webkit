@@ -8,22 +8,30 @@
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import LanguageSelect from '@aziontech/webkit/language-select'
-  import NavigationMenu from '@aziontech/webkit/navigation-menu'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
   import SkipLink from '@aziontech/webkit/skip-link'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import { computed, defineAsyncComponent, hydrateOnIdle, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
+  import { useRouteFocus } from '../composables/use-route-focus'
   import { LOCALES, messages } from '../lib/i18n'
   import { settings } from '../lib/settings'
+  import DirectionToggle from './direction-toggle.vue'
   import SearchCommand from './search-command.vue'
   import SideNav from './side-nav.vue'
+
+  const DocsSidebar = defineAsyncComponent({
+    loader: () => import('./docs-sidebar.vue'),
+    hydrate: hydrateOnIdle()
+  })
+  const HeaderNav = defineAsyncComponent({
+    loader: () => import('./header-nav.vue'),
+    hydrate: hydrateOnIdle()
+  })
 
   const route = useRoute()
   const t = messages
@@ -45,9 +53,13 @@
     () => sections.value.find((section) => route.path.startsWith(section.to))?.to ?? ''
   )
 
-  function toggleDirection() {
-    settings.dir = settings.dir === 'rtl' ? 'ltr' : 'rtl'
-  }
+  const sidebarLabel = computed(
+    () =>
+      sections.value.find((section) => section.to === activeSection.value)?.label ??
+      t.value.foundations
+  )
+
+  const announcement = useRouteFocus()
 
   watch(
     () => route.fullPath,
@@ -60,8 +72,16 @@
 <template>
   <div class="flex min-h-screen w-full flex-col">
     <SkipLink />
+    <p
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+      data-docs-announcer
+    >
+      {{ announcement }}
+    </p>
     <div class="@container sticky top-0 z-40 w-full">
-      <AppHeader :aria-label="t.navigation">
+      <AppHeader :aria-label="t.siteHeader">
         <AppHeader.Start>
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
             <div class="shrink-0 lg:hidden">
@@ -83,23 +103,11 @@
                 size="small"
               />
             </AppHeader.Brand>
-            <NavigationMenu
-              :aria-label="t.navigation"
-              class="ms-(--spacing-sm) hidden lg:flex"
-            >
-              <NavigationMenu.List>
-                <NavigationMenu.Item
-                  v-for="section in sections"
-                  :key="section.to"
-                >
-                  <NavigationMenu.Link
-                    :href="section.to"
-                    :active="activeSection === section.to"
-                    >{{ section.label }}</NavigationMenu.Link
-                  >
-                </NavigationMenu.Item>
-              </NavigationMenu.List>
-            </NavigationMenu>
+            <HeaderNav
+              :label="t.sections"
+              :sections="sections"
+              :active="activeSection"
+            />
           </div>
         </AppHeader.Start>
         <AppHeader.Center />
@@ -117,17 +125,9 @@
               :aria-label="t.language"
             />
           </div>
-          <Tooltip :content="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
-            <IconButton
-              :icon="settings.dir === 'rtl' ? 'az az-align-left' : 'az az-align-right'"
-              variant="outline"
-              size="medium"
-              :aria-label="t.rightToLeft"
-              :aria-pressed="settings.dir === 'rtl'"
-              class="shrink-0"
-              @click="toggleDirection"
-            />
-          </Tooltip>
+          <div class="hidden shrink-0 sm:block">
+            <DirectionToggle />
+          </div>
           <div class="hidden shrink-0 sm:block">
             <ThemeSwitcher
               v-model="settings.theme"
@@ -148,16 +148,9 @@
     </div>
 
     <div class="relative flex min-h-0 flex-1">
-      <aside
-        class="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-(--container-2xs) shrink-0 lg:flex"
-      >
-        <Sidebar
-          :aria-label="t.navigation"
-          class="w-full"
-        >
-          <SideNav />
-        </Sidebar>
-      </aside>
+      <div class="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-(--container-2xs) shrink-0 lg:flex">
+        <DocsSidebar :label="sidebarLabel" />
+      </div>
 
       <div class="flex min-w-0 flex-1 flex-col">
         <main
@@ -203,7 +196,7 @@
     <Drawer
       v-model:open="navOpen"
       dismissible
-      :side="settings.dir === 'rtl' ? 'end' : 'start'"
+      side="start"
       size="small"
     >
       <DrawerContent>
@@ -223,10 +216,22 @@
                 size="medium"
               />
             </div>
-            <ThemeSwitcher
-              v-model="settings.theme"
-              :aria-label="t.theme"
-            />
+            <div
+              class="flex flex-wrap items-center gap-(--spacing-xs)"
+              data-docs-drawer-settings
+            >
+              <LanguageSelect
+                v-model="settings.locale"
+                variant="outline"
+                :options="LOCALES"
+                :aria-label="t.language"
+              />
+              <DirectionToggle />
+              <ThemeSwitcher
+                v-model="settings.theme"
+                :aria-label="t.theme"
+              />
+            </div>
             <SideNav />
           </div>
         </PanelBody>

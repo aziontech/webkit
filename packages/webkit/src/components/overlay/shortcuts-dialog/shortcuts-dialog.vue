@@ -70,12 +70,20 @@
     :data-testid="testId"
     size="medium"
   >
-    <DialogTrigger v-if="$slots['trigger']">
+    <DialogTrigger
+      :data-testid="`${testId}__trigger`"
+      v-if="$slots['trigger']"
+    >
       <slot name="trigger" />
     </DialogTrigger>
-    <DialogContent v-bind="contentAttrs">
+    <DialogContent
+      :data-testid="`${testId}__panel`"
+      v-bind="contentAttrs"
+    >
       <PanelHeader class="w-full">
-        <DialogTitle>{{ title || t('shortcutsDialog.title') }}</DialogTitle>
+        <DialogTitle :data-testid="`${testId}__title`">{{
+          title || t('shortcutsDialog.title')
+        }}</DialogTitle>
       </PanelHeader>
       <PanelBody>
         <EmptyState

@@ -31,6 +31,18 @@ export const toMenuFields = (fields: TableFilterField[]): FilterMenuField[] =>
 const toTime = (value: string | number | undefined): Date | null =>
   value === undefined || value === '' ? null : new Date(Number(value))
 
+const isScalar = (value: TableFilterValue): value is string | number =>
+  !Array.isArray(value) && typeof value !== 'boolean'
+
+const toMenuValues = (filter: TableAppliedFilter): FilterMenuValue[] | null => {
+  const { operator, value } = filter
+  if (operator === 'in' && Array.isArray(value)) return [...value]
+  if ((operator === 'eq' || operator === 'within') && isScalar(value)) return [value]
+  if (operator === 'between' && Array.isArray(value))
+    return [{ start: toTime(value[0]), end: toTime(value[1]) }]
+  return null
+}
+
 export const toMenuModel = (
   applied: TableAppliedFilter[],
   fields: FilterMenuField[]
@@ -38,14 +50,8 @@ export const toMenuModel = (
   const model: FilterMenuModel = {}
   for (const filter of applied) {
     if (!fields.some((field) => field.id === filter.field)) continue
-    const { operator, value } = filter
-    if (operator === 'in' && Array.isArray(value)) model[filter.field] = [...value]
-    else if (operator === 'eq' && !Array.isArray(value) && typeof value !== 'boolean')
-      model[filter.field] = [value]
-    else if (operator === 'within' && !Array.isArray(value) && typeof value !== 'boolean')
-      model[filter.field] = [value]
-    else if (operator === 'between' && Array.isArray(value))
-      model[filter.field] = [{ start: toTime(value[0]), end: toTime(value[1]) }]
+    const values = toMenuValues(filter)
+    if (values) model[filter.field] = values
   }
   return model
 }

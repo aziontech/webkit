@@ -224,6 +224,19 @@ Each variant is the same screen in another state: `get_block("state/state-first-
 
   const methods = ['github', 'cli', 'scratch']
   const promos = ['catalog', 'agent']
+
+  const CARD_BODY_CLASS = 'flex w-full flex-col items-start gap-(--spacing-md) text-start'
+
+  const MARK_STACK_CLASS =
+    'flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover/item:[&>*+*]:-ms-1.5 ' +
+    'group-focus-visible/item:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none'
+
+  const MARK_TILE_CLASS =
+    'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)'
+
+  const EXTERNAL_ICON_CLASS =
+    'az az-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none group-hover/item:text-(--text-default)'
 </script>
 
 <template>
@@ -269,14 +282,16 @@ Each variant is the same screen in another state: `get_block("state/state-first-
                 />
               </Item.Media>
               <Item.Content>
-                <Skeleton
-                  width="8rem"
-                  height="0.875rem"
-                />
-                <Skeleton
-                  width="16rem"
-                  height="0.75rem"
-                />
+                <div class="flex flex-col gap-(--spacing-2xs)">
+                  <Skeleton
+                    width="8rem"
+                    height="0.875rem"
+                  />
+                  <Skeleton
+                    width="16rem"
+                    height="0.75rem"
+                  />
+                </div>
               </Item.Content>
               <Item.Actions>
                 <Skeleton
@@ -431,65 +446,59 @@ Each variant is the same screen in another state: `get_block("state/state-first-
         class="w-full"
       >
         <template #default>
-          <a
-            href="https://www.azion.com/en/templates/"
+          <Item
+            href="https://www.azion.com/en/documentation/platform/marketplace/templates/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+            class="h-full"
           >
-            <span
-              class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
-              aria-hidden="true"
-            >
+            <span :class="CARD_BODY_CLASS">
               <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                :class="MARK_STACK_CLASS"
+                aria-hidden="true"
               >
-                <i
-                  class="az-color az-nextjs text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
+                <span :class="MARK_TILE_CLASS">
+                  <i
+                    class="az-color az-nextjs text-body-lg leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span :class="MARK_TILE_CLASS">
+                  <i
+                    class="az-color az-react text-body-lg leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span :class="MARK_TILE_CLASS">
+                  <i
+                    class="az-color az-vue text-body-lg leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span :class="MARK_TILE_CLASS">
+                  <i
+                    class="az-color az-svelte text-body-lg leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
               </span>
-              <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  class="az-color az-react text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-              <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  class="az-color az-vue text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-              <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  class="az-color az-svelte text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-            </span>
 
-            <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <span class="text-heading-2xs text-(--text-default)"
-                >Start from a Catalog template</span
-              >
-              <span class="text-pretty text-body-sm text-(--text-muted)"
-                >Deploy a framework starter and the resource that serves it, in one step.</span
-              >
-            </span>
+              <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                <span class="text-heading-2xs text-(--text-default)"
+                  >Start from a Catalog template</span
+                >
+                <span class="text-pretty text-body-sm text-(--text-muted)"
+                  >Deploy a framework starter and the resource that serves it, in one step.</span
+                >
+              </span>
 
-            <i
-              class="az az-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
-              aria-hidden="true"
-            />
-            <span class="sr-only">(opens in a new tab)</span>
-          </a>
+              <i
+                :class="EXTERNAL_ICON_CLASS"
+                aria-hidden="true"
+              />
+              <span class="sr-only">(opens in a new tab)</span>
+            </span>
+          </Item>
         </template>
       </Card>
 
@@ -498,36 +507,38 @@ Each variant is the same screen in another state: `get_block("state/state-first-
         class="w-full"
       >
         <template #default>
-          <a
+          <Item
             :href="agentSetupHref"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+            class="h-full"
           >
-            <span
-              class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
-              aria-hidden="true"
-            >
+            <span :class="CARD_BODY_CLASS">
               <span
-                v-for="agent in agentMarks"
-                :key="agent.name"
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                :class="MARK_STACK_CLASS"
+                aria-hidden="true"
               >
-                <ThirdPartyLogo
-                  :name="agent.name"
-                  :src="agent.src"
-                  :variant="agent.mono ? 'current' : 'color'"
-                  decorative
-                  size="small"
-                />
+                <span
+                  v-for="agent in agentMarks"
+                  :key="agent.name"
+                  :class="MARK_TILE_CLASS"
+                >
+                  <ThirdPartyLogo
+                    :name="agent.name"
+                    :src="agent.src"
+                    :variant="agent.mono ? 'current' : 'color'"
+                    decorative
+                    size="small"
+                  />
+                </span>
+              </span>
+
+              <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                <span class="text-heading-2xs text-(--text-default)">Set up your coding agent</span>
+                <span class="text-pretty text-body-sm text-(--text-muted)"
+                  >Give your editor a prompt that teaches it to build and deploy here.</span
+                >
               </span>
             </span>
-
-            <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <span class="text-heading-2xs text-(--text-default)">Set up your coding agent</span>
-              <span class="text-pretty text-body-sm text-(--text-muted)"
-                >Give your editor a prompt that teaches it to build and deploy here.</span
-              >
-            </span>
-          </a>
+          </Item>
         </template>
       </Card>
     </div>

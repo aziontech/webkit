@@ -48,12 +48,19 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow reading the wall clock (`Date.now()`, `new Date()` with no argument) while a component renders: at setup, in a `computed` getter or in the template. The server and the browser render different text, so hydration mismatches across a minute or day boundary and a copied example is not deterministic.'
+        'Disallow reading the wall clock (`Date.now()`, `new Date()` with no argument) while a ' +
+        'component renders: at setup, in a `computed` getter or in the template. The server and ' +
+        'the browser render different text, so hydration mismatches across a minute or day ' +
+        'boundary and a copied example is not deterministic.'
     },
     schema: [],
     messages: {
       clock:
-        '`{{call}}` reads the wall clock while the component renders, so the server and the browser can render different text (a hydration mismatch across a minute or day boundary). Count sample dates from a fixed reference (`const NOW = Date.UTC(2026, 10, 10, 12)`), give relative times that reference through `<ConfigProvider :now="NOW">`, and read the real clock only in `onMounted` or an event handler.'
+        '`{{call}}` reads the wall clock while the component renders, so the server and the ' +
+        'browser can render different text (a hydration mismatch across a minute or day ' +
+        'boundary). Count sample dates from a fixed reference (`const NOW = Date.UTC(2026, 10, ' +
+        '10, 12)`), give relative times that reference through `<ConfigProvider :now="NOW">`, ' +
+        'and read the real clock only in `onMounted` or an event handler.'
     }
   },
   create(context) {

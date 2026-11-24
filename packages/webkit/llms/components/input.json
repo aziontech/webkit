@@ -66,7 +66,7 @@
    "type": "boolean | undefined",
    "default": "undefined",
    "required": "false",
-   "doc": "Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck=\"false\"` on every field."
+   "doc": "Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains; `false` also sets `autocapitalize=\"none\"` and `autocorrect=\"off\"`, so a phone does not capitalize a case-sensitive key (a passed attribute wins). Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck=\"false\"` on every field."
   },
   {
    "name": "size",

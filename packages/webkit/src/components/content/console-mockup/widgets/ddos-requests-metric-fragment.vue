@@ -1,12 +1,9 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Tag from '../../tag/tag.vue'
-  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import type { MockupCursorTarget } from '../composables/use-mockup-cursor'
+  import { useMockupFrames } from '../composables/use-mockup-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
-  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
 
   defineOptions({ name: 'DdosRequestsMetricFragment' })
 
@@ -18,9 +15,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const SERIES = [
     1184, 1212, 1236, 1198, 1251, 1274, 1229, 1262, 1305, 1288, 1241, 1276, 1310, 1295, 1268, 18412,
@@ -62,195 +56,152 @@
     { cursor: PEAK_POINT, tip: true, forward: 640, back: 420 }
   ]
 
-  const LAST = FRAMES.length - 1
+  const { frame } = useMockupFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered,
+    stepOnTouch: true
+  })
 
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-  const frame = computed(() => FRAMES[step.value])
-
-  const stageEl = ref<globalThis.HTMLElement | null>(null)
-
-  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value) {
-      step.value = target
-      return
-    }
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onScopeDispose(halt)
+  const PEAK_TOOLTIP_CLASS =
+    'absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) ' +
+    'py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance ' +
+    'data-[state=open]:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupFragment
     shell="legacy"
-    fade="bottom"
     class="[--console-mockup-fade-start:86%]"
-    :chrome="false"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    stage-class="py-(--spacing-xs)"
+    :cursor="frame.cursor"
+    cursor-name="Alex"
   >
-    <div
-      ref="stageEl"
-      class="relative py-(--spacing-xs)"
-    >
-      <ConsoleMockupShellItem :order="0">
-        <div
-          class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
-        >
-          <span class="flex items-center gap-(--spacing-xs)">
+    <ConsoleMockupShellItem :order="0">
+      <div
+        class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
+      >
+        <span class="flex items-center gap-(--spacing-xs)">
+          <Tag
+            icon="az az-azion"
+            severity="neutral"
+            size="small"
+          />
+          <span class="truncate text-label-md text-(--text-default)">
+            Total Requests per Second
+          </span>
+        </span>
+
+        <span class="flex flex-col gap-(--spacing-sm)">
+          <span class="text-body-xs text-(--text-muted)">
+            Average of requests per second made from customers to your domain. Displays the average
+            number of requests per second.
+          </span>
+          <span class="flex">
             <Tag
-              icon="az az-azion"
-              severity="neutral"
+              label="Sum"
+              icon="az az-calculator"
+              severity="info"
               size="small"
             />
-            <span class="truncate text-label-md text-(--text-default)">
-              Total Requests per Second
-            </span>
           </span>
+        </span>
 
-          <span class="flex flex-col gap-(--spacing-sm)">
-            <span class="text-body-xs text-(--text-muted)">
-              Average of requests per second made from customers to your domain. Displays the
-              average number of requests per second.
-            </span>
-            <span class="flex">
-              <Tag
-                label="Sum"
-                icon="az az-calculator"
-                severity="info"
-                size="small"
-              />
-            </span>
-          </span>
-
-          <ConsoleMockupShellItem :order="1">
-            <div class="flex flex-col gap-(--spacing-sm)">
-              <div class="flex gap-(--spacing-xs)">
-                <span class="flex h-28 shrink-0 flex-col justify-between">
-                  <span
-                    v-for="tick in TICKS"
-                    :key="tick"
-                    class="text-body-xs text-(--text-muted)"
-                  >
-                    {{ tick }}
-                  </span>
-                </span>
-                <div class="relative h-28 min-w-0 flex-1">
-                  <svg
-                    :viewBox="`0 0 ${WIDTH} ${HEIGHT}`"
-                    preserveAspectRatio="none"
-                    class="absolute inset-0 size-full overflow-visible"
-                    aria-hidden="true"
-                  >
-                    <line
-                      v-for="row in 3"
-                      :key="row"
-                      x1="0"
-                      :x2="WIDTH"
-                      :y1="((row - 1) / 2) * HEIGHT"
-                      :y2="((row - 1) / 2) * HEIGHT"
-                      vector-effect="non-scaling-stroke"
-                      class="stroke-(--border-default)"
-                    />
-                    <polygon
-                      :points="area"
-                      class="fill-[color-mix(in_srgb,var(--chart-series-1)_16%,transparent)]"
-                    />
-                    <polyline
-                      :points="line"
-                      fill="none"
-                      stroke-width="2"
-                      stroke-linejoin="round"
-                      vector-effect="non-scaling-stroke"
-                      class="stroke-(--chart-series-1)"
-                    />
-                    <line
-                      :x1="x(PEAK)"
-                      :x2="x(PEAK)"
-                      y1="0"
-                      :y2="HEIGHT"
-                      :data-state="frame.tip ? 'open' : 'closed'"
-                      vector-effect="non-scaling-stroke"
-                      class="stroke-(--text-muted) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
-                    />
-                  </svg>
-
-                  <span
-                    :style="peakStyle"
-                    data-cursor="peak"
-                    class="absolute size-2 -translate-1/2"
-                  />
-
-                  <span
-                    :style="peakStyle"
-                    :data-state="frame.tip ? 'open' : 'closed'"
-                    class="absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
-                  >
-                    <span class="text-label-sm text-(--text-default)">
-                      Oct 16, 2026, 02:02:40 PM
-                    </span>
-                    <span class="flex items-center gap-(--spacing-xs)">
-                      <span class="size-2 rounded-full bg-(--chart-series-1)" />
-                      <span class="text-body-xs text-(--text-muted)">
-                        Edge Requests Total Per Second
-                      </span>
-                      <span class="text-label-sm text-(--text-default)">48,213</span>
-                    </span>
-                  </span>
-                </div>
-              </div>
-
-              <span class="flex justify-between ps-(--spacing-xl)">
+        <ConsoleMockupShellItem :order="1">
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <div class="flex gap-(--spacing-xs)">
+              <span class="flex h-28 shrink-0 flex-col justify-between">
                 <span
-                  v-for="time in TIMES"
-                  :key="time"
+                  v-for="tick in TICKS"
+                  :key="tick"
                   class="text-body-xs text-(--text-muted)"
                 >
-                  {{ time }}
+                  {{ tick }}
                 </span>
               </span>
+              <div class="relative h-28 min-w-0 flex-1">
+                <svg
+                  :viewBox="`0 0 ${WIDTH} ${HEIGHT}`"
+                  preserveAspectRatio="none"
+                  class="absolute inset-0 size-full overflow-visible"
+                  aria-hidden="true"
+                >
+                  <line
+                    v-for="row in 3"
+                    :key="row"
+                    x1="0"
+                    :x2="WIDTH"
+                    :y1="((row - 1) / 2) * HEIGHT"
+                    :y2="((row - 1) / 2) * HEIGHT"
+                    vector-effect="non-scaling-stroke"
+                    class="stroke-(--border-default)"
+                  />
+                  <polygon
+                    :points="area"
+                    class="fill-[color-mix(in_srgb,var(--chart-series-1)_16%,transparent)]"
+                  />
+                  <polyline
+                    :points="line"
+                    fill="none"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                    vector-effect="non-scaling-stroke"
+                    class="stroke-(--chart-series-1)"
+                  />
+                  <line
+                    :x1="x(PEAK)"
+                    :x2="x(PEAK)"
+                    y1="0"
+                    :y2="HEIGHT"
+                    :data-state="frame.tip ? 'open' : 'closed'"
+                    vector-effect="non-scaling-stroke"
+                    class="stroke-(--text-muted) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
+                  />
+                </svg>
 
-              <span class="flex items-center justify-center gap-(--spacing-xs)">
-                <span class="size-2 rounded-full bg-(--chart-series-1)" />
-                <span class="text-body-xs text-(--text-muted)">
-                  Edge Requests Total Per Second
+                <span
+                  :style="peakStyle"
+                  data-cursor="peak"
+                  class="absolute size-2 -translate-1/2"
+                />
+
+                <span
+                  :style="peakStyle"
+                  :data-state="frame.tip ? 'open' : 'closed'"
+                  :class="PEAK_TOOLTIP_CLASS"
+                >
+                  <span class="text-label-sm text-(--text-default)">
+                    Oct 16, 2026, 02:02:40 PM
+                  </span>
+                  <span class="flex items-center gap-(--spacing-xs)">
+                    <span class="size-2 rounded-full bg-(--chart-series-1)" />
+                    <span class="text-body-xs text-(--text-muted)">
+                      Edge Requests Total Per Second
+                    </span>
+                    <span class="text-label-sm text-(--text-default)">48,213</span>
+                  </span>
                 </span>
-              </span>
+              </div>
             </div>
-          </ConsoleMockupShellItem>
-        </div>
-      </ConsoleMockupShellItem>
 
-      <MockupCursor
-        name="Alex"
-        :x="position.x"
-        :y="position.y"
-        :pressed="false"
-      />
-    </div>
-  </ConsoleMockupShell>
+            <span class="flex justify-between ps-(--spacing-xl)">
+              <span
+                v-for="time in TIMES"
+                :key="time"
+                class="text-body-xs text-(--text-muted)"
+              >
+                {{ time }}
+              </span>
+            </span>
+
+            <span class="flex items-center justify-center gap-(--spacing-xs)">
+              <span class="size-2 rounded-full bg-(--chart-series-1)" />
+              <span class="text-body-xs text-(--text-muted)"> Edge Requests Total Per Second </span>
+            </span>
+          </div>
+        </ConsoleMockupShellItem>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupFragment>
 </template>

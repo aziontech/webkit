@@ -28,9 +28,9 @@ const MATH_FUNCTION = /\b(calc|min|max|clamp)\(/i
 
 const toPosix = (p) => p.split(sep).join('/')
 
-export const STYLELINT_PATTERN = '**/*.{css,scss,vue}'
+const STYLELINT_PATTERN = '**/*.{css,scss,vue}'
 
-export function stylelintRoot(projectDir) {
+function stylelintRoot(projectDir) {
   return existsSync(join(projectDir, 'src')) ? 'src' : '.'
 }
 
@@ -39,7 +39,7 @@ function pattern(projectDir) {
   return root === '.' ? STYLELINT_PATTERN : `${root}/${STYLELINT_PATTERN}`
 }
 
-export function hasStylelintConfig(projectDir) {
+function hasStylelintConfig(projectDir) {
   if (firstExisting(projectDir, STYLELINT_CONFIG_CANDIDATES)) return true
   try {
     return Boolean(JSON.parse(readFileSync(join(projectDir, 'package.json'), 'utf8')).stylelint)
@@ -60,16 +60,48 @@ function parseReport(text) {
 const stripRuleSuffix = (text, rule) =>
   rule && text.endsWith(` (${rule})`) ? text.slice(0, -rule.length - 3) : text
 
+function resultFindings(projectDir, result) {
+  const file = toPosix(relative(projectDir, result.source))
+  const warnings = (result.warnings || []).map((w) => ({
+    source: 'stylelint',
+    severity: w.severity === 'error' ? 'error' : 'warn',
+    file,
+    line: w.line,
+    rule: w.rule,
+    message: stripRuleSuffix(w.text, w.rule)
+  }))
+  const invalid = (result.invalidOptionWarnings || []).map((w) => ({
+    source: 'stylelint',
+    severity: 'error',
+    file,
+    message: w.text
+  }))
+  return [...warnings, ...invalid]
+}
+
+function noReport(proc) {
+  const detail = (proc.stderr || proc.stdout || '').trim().split('\n')[0]
+  return {
+    ran: false,
+    reason: `Stylelint produced no JSON report (exit ${proc.status})${detail ? `: ${detail}` : ''}`,
+    findings: []
+  }
+}
+
+function stylelintBin(projectDir) {
+  try {
+    return resolvePackageBin(projectDir, 'stylelint')
+  } catch {
+    return null
+  }
+}
+
 export function stylelintFindings(projectDir) {
   if (!hasStylelintConfig(projectDir)) {
     return { ran: false, reason: 'no Stylelint config', findings: [] }
   }
-  let cmd
-  try {
-    cmd = resolvePackageBin(projectDir, 'stylelint')
-  } catch {
-    return { ran: false, reason: 'Stylelint is not installed', findings: [] }
-  }
+  const cmd = stylelintBin(projectDir)
+  if (!cmd) return { ran: false, reason: 'Stylelint is not installed', findings: [] }
   const proc = spawnSync(
     cmd.command,
     [...cmd.prefix, pattern(projectDir), '--allow-empty-input', '--formatter', 'json'],
@@ -77,32 +109,8 @@ export function stylelintFindings(projectDir) {
   )
   if (proc.error) return { ran: false, reason: proc.error.message, findings: [] }
   const results = parseReport(proc.stdout) ?? parseReport(proc.stderr)
-  if (!results) {
-    const detail = (proc.stderr || proc.stdout || '').trim().split('\n')[0]
-    return {
-      ran: false,
-      reason: `Stylelint produced no JSON report (exit ${proc.status})${detail ? `: ${detail}` : ''}`,
-      findings: []
-    }
-  }
-  const findings = []
-  for (const result of results) {
-    const file = toPosix(relative(projectDir, result.source))
-    for (const w of result.warnings || []) {
-      findings.push({
-        source: 'stylelint',
-        severity: w.severity === 'error' ? 'error' : 'warn',
-        file,
-        line: w.line,
-        rule: w.rule,
-        message: stripRuleSuffix(w.text, w.rule)
-      })
-    }
-    for (const w of result.invalidOptionWarnings || []) {
-      findings.push({ source: 'stylelint', severity: 'error', file, message: w.text })
-    }
-  }
-  return { ran: true, findings }
+  if (!results) return noReport(proc)
+  return { ran: true, findings: results.flatMap((result) => resultFindings(projectDir, result)) }
 }
 
 function styleFiles(dir, out = []) {

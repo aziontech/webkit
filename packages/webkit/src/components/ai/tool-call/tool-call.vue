@@ -5,6 +5,7 @@
   import * as en from '../../../locales/en'
   import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
+  import ToolCallHeading from './parts/tool-call-heading.vue'
 
   export type ToolCallStatus =
     'pending' | 'streaming' | 'running' | 'success' | 'error' | 'canceled' | 'denied'
@@ -19,7 +20,11 @@
     name: string
     /** What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. */
     title?: string
-    /** `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). */
+    /**
+     * `pending` waits for authorization, `streaming` receives its arguments, `running` is in
+     * flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the
+     * reader refused it).
+     */
     status?: ToolCallStatus
     /** Initial open state when uncontrolled; details start collapsed. */
     defaultOpen?: boolean
@@ -61,6 +66,11 @@
   function toggle(): void {
     open.value = !isOpen.value
   }
+
+  const TRIGGER_CLASS =
+    'flex min-h-10 min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -69,66 +79,44 @@
     :data-testid="testId"
     :data-status="status"
     :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
-    class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="flex w-full flex-col gap-(--spacing-2xs)"
   >
-    <div class="flex min-h-10 items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)">
+    <div class="flex min-h-10 items-center gap-(--spacing-sm)">
       <button
         v-if="expandable()"
         type="button"
         :aria-expanded="isOpen ? 'true' : 'false'"
         :aria-controls="panelId"
         :data-testid="`${testId}__trigger`"
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        :class="TRIGGER_CLASS"
         @click="toggle"
       >
         <i
           class="az az-wrench shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
-        <span
-          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
-        >
-          <span
-            v-if="title"
-            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
-          >
-            {{ title }}
-          </span>
-          <code
-            dir="ltr"
-            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
-            >{{ name }}</code
-          >
-        </span>
+        <ToolCallHeading
+          :title="title"
+          :name="name"
+        />
         <i
           :data-state="isOpen ? 'open' : 'closed'"
-          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-[rotate] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </button>
       <div
         v-else
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-muted)"
       >
         <i
           class="az az-wrench shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
-        <span
-          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
-        >
-          <span
-            v-if="title"
-            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
-          >
-            {{ title }}
-          </span>
-          <code
-            dir="ltr"
-            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
-            >{{ name }}</code
-          >
-        </span>
+        <ToolCallHeading
+          :title="title"
+          :name="name"
+        />
       </div>
       <span
         role="status"
@@ -147,7 +135,7 @@
       v-show="isOpen"
       :id="panelId"
       :data-testid="`${testId}__details`"
-      class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+      class="flex flex-col gap-(--spacing-sm) ms-(--spacing-xs) border-s border-(--border-default) ps-(--spacing-md) pb-(--spacing-xs)"
     >
       <section
         v-if="slots.input"

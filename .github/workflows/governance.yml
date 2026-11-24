@@ -26,6 +26,8 @@ jobs:
       canary: ${{ steps.filter.outputs.canary }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         id: filter
@@ -36,6 +38,7 @@ jobs:
               - 'packages/webkit-mcp/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
+              - '.syncpackrc.json'
             tests:
               - 'packages/webkit/**'
             visual:
@@ -60,6 +63,26 @@ jobs:
               - '.prettierignore'
               - '.github/workflows/governance.yml'
 
+      - name: Install actionlint and zizmor (pinned release binaries, checksum verified)
+        env:
+          ACTIONLINT_VERSION: 1.7.12
+          ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+          ZIZMOR_VERSION: 1.32.0
+          ZIZMOR_SHA256: bb110cc765eca9cd7efb2e284a956be5974c60027b0970f16397d86208a9957b
+        run: |
+          bin="$RUNNER_TEMP/workflow-linters"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/actionlint.tar.gz" "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          curl -fsSL -o "$RUNNER_TEMP/zizmor.tar.gz" "https://github.com/zizmorcore/zizmor/releases/download/v${ZIZMOR_VERSION}/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+          echo "${ACTIONLINT_SHA256}  $RUNNER_TEMP/actionlint.tar.gz" | sha256sum -c -
+          echo "${ZIZMOR_SHA256}  $RUNNER_TEMP/zizmor.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$bin" actionlint
+          tar -xzf "$RUNNER_TEMP/zizmor.tar.gz" -C "$bin" zizmor
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Lint the workflows (actionlint, zizmor)
+        run: npm run check:workflows
+
   security:
     name: Security scans
     needs: changes
@@ -67,6 +90,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -90,10 +115,11 @@ jobs:
           base: ${{ github.event.repository.default_branch }}
           extra_args: --only-verified
 
-      - name: Check unused dependencies
-        run: npx depcheck --ignores="@types/*,eslint-*"
-        working-directory: packages/webkit
-        continue-on-error: true
+      - name: Check unused files, exports and dependencies
+        run: pnpm run check:unused
+
+      - name: Check every package uses one version of each shared dependency and the lockfile has no duplicate
+        run: pnpm run check:versions
 
   lint-canaries:
     name: Lint canaries (broken samples must stay broken)
@@ -102,6 +128,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -125,6 +153,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -141,6 +171,9 @@ jobs:
       - name: Run ESLint (zero warnings policy)
         run: pnpm run lint:webkit
 
+      - name: Quality lint — no line over 200 characters and the full accessibility lint in components, blocks and examples (no baseline)
+        run: pnpm --filter @aziontech/webkit run lint:quality
+
       - name: Run Stylelint
         run: pnpm run lint:webkit:style
 
@@ -154,6 +187,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -189,6 +224,8 @@ jobs:
     if: needs.changes.outputs.webkit == 'true'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -213,14 +250,19 @@ jobs:
         run: pnpm run check:size
         working-directory: packages/webkit
 
+      - name: Package lint — publint on the packed theme, icons and webkit, arethetypeswrong on theme (esm-only) and icons
+        run: pnpm --filter @aziontech/webkit run check:package-lint
+
   site:
     name: Build docs site and demos
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
     if: needs.changes.outputs.visual == 'true'
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -235,7 +277,26 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build the docs site (every route prerendered)
+        env:
+          DOCS_SOURCE_REF: ${{ github.event.pull_request.head.sha }}
         run: pnpm build:docs
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/docs
+
+      - name: Docs smoke test — every route loads without a console error, axe in light and dark finds no violation
+        run: pnpm test:docs:smoke
+
+      - name: Docs shell test — landmarks, focus on navigation, drawer, outline, touch sizes, phone search
+        run: pnpm test:docs:shell
 
       - name: Check that every docs link resolves
         run: pnpm check:docs:links
@@ -243,8 +304,38 @@ jobs:
       - name: Check that no docs page loads the Monaco editor up front
         run: pnpm check:docs:editor-chunks
 
+      - name: Install lychee (pinned release binary, checksum verified)
+        env:
+          LYCHEE_VERSION: 0.24.2
+          LYCHEE_SHA256: 73657a111819a30c47c08352896796f23d64e4eb2b3ed39b6d32149241566fc5
+        run: |
+          bin="$RUNNER_TEMP/lychee"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/lychee.tar.gz" "https://github.com/lycheeverse/lychee/releases/download/lychee-v${LYCHEE_VERSION}/lychee-x86_64-unknown-linux-musl.tar.gz"
+          echo "${LYCHEE_SHA256}  $RUNNER_TEMP/lychee.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/lychee.tar.gz" -C "$bin" --strip-components=1 lychee-x86_64-unknown-linux-musl/lychee
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Check that every external docs link resolves (lychee; bot-blocking hosts may answer 403 or 429)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: pnpm --filter @aziontech/webkit-docs run check:external-links
+
       - name: Build the demos
         run: pnpm build:demos
+
+      - name: Lighthouse — accessibility 100, LCP at most 2.5 s, CLS at most 0.1, TBT at most 200 ms (docs home, one component page, one demo)
+        env:
+          LIGHTHOUSE_OUT: ${{ runner.temp }}/lighthouse
+        run: pnpm --filter @aziontech/webkit-docs run check:lighthouse
+
+      - name: Upload the Lighthouse reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: lighthouse
+          path: ${{ runner.temp }}/lighthouse/
+          retention-days: 7
 
       - name: Upload the built sites for the visual shards
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -263,8 +354,9 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Setup pnpm
@@ -362,6 +454,30 @@ jobs:
       - name: No new look-alike components — two components that do the same job without reusing each other (ratcheted by a baseline)
         run: pnpm --filter @aziontech/webkit run check:look-alikes
 
+      - name: No copy-pasted code in components or inside a block (jscpd, no baseline)
+        run: pnpm --filter @aziontech/webkit run check:duplication
+
+      - name: Maintainability — no file, script block, function, line, prop or model count over the CODE_QUALITY.md 3.1 limits (no baseline)
+        run: pnpm --filter @aziontech/webkit run check:maintainability
+
+      - name: Type assertions — no as never or as unknown as, and the assertion count does not grow
+        run: pnpm --filter @aziontech/webkit run check:assertions
+
+      - name: Install typos (pinned release binary, checksum verified)
+        env:
+          TYPOS_VERSION: 1.52.2
+          TYPOS_SHA256: 3b13d1291281d39d01822e54035636487a7a0f228e70097899b1e33aeb0e7e93
+        run: |
+          bin="$RUNNER_TEMP/typos"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/typos.tar.gz" "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          echo "${TYPOS_SHA256}  $RUNNER_TEMP/typos.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/typos.tar.gz" -C "$bin" ./typos
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Spelling — no spelling mistake in code, docs or identifiers (typos, words in _typos.toml)
+        run: pnpm run check:spelling
+
       - name: Size budgets only ratchet down (a raise needs a Budget-raise line in the PR body)
         run: pnpm --filter @aziontech/webkit run check:size-ratchet
         env:
@@ -384,6 +500,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -408,6 +526,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -435,6 +555,8 @@ jobs:
         shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -481,6 +603,8 @@ jobs:
         shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -542,6 +666,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -588,7 +713,21 @@ jobs:
     name: Governance Gate
     runs-on: ubuntu-latest
     needs:
-      [changes, security, lint-canaries, lint, types, build, site, toolkit, smoke, tests, visual]
+      [
+        changes,
+        security,
+        lint-canaries,
+        lint,
+        types,
+        build,
+        site,
+        toolkit,
+        smoke,
+        consumer-types,
+        tests,
+        visual,
+        visual-review
+      ]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -603,8 +742,10 @@ jobs:
             [site]="${{ needs.site.result }}"
             [toolkit]="${{ needs.toolkit.result }}"
             [smoke]="${{ needs.smoke.result }}"
+            [consumer-types]="${{ needs.consumer-types.result }}"
             [tests]="${{ needs.tests.result }}"
             [visual]="${{ needs.visual.result }}"
+            [visual-review]="${{ needs.visual-review.result }}"
           )
           failed=0
           for job in "${!results[@]}"; do

@@ -5,12 +5,12 @@
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-console")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), `ConsoleLayoutRoot`, [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [HighlightButton](../../components/highlight-button.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), `TableCellId`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-color-mode`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), `ConsoleLayoutRoot`, [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [HelpPanel](../../components/help-panel.md), [HighlightButton](../../components/highlight-button.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), `TableCellId`, `TableCellLink`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações; switch account; account switcher; organization switcher; change organization; trocar conta; trocar organização; selecionar conta; console layout component; ConsoleLayout; app layout with router view; layout do console com RouterView; account list failed to load; switch account error; erro ao carregar contas
+platform shell; console shell; app shell; sidebar layout; navigation rail; dashboard layout; admin layout; app layout with sidebar; estrutura do console; layout com menu lateral; menu lateral; console; console layout; layout do console; notifications panel; notifications drawer; notification center; central de notificações; painel de notificações; switch account; account switcher; organization switcher; change organization; trocar conta; trocar organização; selecionar conta; console layout component; ConsoleLayout; app layout with router view; layout do console com RouterView; account list failed to load; switch account error; erro ao carregar contas; page help; help panel; info link; contextual help; ajuda da página; painel de ajuda
 
 The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: the navigation rail (wordmark, grouped navigation with drill-in levels, the account at its foot), one global header (breadcrumbs, search, the app's actions, the avatar) and the ⌘K palette. All of that is one component, `ConsoleLayout`: this block is the app's `App.vue` — compose it once around `RouterView` and every console page is only the body rendered through its default slot. The body here is a stand-in for `view/view-table`.
 
@@ -77,7 +77,7 @@ The app's one toast region, at `bottom-end`, mounted once by the shell because i
 
 ## Data
 
-`navigation`, `account` and the recents are the shell's own constants, which the app replaces with its navigation file and signed-in user. The states render the shell and fill its slots instead of copying it:
+`navigation`, `account` and `recents` are props (`ShellConsoleProps`, `ShellConsoleRecent` are exported from `shell-console.vue`); left out, the console tree, the account and the recents in `sample.ts` render. The app passes its navigation file and signed-in user, then deletes `sample.ts` and its import. The states render the shell and fill its slots instead of copying it:
 
 | Slot             | Scope         | What goes in it                                                               |
 | ---------------- | ------------- | ----------------------------------------------------------------------------- |
@@ -86,7 +86,7 @@ The app's one toast region, at `bottom-end`, mounted once by the shell because i
 | `sidebar-header` | `{ compact }` | Content under the wordmark in the rail (the AccountSwitch switcher).          |
 | `header-leading` | `{ compact }` | Content before the breadcrumbs in the header (the switcher while compact).    |
 | `notifications`  |               | Flash messages above the page body.                                           |
-| `tools`          |               | The tools region beside the content (the notification list).                  |
+| `tools`          |               | The tools region beside the content (the notification list, a `HelpPanel`).   |
 
 `v-model:tools-open` opens and closes the tools region, and `tools-label` names it. It emits one event:
 
@@ -102,6 +102,7 @@ Handle it where the session lives: clear the token (`sessionStorage.removeItem`,
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
 - Give every row an `href` (never `to` or `path`); derive a static `breadcrumbs` trail from the route.
 - Let a detail page set its own trail, control crumb included, with `ConsoleLayout.Breadcrumb`.
+- Open a page's help from `ConsoleLayout.ToolsTrigger` in its `PageHeader` `meta` slot, with the `HelpPanel` in `tools`.
 - Frame a list or form body with `layout-boundary` + `layout-column`; open a detail body flush on `PageTabs`.
 
 ## Don't
@@ -114,6 +115,7 @@ Handle it where the session lives: clear the token (`sessionStorage.removeItem`,
 - Don't render the account switcher in both `sidebar-header` and `header-leading` at once; pick by the slots' `compact`.
 - Don't leave an empty account table when the list fails to load; show the danger `Alert` with Retry in its place.
 - Don't open the notifications region as a popover over the page; it is the layout's tools region beside the content.
+- Don't open page help from a boxed `IconButton`, a typed `?` or a `Tooltip` beside the title; the page's `Info` link is the one way in.
 
 ## Copy
 
@@ -137,6 +139,7 @@ Handle it where the session lives: clear the token (`sessionStorage.removeItem`,
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) over the page body. The controls row and the table belong to `view/view-table`, which builds them from the Table toolbar parts; the shell does not draw them.
 - DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as `items`, then the environment in its slot, a `Select` with `variant="ghost"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). While compact the header hides the crumbs but keeps the environment `Select` in place of the brand, so Deploy always has its target in view; the body repeats the rest of the trail under `md` in its own `nav` row named Application (a ghost back `IconButton` to Applications and the application name). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list as `Item.List` of `Item` rows (`Item.Media type="icon"` toned through `data-type`, title, description, time, `Item.Actions`), five at a time with `Show older` for the rest: unread items marked with a `New` tag (and a visually hidden `Unread:` prefix), Edit and Redeploy on each deploy, Mark all as read, Clear all (it empties the list and toasts `Notifications cleared.` with Undo, which brings them back), and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
+- PageHelp: the ListPage through `ConsoleLayout` with page help. `ConsoleLayout.ToolsTrigger` is first in the `PageHeader`'s `meta` slot, so the `Info` link (named `Info about applications`) sits right after the h1 on the same line; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Help"`, a drawer when narrow), carries `aria-expanded` and, while open, `aria-controls` on the region's body. The `tools` slot holds the `HelpPanel` topic: what an application is, when to create one, and the Learn more link to the documentation. The region's close button closes it as well; focus stays on the link.
 - AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-leading` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `TableCellStatus`, ID and client ID as `TableCellId`. Each name is a `Button` with `variant="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
 - AccountSwitchError: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Retry`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Retry loads the list again and shows the table.
 
@@ -150,6 +153,7 @@ Handle it where the session lives: clear the token (`sessionStorage.removeItem`,
 - `ListPage` — primary (the code below)
 - `DetailPage` — A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumb` (Applications, the application) ending on its environment as a control crumb, a `Select` with `variant="ghost"` and `size="small"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; while compact the header hides the crumbs but keeps the environment `Select` in place of the brand, and below `md` the body repeats the rest of the trail in its own row (back to Applications, the application name); the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.
 - `Notifications` — The ListPage rendered through `ConsoleLayout` with a bell in its `actions` slot: the bell carries an unread `Badge` and toggles the layout's tools region (`v-model:tools-open`, titled Notifications, a drawer on a narrow screen), whose `tools` slot lists deploys, invitations and alerts with Mark all as read and Clear all and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` in the `notifications` slot above the page, and an empty list reads You are all caught up through `EmptyState`.
+- `PageHelp` — The ListPage rendered through `ConsoleLayout` with page help: `ConsoleLayout.ToolsTrigger` first in the `PageHeader`'s `meta` slot puts the `Info` link right after the title, and it opens and closes the layout's tools region (`v-model:tools-open`, titled Help, a drawer on a narrow screen), whose `tools` slot holds the page's `HelpPanel` topic (what an application is, when to create one, a Learn more link). The link carries `aria-expanded` and `aria-controls`; the region's close button closes it too.
 - `AccountSwitch` — The ListPage rendered through `ConsoleLayout` with the account switcher in its `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar`, the account name, a sort glyph; tooltip on the right; Ctrl+O or ⌘O), and in its `header-start` slot while compact (avatar and chevron only): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.
 - `AccountSwitchError` — The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Retry replaces the account `Table` under the search; Retry loads the tree.
 
@@ -163,6 +167,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
   import ConsoleLayoutRoot, {
+    type ConsoleLayoutAccount,
     type ConsoleLayoutNavGroup
   } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -174,13 +179,36 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
+  import { sampleAccount, sampleNavigation, sampleRecents } from './sample'
+
+  /** A page the search palette lists under Recents. */
+  export interface ShellConsoleRecent {
+    /** Stable key; the palette value is `recent:` followed by it. */
+    id: string
+    /** The resource name. */
+    label: string
+    /** Icon class of the resource kind. */
+    icon: string
+    /** The resource kind, shown after the name. */
+    type: string
+  }
+
   export interface ShellConsoleProps {
     /** Accessible name of the tools region the tools slot fills. */
     toolsLabel?: string
+    /** The rail's navigation tree. Left out, the sample console tree renders. */
+    navigation?: ConsoleLayoutNavGroup[]
+    /** The signed-in account at the rail's foot. Left out, the sample account renders. */
+    account?: ConsoleLayoutAccount
+    /** The pages the search palette lists under Recents. Left out, the sample renders. */
+    recents?: ShellConsoleRecent[]
   }
 
   withDefaults(defineProps<ShellConsoleProps>(), {
-    toolsLabel: ''
+    toolsLabel: '',
+    navigation: () => sampleNavigation,
+    account: () => sampleAccount,
+    recents: () => sampleRecents
   })
 
   const emit = defineEmits<{ 'sign-out': [event: MouseEvent | KeyboardEvent] }>()
@@ -201,176 +229,6 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
     /** The tools region beside the content. */
     tools(): unknown
   }>()
-
-  const navigation: ConsoleLayoutNavGroup[] = [
-    {
-      items: [
-        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
-        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
-        {
-          id: 'deployments',
-          label: 'Deployments',
-          icon: 'az az-deploy-pillar',
-          href: '/deployments'
-        }
-      ]
-    },
-    {
-      label: 'Build',
-      items: [
-        {
-          id: 'applications',
-          label: 'Applications',
-          icon: 'az az-applications',
-          href: '/applications'
-        },
-        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' },
-        { id: 'variables', label: 'Variables', icon: 'az az-variables', href: '/variables' },
-        {
-          id: 'connectors',
-          label: 'Connectors',
-          icon: 'az az-connectors',
-          href: '/connectors'
-        },
-        {
-          id: 'custom-pages',
-          label: 'Custom Pages',
-          icon: 'az az-custom-pages',
-          href: '/custom-pages'
-        }
-      ]
-    },
-    {
-      label: 'Secure',
-      items: [
-        { id: 'firewall', label: 'Firewall', icon: 'az az-firewall', href: '/firewall' },
-        { id: 'edge-dns', label: 'Edge DNS', icon: 'az az-edge-dns', href: '/edge-dns' },
-        { id: 'waf-rules', label: 'WAF Rules', icon: 'az az-waf', href: '/waf-rules' },
-        {
-          id: 'certificate-manager',
-          label: 'Certificate Manager',
-          icon: 'az az-certificate-manager',
-          href: '/certificate-manager'
-        },
-        {
-          id: 'network-lists',
-          label: 'Network Lists',
-          icon: 'az az-network-lists',
-          href: '/network-lists'
-        }
-      ]
-    },
-    {
-      label: 'Store',
-      items: [
-        {
-          id: 'object-storage',
-          label: 'Object Storage',
-          icon: 'az az-object-storage',
-          href: '/object-storage'
-        },
-        {
-          id: 'sql-database',
-          label: 'SQL Database',
-          icon: 'az az-sql-database',
-          href: '/sql-database',
-          tagValue: 'Preview'
-        }
-      ]
-    },
-    {
-      label: 'Observe',
-      items: [
-        {
-          id: 'data-stream',
-          label: 'Data Stream',
-          icon: 'az az-data-stream',
-          href: '/data-stream'
-        },
-        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'az az-edge-pulse', href: '/edge-pulse' },
-        {
-          id: 'real-time-metrics',
-          label: 'Real-Time Metrics',
-          icon: 'az az-real-time-metrics',
-          href: '/real-time-metrics'
-        },
-        {
-          id: 'real-time-events',
-          label: 'Real-Time Events',
-          icon: 'az az-real-time-events',
-          href: '/real-time-events'
-        },
-        {
-          id: 'real-time-purge',
-          label: 'Real-Time Purge',
-          icon: 'az az-real-time-purge',
-          href: '/real-time-purge'
-        }
-      ]
-    },
-    {
-      label: 'More',
-      items: [
-        {
-          id: 'marketplace',
-          label: 'Marketplace',
-          icon: 'az az-marketplace',
-          href: '/marketplace'
-        },
-        {
-          id: 'settings',
-          label: 'Settings',
-          icon: 'az az-settings',
-          type: 'drill',
-          groups: [
-            {
-              label: 'Settings',
-              items: [
-                { id: 'settings-general', label: 'General', href: '/settings' },
-                {
-                  id: 'settings-build',
-                  label: 'Build and deployment',
-                  href: '/settings/build-deployment'
-                },
-                {
-                  id: 'settings-environments',
-                  label: 'Environments',
-                  href: '/settings/environments'
-                },
-                { id: 'settings-users', label: 'Users management', href: '/settings/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', href: '/settings/teams' }
-              ]
-            },
-            {
-              label: 'Access',
-              items: [
-                { id: 'settings-tokens', label: 'Personal tokens', href: '/settings/tokens' },
-                { id: 'settings-credentials', label: 'Credentials', href: '/settings/credentials' },
-                { id: 'settings-mfa', label: 'Multi-factor auth', href: '/settings/mfa' },
-                { id: 'settings-sessions', label: 'Active sessions', href: '/settings/sessions' },
-                { id: 'settings-activity', label: 'Activity history', href: '/settings/activity' }
-              ]
-            },
-            {
-              label: 'Billing',
-              items: [
-                { id: 'settings-billing', label: 'Billing and plan', href: '/settings/billing' },
-                { id: 'settings-invoices', label: 'Invoices', href: '/settings/invoices' }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
-
-  const recents = [
-    { id: 'azion-site', label: 'azion-site', icon: 'az az-applications', type: 'Application' },
-    { id: 'edge-auth', label: 'edge-auth', icon: 'az az-functions', type: 'Function' },
-    { id: 'shop-assets', label: 'shop-assets', icon: 'az az-object-storage', type: 'Bucket' }
-  ]
 
   const { mode: theme } = useColorMode()
 
@@ -644,6 +502,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
             <template #actions>
               <Button
                 label="Documentation"
+                aria-label="Documentation (opens in a new tab)"
                 icon="az az-book"
                 variant="outline"
                 size="medium"
@@ -674,4 +533,287 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
     <Toaster position="bottom-end" />
   </ConsoleLayoutRoot>
 </template>
+```
+
+## `sample.ts`
+
+```ts
+import type {
+  ConsoleLayoutAccount,
+  ConsoleLayoutNavGroup
+} from '@aziontech/webkit/console-layout-root'
+import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+
+import type { ShellConsoleRecent } from './shell-console.vue'
+
+export const sampleNavigation: ConsoleLayoutNavGroup[] = [
+  {
+    items: [
+      { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+      { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
+      {
+        id: 'deployments',
+        label: 'Deployments',
+        icon: 'az az-deploy-pillar',
+        href: '/deployments'
+      }
+    ]
+  },
+  {
+    label: 'Build',
+    items: [
+      {
+        id: 'applications',
+        label: 'Applications',
+        icon: 'az az-applications',
+        href: '/applications'
+      },
+      { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' },
+      { id: 'variables', label: 'Variables', icon: 'az az-variables', href: '/variables' },
+      {
+        id: 'connectors',
+        label: 'Connectors',
+        icon: 'az az-connectors',
+        href: '/connectors'
+      },
+      {
+        id: 'custom-pages',
+        label: 'Custom Pages',
+        icon: 'az az-custom-pages',
+        href: '/custom-pages'
+      }
+    ]
+  },
+  {
+    label: 'Secure',
+    items: [
+      { id: 'firewall', label: 'Firewall', icon: 'az az-firewall', href: '/firewall' },
+      { id: 'edge-dns', label: 'Edge DNS', icon: 'az az-edge-dns', href: '/edge-dns' },
+      { id: 'waf-rules', label: 'WAF Rules', icon: 'az az-waf', href: '/waf-rules' },
+      {
+        id: 'certificate-manager',
+        label: 'Certificate Manager',
+        icon: 'az az-certificate-manager',
+        href: '/certificate-manager'
+      },
+      {
+        id: 'network-lists',
+        label: 'Network Lists',
+        icon: 'az az-network-lists',
+        href: '/network-lists'
+      }
+    ]
+  },
+  {
+    label: 'Store',
+    items: [
+      {
+        id: 'object-storage',
+        label: 'Object Storage',
+        icon: 'az az-object-storage',
+        href: '/object-storage'
+      },
+      {
+        id: 'sql-database',
+        label: 'SQL Database',
+        icon: 'az az-sql-database',
+        href: '/sql-database',
+        tagValue: 'Preview'
+      }
+    ]
+  },
+  {
+    label: 'Observe',
+    items: [
+      {
+        id: 'data-stream',
+        label: 'Data Stream',
+        icon: 'az az-data-stream',
+        href: '/data-stream'
+      },
+      { id: 'edge-pulse', label: 'Edge Pulse', icon: 'az az-edge-pulse', href: '/edge-pulse' },
+      {
+        id: 'real-time-metrics',
+        label: 'Real-Time Metrics',
+        icon: 'az az-real-time-metrics',
+        href: '/real-time-metrics'
+      },
+      {
+        id: 'real-time-events',
+        label: 'Real-Time Events',
+        icon: 'az az-real-time-events',
+        href: '/real-time-events'
+      },
+      {
+        id: 'real-time-purge',
+        label: 'Real-Time Purge',
+        icon: 'az az-real-time-purge',
+        href: '/real-time-purge'
+      }
+    ]
+  },
+  {
+    label: 'More',
+    items: [
+      {
+        id: 'marketplace',
+        label: 'Marketplace',
+        icon: 'az az-marketplace',
+        href: '/marketplace'
+      },
+      {
+        id: 'settings',
+        label: 'Settings',
+        icon: 'az az-settings',
+        type: 'drill',
+        groups: [
+          {
+            label: 'Settings',
+            items: [
+              { id: 'settings-general', label: 'General', href: '/settings' },
+              {
+                id: 'settings-build',
+                label: 'Build and deployment',
+                href: '/settings/build-deployment'
+              },
+              {
+                id: 'settings-environments',
+                label: 'Environments',
+                href: '/settings/environments'
+              },
+              { id: 'settings-users', label: 'Users management', href: '/settings/users' },
+              { id: 'settings-teams', label: 'Teams and permissions', href: '/settings/teams' }
+            ]
+          },
+          {
+            label: 'Access',
+            items: [
+              { id: 'settings-tokens', label: 'Personal tokens', href: '/settings/tokens' },
+              { id: 'settings-credentials', label: 'Credentials', href: '/settings/credentials' },
+              { id: 'settings-mfa', label: 'Multi-factor auth', href: '/settings/mfa' },
+              { id: 'settings-sessions', label: 'Active sessions', href: '/settings/sessions' },
+              { id: 'settings-activity', label: 'Activity history', href: '/settings/activity' }
+            ]
+          },
+          {
+            label: 'Billing',
+            items: [
+              { id: 'settings-billing', label: 'Billing and plan', href: '/settings/billing' },
+              { id: 'settings-invoices', label: 'Invoices', href: '/settings/invoices' }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+
+export const sampleAccount: ConsoleLayoutAccount = {
+  name: 'Amy Chen',
+  email: 'amy.chen@example.com'
+}
+
+export const sampleRecents: ShellConsoleRecent[] = [
+  { id: 'azion-site', label: 'azion-site', icon: 'az az-applications', type: 'Application' },
+  { id: 'edge-auth', label: 'edge-auth', icon: 'az az-functions', type: 'Function' },
+  { id: 'shop-assets', label: 'shop-assets', icon: 'az az-object-storage', type: 'Bucket' }
+]
+
+/** The level of an account in the account tree. */
+export type ShellConsoleAccountType = 'organization' | 'group' | 'workspace'
+
+/** How the account switch draws one account level. */
+export interface ShellConsoleAccountTypeMeta {
+  /** The level's name. */
+  label: string
+  /** Icon class of the level. */
+  icon: string
+  /** Tag severity of the level. */
+  severity?: TagSeverity
+  /** Tag variant of the level. */
+  variant?: TagVariant
+}
+
+/** One account the account switch lists. */
+export interface ShellConsoleSwitchAccount {
+  /** Account ID. */
+  id: string
+  /** Client ID. */
+  clientId: string
+  /** Account name. */
+  name: string
+  /** Level in the tree. */
+  type: ShellConsoleAccountType
+  /** The parent account, or null for a root. */
+  parentId: string | null
+}
+
+export const sampleAccountTypes: Record<ShellConsoleAccountType, ShellConsoleAccountTypeMeta> = {
+  organization: { label: 'Organization', icon: 'az az-building', variant: 'primary' },
+  group: { label: 'Group', icon: 'az az-users', severity: 'info' },
+  workspace: { label: 'Workspace', icon: 'az az-layout-grid', severity: 'neutral' }
+}
+
+export const sampleSwitchAccounts: ShellConsoleSwitchAccount[] = [
+  {
+    id: '1001',
+    clientId: '7f3a1',
+    name: 'Acme Inc.',
+    type: 'organization',
+    parentId: null
+  },
+  { id: '1140', clientId: '7f3b9', name: 'Retail', type: 'group', parentId: '1001' },
+  { id: '2201', clientId: '8a0c2', name: 'Storefront EU', type: 'workspace', parentId: '1140' },
+  { id: '2202', clientId: '8a0c7', name: 'Storefront US', type: 'workspace', parentId: '1140' },
+  { id: '1150', clientId: '7f3c4', name: 'Media', type: 'group', parentId: '1001' },
+  { id: '2310', clientId: '8b114', name: 'Video platform', type: 'workspace', parentId: '1150' },
+  { id: '3001', clientId: '9c201', name: 'Acme Labs', type: 'organization', parentId: null },
+  { id: '3105', clientId: '9c2e8', name: 'Research', type: 'workspace', parentId: '3001' }
+]
+
+/** What a notification reports. */
+export type ShellConsoleNotificationKind = 'deploy-failed' | 'deploy-succeeded' | 'info'
+
+/** One entry of the notification list. */
+export interface ShellConsoleNotification {
+  /** Stable key. */
+  id: string
+  /** What it reports, which picks its icon. */
+  kind: ShellConsoleNotificationKind
+  /** The headline. */
+  title: string
+  /** One sentence of detail. */
+  description: string
+  /** When it happened, as shown. */
+  time: string
+  /** The user has seen it. */
+  read: boolean
+}
+
+export const sampleNotifications: ShellConsoleNotification[] = [
+  {
+    id: 'run-4182',
+    kind: 'deploy-failed',
+    title: 'azion-site failed to deploy',
+    description: 'The build stopped at step 3 of 5: a module could not be resolved.',
+    time: '2 min ago',
+    read: false
+  },
+  {
+    id: 'run-4181',
+    kind: 'deploy-succeeded',
+    title: 'edge-auth is live',
+    description: 'Deployed to production in 48 seconds.',
+    time: '25 min ago',
+    read: false
+  },
+  {
+    id: 'invite-77',
+    kind: 'info',
+    title: 'Sam joined the team',
+    description: 'Sam accepted your invitation and can now edit applications.',
+    time: 'Yesterday',
+    read: true
+  }
+]
 ```

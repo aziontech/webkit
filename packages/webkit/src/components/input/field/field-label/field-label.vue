@@ -12,7 +12,7 @@
   })
 
   export interface FieldLabelProps {
-    /** Short explanation appended as a Hint glyph that reveals it on hover or focus. Empty renders no glyph. */
+    /** Short explanation appended as a Hint glyph that opens it on click. Empty renders no glyph. */
     hint?: string
     /** Shows the Required marker without an enclosing Field, for a label set apart from its control. An enclosing Field's required sets it too. */
     required?: boolean
@@ -33,6 +33,19 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'field-label')
   const htmlFor = computed(() => (attrs['for'] as string | undefined) ?? field?.controlId)
   const required = computed(() => props.required || (field?.required.value ?? false))
+
+  const ROOT_CLASS =
+    'group/field-label inline-flex w-fit items-center gap-(--spacing-2xs) text-label-sm text-(--text-default) ' +
+    'data-[disabled]:text-(--text-muted) ' +
+    'has-[>[data-slot=field]]:relative has-[>[data-slot=field]]:flex has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:cursor-pointer ' +
+    'has-[>[data-slot=field]]:rounded-(--shape-button) has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-(--border-muted) has-[>[data-slot=field]]:bg-(--bg-surface) ' +
+    'has-[>[data-slot=field]]:p-(--spacing-sm) has-[>[data-slot=field]]:transition-colors has-[>[data-slot=field]]:duration-150 has-[>[data-slot=field]]:ease-out ' +
+    'motion-reduce:transition-none ' +
+    'has-[>[data-slot=field]]:hover:bg-(--bg-hover) has-[>[data-slot=field]]:has-[:focus-visible]:outline-none has-[>[data-slot=field]]:has-[:focus-visible]:ring-2 ' +
+    'has-[>[data-slot=field]]:has-[:focus-visible]:ring-(--ring-color) has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-1 ' +
+    'has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-(--bg-canvas) has-[>[data-slot=field]]:has-[[data-checked]]:border-(--border-selected) ' +
+    'has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--bg-selected) has-[>[data-slot=field][data-disabled]]:cursor-not-allowed has-[>[data-slot=field][data-disabled]]:opacity-50 ' +
+    'has-[>[data-slot=field][data-disabled]]:hover:bg-(--bg-surface)'
 </script>
 
 <template>
@@ -43,21 +56,23 @@
     :data-testid="testId"
     :data-required="required || null"
     :data-disabled="field?.disabled.value || null"
-    class="group/field-label inline-flex w-fit items-center gap-(--spacing-2xs) text-label-sm text-(--text-default) data-[disabled]:text-(--text-muted) has-[>[data-slot=field]]:relative has-[>[data-slot=field]]:flex has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:cursor-pointer has-[>[data-slot=field]]:rounded-(--shape-button) has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-(--border-muted) has-[>[data-slot=field]]:bg-(--bg-surface) has-[>[data-slot=field]]:p-(--spacing-sm) has-[>[data-slot=field]]:transition-colors has-[>[data-slot=field]]:duration-150 has-[>[data-slot=field]]:ease-out motion-reduce:transition-none has-[>[data-slot=field]]:hover:bg-(--bg-hover) has-[>[data-slot=field]]:has-[:focus-visible]:outline-none has-[>[data-slot=field]]:has-[:focus-visible]:ring-2 has-[>[data-slot=field]]:has-[:focus-visible]:ring-(--ring-color) has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-1 has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-(--bg-canvas) has-[>[data-slot=field]]:has-[[data-checked]]:border-(--border-selected) has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--bg-selected) has-[>[data-slot=field][data-disabled]]:cursor-not-allowed has-[>[data-slot=field][data-disabled]]:opacity-50 has-[>[data-slot=field][data-disabled]]:hover:bg-(--bg-surface)"
+    :class="ROOT_CLASS"
   >
     <slot />
     <span
       v-if="required"
       :data-testid="`${testId}__required`"
-      class="text-label-sm text-(--text-muted)"
+      aria-hidden="true"
+      class="text-label-sm text-(--text-default)"
+      >*</span
     >
-      <span
-        aria-hidden="true"
-        class="text-(--text-brand)"
-        >*</span
-      >
-      {{ t('field.required') }}
-    </span>
+    <span
+      v-if="field?.required.value"
+      :id="field.requiredId"
+      :data-testid="`${testId}__required-text`"
+      hidden
+      >{{ t('field.required') }}</span
+    >
     <Hint
       v-if="hint"
       :content="hint"

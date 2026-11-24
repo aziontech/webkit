@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-project-intake")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [FileDropzone](../../components/file-dropzone.md), [UploadProgress](../../components/upload-progress.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [FileDropzone](../../components/file-dropzone.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`, `use-locale`
 - Skills: `webkit-ui-states`, `webkit-motion-polish`
 
 ## Asked as
@@ -38,7 +38,7 @@ The inline `FileDropzone` with `directories`, filling the page body: its title s
 
 ### B. Keyboard way in — `Button` (required)
 
-An outlined Choose a folder `Button` in the dropzone's default slot opens a hidden folder picker (`webkitdirectory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
+An outlined Choose a folder `Button` in the dropzone's default slot opens the system folder picker (`useFilePicker` with `directory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
 
 ### C. Upload list — `UploadProgress` (Initializing, UploadError)
 
@@ -104,9 +104,9 @@ Keep `uploads` `undefined` until the first file arrives, so the drop target show
 
 - **Drop heading:** what the drop does, one line: `Drop your project to deploy it`. On a project page: `We build a new version of web-app, then you choose where it goes live.`
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
-- **Overlay heading:** one word for the phase: `Initializing`.
+- **Overlay heading:** one word for the phase: `Initializing`; `Upload paused` while a file has failed, with the danger `Alert` as the only summary of the failure. The `UploadProgress` header is the one place that counts the files.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
-- **Summary:** count and total size: `5 files, 8.4 kB`.
+- **Summary:** count and total size, formatted with `formatFileSize` from `useLocale` like the rows: `5 files, 8.2 kB`.
 - **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility
@@ -145,6 +145,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
   import Button from '@aziontech/webkit/button'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
@@ -174,7 +175,8 @@ Each variant is the same screen in another state: `get_block("state/state-projec
 
   const MAX_ROWS = 50
 
-  const folderInputEl = ref<HTMLInputElement | null>(null)
+  const folderPicker = useFilePicker({ directory: true, multiple: true })
+  const { formatFileSize } = useLocale()
   const received = ref(0)
   const files = ref<ProjectIntakeUpload[]>([])
 
@@ -186,20 +188,23 @@ Each variant is the same screen in another state: `get_block("state/state-projec
     { immediate: true }
   )
 
-  const doneCount = computed(() => files.value.filter((file) => file.status === 'success').length)
   const failedCount = computed(() => files.value.filter((file) => file.status === 'error').length)
   const shownFiles = computed(() =>
     files.value.length <= MAX_ROWS
       ? files.value
       : files.value.filter((file) => file.status !== 'success').slice(0, MAX_ROWS)
   )
-  const { formatFileSize } = useLocale()
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
-  const chooseFolder = () => folderInputEl.value?.click()
+  const failedLabel = computed(() =>
+    failedCount.value === 1
+      ? '1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.'
+      : `${failedCount.value} files could not be uploaded. Retry them, or remove them from the folder and drop the project again.`
+  )
 
-  const onFolderChosen = (event: Event) => {
-    const chosen = Array.from((event.target as HTMLInputElement).files ?? [])
+  const chooseFolder = async (event: MouseEvent) => {
+    const chosen = await folderPicker.open()
+    if (!chosen.length) return
     received.value = chosen.length
     emit('select', event, chosen)
   }
@@ -237,9 +242,14 @@ Each variant is the same screen in another state: `get_block("state/state-projec
       class="animate-fade-in motion-reduce:animate-none fixed inset-0 z-(--z-control-overlay) flex flex-col items-center justify-center gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
     >
       <header class="flex flex-col items-center gap-(--spacing-2xs) text-center">
-        <h1 class="text-heading-sm text-(--text-default)">Initializing</h1>
-        <p class="text-body-sm text-(--text-muted)">
-          Setting up your deployment. {{ doneCount }} of {{ files.length }} files.
+        <h1 class="text-heading-sm text-(--text-default)">
+          {{ failedCount ? 'Upload paused' : 'Initializing' }}
+        </h1>
+        <p
+          v-if="!failedCount"
+          class="text-body-sm text-(--text-muted)"
+        >
+          Setting up your deployment.
         </p>
       </header>
 
@@ -248,7 +258,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
         severity="danger"
         size="small"
         class="w-full max-w-(--container-md)"
-        :label="`${failedCount} file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`"
+        :label="failedLabel"
         action-label="Retry"
         @action="(event: MouseEvent) => retry(event)"
       />
@@ -283,15 +293,6 @@ Each variant is the same screen in another state: `get_block("state/state-projec
         size="medium"
         icon="az az-folder-open"
         @click="chooseFolder"
-      />
-      <input
-        ref="folderInputEl"
-        type="file"
-        webkitdirectory
-        multiple
-        hidden
-        aria-label="Project folder"
-        @change="onFolderChosen"
       />
     </FileDropzone>
     <p

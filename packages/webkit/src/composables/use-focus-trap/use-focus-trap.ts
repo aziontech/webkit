@@ -10,7 +10,11 @@ const NOT_FIELD_INPUT_TYPES = new Set(['button', 'submit', 'reset', 'image', 'fi
 
 /** Options of `useFocusTrap`. */
 export interface UseFocusTrapOptions {
-  /** What takes focus when the trap turns on, after an element marked `data-autofocus`: the first tabbable element, or the first form field (falling back to the first tabbable element when there is none). */
+  /**
+   * What takes focus when the trap turns on, after an element marked `data-autofocus`: the first
+   * tabbable element, or the first form field (falling back to the first tabbable element when
+   * there is none).
+   */
   initialFocus?: 'first' | 'field'
 }
 
@@ -21,6 +25,28 @@ const isField = (el: HTMLElement): boolean => {
   if (el.isContentEditable) return true
   const role = el.getAttribute('role')
   return role === 'combobox' || role === 'textbox' || role === 'spinbutton'
+}
+
+function wrapTab(event: KeyboardEvent, root: HTMLElement): void {
+  const focusable = tabbableIn(root)
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+  if (!first || !last) {
+    event.preventDefault()
+    return
+  }
+  const activeEl = document.activeElement
+  if (event.shiftKey) {
+    if (activeEl === first || !root.contains(activeEl)) {
+      event.preventDefault()
+      last.focus()
+    }
+    return
+  }
+  if (activeEl === last || !root.contains(activeEl)) {
+    event.preventDefault()
+    first.focus()
+  }
 }
 
 export function useFocusTrap(
@@ -38,31 +64,7 @@ export function useFocusTrap(
       }
 
       const root = toValue(containerEl)
-      if (!root) return
-
-      const focusable = tabbableIn(root)
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (!first || !last) {
-        event.preventDefault()
-        return
-      }
-
-      const activeEl = document.activeElement
-
-      if (event.shiftKey) {
-        if (activeEl === first || !root.contains(activeEl)) {
-          event.preventDefault()
-          last.focus()
-        }
-        return
-      }
-
-      if (activeEl === last || !root.contains(activeEl)) {
-        event.preventDefault()
-        first.focus()
-      }
+      if (root) wrapTab(event, root)
     }
   )
 

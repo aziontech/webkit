@@ -14,5 +14,3 @@ export const warning = {
     'warning-mark': tokenRef('primitives.yellow.600')
   }
 }
-
-export default { warning }

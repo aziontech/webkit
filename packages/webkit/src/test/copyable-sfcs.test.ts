@@ -6,7 +6,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Component } from 'vue'
 
 const modules = {
-  ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
+  ...import.meta.glob<{ default: Component }>([
+    '../../blocks/**/*.vue',
+    '!../../blocks/**/parts/**'
+  ]),
   ...import.meta.glob<{ default: Component }>('../../examples/**/*.vue')
 }
 

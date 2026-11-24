@@ -1,13 +1,11 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, provide, ref, useAttrs, watch } from 'vue'
+  import { computed, provide, ref, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
-  import { usePlacement } from '../../../composables/use-placement'
-  import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
+  import { useDatePickerPanel } from './composables/use-date-picker-panel'
   import { asSingle, formatValueLabel, withTime } from './format'
   import {
     DatePickerInjectionKey,
@@ -17,8 +15,10 @@
     type DatePickerSize,
     type DatePickerValue
   } from './injection-key'
-  import DatePickerFields from './parts/date-picker-fields.vue'
-  import DatePickerGrid from './parts/date-picker-grid.vue'
+  import DatePickerControl from './parts/date-picker-control.vue'
+  import DatePickerControlButton from './parts/date-picker-control-button.vue'
+  import DatePickerPopover from './parts/date-picker-popover.vue'
+  import DatePickerTrigger from './parts/date-picker-trigger.vue'
 
   defineOptions({
     name: 'DatePicker',
@@ -106,10 +106,8 @@
   const isHorizontal = computed(() => props.orientation === 'horizontal')
 
   const triggerEl = ref<globalThis.HTMLElement | null>(null)
-  const panelEl = ref<globalThis.HTMLElement | null>(null)
 
   const isOpen = computed(() => openModel.value ?? props.defaultOpen)
-  const isOpenRef = computed(() => isOpen.value)
 
   const setOpen = (value: boolean) => {
     if (value && isDisabled.value) {
@@ -119,6 +117,8 @@
   }
 
   const toggleOpen = () => setOpen(!isOpen.value)
+
+  const { panel, panelOpen } = useDatePickerPanel(isOpen)
 
   const cloneValue = (value: DatePickerValue): DatePickerValue => {
     const date = asSingle(value)
@@ -192,6 +192,12 @@
     setOpen(false)
   }
 
+  const cancelSelection = () => {
+    draft.value = cloneValue(model.value)
+    setOpen(false)
+    triggerEl.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
+  }
+
   const clearCommitted = () => {
     if (isDisabled.value) {
       return
@@ -206,49 +212,12 @@
   const hasCommitted = computed(() => displayValue.value !== '')
   const triggerText = computed(() => displayValue.value || placeholderText.value)
 
-  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
-    triggerRef: triggerEl,
-    panelRef: panelEl,
-    isOpen: isOpenRef,
-    side: 'bottom',
-    align: 'start',
-    sideOffset: 6,
-    onDismiss: () => setOpen(false)
-  })
-
-  useFocusTrap(panelEl, isOpenRef)
-  const { isInsideHigherLayer } = useOverlayLayer(isOpenRef, { element: panelEl })
-
-  const onDocumentMousedown = (event: globalThis.MouseEvent) => {
-    const target = event.target as globalThis.Node | null
-    if (!target || isInsideHigherLayer(target)) {
-      return
-    }
-    if (isOpen.value && !triggerEl.value?.contains(target) && !panelEl.value?.contains(target)) {
-      setOpen(false)
-    }
-  }
-
-  const onPanelKeydown = (event: globalThis.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      setOpen(false)
+  const onPopoverClose = (event: Event | null) => {
+    setOpen(false)
+    if (event?.type === 'keydown') {
       triggerEl.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
     }
   }
-
-  watch(
-    isOpen,
-    (open) => {
-      if (open) globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-      else globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-    },
-    { immediate: true }
-  )
-
-  onBeforeUnmount(() => {
-    globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-  })
 
   provide(DatePickerInjectionKey, {
     testId: testId.value,
@@ -273,7 +242,11 @@
     changeMonth
   })
 
-  const portalLocale = usePortalLocale()
+  const FOOTER_CLASS =
+    'flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm) ' +
+    'data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] ' +
+    'data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] ' +
+    'data-[horizontal]:sm:min-w-(--container-3xs) data-[horizontal]:sm:max-w-none data-[horizontal]:sm:border-t-0 data-[horizontal]:sm:border-s'
 
   defineExpose({
     /** Moves focus to the trigger button. */
@@ -301,158 +274,123 @@
         :value="model"
         :display-value="displayValue"
       >
-        <span
+        <DatePickerControl
           :data-size="size"
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="isDisabled || null"
           :data-invalid="field.invalid.value || null"
-          class="inline-flex w-(--container-3xs) max-w-full items-stretch rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+          class="w-(--container-3xs)"
         >
-          <button
-            type="button"
-            :disabled="isDisabled"
-            :data-size="size"
-            :data-empty="!hasCommitted || null"
-            :data-testid="`${testId}__trigger`"
+          <DatePickerTrigger
             :id="field.controlId.value"
+            :test-id="testId"
+            :size="size"
+            :disabled="isDisabled"
+            :open="isOpen"
+            :show-placeholder="!hasCommitted"
+            :show-chevron="!split && !(clearable && hasCommitted)"
             :aria-label="ariaLabel ? `${ariaLabel}: ${triggerText}` : undefined"
-            :aria-describedby="field.describedBy.value"
+            :aria-describedby="
+              [field.describedBy.value, field.required.value && field.field?.requiredId]
+                .filter(Boolean)
+                .join(' ') || undefined
+            "
             :aria-invalid="field.invalid.value || undefined"
-            aria-haspopup="dialog"
-            :aria-expanded="isOpen"
-            class="relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+            class="focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
             @click="toggleOpen"
+            >{{ triggerText }}</DatePickerTrigger
           >
-            <span
-              aria-hidden="true"
-              data-slot="touch-target"
-              class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-            />
-            <i
-              class="az az-calendar shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
-              aria-hidden="true"
-            />
-            <span
-              :data-testid="`${testId}__value`"
-              class="min-w-0 flex-1 text-start tabular-nums [overflow-wrap:anywhere]"
-              >{{ triggerText }}</span
-            >
-            <i
-              v-if="!split && !(clearable && hasCommitted)"
-              :data-state="isOpen ? 'open' : 'closed'"
-              class="az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
-              aria-hidden="true"
-            />
-          </button>
 
-          <button
+          <DatePickerControlButton
             v-if="clearable && hasCommitted"
-            type="button"
+            key="clear"
             :disabled="isDisabled"
             :aria-label="t('datePicker.clear')"
             :data-testid="`${testId}__clear-trigger`"
-            class="relative inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="clearCommitted"
           >
-            <span
-              aria-hidden="true"
-              data-slot="touch-target"
-              class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-            />
             <i
               class="az az-x text-[length:inherit] leading-none"
               aria-hidden="true"
             />
-          </button>
+          </DatePickerControlButton>
 
-          <button
+          <DatePickerControlButton
             v-if="split"
-            type="button"
+            key="split"
             :disabled="isDisabled"
             :aria-label="t('datePicker.open')"
             :aria-expanded="isOpen"
             :data-testid="`${testId}__split`"
-            class="relative inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            class="border-s border-(--border-input)"
             @click="toggleOpen"
           >
-            <span
-              aria-hidden="true"
-              data-slot="touch-target"
-              class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-            />
             <i
               :data-state="isOpen ? 'open' : 'closed'"
               class="az az-chevron-down text-[length:inherit] leading-none transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
               aria-hidden="true"
             />
-          </button>
-        </span>
+          </DatePickerControlButton>
+        </DatePickerControl>
       </slot>
     </span>
 
-    <Teleport to="body">
+    <DatePickerPopover
+      :test-id="testId"
+      :open="panelOpen"
+      :anchor="triggerEl"
+      :aria-label="t('datePicker.chooseDate')"
+      class="max-w-[min(calc(100vw-2*var(--spacing-sm)),44rem)] overflow-x-hidden overflow-y-auto overscroll-contain max-sm:items-center"
+      @close="onPopoverClose"
+    >
       <div
-        v-if="isOpen"
-        aria-hidden="true"
-        :data-testid="`${testId}__backdrop`"
-        class="fixed inset-0 z-1099 bg-(--bg-backdrop) sm:hidden"
-      />
-      <Transition
-        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+        v-if="panel"
+        class="flex flex-col items-stretch data-[horizontal]:sm:flex-row"
+        :data-horizontal="isHorizontal || null"
       >
+        <div class="p-(--spacing-sm)">
+          <component :is="panel.grid" />
+        </div>
+
         <div
-          v-if="isOpen"
-          :dir="portalLocale.dir"
-          :lang="portalLocale.lang"
-          ref="panelEl"
-          role="dialog"
-          :aria-label="t('datePicker.chooseDate')"
-          :data-testid="`${testId}__popover`"
-          :data-state="isOpen ? 'open' : 'closed'"
-          :data-side="resolvedSide"
-          :data-align="resolvedAlign"
-          :style="panelStyle"
-          class="flex max-w-[min(calc(100vw-2*var(--spacing-sm)),44rem)] flex-col overflow-x-hidden overflow-y-auto overscroll-contain rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:items-center max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
-          @keydown="onPanelKeydown"
+          :data-size="size"
+          :data-horizontal="isHorizontal || null"
+          :class="FOOTER_CLASS"
         >
-          <div
-            class="flex flex-col items-stretch data-[horizontal]:sm:flex-row"
-            :data-horizontal="isHorizontal || null"
+          <component
+            :is="panel.fields"
+            v-if="showFields"
+          />
+
+          <span
+            v-if="$slots['footer']"
+            class="inline-flex items-center gap-(--spacing-xs)"
           >
-            <div class="p-(--spacing-sm)">
-              <DatePickerGrid />
-            </div>
+            <slot name="footer" />
+          </span>
 
-            <div
-              :data-size="size"
-              :data-horizontal="isHorizontal || null"
-              class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm) data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] data-[horizontal]:sm:min-w-(--container-3xs) data-[horizontal]:sm:max-w-none data-[horizontal]:sm:border-t-0 data-[horizontal]:sm:border-s"
-            >
-              <DatePickerFields v-if="showFields" />
-
-              <span
-                v-if="$slots['footer']"
-                class="inline-flex items-center gap-(--spacing-xs)"
-              >
-                <slot name="footer" />
-              </span>
-
-              <Button
-                v-if="showApply"
-                :label="t('datePicker.apply')"
-                variant="outline"
-                :size="size"
-                :disabled="isDisabled"
-                icon="az az-arrow-down-left"
-                class="w-full justify-center"
-                :data-testid="`${testId}__apply`"
-                @click="applySelection"
-              />
-            </div>
+          <div
+            v-if="showApply"
+            class="flex items-center justify-end gap-(--spacing-xs)"
+          >
+            <Button
+              :label="t('datePicker.cancel')"
+              variant="ghost"
+              :size="size"
+              :data-testid="`${testId}__cancel`"
+              @click="cancelSelection"
+            />
+            <Button
+              :label="t('datePicker.apply')"
+              variant="primary"
+              :size="size"
+              :disabled="isDisabled"
+              :data-testid="`${testId}__apply`"
+              @click="applySelection"
+            />
           </div>
         </div>
-      </Transition>
-    </Teleport>
+      </div>
+    </DatePickerPopover>
   </div>
 </template>

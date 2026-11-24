@@ -32,6 +32,7 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'field')
+  const requiredId = `field-required-${useId()}`
 
   const descriptions = ref<string[]>([])
   const errors = ref<string[]>([])
@@ -54,9 +55,18 @@
     invalid,
     disabled: computed(() => props.disabled),
     required: computed(() => props.required),
+    requiredId,
     hasError: computed(() => errors.value.length > 0),
     register
   })
+
+  const ROOT_CLASS =
+    'group/field flex w-full gap-(--spacing-xs) ' +
+    'data-[orientation=vertical]:flex-col data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:items-center ' +
+    'data-[orientation=horizontal]:has-[>[data-slot=field-content]]:items-start data-[orientation=horizontal]:[&>[data-slot=field-label]]:flex-auto ' +
+    'data-[orientation=responsive]:flex-col ' +
+    '@md:data-[orientation=responsive]:flex-row @md:data-[orientation=responsive]:items-center ' +
+    'data-[disabled]:cursor-not-allowed'
 </script>
 
 <template>
@@ -69,7 +79,7 @@
     :data-invalid="invalid || null"
     :data-disabled="disabled || null"
     :data-required="required || null"
-    class="group/field flex w-full gap-(--spacing-xs) data-[orientation=vertical]:flex-col data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:items-center data-[orientation=horizontal]:has-[>[data-slot=field-content]]:items-start data-[orientation=horizontal]:[&>[data-slot=field-label]]:flex-auto data-[orientation=responsive]:flex-col @md:data-[orientation=responsive]:flex-row @md:data-[orientation=responsive]:items-center data-[disabled]:cursor-not-allowed"
+    :class="ROOT_CLASS"
   >
     <slot />
   </div>

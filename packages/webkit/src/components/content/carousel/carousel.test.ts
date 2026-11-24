@@ -294,6 +294,26 @@ describe('Carousel', () => {
       }
     })
 
+    it('lets the next card peek on a phone, with the trailing fade only over the peek', () => {
+      const twoCards = defineComponent({
+        components: { Carousel, CarouselItem },
+        template:
+          '<Carousel><CarouselItem>One</CarouselItem><CarouselItem>Two</CarouselItem></Carousel>'
+      })
+      const { container, getAllByTestId } = render(twoCards)
+
+      for (const item of getAllByTestId(ITEM_TESTID)) {
+        expect(item.classList.contains('w-[85%]')).toBe(true)
+      }
+      const track = container.querySelector('ul') as HTMLElement
+      expect(
+        track.classList.contains('max-sm:data-[can-scroll-next]:[--carousel-fade-end:8%]')
+      ).toBe(true)
+      expect(
+        track.classList.contains('max-sm:data-[can-scroll-prev]:[--carousel-fade-start:0%]')
+      ).toBe(true)
+    })
+
     it('sizes every item medium unless it sets its own size', () => {
       const sized = defineComponent({
         components: { Carousel, CarouselItem },

@@ -2,7 +2,7 @@
   import DataTable from '@aziontech/webkit/data-table'
 
   const rows = [
-    { id: 'r1', name: 'Edge Functions 2.4', area: 'Build', released: 'Jan 14, 2026' },
+    { id: 'r1', name: 'Functions 2.4', area: 'Build', released: 'Jan 14, 2026' },
     { id: 'r2', name: 'Real-Time Events filters', area: 'Observe', released: 'Jan 9, 2026' },
     { id: 'r3', name: 'WAF tuning presets', area: 'Secure', released: 'Dec 18, 2025' }
   ]

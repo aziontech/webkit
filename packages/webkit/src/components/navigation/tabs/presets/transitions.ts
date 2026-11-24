@@ -2,7 +2,7 @@ import { curve, duration } from '@aziontech/theme/animations'
 
 export type TabsSlideDirection = 'left' | 'right' | null
 
-export const tabViewPanelMotion = {
+const tabViewPanelMotion = {
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
@@ -13,9 +13,3 @@ export const getTabViewPanelTransitionStyle = (): { transition: string } => {
     transition: `translate ${transitionDuration} ${transitionTimingFunction}, transform ${transitionDuration} ${transitionTimingFunction}, opacity ${transitionDuration} ${transitionTimingFunction}`
   }
 }
-
-export const tabViewEnterOffsetClasses = {
-  right: 'translate-x-(--spacing-md) rtl:-translate-x-(--spacing-md)',
-  left: '-translate-x-(--spacing-md) rtl:translate-x-(--spacing-md)',
-  none: 'translate-x-0'
-} as const

@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Careers page's latest roles, with the button into the full list in the table footer. Edit the props in the Controls panel — a band with no rows renders nothing, and one with no `primaryAction` drops its button.",
+      "summary": "The Careers page's latest roles, with the button into the full list in the table footer. A band with no rows renders nothing, and one with no `primaryAction` drops its button.",
       "file": "default.vue"
     }
   ],

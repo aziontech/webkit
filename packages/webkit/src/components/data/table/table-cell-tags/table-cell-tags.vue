@@ -58,17 +58,28 @@
     if (!row || !ruler) return
     const gap = Number.parseFloat(globalThis.getComputedStyle(row).columnGap) || 0
     const available = row.clientWidth - (iconEl.value ? iconEl.value.offsetWidth + gap : 0)
+    const rulerGap = Number.parseFloat(globalThis.getComputedStyle(ruler).columnGap) || 0
+    let end = -rulerGap
     const ends = Array.from(ruler.querySelectorAll<HTMLElement>('[data-ruler-item]')).map(
-      (node) => node.offsetLeft + node.offsetWidth
+      (node) => (end += rulerGap + node.getBoundingClientRect().width)
     )
     if (ends.length === 0 || ends[ends.length - 1] <= available) {
       fit.value = props.items.length
+      void nextTick(settle)
       return
     }
     const chip = (chipEl.value?.offsetWidth ?? 0) + gap
     let count = 0
     while (count < ends.length && ends[count] + chip <= available) count += 1
     fit.value = Math.max(1, count)
+    void nextTick(settle)
+  }
+
+  const settle = (): void => {
+    const texts = Array.from(rowEl.value?.querySelectorAll<HTMLElement>('[data-tag-text]') ?? [])
+    if (shownCount.value < 2 || !texts.some((el) => el.scrollWidth > el.clientWidth + 0.5)) return
+    fit.value = shownCount.value - 1
+    void nextTick(settle)
   }
 
   let watched: HTMLElement[] = []
@@ -162,6 +173,7 @@
       >
         <span
           dir="auto"
+          data-tag-text
           class="min-w-0 truncate"
           >{{ item }}</span
         >

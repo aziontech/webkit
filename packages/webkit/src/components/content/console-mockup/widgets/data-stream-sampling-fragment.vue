@@ -1,15 +1,13 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
-
-  import { useMediaQuery } from '../../../../composables/use-media-query'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import NumberInput from '../../../input/number-input/number-input.vue'
   import RadioGroup from '../../../input/radio-group/radio-group.vue'
   import RadioGroupItem from '../../../input/radio-group/radio-group-item/radio-group-item.vue'
-  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import { useMockupScrollFrames } from '../composables/use-mockup-scroll-frames'
   import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
+  import MockupScrollColumn from '../parts/mockup-scroll-column.vue'
 
   defineOptions({ name: 'DataStreamSamplingFragment' })
 
@@ -21,9 +19,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
-
-  const canHover = useMediaQuery('(hover: hover)', true)
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const OPTIONS = [
     {
@@ -55,154 +50,90 @@
     { anchor: 1, sampling: true, rate: 10, forward: 900, back: 360 }
   ]
 
-  const LAST = FRAMES.length - 1
-  const LEAD = 28
-
-  const wanted = () => props.active && (props.hovered || !canHover.value)
-
-  const step = ref(0)
-
-  const frame = computed(() => FRAMES[step.value])
-
-  const columnEl = ref<globalThis.HTMLElement | null>(null)
-  const offsets = ref<number[]>([0, 0])
-
-  const measure = () => {
-    const anchors = columnEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
-    if (!anchors?.length) return
-    offsets.value = [...anchors].map((anchor) => anchor.offsetTop)
-  }
-
-  const atRest = computed(() => frame.value.anchor === 0)
-
-  const scrollStyle = computed(() => ({
-    translate: `0 ${atRest.value ? 0 : LEAD - (offsets.value[frame.value.anchor] ?? 0)}px`
-  }))
-
-  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
-  let observer: globalThis.ResizeObserver | null = null
-
-  const halt = () => {
-    if (timer) globalThis.clearTimeout(timer)
-    timer = null
-  }
-
-  const advance = () => {
-    halt()
-    const target = wanted() ? LAST : 0
-    if (step.value === target) return
-    if (reduced.value || !canHover.value) {
-      step.value = target
-      return
-    }
-    measure()
-    const forward = target > step.value
-    const next = step.value + (forward ? 1 : -1)
-    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
-    timer = globalThis.setTimeout(() => {
-      step.value = next
-      advance()
-    }, delay)
-  }
-
-  watch(wanted, advance, { immediate: true })
-
-  onMounted(() => {
-    observer = new globalThis.ResizeObserver(measure)
-    if (columnEl.value) observer.observe(columnEl.value)
-    measure()
-  })
-
-  onScopeDispose(() => {
-    halt()
-    observer?.disconnect()
+  const { frame, bindColumn } = useMockupScrollFrames(FRAMES, {
+    active: () => props.active,
+    hovered: () => props.hovered
   })
 </script>
 
 <template>
-  <ConsoleMockupShell
-    variant="bare"
+  <MockupScrollColumn
+    :ref="bindColumn"
     shell="legacy"
-    :fade="atRest ? 'bottom' : 'y'"
     class="[--console-mockup-fade-edge:20%] [--console-mockup-fade-start:74%]"
-    :chrome="false"
+    column-class="flex flex-col gap-(--spacing-lg)"
     :active="active"
-    :width="420"
-    :mobile-width="380"
+    :anchor="frame.anchor || null"
+    :lead="28"
+    observe
   >
-    <div
-      ref="columnEl"
-      :style="scrollStyle"
-      class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+    <ConsoleMockupShellItem
+      :order="0"
+      data-anchor
     >
-      <ConsoleMockupShellItem
-        :order="0"
-        data-anchor
-      >
-        <div class="flex flex-col gap-(--spacing-sm)">
-          <span class="text-label-sm text-(--text-default)">Option</span>
-          <RadioGroup
-            model-value="all"
-            variant="card"
-            name="data-stream-workloads"
-            aria-label="Option"
+      <div class="flex flex-col gap-(--spacing-sm)">
+        <span class="text-label-sm text-(--text-default)">Option</span>
+        <RadioGroup
+          model-value="all"
+          variant="card"
+          name="data-stream-workloads"
+          aria-label="Option"
+        >
+          <RadioGroupItem
+            v-for="choice in OPTIONS"
+            :key="choice.value"
+            :value="choice.value"
+            :description="choice.description"
+            >{{ choice.label }}</RadioGroupItem
           >
-            <RadioGroupItem
-              v-for="choice in OPTIONS"
-              :key="choice.value"
-              :value="choice.value"
-              :description="choice.description"
-              >{{ choice.label }}</RadioGroupItem
-            >
-          </RadioGroup>
-        </div>
-      </ConsoleMockupShellItem>
+        </RadioGroup>
+      </div>
+    </ConsoleMockupShellItem>
 
-      <ConsoleMockupShellItem
-        :order="1"
-        data-anchor
-      >
-        <div class="flex flex-col">
-          <span class="flex items-start gap-(--spacing-sm)">
-            <LegacySwitch :checked="frame.sampling" />
-            <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-              <span class="text-label-md text-(--text-default)">Sampling</span>
-              <span class="text-body-xs text-(--text-muted)">
-                Enable sampling to collect a percentage of the data instead of the entire dataset,
-                optimizing resource usage.
-              </span>
+    <ConsoleMockupShellItem
+      :order="1"
+      data-anchor
+    >
+      <div class="flex flex-col">
+        <span class="flex items-start gap-(--spacing-sm)">
+          <LegacySwitch :checked="frame.sampling" />
+          <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <span class="text-label-md text-(--text-default)">Sampling</span>
+            <span class="text-body-xs text-(--text-muted)">
+              Enable sampling to collect a percentage of the data instead of the entire dataset,
+              optimizing resource usage.
             </span>
           </span>
+        </span>
 
-          <Transition
-            enter-from-class="-translate-y-1 opacity-0"
-            enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-            leave-to-class="-translate-y-1 opacity-0"
-            leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        <Transition
+          enter-from-class="-translate-y-1 opacity-0"
+          enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          leave-to-class="-translate-y-1 opacity-0"
+          leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        >
+          <div
+            v-if="frame.rate !== null"
+            class="overflow-hidden [interpolate-size:allow-keywords]"
           >
-            <div
-              v-if="frame.rate !== null"
-              class="overflow-hidden [interpolate-size:allow-keywords]"
-            >
-              <div class="flex flex-col gap-(--spacing-xs) pt-(--spacing-lg)">
-                <FieldLabel for="data-stream-sampling-rate">Sampling Rate (%)</FieldLabel>
-                <NumberInput
-                  id="data-stream-sampling-rate"
-                  :model-value="frame.rate"
-                  :min="0"
-                  :max="100"
-                  size="medium"
-                  aria-label="Sampling Rate (%)"
-                />
-                <FieldDescription
-                  >Percentage of data to be collected. A value of 100% collects all data, while
-                  lower values collect a proportional sample.</FieldDescription
-                >
-              </div>
+            <div class="flex flex-col gap-(--spacing-xs) pt-(--spacing-lg)">
+              <FieldLabel for="data-stream-sampling-rate">Sampling Rate (%)</FieldLabel>
+              <NumberInput
+                id="data-stream-sampling-rate"
+                :model-value="frame.rate"
+                :min="0"
+                :max="100"
+                size="medium"
+                aria-label="Sampling Rate (%)"
+              />
+              <FieldDescription
+                >Percentage of data to be collected. A value of 100% collects all data, while lower
+                values collect a proportional sample.</FieldDescription
+              >
             </div>
-          </Transition>
-        </div>
-      </ConsoleMockupShellItem>
-    </div>
-  </ConsoleMockupShell>
+          </div>
+        </Transition>
+      </div>
+    </ConsoleMockupShellItem>
+  </MockupScrollColumn>
 </template>

@@ -39,9 +39,9 @@ Beside the filter, outlined medium `IconButton`s for Refresh (the button and the
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` opens a dialog that edits a draft and applies it on Confirm: the page size (10, 25, 50), the columns (shown, hidden and reordered), wrapped lines, striped rows and density. The Name and actions columns are `hideable: false`, so the panel locks them. `preferences.storageKey` saves the choice in localStorage per list; `defaults.columns` hides the ID column until someone shows it.
 
-### E. Resource table — `Card`, `DataTable` (required)
+### E. Resource table — `Card`, `DataTable`, `DataTablePagination` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, density, wrap and stripes, while `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot is the pagination footer; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. Status comes right after Name, so a phone shows the column people scan without scrolling. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
@@ -67,7 +67,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 ## Data
 
-The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set).
+The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `view-table.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set). The filter row (the `PropertyFilter`, Refresh, Download CSV and preferences) is the private part `parts/collection-controls.vue`; the Deployments state is `parts/deployments-page.vue`, which renders `parts/deployments-table.vue` with the columns, properties and statuses of `lib/deployments.ts` and the sample runs `sampleDeployments` of `sample.ts`.
 
 | Prop        | Type                  | What it does                                                                                                                                |
 | ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -104,7 +104,7 @@ To go live, render the block from a page that owns the request and pass what it 
 </template>
 ```
 
-Then delete `sample.ts` and its import. A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
+Then delete `sampleResources` and its import (keep `sample.ts` only if you copied the Deployments state, which reads `sampleDeployments` from it). A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
 
 ## Do
 
@@ -120,7 +120,7 @@ Then delete `sample.ts` and its import. A list too large for the browser moves t
 ## Don't
 
 - Don't add a search `Input`, a filter popover, a chip row or a row of `Select`s beside the `PropertyFilter`; one control narrows the list.
-- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, `paginated` and `v-model:globalFilter` by hand beside `tableProps`.
+- Don't filter, sort or page rows in a `computed` outside the collection, or pass `:data`, a non-manual `DataTablePagination` or a `TableSearch` `v-model` by hand beside `tableProps`; page with `<DataTablePagination v-bind="paginationProps" manual />` in the `footer` slot.
 - Don't build a columns popover of `Switch`es; column visibility and order belong to `CollectionPreferences`.
 - Don't wrap a bordered table in a padded card, or let the page scroll sideways for a wide table.
 - Don't add a second create button to the controls row.
@@ -134,7 +134,7 @@ Then delete `sample.ts` and its import. A list too large for the browser moves t
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter resources".
 - **Properties:** the column header's words, e.g. "Name", "Author", "Status", "Domain".
 - **Icon buttons:** a verb or noun in sentence case, e.g. "Refresh", "Download CSV", "Row actions". Preferences title: "Table preferences".
-- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last modified".
+- **Column headers:** one or two words without punctuation, e.g. "Name", "Status", "ID", "Domains", "Last modified".
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".

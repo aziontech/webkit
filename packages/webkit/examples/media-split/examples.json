@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "One claim and one picture of that claim, copy leading and media closing — the `media-end` default. The picture is an official `Illustration` scene: vector, drawn on the system's own canvas, and transparent, so it sits on the band's ground — a grid lattice that fades radially to nothing before the cell's edges. Type a URL into `src` in the Controls panel and the band swaps the scene for a plain image, which covers the ground instead; clear both and the copy column takes the full frame rather than leaving an empty half.",
+      "summary": "One claim and one picture of that claim, copy leading and media closing — the `media-end` default. The picture is an official `Illustration` scene: vector, drawn on the system's own canvas, and transparent, so it sits on the band's ground — a grid lattice that fades radially to nothing before the cell's edges. Set `src` to an image URL and the band swaps the scene for a plain image, which covers the ground instead; clear both and the copy column takes the full frame rather than leaving an empty half.",
       "file": "default.vue"
     },
     {
@@ -34,7 +34,7 @@
     },
     {
       "name": "Actions",
-      "summary": "The band's action pattern, which is fixed rather than per-page: the action itself is a `small` `secondary` button, and a band that carries a second one puts it beside the first as `outlined` at the same size. The size is deliberate — these bands repeat down a page, so a full-height action on each one would compete with the section's own call to action. The slot takes the controls bare; the band floors them under the copy so consecutive bands align on the same line.",
+      "summary": "The band's action pattern, which is fixed rather than per-page: the action itself is a `secondary` button at the default 40px size (the touch floor), and a band that carries a second one puts it beside the first as `outline` at the same size. The quieter variants, not a smaller size, keep these repeated bands from competing with the page's own `primary` call to action. The slot takes the controls bare; the band floors them under the copy so consecutive bands align on the same line.",
       "file": "actions.vue"
     },
     {

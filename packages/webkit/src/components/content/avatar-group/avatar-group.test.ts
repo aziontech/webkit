@@ -69,6 +69,34 @@ describe('AvatarGroup', () => {
     expect(getByRole('img', { name: 'Sam' })).toBe(sam)
   })
 
+  it('shows one initial at small size, so the next avatar never covers half of it', () => {
+    const { getAllByTestId } = render(AvatarGroup, {
+      props: { size: 'small', items: [{ name: 'Jane Doe' }, { name: 'Sam', label: 'sx' }] }
+    })
+
+    const [jane, sam] = getAllByTestId('avatar-group__avatar')
+    expect(jane!.textContent?.trim()).toBe('J')
+    expect(jane).toHaveAttribute('aria-label', 'Jane Doe')
+    expect(sam!.textContent?.trim()).toBe('S')
+  })
+
+  it('keeps a whole character when one initial is drawn from a name outside the basic plane', () => {
+    const { getByTestId } = render(AvatarGroup, {
+      props: { size: 'small', items: [{ name: '\u{1D49C}lex Morgan' }] }
+    })
+
+    expect(getByTestId('avatar-group__avatar').textContent?.trim()).toBe('\u{1D49C}')
+  })
+
+  it('gives the +N button a 44px hit area on a coarse pointer', () => {
+    const { getByTestId } = render(AvatarGroup, { props: { items: people(6), max: 3 } })
+    const hit = getByTestId('avatar-group__touch-target')
+
+    expect(getByTestId('avatar-group__overflow').contains(hit)).toBe(true)
+    expect(hit.getAttribute('aria-hidden')).toBe('true')
+    expect(hit.classList.contains('pointer-coarse:block')).toBe(true)
+  })
+
   it('renders a photo with the name as its alt', () => {
     const { getByAltText, getByTestId } = render(AvatarGroup, {
       props: { items: [{ name: 'Jane Doe', src: PHOTO }] }

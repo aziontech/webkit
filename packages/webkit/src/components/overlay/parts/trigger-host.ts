@@ -35,7 +35,7 @@ const nameOf = ({ type }: VNode): string => (type as { name?: string }).name ?? 
 
 function isControl(vnode: VNode): boolean {
   const { type, props } = vnode
-  if (typeof type !== 'string') return /^(Icon)?Button$/.test(nameOf(vnode))
+  if (typeof type !== 'string') return /^((Icon)?Button|AppHeaderAccount)$/.test(nameOf(vnode))
   const p = props ?? {}
   return (
     /^(button|input|select|textarea)$/.test(type) ||
@@ -77,6 +77,28 @@ function isTextEntry(el: globalThis.HTMLElement): boolean {
   return el instanceof globalThis.HTMLInputElement && !NON_TEXT_INPUTS.includes(el.type)
 }
 
+function controlAria(first: VNode, own: TriggerAria): TriggerAria {
+  own['id'] = first.props?.['id'] ?? own['id']
+  const p = first.props ?? {}
+  if (
+    !p['role'] &&
+    (first.type === 'textarea' ||
+      (first.type === 'input' && !NON_TEXT_INPUTS.includes(String(p['type'] ?? 'text'))))
+  ) {
+    for (const name of POPUP_ARIA) delete own[name]
+  }
+  return own
+}
+
+function applyAttrs(el: globalThis.HTMLElement, attrs: TriggerAria): void {
+  if (isTextEntry(el)) {
+    for (const name of POPUP_ARIA) delete attrs[name]
+  }
+  for (const [name, value] of Object.entries(attrs))
+    if (value !== undefined) el.setAttribute(name, value)
+    else if (name !== 'id') el.removeAttribute(name)
+}
+
 function merge(nodes: VNode[], aria: () => TriggerAria): boolean {
   const index = nodes.findIndex(
     (vnode) => vnode.type !== Comment && !(vnode.type === Text && !String(vnode.children).trim())
@@ -84,17 +106,7 @@ function merge(nodes: VNode[], aria: () => TriggerAria): boolean {
   const first = nodes[index]
   if (!first) return false
   if (isControl(first)) {
-    const own = aria()
-    own['id'] = first.props?.['id'] ?? own['id']
-    const p = first.props ?? {}
-    if (
-      !p['role'] &&
-      (first.type === 'textarea' ||
-        (first.type === 'input' && !NON_TEXT_INPUTS.includes(String(p['type'] ?? 'text'))))
-    ) {
-      for (const name of POPUP_ARIA) delete own[name]
-    }
-    nodes[index] = cloneVNode(first, own, true)
+    nodes[index] = cloneVNode(first, controlAria(first, aria()), true)
     return true
   }
   const inner = (first.children as Record<string, Slot> | null)?.['default']
@@ -106,7 +118,7 @@ function merge(nodes: VNode[], aria: () => TriggerAria): boolean {
       merge(out, aria)
       return out
     }
-  } as unknown as VNode['children']
+  }
   return true
 }
 
@@ -146,13 +158,8 @@ export const TriggerHost = defineComponent({
         control = next
       }
       const attrs = next === host ? hostAttrs() : { ...props.aria, id: undefined }
-      if (isTextEntry(next)) {
-        for (const name of POPUP_ARIA) delete attrs[name]
-      }
       if (ownsId) attrs['id'] = props.controlId
-      for (const [name, value] of Object.entries(attrs))
-        if (value !== undefined) next.setAttribute(name, value)
-        else if (name !== 'id') next.removeAttribute(name)
+      applyAttrs(next, attrs)
       emit('control', next)
     }
 

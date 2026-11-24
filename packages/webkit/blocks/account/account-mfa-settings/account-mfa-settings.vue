@@ -6,6 +6,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
+  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -82,6 +83,24 @@
 
   const withoutMfa = computed(() => items.value.filter((member) => !member.enabled))
 
+  const relaxDescription = computed(() => {
+    const count = withoutMfa.value.length
+    const after = 'New people and anyone whose MFA is reset can then sign in with a password only.'
+    if (!count) return `Everyone keeps the MFA they set up. ${after}`
+    return `${count} ${count === 1 ? 'person' : 'people'} without MFA can sign in again. ${after}`
+  })
+
+  const requireDescription = computed(() => {
+    const count = withoutMfa.value.length
+    if (!count)
+      return 'Everyone in the account already uses MFA. New people set it up at their first sign-in.'
+    const names = withoutMfa.value.map((member) => member.name).join(', ')
+    return (
+      `${count} ${count === 1 ? 'person does' : 'people do'} not use MFA yet (${names}). ` +
+      'They are asked to set it up at their next sign-in and cannot use the account until they do.'
+    )
+  })
+
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'status', header: 'MFA', minWidth: 120 },
@@ -106,15 +125,21 @@
     { key: 'method', label: 'Method', options: [{ value: 'Authenticator app' }] }
   ]
 
-  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
-    useCollection({
-      items: rows,
-      columns,
-      filtering: { fields: ['name', 'email', 'status', 'method'] },
-      propertyFiltering: { properties },
-      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
-      preferences: { storageKey: 'account-mfa' }
-    })
+  const {
+    paginationProps,
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    matchingItems,
+    clearFilters
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'email', 'status', 'method'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'account-mfa' }
+  })
 
   const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
   const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
@@ -122,12 +147,14 @@
   const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const requireOpen = ref(false)
+  const relaxOpen = ref(false)
   const onRequire = (value: boolean) => {
-    if (value) {
-      requireOpen.value = true
-      return
-    }
+    if (value) requireOpen.value = true
+    else relaxOpen.value = true
+  }
+  const confirmRelax = () => {
     required.value = false
+    relaxOpen.value = false
   }
   const confirmRequire = () => {
     required.value = true
@@ -167,6 +194,7 @@
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -363,6 +391,12 @@
                     </template>
                   </EmptyState>
                 </template>
+                <template #footer>
+                  <DataTablePagination
+                    v-bind="paginationProps"
+                    manual
+                  />
+                </template>
               </DataTable>
             </template>
           </Card>
@@ -374,14 +408,20 @@
       v-model:open="requireOpen"
       variant="primary"
       title="Require MFA"
-      :description="
-        withoutMfa.length
-          ? `${withoutMfa.length} ${withoutMfa.length === 1 ? 'person does' : 'people do'} not use MFA yet (${withoutMfa.map((member) => member.name).join(', ')}). They are asked to set it up at their next sign-in and cannot use the account until they do.`
-          : 'Everyone in the account already uses MFA. New people set it up at their first sign-in.'
-      "
+      :description="requireDescription"
       confirm-label="Require MFA"
       size="small"
       @confirm="confirmRequire"
+    />
+
+    <ConfirmDialog
+      v-model:open="relaxOpen"
+      variant="danger"
+      title="Stop requiring MFA"
+      :description="relaxDescription"
+      confirm-label="Stop requiring MFA"
+      size="small"
+      @confirm="confirmRelax"
     />
 
     <ConfirmDialog

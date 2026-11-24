@@ -48,7 +48,7 @@
   <div class="flex flex-col justify-center items-center w-full">
     <!-- Top Bar -->
     <div
-      class="w-full bg-neutral-200 dark:bg-neutral-900 overflow-hidden pb-5 gradient-mask-b-60 md:gradient-mask-b-60 px-4 md:px-8 top-0 z-20 py-4 md:py-8 sticky justify-center items-center flex flex-col"
+      class="w-full bg-neutral-200 dark:bg-neutral-900 overflow-hidden pb-5 mask-b-from-60% px-4 md:px-8 top-0 z-20 py-4 md:py-8 sticky justify-center items-center flex flex-col"
     >
       <div class="max-w-[1472px] w-full z-20 flex gap-2 md:gap-4 justify-between">
         <SearchBar class="w-full z-20" />
@@ -134,7 +134,7 @@
             <i class="az az-face-smile"></i>
           </div>
         </div>
-        <!-- Comandos -->
+        <!-- Commands -->
         <div
           class="flex-col gap-3 w-full md:flex-col md:w-64 md:sticky top-28 md:h-60 z-10 hidden md:flex"
         >
@@ -142,7 +142,7 @@
             class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
           >
             <i
-              class="az az-move-horizontal text-xs ml-1 text-neutral-700 dark:text-neutral-400"
+              class="az az-move-horizontal text-xs ms-1 text-neutral-700 dark:text-neutral-400"
             ></i>
             <!-- Slider -->
             <div class="flex flex-row w-full items-center gap-2">
@@ -156,7 +156,7 @@
                 :style="{ '--thumb-color': pureColor }"
                 style="cursor: grab"
               />
-              <p class="text-neutral-500 text-xs dark:text-neutral-400 w-12 text-left">
+              <p class="text-neutral-500 text-xs dark:text-neutral-400 w-12 text-start">
                 {{ selectedFontSize }}px
               </p>
             </div>
@@ -164,13 +164,13 @@
           <div
             class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
           >
-            <i class="az az-palette text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+            <i class="az az-palette text-xs ms-1 text-neutral-700 dark:text-neutral-400"></i>
             <color-picker v-model:pureColor="pureColor" />
           </div>
           <div
             class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
           >
-            <i class="az az-settings text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+            <i class="az az-settings text-xs ms-1 text-neutral-700 dark:text-neutral-400"></i>
             <div class="radio-group">
               <label class="w-full">
                 <input
@@ -205,11 +205,11 @@
     <div
       class="flex flex-col gap-3 w-full md:flex-col md:w-64 md:sticky top-28 md:h-60 z-10 px-4 pt-6 pb-8"
     >
-      <!-- Comandos -->
+      <!-- Commands -->
       <div
         class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
       >
-        <i class="az az-move-horizontal text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+        <i class="az az-move-horizontal text-xs ms-1 text-neutral-700 dark:text-neutral-400"></i>
         <!-- Slider for mobile -->
         <div class="flex flex-row w-full items-center gap-2">
           <input
@@ -229,13 +229,13 @@
       <div
         class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
       >
-        <i class="az az-palette text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+        <i class="az az-palette text-xs ms-1 text-neutral-700 dark:text-neutral-400"></i>
         <color-picker v-model:pureColor="pureColor" />
       </div>
       <div
         class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
       >
-        <i class="az az-settings text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+        <i class="az az-settings text-xs ms-1 text-neutral-700 dark:text-neutral-400"></i>
         <div class="radio-group">
           <label class="w-full">
             <input
@@ -270,6 +270,8 @@
 </template>
 
 <style scoped>
+  @reference './styles/main.css';
+
   .circle {
     width: 600px;
     height: 600px;
@@ -295,7 +297,7 @@
     height: 16px;
     border-radius: 50%;
     cursor: grab;
-    background-color: var(--thumb-color, #4a5568); /* Aplica a cor da bolinha */
+    background-color: var(--thumb-color, #4a5568); /* Applies the thumb color */
   }
 
   .slider-input::-moz-range-thumb {
@@ -303,6 +305,6 @@
     height: 16px;
     border-radius: 50%;
     cursor: grab;
-    background-color: var(--thumb-color, #4a5568); /* Aplica a cor da bolinha */
+    background-color: var(--thumb-color, #4a5568); /* Applies the thumb color */
   }
 </style>

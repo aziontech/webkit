@@ -1,5 +1,5 @@
 {
- "purpose": "A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.",
+ "purpose": "A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans every cell left in the grid's last row so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.",
  "useWhen": [
   "On the Learning Center index, to list every subject with the articles that teach it.",
   "Whenever a page needs a grid of topic cards that each carry a short list of links, closed by one call to action."
@@ -15,7 +15,7 @@
  ],
  "bestPractices": [
   "Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.",
-  "Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.",
+  "Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell takes two thirds of the last row on desktop; any other count still ends flush, with the closing cell across one cell or a full row.",
   "Keep each subject's articles to a handful; the card grows with its list."
  ]
 }

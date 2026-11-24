@@ -30,7 +30,7 @@
     "name": "Existing",
     "file": "create-resource-picker.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["sample.ts", "composables/use-paged-list.ts"],
   "variants": [
     {
       "name": "New",

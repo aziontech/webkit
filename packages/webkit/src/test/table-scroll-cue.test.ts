@@ -10,7 +10,12 @@ import ScanResults from '../../blocks/dashboard/dashboard-scan-results/dashboard
 import RulesList from '../../blocks/view/view-rule-list/view-rule-list.vue'
 import ViewTable from '../../blocks/view/view-table/view-table.vue'
 import DataGridDefault from '../../examples/data-grid/default.vue'
+import DataGridReadonly from '../../examples/data-grid/readonly.vue'
 import DataGridRowSelection from '../../examples/data-grid/row-selection.vue'
+import DataTableDefault from '../../examples/data-table/default.vue'
+import DataTableFixedLayout from '../../examples/data-table/fixed-layout-with-column-sizes.vue'
+import PropertyFilterCollection from '../../examples/property-filter/with-collection.vue'
+import TableCellPresets from '../../examples/table/cell-presets.vue'
 import TableDefault from '../../examples/table/default.vue'
 import DataTableRoot from '../components/data/data-table/data-table.vue'
 import type { TableColumn } from '../components/data/table/injection-key'
@@ -141,7 +146,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
   })
 
   it.each(['ltr', 'rtl'] as const)(
-    'leaves the end edge to a frozen end column, which paints over the cue and draws its own fade (%s)',
+    'puts the end fade beside the frozen end columns, which draw no cut (%s)',
     async (dir) => {
       const { container } = mount(
         () => h(DataTable, { data: rows, columns: twoEndFrozen, rowKey: 'id', ariaLabel: 'Rules' }),
@@ -150,17 +155,12 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
       await settle()
       const { scroll, end } = parts(container, 'data-table')
       expect(scroll.dataset['overflowEnd']).toBeTruthy()
-      end!.style.pointerEvents = 'auto'
+      const frozen = Array.from(
+        container.querySelectorAll<HTMLElement>('[role="columnheader"][data-frozen="end"]')
+      ).map((el) => el.getBoundingClientRect())
       const fade = end!.getBoundingClientRect()
-      const x = fade.left + fade.width / 2
-      const rowEls = [...container.querySelectorAll<HTMLElement>('[role="row"]')].slice(0, 3)
-      expect(rowEls.length).toBe(3)
-      for (const rowEl of rowEls) {
-        const box = rowEl.getBoundingClientRect()
-        const top = document.elementFromPoint(x, box.top + box.height / 2)
-        expect(top?.closest('[data-frozen="end"]')).not.toBeNull()
-      }
-      end!.style.pointerEvents = ''
+      if (dir === 'rtl') expect(fade.left).toBeCloseTo(Math.max(...frozen.map((r) => r.right)), 0)
+      else expect(fade.right).toBeCloseTo(Math.min(...frozen.map((r) => r.left)), 0)
     }
   )
 
@@ -304,5 +304,76 @@ describe('a fade never covers content that is fully visible', () => {
       expect(fades.length).toBeGreaterThan(0)
       for (const fade of fades) expect(shown(fade), fade.dataset['testid']).toBe(false)
     })
+  })
+})
+
+const endEdge = (viewport: HTMLElement, dir: 'ltr' | 'rtl'): number => {
+  const box = viewport.getBoundingClientRect()
+  const inner =
+    dir === 'rtl'
+      ? box.left + viewport.clientLeft
+      : box.left + viewport.clientLeft + viewport.clientWidth
+  const frozen = Array.from(
+    viewport.querySelectorAll<HTMLElement>('[role="columnheader"][data-frozen="end"]')
+  ).map((el) => el.getBoundingClientRect())
+  if (frozen.length === 0) return inner
+  return dir === 'rtl'
+    ? Math.max(...frozen.map((r) => r.right))
+    : Math.min(...frozen.map((r) => r.left))
+}
+
+describe('a column cut at the end edge never shows a partial value', () => {
+  it.each([
+    { name: 'data-grid/row-selection', id: 'data-grid', view: DataGridRowSelection },
+    { name: 'data-grid/readonly', id: 'data-grid', view: DataGridReadonly },
+    { name: 'data-table/default', id: 'data-table', view: DataTableDefault },
+    {
+      name: 'data-table/fixed-layout-with-column-sizes',
+      id: 'data-table',
+      view: DataTableFixedLayout
+    },
+    { name: 'property-filter/with-collection', id: 'data-table', view: PropertyFilterCollection },
+    { name: 'table/cell-presets', id: 'data-table', view: TableCellPresets }
+  ])('$name at 320 and 390', async ({ id, view }) => {
+    for (const pageDir of ['ltr', 'rtl'] as const) {
+      for (const width of [320, 390]) {
+        const { container, unmount } = mount(() => h(view as Component), pageDir, width)
+        await settle()
+        const { viewport, end } = parts(container, id)
+        const dir = getComputedStyle(viewport).direction === 'rtl' ? 'rtl' : 'ltr'
+        const edge = endEdge(viewport, dir)
+        const fade = end!.getBoundingClientRect()
+        const covered = dir === 'rtl' ? fade.right : fade.left
+        for (const head of viewport.querySelectorAll<HTMLElement>('[role="columnheader"]')) {
+          if (head.dataset['frozen']) continue
+          const r = head.getBoundingClientRect()
+          if (r.left >= edge - 0.5 || r.right <= edge + 0.5) continue
+          const slice = dir === 'rtl' ? r.right - edge : edge - r.left
+          const label = `${head.textContent?.trim()} ${dir} ${width}`
+          const endAligned = head.matches('[data-align=end], :has(> [data-align=end])')
+          if (endAligned || slice < r.width / 2) {
+            const detail = `${label} fade=${fade.left}..${fade.right} head=${r.left}..${r.right} edge=${edge}`
+            if (dir === 'rtl') expect(covered, detail).toBeGreaterThanOrEqual(r.right - 1)
+            else expect(covered, detail).toBeLessThanOrEqual(r.left + 1)
+          }
+        }
+        unmount()
+      }
+    }
+  })
+
+  it('keeps the Status column in view on a phone in the data-table examples', async () => {
+    for (const width of [320, 390]) {
+      const { container, unmount } = mount(() => h(DataTableDefault as Component), 'ltr', width)
+      await settle()
+      const { viewport } = parts(container, 'data-table')
+      const status = Array.from(
+        viewport.querySelectorAll<HTMLElement>('[role="columnheader"]')
+      ).find((el) => el.textContent?.includes('Status'))!
+      expect(status.getBoundingClientRect().right).toBeLessThanOrEqual(
+        endEdge(viewport, 'ltr') + 0.5
+      )
+      unmount()
+    }
   })
 })

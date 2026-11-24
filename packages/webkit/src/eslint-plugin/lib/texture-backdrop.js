@@ -27,7 +27,7 @@ export const BACKDROP_SCENES = [
   'SpinningGlobe'
 ]
 
-export const GROUND_COMPONENTS = ['ConsoleMockup', 'ConsoleMockupShell']
+const GROUND_COMPONENTS = ['ConsoleMockup', 'ConsoleMockupShell']
 
 export const TEXTURE_BACKDROP_DIRS = [
   'packages/webkit/src',
@@ -37,7 +37,12 @@ export const TEXTURE_BACKDROP_DIRS = [
 
 export const TEXTURE_BACKDROP_MESSAGES = {
   'graphic-on-texture':
-    'Content other than text drawn on a texture: a chart, diagram, map or stat, or any page-JSON scene other than a console window, globe or illustration. A Texture is a backdrop for text only: its dots compete with the marks, labels and lines, so the content cannot be read. Set the host to a layout without the texture (`ConsoleShowcaseSection variant="diagram"`, `texture="none"`), or move the graphic off the textured band (.claude/rules/styling.md § "A texture is a backdrop for text only").'
+    'Content other than text drawn on a texture: a chart, diagram, map or stat, or any ' +
+    'page-JSON scene other than a console window, globe or illustration. A Texture is a ' +
+    'backdrop for text only: its dots compete with the marks, labels and lines, so the ' +
+    'content cannot be read. Set the host to a layout without the texture ' +
+    '(`ConsoleShowcaseSection variant="diagram"`, `texture="none"`), or move the graphic off ' +
+    'the textured band (.claude/rules/styling.md § "A texture is a backdrop for text only").'
 }
 
 export function textureBackdropApplies(rel) {
@@ -62,21 +67,31 @@ const ELEMENT = 1
 const ATTRIBUTE = 6
 const DIRECTIVE = 7
 
+const namesProp = (candidate, name, kebab) => candidate === name || candidate === kebab
+
+const isStaticBind = (prop, name, kebab) =>
+  prop.type === DIRECTIVE &&
+  prop.name === 'bind' &&
+  prop.arg?.isStatic &&
+  namesProp(prop.arg.content, name, kebab)
+
+const boundLiteral = (prop) => {
+  const literal = /^\s*(['"])([^'"]*)\1\s*$/.exec(prop.exp?.content ?? '')
+  return { value: literal ? literal[2] : undefined }
+}
+
+const propValue = (prop, name, kebab) => {
+  if (prop.type === ATTRIBUTE && namesProp(prop.name, name, kebab)) {
+    return { value: prop.value?.content ?? '' }
+  }
+  return isStaticBind(prop, name, kebab) ? boundLiteral(prop) : null
+}
+
 const staticProp = (node, name) => {
   const kebab = name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)
   for (const prop of node.props ?? []) {
-    if (prop.type === ATTRIBUTE && (prop.name === name || prop.name === kebab)) {
-      return { value: prop.value?.content ?? '' }
-    }
-    if (
-      prop.type === DIRECTIVE &&
-      prop.name === 'bind' &&
-      prop.arg?.isStatic &&
-      (prop.arg.content === name || prop.arg.content === kebab)
-    ) {
-      const literal = /^\s*(['"])([^'"]*)\1\s*$/.exec(prop.exp?.content ?? '')
-      return { value: literal ? literal[2] : undefined }
-    }
+    const found = propValue(prop, name, kebab)
+    if (found) return found
   }
   return null
 }

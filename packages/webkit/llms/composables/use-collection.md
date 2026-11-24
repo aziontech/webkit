@@ -4,7 +4,7 @@ Composable `@aziontech/webkit/use-collection`. The signatures and option tables 
 
 ```ts
 import { useCollection, matchesQuery, matchesText, parseFilterText, tokenText, historyAdapter, routerAdapter } from '@aziontech/webkit/use-collection'
-import type { UseCollectionOptions, UseCollectionReturn, CollectionColumnPreference, CollectionDensity, CollectionPreferencesValue, PreferencesStorage, FilteringProperty, PropertyFilterOperation, PropertyFilterOperator, PropertyFilterOption, PropertyFilterQuery, PropertyFilterToken, PropertyFilterTokenGroup, CollectionUrlAdapter, RouterLike, CollectionCardListProps, CollectionColumn, CollectionExportParams, CollectionExportScope, CollectionFetchParams, CollectionFetchResult, CollectionPaginationProps, CollectionPreferenceColumn, CollectionPreferencesProps, CollectionPropertyFilterProps, CollectionSelectionMode, CollectionSort, CollectionStatus, CollectionTableProps, CollectionTextFilterProps } from '@aziontech/webkit/use-collection'
+import type { UseCollectionOptions, UseCollectionReturn, CollectionColumnPreference, CollectionDensity, CollectionPreferencesValue, PreferencesStorage, FilteringProperty, PropertyFilterOperation, PropertyFilterOperator, PropertyFilterOption, PropertyFilterQuery, PropertyFilterToken, PropertyFilterTokenGroup, CollectionCardListProps, CollectionColumn, CollectionExportParams, CollectionExportScope, CollectionFetchParams, CollectionFetchResult, CollectionPaginationProps, CollectionPreferenceColumn, CollectionPreferencesProps, CollectionPropertyFilterProps, CollectionSelectionMode, CollectionSort, CollectionStatus, CollectionTableProps, CollectionTextFilterProps, CollectionUrlAdapter, RouterLike } from '@aziontech/webkit/use-collection'
 ```
 
 ## `useCollection`
@@ -216,26 +216,6 @@ Tokens combined by their own operation, inside a query.
 | `tokens` | `PropertyFilterToken[]` | yes |  |
 | `operation` | `PropertyFilterOperation` | yes |  |
 
-## `CollectionUrlAdapter`
-
-Reads and writes the query string. `useCollection` keeps its state in it when `url` is set.
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `read` | `() => URLSearchParams` | yes |  |
-| `write` | `(params: URLSearchParams) => void` | yes |  |
-| `subscribe` | `(listener: () => void) => () => void` | no |  |
-
-## `RouterLike`
-
-The part of a Vue Router instance the adapter uses.
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `currentRoute` | `{ value: { query: Record<string, RouteQueryValue> } }` | yes |  |
-| `replace` | `(to: { query: Record<string, string \| string[]> }) => unknown` | yes |  |
-| `afterEach` | `(hook: () => void) => () => void` | no |  |
-
 ## `CollectionCardListProps<T>`
 
 | Field | Type | Required | Description |
@@ -374,22 +354,13 @@ type CollectionStatus = 'loading' | 'error' | 'empty' | 'no-match' | 'ready'
 | `sorting` | `CollectionSort[]` | yes |  |
 | `manualSorting` | `true` | yes |  |
 | `manualFiltering` | `true` | yes |  |
-| `manualPagination` | `true` | yes |  |
-| `paginated` | `boolean` | yes |  |
-| `page` | `number` | yes |  |
-| `pageSize` | `number` | yes |  |
-| `rowCount` | `number` | yes |  |
-| `pageSizeOptions` | `number[]` | yes |  |
 | `selectable` | `boolean` | yes |  |
 | `selectedKeys` | `string[]` | yes |  |
 | `columnVisibility` | `Record<string, boolean>` | yes |  |
 | `wrapLines` | `boolean` | yes |  |
 | `striped` | `boolean` | yes |  |
 | `density` | `CollectionDensity` | yes |  |
-| `exportRows` | `(scope: CollectionExportScope) => Promise<T[]> \| T[]` | yes |  |
 | `onUpdate:sorting` | `(value: CollectionSort[] \| undefined) => void` | yes |  |
-| `onUpdate:page` | `(value: number \| undefined) => void` | yes |  |
-| `onUpdate:pageSize` | `(value: number) => void` | yes |  |
 | `onUpdate:selectedKeys` | `(value: string[] \| undefined) => void` | yes |  |
 | `onUpdate:columnVisibility` | `(value: Record<string, boolean> \| undefined) => void` | yes |  |
 
@@ -399,3 +370,23 @@ type CollectionStatus = 'loading' | 'error' | 'empty' | 'no-match' | 'ready'
 | --- | --- | --- | --- |
 | `modelValue` | `string` | yes |  |
 | `onUpdate:modelValue` | `(value: string) => void` | yes |  |
+
+## `CollectionUrlAdapter`
+
+Reads and writes the query string. `useCollection` keeps its state in it when `url` is set.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `read` | `() => URLSearchParams` | yes |  |
+| `write` | `(params: URLSearchParams) => void` | yes |  |
+| `subscribe` | `(listener: () => void) => () => void` | no |  |
+
+## `RouterLike`
+
+The part of a Vue Router instance the adapter uses.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `currentRoute` | `{ value: { query: Record<string, RouteQueryValue> } }` | yes |  |
+| `replace` | `(to: { query: Record<string, string \| string[]> }) => unknown` | yes |  |
+| `afterEach` | `(hook: () => void) => () => void` | no |  |

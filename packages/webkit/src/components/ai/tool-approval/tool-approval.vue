@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -7,9 +7,9 @@
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import Field from '../../input/field/field.vue'
   import FieldError from '../../input/field/field-error/field-error.vue'
+  import Input from '../../input/input/input.vue'
   import Textarea from '../../input/textarea/textarea.vue'
-  import MarkdownInline from '../lib/markdown-inline'
-  import { parseInline } from '../lib/parse-markdown'
+  import AgentQuestionHeading from '../agent-question/parts/agent-question-heading.vue'
 
   export type ToolApprovalStatus = 'pending' | 'approved' | 'denied' | 'expired'
   export type ToolApprovalVariant = 'primary' | 'danger'
@@ -80,10 +80,20 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'tool-approval'
   )
-  const headingEl = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
+  const headingEl = ref<InstanceType<typeof AgentQuestionHeading> | null>(null)
   const typed = ref<string>('')
-  const titleNodes = computed(() => parseInline(props.title))
-  const descriptionNodes = computed(() => parseInline(props.description))
+  const phraseMismatch = computed<boolean>(() => {
+    const value = typed.value.trim()
+    return (
+      !!props.confirmationPhrase &&
+      value.length >= props.confirmationPhrase.length &&
+      value !== props.confirmationPhrase
+    )
+  })
+  const confirmLabelParts = computed<string[]>(() =>
+    t('toolApproval.confirmLabel', { phrase: '\u0000' }).split('\u0000')
+  )
   const confirmed = computed<boolean>(
     () =>
       (!props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase) &&
@@ -104,8 +114,12 @@
 
   watch(
     () => props.status,
-    (status) => {
+    (status, previous) => {
       if (status === 'pending') typed.value = ''
+      if (previous !== 'pending' || status === 'pending' || typeof document === 'undefined') return
+      const active = document.activeElement
+      const focusWasInside = !active || active === document.body || !!rootEl.value?.contains(active)
+      if (focusWasInside) void nextTick(focus)
     }
   )
 
@@ -124,10 +138,15 @@
   }
 
   defineExpose({ focus })
+
+  const ROOT_CLASS =
+    'flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) ' +
+    'data-[variant=danger]:data-[status=pending]:border-(--danger-border)'
 </script>
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     role="group"
     :aria-labelledby="titleId"
@@ -135,32 +154,23 @@
     :data-testid="testId"
     :data-status="status"
     :data-variant="variant"
-    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) data-[variant=danger]:data-[status=pending]:border-(--danger-border)"
+    :class="ROOT_CLASS"
   >
     <div class="flex items-start gap-(--spacing-sm)">
       <i
         :data-variant="variant"
-        class="az az-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-foreground)"
+        class="az az-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-mark)"
         aria-hidden="true"
       />
-      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-        <h3
-          :id="titleId"
-          ref="headingEl"
-          tabindex="-1"
-          :data-testid="`${testId}__title`"
-          class="m-0 text-heading-2xs [overflow-wrap:anywhere] text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-        >
-          <MarkdownInline :nodes="titleNodes" />
-        </h3>
-        <p
-          v-if="description"
-          :id="descriptionId"
-          class="m-0 text-body-sm text-(--text-muted)"
-        >
-          <MarkdownInline :nodes="descriptionNodes" />
-        </p>
-      </div>
+      <AgentQuestionHeading
+        ref="headingEl"
+        :title-id="titleId"
+        :description-id="descriptionId"
+        :title="title"
+        :description="description"
+        :test-id="testId"
+        title-class="[overflow-wrap:anywhere]"
+      />
     </div>
     <div
       v-if="slots.default"
@@ -187,6 +197,7 @@
         dir="ltr"
         spellcheck="false"
         autocomplete="off"
+        wrap="off"
         monospace
         auto-resize
         :min-rows="3"
@@ -203,27 +214,39 @@
       </FieldError>
     </Field>
     <template v-if="status === 'pending'">
-      <div
+      <Field
         v-if="confirmationPhrase"
-        class="flex flex-col gap-(--spacing-2xs)"
+        :invalid="phraseMismatch"
+        :disabled="loading"
       >
         <label
           :for="phraseId"
           class="text-label-sm text-(--text-default)"
         >
-          {{ t('toolApproval.confirmLabel', { phrase: confirmationPhrase }) }}
+          {{ confirmLabelParts[0]
+          }}<code
+            dir="ltr"
+            class="rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default) [overflow-wrap:anywhere]"
+            :data-testid="`${testId}__phrase-text`"
+            >{{ confirmationPhrase }}</code
+          >{{ confirmLabelParts[1] }}
         </label>
-        <input
+        <Input
           :id="phraseId"
           v-model="typed"
-          type="text"
           autocomplete="off"
-          spellcheck="false"
+          autocapitalize="off"
+          :spellcheck="false"
           :disabled="loading"
           :data-testid="`${testId}__phrase`"
-          class="h-8 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)"
         />
-      </div>
+        <FieldError
+          v-if="phraseMismatch"
+          :data-testid="`${testId}__phrase-error`"
+        >
+          {{ t('toolApproval.phraseMismatch', { phrase: confirmationPhrase }) }}
+        </FieldError>
+      </Field>
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">
         <Button
           :label="denyLabel || t('toolApproval.deny')"

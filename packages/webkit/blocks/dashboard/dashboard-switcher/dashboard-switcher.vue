@@ -220,6 +220,14 @@
         title="Dashboards"
         description="Traffic, security and business views across every workload, plus a layout of your own."
       />
+      <Alert
+        v-if="error"
+        severity="danger"
+        :label="`Couldn't load the dashboard. ${error}`"
+        action-label="Retry"
+        data-testid="dashboard-switcher__error"
+        @action="(event: MouseEvent) => emit('retry', event)"
+      />
 
       <section
         aria-label="Dashboard controls"
@@ -338,13 +346,12 @@
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="`Couldn't load ${active.chart.title.toLowerCase()}. ${error}`"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 v-model:active-index="activeIndex"
@@ -381,13 +388,12 @@
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="`Couldn't load ${active.breakdown.title.toLowerCase()}. ${error}`"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <BarList
                 v-else
                 :items="data?.breakdown ?? []"

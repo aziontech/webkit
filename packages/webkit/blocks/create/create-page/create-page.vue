@@ -1,6 +1,7 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
+  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
@@ -17,11 +18,13 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import TagEditor, { type TagEditorTag } from '@aziontech/webkit/tag-editor'
-  import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import { onMounted, reactive, ref, watch } from 'vue'
+
+  import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'
 
   /** The values of the Create Domain form. */
   export interface CreatePageValues {
@@ -42,15 +45,8 @@
     defaultValues?: Partial<CreatePageValues>
     /** The create request is in flight; the form locks and Save spins. */
     loading?: boolean
-    /** Why the create request failed, shown in an error toast with Retry. */
+    /** Why the create request failed, shown in an inline error with Retry above the save bar. */
     error?: string
-  }
-
-  interface FormErrors {
-    name: string
-    nameKind: 'helper' | 'invalid' | 'required'
-    domain: string
-    domainKind: 'helper' | 'invalid' | 'required'
   }
 
   const props = withDefaults(defineProps<CreatePageProps>(), {
@@ -76,7 +72,7 @@
   })
   const tagKeySuggestions = ['team', 'environment', 'owner', 'cost-center']
   const tagEditorEl = ref<InstanceType<typeof TagEditor> | null>(null)
-  const errors = reactive<FormErrors>({
+  const errors = reactive<CreatePageDomainErrors>({
     name: '',
     nameKind: 'required',
     domain: '',
@@ -84,34 +80,10 @@
   })
   const advancedOpen = ref(false)
 
-  const NAME_MAX = 50
-  const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
-
   const validate = () => {
-    const name = form.name.trim()
-    if (!name) {
-      errors.nameKind = 'required'
-      errors.name = 'This field is required.'
-    } else if (name.length > NAME_MAX) {
-      errors.nameKind = 'invalid'
-      errors.name = 'Use at most ' + NAME_MAX + ' characters.'
-    } else {
-      errors.name = ''
-    }
-
-    const domain = form.domain.trim()
-    if (!domain) {
-      errors.domainKind = 'required'
-      errors.domain = 'This field is required.'
-    } else if (!DOMAIN_PATTERN.test(domain)) {
-      errors.domainKind = 'invalid'
-      errors.domain = 'Enter a valid domain name. Example: example.com.'
-    } else {
-      errors.domain = ''
-    }
-
+    const fieldsValid = validateDomainForm(form, errors)
     const tagsValid = tagEditorEl.value?.validate() ?? true
-    return !errors.name && !errors.domain && tagsValid
+    return fieldsValid && tagsValid
   }
 
   const values = (): CreatePageValues => ({
@@ -150,21 +122,25 @@
   onMounted(() => nameEl.value?.focus())
 
   const submit = (event: Event) => {
-    if (props.loading || !validate()) return
+    if (props.loading) return
+    if (!validate()) {
+      focusFirstInvalid(formEl.value)
+      return
+    }
     emit('submit', event, values())
   }
 
+  const attempt = ref(0)
+
   watch(
-    () => props.error,
-    (message) => {
-      if (!message) return
-      toast.error('Could not create the domain.', {
-        description: message,
-        action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
-      })
-    },
-    { immediate: true }
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) attempt.value += 1
+    }
   )
+
+  const DNSSEC_DESCRIPTION =
+    "Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
 </script>
 
 <template>
@@ -191,17 +167,10 @@
       </AppHeader.Start>
       <AppHeader.Center />
       <AppHeader.End>
-        <button
-          type="button"
+        <AppHeaderAccount
+          name="name@example.com"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
+        />
       </AppHeader.End>
     </AppHeader>
 
@@ -238,6 +207,7 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        required
                         stackable
                         title="Name"
                         description="Identifies the domain in this list. It is not the hostname."
@@ -262,6 +232,7 @@
                         >
                       </SettingsRow>
                       <SettingsRow
+                        required
                         stackable
                         title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain."
@@ -319,7 +290,7 @@
                     <Item.List>
                       <SettingsRow
                         title="DNSSEC"
-                        description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
+                        :description="DNSSEC_DESCRIPTION"
                         variant="compact"
                       >
                         <Switch
@@ -342,6 +313,17 @@
                 </Card>
               </SettingsGroup>
             </fieldset>
+
+            <Alert
+              v-if="error"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="Could not create the domain."
+              :label="error"
+              action-label="Retry"
+              @action="submit"
+            />
           </div>
           <SaveBar variant="centered">
             <template #actions>

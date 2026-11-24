@@ -1,7 +1,10 @@
+import '../../../test/reflow.css'
+
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/toggle-group/default.vue'
+import Fluid from '../../../../examples/toggle-group/fluid.vue'
 import WithDisabledOption from '../../../../examples/toggle-group/with-disabled-option.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ToggleGroup from './toggle-group.vue'
@@ -38,6 +41,19 @@ describe('ToggleGroup', () => {
     const { getByTestId } = render(ToggleGroup, { props: { options: OPTIONS, size } })
 
     expect(getByTestId('toggle-group').getAttribute('data-size')).toBe(expected)
+  })
+
+  it('grows every segment hit area to 44px tall on coarse pointers, never sideways into a neighbour', () => {
+    const { getAllByRole } = render(ToggleGroup, {
+      props: { options: OPTIONS, ariaLabel: 'Choose one' }
+    })
+
+    for (const option of getAllByRole('radio')) {
+      const target = option.querySelector('[data-slot="touch-target"]')
+      expect(target?.className).toContain('pointer-coarse:block')
+      expect(target?.className).toContain('inset-y-[min(0rem,calc(50%-22px))]')
+      expect(target?.className).toContain('inset-x-0')
+    }
   })
 
   it('defaults data-size to large', () => {
@@ -373,6 +389,42 @@ describe('ToggleGroup', () => {
       expect(new FormData(form).get('range')).toBe('one')
       await fireEvent.click(getAllByTestId('toggle-group__option')[2])
       expect(new FormData(form).get('range')).toBe('three')
+    })
+  })
+
+  describe('layout (styled)', () => {
+    const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
+
+    it.each([
+      ['Default', Default],
+      ['Fluid', Fluid]
+    ])('wraps the %s options in a narrow box instead of cutting a label', async (_, example) => {
+      const { container } = render({
+        components: { example },
+        template: '<div style="width: 180px"><example /></div>'
+      })
+      await frame()
+      await frame()
+      const labels = [
+        ...container.querySelectorAll<HTMLElement>('[role="radio"] > span:not([aria-hidden])')
+      ]
+      expect(labels.length).toBeGreaterThan(0)
+      for (const label of labels) {
+        expect(label.scrollWidth).toBeLessThanOrEqual(label.clientWidth + 1)
+        const box = label.getBoundingClientRect()
+        const group = label.closest('[role="radiogroup"]')!.getBoundingClientRect()
+        expect(box.right).toBeLessThanOrEqual(group.right + 1)
+        expect(box.bottom).toBeLessThanOrEqual(group.bottom + 1)
+      }
+    })
+
+    it('paints no fill on a disabled option, so only the selected one is filled', async () => {
+      const { getAllByTestId } = render(WithDisabledOption)
+      await frame()
+      const disabled = getAllByTestId('toggle-group__option').find((option) =>
+        option.hasAttribute('disabled')
+      )!
+      expect(getComputedStyle(disabled).backgroundColor).toBe('rgba(0, 0, 0, 0)')
     })
   })
 })

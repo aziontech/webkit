@@ -331,6 +331,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ```vue
 <script setup>
+  import Link from '@aziontech/webkit/link'
   import TutorialPanel from '@aziontech/webkit/tutorial-panel'
   import { ref } from 'vue'
 
@@ -376,12 +377,11 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
     >
       <TutorialPanel>
         <template #completion>
-          <a
+          <Link
             href="#feedback"
-            class="text-link w-fit"
-          >
-            Tell us how this tutorial went
-          </a>
+            label="Tell us how this tutorial went"
+            size="small"
+          />
         </template>
       </TutorialPanel>
     </TutorialPanel.Provider>

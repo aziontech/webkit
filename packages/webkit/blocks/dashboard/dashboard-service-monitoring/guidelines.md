@@ -80,26 +80,30 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 
 ### L. Load failure — `Alert` (required)
 
-With `error` set, a danger `Alert` takes the place of each chart and of the rail, naming what did not
-load (`Couldn't load latency.`) with Retry.
+When `error` is set, one danger `Alert` under the page heading says `Couldn't load <page>.` followed by the message, with Retry, which emits `retry`. Every region keeps its header and shows a quiet `Not available.` line in place of its content, and each tile shows a dash over a neutral `Couldn't load` band, so one failed request reads as one problem instead of a wall of red banners.
+
+### M. Jump to the open alerts — `Link` (required below `xl`)
+
+Below `xl` the Open alerts rail follows the tiles and the charts, so a `Link` under the page heading
+(`3 open alerts`) jumps to it; at `xl` the rail sits beside the content and the link hides.
 
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `ServiceMonitoringService`, `ServiceMonitoringSeriesData`, `ServiceMonitoringAlert`, `ServiceMonitoringWindow` and `ServiceMonitoringDashboardProps` are exported from `dashboard-service-monitoring.vue`, and `sample.ts` holds the sample services, series and alerts the block renders when a data prop is left out (and never while `loading` or `error` is set).
 
-| Prop / model     | Type                          | What it does                                                                                                   |
-| ---------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `services`       | `ServiceMonitoringService[]`  | One tile per service. A service with `latency: null` shows a dash and no state.                                |
-| `latency`        | `ServiceMonitoringSeriesData` | The `p50`, `p95` and `p99` lines over the window. No series is the `No traffic yet` empty chart.               |
-| `errorRate`      | `ServiceMonitoringSeriesData` | The `Status 4xx` and `Status 5xx` lines over the window.                                                       |
-| `alerts`         | `ServiceMonitoringAlert[]`    | The open alerts in the rail. Pass `[]` for `No open alerts`.                                                   |
-| `loading`        | `boolean`                     | The window is loading: the tiles, both charts and the rail hold Skeletons; the window switch stays usable.     |
-| `error`          | `string`                      | Why the request failed, shown after `Couldn't load latency.` (error rate, open alerts) in each danger `Alert`. |
-| `v-model:window` | `'1h' \| '6h' \| '24h'`       | The window every tile and chart reads; refetch when it changes. Defaults to `24h`.                             |
+| Prop / model     | Type                          | What it does                                                                                                                   |
+| ---------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `services`       | `ServiceMonitoringService[]`  | One tile per service. A service with `latency: null` shows a dash and no state.                                                |
+| `latency`        | `ServiceMonitoringSeriesData` | The `p50`, `p95` and `p99` lines over the window. No series is the `No traffic yet` empty chart.                               |
+| `errorRate`      | `ServiceMonitoringSeriesData` | The `Status 4xx` and `Status 5xx` lines over the window.                                                                       |
+| `alerts`         | `ServiceMonitoringAlert[]`    | The open alerts in the rail. Pass `[]` for `No open alerts`.                                                                   |
+| `loading`        | `boolean`                     | The window is loading: the tiles, both charts and the rail hold Skeletons; the window switch stays usable.                     |
+| `error`          | `string`                      | Why the period could not load; one danger `Alert` under the heading shows it with Retry, and the regions show `Not available.` |
+| `v-model:window` | `'1h' \| '6h' \| '24h'`       | The window every tile and chart reads; refetch when it changes. Defaults to `24h`.                                             |
 
-| Event   | Payload   | When                              |
-| ------- | --------- | --------------------------------- |
-| `retry` | `(event)` | Retry in any of the error alerts. |
+| Event   | Payload   | When                             |
+| ------- | --------- | -------------------------------- |
+| `retry` | `(event)` | Retry in the page's error alert. |
 
 Each alert row links to `/alerts/<id>`; point it at your alert page. To go live, render the block from a page that owns the request and pass what it returns:
 
@@ -167,7 +171,7 @@ Then delete `sample.ts` and its import.
 - Default: services reporting, both charts populated, open alerts in the rail.
 - Loading: `loading`; every tile, both charts and the rail hold Skeletons; the window switch stays usable.
 - Empty: no traffic yet (`latency: null` per service, no series, `alerts: []`); tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
-- Error: `error`; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
+- Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
 

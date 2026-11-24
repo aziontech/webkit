@@ -2,6 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
 
+import Mosaic from '../../../../examples/bento-grid/mosaic.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import BentoGridCell from './bento-grid-cell/bento-grid-cell.vue'
 import BentoGrid from './index'
@@ -212,6 +213,26 @@ describe('BentoGrid', () => {
       const { container } = render(host({ ariaLabel: 'Platform capabilities', columns: 4 }))
 
       await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('Cell href — the whole tile is one link', () => {
+    it('renders the cell surface as an anchor, keeping the plain cells as boxes', async () => {
+      const { container, getByRole, getAllByRole } = render(Mosaic)
+      const link = getByRole('link', { name: /^Pay for what you use/ })
+      expect(link.getAttribute('href')).toBe('#pricing')
+      expect(link.getAttribute('data-testid')).toBe('bento-grid-cell__link')
+      expect(link.hasAttribute('data-link')).toBe(true)
+      expect(getAllByRole('link')).toHaveLength(1)
+      await expectNoA11yViolations(container)
+    })
+
+    it('renders no anchor for an unsafe href', () => {
+      const { queryByRole } = render(BentoGridCell, {
+        props: { href: 'javascript:alert(1)' },
+        slots: { default: 'Tile' }
+      })
+      expect(queryByRole('link')).toBeNull()
     })
   })
 })

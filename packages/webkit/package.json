@@ -20,6 +20,7 @@
     "format": "prettier --write \"**/*.{js,mjs,ts,vue,css,json,md}\"",
     "check:format": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\"",
     "lint": "eslint src --ext .js,.mjs,.ts,.vue --max-warnings 0",
+    "lint:quality": "eslint -c eslint.quality.config.js src blocks examples --max-warnings 0",
     "lint:fix": "eslint src --ext .js,.mjs,.ts,.vue --fix",
     "lint:style": "stylelint \"src/**/*.{css,scss,vue}\"",
     "lint:style:fix": "stylelint \"src/**/*.{css,scss,vue}\" --fix",
@@ -35,6 +36,10 @@
     "check:size-ratchet": "node scripts/check-size-ratchet.mjs",
     "check:complete": "node scripts/check-complete.mjs",
     "check:look-alikes": "node scripts/check-look-alikes.mjs",
+    "check:duplication": "node scripts/check-duplication.mjs",
+    "check:maintainability": "node scripts/check-maintainability.mjs",
+    "check:assertions": "node scripts/check-assertions.mjs",
+    "check:package-lint": "node scripts/check-package-lint.mjs",
     "test:toolkit": "node --test \"test/**/*.test.mjs\"",
     "test:ssr": "node --test src/test/ssr.test.mjs",
     "check:authoring": "node scripts/check-authoring.mjs",
@@ -83,8 +88,9 @@
     "tailwind-merge": "^3.6.0"
   },
   "peerDependencies": {
-    "@aziontech/icons": "^4.4.0 || ^5.0.0",
+    "@aziontech/icons": "^4.4.0 || ^5.0.0 || ^6.0.0",
     "@aziontech/theme": "^5.2.2 || ^6.0.0",
+    "@tanstack/ai": "^1.5.0",
     "eslint": ">=9",
     "monaco-editor": ">=0.50",
     "stylelint": ">=16",
@@ -92,6 +98,9 @@
     "vue-eslint-parser": ">=9"
   },
   "peerDependenciesMeta": {
+    "@tanstack/ai": {
+      "optional": true
+    },
     "eslint": {
       "optional": true
     },
@@ -106,28 +115,33 @@
     }
   },
   "devDependencies": {
-    "@aziontech/icons": "workspace:^",
-    "@aziontech/theme": "workspace:^",
+    "@aziontech/icons": "workspace:*",
+    "@aziontech/theme": "workspace:*",
     "@figma/code-connect": "^2.1.0",
-    "@tailwindcss/vite": "^4.0.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/ai": "1.5.0",
     "@testing-library/user-event": "^14.5.2",
     "@testing-library/vue": "^8.1.0",
+    "@typescript-eslint/parser": "^8.65.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vitest/browser": "^4.1.12",
     "@vitest/browser-playwright": "^4.1.12",
     "@vitest/coverage-v8": "^4.1.12",
     "@vitest/ui": "^4.1.12",
     "astro-eslint-parser": "^3.1.0",
-    "axe-core": "^4.10.3",
+    "axe-core": "^4.12.1",
     "esbuild": "^0.25.12",
     "eslint": "^9.39.3",
+    "jscpd": "^4.3.0",
     "monaco-editor": "0.57.0",
-    "playwright": "^1.61.1",
+    "playwright": "^1.62.0",
     "stylelint": "^17.7.0",
-    "tailwindcss": "^4.0.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.4",
     "vitest": "^4.1.12",
     "vue": "^3.5.29",
-    "vue-eslint-parser": ">=9",
+    "vue-eslint-parser": "^10.4.0",
+    "vue-router": "^4.6.4",
     "vue-tsc": ">=3.2.5 <3.3.12 || >=3.3.15 <4.0.0"
   },
   "files": [
@@ -469,6 +483,10 @@
       "types": "./types/components/content/tag/tag.vue.d.ts",
       "default": "./src/components/content/tag/tag.vue"
     },
+    "./priority-tag": {
+      "types": "./types/components/content/priority-tag/priority-tag.vue.d.ts",
+      "default": "./src/components/content/priority-tag/priority-tag.vue"
+    },
     "./severity-tag": {
       "types": "./types/components/content/severity-tag/severity-tag.vue.d.ts",
       "default": "./src/components/content/severity-tag/severity-tag.vue"
@@ -480,6 +498,26 @@
     "./timestamp": {
       "types": "./types/components/content/timestamp/timestamp.vue.d.ts",
       "default": "./src/components/content/timestamp/timestamp.vue"
+    },
+    "./timeline": {
+      "types": "./types/components/content/timeline/index.d.ts",
+      "default": "./src/components/content/timeline/index.ts"
+    },
+    "./timeline-root": {
+      "types": "./types/components/content/timeline/timeline.vue.d.ts",
+      "default": "./src/components/content/timeline/timeline.vue"
+    },
+    "./timeline-item": {
+      "types": "./types/components/content/timeline/timeline-item/timeline-item.vue.d.ts",
+      "default": "./src/components/content/timeline/timeline-item/timeline-item.vue"
+    },
+    "./timeline-group": {
+      "types": "./types/components/content/timeline/timeline-group/timeline-group.vue.d.ts",
+      "default": "./src/components/content/timeline/timeline-group/timeline-group.vue"
+    },
+    "./countdown": {
+      "types": "./types/components/content/countdown/countdown.vue.d.ts",
+      "default": "./src/components/content/countdown/countdown.vue"
     },
     "./avatar": {
       "types": "./types/components/content/avatar/avatar.vue.d.ts",
@@ -673,6 +711,22 @@
       "types": "./types/components/content/key-value-list/key-value-list-group/key-value-list-group.vue.d.ts",
       "default": "./src/components/content/key-value-list/key-value-list-group/key-value-list-group.vue"
     },
+    "./message-thread": {
+      "types": "./types/components/content/message-thread/index.d.ts",
+      "default": "./src/components/content/message-thread/index.ts"
+    },
+    "./message-thread-root": {
+      "types": "./types/components/content/message-thread/message-thread.vue.d.ts",
+      "default": "./src/components/content/message-thread/message-thread.vue"
+    },
+    "./message-thread-item": {
+      "types": "./types/components/content/message-thread/message-thread-item/message-thread-item.vue.d.ts",
+      "default": "./src/components/content/message-thread/message-thread-item/message-thread-item.vue"
+    },
+    "./message-thread-group": {
+      "types": "./types/components/content/message-thread/message-thread-group/message-thread-group.vue.d.ts",
+      "default": "./src/components/content/message-thread/message-thread-group/message-thread-group.vue"
+    },
     "./network-map": {
       "types": "./types/components/content/network-map/network-map.vue.d.ts",
       "default": "./src/components/content/network-map/network-map.vue"
@@ -720,6 +774,14 @@
     "./data-table": {
       "types": "./types/components/data/data-table/data-table.vue.d.ts",
       "default": "./src/components/data/data-table/data-table.vue"
+    },
+    "./data-table-pagination": {
+      "types": "./types/components/data/data-table/data-table-pagination/data-table-pagination.vue.d.ts",
+      "default": "./src/components/data/data-table/data-table-pagination/data-table-pagination.vue"
+    },
+    "./data-table-load-more": {
+      "types": "./types/components/data/data-table/data-table-load-more/data-table-load-more.vue.d.ts",
+      "default": "./src/components/data/data-table/data-table-load-more/data-table-load-more.vue"
     },
     "./data-grid": {
       "types": "./types/components/data/data-grid/data-grid.vue.d.ts",
@@ -1181,6 +1243,10 @@
       "types": "./types/components/input/password-requirements/index.d.ts",
       "default": "./src/components/input/password-requirements/index.ts"
     },
+    "./password-requirements-root": {
+      "types": "./types/components/input/password-requirements/password-requirements.vue.d.ts",
+      "default": "./src/components/input/password-requirements/password-requirements.vue"
+    },
     "./radio-group": {
       "types": "./types/components/input/radio-group/index.d.ts",
       "default": "./src/components/input/radio-group/index.ts"
@@ -1192,6 +1258,10 @@
     "./radio-group-root": {
       "types": "./types/components/input/radio-group/radio-group.vue.d.ts",
       "default": "./src/components/input/radio-group/radio-group.vue"
+    },
+    "./rating": {
+      "types": "./types/components/input/rating/rating.vue.d.ts",
+      "default": "./src/components/input/rating/rating.vue"
     },
     "./chip": {
       "types": "./types/components/input/chip/chip.vue.d.ts",
@@ -1216,6 +1286,10 @@
     "./textarea": {
       "types": "./types/components/input/textarea/textarea.vue.d.ts",
       "default": "./src/components/input/textarea/textarea.vue"
+    },
+    "./markdown-editor": {
+      "types": "./types/components/input/markdown-editor/markdown-editor.vue.d.ts",
+      "default": "./src/components/input/markdown-editor/markdown-editor.vue"
     },
     "./context-menu": {
       "types": "./types/components/navigation/context-menu/index.d.ts",
@@ -1353,6 +1427,10 @@
       "types": "./types/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue.d.ts",
       "default": "./src/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue"
     },
+    "./console-layout-tools-trigger": {
+      "types": "./types/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue.d.ts",
+      "default": "./src/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue"
+    },
     "./use-console-layout": {
       "types": "./types/components/layout/console-layout/composables/use-console-layout.d.ts",
       "default": "./src/components/layout/console-layout/composables/use-console-layout.ts"
@@ -1420,6 +1498,10 @@
     "./app-header-root": {
       "types": "./types/components/layout/app-header/app-header.vue.d.ts",
       "default": "./src/components/layout/app-header/app-header.vue"
+    },
+    "./app-header-account": {
+      "types": "./types/components/layout/app-header/app-header-account.vue.d.ts",
+      "default": "./src/components/layout/app-header/app-header-account.vue"
     },
     "./sidebar": {
       "types": "./types/components/layout/sidebar/index.d.ts",
@@ -2471,9 +2553,29 @@
       "types": "./types/utils/clipboard.d.ts",
       "default": "./src/utils/clipboard.ts"
     },
+    "./utils/ai-chat": {
+      "types": "./types/utils/ai-chat.d.ts",
+      "default": "./src/utils/ai-chat.ts"
+    },
+    "./utils/ai-chat-questions": {
+      "types": "./types/utils/ai-chat-questions.d.ts",
+      "default": "./src/utils/ai-chat-questions.ts"
+    },
     "./utils/csv": {
       "types": "./types/utils/csv.d.ts",
       "default": "./src/utils/csv.ts"
+    },
+    "./utils/focus-invalid": {
+      "types": "./types/utils/focus-invalid.d.ts",
+      "default": "./src/utils/focus-invalid.ts"
+    },
+    "./utils/leave-link": {
+      "types": "./types/utils/leave-link.d.ts",
+      "default": "./src/utils/leave-link.ts"
+    },
+    "./utils/radio-list": {
+      "types": "./types/utils/radio-list.d.ts",
+      "default": "./src/utils/radio-list.ts"
     },
     "./styles/country-flags": {
       "types": "./types/css.d.ts",
@@ -2490,6 +2592,10 @@
     "./use-direction": {
       "types": "./types/composables/use-direction/index.d.ts",
       "default": "./src/composables/use-direction/index.ts"
+    },
+    "./use-file-picker": {
+      "types": "./types/composables/use-file-picker/index.d.ts",
+      "default": "./src/composables/use-file-picker/index.ts"
     },
     "./use-focus-trap": {
       "types": "./types/composables/use-focus-trap/index.d.ts",
@@ -2582,6 +2688,14 @@
     "./use-shortcuts": {
       "types": "./types/composables/use-shortcuts/index.d.ts",
       "default": "./src/composables/use-shortcuts/index.ts"
+    },
+    "./use-ai-chat-versions": {
+      "types": "./types/composables/use-ai-chat-versions/index.d.ts",
+      "default": "./src/composables/use-ai-chat-versions/index.ts"
+    },
+    "./use-ai-chat-tools": {
+      "types": "./types/composables/use-ai-chat-tools/index.d.ts",
+      "default": "./src/composables/use-ai-chat-tools/index.ts"
     },
     "./shortcuts-dialog": {
       "types": "./types/components/overlay/shortcuts-dialog/shortcuts-dialog.vue.d.ts",
@@ -2872,6 +2986,9 @@
       "tag": [
         "./types/components/content/tag/tag.vue.d.ts"
       ],
+      "priority-tag": [
+        "./types/components/content/priority-tag/priority-tag.vue.d.ts"
+      ],
       "severity-tag": [
         "./types/components/content/severity-tag/severity-tag.vue.d.ts"
       ],
@@ -2880,6 +2997,21 @@
       ],
       "timestamp": [
         "./types/components/content/timestamp/timestamp.vue.d.ts"
+      ],
+      "timeline": [
+        "./types/components/content/timeline/index.d.ts"
+      ],
+      "timeline-root": [
+        "./types/components/content/timeline/timeline.vue.d.ts"
+      ],
+      "timeline-item": [
+        "./types/components/content/timeline/timeline-item/timeline-item.vue.d.ts"
+      ],
+      "timeline-group": [
+        "./types/components/content/timeline/timeline-group/timeline-group.vue.d.ts"
+      ],
+      "countdown": [
+        "./types/components/content/countdown/countdown.vue.d.ts"
       ],
       "avatar": [
         "./types/components/content/avatar/avatar.vue.d.ts"
@@ -3025,6 +3157,18 @@
       "key-value-list-group": [
         "./types/components/content/key-value-list/key-value-list-group/key-value-list-group.vue.d.ts"
       ],
+      "message-thread": [
+        "./types/components/content/message-thread/index.d.ts"
+      ],
+      "message-thread-root": [
+        "./types/components/content/message-thread/message-thread.vue.d.ts"
+      ],
+      "message-thread-item": [
+        "./types/components/content/message-thread/message-thread-item/message-thread-item.vue.d.ts"
+      ],
+      "message-thread-group": [
+        "./types/components/content/message-thread/message-thread-group/message-thread-group.vue.d.ts"
+      ],
       "network-map": [
         "./types/components/content/network-map/network-map.vue.d.ts"
       ],
@@ -3060,6 +3204,12 @@
       ],
       "data-table": [
         "./types/components/data/data-table/data-table.vue.d.ts"
+      ],
+      "data-table-pagination": [
+        "./types/components/data/data-table/data-table-pagination/data-table-pagination.vue.d.ts"
+      ],
+      "data-table-load-more": [
+        "./types/components/data/data-table/data-table-load-more/data-table-load-more.vue.d.ts"
       ],
       "data-grid": [
         "./types/components/data/data-grid/data-grid.vue.d.ts"
@@ -3406,6 +3556,9 @@
       "password-requirements": [
         "./types/components/input/password-requirements/index.d.ts"
       ],
+      "password-requirements-root": [
+        "./types/components/input/password-requirements/password-requirements.vue.d.ts"
+      ],
       "radio-group": [
         "./types/components/input/radio-group/index.d.ts"
       ],
@@ -3414,6 +3567,9 @@
       ],
       "radio-group-root": [
         "./types/components/input/radio-group/radio-group.vue.d.ts"
+      ],
+      "rating": [
+        "./types/components/input/rating/rating.vue.d.ts"
       ],
       "chip": [
         "./types/components/input/chip/chip.vue.d.ts"
@@ -3432,6 +3588,9 @@
       ],
       "textarea": [
         "./types/components/input/textarea/textarea.vue.d.ts"
+      ],
+      "markdown-editor": [
+        "./types/components/input/markdown-editor/markdown-editor.vue.d.ts"
       ],
       "context-menu": [
         "./types/components/navigation/context-menu/index.d.ts"
@@ -3535,6 +3694,9 @@
       "console-layout-breadcrumb": [
         "./types/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue.d.ts"
       ],
+      "console-layout-tools-trigger": [
+        "./types/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue.d.ts"
+      ],
       "use-console-layout": [
         "./types/components/layout/console-layout/composables/use-console-layout.d.ts"
       ],
@@ -3585,6 +3747,9 @@
       ],
       "app-header-root": [
         "./types/components/layout/app-header/app-header.vue.d.ts"
+      ],
+      "app-header-account": [
+        "./types/components/layout/app-header/app-header-account.vue.d.ts"
       ],
       "sidebar": [
         "./types/components/layout/sidebar/index.d.ts"
@@ -4105,8 +4270,23 @@
       "utils/clipboard": [
         "./types/utils/clipboard.d.ts"
       ],
+      "utils/ai-chat": [
+        "./types/utils/ai-chat.d.ts"
+      ],
+      "utils/ai-chat-questions": [
+        "./types/utils/ai-chat-questions.d.ts"
+      ],
       "utils/csv": [
         "./types/utils/csv.d.ts"
+      ],
+      "utils/focus-invalid": [
+        "./types/utils/focus-invalid.d.ts"
+      ],
+      "utils/leave-link": [
+        "./types/utils/leave-link.d.ts"
+      ],
+      "utils/radio-list": [
+        "./types/utils/radio-list.d.ts"
       ],
       "styles/country-flags": [
         "./types/css.d.ts"
@@ -4119,6 +4299,9 @@
       ],
       "use-direction": [
         "./types/composables/use-direction/index.d.ts"
+      ],
+      "use-file-picker": [
+        "./types/composables/use-file-picker/index.d.ts"
       ],
       "use-focus-trap": [
         "./types/composables/use-focus-trap/index.d.ts"
@@ -4188,6 +4371,12 @@
       ],
       "use-shortcuts": [
         "./types/composables/use-shortcuts/index.d.ts"
+      ],
+      "use-ai-chat-versions": [
+        "./types/composables/use-ai-chat-versions/index.d.ts"
+      ],
+      "use-ai-chat-tools": [
+        "./types/composables/use-ai-chat-tools/index.d.ts"
       ],
       "shortcuts-dialog": [
         "./types/components/overlay/shortcuts-dialog/shortcuts-dialog.vue.d.ts"

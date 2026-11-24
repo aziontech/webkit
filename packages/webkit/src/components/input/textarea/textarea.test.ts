@@ -332,6 +332,24 @@ describe('Textarea', () => {
   })
 
   describe('monospace', () => {
+    it('keeps a long record on one line and scrolls sideways in a narrow field', () => {
+      const { getByTestId } = render(Textarea, {
+        props: { monospace: true, modelValue: '@ 3600 IN A 192.0.2.10 ; '.repeat(12) }
+      })
+      const field = getByTestId('textarea') as HTMLTextAreaElement
+      expect(field.getAttribute('wrap')).toBe('off')
+      expect(field.scrollWidth).toBeGreaterThan(field.clientWidth)
+    })
+
+    it('wraps a plain field', () => {
+      const { getByTestId } = render(Textarea, {
+        props: { modelValue: '@ 3600 IN A 192.0.2.10 ; '.repeat(12) }
+      })
+      const field = getByTestId('textarea') as HTMLTextAreaElement
+      expect(field.hasAttribute('wrap')).toBe(false)
+      expect(field.scrollWidth).toBeLessThanOrEqual(field.clientWidth)
+    })
+
     it('omits data-monospace by default', () => {
       const { getByTestId } = render(Textarea)
       expect(getByTestId('textarea').hasAttribute('data-monospace')).toBe(false)

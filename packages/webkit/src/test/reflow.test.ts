@@ -7,7 +7,10 @@ import type { Component } from 'vue'
 import { nextTick } from 'vue'
 
 const modules = {
-  ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
+  ...import.meta.glob<{ default: Component }>([
+    '../../blocks/**/*.vue',
+    '!../../blocks/**/parts/**'
+  ]),
   ...import.meta.glob<{ default: Component }>('../../examples/**/*.vue')
 }
 

@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { initials } from '../../../utils/initials'
 
   defineOptions({
     name: 'AvatarGroup',
@@ -68,13 +69,10 @@
   const showsPhoto = (item: AvatarGroupItem) =>
     Boolean(item.src) && !failedSources.value.includes(item.src as string)
 
-  const initialsOf = (item: AvatarGroupItem) => {
-    if (item.label) return item.label.trim().slice(0, 2).toUpperCase()
-    const words = item.name.trim().split(/\s+/).filter(Boolean)
-    const first = words[0]?.charAt(0) ?? ''
-    const last = words.length > 1 ? (words[words.length - 1]?.charAt(0) ?? '') : ''
-    return `${first}${last}`.toUpperCase()
-  }
+  const itemInitials = (item: AvatarGroupItem) =>
+    Array.from(initials(item.label || item.name))
+      .slice(0, props.size === 'small' ? 1 : 2)
+      .join('')
 
   function onImageError(src: string | undefined) {
     if (src && !failedSources.value.includes(src)) failedSources.value.push(src)
@@ -83,6 +81,28 @@
   function onToggle(event: Event) {
     open.value = (event as ToggleEvent).newState === 'open'
   }
+
+  const AVATAR_CLASS =
+    'relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-(--bg-surface-raised) text-(--text-default) uppercase select-none text-label-sm size-8 ' +
+    'ring-2 ring-(--bg-canvas) hover:z-1 not-first:group-data-[orientation=horizontal]:-ms-(--spacing-2xs) not-first:group-data-[orientation=vertical]:-mt-(--spacing-2xs) ' +
+    'not-first:group-data-[size=large]:group-data-[orientation=horizontal]:-ms-(--spacing-xs) not-first:group-data-[size=large]:group-data-[orientation=vertical]:-mt-(--spacing-xs) ' +
+    'group-data-[size=small]:size-6 group-data-[size=large]:size-12 group-data-[size=large]:text-label-md ' +
+    'data-[content=label]:border data-[content=label]:border-(--border-default)'
+
+  const OVERFLOW_CLASS =
+    'relative inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface-raised) text-(--text-default) select-none ' +
+    'text-label-sm size-8 ring-2 ring-(--bg-canvas) transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none hover:z-1 hover:bg-(--bg-hover) focus-visible:z-1 focus-visible:outline-none focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[state=open]:z-1 data-[state=open]:bg-(--bg-hover) ' +
+    'group-data-[orientation=horizontal]:-ms-(--spacing-2xs) group-data-[orientation=vertical]:-mt-(--spacing-2xs) ' +
+    'group-data-[size=large]:group-data-[orientation=horizontal]:-ms-(--spacing-xs) group-data-[size=large]:group-data-[orientation=vertical]:-mt-(--spacing-xs) ' +
+    'group-data-[size=small]:size-6 group-data-[size=large]:size-12 group-data-[size=large]:text-label-md'
+
+  const LIST_CLASS =
+    'm-0 mt-(--spacing-2xs) inset-auto max-h-(--container-3xs) max-w-(--container-3xs) overflow-y-auto rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) p-(--spacing-xs) text-(--text-default) text-body-sm shadow-(--shadow-sm) [position-area:block-end_span-inline-end] ' +
+    '[position-try-fallbacks:flip-block,flip-inline]'
 </script>
 
 <template>
@@ -103,7 +123,7 @@
       :aria-label="showsPhoto(item) ? undefined : item.name"
       :data-content="showsPhoto(item) ? 'image' : 'label'"
       :data-testid="`${testId}__avatar`"
-      class="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-(--bg-surface-raised) text-(--text-default) uppercase select-none text-label-sm size-8 ring-2 ring-(--bg-canvas) hover:z-1 not-first:group-data-[orientation=horizontal]:-ms-(--spacing-2xs) not-first:group-data-[orientation=vertical]:-mt-(--spacing-2xs) not-first:group-data-[size=large]:group-data-[orientation=horizontal]:-ms-(--spacing-xs) not-first:group-data-[size=large]:group-data-[orientation=vertical]:-mt-(--spacing-xs) group-data-[size=small]:size-6 group-data-[size=large]:size-12 group-data-[size=large]:text-label-md data-[content=label]:border data-[content=label]:border-(--border-default)"
+      :class="AVATAR_CLASS"
     >
       <img
         v-if="showsPhoto(item)"
@@ -117,7 +137,7 @@
         aria-hidden="true"
         class="leading-none"
       >
-        {{ initialsOf(item) }}
+        {{ itemInitials(item) }}
       </span>
     </span>
     <button
@@ -130,9 +150,15 @@
       :data-state="open ? 'open' : 'closed'"
       :data-testid="`${testId}__overflow`"
       :style="{ anchorName }"
-      class="relative inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface-raised) text-(--text-default) select-none text-label-sm size-8 ring-2 ring-(--bg-canvas) transition-colors duration-150 ease-out motion-reduce:transition-none hover:z-1 hover:bg-(--bg-hover) focus-visible:z-1 focus-visible:outline-none focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[state=open]:z-1 data-[state=open]:bg-(--bg-hover) group-data-[orientation=horizontal]:-ms-(--spacing-2xs) group-data-[orientation=vertical]:-mt-(--spacing-2xs) group-data-[size=large]:group-data-[orientation=horizontal]:-ms-(--spacing-xs) group-data-[size=large]:group-data-[orientation=vertical]:-mt-(--spacing-xs) group-data-[size=small]:size-6 group-data-[size=large]:size-12 group-data-[size=large]:text-label-md"
+      :class="OVERFLOW_CLASS"
     >
-      +{{ hidden.length }}
+      <span dir="ltr">+{{ hidden.length }}</span>
+      <span
+        aria-hidden="true"
+        data-slot="touch-target"
+        :data-testid="`${testId}__touch-target`"
+        class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+      />
     </button>
     <div
       v-if="hidden.length"
@@ -140,7 +166,7 @@
       popover="auto"
       :data-testid="`${testId}__list`"
       :style="{ positionAnchor: anchorName }"
-      class="m-0 mt-(--spacing-2xs) inset-auto max-h-(--container-3xs) max-w-(--container-3xs) overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xs) text-(--text-default) text-body-sm shadow-(--shadow-sm) [position-area:block-end_span-inline-end] [position-try-fallbacks:flip-block,flip-inline]"
+      :class="LIST_CLASS"
       @toggle="onToggle"
     >
       <ul

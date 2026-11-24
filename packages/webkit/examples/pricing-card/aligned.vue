@@ -21,7 +21,7 @@
       pricing-details="Billed annually, save 20%"
       value="20"
       prefix="$"
-      suffix="/ mon"
+      suffix="/ month"
       action-label="Continue with Pro"
     />
     <PricingCard

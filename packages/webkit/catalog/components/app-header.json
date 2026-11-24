@@ -21,6 +21,7 @@
   "Keep the default `variant=\"content\"` for app shells; use `variant=\"site\"` only on framed marketing pages.",
   "Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.",
   "Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href=\"/\" aria-label=\"Azion home\">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).",
+  "Put the signed-in account at the end with `AppHeaderAccount` (`import AppHeaderAccount from '@aziontech/webkit/app-header-account'`, then `<AppHeaderAccount :name=\"account.name\" :src=\"account.src\" />`) instead of a hand-made button around an `Avatar`: the part owns the focus ring, the hover affordance and the accessible name. To open the account menu, place it in `DropdownMenu.Trigger`, which forwards the menu state onto it.",
   "Name the product beside the mark with `label` on `AppHeader.Brand` (`label=\"Docs\"`, `label=\"Console\"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.",
   "Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.",
   "Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.",

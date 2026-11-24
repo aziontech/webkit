@@ -40,6 +40,7 @@ coverage
 .edge
 
 package-lock.json
+!.github/tools/claude-code/package-lock.json
 yarn.lock
 
 .DS_Store
@@ -120,3 +121,9 @@ packages/webkit/skills/
 packages/webkit/rules/
 packages/webkit/adapters/
 packages/webkit/test/docs/.snippets-*/
+
+# Release supply-chain files written by .github/workflows/release-package.yml
+sbom-*.json
+*.sigstore-bundle
+SHA256SUMS
+grype-report-sarif.json

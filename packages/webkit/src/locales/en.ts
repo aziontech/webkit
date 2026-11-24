@@ -25,7 +25,11 @@ export const articleBodySection = {
 export const articleIndexSection = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  noMatch: 'No results found.'
+  noMatch: 'No results found.',
+  results: {
+    one: '{count} result',
+    other: '{count} results'
+  }
 } as const
 
 export const attributeEditor = {
@@ -57,7 +61,12 @@ export const attributeEditor = {
 
 export const avatar = {
   fallbackLabel: 'User avatar',
-  imageAlt: 'Avatar'
+  imageAlt: 'Avatar',
+  presenceOnline: 'online',
+  presenceAway: 'away',
+  presenceBusy: 'busy',
+  presenceOffline: 'offline',
+  withPresence: '{name}, {presence}'
 } as const
 
 export const avatarGroup = {
@@ -140,6 +149,9 @@ export const chart = {
 export const chartCard = {
   resize: 'Resize card',
   move: 'Move card',
+  moveVerb: 'Move',
+  moveHint: 'Use the arrow keys to move the card.',
+  moved: 'Moved to position {position} of {total}',
   columns: '{span} of {max} columns',
   columnsAndHeight: '{columns}, {height} pixels tall'
 } as const
@@ -254,7 +266,8 @@ export const responseBranches = {
   label: 'Response versions',
   previous: 'Previous version',
   next: 'Next version',
-  position: '{current} of {total}'
+  position: '{current}/{total}',
+  positionLabel: 'Version {current} of {total}'
 } as const
 
 export const feedbackReasonDialog = {
@@ -281,7 +294,10 @@ export const conversationHistory = {
   previous30: 'Previous 30 days',
   older: 'Older',
   emptyTitle: 'No conversations yet.',
-  delete: 'Delete {title}'
+  delete: 'Delete {title}',
+  newChat: 'New chat',
+  search: 'Search conversations',
+  noMatch: 'No conversations match “{query}”.'
 } as const
 
 export const qrCode = {
@@ -294,6 +310,7 @@ export const datePicker = {
   open: 'Open calendar',
   chooseDate: 'Choose date',
   apply: 'Apply',
+  cancel: 'Cancel',
   previousMonth: 'Previous month',
   nextMonth: 'Next month',
   month: 'Month',
@@ -471,11 +488,12 @@ export const errorBoundary = {
 } as const
 
 export const field = {
-  required: '(Required)'
+  required: 'Required'
 } as const
 
 export const fileDropzone = {
-  title: 'Drop files to upload'
+  title: 'Drop files to upload',
+  touchTitle: 'Choose files to upload'
 } as const
 
 export const audioPlayer = {
@@ -609,18 +627,24 @@ export const uploadProgress = {
 } as const
 
 export const footer = {
-  label: 'Footer'
+  label: 'Footer',
+  home: 'Azion home'
 } as const
 
 export const appHeader = {
   label: 'Global header',
   home: 'Azion home',
-  productHome: 'Azion {product} home'
+  productHome: 'Azion {product} home',
+  account: 'Account menu'
 } as const
 
 export const helpPanel = {
   label: 'Help',
   learnMore: 'Learn more'
+} as const
+
+export const hint = {
+  label: 'More information'
 } as const
 
 export const heroSection = {
@@ -714,6 +738,31 @@ export const sidebarMenu = {
   expandNamed: 'Expand {label}'
 } as const
 
+export const messageThread = {
+  label: 'Conversation',
+  loading: 'Loading conversation',
+  loaded: 'Conversation loaded',
+  customer: 'Customer',
+  agent: 'Agent',
+  via: 'via {channel}',
+  email: 'Email',
+  chat: 'Chat',
+  phone: 'Phone',
+  web: 'Web form',
+  api: 'API',
+  internalNote: 'Internal note',
+  to: 'To: {addresses}',
+  cc: 'Cc: {addresses}',
+  showQuoted: 'Show quoted text',
+  hideQuoted: 'Hide quoted text',
+  showEarlier: {
+    one: 'Show {count} earlier message',
+    other: 'Show {count} earlier messages'
+  },
+  showEarlierAll: 'Show earlier messages',
+  earlier: 'Earlier messages'
+} as const
+
 export const multiSelect = {
   noMatch: 'No matches',
   loading: 'Loading options',
@@ -776,7 +825,8 @@ export const passwordRequirements = {
   number: 'Number',
   lowercase: 'Lowercase letter',
   met: 'met',
-  unmet: 'not met'
+  unmet: 'not met',
+  progress: '{met} of {total} requirements met'
 } as const
 
 export const phoneInput = {
@@ -799,6 +849,15 @@ export const transferList = {
 
 export const popover = {
   close: 'Close'
+} as const
+
+export const priorityTag = {
+  prefix: 'Priority:',
+  urgent: 'Urgent',
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low',
+  none: 'No priority'
 } as const
 
 export const progress = {
@@ -860,6 +919,16 @@ export const propertyFilter = {
   unclosedQuote: 'Close the quote that opens at character {position}.'
 } as const
 
+export const rating = {
+  star: {
+    one: '{count} star',
+    other: '{count} stars'
+  },
+  value: 'Rated {value} out of {max}',
+  empty: 'Not rated',
+  clear: 'Clear rating'
+} as const
+
 export const resizable = {
   handle: 'Resize panel'
 } as const
@@ -869,6 +938,7 @@ export const schemaForm = {
   minLength: 'Use at least {min} characters.',
   maxLength: 'Use at most {max} characters.',
   pattern: "This value doesn't match the expected format.",
+  patternRule: 'Check the format: {rule}',
   minimum: 'Enter {min} or more.',
   maximum: 'Enter {max} or less.',
   number: 'Enter a number.',
@@ -990,7 +1060,7 @@ export const dataGrid = {
 
 export const table = {
   selectAll: 'Select all rows',
-  selectRow: 'Select row',
+  selectRow: 'Select row {row}',
   emptyTitle: 'No results yet',
   emptyDescription: 'Get started by creating your first resource.',
   errorTitle: 'Could not load the data'
@@ -1001,7 +1071,6 @@ export const tableExportButton = {
 } as const
 
 export const tableHeadCell = {
-  resize: 'Resize column',
   sortBy: 'Sort by'
 } as const
 
@@ -1087,6 +1156,23 @@ export const themeSwitcher = {
   system: 'System',
   dark: 'Dark',
   light: 'Light'
+} as const
+
+export const timeline = {
+  label: 'Activity',
+  loading: 'Loading activity'
+} as const
+
+export const countdown = {
+  label: '{label}:',
+  dueIn: 'Due in {duration}',
+  due: 'Due {relative}',
+  overdue: 'Overdue by {duration}',
+  duration: '{major} {minor}',
+  expiresIn: 'Expires in {duration}',
+  expires: 'Expires {relative}',
+  expired: 'Expired {relative}',
+  paused: 'Paused'
 } as const
 
 export const timestamp = {
@@ -1252,7 +1338,8 @@ export const toolApproval = {
   expired: 'Request expired',
   confirmLabel: 'Type {phrase} to confirm',
   arguments: 'Arguments',
-  invalidArguments: 'These arguments are not valid. Correct them to approve.'
+  invalidArguments: 'These arguments are not valid. Correct them to approve.',
+  phraseMismatch: 'This does not match {phrase}. Type it exactly to confirm.'
 } as const
 
 export const agentQuestion = {
@@ -1301,16 +1388,30 @@ export const chatMessage = {
   actions: 'Message actions',
   error: 'The response could not be generated.',
   retry: 'Try again',
-  helpful: 'Helpful',
-  notHelpful: 'Not helpful',
+  goodResponse: 'Good response',
+  badResponse: 'Bad response',
   feedback: 'Response feedback',
   feedbackSubmitting: 'Submitting feedback',
-  feedbackSubmitted: 'Feedback submitted'
+  feedbackThanks: 'Thanks for your feedback',
+  readAloud: 'Read aloud',
+  stopReading: 'Stop reading',
+  share: 'Share',
+  more: 'More actions',
+  branch: 'Branch in new chat',
+  edit: 'Edit message',
+  editField: 'Edit your message',
+  cancel: 'Cancel',
+  send: 'Send'
 } as const
 
 export const citation = {
   label: 'Source {index}: {title}',
-  labelUntitled: 'Source {index}'
+  labelMany: '{site} +{more}, sources {indexes}',
+  labelUntitled: 'Source {index}',
+  labelWithSite: 'Source {index}, {site}: {title}',
+  next: 'Next source',
+  page: '{current}/{total}',
+  previous: 'Previous source'
 } as const
 
 export const conversation = {
@@ -1361,7 +1462,11 @@ export const promptInput = {
   context: 'Choose context',
   contextRemove: 'Remove context',
   tools: 'Tools',
-  toolsEnabled: 'Enabled tools'
+  toolsEnabled: 'Enabled tools',
+  addMenu: 'Add',
+  camera: 'Camera',
+  photos: 'Photos',
+  files: 'Files'
 } as const
 
 export const agentActivity = {
@@ -1399,6 +1504,8 @@ export const reasoning = {
 
 export const sources = {
   label: 'Sources',
+  cited: 'Citations',
+  more: 'More',
   count: {
     one: '{count} source',
     other: '{count} sources'
@@ -1527,11 +1634,12 @@ export const consoleLayout = {
   home: 'Azion home',
   openNavigation: 'Open navigation',
   accountMenu: 'Account menu',
-  accountMenuFor: '{initials}, account menu',
+  accountMenuFor: '{initials}, {name}, account menu',
   searchPlaceholder: 'Search pages and commands',
   noMatch: 'No page or command matches your search.',
   pages: 'Pages',
-  searchShortcut: 'Search pages and commands'
+  searchShortcut: 'Search pages and commands',
+  info: 'Info'
 } as const
 
 export const docLayout = {
@@ -1570,6 +1678,29 @@ export const dataTable = {
   reorderMoved: 'Moved {name} to position {position} of {total}.',
   reorderDropped: 'Dropped {name} at position {position} of {total}.',
   reorderCancelled: 'Reorder cancelled.'
+} as const
+
+export const markdownEditor = {
+  label: 'Message',
+  write: 'Write',
+  preview: 'Preview',
+  toolbar: 'Formatting',
+  bold: 'Bold',
+  italic: 'Italic',
+  link: 'Link',
+  bulletedList: 'Bulleted list',
+  numberedList: 'Numbered list',
+  quote: 'Quote',
+  code: 'Code',
+  shortcut: '{label} ({keys})',
+  linkPlaceholder: 'url',
+  emptyTitle: 'Nothing to preview',
+  previewLoading: 'Loading preview',
+  mentionMenu: 'People',
+  mentionResults: {
+    one: '{count} person',
+    other: '{count} people'
+  }
 } as const
 
 export const en = {
@@ -1641,6 +1772,7 @@ export const en = {
   gaugeChart,
   appHeader,
   helpPanel,
+  hint,
   heroSection,
   heroFormSection,
   keyValueList,
@@ -1652,6 +1784,7 @@ export const en = {
   logViewer,
   mapChart,
   sidebarMenu,
+  messageThread,
   multiSelect,
   navigationMenu,
   numberInput,
@@ -1663,12 +1796,14 @@ export const en = {
   phoneInput,
   transferList,
   popover,
+  priorityTag,
   progress,
   promptInput,
   promptQueue,
   propertyFilter,
   agentActivity,
   reasoning,
+  rating,
   resizable,
   schemaForm,
   subheader,
@@ -1702,7 +1837,9 @@ export const en = {
   tabs,
   tagEditor,
   themeSwitcher,
+  timeline,
   timestamp,
+  countdown,
   toast,
   toggleGroup,
   trace,
@@ -1727,5 +1864,6 @@ export const en = {
   docAgentCard,
   common,
   newsletterSection,
-  dataTable
+  dataTable,
+  markdownEditor
 }

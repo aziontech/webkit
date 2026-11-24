@@ -78,8 +78,11 @@ export function loadIllustrationScene(url: string): Promise<IllustrationScene> {
       return response.text()
     })
     .then((markup) => {
-      const svg = new globalThis.DOMParser().parseFromString(markup, 'image/svg+xml')
-        .documentElement as unknown as globalThis.SVGSVGElement
+      const svg = new globalThis.DOMParser().parseFromString(
+        markup,
+        'image/svg+xml'
+      ).documentElement
+      if (!(svg instanceof globalThis.SVGSVGElement)) throw new Error(`${url} is not an SVG`)
       paintRoles(svg)
       pruneUnreferencedIds(svg)
       return {

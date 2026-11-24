@@ -9,16 +9,22 @@ export const MARKET_ALIASES = {
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
   'command-palette': 'command',
+  'contextual-help': 'help-panel',
   cta: 'call-to-action',
   datatable: 'data-table',
   'date-time-picker': 'date-picker',
   datepicker: 'date-picker',
   'datetime-picker': 'date-picker',
+  'due-date': 'countdown',
   'doc-tab': 'tabs',
   'doc-tabs': 'tabs',
   'feature-grid': 'capability-grid-section',
   'file-viewer': 'file-preview',
+  'help-icon': 'hint',
+  'help-tooltip': 'hint',
   'image-viewer': 'file-preview',
+  'info-icon': 'hint',
+  'info-link': 'console-layout-tools-trigger',
   'input-otp': 'otp-input',
   kebab: 'dropdown-menu',
   keyboard: 'kbd',
@@ -34,15 +40,17 @@ export const MARKET_ALIASES = {
   'section-heading': 'subheader',
   'segmented-control': 'toggle-group',
   sheet: 'drawer',
+  'sla-badge': 'countdown',
   snackbar: 'toast',
   steps: 'stepper',
   testimonial: 'client-quotes-section',
   testimonials: 'client-quotes-section',
   'text-field': 'input',
+  toggletip: 'hint',
   transfer: 'transfer-list'
 }
 
-export const NON_ENGLISH_WORDS = [
+const NON_ENGLISH_WORDS = [
   'botao',
   'cabecalho',
   'cadastro',
@@ -86,7 +94,7 @@ export function removedNames(subpaths, migration) {
   )
 }
 
-export const RENAMED_OVERRIDES = {
+const RENAMED_OVERRIDES = {
   menu: null,
   'radio-button': 'radio-group'
 }

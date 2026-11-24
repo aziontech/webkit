@@ -1,5 +1,6 @@
-import { cleanup, fireEvent, render } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import Health, {
   type HealthScoreIncident
@@ -43,6 +44,27 @@ describe('dashboard/dashboard-health-score', () => {
     expect(view.container.textContent).toContain('Largest contentful paint')
   })
 
+  it('drives the vital tiles and their trend cards from the same period', async () => {
+    const view = render(HealthRealUser)
+    const tile = () =>
+      view
+        .getAllByRole('group')
+        .find((group) => group.textContent?.trim().startsWith('Page load time'))!
+    expect(view.container.textContent).toContain('Page load time, hourly median')
+    expect(view.container.textContent).toContain('Last hour')
+    const before = tile().textContent
+    await userEvent.click(view.getByRole('combobox', { name: 'Period' }))
+    const option = await waitFor(() => {
+      const found = Array.from(document.querySelectorAll('[role="option"]')).find(
+        (node) => node.textContent?.trim() === 'Last 7 days'
+      )
+      if (!found) throw new Error('no option')
+      return found as HTMLElement
+    })
+    await userEvent.click(option)
+    await waitFor(() => expect(tile().textContent).not.toBe(before))
+  })
+
   it('renders the incidents it is given instead of the sample', () => {
     const incident: HealthScoreIncident = {
       id: 'incident-acme',
@@ -71,7 +93,7 @@ describe('dashboard/dashboard-health-score', () => {
   it('shows the error in every region and emits retry', async () => {
     const view = render(Health, { props: { error: 'Check your connection and retry.' } })
     expect(view.container.textContent).toContain(
-      "Couldn't load open incidents. Check your connection and retry."
+      "Couldn't load the experience score. Check your connection and retry."
     )
     expect(view.container.textContent).not.toContain('Top cause')
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])

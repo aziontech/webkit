@@ -9,7 +9,8 @@ export const es: Messages = {
     expired: 'Solicitud vencida',
     confirmLabel: 'Escribe {phrase} para confirmar',
     arguments: 'Argumentos',
-    invalidArguments: 'Estos argumentos no son válidos. Corrígelos para aprobar.'
+    invalidArguments: 'Estos argumentos no son válidos. Corrígelos para aprobar.',
+    phraseMismatch: 'El texto no coincide con {phrase}. Escríbelo exactamente para confirmar.'
   },
   agentQuestion: {
     submit: 'Enviar',
@@ -52,15 +53,29 @@ export const es: Messages = {
     actions: 'Acciones del mensaje',
     error: 'No se pudo generar la respuesta.',
     retry: 'Intentar de nuevo',
-    helpful: 'Útil',
-    notHelpful: 'No fue útil',
+    goodResponse: 'Buena respuesta',
+    badResponse: 'Mala respuesta',
     feedback: 'Valoración de la respuesta',
     feedbackSubmitting: 'Enviando valoración',
-    feedbackSubmitted: 'Valoración enviada'
+    feedbackThanks: 'Gracias por tu valoración',
+    readAloud: 'Leer en voz alta',
+    stopReading: 'Detener la lectura',
+    share: 'Compartir',
+    more: 'Más acciones',
+    branch: 'Ramificar en un chat nuevo',
+    edit: 'Editar mensaje',
+    editField: 'Edita tu mensaje',
+    cancel: 'Cancelar',
+    send: 'Enviar'
   },
   citation: {
     label: 'Fuente {index}: {title}',
-    labelUntitled: 'Fuente {index}'
+    labelUntitled: 'Fuente {index}',
+    labelWithSite: 'Fuente {index}, {site}: {title}',
+    labelMany: '{site} +{more}, fuentes {indexes}',
+    next: 'Fuente siguiente',
+    page: '{current}/{total}',
+    previous: 'Fuente anterior'
   },
   conversation: {
     label: 'Conversación',
@@ -109,7 +124,11 @@ export const es: Messages = {
     context: 'Elegir contexto',
     contextRemove: 'Quitar contexto',
     tools: 'Herramientas',
-    toolsEnabled: 'Herramientas activadas'
+    toolsEnabled: 'Herramientas activadas',
+    addMenu: 'Añadir',
+    camera: 'Cámara',
+    photos: 'Fotos',
+    files: 'Archivos'
   },
   agentActivity: {
     label: 'Actividad del agente',
@@ -144,6 +163,8 @@ export const es: Messages = {
   },
   sources: {
     label: 'Fuentes',
+    cited: 'Citas',
+    more: 'Más',
     count: {
       one: '{count} fuente',
       other: '{count} fuentes'
@@ -211,7 +232,11 @@ export const es: Messages = {
   articleIndexSection: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    noMatch: 'No se encontraron resultados.'
+    noMatch: 'No se encontraron resultados.',
+    results: {
+      one: '{count} resultado',
+      other: '{count} resultados'
+    }
   },
   attributeEditor: {
     add: 'Agregar elemento',
@@ -241,7 +266,12 @@ export const es: Messages = {
   },
   avatar: {
     fallbackLabel: 'Avatar del usuario',
-    imageAlt: 'Avatar'
+    imageAlt: 'Avatar',
+    presenceOnline: 'en línea',
+    presenceAway: 'ausente',
+    presenceBusy: 'ocupado',
+    presenceOffline: 'desconectado',
+    withPresence: '{name}, {presence}'
   },
   avatarGroup: {
     people: {
@@ -314,6 +344,9 @@ export const es: Messages = {
   chartCard: {
     resize: 'Redimensionar tarjeta',
     move: 'Mover tarjeta',
+    moveVerb: 'Mover',
+    moveHint: 'Usa las flechas para mover la tarjeta.',
+    moved: 'Movida a la posición {position} de {total}',
     columns: '{span} de {max} columnas',
     columnsAndHeight: '{columns}, {height} píxeles de alto'
   },
@@ -409,11 +442,12 @@ export const es: Messages = {
     home: 'Inicio de Azion',
     openNavigation: 'Abrir navegación',
     accountMenu: 'Menú de la cuenta',
-    accountMenuFor: '{initials}, menú de la cuenta',
+    accountMenuFor: '{initials}, {name}, menú de la cuenta',
     searchPlaceholder: 'Buscar páginas y comandos',
     noMatch: 'Ninguna página o comando coincide con la búsqueda.',
     pages: 'Páginas',
-    searchShortcut: 'Buscar páginas y comandos'
+    searchShortcut: 'Buscar páginas y comandos',
+    info: 'Información'
   },
   copyButton: {
     fallbackTitle: 'Copia manualmente',
@@ -427,7 +461,8 @@ export const es: Messages = {
     label: 'Versiones de la respuesta',
     previous: 'Versión anterior',
     next: 'Versión siguiente',
-    position: '{current} de {total}'
+    position: '{current}/{total}',
+    positionLabel: 'Versión {current} de {total}'
   },
   feedbackReasonDialog: {
     title: '¿Qué salió mal?',
@@ -452,7 +487,10 @@ export const es: Messages = {
     previous30: 'Últimos 30 días',
     older: 'Más antiguas',
     emptyTitle: 'Aún no hay conversaciones.',
-    delete: 'Eliminar {title}'
+    delete: 'Eliminar {title}',
+    newChat: 'Nuevo chat',
+    search: 'Buscar conversaciones',
+    noMatch: 'Ninguna conversación coincide con «{query}».'
   },
   qrCode: {
     label: 'Código QR'
@@ -463,6 +501,7 @@ export const es: Messages = {
     open: 'Abrir calendario',
     chooseDate: 'Elegir fecha',
     apply: 'Aplicar',
+    cancel: 'Cancelar',
     previousMonth: 'Mes anterior',
     nextMonth: 'Mes siguiente',
     month: 'Mes',
@@ -643,10 +682,11 @@ export const es: Messages = {
     retry: 'Reintentar'
   },
   field: {
-    required: '(Obligatorio)'
+    required: 'Obligatorio'
   },
   fileDropzone: {
-    title: 'Suelta archivos para subirlos'
+    title: 'Suelta archivos para subirlos',
+    touchTitle: 'Elige archivos para subirlos'
   },
   audioPlayer: {
     label: 'Reproductor de audio',
@@ -770,16 +810,21 @@ export const es: Messages = {
     itemProgress: 'Progreso de {name}'
   },
   footer: {
-    label: 'Pie de página'
+    label: 'Pie de página',
+    home: 'Inicio de Azion'
   },
   appHeader: {
     label: 'Encabezado global',
     home: 'Inicio de Azion',
-    productHome: 'Inicio de Azion {product}'
+    productHome: 'Inicio de Azion {product}',
+    account: 'Menú de la cuenta'
   },
   helpPanel: {
     label: 'Ayuda',
     learnMore: 'Más información'
+  },
+  hint: {
+    label: 'Más información'
   },
   heroSection: {
     carouselLabel: 'Probada en cargas de trabajo críticas'
@@ -862,6 +907,30 @@ export const es: Messages = {
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
   },
+  messageThread: {
+    label: 'Conversación',
+    loading: 'Cargando conversación',
+    loaded: 'Conversación cargada',
+    customer: 'Cliente',
+    agent: 'Agente',
+    via: 'por {channel}',
+    email: 'Correo electrónico',
+    chat: 'Chat',
+    phone: 'Teléfono',
+    web: 'Formulario web',
+    api: 'API',
+    internalNote: 'Nota interna',
+    to: 'Para: {addresses}',
+    cc: 'Cc: {addresses}',
+    showQuoted: 'Mostrar texto citado',
+    hideQuoted: 'Ocultar texto citado',
+    showEarlier: {
+      one: 'Mostrar {count} mensaje anterior',
+      other: 'Mostrar {count} mensajes anteriores'
+    },
+    showEarlierAll: 'Mostrar mensajes anteriores',
+    earlier: 'Mensajes anteriores'
+  },
   multiSelect: {
     noMatch: 'Sin resultados',
     loading: 'Cargando opciones',
@@ -917,7 +986,8 @@ export const es: Messages = {
     number: 'Número',
     lowercase: 'Letra minúscula',
     met: 'cumplido',
-    unmet: 'no cumplido'
+    unmet: 'no cumplido',
+    progress: '{met} de {total} requisitos cumplidos'
   },
   phoneInput: {
     dialCode: 'Código de marcación del país',
@@ -937,6 +1007,14 @@ export const es: Messages = {
   },
   popover: {
     close: 'Cerrar'
+  },
+  priorityTag: {
+    prefix: 'Prioridad:',
+    urgent: 'Urgente',
+    high: 'Alta',
+    medium: 'Media',
+    low: 'Baja',
+    none: 'Sin prioridad'
   },
   progress: {
     label: 'Progreso'
@@ -995,6 +1073,15 @@ export const es: Messages = {
     danglingConnective: 'Añade una condición después de {connective}.',
     unclosedQuote: 'Cierra las comillas abiertas en el carácter {position}.'
   },
+  rating: {
+    star: {
+      one: '{count} estrella',
+      other: '{count} estrellas'
+    },
+    value: 'Valorado con {value} de {max}',
+    empty: 'Sin valoración',
+    clear: 'Borrar valoración'
+  },
   resizable: {
     handle: 'Redimensionar panel'
   },
@@ -1003,6 +1090,7 @@ export const es: Messages = {
     minLength: 'Usa al menos {min} caracteres.',
     maxLength: 'Usa como máximo {max} caracteres.',
     pattern: 'Este valor no sigue el formato esperado.',
+    patternRule: 'Revisa el formato: {rule}',
     minimum: 'Ingresa {min} o más.',
     maximum: 'Ingresa {max} o menos.',
     number: 'Ingresa un número.',
@@ -1119,7 +1207,7 @@ export const es: Messages = {
   },
   table: {
     selectAll: 'Seleccionar todas las filas',
-    selectRow: 'Seleccionar fila',
+    selectRow: 'Seleccionar la fila {row}',
     emptyTitle: 'Aún no hay resultados',
     emptyDescription: 'Empieza creando tu primer recurso.',
     errorTitle: 'No se pudieron cargar los datos'
@@ -1128,7 +1216,6 @@ export const es: Messages = {
     label: 'Exportar CSV'
   },
   tableHeadCell: {
-    resize: 'Redimensionar columna',
     sortBy: 'Ordenar por'
   },
   tableRefreshButton: {
@@ -1202,6 +1289,22 @@ export const es: Messages = {
     system: 'Sistema',
     dark: 'Oscuro',
     light: 'Claro'
+  },
+  timeline: {
+    label: 'Actividad',
+    loading: 'Cargando actividad'
+  },
+
+  countdown: {
+    label: '{label}:',
+    dueIn: 'Vence en {duration}',
+    due: 'Vence {relative}',
+    overdue: 'Vencido hace {duration}',
+    duration: '{major} {minor}',
+    expiresIn: 'Caduca en {duration}',
+    expires: 'Caduca {relative}',
+    expired: 'Caducó {relative}',
+    paused: 'En pausa'
   },
   timestamp: {
     title: 'Detalles de la marca de tiempo',
@@ -1394,7 +1497,9 @@ export const es: Messages = {
   docAgentCard: {
     title: 'Tu agente de IA, fluido en Azion',
     description:
-      'Un prompt le enseña la plataforma a cualquier agente de código: los nombres actuales de los productos, la documentación en vivo a través del servidor MCP de Azion y despliegues reales con la CLI.',
+      'Un prompt le enseña la plataforma a cualquier agente de código: los nombres actuales de ' +
+      'los productos, la documentación en vivo a través del servidor MCP de Azion y ' +
+      'despliegues reales con la CLI.',
     asideTitle: '¿Prefieres la ruta guiada?',
     action: 'Configurar agente'
   },
@@ -1423,7 +1528,27 @@ export const es: Messages = {
     reorderMoved: '{name} movido a la posición {position} de {total}.',
     reorderDropped: '{name} soltado en la posición {position} de {total}.',
     reorderCancelled: 'Reordenación cancelada.'
+  },
+  markdownEditor: {
+    label: 'Mensaje',
+    write: 'Escribir',
+    preview: 'Vista previa',
+    toolbar: 'Formato',
+    bold: 'Negrita',
+    italic: 'Cursiva',
+    link: 'Enlace',
+    bulletedList: 'Lista con viñetas',
+    numberedList: 'Lista numerada',
+    quote: 'Cita',
+    code: 'Código',
+    shortcut: '{label} ({keys})',
+    linkPlaceholder: 'url',
+    emptyTitle: 'Nada que previsualizar',
+    previewLoading: 'Cargando la vista previa',
+    mentionMenu: 'Personas',
+    mentionResults: {
+      one: '{count} persona',
+      other: '{count} personas'
+    }
   }
 }
-
-export default es

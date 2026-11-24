@@ -82,18 +82,30 @@
     @account-select="onAccountSelect"
   >
     <template #actions="{ compact }">
-      <Tooltip
-        v-if="compact"
-        content="Create"
-        side="bottom"
-      >
-        <IconButton
-          icon="az az-circle-plus"
-          variant="primary"
-          size="medium"
-          aria-label="Create"
-        />
-      </Tooltip>
+      <template v-if="compact">
+        <Tooltip
+          content="Create"
+          side="bottom"
+        >
+          <IconButton
+            icon="az az-circle-plus"
+            variant="primary"
+            size="medium"
+            aria-label="Create"
+          />
+        </Tooltip>
+        <Tooltip
+          content="Agent"
+          side="bottom"
+        >
+          <IconButton
+            icon="az az-ask-azion"
+            variant="outline"
+            size="medium"
+            aria-label="Agent"
+          />
+        </Tooltip>
+      </template>
       <template v-else>
         <Button
           label="Create"

@@ -5,6 +5,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -146,6 +147,25 @@
             />
           </template>
         </PageHeader>
+        <Alert
+          v-if="error"
+          severity="danger"
+          :label="`Couldn't load service monitoring. ${error}`"
+          action-label="Retry"
+          data-testid="dashboard-service-monitoring__error"
+          @action="(event: MouseEvent) => emit('retry', event)"
+        />
+        <div
+          v-if="!loading && !error && alerts.length"
+          class="self-start xl:hidden"
+        >
+          <Link
+            href="#open-alerts"
+            icon="az az-arrow-down"
+            size="medium"
+            :label="`${alerts.length} open ${alerts.length === 1 ? 'alert' : 'alerts'}`"
+          />
+        </div>
         <ul
           class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 lg:grid-cols-2 2xl:grid-cols-3"
         >
@@ -185,13 +205,12 @@
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="`Couldn't load latency. ${error}`"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 :series="latency.series"
@@ -222,13 +241,12 @@
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
-              <Alert
+              <p
                 v-if="error"
-                severity="danger"
-                :label="`Couldn't load error rate. ${error}`"
-                action-label="Retry"
-                @action="(event) => emit('retry', event)"
-              />
+                class="text-body-sm text-(--text-muted)"
+              >
+                Not available.
+              </p>
               <Chart
                 v-else
                 :series="errorRate.series"
@@ -253,6 +271,7 @@
     </div>
 
     <aside
+      id="open-alerts"
       aria-labelledby="open-alerts-title"
       class="flex min-h-0 min-w-0 flex-col border-t border-(--border-muted) bg-(--bg-surface) xl:w-(--container-sm) xl:shrink-0 xl:border-t-0 xl:border-s"
     >
@@ -278,13 +297,12 @@
         aria-labelledby="open-alerts-title"
         tabindex="0"
       >
-        <Alert
+        <p
           v-if="error"
-          severity="danger"
-          :label="`Couldn't load open alerts. ${error}`"
-          action-label="Retry"
-          @action="(event) => emit('retry', event)"
-        />
+          class="text-body-sm text-(--text-muted)"
+        >
+          Not available.
+        </p>
         <div
           v-else-if="loading"
           class="flex flex-col gap-(--spacing-lg)"

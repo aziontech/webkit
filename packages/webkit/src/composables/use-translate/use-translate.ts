@@ -30,6 +30,14 @@ export interface LocaleContext {
   now?: ComputedRef<number | undefined>
   /** IANA time zone that absolute times below the provider read in (`Timestamp`); undefined reads the browser's zone. */
   timeZone?: ComputedRef<string | undefined>
+  /** Direction a provider in the chain sets (its `dir`, its `locale`, or a registered right-to-left device locale); undefined when the root provider inherits the page's direction. */
+  declaredDir?: ComputedRef<Direction | undefined>
+  /** The `dir` and `lang` an element teleported out of the provider copies (`usePortalLocale`); a context without it gives teleported roots neither. */
+  portal?: ComputedRef<PortalLocaleAttrs>
+  /** Catalogs registered along the provider chain, keyed by locale tag. */
+  catalogs?: ComputedRef<Record<string, Messages>>
+  /** Partial catalog overrides merged along the provider chain. */
+  overrides?: ComputedRef<PartialMessages | undefined>
 }
 
 /** What `useTranslate()` returns. */
@@ -46,7 +54,7 @@ export const LocaleInjectionKey: InjectionKey<LocaleContext> = Symbol('Locale')
 
 export const DEFAULT_LOCALE = 'en'
 
-export const SERVER_LOCALE = 'en-US'
+const SERVER_LOCALE = 'en-US'
 
 const deviceTag = ref(SERVER_LOCALE)
 
@@ -91,9 +99,11 @@ export function cached<T>(
   return formatter
 }
 
-function lookup(messages: PartialMessages, key: string): string | PluralMessage | undefined {
+type MessageCatalog = Readonly<Record<string, Readonly<Record<string, unknown>> | undefined>>
+
+function lookup(messages: MessageCatalog, key: string): string | PluralMessage | undefined {
   const [group, name] = key.split('.') as [string, string]
-  const value = (messages as unknown as Record<string, Record<string, unknown>>)[group]?.[name]
+  const value = messages[group]?.[name]
   if (typeof value === 'string') return value
   if (value && typeof value === 'object' && 'other' in value) return value as PluralMessage
   return undefined
@@ -178,15 +188,12 @@ export function useTranslate(fallback: PartialMessages = {}): UseTranslateReturn
   return { locale, dir, t }
 }
 
-/** `dir` and `lang` of the nearest `ConfigProvider`, for an element teleported out of it (empty with no provider). */
+/** `dir` and `lang` of the nearest `ConfigProvider`, for an element teleported out of it (empty with no provider; no `dir` when the providers inherit the page's direction). */
 export interface PortalLocaleAttrs {
   dir?: Direction
   lang?: string
 }
 
 export function usePortalLocale(): ComputedRef<PortalLocaleAttrs> {
-  const context = inject(LocaleInjectionKey, null)
-  return computed<PortalLocaleAttrs>(() =>
-    context ? { dir: context.dir.value, lang: context.locale.value } : {}
-  )
+  return inject(LocaleInjectionKey, null)?.portal ?? computed<PortalLocaleAttrs>(() => ({}))
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onUnmounted, ref, useAttrs } from 'vue'
 
+  import { useElementListener } from '../../../composables/use-element-listener'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import type { Severity } from '../../../utils/severity'
@@ -99,9 +100,13 @@
   )
 
   const visible = ref(true)
+  const rootEl = ref<HTMLElement | null>(null)
 
   let dismissTimer: ReturnType<typeof setTimeout> | undefined
   let dismissEvent: Event | undefined
+  let remainingLife = 0
+  let timerStartedAt = 0
+  let holds = 0
 
   const clearDismissTimer = () => {
     if (dismissTimer !== undefined) {
@@ -139,15 +144,58 @@
     }
   }
 
-  onMounted(() => {
-    if (props.life > 0) {
-      dismissTimer = setTimeout(() => dismiss(), props.life)
+  const startDismissTimer = () => {
+    if (remainingLife > 0 && dismissTimer === undefined && holds === 0) {
+      timerStartedAt = Date.now()
+      dismissTimer = setTimeout(() => dismiss(), remainingLife)
     }
+  }
+
+  const pauseDismissTimer = () => {
+    holds += 1
+    if (dismissTimer !== undefined) {
+      clearDismissTimer()
+      remainingLife -= Date.now() - timerStartedAt
+    }
+  }
+
+  const resumeDismissTimer = () => {
+    holds = Math.max(0, holds - 1)
+    startDismissTimer()
+  }
+
+  useElementListener(rootEl, 'keydown', onEscape)
+  useElementListener(rootEl, 'pointerenter', pauseDismissTimer)
+  useElementListener(rootEl, 'pointerleave', resumeDismissTimer)
+  useElementListener(rootEl, 'focusin', pauseDismissTimer)
+  useElementListener(rootEl, 'focusout', resumeDismissTimer)
+
+  onMounted(() => {
+    remainingLife = props.life
+    startDismissTimer()
   })
 
   onUnmounted(() => {
     clearDismissTimer()
   })
+
+  const ROOT_CLASS =
+    '@container/alert relative box-border flex w-full flex-wrap items-center gap-(--spacing-sm) break-words rounded-(--shape-button) border ' +
+    'border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) ' +
+    'data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) ' +
+    'data-[trailing]:pe-(--spacing-xs) ' +
+    'data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) ' +
+    'data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)'
+
+  const ICON_CLASS =
+    'size-3.5 text-label-md leading-none ' +
+    'data-[severity=info]:text-(--info-foreground) data-[severity=success]:text-(--success-foreground) data-[severity=warning]:text-(--warning-foreground) ' +
+    'data-[severity=danger]:text-(--danger-foreground)'
+
+  const CONTENT_CLASS =
+    'm-0 min-w-0 text-(--text-default) ' +
+    'data-[size=small]:text-label-sm data-[size=medium]:text-label-md ' +
+    '[&_a]:text-link [&_a]:[--text-link-color:currentColor] [&_a]:[--text-link-hover:currentColor] [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none'
 </script>
 
 <template>
@@ -160,6 +208,7 @@
   >
     <div
       v-if="visible"
+      ref="rootEl"
       v-bind="$attrs"
       :role="role"
       :data-testid="testId"
@@ -168,8 +217,7 @@
       :data-trailing="hasTrailingControl() || null"
       :data-titled="title ? true : null"
       tabindex="-1"
-      class="@container/alert relative box-border flex w-full flex-wrap items-center gap-(--spacing-sm) break-words rounded-(--shape-button) border border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) data-[trailing]:pe-(--spacing-xs) data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)"
-      @keydown="onEscape"
+      :class="ROOT_CLASS"
     >
       <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
         <span
@@ -177,9 +225,8 @@
           class="flex shrink-0 items-center data-[size=small]:h-4.5 data-[size=medium]:h-5.25"
         >
           <i
-            :class="resolvedIcon"
             :data-severity="normalizedSeverity"
-            class="size-3.5 text-label-md leading-none data-[severity=info]:text-(--info-foreground) data-[severity=success]:text-(--success-foreground) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:text-(--danger-foreground)"
+            :class="[ICON_CLASS, resolvedIcon]"
             aria-hidden="true"
           />
         </span>
@@ -194,7 +241,7 @@
           <div
             v-if="$slots['default'] || label || !title"
             :data-size="size"
-            class="m-0 min-w-0 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:[--text-link-color:currentColor] [&_a]:[--text-link-hover:currentColor] [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
+            :class="CONTENT_CLASS"
             :data-testid="`${testId}__content`"
           >
             <slot v-if="$slots['default']" />

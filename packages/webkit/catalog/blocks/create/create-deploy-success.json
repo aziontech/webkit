@@ -8,7 +8,11 @@
  ],
  "sfcFile": "blocks/create/create-deploy-success/create-deploy-success.vue",
  "guidelinesFile": "blocks/create/create-deploy-success/guidelines.md",
- "fileSources": {
-  "sample.ts": "blocks/create/create-deploy-success/sample.ts"
- }
+ "fileSources": [
+  "sample.ts",
+  "lib/connect-paths.ts",
+  "parts/connect-paths.vue",
+  "parts/deployment-card.vue",
+  "types.ts"
+ ]
 }

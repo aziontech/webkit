@@ -23,6 +23,7 @@
       />
       <Button
         label="Status page"
+        aria-label="Status page (opens in a new tab)"
         variant="outline"
         size="medium"
         icon="az az-external-link"

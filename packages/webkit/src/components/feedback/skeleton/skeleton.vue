@@ -30,6 +30,13 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'skeleton')
+
+  const ROOT_CLASS =
+    'block bg-(--bg-placeholder) ' +
+    'data-[variant=rectangle]:max-w-full data-[variant=rectangle]:rounded-(--shape-control) data-[variant=circle]:rounded-full ' +
+    'data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] ' +
+    'data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-shimmer ' +
+    'motion-reduce:animate-none'
 </script>
 
 <template>
@@ -41,6 +48,6 @@
     :data-variant="variant"
     :data-animated="animated || null"
     :style="{ width, height }"
-    class="block bg-(--bg-placeholder) data-[variant=rectangle]:rounded-(--shape-control) data-[variant=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
+    :class="ROOT_CLASS"
   />
 </template>

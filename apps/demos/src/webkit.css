@@ -2,9 +2,12 @@
 @import '@aziontech/theme';
 @import '@aziontech/theme/fonts.css';
 
-/* The demos render every block, so they register every WebKit component. An app imports
-   './webkit.sources.css' instead (see `npx @aziontech/webkit init`). */
-@import '@aziontech/webkit/styles/all';
+/* The base rules WebKit components share. */
+@import '@aziontech/webkit/styles';
+
+/* The WebKit files the demos import, so Tailwind compiles only the classes they use. The
+   Vite plugin (@aziontech/webkit/vite-plugin) rewrites it when the imports change. */
+@import './webkit.sources.css';
 @source './';
 
 /* Text rendering. The type ladder is drawn at these settings, so they are the design

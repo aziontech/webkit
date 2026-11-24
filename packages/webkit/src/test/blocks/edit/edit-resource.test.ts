@@ -1,10 +1,14 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import EditResource from '../../../../blocks/edit/edit-resource/edit-resource.vue'
 import CacheSettings from '../../../../blocks/edit/edit-resource/variants/cache-settings.vue'
 import DangerZone from '../../../../blocks/edit/edit-resource/variants/danger-zone.vue'
+import DataStream from '../../../../blocks/edit/edit-resource/variants/data-stream.vue'
+import DeployableSettings from '../../../../blocks/edit/edit-resource/variants/deployable-settings.vue'
+import PolicySettings from '../../../../blocks/edit/edit-resource/variants/policy-settings.vue'
 import Protocols from '../../../../blocks/edit/edit-resource/variants/protocols.vue'
+import ResourceSettings from '../../../../blocks/edit/edit-resource/variants/resource-settings.vue'
 import Saving from '../../../../blocks/edit/edit-resource/variants/saving.vue'
 import StaleRecord from '../../../../blocks/edit/edit-resource/variants/stale-record.vue'
 import WafSettings from '../../../../blocks/edit/edit-resource/variants/waf-settings.vue'
@@ -273,5 +277,85 @@ describe('edit-resource save shortcut', () => {
     expect(submits).toHaveLength(1)
     expect(submits[0]![0]).toBe(event)
     expect(submits[0]![1].name).toBe('acme-shop')
+  })
+})
+
+describe('edit/edit-resource DataStream', () => {
+  it('edits Custom headers as rows and keeps a credential value masked', async () => {
+    render(DataStream)
+    const editor = await waitFor(() => {
+      const field = document.querySelector<HTMLElement>('#data-stream-headers')
+      expect(field).not.toBeNull()
+      return field!
+    })
+    const values = Array.from(
+      editor.querySelectorAll<HTMLInputElement>('input:not([type="hidden"])')
+    ).map((input) => [input.type, input.value])
+    expect(values).toEqual([
+      ['text', 'X-Stream-Source'],
+      ['text', 'acme-edge'],
+      ['text', 'Authorization'],
+      ['password', 'Bearer example-token']
+    ])
+    expect(within(editor).getAllByRole('button', { name: /Show/ })).toHaveLength(1)
+    await expectNoA11yViolations(editor)
+  })
+
+  it('names the header cell that is missing before it saves', async () => {
+    render(DataStream)
+    const editor = await waitFor(() => document.querySelector<HTMLElement>('#data-stream-headers')!)
+    await fireEvent.click(within(editor).getByRole('button', { name: 'Add header' }))
+    await fireEvent.click(await screen.findByRole('button', { name: 'Save' }, wait))
+    await waitFor(() => expect(editor.textContent).toContain('Enter a value.'))
+    expect(editor.textContent).toContain('Enter a header name of letters, numbers and hyphens.')
+    await waitFor(() => expect(document.activeElement?.getAttribute('aria-invalid')).toBe('true'))
+    expect(editor.contains(document.activeElement)).toBe(true)
+  })
+})
+
+describe('edit/edit-resource leave guard', () => {
+  const reloadBlocked = () => {
+    const event = new Event('beforeunload', { cancelable: true })
+    window.dispatchEvent(event)
+    return event.defaultPrevented
+  }
+
+  it.each([
+    ['DeployableSettings', DeployableSettings],
+    ['PolicySettings', PolicySettings],
+    ['WafSettings', WafSettings],
+    ['ResourceSettings', ResourceSettings],
+    ['DataStream', DataStream],
+    ['CacheSettings', CacheSettings],
+    ['Protocols', Protocols]
+  ])('%s warns on reload once the form holds edits', async (_name, variant) => {
+    const view = render(variant)
+    const control = await waitFor(() => {
+      const found = view.container.querySelector<HTMLElement>(
+        'input:not([type]):not([disabled]), input[type="text"]:not([disabled]), [role="switch"]:not([disabled])'
+      )
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(reloadBlocked()).toBe(false)
+    if (control instanceof HTMLInputElement) await fireEvent.update(control, `${control.value}x`)
+    else await fireEvent.click(control)
+    await waitFor(() => expect(reloadBlocked()).toBe(true))
+    view.unmount()
+  })
+
+  it('asks before a tab change drops the edits', async () => {
+    const view = render(PolicySettings)
+    const field = await waitFor(() =>
+      view.container.querySelector<HTMLInputElement>('#resource-name')!
+    )
+    await fireEvent.update(field, `${field.value}x`)
+    const other = Array.from(view.container.querySelectorAll<HTMLElement>('[role="tab"]')).find(
+      (tab) => tab.getAttribute('aria-selected') !== 'true'
+    )!
+    await fireEvent.click(other)
+    await waitFor(() =>
+      expect(document.querySelector('[data-testid="unsaved-changes-dialog"]')).not.toBeNull()
+    )
   })
 })

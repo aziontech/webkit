@@ -1,4 +1,5 @@
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import Resizable from '@aziontech/webkit/resizable'
   import { ref } from 'vue'
 
@@ -7,12 +8,13 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
-    <button
-      type="button"
+    <Button
+      class="self-start"
+      :label="`${open ? 'Hide' : 'Show'} the preview`"
+      variant="outline"
+      size="medium"
       @click="open = !open"
-    >
-      {{ open ? 'Hide' : 'Show' }} the preview
-    </button>
+    />
     <div class="h-64">
       <Resizable
         class="h-full"

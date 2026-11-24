@@ -138,7 +138,9 @@ No built-in strings: every visible and announced text is a prop from the page JS
         logoLight: gigaomExtendedColor
       },
       {
-        text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
+        text:
+          'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, ' +
+          'WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
         reportName: 'G2 Reports',
         date: 'March 2026',
         firmName: 'G2',

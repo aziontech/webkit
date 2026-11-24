@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, useAttrs } from 'vue'
+  import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 
   import { resolveDirection } from '../../../../composables/use-direction'
+  import { useElementListener } from '../../../../composables/use-element-listener'
   import { useContextMenuContext } from '../composables/use-context-menu-context'
 
   defineOptions({
@@ -24,6 +25,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'context-menu-trigger'
   )
 
+  const areaEl = ref<globalThis.HTMLElement | null>(null)
+
   const isOpen = computed(() => ctx.isOpen.value)
 
   let pressTimer: ReturnType<typeof setTimeout> | undefined
@@ -31,7 +34,8 @@
   let openedAt = 0
 
   function setAreaEl(el: unknown) {
-    ctx.areaEl.value = el instanceof HTMLElement ? el : null
+    areaEl.value = el instanceof HTMLElement ? el : null
+    ctx.areaEl.value = areaEl.value
   }
 
   function open(x: number, y: number, source: globalThis.Element | null) {
@@ -85,6 +89,13 @@
     if (moved > LONG_PRESS_SLOP) cancelPress()
   }
 
+  useElementListener(areaEl, 'contextmenu', onContextmenu)
+  useElementListener(areaEl, 'keydown', onKeydown)
+  useElementListener(areaEl, 'pointerdown', onPointerdown)
+  useElementListener(areaEl, 'pointermove', onPointermove)
+  useElementListener(areaEl, 'pointerup', cancelPress)
+  useElementListener(areaEl, 'pointercancel', cancelPress)
+
   onBeforeUnmount(() => {
     cancelPress()
     ctx.areaEl.value = null
@@ -99,12 +110,6 @@
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="ctx.disabled.value || null"
     class="block"
-    @contextmenu="onContextmenu"
-    @keydown="onKeydown"
-    @pointerdown="onPointerdown"
-    @pointermove="onPointermove"
-    @pointerup="cancelPress"
-    @pointercancel="cancelPress"
   >
     <slot :is-open="isOpen" />
   </div>

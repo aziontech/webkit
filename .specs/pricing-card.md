@@ -3,8 +3,8 @@ name: pricing-card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 7
-checksum: eb0babf9fd363a3b6d17f8a1dc1586b3457fb0b66d10053fbcc32ad55b1a2f6a
+spec_version: 8
+checksum: ce0563b86f271ef486dc0daadb08ad841726ec6d86d159bd52d28ce904bd9615
 created: 2026-05-22
 last_updated: 2026-11-18
 ---
@@ -15,7 +15,9 @@ last_updated: 2026-11-18
 
 One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it. The card owns the typographic hierarchy of a price — an overline plan name, the amount as the headline figure, and the billing caveat under it in muted body copy — so a row of tiers reads as a comparison rather than as three differently-typeset cards.
 
-`actionsPosition` is the axis that decides which of the two compositions the card is. **`bottom`** is the compact tier: the name, a `medium` amount and the caveat stack at the top, the action follows, and the slot sits under it — a card sized by its own content, for a row of tiers a reader scans. **`middle`** is the full tier: the amount becomes the `large` headline figure, the caveat moves up to `body-md`, the slot grows to fill the card, and the action is pinned to the bottom edge so a row of `middle` cards has its buttons on one line whatever each tier's feature list holds.
+`actionsPosition` is the axis that decides which of the two compositions the card is. **`bottom`** is the compact tier: the name, a `medium` amount and the caveat stack at the top, the action follows, and the slot sits under it — a card sized by its own content, for a row of tiers a reader scans. With nothing in the default slot the `bottom` card renders no slot region at all, so it ends at its action instead of under an empty band. **`middle`** is the full tier: the amount becomes the `large` headline figure, the caveat moves up to `body-md`, the slot grows to fill the card, and the action is pinned to the bottom edge so a row of `middle` cards has its buttons on one line whatever each tier's feature list holds. The `middle` slot reserves a 160px band (`min-h-40`) only with `equalHeight`; a lone card is sized by what it holds.
+
+The built-in action is `outline` (`bottom`) or `secondary` (`middle`); on the card that shows its tag (`showTag`, the tier the row singles out, such as Popular) it is `primary`, so the recommended plan carries the one filled button in the row. The default period is `/ month`: `/ mon` read as Monday.
 
 `variant` decides only whether the card draws its own surface (`contained`) or sits on the one behind it (`ghost`); it never changes the composition.
 
@@ -70,7 +72,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
     title="Pro"
     value="20"
     prefix="$"
-    suffix="/ mon"
+    suffix="/ month"
     pricing-details="Billed annually or $25/mo billed monthly."
     actions-position="middle"
     variant="contained"
@@ -110,7 +112,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 | `variant`            | `'contained' \| 'ghost'` | `'contained'` | false    | Whether the card draws its own surface: `contained` has a border and a surface, `ghost` sits on the page.                                          |
 | `value`              | `string`                 | `'20'`        | false    | Price amount, already formatted, without the currency symbol.                                                                                      |
 | `prefix`             | `string`                 | `'$'`         | false    | Text before the amount, usually the currency symbol.                                                                                               |
-| `suffix`             | `string`                 | `'/ mon'`     | false    | Text after the amount, usually the billing period.                                                                                                 |
+| `suffix`             | `string`                 | `'/ month'`     | false    | Text after the amount, usually the billing period.                                                                                                 |
 | `showPrefix`         | `boolean`                | `true`        | false    | Shows the prefix.                                                                                                                                  |
 | `showSuffix`         | `boolean`                | `true`        | false    | Shows the suffix.                                                                                                                                  |
 | `actionLabel`        | `string`                 | `'Label'`     | false    | Label of the default action button.                                                                                                                |

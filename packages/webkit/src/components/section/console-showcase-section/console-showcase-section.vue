@@ -4,18 +4,17 @@
   import { useMediaQuery } from '../../../composables/use-media-query'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import type { TextureFade, TextureVariant } from '../../content/texture/texture.vue'
   import Texture from '../../content/texture/texture.vue'
-  import Module from '../../layout/module/module.vue'
   import type {
     ModuleHeaderAlign,
     ModuleHeaderPadding,
     ModuleHeaderSize
   } from '../../layout/module-header/module-header.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import CapabilityGridSectionActions from '../capability-grid-section/parts/capability-grid-section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({ name: 'ConsoleShowcaseSection', inheritAttrs: false })
 
@@ -106,6 +105,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ consoleShowcaseSection: en.consoleShowcaseSection })
   const roomy = useMediaQuery('(min-width: 40rem)', true)
+  const cramped = useMediaQuery('(max-width: 22.49rem)', false)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'console-showcase-section'
@@ -137,90 +137,75 @@
       '--console-showcase-section-fade-start': `${fadeEnd - 22}%`
     }
   })
+
+  const SCENE_CLASS =
+    'relative z-10 w-full ' +
+    'data-[variant=console]:aspect-square data-[variant=diagram]:flex data-[variant=diagram]:min-h-(--size-96) data-[variant=diagram]:items-center data-[variant=diagram]:justify-center ' +
+    'data-[variant=diagram]:*:min-w-[min(100%,var(--container-3xl))] ' +
+    'md:data-[variant=console]:-mb-(--console-showcase-section-crop) md:data-[variant=console]:aspect-[1.9/1] ' +
+    'md:data-[variant=console]:[--console-mockup-fade-end:var(--console-showcase-section-fade-end)] ' +
+    'md:data-[variant=console]:[--console-mockup-fade-start:var(--console-showcase-section-fade-start)]'
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
     :data-testid="testId"
     :data-variant="variant"
-    :aria-label="title || undefined"
+    :label="title"
   >
-    <Module
-      :divided="false"
-      :padded="false"
+    <template
+      v-if="title"
+      #header
     >
-      <template
-        v-if="title"
-        #header
+      <ModuleHeader
+        class="[--module-header-headline-max:var(--container-xl)] [--module-header-headline-span:2]"
+        :align="titleAlign"
+        :padding="titlePadding"
+        :size="size"
+        :eyebrow="eyebrow"
+        :title="title"
+        :description="description"
       >
-        <ModuleHeader
-          class="[--module-header-headline-max:var(--container-xl)] [--module-header-headline-span:2]"
-          :align="titleAlign"
-          :padding="titlePadding"
-          :size="size"
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
+        <template
+          v-if="tabs.length || buttons.length"
+          #actions
         >
-          <template
-            v-if="tabs.length || buttons.length"
-            #actions
-          >
-            <Button
-              v-for="action in buttons"
-              :key="action.label"
-              :label="action.label"
-              :href="action.href"
-              :target="action.target"
-              :variant="action.variant"
-              size="large"
-              :icon="action.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(action.trailing)"
-            />
-            <ToggleGroup
-              v-if="tabs.length"
-              v-model="current"
-              :options="options"
-              :fluid="!roomy"
-              size="large"
-              :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
-            />
-          </template>
-        </ModuleHeader>
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
-        <div
-          :data-variant="variant"
-          :data-testid="`${testId}__frame`"
-          class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:data-[variant=console]:pb-0"
-        >
-          <Texture
-            v-if="variant === 'console'"
-            :variant="texture"
-            size="small"
-            :fade="textureFade"
+          <CapabilityGridSectionActions :actions="buttons" />
+          <ToggleGroup
+            v-if="tabs.length"
+            v-model="current"
+            :options="options"
+            :fluid="!roomy && !cramped"
+            :size="cramped ? 'medium' : 'large'"
+            :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
           />
-          <div
-            :data-variant="variant"
-            class="relative z-10 w-full data-[variant=console]:aspect-square data-[variant=diagram]:flex data-[variant=diagram]:min-h-(--size-96) data-[variant=diagram]:items-center data-[variant=diagram]:justify-center data-[variant=diagram]:*:min-w-[min(100%,var(--container-3xl))] md:data-[variant=console]:-mb-(--console-showcase-section-crop) md:data-[variant=console]:aspect-[1.9/1] md:data-[variant=console]:[--console-mockup-fade-end:var(--console-showcase-section-fade-end)] md:data-[variant=console]:[--console-mockup-fade-start:var(--console-showcase-section-fade-start)]"
-            :style="cropStyle"
-          >
-            <slot
-              name="scene"
-              :tab="tabs.length ? current : undefined"
-            />
-          </div>
-        </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        </template>
+      </ModuleHeader>
+    </template>
+
+    <div
+      :data-variant="variant"
+      :data-testid="`${testId}__frame`"
+      class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:data-[variant=console]:pb-0"
+    >
+      <Texture
+        v-if="variant === 'console'"
+        :variant="texture"
+        size="small"
+        :fade="textureFade"
+      />
+      <div
+        :data-variant="variant"
+        :class="SCENE_CLASS"
+        :style="cropStyle"
+      >
+        <slot
+          name="scene"
+          :tab="tabs.length ? current : undefined"
+        />
+      </div>
+    </div>
+  </SectionBand>
 </template>
