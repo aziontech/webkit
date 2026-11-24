@@ -6,8 +6,8 @@ status: implemented
 spec_version: 5
 template: 2
 created: 2026-11-15
-last_updated: 2026-11-16
-checksum: b63311b289b6b083f53a09ca5bb0ebf918fe9fd61241e4a23f7c7f5b9672c96d
+last_updated: 2026-11-24
+checksum: a9a1a4079b3910d4077b18b113349efeaafbb39f4299c30f8e543770f36f577f
 ---
 
 # ArticleIndexSection — Component Spec
@@ -148,6 +148,7 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 - Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
 - `data-variant` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
 - A row with no `image` draws its `mark` (the client's logo, flattened to one ink that inverts in the dark theme); an author with an `avatar` URL shows the photo, otherwise the initials
+- Broken cover: an `image` that fails to load is dropped, so the cover shows its `mark` when it has one and otherwise the plain `--bg-surface` panel, never the browser's broken-image glyph.
 - A row whose `target` is `_blank` opens in a new tab (with `rel="noopener"`)
 - `categoryParam` (`category-search`): on mount (client only) a query value that matches one of `categories` selects it and scrolls the band into view
 

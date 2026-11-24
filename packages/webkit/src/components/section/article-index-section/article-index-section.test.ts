@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render, screen } from '@testing-library/vue'
+import { fireEvent, render, screen } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { commands } from 'vitest/browser'
 
@@ -620,5 +620,17 @@ describe('ArticleIndexSection', () => {
 
       expect(getByRole('list', { name: LIST }).getAttribute('data-variant')).toBe('byline')
     })
+  })
+
+  it('drops a cover image that fails to load and keeps the neutral cover', async () => {
+    const { container } = band({})
+    const first = container.querySelector<HTMLImageElement>('img[alt=""]')!
+    const cover = first.parentElement!
+
+    await fireEvent.error(first)
+
+    expect(first.isConnected).toBe(false)
+    expect(cover.isConnected).toBe(true)
+    expect(cover.querySelector('img[alt=""]')).toBeNull()
   })
 })
