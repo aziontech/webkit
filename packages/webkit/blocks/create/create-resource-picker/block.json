@@ -3,6 +3,9 @@
   "name": "CreateResourcePicker",
   "title": "Blocks/Create/CreateResourcePicker",
   "surface": "app",
+  "keyboard": {
+    "entry": "page"
+  },
   "kind": "fragment",
   "summary": "The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. The CreateAndDeploy variant of MultipageCreate binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingsRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on, its row description saying it is always on. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `FieldError`, `Item`, `Skeleton` and `Button`.",
   "preview": {
