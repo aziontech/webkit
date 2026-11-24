@@ -7,13 +7,18 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "84.15 KB",
+    "limit": "84.25 KB",
     "entryOnly": true
   },
   {
     "name": "console-layout-breadcrumb",
     "path": "src/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue",
     "limit": "0.55 KB"
+  },
+  {
+    "name": "console-layout-tools-trigger",
+    "path": "src/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue",
+    "limit": "4.7 KB"
   },
   {
     "name": "site-layout",
@@ -2124,7 +2129,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "85.4 KB"
+    "limit": "85.9 KB"
   },
   {
     "name": "use-console-layout",

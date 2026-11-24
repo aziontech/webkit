@@ -1733,3 +1733,5 @@ Budget-raise: feedback-reason-dialog 34.55 KB → 34.6 KB (measured 34.56 KB): c
 Budget-raise: field 9.2 KB → 9.25 KB (measured 9.22 KB): the lone required asterisk (REQ-1) and the follow-up Tooltip fix, measured together after merging PR #1203's newer commits
 Budget-raise: schema-form 64.5 KB → 64.55 KB (measured 64.50 KB): same combination (REQ-1 field marker with the follow-up fixes)
 Budget-raise: date-picker 15.05 KB → 15.1 KB (measured 15.06 KB): REQ-1's required marker in the DatePicker trigger, on top of the lazy calendar entry
+Budget-raise: console-layout-root 84.15 KB → 84.25 KB (measured 84.21 KB): the page context carries the tools region's state and actions (toolsOpen, openTools, closeTools, toggleTools) and its body gets a stable id, for the page Info trigger (in-product help level D, HELP-B-1).
+Budget-raise: console-layout 85.4 KB → 85.9 KB (measured 85.87 KB): the compound attaches ConsoleLayout.ToolsTrigger, the page Info link that opens the tools region (in-product help level D, HELP-B-1); without it the entry measures 85.49 KB with the context change above.

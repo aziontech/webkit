@@ -31,6 +31,11 @@
       "name": "SidebarHeader",
       "summary": "An account switcher in the `sidebar-header` slot: full width in the rail under the wordmark, with the organization's generated mark and name; while the layout is compact the slot renders nothing and the same switcher, mark and chevron only, moves to `header-leading`.",
       "file": "sidebar-header.vue"
+    },
+    {
+      "name": "HelpInfo",
+      "summary": "Page help: `ConsoleLayout.ToolsTrigger` first in `PageHeader`'s `meta` slot puts the `Info` link right after the title, and opens and closes the layout's tools region (`v-model:tools-open`), whose `tools` slot holds the page's `HelpPanel` topic. The trigger carries `aria-expanded` and `aria-controls`; the region's close button and the link both close it.",
+      "file": "help-info.vue"
     }
   ]
 }

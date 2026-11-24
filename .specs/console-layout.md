@@ -3,18 +3,18 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
-checksum: 1b4ee4c4fddc73863ee031e7c0d332a170a6f9f769c2b5b1b43f6fa536fa15a2
+checksum: ed07b7d77b596d9294104d54e7a748fe6384ad598b9870b42340cc62f65829d0
 created: 2026-11-12
-last_updated: 2026-11-20
+last_updated: 2026-11-23
 ---
 
 # ConsoleLayout — Component Spec
 
 ## Purpose
 
-The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumb`, and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
+The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumb`, opens its help in the tools region with `ConsoleLayout.ToolsTrigger` (the `Info` link after its title), and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
 
 ## When to use
 
@@ -46,6 +46,9 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - A page's control crumb is its `ConsoleLayout.Breadcrumb`, never `App.vue`'s `breadcrumbs` slot.
+- Page help (level D of the in-product help standard) is a `HelpPanel` in the `tools` slot, opened by `ConsoleLayout.ToolsTrigger` placed first in `PageHeader`'s `meta` slot, so the `Info` link sits right after the page title on the same line. One per page. Never a boxed `IconButton`, a typed `?` or a `Tooltip` to open page help; never hand-build the toggle with `useConsoleLayout()` and a `Button`.
+- The app-wide help or notifications entry in the header (`actions` with `toggleTools`) and a page's `Info` link drive the same tools region: the page swaps the panel's topic in the trigger's `click` handler, which runs before the region toggles. To keep the region open while switching topic, call `event.preventDefault()` in the handler and then `useConsoleLayout().openTools()`.
+- A section of a page (a `Subheader`, a `SettingsGroup`, a `Card` header) takes no `Info` link: one per page, after the h1. A section explains itself with its `description` (level A) or a `Hint` after its title (level C).
 - A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
 - Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
@@ -121,7 +124,27 @@ The app's root renders only `<ConsoleLayout>`, so it imports the standalone root
 </template>
 ```
 
-`@aziontech/webkit/console-layout-breadcrumb` is the standalone part.
+A page opens its help topic from the `Info` link after its title; the app's `tools` slot holds the `HelpPanel` (see the HelpInfo example):
+
+```vue
+<script setup lang="ts">
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import PageHeader from '@aziontech/webkit/page-header'
+</script>
+
+<template>
+  <PageHeader
+    title="Workloads"
+    description="Group the domains, applications and firewalls that serve one site."
+  >
+    <template #meta>
+      <ConsoleLayout.ToolsTrigger aria-label="Info about workloads" />
+    </template>
+  </PageHeader>
+</template>
+```
+
+`@aziontech/webkit/console-layout-breadcrumb` and `@aziontech/webkit/console-layout-tools-trigger` are the standalone parts.
 
 ## Sub-components
 
@@ -134,13 +157,18 @@ packages/webkit/src/components/layout/console-layout/
 ├── injection-key.ts            (the page context and the trail registry)
 ├── composables/use-console-layout.ts
 ├── console-layout.test.ts
-└── console-layout-breadcrumb/console-layout-breadcrumb.vue
+├── console-layout-breadcrumb/console-layout-breadcrumb.vue
+└── console-layout-tools-trigger/console-layout-tools-trigger.vue
 ```
 
 - `console-layout-breadcrumb/console-layout-breadcrumb.vue` — a page's own trail. Renders nothing in place; registers with the layout on mount and `KeepAlive` activation, unregisters on unmount and deactivation; the latest wins and replaces the layout's `breadcrumbs` prop and slot. Does nothing outside a `ConsoleLayout`. Crumbs are followed with the app's router.
   - Props: `items: BreadcrumbItemData[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
   - Events: _none_ (crumb clicks are followed by the layout).
   - Slots: `default` — one or more controls that end the trail (a `Select` with `variant="ghost"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
+- `console-layout-tools-trigger/console-layout-tools-trigger.vue` — the page's `Info` link: a `Button` with `variant="link"` (text only, `.text-body-sm`, the link colour) that opens and closes the layout's tools region. It reads the layout context with `useConsoleLayout({ optional: true })`: inside a `ConsoleLayout` it sets `aria-expanded` (`"true"` / `"false"`), `aria-controls` (the tools region body's id, only while open, when the region is in the page) and `data-state="open|closed"` from `v-model:tools-open`; a click first emits `click` and then toggles the region unless the handler called `event.preventDefault()`. Outside a layout (a block preview, a test) it still renders and emits `click`, and sets no `aria-expanded`, `aria-controls` or `data-state`. `data-testid` fallback `console-layout-tools-trigger`. Placed first in `PageHeader`'s `meta` slot.
+  - Props: `label: string` default `''` — the visible label; empty uses the locale catalog (`consoleLayout.info`, `Info`). `ariaLabel: string` default `''` — a fuller accessible name that starts with the visible label (`Info about workloads`, WCAG 2.5.3); empty leaves the visible label as the name.
+  - Events: `click` — `(event: MouseEvent)`, fired before the region toggles, so the page can set the `HelpPanel` topic first; `event.preventDefault()` keeps the region as it is.
+  - Slots: _none_.
 
 ## Props
 
@@ -148,7 +176,7 @@ packages/webkit/src/components/layout/console-layout/
 | ------------------- | ------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `navigation`        | `ConsoleLayoutNavGroup[]` | `[]`        | false    | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
 | `activeId`          | `string`                  | `''`        | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                             |
-| `breadcrumbs`       | `BreadcrumbItemData[]`    | `[]`        | false    | The trail shown in the header (while compact, hidden below a 28rem header); each is `{ label, href? }` and the last one is the current page.                                        |
+| `breadcrumbs`       | `BreadcrumbItemData[]`    | `[]`        | false    | The trail shown in the header (while compact, hidden below a 28rem header); each is `{ label, href? }` and the last one is the current page.                                  |
 | `home`              | `string`                  | `'/'`       | false    | Where the brand mark links.                                                                                                                                                   |
 | `account`           | `ConsoleLayoutAccount`    | `undefined` | false    | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent.                                     |
 | `ariaLabel`         | `string`                  | `''`        | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`).                                                                                |
@@ -179,7 +207,7 @@ packages/webkit/src/components/layout/console-layout/
 | `actions`        | `{ compact: boolean, toggleTools: () => void }` | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell).                                                                                                                                            |
 | `header-leading` | `{ compact: boolean }`                          | Content at the start of the header, before the breadcrumbs (an account or organization switcher).                                                                                                                                                                                                                              |
 | `sidebar-header` | `{ compact: boolean }`                          | Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-leading`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden. |
-| `breadcrumbs`    | —                                               | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; while compact, hidden below a 28rem header.                                                                                                                                                                            |
+| `breadcrumbs`    | —                                               | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; while compact, hidden below a 28rem header.                                                                                                                                                      |
 | `notifications`  | —                                               | Flash messages (`Alert`) above the page, kept in view while the page scrolls.                                                                                                                                                                                                                                                  |
 | `tools`          | —                                               | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`.                                                                                                                                                                                                                           |
 | `search`         | `{ query: string }`                             | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette.                                                                                                                                                                                                                         |
@@ -232,20 +260,22 @@ packages/webkit/src/components/layout/console-layout/
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
 - A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
+- Page help: `ConsoleLayout.ToolsTrigger` is a native `button` (a disclosure: `Enter` and `Space` toggle) with `aria-expanded` and, while open, `aria-controls` pointing at the tools region's body (`useId()`-based, stable in the server render). Its name is the visible `Info` or an `aria-label` that starts with it. Focus stays on the trigger when the region opens; the region's close button (`AppLayout`) and the trigger both close it. Tests: `console-layout.test.ts` › tools trigger.
 
 ## Internationalization
 
-| Key                               | English source                            | Override prop       |
-| --------------------------------- | ----------------------------------------- | ------------------- |
-| `consoleLayout.navigation`        | `Main navigation`                         | `ariaLabel`         |
-| `consoleLayout.home`              | `Azion home`                              | —                   |
-| `consoleLayout.openNavigation`    | `Open navigation`                         | —                   |
-| `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
-| `consoleLayout.accountMenuFor`    | `{initials}, {name}, account menu`        | —                   |
-| `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
-| `consoleLayout.noMatch`           | `No page or command matches your search.` | —                   |
-| `consoleLayout.pages`             | `Pages`                                   | —                   |
-| `consoleLayout.searchShortcut`    | `Search pages and commands`               | —                   |
+| Key                               | English source                            | Override prop          |
+| --------------------------------- | ----------------------------------------- | ---------------------- |
+| `consoleLayout.navigation`        | `Main navigation`                         | `ariaLabel`            |
+| `consoleLayout.home`              | `Azion home`                              | —                      |
+| `consoleLayout.openNavigation`    | `Open navigation`                         | —                      |
+| `consoleLayout.accountMenu`       | `Account menu`                            | —                      |
+| `consoleLayout.accountMenuFor`    | `{initials}, {name}, account menu`        | —                      |
+| `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder`    |
+| `consoleLayout.noMatch`           | `No page or command matches your search.` | —                      |
+| `consoleLayout.pages`             | `Pages`                                   | —                      |
+| `consoleLayout.searchShortcut`    | `Search pages and commands`               | —                      |
+| `consoleLayout.info`              | `Info`                                    | `ToolsTrigger` `label` |
 
 - Formatting: none. Navigation, breadcrumb and account text is consumer data.
 
@@ -267,7 +297,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## Performance
 
-- Bundle budget: 66.5 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 66.0 KB measured, up from 65.0 KB for the `sidebar-header` region and the `Avatar` marble pattern it carries; it pulls `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) plus `ShortcutsDialog` (the `?` list) and a list-only `useShortcuts` entry, and 1 KB for `./console-layout-breadcrumb` (0.42 KB measured).
+- Bundle budget: 66.5 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 66.0 KB measured, up from 65.0 KB for the `sidebar-header` region and the `Avatar` marble pattern it carries; it pulls `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) plus `ShortcutsDialog` (the `?` list) and a list-only `useShortcuts` entry, 1 KB for `./console-layout-breadcrumb` (0.42 KB measured), and 4.7 KB for `./console-layout-tools-trigger` (4.65 KB measured; it pulls `Button` and the locale lookup).
 - Runtime budget: one `popstate` listener when no router is installed; one watcher on the route path that bumps the main's key; the active row is a computed match over the navigation leaves, and one post-flush watcher on it and on the rail element scrolls the row into view (one layout read per change); the page trail is a short list of registrations.
 - Development warning: in development only, one `MutationObserver` on the `<main>` and a scan of its `SidebarMenu` links against the navigation tree; it is removed from production builds (0.02 KB measured in the root budget for the `<main>` ref).
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).
@@ -280,6 +310,8 @@ packages/webkit/src/components/layout/console-layout/
 - **Account selection, label in name and the active row in view (2026-11-14).** The console handled the account menu with `@click` plus `@keydown.enter` on each option, because the layout owns the `DropdownMenu` and did not forward its `select`; keyboard selection was lost otherwise. Decided: the layout re-emits it as `account-select` with `DropdownMenu`'s own `(event, value)` payload, as it does for the palette with `search-select`. The header avatar trigger was named `Account menu` while showing the initials (axe `label-content-name-mismatch`); its name now starts with the visible initials through an interpolated catalog message, rather than hiding the initials with `aria-hidden`, so a speech user can say what they see and a screen reader still hears whose menu it is. A low current row in a long rail rendered under the fade above the account footer; the layout now scrolls the rail's own scroller to it, computing the offset rather than calling `scrollIntoView`, which can also scroll the page and the frame.
 - **The environment stays on phones (2026-11-17, owner decision AU5).** While compact the header hid the whole trail, the environment `Select` with it, so a phone user had to remember which environment they were editing (the round-2 audit's working-memory failure). Decided: the crumbs still collapse, but a page trail's control crumbs render in the compact header as a trail of their own (a `Breadcrumb` list holding only the controls, `__page-control`), after the hamburger and in place of the brand, which a 390 px header has no room for beside a control (the brand stays in the navigation drawer). The layout's `breadcrumbs` prop and slot, which hold no controls, stay hidden while compact. A page body that repeated its environment control under `md` because the header hid it drops the repeat.
 
+- **Page help trigger (2026-11-23, in-product help standard, level D).** Agents hand-built page help as a boxed `IconButton` with a `?` opening a `Tooltip`, or wired `toggleTools` from the header into the page. Decided (HELP-B-1): a structural part, `ConsoleLayout.ToolsTrigger`, that the page renders after its title in `PageHeader`'s `meta` slot and that drives the layout's tools region through the context (`toolsOpen`, `openTools`, `closeTools`, `toggleTools`, `toolsId`), as Cloudscape's `Info` link opens its help panel. It is a `Trigger` because the tools region it opens has an open and closed state (`v-model:tools-open`, `data-state` on the trigger). It reuses `Button` `variant="link"` rather than `Link`, because it acts on the page and is not a navigation. The click is emitted before the toggle so one handler can swap the `HelpPanel` topic, and `preventDefault()` lets a page that switches topics keep the region open. Attached to the compound (it composes only `Button`, no overlay or input), with its own flat export.
+
 ## Examples
 
 - Default — the layout with console navigation (a drill level and a preview badge), breadcrumbs, header actions, the account menu with an `account-select` handler and a list page body.
@@ -288,8 +320,9 @@ packages/webkit/src/components/layout/console-layout/
 - Page breadcrumbs — a detail page body that sets its own trail with `ConsoleLayout.Breadcrumb`, ending on an environment `Select` (`variant="ghost"`, `size="small"`).
 - Fill page — a workspace page body whose root carries `data-layout-fill`: the main stops scrolling and the body's own panes scroll.
 - Sidebar header — an account switcher in `sidebar-header` under the wordmark, moved to `header-leading` while compact.
+- Help info — a page whose `PageHeader` carries `ConsoleLayout.ToolsTrigger` in `meta`, opening a `HelpPanel` topic in the `tools` slot.
 
-The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable. The third is justified: the rail's bound state is behaviour no other example shows, and the palette command is how the console offered it. The fourth is justified: a page-owned trail with a control crumb is the sub-component's whole reason to exist. The fifth is justified: the fill mode only shows with a body that pins its own panes. The sixth is justified: the rail header region only shows with content in it, and the switcher's move to the header while compact is the pattern the slot exists for.
+The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable. The third is justified: the rail's bound state is behaviour no other example shows, and the palette command is how the console offered it. The fourth is justified: a page-owned trail with a control crumb is the sub-component's whole reason to exist. The fifth is justified: the fill mode only shows with a body that pins its own panes. The sixth is justified: the rail header region only shows with content in it, and the switcher's move to the header while compact is the pattern the slot exists for. The seventh is justified: the page help trigger only shows with a tools region and a help topic to open.
 
 ## Constraints — DO NOT
 
