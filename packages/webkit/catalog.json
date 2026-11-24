@@ -10677,6 +10677,119 @@
    "treeShakeableImport": "@aziontech/webkit/key-value-list-group",
    "surface": "app"
   },
+  "message-thread": {
+   "import": "@aziontech/webkit/message-thread",
+   "target": "./src/components/content/message-thread/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/message-thread-root",
+   "subcomponents": [
+    "@aziontech/webkit/message-thread-item",
+    "@aziontech/webkit/message-thread-group"
+   ],
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "timestampFormat",
+     "type": "TimestampFormat",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows three placeholder messages in place of the items while the thread loads, and marks it busy."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `MessageThread.Item` and `MessageThread.Group` children, oldest first. Not rendered while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/message-thread.json",
+   "docsFile": "catalog/components/message-thread.json"
+  },
+  "message-thread-root": {
+   "import": "@aziontech/webkit/message-thread-root",
+   "target": "./src/components/content/message-thread/message-thread.vue",
+   "kind": "root",
+   "rootOf": "message-thread",
+   "treeShakeableImport": "@aziontech/webkit/message-thread-root",
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "timestampFormat",
+     "type": "TimestampFormat",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows three placeholder messages in place of the items while the thread loads, and marks it busy."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `MessageThread.Item` and `MessageThread.Group` children, oldest first. Not rendered while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "docsFile": "catalog/components/message-thread-root.json"
+  },
+  "message-thread-item": {
+   "import": "@aziontech/webkit/message-thread-item",
+   "target": "./src/components/content/message-thread/message-thread-item/message-thread-item.vue",
+   "kind": "subcomponent",
+   "parent": "message-thread",
+   "treeShakeableImport": "@aziontech/webkit/message-thread-item",
+   "models": [
+    "quotedOpen"
+   ],
+   "stability": "preview",
+   "surface": "app"
+  },
+  "message-thread-group": {
+   "import": "@aziontech/webkit/message-thread-group",
+   "target": "./src/components/content/message-thread/message-thread-group/message-thread-group.vue",
+   "kind": "subcomponent",
+   "parent": "message-thread",
+   "treeShakeableImport": "@aziontech/webkit/message-thread-group",
+   "models": [
+    "open"
+   ],
+   "stability": "preview",
+   "surface": "app"
+  },
   "network-map": {
    "import": "@aziontech/webkit/network-map",
    "target": "./src/components/content/network-map/network-map.vue",

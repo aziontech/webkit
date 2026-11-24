@@ -1692,3 +1692,6 @@ Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.13 KB): the `rating` 
 Budget-raise: package packedBytes 8,620,000 → 8,630,000 bytes (measured 8,625,782): the `Rating` component, its test, five examples and its catalog and llms pages (SUP-RT).
 Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.81 KB): the English catalog it bundles gains the six PriorityTag strings, the hidden "Priority:" prefix and the five level names (SUP-PT-2).
 Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.13 KB): the Spanish catalog gains the six PriorityTag strings (SUP-PT-2).
+Budget-raise: config-provider 12.8 KB → 13.05 KB (measured 12.95 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: locales-pt-BR 12 KB → 12.25 KB (measured 12.15 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: locales-es 12.1 KB → 12.4 KB (measured 12.28 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.

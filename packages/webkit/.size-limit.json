@@ -984,6 +984,26 @@
     "limit": "0.75 KB"
   },
   {
+    "name": "message-thread",
+    "path": "src/components/content/message-thread/index.ts",
+    "limit": "38 KB"
+  },
+  {
+    "name": "message-thread-root",
+    "path": "src/components/content/message-thread/message-thread.vue",
+    "limit": "3.5 KB"
+  },
+  {
+    "name": "message-thread-item",
+    "path": "src/components/content/message-thread/message-thread-item/message-thread-item.vue",
+    "limit": "35.5 KB"
+  },
+  {
+    "name": "message-thread-group",
+    "path": "src/components/content/message-thread/message-thread-group/message-thread-group.vue",
+    "limit": "6 KB"
+  },
+  {
     "name": "plan-feature-list",
     "path": "src/components/content/plan-feature-list/plan-feature-list.vue",
     "limit": "1 KB"
@@ -1117,17 +1137,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.9 KB"
+    "limit": "13.05 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "12.1 KB"
+    "limit": "12.25 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "12.25 KB"
+    "limit": "12.4 KB"
   },
   {
     "name": "phone-input",

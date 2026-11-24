@@ -304,5 +304,15 @@ export const COMPONENT_TERMS = {
   'capability-grid-section': ['feature grid', 'features grid', 'capabilities grid'],
   'plan-comparison-section': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
   'article-index-section': ['blog index', 'article index', 'resource hub', 'blog list'],
-  'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter']
+  'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter'],
+  'message-thread': [
+    'support ticket',
+    'ticket conversation',
+    'ticket thread',
+    'support conversation',
+    'email thread',
+    'internal note',
+    'conversa do ticket',
+    'conversación del ticket'
+  ]
 }
