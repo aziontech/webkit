@@ -2,11 +2,11 @@
 name: markdown-editor
 category: input
 structure: monolithic
-status: draft
+status: approved
 stability: preview
 spec_version: 1
 template: 2
-checksum: 0000000000000000000000000000000000000000000000000000000000000000
+checksum: 6a189c782fb347eb985c69ae40feb4e2fea139989310bbdee248b215767f064d
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -139,7 +139,8 @@ Attributes: the consumer `class` and `data-testid` go on the root; every other a
 - Mention menu: `data-mention-state="open|closed"` on the root. Open while the `@` token before the caret matches at least one person and the field is editable: the listbox renders above the field (or below it, when there is not enough room above and more below), the match count is spoken in the polite live region, and the field carries `aria-controls` (the listbox) and `aria-activedescendant` (the highlighted option). Closed: no listbox in the DOM, and the field carries neither attribute (`aria-autocomplete="list"` stays while `mentions` is not empty). No match, Escape, a pick, or the caret leaving the token closes it.
 - `disabled`: field, toolbar buttons and tab triggers disabled; the mention menu never opens.
 - `readonly`: toolbar buttons disabled (so the toolbar has no focus stop and Tab skips it), keyboard shortcuts do nothing, the mention menu never opens; the tabs work.
-- No loading, empty or error state of its own: the empty preview text is the only empty state; a send error belongs to the host's `Field` error.
+- Preview loading: the renderer is a lazy chunk (see Performance). Until it arrives the preview box keeps its `minRows` height, carries `aria-busy="true"` and `data-loading`, and shows the muted text "Loading preview" (`markdownEditor.previewLoading`). If the chunk fails to load, the box shows the Markdown source as plain text (`whitespace-pre-wrap`), so the writer still reads what they wrote; there is no retry button.
+- Empty: an empty value shows the muted "Nothing to preview" (`markdownEditor.emptyTitle`). A send error belongs to the host's `Field` error, not to the editor.
 - Every insertion (toolbar buttons, Ctrl/⌘+B, I, K, and a picked mention) keeps the browser's undo history: text goes in through `document.execCommand('insertText')`; where that returns false the component falls back to `setRangeText` plus an `input` event, which is not undoable.
 - What each action inserts (GitHub's markers), on the selection or at the caret:
   - Bold `**text**`, Italic `_text_`; with no selection the empty markers go in with the caret between them; a selection already wrapped in the markers is unwrapped.
@@ -186,7 +187,7 @@ The panel top gap replaces `Tabs.Content`'s `--layout-group-gap` through its `cn
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the field, tabs and toolbar buttons keep the focus rings of `Textarea`, `Tabs.Trigger` and `IconButton`. The Preview panel is the one focus stop of the Preview tab (`tabindex="0"`, from `Tabs.Content`) and the editor gives it `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` (merged through `Tabs.Content`'s `cn`). The Write panel takes `tabindex="-1"`: its first content is the field, so the panel is not a stop of its own.
+- Visible focus: the field, tabs and toolbar buttons keep the focus rings of `Textarea`, `Tabs.Trigger` and `IconButton`. Both panels take `tabindex="-1"`, so neither `Tabs.Content` panel is a stop of its own: in Write the first content is the field; in Preview the preview box (`data-slot="preview"`, `tabindex="0"`) is the one focus stop, with `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the box itself.
 - Keyboard map:
   - Tab order: the active tab (Write or Preview), then the toolbar (one stop, Write only), then the field (Write) or the preview box (Preview), then the controls in the `footer` slot.
   - In the field: Ctrl+B (⌘B on Apple) bold, Ctrl+I (⌘I) italic, Ctrl+K (⌘K) link; each wraps the selection, or inserts the empty markers with the caret between them.
@@ -217,7 +218,8 @@ The panel top gap replaces `Tabs.Content`'s `--layout-group-gap` through its `cn
 | `markdownEditor.code`            | `Code`                                   | —             |
 | `markdownEditor.shortcut`        | `{label} ({keys})`                       | —             |
 | `markdownEditor.linkPlaceholder` | `url`                                    | —             |
-| `markdownEditor.empty`           | `Nothing to preview`                     | —             |
+| `markdownEditor.emptyTitle`      | `Nothing to preview`                     | —             |
+| `markdownEditor.previewLoading`  | `Loading preview`                        | —             |
 | `markdownEditor.mentionMenu`     | `People`                                 | —             |
 | `markdownEditor.mentionResults`  | one `{count} person`, other `{count} people` | —         |
 
@@ -236,9 +238,9 @@ The panel top gap replaces `Tabs.Content`'s `--layout-group-gap` through its `cn
 ## Responsive
 
 - Container queries: none; the header row is a wrapping flex row.
-- Narrow (≤ 640 px or a narrow container): the toolbar wraps onto its own line under the tabs, aligned to the end; the field and the preview take the full width; the mention menu spans the field's width.
+- Narrow container: the header row wraps by content width (no breakpoint); the toolbar keeps `ms-auto`, wraps onto its own line under the tabs, aligned to the end; the field and the preview take the full width; the mention menu spans the field's width.
 - The mention menu is positioned with CSS only (`absolute` against the field wrapper, no teleport, no positioning library): it opens above the field and moves below it when there is not enough room above and more room below (`data-side=top|bottom`, the shared part's behaviour, unchanged). Inside an `overflow: hidden` or scrolling parent (a dialog body) it can be clipped like any in-flow popup; the host leaves room under the composer, as for `PromptInput`.
-- Touch: toolbar buttons and menu options are 44 px tall on `pointer: coarse`; the tooltips are hover/focus extras, every button still has its accessible name and does its job with a tap.
+- Touch: toolbar buttons keep `IconButton`'s 44 × 44 px hit area and menu options are 44 px tall on `pointer: coarse`; the tooltips are hover/focus extras, every button still has its accessible name and does its job with a tap.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom (WCAG 1.4.10); a long line in the field wraps; a code block in the preview scrolls inside its own box.
 
 ## Performance
