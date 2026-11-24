@@ -28,11 +28,15 @@ describe('detail/detail-customer', () => {
     const view = render(DetailCustomer)
     await fireEvent.click(screen.getByRole('button', { name: 'Edit' }))
     await fireEvent.click(screen.getByRole('button', { name: 'New ticket' }))
-    expect(view.emitted('edit')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
-    expect(view.emitted('new-ticket')?.[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect((view.emitted('edit') as [MouseEvent][])[0][0]).toBeInstanceOf(MouseEvent)
+    expect((view.emitted('new-ticket') as [MouseEvent][])[0][0]).toBeInstanceOf(MouseEvent)
     await fireEvent.click(screen.getByRole('button', { name: 'More actions' }))
     await fireEvent.click(await screen.findByRole('menuitem', { name: 'Delete customer' }))
-    await waitFor(() => expect(view.emitted('customer-action')?.[0]?.[1]).toBe('delete'))
+    await waitFor(() =>
+      expect((view.emitted('customer-action') as [Event, string][] | undefined)?.[0]?.[1]).toBe(
+        'delete'
+      )
+    )
   })
 
   it('opens a ticket from its subject and gives every row its status, priority and deadline', async () => {
@@ -44,7 +48,7 @@ describe('detail/detail-customer', () => {
     const link = within(table).getByRole('link', { name: /certificate error/ })
     link.addEventListener('click', (event) => event.preventDefault())
     await fireEvent.click(link)
-    const [event, ticket] = view.emitted('open-ticket')?.[0] ?? []
+    const [[event, ticket]] = view.emitted('open-ticket') as [[MouseEvent, { id: string }]]
     expect(event).toBeInstanceOf(MouseEvent)
     expect(ticket).toMatchObject({ id: '4812' })
   })
@@ -52,7 +56,7 @@ describe('detail/detail-customer', () => {
   it('switches tabs through the tab model', async () => {
     const view = render(DetailCustomer)
     await fireEvent.click(screen.getByRole('tab', { name: 'Activity' }))
-    expect(view.emitted('update:tab')?.[0]).toEqual(['activity'])
+    expect(view.emitted('update:tab')).toEqual([['activity']])
   })
 
   it('groups the activity by day', () => {
@@ -72,7 +76,9 @@ describe('detail/detail-customer', () => {
     const field = screen.getByLabelText('Add a note') as HTMLTextAreaElement
     await fireEvent.update(field, '  Called back about the invoice.  ')
     await fireEvent.click(screen.getByRole('button', { name: 'Add note' }))
-    expect(view.emitted('add-note')?.[0]?.[1]).toBe('Called back about the invoice.')
+    expect((view.emitted('add-note') as [MouseEvent, string][])[0][1]).toBe(
+      'Called back about the invoice.'
+    )
   })
 
   it('shows the empty state with New ticket for a new customer', async () => {
