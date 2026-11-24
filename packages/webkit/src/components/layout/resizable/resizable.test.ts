@@ -2,6 +2,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h, nextTick, ref } from 'vue'
 
+import Collapsed from '../../../../examples/resizable/collapsed.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Resizable, { ResizableHandle, ResizablePane } from './index'
 
@@ -232,5 +233,14 @@ describe('Resizable', () => {
         'data-[orientation=horizontal]:overflow-x-clip'
       )
     })
+  })
+
+  it('toggles the collapsed example pane with a system Button', async () => {
+    const view = render(Collapsed)
+    const toggle = view.getByRole('button', { name: 'Show the preview' })
+    expect(toggle.getAttribute('data-testid')).toBe('button')
+    expect(toggle.getAttribute('data-variant')).toBe('outline')
+    await fireEvent.click(toggle)
+    expect(view.getByRole('button', { name: 'Hide the preview' })).toBeTruthy()
   })
 })
