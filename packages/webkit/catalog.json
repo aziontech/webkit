@@ -24283,21 +24283,21 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty follows the device locale, `en-US` on the server and until mount."
+     "doc": "BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty inherits the provider above; at the root it follows the device locale, `en-US` on the server and until mount."
     },
     {
      "name": "catalogs",
      "type": "Record<string, Messages>",
      "default": "undefined",
      "required": "false",
-     "doc": "Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English."
+     "doc": "Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`), added to those of the provider above; a locale with no catalog falls back to English."
     },
     {
      "name": "messages",
      "type": "PartialMessages",
      "default": "undefined",
      "required": "false",
-     "doc": "Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`)."
+     "doc": "Partial catalog deep-merged over the built-in one and the provider above's overrides, keyed by component group (`{ pagination: { next: 'Seguinte' } }`)."
     },
     {
      "name": "dir",
@@ -24311,14 +24311,14 @@
      "type": "string | number | Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute."
+     "doc": "Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset inherits the provider above, and at the root reads the real clock, ticking each minute."
     },
     {
      "name": "timeZone",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone."
+     "doc": "IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty inherits the provider above, and at the root reads the browser's zone."
     }
    ],
    "slots": [
