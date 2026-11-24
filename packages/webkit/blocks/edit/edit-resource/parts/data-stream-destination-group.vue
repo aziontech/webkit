@@ -1,14 +1,19 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AttributeEditor, { type AttributeEditorColumn } from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import FieldError from '@aziontech/webkit/field-error'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import PasswordInput from '@aziontech/webkit/password-input'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Textarea from '@aziontech/webkit/textarea'
+  import { computed } from 'vue'
 
+  import { headerProblem, isCredentialHeader } from '../lib/data-stream-checks'
   import { sampleDataStreamConnectors as connectorOptions } from '../sample'
   import { useDataStreamContext } from '../use-data-stream'
   import DataStreamInputRow from './data-stream-input-row.vue'
@@ -19,6 +24,15 @@
   const labelOf = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
   const connectorLabel = labelOf(connectorOptions)
+
+  const HEADER_COLUMNS: AttributeEditorColumn[] = [
+    { key: 'name', label: 'Name', placeholder: 'X-Header-Name' },
+    { key: 'value', label: 'Value', placeholder: 'value' }
+  ]
+  const newHeader = () => ({ name: '', value: '' })
+  const headerErrors = computed(() =>
+    errors.headers ? form.headers.map((header) => headerProblem(header)) : []
+  )
 </script>
 
 <template>
@@ -121,29 +135,41 @@
               v-if="form.connector === 'standard'"
               key="headers"
               title="Custom headers"
-              description="Sent with every request. One per line, up to 5, in the Key:Value format."
+              description="Sent with every request, up to 5. A credential such as Authorization or an API key stays masked."
               variant="stacked"
             >
-              <div class="flex w-full font-code">
-                <Textarea
-                  id="data-stream-headers"
-                  v-model="form.headers"
-                  class="w-full"
-                  :rows="3"
-                  aria-label="Custom headers"
-                  placeholder="header-name:value"
-                  required
-                  :invalid="!!errors.headers"
-                  :aria-describedby="errors.headers ? 'data-stream-headers-message' : undefined"
-                  :disabled="saving"
-                  @update:model-value="onDestinationChange('headers')"
-                />
-              </div>
-              <FieldError
-                v-if="errors.headers"
-                id="data-stream-headers-message"
-                >{{ errors.headers.message }}</FieldError
+              <AttributeEditor
+                id="data-stream-headers"
+                v-model:items="form.headers"
+                :definition="HEADER_COLUMNS"
+                :new-item="newHeader"
+                :limit="5"
+                :disabled="saving"
+                add-button-label="Add header"
+                remove-button-label="Remove header"
+                aria-label="Custom headers"
+                :errors="headerErrors"
+                @update:items="onDestinationChange('headers')"
               >
+                <template #cell-value="{ item, value, update, invalid }">
+                  <PasswordInput
+                    v-if="isCredentialHeader(item.name)"
+                    :model-value="value"
+                    autocomplete="off"
+                    monospace
+                    :invalid="invalid"
+                    @update:model-value="update"
+                  />
+                  <Input
+                    v-else
+                    :model-value="value"
+                    autocomplete="off"
+                    :spellcheck="false"
+                    :invalid="invalid"
+                    @update:model-value="update"
+                  />
+                </template>
+              </AttributeEditor>
             </SettingsRow>
             <SettingsRow
               v-if="form.connector === 'kafka'"

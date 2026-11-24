@@ -41,7 +41,7 @@
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | false | Leaves the area to the browser's native context menu and never opens the panel. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the menu panel; when empty the panel has no name of its own. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 6dfd26d281d98de5d18dfd3be623953b4873451f8c0802590849ee96a2f4c6c7
+checksum: 7670c907e3741fc80b27b61093d44582066ce31c28c2c16c9fb3480d8470a714
 created: 2026-06-30
-last_updated: 2026-11-16
+last_updated: 2026-11-23
 ---
 
 # Split Button — Component Spec
@@ -175,7 +175,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 ## Responsive
 
 - The control never wraps; on narrow screens keep the label short or move the actions into a `DropdownMenu` behind an `IconButton`.
-- Touch: both segments use the Button and IconButton touch-target spans (44 px on a coarse pointer).
+- Touch: both segments use the Button and IconButton touch-target spans (44 px tall on a coarse pointer); the spans grow only vertically, so a tap on the edge of one segment never opens or fires the other.
 
 ## Performance
 

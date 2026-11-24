@@ -34,7 +34,7 @@
   "Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.",
   "Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.",
   "Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.",
-  "Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until hover or focus."
+  "Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until the reader clicks it."
  ],
  "props": [
   {
@@ -77,7 +77,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Extra guidance in a Hint glyph beside the title; empty renders no glyph."
+   "doc": "Extra guidance, one to three sentences, in a click-open Hint note beside the title; empty renders no glyph."
   },
   {
    "name": "required",

@@ -4,6 +4,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
   import { computed, ref } from 'vue'
 
   import type { CreateWizardPolicy } from '../types'
@@ -76,7 +77,15 @@
           size="small"
           clickable
           role="radio"
+          @keydown="onRadioListKeydown"
           :aria-checked="choice === option.value"
+          :tabindex="
+            radioListTabIndex(
+              option.value,
+              choice,
+              visible.map((entry) => entry.value)
+            )
+          "
           @click="choose(option)"
         >
           <Item.Media>

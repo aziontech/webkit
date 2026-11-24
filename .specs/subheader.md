@@ -3,10 +3,10 @@ name: subheader
 category: layout
 structure: monolithic
 status: implemented
-checksum: 0f207a232fe39dabdaa3dfe4a1a8569841007988b9207b8fd28b729c15514f5d
-spec_version: 5
+checksum: f37b5db9741f8d43f590aca616f3f7bf7500bc0d6faa3572ff76bdc932e63269
+spec_version: 6
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-23
 ---
 
 # Subheader — Component Spec
@@ -38,6 +38,7 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 - Keep the description to one sentence; put longer guidance in the band body.
 - Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.
 - Keep band actions to one or two outlined medium buttons.
+- Help for a band: the `description` first (level A of the in-product help standard). Subheader has no slot on its title line, so it takes no help glyph and never an `Info` link: the page's one `Info` link (`ConsoleLayout.ToolsTrigger`) sits after the h1 in `PageHeader`. A settings band that needs a click-open note uses `SettingsGroup`, whose `hint` renders a `Hint` after its title (level C).
 
 ## Usage
 

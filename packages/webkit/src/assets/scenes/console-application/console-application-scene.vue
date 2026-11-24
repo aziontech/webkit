@@ -165,7 +165,10 @@
         <span class="shrink-0 text-label-code-sm text-(--text-muted)">{{ counter }}</span>
       </div>
 
-      <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)">
+      <div
+        :data-testid="`${testId}__tabs`"
+        class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs) max-md:hidden"
+      >
         <TabsRoot :model-value="step.value">
           <TabsList>
             <TabsTrigger
@@ -299,7 +302,11 @@
             />
             <span class="min-w-0">
               {{ saveBar.label }}
-              <span class="text-(--text-muted)">{{ saveBar.hint }}</span>
+              <span
+                :data-testid="`${testId}__save-bar-hint`"
+                class="text-(--text-muted) max-md:hidden"
+                >{{ saveBar.hint }}</span
+              >
             </span>
           </template>
           <template #actions>
@@ -330,7 +337,7 @@
         :key="step.value"
         :data-animated="animated || null"
         :data-testid="`${testId}__drawer`"
-        class="absolute inset-y-0 end-0 flex w-[62%] data-animated:animate-slide-in-end motion-reduce:animate-none"
+        class="absolute inset-y-0 end-0 flex w-[62%] max-md:w-[88%] data-animated:animate-slide-in-end motion-reduce:animate-none"
       >
         <Panel
           data-fluid

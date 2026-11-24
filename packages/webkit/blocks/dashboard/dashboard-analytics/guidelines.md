@@ -136,7 +136,8 @@ products, then six highlight cards in two columns. Each card keeps the full head
 Bar, Expand, the more-options menu) and ends in a `ChartCard.Footer` holding one medium `Link`
 without icon, `Open <Product> dashboard`, to the product dashboard and view the card came from.
 The header actions hold the `Period` `Select` and an outlined Refresh `IconButton` in a `Tooltip`;
-Refresh holds the charts at reduced opacity (`refetching`) while the data reloads.
+Refresh emits `refresh` and fakes no reload: the page fetches again and passes `refetching`, which
+holds the charts at reduced opacity until the new figures arrive.
 
 ### Q. Usage — `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Hint`, `Input`, `EmptyState` (optional)
 

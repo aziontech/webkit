@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/data-table/default.vue'
@@ -1208,6 +1208,13 @@ describe('DataTable', () => {
   })
 
   describe('filter events carry the DOM event first', () => {
+    beforeAll(async () => {
+      await Promise.all([
+        import('../property-filter/property-filter.vue'),
+        import('../filter-menu/filter-menu.vue')
+      ])
+    })
+
     const filterFields = [
       {
         id: 'status',
@@ -1269,9 +1276,11 @@ describe('DataTable', () => {
     it('renders the applied filters as PropertyFilter tokens with type="property", AND only', async () => {
       const view = renderFiltered('property')
       const field = await view.findByTestId('table-filter')
-      await waitFor(() => expect(field.textContent).toContain('Active'))
+      await waitFor(() => {
+        expect(field.textContent).toContain('Active')
+        expect(view.getAllByRole('row')).toHaveLength(3)
+      })
       expect(view.queryByTestId('table-filter__operation')).toBeNull()
-      expect(view.getAllByRole('row')).toHaveLength(3)
     })
 
     it('emits filter-apply as (event, filters) when a property token is removed', async () => {

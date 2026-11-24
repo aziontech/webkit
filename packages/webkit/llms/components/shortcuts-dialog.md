@@ -41,7 +41,7 @@
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`Keyboard shortcuts`). |
 | `shortcut` | `string` | `'?'` | false | Keys that open the list, in the `useShortcuts` syntax; listed under the general group. Empty binds no key. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 

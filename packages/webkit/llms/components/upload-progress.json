@@ -70,7 +70,7 @@
   {
    "name": "open",
    "type": "boolean",
-   "default": "undefined as never",
+   "default": "undefined",
    "required": "false",
    "doc": "Two-way value (`v-model:open`)."
   }

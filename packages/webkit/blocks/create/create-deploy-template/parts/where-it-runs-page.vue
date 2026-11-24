@@ -4,6 +4,7 @@
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
   import { computed, nextTick, ref } from 'vue'
 
   import CreateDeployTemplate from '../create-deploy-template.vue'
@@ -166,7 +167,15 @@
                     size="small"
                     clickable
                     role="radio"
+                    @keydown="onRadioListKeydown"
                     :aria-checked="service === option.value"
+                    :tabindex="
+                      radioListTabIndex(
+                        option.value,
+                        service,
+                        visible.map((entry) => entry.value)
+                      )
+                    "
                     @click="choose(option.value)"
                   >
                     <Item.Media>

@@ -29,7 +29,8 @@ const RULE_PURPOSE = {
   'no-gap-after-closing-section':
     'Spacer or closing frame after a section that draws its own close',
   'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
-  'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
+  'no-dropped-children': 'content inside a webkit component with no default slot, never rendered',
+  'prefer-hint': 'hand-made help (a typed ?, an info icon in a Tooltip) or a paragraph in a Tooltip'
 }
 
 const TEMPLATE_ONLY_RULES = [
@@ -39,7 +40,8 @@ const TEMPLATE_ONLY_RULES = [
   'no-wrapped-page-chrome',
   'no-gap-after-closing-section',
   'require-accessible-name',
-  'no-dropped-children'
+  'no-dropped-children',
+  'prefer-hint'
 ]
 
 function bare(rule) {

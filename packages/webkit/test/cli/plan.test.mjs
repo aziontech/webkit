@@ -529,6 +529,7 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/skills/webkit-adoption/SKILL.md',
       '.claude/skills/webkit-azion-api/SKILL.md',
       '.claude/skills/webkit-query-explorer/SKILL.md',
+      '.claude/skills/webkit-in-product-help/SKILL.md',
       '.claude/skills/webkit-site-pages/SKILL.md',
       '.claude/skills/webkit-product-screens/SKILL.md',
       '.claude/agents/webkit-advisor.md',

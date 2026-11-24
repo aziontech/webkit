@@ -9,6 +9,7 @@ export const MARKET_ALIASES = {
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
   'command-palette': 'command',
+  'contextual-help': 'help-panel',
   cta: 'call-to-action',
   datatable: 'data-table',
   'due-date': 'countdown',
@@ -16,7 +17,11 @@ export const MARKET_ALIASES = {
   'doc-tabs': 'tabs',
   'feature-grid': 'capability-grid-section',
   'file-viewer': 'file-preview',
+  'help-icon': 'hint',
+  'help-tooltip': 'hint',
   'image-viewer': 'file-preview',
+  'info-icon': 'hint',
+  'info-link': 'console-layout-tools-trigger',
   'input-otp': 'otp-input',
   kebab: 'dropdown-menu',
   keyboard: 'kbd',
@@ -37,6 +42,7 @@ export const MARKET_ALIASES = {
   testimonial: 'client-quotes-section',
   testimonials: 'client-quotes-section',
   'text-field': 'input',
+  toggletip: 'hint',
   transfer: 'transfer-list'
 }
 

@@ -1,7 +1,8 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
+import States from '../../../../examples/gauge-chart/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import GaugeChart from './gauge-chart.vue'
 
@@ -112,5 +113,14 @@ describe('GaugeChart', () => {
     expect(figures.every((figure) => /^[\d.,]+$/.test(figure ?? ''))).toBe(true)
     expect(units.length).toBe(figures.length)
     expect(new Set(units)).toEqual(new Set(['ms']))
+  })
+
+  it('offers Retry in the States example error and draws the data once it is pressed', async () => {
+    const view = render(States)
+    const retry = view.getByRole('button', { name: 'Retry' })
+    expect(view.getByText('Could not load the cache hit ratio.')).toBeTruthy()
+    await fireEvent.click(retry)
+    expect(view.queryByText('Could not load the cache hit ratio.')).toBeNull()
+    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
 })

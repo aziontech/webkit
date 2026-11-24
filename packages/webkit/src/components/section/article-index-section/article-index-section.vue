@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
+  import { computed, nextTick, onMounted, ref, useAttrs, useTemplateRef, watch } from 'vue'
 
   import { useLoadMore } from '../../../composables/use-load-more'
   import { useMediaQuery } from '../../../composables/use-media-query'
@@ -10,8 +10,8 @@
   import Avatar from '../../content/avatar/avatar.vue'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
   import Input from '../../input/input/input.vue'
-  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import SectionBand from '../parts/section-band.vue'
   import StoryIndexSectionFacetSelect from '../story-index-section/parts/story-index-section-facet-select.vue'
   import ArticleIndexSectionEmpty from './parts/article-index-section-empty.vue'
   import ArticleIndexSectionMore from './parts/article-index-section-more.vue'
@@ -147,7 +147,7 @@
 
   const { t } = useTranslate({ articleIndexSection: en.articleIndexSection, common: en.common })
 
-  const rootEl = ref<HTMLElement | null>(null)
+  const rootEl = useTemplateRef<InstanceType<typeof SectionBand>>('rootEl')
 
   const category = ref<string | undefined>(props.allLabel)
 
@@ -231,7 +231,8 @@
     if (!requested || !props.categories.includes(requested)) return
     category.value = requested
     await nextTick()
-    rootEl.value?.scrollIntoView()
+    const root: HTMLElement | undefined = rootEl.value?.$el
+    root?.scrollIntoView()
   })
 
   const clearFilters = (): void => {
@@ -269,218 +270,213 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     ref="rootEl"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :framed="false"
   >
-    <Module
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      key="toolbar"
+      v-if="title || showCategories || showSearch || showFacets"
+      flush
+      borders="y"
+      marks="none"
     >
+      <div
+        role="search"
+        class="flex flex-col gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:flex-row lg:items-center lg:justify-between"
+      >
+        <h2
+          v-if="title"
+          class="m-0 text-heading-md text-(--text-default)"
+        >
+          {{ title }}
+        </h2>
+
+        <div
+          v-if="showCategories"
+          :class="CATEGORY_STRIP_CLASS"
+        >
+          <ToggleGroup
+            v-model="category"
+            :options="options"
+            :aria-label="categoryAriaLabel || undefined"
+            :size="controlSize"
+            class="w-max max-w-none"
+          />
+        </div>
+
+        <div
+          v-if="showSearch"
+          class="w-full shrink-0 lg:w-(--container-3xs)"
+        >
+          <Input
+            v-model="query"
+            :size="controlSize"
+            type="text"
+            :placeholder="searchPlaceholder || undefined"
+            :aria-label="searchAriaLabel || undefined"
+          >
+            <template #leading>
+              <i class="az az-search text-(--text-muted)" />
+            </template>
+          </Input>
+        </div>
+
+        <div
+          v-if="showFacets"
+          class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:flex-wrap"
+        >
+          <StoryIndexSectionFacetSelect
+            v-for="facet in facets"
+            :key="facet.id"
+            :model-value="valueOf(facet)"
+            :label="facet.label"
+            :options="choicesOf(facet)"
+            :all-option="{ value: facet.allLabel, label: facet.allLabel }"
+            size="medium"
+            :search-placeholder="t('articleIndexSection.search')"
+            :search-aria-label="
+              t('articleIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
+            "
+            :no-match-label="t('articleIndexSection.noMatch')"
+            class="w-full sm:w-56"
+            @update:model-value="select(facet, $event)"
+          />
+        </div>
+      </div>
+    </RegistrationFrame>
+
+    <template v-if="visible.length > 0">
       <RegistrationFrame
-        key="toolbar"
-        v-if="title || showCategories || showSearch || showFacets"
+        key="rows"
         flush
         borders="y"
-        marks="none"
+        marks="bottom"
       >
-        <div
-          role="search"
-          class="flex flex-col gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:flex-row lg:items-center lg:justify-between"
+        <ul
+          ref="listEl"
+          :aria-label="ariaLabel || undefined"
+          :data-variant="layout"
+          :data-filters="filters"
+          class="group/rows m-0 flex list-none flex-col p-0"
         >
-          <h2
-            v-if="title"
-            class="m-0 text-heading-md text-(--text-default)"
+          <li
+            v-for="(item, index) in visible"
+            :key="item.id"
           >
-            {{ title }}
-          </h2>
-
-          <div
-            v-if="showCategories"
-            :class="CATEGORY_STRIP_CLASS"
-          >
-            <ToggleGroup
-              v-model="category"
-              :options="options"
-              :aria-label="categoryAriaLabel || undefined"
-              :size="controlSize"
-              class="w-max max-w-none"
+            <div
+              v-if="index > 0"
+              aria-hidden="true"
+              class="h-(--spacing-lg) border-y border-(--border-default)"
             />
-          </div>
-
-          <div
-            v-if="showSearch"
-            class="w-full shrink-0 lg:w-(--container-3xs)"
-          >
-            <Input
-              v-model="query"
-              :size="controlSize"
-              type="text"
-              :placeholder="searchPlaceholder || undefined"
-              :aria-label="searchAriaLabel || undefined"
-            >
-              <template #leading>
-                <i class="az az-search text-(--text-muted)" />
-              </template>
-            </Input>
-          </div>
-
-          <div
-            v-if="showFacets"
-            class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:flex-wrap"
-          >
-            <StoryIndexSectionFacetSelect
-              v-for="facet in facets"
-              :key="facet.id"
-              :model-value="valueOf(facet)"
-              :label="facet.label"
-              :options="choicesOf(facet)"
-              :all-option="{ value: facet.allLabel, label: facet.allLabel }"
-              size="medium"
-              :search-placeholder="t('articleIndexSection.search')"
-              :search-aria-label="
-                t('articleIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
-              "
-              :no-match-label="t('articleIndexSection.noMatch')"
-              class="w-full sm:w-56"
-              @update:model-value="select(facet, $event)"
-            />
-          </div>
-        </div>
-      </RegistrationFrame>
-
-      <template v-if="visible.length > 0">
-        <RegistrationFrame
-          key="rows"
-          flush
-          borders="y"
-          marks="bottom"
-        >
-          <ul
-            ref="listEl"
-            :aria-label="ariaLabel || undefined"
-            :data-variant="layout"
-            :data-filters="filters"
-            class="group/rows m-0 flex list-none flex-col p-0"
-          >
-            <li
-              v-for="(item, index) in visible"
-              :key="item.id"
-            >
+            <article :class="ROW_CLASS">
               <div
-                v-if="index > 0"
-                aria-hidden="true"
-                class="h-(--spacing-lg) border-y border-(--border-default)"
-              />
-              <article :class="ROW_CLASS">
+                class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) md:border-e md:border-b-0"
+              >
+                <img
+                  v-if="item.image"
+                  :src="item.image"
+                  alt=""
+                  loading="lazy"
+                  class="size-full object-cover"
+                />
+                <img
+                  v-else-if="item.mark"
+                  :src="item.mark.logo"
+                  :alt="item.mark.name"
+                  loading="lazy"
+                  class="h-8 w-auto max-w-40 object-contain brightness-0 [[data-theme=dark]_&]:invert"
+                />
+              </div>
+              <div class="flex min-w-0 gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg)">
                 <div
-                  class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) md:border-e md:border-b-0"
+                  class="flex min-w-0 flex-1 flex-col justify-between gap-(--spacing-sm) group-data-[variant=center]/rows:justify-center"
                 >
-                  <img
-                    v-if="item.image"
-                    :src="item.image"
-                    alt=""
-                    loading="lazy"
-                    class="size-full object-cover"
-                  />
-                  <img
-                    v-else-if="item.mark"
-                    :src="item.mark.logo"
-                    :alt="item.mark.name"
-                    loading="lazy"
-                    class="h-8 w-auto max-w-40 object-contain brightness-0 [[data-theme=dark]_&]:invert"
-                  />
-                </div>
-                <div class="flex min-w-0 gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg)">
-                  <div
-                    class="flex min-w-0 flex-1 flex-col justify-between gap-(--spacing-sm) group-data-[variant=center]/rows:justify-center"
-                  >
-                    <div class="flex flex-col gap-(--spacing-sm)">
-                      <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
-                      <h3 class="m-0">
-                        <a
-                          :href="safeHref(item.href) ?? undefined"
-                          :target="item.target"
-                          :rel="item.target === '_blank' ? 'noopener' : undefined"
-                          :class="ROW_TITLE_LINK_CLASS"
+                  <div class="flex flex-col gap-(--spacing-sm)">
+                    <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
+                    <h3 class="m-0">
+                      <a
+                        :href="safeHref(item.href) ?? undefined"
+                        :target="item.target"
+                        :rel="item.target === '_blank' ? 'noopener' : undefined"
+                        :class="ROW_TITLE_LINK_CLASS"
+                      >
+                        {{ item.title }}
+                        <span
+                          v-if="item.target === '_blank'"
+                          class="sr-only"
+                          >{{ t('common.newTab') }}</span
                         >
-                          {{ item.title }}
-                          <span
-                            v-if="item.target === '_blank'"
-                            class="sr-only"
-                            >{{ t('common.newTab') }}</span
-                          >
-                        </a>
-                      </h3>
-                      <p
-                        v-if="item.description"
-                        class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted) group-data-[filters=facets]/rows:line-clamp-none"
-                      >
-                        {{ item.description }}
-                      </p>
-                    </div>
-                    <span
-                      v-if="item.byline || item.authors?.length"
-                      class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
+                      </a>
+                    </h3>
+                    <p
+                      v-if="item.description"
+                      class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted) group-data-[filters=facets]/rows:line-clamp-none"
                     >
-                      <span
-                        v-if="item.authors?.length"
-                        class="flex shrink-0 -space-x-(--spacing-xs)"
-                      >
-                        <Avatar
-                          v-for="author in item.authors ?? []"
-                          :key="author.name"
-                          variant="circle"
-                          size="small"
-                          :src="author.avatar || undefined"
-                          :label="author.avatar ? undefined : author.name"
-                          :alt="author.name"
-                          class="ring-2 ring-(--bg-canvas)"
-                        />
-                      </span>
-                      <span v-if="item.byline">{{ item.byline }}</span>
-                    </span>
+                      {{ item.description }}
+                    </p>
                   </div>
                   <span
-                    v-if="rowLabel"
-                    aria-hidden="true"
-                    :class="ROW_LABEL_CLASS"
+                    v-if="item.byline || item.authors?.length"
+                    class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
                   >
-                    {{ rowLabel }}
-                    <i class="az az-arrow-up-right leading-none" />
+                    <span
+                      v-if="item.authors?.length"
+                      class="flex shrink-0 -space-x-(--spacing-xs)"
+                    >
+                      <Avatar
+                        v-for="author in item.authors ?? []"
+                        :key="author.name"
+                        variant="circle"
+                        size="small"
+                        :src="author.avatar || undefined"
+                        :label="author.avatar ? undefined : author.name"
+                        :alt="author.name"
+                        class="ring-2 ring-(--bg-canvas)"
+                      />
+                    </span>
+                    <span v-if="item.byline">{{ item.byline }}</span>
                   </span>
                 </div>
-              </article>
-            </li>
-          </ul>
-        </RegistrationFrame>
+                <span
+                  v-if="rowLabel"
+                  aria-hidden="true"
+                  :class="ROW_LABEL_CLASS"
+                >
+                  {{ rowLabel }}
+                  <i class="az az-arrow-up-right leading-none" />
+                </span>
+              </div>
+            </article>
+          </li>
+        </ul>
+      </RegistrationFrame>
 
-        <ArticleIndexSectionMore
-          v-if="hasMore"
-          :label="moreLabel"
-          @more="loadMore"
-        />
-      </template>
-
-      <ArticleIndexSectionEmpty
-        v-else-if="emptyTitle"
-        key="empty"
-        :title="emptyTitle"
-        :description="emptyDescription"
-        :action-label="emptyActionLabel"
-        @clear="clearFilters"
+      <ArticleIndexSectionMore
+        v-if="hasMore"
+        :label="moreLabel"
+        @more="loadMore"
       />
-      <p
-        role="status"
-        data-slot="result-count"
-        class="sr-only"
-      >
-        {{ announcement }}
-      </p>
-    </Module>
-  </section>
+    </template>
+
+    <ArticleIndexSectionEmpty
+      v-else-if="emptyTitle"
+      key="empty"
+      :title="emptyTitle"
+      :description="emptyDescription"
+      :action-label="emptyActionLabel"
+      @clear="clearFilters"
+    />
+    <p
+      role="status"
+      data-slot="result-count"
+      class="sr-only"
+    >
+      {{ announcement }}
+    </p>
+  </SectionBand>
 </template>

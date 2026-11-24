@@ -80,7 +80,7 @@
   {
    "name": "modelValue",
    "type": "TModel",
-   "default": "undefined as never",
+   "default": "undefined",
    "required": "false",
    "doc": "Two-way value (`v-model`)."
   }

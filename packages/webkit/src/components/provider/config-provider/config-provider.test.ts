@@ -69,6 +69,43 @@ describe('ConfigProvider', () => {
       expect(getByTestId('probe').textContent).toBe('rtl')
     })
 
+    it('lets a nested provider inherit the locale, catalogs, messages and now it does not set', () => {
+      const Probe = defineComponent({
+        setup: () => {
+          const { locale, t, formatRelativeTime } = useLocale()
+          return () =>
+            h(
+              'span',
+              { 'data-testid': 'probe' },
+              [
+                locale.value,
+                t('chip.remove'),
+                t('toolApproval.deny'),
+                t('toolApproval.approve'),
+                formatRelativeTime(new Date('2026-11-11T14:00:00Z'))
+              ].join('|')
+            )
+        }
+      })
+      const { getAllByTestId, getByTestId } = render(
+        withProvider(
+          {
+            locale: 'pt-BR',
+            messages: { toolApproval: { deny: 'Recusar' } },
+            now: '2026-11-11T15:00:00Z'
+          },
+          () =>
+            h(
+              ConfigProvider,
+              { messages: { toolApproval: { approve: 'Confirmar' } } },
+              { default: () => h(Probe) }
+            )
+        )
+      )
+      expect(getAllByTestId('config-provider')[1]!.getAttribute('lang')).toBe('pt-BR')
+      expect(getByTestId('probe').textContent).toBe('pt-BR|Remover|Recusar|Confirmar|há 1 hora')
+    })
+
     it('derives dir="rtl" from an Arabic, Hebrew, Persian or Urdu locale', () => {
       for (const locale of ['ar', 'he-IL', 'fa', 'ur-PK']) {
         const { getAllByTestId, unmount } = render(withProvider({ locale }, () => h('span')))

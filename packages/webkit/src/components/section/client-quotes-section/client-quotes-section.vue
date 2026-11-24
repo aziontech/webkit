@@ -2,10 +2,9 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../action/button/button.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import QuoteTabs from '../../marketing/quote-tabs/quote-tabs.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ClientQuotesSection',
@@ -71,43 +70,31 @@
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
     :data-testid="testId"
+    :filled="hasItems"
   >
-    <Module
-      v-if="hasItems"
-      :divided="false"
-      :padded="false"
+    <QuoteTabs
+      :aria-label="ariaLabel || undefined"
+      v-model="model"
+      :items="quotes"
+      :autoplay="autoplay"
+      :autoplay-interval="autoplayInterval"
     >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
-        <QuoteTabs
-          :aria-label="ariaLabel || undefined"
-          v-model="model"
-          :items="quotes"
-          :autoplay="autoplay"
-          :autoplay-interval="autoplayInterval"
-        >
-          <template #actions>
-            <Button
-              v-if="primaryAction"
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              variant="secondary"
-              size="large"
-              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(primaryAction.trailing)"
-            />
-          </template>
-        </QuoteTabs>
-      </RegistrationFrame>
-    </Module>
-  </div>
+      <template #actions>
+        <Button
+          v-if="primaryAction"
+          :label="primaryAction.label"
+          :href="primaryAction.href"
+          variant="secondary"
+          size="large"
+          :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
+          icon-position="trailing"
+          :animated="Boolean(primaryAction.trailing)"
+        />
+      </template>
+    </QuoteTabs>
+  </SectionBand>
 </template>

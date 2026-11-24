@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-shortcuts`, `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-shortcuts`, `use-unsaved-changes`, `utils/leave-link`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -77,7 +77,7 @@ The form column with four `SettingsGroup`s: General (Name, required on Save), Ru
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error. The dirty state comes from `useUnsavedChanges`, which also asks the browser to confirm a reload or a tab close while code, arguments or settings hold unsaved edits; an app that routes away from the editor adds `onBeforeRouteLeave(() => guard.confirmLeave())` and binds the guard's `ConfirmDialog` (`v-bind="dialogProps"`) as `edit/edit-resource` does.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error. The dirty state comes from `useUnsavedChanges`, which also asks the browser to confirm a reload or a tab close while code, arguments or settings hold unsaved edits. With unsaved edits, a click on any link on the page that leaves it in the same tab (the breadcrumb, the sidebar, a back button; `leavingLink` from `@aziontech/webkit/utils/leave-link` skips new-tab, download and in-page links) first opens the guard's `Unsaved changes` `ConfirmDialog` (Keep editing or Discard changes), as `account/account-team-permissions` does in Edit Team; nothing typed is lost silently.
 
 ### K. Shortcut keycap — `Kbd` (optional)
 
@@ -223,11 +223,23 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, nextTick, reactive, ref, toRaw, useId, watch } from 'vue'
+  import { leavingLink } from '@aziontech/webkit/utils/leave-link'
+  import {
+    computed,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    reactive,
+    ref,
+    toRaw,
+    useId,
+    watch
+  } from 'vue'
 
   import { useFunctionFields } from './composables/use-function-fields'
   import { documents, loadMonaco, runtimeLabel, tabs } from './lib/function-editor'
   import FunctionArguments from './parts/function-arguments.vue'
+  import FunctionLeaveDialog from './parts/function-leave-dialog.vue'
   import FunctionSaveBar from './parts/function-save-bar.vue'
   import FunctionSettingsTab from './parts/function-settings-tab.vue'
   import { sampleFields, sampleService } from './sample'
@@ -360,7 +372,12 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   const fieldList = useFunctionFields(draftFields, formId, props.defaultOpenKeys)
   const { moveStatus } = fieldList
 
-  const guard = useUnsavedChanges(() => ({ form: { ...form }, fields: draftFields.value }))
+  const guard = useUnsavedChanges(() => ({ form: { ...form }, fields: draftFields.value }), {
+    onDiscard: (saved) => {
+      Object.assign(form, saved.form)
+      draftFields.value = saved.fields
+    }
+  })
   Object.assign(form, props.defaultDraft)
   const dirty = guard.isDirty
   const saving = computed(() => props.loading)
@@ -410,6 +427,15 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
     if (!dirty.value || saving.value) return
     save(event)
   }
+  const onLeaveClick = async (event: MouseEvent) => {
+    const link = leavingLink(event)
+    if (!link || !dirty.value) return
+    event.preventDefault()
+    if (await guard.confirmLeave()) window.location.assign(link.href)
+  }
+
+  onMounted(() => document.addEventListener('click', onLeaveClick, true))
+  onBeforeUnmount(() => document.removeEventListener('click', onLeaveClick, true))
 </script>
 
 <template>
@@ -540,6 +566,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
       @discard="discard"
       @save="save"
     />
+    <FunctionLeaveDialog :guard="guard" />
   </div>
 </template>
 ```

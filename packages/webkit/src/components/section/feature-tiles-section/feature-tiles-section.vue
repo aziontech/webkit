@@ -4,10 +4,8 @@
   import Illustration from '../../content/illustration/illustration.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'FeatureTilesSection',
@@ -48,7 +46,7 @@
     tiles?: FeatureTilesSectionTile[]
   }
 
-  const props = withDefaults(defineProps<FeatureTilesSectionProps>(), {
+  withDefaults(defineProps<FeatureTilesSectionProps>(), {
     variant: 'artwork',
     anchor: '',
     eyebrow: '',
@@ -62,86 +60,65 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-tiles-section'
   )
-
-  const hasTitle = computed(() => props.title.length > 0)
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
     :data-variant="variant"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :filled="tiles.length > 0"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
+    :marks="variant === 'artwork' ? 'all' : 'bottom'"
   >
-    <Module
-      v-if="tiles.length > 0"
-      :divided="false"
-      :padded="false"
+    <CardGrid
+      flush
+      variant="frame"
+      :columns="variant === 'artwork' ? 4 : 3"
     >
-      <template
-        v-if="hasTitle"
-        #header
+      <CardGridCell
+        v-for="tile in tiles"
+        :key="tile.title"
+        variant="canvas"
+        :padded="false"
       >
-        <ModuleHeader
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
-        />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        :marks="variant === 'artwork' ? 'all' : 'bottom'"
-      >
-        <CardGrid
-          flush
-          variant="frame"
-          :columns="variant === 'artwork' ? 4 : 3"
+        <MediaTile
+          key="media-tile-1"
+          v-if="tile.illustration"
+          variant="plain"
+          :title="tile.title"
+          :description="tile.description"
+          :media-scale="tile.scale ?? 1"
+          fluid
         >
-          <CardGridCell
-            v-for="tile in tiles"
-            :key="tile.title"
-            variant="canvas"
-            :padded="false"
-          >
-            <MediaTile
-              key="media-tile-1"
-              v-if="tile.illustration"
-              variant="plain"
-              :title="tile.title"
-              :description="tile.description"
-              :media-scale="tile.scale ?? 1"
-              fluid
+          <template #media>
+            <div
+              v-if="variant === 'artwork'"
+              class="aspect-170/128"
             >
-              <template #media>
-                <div
-                  v-if="variant === 'artwork'"
-                  class="aspect-170/128"
-                >
-                  <Illustration
-                    :name="tile.illustration"
-                    class="h-full!"
-                  />
-                </div>
-                <Illustration
-                  v-else
-                  :name="tile.illustration"
-                />
-              </template>
-            </MediaTile>
-            <MediaTile
-              key="media-tile-2"
+              <Illustration
+                :name="tile.illustration"
+                class="h-full!"
+              />
+            </div>
+            <Illustration
               v-else
-              variant="plain"
-              :title="tile.title"
-              :description="tile.description"
+              :name="tile.illustration"
             />
-          </CardGridCell>
-        </CardGrid>
-      </RegistrationFrame>
-    </Module>
-  </section>
+          </template>
+        </MediaTile>
+        <MediaTile
+          key="media-tile-2"
+          v-else
+          variant="plain"
+          :title="tile.title"
+          :description="tile.description"
+        />
+      </CardGridCell>
+    </CardGrid>
+  </SectionBand>
 </template>

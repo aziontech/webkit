@@ -1,10 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MarqueeLoop from '../../marketing/marquee/marquee-loop.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'PhotoMarqueeSection',
@@ -67,64 +65,45 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :filled="hasPhotos"
+    align="split"
+    :title="title"
+    :description="description"
+    :description-width="descriptionWidth"
+    marks="bottom"
   >
-    <Module
-      v-if="hasPhotos"
-      :divided="false"
-      :padded="false"
+    <MarqueeLoop
+      v-slot="{ copy, duplicate }"
+      :duration="loopDuration"
+      :aria-label="ariaLabel"
     >
-      <template
-        v-if="title"
-        #header
+      <ul
+        :data-duplicate="duplicate || null"
+        :aria-hidden="duplicate ? 'true' : undefined"
+        class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pe-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
       >
-        <ModuleHeader
-          align="split"
-          :title="title"
-          :description="description"
-          :description-width="descriptionWidth"
-        />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <MarqueeLoop
-          v-slot="{ copy, duplicate }"
-          :duration="loopDuration"
-          :aria-label="ariaLabel"
+        <li
+          v-for="photo in photos"
+          :key="photo.src + copy"
+          :style="{ aspectRatio: `${photo.width} / ${photo.height}` }"
+          class="h-80 shrink-0 overflow-hidden sm:h-112"
         >
-          <ul
-            :data-duplicate="duplicate || null"
-            :aria-hidden="duplicate ? 'true' : undefined"
-            class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pe-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
-          >
-            <li
-              v-for="photo in photos"
-              :key="photo.src + copy"
-              :style="{ aspectRatio: `${photo.width} / ${photo.height}` }"
-              class="h-80 shrink-0 overflow-hidden sm:h-112"
-            >
-              <img
-                :src="photo.src"
-                :alt="duplicate ? '' : photo.alt"
-                :width="photo.width"
-                :height="photo.height"
-                draggable="false"
-                decoding="async"
-                class="size-full object-cover"
-              />
-            </li>
-          </ul>
-        </MarqueeLoop>
-      </RegistrationFrame>
-    </Module>
-  </section>
+          <img
+            :src="photo.src"
+            :alt="duplicate ? '' : photo.alt"
+            :width="photo.width"
+            :height="photo.height"
+            draggable="false"
+            decoding="async"
+            class="size-full object-cover"
+          />
+        </li>
+      </ul>
+    </MarqueeLoop>
+  </SectionBand>
 </template>

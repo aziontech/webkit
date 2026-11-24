@@ -48,12 +48,12 @@
       :data-testid="`${testId}__label`"
       class="min-w-0 text-pretty text-(--text-default) font-medium uppercase text-overline-md"
     >
-      <slot />
+      <slot /><span
+        v-if="cursor"
+        aria-hidden="true"
+        :data-testid="`${testId}__cursor`"
+        class="ms-(--spacing-2xs) -my-1 inline-block h-5 w-1 align-middle bg-(--brand-blue) animate-blink-settle motion-reduce:animate-none"
+      />
     </span>
-    <span
-      v-if="cursor"
-      aria-hidden="true"
-      class="w-1 h-5 shrink-0 relative bg-(--brand-blue) animate-blink-settle motion-reduce:animate-none"
-    />
   </div>
 </template>

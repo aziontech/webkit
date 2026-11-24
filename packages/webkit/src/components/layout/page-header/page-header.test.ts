@@ -7,6 +7,7 @@ import Default from '../../../../examples/page-header/default.vue'
 import DetailPage from '../../../../examples/page-header/detail-page.vue'
 import RichDescription from '../../../../examples/page-header/rich-description.vue'
 import Sizes from '../../../../examples/page-header/sizes.vue'
+import WithInfo from '../../../../examples/page-header/with-info.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import PageHeader from './page-header.vue'
 
@@ -176,6 +177,23 @@ describe('PageHeader', () => {
         ).toBeTruthy()
       }
       expect(getByTestId('page-header__meta').textContent).toBe('Active')
+    })
+
+    it('renders the WithInfo example with the Info link right after the title, on its line', async () => {
+      const { container } = render(WithInfo)
+      const view = within(container as HTMLElement)
+      const title = view.getByRole('heading', { level: 1 })
+      const info = view.getByRole('button', { name: 'Info about workloads' })
+
+      expect(view.getByTestId('page-header__meta')).toContainElement(info)
+      expect(info.textContent?.trim()).toBe('Info')
+      const titleBox = title.getBoundingClientRect()
+      const infoBox = info.getBoundingClientRect()
+      expect(infoBox.left).toBeGreaterThanOrEqual(titleBox.right)
+      expect(infoBox.left - titleBox.right).toBeLessThanOrEqual(16)
+      expect(infoBox.top).toBeLessThan(titleBox.bottom)
+      expect(infoBox.bottom).toBeGreaterThan(titleBox.top)
+      await expectNoA11yViolations(container)
     })
 
     it('hides the decorative icon from assistive technology', () => {

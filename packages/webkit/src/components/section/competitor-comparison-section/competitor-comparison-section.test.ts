@@ -86,7 +86,7 @@ describe('CompetitorComparisonSection', () => {
   it('renders one category head and one row head per capability, in order', () => {
     const { getAllByRole } = band()
 
-    const heads = getAllByRole('rowheader').map((cell) => cell.textContent?.trim())
+    const heads = getAllByRole('rowheader').map((cell) => cell.innerText.trim())
     expect(heads).toEqual(['Bot management', 'Zero Trust', 'AI inference'])
     expect(getAllByRole('columnheader').length).toBeGreaterThanOrEqual(3)
   })
@@ -154,11 +154,13 @@ describe('CompetitorComparisonSection', () => {
     expect(getByText('Security').classList.contains('border-(--primary)')).toBe(true)
   })
 
-  it('renders an info button only for a capability with a definition', () => {
-    const { getByRole, queryByRole } = band()
+  it('renders a Hint only for a capability with a definition', () => {
+    const { getByRole } = band()
 
-    expect(getByRole('button', { name: 'About Bot management' })).toBeInTheDocument()
-    expect(queryByRole('button', { name: 'About Zero Trust' })).toBeNull()
+    const defined = getByRole('rowheader', { name: /Bot management/ })
+    expect(within(defined).getByTestId('hint__trigger').tagName).toBe('BUTTON')
+    const bare = getByRole('rowheader', { name: /Zero Trust/ })
+    expect(within(bare).queryByTestId('hint')).toBeNull()
   })
 
   it('renders both theme logos when both files are set', () => {

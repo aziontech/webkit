@@ -38,7 +38,7 @@
 | `closable` | `boolean` | `true` | false | Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. |
 | `size` | `DialogSize` | `'medium'` | false | Panel max-width preset passed to the inner Panel. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 

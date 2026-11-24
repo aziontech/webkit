@@ -1,9 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Module from '../../layout/module/module.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Stats from '../../marketing/stats/stats.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'StatsSection',
@@ -46,24 +45,13 @@
 </script>
 
 <template>
-  <div
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
+    :anchor="anchor"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :filled="hasItems"
+    marks="bottom"
   >
-    <Module
-      v-if="hasItems"
-      :divided="false"
-      :padded="false"
-    >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <Stats :items="items" />
-      </RegistrationFrame>
-    </Module>
-  </div>
+    <Stats :items="items" />
+  </SectionBand>
 </template>

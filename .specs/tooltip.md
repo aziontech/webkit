@@ -3,13 +3,13 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 7520ac6d471896f042d1c270aa797e4fc474dd5a5d85ee80d1859a802013f04f
+checksum: 983c76e74bcbfa229d2f0a64af4e06fe1131cfbf04ff9bf2ca289d87cd849e4f
 created: 2026-06-02
-last_updated: 2026-11-17
+last_updated: 2026-11-23
 ---
 
 # Tooltip — Component Spec
@@ -28,21 +28,21 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 ## When NOT to use
 
 - The content has links, buttons or more than one line of structure → use `popover`.
-- An info glyph beside a field label or column header → use `hint`.
+- An explanation, an info glyph, or anything over a few words (about 80 characters) → use `hint`.
 - A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.
 - Guidance or errors the user needs to complete a field → use `field-error`.
 
 ## Related
 
 - `popover` — click-opened, interactive, with a header, body and footer.
-- `hint` — the focusable info glyph that renders a `Tooltip` for you.
+- `hint` — the info glyph that opens a short note on click; use it for explanations, never a tooltip.
 - `hover-card` — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.
 - `icon-button` — the most common trigger; it still needs its own `ariaLabel`.
 
 ## Best practices
 
 - Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.
-- Keep `content` to a few words. It renders as plain text, with no markup.
+- Keep `content` to a few words (about 80 characters at most): a name, a shortcut or an abbreviation, as plain text. Never an explanation.
 - The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
 - Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.
 - Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.
@@ -144,7 +144,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
 - Hoverable (WCAG 1.4.13): the panel takes the pointer. Leaving the trigger closes the tooltip after a 100 ms grace, and entering the panel within the grace keeps it open (so text can be read under magnification); leaving the panel closes it after the same grace. Tests: `tooltip.test.ts` › hoverable content.
 - Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
-- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. Tests: `tooltip.test.ts` › keyboard map (spec).
+- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. A tooltip closed by `Escape` stays closed while the pointer rests on the trigger (a browser fires `mouseenter` when the panel disappears under a still pointer); it opens on hover again only after the pointer leaves the trigger and comes back, and on the next focus as usual. Tests: `tooltip.test.ts` › keyboard map (spec).
 - Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
 - ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.

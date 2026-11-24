@@ -643,6 +643,10 @@ export const helpPanel = {
   learnMore: 'Learn more'
 } as const
 
+export const hint = {
+  label: 'More information'
+} as const
+
 export const heroSection = {
   carouselLabel: 'Proven on mission-critical workloads'
 } as const
@@ -1634,7 +1638,8 @@ export const consoleLayout = {
   searchPlaceholder: 'Search pages and commands',
   noMatch: 'No page or command matches your search.',
   pages: 'Pages',
-  searchShortcut: 'Search pages and commands'
+  searchShortcut: 'Search pages and commands',
+  info: 'Info'
 } as const
 
 export const docLayout = {
@@ -1767,6 +1772,7 @@ export const en = {
   gaugeChart,
   appHeader,
   helpPanel,
+  hint,
   heroSection,
   heroFormSection,
   keyValueList,

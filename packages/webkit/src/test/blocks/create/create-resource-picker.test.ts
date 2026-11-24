@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import CreateResourcePicker from '../../../../blocks/create/create-resource-picker/create-resource-picker.vue'
 import ResourcePickerEmpty from '../../../../blocks/create/create-resource-picker/variants/empty.vue'
@@ -34,6 +35,24 @@ describe('create-resource-picker', () => {
     expect(screen.queryByText('web-app')).toBeNull()
     expect(screen.getByRole('status').textContent).toBe('2 projects')
     await fireEvent.click(screen.getByRole('radio', { name: /docs-site/ }))
+    expect(view.emitted<unknown[]>('update:modelValue')).toEqual([['docs-site']])
+  })
+
+  it('is one tab stop and moves the project choice with the arrow keys', async () => {
+    const view = render(CreateResourcePicker, {
+      props: {
+        projects: [
+          { value: 'acme-store', label: 'acme-store', description: 'Nuxt · acme/acme-store' },
+          { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' }
+        ]
+      }
+    })
+    const first = screen.getByRole('radio', { name: /acme-store/ })
+    const second = screen.getByRole('radio', { name: /docs-site/ })
+    expect([first.tabIndex, second.tabIndex]).toEqual([0, -1])
+    first.focus()
+    await userEvent.keyboard('{ArrowDown}')
+    expect(document.activeElement).toBe(second)
     expect(view.emitted<unknown[]>('update:modelValue')).toEqual([['docs-site']])
   })
 

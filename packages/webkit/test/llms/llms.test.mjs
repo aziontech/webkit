@@ -186,6 +186,10 @@ test('llms-full.txt cuts repeats and detail, the per-page files keep them', () =
   assert.doesNotMatch(auth, /```vue/)
   assert.match(files['blocks/auth/auth-sign-in.md'], /## Code \(`Login`\)/)
 
+  const activity = entry('blocks/account/account-activity-history.md')
+  assert.match(files['blocks/account/account-activity-history.md'], /^Then delete `sample\.ts`/m)
+  assert.doesNotMatch(activity, /^Then delete `sample\.ts`/m, 'the step after cut code goes too')
+
   for (const m of full.matchAll(/\]\(([^)\s]+\.(?:md|json))\)/g)) {
     if (/^https?:/.test(m[1])) continue
     assert.ok(m[1] in files, `llms-full.txt links ${m[1]}, which is not a file under llms/`)

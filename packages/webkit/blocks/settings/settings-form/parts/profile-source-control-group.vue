@@ -48,7 +48,11 @@
             <Item.Actions>
               <Button
                 :label="provider.action"
-                :aria-label="`${provider.action} ${provider.name}`"
+                :aria-label="
+                  provider.href.startsWith('http')
+                    ? `${provider.action} ${provider.name} (opens in a new tab)`
+                    : `${provider.action} ${provider.name}`
+                "
                 variant="outline"
                 size="medium"
                 :icon="

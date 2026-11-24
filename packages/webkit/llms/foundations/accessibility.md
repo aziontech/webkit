@@ -34,6 +34,11 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   `Esc` closes). Anything clickable must be reachable and operable by keyboard.
   The screen around the pieces follows one console-wide contract (focus on open, `Esc`,
   `⌘ S`, `/`, `?`, list keys): rule [`webkit-keyboard`](./keyboard.md).
+- Put help beside a label in a **`Hint`** (the small info glyph that opens a short note on click),
+  a short explanation in the field or section description, and a long one in a `HelpPanel`. A
+  `Tooltip` only names a control in a few words. A typed `?`, an info icon inside a `Tooltip` or
+  `Popover` trigger, a `Tooltip` over 80 characters and a `Hint` over 280 are flagged by
+  `webkit/prefer-hint`.
 - Generate ids with Vue's **`useId()`** for every `for` / `aria-labelledby` /
   `aria-describedby` association — stable across SSR.
 - Style focus with a **`focus-visible`** ring using the ring token

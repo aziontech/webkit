@@ -61,6 +61,9 @@ in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInp
   points `for` at the control and shows the Required marker; `Field.Description` takes its tone
   (disabled → invalid → helper) from the Field. The accessible-name / error-association rules
   below are satisfied **by construction**.
+- **Extra help on a field:** `Field.Description` first (always visible); detail some people want goes in
+  `<Field.Label hint="…">`, a Hint glyph that opens a short note on click. Never a typed `?`, a boxed icon
+  button or a long `Tooltip` beside a label (`/webkit-in-product-help`).
 - **Checkbox, switch:** `<Field orientation="horizontal">` with the control first and a
   `<Field.Content>` holding `Field.Label` + `Field.Description`.
 - **One of a few (radios):** always `<RadioGroup v-model>` with a `RadioGroup.Item` per option

@@ -55,7 +55,7 @@
 | `showApply` | `boolean` | `true` | false | Stages edits in a draft and shows Cancel and Apply; when false, every edit commits immediately and neither button renders. |
 | `split` | `boolean` | `false` | false | Renders the trigger as a split control with a separate chevron affordance. |
 | `modelValue` | `DatePickerValue` | `null` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 
 ## Events

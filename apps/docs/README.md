@@ -46,8 +46,12 @@ The data side is a Vite plugin, `plugins/docs-plugin.ts`:
 A router guard (`src/lib/data.ts`, `preloadRoute`) loads the chunks a route needs before it
 renders, so server rendering and hydration see the same data.
 
-Examples and blocks import every image they show from `@aziontech/webkit/assets/<file>`, so the docs
-site serves no media of its own and has no public folder. `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
+Examples and blocks import every image they show from `@aziontech/webkit/assets/<file>`. The one
+folder of media the docs site serves itself is `public/thumbnails/blocks/`: the `/blocks` cards show a
+384×240 WebP of each block's primary state in light and dark, cut from its visual baseline
+(`apps/visual/baselines/blocks/<id>/*--<theme>-1280.png`). After a block is added or its baselines are
+regenerated, run `pnpm --filter @aziontech/webkit-docs generate:block-thumbnails` and commit the files;
+`test/block-thumbnails.test.ts` fails when a block has none. `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
 `/llms.txt`; component, block and foundation pages link their `.md` as "View as Markdown".
 
 ## Token table pattern

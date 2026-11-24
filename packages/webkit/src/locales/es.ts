@@ -446,7 +446,8 @@ export const es: Messages = {
     searchPlaceholder: 'Buscar páginas y comandos',
     noMatch: 'Ninguna página o comando coincide con la búsqueda.',
     pages: 'Páginas',
-    searchShortcut: 'Buscar páginas y comandos'
+    searchShortcut: 'Buscar páginas y comandos',
+    info: 'Información'
   },
   copyButton: {
     fallbackTitle: 'Copia manualmente',
@@ -821,6 +822,9 @@ export const es: Messages = {
   helpPanel: {
     label: 'Ayuda',
     learnMore: 'Más información'
+  },
+  hint: {
+    label: 'Más información'
   },
   heroSection: {
     carouselLabel: 'Probada en cargas de trabajo críticas'

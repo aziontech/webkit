@@ -1,5 +1,6 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import PlanComparisonSection from './plan-comparison-section.vue'
@@ -118,7 +119,7 @@ describe('PlanComparisonSection', () => {
     expect(
       getAllByRole('rowheader')
         .filter((cell) => !isBandHead(cell))
-        .map((cell) => cell.textContent?.replace(/\s+/g, ' ').trim())
+        .map((cell) => cell.innerText.replace(/\s+/g, ' ').trim())
     ).toEqual([
       'Applications',
       'Rules Engine',
@@ -184,25 +185,23 @@ describe('PlanComparisonSection', () => {
     expect(within(inference[0]).getByText('Not included')).toBeInTheDocument()
   })
 
-  it('renders the hint button and the tag next to a label', () => {
+  it('renders a Hint and the tag next to a label', () => {
     const { getByRole, getByText } = band()
 
-    expect(getByRole('button', { name: 'About Rules Engine' })).toBeInTheDocument()
+    const row = getByRole('rowheader', { name: /Rules Engine/ })
+    expect(within(row).getByTestId('hint')).toBeInTheDocument()
+    expect(within(row).getByTestId('hint__trigger').tagName).toBe('BUTTON')
+    expect(row.querySelector('.az-circle-info')).not.toBeNull()
     expect(getByText('Preview')).toBeInTheDocument()
   })
 
-  it('opens the hint in a popover titled by the label', async () => {
+  it('opens the hint note from its glyph', async () => {
     const { getByRole } = band()
 
-    await fireEvent.click(getByRole('button', { name: 'About Rules Engine' }))
+    const row = getByRole('rowheader', { name: /Rules Engine/ })
+    await userEvent.click(within(row).getByTestId('hint__trigger'))
 
-    const dialog = await waitFor(() => {
-      const panel = document.body.querySelector<HTMLElement>('[role="dialog"]')
-      expect(panel).not.toBeNull()
-      return panel as HTMLElement
-    })
-    expect(within(dialog).getByText('Rules Engine')).toBeInTheDocument()
-    expect(within(dialog).getByText('Conditional rules.')).toBeInTheDocument()
+    await waitFor(() => expect(document.body).toHaveTextContent('Conditional rules.'))
   })
 
   it('draws included and not-included marks with tooltips of their labels', () => {

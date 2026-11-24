@@ -2,6 +2,7 @@ import {
   useUnsavedChanges,
   type UseUnsavedChangesReturn
 } from '@aziontech/webkit/use-unsaved-changes'
+import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
 import {
   type ComputedRef,
   inject,
@@ -57,7 +58,9 @@ const unreachable = (value: string) => {
 const focusFirstError = (errors: FieldProblems) =>
   nextTick(() => {
     const id = Object.keys(errors)[0]
-    if (id) document.getElementById(`data-stream-${id}`)?.focus()
+    const field = id ? document.getElementById(`data-stream-${id}`) : null
+    if (field?.matches('input, textarea, select, button')) field.focus()
+    else void focusFirstInvalid(field)
   })
 
 const settled = (saving: Ref<boolean>) =>

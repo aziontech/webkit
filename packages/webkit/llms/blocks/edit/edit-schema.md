@@ -1344,6 +1344,7 @@ export const createdDescription = (rows: number, relations: number) =>
         <Button
           type="button"
           label="About data types"
+          aria-label="About data types (opens in a new tab)"
           variant="outline"
           size="small"
           icon="az az-external-link"

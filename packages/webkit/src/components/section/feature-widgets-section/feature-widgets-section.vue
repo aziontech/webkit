@@ -16,7 +16,9 @@
     ModuleHeaderAlign
   } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'FeatureWidgetsSection',
@@ -110,6 +112,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feature-widgets-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, props.secondaryAction))
 
   const scenes = computed(() => resolveItemScenes(props.items))
 
@@ -130,18 +133,25 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="items.length"
+    :filled="items.length > 0"
+    :framed="false"
     :align="titleAlign"
-    :primary-action="primaryAction"
-    :secondary-action="secondaryAction"
   >
+    <template
+      v-if="headerActions.length"
+      #header-actions
+    >
+      <SectionActions :actions="headerActions" />
+    </template>
+
     <RegistrationFrame
       flush
       borders="y"
@@ -216,5 +226,5 @@
         </BentoGridCell>
       </BentoGrid>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>
