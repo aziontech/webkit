@@ -2,11 +2,11 @@
 name: countdown
 category: content
 structure: monolithic
-status: approved
+status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 1d76474f68fb91fd220af6d457358c16cb7da1d2e96b8fcc687fe10282db8aca
+checksum: 6ccfc82ffd7514e1eac00e9ffac6f5562a9029f628c6419eb768a9856e29d614
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -23,6 +23,7 @@ Countdown shows the time left until a deadline as a compact tag: the SLA badge o
 - A support or task tool shows a due date that must stand out as it gets close and once it is missed.
 - A settings or billing page shows how long until a certificate, an API key or a trial expires.
 - A row of an SLA policy shows that the clock is paused while the ticket waits on the customer.
+- An SLA timer or a due-date badge has to turn amber as the date gets close and red once it is overdue, with words and an icon, not colour alone.
 
 ## When NOT to use
 
@@ -74,14 +75,14 @@ Countdown shows the time left until a deadline as a compact tag: the SLA badge o
 
 ## Props
 
-| Prop               | Type                       | Default     | Required | JSDoc                                                                                                                                                                                        |
-| ------------------ | -------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `deadline`         | `string \| number \| Date` | `undefined` | false    | The deadline: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash.        |
-| `warningThreshold` | `number`                   | `3600000`   | false    | Time left, in milliseconds, at or under which the countdown turns to warning. `0` stays neutral until the deadline passes.                                                                   |
-| `label`            | `string`                   | `''`        | false    | Name of what is due (`First reply`, `Certificate`), shown before the phrase. Empty shows the phrase alone.                                                                                   |
-| `type`             | `'due' \| 'expiry'`        | `'due'`     | false    | The words of the phrase: `due` says `Due in` and `Overdue by` (a task, an SLA); `expiry` says `Expires in` and `Expired` (a certificate, a key, a trial).                                    |
-| `paused`           | `boolean`                  | `false`     | false    | The clock is stopped (an SLA waiting on the customer): the countdown says `Paused` with a pause icon, stays neutral and stops counting.                                                       |
-| `size`             | `'small' \| 'medium'`      | `'medium'`  | false    | Size token of the tag; `medium` is 24px tall, `small` is 20px.                                                                                                                               |
+| Prop               | Type                       | Default     | Required | JSDoc                                                                                                                                                                                 |
+| ------------------ | -------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `deadline`         | `string \| number \| Date` | `undefined` | false    | The deadline: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash. |
+| `warningThreshold` | `number`                   | `3600000`   | false    | Time left, in milliseconds, at or under which the countdown turns to warning. `0` stays neutral until the deadline passes.                                                            |
+| `label`            | `string`                   | `''`        | false    | Name of what is due (`First reply`, `Certificate`), shown before the phrase. Empty shows the phrase alone.                                                                            |
+| `type`             | `'due' \| 'expiry'`        | `'due'`     | false    | The words of the phrase: `due` says `Due in` and `Overdue by` (a task, an SLA); `expiry` says `Expires in` and `Expired` (a certificate, a key, a trial).                             |
+| `paused`           | `boolean`                  | `false`     | false    | The clock is stopped (an SLA waiting on the customer): the countdown says `Paused` with a pause icon, stays neutral and stops counting.                                               |
+| `size`             | `'small' \| 'medium'`      | `'medium'`  | false    | Size token of the tag; `medium` is 24px tall, `small` is 20px.                                                                                                                        |
 
 ## Events
 
@@ -95,13 +96,13 @@ _none_
 
 The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
-| State     | Condition                                      | `data-severity` | Icon                | Phrase (`type="due"` / `type="expiry"`)                         |
-| --------- | ---------------------------------------------- | --------------- | ------------------- | --------------------------------------------------------------- |
-| remaining | time left above `warningThreshold`             | `neutral`       | `az az-clock`          | `Due in 2h 15m` / `Expires in 2h 15m`; from 24 h: `Due tomorrow`, `Due in 3 days` / `Expires in 30 days` |
-| warning   | 0 < time left ≤ `warningThreshold`             | `warning`       | `az az-triangle-alert` | `Due in 45m` / `Expires in 45m`                                 |
-| overdue   | deadline reached or passed                     | `danger`        | `az az-circle-alert`   | `Overdue by 15m`, `Overdue by 2d 3h` / `Expired 15 minutes ago`, `Expired yesterday` |
-| paused    | `paused` is true (any deadline)                | `neutral`       | `az az-circle-pause`   | `Paused`                                                        |
-| invalid   | `deadline` empty or unparseable                | —               | —                   | a muted dash, no tag                                            |
+| State     | Condition                          | `data-severity` | Icon                   | Phrase (`type="due"` / `type="expiry"`)                                                                  |
+| --------- | ---------------------------------- | --------------- | ---------------------- | -------------------------------------------------------------------------------------------------------- |
+| remaining | time left above `warningThreshold` | `neutral`       | `az az-clock`          | `Due in 2h 15m` / `Expires in 2h 15m`; from 24 h: `Due tomorrow`, `Due in 3 days` / `Expires in 30 days` |
+| warning   | 0 < time left ≤ `warningThreshold` | `warning`       | `az az-triangle-alert` | `Due in 45m` / `Expires in 45m`                                                                          |
+| overdue   | deadline reached or passed         | `danger`        | `az az-circle-alert`   | `Overdue by 15m`, `Overdue by 2d 3h` / `Expired 15 minutes ago`, `Expired yesterday`                     |
+| paused    | `paused` is true (any deadline)    | `neutral`       | `az az-circle-pause`   | `Paused`                                                                                                 |
+| invalid   | `deadline` empty or unparseable    | —               | —                      | a muted dash, no tag                                                                                     |
 
 - `invalid` wins over `paused`: an empty or unparseable deadline renders the dash even when `paused` is set. `invalid` means an unparseable deadline, as in Timestamp, not form validation.
 - `loading`, `empty`, `error`, `disabled` and `readonly` do not apply: the deadline is a prop the consumer passes, the component holds no async state and is not interactive.
@@ -122,13 +123,13 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ## Tokens
 
-| Region            | Token (DESIGN.md)                                                                 |
-| ----------------- | --------------------------------------------------------------------------------- |
+| Region            | Token (DESIGN.md)                                                                                                                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | tag surface, text | `Tag` tokens: neutral `var(--bg-canvas)` + `var(--border-default)` + `var(--text-default)`; warning `var(--warning)` + `var(--warning-foreground)`; danger `var(--danger)` + `var(--danger-foreground)` |
-| tag typography    | `Tag` (`.text-tag-md`, `.text-tag-sm`)                                             |
-| icon              | `Tag` icon slot, the tag's text colour                                            |
-| label             | inherits the tag text                                                             |
-| invalid dash      | `var(--text-muted)`                                                               |
+| tag typography    | `Tag` (`.text-tag-md`, `.text-tag-sm`)                                                                                                                                                                  |
+| icon              | `Tag` icon slot, the tag's text colour                                                                                                                                                                  |
+| label             | inherits the tag text                                                                                                                                                                                   |
+| invalid dash      | `var(--text-muted)`                                                                                                                                                                                     |
 
 ## Theme gaps
 
@@ -178,7 +179,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ## Performance
 
-- Bundle budget: 3.5 KB gzip for `./countdown` in `.size-limit.json` (Tag, the Timestamp parsing and the locale helpers).
+- Bundle budget: 4.3 KB gzip for `./countdown` in `.size-limit.json` (Tag, the Timestamp parsing and the locale helpers; 4.16 KB measured).
 - Runtime budget: every Countdown shares one minute clock; no per-instance timer; the phrase is a computed over the clock.
 - Heavy parts: none; no dependency beyond Vue.
 

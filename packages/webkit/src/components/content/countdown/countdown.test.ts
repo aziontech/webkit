@@ -217,21 +217,21 @@ describe('Countdown', () => {
     expect(severities).toEqual(['danger', 'warning', 'neutral', 'neutral'])
     await expectNoA11yViolations(list.container)
   })
-})
 
-describe('countdown phrase helpers', () => {
-  it('rounds to whole minutes, at least one', () => {
-    expect(roundedMinutes(0)).toBe(1)
-    expect(roundedMinutes(-61_000)).toBe(2)
-    expect(roundedMinutes(14 * HOUR + 30_000)).toBe(14 * 60 + 1)
-  })
+  describe('phrase helpers', () => {
+    it('rounds to whole minutes, at least one', () => {
+      expect(roundedMinutes(0)).toBe(1)
+      expect(roundedMinutes(-61_000)).toBe(2)
+      expect(roundedMinutes(14 * HOUR + 30_000)).toBe(14 * 60 + 1)
+    })
 
-  it('keeps the two largest non-zero units', () => {
-    expect(durationParts(2 * 1440 + 3 * 60 + 5)).toEqual([
-      { value: 2, unit: 'day' },
-      { value: 3, unit: 'hour' }
-    ])
-    expect(durationParts(2 * 1440 + 5)).toEqual([{ value: 2, unit: 'day' }])
-    expect(durationParts(45)).toEqual([{ value: 45, unit: 'minute' }])
+    it('keeps the two largest non-zero units', () => {
+      expect(durationParts(2 * 1440 + 3 * 60 + 5)).toEqual([
+        { value: 2, unit: 'day' },
+        { value: 3, unit: 'hour' }
+      ])
+      expect(durationParts(2 * 1440 + 5)).toEqual([{ value: 2, unit: 'day' }])
+      expect(durationParts(45)).toEqual([{ value: 45, unit: 'minute' }])
+    })
   })
 })

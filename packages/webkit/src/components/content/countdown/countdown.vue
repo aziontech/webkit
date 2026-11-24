@@ -64,7 +64,7 @@
     timestamp: en.timestamp
   })
 
-  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'countdown')
+  const testId = computed<string>(() => String(attrs['data-testid'] ?? 'countdown'))
 
   const date = computed<Date | null>(() => toDate(props.deadline))
   const left = computed<number>(() => (date.value ? date.value.getTime() - now.value : 0))
