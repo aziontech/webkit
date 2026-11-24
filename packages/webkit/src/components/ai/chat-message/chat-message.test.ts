@@ -57,7 +57,7 @@ describe('ChatMessage', () => {
       props: { from: 'user', timestamp: '10:42' },
       slots: { default: () => 'Hi' }
     })
-    expect(user.getByTestId('chat-message__content')).toHaveAttribute('title', '10:42')
+    expect(user.getByTestId('chat-message__content')).toHaveAttribute('title', '\u206810:42\u2069')
     const assistant = render(ChatMessage, {
       props: { timestamp: '10:43' },
       slots: { default: () => 'Hello' },

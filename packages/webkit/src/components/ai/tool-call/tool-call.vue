@@ -68,7 +68,7 @@
   }
 
   const TRIGGER_CLASS =
-    'flex min-h-10 min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start text-(--text-muted) ' +
+    'flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start text-(--text-muted) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
@@ -81,7 +81,7 @@
     :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
     class="flex w-full flex-col gap-(--spacing-2xs)"
   >
-    <div class="flex min-h-10 items-center gap-(--spacing-sm)">
+    <div class="flex min-h-10 flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)">
       <button
         v-if="expandable()"
         type="button"
@@ -107,7 +107,7 @@
       </button>
       <div
         v-else
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-muted)"
+        class="flex min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) text-(--text-muted)"
       >
         <i
           class="az az-wrench shrink-0 text-(--text-muted)"

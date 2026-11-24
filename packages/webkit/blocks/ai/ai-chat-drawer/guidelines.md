@@ -235,7 +235,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Drawer title:** `AI assistant`, with the Preview tag while in preview.
 - **Empty state:** "Ask about <resource>" and one sentence saying the assistant reads this resource's settings and metrics.
 - **Placeholder:** "Ask about <resource>".
-- **Disclaimer:** "The AI assistant can make mistakes. Check important information."
+- **Disclaimer:** "The AI assistant can make mistakes. Check important information before you act on it.", word for word the one `ai/ai-chat` uses; `ai/ai-action-approval` adds "It runs nothing in your account without your approval."
 - Errors, loading and feedback strings follow `ai/ai-chat` and `skills/webkit-microcopy`.
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.

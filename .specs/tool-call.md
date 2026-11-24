@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: f5f5e9360e725af85cf677f6ace2afb0cf695b27b0130b1df4387cec8733f953
+checksum: fca2ef547c56a543eff9ec9edaab141f537b7e8d07f228d7952c13e2b66bea61
 created: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-24
 ---
 
 # ToolCall — Component Spec
@@ -159,7 +159,7 @@ _None._
 ## Responsive
 
 - Container queries: none.
-- Narrow: the title wraps to two lines before it clamps, and the tool name drops to its own line under it when the row has no room for both, truncating only past the row's width; the status stays visible.
+- Narrow: when the row has less than 12rem for the title beside the status, the status drops to its own line under the title, so the title keeps the row's width. The title wraps to two lines before it clamps, and the tool name drops to its own line under it when the row has no room for both, breaking anywhere instead of truncating, so the whole name always shows; the status stays visible.
 - Touch: 40 px row.
 - Reflow: code in details scrolls inside its block.
 

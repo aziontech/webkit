@@ -35,10 +35,10 @@ describe('PasswordRequirements', () => {
 
     expect(validated(getAllByTestId('password-requirements__chip'))).toEqual([
       ['8-128 characters', true],
+      ['Lowercase letter', true],
       ['Uppercase letter', false],
-      ['Special character', false],
       ['Number', true],
-      ['Lowercase letter', true]
+      ['Special character', false]
     ])
   })
 
@@ -47,8 +47,8 @@ describe('PasswordRequirements', () => {
     const states = getAllByTestId('password-requirements__chip-state').map((el) =>
       el.textContent?.trim()
     )
-    expect(states).toEqual([', met', ', not met', ', not met', ', met', ', met'])
-    expect(getAllByTestId('password-requirements__chip')[1].textContent).toContain(
+    expect(states).toEqual([', met', ', met', ', not met', ', met', ', not met'])
+    expect(getAllByTestId('password-requirements__chip')[2].textContent).toContain(
       'Uppercase letter, not met'
     )
   })

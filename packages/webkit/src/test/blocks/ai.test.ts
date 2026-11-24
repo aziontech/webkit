@@ -4,15 +4,40 @@ import { afterEach, describe, expect, it } from 'vitest'
 import AiActionApproval from '../../../blocks/ai/ai-action-approval/ai-action-approval.vue'
 import {
   sampleDeleteMessages,
+  sampleDeniedMessages,
   sampleFailedMessages,
   sampleRunningMessages,
   sampleTools
 } from '../../../blocks/ai/ai-action-approval/sample'
+import AiChat from '../../../blocks/ai/ai-chat/ai-chat.vue'
 import AiChatDrawer from '../../../blocks/ai/ai-chat-drawer/ai-chat-drawer.vue'
 import type { AiChatInterrupt, AiChatMessage, AiChatToolCallPart } from '../../utils/ai-chat'
 
 afterEach(() => cleanup())
 describe('ai', () => {
+  it('the three AI composers share one disclaimer; only approval adds what it never runs', () => {
+    const shared =
+      'The AI assistant can make mistakes. Check important information before you act on it.'
+    for (const block of [AiChat, AiChatDrawer, AiActionApproval]) {
+      const view = render(block)
+      const box = view.getByTestId('prompt-input__box')
+      const hint = document.getElementById(
+        (box.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').split(' ').at(-1) ??
+          ''
+      )
+      expect(hint?.textContent?.replace(/\s+/g, ' ').trim()).toContain(shared)
+      view.unmount()
+    }
+  })
+
+  it('ai-action-approval Denied: the denied call keeps a neutral title, not an in-progress one', () => {
+    const view = render(AiActionApproval, {
+      props: { messages: sampleDeniedMessages, tools: sampleTools }
+    })
+    expect(view.container.textContent).toContain('Deploy storefront to production')
+    expect(view.container.textContent).not.toMatch(/\b[A-Z][a-z]+ing storefront/)
+  })
+
   it('ai-action-approval Error: says what failed and names the action it re-runs', async () => {
     const view = render(AiActionApproval, {
       props: { messages: sampleFailedMessages, tools: sampleTools }

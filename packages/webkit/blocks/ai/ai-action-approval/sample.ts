@@ -51,17 +51,17 @@ const deploy = (state: AiChatToolCallPart['state'], approved?: boolean): AiChatT
 const deployRequest = request('m1', 'Deploy the current build of storefront to production')
 
 export const sampleTools: Record<string, AiChatTool> = {
-  get_build: { title: 'Reading the latest build of storefront' },
+  get_build: { title: 'Read the latest build of storefront' },
   deploy_workload: {
-    title: 'Deploying storefront to production',
+    title: 'Deploy storefront to production',
     question: 'Allow `deploy_workload` on production?',
     description:
       'Deploys build `b-4821` of storefront to production. The current version stays available for rollback.',
     approveLabel: 'Deploy'
   },
-  get_domain_traffic: { title: 'Reading the traffic of old.example.com' },
+  get_domain_traffic: { title: 'Read the traffic of old.example.com' },
   delete_domain: {
-    title: 'Deleting old.example.com',
+    title: 'Delete old.example.com',
     question: 'Delete the domain `old.example.com`?',
     description:
       'The domain stops answering at once and its certificate is revoked. This cannot be undone.',
