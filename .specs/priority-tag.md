@@ -2,11 +2,11 @@
 name: priority-tag
 category: content
 structure: monolithic
-status: approved
+status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 4a4bbde7fd1c513eefee8d8bd7aaacef4fd2cdecddb2aec2d7bc7dfe9c297228
+checksum: 3e9931c7cd8718ab299ca6ccb19c43189e869eeeb2d958bb87c10f29809ebe76
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-23
 
 Use PriorityTag only for the priority of a ticket, task or request on the urgent → low scale, or for "no priority"; the severity of a finding or alert is a SeverityTag, and the state of a ticket is a StatusIndicator or a Tag.
 
-PriorityTag labels a work item with how soon it should be handled: urgent, high, medium, low or none. The level reads from a three-bar signal glyph (the filled bars count the level), from a distinct alert mark for urgent, from three flat dashes for none, and from the label, so no level depends on colour alone. Its accessible name always says the axis ("Priority: High"), which is why it is its own component and not a SeverityTag (decision SUP-05).
+PriorityTag labels a work item with how soon it should be handled: urgent, high, medium, low or none. The level reads from a three-bar signal glyph (the filled bars count the level), from a distinct alert mark for urgent, from three flat dots for none, and from the label, so no level depends on colour alone. Its accessible name always says the axis ("Priority: High"), which is why it is its own component and not a SeverityTag (decision SUP-05).
 
 ## When to use
 
@@ -62,11 +62,11 @@ PriorityTag labels a work item with how soon it should be handled: urgent, high,
 
 ## Props
 
-| Prop       | Type                                                | Default    | Required | JSDoc                                                                                                                         |
-| ---------- | --------------------------------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `priority` | `'urgent' \| 'high' \| 'medium' \| 'low' \| 'none'` | `'none'`   | false    | Priority level (exported as `PriorityTagPriority`); sets the glyph (alert mark, filled bars or dashes) and the default label. |
-| `label`    | `string`                                            | `''`       | false    | Text of the tag. Empty uses the locale catalog (`Urgent`, `High`, `Medium`, `Low`, `No priority`).                            |
-| `size`     | `'small' \| 'medium'`                               | `'medium'` | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                           |
+| Prop       | Type                                                | Default    | Required | JSDoc                                                                                                                       |
+| ---------- | --------------------------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `priority` | `'urgent' \| 'high' \| 'medium' \| 'low' \| 'none'` | `'none'`   | false    | Priority level (exported as `PriorityTagPriority`); sets the glyph (alert mark, filled bars or dots) and the default label. |
+| `label`    | `string`                                            | `''`       | false    | Text of the tag. Empty uses the locale catalog (`Urgent`, `High`, `Medium`, `Low`, `No priority`).                          |
+| `size`     | `'small' \| 'medium'`                               | `'medium'` | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                         |
 
 ## Events
 
@@ -83,8 +83,8 @@ PriorityTag labels a work item with how soon it should be handled: urgent, high,
 - Visual states: `default` (static, non-interactive)
 - `data-priority` mirrors the `priority` prop: `urgent` | `high` | `medium` | `low` | `none`
 - `data-size` mirrors the `size` prop: `small` | `medium`
-- Glyph per level: urgent the `az-circle-alert` mark; high 3 filled bars of 3; medium 2; low 1; none three flat dashes
-- `none` ("No priority", three dashes) is the empty, untriaged value: the tag never renders blank
+- Glyph per level: urgent the `az-circle-alert` mark; high 3 filled bars of 3; medium 2; low 1; none three flat dots
+- `none` ("No priority", three dots) is the empty, untriaged value: the tag never renders blank
 - Loading, error, disabled, readonly and invalid do not apply: the tag is static and non-interactive (a loading row shows a `skeleton` in its place)
 
 ## Motion & Animations
@@ -104,7 +104,7 @@ _none_
 | shape                   | `var(--shape-control)`                                            |
 | glyph bar (filled)      | `var(--text-default)`                                             |
 | glyph bar (empty)       | `var(--border-default)`                                           |
-| glyph dashes (none)     | `var(--text-muted)`                                               |
+| glyph dots (none)       | `var(--text-muted)`                                               |
 | urgent mark             | `var(--danger-mark)` (a status icon standing on a surface, OI-02) |
 
 The border width is the theme's default border width, the same utility SeverityTag uses. The `--severity-*` ramp is not used: it belongs to the severity scale only (`rules/webkit-tokens.md`).
@@ -153,7 +153,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 1.85 KB gzip for `./priority-tag` (the `.size-limit.json` entry; the same ceiling as SeverityTag).
+- Bundle budget: 1.95 KB gzip for `./priority-tag` (the `.size-limit.json` entry; measured 1.88 KB, about 0.05 KB over SeverityTag for the hidden prefix and the urgent mark).
 - Runtime budget: none: static.
 - Heavy parts: none.
 

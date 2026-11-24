@@ -38,6 +38,16 @@ export const COMPONENT_TERMS = {
   ],
   'password-input': ['password', 'password field', 'senha', 'contraseña', 'campo de senha'],
   'phone-input': ['phone', 'phone number', 'telefone', 'teléfono', 'telefono'],
+  'priority-tag': [
+    'priority',
+    'ticket priority',
+    'task priority',
+    'urgency',
+    'how urgent',
+    'untriaged',
+    'prioridade',
+    'prioridad'
+  ],
   'context-menu': [
     'context menu',
     'right click',

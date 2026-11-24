@@ -34,9 +34,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'priority-tag'
-  )
+  const testId = computed<string>(() => String(attrs['data-testid'] ?? 'priority-tag'))
 
   const { t } = useTranslate({ priorityTag: en.priorityTag })
 
