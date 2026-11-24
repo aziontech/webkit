@@ -106,7 +106,7 @@
   useElementListener(rootEl, 'keydown', onKeydown)
 
   const ROOT_CLASS =
-    'relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
+    'relative inline-flex w-fit max-w-full items-center justify-center rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
     'leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 ' +
     "before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none " +
@@ -146,7 +146,7 @@
     :class="[ROOT_CLASS, attrs.class]"
   >
     <span
-      class="relative z-(--z-control) inline-flex min-w-0 items-center justify-center gap-(--spacing-2xs)"
+      class="relative z-(--z-control) inline-flex min-w-0 max-w-full items-center justify-center gap-(--spacing-2xs)"
     >
       <span
         v-if="splitBody"

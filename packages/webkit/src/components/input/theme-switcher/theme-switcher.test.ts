@@ -212,6 +212,11 @@ describe('ThemeSwitcher', () => {
 
     const dark = getByRole('radio', { name: 'Dark' }) as HTMLButtonElement
     expect(dark.disabled).toBe(true)
+    expect(root.classList).toContain('data-[disabled]:bg-(--bg-disabled)')
+    expect(getByTestId('theme-switcher__indicator').classList).toContain(
+      'group-data-[disabled]:bg-(--bg-surface)'
+    )
+    expect(dark.classList).toContain('disabled:text-(--text-disabled)!')
 
     await fireEvent.click(dark)
     await fireEvent.keyDown(dark, { key: 'ArrowRight' })

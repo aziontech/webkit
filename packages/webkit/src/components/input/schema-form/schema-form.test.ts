@@ -451,6 +451,8 @@ describe('SchemaForm', () => {
       const { view, model } = bound({ schema: repeat, ui })
       await nextTick()
       expect(view.getByRole('group', { name: 'Rules' }).tagName).toBe('FIELDSET')
+      expect(view.getByRole('button', { name: 'Add rule' })).toBeTruthy()
+      expect(view.queryByRole('button', { name: 'Add new item' })).toBeNull()
       await fireEvent.click(view.getByRole('button', { name: /Add/ }))
       await waitFor(() => expect(model.value).toEqual({ rules: [{ path: '/' }] }))
       expect(view.getByRole('group', { name: 'Rule 1' })).toBeTruthy()
@@ -627,6 +629,8 @@ describe('SchemaForm', () => {
       expect(view.getByRole('group', { name: 'Placement' }).tagName).toBe('FIELDSET')
       const trigger = view.getByRole('button', { name: 'Advanced settings' })
       expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      const folded = view.container.querySelector('[data-widget="section"]:not(fieldset)')!
+      expect(folded.classList).toContain('[--accordion-inset:0]')
       expect(view.queryByLabelText(/Retries/)).toBeNull()
       await fireEvent.click(trigger)
       await waitFor(() => expect(view.getByLabelText(/Retries/)).toBeTruthy())

@@ -100,6 +100,7 @@
           size="small"
           key-name="escape"
           aria-hidden="true"
+          class="pointer-coarse:hidden!"
         />
       </template>
     </Input>

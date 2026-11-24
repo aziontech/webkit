@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 78930a5f27ba22bc5a2cb12f270211e4436a792ad65c26ba63358485f37e394b
+checksum: c0f9c3ec5020e00d86ef0661ad6e0b64ffbf44496cb87cb810a7960303fa81b7
 created: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-24
 ---
 
 # SchemaForm — Component Spec
@@ -138,7 +138,7 @@ const ui = {
 | `string` with `writeOnly: true` or `format: password`         | `PasswordInput` (show/hide toggle)                                        | the `string` checks; empty leaves the key out                                      |
 | `object` with `oneOf` and `discriminator.propertyName`        | `Field.Set`: a `Select` of the variants, then the chosen variant's fields | a variant must be chosen                                                           |
 | `object` with `additionalProperties` of type `string` (a map) | `AttributeEditor` with Key and Value columns                              | unique keys; rows with an empty key are left out                                   |
-| `array` of objects with `ui[path].widget: 'repeat'`           | `AttributeEditor` of fieldsets, one per item, with Add and Remove         | `minItems`, `maxItems` (Add stops, Remove hides at the limits), each item's fields |
+| `array` of objects with `ui[path].widget: 'repeat'`           | `AttributeEditor` of fieldsets, one per item, with Add (named after the item schema's `title`: `Add rule`) and Remove | `minItems`, `maxItems` (Add stops, Remove hides at the limits), each item's fields |
 | any field with `ui[path].options`                             | `Combobox` (searches through the loader), or `MultiSelect` for an array   | `required`, `minItems`, `maxItems`                                                 |
 | anything else (arrays of objects, objects without properties) | `Textarea` holding JSON                                                   | valid JSON                                                                         |
 
@@ -154,7 +154,7 @@ const ui = {
 | `order`       | `string[]`                                       | an object  | The keys to ask first.                                                                                                                                                                          |
 | `when`        | `(value, parent) => boolean`                     | a field    | Shows the field while it returns true. A hidden field is not validated and its key leaves the value; showing it again brings back what it held, else its `default`.                             |
 | `options`     | `(query: string) => Promise<SchemaFormOption[]>` | a field    | Choices from the app: called with `''` when the field appears and with the typed text (after 250 ms) as the user searches; a late answer to an older query is dropped.                          |
-| `sections`    | `SchemaFormSection[]`                            | an object  | Groups keys under a legend (`{ title, description, keys }`) or, with `collapsed: true`, under a closed disclosure; a section without `title` is "Advanced settings". Ungrouped keys come first. |
+| `sections`    | `SchemaFormSection[]`                            | an object  | Groups keys under a legend (`{ title, description, keys }`) or, with `collapsed: true`, under a closed disclosure whose trigger lines up with the fields (`--accordion-inset: 0`); a section without `title` is "Advanced settings". Ungrouped keys come first. |
 
 Paths inside a repeat item carry the index (`rules.0.path`) in `v-model`, `errors`, `validate()` and the `field:<path>` slot; `ui` addresses every item with `*` (`rules.*.target`).
 
@@ -246,6 +246,7 @@ The form has no motion of its own; the composed controls bring theirs (the `Sele
 | `schemaForm.optionsError`         | Couldn't load the options.                     | —                      |
 | `schemaForm.writeOnlyPlaceholder` | Leave empty to keep the current value          | `ui[path].placeholder` |
 | `schemaForm.item`                 | Item {index}                                   | item schema `title`    |
+| `schemaForm.addItem`              | Add {item}                                     | —                      |
 | `schemaForm.advanced`             | Advanced settings                              | section `title`        |
 | `schemaForm.mapKey`               | Key                                            | —                      |
 | `schemaForm.mapValue`             | Value                                          | —                      |

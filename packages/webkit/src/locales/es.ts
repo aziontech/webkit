@@ -1067,6 +1067,7 @@ export const es: Messages = {
     optionsError: 'No se pudieron cargar las opciones.',
     writeOnlyPlaceholder: 'Déjalo vacío para conservar el valor actual',
     item: 'Elemento {index}',
+    addItem: 'Añadir {item}',
     advanced: 'Configuración avanzada',
     mapKey: 'Clave',
     mapValue: 'Valor',

@@ -3,21 +3,21 @@
 </script>
 
 <template>
-  <div class="flex items-center gap-(--spacing-lg)">
+  <div class="flex items-center justify-center gap-(--spacing-lg) py-(--spacing-2xl)">
     <Hint
-      content="Anchored above the glyph."
+      content="Opens above the glyph."
       side="top"
     />
     <Hint
-      content="Anchored to the right of the glyph."
+      content="Opens on the end side of the glyph."
       side="end"
     />
     <Hint
-      content="Anchored below the glyph."
+      content="Opens below the glyph."
       side="bottom"
     />
     <Hint
-      content="Anchored to the left of the glyph."
+      content="Opens on the start side of the glyph."
       side="start"
     />
   </div>

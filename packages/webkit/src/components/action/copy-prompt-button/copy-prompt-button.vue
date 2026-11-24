@@ -158,7 +158,7 @@
         ref="rootEl"
         type="button"
         v-bind="$attrs"
-        data-theme="dark"
+        :data-theme="disabled ? undefined : 'dark'"
         :data-testid="testId"
         :data-state="copied ? 'copied' : 'idle'"
         :data-disabled="disabled ? '' : undefined"

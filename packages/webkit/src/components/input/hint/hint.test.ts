@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/hint/default.vue'
+import Placements from '../../../../examples/hint/placements.vue'
 import WithLink from '../../../../examples/hint/with-link.vue'
 import { useEscapeToCancel } from '../../../composables/use-escape-to-cancel'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -280,6 +281,28 @@ describe('Hint', () => {
     expect(byTestId('hint__link')?.getAttribute('href')).toBe(
       'https://example.com/docs/cache-settings'
     )
+  })
+
+  it('centres the placements row and names each side without a physical direction', async () => {
+    const view = render(Placements)
+    const row = view.container.firstElementChild as HTMLElement
+    expect(row.classList).toContain('justify-center')
+    const triggers = view.getAllByTestId('hint__trigger')
+    expect(triggers).toHaveLength(4)
+    const notes: string[] = []
+    for (const trigger of triggers) {
+      await userEvent.click(trigger)
+      await settle()
+      notes.push(byTestId('hint__panel')?.textContent?.trim() ?? '')
+      await userEvent.keyboard('{Escape}')
+      await settle()
+    }
+    expect(notes).toEqual([
+      'Opens above the glyph.',
+      'Opens on the end side of the glyph.',
+      'Opens below the glyph.',
+      'Opens on the start side of the glyph.'
+    ])
   })
 
   it('extends the trigger hit area with a touch-target span', () => {

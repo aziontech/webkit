@@ -1067,6 +1067,7 @@ export const ptBR: Messages = {
     optionsError: 'Não foi possível carregar as opções.',
     writeOnlyPlaceholder: 'Deixe vazio para manter o valor atual',
     item: 'Item {index}',
+    addItem: 'Adicionar {item}',
     advanced: 'Configurações avançadas',
     mapKey: 'Chave',
     mapValue: 'Valor',

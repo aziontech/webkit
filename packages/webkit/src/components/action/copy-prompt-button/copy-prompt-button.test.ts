@@ -154,9 +154,17 @@ describe('CopyPromptButton', () => {
     const button = getByRole('button')
     expect(button).toBeDisabled()
     expect(button).toHaveAttribute('data-disabled')
+    expect(button).not.toHaveAttribute('data-theme')
     await fireEvent.click(button)
     expect(spy).not.toHaveBeenCalled()
     expect(emitted('copy')).toBeUndefined()
+  })
+
+  it('turns the glow once and rests instead of spinning forever', () => {
+    const { getByRole } = render(CopyPromptButton, { props: { value: PROMPT } })
+    const glow = getByRole('button').querySelector('[aria-hidden="true"]')!
+    expect(glow.classList).toContain('animate-spin-settle')
+    expect(glow.classList).not.toContain('animate-spin')
   })
 
   it('opens the manual-copy fallback when the clipboard refuses', async () => {

@@ -912,6 +912,7 @@ export const schemaForm = {
   optionsError: "Couldn't load the options.",
   writeOnlyPlaceholder: 'Leave empty to keep the current value',
   item: 'Item {index}',
+  addItem: 'Add {item}',
   advanced: 'Advanced settings',
   mapKey: 'Key',
   mapValue: 'Value',
