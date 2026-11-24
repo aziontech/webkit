@@ -165,8 +165,8 @@ describe('view/view-file-browser block', () => {
     document.documentElement.dir = 'rtl'
     try {
       const view = render(ViewFileBrowser)
-      const size = await waitFor(() => view.getByText('64 byte'))
-      expect(readsLeftToRight(size, '64', 'byte')).toBe(true)
+      const size = await waitFor(() => view.getByText('64 bytes'))
+      expect(readsLeftToRight(size, '64', 'bytes')).toBe(true)
       const time = view.container.querySelector('time')!
       expect(time.getAttribute('dir')).toBe('auto')
       const folder = view.getAllByRole('button').find((b) => b.textContent?.trim().endsWith('/'))!

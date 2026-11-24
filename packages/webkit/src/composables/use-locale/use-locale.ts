@@ -190,7 +190,7 @@ export function createTranslator(
     return formatNumber(value, {
       style: 'unit',
       unit: FILE_SIZE_UNITS[index],
-      unitDisplay: 'short',
+      unitDisplay: index === 0 ? 'long' : 'short',
       maximumFractionDigits: index === 0 ? 0 : 1,
       ...options
     })
