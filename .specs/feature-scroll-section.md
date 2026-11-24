@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-24
-checksum: e048f01899b93ca558f669947e879aa5aa2b7e451a81aa1289e5f2abf8839861
+checksum: ab1ac10b4998eeb6989a84e1db57fc6af9146d75782e773b5e9a98053ad1c089
 ---
 
 # FeatureScrollSection — Component Spec
@@ -92,7 +92,7 @@ The walkthrough band of a product page: a large section title over one screen pe
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
 - The server renders both layouts (CSS shows the right one); once mounted only the layout that matches the width stays in the document, so the band never carries two copies of every scene and illustration
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
-- Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
+- Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. In the grid a `code` sample opens on a label strip naming its file, which holds the copy button, so the button never covers the first line. A scene name that is not registered draws nothing.
 
 ## Motion & Animations
 
