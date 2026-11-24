@@ -206,14 +206,17 @@
                         :loading="connecting"
                         @click="(event: MouseEvent) => emit('connect', event)"
                       />
-                      <Alert
+                      <div
                         v-if="connectError"
-                        severity="danger"
-                        size="small"
-                        :label="connectError"
                         class="w-(--container-xs) max-w-full"
                         data-testid="create-hub__connect-error"
-                      />
+                      >
+                        <Alert
+                          severity="danger"
+                          size="small"
+                          :label="connectError"
+                        />
+                      </div>
                       <Link
                         label="Manage connected providers"
                         href="#"

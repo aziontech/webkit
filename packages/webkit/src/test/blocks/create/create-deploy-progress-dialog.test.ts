@@ -14,6 +14,10 @@ useToastRegion()
 
 const wait = { timeout: 4000 }
 const visible = { ignore: '[aria-live], script, style' }
+const footerButton = (dialog: HTMLElement, label: string) =>
+  within(dialog)
+    .getAllByRole('button', { name: label })
+    .find((button) => button.textContent?.trim() === label) as HTMLElement
 describe('create-deploy-progress-dialog', () => {
   it('lets the user hide the dialog while the run goes on and reopen it', async () => {
     render(CreateDeployProgressDialog)
@@ -48,7 +52,7 @@ describe('create-deploy-progress-dialog', () => {
     render(CreateDeployProgressDialog, { props: { items: samplePartialItems } })
     const dialog = await screen.findByRole('dialog')
     const retry = within(dialog).getByRole('button', { name: 'Retry failed' })
-    const close = within(dialog).getByRole('button', { name: 'Close' })
+    const close = footerButton(dialog, 'Close')
     expect(retry.getAttribute('data-variant')).toBe('primary')
     expect(close.getAttribute('data-variant')).toBe('outline')
     const bar = within(dialog).getByTestId('create-deploy-progress-dialog__progress')
@@ -67,9 +71,7 @@ describe('create-deploy-progress-dialog', () => {
       within(dialog).queryByRole('radiogroup', { name: 'Filter deploys by status' })
     ).toBeNull()
     expect(dialog.textContent).not.toContain('the ones that succeeded stay live')
-    expect(within(dialog).getByRole('button', { name: 'Close' }).getAttribute('data-variant')).toBe(
-      'primary'
-    )
+    expect(footerButton(dialog, 'Close').getAttribute('data-variant')).toBe('primary')
   })
 
   it('follows the rows the page passes instead of a timer', async () => {

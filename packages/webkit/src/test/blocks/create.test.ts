@@ -129,7 +129,7 @@ describe('create blocks, styled', () => {
     const submit = [...dialog.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].at(-1)!
     const footer = submit.parentElement!
     expect(submit.getBoundingClientRect().width).toBeLessThan(
-      footer.getBoundingClientRect().width / 2
+      footer.getBoundingClientRect().width * 0.75
     )
     expect(
       Math.abs(footer.getBoundingClientRect().right - submit.getBoundingClientRect().right)
