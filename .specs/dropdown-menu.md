@@ -3,7 +3,7 @@ name: dropdown-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev

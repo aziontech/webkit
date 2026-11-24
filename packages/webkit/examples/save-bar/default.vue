@@ -38,13 +38,14 @@
           @click="save"
         >
           Save
-          <Kbd
-            meta
-            size="small"
-            aria-hidden="true"
-            class="pointer-coarse:hidden"
-            >S</Kbd
-          >
+          <span class="inline-flex pointer-coarse:hidden">
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </span>
         </Button>
       </template>
     </SaveBar>

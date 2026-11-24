@@ -3,7 +3,7 @@ name: copy-button
 category: action
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 checksum: 4f8d06143f57f86f293e57c5ce830746dcfa333f048027e19e7d06f78c847579
 created: 2026-06-02

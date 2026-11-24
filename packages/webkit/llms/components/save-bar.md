@@ -138,13 +138,14 @@ The status sentence and the action labels come from the consumer's slots. One bu
           @click="save"
         >
           Save
-          <Kbd
-            meta
-            size="small"
-            aria-hidden="true"
-            class="pointer-coarse:hidden"
-            >S</Kbd
-          >
+          <span class="inline-flex pointer-coarse:hidden">
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </span>
         </Button>
       </template>
     </SaveBar>

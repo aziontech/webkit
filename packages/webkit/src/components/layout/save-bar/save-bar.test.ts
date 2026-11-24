@@ -2,6 +2,7 @@ import '../../../test/reflow.css'
 
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
+import { commands } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Centered from '../../../../examples/save-bar/centered.vue'
@@ -209,12 +210,26 @@ describe('SaveBar', () => {
     })
   })
 
-  it('hides the Save shortcut chip in the default example on a touch screen', () => {
-    const view = render(Default)
-    const save = view.getByRole('button', { name: /Save/ })
-    const chip = within(save).getByTestId('kbd')
-
-    expect(chip.classList).toContain('pointer-coarse:hidden')
+  it('hides the Save shortcut chip in the default example on a touch screen', async () => {
+    const shown = render(Default)
+    expect(
+      within(shown.getByRole('button', { name: /Save/ }))
+        .getByTestId('kbd')
+        .checkVisibility()
+    ).toBe(true)
+    shown.unmount()
+    await commands.emulateTouch(true)
+    try {
+      const touch = render(Default)
+      expect(matchMedia('(pointer: coarse)').matches).toBe(true)
+      expect(
+        within(touch.getByRole('button', { name: /Save/ }))
+          .getByTestId('kbd')
+          .checkVisibility()
+      ).toBe(false)
+    } finally {
+      await commands.emulateTouch(false)
+    }
   })
 
   describe('in a narrow box', () => {

@@ -273,16 +273,16 @@ describe('DashboardGrid', () => {
   })
 
   it.each([
-    [390, 'none'],
-    [1280, 'flex']
-  ])('shows the editing span badge at %ipx only where spans apply', (width, display) => {
+    [390, false],
+    [1280, true]
+  ])('shows the editing span badge at %ipx only where spans apply', (width, visible) => {
     const box = document.body.appendChild(document.createElement('div'))
     box.style.width = `${width}px`
     const view = render(Editing, { container: box })
     expect(view.getByRole('button', { name: 'Done' })).toBeTruthy()
-    const badges = view.getAllByTestId('chart-card-controls')
+    const badges = view.getAllByText(/\d+\/12/)
     expect(badges.length).toBeGreaterThan(0)
-    for (const badge of badges) expect(getComputedStyle(badge).display).toBe(display)
+    for (const badge of badges) expect(badge.checkVisibility()).toBe(visible)
     box.remove()
   })
 })
