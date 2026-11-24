@@ -1,14 +1,15 @@
 import { computed, type ComputedRef, type MaybeRefOrGetter, toValue } from 'vue'
 
 import { type LazyChunk, useLazyChunks } from '../../../../composables/use-lazy-chunks'
-import type { ConversationHistoryItem } from '../conversation-history.vue'
+import type { ConversationHistoryGroupBy, ConversationHistoryItem } from '../lib/types'
 import { timeOf } from './use-conversation-history-projects'
 
 export type ConversationHistoryGroupKey =
-  'today' | 'yesterday' | 'previous7' | 'previous30' | 'older'
+  'today' | 'yesterday' | 'previous7' | 'previous30' | 'older' | 'working' | 'settled'
 
 export interface ConversationHistoryGroup {
   key: ConversationHistoryGroupKey
+  count: number
   chunks: LazyChunk<ConversationHistoryItem>[]
 }
 
@@ -22,7 +23,9 @@ const ORDER: ConversationHistoryGroupKey[] = [
   'yesterday',
   'previous7',
   'previous30',
-  'older'
+  'older',
+  'working',
+  'settled'
 ]
 const DAY = 86_400_000
 
@@ -43,34 +46,40 @@ export const groupOf = (time: number, today: number): ConversationHistoryGroupKe
 
 export function useConversationHistoryGroups(
   items: MaybeRefOrGetter<readonly ConversationHistoryItem[]>,
-  now: MaybeRefOrGetter<string | number | Date>
+  now: MaybeRefOrGetter<string | number | Date>,
+  groupBy: MaybeRefOrGetter<ConversationHistoryGroupBy> = 'date',
+  archived: MaybeRefOrGetter<readonly ConversationHistoryItem[]> = []
 ): UseConversationHistoryGroupsReturn {
   const lazy = Object.fromEntries(
     ORDER.map((key) => [key, useLazyChunks({ rowHeight: 32 })])
   ) as Record<ConversationHistoryGroupKey, ReturnType<typeof useLazyChunks>>
 
+  const keyOf = (item: ConversationHistoryItem, today: number): ConversationHistoryGroupKey => {
+    if (toValue(groupBy) === 'date') return groupOf(timeOf(item), today)
+    return item.status === 'running' && !item.archived ? 'working' : 'settled'
+  }
+
   const groups = computed<ConversationHistoryGroup[]>(() => {
     const today = startOfDay(new Date(toValue(now)).getTime())
+    const byStatus = toValue(groupBy) === 'status'
     const buckets = new Map<
       ConversationHistoryGroupKey,
       { item: ConversationHistoryItem; time: number }[]
     >()
-    for (const item of toValue(items)) {
-      const time = timeOf(item)
-      const key = groupOf(time, today)
+    const all = byStatus ? [...toValue(items), ...toValue(archived)] : toValue(items)
+    for (const item of all) {
+      const key = keyOf(item, today)
       const bucket = buckets.get(key) ?? []
-      bucket.push({ item, time })
+      bucket.push({ item, time: timeOf(item) })
       buckets.set(key, bucket)
     }
-    return ORDER.filter((key) => buckets.has(key)).map((key) => ({
-      key,
-      chunks: lazy[key].split(
-        buckets
-          .get(key)!
-          .sort((a, b) => b.time - a.time)
-          .map(({ item }) => item)
-      )
-    }))
+    return ORDER.filter((key) => buckets.has(key)).map((key) => {
+      const sorted = buckets
+        .get(key)!
+        .sort((a, b) => b.time - a.time)
+        .map(({ item }) => item)
+      return { key, count: sorted.length, chunks: lazy[key].split(sorted) }
+    })
   })
 
   const observe = (key: ConversationHistoryGroupKey, el: unknown, index: number) =>

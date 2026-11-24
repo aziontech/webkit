@@ -5316,59 +5316,95 @@
     "modelValue",
     "openKeys",
     "projectsOpen",
-    "projectSort"
+    "projectSort",
+    "openSectionKeys"
    ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
     {
      "name": "items",
-     "type": "{ id: string; title: string; updatedAt: string | number | Date; projectId?: string }[]",
+     "type": "ConversationHistoryItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "Conversations, any order; they are sorted newest first inside their group or project. A `projectId` that matches a project puts the chat under it instead of in Recents."
+     "doc": "Conversations, any order; sorted newest first in their group or project."
     },
     {
      "name": "projects",
-     "type": "{ id: string; title: string }[]",
+     "type": "ConversationHistoryProject[]",
      "default": "[]",
      "required": "false",
-     "doc": "Projects shown in a Projects section above Recents; empty keeps the plain date groups."
+     "doc": "Projects shown in a Projects section above Recents; empty keeps the plain groups."
     },
     {
      "name": "now",
      "type": "string | number | Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference time for the groups. Empty uses the nearest `ConfigProvider`'s `now`, then the current time; set either when the list is rendered on the server."
+     "doc": "Reference time for groups and ages. Empty uses the nearest ConfigProvider now, then the current time."
     },
     {
      "name": "removable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a Delete button on each row that emits `remove`."
+     "doc": "Lets each row be deleted (emits `remove`): a Delete button, or Delete in the row menu when `itemActions` is set."
     },
     {
      "name": "creatable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a New chat row at the top that emits `create`."
+     "doc": "Shows New chat (a row, or a toolbar button with `showToolbar`) that emits `create`."
     },
     {
      "name": "projectCreatable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a New project button in the Projects header that emits `project-create`; the section shows even with no projects yet."
+     "doc": "Shows New project (in the Projects header, or the toolbar) that emits `project-create`."
     },
     {
      "name": "searchable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a search field at the top that hides conversations whose title does not contain the typed text."
+     "doc": "Shows a search field that hides conversations whose title does not contain the typed text."
+    },
+    {
+     "name": "showToolbar",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a top toolbar: a Search button that emits `search-open`, then New project and New chat as icon buttons."
+    },
+    {
+     "name": "itemActions",
+     "type": "('pin' | 'rename' | 'share' | 'lock' | 'move' | 'archive')[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Row actions: a Pin button and a More menu on each row; `move` needs `projects`."
+    },
+    {
+     "name": "projectActions",
+     "type": "('pin' | 'settings' | 'remove' | 'chat-create')[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Project row actions: a More menu (pin, settings, remove) and a New chat button (`chat-create`)."
+    },
+    {
+     "name": "groupBy",
+     "type": "'date' | 'status'",
+     "default": "'date'",
+     "required": "false",
+     "doc": "Groups chats outside projects by last activity, or into Working (`status: 'running'`) and Settled (the rest and archived chats)."
+    },
+    {
+     "name": "showTime",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows each chat's age (`10m`, `15h`, `3d`) at the end of its row."
     },
     {
      "name": "loading",
@@ -5411,12 +5447,19 @@
      "default": "'recent'",
      "required": "false",
      "doc": "Two-way value (`v-model:projectSort`)."
+    },
+    {
+     "name": "openSectionKeys",
+     "type": "string[]",
+     "default": "—",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openSectionKeys`)."
     }
    ],
    "events": [
     {
      "name": "remove",
-     "payload": "(event: MouseEvent, id: string)",
+     "payload": "(event: MouseEvent | KeyboardEvent, id: string)",
      "notes": ""
     },
     {
@@ -5428,6 +5471,73 @@
      "name": "project-create",
      "payload": "(event: MouseEvent)",
      "notes": ""
+    },
+    {
+     "name": "search-open",
+     "payload": "(event: MouseEvent | KeyboardEvent)",
+     "notes": ""
+    },
+    {
+     "name": "item-pin",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "item-rename",
+     "payload": "(event: KeyboardEvent | FocusEvent, payload: { item; title: string })",
+     "notes": ""
+    },
+    {
+     "name": "item-share",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "item-lock",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "item-move",
+     "payload": "(event: MouseEvent | KeyboardEvent, payload: { item; project })",
+     "notes": ""
+    },
+    {
+     "name": "item-archive",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+     "notes": ""
+    },
+    {
+     "name": "project-pin",
+     "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    },
+    {
+     "name": "project-settings-open",
+     "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    },
+    {
+     "name": "project-remove",
+     "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    },
+    {
+     "name": "project-chat-create",
+     "payload": "(event: MouseEvent, project: ConversationHistoryProject)",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "item",
+     "scope": "{ item: ConversationHistoryItem }",
+     "notes": "Replaces a chat row's tag, title and description; the row keeps its button and actions."
+    },
+    {
+     "name": "item-meta",
+     "scope": "{ item: ConversationHistoryItem }",
+     "notes": "Replaces the end of a chat row (age, lock, status)."
     }
    ],
    "surface": "app",

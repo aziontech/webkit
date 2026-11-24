@@ -64,4 +64,29 @@ describe('useConversationHistoryProjects', () => {
     query.value = 'zzz'
     expect(hasMatch.value).toBe(false)
   })
+
+  it('takes pinned and archived chats out of projects and Recents, and lists pinned projects first', () => {
+    const { rows, outside, pinned, archived } = useConversationHistoryProjects({
+      items: [
+        ...items,
+        {
+          id: 'f',
+          title: 'Pinned',
+          updatedAt: '2026-11-11T10:00:00',
+          projectId: 'p1',
+          pinned: true
+        },
+        { id: 'g', title: 'Archived', updatedAt: '2026-11-11T10:00:00', archived: true }
+      ],
+      projects: [projects[0]!, projects[1]!, { ...projects[2]!, pinned: true }],
+      query: '',
+      locale: 'en-US',
+      sort: 'recent'
+    })
+    expect(pinned.value.map((item) => item.id)).toEqual(['f'])
+    expect(archived.value.map((item) => item.id)).toEqual(['g'])
+    expect(outside.value.map((item) => item.id)).toEqual(['d', 'e'])
+    expect(rows.value.map((row) => row.project.id)).toEqual(['p3', 'p2', 'p1'])
+    expect(rows.value[2]!.items.map((item) => item.id)).toEqual(['a', 'b'])
+  })
 })

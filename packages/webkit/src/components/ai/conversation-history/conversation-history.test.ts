@@ -6,7 +6,9 @@ import { h } from 'vue'
 
 import Default from '../../../../examples/conversation-history/default.vue'
 import Projects from '../../../../examples/conversation-history/projects.vue'
+import RichRows from '../../../../examples/conversation-history/rich-rows.vue'
 import States from '../../../../examples/conversation-history/states.vue'
+import StatusGroups from '../../../../examples/conversation-history/status-groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
@@ -327,7 +329,7 @@ describe('ConversationHistory', () => {
       const header = view.getByRole('button', { name: 'Projects' })
       expect(header).toHaveAttribute('aria-expanded', 'true')
       const list = view.getByRole('list', { name: 'Projects' })
-      expect(header).toHaveAttribute('aria-controls', list.id)
+      expect(document.getElementById(header.getAttribute('aria-controls')!)).toContainElement(list)
       const storefront = view.getByRole('button', { name: 'storefront' })
       expect(storefront).toHaveAttribute('aria-expanded', 'true')
       const chats = view.getByRole('list', { name: 'storefront' })
@@ -464,6 +466,344 @@ describe('ConversationHistory', () => {
         'true'
       )
       await expectNoA11yViolations(view.container)
+    })
+  })
+
+  describe('row actions, sections and rich rows', () => {
+    const projects = [
+      { id: 'p1', title: 'storefront' },
+      { id: 'p2', title: 'Acme docs' }
+    ]
+    const chats = [
+      { id: 'a', title: 'Alpha', updatedAt: '2026-11-11T14:00:00', projectId: 'p1' },
+      { id: 'b', title: 'Bravo', updatedAt: '2026-11-11T13:00:00', pinned: true },
+      { id: 'c', title: 'Charlie', updatedAt: '2026-11-11T12:00:00' },
+      { id: 'd', title: 'Delta', updatedAt: '2026-11-10T12:00:00', archived: true }
+    ]
+    const actions = ['pin', 'rename', 'share', 'lock', 'move', 'archive'] as const
+
+    const openMenu = async (view: ReturnType<typeof render>, name: string) => {
+      const more = await waitFor(() => {
+        const found = view.getByRole('button', { name })
+        expect(found).toHaveAttribute('aria-haspopup', 'menu')
+        return found
+      })
+      await userEvent.click(more)
+      return waitFor(() => {
+        const menu = document.querySelector<HTMLElement>('[role="menu"]')
+        expect(menu?.querySelectorAll('[role="menuitem"]').length).toBeGreaterThan(0)
+        return menu!
+      })
+    }
+
+    it('keeps today’s rows when no new field or prop is given', () => {
+      const view = render(ConversationHistory, { props: { items, now, removable: true } })
+      expect(view.queryByRole('button', { name: /^More actions/ })).toBeNull()
+      expect(view.queryByRole('button', { name: /^Pin / })).toBeNull()
+      expect(view.queryByText('Pinned')).toBeNull()
+      expect(view.getAllByRole('button', { name: /^Delete / })).toHaveLength(items.length)
+      expect(view.getByRole('button', { name: 'Later today' })).not.toHaveAttribute(
+        'aria-describedby'
+      )
+    })
+
+    it('puts pinned chats in a Pinned group on top and hides archived ones by date', () => {
+      const view = render(ConversationHistory, { props: { items: chats, now } })
+      const pinned = view.getByRole('list', { name: 'Pinned' })
+      expect(within(pinned).getByRole('button')).toHaveTextContent('Bravo')
+      expect(within(view.getByRole('list', { name: 'Today' })).getAllByRole('button')).toHaveLength(
+        2
+      )
+      expect(view.queryByText('Delta')).toBeNull()
+    })
+
+    it('emits every chat action from the More menu with the event and the item', async () => {
+      const calls: [string, unknown[]][] = []
+      const record =
+        (name: string) =>
+        (...args: unknown[]) =>
+          calls.push([name, args])
+      const view = render(ConversationHistory, {
+        props: {
+          items: chats,
+          projects,
+          now,
+          removable: true,
+          itemActions: [...actions],
+          onItemPin: record('pin'),
+          onItemShare: record('share'),
+          onItemLock: record('lock'),
+          onItemArchive: record('archive'),
+          onRemove: record('remove')
+        }
+      })
+      for (const [label, name] of [
+        ['Pin', 'pin'],
+        ['Share', 'share'],
+        ['Lock', 'lock'],
+        ['Archive', 'archive'],
+        ['Delete', 'remove']
+      ] as const) {
+        const menu = await openMenu(view, 'More actions for Charlie')
+        await userEvent.click(within(menu).getByRole('menuitem', { name: new RegExp(`^${label}`) }))
+        const [event, subject] = calls.at(-1)![1] as [Event, unknown]
+        expect(calls.at(-1)![0]).toBe(name)
+        expect(event).toBeInstanceOf(Event)
+        expect(name === 'remove' ? subject : (subject as { id: string }).id).toBe('c')
+      }
+      const menu = await openMenu(view, 'More actions for Bravo')
+      expect(within(menu).getByRole('menuitem', { name: /^Unpin/ })).toBeTruthy()
+      expect(within(menu).getByRole('menuitem', { name: /^Unpin/ })).toHaveTextContent('P')
+      await userEvent.keyboard('{Escape}')
+    })
+
+    it('runs a shortcut hint only while its menu is open', async () => {
+      const pins: string[] = []
+      const view = render(ConversationHistory, {
+        props: {
+          items: chats,
+          now,
+          itemActions: ['pin', 'archive'],
+          onItemPin: (_event: Event, item: { id: string }) => pins.push(item.id)
+        }
+      })
+      await userEvent.keyboard('p')
+      expect(pins).toEqual([])
+      await openMenu(view, 'More actions for Charlie')
+      await userEvent.keyboard('p')
+      expect(pins).toEqual(['c'])
+    })
+
+    it('pins from the hover button', async () => {
+      const view = render(ConversationHistory, {
+        props: { items: chats, now, itemActions: ['pin'] }
+      })
+      await userEvent.click(view.getByRole('button', { name: 'Unpin Bravo' }))
+      await userEvent.click(view.getByRole('button', { name: 'Pin Charlie' }))
+      const emitted = view.emitted('item-pin') as [Event, { id: string }][]
+      expect(emitted.map(([, item]) => item.id)).toEqual(['b', 'c'])
+    })
+
+    it('moves a chat to another project from the sub-menu', async () => {
+      const view = render(ConversationHistory, {
+        props: { items: chats, projects, now, openKeys: ['p1'], itemActions: ['move'] }
+      })
+      const menu = await openMenu(view, 'More actions for Alpha')
+      await userEvent.click(within(menu).getByRole('menuitem', { name: 'Move to project' }))
+      const sub = await waitFor(() => {
+        const panels = document.querySelectorAll<HTMLElement>('[role="menu"]')
+        expect(panels.length).toBe(2)
+        return panels[1]!
+      })
+      const options = within(sub).getAllByRole('menuitem')
+      expect(options.map((option) => option.textContent?.trim())).toEqual(['Acme docs'])
+      await userEvent.click(options[0]!)
+      const [[event, payload]] = view.emitted('item-move') as [
+        Event,
+        { item: { id: string }; project: { id: string } }
+      ][]
+      expect(event).toBeInstanceOf(Event)
+      expect(payload.item.id).toBe('a')
+      expect(payload.project.id).toBe('p2')
+    })
+
+    it('renames inline: Enter saves, Escape cancels, focus returns to the row', async () => {
+      const view = render(ConversationHistory, {
+        props: { items: chats, now, itemActions: ['rename'] }
+      })
+      let menu = await openMenu(view, 'More actions for Charlie')
+      await userEvent.click(within(menu).getByRole('menuitem', { name: /^Rename/ }))
+      const field = await waitFor(() => {
+        const found = view.getByRole('textbox', { name: 'Rename Charlie' })
+        expect(document.activeElement).toBe(found)
+        return found
+      })
+      await userEvent.clear(field)
+      await userEvent.type(field, '  Charlie two {Enter}')
+      const [[event, payload]] = view.emitted('item-rename') as [
+        Event,
+        { item: { id: string }; title: string }
+      ][]
+      expect(event).toBeInstanceOf(KeyboardEvent)
+      expect(payload).toEqual({ item: expect.objectContaining({ id: 'c' }), title: 'Charlie two' })
+      await waitFor(() => expect(document.activeElement).toHaveAccessibleName('Charlie'))
+      menu = await openMenu(view, 'More actions for Charlie')
+      await userEvent.click(within(menu).getByRole('menuitem', { name: /^Rename/ }))
+      await waitFor(() =>
+        expect(document.activeElement).toBe(view.getByRole('textbox', { name: 'Rename Charlie' }))
+      )
+      await userEvent.keyboard('X{Escape}')
+      expect(view.emitted('item-rename')).toHaveLength(1)
+      await waitFor(() => expect(document.activeElement).toHaveAccessibleName('Charlie'))
+    })
+
+    it('emits the project actions', async () => {
+      const view = render(ConversationHistory, {
+        props: {
+          items: chats,
+          projects,
+          now,
+          projectActions: ['pin', 'settings', 'remove', 'chat-create']
+        }
+      })
+      await userEvent.click(view.getByRole('button', { name: 'New chat in storefront' }))
+      expect((view.emitted('project-chat-create') as [Event, { id: string }][])[0]![1].id).toBe(
+        'p1'
+      )
+      for (const [label, name] of [
+        ['Pin project', 'project-pin'],
+        ['Project settings', 'project-settings-open'],
+        ['Delete project', 'project-remove']
+      ] as const) {
+        const menu = await openMenu(view, 'More actions for Acme docs')
+        await userEvent.click(within(menu).getByRole('menuitem', { name: label }))
+        const [[event, project]] = view.emitted(name) as [Event, { id: string }][]
+        expect(event).toBeInstanceOf(Event)
+        expect(project.id).toBe('p2')
+      }
+    })
+
+    it('lists pinned projects first', () => {
+      const view = render(ConversationHistory, {
+        props: {
+          items: chats,
+          projects: [projects[0]!, { ...projects[1]!, pinned: true }],
+          now
+        }
+      })
+      expect(
+        view.getAllByTestId('conversation-history__project').map((b) => b.textContent!.trim())
+      ).toEqual(['Acme docs', 'storefront'])
+    })
+
+    it('collapses Recents through v-model:openSectionKeys', async () => {
+      const view = render(ConversationHistory, { props: { items: chats, projects, now } })
+      const recents = view.getByRole('button', { name: 'Recents' })
+      expect(recents).toHaveAttribute('aria-expanded', 'true')
+      expect(view.getByText('Charlie')).toBeTruthy()
+      await userEvent.click(recents)
+      expect(view.emitted('update:openSectionKeys')![0]).toEqual([['working']])
+      expect(recents).toHaveAttribute('aria-expanded', 'false')
+      expect(view.queryByText('Charlie')).toBeNull()
+    })
+
+    it('renders a rich row: tag, description, age, lock and status describe the button', () => {
+      const view = render(ConversationHistory, {
+        props: {
+          now,
+          showTime: true,
+          items: [
+            {
+              id: 'r',
+              title: 'Rich',
+              updatedAt: '2026-11-11T14:50:00',
+              tag: 'Bug',
+              description: 'fix/branch',
+              status: 'running',
+              locked: true
+            },
+            { id: 'e', title: 'Failed one', updatedAt: '2026-11-11T00:00:00', status: 'error' }
+          ]
+        }
+      })
+      const rich = view.getByRole('button', { name: 'Rich' })
+      expect(rich).toHaveAttribute('data-description')
+      expect(rich).toHaveAccessibleDescription('Bug fix/branch Locked Working 10m')
+      expect(view.getByRole('button', { name: 'Failed one' })).toHaveAccessibleDescription(
+        'Failed 15h'
+      )
+      expect(rich.querySelector('time')).toHaveAttribute(
+        'datetime',
+        new Date('2026-11-11T14:50:00').toISOString()
+      )
+    })
+
+    it('composes a row through the item and item-meta slots', () => {
+      const view = render(ConversationHistory, {
+        props: { items: chats.slice(2, 3), now },
+        slots: {
+          item: ({ item }: { item: { title: string } }) => h('strong', `Custom ${item.title}`),
+          'item-meta': () => h('span', 'meta')
+        }
+      })
+      const row = view.getByRole('button', { name: 'Custom Charlie' })
+      expect(row).toHaveAccessibleDescription('meta')
+      expect(row.querySelector('strong')).toHaveTextContent('Custom Charlie')
+    })
+
+    it('groups by status: Working first with its count, Settled collapsed with archived chats', async () => {
+      const view = render(StatusGroups)
+      const working = view.getByRole('button', { name: 'Working 2' })
+      const settled = view.getByRole('button', { name: 'Settled 3' })
+      expect(working).toHaveAttribute('aria-expanded', 'true')
+      expect(settled).toHaveAttribute('aria-expanded', 'false')
+      expect(
+        within(view.getByRole('list', { name: 'Working 2' }))
+          .getAllByRole('button')
+          .map((b) => b.getAttribute('aria-current') ?? '')
+      ).toEqual(['page', ''])
+      expect(view.queryByText('Draft the docs-site navigation')).toBeNull()
+      await userEvent.click(settled)
+      expect(view.getByText('Draft the docs-site navigation')).toBeTruthy()
+      expect(
+        within(view.getByRole('list', { name: 'Settled 3' })).getAllByRole('button')
+      ).toHaveLength(3)
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('emits search-open from the toolbar and moves New chat and New project into it', async () => {
+      const opened: Event[] = []
+      const view = render(ConversationHistory, {
+        props: {
+          items,
+          now,
+          projects,
+          showToolbar: true,
+          creatable: true,
+          projectCreatable: true,
+          'onSearch-open': (event: Event) => opened.push(event)
+        }
+      })
+      const toolbar = await view.findByTestId('conversation-history__toolbar')
+      await userEvent.click(within(toolbar).getByRole('button', { name: /Search chats/ }))
+      expect(opened[0]).toBeInstanceOf(MouseEvent)
+      expect(view.getAllByRole('button', { name: 'New chat' })).toHaveLength(1)
+      expect(view.getAllByRole('button', { name: 'New project' })).toHaveLength(1)
+      await userEvent.click(within(toolbar).getByRole('button', { name: 'New project' }))
+      expect(view.emitted('project-create')).toHaveLength(1)
+    })
+
+    it('reads the new strings from the locale catalog', async () => {
+      const view = render(ConfigProvider, {
+        props: { locale: 'es', catalogs: LOCALES },
+        slots: {
+          default: () =>
+            h(ConversationHistory, {
+              items: chats,
+              now,
+              itemActions: ['pin'],
+              groupBy: 'status'
+            })
+        }
+      })
+      expect(view.getByText('Fijados')).toBeTruthy()
+      expect(view.getByRole('button', { name: /^Finalizados/ })).toBeTruthy()
+      expect(view.getByRole('button', { name: 'Dejar de fijar Bravo' })).toBeTruthy()
+    })
+
+    it('renders the RichRows example with no axe violations', async () => {
+      const view = render(RichRows)
+      await waitFor(() =>
+        expect(
+          view.getByRole('button', { name: 'More actions for Purge the cache after a deploy' })
+        ).toHaveAttribute('aria-haspopup', 'menu')
+      )
+      await expectNoA11yViolations(view.container)
+      const menu = await openMenu(view, 'More actions for Purge the cache after a deploy')
+      await userEvent.click(within(menu).getByRole('menuitem', { name: 'Delete' }))
+      await waitFor(() => expect(view.queryByText('Purge the cache after a deploy')).toBeNull())
+      await userEvent.click(view.getByRole('button', { name: 'Undo' }))
+      expect(view.getByText('Purge the cache after a deploy')).toBeTruthy()
     })
   })
 })

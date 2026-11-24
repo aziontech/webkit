@@ -1,7 +1,7 @@
 import { type MaybeRefOrGetter, onScopeDispose, type Ref, toValue, watch } from 'vue'
 
 export interface UseConversationHistoryRemovalFocusReturn {
-  track: (event: Event, id: string) => void
+  track: (origin: Event | Element | null, id: string) => void
 }
 
 const ROW = '[data-slot="conversation-history-item"]'
@@ -17,8 +17,9 @@ export function useConversationHistoryRemovalFocus(
   const rows = (): HTMLElement[] =>
     container.value ? Array.from(container.value.querySelectorAll<HTMLElement>(ROW)) : []
 
-  const track = (event: Event, id: string) => {
-    const target = event.target instanceof Element ? event.target : null
+  const track = (origin: Event | Element | null, id: string) => {
+    const source = origin instanceof Element ? origin : (origin?.target ?? null)
+    const target = source instanceof Element ? source : null
     const row = target?.closest('li')?.querySelector<HTMLElement>(ROW) ?? null
     pending = { id, index: row ? rows().indexOf(row) : -1 }
   }
