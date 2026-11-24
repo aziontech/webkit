@@ -257,14 +257,15 @@ describe('ChartCard', () => {
   })
 
   describe('on devices', () => {
-    it('is a named container whose header and controls wrap in a narrow card', () => {
+    it('is a named container whose header wraps and keeps the controls at the end', () => {
       const view = render(card())
 
       expect(view.getByTestId('chart-card').className).toContain('@container/chart-card')
       expect(view.getByTestId('chart-card-header').className).toContain('flex-wrap')
-      expect(view.getByTestId('chart-card-controls').className).toContain(
-        '@max-xs/chart-card:w-full'
-      )
+      const controls = view.getByTestId('chart-card-controls').className
+      expect(controls).toContain('ms-auto')
+      expect(controls).not.toContain('@max-xs/chart-card:w-full')
+      expect(controls).not.toContain('@max-xs/chart-card:ms-0')
     })
   })
 

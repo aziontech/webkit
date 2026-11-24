@@ -22,7 +22,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="ms-auto flex max-w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) @max-xs/chart-card:ms-0 @max-xs/chart-card:w-full"
+    class="ms-auto flex max-w-full shrink-0 flex-wrap items-center gap-(--spacing-xs)"
   >
     <slot />
   </div>

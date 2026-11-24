@@ -58,8 +58,9 @@ menu.
 
 ### E. Aggregation and variation — `Tag` (required)
 
-`Sum` names the aggregation; a second tag states the change for the period (`+10.03%`). Tags state
-facts; they are not buttons. A tile and the card that charts the same metric come from one series:
+`Sum` names the aggregation as muted text with no frame and no icon, so it never reads as a button;
+a tag states the change for the period (`+10.03%`). Tags state facts; they are not buttons. On a
+phone the header actions stay on the title row, at its end, and the title truncates. A tile and the card that charts the same metric come from one series:
 the Requests tile is the sum of the Requests over time points, its delta is the card's change tag,
 and the Status codes classes add up to the same requests, so no number on the page contradicts
 another.
@@ -259,7 +260,7 @@ Then delete `sample.ts` and its import.
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
 - **Overview:** footer links read `Open <Product> dashboard`; breakdown searches name what they match (`Search addresses, networks or countries`).
 - **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
-- **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
+- **Metrics:** title `Real-time metrics`; tab labels are product names; the aggregation names the math in muted text (`Sum`, `Median`, `Percentile`).
 - **Usage:** title `Data usage`, description `What your projects consumed in the period, against the previous period.`; card titles say what is compared (`Data transferred, this period vs previous`); series `This period`, `Previous period`.
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`

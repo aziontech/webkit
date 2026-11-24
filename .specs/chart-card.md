@@ -3,10 +3,10 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 5b904a57c99e40e6a9881106a7fe9eecd81a03e1ec29023b954bbd0573dfaa0d
+checksum: 38cd26ca4d34a7ac90fe3cf9bd385a082e47bd6e1f12bd6ce1c2255dde2a9f18
 spec_version: 6
 created: 2026-10-20
-last_updated: 2026-11-15
+last_updated: 2026-11-24
 ---
 
 # ChartCard — Component Spec
@@ -184,7 +184,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-draggable`, `data-resizable` mirror the props
 - `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
 - `data-flush` on the content is set when the padding is off (`padded` false)
-- Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
+- Responsive: the root is the `@container/chart-card`. The header and footer wrap; the controls stay at the end of the title row, and when they cannot fit beside the title they wrap to a line of their own, still aligned to the end, never stretched to full width under a start-aligned title.
 
 ## Motion & Animations
 
