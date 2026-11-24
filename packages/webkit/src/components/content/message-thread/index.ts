@@ -9,6 +9,7 @@ const MessageThreadRoot = Object.assign(MessageThread, {
 
 export default MessageThreadRoot
 export { MessageThreadGroup, MessageThreadItem }
+export type { TimestampFormat } from '../timestamp/timestamp.vue'
 export { useMessageThreadContext } from './composables/use-message-thread-context'
 export type { MessageThreadContext } from './injection-key'
 export type { MessageThreadProps } from './message-thread.vue'

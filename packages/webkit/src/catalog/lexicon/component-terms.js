@@ -1,31 +1,15 @@
+import { SUPPORT_TERMS } from './support-terms.js'
+import { TIME_TERMS } from './time-terms.js'
+
 export const RENDERS_THROUGH = {
   'data-table': ['table']
 }
 
 export const COMPONENT_TERMS = {
+  ...SUPPORT_TERMS,
+  ...TIME_TERMS,
   button: ['botão', 'botón', 'boton'],
   checkbox: ['check box', 'caixa de seleção', 'casilla de verificación', 'casilla'],
-  'date-picker': [
-    'date picker',
-    'datepicker',
-    'pick a date',
-    'choose a date',
-    'seletor de data',
-    'selector de fecha',
-    'calendário',
-    'calendario'
-  ],
-  'date-range-picker': [
-    'date range picker',
-    'time range',
-    'last 24 hours',
-    'last 7 days',
-    'last 30 days',
-    'last hour',
-    'relative time range',
-    'period',
-    'time window'
-  ],
   tabs: ['abas', 'guias', 'pestañas'],
   toast: ['notificação', 'notificación', 'aviso temporário'],
   input: [
@@ -38,16 +22,6 @@ export const COMPONENT_TERMS = {
   ],
   'password-input': ['password', 'password field', 'senha', 'contraseña', 'campo de senha'],
   'phone-input': ['phone', 'phone number', 'telefone', 'teléfono', 'telefono'],
-  'priority-tag': [
-    'priority',
-    'ticket priority',
-    'task priority',
-    'urgency',
-    'how urgent',
-    'untriaged',
-    'prioridade',
-    'prioridad'
-  ],
   'context-menu': [
     'context menu',
     'right click',
@@ -274,13 +248,6 @@ export const COMPONENT_TERMS = {
   brand: ['azion logo'],
   'hover-card': ['hover card', 'preview on hover', 'link preview', 'user card'],
   'status-code': ['http status', 'status code', 'http status code', 'http method', 'get post'],
-  timeline: [
-    'activity feed',
-    'audit trail',
-    'deployment history',
-    'linha do tempo',
-    'línea de tiempo'
-  ],
   timestamp: ['timestamp', 'relative time', 'time ago', 'date time display'],
   'chart-reference': [
     'threshold',
