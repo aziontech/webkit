@@ -8763,6 +8763,13 @@
      "default": "['var(--primary)', 'var(--warning)', 'var(--brand-blue)']",
      "required": "false",
      "doc": "CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`."
+    },
+    {
+     "name": "presence",
+     "type": "AvatarPresence | ''",
+     "default": "''",
+     "required": "false",
+     "doc": "Whether the person is reachable now, drawn as a dot on the bottom inline-end edge and added to the accessible name; empty draws no dot."
     }
    ],
    "surface": "app",

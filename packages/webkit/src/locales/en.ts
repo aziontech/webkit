@@ -61,7 +61,12 @@ export const attributeEditor = {
 
 export const avatar = {
   fallbackLabel: 'User avatar',
-  imageAlt: 'Avatar'
+  imageAlt: 'Avatar',
+  presenceOnline: 'online',
+  presenceAway: 'away',
+  presenceBusy: 'busy',
+  presenceOffline: 'offline',
+  withPresence: '{name}, {presence}'
 } as const
 
 export const avatarGroup = {
