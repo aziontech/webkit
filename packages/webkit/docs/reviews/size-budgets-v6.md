@@ -1771,3 +1771,22 @@ Budget-raise: contact-hub-section 9.55 KB → 9.8 KB (measured 9.75 KB): the sec
 Budget-raise: newsletter-section 14 KB → 14.3 KB (measured 14.25 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
 Budget-raise: job-posting-section 63.05 KB → 63.35 KB (measured 63.32 KB): the click-open Hint (HELP-A-1) merged with the SectionBand frame (LA-2); both changes landed in the same entry.
 Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a rounding hair over): the SectionBand frame (LA-2) merged with the in-product help branch.
+Budget-raise: doc-markdown 41.05 KB → 41.15 KB (measured 41.12 KB): it embeds CodeBlock and StreamingResponse text (A5P3-044, A5P3-046, A5P3-051).
+Budget-raise: property-filter 36.65 KB → 36.8 KB (measured 36.78 KB): one Properties section heading and the 28rem cap from the field start (A5P3-036).
+Budget-raise: doc-code-group 34.6 KB → 34.65 KB (measured 34.64 KB): it embeds CodeBlock, whose copy moves into the header (A5P3-051).
+Budget-raise: console-application-scene 126.4 KB → 126.45 KB (measured 126.42 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: console-trace-scene 85.5 KB → 85.55 KB (measured 85.52 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: feature-widgets-section 20.3 KB → 20.35 KB (measured 20.30 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: cli-terminal-section 47.65 KB → 47.7 KB (measured 47.69 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: feature-tabs-section 59.9 KB → 59.95 KB (measured 59.93 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: config-provider 12.9 KB → 12.95 KB (measured 12.92 KB): it bundles the English catalog, which gains three strings (A5P3-045, A5P3-050).
+Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.01 KB): three new strings and the neutral DataTable empty copy (A5P3-043, A5P3-045, A5P3-050).
+Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.14 KB): three new strings and the neutral DataTable empty copy (A5P3-043, A5P3-045, A5P3-050).
+Budget-raise: code-block 34.2 KB → 34.25 KB (measured 34.21 KB): the copy control moves into the tab strip or filename bar (A5P3-051).
+Budget-raise: log-viewer-content 29.6 KB → 29.65 KB (measured 29.63 KB): the first two lines reserve the copy footprint (A5P3-051).
+Budget-raise: streaming-response 43.35 KB → 43.55 KB (measured 43.52 KB): no-break space before a citation and balanced parentheses in link destinations (A5P3-044, A5P3-046).
+Budget-raise: conversation-history 9.05 KB → 9.15 KB (measured 9.12 KB): the empty state gains its description line (A5P3-045).
+Budget-raise: prompt-queue 4.75 KB → 5.35 KB (measured 5.34 KB): a clamped message gets a Show more / Show less toggle (A5P3-050); Button and VueUse were left out to keep it small.
+Budget-raise: tool-call 3.5 KB → 3.55 KB (measured 3.52 KB): the tool name chip wraps instead of truncating (A5P3-053).
+Budget-raise: log-viewer 43.8 KB → 43.85 KB (measured 43.84 KB): the first two lines reserve the copy footprint (A5P3-051).
+Budget-raise: log-viewer-steps 42.2 KB → 42.25 KB (measured 42.22 KB): it embeds LogViewer content (A5P3-051).
