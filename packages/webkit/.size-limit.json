@@ -386,7 +386,7 @@
   {
     "name": "embed",
     "path": "src/components/content/embed/embed.vue",
-    "limit": "1.1 KB"
+    "limit": "1.15 KB"
   },
   {
     "name": "faq",

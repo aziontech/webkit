@@ -1825,3 +1825,4 @@ Budget-raise: subject-grid-section 8.7 KB → 8.95 KB (measured 8.91 KB): the se
 Budget-raise: select 23.3 KB → 23.35 KB: the merge 7571abba9 carries both the A5-015 panel Tab order and the A5-028 named ScrollArea, each recorded above from 23 KB on its own lane.
 Budget-raise: select-content 19.65 KB → 19.7 KB: the merge 7571abba9 carries both the A5-015 panel Tab order and the A5-028 named ScrollArea, each recorded above from 19.35 KB on its own lane.
 Budget-raise: network-map 6.5 KB → 7.1 KB (measured 6.97 KB): NetworkMap traffic (MapMesh rays and packets, a still frame under reduced motion), on in BannerArt network (M2.10 row 43); it peaked at 7.5 KB and was lowered to 7.1 KB.
+Budget-raise: embed 1.1 KB → 1.15 KB (measured 1.13 KB): Embed frames only https and decides allow-same-origin after mount, from the page origin, so a same-origin page cannot lift its sandbox (A5P3-223).
