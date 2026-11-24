@@ -64,8 +64,9 @@ events, so most copies are unchanged; a page such as `src/pages/table-view-page.
 names the resource flow in its breadcrumb and title and wires its back button to `cancel`,
 `async-submit` takes the service `name` and leaves the toasts to `src/lib/deploy.ts` (so the run
 reports back after you leave the page), and `src/app.vue`, the `shell/shell-console` shell, renders
-`RouterView` with the demo's navigation. The five support blocks are copied unchanged (only their imports are re-sorted for
-the app's lint); their ticket links point at `/tickets` and `/tickets/:id`, which the router
+`RouterView` with the demo's navigation. The five support blocks are copied unchanged apart from their imports, re-sorted for
+the app's lint, and `create-ticket`'s root height, which stops above the demo bar like
+`create-page` and `onboarding-form`; their ticket links point at `/tickets` and `/tickets/:id`, which the router
 redirects to `/support`.
 
 To update after a release, run `npx @aziontech/webkit check`; for each block it reports, look at

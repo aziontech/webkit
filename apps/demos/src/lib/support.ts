@@ -115,7 +115,9 @@ function seedTicket(ticket: TicketInboxTicket): SupportTicket {
       type: sampleTicket.type,
       cc: [],
       messages: ticketMessages.map((message) => ({ ...message })),
-      activity: ticketActivity.map((entry) => ({ ...entry }))
+      activity: ticketActivity
+        .filter((entry) => entry.actor !== 'SLA policy')
+        .map((entry) => ({ ...entry }))
     }
   const opened = new Date(ticket.updatedAt.getTime() - HOUR)
   return {

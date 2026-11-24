@@ -274,7 +274,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+  <div class="flex h-(--demo-viewport-height) flex-col bg-(--bg-canvas)">
     <TicketCreationHeader @back="onCancel" />
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
