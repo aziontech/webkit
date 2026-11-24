@@ -507,6 +507,9 @@ export function undocumentedExports(catalog, files) {
   return missing.sort()
 }
 
+const PREVIEW_FACT =
+  'Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.'
+
 function componentApi(catalog, name) {
   const e = catalog.imports[name]
   return {
@@ -529,6 +532,7 @@ function componentApi(catalog, name) {
     events: e.events ?? [],
     slots: e.slots ?? [],
     styleSeam: e.styleSeam === true,
+    ...(e.stability === 'preview' ? { stability: 'preview' } : {}),
     assets: Object.entries(catalog.assets || {})
       .filter(([, meta]) => (meta.usedBy || []).includes(name))
       .map(([kind]) => ({ kind, page: assetPagePath(kind) })),
@@ -547,6 +551,7 @@ function componentPage(catalog, name, { full = true } = {}) {
     `Import: \`import ${binding(api.treeShakeableImport.split('/').pop())} from '${api.treeShakeableImport}'\``,
     `Category: ${api.category ?? '—'} · Surface: ${api.surface ?? '—'} · Structure: ${api.structure ?? '—'}`
   ]
+  if (api.stability === 'preview') facts.push(PREVIEW_FACT)
   if (full) facts.push(`API as JSON: [${name}.json](${name}.json)`)
   if (api.treeShakeableImport !== api.import) {
     facts.splice(
@@ -659,6 +664,7 @@ function blockPage(catalog, id, { full = true } = {}) {
     `Source: \`${p.source}\` in \`@aziontech/webkit\``,
     `MCP: \`get_block("${id}")\``
   ]
+  if (p.stability === 'preview') facts.push(PREVIEW_FACT)
   if (p.components?.length) {
     facts.push(
       `Components: ${p.components
@@ -1156,7 +1162,7 @@ export function buildLlms(catalog = loadCatalog()) {
       const p = catalog.block(id)
       files[`blocks/${id}.md`] = blockPage(catalog, id)
       index.push(
-        `- [${p.name} (${id})](blocks/${id}.md): ${firstSentence(p.guidelinesSummary || p.summary)}`
+        `- [${p.name} (${id})](blocks/${id}.md)${p.stability === 'preview' ? ' (preview)' : ''}: ${firstSentence(p.guidelinesSummary || p.summary)}`
       )
       fullParts.push(
         `<!-- blocks/${id}.md -->\n\n${namesOnly(blockPage(catalog, id, { full: false }))}`
@@ -1174,7 +1180,7 @@ export function buildLlms(catalog = loadCatalog()) {
       files[`components/${n}.md`] = componentPage(catalog, n)
       files[`components/${n}.json`] = apiJson(componentApi(catalog, n), new Set(names))
       index.push(
-        `- [${binding(n)}](components/${n}.md): ${firstSentence(catalog.imports[n].purpose)}`
+        `- [${binding(n)}](components/${n}.md)${catalog.imports[n].stability === 'preview' ? ' (preview)' : ''}: ${firstSentence(catalog.imports[n].purpose)}`
       )
       const surface = catalog.imports[n].surface ?? 'app'
       ;(surface === 'app' ? fullParts : siteParts).push(

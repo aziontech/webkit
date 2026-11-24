@@ -3,6 +3,7 @@ name: <kebab-case-name>
 category: <action|ai|chart|code|content|data|docs|feedback|input|layout|marketing|navigation|overlay|provider|section>
 structure: <monolithic|composition>
 status: draft
+stability: preview
 spec_version: 1
 template: 2
 figma:
