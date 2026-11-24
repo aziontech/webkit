@@ -8,9 +8,14 @@ import { h, nextTick } from 'vue'
 import AccordionDefault from '../../examples/accordion/default.vue'
 import AppHeaderWithAccount from '../../examples/app-header/with-account.vue'
 import AppLayoutDefault from '../../examples/app-layout/default.vue'
+import ArticleHighlightAutoplay from '../../examples/article-highlight-section/autoplay.vue'
 import ButtonGroupDefault from '../../examples/button-group/default.vue'
 import CitationDefault from '../../examples/citation/default.vue'
+import CliTerminalDefault from '../../examples/cli-terminal-section/default.vue'
+import ClientQuotesDefault from '../../examples/client-quotes-section/default.vue'
+import ClosingAudiences from '../../examples/closing-call-to-action-section/audiences.vue'
 import CodeBlockUnevenTabs from '../../examples/code-block/uneven-tabs.vue'
+import CompetitorComparisonDefault from '../../examples/competitor-comparison-section/default.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
 import DocTableOfContentsDefault from '../../examples/doc-table-of-contents/default.vue'
@@ -317,6 +322,30 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const marker = view.container.querySelector<HTMLElement>('[data-testid="citation__chip"]')!
       expect(marker.getBoundingClientRect().height).toBeLessThan(44)
       expect(hitSpan(marker, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
+    it.each([
+      ['CompetitorComparisonSection', CompetitorComparisonDefault, 'About Unified platform'],
+      ['CliTerminalSection', CliTerminalDefault, 'Copy the deploy session'],
+      ['ArticleHighlightSection', ArticleHighlightAutoplay, 'Pause rotation'],
+      ['ClientQuotesSection', ClientQuotesDefault, 'Pause rotation'],
+      ['ClosingCallToActionSection', ClosingAudiences, 'Pause animation']
+    ])('%s small icon control answers a 40px tap', async (_name, component, label) => {
+      await touch()
+      const view = await mount(component)
+      const control = await vi.waitFor(
+        () => {
+          const found = view.container.querySelector<HTMLElement>(`button[aria-label="${label}"]`)
+          if (!found) throw new Error(`no ${label} control yet`)
+          return found
+        },
+        { timeout: 3000 }
+      )
+      control.scrollIntoView({ block: 'center' })
+      await settle()
+      expect(control.getBoundingClientRect().height).toBeLessThan(40)
+      expect(hitSpan(control, 'x')).toBeGreaterThanOrEqual(40)
+      expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(40)
     })
 
     it('PromptInput shortcut menu rows are 44px tall', async () => {

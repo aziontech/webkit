@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 8
 created: 2026-11-04
-last_updated: 2026-11-18
-checksum: 0ce5d46c6a387b69c9630e16670df9dd77427376f2dd032f36b04434e3437422
+last_updated: 2026-11-24
+checksum: 05852eb4f0d68f89adce9ad2a0b308a45a6f8f68916789e1a2cac7d5afb94725
 ---
 
 # FeatureWidgetsSection — Component Spec
@@ -104,6 +104,7 @@ The "three ways to start" band of a product page: a centered section title with 
 - A cell's copy button writes `copy.text` to the clipboard on activation, then reads `copiedLabel` (or the catalog's `Copied`) with a check icon for two seconds before it returns to its label; the timer is cleared when the band unmounts. A failed write leaves the label as it was
 - A cell with both `action` and `copy` renders the link button first, then the copy button
 - Media per cell: `scene` wins over `illustration`; the scene receives `hover: true` while the pointer is over its cell (also on `pointermove`, so a pointer left still while the page scrolls under it counts). A scene name that is not registered draws nothing
+- A scene and an illustration share one inset: `var(--spacing-xl)` from the cell's top and side edges, so no art runs into the cell frame.
 
 ## Motion & Animations
 

@@ -45,6 +45,7 @@
 ## States
 
 - Visual states: `default`; the copy button and the button own their hover and focus states
+- The session window opens on a `Shell` label strip that holds the copy button, so the button never covers the first command line; long lines scroll sideways inside the window.
 - Empty: when neither `script` nor `session` is set the band renders nothing — not the header, not the frame
 - `script` draws the `console-mockup` `cli-terminal-start` or `cli-terminal-deploy` in a stage 18rem tall (24rem from `md` up); `data-entered` is set on the stage the first time a fifth of it is on screen, and the stage rises, grows and fades in. The widget types its session while on screen and shows its finished state under reduced motion (owned by `console-mockup`). Without `script` the `session` renders as a `code-block`
 - The header renders only when `title` is set

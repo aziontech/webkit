@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 7
 created: 2026-11-05
-last_updated: 2026-11-18
-checksum: 2530c2a5398715bcf44b4de97cda5d39b9ea113431defa4560c1e2cea7e894a7
+last_updated: 2026-11-24
+checksum: 7ed698a53cbbac7fe4172767623bbdb4f412a56926fefcf60580a0bd17fea75e
 ---
 
 # CliTerminalSection — Component Spec
@@ -80,6 +80,7 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 ## States
 
 - Visual states: `default`; the copy button and the button own their hover and focus states
+- The session window opens on a `Shell` label strip that holds the copy button, so the button never covers the first command line; long lines scroll sideways inside the window.
 - Empty: when neither `script` nor `session` is set the band renders nothing — not the header, not the frame
 - `script` draws the `console-mockup` `cli-terminal-start` or `cli-terminal-deploy` in a stage 18rem tall (24rem from `md` up); `data-entered` is set on the stage the first time a fifth of it is on screen, and the stage rises, grows and fades in. The widget types its session while on screen and shows its finished state under reduced motion (owned by `console-mockup`). Without `script` the `session` renders as a `code-block`
 - The header renders only when `title` is set

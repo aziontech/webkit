@@ -125,6 +125,18 @@
 
   const hasContent = computed(() => placed.value.length > 0)
 
+  const loneOnPhone = computed<Set<number>>(() => {
+    const lone = new Set<number>()
+    let column = 0
+    placed.value.forEach((cell, index) => {
+      const wide = Boolean(cell.text) || cell.span === '2'
+      if (wide && column === 1) lone.add(index - 1)
+      column = wide ? 0 : (column + 1) % 2
+    })
+    if (column === 1) lone.add(placed.value.length - 1)
+    return lone
+  })
+
   const treatmentOf = (cell: ClientMosaicSectionCell): ThirdPartyLogoTreatment =>
     cell.logoTreatment ??
     (cell.fill === 'white' || cell.fill === 'primary' ? 'knockout' : 'monochrome')
@@ -171,7 +183,8 @@
         variant="none"
         :padded="false"
         :data-cell="cell.text ? 'story' : 'logo'"
-        class="min-h-[clamp(180px,18vw,240px)] max-md:data-[span=2]:col-span-full max-lg:data-[cell=story]:col-span-2"
+        :data-lone="loneOnPhone.has(index) || null"
+        class="min-h-[clamp(180px,18vw,240px)] max-md:data-[span=2]:col-span-full max-md:data-[lone]:col-span-full max-lg:data-[cell=story]:col-span-2"
       >
         <div
           v-if="cell.text"

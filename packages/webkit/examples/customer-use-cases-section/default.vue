@@ -6,7 +6,7 @@
   <CustomerUseCasesSection
     eyebrow="SQL Database"
     title="What teams use SQL Database for"
-    description="Four workloads teams run on SQL Database today."
+    description="Four ways teams put vector search and SQL to work."
     :primary-action="{ label: 'Docs', href: '/site/docs', trailing: true }"
     :items="[
       {

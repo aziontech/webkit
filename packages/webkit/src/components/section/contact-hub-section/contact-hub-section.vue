@@ -201,11 +201,17 @@
           :heading-level="2"
           :icon="channel.icon"
           :title="channel.title"
-          :description="channel.description"
           :href="channel.href"
           :target="channel.target"
           :rel="relOf(channel.target)"
-        />
+        >
+          {{ channel.description }}
+          <span
+            v-if="channel.target === '_blank'"
+            class="sr-only"
+            >{{ ' ' + t('common.newTab') }}</span
+          >
+        </FeatureItem>
       </CardGridCell>
     </CardGrid>
   </SectionBand>

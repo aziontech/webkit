@@ -6,8 +6,8 @@ status: implemented
 spec_version: 4
 template: 2
 created: 2026-11-04
-last_updated: 2026-11-16
-checksum: 40e60ad3ce7044eec91445633eb1bf21d4b6d501e79fa8a3c93795c854ae9ea8
+last_updated: 2026-11-24
+checksum: 6e940b2f4c07e3332c1d9766c7bfc5a3ea73964a68461642696405e8ba7ec600
 ---
 
 # ClientMosaicSection — Component Spec
@@ -153,6 +153,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 - Container queries: none of its own; `bento-grid` sets four columns, two below `md`.
 - Narrow: a two-column span fills the phone row; cells keep a minimum height of `clamp(180px, 18vw, 240px)`.
+- On a phone a mark cell left alone in its row (an odd run of marks before a story, or the last mark) carries `data-lone` and fills the row, so the two-column frame never shows a blank half cell.
 - Below `lg` a story cell spans two columns (the full row on a phone, half the four-column grid on a tablet), so its claim and its link never squeeze into one narrow column.
 - Touch: every mark cell is a full-cell link; story links are `link` targets.
 - Reflow: no horizontal scroll at 320 px.

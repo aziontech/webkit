@@ -26,7 +26,7 @@
       logo: dafitiExtendedMono,
       logoAlt: 'Dafiti',
       href: 'https://www.azion.com/en/success-case/dafiti/',
-      fill: 'white'
+      fill: 'canvas'
     },
     {
       logo: agibankExtendedReversed,
@@ -52,7 +52,7 @@
       logo: fourbankExtendedReversed,
       logoAlt: 'Fourbank',
       href: 'https://www.azion.com/en/success-case/fourbank/',
-      fill: 'primary'
+      fill: 'canvas'
     },
     {
       logo: exameExtendedMono,

@@ -15,7 +15,8 @@
 ## Do
 
 - Four to six items; the stack needs enough steps to earn the scroll.
-- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself.
+- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself. Give a workload screen (`workloads-list`, `workload-topology`, `workload-domains`, `workload-rollout-rows`) `width: 600` so it fills the pinned pane near its true size; at its own 860 design width it shrinks to about two thirds and its table text cannot be read.
+- Describe illustration scenes as pictures of the product; only a `ConsoleMockup` scene is the console itself.
 - Keep `action` to a short label such as "Docs" — it sits under the step copy at the small size.
 
 ## Don’t
@@ -50,7 +51,7 @@
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
 - The server renders both layouts (CSS shows the right one); once mounted only the layout that matches the width stays in the document, so the band never carries two copies of every scene and illustration
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
-- Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
+- Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. In the grid a `code` sample opens on a label strip naming its file, which holds the copy button, so the button never covers the first line. A scene name that is not registered draws nothing.
 
 ## Accessibility
 
@@ -74,7 +75,7 @@
   <FeatureScrollSection
     eyebrow="Workloads"
     title="Everything a workload does, one screen at a time"
-    description="Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout. Each screen is the one you get, not a picture of it."
+    description="Scroll through what a workload does: the list, the topology, the domains, the deploy and the rollout."
     :items="[
       {
         title: 'Every workload on one list',
@@ -153,7 +154,7 @@
         title: 'Every workload on one list',
         description:
           'See each workload with its domain, status and last deployment, so what is live is never a question.',
-        scene: { component: 'ConsoleMockup', props: { name: 'workloads-list' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workloads-list', width: 600 } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -164,7 +165,7 @@
         title: 'Read the deployment topology',
         description:
           'The domains, the application and the firewall a workload serves, drawn as one chain.',
-        scene: { component: 'ConsoleMockup', props: { name: 'workload-topology' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-topology', width: 600 } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -175,7 +176,7 @@
         title: 'Domains and TLS, handled',
         description:
           'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
-        scene: { component: 'ConsoleMockup', props: { name: 'workload-domains' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-domains', width: 600 } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -197,7 +198,7 @@
         title: 'Gradual rollouts and instant rollback',
         description:
           'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-        scene: { component: 'ConsoleMockup', props: { name: 'workload-rollout-rows' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-rollout-rows', width: 600 } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',

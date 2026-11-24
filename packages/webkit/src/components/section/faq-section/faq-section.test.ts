@@ -128,7 +128,7 @@ describe('FaqSection', () => {
 
     await open(getByRole, items[2]!.question)
 
-    const link = getByRole('link', { name: 'API reference' })
+    const link = getByRole('link', { name: /^API reference ?\(opens in a new tab\)$/ })
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.getAttribute('rel')).toBe('noopener noreferrer')
   })
@@ -165,7 +165,7 @@ describe('FaqSection', () => {
     const entries = within(list).getAllByRole('listitem')
     expect(entries.map((entry) => entry.textContent?.trim())).toEqual([
       'Right to be informed',
-      'Right of access, see the Vanta report',
+      'Right of access, see the Vanta (opens in a new tab) report',
       'Right to erasure'
     ])
     expect(list.textContent).not.toContain('- ')
@@ -176,7 +176,7 @@ describe('FaqSection', () => {
 
     await open(getByRole, items[3]!.question)
 
-    const link = getByRole('link', { name: 'Vanta' })
+    const link = getByRole('link', { name: /^Vanta ?\(opens in a new tab\)$/ })
     expect(link.getAttribute('href')).toBe('https://vanta.com')
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.closest('[role="listitem"]')).not.toBeNull()

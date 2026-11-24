@@ -6,8 +6,8 @@ status: implemented
 spec_version: 6
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-18
-checksum: 80e57afa9ab524ff2e6b434eecca74e4cfa470cf903f7d664c99a40eaca8e9c3
+last_updated: 2026-11-24
+checksum: d9dfbe3fccaa7fe799a1f3d2a8dc298ac67c213618385016dee91c37458a4a18
 ---
 
 # ArticleBodySection — Component Spec
@@ -163,6 +163,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 
 - Container queries: none; from `lg` the grid has three columns with sticky rails.
 - Narrow (< `lg`): the column stands alone; the outline is a closed `details` disclosure ("On this page") between the byline and the prose, and the share rail follows the prose under a divider, so no control is dropped; code blocks scroll sideways inside themselves.
+- Phone (< `sm`): when the trail holds a linked crumb before the active one, the breadcrumb gives way to one back link to that parent crumb (a leading `az-chevron-left`, at least 40 px tall, `data-testid` `${testId}__back`); the headline under it names the page.
 - Touch: owned by `icon-button` and `split-button`.
 - Reflow: no horizontal page scroll at 320 px; only a code block scrolls.
 

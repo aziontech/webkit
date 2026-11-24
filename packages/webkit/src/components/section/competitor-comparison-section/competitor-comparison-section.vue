@@ -153,6 +153,8 @@
     'sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 ' +
     'sm:px-(--spacing-xl) text-start align-middle font-normal h-(--competitor-comparison-section-head)'
 
+  const PHONE_NAME_CLASS = 'text-label-sm wrap-break-word text-(--text-default) sm:hidden'
+
   const PLATFORM_HEADER_CELL_CLASS =
     'sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal ' +
     'h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)'
@@ -229,8 +231,13 @@
             <Brand
               variant="default"
               size="small"
-              class="max-w-full [&>svg]:h-3! [&>svg]:max-w-full sm:[&>svg]:h-4! md:[&>svg]:h-6!"
+              class="max-w-full max-sm:hidden [&>svg]:max-w-full sm:[&>svg]:h-4! md:[&>svg]:h-6!"
             />
+            <span
+              aria-hidden="true"
+              :class="PHONE_NAME_CLASS"
+              >Azion</span
+            >
             <span class="sr-only">Azion</span>
           </th>
           <th
@@ -244,8 +251,14 @@
               :src-light="competitorMark.logoLight"
               :artwork="competitorMark.artwork"
               :data-testid="`${testId}__competitor-logo`"
-              class="h-3 sm:h-4 md:h-6"
+              class="max-sm:hidden sm:h-4 md:h-6"
             />
+            <span
+              aria-hidden="true"
+              :data-testid="`${testId}__competitor-name`"
+              :class="PHONE_NAME_CLASS"
+              >{{ competitor.name }}</span
+            >
           </th>
         </tr>
       </thead>

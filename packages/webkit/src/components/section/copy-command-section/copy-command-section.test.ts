@@ -4,6 +4,7 @@ import { h } from 'vue'
 
 import Default from '../../../../examples/copy-command-section/default.vue'
 import Prompt from '../../../../examples/copy-command-section/prompt.vue'
+import * as en from '../../../locales/en'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
@@ -72,5 +73,19 @@ describe('CopyCommandSection', () => {
   it('has no axe violations for an agent prompt', async () => {
     const { container } = render(Prompt)
     await expectNoA11yViolations(container)
+  })
+
+  it('names its copy labels after the message, never after the namespace', () => {
+    for (const catalog of [
+      en.copyCommandSection,
+      ...Object.values(LOCALES).map((locale) => locale.copyCommandSection)
+    ]) {
+      expect(Object.keys(catalog ?? {}).sort()).toEqual([
+        'command',
+        'copyCommand',
+        'copyPrompt',
+        'prompt'
+      ])
+    }
   })
 })

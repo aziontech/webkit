@@ -6,8 +6,8 @@ status: implemented
 spec_version: 6
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-23
-checksum: a63e5a087f25689f8c3babd9c5d00fb4d4494af1c8e20ceb63357647b99c80aa
+last_updated: 2026-11-24
+checksum: fb3dea961a9d44bd3100b5cf7cfc914369cb092d95dab3bfa7ce5c13c153a176
 ---
 
 # CompetitorComparisonSection — Component Spec
@@ -167,7 +167,7 @@ _none_
 
 ## Responsive
 
-- Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
+- Container queries: none; below `sm` the head row names the two platforms in `text-label-sm` text instead of their logos, which would shrink past legibility; from `sm` the logos show at 16 px, and at 24 px from `md`.
 - Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
 - Touch: the hint glyph is a secondary affordance next to the capability name; its touch target grows on a coarse pointer.
 - Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header at `top: var(--layout-sticky-top)` (the header height by default; `0` inside a scroller with no header above it, so the head row never covers the first category at rest).

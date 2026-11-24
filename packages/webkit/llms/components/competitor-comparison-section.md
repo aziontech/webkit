@@ -91,7 +91,7 @@
 
 ## Responsive
 
-- Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
+- Container queries: none; below `sm` the head row names the two platforms in `text-label-sm` text instead of their logos, which would shrink past legibility; from `sm` the logos show at 16 px, and at 24 px from `md`.
 - Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
 - Touch: the hint glyph is a secondary affordance next to the capability name; its touch target grows on a coarse pointer.
 - Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header at `top: var(--layout-sticky-top)` (the header height by default; `0` inside a scroller with no header above it, so the head row never covers the first category at rest).

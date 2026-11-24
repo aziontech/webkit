@@ -1,4 +1,4 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -182,5 +182,17 @@ describe('ArticleCardsSection', () => {
     const { container } = band({ align: 'center', eyebrow: EYEBROW, items: stories })
 
     await expectNoA11yViolations(container)
+  })
+
+  it('drops a cover image that fails to load and keeps the neutral cover', async () => {
+    const { container } = band({ items: posts })
+    const first = container.querySelector<HTMLImageElement>('img[alt=""]')!
+    const cover = first.parentElement!
+
+    await fireEvent.error(first)
+
+    expect(first.isConnected).toBe(false)
+    expect(cover.isConnected).toBe(true)
+    expect(cover.querySelector('img[alt=""]')).toBeNull()
   })
 })

@@ -124,6 +124,10 @@
     }
   ]
 
+  const tileTabs = (sample: FeatureScrollSectionCode) => [
+    { label: sample.fileName, value: sample.fileName, code: sample.code, language: sample.language }
+  ]
+
   const MEDIA_FRAME_CLASS =
     'relative h-[30rem] w-full min-w-0 overflow-hidden rounded-(--shape-card) bg-(--bg-surface) ' +
     'lg:absolute lg:inset-0 lg:h-auto lg:rounded-none lg:border-0 [background-clip:var(--illustration-rim-boxes)] ' +
@@ -183,7 +187,8 @@
                 class="w-full min-w-0 p-(--spacing-md)"
               >
                 <CodeBlock
-                  :tabs="sampleTabs(item.code)"
+                  :tabs="tileTabs(item.code)"
+                  show-label
                   show-line-numbers
                   :copy-aria-label="item.code.copyAriaLabel || undefined"
                 />

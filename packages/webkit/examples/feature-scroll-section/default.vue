@@ -6,7 +6,7 @@
   <FeatureScrollSection
     eyebrow="Workloads"
     title="Everything a workload does, one screen at a time"
-    description="Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout. Each screen is the one you get, not a picture of it."
+    description="Scroll through what a workload does: the list, the topology, the domains, the deploy and the rollout."
     :items="[
       {
         title: 'Every workload on one list',

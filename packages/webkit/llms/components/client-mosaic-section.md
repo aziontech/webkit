@@ -74,6 +74,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 - Container queries: none of its own; `bento-grid` sets four columns, two below `md`.
 - Narrow: a two-column span fills the phone row; cells keep a minimum height of `clamp(180px, 18vw, 240px)`.
+- On a phone a mark cell left alone in its row (an odd run of marks before a story, or the last mark) carries `data-lone` and fills the row, so the two-column frame never shows a blank half cell.
 - Below `lg` a story cell spans two columns (the full row on a phone, half the four-column grid on a tablet), so its claim and its link never squeeze into one narrow column.
 - Touch: every mark cell is a full-cell link; story links are `link` targets.
 - Reflow: no horizontal scroll at 320 px.
@@ -126,8 +127,8 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
         logo: dafitiExtendedMono,
         logoAlt: 'Dafiti',
         href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
-        fill: 'white',
-        logoTreatment: 'knockout'
+        fill: 'canvas',
+        logoTreatment: 'monochrome'
       },
       {
         logo: agibankExtendedReversed,
@@ -147,8 +148,8 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
         logo: fourbankExtendedReversed,
         logoAlt: 'Fourbank',
         href: 'https://www.azion.com/en/success-case/fourbank/',
-        fill: 'primary',
-        logoTreatment: 'knockout'
+        fill: 'canvas',
+        logoTreatment: 'monochrome'
       },
       {
         logo: exameExtendedMono,
@@ -200,7 +201,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
       logo: dafitiExtendedMono,
       logoAlt: 'Dafiti',
       href: 'https://www.azion.com/en/success-case/dafiti/',
-      fill: 'white'
+      fill: 'canvas'
     },
     {
       logo: agibankExtendedReversed,
@@ -226,7 +227,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
       logo: fourbankExtendedReversed,
       logoAlt: 'Fourbank',
       href: 'https://www.azion.com/en/success-case/fourbank/',
-      fill: 'primary'
+      fill: 'canvas'
     },
     {
       logo: exameExtendedMono,

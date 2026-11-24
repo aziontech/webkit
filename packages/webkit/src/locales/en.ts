@@ -1530,7 +1530,7 @@ export const newsletterSection = {
 export const copyCommandSection = {
   command: 'Command',
   prompt: 'Prompt',
-  copyCommandSection: 'Copy command',
+  copyCommand: 'Copy command',
   copyPrompt: 'Copy prompt'
 } as const
 

@@ -22,7 +22,7 @@
       _id: 'customer-use-cases-section',
       props: {
         title: 'What teams use SQL Database for',
-        description: 'Four workloads teams run on SQL Database today.',
+        description: 'Four ways teams put vector search and SQL to work.',
         primaryAction: { label: 'Docs', href: '/docs', trailing: true },
         items: [
           {

@@ -9,7 +9,7 @@
     },
     {
       "name": "Live scenes",
-      "summary": "The same band with a live console fragment for each feature: every item names a `ConsoleMockup` as its `scene`, so the pinned stage plays the open step's screen and the small-screen grid shows each one still. An item's `scene` wins over its `illustration`.",
+      "summary": "The same band with a live console fragment for each feature: every item names a `ConsoleMockup` as its `scene`, so the pinned stage plays the open step's screen and the small-screen grid shows each one still. An item's `scene` wins over its `illustration`. Each workload screen takes `width: 600`, so it fills the pinned pane near its true size and its table stays readable.",
       "file": "live-scenes.vue"
     },
     {

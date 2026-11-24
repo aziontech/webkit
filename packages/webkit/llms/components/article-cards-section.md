@@ -47,6 +47,7 @@
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
 - A card title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays in the accessibility tree, with no `title` attribute.
+- Broken cover: an `image` that fails to load is dropped, so the cover shows its `mark` when it has one and otherwise the plain `--bg-surface` panel, never the browser's broken-image glyph.
 
 ## Accessibility
 

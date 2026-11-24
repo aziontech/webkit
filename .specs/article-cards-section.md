@@ -6,8 +6,8 @@ status: implemented
 spec_version: 7
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: da32012b67e812bcc7ae91081ba8cbc33f69b6f6f6764bf2af3d206d967ee027
+last_updated: 2026-11-24
+checksum: 42b98ded771cee555a5a425cfb5fbea21d5b9fae08b542c16689903ae0bae39c
 ---
 
 # ArticleCardsSection — Component Spec
@@ -90,6 +90,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
 - A card title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays in the accessibility tree, with no `title` attribute.
+- Broken cover: an `image` that fails to load is dropped, so the cover shows its `mark` when it has one and otherwise the plain `--bg-surface` panel, never the browser's broken-image glyph.
 
 ## Motion & Animations
 

@@ -144,4 +144,15 @@ describe('CliTerminalSection', () => {
 
     await expectNoA11yViolations(container)
   })
+
+  it('puts the copy button in the label strip, off the first command line', () => {
+    const { getByTestId, queryByTestId } = render(CliTerminalSection, {
+      props: { session: 'azion link --preset javascript\nazion deploy --auto' }
+    })
+
+    const copy = getByTestId('code-block__copy')
+    expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+    expect(getByTestId('code-block__content').contains(copy)).toBe(false)
+    expect(getByTestId('code-block').textContent).toContain('Shell')
+  })
 })
