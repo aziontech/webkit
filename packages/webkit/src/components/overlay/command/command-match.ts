@@ -89,9 +89,9 @@ export function matchCommand(
   if (direct) return direct
   const keywordScore = keywords.reduce((best, keyword) => {
     const word = keyword.toLowerCase()
-    if (word === q) return Math.max(best, 0.85)
-    if (word.startsWith(q)) return Math.max(best, 0.75)
-    return word.includes(q) ? Math.max(best, 0.65) : best
+    if (word === q) return Math.max(best, 0.68)
+    if (word.startsWith(q)) return Math.max(best, 0.66)
+    return word.includes(q) ? Math.max(best, 0.62) : best
   }, 0)
   if (keywordScore) return { score: keywordScore, ranges: [] }
   return subsequenceMatch(text, q) ?? NONE

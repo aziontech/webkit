@@ -60,7 +60,7 @@
 | `invalid` | `boolean` | `false` | false | Marks the field invalid (`aria-invalid`, danger border). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

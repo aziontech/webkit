@@ -101,7 +101,10 @@
         />
       </div>
 
-      <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)">
+      <div
+        :data-testid="`${testId}__tabs`"
+        class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs) max-md:hidden"
+      >
         <TabsRoot :model-value="step.value">
           <TabsList>
             <TabsTrigger
@@ -120,9 +123,11 @@
         :data-testid="`${testId}__page`"
         class="flex min-h-0 flex-1 flex-col gap-(--spacing-sm) overflow-hidden p-(--spacing-md) [--page-enter-distance:var(--spacing-lg)] data-animated:animate-page-enter motion-reduce:animate-none"
       >
-        <span class="shrink-0 truncate text-heading-xs text-(--text-default)">{{
-          step.title
-        }}</span>
+        <span
+          :data-testid="`${testId}__title`"
+          class="shrink-0 truncate text-heading-xs text-(--text-default) max-md:hidden"
+          >{{ step.title }}</span
+        >
 
         <Trace
           v-if="step.value === 'trace'"

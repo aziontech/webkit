@@ -51,6 +51,16 @@ describe('account/account-onboarding-form', () => {
     expect(view.queryByText('This field is required.')).toBeNull()
   })
 
+  it('prints each plan description once on its card', async () => {
+    const view = render(Plan)
+    for (const description of [
+      'Start free for personal projects and experimentation',
+      'For growing projects with higher usage demand'
+    ]) {
+      expect(view.getAllByText(description)).toHaveLength(1)
+    }
+  })
+
   it('lists what the upgrade includes with PlanFeatureList', async () => {
     const view = render(Plan)
     await userEvent.click(view.getByRole('radio', { name: /Pro plan/ }))

@@ -48,7 +48,7 @@
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
 | `confirmationPhrase` | `string` | `''` | false | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

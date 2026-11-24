@@ -19,7 +19,7 @@
 - One `AppLayout` per page, at the root. Do not nest them.
 - Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.
 - Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
-- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button.
+- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button. In the console, `ConsoleLayout` wraps this layout and a page opens its own help from `ConsoleLayout.ToolsTrigger`, the `Info` link after the page title.
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
 - Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
 - Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.

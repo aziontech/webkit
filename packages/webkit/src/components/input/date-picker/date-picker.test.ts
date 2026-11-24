@@ -812,6 +812,17 @@ describe('DatePicker', () => {
     })
   })
 
+  describe('lazy calendar', () => {
+    it('renders no popover while closed and focuses the active day once the calendar loads', async () => {
+      const { getByTestId } = render(DatePicker, { props: { ariaLabel: 'Date' } })
+      expect(getPopover()).toBeNull()
+      const popover = await openDatePicker(getByTestId)
+      await waitFor(() =>
+        expect(document.activeElement).toBe(popover.querySelector('[data-autofocus]'))
+      )
+    })
+  })
+
   describe('on devices', () => {
     it('never grows past its container', () => {
       const view = render(DatePicker)

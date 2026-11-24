@@ -70,7 +70,7 @@
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: a directional `icon` is the consumer's choice and does not mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI.
+- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI; a label with no letter (a count, `+10.5%`, `#1024`) renders `dir="ltr"`, so its sign and unit stay in order in every engine.
 
 ## Examples
 

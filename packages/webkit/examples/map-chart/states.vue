@@ -1,11 +1,15 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import MapChart from '@aziontech/webkit/map-chart'
+  import { ref } from 'vue'
 
   const regions = [
     { id: 'BR', value: 48200 },
     { id: 'US', value: 31600 },
     { id: 'DE', value: 18900 }
   ]
+
+  const failed = ref(true)
 </script>
 
 <template>
@@ -19,9 +23,19 @@
       empty-description="No request matched the filters in this range."
     />
     <MapChart
-      error="Could not load requests by country. Try again in a few seconds."
+      :regions="failed ? [] : regions"
+      :error="failed ? 'Could not load requests by country.' : ''"
       aria-label="Requests by country, failed"
-    />
+    >
+      <template #error>
+        <Alert
+          severity="danger"
+          label="Could not load requests by country."
+          action-label="Retry"
+          @action="failed = false"
+        />
+      </template>
+    </MapChart>
     <MapChart
       :regions="regions"
       table-view

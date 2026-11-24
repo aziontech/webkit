@@ -4,6 +4,7 @@
   import DataTable from '@aziontech/webkit/data-table'
   import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import Hint from '@aziontech/webkit/hint'
   import { type TableColumn } from '@aziontech/webkit/table'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellId from '@aziontech/webkit/table-cell-id'
@@ -138,14 +139,10 @@
         <template #header-charges>
           <span class="inline-flex items-center gap-(--spacing-2xs)">
             Charges
-            <Tooltip content="Estimated month-to-date charges.">
-              <i
-                class="az az-circle-help text-body-xs text-(--text-muted)"
-                role="img"
-                aria-label="About charges"
-                tabindex="0"
-              />
-            </Tooltip>
+            <Hint
+              content="Estimated month-to-date charges."
+              aria-label="About charges"
+            />
           </span>
         </template>
         <template #cell-labels="{ value }">

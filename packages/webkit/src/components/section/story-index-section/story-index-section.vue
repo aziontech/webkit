@@ -7,11 +7,10 @@
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import ArticleIndexSectionEmpty from '../article-index-section/parts/article-index-section-empty.vue'
   import ArticleIndexSectionMore from '../article-index-section/parts/article-index-section-more.vue'
+  import SectionBand from '../parts/section-band.vue'
   import StoryIndexSectionFacetSelect from './parts/story-index-section-facet-select.vue'
   import StoryIndexSectionToolbar from './parts/story-index-section-toolbar.vue'
 
@@ -127,8 +126,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'story-index-section'
   )
 
-  const hasTitle = computed(() => props.title.length > 0)
-
   const matches = computed(() => {
     const term = query.value.trim().toLowerCase()
     return props.items.filter((item) => {
@@ -226,126 +223,113 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :title="title"
+    align="start"
+    :framed="false"
   >
-    <Module
-      :divided="false"
-      :padded="false"
+    <RegistrationFrame
+      key="toolbar"
+      v-if="hasSearch || facets.length > 0"
+      flush
+      borders="y"
     >
-      <template
-        v-if="hasTitle"
-        #header
+      <StoryIndexSectionToolbar
+        v-model:query="query"
+        :test-id="testId"
+        :filterable="facets.length > 0"
+        :filter-label="filterButtonLabel"
+        :searchable="hasSearch"
+        :search-placeholder="placeholder"
+        :search-aria-label="searchAriaLabel"
+        :applied="applied"
+        class="items-center"
+        @remove="(_event, key) => select(key, '')"
       >
-        <ModuleHeader
-          align="start"
-          :title="title"
+        <StoryIndexSectionFacetSelect
+          v-for="facet in facets"
+          :key="facet.id"
+          :model-value="selection[facet.id]"
+          :label="facet.label"
+          :options="facet.options"
+          :all-option="{ value: '', label: facet.allLabel }"
+          :placeholder="facet.allLabel"
+          :search-placeholder="t('storyIndexSection.search')"
+          :search-aria-label="
+            t('storyIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
+          "
+          :no-match-label="t('storyIndexSection.noMatch')"
+          @update:model-value="select(facet.id, $event)"
         />
-      </template>
+      </StoryIndexSectionToolbar>
+    </RegistrationFrame>
 
+    <template v-if="visible.length > 0">
       <RegistrationFrame
-        key="toolbar"
-        v-if="hasSearch || facets.length > 0"
         flush
         borders="y"
+        marks="bottom"
       >
-        <StoryIndexSectionToolbar
-          v-model:query="query"
-          :test-id="testId"
-          :filterable="facets.length > 0"
-          :filter-label="filterButtonLabel"
-          :searchable="hasSearch"
-          :search-placeholder="placeholder"
-          :search-aria-label="searchAriaLabel"
-          :applied="applied"
-          class="items-center"
-          @remove="(_event, key) => select(key, '')"
+        <ul
+          ref="listEl"
+          class="m-0 grid list-none grid-cols-1 p-0 sm:grid-cols-2 lg:grid-cols-3"
+          :aria-label="ariaLabel || undefined"
         >
-          <StoryIndexSectionFacetSelect
-            v-for="facet in facets"
-            :key="facet.id"
-            :model-value="selection[facet.id]"
-            :label="facet.label"
-            :options="facet.options"
-            :all-option="{ value: '', label: facet.allLabel }"
-            :placeholder="facet.allLabel"
-            :search-placeholder="t('storyIndexSection.search')"
-            :search-aria-label="
-              t('storyIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
-            "
-            :no-match-label="t('storyIndexSection.noMatch')"
-            @update:model-value="select(facet.id, $event)"
-          />
-        </StoryIndexSectionToolbar>
+          <li
+            v-for="(item, index) in visible"
+            :key="item.id"
+            :data-last-row-sm="index >= lastRowFrom(2) || undefined"
+            :data-last-row-lg="index >= lastRowFrom(3) || undefined"
+            :class="CARD_CELL_CLASS"
+          >
+            <a
+              :href="safeHref(item.href) ?? undefined"
+              :target="item.target"
+              :rel="item.target === '_blank' ? 'noopener' : undefined"
+              :aria-label="cardLabel(item)"
+              :class="CARD_LINK_CLASS"
+            >
+              <span class="flex h-8 items-center">
+                <img
+                  :src="item.client.logo"
+                  alt=""
+                  class="brightness-0 [[data-theme=dark]_&]:invert h-full w-auto min-w-0 max-w-36 object-contain object-left"
+                />
+              </span>
+              <span class="text-overline-sm text-(--text-muted)">{{ item.category }}</span>
+              <span class="text-pretty text-body-sm text-(--text-default)">
+                {{ item.description }}
+              </span>
+              <span
+                v-if="linkLabel"
+                aria-hidden="true"
+                :class="CARD_LINK_LABEL_CLASS"
+              >
+                {{ linkLabel }}
+                <i :class="CARD_ARROW_CLASS" />
+              </span>
+            </a>
+          </li>
+        </ul>
       </RegistrationFrame>
 
-      <template v-if="visible.length > 0">
-        <RegistrationFrame
-          flush
-          borders="y"
-          marks="bottom"
-        >
-          <ul
-            ref="listEl"
-            class="m-0 grid list-none grid-cols-1 p-0 sm:grid-cols-2 lg:grid-cols-3"
-            :aria-label="ariaLabel || undefined"
-          >
-            <li
-              v-for="(item, index) in visible"
-              :key="item.id"
-              :data-last-row-sm="index >= lastRowFrom(2) || undefined"
-              :data-last-row-lg="index >= lastRowFrom(3) || undefined"
-              :class="CARD_CELL_CLASS"
-            >
-              <a
-                :href="safeHref(item.href) ?? undefined"
-                :target="item.target"
-                :rel="item.target === '_blank' ? 'noopener' : undefined"
-                :aria-label="cardLabel(item)"
-                :class="CARD_LINK_CLASS"
-              >
-                <span class="flex h-8 items-center">
-                  <img
-                    :src="item.client.logo"
-                    alt=""
-                    class="brightness-0 [[data-theme=dark]_&]:invert h-full w-auto min-w-0 max-w-36 object-contain object-left"
-                  />
-                </span>
-                <span class="text-overline-sm text-(--text-muted)">{{ item.category }}</span>
-                <span class="text-pretty text-body-sm text-(--text-default)">
-                  {{ item.description }}
-                </span>
-                <span
-                  v-if="linkLabel"
-                  aria-hidden="true"
-                  :class="CARD_LINK_LABEL_CLASS"
-                >
-                  {{ linkLabel }}
-                  <i :class="CARD_ARROW_CLASS" />
-                </span>
-              </a>
-            </li>
-          </ul>
-        </RegistrationFrame>
-
-        <ArticleIndexSectionMore
-          v-if="hasMore"
-          :label="moreLabel"
-          @more="loadMore"
-        />
-      </template>
-
-      <ArticleIndexSectionEmpty
-        v-else-if="emptyTitle"
-        key="empty"
-        :title="emptyTitle"
-        :action-label="emptyActionLabel"
-        @clear="clear"
+      <ArticleIndexSectionMore
+        v-if="hasMore"
+        :label="moreLabel"
+        @more="loadMore"
       />
-    </Module>
-  </section>
+    </template>
+
+    <ArticleIndexSectionEmpty
+      v-else-if="emptyTitle"
+      key="empty"
+      :title="emptyTitle"
+      :action-label="emptyActionLabel"
+      @clear="clear"
+    />
+  </SectionBand>
 </template>

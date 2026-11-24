@@ -9,10 +9,9 @@
   } from '../../feedback/status-indicator/status-indicator.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ContactHubSection',
@@ -97,132 +96,117 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
+    :anchor="anchor"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :filled="hasContent"
+    marks="bottom"
   >
-    <Module
-      v-if="hasContent"
-      :divided="false"
-      :padded="false"
+    <CardGrid
+      v-if="lanes.length > 0"
+      key="lanes"
+      flush
+      variant="frame"
+      :columns="2"
     >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
+      <CardGridCell
+        v-for="lane in lanes"
+        :key="lane.title"
+        variant="canvas"
       >
-        <CardGrid
-          v-if="lanes.length > 0"
-          key="lanes"
-          flush
-          variant="frame"
-          :columns="2"
-        >
-          <CardGridCell
-            v-for="lane in lanes"
-            :key="lane.title"
-            variant="canvas"
+        <div class="flex h-full flex-col gap-(--spacing-xl)">
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <h2 class="m-0 flex items-center gap-(--spacing-xs) text-body-md text-(--text-muted)">
+              <i
+                :class="lane.icon"
+                class="shrink-0 text-(--primary)"
+                aria-hidden="true"
+              />
+              {{ lane.title }}
+            </h2>
+            <p class="m-0 max-w-(--container-md) text-pretty text-heading-sm text-(--text-default)">
+              {{ lane.description }}
+            </p>
+          </div>
+          <div
+            v-if="lane.action || lane.secondaryAction || lane.statusLink"
+            class="mt-auto flex flex-wrap gap-(--spacing-sm)"
           >
-            <div class="flex h-full flex-col gap-(--spacing-xl)">
-              <div class="flex flex-col gap-(--spacing-sm)">
-                <h2
-                  class="m-0 flex items-center gap-(--spacing-xs) text-body-md text-(--text-muted)"
-                >
-                  <i
-                    :class="lane.icon"
-                    class="shrink-0 text-(--primary)"
-                    aria-hidden="true"
-                  />
-                  {{ lane.title }}
-                </h2>
-                <p
-                  class="m-0 max-w-(--container-md) text-pretty text-heading-sm text-(--text-default)"
-                >
-                  {{ lane.description }}
-                </p>
-              </div>
-              <div
-                v-if="lane.action || lane.secondaryAction || lane.statusLink"
-                class="mt-auto flex flex-wrap gap-(--spacing-sm)"
-              >
-                <Button
-                  v-if="lane.action"
-                  key="action"
-                  :label="lane.action.label"
-                  :href="lane.action.href"
-                  variant="secondary"
-                  size="large"
-                  :icon="lane.action.trailing ? 'az az-chevron-right' : ''"
-                  icon-position="trailing"
-                  :animated="Boolean(lane.action.trailing)"
-                />
-                <Button
-                  v-if="lane.secondaryAction"
-                  key="secondary-action"
-                  :label="lane.secondaryAction.label"
-                  :href="lane.secondaryAction.href"
-                  variant="outline"
-                  size="large"
-                  :icon="lane.secondaryAction.trailing ? 'az az-chevron-right' : ''"
-                  icon-position="trailing"
-                  :animated="Boolean(lane.secondaryAction.trailing)"
-                />
-                <Button
-                  v-if="lane.statusLink"
-                  key="status"
-                  :href="lane.statusLink.href"
-                  :target="lane.statusLink.target === '_blank' ? '_blank' : '_self'"
-                  :aria-label="statusLinkName(lane.statusLink)"
-                  variant="outline"
-                  size="large"
-                >
-                  <StatusIndicator
-                    v-if="lane.statusLink.severity"
-                    :severity="lane.statusLink.severity"
-                    :label="lane.statusLink.label"
-                  />
-                  <span
-                    v-else
-                    class="inline-flex items-center gap-(--spacing-xs)"
-                  >
-                    <i
-                      class="az az-wave-pulse text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    {{ lane.statusLink.label }}
-                  </span>
-                </Button>
-              </div>
-            </div>
-          </CardGridCell>
-        </CardGrid>
-
-        <CardGrid
-          v-if="channels.length > 0"
-          key="channels"
-          flush
-          variant="frame"
-          :columns="3"
-        >
-          <CardGridCell
-            v-for="channel in channels"
-            :key="channel.title"
-            variant="canvas"
-          >
-            <FeatureItem
-              :heading-level="2"
-              :icon="channel.icon"
-              :title="channel.title"
-              :description="channel.description"
-              :href="channel.href"
-              :target="channel.target"
-              :rel="relOf(channel.target)"
+            <Button
+              v-if="lane.action"
+              key="action"
+              :label="lane.action.label"
+              :href="lane.action.href"
+              variant="secondary"
+              size="large"
+              :icon="lane.action.trailing ? 'az az-chevron-right' : ''"
+              icon-position="trailing"
+              :animated="Boolean(lane.action.trailing)"
             />
-          </CardGridCell>
-        </CardGrid>
-      </RegistrationFrame>
-    </Module>
-  </section>
+            <Button
+              v-if="lane.secondaryAction"
+              key="secondary-action"
+              :label="lane.secondaryAction.label"
+              :href="lane.secondaryAction.href"
+              variant="outline"
+              size="large"
+              :icon="lane.secondaryAction.trailing ? 'az az-chevron-right' : ''"
+              icon-position="trailing"
+              :animated="Boolean(lane.secondaryAction.trailing)"
+            />
+            <Button
+              v-if="lane.statusLink"
+              key="status"
+              :href="lane.statusLink.href"
+              :target="lane.statusLink.target === '_blank' ? '_blank' : '_self'"
+              :aria-label="statusLinkName(lane.statusLink)"
+              variant="outline"
+              size="large"
+            >
+              <StatusIndicator
+                v-if="lane.statusLink.severity"
+                :severity="lane.statusLink.severity"
+                :label="lane.statusLink.label"
+              />
+              <span
+                v-else
+                class="inline-flex items-center gap-(--spacing-xs)"
+              >
+                <i
+                  class="az az-wave-pulse text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                {{ lane.statusLink.label }}
+              </span>
+            </Button>
+          </div>
+        </div>
+      </CardGridCell>
+    </CardGrid>
+
+    <CardGrid
+      v-if="channels.length > 0"
+      key="channels"
+      flush
+      variant="frame"
+      :columns="3"
+    >
+      <CardGridCell
+        v-for="channel in channels"
+        :key="channel.title"
+        variant="canvas"
+      >
+        <FeatureItem
+          :heading-level="2"
+          :icon="channel.icon"
+          :title="channel.title"
+          :description="channel.description"
+          :href="channel.href"
+          :target="channel.target"
+          :rel="relOf(channel.target)"
+        />
+      </CardGridCell>
+    </CardGrid>
+  </SectionBand>
 </template>

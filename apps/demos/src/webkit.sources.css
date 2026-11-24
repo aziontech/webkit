@@ -281,10 +281,13 @@
 @source "../node_modules/@aziontech/webkit/src/components/layout/app-layout/composables/use-app-layout-storage.ts";
 @source "../node_modules/@aziontech/webkit/src/components/layout/app-layout/parts/app-layout-split-panel.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/composables/use-console-layout-nav-audit.ts";
+@source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/composables/use-console-layout.ts";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue";
+@source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/console-layout-tools-trigger/console-layout-tools-trigger.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/console-layout.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/index.ts";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/injection-key.ts";
+@source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/lib/layout-context.ts";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/lib/reveal-active.ts";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/parts/console-layout-header-start.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/parts/console-layout-palette.vue";
@@ -361,6 +364,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/command.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-active.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-menu-context.ts";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-order.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/composables/use-command-pages.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/index.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/command/injection-key.ts";
@@ -532,4 +536,5 @@
 @source "../node_modules/@aziontech/webkit/src/utils/safe-href.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/severity.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/tabbable.ts";
+@source "../node_modules/@aziontech/webkit/src/utils/text-direction.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/trigger-control.ts";

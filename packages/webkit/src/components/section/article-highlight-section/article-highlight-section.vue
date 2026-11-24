@@ -11,8 +11,8 @@
   import type { CardGridColumns } from '../../layout/card-grid/card-grid.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
-  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ArticleHighlightSection',
@@ -229,177 +229,165 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :filled="Boolean(current)"
   >
-    <Module
-      v-if="current"
-      :divided="false"
-      :padded="false"
+    <div
+      :data-autoplay="running || null"
+      :data-paused="(autoplaying && paused) || null"
+      :data-fill="fill || null"
+      class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-2xl)*2)]"
+      @pointerenter="pointerInside = true"
+      @pointerleave="pointerInside = false"
+      @focusin="onFocusin"
+      @focusout="onFocusout"
     >
+      <IconButton
+        v-if="autoplaying"
+        :icon="paused ? 'az az-play' : 'az az-pause'"
+        :aria-label="pauseLabel"
+        variant="outline"
+        size="small"
+        class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
+        @click="paused = !paused"
+      />
       <RegistrationFrame
-        flush
-        borders="y"
+        :id="panelId"
+        borders="bottom"
         marks="all"
+        role="tabpanel"
+        :aria-labelledby="tabId(selected)"
+        :data-direction="direction"
+        class="group/panel relative bg-(--bg-canvas) lg:group-data-[fill]/highlight:min-h-0 lg:group-data-[fill]/highlight:flex-1"
       >
-        <div
-          :data-autoplay="running || null"
-          :data-paused="(autoplaying && paused) || null"
-          :data-fill="fill || null"
-          class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-2xl)*2)]"
-          @pointerenter="pointerInside = true"
-          @pointerleave="pointerInside = false"
-          @focusin="onFocusin"
-          @focusout="onFocusout"
-        >
-          <IconButton
-            v-if="autoplaying"
-            :icon="paused ? 'az az-play' : 'az az-pause'"
-            :aria-label="pauseLabel"
-            variant="outline"
-            size="small"
-            class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
-            @click="paused = !paused"
-          />
-          <RegistrationFrame
-            :id="panelId"
-            borders="bottom"
-            marks="all"
-            role="tabpanel"
-            :aria-labelledby="tabId(selected)"
-            :data-direction="direction"
-            class="group/panel relative bg-(--bg-canvas) lg:group-data-[fill]/highlight:min-h-0 lg:group-data-[fill]/highlight:flex-1"
+        <div class="grid *:col-start-1 *:row-start-1 lg:group-data-[fill]/highlight:h-full">
+          <div
+            aria-hidden="true"
+            inert
+            class="pointer-events-none grid min-w-0 opacity-0 *:col-start-1 *:row-start-1"
           >
-            <div class="grid *:col-start-1 *:row-start-1 lg:group-data-[fill]/highlight:h-full">
-              <div
-                aria-hidden="true"
-                inert
-                class="pointer-events-none grid min-w-0 opacity-0 *:col-start-1 *:row-start-1"
-              >
-                <div
-                  v-for="item in items"
-                  :key="item.key"
-                  class="grid min-w-0 lg:grid-cols-2"
-                >
-                  <span
-                    class="block min-w-0 aspect-video lg:aspect-4/3 lg:group-data-[fill]/highlight:aspect-auto"
-                  />
-                  <div
-                    class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-2xl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
-                  >
-                    <span class="text-overline-sm">{{ item.meta }}</span>
-                    <span class="text-heading-lg">{{ item.title }}</span>
-                    <span
-                      class="line-clamp-3 text-body-md lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:hidden"
-                      >{{ item.description }}</span
-                    >
-                    <span class="text-body-sm">{{ item.readTime }}</span>
-                    <span class="h-10" />
-                  </div>
-                </div>
-              </div>
-
-              <Transition
-                mode="out-in"
-                enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                :enter-from-class="ARTICLE_ENTER_FROM_CLASS"
-                leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
-                :leave-to-class="ARTICLE_LEAVE_TO_CLASS"
-              >
-                <article
-                  :key="current.key"
-                  class="group/article relative grid min-w-0 lg:grid-cols-2"
-                >
-                  <div :class="ARTICLE_MEDIA_CLASS">
-                    <img
-                      :src="current.highlightImage || current.image"
-                      alt=""
-                      decoding="async"
-                      class="absolute inset-0 size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
-                    />
-                  </div>
-                  <div :class="ARTICLE_COPY_CLASS">
-                    <span class="text-overline-sm text-(--text-muted)">{{ current.meta }}</span>
-                    <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
-                      <a
-                        :href="safeHref(current.href) ?? undefined"
-                        :class="ARTICLE_TITLE_LINK_CLASS"
-                      >
-                        {{ current.title }}
-                      </a>
-                    </h2>
-                    <p
-                      class="m-0 line-clamp-3 text-pretty text-body-md text-(--text-muted) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:hidden"
-                    >
-                      {{ current.description }}
-                    </p>
-                    <span class="text-body-sm text-(--text-muted)">{{ current.readTime }}</span>
-                    <Button
-                      v-if="actionLabel"
-                      :label="actionLabel"
-                      variant="secondary"
-                      size="large"
-                      :href="current.href"
-                      icon="az az-chevron-right"
-                      icon-position="trailing"
-                      animated
-                      class="relative mt-(--spacing-sm) self-start"
-                    />
-                  </div>
-                </article>
-              </Transition>
-            </div>
-
-            <span
-              v-if="autoplaying"
-              aria-hidden="true"
-              :data-testid="`${testId}__progress`"
-              :style="{ width: `${progress}%` }"
-              class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
-            />
-          </RegistrationFrame>
-
-          <div ref="wallEl">
-            <CardGrid
-              variant="frame"
-              flush
-              :columns="wallColumns"
-              :mobile-columns="1"
-              role="tablist"
-              :aria-label="ariaLabel || undefined"
+            <div
+              v-for="item in items"
+              :key="item.key"
+              class="grid min-w-0 lg:grid-cols-2"
             >
-              <CardGridCell
-                v-for="(item, index) in items"
-                :key="item.key"
-                variant="canvas"
-                :padded="false"
-                role="presentation"
+              <span
+                class="block min-w-0 aspect-video lg:aspect-4/3 lg:group-data-[fill]/highlight:aspect-auto"
+              />
+              <div
+                class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-2xl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
               >
-                <button
-                  :id="tabId(index)"
-                  type="button"
-                  role="tab"
-                  :aria-selected="index === selected ? 'true' : 'false'"
-                  :aria-controls="panelId"
-                  :tabindex="index === selected ? 0 : -1"
-                  :data-active="index === selected || undefined"
-                  :class="TAB_CLASS"
-                  @click="select(index)"
-                  @keydown="onKeydown($event, index)"
+                <span class="text-overline-sm">{{ item.meta }}</span>
+                <span class="text-heading-lg">{{ item.title }}</span>
+                <span
+                  class="line-clamp-3 text-body-md lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:hidden"
+                  >{{ item.description }}</span
                 >
-                  <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
-                  <span class="line-clamp-2 text-balance text-heading-2xs text-(--text-default)">
-                    {{ item.title }}
-                  </span>
-                </button>
-              </CardGridCell>
-            </CardGrid>
+                <span class="text-body-sm">{{ item.readTime }}</span>
+                <span class="h-10" />
+              </div>
+            </div>
           </div>
+
+          <Transition
+            mode="out-in"
+            enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+            :enter-from-class="ARTICLE_ENTER_FROM_CLASS"
+            leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
+            :leave-to-class="ARTICLE_LEAVE_TO_CLASS"
+          >
+            <article
+              :key="current.key"
+              class="group/article relative grid min-w-0 lg:grid-cols-2"
+            >
+              <div :class="ARTICLE_MEDIA_CLASS">
+                <img
+                  :src="current.highlightImage || current.image"
+                  alt=""
+                  decoding="async"
+                  class="absolute inset-0 size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
+                />
+              </div>
+              <div :class="ARTICLE_COPY_CLASS">
+                <span class="text-overline-sm text-(--text-muted)">{{ current.meta }}</span>
+                <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
+                  <a
+                    :href="safeHref(current.href) ?? undefined"
+                    :class="ARTICLE_TITLE_LINK_CLASS"
+                  >
+                    {{ current.title }}
+                  </a>
+                </h2>
+                <p
+                  class="m-0 line-clamp-3 text-pretty text-body-md text-(--text-muted) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:hidden"
+                >
+                  {{ current.description }}
+                </p>
+                <span class="text-body-sm text-(--text-muted)">{{ current.readTime }}</span>
+                <Button
+                  v-if="actionLabel"
+                  :label="actionLabel"
+                  variant="secondary"
+                  size="large"
+                  :href="current.href"
+                  icon="az az-chevron-right"
+                  icon-position="trailing"
+                  animated
+                  class="relative mt-(--spacing-sm) self-start"
+                />
+              </div>
+            </article>
+          </Transition>
         </div>
+
+        <span
+          v-if="autoplaying"
+          aria-hidden="true"
+          :data-testid="`${testId}__progress`"
+          :style="{ width: `${progress}%` }"
+          class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+        />
       </RegistrationFrame>
-    </Module>
-  </section>
+
+      <div ref="wallEl">
+        <CardGrid
+          variant="frame"
+          flush
+          :columns="wallColumns"
+          :mobile-columns="1"
+          role="tablist"
+          :aria-label="ariaLabel || undefined"
+        >
+          <CardGridCell
+            v-for="(item, index) in items"
+            :key="item.key"
+            variant="canvas"
+            :padded="false"
+            role="presentation"
+          >
+            <button
+              :id="tabId(index)"
+              type="button"
+              role="tab"
+              :aria-selected="index === selected ? 'true' : 'false'"
+              :aria-controls="panelId"
+              :tabindex="index === selected ? 0 : -1"
+              :data-active="index === selected || undefined"
+              :class="TAB_CLASS"
+              @click="select(index)"
+              @keydown="onKeydown($event, index)"
+            >
+              <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
+              <span class="line-clamp-2 text-balance text-heading-2xs text-(--text-default)">
+                {{ item.title }}
+              </span>
+            </button>
+          </CardGridCell>
+        </CardGrid>
+      </div>
+    </div>
+  </SectionBand>
 </template>

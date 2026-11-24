@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, onBeforeUnmount, ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   import {
     chartForms,
@@ -23,11 +23,19 @@
   import SeriesChart from './series-chart.vue'
   import TileList from './tile-list.vue'
 
+  export interface OverviewPageProps {
+    /** The figures are reloading after a Refresh; every chart holds its previous render at reduced opacity. */
+    refetching?: boolean
+  }
+
+  withDefaults(defineProps<OverviewPageProps>(), { refetching: false })
+
+  const emit = defineEmits<{ refresh: [event: MouseEvent] }>()
+
   const formatters = metricFormatters(useLocale().formatNumber)
 
   const period = ref('24h')
   const activeIndex = ref<number | null>(null)
-  const refetching = ref(false)
   const forms = ref<Record<string, string>>(
     Object.fromEntries(
       overviewHighlights.map((highlight) => [
@@ -38,7 +46,6 @@
   )
   const expanded = ref(false)
   const expandedId = ref(overviewHighlights[0]?.id ?? '')
-  let refreshTimer: ReturnType<typeof setTimeout> | undefined
 
   const currentPeriod = computed(
     () => periods.find((entry) => entry.value === period.value) ?? periods[1]!
@@ -75,16 +82,6 @@
     expanded.value = true
   }
 
-  const refresh = () => {
-    refetching.value = true
-    clearTimeout(refreshTimer)
-    refreshTimer = setTimeout(() => {
-      refetching.value = false
-    }, 600)
-  }
-
-  onBeforeUnmount(() => clearTimeout(refreshTimer))
-
   const onCardOption = (card: HighlightCard, value: string | number) =>
     runCardOption(value, {
       query: timeQuery(card.dataset, card.measure, currentPeriod.value),
@@ -104,7 +101,7 @@
         :options="periods"
         refreshable
         :refetching="refetching"
-        @refresh="refresh"
+        @refresh="(event: MouseEvent) => emit('refresh', event)"
       />
 
       <section

@@ -63,7 +63,7 @@
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
 | `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 | `refreshInterval` | `number` | `300` | false | Two-way value (`v-model:refreshInterval`). |
 
 ## Events

@@ -30,6 +30,9 @@ test('modelProps reads every defineModel of a root, named and default', () => {
       doc: 'Two-way value (`v-model:open`).'
     }
   ])
+
+  const command = modelProps(exportTarget(exportsMap['./command']))
+  assert.equal(command.find((m) => m.name === 'open')?.default, 'undefined')
 })
 
 test('the catalog lists v-model values as props, so webkit view shows them', async () => {

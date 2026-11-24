@@ -366,7 +366,7 @@ test('the bundle is read from the repo-root layout: skills/, rules/, adapters/',
   assert.ok(bundle.includes('rules/webkit-strings.md'))
   assert.ok(bundle.includes('rules/webkit-keyboard.md'))
   assert.ok(bundle.includes('agents/webkit-advisor.md'))
-  assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 23)
+  assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 24)
 })
 
 test('copyAiBundle writes skills/, rules/ and adapters/ only — no legacy cli-templates/ copy', () => {

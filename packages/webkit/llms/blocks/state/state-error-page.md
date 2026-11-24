@@ -241,6 +241,7 @@ Each variant is the same screen in another state: `get_block("state/state-error-
               />
               <Button
                 label="Docs"
+                aria-label="Docs (opens in a new tab)"
                 variant="outline"
                 icon="az az-book"
                 size="medium"

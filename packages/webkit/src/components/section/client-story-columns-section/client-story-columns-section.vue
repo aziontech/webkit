@@ -7,9 +7,9 @@
   import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
   import type { ThirdPartyLogoTreatment } from '../../content/third-party-logo/third-party-logo.vue'
-  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ClientStoryColumnsSection',
@@ -184,18 +184,15 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
+    :anchor="anchor"
+    :filled="cells.length > 0"
+    :framed="reveal !== 'hover'"
+    marks="none"
   >
-    <Module
-      key="hover"
-      v-if="cells.length > 0 && reveal === 'hover'"
-      :divided="false"
-      :padded="false"
-    >
+    <template v-if="reveal === 'hover'">
       <RegistrationFrame
         borders="none"
         marks="none"
@@ -276,64 +273,53 @@
           </li>
         </ul>
       </RegistrationFrame>
-    </Module>
-    <Module
-      key="always"
-      v-else-if="cells.length > 0"
-      :divided="false"
-      :padded="false"
-    >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="none"
+    </template>
+    <template v-else>
+      <div
+        role="list"
+        :aria-label="ariaLabel || undefined"
+        class="grid gap-px bg-(--border-default) md:grid-cols-3"
       >
-        <div
-          role="list"
-          :aria-label="ariaLabel || undefined"
-          class="grid gap-px bg-(--border-default) md:grid-cols-3"
+        <RegistrationFrame
+          v-for="cell in cells"
+          :key="cell.name"
+          role="listitem"
+          borders="none"
+          marks="all"
         >
-          <RegistrationFrame
-            v-for="cell in cells"
-            :key="cell.name"
-            role="listitem"
-            borders="none"
-            marks="all"
-          >
-            <div class="group/card flex h-full flex-col gap-px bg-(--border-default)">
-              <LogoWall
-                variant="rectangle"
-                :aria-label="cell.name"
-                :link-label="linkLabel"
-                :items="[{ src: cell.logo, alt: `${cell.name}: ${cell.story}`, href: cell.href }]"
-                :style="faceStyle(cell)"
-                :data-theme="faceTheme(cell)"
-                :class="LOGO_WALL_CLASS"
-              >
-                <template #mark>
-                  <img
-                    :src="cell.logo"
-                    :alt="cell.name"
-                    decoding="async"
-                    :data-treatment="cell.logoTreatment ?? 'color'"
-                    :class="MARK_IMAGE_CLASS"
-                  />
-                </template>
-              </LogoWall>
-              <a
-                :href="safeHref(cell.href) ?? undefined"
-                tabindex="-1"
-                aria-hidden="true"
-                :class="STORY_LINK_CLASS"
-              >
-                <p class="m-0 text-balance text-heading-sm text-(--text-default)">
-                  {{ cell.story }}
-                </p>
-              </a>
-            </div>
-          </RegistrationFrame>
-        </div>
-      </RegistrationFrame>
-    </Module>
-  </section>
+          <div class="group/card flex h-full flex-col gap-px bg-(--border-default)">
+            <LogoWall
+              variant="rectangle"
+              :aria-label="cell.name"
+              :link-label="linkLabel"
+              :items="[{ src: cell.logo, alt: `${cell.name}: ${cell.story}`, href: cell.href }]"
+              :style="faceStyle(cell)"
+              :data-theme="faceTheme(cell)"
+              :class="LOGO_WALL_CLASS"
+            >
+              <template #mark>
+                <img
+                  :src="cell.logo"
+                  :alt="cell.name"
+                  decoding="async"
+                  :data-treatment="cell.logoTreatment ?? 'color'"
+                  :class="MARK_IMAGE_CLASS"
+                />
+              </template>
+            </LogoWall>
+            <a
+              :href="safeHref(cell.href) ?? undefined"
+              tabindex="-1"
+              aria-hidden="true"
+              :class="STORY_LINK_CLASS"
+            >
+              <p class="m-0 text-balance text-heading-sm text-(--text-default)">
+                {{ cell.story }}
+              </p>
+            </a>
+          </div>
+        </RegistrationFrame>
+      </div>
+    </template>
+  </SectionBand>
 </template>

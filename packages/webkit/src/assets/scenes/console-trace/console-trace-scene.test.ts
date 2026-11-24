@@ -37,6 +37,13 @@ describe('ConsoleTraceScene', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
+  it('drops the tab bar and the page title below md, so a phone frame shows the waterfall', () => {
+    const { getByTestId } = render(host())
+
+    expect(getByTestId(`${TESTID}__tabs`).classList.contains('max-md:hidden')).toBe(true)
+    expect(getByTestId(`${TESTID}__title`).classList.contains('max-md:hidden')).toBe(true)
+  })
+
   it('draws the span waterfall by default and for an unknown tab', () => {
     const empty = render(host())
     expect(empty.getByTestId(TESTID).getAttribute('data-tab')).toBe('trace')

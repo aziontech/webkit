@@ -1,11 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MarqueeLoop from '../../marketing/marquee/marquee-loop.vue'
   import Quote from '../../marketing/quote/quote.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'RecognitionMarqueeSection',
@@ -64,89 +63,69 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :filled="items.length > 0"
+    :eyebrow="eyebrow"
+    :title="title"
   >
-    <Module
-      v-if="items.length > 0"
-      :divided="false"
-      :padded="false"
+    <MarqueeLoop
+      v-slot="{ duplicate }"
+      :duration="loopDuration"
+      :aria-label="ariaLabel"
     >
-      <template
-        v-if="title.length > 0"
-        #header
+      <ul
+        :data-duplicate="duplicate || null"
+        :aria-hidden="duplicate ? 'true' : undefined"
+        class="m-0 flex w-max shrink-0 list-none p-0 motion-reduce:data-[duplicate]:hidden"
       >
-        <ModuleHeader
-          :eyebrow="eyebrow"
-          :title="title"
-        />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
-        <MarqueeLoop
-          v-slot="{ duplicate }"
-          :duration="loopDuration"
-          :aria-label="ariaLabel"
+        <li
+          v-for="(item, index) in items"
+          :key="index"
+          class="flex w-[85vw] max-w-(--container-md) shrink-0 sm:w-(--container-md)"
         >
-          <ul
-            :data-duplicate="duplicate || null"
-            :aria-hidden="duplicate ? 'true' : undefined"
-            class="m-0 flex w-max shrink-0 list-none p-0 motion-reduce:data-[duplicate]:hidden"
+          <RegistrationFrame
+            borders="right"
+            marks="all"
+            class="w-full bg-(--bg-surface)"
           >
-            <li
-              v-for="(item, index) in items"
-              :key="index"
-              class="flex w-[85vw] max-w-(--container-md) shrink-0 sm:w-(--container-md)"
+            <Quote
+              variant="signed"
+              :text="item.text"
+              :name="item.reportName"
+              :job-title="item.date"
+              class="p-(--spacing-xl)"
             >
-              <RegistrationFrame
-                borders="right"
-                marks="all"
-                class="w-full bg-(--bg-surface)"
-              >
-                <Quote
-                  variant="signed"
-                  :text="item.text"
-                  :name="item.reportName"
-                  :job-title="item.date"
-                  class="p-(--spacing-xl)"
-                >
-                  <template #mark>
-                    <template v-if="item.logoLight">
-                      <img
-                        :src="item.logo"
-                        :alt="item.firmName"
-                        decoding="async"
-                        class="h-8 w-auto max-w-40 object-contain hidden [[data-theme=dark]_&]:block"
-                      />
-                      <img
-                        :src="item.logoLight"
-                        :alt="item.firmName"
-                        decoding="async"
-                        class="h-8 w-auto max-w-40 object-contain block [[data-theme=dark]_&]:hidden"
-                      />
-                    </template>
-                    <img
-                      v-else
-                      :src="item.logo"
-                      :alt="item.firmName"
-                      decoding="async"
-                      class="h-8 w-auto max-w-40 object-contain"
-                    />
-                  </template>
-                </Quote>
-              </RegistrationFrame>
-            </li>
-          </ul>
-        </MarqueeLoop>
-      </RegistrationFrame>
-    </Module>
-  </section>
+              <template #mark>
+                <template v-if="item.logoLight">
+                  <img
+                    :src="item.logo"
+                    :alt="item.firmName"
+                    decoding="async"
+                    class="h-8 w-auto max-w-40 object-contain hidden [[data-theme=dark]_&]:block"
+                  />
+                  <img
+                    :src="item.logoLight"
+                    :alt="item.firmName"
+                    decoding="async"
+                    class="h-8 w-auto max-w-40 object-contain block [[data-theme=dark]_&]:hidden"
+                  />
+                </template>
+                <img
+                  v-else
+                  :src="item.logo"
+                  :alt="item.firmName"
+                  decoding="async"
+                  class="h-8 w-auto max-w-40 object-contain"
+                />
+              </template>
+            </Quote>
+          </RegistrationFrame>
+        </li>
+      </ul>
+    </MarqueeLoop>
+  </SectionBand>
 </template>

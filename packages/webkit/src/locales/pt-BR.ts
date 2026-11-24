@@ -441,7 +441,8 @@ export const ptBR: Messages = {
     searchPlaceholder: 'Buscar páginas e comandos',
     noMatch: 'Nenhuma página ou comando corresponde à busca.',
     pages: 'Páginas',
-    searchShortcut: 'Buscar páginas e comandos'
+    searchShortcut: 'Buscar páginas e comandos',
+    info: 'Informações'
   },
   copyButton: {
     fallbackTitle: 'Copie manualmente',
@@ -816,6 +817,9 @@ export const ptBR: Messages = {
   helpPanel: {
     label: 'Ajuda',
     learnMore: 'Saiba mais'
+  },
+  hint: {
+    label: 'Mais informações'
   },
   heroSection: {
     carouselLabel: 'Comprovada em cargas de trabalho críticas'

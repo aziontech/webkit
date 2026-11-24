@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import DashboardAlerts from '../../../../blocks/dashboard/dashboard-alerts/dashboard-alerts.vue'
+import OpenAlertTable from '../../../../blocks/dashboard/dashboard-alerts/parts/open-alert-table.vue'
 import AlertsDashboardEmpty from '../../../../blocks/dashboard/dashboard-alerts/variants/empty.vue'
 
 afterEach(() => cleanup())
@@ -68,5 +69,31 @@ describe('dashboard/dashboard-alerts', () => {
     })
     await userEvent.click(option)
     await waitFor(() => expect(view.emitted('update:period')?.[0]).toEqual(['7d']))
+  })
+
+  it('stacks the Open alerts rows as cards on a phone instead of scrolling sideways', async () => {
+    const host = document.createElement('div')
+    host.style.width = '360px'
+    document.body.appendChild(host)
+    const view = render(OpenAlertTable, {
+      props: {
+        alerts: [
+          {
+            id: 'a1',
+            level: 'high',
+            rank: 4,
+            title: 'Acme token leaked',
+            entity: 'jane.doe',
+            opened: 'Nov 10, 08:00',
+            status: 'Open'
+          }
+        ]
+      },
+      container: host
+    })
+    await waitFor(() =>
+      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(true)
+    )
+    host.remove()
   })
 })

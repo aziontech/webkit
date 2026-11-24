@@ -102,7 +102,7 @@
 ## Responsive
 
 - The control never wraps; on narrow screens keep the label short or move the actions into a `DropdownMenu` behind an `IconButton`.
-- Touch: both segments use the Button and IconButton touch-target spans (44 px on a coarse pointer).
+- Touch: both segments use the Button and IconButton touch-target spans (44 px tall on a coarse pointer); the spans grow only vertically, so a tap on the edge of one segment never opens or fires the other.
 
 ## Examples
 

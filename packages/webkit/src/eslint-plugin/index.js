@@ -20,6 +20,7 @@ import noViewportHeightCalc from './rules/no-viewport-height-calc.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
 import preferDefineModel from './rules/prefer-define-model.js'
+import preferHint from './rules/prefer-hint.js'
 import preferHrefInMenuNode from './rules/prefer-href-in-menu-node.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
@@ -61,7 +62,8 @@ const rules = {
   'no-polymorphic-as-prop': noPolymorphicAsProp,
   'no-page-navigation-menu': noPageNavigationMenu,
   'consistent-header-action-size': consistentHeaderActionSize,
-  'no-unowned-element': noUnownedElement
+  'no-unowned-element': noUnownedElement,
+  'prefer-hint': preferHint
 }
 
 const FILES = [
@@ -123,7 +125,8 @@ const RECOMMENDED = {
   'require-composable-scope-cleanup': 'error',
   'no-polymorphic-as-prop': 'error',
   'no-page-navigation-menu': 'warn',
-  'consistent-header-action-size': 'error'
+  'consistent-header-action-size': 'error',
+  'prefer-hint': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze([

@@ -66,7 +66,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: none mirror.
 - Keyboard: no horizontal arrow-key logic.
-- Isolation: the label renders `dir="auto"`, so a count or value in another script keeps its own direction.
+- Isolation: the label renders `dir="auto"`, so a value in another script keeps its own direction; a label with no letter (a count, `+3`, `-12%`) renders `dir="ltr"`, so its sign and unit stay in order in every engine.
 
 ## Examples
 

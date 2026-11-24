@@ -155,7 +155,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 - ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
-- Default with `deploymentId: ''`: the same page for a resource never deployed: the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
+- NoDeployment: the same page for a resource never deployed (`deploymentId: ''`): the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
@@ -198,6 +198,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - `ResourceBuild` — The Build tab of a resource made from the CLI: the small Build heading with an outlined Deploy, the Git repository band holding the Connect Git repository card, the Build configuration band with the read-only framework preset and the build and deploy commands, and the Deployment band with the API token. Editing a command raises the save bar.
 - `ServiceOverview` — A service (its environment crumb is a transparent small select the page sets with `ConsoleLayout.Breadcrumb`): the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the layout hides the breadcrumb), the production checklist expands into a drawer, and the deployment topology is a `FlowDiagram` from domains to storage, whose Domains node adds a domain from its `actions` slot: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy.
 - `Application` — An application page body with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `Subheader` over a `DataTable` each), and Topology, where `FlowDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the state-async-submit toast with Edit (back to Topology) and Redeploy.
+- `NoDeployment` — The Overview of a resource that was created but never deployed: the summary reads Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status and no Visit, the state band names the three ways to deploy (drop the project, connect Git, or the CLI), and Get started follows.
 - `FirstDeploy` — The summary cards before and during the first deploy: a resource never deployed (Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status, Not yet as its creation, Connect Git repository and Project upload under Source, and the state band naming the three ways to deploy), then two service cards whose Status reads Deploying · Build with a loading `StatusIndicator`, and Inactive.
 - `ResourceBuildConnected` — The Build tab of a resource with a connected repository: the Git repository band holds the repository link with a danger Disconnect and the Production branch and Preview branch rows, then the Build configuration and Deployment bands. Editing a branch or a command raises the save bar.
 - `ApplicationBuild` — An application page body with the Overview, Versions, Build and Deployments tabs and no topology: the Overview summary says every push to the production branch deploys and that a project can be dropped on the page; dragging files over the page raises the dashed state-project-intake drop target, and dropping them (or Deploy on the tab row) opens a deploy `Drawer` that names the source and runs through the state-async-submit toast with Edit and Redeploy. The Build tab edits the connected repository branches and the build commands behind a save bar, and leaving it with unsaved changes asks first in a `ConfirmDialog` (`useUnsavedChanges`).
@@ -378,6 +379,19 @@ export const webAppResource: ResourceDetailResource = {
   createdBy: 'Riley Carter',
   framework: 'Nuxt',
   frameworkIcon: 'az-color az-nuxt'
+}
+
+export const neverDeployedResource: ResourceDetailResource = {
+  name: 'docs-site',
+  domain: 'docs-site-q4w5e6.example.com',
+  deploymentId: '',
+  environment: 'Production',
+  status: 'Not deployed',
+  statusSeverity: 'neutral',
+  createdAt: new Date(referenceTime - 2 * 3_600_000),
+  createdBy: 'Jane Doe',
+  framework: 'Astro',
+  frameworkIcon: 'az-color az-astro'
 }
 
 export const resourceTabs: { value: ResourceDetailTab; label: string }[] = [

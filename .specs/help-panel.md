@@ -3,10 +3,10 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 421ba5fd4cf26a6b0aa59e63c6af696f73f9319da83149fed3d711e2b9c4427d
-spec_version: 5
+checksum: fe8124c6586b537163b3013d65e602a15f05649bbf9ef990d64cc7901b9cca44
+spec_version: 6
 created: 2026-11-10
-last_updated: 2026-11-16
+last_updated: 2026-11-23
 ---
 
 # HelpPanel — Component Spec
@@ -52,6 +52,7 @@ the links or carry one section or five.
 - Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).
 - Put links to the documentation in `HelpPanel.Footer`, at the end, not inline in every section.
 - Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one.
+- How it opens in the console: the panel is the body of `ConsoleLayout`'s `tools` slot, and the page opens it with `ConsoleLayout.ToolsTrigger`, the `Info` link placed first in `PageHeader`'s `meta` slot, right after the page title. The trigger's `click` runs before the region toggles, so the page sets the topic there. Never open help from a boxed icon button, a typed `?` or a `Tooltip`.
 
 ## Usage
 

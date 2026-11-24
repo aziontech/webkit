@@ -692,6 +692,47 @@ describe('Command', () => {
       expect(prefix).toBeGreaterThan(inner)
       expect(inner).toBeGreaterThan(0)
       expect(matchCommand('set', 'Settings Domains').score).toBeGreaterThan(exact)
+      expect(matchCommand('set', 'Reset').score).toBeGreaterThan(exact)
+      expect(exact).toBeGreaterThan(matchCommand('dpl', 'Deploy Project').score)
+    })
+
+    it('shows at most three keyword-only matches per group while a label matches, so a later group title match is not buried', async () => {
+      const Hints = defineComponent({
+        components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+        setup: () => ({ open: ref(true) }),
+        template: `
+        <Command v-model:open="open" shortcut="">
+          <CommandInput placeholder="Search" />
+          <CommandList>
+            <CommandGroup label="Components">
+              <CommandItem value="table">Table</CommandItem>
+              <CommandItem value="canvas" :keywords="['tables']">Canvas</CommandItem>
+              <CommandItem value="frame" :keywords="['tables']">Frame</CommandItem>
+              <CommandItem value="card" :keywords="['tables']">Card</CommandItem>
+              <CommandItem value="chart" :keywords="['tables']">Chart</CommandItem>
+              <CommandItem value="grid" :keywords="['tables']">Grid</CommandItem>
+            </CommandGroup>
+            <CommandGroup label="Blocks">
+              <CommandItem value="view-table">View Table</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      `
+      })
+      render(Hints)
+      await settle()
+      const shown = () =>
+        [...document.body.querySelectorAll<HTMLElement>('[role="option"]')]
+          .filter((node) => node.style.display !== 'none')
+          .map((node) => node.textContent?.trim())
+
+      await fireEvent.update(input(), 'table')
+      await settle()
+      expect(shown()).toEqual(['Table', 'Canvas', 'Frame', 'Card', 'View Table'])
+
+      await fireEvent.update(input(), 'tables')
+      await settle()
+      expect(shown()).toEqual(['Canvas', 'Frame', 'Card', 'Chart', 'Grid'])
     })
 
     it('keyboard order follows the rank: the best group and item lead', async () => {
@@ -706,13 +747,59 @@ describe('Command', () => {
       expect(byTestId('command-list')).toHaveAttribute('data-ranked')
       expect(groups[1]).toHaveAttribute('data-leading')
       expect((groups[0] as HTMLElement).style.display).toBe('none')
-      const rows = [...groups[1].querySelectorAll('[role="option"]')] as HTMLElement[]
-      expect(Number(rows[0].style.order)).toBeLessThan(Number(rows[1].style.order))
+      const rows = [...groups[1].querySelectorAll<HTMLElement>('[role="option"]')].filter(
+        (row) => row.style.display !== 'none'
+      )
+      expect(rows.map((row) => row.textContent?.trim())).toEqual(['Settings Domains'])
       expect(byTestId('command-separator')!.style.display).toBe('none')
       expect(activeText()).toBe('Settings Domains')
 
       await userEvent.keyboard('{Enter}')
       expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'domains')
+    })
+
+    it('moves ranked groups and rows in the DOM so reading order is the ranked order, and restores it', async () => {
+      const Ranked = defineComponent({
+        components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+        setup: () => ({ open: ref(true) }),
+        template: `
+        <Command v-model:open="open" shortcut="">
+          <CommandInput placeholder="Search" />
+          <CommandList>
+            <CommandGroup label="Lamps">
+              <CommandItem value="notable">Notable lamp</CommandItem>
+              <CommandItem value="table-lamp">Table lamp</CommandItem>
+            </CommandGroup>
+            <CommandGroup label="Tables">
+              <CommandItem value="table">Table</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      `
+      })
+      render(Ranked)
+      await settle()
+      const shown = () =>
+        [...document.body.querySelectorAll<HTMLElement>('[role="group"], [role="option"]')]
+          .filter((node) => node.style.display !== 'none')
+          .map((node) =>
+            node.getAttribute('role') === 'group'
+              ? `# ${node.querySelector('[data-testid="command-group__label"]')?.textContent?.trim()}`
+              : node.textContent?.trim()
+          )
+      const original = shown()
+      expect(original).toEqual(['# Lamps', 'Notable lamp', 'Table lamp', '# Tables', 'Table'])
+
+      await fireEvent.update(input(), 'table')
+      await settle()
+      expect(shown()).toEqual(['# Tables', 'Table', '# Lamps', 'Table lamp', 'Notable lamp'])
+      expect(activeText()).toBe('Table')
+      await userEvent.keyboard('{ArrowDown}')
+      expect(activeText()).toBe('Table lamp')
+
+      await fireEvent.update(input(), '')
+      await settle()
+      expect(shown()).toEqual(original)
     })
 
     it('matches keywords that are not in the label', async () => {

@@ -36,7 +36,7 @@
 | `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

@@ -215,7 +215,16 @@ export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
   const parent = inject(LocaleInjectionKey, null)
   const device = useDeviceLocale()
   const explicit = computed(() => toValue(options.locale) || '')
-  const locale = computed(() => explicit.value || device.value)
+  const locale = computed(() => explicit.value || parent?.locale.value || device.value)
+  const catalogs = computed<Record<string, Messages>>(() => ({
+    ...parent?.catalogs?.value,
+    ...toValue(options.catalogs)
+  }))
+  const overrides = computed<PartialMessages[]>(() => {
+    const own = toValue(options.messages)
+    const inherited = parent?.overrides?.value ?? []
+    return own ? [...inherited, own] : inherited
+  })
   const ownDir = computed<Direction | undefined>(() => {
     const requested = toValue(options.dir) ?? 'auto'
     if (requested !== 'auto') return requested
@@ -224,17 +233,23 @@ export function provideLocale(options: ProvideLocaleOptions): ProvidedLocale {
   const dir = computed<Direction>(() => {
     if (ownDir.value) return ownDir.value
     if (parent) return parent.dir.value
-    return findCatalog(locale.value, toValue(options.catalogs)) ? directionOf(locale.value) : 'ltr'
+    return findCatalog(locale.value, catalogs.value) ? directionOf(locale.value) : 'ltr'
   })
   const messages = computed(() => {
-    const catalogs = toValue(options.catalogs)
-    const found = findCatalog(locale.value, catalogs)
+    const found = findCatalog(locale.value, catalogs.value)
     if (!found && explicit.value) warnMissingCatalog(locale.value)
-    return mergeMessages(found ?? (catalogs[DEFAULT_LOCALE] as Messages), toValue(options.messages))
+    return overrides.value.reduce(
+      mergeMessages,
+      found ?? (catalogs.value[DEFAULT_LOCALE] as Messages)
+    )
   })
-  const now = computed<number | undefined>(() => epochOf(toValue(options.now)))
-  const timeZone = computed<string | undefined>(() => toValue(options.timeZone) || undefined)
-  const context: LocaleContext = { locale, dir, messages, now, timeZone }
+  const now = computed<number | undefined>(
+    () => epochOf(toValue(options.now)) ?? parent?.now?.value
+  )
+  const timeZone = computed<string | undefined>(
+    () => toValue(options.timeZone) || parent?.timeZone?.value || undefined
+  )
+  const context: LocaleContext = { locale, dir, messages, now, timeZone, catalogs, overrides }
   provide(LocaleInjectionKey, context)
   return { ...context, ownDir }
 }

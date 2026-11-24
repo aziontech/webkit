@@ -30,6 +30,10 @@ export interface LocaleContext {
   now?: ComputedRef<number | undefined>
   /** IANA time zone that absolute times below the provider read in (`Timestamp`); undefined reads the browser's zone. */
   timeZone?: ComputedRef<string | undefined>
+  /** Every catalog the provider picks from, inherited ones included, so a nested provider can switch locale. */
+  catalogs?: ComputedRef<Record<string, Messages>>
+  /** The partial overrides in effect, outermost first, merged in order over whichever catalog a nested provider picks. */
+  overrides?: ComputedRef<PartialMessages[]>
 }
 
 /** What `useTranslate()` returns. */

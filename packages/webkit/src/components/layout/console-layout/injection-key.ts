@@ -10,6 +10,16 @@ export interface ConsoleLayoutContext {
   closeSearch: () => void
   /** Whether the search palette is open. */
   searchOpen: Readonly<Ref<boolean>>
+  /** Opens the layout's tools region. */
+  openTools: () => void
+  /** Closes the layout's tools region. */
+  closeTools: () => void
+  /** Opens the tools region when closed and closes it when open. */
+  toggleTools: () => void
+  /** Whether the tools region is open. */
+  toolsOpen: Readonly<Ref<boolean>>
+  /** Id of the tools region's body, for aria-controls on a control that opens it. */
+  toolsId: string
 }
 
 /** One page's trail, registered by `ConsoleLayout.Breadcrumb`. */

@@ -706,6 +706,7 @@ jobs:
 
             <Button
               label="Visit site"
+              aria-label="Visit site (opens in a new tab)"
               variant="outline"
               size="medium"
               icon="az az-external-link"

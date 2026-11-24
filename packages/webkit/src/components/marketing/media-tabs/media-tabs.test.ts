@@ -157,6 +157,22 @@ describe('MediaTabs', () => {
     await expectNoA11yViolations(container)
   })
 
+  it('keeps one copy of the media once mounted: the inline medium below lg, the side panels from lg', async () => {
+    const narrow = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    await nextTick()
+    expect(narrow.container.querySelectorAll('[role="tabpanel"]')).toHaveLength(ITEMS.length)
+    expect(narrow.container.querySelector('[id*="-row-media-"]')).toBeNull()
+    narrow.unmount()
+
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const { container } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    await nextTick()
+
+    expect(container.querySelectorAll('[role="tabpanel"]')).toHaveLength(0)
+    expect(container.querySelectorAll('img')).toHaveLength(1)
+  })
+
   it('carries the size and selectOn tokens as data attributes', () => {
     const { getByTestId } = render(MediaTabs, {
       props: { items: ITEMS, autoplay: false, size: 'large', selectOn: 'click' }

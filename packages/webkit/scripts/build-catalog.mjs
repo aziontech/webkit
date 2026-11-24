@@ -33,6 +33,7 @@ import {
   useWhen as themeAnimateUseWhen
 } from '../../theme/src/tokens/primitives/animations/animate.js'
 import { buildTokenExport } from '../../theme/src/tokens/token-export.js'
+import { illustrationFrame } from '../src/assets/illustrations/frames.ts'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -222,6 +223,7 @@ export function modelProps(target) {
     const opens = (fallback.match(/[([{]/g) ?? []).length
     const closes = (fallback.match(/[)\]}]/g) ?? []).length
     if (opens !== closes) fallback = '—'
+    if (fallback === 'undefined as never') fallback = 'undefined'
     models.push({
       name,
       type: match[1].replace(/\s+/g, ' ').trim(),
@@ -585,10 +587,9 @@ function quoted(src, key, from = 0) {
   return m ? m[2].replace(/\\'/g, "'").replace(/\s+/g, ' ').trim() : null
 }
 
-function viewBoxOf(file) {
-  const m = readFileSync(file, 'utf-8').match(/viewBox="([^"]+)"/)
-  const [, , w, h] = (m?.[1] ?? '').split(/[\s,]+/).map(Number)
-  return w > 0 && h > 0 ? `${Math.round(w)}x${Math.round(h)}` : null
+function canvasOf(name) {
+  const { width, height } = illustrationFrame(name)
+  return `${Math.round(width)}x${Math.round(height)}`
 }
 
 function importGraph() {
@@ -646,7 +647,7 @@ export function buildAssets(imports) {
     illustrations: objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets')
       .map(({ name }) => ({
         name,
-        canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${name}.svg`))
+        canvas: canvasOf(name)
       }))
       .sort((a, b) => a.name.localeCompare(b.name)),
     diagrams: objectKeys(ASSET_KINDS.diagrams.registry, 'diagrams')

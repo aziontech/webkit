@@ -54,6 +54,13 @@ describe('account/account-hierarchy', () => {
     await waitFor(() => expect(view.getByRole('treegrid', { name: 'Resources' })).toBeTruthy())
   })
 
+  it('explains the Charges column with a Hint beside its header', () => {
+    const view = render(ManageResources)
+    const header = view.getByRole('columnheader', { name: /Charges/ })
+    expect(header.querySelector('[data-testid="hint__trigger"]')).not.toBeNull()
+    expect(header.querySelector('.az-circle-help')).toBeNull()
+  })
+
   it('marks an empty charge as such', () => {
     render(ManageResources)
     const charge = row('grp-2101').querySelector('[data-empty]')

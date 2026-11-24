@@ -86,3 +86,21 @@ export const rewrittenNames = (
   settings
     .filter((setting) => !setting.system && setting.bindingPolicy !== policy)
     .map((setting) => setting.name)
+
+export const withBindingPolicy = (
+  settings: DeploymentSettingsSetting[],
+  bindingPolicy: DeploymentSettingsBindingPolicy,
+  updatedBy: string
+): DeploymentSettingsSetting[] =>
+  settings.map((setting) =>
+    setting.system ? setting : { ...setting, bindingPolicy, updatedAt: new Date(), updatedBy }
+  )
+
+export const savedDefaultsDescription = (
+  settings: DeploymentSettingsSetting[],
+  bindingPolicy: DeploymentSettingsBindingPolicy,
+  applied: boolean
+): string =>
+  applied
+    ? `${settings.filter((setting) => !setting.system).length} settings now use the ${bindingLabel(bindingPolicy)} binding policy. Default is never changed.`
+    : 'The next service is created with them. Existing settings keep theirs.'

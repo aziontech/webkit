@@ -2,6 +2,7 @@ import {
   useUnsavedChanges,
   type UseUnsavedChangesReturn
 } from '@aziontech/webkit/use-unsaved-changes'
+import { leavingLink } from '@aziontech/webkit/utils/leave-link'
 import { type MaybeRefOrGetter, onScopeDispose, toValue } from 'vue'
 
 export function useTeamLeaveGuard<T>(
@@ -12,10 +13,9 @@ export function useTeamLeaveGuard<T>(
   const guard = useUnsavedChanges(source, { enabled })
 
   const onLeaveClick = async (event: MouseEvent) => {
-    const target = event.target instanceof Element ? event.target : null
-    const link = target?.closest<HTMLAnchorElement>('a[href]')
-    if (!link || !toValue(rootEl)?.contains(link)) return
-    if (!guard.isDirty.value) return
+    const root = toValue(rootEl)
+    const link = root ? leavingLink(event, root) : null
+    if (!link || !guard.isDirty.value) return
     event.preventDefault()
     if (await guard.confirmLeave()) window.location.assign(link.href)
   }

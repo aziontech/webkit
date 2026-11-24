@@ -2,6 +2,7 @@ import '../../../test/reflow.css'
 
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import ChoiceCard from '../../../../examples/field/choice-card.vue'
@@ -323,11 +324,33 @@ describe('Field', () => {
   })
 
   describe('Field.Label hint and the RequiredAndDisabled example', () => {
-    it('renders the hint glyph beside a label with hint, named by the hint text', () => {
+    it('renders the hint glyph beside a label with hint, described by the hint text', () => {
       const view = render(RequiredAndDisabled)
+      const glyph = view.getByRole('button', { name: 'More information' })
+      expect(glyph).toHaveAccessibleDescription(
+        "The name appears in the console and in the application's default domain."
+      )
+    })
+
+    it('opens the hint on a click without focusing or toggling the labelled control', async () => {
+      const checked = ref(false)
+      const view = render(
+        defineComponent({
+          components: { Field, FieldLabel, Checkbox },
+          setup: () => ({ checked }),
+          template:
+            '<Field orientation="horizontal"><Checkbox v-model="checked" /><FieldLabel hint="Values are encrypted at rest.">Sensitive</FieldLabel></Field>'
+        })
+      )
+      const glyph = view.getByTestId('field-label__hint__trigger')
+      await userEvent.click(glyph)
+      await nextTick()
+      expect(checked.value).toBe(false)
+      expect(document.activeElement).toBe(glyph)
+      expect(glyph.getAttribute('aria-expanded')).toBe('true')
       expect(
-        view.getByRole('button', { name: 'Lowercase letters, numbers and hyphens.' })
-      ).toBeTruthy()
+        document.body.querySelector('[data-testid="field-label__hint__panel"]')?.textContent
+      ).toContain('Values are encrypted at rest.')
     })
 
     it('marks the first input required and disables the second', () => {

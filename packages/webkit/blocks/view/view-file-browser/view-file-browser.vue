@@ -11,13 +11,15 @@
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import { toast } from '@aziontech/webkit/toast'
   import type { UploadProgressItem } from '@aziontech/webkit/upload-progress'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import {
     addToFilesActions,
+    destinationOptionsOf,
     fileColumns,
     type FileRow,
-    folderName,
+    folderPathsIn,
     listRows,
     sortRows,
     UPLOAD_LIMIT
@@ -129,6 +131,8 @@
   const path = defineModel<string>('path', { default: '' })
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
+  const { formatFileSize } = useLocale()
+
   const rootName = computed(() => props.storageName ?? sampleStorageName)
   const folderPath = computed(() => path.value.match(/[^/]+\//g) ?? [])
 
@@ -144,7 +148,9 @@
     { immediate: true }
   )
 
-  const rows = computed<FileRow[]>(() => listRows(items.value, folderPath.value.length > 0))
+  const rows = computed<FileRow[]>(() =>
+    listRows(items.value, folderPath.value.length > 0, formatFileSize)
+  )
 
   const sorting = ref<{ desc: boolean; id: string }[]>([])
   const sortedRows = computed<FileRow[]>(() => sortRows(rows.value, sorting.value[0]))
@@ -210,19 +216,14 @@
     emit('delete', event, entry)
   }
 
-  const destinationPaths = computed(
-    () =>
+  const destinationOptions = computed(() =>
+    destinationOptionsOf(
       props.destinations ??
-      (props.entries
-        ? props.entries
-            .filter((entry) => entry.kind === 'folder')
-            .map((entry) => path.value + folderName(entry.name))
-        : Object.keys(sampleFolders).filter(Boolean))
+        (props.entries
+          ? folderPathsIn(props.entries, path.value)
+          : Object.keys(sampleFolders).filter(Boolean))
+    )
   )
-  const destinationOptions = computed(() => [
-    { value: '/', label: '/', description: 'Storage root' },
-    ...destinationPaths.value.map((value) => ({ value }))
-  ])
 
   const moveOpen = ref(false)
   const moving = ref<FileRow[]>([])

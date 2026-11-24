@@ -41,7 +41,7 @@
 | `title` | `string` | `''` | false | Overrides the header text. Empty builds it from the operation and the counts. |
 | `floating` | `boolean` | `true` | false | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
 | `cancelable` | `boolean` | `true` | false | Shows Cancel on running and waiting files and Cancel all in the header. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

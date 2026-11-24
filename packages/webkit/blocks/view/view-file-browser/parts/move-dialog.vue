@@ -9,14 +9,10 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
-  import {
-    destinationProblem,
-    type FileRow,
-    formatBytes,
-    normalizeDestination
-  } from '../lib/file-rows'
+  import { destinationProblem, type FileRow, normalizeDestination } from '../lib/file-rows'
 
   const props = defineProps<{
     moving: FileRow[]
@@ -31,6 +27,8 @@
 
   const open = defineModel<boolean>('open', { default: false })
 
+  const { formatFileSize } = useLocale()
+
   const destination = ref('')
   const destinationError = ref('')
 
@@ -38,7 +36,7 @@
     props.moving.length === 1 ? `Move ${props.moving[0].name}` : `Move ${props.moving.length} files`
   )
   const movingSize = computed(() =>
-    formatBytes(props.moving.reduce((sum, item) => sum + item.bytes, 0))
+    formatFileSize(props.moving.reduce((sum, item) => sum + item.bytes, 0))
   )
 
   watch(open, (now) => {

@@ -37,7 +37,7 @@
 | `items` | `SourcesItem[]` | `[]` | false | The sources behind the response, in citation order; item `n` is what `[n]` points at. |
 | `title` | `string` | `''` | false | Label of the pill that opens the panel. Empty shows `Sources` and names the pill with the count (`3 sources`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Sub-components
 
