@@ -2,11 +2,11 @@
 name: rating
 category: input
 structure: monolithic
-status: approved
+status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: cccfcb62ba4d3deca34297ae65a28ca3ebcf1e0b8490019e10d7a6d8504c2afd
+checksum: 0bef2a8bfa004ebd7bbf9e523b4c725b7b9ab7ac7a96244b82663b883d4945b5
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -40,7 +40,7 @@ Rating is a row of stars that picks a whole score from 1 to `max` (5 by default)
 
 ## Best practices
 
-- Name the group: put it in a `Field` with a `Field.Label` (or `Field.Title`), or set `aria-label` on the root ("Rate this conversation").
+- Name the group: put it in a `Field` with a `Field.Title`, or set `aria-label` on the root ("Rate this conversation").
 - Keep `max` at 5 for satisfaction and reviews; scales above 5 are hard to tell apart at a glance.
 - Start empty (`0`) when you ask for a rating, so nobody submits a score they did not choose; set `required` when the score is mandatory.
 - Set `clearable` when a score is optional, so a person can take it back with the keyboard and a screen reader, not only by reloading.
@@ -74,23 +74,23 @@ Rating is a row of stars that picks a whole score from 1 to `max` (5 by default)
 
 ## Props
 
-| Prop        | Type                              | Default    | Required | JSDoc                                                                                                                                            |
-| ----------- | --------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `max`       | `number`                          | `5`        | false    | Number of stars, the highest score. Rounded to a whole number and kept between 1 and 10.                                                         |
-| `size`      | `'small' \| 'medium' \| 'large'`  | `'medium'` | false    | Star size: 16, 20 or 24 px glyphs in 24, 28 or 32 px targets. `RatingSize`, exported.                                                            |
-| `name`      | `string`                          | `''`       | false    | Form field name shared by every star radio; the score submits under it. Empty uses a generated name so the radios still group.                  |
-| `readonly`  | `boolean`                         | `false`    | false    | Shows the score instead of asking for it: no radios, the value rounded to the nearest half star, announced as one image.                         |
-| `disabled`  | `boolean`                         | `false`    | false    | Disables every star and the clear button; the row shows at 50 % opacity with a not-allowed cursor.                                              |
-| `required`  | `boolean`                         | `false`    | false    | Requires a score: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit.                       |
-| `invalid`   | `boolean`                         | `false`    | false    | Marks the rating invalid: sets `aria-invalid` on the group and draws the empty stars in the danger mark colour.                                  |
-| `clearable` | `boolean`                         | `false`    | false    | Shows a clear button after the stars that resets the score to 0 and moves focus to the first star. Not shown while `readonly`.                   |
+| Prop        | Type                             | Default    | Required | JSDoc                                                                                                                          |
+| ----------- | -------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `max`       | `number`                         | `5`        | false    | Number of stars, the highest score. Rounded to a whole number and kept between 1 and 10.                                       |
+| `size`      | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Star size: 16, 20 or 24 px glyphs in 24, 28 or 32 px targets. `RatingSize`, exported.                                          |
+| `name`      | `string`                         | `''`       | false    | Form field name shared by every star radio; the score submits under it. Empty uses a generated name so the radios still group. |
+| `readonly`  | `boolean`                        | `false`    | false    | Shows the score instead of asking for it: no radios, the value rounded to the nearest half star, announced as one image.       |
+| `disabled`  | `boolean`                        | `false`    | false    | Disables every star and the clear button; the row shows at 50 % opacity with a not-allowed cursor.                             |
+| `required`  | `boolean`                        | `false`    | false    | Requires a score: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit.     |
+| `invalid`   | `boolean`                        | `false`    | false    | Marks the rating invalid: sets `aria-invalid` on the group and draws the empty stars in the danger mark colour.                |
+| `clearable` | `boolean`                        | `false`    | false    | Shows a clear button after the stars that resets the score to 0 and moves focus to the first star. Not shown while `readonly`. |
 
 `RatingProps` is exported as the named props interface.
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                                     |
-| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                           |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model` | `number` | `0`     | `update:modelValue` | The score via `defineModel`; `0` means no score. Picking a star emits its whole number (1 … `max`); the clear button emits `0`. Unbound, the rating keeps its own score. As an input a fractional value shows rounded to a whole star; `readonly` shows it to the nearest half. |
 
 ## Events
@@ -113,26 +113,26 @@ _none_
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
-| ----------------------------- | ------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| fill change (pick, preview)   | `transition-colors duration-fast-02 ease-productive-entrance` on each star glyph | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| Trigger                     | Animation / Transition                                                           | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| --------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| fill change (pick, preview) | `transition-colors duration-fast-02 ease-productive-entrance` on each star glyph | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 The clear button is an `IconButton` (`variant="ghost"`, `size="small"` at every rating size, icon `az az-x`) and keeps its own transitions.
 
 ## Tokens
 
-| Region                          | Token (DESIGN.md)                                       |
-| ------------------------------- | ------------------------------------------------------- |
-| filled and half star            | `var(--warning-mark)`                                   |
-| empty star                      | `var(--text-muted)`                                     |
-| empty star (invalid)            | `var(--danger-mark)`                                    |
-| star target (hover)             | `var(--bg-hover)`                                       |
-| star target radius              | `var(--shape-button)`                                   |
-| gap between stars and clear     | `var(--spacing-2xs)`                                    |
-| focus ring                      | `var(--ring-color)` offset on `var(--bg-canvas)`        |
-| disabled                        | 50 % opacity on the whole row, `cursor-not-allowed` (as `radio-group-item` and `checkbox`) |
-| star glyph size (small / medium / large) | `text-[1rem]` / `text-[1.25rem]` / `text-[1.5rem]` with `leading-none` (icon font size, as `doc-card`) |
-| star target (small / medium / large / coarse) | `size-6` / `size-7` / `size-8` / `pointer-coarse:size-11` |
+| Region                                        | Token (DESIGN.md)                                                                                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| filled and half star                          | `var(--warning-mark)`                                                                                  |
+| empty star                                    | `var(--text-muted)`                                                                                    |
+| empty star (invalid)                          | `var(--danger-mark)`                                                                                   |
+| star target (hover)                           | `var(--bg-hover)`                                                                                      |
+| star target radius                            | `var(--shape-button)`                                                                                  |
+| gap between stars and clear                   | `var(--spacing-2xs)`                                                                                   |
+| focus ring                                    | `var(--ring-color)` offset on `var(--bg-canvas)`                                                       |
+| disabled                                      | 50 % opacity on the whole row, `cursor-not-allowed` (as `radio-group-item` and `checkbox`)             |
+| star glyph size (small / medium / large)      | `text-[1rem]` / `text-[1.25rem]` / `text-[1.5rem]` with `leading-none` (icon font size, as `doc-card`) |
+| star target (small / medium / large / coarse) | `size-6` / `size-7` / `size-8` / `pointer-coarse:size-11`                                              |
 
 `--warning-mark` is the amber the theme documents for an icon on a surface at the icon target (APCA Lc 45, WCAG 3:1) on `--bg-canvas`, `--bg-surface` and `--bg-surface-raised` in both themes; `--primary` is documented only as a solid mark (Lc 30), so it is not used for the star glyph. Colour is never the only cue: a filled star is a filled glyph (`az-star-fill`), an empty one an outline (`az-star`), a half star `az-star-half-fill`.
 
@@ -154,12 +154,12 @@ The clear button is an `IconButton` (`variant="ghost"`, `size="small"` at every 
 
 ## Internationalization
 
-| Key             | English source                                          | Override prop |
-| --------------- | ------------------------------------------------------- | ------------- |
-| `rating.star`   | `{count} star` (one) / `{count} stars` (other)          | —             |
-| `rating.value`  | `Rated {value} out of {max}`                            | —             |
-| `rating.empty`  | `Not rated`                                             | —             |
-| `rating.clear`  | `Clear rating`                                          | —             |
+| Key            | English source                                 | Override prop |
+| -------------- | ---------------------------------------------- | ------------- |
+| `rating.star`  | `{count} star` (one) / `{count} stars` (other) | —             |
+| `rating.value` | `Rated {value} out of {max}`                   | —             |
+| `rating.empty` | `Not rated`                                    | —             |
+| `rating.clear` | `Clear rating`                                 | —             |
 
 - Formatting: plurals through `Intl.PluralRules` (the `t()` plural form) with the locale from `ConfigProvider`; `{value}` and `{max}` through `Intl.NumberFormat` (at most one fraction digit, so 4.5 reads "4,5" in pt-BR). Overrides go through `ConfigProvider` messages.
 
@@ -189,7 +189,7 @@ The clear button is an `IconButton` (`variant="ghost"`, `size="small"` at every 
 - Sizes — every `size` value side by side.
 - Readonly — averages shown with `readonly` (4.5, 3, 0) with their review counts in text. Justified: display mode is the second job of the component (scores and averages in tickets and lists).
 - Disabled — a rating with a score, `disabled`.
-- InField — inside a `Field` with a `Field.Label`, a description, `required` and an error after an empty submit. Justified: shows the Field wiring (group name, description, required, invalid) of a CSAT survey.
+- InField — inside a `Field` with a `Field.Title`, a description, `required` and an error after an empty submit. Justified: shows the Field wiring (group name, description, required, invalid) of a CSAT survey.
 
 ## Constraints — DO NOT
 
