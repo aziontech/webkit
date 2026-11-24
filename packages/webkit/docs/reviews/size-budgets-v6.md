@@ -1657,3 +1657,27 @@ Budget-raise: conversation-history 9.05 KB → 11.85 KB (measured 11.81 KB): the
 Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.81 KB): the English catalog it bundles gains the ConversationHistory project strings (Projects, Recents, New project, Organize projects, sort labels, empty project), owner 2026-11-23.
 Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.01 KB): the ConversationHistory project strings in Portuguese, owner 2026-11-23.
 Budget-raise: locales-es 12.1 KB → 12.2 KB (measured 12.15 KB): the ConversationHistory project strings in Spanish, owner 2026-11-23.
+
+## Sources list on DropdownMenu (2026-11-23)
+
+The owner asked for the Sources list to be built from an existing component instead of an ad hoc popover list. It is now a `DropdownMenu` of link items, and `DropdownMenu.Item` gains `target` (`_blank`: `rel`, the external-link glyph and the translated `common.newTab` hint, which brings `useTranslate` into the item) and `description` (a second line named by `aria-describedby`). Every entry that bundles the item grows with it.
+
+Budget-raise: sources 11.8 KB → 14.45 KB (measured 14.38 KB): the source list is a `DropdownMenu` (trigger, groups, link items, roving focus and typeahead) instead of a `Popover` with a hand-made list, owner 2026-11-23.
+Budget-raise: dropdown-menu-item 2.2 KB → 3.4 KB (measured 3.35 KB): the `target` and `description` props, with `useTranslate` for the `common.newTab` hint of a new-tab link, owner 2026-11-23.
+Budget-raise: console-layout-root 83.4 KB → 83.95 KB (measured 83.87 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: doc-page-header 32.9 KB → 33.3 KB (measured 33.25 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: article-body-section 47.45 KB → 47.9 KB (measured 47.82 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: prompt-input 15.6 KB → 15.75 KB (measured 15.69 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: prompt-input-attach-button 6.7 KB → 6.85 KB (measured 6.80 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: prompt-input-model-picker 15.35 KB → 15.85 KB (measured 15.77 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: prompt-input-context-picker 15.25 KB → 15.7 KB (measured 15.65 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: prompt-input-tools 17.75 KB → 18.2 KB (measured 18.15 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: conversation-history 11.85 KB → 11.95 KB (measured 11.91 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: button-group 16.85 KB → 17.3 KB (measured 17.24 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: split-button 17.1 KB → 17.6 KB (measured 17.56 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: flow-diagram-bind 16.2 KB → 16.65 KB (measured 16.57 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: context-menu 11.7 KB → 12.9 KB (measured 12.83 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: dropdown-menu 12.75 KB → 13.9 KB (measured 13.86 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: console-layout 84.7 KB → 85.2 KB (measured 85.16 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: breadcrumb 26.9 KB → 27.45 KB (measured 27.38 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.
+Budget-raise: breadcrumb-root 26.85 KB → 27.4 KB (measured 27.34 KB): bundles `DropdownMenu.Item`, which gains `target` (new-tab link with its translated hint) and `description` for the Sources list, owner 2026-11-23.

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, useAttrs, useSlots, watch } from 'vue'
+  import { computed, inject, onBeforeUnmount, useAttrs, useId, useSlots, watch } from 'vue'
 
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
   import { safeHref } from '../../../../utils/safe-href'
   import { useDropdownContext } from '../composables/use-dropdown-context'
   import type { DropdownMenuItemType } from '../injection-key'
   import { DropdownMenuGroupInjectionKey } from '../injection-key'
+
+  export type DropdownMenuItemTarget = '_self' | '_blank'
 
   defineOptions({
     name: 'DropdownMenuItem',
@@ -34,6 +38,10 @@
     selected?: boolean
     /** Destination URL; the option renders as a link that still emits select. */
     href?: string
+    /** Where the link opens; `_blank` adds `rel="noopener noreferrer"`, the external-link glyph and the new-tab hint. */
+    target?: DropdownMenuItemTarget
+    /** Secondary line under the label, cut at two lines; set, the row grows to fit both lines. */
+    description?: string
     /** Item role: a plain action that closes the menu, or a checkbox or radio item that keeps it open. */
     type?: DropdownMenuItemType
   }
@@ -44,6 +52,8 @@
     disabled: false,
     selected: false,
     href: '',
+    target: '_self',
+    description: '',
     type: 'default'
   })
 
@@ -51,6 +61,10 @@
   const slots = useSlots()
   const ctx = useDropdownContext()
   const inGroup = inject(DropdownMenuGroupInjectionKey, false)
+  const { t } = useTranslate({ common: en.common })
+  const uid = useId()
+  const labelId = `${uid}-label`
+  const descriptionId = `${uid}-description`
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu-item'
@@ -59,6 +73,8 @@
   const hasCommand = computed(() => props.command.length > 0)
   const linkHref = computed(() => safeHref(props.href))
   const isLink = computed(() => linkHref.value !== null && !props.disabled)
+  const newTab = computed(() => isLink.value && props.target === '_blank')
+  const hasDescription = computed(() => props.description.length > 0)
   const hasLeading = () => Boolean(slots['leading'])
   const hasTrailing = () => Boolean(slots['trailing'])
 
@@ -131,7 +147,8 @@
     'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) ' +
     'data-[type=default]:data-[selected]:bg-(--bg-selected) ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) ' +
-    'data-[ungrouped]:mx-(--spacing-2xs)'
+    'data-[ungrouped]:mx-(--spacing-2xs) ' +
+    'data-[description]:h-auto data-[description]:items-start data-[description]:py-(--spacing-xs)'
 </script>
 
 <template>
@@ -144,15 +161,20 @@
       :is="isLink ? 'a' : 'div'"
       v-bind="attrs"
       :href="isLink ? (linkHref ?? undefined) : undefined"
+      :target="isLink && target === '_blank' ? '_blank' : undefined"
+      :rel="newTab ? 'noopener noreferrer' : undefined"
       :role="role"
       tabindex="-1"
       :aria-checked="ariaChecked"
       :aria-disabled="disabled || undefined"
+      :aria-labelledby="hasDescription ? labelId : undefined"
+      :aria-describedby="hasDescription ? descriptionId : undefined"
       :data-testid="testId"
       :data-type="type"
       :data-selected="selected || null"
       :data-disabled="disabled || null"
       :data-ungrouped="inGroup ? null : ''"
+      :data-description="hasDescription || null"
       :class="ROOT_CLASS"
       @click="onClick"
       @keydown="onKeydown"
@@ -183,8 +205,24 @@
         <slot name="leading" />
       </span>
 
-      <span class="flex-1 truncate text-start">
-        <slot>{{ label }}</slot>
+      <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) text-start">
+        <span
+          :id="labelId"
+          class="truncate in-data-[description]:line-clamp-2 in-data-[description]:whitespace-normal"
+          ><slot>{{ label }}</slot
+          ><span
+            v-if="newTab"
+            class="sr-only"
+            >{{ ' ' }}{{ t('common.newTab') }}</span
+          ></span
+        >
+        <span
+          v-if="hasDescription"
+          :id="descriptionId"
+          :data-testid="`${testId}__description`"
+          class="line-clamp-2 text-body-xs text-(--text-muted)"
+          >{{ description }}</span
+        >
       </span>
 
       <span
@@ -202,6 +240,13 @@
       >
         {{ command }}
       </span>
+
+      <i
+        v-else-if="newTab"
+        :data-testid="`${testId}__external`"
+        class="az az-external-link shrink-0 text-body-xs text-(--text-muted)"
+        aria-hidden="true"
+      />
 
       <i
         v-if="selected && !checkable"

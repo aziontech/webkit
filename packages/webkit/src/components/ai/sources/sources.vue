@@ -1,15 +1,16 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useId } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-translate'
+  import { LocaleInjectionKey, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Popover from '../../overlay/popover/popover.vue'
-  import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
-  import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
-  import SourcesItemPart from './parts/sources-item.vue'
+  import { safeHref } from '../../../utils/safe-href'
+  import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
+  import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
+  import DropdownMenuItem from '../../navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue'
+  import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import SourcesMark from './parts/sources-mark.vue'
   import type { SourcesItem } from './types'
-  import { sourceCited } from './types'
+  import { sourceCited, sourceMeta } from './types'
 
   export type { SourcesItem }
 
@@ -36,16 +37,23 @@
   /** Controlled open state of the panel. Use with `v-model:open`; while unbound it follows `defaultOpen` and toggles locally. */
   const open = defineModel<boolean>('open', { default: undefined as never })
 
+  interface SourcesRow {
+    index: number
+    item: SourcesItem
+    href: string
+    external: boolean
+    meta: string
+  }
+
   interface SourcesGroup {
     key: 'cited' | 'more'
-    id: string
     label: string
-    items: SourcesItem[]
+    rows: SourcesRow[]
   }
 
   const attrs = useAttrs()
-  const uid = useId()
-  const { t } = useTranslate({ sources: en.sources })
+  const { t, locale } = useTranslate({ sources: en.sources })
+  const context = inject(LocaleInjectionKey, null)
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'sources')
   const heading = computed<string>(() => props.title || t('sources.label'))
@@ -57,22 +65,33 @@
     return (cited.length ? cited : props.items).slice(0, 3)
   })
 
+  const rows = computed<SourcesRow[]>(() =>
+    props.items.map((item, index) => {
+      const href = safeHref(item.href) ?? ''
+      return {
+        index,
+        item,
+        href,
+        external: /^https?:\/\//i.test(href),
+        meta: sourceMeta(item, locale.value, context?.timeZone?.value)
+      }
+    })
+  )
+
   const groups = computed<SourcesGroup[]>(() => {
     const all: SourcesGroup[] = [
       {
         key: 'cited',
-        id: `${uid}-cited`,
         label: t('sources.cited'),
-        items: props.items.filter(sourceCited)
+        rows: rows.value.filter((row) => sourceCited(row.item))
       },
       {
         key: 'more',
-        id: `${uid}-more`,
         label: t('sources.more'),
-        items: props.items.filter((item) => !sourceCited(item))
+        rows: rows.value.filter((row) => !sourceCited(row.item))
       }
     ]
-    return all.filter((group) => group.items.length)
+    return all.filter((group) => group.rows.length)
   })
   const grouped = computed<boolean>(() => groups.value.length > 1)
 
@@ -86,9 +105,6 @@
     'relative inline-flex h-8 w-fit shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap rounded-(--shape-control) ps-(--spacing-2xs) pe-(--spacing-sm) text-label-md text-(--text-muted) ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[state=open]:bg-(--bg-hover) data-[state=open]:text-(--text-default)'
-
-  const ITEM_CLASS =
-    'rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none has-[a:hover]:bg-(--bg-hover)'
 </script>
 
 <template>
@@ -99,16 +115,15 @@
     :data-state="isOpen ? 'open' : 'closed'"
     class="contents"
   >
-    <Popover
+    <DropdownMenu
       :open="isOpen"
       side="auto"
       align="start"
-      size="small"
-      :data-testid="`${testId}__popover`"
+      :data-testid="`${testId}__menu`"
       class="shrink-0"
       @update:open="setOpen"
     >
-      <PopoverTrigger :data-testid="`${testId}__host`">
+      <DropdownMenuTrigger :data-testid="`${testId}__host`">
         <button
           type="button"
           :aria-label="triggerName"
@@ -135,42 +150,31 @@
           </span>
           <span>{{ heading }}</span>
         </button>
-      </PopoverTrigger>
-      <PopoverContent :data-testid="`${testId}__content`">
-        <section
-          v-for="group in groups"
-          :key="group.key"
-          :aria-label="grouped ? undefined : t('sources.label')"
-          :aria-labelledby="grouped ? group.id : undefined"
-          :data-testid="`${testId}__group`"
-          class="flex flex-col p-(--spacing-xs) not-first:border-t not-first:border-(--border-default)"
+      </DropdownMenuTrigger>
+      <DropdownMenuGroup
+        v-for="group in groups"
+        :key="group.key"
+        :label="grouped ? group.label : ''"
+        :data-testid="`${testId}__group`"
+      >
+        <DropdownMenuItem
+          v-for="row in group.rows"
+          :key="`${row.index}-${row.item.title}`"
+          :value="row.index"
+          :label="row.item.title"
+          :href="row.href"
+          :target="row.external ? '_blank' : '_self'"
+          :description="row.meta"
+          :data-testid="`${testId}__item`"
         >
-          <h3
-            v-if="grouped"
-            :id="group.id"
-            class="m-0 px-(--spacing-xs) pt-(--spacing-xs) text-label-sm text-(--text-muted)"
-          >
-            {{ group.label }}
-          </h3>
-          <ol
-            :data-testid="`${testId}__list`"
-            data-slot="sources-list"
-            class="m-0 flex list-none flex-col p-0"
-          >
-            <li
-              v-for="(item, i) in group.items"
-              :key="`${i}-${item.title}`"
-              :class="ITEM_CLASS"
-            >
-              <SourcesItemPart
-                :item="item"
-                show-description
-                :data-testid="`${testId}__item`"
-              />
-            </li>
-          </ol>
-        </section>
-      </PopoverContent>
-    </Popover>
+          <template #leading>
+            <SourcesMark
+              :item="row.item"
+              size="medium"
+            />
+          </template>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+    </DropdownMenu>
   </div>
 </template>

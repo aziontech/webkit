@@ -55,7 +55,7 @@ describe('Citation', () => {
     expect(getByRole('note', { name: 'Source 4' })).toHaveTextContent('4')
   })
 
-  it('opens a card with the site, the linked title and the publisher and date on click', async () => {
+  it('opens a card with the mark, the linked title and the site, publisher and date on click', async () => {
     const { getByRole } = render(Citation, { props: { indexes: [1], sources } })
     const chip = getByRole('button')
     await userEvent.click(chip)
@@ -63,8 +63,11 @@ describe('Citation', () => {
     const panel = card()!
     expect(panel).toHaveTextContent('Azion')
     expect(panel.querySelector('[data-testid="citation__item__meta"]')).toHaveTextContent(
-      'Acme Inc. · Jun 16, 2019'
+      'Azion · Acme Inc. · Jun 16, 2019'
     )
+    expect(
+      panel.querySelector('[data-testid="citation__item"] [data-size="medium"]')
+    ).not.toBeNull()
     expect(panel).not.toHaveTextContent('Removes cached objects')
     const link = panel.querySelector('a')!
     expect(link).toHaveAttribute('href', 'https://www.azion.com/en/documentation/')
@@ -110,12 +113,25 @@ describe('Citation', () => {
     expect(panel.querySelectorAll('button')).toHaveLength(0)
   })
 
-  it('shows the publisher alone, or nothing, when the date is missing', async () => {
+  it('leaves out the publisher or the date the source does not have', async () => {
     const { getByRole } = render(Citation, { props: { indexes: [2, 3], sources } })
     await fireEvent.click(getByRole('button'))
     const metas = card()!.querySelectorAll('[data-testid="citation__item__meta"]')
-    expect(metas).toHaveLength(1)
-    expect(metas[0]).toHaveTextContent(/^Acme Inc\.$/)
+    expect(metas).toHaveLength(2)
+    expect(metas[0]).toHaveTextContent(/^github\.com · Acme Inc\.$/)
+    expect(metas[1]).toHaveTextContent(/^w3\.org$/)
+  })
+
+  it('draws the rows with the menu row type and no hover fill or underline', async () => {
+    const { getByRole } = render(Citation, { props: { indexes: [1, 2], sources } })
+    await fireEvent.click(getByRole('button'))
+    const panel = card()!
+    const link = panel.querySelector<HTMLElement>('[data-testid="citation__item__link"]')!
+    expect(link.className).toContain('text-label-sm')
+    expect(link.className).toContain('no-underline')
+    expect(panel.innerHTML).not.toContain('hover:underline')
+    expect(panel.innerHTML).not.toContain('hover:bg-')
+    expect(panel.querySelector('ol')).toHaveClass('divide-y')
   })
 
   it('moves Tab from the chip through every link in the card', async () => {

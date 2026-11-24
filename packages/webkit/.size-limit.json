@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "83.4 KB",
+    "limit": "83.95 KB",
     "entryOnly": true
   },
   {
@@ -276,7 +276,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "32.9 KB"
+    "limit": "33.3 KB"
   },
   {
     "name": "doc-table-of-contents",
@@ -478,7 +478,7 @@
   {
     "name": "article-body-section",
     "path": "src/components/section/article-body-section/article-body-section.vue",
-    "limit": "47.45 KB",
+    "limit": "47.9 KB",
     "entryOnly": true
   },
   {
@@ -1211,7 +1211,7 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "15.6 KB",
+    "limit": "15.75 KB",
     "entryOnly": true
   },
   {
@@ -1223,7 +1223,7 @@
   {
     "name": "prompt-input-attach-button",
     "path": "src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue",
-    "limit": "6.7 KB",
+    "limit": "6.85 KB",
     "entryOnly": true
   },
   {
@@ -1235,19 +1235,19 @@
   {
     "name": "prompt-input-model-picker",
     "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
-    "limit": "15.35 KB",
+    "limit": "15.85 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-context-picker",
     "path": "src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue",
-    "limit": "15.25 KB",
+    "limit": "15.7 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "17.75 KB",
+    "limit": "18.2 KB",
     "entryOnly": true
   },
   {
@@ -1263,7 +1263,7 @@
   {
     "name": "sources",
     "path": "src/components/ai/sources/sources.vue",
-    "limit": "11.8 KB"
+    "limit": "14.45 KB"
   },
   {
     "name": "streaming-response",
@@ -1274,7 +1274,7 @@
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "11.85 KB",
+    "limit": "11.95 KB",
     "entryOnly": true
   },
   {
@@ -1320,7 +1320,7 @@
   {
     "name": "button-group",
     "path": "src/components/action/button-group/button-group.vue",
-    "limit": "16.85 KB"
+    "limit": "17.3 KB"
   },
   {
     "name": "combobox",
@@ -1498,7 +1498,7 @@
   {
     "name": "split-button",
     "path": "src/components/action/split-button/split-button.vue",
-    "limit": "17.1 KB"
+    "limit": "17.6 KB"
   },
   {
     "name": "chart-card-content",
@@ -1832,7 +1832,7 @@
   {
     "name": "flow-diagram-bind",
     "path": "src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue",
-    "limit": "16.2 KB"
+    "limit": "16.65 KB"
   },
   {
     "name": "transfer-list",
@@ -1997,7 +1997,7 @@
   {
     "name": "context-menu",
     "path": "src/components/navigation/context-menu/index.ts",
-    "limit": "11.7 KB"
+    "limit": "12.9 KB"
   },
   {
     "name": "context-menu-root",
@@ -2012,7 +2012,7 @@
   {
     "name": "dropdown-menu",
     "path": "src/components/navigation/dropdown-menu/index.ts",
-    "limit": "12.75 KB"
+    "limit": "13.9 KB"
   },
   {
     "name": "dropdown-menu-root",
@@ -2032,7 +2032,7 @@
   {
     "name": "dropdown-menu-item",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue",
-    "limit": "2.2 KB"
+    "limit": "3.4 KB"
   },
   {
     "name": "dropdown-menu-sub",
@@ -2122,7 +2122,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "84.7 KB"
+    "limit": "85.2 KB"
   },
   {
     "name": "use-console-layout",
@@ -2242,12 +2242,12 @@
   {
     "name": "breadcrumb",
     "path": "src/components/navigation/breadcrumb/index.ts",
-    "limit": "26.9 KB"
+    "limit": "27.45 KB"
   },
   {
     "name": "breadcrumb-root",
     "path": "src/components/navigation/breadcrumb/breadcrumb.vue",
-    "limit": "26.85 KB"
+    "limit": "27.4 KB"
   },
   {
     "name": "breadcrumb-item",
