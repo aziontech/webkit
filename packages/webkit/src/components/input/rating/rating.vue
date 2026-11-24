@@ -44,6 +44,11 @@
     clearable: false
   })
 
+  const emit = defineEmits<{
+    /** A star was picked with a click, a tap, Enter or Space; not fired while the arrow keys move the score. Send the score here when the pick is the answer. */
+    select: [event: MouseEvent | KeyboardEvent, value: number]
+  }>()
+
   /** The score; 0 means no score. Picking a star sets its whole number, the clear button sets 0. */
   const model = defineModel<number>({ default: 0 })
 
@@ -125,6 +130,18 @@
   const onChange = (n: number): void => {
     if (field.disabled.value) return
     model.value = n
+  }
+
+  const onClick = (event: MouseEvent, n: number): void => {
+    if (event.detail === 0 || field.disabled.value) return
+    model.value = n
+    emit('select', event, n)
+  }
+
+  const onKeydown = (event: KeyboardEvent, n: number): void => {
+    if ((event.key !== 'Enter' && event.key !== ' ') || field.disabled.value) return
+    model.value = n
+    emit('select', event, n)
   }
 
   const onClear = async (): Promise<void> => {
@@ -218,6 +235,8 @@
             :data-testid="`${testId}__control`"
             class="absolute inset-0 m-0 size-full cursor-pointer appearance-none opacity-0 disabled:cursor-not-allowed"
             @change="onChange(n)"
+            @click="(event: MouseEvent) => onClick(event, n)"
+            @keydown="(event: KeyboardEvent) => onKeydown(event, n)"
           />
           <i
             aria-hidden="true"

@@ -17232,6 +17232,13 @@
      "doc": "Two-way value (`v-model`)."
     }
    ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: number)",
+     "notes": ""
+    }
+   ],
    "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/rating.json",

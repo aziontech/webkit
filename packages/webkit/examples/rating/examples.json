@@ -23,9 +23,9 @@
       "file": "disabled.vue"
     },
     {
-      "name": "InField",
-      "summary": "A support satisfaction (CSAT) question inside a `Field`: the title names the group, the description explains the scale, and an empty submit shows the error.",
-      "file": "in-field.vue"
+      "name": "SendOnSelect",
+      "summary": "A support satisfaction (CSAT) question: the star the customer picks is the answer, sent on `@select` with no Send button, then a thank-you replaces the stars and takes focus.",
+      "file": "send-on-select.vue"
     }
   ]
 }
