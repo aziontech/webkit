@@ -57,7 +57,7 @@ One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centre
 
 The one place every outcome lands. It sits under the card heading and above **both** fields, always `size="small"`, always in the same slot:
 
-- **Session expired** (primary, `SessionExpired`): `severity="info"`, clears on the next action.
+- **Session expired** (primary, `SessionExpired`): `severity="info"`, clears on the next action. Only for a person who had a session that ended: a 401 to a request that carried their token, or a server that reports the session cookie it received as ended. A first visit, or a cold load with no credential, opens the card with no notice.
 - **401** (`IncorrectCredentials`): `danger`, no action. The fields under it are the recovery. The password is cleared and takes focus.
 - **503** (`ServiceUnavailable`) and **no response** (`Timeout`): `warning`, with **Retry** in the `#actions` slot. Severity follows certainty: a timeout is an unknown.
 - **500** (`ServerError`): `danger`, with **Retry**. Tied to no field, so where the console would toast, the card keeps it.
@@ -249,6 +249,7 @@ To go live, render the block from the route that owns the session and pass what 
 ## Don't
 
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
+- Don't show the session-expired notice to someone who never signed in. A route guard that finds no session can't tell a first visit from an ended session by itself: send `reason=expired` only when the 401 came on a request that carried a credential, or when the server says the session it received has ended (an HttpOnly cookie is invisible to the page, so the server has to say it).
 - Don't say which half of the pair was wrong after a 401; it confirms the address exists.
 - Don't put a Retry button on a 401: the form under the notice is the retry.
 - Don't put client-side validation in the `Alert`; it belongs on the field.
