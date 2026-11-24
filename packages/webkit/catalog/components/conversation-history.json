@@ -1,5 +1,5 @@
 {
- "purpose": "The list of past conversations with an assistant, in a side panel on wide screens or a `Drawer` on phones: plain rows of titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, an optional Delete per row, and at the top an optional New chat row and a search field that filters the titles. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.",
+ "purpose": "The list of past conversations with an assistant, in a side panel on wide screens or a `Drawer` on phones: plain rows of titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, an optional Delete per row, and at the top an optional New chat row and a search field that filters the titles. With `projects` the panel organises chats like a chat sidebar: a Projects section (a collapsible header with an Organize menu that sorts the projects and an optional New project button, then one folder row per project that expands in place to show its chats) above a Recents section that holds the chats outside any project, still in their date groups. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.",
  "useWhen": [
   "An assistant keeps past conversations and the person returns to one.",
   "The left rail or a drawer of a chat page."
@@ -17,6 +17,7 @@
   "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",
   "Put it in a side panel beside the conversation on wide screens and in a `Drawer` (`side=\"start\"`) opened from a menu button on phones; close the drawer from `update:modelValue` and `create` so the chosen conversation shows at once (the Default example).",
   "Turn on `creatable` when the page has no other New chat control, and `searchable` once the list is long enough to scroll.",
+  "Pass `projects` once people can file chats into projects; set `projectId` on each chat that belongs to one. Turn on `projectCreatable` and open the owner's own create-project dialog from `project-create`. Keep `v-model:openKeys`, `v-model:projectsOpen` and `v-model:projectSort` in the app's preferences when the panel should reopen the way the person left it.",
   "Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.",
   "Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast."
  ]

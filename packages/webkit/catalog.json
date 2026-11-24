@@ -5313,17 +5313,27 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/conversation-history",
    "models": [
-    "modelValue"
+    "modelValue",
+    "openKeys",
+    "projectsOpen",
+    "projectSort"
    ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
     {
      "name": "items",
-     "type": "{ id: string; title: string; updatedAt: string | number | Date }[]",
+     "type": "{ id: string; title: string; updatedAt: string | number | Date; projectId?: string }[]",
      "default": "[]",
      "required": "false",
-     "doc": "Conversations, any order; they are sorted newest first inside their group."
+     "doc": "Conversations, any order; they are sorted newest first inside their group or project. A `projectId` that matches a project puts the chat under it instead of in Recents."
+    },
+    {
+     "name": "projects",
+     "type": "{ id: string; title: string }[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Projects shown in a Projects section above Recents; empty keeps the plain date groups."
     },
     {
      "name": "now",
@@ -5345,6 +5355,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows a New chat row at the top that emits `create`."
+    },
+    {
+     "name": "projectCreatable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a New project button in the Projects header that emits `project-create`; the section shows even with no projects yet."
     },
     {
      "name": "searchable",
@@ -5373,6 +5390,27 @@
      "default": "null",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "openKeys",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openKeys`)."
+    },
+    {
+     "name": "projectsOpen",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Two-way value (`v-model:projectsOpen`)."
+    },
+    {
+     "name": "projectSort",
+     "type": "ConversationHistoryProjectSort",
+     "default": "'recent'",
+     "required": "false",
+     "doc": "Two-way value (`v-model:projectSort`)."
     }
    ],
    "events": [
@@ -5383,6 +5421,11 @@
     },
     {
      "name": "create",
+     "payload": "(event: MouseEvent)",
+     "notes": ""
+    },
+    {
+     "name": "project-create",
      "payload": "(event: MouseEvent)",
      "notes": ""
     }

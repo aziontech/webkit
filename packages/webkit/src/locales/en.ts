@@ -292,7 +292,15 @@ export const conversationHistory = {
   delete: 'Delete {title}',
   newChat: 'New chat',
   search: 'Search conversations',
-  noMatch: 'No conversations match “{query}”.'
+  noMatch: 'No conversations match “{query}”.',
+  projects: 'Projects',
+  recents: 'Recents',
+  newProject: 'New project',
+  organizeProjects: 'Organize projects',
+  sortBy: 'Sort by',
+  sortRecent: 'Recent activity',
+  sortName: 'Name',
+  projectEmptyTitle: 'No chats in this project yet.'
 } as const
 
 export const qrCode = {

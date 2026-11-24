@@ -1,35 +1,55 @@
 <script setup lang="ts">
-  import { computed, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, defineAsyncComponent, h, ref, useAttrs, useId } from 'vue'
 
-  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocaleContext, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Input from '../../input/input/input.vue'
-
-  export interface ConversationHistoryItem {
-    id: string
-    title: string
-    updatedAt: string | number | Date
-  }
-
-  type GroupKey = 'today' | 'yesterday' | 'previous7' | 'previous30' | 'older'
+  import { useConversationHistoryGroups } from './composables/use-conversation-history-groups'
+  import { useConversationHistoryProjects } from './composables/use-conversation-history-projects'
+  import { useConversationHistoryRemovalFocus } from './composables/use-conversation-history-removal-focus'
+  import ConversationHistoryRow from './parts/conversation-history-row.vue'
 
   defineOptions({
     name: 'ConversationHistory',
     inheritAttrs: false
   })
 
+  export interface ConversationHistoryItem {
+    /** Id of the conversation, the value of v-model while it is open. */
+    id: string
+    /** Title of the conversation. */
+    title: string
+    /** Time of the last message; it sets the date group and the order. */
+    updatedAt: string | number | Date
+    /** Id of the project the conversation belongs to; it then shows under that project instead of in Recents. */
+    projectId?: string
+  }
+
+  export interface ConversationHistoryProject {
+    /** Id of the project, the key in v-model:openKeys. */
+    id: string
+    /** Name of the project. */
+    title: string
+  }
+
+  /** Order of the projects: by their newest conversation, or by name. */
+  export type ConversationHistoryProjectSort = 'recent' | 'name'
+
   export interface ConversationHistoryProps {
-    /** Conversations, any order; they are sorted newest first inside their group. */
+    /** Conversations, any order; they are sorted newest first inside their group or project. */
     items?: ConversationHistoryItem[]
+    /** Projects shown in a Projects section above Recents; empty keeps the plain date groups. */
+    projects?: ConversationHistoryProject[]
     /** Reference time for the groups. Empty uses the nearest ConfigProvider now, then the current time; set either when the list is rendered on the server. */
     now?: string | number | Date
     /** Shows a Delete button on each row that emits `remove`. */
     removable?: boolean
     /** Shows a New chat row at the top that emits `create`. */
     creatable?: boolean
+    /** Shows a New project button in the Projects header that emits `project-create`. */
+    projectCreatable?: boolean
     /** Shows a search field at the top that hides conversations whose title does not contain the typed text. */
     searchable?: boolean
     /** Shows placeholder rows while the history loads. */
@@ -40,20 +60,28 @@
 
   const props = withDefaults(defineProps<ConversationHistoryProps>(), {
     items: () => [],
+    projects: () => [],
     now: undefined,
     removable: false,
     creatable: false,
+    projectCreatable: false,
     searchable: false,
     loading: false,
     ariaLabel: ''
   })
 
-  const model = defineModel<string | null>({ default: null })
-
   const emit = defineEmits<{
     remove: [event: MouseEvent, id: string]
     create: [event: MouseEvent]
+    'project-create': [event: MouseEvent]
   }>()
+
+  const model = defineModel<string | null>({ default: null })
+  const openKeys = defineModel<string[]>('openKeys', { default: () => [] })
+  const projectsOpen = defineModel<boolean>('projectsOpen', { default: true })
+  const projectSort = defineModel<ConversationHistoryProjectSort>('projectSort', {
+    default: 'recent'
+  })
 
   const attrs = useAttrs()
   const uid = useId()
@@ -61,140 +89,81 @@
   const { context: localeContext } = useLocaleContext()
   const query = ref('')
 
+  const ProjectSortMenu = defineAsyncComponent({
+    loader: () => import('./parts/conversation-history-project-sort.vue'),
+    loadingComponent: {
+      inheritAttrs: false,
+      render: () =>
+        h(IconButton, {
+          icon: 'az az-sliders-horizontal',
+          ariaLabel: t('conversationHistory.organizeProjects'),
+          variant: 'ghost',
+          size: 'small',
+          disabled: true
+        })
+    },
+    delay: 0
+  })
+
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'conversation-history'
   )
 
-  const ORDER: GroupKey[] = ['today', 'yesterday', 'previous7', 'previous30', 'older']
-  const DAY = 86_400_000
+  const needle = computed<string>(() => (props.searchable ? query.value.trim() : ''))
 
-  const startOfDay = (time: number): number => {
-    const date = new Date(time)
-    date.setHours(0, 0, 0, 0)
-    return date.getTime()
-  }
-
-  const lazy = Object.fromEntries(
-    ORDER.map((key) => [key, useLazyChunks({ rowHeight: 40 })])
-  ) as Record<GroupKey, ReturnType<typeof useLazyChunks>>
-
-  const groupOf = (time: number, today: number): GroupKey => {
-    const days = Math.round((today - startOfDay(time)) / DAY)
-    if (days <= 0) return 'today'
-    if (days === 1) return 'yesterday'
-    if (days < 7) return 'previous7'
-    if (days < 30) return 'previous30'
-    return 'older'
-  }
-
-  const needle = computed<string>(() =>
-    props.searchable ? query.value.trim().toLocaleLowerCase(locale.value) : ''
-  )
-
-  const visibleItems = computed<ConversationHistoryItem[]>(() =>
-    needle.value
-      ? props.items.filter((item) =>
-          item.title.toLocaleLowerCase(locale.value).includes(needle.value)
-        )
-      : props.items
-  )
-
-  const groups = computed(() => {
-    const reference = props.now ?? localeContext?.now?.value ?? Date.now()
-    const today = startOfDay(new Date(reference).getTime())
-    const buckets = new Map<GroupKey, { item: ConversationHistoryItem; time: number }[]>()
-    for (const item of visibleItems.value) {
-      const time = new Date(item.updatedAt).getTime()
-      const key = groupOf(Number.isNaN(time) ? 0 : time, today)
-      const bucket = buckets.get(key)
-      if (bucket) bucket.push({ item, time })
-      else buckets.set(key, [{ item, time }])
-    }
-    return ORDER.filter((key) => buckets.has(key)).map((key) => ({
-      key,
-      chunks: lazy[key].split(
-        buckets
-          .get(key)!
-          .sort((a, b) => b.time - a.time)
-          .map(({ item }) => item)
-      )
-    }))
+  const {
+    rows: projectRows,
+    outside,
+    hasMatch
+  } = useConversationHistoryProjects({
+    items: () => props.items,
+    projects: () => props.projects,
+    query: needle,
+    locale,
+    sort: projectSort
   })
 
-  const navEl = ref<HTMLElement | null>(null)
-  const removing = ref<{ id: string; index: number } | null>(null)
-  let focusFrame = 0
-  let focusDeadline = 0
+  const showProjects = computed<boolean>(
+    () =>
+      (props.projects.length > 0 || props.projectCreatable) &&
+      !(needle.value && !projectRows.value.length)
+  )
+  const sectionOpen = computed<boolean>(() => Boolean(needle.value) || projectsOpen.value)
+  const isProjectOpen = (id: string): boolean =>
+    Boolean(needle.value) || openKeys.value.includes(id)
 
-  const orderedIds = () =>
-    groups.value.flatMap((group) =>
-      group.chunks.flatMap((chunk) => chunk.items.map((item) => item.id))
-    )
+  const toggleProject = (id: string) => {
+    openKeys.value = openKeys.value.includes(id)
+      ? openKeys.value.filter((key) => key !== id)
+      : [...openKeys.value, id]
+  }
+
+  const { groups, observe } = useConversationHistoryGroups(
+    outside,
+    () => props.now ?? localeContext?.now?.value ?? Date.now()
+  )
+
+  const navEl = ref<HTMLElement | null>(null)
+  const { track } = useConversationHistoryRemovalFocus(navEl, () =>
+    props.items.map((item) => item.id)
+  )
 
   const onRemove = (event: MouseEvent, id: string) => {
-    removing.value = { id, index: orderedIds().indexOf(id) }
+    track(event, id)
     emit('remove', event, id)
   }
 
-  const focusAfterRemoval = () => {
-    focusFrame = 0
-    const pending = removing.value
-    if (!pending || !navEl.value) return
-    const active = document.activeElement
-    const lost = !active || active === document.body || !active.isConnected
-    if (!lost) {
-      if (performance.now() < focusDeadline) focusFrame = requestAnimationFrame(focusAfterRemoval)
-      else removing.value = null
-      return
-    }
-    removing.value = null
-    const rows = Array.from(
-      navEl.value.querySelectorAll<HTMLElement>('[data-slot="conversation-history-item"]')
-    )
-    const target = rows[Math.min(pending.index, rows.length - 1)] ?? navEl.value
-    target.focus()
-  }
-
-  watch(
-    () => props.items.map((item) => item.id),
-    (ids) => {
-      const pending = removing.value
-      if (!pending) return
-      if (ids.includes(pending.id)) {
-        removing.value = null
-        return
-      }
-      cancelAnimationFrame(focusFrame)
-      focusDeadline = performance.now() + 1000
-      focusFrame = requestAnimationFrame(focusAfterRemoval)
-    },
-    { flush: 'post' }
-  )
-
-  onScopeDispose(() => cancelAnimationFrame(focusFrame))
-
-  const ITEM_CLASS =
-    'group/item relative flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) pe-(--spacing-2xs) pointer-fine:pe-0 transition-colors duration-fast-02 ease-productive-entrance ' +
-    'hover:bg-(--bg-hover) ' +
-    'data-[active]:bg-(--bg-selected) ' +
-    'motion-reduce:transition-none'
-
-  const ITEM_BUTTON_CLASS =
+  const ROW_ACTION_CLASS =
     'flex h-11 min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-sm) text-start text-label-lg text-(--text-default) outline-none ' +
-    'pointer-fine:h-9 pointer-fine:text-label-md ' +
-    'pointer-fine:group-data-[removable]/item:group-hover/item:pe-10 ' +
-    'pointer-fine:group-data-[removable]/item:group-focus-within/item:pe-10 ' +
-    'pointer-fine:group-data-[removable]/item:group-data-[active]/item:pe-10 ' +
+    'pointer-fine:h-9 pointer-fine:text-label-md transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none ' +
     'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 
-  const REMOVE_CLASS =
-    'transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
-    'pointer-fine:absolute pointer-fine:end-(--spacing-2xs) pointer-fine:top-1/2 pointer-fine:-translate-y-1/2 ' +
-    'pointer-fine:opacity-0 pointer-fine:group-hover/item:opacity-100 pointer-fine:group-focus-within/item:opacity-100 pointer-fine:group-data-[active]/item:opacity-100'
+  const SECTION_BUTTON_CLASS =
+    'flex h-11 min-w-0 flex-1 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-sm) text-start text-label-sm text-(--text-muted) outline-none ' +
+    'pointer-fine:h-8 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) motion-reduce:transition-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 
-  const NEW_CHAT_CLASS =
-    ITEM_BUTTON_CLASS +
-    ' transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none'
+  const LIST_CLASS = 'm-0 flex list-none flex-col gap-(--spacing-2xs) p-0'
 
   const NOTE_CLASS = 'm-0 px-(--spacing-sm) text-body-sm text-(--text-muted)'
 </script>
@@ -216,7 +185,7 @@
       <button
         v-if="creatable"
         type="button"
-        :class="NEW_CHAT_CLASS"
+        :class="ROW_ACTION_CLASS"
         :data-testid="`${testId}__create`"
         @click="(event: MouseEvent) => emit('create', event)"
       >
@@ -260,14 +229,7 @@
       </li>
     </ul>
     <p
-      v-else-if="!items.length"
-      :class="NOTE_CLASS"
-      :data-testid="`${testId}__empty`"
-    >
-      {{ t('conversationHistory.emptyTitle') }}
-    </p>
-    <p
-      v-else-if="!visibleItems.length"
+      v-else-if="needle && !hasMatch"
       :class="NOTE_CLASS"
       :data-testid="`${testId}__no-match`"
     >
@@ -275,70 +237,164 @@
     </p>
     <template v-else>
       <div
-        v-for="group in groups"
-        :key="group.key"
+        v-if="showProjects"
         class="flex flex-col gap-(--spacing-2xs)"
-        :data-group="group.key"
+        :data-state="sectionOpen ? 'open' : 'closed'"
+      >
+        <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
+          <button
+            :id="`${uid}-projects`"
+            type="button"
+            :aria-expanded="sectionOpen"
+            :aria-controls="`${uid}-projects-list`"
+            :class="SECTION_BUTTON_CLASS"
+            :data-testid="`${testId}__projects`"
+            @click="projectsOpen = !projectsOpen"
+          >
+            <span class="truncate">{{ t('conversationHistory.projects') }}</span>
+            <i
+              :class="sectionOpen ? 'az az-chevron-down' : 'az az-chevron-right'"
+              aria-hidden="true"
+            />
+          </button>
+          <ProjectSortMenu
+            v-if="projects.length > 1"
+            v-model="projectSort"
+            :data-testid="`${testId}__sort`"
+          />
+          <IconButton
+            v-if="projectCreatable"
+            icon="az az-plus"
+            :ariaLabel="t('conversationHistory.newProject')"
+            variant="ghost"
+            size="small"
+            :data-testid="`${testId}__project-create`"
+            @click="(event: MouseEvent) => emit('project-create', event)"
+          />
+        </div>
+        <ul
+          v-show="sectionOpen"
+          :id="`${uid}-projects-list`"
+          :aria-labelledby="`${uid}-projects`"
+          :class="LIST_CLASS"
+        >
+          <li
+            v-for="row in projectRows"
+            :key="row.project.id"
+            class="flex flex-col gap-(--spacing-2xs)"
+            :data-state="isProjectOpen(row.project.id) ? 'open' : 'closed'"
+          >
+            <button
+              :id="`${uid}-project-${row.index}`"
+              type="button"
+              :aria-expanded="isProjectOpen(row.project.id)"
+              :aria-controls="`${uid}-project-${row.index}-list`"
+              :title="row.project.title"
+              :class="ROW_ACTION_CLASS"
+              :data-testid="`${testId}__project`"
+              @click="toggleProject(row.project.id)"
+            >
+              <i
+                :class="isProjectOpen(row.project.id) ? 'az az-folder-open' : 'az az-folder'"
+                class="shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <bdi
+                dir="auto"
+                class="truncate"
+                >{{ row.project.title }}</bdi
+              >
+            </button>
+            <ul
+              v-if="isProjectOpen(row.project.id)"
+              :id="`${uid}-project-${row.index}-list`"
+              :aria-labelledby="`${uid}-project-${row.index}`"
+              :class="LIST_CLASS"
+              class="ps-(--spacing-md)"
+            >
+              <li
+                v-if="!row.items.length"
+                :class="NOTE_CLASS"
+                class="py-(--spacing-2xs)"
+                :data-testid="`${testId}__project-empty`"
+              >
+                {{ t('conversationHistory.projectEmptyTitle') }}
+              </li>
+              <ConversationHistoryRow
+                v-for="item in row.items"
+                :key="item.id"
+                :item="item"
+                :active="item.id === model"
+                :removable="removable"
+                :data-testid="`${testId}__item`"
+                @select="model = item.id"
+                @remove="(event: MouseEvent) => onRemove(event, item.id)"
+              />
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <p
+        v-if="!items.length"
+        :class="NOTE_CLASS"
+        :data-testid="`${testId}__empty`"
+      >
+        {{ t('conversationHistory.emptyTitle') }}
+      </p>
+      <div
+        v-if="groups.length"
+        class="flex flex-col gap-(--spacing-md)"
       >
         <p
-          :id="`${uid}-${group.key}`"
-          class="m-0 px-(--spacing-sm) pb-(--spacing-2xs) text-label-sm text-(--text-muted)"
+          v-if="showProjects"
+          class="m-0 flex h-11 items-center px-(--spacing-sm) text-label-sm text-(--text-muted) pointer-fine:h-8"
+          :data-testid="`${testId}__recents`"
         >
-          {{ t(`conversationHistory.${group.key}`) }}
+          {{ t('conversationHistory.recents') }}
         </p>
-        <ul
-          :aria-labelledby="`${uid}-${group.key}`"
-          class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
+        <div
+          v-for="group in groups"
+          :key="group.key"
+          class="flex flex-col gap-(--spacing-2xs)"
+          :data-group="group.key"
         >
-          <template
-            v-for="chunk in group.chunks"
-            :key="chunk.index"
+          <p
+            :id="`${uid}-${group.key}`"
+            class="m-0 px-(--spacing-sm) pb-(--spacing-2xs) text-label-sm text-(--text-muted)"
           >
-            <li
-              v-if="!chunk.mounted"
-              :ref="(el) => lazy[group.key].observe(el, chunk.index)"
-              :data-chunk="chunk.index"
-              aria-hidden="true"
-              class="shrink-0"
-              :style="{ height: `${chunk.estimatedHeight}px` }"
-            />
-            <template v-else>
+            {{ t(`conversationHistory.${group.key}`) }}
+          </p>
+          <ul
+            :aria-labelledby="`${uid}-${group.key}`"
+            :class="LIST_CLASS"
+          >
+            <template
+              v-for="chunk in group.chunks"
+              :key="chunk.index"
+            >
               <li
-                v-for="item in chunk.items"
-                :key="item.id"
-                :data-active="item.id === model || null"
-                :data-removable="removable || null"
-                :data-testid="`${testId}__item`"
-                :class="ITEM_CLASS"
-              >
-                <button
-                  type="button"
-                  data-slot="conversation-history-item"
-                  :aria-current="item.id === model ? 'page' : undefined"
-                  :title="item.title"
-                  :class="ITEM_BUTTON_CLASS"
-                  @click="model = item.id"
-                >
-                  <bdi
-                    dir="auto"
-                    class="truncate"
-                    >{{ item.title }}</bdi
-                  >
-                </button>
-                <IconButton
-                  v-if="removable"
-                  icon="az az-trash"
-                  :ariaLabel="t('conversationHistory.delete', { title: item.title })"
-                  variant="ghost"
-                  size="small"
-                  :class="REMOVE_CLASS"
-                  :data-testid="`${testId}__remove`"
-                  @click="(event: MouseEvent) => onRemove(event, item.id)"
+                v-if="!chunk.mounted"
+                :ref="(el) => observe(group.key, el, chunk.index)"
+                :data-chunk="chunk.index"
+                aria-hidden="true"
+                class="shrink-0"
+                :style="{ height: `${chunk.estimatedHeight}px` }"
+              />
+              <template v-else>
+                <ConversationHistoryRow
+                  v-for="item in chunk.items"
+                  :key="item.id"
+                  :item="item"
+                  :active="item.id === model"
+                  :removable="removable"
+                  :data-testid="`${testId}__item`"
+                  @select="model = item.id"
+                  @remove="(event: MouseEvent) => onRemove(event, item.id)"
                 />
-              </li>
+              </template>
             </template>
-          </template>
-        </ul>
+          </ul>
+        </div>
       </div>
     </template>
   </nav>

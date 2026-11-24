@@ -481,7 +481,15 @@ export const es: Messages = {
     delete: 'Eliminar {title}',
     newChat: 'Nuevo chat',
     search: 'Buscar conversaciones',
-    noMatch: 'Ninguna conversación coincide con «{query}».'
+    noMatch: 'Ninguna conversación coincide con «{query}».',
+    projects: 'Proyectos',
+    recents: 'Recientes',
+    newProject: 'Nuevo proyecto',
+    organizeProjects: 'Organizar proyectos',
+    sortBy: 'Ordenar por',
+    sortRecent: 'Actividad reciente',
+    sortName: 'Nombre',
+    projectEmptyTitle: 'Aún no hay chats en este proyecto.'
   },
   qrCode: {
     label: 'Código QR'

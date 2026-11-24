@@ -481,7 +481,15 @@ export const ptBR: Messages = {
     delete: 'Excluir {title}',
     newChat: 'Novo chat',
     search: 'Buscar conversas',
-    noMatch: 'Nenhuma conversa corresponde a “{query}”.'
+    noMatch: 'Nenhuma conversa corresponde a “{query}”.',
+    projects: 'Projetos',
+    recents: 'Recentes',
+    newProject: 'Novo projeto',
+    organizeProjects: 'Organizar projetos',
+    sortBy: 'Ordenar por',
+    sortRecent: 'Atividade recente',
+    sortName: 'Nome',
+    projectEmptyTitle: 'Nenhum chat neste projeto ainda.'
   },
   qrCode: {
     label: 'Código QR'
