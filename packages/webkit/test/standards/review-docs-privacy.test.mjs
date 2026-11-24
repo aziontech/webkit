@@ -19,7 +19,9 @@ test('the review docs hold no personal company address and no build-host path', 
     const text = readFileSync(file, 'utf8')
     for (const [, local] of text.matchAll(/\b([\w.%+-]+)@azion\.com\b/g))
       if (!ROLE_MAILBOXES.has(local)) found.push(`${relative(PKG, file)}: ${local}@azion.com`)
-    for (const [path] of text.matchAll(/(?<![\w.:])\/(?:data\/claude|root|home\/[a-z][\w-]*)\/[^\s'"`)]*/g))
+    for (const [path] of text.matchAll(
+      /(?<![\w.:])\/(?:data\/claude|root|home\/[a-z][\w-]*)\/[^\s'"`)]*/g
+    ))
       found.push(`${relative(PKG, file)}: ${path}`)
   }
   assert.deepEqual(found, [])
