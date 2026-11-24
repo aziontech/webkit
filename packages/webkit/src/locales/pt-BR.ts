@@ -975,6 +975,14 @@ export const ptBR: Messages = {
   popover: {
     close: 'Fechar'
   },
+  priorityTag: {
+    prefix: 'Prioridade:',
+    urgent: 'Urgente',
+    high: 'Alta',
+    medium: 'Média',
+    low: 'Baixa',
+    none: 'Sem prioridade'
+  },
   progress: {
     label: 'Progresso'
   },
