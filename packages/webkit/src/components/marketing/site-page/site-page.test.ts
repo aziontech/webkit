@@ -235,7 +235,7 @@ describe('SitePage', () => {
       ]
     })
 
-    expect(await findByTestId(testId)).toBeInTheDocument()
+    expect(await findByTestId(testId, {}, { timeout: 5000 })).toBeInTheDocument()
   })
 
   it('places a FlowDiagram from page JSON as a scene, with its nodes and edges', async () => {

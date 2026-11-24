@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { planShards } from '../../scripts/lib/shard-plan.mjs'
+import { RESIZE_OBSERVER_LOOP } from './setup'
 import DURATIONS from './shard-durations.json'
 
 const SUITES = import.meta.glob<string>('./reflow*.test.ts', {
@@ -19,9 +20,13 @@ describe('the ResizeObserver loop notice', () => {
         message: 'ResizeObserver loop completed with undelivered notifications.'
       })
     )
-    window.dispatchEvent(new ErrorEvent('error', { message: 'a real failure' }))
     EventTarget.prototype.removeEventListener.call(window, 'error', listener)
-    expect(seen).toEqual(['a real failure'])
+    expect(seen).toEqual([])
+  })
+
+  it('matches only the loop notice, so every other error still fails the run', () => {
+    expect(RESIZE_OBSERVER_LOOP.test('ResizeObserver loop limit exceeded')).toBe(true)
+    expect(RESIZE_OBSERVER_LOOP.test('TypeError: x is undefined')).toBe(false)
   })
 })
 

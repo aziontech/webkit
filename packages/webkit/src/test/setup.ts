@@ -29,8 +29,9 @@ function preventAnchorNavigation(event: MouseEvent) {
 export const RESIZE_OBSERVER_LOOP =
   /^ResizeObserver loop (completed with undelivered notifications|limit exceeded)/
 
-function ignoreResizeObserverLoop(event: ErrorEvent) {
-  if (RESIZE_OBSERVER_LOOP.test(event.message)) event.stopImmediatePropagation()
+function ignoreResizeObserverLoop(event: Event) {
+  if (event instanceof ErrorEvent && RESIZE_OBSERVER_LOOP.test(event.message))
+    event.stopImmediatePropagation()
 }
 
 EventTarget.prototype.addEventListener.call(window, 'error', ignoreResizeObserverLoop, true)
