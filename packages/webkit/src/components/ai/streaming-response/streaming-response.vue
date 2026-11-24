@@ -58,7 +58,7 @@
     :data-testid="testId"
     :data-streaming="streaming || null"
     data-slot="streaming-response"
-    class="flex w-full min-w-0 flex-col gap-(--spacing-md) text-body-lg text-(--text-default) break-words"
+    class="flex w-full min-w-0 flex-col gap-(--spacing-md) text-body-prose-md text-(--text-default) break-words"
   >
     <template
       v-for="(block, i) in blocks"
@@ -83,7 +83,7 @@
         :is="`h${block.level}`"
         v-else-if="block.type === 'heading'"
         :data-level="block.level"
-        class="m-0 mt-(--spacing-sm) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md"
+        class="m-0 mt-(--spacing-xs) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md [&+*]:-mt-(--spacing-xs)"
       >
         <MarkdownInline
           :nodes="block.children"

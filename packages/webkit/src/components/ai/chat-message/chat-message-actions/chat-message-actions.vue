@@ -115,7 +115,7 @@
           icon: 'az az-ellipsis',
           ariaLabel: t('chatMessage.more'),
           variant: 'ghost',
-          size: 'large',
+          size: 'medium',
           disabled: true
         })
     },
@@ -159,7 +159,7 @@
     :data-testid="testId"
     :data-from="from"
     :data-compact="compact || null"
-    class="flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end"
+    class="flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end [&_button[data-size=medium]_[data-transition]]:size-5 [&_button[data-size=medium]_i]:text-body-lg [&_button[data-size=medium]:not([data-inert])_i]:text-(--text-muted) [&_button[data-size=medium]:not([data-inert]):hover_i]:text-(--text-default)"
     @focusin="refreshCopy"
     @pointerenter="refreshCopy"
   >
@@ -167,7 +167,7 @@
     <CopyButton
       v-if="copyable"
       :value="copyValue"
-      size="large"
+      size="medium"
       :data-testid="`${testId}__copy`"
     />
     <Tooltip
@@ -178,7 +178,7 @@
         icon="az az-pencil"
         :aria-label="t('chatMessage.edit')"
         variant="ghost"
-        size="large"
+        size="medium"
         :disabled="disabled"
         :data-testid="`${testId}__edit`"
         @click="edit"
@@ -203,7 +203,7 @@
         icon="az az-share"
         :aria-label="t('chatMessage.share')"
         variant="ghost"
-        size="large"
+        size="medium"
         :data-testid="`${testId}__share`"
         @click="(event: MouseEvent) => emit('share', event)"
       />
@@ -217,7 +217,7 @@
         icon="az az-refresh"
         :aria-label="t('chatMessage.retry')"
         variant="ghost"
-        size="large"
+        size="medium"
         :disabled="disabled"
         :data-testid="`${testId}__retry`"
         @click="(event: MouseEvent) => emit('retry', event)"

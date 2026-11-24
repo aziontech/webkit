@@ -1,6 +1,6 @@
 # Chat Message
 
-> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the good / bad response thumbs, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column (`.text-body-lg`): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 80 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
+> One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the good / bad response thumbs, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 70 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
@@ -82,7 +82,7 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
   - Test ids: `__copy`, `__edit`, `__feedback`, `__read-aloud`, `__share`, `__retry`, `__more`, `__trailing`.
   - Read aloud (private part `parts/chat-message-read-aloud.vue`, test id `chat-message-actions__read-aloud`): a 40 px ghost `IconButton` that speaks the text with `speechSynthesis` in the active locale; while speaking it is `Stop reading` (`data-speaking`). Pressing it again, another message's Read aloud or unmounting stops it. Rendered after mount, only where the browser has speech synthesis.
   - `data-testid` fallback: `chat-message-actions`.
-- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, large ghost `IconButton`s), each with a tooltip (`Good response`, `Bad response`). Choosing one fills its icon and hides the other; pressing the filled thumb again clears the choice and brings the other back. A visually hidden `role="status"` line reads `Submitting feedback` (while `loading`) then `Thanks for your feedback`; nothing is written in the row.
+- `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`, medium ghost `IconButton`s), each with a tooltip (`Good response`, `Bad response`). Choosing one fills its icon and hides the other; pressing the filled thumb again clears the choice and brings the other back. A visually hidden `role="status"` line reads `Submitting feedback` (while `loading`) then `Thanks for your feedback`; nothing is written in the row.
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `chat-message-feedback`.
@@ -169,7 +169,7 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Responsive
 
-- Container queries: none; user bubbles cap at 80 % of the thread width, assistant content fills it.
+- Container queries: none; user bubbles cap at 70 % of the thread width, assistant content fills it.
 - Narrow: the action row stays one line; below 480 px of its own width it moves the thumbs and Try again into More (measured with a resize observer, so a response in a narrow drawer gets the phone row too).
 - Touch: every action is a 40 px `IconButton`; the `Sources` pill has a 44 px hit area on coarse pointers; a prompt's Copy and Edit are always visible on a coarse pointer.
 - Reflow: long words break (`break-words`); code and tables scroll in their own blocks.

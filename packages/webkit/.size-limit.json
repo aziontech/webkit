@@ -1179,7 +1179,7 @@
   {
     "name": "chat-message",
     "path": "src/components/ai/chat-message/index.ts",
-    "limit": "20.35 KB",
+    "limit": "20.45 KB",
     "entryOnly": true
   },
   {
@@ -1190,7 +1190,7 @@
   {
     "name": "chat-message-actions",
     "path": "src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
-    "limit": "14.25 KB",
+    "limit": "14.35 KB",
     "entryOnly": true
   },
   {
@@ -1269,7 +1269,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "43.35 KB",
+    "limit": "43.45 KB",
     "entryOnly": true
   },
   {

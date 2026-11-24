@@ -8,7 +8,7 @@ import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 const EXTERNAL = /^https?:/i
 
 const CODE_CLASS =
-  'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default)'
+  'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px font-medium text-(--text-default)'
 const EXTERNAL_ICON_CLASS =
   'az az-external-link ms-0.5 inline-block text-body-xs leading-none no-underline'
 const LINK_CLASS =
@@ -20,6 +20,7 @@ type LeafNode = Exclude<MarkdownInlineNode, ContainerNode>
 interface RenderContext {
   sources: SourcesItem[]
   citation?: Component
+  codeText: string
   newTab: string
 }
 
@@ -45,14 +46,14 @@ function renderContainer(node: ContainerNode, context: RenderContext): VNodeChil
   }
 }
 
-function renderLeaf(node: LeafNode, { sources, citation }: RenderContext): VNodeChild {
+function renderLeaf(node: LeafNode, { sources, citation, codeText }: RenderContext): VNodeChild {
   switch (node.type) {
     case 'text':
       return node.value
     case 'break':
       return h('br')
     case 'code':
-      return h('code', { dir: 'ltr', class: CODE_CLASS }, node.value)
+      return h('code', { dir: 'ltr', class: `${CODE_CLASS} ${codeText}` }, node.value)
     case 'citation':
       return citation
         ? h(citation, { indexes: node.indexes, sources })
@@ -96,7 +97,7 @@ function renderNodes(nodes: MarkdownInlineNode[], context: RenderContext): VNode
   )
 }
 
-export function createMarkdownInline(citation?: Component) {
+export function createMarkdownInline(citation?: Component, codeText = 'text-label-code-sm') {
   return defineComponent({
     name: 'MarkdownInline',
     props: {
@@ -109,6 +110,7 @@ export function createMarkdownInline(citation?: Component) {
         renderNodes(props.nodes, {
           sources: props.sources,
           citation,
+          codeText,
           newTab: t('common.newTab')
         })
     }

@@ -63,7 +63,7 @@
         :aria-pressed="model === 'up' ? 'true' : 'false'"
         :loading="loading && model === 'up'"
         variant="ghost"
-        size="large"
+        size="medium"
         :data-testid="`${testId}__up`"
         @click="choose('up')"
       />
@@ -79,7 +79,7 @@
         :aria-pressed="model === 'down' ? 'true' : 'false'"
         :loading="loading && model === 'down'"
         variant="ghost"
-        size="large"
+        size="medium"
         :data-testid="`${testId}__down`"
         @click="choose('down')"
       />

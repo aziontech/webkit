@@ -211,9 +211,8 @@
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 
   const CONTENT_CLASS =
-    'mx-auto flex min-h-full w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-md) ' +
-    'pb-[calc(var(--conversation-composer-height,0rem)+var(--spacing-md))] ' +
-    '[&>[data-from=user]:not(:first-child,[data-grouped])]:mt-(--spacing-lg)'
+    'mx-auto flex min-h-full w-full max-w-[calc(var(--container-2xl)+2*var(--spacing-md))] flex-col gap-[calc(var(--spacing-lg)+var(--spacing-sm))] px-(--spacing-md) pt-(--spacing-md) ' +
+    'pb-[calc(var(--conversation-composer-height,0rem)+var(--spacing-md))]'
 
   const COMPOSER_CLASS =
     'pointer-events-none absolute inset-x-0 bottom-0 z-1 bg-[linear-gradient(to_top,var(--conversation-composer-fade,var(--bg-canvas))_60%,transparent)] pt-(--spacing-lg)'
@@ -288,7 +287,7 @@
       :class="COMPOSER_CLASS"
     >
       <div
-        class="pointer-events-auto mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-xs) px-(--spacing-md) pb-[max(var(--spacing-md),env(safe-area-inset-bottom))]"
+        class="pointer-events-auto mx-auto flex w-full max-w-[calc(var(--container-2xl)+2*var(--spacing-md))] flex-col gap-(--spacing-xs) px-(--spacing-md) pb-[max(var(--spacing-md),env(safe-area-inset-bottom))]"
       >
         <slot name="composer" />
       </div>
