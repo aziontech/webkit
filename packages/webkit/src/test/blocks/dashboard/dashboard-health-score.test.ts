@@ -16,12 +16,22 @@ afterEach(() => cleanup())
 const byTestId = (id: string, root: Document | HTMLElement = document) =>
   root.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 describe('dashboard/dashboard-health-score', () => {
-  it('renders the overall score as a StatTile out of 100', () => {
+  it('renders the overall score as the card figure out of 100, with no boxed tile', () => {
     const view = render(Health)
-    const tile = byTestId('stat-tile', view.container as HTMLElement)!
-    expect(tile.textContent).toContain('Overall score')
-    expect(tile.textContent).toContain('79')
-    expect(tile.textContent).toContain('/ 100')
+    expect(byTestId('stat-tile', view.container as HTMLElement)).toBeNull()
+    const figure = byTestId('dashboard-health-score__score', view.container as HTMLElement)!
+    expect(figure.textContent).toContain('79')
+    expect(figure.textContent).toContain('/ 100')
+    expect(figure.textContent).not.toContain('Overall score')
+  })
+
+  it('bands each hourly row by the same thresholds as its score and marks the hour axis', () => {
+    const view = render(Health)
+    const row = view.getByRole('group', { name: /Video calls, score per hour/ }).closest('li')!
+    expect(row.textContent).toContain('Poor')
+    const hours = byTestId('dashboard-health-score__hours', view.container as HTMLElement)!
+    expect(hours.textContent).toContain('00:00')
+    expect(hours.textContent).toContain('23:00')
   })
 
   it('links every open incident to its page', () => {
@@ -34,8 +44,8 @@ describe('dashboard/dashboard-health-score', () => {
 
   it('prints a dash for the overall score when the period is empty', () => {
     const view = render(HealthEmpty)
-    const tile = byTestId('stat-tile', view.container as HTMLElement)!
-    expect(tile.textContent).toContain('No value')
+    const figure = byTestId('dashboard-health-score__score', view.container as HTMLElement)!
+    expect(figure.textContent).toContain('No score')
   })
 
   it('shows the real-user web vitals in the RealUser variant', () => {
