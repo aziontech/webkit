@@ -602,6 +602,8 @@ describe('ConsoleMockup', () => {
         'Rules Engine'
       ])
       const view = render(host({ name: 'workloads-list' }))
+      await frameOf(view)
+      await view.findByText('Create workload', {}, { timeout: 5000 })
       const text = view.container.textContent ?? ''
       expect(text).toContain('Create workload')
       expect(text).toContain('Last modified')

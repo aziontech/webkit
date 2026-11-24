@@ -3,6 +3,7 @@ import '../../../test/reflow.css'
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import AccordionWithLog from '../../../../examples/accordion/with-log-viewer.vue'
@@ -982,15 +983,34 @@ describe('LogViewer', () => {
       expect(left(times[0]!)).toBeLessThan(left(messages[0]!))
     })
 
-    it('keeps the copy button off the text of a long first line', () => {
-      const message = 'Deploy started successfully and the build is now running '.repeat(4)
-      const view = renderLines([{ id: 'g1', time: '13:47:33', type: 'text', message }])
-      const copy = view.getByTestId('log-viewer__copy').getBoundingClientRect()
+    const textRowsUnder = (message: HTMLElement, copy: DOMRect) => {
       const text = document.createRange()
-      text.selectNodeContents(view.getByTestId('log-viewer__line-message'))
-      const rows = Array.from(text.getClientRects()).filter((rect) => rect.top < copy.bottom)
-      expect(rows.length).toBeGreaterThan(0)
-      for (const rect of rows) expect(rect.right).toBeLessThanOrEqual(copy.left + 0.5)
+      text.selectNodeContents(message)
+      return Array.from(text.getClientRects()).filter((rect) => rect.top < copy.bottom)
+    }
+
+    it('keeps the copy button off the text of a long first line', async () => {
+      await page.viewport(1280, 900)
+      try {
+        const message = 'Deploy started successfully and the build is now running '.repeat(4)
+        const view = renderLines([{ id: 'g1', time: '13:47:33', type: 'text', message }])
+        const copy = view.getByTestId('log-viewer__copy').getBoundingClientRect()
+        const rows = textRowsUnder(view.getByTestId('log-viewer__line-message'), copy)
+        expect(rows.length).toBeGreaterThan(0)
+        for (const rect of rows) expect(rect.right).toBeLessThanOrEqual(copy.left + 0.5)
+      } finally {
+        await page.viewport(414, 896)
+      }
+    })
+
+    it('keeps the copy button off the first line of the accordion example on a phone', async () => {
+      const view = render(AccordionWithLog)
+      await nextTick()
+      const copy = view.getByTestId('log-viewer__copy').getBoundingClientRect()
+      const first = view.getAllByTestId('log-viewer__line-message')[0]!
+      for (const rect of textRowsUnder(first, copy)) {
+        expect(rect.right).toBeLessThanOrEqual(copy.left + 0.5)
+      }
     })
 
     it('sizes a short log to its lines inside the accordion example', async () => {

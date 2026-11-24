@@ -35,7 +35,7 @@ describe('Eyebrow', () => {
   it('renders the prefix text when a prefix is provided', () => {
     const { getByText } = render(Eyebrow, {
       props: { prefix: '//' },
-      slots: { default: 'COMMENT STYLE' }
+      slots: { default: 'Edge functions' }
     })
     expect(getByText('//')).toBeInTheDocument()
     expect(getByText('Edge functions')).toBeInTheDocument()
@@ -44,7 +44,7 @@ describe('Eyebrow', () => {
   it('hides the decorative prefix from assistive tech and keeps the label exposed', () => {
     const { getByText } = render(Eyebrow, {
       props: { prefix: '//' },
-      slots: { default: 'COMMENT STYLE' }
+      slots: { default: 'Edge functions' }
     })
     expect(getByText('//').getAttribute('aria-hidden')).toBe('true')
     expect(getByText('Edge functions').closest('[aria-hidden]')).toBeNull()
