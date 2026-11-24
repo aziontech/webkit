@@ -47,7 +47,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The prompt itself: one or more sentences of literal text. Also the string the copy control carries. |
+| `default` | — | The prompt itself: one or more sentences of literal text, drawn without the whitespace that opens and closes the slot. Also the string the copy control carries. |
 
 ## Assets
 

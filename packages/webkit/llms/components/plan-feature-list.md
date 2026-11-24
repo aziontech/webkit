@@ -87,10 +87,10 @@ No built-in strings: every visible text comes from `items`, and the accessible n
   import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
 
   const features = [
-    { label: 'Unlimited Applications' },
-    { label: 'Unlimited Workloads' },
-    { label: 'Custom Domains' },
-    { label: 'Priority Support' }
+    { label: 'Unlimited applications' },
+    { label: 'Unlimited workloads' },
+    { label: 'Custom domains' },
+    { label: 'Priority support' }
   ]
 </script>
 
@@ -109,14 +109,14 @@ No built-in strings: every visible text comes from `items`, and the accessible n
   import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
 
   const features = [
-    { label: 'Unlimited Applications' },
-    { label: 'Unlimited Workloads' },
-    { label: 'Custom Domains' },
-    { label: 'Priority Support' },
+    { label: 'Unlimited applications' },
+    { label: 'Unlimited workloads' },
+    { label: 'Custom domains' },
+    { label: 'Priority support' },
     { label: 'Real-Time Metrics' },
     { label: 'Data Stream' },
     { label: 'Web Application Firewall' },
-    { label: 'Team Permissions' }
+    { label: 'Team permissions' }
   ]
 </script>
 
@@ -137,15 +137,15 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 
   const features = [
     {
-      label: 'Unlimited Applications',
+      label: 'Unlimited applications',
       description: 'Deploy as many applications as your projects need.'
     },
     {
-      label: 'Custom Domains',
+      label: 'Custom domains',
       description: 'Serve every application from your own domain, with managed certificates.'
     },
     {
-      label: 'Priority Support',
+      label: 'Priority support',
       description: 'Reach the support team by chat and get an answer within one business day.'
     }
   ]

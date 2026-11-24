@@ -104,12 +104,12 @@
 
 <template>
   <Card
-    title="Card Title"
+    title="Production"
     class="w-full max-w-[512px]"
   >
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        Card body content. Place forms, tables, or any markup in the content slot.
+        Serves acme-store from 120 locations. The last deployment finished 2 minutes ago.
       </p>
     </template>
   </Card>
@@ -128,10 +128,10 @@
   <Card class="w-full max-w-[512px]">
     <template #header>
       <div class="flex items-center justify-between w-full">
-        <h2 class="text-label-md text-(--text-default)">Card Title</h2>
+        <h2 class="text-label-md text-(--text-default)">Staging</h2>
         <IconButton
           icon="az az-chevron-right"
-          aria-label="Expand"
+          aria-label="Open staging"
           variant="outline"
           size="small"
         />
@@ -139,7 +139,7 @@
     </template>
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        An action rendered in the header slot stays visible, aligned to the end of the header.
+        Deploys every push to the main branch. Last deployed yesterday.
       </p>
     </template>
   </Card>
@@ -157,19 +157,19 @@
 
 <template>
   <Card
-    title="Card Title"
+    title="Cache settings"
     class="w-full max-w-[512px]"
   >
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        The footer bar renders only when the footer slot is filled.
+        Cache static assets for 30 days and HTML for 5 minutes.
       </p>
     </template>
     <template #footer>
       <div class="flex w-full items-center justify-between gap-(--spacing-sm)">
         <Link
-          href="/docs"
-          label="Check documentation"
+          href="https://example.com/docs/caching"
+          label="Read the caching guide"
           size="small"
         />
         <div class="flex gap-(--spacing-sm)">
@@ -180,7 +180,7 @@
           />
           <Button
             label="Save"
-            variant="outline"
+            variant="primary"
             size="small"
           />
         </div>

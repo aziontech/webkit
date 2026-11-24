@@ -40,7 +40,7 @@
 | `href` | `string` | `''` | false | Destination; when set the whole card becomes the link. |
 | `target` | `'_self' \| '_blank'` | `'_self'` | false | Where the link opens. |
 | `label` | `string` | `''` | false | Fallback copy when the default slot is empty. |
-| `linkLabel` | `string` | `''` | false | Call-to-action text; when set the card closes on a link row. |
+| `linkLabel` | `string` | `''` | false | Call-to-action text; when set the card closes on a link row. A linked card without it shows the link glyph alone in its top-end corner. |
 
 ## Slots
 

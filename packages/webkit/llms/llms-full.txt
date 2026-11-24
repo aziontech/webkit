@@ -17311,7 +17311,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - `data-muted` is set while the audio is muted; the mute control shows Unmute and the volume slider reads 0.
 - Empty: `src` empty with `loading` false sets `data-disabled`; the times show `--:--` and the Download link is not rendered.
 - Unknown duration (no `duration` and the file not read yet): the times show `--:--` and the seek bar is disabled until the browser reports the length.
-- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root.
+- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root. On a coarse pointer an invisible layer (`data-slot="touch-target"`) extends the summary's hit area to 40 px tall.
 - Not applicable: `readonly` and `invalid` (the player takes no value input).
 - A new `src` resets the time, the playing state and the error.
 
@@ -18024,12 +18024,12 @@ The frame is static apart from its resize handles.
 
 <template>
   <Card
-    title="Card Title"
+    title="Production"
     class="w-full max-w-[512px]"
   >
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        Card body content. Place forms, tables, or any markup in the content slot.
+        Serves acme-store from 120 locations. The last deployment finished 2 minutes ago.
       </p>
     </template>
   </Card>
@@ -18157,7 +18157,7 @@ The frame is static apart from its resize handles.
 ## Do
 
 - Pass the exact text in `value`; CopyText shows and copies the same string.
-- Keep values to one line. A long value truncates with an ellipsis; the full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
+- Keep values to one line. A long value truncates in the middle: the start ends in an ellipsis and its last characters (up to 12, a third of the value at most) stay visible, so `acme-store-pr…example.com` still shows how the value ends (decision A5P3-L02-3). The full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
 - Pass `ariaLabel` when the value alone does not say what it is (`Copy CNAME`); the default reads `Copy {value}`.
 - Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
 - Use `size="small"` in dense tables and lists.
@@ -18391,7 +18391,7 @@ The frame is static apart from its resize handles.
 </script>
 
 <template>
-  <Eyebrow>OVERLINE TEXT</Eyebrow>
+  <Eyebrow>Platform</Eyebrow>
 </template>
 ```
 
@@ -19144,12 +19144,12 @@ name.
 <template>
   <Item>
     <Item.Content>
-      <Item.Title>Basic Item</Item.Title>
-      <Item.Description>A simple item with title and description.</Item.Description>
+      <Item.Title>storefront-prod</Item.Title>
+      <Item.Description>Deployed 2 minutes ago</Item.Description>
     </Item.Content>
     <Item.Actions>
       <Button
-        label="Action"
+        label="Open"
         variant="outline"
         size="small"
       />
@@ -19386,13 +19386,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         label="Active"
       />
     </KeyValueList.Item>
-    <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+    <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
     <KeyValueList.Item label="Domain">
       <Link
         label="shop.example.com"
         href="https://shop.example.com"
-        size="small"
+        inline
       />
     </KeyValueList.Item>
   </KeyValueList>
@@ -19744,10 +19744,10 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
 
   const features = [
-    { label: 'Unlimited Applications' },
-    { label: 'Unlimited Workloads' },
-    { label: 'Custom Domains' },
-    { label: 'Priority Support' }
+    { label: 'Unlimited applications' },
+    { label: 'Unlimited workloads' },
+    { label: 'Custom domains' },
+    { label: 'Priority support' }
   ]
 </script>
 
@@ -20396,7 +20396,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - Visible focus: the trigger and the copy buttons draw the ring token.
 - Contrast: `var(--text-default)` and `var(--text-muted)` on `var(--bg-surface-raised)` are theme-guaranteed.
 - `motion-reduce:*`: the panel and the hover colour transition both pair with a reduced-motion fallback.
-- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in.
+- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in; on a coarse pointer an invisible layer (`data-slot="touch-target"`) extends its hit area to 40 px tall, the WebKit floor, without moving the text.
 
 ## Examples
 
@@ -20689,6 +20689,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             <Button
               label="New service"
               icon="az az-plus"
+              variant="outline"
               size="medium"
             />
           </TutorialPanelHotspot>
@@ -20717,7 +20718,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             >
               <Button
                 label="Deploy"
-                variant="primary"
+                variant="outline"
                 size="medium"
               />
             </TutorialPanelHotspot>

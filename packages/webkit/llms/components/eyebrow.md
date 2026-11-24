@@ -82,7 +82,7 @@
 </script>
 
 <template>
-  <Eyebrow>OVERLINE TEXT</Eyebrow>
+  <Eyebrow>Platform</Eyebrow>
 </template>
 ```
 
@@ -95,9 +95,9 @@
 
 <template>
   <div class="flex flex-col items-start gap-4">
-    <Eyebrow prefix="//">COMMENT STYLE</Eyebrow>
-    <Eyebrow prefix="<>">CODE LABEL</Eyebrow>
-    <Eyebrow prefix="</>">CLOSING TAG</Eyebrow>
+    <Eyebrow prefix="//">Edge functions</Eyebrow>
+    <Eyebrow prefix="<>">Open source</Eyebrow>
+    <Eyebrow prefix="</>">Built for developers</Eyebrow>
   </div>
 </template>
 ```
@@ -114,9 +114,9 @@
     <Eyebrow
       cursor
       prefix="//"
-      >OVERLINE TEXT</Eyebrow
+      >Developer platform</Eyebrow
     >
-    <Eyebrow cursor>NO PREFIX</Eyebrow>
+    <Eyebrow cursor>Pricing</Eyebrow>
   </div>
 </template>
 ```
