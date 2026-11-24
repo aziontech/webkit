@@ -1219,6 +1219,10 @@
       "types": "./types/components/input/radio-group/radio-group.vue.d.ts",
       "default": "./src/components/input/radio-group/radio-group.vue"
     },
+    "./rating": {
+      "types": "./types/components/input/rating/rating.vue.d.ts",
+      "default": "./src/components/input/rating/rating.vue"
+    },
     "./chip": {
       "types": "./types/components/input/chip/chip.vue.d.ts",
       "default": "./src/components/input/chip/chip.vue"
@@ -3477,6 +3481,9 @@
       ],
       "radio-group-root": [
         "./types/components/input/radio-group/radio-group.vue.d.ts"
+      ],
+      "rating": [
+        "./types/components/input/rating/rating.vue.d.ts"
       ],
       "chip": [
         "./types/components/input/chip/chip.vue.d.ts"

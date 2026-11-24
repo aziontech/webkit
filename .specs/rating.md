@@ -6,7 +6,7 @@ status: approved
 stability: preview
 spec_version: 1
 template: 2
-checksum: 38dc5556e95718b029d10cc3643340403da55a2309b331bf5554f477a8d4bef4
+checksum: cccfcb62ba4d3deca34297ae65a28ca3ebcf1e0b8490019e10d7a6d8504c2afd
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -179,7 +179,7 @@ The clear button is an `IconButton` (`variant="ghost"`, `size="small"` at every 
 
 ## Performance
 
-- Bundle budget: `rating` within 5.5 KB gzip, set from the measured build plus headroom (it bundles `IconButton`, about 2.7 KB, plus `useFieldControl` and `useTranslate`).
+- Bundle budget: `rating` within 5.8 KB gzip (measured 5.55 KB plus headroom) (it bundles `IconButton`, about 2.7 KB, plus `useFieldControl` and `useTranslate`).
 - Runtime budget: none: at most 10 native inputs.
 - Heavy parts: none.
 

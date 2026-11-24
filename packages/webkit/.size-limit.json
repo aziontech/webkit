@@ -1970,6 +1970,11 @@
     "limit": "3.2 KB"
   },
   {
+    "name": "rating",
+    "path": "src/components/input/rating/rating.vue",
+    "limit": "5.8 KB"
+  },
+  {
     "name": "radio-group-item",
     "path": "src/components/input/radio-group/radio-group-item/radio-group-item.vue",
     "limit": "2.35 KB"

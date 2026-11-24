@@ -1032,6 +1032,15 @@ export const ptBR: Messages = {
     danglingConnective: 'Adicione uma condição depois de {connective}.',
     unclosedQuote: 'Feche as aspas abertas no caractere {position}.'
   },
+  rating: {
+    star: {
+      one: '{count} estrela',
+      other: '{count} estrelas'
+    },
+    value: 'Avaliado em {value} de {max}',
+    empty: 'Sem avaliação',
+    clear: 'Limpar avaliação'
+  },
   resizable: {
     handle: 'Redimensionar painel'
   },
