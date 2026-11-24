@@ -142,7 +142,7 @@
       :value="copyValue || label"
       :aria-label="t('tableCellLink.copy', { label })"
       :data-testid="`${testId}__copy`"
-      class="ms-auto shrink-0"
+      class="shrink-0"
       size="small"
     />
   </div>

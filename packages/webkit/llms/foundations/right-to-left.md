@@ -16,7 +16,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
 - Center with `left-1/2 -translate-x-1/2`: the one physical pair allowed, because the result is the
   same in both directions.
 - Mirror what points along the reading direction: arrows, chevrons, carets, "back"/"next", sign-in /
-  sign-out. Webkit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
+  sign-out. WebKit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
   and `@aziontech/webkit/styles` for any `az az-chevron-right`-style glyph); on your own glyph add
   `rtl:-scale-x-100`. Never add `rtl:rotate-180` to an `az-*` arrow, chevron or caret: the
   stylesheet already mirrors it, the rotation flips it a second time and it points the wrong way
@@ -32,7 +32,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
   `logicalArrowKey(event.key, dir.value)` does the swap.
 - Isolate user and system values printed inside sentences: `<bdi>{{ name }}</bdi>`, or
   `dir="ltr"` on values that are always left-to-right (code, URLs, domains, IDs, hashes, file
-  paths). Webkit's `Input`, `Textarea`, `NumberInput` and `PasswordInput` already use
+  paths). WebKit's `Input`, `Textarea`, `NumberInput` and `PasswordInput` already use
   `dir="auto"`; pass `dir` to override.
 - Set `lang` with `dir` (`<html lang="ar" dir="rtl">`): the theme's sans stack falls back to Noto
   Sans Arabic and Arabic text gets a taller line height through `:lang(ar)`.

@@ -783,7 +783,7 @@ export const accents: Accent[] = [
     value: 'orange',
     label: 'Orange',
     ariaLabel: 'Orange mark',
-    colors: ['var(--primary)', 'var(--warning)', 'var(--brand-blue)']
+    colors: ['var(--primary)', 'var(--warning)', 'var(--primary)']
   },
   {
     value: 'yellow',
@@ -801,7 +801,7 @@ export const accents: Accent[] = [
     value: 'green',
     label: 'Green',
     ariaLabel: 'Green mark',
-    colors: ['var(--success)', 'var(--success-mark)', 'var(--brand-blue)']
+    colors: ['var(--success)', 'var(--success-mark)', 'var(--success)']
   },
   {
     value: 'blue',
@@ -899,7 +899,7 @@ export const roleOptions = [
 </script>
 
 <template>
-  <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-me-(--spacing-xl)">
+  <div class="min-w-0 max-w-full lg:sticky lg:top-(--spacing-xl) lg:my-auto">
     <div
       class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden mask-r-from-72% mask-b-from-80% lg:block"
     >
