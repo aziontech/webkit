@@ -1,4 +1,4 @@
-import { computed, type ComputedRef, type MaybeRefOrGetter, toValue } from 'vue'
+import { computed, type ComputedRef, type MaybeRefOrGetter, onMounted, ref, toValue } from 'vue'
 
 import { type LazyChunk, useLazyChunks } from '../../../../composables/use-lazy-chunks'
 import type { ConversationHistoryGroupBy, ConversationHistoryItem } from '../lib/types'
@@ -71,9 +71,14 @@ export function useConversationHistoryGroups(
   const lazy = Object.fromEntries(
     ORDER.map((key) => [key, useLazyChunks({ rowHeight: 44 })])
   ) as Record<ConversationHistoryGroupKey, ReturnType<typeof useLazyChunks>>
+  const mounted = ref<boolean>(false)
+  onMounted(() => {
+    mounted.value = true
+  })
+  const zone = (): string | undefined => toValue(timeZone) || (mounted.value ? undefined : 'UTC')
 
   const keyOf = (item: ConversationHistoryItem, today: number): ConversationHistoryGroupKey => {
-    if (toValue(groupBy) === 'date') return groupOf(timeOf(item), today, toValue(timeZone))
+    if (toValue(groupBy) === 'date') return groupOf(timeOf(item), today, zone())
     return item.status === 'running' && !item.archived ? 'working' : 'settled'
   }
 
