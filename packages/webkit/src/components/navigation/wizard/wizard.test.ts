@@ -543,6 +543,21 @@ describe('Wizard', () => {
       expect(getComputedStyle(counter).display).not.toBe('none')
     })
 
+    it('writes the counter as plain sentence-case body text, not a monospace kicker', async () => {
+      const wide = render(inBox(1200))
+      await nextTick()
+      await nextTick()
+      const counter = within(wide.getByRole('group')).getByText('Step 1 of 3')
+      expect(getComputedStyle(counter).textTransform).toBe('none')
+      expect(getComputedStyle(counter).fontFamily).not.toMatch(/mono/i)
+      wide.unmount()
+      const narrow = render(inBox(400))
+      await nextTick()
+      await nextTick()
+      expect(getComputedStyle(progressOf(narrow)).textTransform).toBe('none')
+      expect(getComputedStyle(progressOf(narrow)).fontFamily).not.toMatch(/mono/i)
+    })
+
     const footerButtons = (view: ReturnType<typeof render>) =>
       within(view.getByTestId('wizard__footer')).getAllByRole('button')
 
