@@ -149,7 +149,7 @@ export const sampleNotes: ExecutiveSummaryDashboardNote[] = [
   {
     id: 'note-04',
     author: 'Emma Wilson',
-    initials: 'MS',
+    initials: 'EW',
     role: 'Head of Finance',
     date: '2026-09-30',
     dateLabel: 'Sep 30, 2026',
@@ -176,7 +176,7 @@ export const sampleNotes: ExecutiveSummaryDashboardNote[] = [
   {
     id: 'note-01',
     author: 'Daniel Moore',
-    initials: 'LM',
+    initials: 'DM',
     role: 'VP of Engineering',
     date: '2026-09-12',
     dateLabel: 'Sep 12, 2026',

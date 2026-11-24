@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import DashboardExecutiveSummary from '../../../../blocks/dashboard/dashboard-executive-summary/dashboard-executive-summary.vue'
+import { sampleNotes } from '../../../../blocks/dashboard/dashboard-executive-summary/sample'
 import ExecutiveSummaryEmpty from '../../../../blocks/dashboard/dashboard-executive-summary/variants/empty.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -40,6 +41,16 @@ describe('dashboard/dashboard-executive-summary', () => {
     expect(view.container.textContent).toContain('Sign-ups slowed in September.')
     expect(view.container.textContent).not.toContain('Enterprise deals closed')
     expect(view.container.textContent).not.toContain('Emma Wilson')
+  })
+
+  it('gives every sample note the initials of its author', () => {
+    for (const note of sampleNotes) {
+      const initials = note.author
+        .split(' ')
+        .map((word) => word[0])
+        .join('')
+      expect(note.initials).toBe(initials)
+    }
   })
 
   it('emits export and downloads the quarter', async () => {
