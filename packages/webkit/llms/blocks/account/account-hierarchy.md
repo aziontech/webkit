@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableFooter`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -38,7 +38,7 @@ A `role="group"` row named `Resource actions`: Create Group (outlined), a divide
 
 ### C. Resource tree — `Input`, `Card`, `DataTable`, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 
-A search `Input` named `Search resources` over name, ID, type and labels sits above the tree. A match keeps its ancestors (so a workspace shows under its group and organization) and opens every branch while the search is on; clearing it restores the branches the person had open. No match shows a small `EmptyState` (`No matching resources`) with Clear search in the card. Then a flush `Card` holding `DataTable` (tree rows), `paginated` at 25 rows a page, with `:get-sub-rows="(row) => row.children"`, `v-model:open-keys` (the first organization and its first group open) and `v-model:selected-keys`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `TableCellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace neutral). Last accessed, Status (`TableCellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header (an empty charge is a muted dash through `data-empty`, never a class ternary), Labels as `TableCellTags` with `+N`, and `TableCellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
+A search `Input` named `Search resources` over name, ID, type and labels sits above the tree. A match keeps its ancestors (so a workspace shows under its group and organization) and opens every branch while the search is on; clearing it restores the branches the person had open. No match shows a small `EmptyState` (`No matching resources`) with Clear search in the card. Then a flush `Card` holding `DataTable` (tree rows, not paginated: a page of top-level rows would count organizations while every open row shows), with `:get-sub-rows="(row) => row.children"`, `v-model:open-keys` (the first organization and its first group open) and `v-model:selected-keys`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `TableCellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace neutral). Last accessed, Status (`TableCellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header (an empty charge is a muted dash through `data-empty`, never a class ternary), Labels as `TableCellTags` with `+N`, and `TableCellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. The `TableFooter` counts every resource in the tree, open branches or not (`11 resources`), never the top-level rows alone. Below the card, a `Link` to Resources pending deletion. While the resources fail to load, the danger `Alert` with Retry stands alone: no details panel and no pending-deletion link, since there is nothing to select.
 
 The data stays flat (`parentId`) and the page builds the tree for the table, so a move only changes one field.
 
@@ -511,7 +511,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
         />
 
         <HierarchyDetails
-          v-show="detailsOpen"
+          v-show="detailsOpen && !error"
           v-model:tab="detailsTab"
           :uid="uid"
           :details-title="detailsTitle"
@@ -1156,7 +1156,6 @@ export const descendantsIn = (
   import Avatar from '@aziontech/webkit/avatar'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
   import { type TableColumn } from '@aziontech/webkit/table'
@@ -1164,12 +1163,14 @@ export const descendantsIn = (
   import TableCellId from '@aziontech/webkit/table-cell-id'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
+  import TableFooter from '@aziontech/webkit/table-footer'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { computed } from 'vue'
 
   import type { AccountHierarchyResource } from '../account-hierarchy.vue'
-  import { initials, type ResourceNode, statusSeverity, types } from '../hierarchy-model'
+  import { initials, plural, type ResourceNode, statusSeverity, types } from '../hierarchy-model'
 
   export interface HierarchyResourcesTableProps {
     /** The tree the table shows, pruned by the search. */
@@ -1182,7 +1183,7 @@ export const descendantsIn = (
     labelledby: string
   }
 
-  defineProps<HierarchyResourcesTableProps>()
+  const props = defineProps<HierarchyResourcesTableProps>()
 
   const tableExpanded = defineModel<string[]>('openKeys', { required: true })
   const selectedKeys = defineModel<string[]>('selectedKeys', { required: true })
@@ -1206,6 +1207,10 @@ export const descendantsIn = (
   ]
 
   const { formatNumber } = useLocale()
+
+  const countNodes = (nodes: ResourceNode[]): number =>
+    nodes.reduce((sum, node) => sum + 1 + countNodes(node.children ?? []), 0)
+  const resourceCount = computed(() => countNodes(props.visibleTree))
 
   const money = (value: number) => formatNumber(value, { style: 'currency', currency: 'USD' })
 </script>
@@ -1337,7 +1342,11 @@ export const descendantsIn = (
           </TableCellActions>
         </template>
         <template #footer>
-          <DataTablePagination :page-size="25" />
+          <TableFooter v-if="!loading">
+            <p class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)">
+              {{ plural(resourceCount, 'resource', 'resources') }}
+            </p>
+          </TableFooter>
         </template>
       </DataTable>
     </template>
@@ -1513,6 +1522,7 @@ export const descendantsIn = (
     </template>
 
     <Link
+      v-if="!error"
       label="Resources pending deletion"
       size="medium"
       href="/account/resources/pending-deletion"

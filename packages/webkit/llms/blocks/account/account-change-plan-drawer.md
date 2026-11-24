@@ -1566,14 +1566,14 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
           href="https://example.com/terms"
           target="_blank"
           inline
-          >Terms of Service<span class="sr-only"> (opens in a new tab)</span></Link
+          >Terms of Service</Link
         >
         and the
         <Link
           href="https://example.com/privacy"
           target="_blank"
           inline
-          >Privacy Policy<span class="sr-only"> (opens in a new tab)</span></Link
+          >Privacy Policy</Link
         >
       </Field.Label>
       <Field.Description v-if="termsError">{{ termsError }}</Field.Description>

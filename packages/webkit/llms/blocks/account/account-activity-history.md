@@ -45,7 +45,7 @@ Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionP
 
 ### E. Event table — `Card`, `DataTable`, `DataTablePagination`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
 
-One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `TableCellTime` (relative, exact time on the tooltip).
+One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small neutral `Tag` with one icon per category (Sign-in, Security, Deploy, Users, Billing): a category is not a status, so it never borrows the info, warning, success or brand colours, User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `TableCellTime` (relative, exact time on the tooltip).
 
 ### F. No match and empty period — `EmptyState` (required)
 
@@ -172,7 +172,7 @@ Each variant is the same screen in another state: `get_block("account/account-ac
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -234,20 +234,13 @@ Each variant is the same screen in another state: `get_block("account/account-ac
   )
   const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
 
-  const categorySeverity = (category: ActivityHistoryCategory): TagSeverity | undefined =>
-    category === 'Billing'
-      ? undefined
-      : ((
-          {
-            'Sign-in': 'info',
-            Security: 'warning',
-            Deploy: 'success',
-            Users: 'neutral'
-          } as const
-        )[category] ?? 'neutral')
-
-  const categoryVariant = (category: ActivityHistoryCategory): TagVariant | undefined =>
-    category === 'Billing' ? 'primary' : undefined
+  const categoryIcons: Record<ActivityHistoryCategory, string> = {
+    'Sign-in': 'az az-log-in',
+    Security: 'az az-shield',
+    Deploy: 'az az-cloud-upload',
+    Users: 'az az-users',
+    Billing: 'az az-credit-card'
+  }
 
   const relativeOptions: RelativeOption[] = [
     { key: 'last-15-minutes', amount: 15, unit: 'minute' },
@@ -355,7 +348,6 @@ Each variant is the same screen in another state: `get_block("account/account-ac
         <template #actions>
           <Button
             label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -478,8 +470,8 @@ Each variant is the same screen in another state: `get_block("account/account-ac
               <template #cell-category="{ value }">
                 <Tag
                   :label="value"
-                  :variant="categoryVariant(value)"
-                  :severity="categorySeverity(value)"
+                  :icon="categoryIcons[value as ActivityHistoryCategory] ?? 'az az-tag'"
+                  severity="neutral"
                   size="small"
                 />
               </template>

@@ -783,37 +783,37 @@ export const accents: Accent[] = [
     value: 'orange',
     label: 'Orange',
     ariaLabel: 'Orange mark',
-    colors: ['var(--primary)', 'var(--warning)', 'var(--brand-blue)']
+    colors: ['var(--primary)', 'var(--primary)', 'var(--warning)']
   },
   {
     value: 'yellow',
     label: 'Yellow',
     ariaLabel: 'Yellow mark',
-    colors: ['var(--warning)', 'var(--warning-mark)', 'var(--primary)']
+    colors: ['var(--warning)', 'var(--warning)', 'var(--warning-mark)']
   },
   {
     value: 'red',
     label: 'Red',
     ariaLabel: 'Red mark',
-    colors: ['var(--danger)', 'var(--danger-mark)', 'var(--primary)']
+    colors: ['var(--danger)', 'var(--danger)', 'var(--danger-mark)']
   },
   {
     value: 'green',
     label: 'Green',
     ariaLabel: 'Green mark',
-    colors: ['var(--success)', 'var(--success-mark)', 'var(--brand-blue)']
+    colors: ['var(--success)', 'var(--success)', 'var(--success-mark)']
   },
   {
     value: 'blue',
     label: 'Blue',
     ariaLabel: 'Blue mark',
-    colors: ['var(--info)', 'var(--info-mark)', 'var(--accent)']
+    colors: ['var(--info)', 'var(--info)', 'var(--info-mark)']
   },
   {
     value: 'violet',
     label: 'Violet',
     ariaLabel: 'Violet mark',
-    colors: ['var(--chart-sequential-2)', 'var(--chart-series-3)', 'var(--brand-blue)']
+    colors: ['var(--chart-series-3)', 'var(--chart-series-3)', 'var(--chart-series-8)']
   },
   {
     value: 'gray',
@@ -901,7 +901,7 @@ export const roleOptions = [
 <template>
   <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-me-(--spacing-xl)">
     <div
-      class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden mask-r-from-72% mask-b-from-80% lg:block"
+      class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden ltr:mask-r-from-72% rtl:mask-l-from-72% mask-b-from-80% lg:block"
     >
       <figure
         :class="PREVIEW_FIGURE_CLASS"
