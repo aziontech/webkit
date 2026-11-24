@@ -21,9 +21,9 @@ jobs:
       actions: write
 
     steps:
-      # Maintains the single Release PR (version bumps + changelogs) while
-      # features land on main; when that PR merges, this same job creates the
-      # per-package tags and GitHub Releases.
+      # Maintains the single Release PR (one version for the four packages,
+      # the root CHANGELOG.md) while features land on main; when that PR
+      # merges, this same job creates the vX.Y.Z tag and its GitHub Release.
       - name: Run release-please
         id: release
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
@@ -35,36 +35,22 @@ jobs:
       # Releases created with `github.token` do not fire a `release: published`
       # event that other workflows can react to — GitHub suppresses events
       # produced by the default token to prevent recursive runs. workflow_dispatch
-      # is exempt from that rule, so dispatch each package's publish workflow
+      # is exempt from that rule, so dispatch the four publish workflows
       # explicitly instead of relying on `release: published`.
-      - name: Dispatch publish workflows for released packages
-        if: steps.release.outputs.releases_created == 'true'
+      - name: Dispatch the four publish workflows for the release
+        if: steps.release.outputs.release_created == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           # This job never checks out the repo, so `gh` cannot infer it from a
           # git remote — name it explicitly.
           GH_REPO: ${{ github.repository }}
-          WEBKIT_RELEASED: ${{ steps.release.outputs['packages/webkit--release_created'] }}
-          WEBKIT_TAG: ${{ steps.release.outputs['packages/webkit--tag_name'] }}
-          THEME_RELEASED: ${{ steps.release.outputs['packages/theme--release_created'] }}
-          THEME_TAG: ${{ steps.release.outputs['packages/theme--tag_name'] }}
-          ICONS_RELEASED: ${{ steps.release.outputs['packages/icons--release_created'] }}
-          ICONS_TAG: ${{ steps.release.outputs['packages/icons--tag_name'] }}
-          WEBKIT_MCP_RELEASED: ${{ steps.release.outputs['packages/webkit-mcp--release_created'] }}
-          WEBKIT_MCP_TAG: ${{ steps.release.outputs['packages/webkit-mcp--tag_name'] }}
+          TAG: ${{ steps.release.outputs.tag_name }}
         run: |
           failed=0
-          dispatch() {
-            local workflow="$1" tag="$2"
-            if ! gh workflow run "$workflow" --ref main -f tag="$tag"; then
-              echo "::error::failed to dispatch $workflow for tag $tag"
+          for workflow in publish-webkit.yml publish-theme.yml publish-icons.yml publish-webkit-mcp.yml; do
+            if ! gh workflow run "$workflow" --ref main -f tag="$TAG"; then
+              echo "::error::failed to dispatch $workflow for tag $TAG"
               failed=1
             fi
-          }
-
-          [ "$WEBKIT_RELEASED" = "true" ] && dispatch publish-webkit.yml "$WEBKIT_TAG"
-          [ "$THEME_RELEASED" = "true" ] && dispatch publish-theme.yml "$THEME_TAG"
-          [ "$ICONS_RELEASED" = "true" ] && dispatch publish-icons.yml "$ICONS_TAG"
-          [ "$WEBKIT_MCP_RELEASED" = "true" ] && dispatch publish-webkit-mcp.yml "$WEBKIT_MCP_TAG"
-
+          done
           exit "$failed"

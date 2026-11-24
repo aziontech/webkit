@@ -2,8 +2,4 @@ exceptions:
   - check: semver
     action: waive
     until: 2027-05-31
-    reason: 'monorepo of four npm packages; release-please tags each one <package>@x.y.z (for example @aziontech/webkit@6.0.0), and every version inside the tag is SemVer'
-  - check: changelog
-    action: waive
-    until: 2027-05-31
-    reason: 'monorepo; release-please writes one CHANGELOG.md per package (packages/webkit, theme and icons today, webkit-mcp from its first release) with version headers, and the GitHub Release notes'
+    reason: 'the per-package tags made before the switch to one shared version (@aziontech/webkit@5.13.0 and older) stay as they are, because releases and changelogs link to them; every new tag is vX.Y.Z'
