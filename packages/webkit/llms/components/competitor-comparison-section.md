@@ -1,6 +1,6 @@
 # Competitor Comparison Section
 
-> The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text and keyed in a one-line legend above the table (each glyph with its label, for touch and keyboard readers who never see the tooltip), and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `brand`, `popover`, `icon-button` and `tooltip`.
+> The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text and keyed in a one-line legend above the table (each glyph with its label, for touch and keyboard readers who never see the tooltip), and a capability with a definition carries a `hint` glyph that opens it as a short note. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `brand`, `hint` and `tooltip`.
 
 - Import: `import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -12,7 +12,7 @@
 
 ## Do
 
-- Give every row a `definition`; the info popover is where a reader learns what the capability means.
+- Give every row a `definition`; the hint note is where a reader learns what the capability means.
 - Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
 - With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.
 - For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.
@@ -60,18 +60,18 @@
   Partial support is a property of the platform, not a problem that needs action, so it never takes the warning colour; an unsupported capability is a quiet dash, not a red cross.
 
 - The competitor head is a `ThirdPartyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
-- Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
+- Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (each hint owns its open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
 ## Accessibility
 
-- Visible focus: owned by the composed `icon-button` and `tooltip` triggers.
-- Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
+- Visible focus: owned by the composed `hint` and `tooltip` triggers.
+- Keyboard map: `Tab` reaches each definition's hint glyph; `Enter` / `Space` opens its note and `Esc` closes it (owned by `hint`).
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `ThirdPartyLogo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads are `--text-default` with a decorative bar in the logo orange (`--primary`); every part passes WCAG 2 AA with no exception (owner decision 2026-11-22).
 - Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text, and the legend above the table pairs each glyph with its label for every reader.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
-- Touch target ≥40×40 px — the info button is a small `icon-button`, a secondary affordance next to the capability name.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the hint and tooltip carry their own reduced-motion fallback; this band adds no motion.
+- Touch target ≥40×40 px — the hint glyph is small and extends its touch target to the pointer size, a secondary affordance next to the capability name.
 
 ## Right-to-left
 
@@ -93,7 +93,7 @@
 
 - Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
 - Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
-- Touch: the info button is a small `icon-button`, a secondary affordance next to the capability name.
+- Touch: the hint glyph is a secondary affordance next to the capability name; its touch target grows on a coarse pointer.
 - Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header at `top: var(--layout-sticky-top)` (the header height by default; `0` inside a scroller with no header above it, so the head row never covers the first category at rest).
 
 ## Examples

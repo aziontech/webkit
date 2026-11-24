@@ -4,9 +4,9 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
-  import IconButton from '../../action/icon-button/icon-button.vue'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import Tag from '../../content/tag/tag.vue'
+  import Hint from '../../input/hint/hint.vue'
   import Input from '../../input/input/input.vue'
   import Select from '../../input/select/select.vue'
   import SelectContent from '../../input/select/select-content/select-content.vue'
@@ -15,11 +15,6 @@
   import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import Link from '../../navigation/link/link.vue'
-  import Popover from '../../overlay/popover/popover.vue'
-  import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
-  import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'
-  import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
-  import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import { bodiesOf, isCategory } from './lib/plan-bodies'
 
@@ -358,26 +353,14 @@
                     {{ labelHead(row.label)
                     }}<span class="whitespace-nowrap"
                       >{{ labelTail(row.label)
-                      }}<span
-                        class="-my-(--spacing-2xs) ms-(--spacing-2xs) inline-flex align-middle"
-                        ><Popover side="auto">
-                          <PopoverTrigger>
-                            <IconButton
-                              variant="ghost"
-                              size="small"
-                              icon="az az-circle-info"
-                              :aria-label="t('planComparisonSection.about', { label: row.label })"
-                            />
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
-                              <PopoverTitle>{{ row.label }}</PopoverTitle>
-                              <PopoverDescription>{{ row.hint }}</PopoverDescription>
-                            </div>
-                          </PopoverContent>
-                        </Popover></span
-                      ></span
-                    >
+                      }}<span class="ms-(--spacing-2xs) inline-flex align-middle"
+                        ><Hint
+                          :content="row.hint"
+                          side="auto"
+                          :aria-label="
+                            t('planComparisonSection.about', { label: row.label })
+                          " /></span
+                    ></span>
                   </template>
                   <template v-else>{{ row.label }}</template>
                   <Tag

@@ -18,11 +18,6 @@
       "file": "auto-placement.vue"
     },
     {
-      "name": "LongContent",
-      "summary": "Long text wraps within the tooltip max width (`var(--container-3xs)`). Hover or focus the info icon to preview the multi-line layout.",
-      "file": "long-content.vue"
-    },
-    {
       "name": "Disabled",
       "summary": "Tooltip activation is a no-op; the trigger renders but no hint appears on hover or focus.",
       "file": "disabled.vue"
