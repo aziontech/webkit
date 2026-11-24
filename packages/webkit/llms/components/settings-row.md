@@ -22,7 +22,7 @@
 - Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
 - Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.
 - Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
-- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until hover or focus.
+- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until the reader clicks it.
 
 ## Don’t
 
@@ -46,7 +46,7 @@
 | `variant` | `'field' \| 'compact' \| 'stacked'` | `'field'` | false | Where the control sits relative to the copy. |
 | `depth` | `0 \| 1 \| 2` | `0` | false | Indent depth under a rule, for a setting that only applies when its parent is on. |
 | `stackable` | `boolean` | `false` | false | Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. |
-| `hint` | `string` | `''` | false | Extra guidance in a Hint glyph beside the title; empty renders no glyph. |
+| `hint` | `string` | `''` | false | Extra guidance, one to three sentences, in a click-open Hint note beside the title; empty renders no glyph. |
 | `required` | `boolean` | `false` | false | Marks the setting as required after its title, as a required field label does. |
 
 ## Slots
@@ -69,7 +69,7 @@
 - Visible focus: owned by the control in the default slot.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
-- No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
+- No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button described by the hint text (read on focus), reachable with `Tab`, that opens the note on click, `Enter` or `Space` (see `hint`).
 - Contrast ≥4.5:1 for the title and the muted description. The required `*` is `var(--text-default)`, like the `Field.Label` asterisk (the logo orange is never a text colour); it is `aria-hidden`, so a screen reader learns it from the control in the slot, which sets its own `required`.
 
 ## Examples

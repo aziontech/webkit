@@ -16,7 +16,7 @@
 ## Do
 
 - Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.
-- Keep `content` to a few words. It renders as plain text, with no markup.
+- Keep `content` to a few words (about 80 characters at most): a name, a shortcut or an expanded abbreviation. It renders as plain text, with no markup. Never put a paragraph or an explanation in a tooltip; that is a `hint`.
 - The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
 - Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.
 - Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.
@@ -25,6 +25,7 @@
 ## Don’t
 
 - The content has links, buttons or more than one line of structure → use `popover`.
+- An explanation, or anything longer than a few words (about 80 characters) → use `hint`, the click-open note beside the label. A tooltip only names a control or expands an abbreviation.
 - An info glyph beside a field label or column header → use `hint`.
 - A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.
 - Guidance or errors the user needs to complete a field → use `field-error`.
@@ -33,7 +34,7 @@
 ## Related
 
 - [popover](popover.md) — click-opened, interactive, with a header, body and footer.
-- [hint](hint.md) — the focusable info glyph that renders a `Tooltip` for you.
+- [hint](hint.md) — the info glyph that opens a short note on click; use it for explanations, never a tooltip.
 - [hover-card](hover-card.md) — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.
 - [icon-button](icon-button.md) — the most common trigger; it still needs its own `ariaLabel`.
 

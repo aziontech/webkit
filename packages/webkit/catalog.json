@@ -15796,6 +15796,9 @@
    "target": "./src/components/input/hint/hint.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/hint",
+   "models": [
+    "open"
+   ],
    "category": "input",
    "structure": "monolithic",
    "props": [
@@ -15804,14 +15807,49 @@
      "type": "string",
      "default": "''",
      "required": "true",
-     "doc": "Guidance text revealed on hover or focus, or by a tap on touch; also the trigger's accessible name."
+     "doc": "The note, one to three sentences, shown when the glyph is clicked and read as the glyph's description."
     },
     {
      "name": "side",
      "type": "'top' | 'bottom' | 'start' | 'end' | 'auto'",
-     "default": "'top'",
+     "default": "'bottom'",
      "required": "false",
-     "doc": "Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. `start` and `end` follow the text direction."
+     "doc": "Side of the glyph the note opens on, flipped when it does not fit; `'auto'` picks the side with the most room."
+    },
+    {
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Docs URL linked under the note; empty renders no link."
+    },
+    {
+     "name": "linkLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the docs link; empty uses the locale catalog (`Learn more`)."
+    },
+    {
+     "name": "target",
+     "type": "'_blank' | '_self'",
+     "default": "'_blank'",
+     "required": "false",
+     "doc": "Where the docs link opens."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the glyph button; empty uses the locale catalog (`More information`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "surface": "app",
@@ -19320,7 +19358,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "One-sentence guidance shown in a Hint glyph beside the label."
+     "doc": "One-sentence guidance in a click-open Hint note beside the label."
     },
     {
      "name": "anchor",
@@ -19415,7 +19453,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Extra guidance in a Hint glyph beside the title; empty renders no glyph."
+     "doc": "Extra guidance, one to three sentences, in a click-open Hint note beside the title; empty renders no glyph."
     },
     {
      "name": "required",
