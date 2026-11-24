@@ -1786,7 +1786,7 @@ Budget-raise: code-block 34.2 KB → 34.25 KB (measured 34.21 KB): the copy cont
 Budget-raise: log-viewer-content 29.6 KB → 29.65 KB (measured 29.63 KB): the first two lines reserve the copy footprint (A5P3-051).
 Budget-raise: streaming-response 43.35 KB → 43.55 KB (measured 43.52 KB): no-break space before a citation and balanced parentheses in link destinations (A5P3-044, A5P3-046).
 Budget-raise: conversation-history 9.05 KB → 9.15 KB (measured 9.12 KB): the empty state gains its description line (A5P3-045).
-Budget-raise: prompt-queue 4.75 KB → 5.35 KB (measured 5.34 KB): a clamped message gets a Show more / Show less toggle (A5P3-050); Button and VueUse were left out to keep it small.
+Budget-raise: prompt-queue 4.75 KB → 5.4 KB (measured 5.37 KB): a clamped message gets a Show more / Show less toggle (A5P3-050); Button and VueUse were left out to keep it small.
 Budget-raise: tool-call 3.5 KB → 3.55 KB (measured 3.52 KB): the tool name chip wraps instead of truncating (A5P3-053).
 Budget-raise: log-viewer 43.8 KB → 43.85 KB (measured 43.84 KB): the first two lines reserve the copy footprint (A5P3-051).
 Budget-raise: log-viewer-steps 42.2 KB → 42.25 KB (measured 42.22 KB): it embeds LogViewer content (A5P3-051).

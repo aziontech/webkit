@@ -1301,7 +1301,7 @@
   {
     "name": "prompt-queue",
     "path": "src/components/ai/prompt-queue/prompt-queue.vue",
-    "limit": "5.35 KB"
+    "limit": "5.4 KB"
   },
   {
     "name": "subagent-card",
