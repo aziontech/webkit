@@ -350,6 +350,8 @@ Close with `List sound` or `N gaps — fix before polish`.
 
 ## References
 
+- `/webkit-api-data` — server-owned lists, the default order, a new item on the first page, and
+  reference columns rendered by name.
 - `/webkit-tables` — the `Table`, the column model and the cell recipes inside the card.
 - `/webkit-navigation` — the shell the page sits in and how its nav row is activated.
 - `/webkit-ui-states` — the loading skeleton, the error alert, and the empty vs no-match states.

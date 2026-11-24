@@ -1273,6 +1273,8 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## References
 
+- `/webkit-api-data` — a `Select` or `MultiSelect` whose options come from an API: server search,
+  selected values that are not in the loaded page, names instead of IDs, revalidated options.
 - `Field` and its parts, `FieldDescription`, `Item`, `Card`, `Select`, `Button` import paths: ask the
   webkit MCP `suggest_component`, or read `node_modules/@aziontech/webkit/catalog.json` (`imports`) —
   every key is a real subpath.

@@ -622,6 +622,8 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 
 ## Related skills
 
+- `/webkit-api-data` — a cell that holds another resource's ID shows its name (`TableCellLink`),
+  and every shape the API sends has one typed formatter.
 - `/webkit-form` — form layout & accessibility (the create/edit view a table's "New" button opens).
 - `/webkit-ui-states` — the loading / empty / error states a table must render.
 - `/webkit-final-polish` — final rhythm/alignment pass over the assembled table.

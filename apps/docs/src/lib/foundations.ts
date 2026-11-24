@@ -125,6 +125,12 @@ export const FOUNDATIONS: FoundationPage[] = [
     summary:
       'A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.',
     markdown: 'skills/webkit-in-product-help/SKILL.md'
+  },
+  {
+    slug: 'api-data',
+    title: 'Showing API data',
+    summary: 'References by name, pickers that keep their values, fresh lookups and typed records.',
+    markdown: 'skills/webkit-api-data/SKILL.md'
   }
 ]
 
