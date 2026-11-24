@@ -14,7 +14,7 @@
     phaseLabel: string
     /** How many rules the phase has. */
     total: number
-    /** The narrow layout: one Move menu instead of the position field and the arrows. */
+    /** The narrow layout: one Move menu instead of the position field and the arrows, and no drag handle. */
     narrow: boolean
     /** Why the rule cannot move, or nothing. */
     lockReason: string
@@ -119,27 +119,34 @@
         />
       </span>
     </Tooltip>
-    <Tooltip :content="lockReason || 'Move up'">
-      <IconButton
-        icon="az az-chevron-up"
-        variant="outline"
-        size="small"
-        data-control="up"
-        :aria-label="lockReason ? `Move ${row.name} up. ${lockReason}` : `Move ${row.name} up`"
-        :disabled="!canMoveUp"
-        @click="emit('step', -1, 'up')"
-      />
-    </Tooltip>
-    <Tooltip :content="lockReason || 'Move down'">
-      <IconButton
-        icon="az az-chevron-down"
-        variant="outline"
-        size="small"
-        data-control="down"
-        :aria-label="lockReason ? `Move ${row.name} down. ${lockReason}` : `Move ${row.name} down`"
-        :disabled="!canMoveDown"
-        @click="emit('step', 1, 'down')"
-      />
-    </Tooltip>
+    <span
+      data-slot="step-buttons"
+      class="flex items-center gap-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance focus-within:opacity-100 pointer-coarse:opacity-100 motion-reduce:transition-none [[data-reorder-row]:hover_&]:opacity-100"
+    >
+      <Tooltip :content="lockReason || 'Move up'">
+        <IconButton
+          icon="az az-chevron-up"
+          variant="outline"
+          size="small"
+          data-control="up"
+          :aria-label="lockReason ? `Move ${row.name} up. ${lockReason}` : `Move ${row.name} up`"
+          :disabled="!canMoveUp"
+          @click="emit('step', -1, 'up')"
+        />
+      </Tooltip>
+      <Tooltip :content="lockReason || 'Move down'">
+        <IconButton
+          icon="az az-chevron-down"
+          variant="outline"
+          size="small"
+          data-control="down"
+          :aria-label="
+            lockReason ? `Move ${row.name} down. ${lockReason}` : `Move ${row.name} down`
+          "
+          :disabled="!canMoveDown"
+          @click="emit('step', 1, 'down')"
+        />
+      </Tooltip>
+    </span>
   </div>
 </template>

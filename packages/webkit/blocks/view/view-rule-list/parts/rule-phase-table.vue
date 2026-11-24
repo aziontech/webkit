@@ -59,7 +59,7 @@
     row-key="id"
     :bordered="false"
     :loading="loading"
-    reorderable
+    :reorderable="!narrow"
     :row-reorderable="reorderable(group.value)"
     :aria-label="`${group.label} phase rules, in the order they run`"
     @update:data="(next: RuleListRule[]) => reorderRows(group.value, next)"

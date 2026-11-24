@@ -254,6 +254,18 @@ describe('view/view-rule-list block', () => {
     expect(requestNames(view.container as HTMLElement)[2]).toBe('Redirect www')
   })
 
+  it('shows the drag handle and the position field, and reveals Move up and down on hover or focus', async () => {
+    const view = render(RulesList)
+    await waitFor(() =>
+      expect(view.container.querySelector('[data-reorder-handle]')).not.toBeNull()
+    )
+    const up = view.getByRole('button', { name: 'Move Docs rewrite up' })
+    const pair = up.closest('[data-slot="step-buttons"]')!
+    expect(pair.classList.contains('opacity-0')).toBe(true)
+    expect(pair.classList.contains('focus-within:opacity-100')).toBe(true)
+    expect(pair.classList.contains('[[data-reorder-row]:hover_&]:opacity-100')).toBe(true)
+  })
+
   it('disables the position of the locked rule with its reason', () => {
     const view = render(RulesList)
     const field = view.getByRole('textbox', {
@@ -408,6 +420,7 @@ describe('view/view-rule-list block', () => {
       view.getByRole('button', { name: 'Move Docs rewrite, position 5 of 5' })
     )
     expect(view.queryByRole('textbox', { name: /^Position of Docs rewrite/ })).toBeNull()
+    expect(view.container.querySelectorAll('[data-reorder-handle]')).toHaveLength(0)
     await fireEvent.click(trigger)
     const up = await waitFor(() => {
       const item = Array.from(document.body.querySelectorAll('[role="menuitem"]')).find((node) =>
