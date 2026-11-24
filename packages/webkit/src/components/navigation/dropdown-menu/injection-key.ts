@@ -1,6 +1,7 @@
 import { type InjectionKey, type Ref } from 'vue'
 
 import type { MenuContext, MenuOptionValue } from '../../../composables/use-menu-root'
+import type { Severity } from '../../../utils/severity'
 
 /** Side of the trigger the panel opens on; `start` and `end` follow the text direction. */
 export type DropdownMenuSide = 'top' | 'bottom' | 'start' | 'end'
@@ -12,6 +13,9 @@ export type DropdownMenuItemValue = MenuOptionValue
 
 /** Item role of an option: a plain action, an on/off setting, or one choice of a group. */
 export type DropdownMenuItemType = 'default' | 'checkbox' | 'radio'
+
+/** Colour meaning of an option: `danger` marks a destructive action such as Delete. */
+export type DropdownMenuItemSeverity = Extract<Severity, 'neutral' | 'danger'>
 
 export type DropdownMenuContext = MenuContext
 

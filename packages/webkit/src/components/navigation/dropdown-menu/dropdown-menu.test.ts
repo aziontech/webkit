@@ -989,6 +989,23 @@ describe('DropdownMenu', () => {
     })
   })
 
+  describe('severity', () => {
+    it('marks a danger option and paints its label with the danger text token', async () => {
+      const { container } = render(SubMenus)
+      await openFromTrigger(container)
+      const remove = await waitFor(() =>
+        within(getPanel() as HTMLElement).getByRole('menuitem', { name: 'Delete' })
+      )
+      expect(remove.dataset['severity']).toBe('danger')
+      expect(remove.classList).toContain('data-[severity=danger]:text-(--text-danger)')
+      const neutral = within(getPanel() as HTMLElement)
+        .getAllByRole('menuitem')
+        .find((item) => item !== remove && !item.hasAttribute('aria-haspopup'))
+      expect(neutral?.hasAttribute('data-severity')).toBe(false)
+      await expectNoA11yViolations(getPanel() as HTMLElement)
+    })
+  })
+
   describe('checkable options', () => {
     it('maps type to menuitemcheckbox / menuitemradio with aria-checked', async () => {
       const { container } = render(CheckableOptions)

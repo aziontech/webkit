@@ -62,6 +62,7 @@
         <ContextMenu.Item
           value="delete"
           label="Delete"
+          severity="danger"
         />
       </ContextMenu.Group>
     </ContextMenu>
