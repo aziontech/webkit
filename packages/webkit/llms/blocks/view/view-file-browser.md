@@ -934,7 +934,7 @@ type FormatSize = (bytes: number) => string
 
 const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
 
-export const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
+const folderName = (name: string) => (name.endsWith('/') ? name : `${name}/`)
 
 const fileRow = (name: string, formatSize: FormatSize, entry?: FileBrowserEntry): FileRow => {
   const bytes = entry?.bytes ?? 0
