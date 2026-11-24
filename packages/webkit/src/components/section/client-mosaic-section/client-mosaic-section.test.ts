@@ -1,6 +1,8 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import Default from '../../../../examples/client-mosaic-section/default.vue'
+import OrderedCells from '../../../../examples/client-mosaic-section/ordered-cells.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ClientMosaicSection from './client-mosaic-section.vue'
 
@@ -225,5 +227,35 @@ describe('ClientMosaicSection', () => {
     const { container } = render(ClientMosaicSection, { props: { ariaLabel: ARIA_LABEL } })
 
     await expectNoA11yViolations(container)
+  })
+
+  it('lets a mark left alone in its phone row fill the row', () => {
+    const { container } = render(OrderedCells)
+
+    const lone = Array.from(container.querySelectorAll('[data-lone]')).map((cell) =>
+      cell.querySelector('a')?.getAttribute('aria-label')
+    )
+    expect(lone).toEqual(['Renner', 'NZN'])
+    expect(container.querySelector('[data-lone]')?.className).toContain(
+      'max-md:data-[lone]:col-span-full'
+    )
+  })
+
+  it('marks no cell lone when the marks pair up', () => {
+    const { container } = render(Default)
+
+    expect(container.querySelectorAll('[data-lone]')).toHaveLength(0)
+  })
+
+  it('keeps the example marks on the canvas with one brand tile at most', () => {
+    for (const example of [Default, OrderedCells]) {
+      const { container, unmount } = render(example)
+      const fills = Array.from(container.querySelectorAll('a[data-fill]')).map((face) =>
+        face.getAttribute('data-fill')
+      )
+      expect(fills).not.toContain('white')
+      expect(fills.filter((fill) => fill === 'primary').length).toBeLessThanOrEqual(1)
+      unmount()
+    }
   })
 })

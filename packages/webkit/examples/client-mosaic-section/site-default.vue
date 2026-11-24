@@ -39,8 +39,8 @@
       logo: dafitiExtendedMono,
       logoAlt: 'Dafiti',
       href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
-      fill: 'white',
-      logoTreatment: 'knockout'
+      fill: 'canvas',
+      logoTreatment: 'monochrome'
     },
     {
       logo: agibankExtendedReversed,
@@ -60,8 +60,8 @@
       logo: fourbankExtendedReversed,
       logoAlt: 'Fourbank',
       href: 'https://www.azion.com/en/success-case/fourbank/',
-      fill: 'primary',
-      logoTreatment: 'knockout'
+      fill: 'canvas',
+      logoTreatment: 'monochrome'
     },
     {
       logo: exameExtendedMono,
