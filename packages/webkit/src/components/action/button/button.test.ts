@@ -61,6 +61,14 @@ describe('Button', () => {
       expect(link.getAttribute('rel')).toBe('noopener noreferrer')
     })
 
+    it('says a new tab after slotted content too', () => {
+      const view = render(Button, {
+        props: { href: 'https://example.com', target: '_blank' },
+        slots: { default: 'Read the docs' }
+      })
+      expect(view.getByRole('link', { name: 'Read the docs (opens in a new tab)' })).toBeTruthy()
+    })
+
     it('says a new tab only on an anchor that opens one', () => {
       const same = render(Button, { props: { label: 'Docs', href: 'https://example.com' } })
       expect(same.getByRole('link', { name: 'Docs' })).toBeTruthy()

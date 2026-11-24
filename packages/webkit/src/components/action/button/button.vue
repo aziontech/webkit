@@ -179,13 +179,23 @@
           v-if="label"
           data-slot="label"
           class="min-w-0 overflow-x-clip text-ellipsis"
-          >{{ label }}</span
+          >{{ label
+          }}<template v-if="opensNewTab"
+            >{{ ' '
+            }}<span
+              class="sr-only"
+              :data-testid="`${rootAttrs['data-testid']}__new-tab`"
+              >{{ t('common.newTab') }}</span
+            ></template
+          ></span
         ></slot
-      ><span
-        v-if="opensNewTab"
-        class="sr-only"
-        :data-testid="`${rootAttrs['data-testid']}__new-tab`"
-        >{{ ` ${t('common.newTab')}` }}</span
+      ><template v-if="opensNewTab && $slots.default"
+        >{{ ' '
+        }}<span
+          class="sr-only"
+          :data-testid="`${rootAttrs['data-testid']}__new-tab`"
+          >{{ t('common.newTab') }}</span
+        ></template
       >
     </span>
     <span
