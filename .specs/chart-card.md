@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 5b904a57c99e40e6a9881106a7fe9eecd81a03e1ec29023b954bbd0573dfaa0d
+checksum: 7eddcd6bde2a889339320828edc94a04fc925d8305472b8f6b0b0b0b73774623
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -215,7 +215,7 @@ A pointer resize follows the pointer 1:1 with no transition; it is direct manipu
 ## Accessibility (WCAG 2.1 AA)
 
 - The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
-- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
+- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them), 44 px on a coarse pointer (10 px around them).
 - Drag handle: a real `<button>` named "Move" plus the card title ("Move card" without a title), described by the arrow-key hint. Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle, and the handle announces "Moved to position 2 of 3" through the shared polite live region. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.

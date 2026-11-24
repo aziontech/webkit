@@ -58,7 +58,7 @@
   }
 
   const ROOT_CLASS =
-    "relative -ms-(--spacing-2xs) inline-flex size-6 shrink-0 before:absolute before:-inset-2 before:content-[''] " +
+    "relative -ms-(--spacing-2xs) inline-flex size-6 shrink-0 before:absolute before:-inset-2 pointer-coarse:before:-inset-2.5 before:content-[''] " +
     'cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     'active:cursor-grabbing'

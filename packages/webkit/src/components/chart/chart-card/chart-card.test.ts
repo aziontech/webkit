@@ -106,6 +106,17 @@ describe('ChartCard', () => {
     expect(both.getByTestId('chart-card-resize-handle').getAttribute('role')).toBe('separator')
   })
 
+  it('widens both handle hit areas to 44px on a coarse pointer', async () => {
+    const view = render(card({ draggable: true, resizable: true }))
+    await nextTick()
+    expect(view.getByTestId('chart-card-drag-handle').classList).toContain(
+      'pointer-coarse:before:-inset-2.5'
+    )
+    expect(view.getByTestId('chart-card-resize-handle').classList).toContain(
+      'pointer-coarse:before:-inset-2.5'
+    )
+  })
+
   it('emits move with the event first and the direction second from the drag handle', async () => {
     const moves: unknown[][] = []
     const view = render(card({ draggable: true, onMove: (...args: unknown[]) => moves.push(args) }))
