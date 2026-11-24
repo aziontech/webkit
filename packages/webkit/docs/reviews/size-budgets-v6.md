@@ -1960,3 +1960,7 @@ Budget-raise: command-input 7.6 KB → 7.65 KB (measured 7.60 KB): the Esc keyca
 Budget-raise: command-list 0.65 KB → 1.5 KB (measured 1.49 KB): the listbox takes its accessible name from the catalog (`command.title`), which brings the translator (A5P3-001).
 Budget-raise: css-button 11 KB → 11.05 KB (measured 11.02 KB gzip): the theme stylesheet every app compiles gains the phone tracking step of the display headings (A5P3-080) and the `animate-autoplay-progress` keyframes (A5P3-235).
 Budget-raise: css-icons 15.25 KB → 15.3 KB (measured 15.29 KB gzip): the same theme additions (A5P3-080, A5P3-235), plus `font-display: block` on the icon font face (A5P3-238).
+Budget-raise: media-tabs 10.45 KB → 10.5 KB (measured 10.49 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
+Budget-raise: quote-tabs 24.85 KB → 24.9 KB (measured 24.85 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
+Budget-raise: client-quotes-section 28.05 KB → 28.1 KB (measured 28.07 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
+Budget-raise: feature-tabs-section 60.35 KB → 60.45 KB (measured 60.40 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).

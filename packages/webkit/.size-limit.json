@@ -381,7 +381,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "10.45 KB"
+    "limit": "10.5 KB"
   },
   {
     "name": "embed",
@@ -438,7 +438,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "24.85 KB",
+    "limit": "24.9 KB",
     "entryOnly": true
   },
   {
@@ -616,7 +616,7 @@
   {
     "name": "client-quotes-section",
     "path": "src/components/section/client-quotes-section/client-quotes-section.vue",
-    "limit": "28.05 KB",
+    "limit": "28.1 KB",
     "entryOnly": true
   },
   {
@@ -687,7 +687,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "60.35 KB",
+    "limit": "60.45 KB",
     "entryOnly": true
   },
   {
