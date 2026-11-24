@@ -224,8 +224,10 @@ pnpm --filter @aziontech/webkit run usage-check -- auth/auth-sign-in "A sign-in 
 
 It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs
 `npx @aziontech/webkit init --yes`, points the app's `.mcp.json` at the packed MCP server (`@aziontech/webkit-mcp`), and runs
-`claude -p "<prompt>" --dangerously-skip-permissions --max-turns 40 --output-format json
---mcp-config .mcp.json --strict-mcp-config` there. It passes when a generated `src/**/*.vue`
+`claude -p "<prompt>" --permission-mode acceptEdits --allowedTools <list> --max-turns 40
+--output-format json --mcp-config .mcp.json --strict-mcp-config` there; the list is
+`USAGE_ALLOWED_TOOLS` in `scripts/check-usage.mjs` (the file tools, the `webkit` MCP server and
+`npx @aziontech/webkit`), so the session never runs with permissions skipped. It passes when a generated `src/**/*.vue`
 imports the component (for a block: at least 80 % of the components its primary SFC imports) and
 `webkit doctor` passes. It needs the `claude` CLI and an API key and costs one agent session, so
 it is not in the PR pipeline: run it locally or through the **Usage check** workflow
