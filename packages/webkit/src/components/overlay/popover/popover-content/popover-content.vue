@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance } from 'vue'
 
+  import { useMounted } from '../../../../composables/use-mounted'
   import { usePopoverContext } from '../injection-key'
 
   defineOptions({
@@ -17,10 +18,16 @@
   const setPanelRef = (el: globalThis.Element | ComponentPublicInstance | null) => {
     ctx.panelRef.value = el instanceof HTMLElement ? el : null
   }
+
+  // Inline on the server and during hydration: SSR hosts like Astro drop the <body> teleport buffer.
+  const teleportReady = useMounted()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

@@ -2,6 +2,7 @@
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useMounted } from '../../../composables/use-mounted'
   import { usePlacement } from '../../../composables/use-placement'
 
   export type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'
@@ -136,6 +137,9 @@
     clearHoverTimer()
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
+
+  // Inline on the server and during hydration: SSR hosts like Astro drop the <body> teleport buffer.
+  const teleportReady = useMounted()
 </script>
 
 <template>
@@ -156,7 +160,10 @@
     <slot />
   </span>
 
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
