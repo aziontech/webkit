@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 5164341bf451364cf6403d8af57260696755299aa780d0e7b254f34f195d4f8e
+checksum: fc60fac878ce34ae64cabcccb03f2b83b5ffc3d9be179524398401a050e1c539
 created: 2026-11-16
-last_updated: 2026-11-17
+last_updated: 2026-11-24
 ---
 
 # Copy Text — Component Spec
@@ -39,7 +39,7 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 ## Best practices
 
 - Pass the exact text in `value`; CopyText shows and copies the same string.
-- Keep values to one line. A long value truncates with an ellipsis; the full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
+- Keep values to one line. A long value truncates in the middle: the start ends in an ellipsis and its last characters (up to 12, a third of the value at most) stay visible, so `acme-store-pr…example.com` still shows how the value ends (decision A5P3-L02-3). The full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
 - Pass `ariaLabel` when the value alone does not say what it is (`Copy CNAME`); the default reads `Copy {value}`.
 - Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
 - Use `size="small"` in dense tables and lists.
@@ -140,7 +140,7 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 ## Responsive
 
 - Container queries: none; the box is inline and as wide as its value, capped at `max-w-full`.
-- Narrow (≤ 640 px or a narrow container): the value never wraps (`whitespace-nowrap`, no break at hyphens) and truncates with an ellipsis; the copy button never shrinks.
+- Narrow (≤ 640 px or a narrow container): the value never wraps (`whitespace-nowrap`, no break at hyphens) and truncates in the middle, keeping its last characters; the copy button never shrinks.
 - The truncating value keeps 2 px of block padding (`py-0.5`) inside its clip, because the code typography sets a line height of 1: without it the clip cuts descenders (`g` in `--bg-canvas` reads as `q`).
 - Touch: the copy button is always visible (no hover-only affordance); 28 / 32 px with a 44 px hit area on `pointer: coarse`.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom — the value truncates instead.

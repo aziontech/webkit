@@ -222,7 +222,7 @@
   }
 
   const TRANSCRIPT_SUMMARY_CLASS =
-    'cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) ' +
+    'relative cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
@@ -388,6 +388,11 @@
     >
       <summary :class="TRANSCRIPT_SUMMARY_CLASS">
         {{ t('audioPlayer.transcript') }}
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-20px))] pointer-coarse:block"
+        />
       </summary>
       <p
         dir="auto"

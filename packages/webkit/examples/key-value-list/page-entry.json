@@ -27,14 +27,22 @@
           "props": {
             "label": "Status"
           },
-          "children": ["Active"]
+          "children": [
+            {
+              "component": "StatusIndicator",
+              "props": {
+                "severity": "success",
+                "label": "Active"
+              }
+            }
+          ]
         },
         {
           "component": "KeyValueListItem",
           "props": {
             "label": "Created"
           },
-          "children": ["Nov 10, 2026, 14:32"]
+          "children": ["Nov 10, 2026, 2:32 PM"]
         },
         {
           "component": "KeyValueListItem",

@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render, waitFor } from '@testing-library/vue'
+import { render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import AccordionPageEntry from '../../../../examples/accordion/page-entry.vue'
@@ -305,14 +305,22 @@ describe('SitePage', () => {
     const { findAllByTestId } = render(KeyValueListPageEntry)
     const items = await findAllByTestId('key-value-list-item')
     await waitFor(() => expect(items).toHaveLength(6))
-    expect(items.map((item) => item.querySelector('dd')!.textContent)).toEqual([
+    expect(items.map((item) => item.querySelector('dd')!.textContent?.trim())).toEqual([
       '1752167890',
-      'Active',
-      'Nov 10, 2026, 14:32',
+      expect.stringContaining('Active'),
+      'Nov 10, 2026, 2:32 PM',
       'US East (Virginia)',
       'shop.example.com',
       expect.stringContaining('—')
     ])
+  })
+
+  it('draws a status child of a scene with the same dot and label as the Vue example', async () => {
+    const { findAllByTestId } = render(KeyValueListPageEntry)
+    const items = await findAllByTestId('key-value-list-item')
+    const status = await within(items[1]!).findByTestId('status-indicator')
+    expect(status.getAttribute('data-severity')).toBe('success')
+    expect(status.textContent).toContain('Active')
   })
 
   it('skips a scene the registry does not hold, with a development warning', async () => {

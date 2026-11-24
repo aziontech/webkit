@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: bb71b36db7530435ea49cf16afc5da90565ed9ceb015453f00bf5688c0f0f4d1
+checksum: 9b291886cda8b43abb3f3c72e85e0eeb941695bd25d20ab276cf2d74c941b611
 created: 2026-08-22
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # DocCallout — Component Spec
@@ -59,7 +59,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 | `variant` | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false    | Which admonition this is; drives the severity color and the icon. |
 | `label`   | `string`                                                        | `''`     | false    | Fallback copy when the default slot is empty.                     |
 
-`variant` names the admonition type (Mintlify's Note, Info, Tip, Check, Warning, Danger), not a severity: `note` and `tip` are not severities. It maps onto `Alert` severities for color and adds an icon (`note` and `info` → info, `tip` → info drawn neutral, `check` → success, `warning` → warning, `danger` → danger), which is why it is not called `severity`.
+`variant` names the admonition type (Mintlify's Note, Info, Tip, Check, Warning, Danger), not a severity: `note` and `tip` are not severities. It maps onto `Alert` severities for color and adds an icon (`note` → info, `info` → info drawn neutral with the info glyph (Mintlify's grey Info, decision A5P3-L02-2), `tip` → info drawn neutral with the lightbulb glyph, so no two variants look alike, `check` → success, `warning` → warning, `danger` → danger), which is why it is not called `severity`.
 
 ## Events
 
@@ -75,7 +75,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 - Visual states: `default`, plus `hover` and `focus-visible` on an inline code chip (a ring, and a tooltip offering the copy)
 - `data-variant` mirrors the `variant` prop, so a test or a consumer can target one flavour
-- `data-neutral` is present only for `tip`, the one variant that carries no severity
+- `data-neutral` is present only for `info` and `tip`, the two variants drawn without a severity colour; they differ by glyph
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
 - Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap; code inside `pre` never takes the chip (`src/test/inline-code.test.ts`)
 - Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)

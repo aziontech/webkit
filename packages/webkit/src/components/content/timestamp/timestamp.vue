@@ -131,7 +131,7 @@
   })
 
   const TEXT_CLASS =
-    'cursor-pointer rounded-(--shape-control) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out ' +
+    'relative cursor-pointer rounded-(--shape-control) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out ' +
     'hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
     'motion-reduce:transition-none'
 
@@ -161,6 +161,11 @@
           dir="auto"
           >{{ text }}</time
         >
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-20px))] pointer-coarse:block"
+        />
       </button>
     </PopoverTrigger>
     <PopoverContent :data-testid="`${testId}__panel`">
@@ -225,6 +230,11 @@
         data-allow-mismatch="text"
         >{{ text }}</time
       >
+      <span
+        aria-hidden="true"
+        data-slot="touch-target"
+        class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-20px))] pointer-coarse:block"
+      />
     </button>
   </span>
   <span

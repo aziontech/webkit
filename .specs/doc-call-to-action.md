@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: d3d759cfeb94c3c4713acab5c9fa9afbdbcd69be2dbd7077d4d7d8401da65142
+checksum: 28e85c1d4a5501f03c1d25af96074e5f8df44f8d05bc2a7e239b2291becb2c9c
 created: 2026-11-14
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # DocCallToAction — Component Spec
@@ -121,7 +121,7 @@ _none_
 
 ## Responsive
 
-- Fills the rail (about 225 px); actions stack full width.
+- Fills the rail (about 225 px) and stops at `--container-3xs` anywhere wider, such as a Markdown content column, so it keeps the rail scale; actions stack full width.
 
 ## Performance
 

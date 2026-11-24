@@ -3,10 +3,10 @@ name: key-value-list
 category: content
 structure: composition
 status: implemented
-checksum: affca7d0f01428086e0b83127d611edb04c75cf928566d32e0277223e20502d3
+checksum: 8f877875849981771951ac2b32923cf0d1e7ccc678542d4424d4f4510fa1af8c
 spec_version: 6
 created: 2026-11-10
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # KeyValueList — Component Spec
@@ -84,14 +84,14 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     </KeyValueList.Group>
     <KeyValueList.Group label="Networking">
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
       <KeyValueList.Item label="Region">
@@ -116,10 +116,11 @@ Tree-shaking alternative — the standalone root plus each sub-component from it
 </script>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same facts render from a docs page as tags (`DocMarkdown`) and from the site's page JSON as the `KeyValueList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot). The items nest: in Markdown each `<KeyValueListItem label="…">` (and `<KeyValueListGroup label="…">`) sits inside the `<KeyValueList>` tag and its value is the text between the tags, with inline Markdown (bold, emphasis, code, links); in page JSON the items are the scene's `children` and a value is a text child:
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same facts render from a docs page as tags (`DocMarkdown`) and from the site's page JSON as the `KeyValueList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot). The items nest: in Markdown each `<KeyValueListItem label="…">` (and `<KeyValueListGroup label="…">`) sits inside the `<KeyValueList>` tag and its value is the text between the tags, with inline Markdown (bold, emphasis, code, links) and an inline `<StatusIndicator severity label />` tag; in page JSON the items are the scene's `children` and a value is a text child or a `StatusIndicator` scene. A status reads as the same dot and label in all three channels:
 
 ```mdx
 <KeyValueList aria-label="Workload details">
+  <KeyValueListItem label="Status"><StatusIndicator severity="success" label="Active" /></KeyValueListItem>
   <KeyValueListItem label="Region">US East (Virginia)</KeyValueListItem>
   <KeyValueListItem label="Domain">[shop.example.com](https://shop.example.com)</KeyValueListItem>
 </KeyValueList>
@@ -130,12 +131,17 @@ Tree-shaking alternative — the standalone root plus each sub-component from it
   "component": "KeyValueList",
   "props": { "ariaLabel": "Workload details" },
   "children": [
+    {
+      "component": "KeyValueListItem",
+      "props": { "label": "Status" },
+      "children": [{ "component": "StatusIndicator", "props": { "severity": "success", "label": "Active" } }]
+    },
     { "component": "KeyValueListItem", "props": { "label": "Region" }, "children": ["US East (Virginia)"] }
   ]
 }
 ```
 
-A value composed of other components (a `CopyButton`, a `StatusIndicator`) and the `info` slot stay Vue. `DocMarkdown` and the scene registry load the list and its parts as async chunks.
+A value composed of other components (a `CopyButton`) and the `info` slot stay Vue. `DocMarkdown` and the scene registry load the list and its parts as async chunks.
 
 ## Sub-components
 
@@ -246,13 +252,13 @@ Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `br
 
 ## Examples
 
-- Default — a resource details list: Workload ID with a `CopyButton`, Status with a `StatusIndicator`, Created at, Region, and Domain with a `Link`, at `columns: 1` with controls driving `columns` and `loading`.
+- Default — a resource details list: Workload ID with a `CopyButton`, Status with a `StatusIndicator`, Created at, Region, and Domain with an inline `Link` (it takes the value's type size), at `columns: 1` with controls driving `columns` and `loading`.
 - Columns — composite: the same facts at `columns` 2, 3 and 4 stacked in one frame (the `Types` equivalent for the `columns` axis).
 - Groups — two to three `KeyValueList.Group` columns (General, Networking, Source) with an `info` `Hint` on one key and one empty value.
 - Loading — `loading: true` on the Default facts.
-- Split — a subscription plan card with `variant="split"` (Plan Price, Billing Period, Next Invoice, Payment Method); justified because `variant` changes the layout of every pair.
-- Markdown — the workload facts as `<KeyValueList>` with `<KeyValueListItem>` tags rendered by `DocMarkdown`, values with inline code, bold and a link, and one empty value. Justified: the docs channel (RV-K2-1).
-- Page JSON — the same facts as a `KeyValueList` scene with item `children` and text values in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
+- Split — a subscription plan card with `variant="split"` (Plan price, Billing period, Next invoice, Payment method); justified because `variant` changes the layout of every pair.
+- Markdown — the workload facts as `<KeyValueList>` with `<KeyValueListItem>` tags rendered by `DocMarkdown`, values with a `StatusIndicator` tag and a link, and one empty value. Justified: the docs channel (RV-K2-1).
+- Page JSON — the same facts as a `KeyValueList` scene with item `children`, text values and a `StatusIndicator` status in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 Justification: KeyValueList has a two-value `variant` axis (`Split` shows the non-default one) and no `size` axis; its other axes are `columns` (shown as the composite `Columns` story) and the Group shape, a distinct anatomy the consumer must see composed. `Loading` is the state story for the declared `loading` prop.
 

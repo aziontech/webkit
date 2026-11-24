@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: b989261358bf6c5ff33c143f4b96e63bc163aaac7664544cda0cb558b4758442
+checksum: e98059069b3010efedb6fc38514755c4db43cc83b4f3b4ccaa3308575b10a607
 created: 2026-08-22
-last_updated: 2026-11-17
+last_updated: 2026-11-24
 ---
 
 # DocFrame — Component Spec
@@ -58,12 +58,12 @@ The bordered surface every screenshot, diagram and clip in a documentation page 
 
 ## Props
 
-| Prop       | Type      | Default | Required | JSDoc                                                                         |
-| ---------- | --------- | ------- | -------- | ----------------------------------------------------------------------------- |
-| `caption`  | `string`  | `''`    | false    | Caption under the frame, centered; plain-text fallback for the caption slot.  |
-| `hint`     | `string`  | `''`    | false    | Lead-in above the frame, left aligned; plain-text fallback for the hint slot. |
-| `src`      | `string`  | `''`    | false    | Media source; omit to frame slot content instead.                             |
-| `alt`      | `string`  | `''`    | false    | Alternative text for the framed media.                                        |
+| Prop       | Type      | Default | Required | JSDoc                                                                                                                                |
+| ---------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `caption`  | `string`  | `''`    | false    | Caption under the frame, centered; plain-text fallback for the caption slot.                                                         |
+| `hint`     | `string`  | `''`    | false    | Lead-in above the frame, left aligned; plain-text fallback for the hint slot.                                                        |
+| `src`      | `string`  | `''`    | false    | Media source; omit to frame slot content instead.                                                                                    |
+| `alt`      | `string`  | `''`    | false    | Alternative text for the framed media.                                                                                               |
 | `autoplay` | `boolean` | `false` | false    | Plays the clip on its own, muted, inline and looping, with a pause control instead of the player controls; off under reduced motion. |
 
 ## Events
@@ -82,7 +82,8 @@ The bordered surface every screenshot, diagram and clip in a documentation page 
 
 - Visual states: `default`; `hover` and `focus-visible` on the zoom trigger of a still (the full-screen badge fades in on both, so the affordance is not pointer-only).
 - The framed element is decided by data, not by a prop: a source matching a clip extension (`.mp4`, `.webm`, `.ogv`, `.ogg`, `.mov`, `.m4v`) renders a player, any other source renders a still, and no source renders the default slot.
-- The lightbox contract: only a **still** opens full screen — the picture itself is the trigger. `Escape`, the backdrop, the close control and a click on the opened picture all close it, and focus returns to the thumbnail trigger. A **clip** does not zoom (it carries controls a click would fight, and a player has fullscreen of its own), and **composed slot content** does not zoom (there is no source to open).
+- The lightbox contract: only a **still** opens full screen — the picture itself is the trigger. `Escape`, the backdrop, the close control and a click on the opened picture all close it, and focus returns to the thumbnail trigger. A **clip** does not zoom (it carries controls a click would fight, and a player has fullscreen of its own), and **composed slot content** does not zoom (there is no source to open). On a coarse pointer (`(pointer: coarse)`, a phone or tablet) a still does not zoom either: the full-screen view would show it at about its inline size, so the plain picture renders and the reader pinch-zooms it.
+- A still loads lazily and decodes off the main thread (`loading="lazy"`, `decoding="async"`), so a page that stacks many screenshots loads only the ones near the view.
 - While open: the overlay carries `data-state="open"`, body scroll is locked, and the full-size copy carries `data-flip="start|armed"` — the attribute that arms the FLIP transition only after the starting transform has committed.
 - `autoplay` is applied on both authoring paths: to the prop, and by rewriting a hand-written autoplaying clip in the default slot with the same muted/inline/loop attributes, no player controls and no native `autoplay` attribute. The frame starts the clip itself after mount, so it can honour the reader's preference: the clip carries `data-autoplay`, and a pause control (`IconButton`, `${testId}__pause`) sits on the frame's bottom end corner.
 - Autoplay playback: `playing` → the clip loops and the control reads "Pause animation" (`common.pauseAnimation`, icon `az-pause`); `paused` → the clip holds its current frame and the control reads "Play animation" (`common.playAnimation`, icon `az-play`). Under `prefers-reduced-motion: reduce` the clip starts paused on its first frame; the reader's own choice then wins over the preference. If the browser refuses to play, the frame falls back to `paused`. When the clip has a text — `alt` on the prop path, the hand-written clip's `aria-label` or `title` in the slot — the label carries it, so several frames on one page have distinct names: "Pause animation: {alt}" (`docFrame.pauseNamed`) and "Play animation: {alt}" (`docFrame.playNamed`).
@@ -92,7 +93,7 @@ The bordered surface every screenshot, diagram and clip in a documentation page 
 
 | Trigger                                                 | Animation / Transition                                                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                                                                                                                        |
 | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| autoplaying clip (loop)                                  | clip playback started by the frame after mount                                                                              | —                                                 | not started under `prefers-reduced-motion: reduce` (first frame, play control shown); pausable at any time from the pause control                                                                                |
+| autoplaying clip (loop)                                 | clip playback started by the frame after mount                                                                               | —                                                 | not started under `prefers-reduced-motion: reduce` (first frame, play control shown); pausable at any time from the pause control                                                                              |
 | hover / keyboard focus on the zoom trigger (badge fade) | `transition-opacity duration-fast-02 ease-productive-entrance`                                                               | semantic                                          | `motion-reduce:transition-none`                                                                                                                                                                                |
 | lightbox open (overlay)                                 | `animate-fade-in`                                                                                                            | semantic                                          | `motion-reduce:animate-none`                                                                                                                                                                                   |
 | lightbox open/close (FLIP travel of the picture)        | `data-[flip=armed]:transition-[transform] data-[flip=armed]:duration-moderate-02 data-[flip=armed]:ease-expressive-entrance` | semantic                                          | `motion-reduce:transition-none!` — and the FLIP is also skipped in JS: the transform is never written under a reduced-motion preference, so the close path (which unmounts on `transitionend`) stays reachable |
@@ -133,7 +134,7 @@ The FLIP transform itself is an inline style because it is a measurement (the re
 - Moving content (WCAG 2.2.2 Pause, Stop, Hide): an autoplaying clip loops for longer than five seconds, so it always ships the visible, keyboard-reachable pause control, and it does not start at all under a reduced-motion preference.
 - The lightbox Teleports to `body` and locks body scroll while open, so assistive tech and the pointer agree on what is interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons) on all frame chrome tokens.
-- Touch target: the zoom trigger is the whole picture; the close control is a padded button at the viewport corner.
+- Touch target: the zoom trigger is the whole picture; the close control is a padded button at the viewport corner. On a coarse pointer there is no zoom trigger (see the lightbox contract).
 - Teleported content: the teleported zoom dialog binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples

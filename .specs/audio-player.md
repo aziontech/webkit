@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 6449f4ae01e3c6783a285792b47d8c066a6926db014075f73b556a769370fd76
+checksum: bc4c9d6bb0e19f974284e1dca0ba42f26c5d8f2723e731ce24a20dd47bc30a3f
 created: 2026-11-19
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 ---
 
 # AudioPlayer — Component Spec
@@ -71,22 +71,22 @@ A compact player for one audio clip: play and pause, a seek bar between the curr
 | Prop            | Type       | Default   | Required | JSDoc                                                                                                                   |
 | --------------- | ---------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `src`           | `string`   | `''`      | false    | Audio source: a URL, an object URL or a data URL built from base64 audio. Empty disables the controls.                  |
-| `title`         | `string`   | `''`      | false    | Name of the clip, shown above the controls and used as the accessible name of the control group.                       |
-| `duration`      | `number`   | undefined | false    | Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder.              |
-| `transcript`    | `string`   | `''`      | false    | Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section.          |
+| `title`         | `string`   | `''`      | false    | Name of the clip, shown above the controls and used as the accessible name of the control group.                        |
+| `duration`      | `number`   | undefined | false    | Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder.               |
+| `transcript`    | `string`   | `''`      | false    | Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section.           |
 | `playbackRates` | `number[]` | `[]`      | false    | Playback speeds the speed control cycles through, in order. Empty hides it; it starts at 1 when listed, else the first. |
 | `downloadable`  | `boolean`  | `false`   | false    | Shows a Download link to `src`.                                                                                         |
 | `fileName`      | `string`   | `''`      | false    | File name the Download link saves the audio as. Empty lets the browser pick one.                                        |
-| `loading`       | `boolean`  | `false`   | false    | The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled.  |
-| `error`         | `string`   | `''`      | false    | Why the audio cannot play. Set, the controls are disabled and this text replaces the time.                             |
+| `loading`       | `boolean`  | `false`   | false    | The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled.    |
+| `error`         | `string`   | `''`      | false    | Why the audio cannot play. Set, the controls are disabled and this text replaces the time.                              |
 | `disabled`      | `boolean`  | `false`   | false    | Disables every control and applies the disabled tokens.                                                                 |
-| `ariaLabel`     | `string`   | `''`      | false    | Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player.         |
+| `ariaLabel`     | `string`   | `''`      | false    | Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player.          |
 
 ## Events
 
-| Event   | Payload | Notes                                                                                          |
-| ------- | ------- | ---------------------------------------------------------------------------------------------- |
-| `play`  | `Event` | Playback started (the audio element's `play` event).                                           |
+| Event   | Payload | Notes                                                                                             |
+| ------- | ------- | ------------------------------------------------------------------------------------------------- |
+| `play`  | `Event` | Playback started (the audio element's `play` event).                                              |
 | `pause` | `Event` | Playback paused, by the reader or because the clip reached its end (the element's `pause` event). |
 
 ## Slots
@@ -103,34 +103,34 @@ _none_
 - `data-muted` is set while the audio is muted; the mute control shows Unmute and the volume slider reads 0.
 - Empty: `src` empty with `loading` false sets `data-disabled`; the times show `--:--` and the Download link is not rendered.
 - Unknown duration (no `duration` and the file not read yet): the times show `--:--` and the seek bar is disabled until the browser reports the length.
-- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root.
+- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root. On a coarse pointer an invisible layer (`data-slot="touch-target"`) extends the summary's hit area to 40 px tall.
 - Not applicable: `readonly` and `invalid` (the player takes no value input).
 - A new `src` resets the time, the playing state and the error.
 
 ## Motion & Animations
 
-| Trigger                  | Animation / Transition                                              | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                         |
-| ------------------------ | ------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| loading indicator        | `Spinner` (inside `IconButton`)                                     | semantic (Spinner's own)                          | `Spinner`'s own `motion-reduce:` fallback       |
-| hover/focus state change | inherited from `IconButton`, `Button` and `Slider`                  | inherited                                         | inherited `motion-reduce:transition-none`       |
+| Trigger                  | Animation / Transition                             | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                   |
+| ------------------------ | -------------------------------------------------- | ------------------------------------------------- | ----------------------------------------- |
+| loading indicator        | `Spinner` (inside `IconButton`)                    | semantic (Spinner's own)                          | `Spinner`'s own `motion-reduce:` fallback |
+| hover/focus state change | inherited from `IconButton`, `Button` and `Slider` | inherited                                         | inherited `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                          |
-| ---------------------- | ------------------------------------------ |
-| surface                | `var(--bg-surface)`                        |
-| border                 | `var(--border-default)`                    |
-| shape                  | `var(--shape-card)`                        |
-| spacing (padding, gap) | `var(--spacing-xs)`, `var(--spacing-sm)`   |
-| title                  | `.text-label-md`, `var(--text-default)`    |
-| time                   | `.text-body-xs`, `var(--text-muted)`       |
-| error line             | `.text-body-xs`, `var(--text-danger)`      |
-| transcript summary     | `.text-label-sm`, `var(--text-default)`    |
-| transcript text        | `.text-body-sm`, `var(--text-muted)`       |
-| transcript spacing     | `var(--spacing-2xs)`                       |
+| Region                 | Token (DESIGN.md)                                      |
+| ---------------------- | ------------------------------------------------------ |
+| surface                | `var(--bg-surface)`                                    |
+| border                 | `var(--border-default)`                                |
+| shape                  | `var(--shape-card)`                                    |
+| spacing (padding, gap) | `var(--spacing-xs)`, `var(--spacing-sm)`               |
+| title                  | `.text-label-md`, `var(--text-default)`                |
+| time                   | `.text-body-xs`, `var(--text-muted)`                   |
+| error line             | `.text-body-xs`, `var(--text-danger)`                  |
+| transcript summary     | `.text-label-sm`, `var(--text-default)`                |
+| transcript text        | `.text-body-sm`, `var(--text-muted)`                   |
+| transcript spacing     | `var(--spacing-2xs)`                                   |
 | summary focus shape    | `var(--shape-control)`, ring offset `var(--bg-canvas)` |
-| disabled               | `var(--text-disabled)`                     |
-| ring                   | `var(--ring-color)`                        |
+| disabled               | `var(--text-disabled)`                                 |
+| ring                   | `var(--ring-color)`                                    |
 
 ## Theme gaps
 
@@ -156,23 +156,23 @@ _none_
 
 ## Internationalization
 
-| Key                       | English source               | Override prop |
-| ------------------------- | ---------------------------- | ------------- |
-| `audioPlayer.label`       | `Audio player`               | `ariaLabel`   |
-| `audioPlayer.play`        | `Play`                       | —             |
-| `audioPlayer.pause`       | `Pause`                      | —             |
-| `audioPlayer.seek`        | `Seek`                       | —             |
-| `audioPlayer.position`    | `{current} of {total}`       | —             |
-| `audioPlayer.mute`        | `Mute`                       | —             |
-| `audioPlayer.unmute`      | `Unmute`                     | —             |
-| `audioPlayer.volume`      | `Volume`                     | —             |
-| `audioPlayer.rate`        | `{rate}×`                    | —             |
-| `audioPlayer.speed`       | `Playback speed {rate}`      | —             |
-| `audioPlayer.download`    | `Download audio`             | —             |
-| `audioPlayer.downloadTitle` | `Download {title}`         | —             |
-| `audioPlayer.loading`     | `Loading audio`              | —             |
-| `audioPlayer.error`       | `The audio could not play.`  | `error`       |
-| `audioPlayer.transcript`  | `Transcript`                 | —             |
+| Key                         | English source              | Override prop |
+| --------------------------- | --------------------------- | ------------- |
+| `audioPlayer.label`         | `Audio player`              | `ariaLabel`   |
+| `audioPlayer.play`          | `Play`                      | —             |
+| `audioPlayer.pause`         | `Pause`                     | —             |
+| `audioPlayer.seek`          | `Seek`                      | —             |
+| `audioPlayer.position`      | `{current} of {total}`      | —             |
+| `audioPlayer.mute`          | `Mute`                      | —             |
+| `audioPlayer.unmute`        | `Unmute`                    | —             |
+| `audioPlayer.volume`        | `Volume`                    | —             |
+| `audioPlayer.rate`          | `{rate}×`                   | —             |
+| `audioPlayer.speed`         | `Playback speed {rate}`     | —             |
+| `audioPlayer.download`      | `Download audio`            | —             |
+| `audioPlayer.downloadTitle` | `Download {title}`          | —             |
+| `audioPlayer.loading`       | `Loading audio`             | —             |
+| `audioPlayer.error`         | `The audio could not play.` | `error`       |
+| `audioPlayer.transcript`    | `Transcript`                | —             |
 
 - Formatting: `formatNumber` (`Intl.NumberFormat`, the `ConfigProvider` locale) for the shown time, `m:ss` under an hour and `h:mm:ss` from an hour on, and for the rate inside `audioPlayer.rate` (a locale can move the sign: `×1,5`). The spoken `aria-valuetext` uses `formatNumber` with `style: 'unit'` (`hour`, `minute`, `second`, long) joined by `formatList` (`type: 'unit'`). An unknown duration shows `--:--`; the seek bar is disabled then, so it announces nothing. `audioPlayer.downloadTitle` names the link when `title` is set (the title fills `{title}`), so two players in one message have distinct link names.
 

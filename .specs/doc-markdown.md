@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: acdf725f2699255ed86a29435ef0490cfb0a1921eb758738d085315a88eb2c00
+checksum: 5085058aae643f00414e00e55fb9b155f12ec892da581a6b6c1a1daebc2f0bab
 created: 2026-11-14
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # DocMarkdown — Component Spec
@@ -40,6 +40,7 @@ Renders a documentation page written in Markdown with Mintlify-style MDX compone
 - `KeyValueList`, `Quote`, `Stats`, `Faq`, `ThirdPartyLogo`, `PricingCard`, `IntegrationCard`, `PlanFeatureList`, `Embed`, `Illustration`, `Diagram`, `ConsoleMockup`, `NetworkMap`, `Carousel` — content components under their own names (decision RV-K2-1), each loaded as an async chunk. A `<KeyValueList>` takes `<KeyValueListItem label="…">` and `<KeyValueListGroup label="…">` tags inside it, and the text between a part's tags is its value, with inline Markdown (bold, emphasis, code, links as `Link`). A `<Carousel>` takes `<CarouselItem>` tags whose content is other tags (a `<Quote />`, a `<Card />`), and `DocMarkdown` adds the previous and next controls. `ConsoleMockup` and `NetworkMap` fill their container, so `DocMarkdown` sets each in a framed box (16:9 and 2:1).
 - `AgentCard`, `CallToAction` — `DocAgentCard` and `DocCallToAction` (decision RV-K2-1); the text inside `<CallToAction>` is its offer copy.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
+- `StatusIndicator` — an inline `<StatusIndicator severity label loading />` tag renders the status dot and label in running text or a `KeyValueListItem` value, so a status reads the same as in Vue and page JSON (decision A5P3-L02-1); a `severity` outside the shared set falls back to the component default.
 - `RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
 - `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
 

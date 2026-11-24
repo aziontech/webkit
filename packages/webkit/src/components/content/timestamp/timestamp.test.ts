@@ -35,6 +35,21 @@ describe('Timestamp', () => {
     expect(time?.textContent).toMatch(/UTC/)
   })
 
+  it('gives the trigger a 40 px hit area on a coarse pointer, before and after it arms', async () => {
+    render(inProvider({ value: VALUE }))
+    const trigger = () => screen.getByTestId('timestamp__text')
+    const pin = () => {
+      const layer = trigger().querySelector('[data-slot="touch-target"]')
+      expect(layer?.getAttribute('aria-hidden')).toBe('true')
+      expect(layer?.classList.contains('pointer-coarse:block')).toBe(true)
+      expect(layer?.classList.contains('inset-y-[min(0rem,calc(50%-20px))]')).toBe(true)
+      expect(trigger().classList.contains('relative')).toBe(true)
+    }
+    pin()
+    await userEvent.click(trigger())
+    pin()
+  })
+
   it('lets a consumer data-testid win', () => {
     render(inProvider({ value: VALUE, 'data-testid': 'started-at' }))
 

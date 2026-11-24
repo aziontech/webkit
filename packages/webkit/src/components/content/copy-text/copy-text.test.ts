@@ -30,6 +30,16 @@ describe('CopyText', () => {
       expect(value.getAttribute('title')).toBe('--spacing-2xl')
     })
 
+    it('keeps the end of a long value visible and truncates its middle', () => {
+      const { getByTestId } = render(LongValue)
+      const value = getByTestId('copy-text__value')
+      const [head, tail] = Array.from(value.children)
+      expect(value.textContent).toBe('acme-store-production.example.com')
+      expect(tail?.textContent).toBe('example.com')
+      expect(tail?.classList.contains('shrink-0')).toBe(true)
+      expect(head?.classList.contains('truncate')).toBe(true)
+    })
+
     it('honors a consumer data-testid and derives the part testids from it', () => {
       const { getByTestId } = render(CopyText, {
         props: { value: 'p-(--spacing-2xl)' },
