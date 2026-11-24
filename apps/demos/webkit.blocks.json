@@ -548,7 +548,7 @@
           "imports": {
             "../settings-canned-responses.vue": "./settings-canned-responses.vue"
           },
-          "checksum": "sha256:972c366b9d1bfe9dde05ffd86170b760daaf2e9a5022eb25e21cae98794db0fc"
+          "checksum": "sha256:da2a2d445c6a8104abd920a1dde47c46bb74205130d17e5dbff25b8e18cca598"
         },
         {
           "path": "src/blocks/settings-canned-responses-responses-table.vue",

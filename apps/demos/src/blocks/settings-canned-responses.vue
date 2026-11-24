@@ -17,15 +17,9 @@
   } from '@aziontech/webkit/use-collection'
   import { computed, ref, watch } from 'vue'
 
-  import {
-    sampleNow,
-    samplePlaceholders,
-    sampleResponses
-  } from './settings-canned-responses.sample'
+  import { sampleNow, samplePlaceholders, sampleResponses } from './settings-canned-responses.sample'
   import ResponseDrawer from './settings-canned-responses-response-drawer.vue'
-  import ResponsesTable, {
-    type CannedResponsesAction
-  } from './settings-canned-responses-responses-table.vue'
+  import ResponsesTable, { type CannedResponsesAction } from './settings-canned-responses-responses-table.vue'
 
   /** Who can insert a response: its author, the author's team, or every agent of the account. */
   export type CannedResponsesVisibility = 'personal' | 'team' | 'everyone'
