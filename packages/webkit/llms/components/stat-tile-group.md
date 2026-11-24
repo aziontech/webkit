@@ -48,6 +48,7 @@
 
 - Visual states: `default` only; loading and empty are each tile's own (`loading`, a null `value`).
 - The group provides an injected context (`StatTileGroupInjectionKey`); a `StatTile` inside it sets `data-grouped`, drops its border, radius and surface, and draws `border-e` + `border-b` as dividers. The inner grid is pulled out by `-me-px -mb-px` and the root clips it (`overflow-hidden`), so the last column's end edge and the last row's bottom edge fall under the card border and every column count gets correct dividers with no `nth-child` rules.
+- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`group-has-[[data-band-shown]]/stat-tile-group:block` on the tile's band), so the labels and figures of a mixed row stay on one line. Pure CSS, so the server render already matches.
 - Not applicable: `disabled`, `readonly`, `invalid`, `open`/`closed`, `error`.
 
 ## Accessibility
@@ -176,32 +177,39 @@
 </template>
 ```
 
-### Markdown
+### MissingData
 
 ```vue
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
-
-  const source = [
-    '## Usage',
-    '',
-    'What your applications served this month.',
-    '',
-    '<StatTileGroup',
-    '  aria-label="Usage"',
-    '>',
-    '  <StatTile label="Data transferred" value={842} unit="GB" delta={12.4} />',
-    '  <StatTile label="Requests / second" value={1240} unit="/s" delta={3.8} />',
-    '  <StatTile label="Bandwidth saving" value={588} unit="GB" delta={6.2} />',
-    '  <StatTile label="Data offload" value={70} unit="%" delta={-1.5} />',
-    '</StatTileGroup>'
-  ].join('\n')
+  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
 </script>
 
 <template>
-  <DocProse>
-    <DocMarkdown :source="source" />
-  </DocProse>
+  <StatTileGroup aria-label="Last 24 hours">
+    <StatTile
+      label="Transactions"
+      :value="15300"
+      :trend="[2, 9, 4, 4, 5, 6, 7, 7, 12, 5, 10, 5, 8, 9, 4, 6, 5, 5, 4, 6, 6, 6, 1, 4]"
+    />
+    <StatTile
+      label="Blocked"
+      :value="7200"
+      :trend="[1, 9, 4, 6, 5, 5, 4, 6, 11, 5, 11, 4, 7, 6, 3, 5, 3, 6, 3, 6, 7, 5, 1, 4]"
+    />
+    <StatTile
+      label="Cautioned"
+      :value="0"
+    />
+    <StatTile
+      label="Threats"
+      :value="null"
+    />
+    <StatTile
+      label="Users"
+      :value="1"
+      error="The request timed out."
+    />
+  </StatTileGroup>
 </template>
 ```

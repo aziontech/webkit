@@ -1821,7 +1821,9 @@ props, so it imports the primary instead of copying it. A marketing band is a pa
 Structure and states first, polish last:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (loading,
-  empty, error, async) · `/webkit-form` · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
+  empty, error, async) · `/webkit-form` (and its control table: dates in `DatePicker`,
+  periods in `DateRangePicker`, references in a searchable picker, never an ID or ISO date typed as
+  text) · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
   levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
@@ -1974,6 +1976,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ Colour logos (`az-color az-<name>`) need no import: `./webkit.css` compiles the ones your sources name, so write the whole class in the code (`'az-color az-react'`, never `` `az-color az-${name}` ``). A logo named only in fetched data goes in `@source inline("az-react");` in `webkit.css`; the whole set (`import '@aziontech/icons/azionicons-color'`, about 85 KB gzip) is only for a page that shows every logo.
 - ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
+- ✅ A control that matches the value's type: `DatePicker` (`show-time` for an instant) or `DateRangePicker` for dates and periods, a searchable picker for a reference to another resource, a `Select` or `RadioGroup` for an enum (`/webkit-form`, Pick the control from the kind of value; the lint rule `prefer-value-control` fails a typed date, and `prefer-date-picker` and `no-raw-id-input` warn on the text fields it cannot see).
 
 ## Must Not Have
 
@@ -16761,7 +16764,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.
 - Keep the label in sentence case with no trailing colon.
 - Put the unit in `unit` ("GB", "ms", "%"), not inside `formatValue`, so it reads muted beside the figure.
-- Leave `trend` out for a strip of figures with no history; the tile then has no chart band.
+- Leave `trend` out for a strip of figures with no history; the tile then has no chart band. In a row where some tiles have a trend, the others draw the gray placeholder band by themselves; do not fake a trend for them.
 - Give the sparkline the same buckets as the chart below it, about twelve points.
 - For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.
 - Use `variant="mono"` (default) for usage figures with a delta, `variant="sans"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one variant per row.
@@ -16780,7 +16783,6 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `stats` — the marketing figure band, with no delta and no live data.
 - `spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - `tag` — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
-- `separator` — carries the "No data" `Tag` across the empty band.
 - `stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview.
 
 ## Props
@@ -16795,7 +16797,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel` | `string` | `''` | false | The comparison period, read after the delta. |
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
-| `trend` | `(number \| null)[]` | `[]` | false | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline. |
+| `trend` | `(number \| null)[]` | `[]` | false | Sparkline values, oldest first. Under two points draws a gray placeholder curve; empty leaves the figure alone unless a sibling in its group draws a band. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton lines in place of the figure, delta and sparkline. |
 | `error` | `string` | `''` | false | Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data. |
 
@@ -16808,7 +16810,9 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton), `error`, `empty value`, `not enough data`. A tile never shows a band without a graph: the band under the figure (48px, `data-band`) draws the sparkline when `trend` has two or more points, and otherwise a gray placeholder curve (`spark-chart` `color="other"` at 40% opacity, a fixed gentle wave drawn from zero so it sits low, decorative and hidden from assistive tech) with a centred `Tag` that says why: `not-enough-data` ("Not enough data", neutral) when the value is there but the trend has under two points; `no-data` ("No data", neutral) when `value` is null, over a dash; `error` ("Couldn't load", neutral, because the danger `Alert` that explains the failure and offers Retry belongs to the page, A5-F12-2) when `error` is set, over a dash, with the delta and the sparkline hidden, `data-error` set and the figure's accessible text reading "Couldn't load." followed by the `error` message; `loading` (the curve with no label) while `loading`, and `loading` wins over `error`.
+- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and CSS shows it as soon as any cell in the group shows a band (`group-has-[[data-band-shown]]/stat-tile-group`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
+- Why a placeholder curve (reverses FR07, owner 2026-11-22): a cell without a graph in a row of graphs reads as broken, and a band that comes and goes moves the row. The curve is the reference systems' chart-shaped placeholder (Carbon Charts skeletons, Infragistics skeleton charts, Dynatrace chart states, Preline chart-shaped empty states); it is gray, faint and always labelled, so it does not read as data.
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
@@ -16824,7 +16828,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - The tile is a `role="group"` named by its label (`aria-labelledby`), not a region landmark, so a strip of KPI tiles adds no landmarks.
 - The animated figure and its unit are `aria-hidden`; a visually hidden copy holds the final formatted value with its unit, so assistive tech never reads a ticking number.
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
-- The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.
+- The sparkline and the placeholder curve are decorative `spark-chart`s (`aria-hidden`); the figure, the delta and the band's `Tag` (Not enough data, No data, Couldn't load) carry the information.
 - Proportional figures on the big number; `tabular-nums` on the delta.
 - Right-to-left: the figure with its unit and the signed delta are left-to-right isolates (`dir="ltr"`), so `110 GB` and `+10.5%` keep their order inside a right-to-left page.
 - Text contrast at least 4.5:1 in both themes.
@@ -16904,6 +16908,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 - Visual states: `default` only; loading and empty are each tile's own (`loading`, a null `value`).
 - The group provides an injected context (`StatTileGroupInjectionKey`); a `StatTile` inside it sets `data-grouped`, drops its border, radius and surface, and draws `border-e` + `border-b` as dividers. The inner grid is pulled out by `-me-px -mb-px` and the root clips it (`overflow-hidden`), so the last column's end edge and the last row's bottom edge fall under the card border and every column count gets correct dividers with no `nth-child` rules.
+- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`group-has-[[data-band-shown]]/stat-tile-group:block` on the tile's band), so the labels and figures of a mixed row stay on one line. Pure CSS, so the server render already matches.
 - Not applicable: `disabled`, `readonly`, `invalid`, `open`/`closed`, `error`.
 
 ## Accessibility
@@ -25843,7 +25848,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 # Date Picker
 
-> DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and a Cancel / Apply pair. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); Cancel closes, drops the draft and refocuses the trigger, as in `date-range-picker`. Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty). Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
+> DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and a Cancel / Apply pair. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); Cancel closes, drops the draft and refocuses the trigger, as in `date-range-picker`. Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty), and the panel shows and edits it in that zone too: the grid, the date and time fields and the `min` / `max` bounds are wall-clock time there, and `v-model` stays the instant. Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
 
 - Import: `import DatePickerRoot from '@aziontech/webkit/date-picker-root'`
 - Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/webkit/date-picker'`
@@ -25929,7 +25934,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | --- | --- | --- | --- | --- |
 | `v-model` | `Date \| null` | `null` | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound. |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`. |
-| `v-model:time-zone` | `string` | `''` | `update:timeZone` | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`. |
+| `v-model:time-zone` | `string` | `''` | `update:timeZone` | IANA time zone the value is shown and picked in, via `defineModel('timeZone')`: the trigger formats in it, and the grid, the fields and `min` / `max` are its wall-clock time, so picking 16:00 commits 16:00 there. Empty resolves to the local zone. Same name as on `date-range-picker`. |
 
 **Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 
@@ -27375,7 +27380,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
-| `v-model` | `number` (`number \| null` with `nullable`) | `0` | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. |
+| `v-model` | `number` (`number \| null` with `nullable`) | `0` | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. A comma typed or pasted as the decimal separator is read as a decimal point (`12,5` is `12.5`): the native number field would drop it and read `125`. A second separator is ignored. |
 
 ## States
 
@@ -30761,6 +30766,7 @@ context, so a consumer never wires one part to the other.
 | --- | --- | --- |
 | `default` | — | The band body, usually a flush Card of SettingsRow rows. |
 | `label` | — | Rich label content; replaces the `label` prop text in the h2. |
+| `info` | — | An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band. |
 
 ## Assets
 
@@ -30782,7 +30788,8 @@ context, so a consumer never wires one part to the other.
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
-- Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
+- Keyboard map: `Tab` reaches the copy-link, the disclosure, the `hint` glyph, the `info` slot's controls and then the body; `Enter`/`Space` toggles the disclosure.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name or the disclosure's; name it after the topic (`Help: Advanced`).
 - ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
 - Contrast ≥4.5:1 for the title.
 - `motion-reduce:transition-none` on every transition.
@@ -31490,6 +31497,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | --- | --- | --- |
 | `description` | — | Rich description content (links, inline code); replaces the `description` prop. |
 | `actions` | — | The band's own actions, on the right of the copy. |
+| `info` | — | An affordance right after the title and outside the h2, before the copy-link: a help button that opens the page's `HelpPanel`. |
 
 ## States
 
@@ -31501,7 +31509,8 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 ## Accessibility
 
 - Visible focus: the copy-link `CopyButton` and the actions carry their own focus ring; focusing the copy-link reveals it.
-- Keyboard map: `Tab` reaches the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- Keyboard map: `Tab` reaches the `info` slot's controls, the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- ARIA: the `info` slot sits outside the h2, so its button's name never joins the heading's name; name it after the topic (`Help: Domains`).
 - ARIA: the copy-link button is named "Copy link to the {title} section" and announces "Link copied".
 - Contrast ≥4.5:1 for the title and the description.
 - `motion-reduce:transition-none` on the reveal.

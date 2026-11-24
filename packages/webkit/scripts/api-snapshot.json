@@ -1158,12 +1158,26 @@
     "conversation-history": {
       "ariaLabel": null,
       "creatable": null,
+      "groupBy": [
+        "date",
+        "status"
+      ],
+      "itemActions": null,
       "items": null,
       "loading": null,
       "modelValue": null,
       "now": null,
+      "openKeys": null,
+      "openSectionKeys": null,
+      "projectActions": null,
+      "projectCreatable": null,
+      "projects": null,
+      "projectsOpen": null,
+      "projectSort": null,
       "removable": null,
-      "searchable": null
+      "searchable": null,
+      "showTime": null,
+      "showToolbar": null
     },
     "prompt-input": {
       "accept": null,
