@@ -80,6 +80,13 @@ describe('InputGroup', () => {
       expect(children[0]).toBe(getByTestId('first'))
       expect(children[2]).toBe(getByTestId('last'))
     })
+
+    it('does not clip its children, so their touch targets reach past the frame', () => {
+      const { getByTestId } = render(InputGroup, { slots: { default: LABELLED_INPUT } })
+      const root = getByTestId('input-group')
+      expect(root.classList).not.toContain('overflow-hidden')
+      expect(root.classList).not.toContain('overflow-clip')
+    })
   })
 
   describe('invalid', () => {

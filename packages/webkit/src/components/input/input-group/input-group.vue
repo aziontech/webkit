@@ -65,7 +65,7 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group')
 
   const ROOT_CLASS =
-    'relative inline-flex items-center w-full overflow-hidden rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
+    'relative inline-flex items-center w-full rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
     'motion-reduce:transition-none ' +
     'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
     '[&:not(:focus-within):not([data-invalid]):not([data-required]):not([data-disabled])]:hover:border-(--border-strong) ' +
@@ -74,12 +74,13 @@
     'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:focus-within:ring-0 ' +
     'data-[disabled]:focus-within:ring-offset-0 ' +
     '[&_*]:focus-visible:!ring-0 [&_*]:focus-visible:!ring-offset-0 [&_*]:focus-within:!ring-0 [&_*]:focus-within:!ring-offset-0 [&_input]:!outline-none ' +
-    '[&_button:not([role=switch])]:!border-transparent [&_button:not([role=switch])]:!rounded-none [&_a]:!border-transparent [&_a]:!rounded-none [&_[role=combobox]]:!border-transparent ' +
-    '[&_[role=combobox]]:!rounded-none ' +
+    '[&_button:not([role=switch])]:!border-transparent [&_a]:!border-transparent [&_[role=combobox]]:!border-transparent ' +
+    '[&_:where(button:not([role=switch]),a,[role=combobox],[data-slot=input])]:rounded-[inherit]! ' +
+    '[&>*_:where(:has(button,a,[role=combobox],[data-slot=input]))]:rounded-[inherit] ' +
     '[&_[data-mode]]:!w-auto ' +
-    '[&_:where([data-slot=input])]:border-0! [&_:where([data-slot=input])]:rounded-none! ' +
-    '[&>*:not(:last-child)]:!border-e [&>*:not(:last-child)]:!border-e-(color:--border-default) [&>*:first-child]:rounded-s-(--shape-control) [&>*:not(:first-child)]:rounded-s-none ' +
-    '[&>*:last-child]:rounded-e-(--shape-control) [&>*:not(:last-child)]:rounded-e-none'
+    '[&_:where([data-slot=input])]:border-0! ' +
+    '[&>*:not(:last-child)]:!border-e [&>*:not(:last-child)]:!border-e-(color:--border-default) [&>*:first-child]:rounded-s-(--shape-control)! [&>*:not(:first-child)]:rounded-s-none! ' +
+    '[&>*:last-child]:rounded-e-(--shape-control)! [&>*:not(:last-child)]:rounded-e-none!'
 </script>
 
 <template>
