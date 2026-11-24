@@ -32,6 +32,24 @@ describe('create-deploy-success', () => {
     expect(screen.getByRole('heading', { name: 'Get started' })).toBeTruthy()
   })
 
+  it('ends on Manage resource when nothing serves the resource yet', () => {
+    render(DeploySuccessCli)
+    expect(screen.getByRole('button', { name: 'Manage resource' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Manage service' })).toBeNull()
+  })
+
+  it('draws no empty preview tile and stacks the next steps one per row', () => {
+    const view = render(CreateDeploySuccess)
+    const heading = screen.getByRole('heading', { name: 'web-app' })
+    const card = heading.closest('[data-testid="card"]') as HTMLElement
+    expect(card.querySelector('[aria-hidden="true"] .az-globe')).toBeNull()
+    const steps = view.container.querySelector(
+      '[data-testid="create-deploy-success__next-steps"]'
+    ) as HTMLElement
+    expect(steps.className).toContain('grid-cols-1')
+    expect(steps.className).not.toContain('sm:grid-cols-3')
+  })
+
   it('renders the records it is given and emits the next step and manage', async () => {
     const step = { icon: 'az az-box', title: 'Open the store', description: 'Go to the store.' }
     const view = render(CreateDeploySuccess, {

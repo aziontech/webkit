@@ -19,9 +19,7 @@
 
 <template>
   <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-    <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
-      Cache expiration policies
-    </h2>
+    <h2 class="text-heading-2xs text-(--text-default)">Cache expiration policies</h2>
     <Card :padded="false">
       <template #default>
         <Item.List>

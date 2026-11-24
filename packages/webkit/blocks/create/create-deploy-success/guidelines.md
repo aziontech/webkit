@@ -23,7 +23,7 @@ A large `h1` stating the outcome and one muted lead sentence under it. For a Git
 
 ### B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 
-The live service: a decorative preview tile (hidden from assistive technology; Visit site is the link), the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
+The live service: the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
 
 ### C. Resources list — `Card`, `Item`, `Tag` (required)
 
@@ -31,7 +31,7 @@ A small heading, "Resources", over `Card :padded="false"` holding an `Item` list
 
 ### D. Next steps — `IntegrationCard` (required)
 
-`IntegrationCard` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
+`IntegrationCard` tiles stacked one per row, each the full width of the column so its title and sentence never clip, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
 ### E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
 
@@ -39,7 +39,7 @@ Only for a resource nothing serves yet (`getStarted` set to its name): a `Subhea
 
 ### F. Manage — `Button` (required)
 
-One full-width secondary large `Button`, "Manage service", at the end of the column that opens the resource. It is the only exit; do not add a second.
+One full-width secondary large `Button` at the end of the column that opens the resource: "Manage service" when a service serves it, "Manage resource" when nothing serves it yet (`deployment` is null). It is the only exit; do not add a second.
 
 ## Data
 
@@ -57,7 +57,7 @@ The block takes what the flow made through props and emits its actions; it fetch
 | Event       | Payload         | When                                           |
 | ----------- | --------------- | ---------------------------------------------- |
 | `next-step` | `(event, step)` | A next-step tile without `href` was activated. |
-| `manage`    | `(event)`       | Manage service.                                |
+| `manage`    | `(event)`       | Manage service, or Manage resource.            |
 
 To go live, render the block from the page the create flow ends on and pass what the flow returned:
 
@@ -103,13 +103,12 @@ Then delete `sample.ts` and its import.
 - **Status tag:** one word, e.g. "Live"; resource tags "Created" or "Bound".
 - **Links:** verb first, e.g. "Visit site", "Add custom domain"; tooltips name the target, e.g. "Open acme/web-app in a new tab".
 - **Next steps:** title verb first in two or three words, e.g. "Customize domain", "View analytics"; description one sentence with a period.
-- **Exit:** "Manage service", the verb and its object.
+- **Exit:** "Manage service", or "Manage resource" when nothing serves it yet: the verb and its object.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no ampersand, no "please".
 
 ## Accessibility
 
 - The heading is the page's only `h1`; the service name and the section titles are `h2`.
-- The preview tile is decorative (`aria-hidden`); Visit site names the address.
 - Links that open a new tab say so in their `Tooltip`, not only with the external-link glyph.
 - Glyphs in rows and cards are decorative and carry `aria-hidden="true"`; the Created or Bound tag gives the state in words.
 - A next-step card is one focusable link or button with a visible focus ring; its title and description are its name.

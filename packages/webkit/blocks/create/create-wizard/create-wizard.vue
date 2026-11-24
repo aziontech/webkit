@@ -289,9 +289,7 @@
                   <Field.Title> Turn on IP filtering </Field.Title>
                   <Field.Description>
                     {{
-                      'Sets modules.ip_filtering on the policy ' +
-                      choice +
-                      ' when this access list is created.'
+                      'Turns on IP filtering for ' + choice + ' when this access list is created.'
                     }}
                   </Field.Description>
                 </Field.Content>
