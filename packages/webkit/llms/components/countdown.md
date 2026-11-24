@@ -87,10 +87,10 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ## Right-to-left
 
-- Layout: inherits `Tag` (gap, no physical side); the icon leads and the label comes before the phrase in the reading order.
+- Layout: inherits `Tag` (gap, no physical side); the icon leads and the label comes before the phrase in the reading order. The label and the phrase sit in one run with `dir="auto"`, so their order follows the language of the phrase (the locale text), not the page: an English phrase on a right-to-left page reads `Next reply: Overdue by 20m`, never `Overdue by 20m Next reply:`. The label, isolated with its own `dir="auto"`, does not count toward that direction, so a label in another script never flips the order of the phrase.
 - Icons: clock, triangle, circle alert and pause are not directional and do not mirror.
 - Keyboard: no keyboard logic.
-- User data: the label is isolated with `dir="auto"`; the phrase is locale text.
+- User data: the label is isolated with `dir="auto"`; the phrase is locale text and sets the direction of the run that holds both.
 
 ## Internationalization
 
