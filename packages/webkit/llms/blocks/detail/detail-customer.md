@@ -36,7 +36,7 @@ A medium `PageHeader` titled with the customer's name, the page's only h1, and t
 
 ### B. Sample clock — `ConfigProvider`
 
-The page body renders inside a `ConfigProvider` with a fixed `now` only while the sample renders, or when the app passes `now`, so countdowns and relative times read the same in every preview. With real data and no `now` there is no provider, so the app's own `ConfigProvider` (its locale and catalogs) reaches every component.
+The page body renders inside a `ConfigProvider` that inherits the app's own (its locale and catalogs). While the sample renders, or when the app passes `now`, it fixes the clock to `now` and reads dates in UTC, so countdowns, relative times and the day headings read the same in every preview and on the server. With real data and no `now` the clock and the time zone are the app's.
 
 ### C. States — `Skeleton`, `Alert`
 
@@ -404,15 +404,10 @@ Each variant is the same screen in another state: `get_block("detail/detail-cust
           />
         </template>
         <template
-          v-if="loading || customer"
+          v-if="customer && !loading"
           #description
         >
-          <Skeleton
-            v-if="loading"
-            width="10rem"
-            height="1rem"
-          />
-          <bdi v-else>{{ customer?.organization }}</bdi>
+          <bdi>{{ customer.organization }}</bdi>
         </template>
         <template
           v-if="!error"
@@ -541,6 +536,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-cust
                 :activity="activity"
                 :name="name"
                 :loading="loading"
+                :now="clock"
               />
             </Tabs.Content>
             <Tabs.Content value="notes">
@@ -719,7 +715,7 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
   import ConfigProvider from '@aziontech/webkit/config-provider'
 
   export interface CustomerClockProps {
-    /** A fixed reference time for every countdown and relative time inside; left out, the page reads the real clock or the app provider's. */
+    /** A fixed reference time for every countdown and relative time inside; the sample also reads its dates in UTC; left out, the page reads the real clock and zone or the app provider's. */
     now?: string | number | Date
   }
 
@@ -734,6 +730,7 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
 <template>
   <ConfigProvider
     :now="now"
+    :time-zone="now === undefined ? undefined : 'UTC'"
     class="min-w-0 flex-1"
   >
     <slot />
@@ -779,7 +776,9 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
 
   const tick = ref<number | undefined>(undefined)
   let timer: ReturnType<typeof setInterval> | undefined
+  const mounted = ref(false)
   onMounted(() => {
+    mounted.value = true
     tick.value = Date.now()
     timer = setInterval(() => (tick.value = Date.now()), 60_000)
   })
@@ -791,7 +790,12 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
     return formatDate(at, { timeStyle: 'short', timeZone: props.customer.timeZone })
   })
   const since = computed(() =>
-    props.customer ? formatDate(props.customer.customerSince, { dateStyle: 'long' }) : ''
+    props.customer
+      ? formatDate(props.customer.customerSince, {
+          dateStyle: 'long',
+          timeZone: props.now === undefined && mounted.value ? undefined : 'UTC'
+        })
+      : ''
   )
   const score = computed(() =>
     formatNumber(props.satisfaction?.average ?? 0, { maximumFractionDigits: 1 })
@@ -1037,7 +1041,7 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
   import EmptyState from '@aziontech/webkit/empty-state'
   import Timeline, { type TimelineItemSeverity } from '@aziontech/webkit/timeline'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
 
   import type { DetailCustomerEvent, DetailCustomerEventType } from '../detail-customer.vue'
 
@@ -1048,11 +1052,14 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
     name?: string
     /** Placeholder items stand in for the activity. */
     loading?: boolean
+    /** A fixed reference time; while set, the day headings read in UTC. */
+    now?: string | number | Date
   }
 
   const props = withDefaults(defineProps<CustomerActivityTabProps>(), {
     name: '',
-    loading: false
+    loading: false,
+    now: undefined
   })
 
   const markers: Record<DetailCustomerEventType, { icon: string; severity: TimelineItemSeverity }> =
@@ -1066,11 +1073,14 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
     }
 
   const { formatDate } = useLocale()
+  const mounted = ref(false)
+  onMounted(() => (mounted.value = true))
+  const zone = computed(() => (props.now === undefined && mounted.value ? undefined : 'UTC'))
 
   const days = computed(() => {
     const groups: { label: string; events: DetailCustomerEvent[] }[] = []
     for (const event of props.activity) {
-      const label = formatDate(event.at, { dateStyle: 'long' })
+      const label = formatDate(event.at, { dateStyle: 'long', timeZone: zone.value })
       const last = groups.at(-1)
       if (last?.label === label) last.events.push(event)
       else groups.push({ label, events: [event] })
