@@ -8,6 +8,16 @@ import HeroTitle from './hero-title/hero-title.vue'
 const TESTID = 'hero'
 
 describe('Hero', () => {
+  it('shows what the Alignment and Widths examples name', async () => {
+    const alignment = (await import('../../../../examples/hero/alignment.vue?raw')).default
+    const widths = (await import('../../../../examples/hero/widths.vue?raw')).default
+
+    const offsets = [...alignment.matchAll(/offset="(\d+)dvh"/g)].map((match) => Number(match[1]))
+    expect(offsets).toHaveLength(3)
+    offsets.forEach((offset) => expect(offset).toBeLessThanOrEqual(50))
+    expect(widths.match(/border-dashed/g)).toHaveLength(3)
+  })
+
   it('teaches a length, never a percentage, for the bottom window in every example and section', () => {
     const sources = {
       ...import.meta.glob('../../../../examples/hero/*.vue', {

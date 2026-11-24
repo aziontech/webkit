@@ -649,4 +649,11 @@ describe('SitePage', () => {
     await findByRole('heading', { level: 2, name: FAQ_TITLE })
     await expectNoA11yViolations(container)
   })
+
+  it('opens the default page with one eyebrow and writes every band description as a sentence', async () => {
+    const source = (await import('../../../../examples/site-page/default.vue?raw')).default
+
+    expect(source.match(/eyebrow:/g)).toHaveLength(1)
+    expect(source).not.toMatch(/description: '[^']*:'/)
+  })
 })
