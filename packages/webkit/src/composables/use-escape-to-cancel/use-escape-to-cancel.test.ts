@@ -120,4 +120,31 @@ describe('useEscapeToCancel', () => {
     press(document.body)
     expect(onEscape).toHaveBeenCalledTimes(1)
   })
+
+  it('shares one pair of document listeners between instances, and the first enabled one runs', () => {
+    const add = vi.spyOn(document, 'addEventListener')
+    const remove = vi.spyOn(document, 'removeEventListener')
+    const keydowns = (spy: typeof add) =>
+      spy.mock.calls.filter(([type]) => type === 'keydown').length
+    try {
+      const enabled = ref(false)
+      const first = setup({ enabled })
+      const second = setup()
+      const third = setup()
+      expect(keydowns(add)).toBe(2)
+      press(document.body)
+      expect(first.onEscape).not.toHaveBeenCalled()
+      expect(second.onEscape).toHaveBeenCalledTimes(1)
+      expect(third.onEscape).not.toHaveBeenCalled()
+      second.scope.stop()
+      first.scope.stop()
+      expect(keydowns(remove)).toBe(0)
+      press(document.body)
+      expect(third.onEscape).toHaveBeenCalledTimes(1)
+      third.scope.stop()
+      expect(keydowns(remove)).toBe(2)
+    } finally {
+      vi.restoreAllMocks()
+    }
+  })
 })

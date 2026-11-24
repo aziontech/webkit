@@ -158,6 +158,19 @@ describe('useShortcuts', () => {
     expect(inLayer).toHaveBeenCalledTimes(1)
   })
 
+  it('looks up the modal layer only when a shortcut matches', () => {
+    const lookups = vi.spyOn(document, 'querySelectorAll')
+    try {
+      scoped(() => useShortcuts({ keys: 'meta+s', handler: vi.fn() }))
+      for (const key of 'typing a note') press(document.body, { key })
+      expect(lookups).not.toHaveBeenCalled()
+      press(document.body, { key: 's', ...primary })
+      expect(lookups).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.restoreAllMocks()
+    }
+  })
+
   it('removes the shortcuts when the scope is disposed', () => {
     const handler = vi.fn()
     const scope = effectScope()
