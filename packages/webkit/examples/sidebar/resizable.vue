@@ -222,7 +222,7 @@
                   <DropdownMenuGroup>
                     <DropdownMenuItem
                       value="logout"
-                      label="Log Out"
+                      label="Log out"
                     >
                       <template #trailing
                         ><i

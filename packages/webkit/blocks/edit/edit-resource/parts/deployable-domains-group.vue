@@ -96,6 +96,7 @@
                   <DropdownMenu.Item
                     value="delete"
                     label="Delete"
+                    severity="danger"
                   >
                     <template #leading
                       ><i

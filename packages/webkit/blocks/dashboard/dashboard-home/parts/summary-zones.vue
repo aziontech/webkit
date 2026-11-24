@@ -99,6 +99,7 @@
                 <DropdownMenuItem
                   value="delete"
                   label="Delete"
+                  severity="danger"
                 />
               </DropdownMenuGroup>
             </TableCellActions>

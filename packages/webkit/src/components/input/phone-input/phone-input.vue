@@ -126,6 +126,12 @@
     if (typeof value === 'string') pickCountry(value)
   }
 
+  const onTouchTargetPress = (event: MouseEvent) => {
+    if (isDisabled.value) return
+    event.preventDefault()
+    document.getElementById(resolvedInputId.value)?.focus()
+  }
+
   const {
     open,
     query,
@@ -156,7 +162,7 @@
   })
 
   const INPUT_CLASS =
-    'w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) rtl:text-end ' +
+    'relative w-full h-full min-w-0 bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) rtl:text-end ' +
     'text-label-sm text-(--text-default) placeholder:text-(--text-muted) ' +
     'disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
@@ -298,25 +304,37 @@
         :disabled="isDisabled"
       />
     </Select>
-    <input
-      :id="resolvedInputId"
-      data-slot="input"
-      type="tel"
-      dir="ltr"
-      inputmode="tel"
-      autocomplete="tel-national"
-      :value="displayValue"
-      :placeholder="effectivePlaceholder"
-      :disabled="isDisabled"
-      :readonly="readonly"
-      :required="isRequired"
-      :aria-invalid="isInvalid || undefined"
-      :aria-required="isRequired || undefined"
-      :aria-describedby="describedBy"
-      :data-testid="`${testId}__input`"
-      class="pointer-coarse:text-body-md"
-      :class="INPUT_CLASS"
-      @input="onInput"
-    />
+    <span
+      data-slot="number"
+      class="relative flex h-full w-full min-w-0 items-center"
+    >
+      <span
+        aria-hidden="true"
+        data-slot="touch-target"
+        :data-testid="`${testId}__touch-target`"
+        class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+        @mousedown="onTouchTargetPress"
+      />
+      <input
+        :id="resolvedInputId"
+        data-slot="input"
+        type="tel"
+        dir="ltr"
+        inputmode="tel"
+        autocomplete="tel-national"
+        :value="displayValue"
+        :placeholder="effectivePlaceholder"
+        :disabled="isDisabled"
+        :readonly="readonly"
+        :required="isRequired"
+        :aria-invalid="isInvalid || undefined"
+        :aria-required="isRequired || undefined"
+        :aria-describedby="describedBy"
+        :data-testid="`${testId}__input`"
+        class="pointer-coarse:text-body-md"
+        :class="INPUT_CLASS"
+        @input="onInput"
+      />
+    </span>
   </InputGroup>
 </template>

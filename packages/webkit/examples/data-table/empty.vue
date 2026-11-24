@@ -30,7 +30,7 @@
       { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
       { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash', severity: 'danger' }]
   ]
 
   const statusSeverity = (status) =>
@@ -97,6 +97,7 @@
             :key="option.value"
             :value="option.value"
             :label="option.label"
+            :severity="option.severity"
           >
             <template #leading
               ><i

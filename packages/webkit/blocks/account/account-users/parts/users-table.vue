@@ -198,6 +198,7 @@
               <DropdownMenu.Item
                 value="remove"
                 :label="row.status === 'Invited' ? 'Cancel invitation' : 'Remove from account'"
+                severity="danger"
               />
             </DropdownMenu.Group>
           </TableCellActions>

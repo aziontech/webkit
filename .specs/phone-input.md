@@ -7,9 +7,9 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 267454d8e19e2b1de3c64dfb5763a892703fd4409476e2ce0700570b37e4e0af
+checksum: dab4a2a89d0f65d2d08630df691a8f9da17f1eac3dbdbcee483ebbaad0b73585
 created: 2026-11-10
-last_updated: 2026-11-20
+last_updated: 2026-11-24
 ---
 
 # PhoneInput — Component Spec
@@ -144,7 +144,7 @@ _none_ — motion is owned by `InputGroup` (colour transitions) and `Select` (dr
 - Keyboard map: `Tab` moves from the dial-code `Select` to the tel input; inside the `Select`, arrows navigate, typing filters, `Enter` picks and returns focus to the input, `Esc` closes.
 - ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="PhoneInputCountry dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
-- Touch target follows the `size` (40px at `large`).
+- Touch target: the field is drawn 28 / 32 / 40 px tall by `size`; on a coarse pointer the number field carries an invisible `aria-hidden` layer (`data-slot="touch-target"`, shown only under `pointer-coarse:`) that extends its hit area to at least 44 px tall past the `InputGroup` frame, and a press on it focuses the field (not when disabled). The dial-code trigger carries the `Select` trigger's own touch target.
 - Direction: the tel input, each option's dial code and the closed trigger's dial code (a `dir="ltr"` span in the trigger's `#trailing` slot) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
 
 ## Responsive

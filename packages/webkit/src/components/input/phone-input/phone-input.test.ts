@@ -796,4 +796,62 @@ describe('PhoneInput', () => {
       expect(getByTestId('phone-input__input').hasAttribute('name')).toBe(false)
     })
   })
+
+  describe('touch target', () => {
+    const showTouchTargets = () => {
+      const style = document.createElement('style')
+      style.textContent = '[data-slot="touch-target"] { display: block !important; }'
+      document.head.append(style)
+      return () => style.remove()
+    }
+
+    it('lets the number field hit area reach past the group frame', () => {
+      const restore = showTouchTargets()
+      const { getByTestId } = render({
+        components: { PhoneInput },
+        template: '<div style="padding: 48px"><PhoneInput country="US" aria-label="Phone" /></div>'
+      })
+      const input = getByTestId('phone-input__input')
+      const touch = getByTestId('phone-input__touch-target')
+      const box = input.getBoundingClientRect()
+      expect(touch.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
+      const x = box.left + box.width / 2
+      expect(document.elementFromPoint(x, box.top - 4)).toBe(touch)
+      expect(document.elementFromPoint(x, box.bottom + 4)).toBe(touch)
+      restore()
+    })
+
+    it('focuses the number field when the touch target is pressed', () => {
+      const { getByTestId } = render(PhoneInput, { attrs: { 'aria-label': 'Phone' } })
+      const touch = getByTestId('phone-input__touch-target')
+      const notPrevented = touch.dispatchEvent(
+        new MouseEvent('mousedown', { bubbles: true, cancelable: true })
+      )
+      expect(notPrevented).toBe(false)
+      expect(document.activeElement).toBe(getByTestId('phone-input__input'))
+    })
+
+    it('does not focus a disabled number field from the touch target', () => {
+      const { getByTestId } = render(PhoneInput, {
+        props: { disabled: true },
+        attrs: { 'aria-label': 'Phone' }
+      })
+      fireEvent.mouseDown(getByTestId('phone-input__touch-target'))
+      expect(document.activeElement).not.toBe(getByTestId('phone-input__input'))
+    })
+
+    it('rounds the dial-code trigger to the group corner instead of clipping it', () => {
+      const { getByTestId } = render(PhoneInput, { attrs: { 'aria-label': 'Phone' } })
+      const group = getByTestId('phone-input')
+      const trigger = group.querySelector('button') as HTMLElement
+      const radius = getComputedStyle(group).borderStartStartRadius
+      expect(getComputedStyle(group).overflow).toBe('visible')
+      expect(radius).not.toBe('0px')
+      expect(getComputedStyle(trigger).borderStartStartRadius).toBe(radius)
+      expect(getComputedStyle(trigger).borderStartEndRadius).toBe('0px')
+      const input = getByTestId('phone-input__input')
+      expect(getComputedStyle(input).borderStartEndRadius).toBe(radius)
+      expect(getComputedStyle(input).borderStartStartRadius).toBe('0px')
+    })
+  })
 })
