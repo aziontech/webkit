@@ -37,3 +37,11 @@ treating one of these as a regression.
 Other engines (Firefox and WebKit runs only) and the styled visual suite: see `ROADMAP.md`, M2.10
 rows 52, 74 and 83 (OtpInput Backspace in Firefox, MapChart keyboard walk and a 320 px reflow in
 WebKit, the console account-switch geometry check). Those rows were not re-checked for this register.
+
+### Styled visual suite (`apps/visual`), seen 2026-11-23 in the Playwright container
+
+| Test | Symptom in the failing run | Alone |
+| ---- | -------------------------- | ----- |
+| `geometry shell/shell-console account-switch dark-1920` | Account table column widths differ (Type, ID and Client ID shift); now fails alone too | 1 of 3 runs pass |
+| `blocks ai/ai-chat agent light-320` and `dark-320` | Whole page 3 px lower (scroll position) | passes |
+| `keyboard example card-carousel-section/default` | `Tab never reaches button carousel-previous "Previous slide"` | passes |

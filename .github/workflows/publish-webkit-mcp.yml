@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag to publish (e.g. @aziontech/webkit-mcp@6.0.0)'
+        description: 'Release tag to publish (e.g. v6.0.0)'
         required: true
         type: string
 
@@ -20,8 +20,8 @@ jobs:
   publish:
     name: Build, scan, sign and publish to npm
     if: >-
-      (github.event_name == 'release' && startsWith(github.event.release.tag_name, '@aziontech/webkit-mcp@'))
-      || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/@aziontech/webkit-mcp@')))
+      (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v'))
+      || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')))
     permissions:
       contents: write
       id-token: write
@@ -31,3 +31,4 @@ jobs:
       directory: packages/webkit-mcp
       tag: ${{ github.event.release.tag_name || inputs.tag }}
       test: pnpm test
+      with-packages: packages/webkit
