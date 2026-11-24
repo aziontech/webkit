@@ -992,7 +992,7 @@
   {
     "name": "field",
     "path": "src/components/input/field/index.ts",
-    "limit": "9.2 KB"
+    "limit": "9.25 KB"
   },
   {
     "name": "field-root",
@@ -1336,7 +1336,7 @@
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "64.5 KB"
+    "limit": "64.55 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1923,7 +1923,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "15.05 KB",
+    "limit": "15.1 KB",
     "entryOnly": true
   },
   {

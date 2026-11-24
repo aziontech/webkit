@@ -1729,3 +1729,7 @@ Budget-raise: hero-form-section 54.2 KB → 54.25 KB (measured 54.20 KB): carrie
 Budget-raise: job-posting-section 59.8 KB → 59.9 KB (measured 59.85 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: newsletter-section 13.95 KB → 14 KB (measured 13.96 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: feedback-reason-dialog 34.55 KB → 34.6 KB (measured 34.56 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
+
+Budget-raise: field 9.2 KB → 9.25 KB (measured 9.22 KB): the lone required asterisk (REQ-1) and the follow-up Tooltip fix, measured together after merging PR #1203's newer commits
+Budget-raise: schema-form 64.5 KB → 64.55 KB (measured 64.50 KB): same combination (REQ-1 field marker with the follow-up fixes)
+Budget-raise: date-picker 15.05 KB → 15.1 KB (measured 15.06 KB): REQ-1's required marker in the DatePicker trigger, on top of the lazy calendar entry
