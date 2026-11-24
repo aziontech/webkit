@@ -9,7 +9,7 @@
     type DashboardGridMoveDirection
   } from '../injection-key'
 
-  defineOptions({ name: 'BoardItem', inheritAttrs: false })
+  defineOptions({ name: 'DashboardGridItem', inheritAttrs: false })
 
   export interface DashboardGridItemProps {
     /** The `id` of this item's entry in the board's layout. */
