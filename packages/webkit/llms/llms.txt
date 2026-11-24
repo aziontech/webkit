@@ -303,6 +303,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PasswordRequirements](components/password-requirements.md): Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it.
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list…
 - [RadioGroup](components/radio-group.md): RadioGroup is the one "pick one of a few" component: it picks exactly one value from a short list of labelled options shown at once.
+- [Rating](components/rating.md): Preview. Rating is a row of stars that picks a whole score from 1 to `max` (5 by default), the way a customer rates a support conversation (CSAT) or a product review.
 - [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
 - [Select](components/select.md): Select control for choosing exactly one option from a list; several values are `multi-select`.
 - [Slider](components/slider.md): Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled.
