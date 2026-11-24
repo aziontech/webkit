@@ -800,7 +800,6 @@
    "--transition-duration-slow-02",
    "--transition-duration-slow-03",
    "--transition-duration-slow-04",
-   "--tw-ring-color",
    "--warning",
    "--warning-border",
    "--warning-foreground",
@@ -1684,9 +1683,6 @@
     "--transition-duration-slow-02",
     "--transition-duration-slow-03",
     "--transition-duration-slow-04"
-   ],
-   "tw": [
-    "--tw-ring-color"
    ],
    "warning": [
     "--warning",

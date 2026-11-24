@@ -437,6 +437,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
           </Tooltip>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -778,6 +779,7 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
           <template #actions>
             <Button
               label="How billing works"
+              aria-label="How billing works (opens in a new tab)"
               variant="outline"
               size="small"
               icon="az az-external-link"
@@ -1256,6 +1258,7 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
             />
             <Button
               label="Contact sales"
+              aria-label="Contact sales (opens in a new tab)"
               variant="primary"
               size="medium"
               href="https://example.com/contact-sales"

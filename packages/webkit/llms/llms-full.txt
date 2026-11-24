@@ -56,7 +56,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
 - Let the class pick the family: headings, titles, body copy and buttons are sans (`text-heading-*`, `text-title-*`, `text-body-*`, `text-button-*`); eyebrows, big numbers and code are mono (`text-overline-*`, `text-big-number-*`, `text-label-code-*`, `text-body-code-sm`). The heading and big-number classes change size by breakpoint, so a page never sets its own type scale. A big number never wraps: inside a size container (`@container`) it shrinks to fit `--text-big-number-characters` glyphs (less the `--text-big-number-inset` gap width) on one line, which `Stats` sets for you.
 - Weight lives in the role, never in a `font-*` utility. Every role is regular (400) except the `text-title-*` set, which is medium (500): the title of a contained surface, such as a dialog or drawer (`text-title-lg`), a side panel (`text-title-md`), or a popover, card, alert or toast (`text-title-sm`). Those parts already apply it; a page or section heading stays `text-heading-*`, regular, so large display type keeps the brand's light look.
-- Keep heading letter spacing in `em`: the heading classes shrink on phones, and a tracking in `rem` stays the same width while the letters get smaller, so a small display heading runs its words together. `text-heading-3xl` tracks at `-0.046em` and `text-heading-2xl` at `-0.053em` (2.56px at their desktop size); a new heading role with tracking takes `em` or `0`, never `rem` or `px`.
+- Keep heading letter spacing in `em`: the heading classes shrink on phones, and a tracking in `rem` stays the same width while the letters get smaller, so a small display heading runs its words together. `text-heading-3xl` tracks at `-0.046em` and `text-heading-2xl` at `-0.053em` from `md` up (2.56px at their desktop size) and both open to `-0.035em` on phones, so word spaces stay readable at 30px; a new heading role with tracking takes `em` or `0`, never `rem` or `px`.
 - Import the styles once, near your app entry: `import './webkit.css'` (the theme, `@aziontech/theme/fonts.css` for the Azion font faces, and `./webkit.sources.css`, the WebKit files Tailwind compiles; `npx @aziontech/webkit init` writes it) and `import '@aziontech/icons'` for icons (the colour logos come with `./webkit.css`, compiled only for the logos your sources name).
 
 ## Don't
@@ -240,12 +240,12 @@ one that is.
 
 ## Token groups
 
-767 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
+768 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
 
 | Group | Count | Tokens |
 | --- | --- | --- |
 | accent | 4 | `--accent` · `--accent-foreground` · `--accent-mask` · `--accent-selected` |
-| animate | 30 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 31 | `--animate-autoplay-progress` · `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
 | aspect | 1 | `--aspect-video` |
 | bg | 13 | `--bg-active` · `--bg-backdrop` · `--bg-canvas` · `--bg-contrast` · `--bg-disabled` · `--bg-hover` · `--bg-mask` · `--bg-placeholder` · `--bg-placeholder-highlight` · `--bg-selected` · `--bg-surface` · `--bg-surface-overlay` · `--bg-surface-raised` |
 | blur | 7 | `--blur-2xl` · `--blur-3xl` · `--blur-lg` · `--blur-md` · `--blur-sm` · `--blur-xl` · `--blur-xs` |
@@ -533,6 +533,25 @@ Tailwind's `dark:` variant follows the same three hooks. For a settings control,
 </template>
 ```
 
+Under a Content-Security-Policy that blocks inline scripts, allow this one script by its hash instead of
+`'unsafe-inline'`. The hash covers the exact text of `colorModeScript`, and a WebKit test fails when the
+script changes without this line:
+
+```text
+script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='
+```
+
+A starting policy for an app built on WebKit, sent as response headers by the server or the edge:
+
+```text
+Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+```
+
+`style-src 'unsafe-inline'` is there because components set a few inline styles and custom properties;
+add the origins your app frames (`frame-src`, for `Embed`) or fetches (`connect-src`).
+
 ## The core rule — style through the role, never the value
 
 A token carries the role; its value is the theme's job. Reference the role and both themes are handled
@@ -734,9 +753,9 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | `text-body-xs` | `0.75rem` |  | Captions and helper text. |
 | `text-button-lg` | `0.875rem` |  | The label of a large button. |
 | `text-button-md` | `0.75rem` |  | The label of a medium or small button. |
-| `text-heading-2xl` | `1.875rem` | sm: 2.25rem, md: 3rem | A marketing section heading. |
+| `text-heading-2xl` | `1.875rem` | sm: 2.25rem, md: 3rem -0.053em | A marketing section heading. |
 | `text-heading-2xs` | `0.875rem` |  | A small title or a wordmark written in type, a flat 14px. |
-| `text-heading-3xl` | `1.875rem` | sm: 3rem, md: 3.5rem | The largest page heading, for a marketing hero. |
+| `text-heading-3xl` | `1.875rem` | sm: 3rem, md: 3.5rem -0.046em | The largest page heading, for a marketing hero. |
 | `text-heading-lg` | `1.125rem` | md: 1.875rem | A large section heading. |
 | `text-heading-md` | `1rem` | sm: 1.25rem, md: 1.5rem | A section heading. |
 | `text-heading-sm` | `0.875rem` | sm: 1rem, md: 1.125rem | A subsection or dialog heading. |
@@ -1147,6 +1166,7 @@ stay a review concern:
 
 | Class | Value | Use when |
 | --- | --- | --- |
+| `animate-autoplay-progress` | `autoplayProgress 2100ms linear forwards` | The hairline that fills while a rotating band (tabs, quotes, highlights) waits to advance. Set animation-duration ON THE ELEMENT to the rotation interval, key the element on the slide so it restarts, pause it with animation-play-state while the rotation holds, and anchor its transform origin at the inline start. |
 | `animate-blink` | `blink 1s step-end infinite` | Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does). |
 | `animate-blink-settle` | `blink 1s step-end 4` | Four caret blinks, then a solid caret (4s): a decorative cursor that must stop by itself within 5 seconds (WCAG 2.2.2). |
 | `animate-bounce` | `bounce 1s infinite` | Playful attention bounce (scroll-down hints); use sparingly. |
@@ -1184,7 +1204,7 @@ stay a review concern:
 | --- | --- | --- |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
 | ease | 7 | `--ease-expressive-entrance` · `--ease-expressive-exit` · `--ease-in` · `--ease-in-out` · `--ease-out` · `--ease-productive-entrance` · `--ease-productive-exit` |
-| animate | 30 | `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 31 | `--animate-autoplay-progress` · `--animate-blink` · `--animate-blink-settle` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-flow-dash-settle` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-ping-settle` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-pulse-settle` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-spin-settle` · `--animate-status-pulse` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
 
 ---
 
@@ -1228,7 +1248,7 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 In your own components, `useLocale()` from `@aziontech/webkit/use-locale` returns the active `locale`, `dir`, `t(key, params)` and the `Intl` helpers (`formatNumber`, `formatDate`, `formatRelativeTime`, `formatList`, `formatFileSize`, `plural`), so your numbers and dates match WebKit's. `t` reads the provider's catalog; pass the English messages it should fall back to when no provider is mounted (`useLocale(en)`, with `en` from the same import).
 
-Webkit components carry their own interface text: close buttons, pagination, empty states,
+WebKit components carry their own interface text: close buttons, pagination, empty states,
 calendar fields, keycaps, wizard steps, screen-reader labels. Each one is read from a locale
 catalog (`en`, `pt-BR`, `es`) through `useLocale`, so it follows the language set on
 `ConfigProvider`. A string typed by hand next to the component, or passed into a prop to repeat the
@@ -1273,7 +1293,7 @@ default, is stuck in one language and drifts from the rest of the product.
 - Hard-code key names (`Ctrl`, `Esc`, `Enter`) next to a `Kbd`: use its modifier props and
   `key-name`; `⌘`, `⌥` and `⇧` stay symbols on macOS.
 - Build a sentence from fragments (`'Step ' + n + ' of ' + total`): plural rules and word order
-  differ by language. Webkit's catalog keys take parameters (`Step {step} of {total}`).
+  differ by language. WebKit's catalog keys take parameters (`Step {step} of {total}`).
 
 ## Example
 
@@ -1336,7 +1356,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
 - Center with `left-1/2 -translate-x-1/2`: the one physical pair allowed, because the result is the
   same in both directions.
 - Mirror what points along the reading direction: arrows, chevrons, carets, "back"/"next", sign-in /
-  sign-out. Webkit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
+  sign-out. WebKit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
   and `@aziontech/webkit/styles` for any `az az-chevron-right`-style glyph); on your own glyph add
   `rtl:-scale-x-100`. Never add `rtl:rotate-180` to an `az-*` arrow, chevron or caret: the
   stylesheet already mirrors it, the rotation flips it a second time and it points the wrong way
@@ -1352,7 +1372,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
   `logicalArrowKey(event.key, dir.value)` does the swap.
 - Isolate user and system values printed inside sentences: `<bdi>{{ name }}</bdi>`, or
   `dir="ltr"` on values that are always left-to-right (code, URLs, domains, IDs, hashes, file
-  paths). Webkit's `Input`, `Textarea`, `NumberInput` and `PasswordInput` already use
+  paths). WebKit's `Input`, `Textarea`, `NumberInput` and `PasswordInput` already use
   `dir="auto"`; pass `dir` to override.
 - Set `lang` with `dir` (`<html lang="ar" dir="rtl">`): the theme's sans stack falls back to Noto
   Sans Arabic and Arabic text gets a taller line height through `:lang(ar)`.
@@ -1485,7 +1505,7 @@ truncating text `min-w-0`.
 
 > WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
 
-Webkit components are accessible by construction: drop in a `Dialog` or `Table` and its
+WebKit components are accessible by construction: drop in a `Dialog` or `Table` and its
 role, keyboard model, focus management, and reduced-motion fallback come with it. Anything
 you build around them — custom components, views, composed overlays — must hold the same
 contract. In this project accessibility is **convention + code review**; two parts are
@@ -1531,8 +1551,9 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   composable (e.g. VueUse), not a hand-written trap.
 - Pair every motion-bearing class with **`motion-reduce:`**
   (`motion-reduce:transition-none` / `motion-reduce:animate-none`).
-- Keep hit targets at **24px or more** (44px on touch layouts), even when the visible glyph is
-  smaller.
+- Keep hit targets at **24px or more**, and at **40px or more** on touch layouts (the WebKit
+  floor: its controls draw at least 40px where they are tapped, and a button's invisible touch
+  area reaches 44px on a coarse pointer), even when the visible glyph is smaller.
 - Announce async results politely: inline validation and status updates go to an
   `aria-live="polite"` region (the webkit `Toast` and `Alert` already do this). Only an error
   interrupts: a `danger` toast is announced assertively by the `Toaster`, every other kind politely.
@@ -2050,7 +2071,7 @@ export default [...webkit.configs.recommended]
 | **Tokens, not colors** | `class="text-[#fff]"` | `class="text-(--text-default)"` |
 | **Icons** | `import Icons from '@aziontech/icons'` | `import '@aziontech/icons'` (side-effect) |
 
-**Discover the API before you write it:** the webkit MCP server (`npx -y @aziontech/webkit-mcp`, wired
+**Discover the API before you write it:** the webkit MCP server (`npx -y @aziontech/webkit-mcp@^6`, wired
 into `.mcp.json` by `init`) answers
 `list_components`, `get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
 and `validate_usage` — so an AI (or you) gets the right import / token / prop _before_ the lint
@@ -2130,7 +2151,7 @@ yout, objects, git) and External (frameworks, AI models, developer tools, langua
 
 554 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
-Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsGroup, SplitButton, Tag.
+Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, CopyButton, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsGroup, SplitButton, Tag.
 
 ## Names
 
@@ -2578,7 +2599,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-dep
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, Hint, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, Tabs, Tag, Toast, Tooltip, `use-locale`
+- Components: Alert, Avatar, Button, Card, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, Hint, IconButton, Input, KeyValueList, Link, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, Table, `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableFooter`, Tabs, Tag, Toast, Tooltip, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3096,7 +3117,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 
 teams; teams and permissions; roles; roles and permissions; permission matrix; access control; rbac; create team; user groups; times e permissões; papéis e permissões; matriz de permissões; controle de acesso; criar time; edit team; team members; editar time; membros do time
 
-Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).
+Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. Two parts make up access, said the same way here and in `account/account-users`: a person's role decides what they can do on the account, and their teams decide which resources they reach, so the list of teams is the whole resource model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).
 
 ## When to use
 
@@ -3372,6 +3393,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 
 - Show exactly what will run, with the real identifiers.
 - Label the approve button with the verb of the title.
+- Give a tool that waits for approval a neutral title in the imperative (`Deploy storefront to production`), never the progressive (`Deploying…`): the same title stays on the call after Denied, where an in-progress verb would claim it ran.
 - Dismiss the buttons as soon as the reader decides and show the outcome in text.
 - Acknowledge a denial and say nothing ran.
 - Expire a request the reader leaves undecided and say nothing ran.
@@ -3639,7 +3661,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - **Empty state:** "What can I help with?".
 - **Support prompts and follow-ups:** written as the reader would ask, under 72 characters, e.g. "How do I purge the cache of one URL?".
 - **Placeholder:** `Ask a question`, no end punctuation.
-- **Disclaimer (hint):** "The AI assistant can make mistakes. Check important information before you act on it."
+- **Disclaimer (hint):** "The AI assistant can make mistakes. Check important information before you act on it." The three AI blocks share this sentence; `ai/ai-action-approval` appends "It runs nothing in your account without your approval."
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
@@ -3780,7 +3802,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - **Drawer title:** `AI assistant`, with the Preview tag while in preview.
 - **Empty state:** "Ask about <resource>" and one sentence saying the assistant reads this resource's settings and metrics.
 - **Placeholder:** "Ask about <resource>".
-- **Disclaimer:** "The AI assistant can make mistakes. Check important information."
+- **Disclaimer:** "The AI assistant can make mistakes. Check important information before you act on it.", word for word the one `ai/ai-chat` uses; `ai/ai-action-approval` adds "It runs nothing in your account without your approval."
 - Errors, loading and feedback strings follow `ai/ai-chat` and `skills/webkit-microcopy`.
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -5256,7 +5278,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-wizar
 - Surface: app
 - Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-alerts")`
-- Components: Alert, BarList, Card, Chart, ChartCard, DataTable, `DataTablePagination`, EmptyState, Hint, PageHeader, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, `use-locale`
+- Components: Alert, BarList, Button, Card, Chart, ChartCard, DataTable, `DataTablePagination`, EmptyState, Hint, PageHeader, Select, SeverityTag, Skeleton, StatTile, `TableCellStatus`, Tag, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5478,7 +5500,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
 - **Overview:** footer links read `Open <Product> dashboard`; breakdown searches name what they match (`Search addresses, networks or countries`).
 - **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
-- **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
+- **Metrics:** title `Real-time metrics`; tab labels are product names; the aggregation names the math in muted text (`Sum`, `Median`, `Percentile`).
 - **Usage:** title `Data usage`, description `What your projects consumed in the period, against the previous period.`; card titles say what is compared (`Data transferred, this period vs previous`); series `This period`, `Previous period`.
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
@@ -5624,7 +5646,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 
 - Default: the populated breakdown for the period (`v-model:period`).
 - Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
-- Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
+- Empty: nothing billed in the period (every kpi `0` and every list `[]`); tiles print `$0` with no delta or trend, the exports disable, and one page-level `EmptyState` replaces the stacked chart, the donut and the table.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -5649,7 +5671,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Surface: app
 - Source: `blocks/dashboard/dashboard-configurable/dashboard-configurable.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-configurable")`
-- Components: Alert, BarList, Button, Chart, ChartCard, DashboardGrid, DonutChart, Hint, IconButton, PageHeader, Tag, `use-locale`
+- Components: Alert, BarList, Button, Chart, ChartCard, DashboardGrid, DonutChart, EmptyState, Hint, IconButton, PageHeader, Tag, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
@@ -5713,7 +5735,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Give every `DashboardGrid.Item` the card title as its `label`; it is what moves and resizes announce.
 - Announce a reset yourself in a polite live region (`Layout reset to the default.`); the board
   announces only what it did.
-- Keep every card at its place and size in loading and empty states, so the reader can arrange it
+- Keep every card at its place and size in loading and partly empty states, so the reader can arrange it
   before data arrives.
 
 ## Don't
@@ -5731,7 +5753,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - **Help line:** two short sentences on how, no layout positions. `Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use the arrow keys.`
 - **Handle labels:** verb plus card title. `Move Requests over time`, `Resize Requests over time`.
 - **Announcements:** full sentences with a period. `Layout reset to the default.`
-- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.`
+- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.` for one card; the page-level one says what fills the page and offers Create Application.
 
 ## Accessibility
 
@@ -5747,7 +5769,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 - Default: the arranged dashboard, read-only (`v-model:layout`).
 - Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
-- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
+- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); one bordered page-level `EmptyState` (`No requests yet`, with Create Application as the next step) replaces the grid and the layout controls, instead of the same empty state in every card. A card left empty while others have data keeps its place and size and shows its own empty state.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -5862,7 +5884,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
-- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
+- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, and one page-level `EmptyState` names the quarter and offers the next later one in place of the trend cards, goals and commentary.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -5921,7 +5943,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - B. Period — `Select` (required)
 - C. Cards — `ChartCard` (required)
 - D. Definitions — `Hint` (required)
-- E. Overall figure — `StatTile` (required)
+- E. Overall figure (required)
 - F. Band — `Tag` (required)
 - G. Loading placeholders — `Skeleton` (required)
 - H. Score per hour — `Chart` (required)
@@ -6674,10 +6696,10 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-deplo
 
 - **Header:** "Deployment logs"; inside a card, "Logs" under a card titled "Deployment" or "Provisioning".
 - **Running status:** count and step, e.g. "3/8 steps", "Build"; the card indicator a progressive word, e.g. "Cloning", "Building".
-- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing Rules".
+- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing rules".
 - **Run time:** past tense with the duration, e.g. "Deployed in 42s", "Failed after 42s".
-- **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing Rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
-- **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing Rules."
+- **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
+- **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing rules."
 - **Splash line:** names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - Follow `skills/webkit-microcopy` and `skills/webkit-errors`: say what failed and why, no "please", no exclamation in console copy.
 
@@ -6694,7 +6716,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-deplo
 
 - Running: the run is in flight (a step is `running` or `pending`); the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
 - Success: every step checked (every `steps` status is `success`, `duration` set), the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
-- Error: a step has status `error`; the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
+- Error: a step has status `error`; the Routing rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
 - ContinuousLog: a finished run in the Complete view (`view` is `complete`), every line as one `LogViewer` with its copy button.
 - ContinuousLogError: the failed run in the Complete view (`view` is `complete`), the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
@@ -7263,7 +7285,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-produ
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DataTablePagination`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellLink`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DataTablePagination`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, Item, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellLink`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -8333,7 +8355,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: Alert, Button, Card, ConfirmDialog, Field, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
+- Components: Alert, Button, Card, ConfirmDialog, CopyText, Field, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -8459,7 +8481,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-console")`
-- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HelpPanel, HighlightButton, IconButton, Input, Item, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellLink`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
+- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DataTablePagination`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HelpPanel, HighlightButton, IconButton, Input, Item, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -8766,7 +8788,7 @@ What each part takes: [blocks/shell/shell-site.md](blocks/shell/shell-site.md).
 
 # StateAsyncSubmit (`state/state-async-submit`)
 
-> The async counterpart of the server rejection in the SectionRejected state of the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends.
+> The async counterpart of the server rejection in the SectionRejected state of the `state/state-form-validation` block: a deploy that runs for about half a minute, so the user walks away before it ends.
 
 - Surface: app
 - Source: `blocks/state/state-async-submit/state-async-submit.vue` in `@aziontech/webkit`
@@ -8847,7 +8869,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-async-s
 
 - **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: what the run does and that the user may leave: `Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`
 - **Status tag:** one or two words: `Idle`, `Deploying`, `Failed`, `Deployed`.
-- **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about 25 seconds.`
+- **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about half a minute.`
 - **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`; description names the source and that the user may leave: `acme/web-app. It keeps running if you leave.`
 - **Failure toast:** what failed and why, then the ways out: `web-app wasn't deployed.` / `The routing rules were refused.` Actions: `Edit`, `Redeploy`.
 - **Success toast:** past tense, names the item and where it is live: `web-app is live.` / `It is available at web-app.example.com.` Actions: `Edit`, `Redeploy`.
@@ -9849,7 +9871,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 ## Copy
 
 - **Title:** the module name as the sidebar shows it, e.g. "Applications". Description: one sentence with a period.
-- **Create action:** `Create <Object>` with the entity's capitalization, e.g. "Create Application"; never "New" or a bare noun. The empty state repeats the same label.
+- **Create action:** `Create <Object>` with the entity's capitalization, e.g. "Create Application"; never "New" or a bare noun. The empty state uses the same label and is the only Create while the list is empty.
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter applications".
 - **Bulk action:** the verb, then the count in parentheses, e.g. "Delete", "Delete (3)".
 - **Field labels:** one or two words, sentence case, no colon, e.g. "Status", "Domain", "Region", "Requests in 24h", "Owner". Preferences title: "Card preferences".
@@ -10276,7 +10298,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
 - `/` focuses the integrations search from anywhere on the page, except while typing in a field.
-- The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
+- The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name. It opens with focus on its title block (the name and publisher, marked `data-autofocus` with `tabindex="-1"`), not on the Application field near the bottom, so the body stays scrolled to its top and Version and Updated stay in view; Tab reaches Application.
 - The Application field is required and labelled; its error is tied to the `Select` through the `Field`, and focus stays on Install so the person can correct and resubmit.
 - Toasts never take focus and are announced politely, the failure toast assertively; the failure toast stays until closed and its actions are reachable by keyboard.
 - In Configure, `⌘ S` (`Ctrl S` off Apple) saves the settings while the `SaveBar` shows unsaved changes, the same as Save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
@@ -11239,12 +11261,17 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'` | false | Visual variant forwarded to `IconButton`. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token forwarded to `IconButton`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| `icon` | `string` | `'az az-copy'` | false | Idle glyph; `az az-link` when the value is a link to a section. The check glyph replaces it after a copy. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `copy` | `(event: MouseEvent, value: string)` | Emitted after a successful clipboard write; `value` is the copied text. |
+
+## Assets
+
+- Icons: every valid name is in icons.md (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -11290,7 +11317,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 # Copy Prompt Button
 
-> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow that turns once behind it and rests, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
+> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow that turns once behind it and rests, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`; a disabled chip drops it and takes the page theme's disabled fill, like every other disabled button), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
 
 - Import: `import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'`
 - Category: action · Surface: app · Structure: monolithic
@@ -11352,7 +11379,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## States
 
-- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (`open` is false: the chip and its dismiss button unmount).
+- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide, the chip leaves `data-theme="dark"` and takes the page theme's disabled fill, the same grey as a disabled `Button`), `dismissed` (`open` is false: the chip and its dismiss button unmount).
 - `data-state` is `idle` or `copied`; `data-disabled` mirrors `disabled`.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the tooltip owns its own open state).
 
@@ -11919,21 +11946,21 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
   import { ref } from 'vue'
 
   const options = [
-    { label: 'Label', value: 'option-1' },
-    { label: 'Label', value: 'option-2' },
-    { label: 'Label', value: 'option-3' },
-    { label: 'Label', value: 'option-4' },
-    { label: 'Label', value: 'option-5' }
+    { label: 'Overview', value: 'overview' },
+    { label: 'Requests', value: 'requests' },
+    { label: 'Errors', value: 'errors' },
+    { label: 'Latency', value: 'latency' },
+    { label: 'Bandwidth', value: 'bandwidth' }
   ]
 
-  const selected = ref('option-1')
+  const selected = ref('overview')
 </script>
 
 <template>
   <ToggleGroup
     v-model="selected"
     :options="options"
-    aria-label="Segmented options"
+    aria-label="Metrics view"
   />
 </template>
 ```
@@ -12633,7 +12660,7 @@ packages/webkit/src/components/ai/chat-message/
 ## States
 
 - `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `status`), `data-alignment` (from the conversation), `data-grouped`.
-- A visually hidden line (`__author`, dropped when `grouped`) reads the accessible name; the user bubble has the time as `title`.
+- A visually hidden line (`__author`, dropped when `grouped`) reads the accessible name; the user bubble has the time as `title`, wrapped in first-strong isolate marks (U+2068 … U+2069) so `03:02 PM` keeps its order inside a right-to-left page.
 - `aria-busy="true"` while `pending` or `streaming`.
 - `pending`: `ResponseLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.
@@ -15487,12 +15514,12 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-draggable`, `data-resizable` mirror the props
 - `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
 - `data-flush` on the content is set when the padding is off (`padded` false)
-- Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
+- Responsive: the root is the `@container/chart-card`. The header and footer wrap; the controls stay at the end of the title row, and when they cannot fit beside the title they wrap to a line of their own, still aligned to the end, never stretched to full width under a start-aligned title.
 
 ## Accessibility
 
 - The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
-- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
+- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them), 44 px on a coarse pointer (10 px around them).
 - Drag handle: a real `<button>` named "Move" plus the card title ("Move card" without a title), described by the arrow-key hint. Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle, and the handle announces "Moved to position 2 of 3" through the shared polite live region. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -16103,7 +16130,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton lines: the figure always, the delta line when `deltaLabel` is set and the sparkline height when `trend` has two or more points, so the tile keeps the shape it loads into), `error` (a dash over the same band with a `neutral` "Couldn't load" `Tag` in place of "No data", kept quiet because the danger `Alert` that explains the failure and offers Retry belongs to the page or region, not to every tile; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
@@ -16380,7 +16407,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 # Code Block
 
-> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The **label header holds the copy control** at its end, and so does the tab strip, or the filename bar when there is one, so the control never covers the first lines of code on a phone (`data-copy-gutter` marks the root only while the copy floats over the code instead, which happens only when the block has no header at all) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look). The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
+> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The **label header holds the copy control** at its end, and so does the tab strip, or the filename bar when there is one, so the control never covers the first lines of code on a phone (`data-copy-gutter` marks the root only while the block has no header at all and the copy sits in a column of its own at the end of the code instead, so no line runs under it) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look). The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
 
 - Import: `import CodeBlock from '@aziontech/webkit/code-block'`
 - Category: code · Surface: app · Structure: monolithic
@@ -16775,7 +16802,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 | `lines` | `LogViewerLine[]` | `[]` | false | Log entries; filtered in LogViewerContent by search and level. |
 | `bordered` | `boolean` | `true` | false | Draw the outer card border and corner radius around the log shell. On by default; set `:bordered="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`). |
-| `copyable` | `boolean` | `true` | false | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewerContent). |
+| `copyable` | `boolean` | `true` | false | Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent). |
 | `disabled` | `boolean` | `false` | false | Disables toolbar controls in LogViewerHeader. |
 | `loading` | `boolean` | `false` | false | Replaces the LogViewerContent log body with a centered spinner and label. |
 | `loadingLabel` | `string` | `''` | false | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`). |
@@ -17101,6 +17128,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
 - Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
 - Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
+- With `icon-position="leading"` the trigger's label keeps its content width but may shrink, so a long label (or a row of label and tags) wraps inside the trigger instead of running out of it on a narrow screen.
 - `Accordion.Content` pads its body on the trigger's inset (`--accordion-inset`) with `--spacing-xs` above and `--spacing-md` below, so the answer starts on the question's left edge (after the chevron when `icon-position` is `leading`). Pass `:padded="false"` for edge-to-edge content (a `LogViewer`, a table) that owns its spacing.
 - Set `size` and `icon-position` on the root, not per item — they are provided to every item through context.
 
@@ -17312,7 +17340,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - `data-muted` is set while the audio is muted; the mute control shows Unmute and the volume slider reads 0.
 - Empty: `src` empty with `loading` false sets `data-disabled`; the times show `--:--` and the Download link is not rendered.
 - Unknown duration (no `duration` and the file not read yet): the times show `--:--` and the seek bar is disabled until the browser reports the length.
-- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root.
+- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root. On a coarse pointer an invisible layer (`data-slot="touch-target"`) extends the summary's hit area to 40 px tall.
 - Not applicable: `readonly` and `invalid` (the player takes no value input).
 - A new `src` resets the time, the playing state and the error.
 
@@ -18025,12 +18053,12 @@ The frame is static apart from its resize handles.
 
 <template>
   <Card
-    title="Card Title"
+    title="Production"
     class="w-full max-w-[512px]"
   >
     <template #default>
       <p class="text-body-sm text-(--text-muted)">
-        Card body content. Place forms, tables, or any markup in the content slot.
+        Serves acme-store from 120 locations. The last deployment finished 2 minutes ago.
       </p>
     </template>
   </Card>
@@ -18158,7 +18186,7 @@ The frame is static apart from its resize handles.
 ## Do
 
 - Pass the exact text in `value`; CopyText shows and copies the same string.
-- Keep values to one line. A long value truncates with an ellipsis; the full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
+- Keep values to one line. A long value truncates in the middle: the start ends in an ellipsis and its last characters (up to 12, a third of the value at most) stay visible, so `acme-store-pr…example.com` still shows how the value ends (decision A5P3-L02-3). The full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
 - Pass `ariaLabel` when the value alone does not say what it is (`Copy CNAME`); the default reads `Copy {value}`.
 - Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
 - Use `size="small"` in dense tables and lists.
@@ -18392,7 +18420,7 @@ The frame is static apart from its resize handles.
 </script>
 
 <template>
-  <Eyebrow>OVERLINE TEXT</Eyebrow>
+  <Eyebrow>Platform</Eyebrow>
 </template>
 ```
 
@@ -19145,12 +19173,12 @@ name.
 <template>
   <Item>
     <Item.Content>
-      <Item.Title>Basic Item</Item.Title>
-      <Item.Description>A simple item with title and description.</Item.Description>
+      <Item.Title>storefront-prod</Item.Title>
+      <Item.Description>Deployed 2 minutes ago</Item.Description>
     </Item.Content>
     <Item.Actions>
       <Button
-        label="Action"
+        label="Open"
         variant="outline"
         size="small"
       />
@@ -19327,7 +19355,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   - Props: `label: string` (required — the key, rendered in the `<dt>`).
   - Events: _none_.
   - Slots: `default` — the value (text or composed components); fallback is the empty-value marker (`<span aria-hidden="true">—</span><span class="sr-only">Not set</span>`), shown when the slot is omitted or renders nothing. `info` — optional affordance after the label text inside the `<dt>`, such as a `Hint`.
-  - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible.
+  - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible. In the `split` variant the value cell shrinks to its content, so the skeleton there is `6rem` wide instead of the full cell.
   - `data-testid` fallback `${rootTestId}__item`; a consumer `data-testid` on the Item wins.
 - `key-value-list-group/key-value-list-group.vue` — a titled column: `<div>` → `<dt>` (label) + `<dd>` → nested `<dl>` stacking its Items in one column.
   - Props: `label: string` (required — the group's term, shown above its Items).
@@ -19387,13 +19415,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         label="Active"
       />
     </KeyValueList.Item>
-    <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+    <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
     <KeyValueList.Item label="Domain">
       <Link
         label="shop.example.com"
         href="https://shop.example.com"
-        size="small"
+        inline
       />
     </KeyValueList.Item>
   </KeyValueList>
@@ -19648,6 +19676,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - `data-brand` on the root: `visa` | `mastercard` | `amex` | `diners` | `jcb` | `discover` | `elo` | `hipercard` | `unionpay` | `unknown`.
 - `data-size`: `small` | `medium`.
 - `data-glyph`: `mark` when the brand has a drawn mark, `generic` otherwise.
+- The Mastercard mark is two equal circles at the same opacity whose overlap reads darker, the network's own one-colour form; one solid circle beside a faded one would read as a switch knob in its track.
 
 ## Accessibility
 
@@ -19745,10 +19774,10 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
 
   const features = [
-    { label: 'Unlimited Applications' },
-    { label: 'Unlimited Workloads' },
-    { label: 'Custom Domains' },
-    { label: 'Priority Support' }
+    { label: 'Unlimited applications' },
+    { label: 'Unlimited workloads' },
+    { label: 'Custom domains' },
+    { label: 'Priority support' }
   ]
 </script>
 
@@ -20397,7 +20426,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - Visible focus: the trigger and the copy buttons draw the ring token.
 - Contrast: `var(--text-default)` and `var(--text-muted)` on `var(--bg-surface-raised)` are theme-guaranteed.
 - `motion-reduce:*`: the panel and the hover colour transition both pair with a reduced-motion fallback.
-- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in.
+- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in; on a coarse pointer an invisible layer (`data-slot="touch-target"`) extends its hit area to 40 px tall, the WebKit floor, without moving the text.
 
 ## Examples
 
@@ -20690,6 +20719,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             <Button
               label="New service"
               icon="az az-plus"
+              variant="outline"
               size="medium"
             />
           </TutorialPanelHotspot>
@@ -20718,7 +20748,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             >
               <Button
                 label="Deploy"
-                variant="primary"
+                variant="outline"
                 size="medium"
               />
             </TutorialPanelHotspot>
@@ -21361,7 +21391,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`
-- Data states: `loading` (skeleton rows, `aria-busy`; `DataTablePagination` states no count it does not know, see Sub-components), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
+- Data states: `loading` (skeleton rows, `aria-busy`; as many rows as are already shown, or with no rows yet the page size capped at 10, so a first load is no taller than a typical page; `DataTablePagination` states no count it does not know, see Sub-components), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
 - The viewport is always a scroll container (`overflow: auto`): horizontal scroll is automatic when columns overflow; vertical scroll engages only when `maxHeight` constrains the content.
 - `data-frozen` on TableHeader (`true`), TableHeadCell / TableCell (`start` | `end`), and TableRow (`true`). A frozen head/body cell renders a CSS-only fade (gradient pseudo-element) just outside its inner edge that dissolves the horizontally scrolling content into the row background (`from-transparent` → `var(--table-row-bg)`, the row-published color, so it matches the row on hover/selected) — `frozen=start` fades on the right, `frozen=end` on the left. The fade tints nothing; it only masks the content sliding under the pinned column.
 - Scroll cue: the scroll viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` gradient as wide as the hidden distance (at most 24 px, none when 4 px or less, so it never sits over text that is otherwise in view) (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge of the viewport, so a phone shows that columns continue; it follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`). A frozen column on that edge draws its own fade and paints over the cue, which sits below frozen cells and the sticky header (`z-5`).
@@ -22995,7 +23025,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
   <Alert
     severity="info"
     label="Your workload finished deploying in 42 seconds."
-    action-label="Label"
+    action-label="View workload"
   />
 </template>
 ```
@@ -23653,7 +23683,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 <template>
   <StatusIndicator
     severity="success"
-    label="Status"
+    label="Healthy"
   />
 </template>
 ```
@@ -24061,7 +24091,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 - Visible focus: every control and button keeps its own ring.
 - Keyboard map: Tab moves through the cells of a row, its reorder controls, its Remove, then the next row; Add moves focus to the first control of the new row; Remove moves focus to the same position in the next row, else the previous row, else Add. With `reorderable`: Arrow Up / Arrow Down on a grip, or Alt+Arrow Up / Alt+Arrow Down on any control of a row, move the row one position inside its group (on a group's grip, the group); focus follows the moved row (the same control, or its grip when that control is now disabled). Drag and drop is a pointer shortcut only; every move is reachable by keyboard and by the buttons.
-- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); each grip is a button named "Reorder item n" ("Reorder group n") and described by the hint "Drag, or press Arrow Up or Arrow Down to move."; Move up / Move down are named "Move item n up" / "Move item n down" ("Move group n up" / "down"); groups are `group`s named "Group n"; a polite `status` region announces "Item n added", "Item n removed" and "Item n moved to position m." ("Group n moved to position m.").
+- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels, with the same `*` after a required column's label as the stacked label, and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); each grip is a button named "Reorder item n" ("Reorder group n") and described by the hint "Drag, or press Arrow Up or Arrow Down to move."; Move up / Move down are named "Move item n up" / "Move item n down" ("Move group n up" / "down"); groups are `group`s named "Group n"; a polite `status` region announces "Item n added", "Item n removed" and "Item n moved to position m." ("Group n moved to position m.").
 - Contrast ≥4.5:1 from the semantic text tokens, including the disabled state.
 - Touch target: Remove follows `size` (40 px at `large`); the stacked layout keeps it at the row's end.
 
@@ -24305,7 +24335,7 @@ The imperative API is backed by a small reactive store composable, declared here
 - ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, the root carries `aria-disabled="true"` (interactive or not) and an interactive root drops `tabindex`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `az az-x` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on every transition the chip declares (variant/border colour, remove-button colour). The chip declares no dismiss animation at all, so there is nothing to suppress there.
-- Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer.
+- Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer; the chip root does not clip it (no `overflow-hidden`: the label truncates on its own), so the target may extend past the chip's edge.
 
 ## Examples
 
@@ -25486,7 +25516,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <InputGroupRoot>
+  <InputGroupRoot class="w-full max-w-(--container-xs)">
     <InputGroupInput
       aria-label="Domain"
       placeholder="domain"
@@ -26189,6 +26219,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ## States
 
 - Each chip carries `data-validated` when its rule passes.
+- `DEFAULT_PASSWORD_REQUIREMENTS` lists its rules in the order people expect to read them: length, lowercase, uppercase, number, special character.
 - The row animates its height as chips wrap.
 
 ## Accessibility
@@ -26786,22 +26817,24 @@ packages/webkit/src/components/input/radio-group/
 </script>
 
 <template>
-  <Select
-    aria-label="Option"
-    v-model="value"
-    size="large"
-    placeholder="Select an option"
-  >
-    <Select.Trigger />
-    <Select.Content>
-      <Select.Item
-        v-for="o in options"
-        :key="o.value"
-        :value="o.value"
-        >{{ o.label }}</Select.Item
-      >
-    </Select.Content>
-  </Select>
+  <div class="w-full max-w-(--container-xs)">
+    <Select
+      aria-label="Option"
+      v-model="value"
+      size="large"
+      placeholder="Select an option"
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <Select.Item
+          v-for="o in options"
+          :key="o.value"
+          :value="o.value"
+          >{{ o.label }}</Select.Item
+        >
+      </Select.Content>
+    </Select>
+  </div>
 </template>
 ```
 
@@ -28487,7 +28520,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
     <template #status>
       <StatusIndicator
         severity="success"
-        label="All Systems Operational"
+        label="All systems operational"
       />
     </template>
     <template #language>
@@ -28844,12 +28877,12 @@ context, so a consumer never wires one part to the other.
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
 - Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--save-bar-height` (so the `toaster` stacks above the bar, on top of any `--toast-offset-bottom` the app sets for its own bottom chrome, which the bar never overwrites), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--save-bar-height` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
-- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
+- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Discard above Save, so the screen order is the focus order. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility
 
 - Visible focus: owned by the action buttons.
-- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top). With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
+- Keyboard map: `Tab` reaches Discard, then Save, in reading order; on a phone the actions stack in the same order, Save last at the bottom nearest the thumb, so the screen order matches the focus order. With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`. The message region (`__message`, the `leading` / default slot) is a polite live region (`role="status"`), so a bar that appears when the form turns dirty announces its status sentence (WCAG 4.1.3 Status Messages) without moving focus.
 - Contrast ≥4.5:1 for the status sentence.
 
@@ -28898,12 +28931,14 @@ context, so a consumer never wires one part to the other.
           @click="save"
         >
           Save
-          <Kbd
-            meta
-            size="small"
-            aria-hidden="true"
-            >S</Kbd
-          >
+          <span class="inline-flex pointer-coarse:hidden">
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </span>
         </Button>
       </template>
     </SaveBar>
@@ -28983,6 +29018,20 @@ context, so a consumer never wires one part to the other.
 ```vue
 <script setup>
   import ScrollArea from '@aziontech/webkit/scroll-area'
+
+  const lines = [
+    { time: '14:02:11', text: 'Build started for acme-store (commit 4f2a9c1)' },
+    { time: '14:02:13', text: 'Installing dependencies' },
+    { time: '14:02:41', text: 'Dependencies installed in 28s' },
+    { time: '14:02:42', text: 'Running build script' },
+    { time: '14:03:05', text: 'Bundled 214 modules into 3 files' },
+    { time: '14:03:06', text: 'Uploading static assets to site-assets' },
+    { time: '14:03:19', text: 'Uploaded 86 files (4.2 MB)' },
+    { time: '14:03:20', text: 'Creating function instance for the storefront API' },
+    { time: '14:03:24', text: 'Function instance ready' },
+    { time: '14:03:25', text: 'Propagating to the edge network' },
+    { time: '14:03:58', text: 'Deployed to production at acme-store.example.com' }
+  ]
 </script>
 
 <template>
@@ -28991,16 +29040,19 @@ context, so a consumer never wires one part to the other.
   >
     <ScrollArea
       orientation="vertical"
-      aria-label="Scrollable content"
+      aria-label="Deployment log"
       class="h-full"
     >
-      <div class="p-(--spacing-4) text-body-sm text-(--text-default)">
-        Jokester began sneaking into the castle in the middle of the night and leaving jokes all
-        over the place: under the king's pillow, in his soup, even in the royal toilet. The king was
-        furious, but he couldn't seem to stop Jokester. And then one day, the king tripped over one
-        of Jokester's whoopee cushions and fell into the moat. He was so embarrassed that he decided
-        to make Jokester the official court jester.
-      </div>
+      <ol class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm) text-label-code-sm">
+        <li
+          v-for="line in lines"
+          :key="line.time + line.text"
+          class="flex gap-(--spacing-sm)"
+        >
+          <span class="shrink-0 text-(--text-muted)">{{ line.time }}</span>
+          <span class="min-w-0 text-(--text-default)">{{ line.text }}</span>
+        </li>
+      </ol>
     </ScrollArea>
   </div>
 </template>
@@ -29722,7 +29774,6 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             icon="az az-sql-database"
             href="/sql-database"
             tag-value="Preview"
-            tag-variant="primary"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Account">
@@ -29851,7 +29902,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `page-header` — the page's h1.
 - `settings-group` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.
 - `module-header` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.
-- `copy-button` — the copy-link affordance it renders.
+- `copy-button` — the copy-link affordance it renders, with the `az az-link` glyph that `settings-group` uses for the same action.
 
 ## Props
 
@@ -30282,6 +30333,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
         <ContextMenu.Item
           value="delete"
           label="Delete"
+          severity="danger"
         />
       </ContextMenu.Group>
     </ContextMenu>
@@ -30393,6 +30445,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
     - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
+    - `severity: 'neutral' | 'danger'` default `'neutral'` — colour meaning of the row. `danger` marks a destructive action (Delete, Remove): the label and leading glyph take `--text-danger` (`data-severity="danger"`) on the same hover fill, so the row reads as destructive before it is activated. Exported as `DropdownMenuItemSeverity` (derived from `Severity`).
   - Events: _none_ (root emits `select`).
   - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`).
 - `dropdown-menu-sub/dropdown-menu-sub.vue` — sub-menu scope.
@@ -30421,6 +30474,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
+- `data-severity` on option mirrors the `severity` prop (`neutral` | `danger`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
@@ -30713,7 +30767,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 - ARIA: the root is a `nav` landmark. A panel trigger is a disclosure button: `aria-expanded` reflects its panel and, while open, `aria-controls` names the panel (`role="region"`); it carries no `aria-haspopup`, since the panel is navigation, not a menu. A link trigger carries `aria-current="page"` when `active`. Tests: `navigation-menu.test.ts` › axe on the closed bar, the open panel and the vertical menu.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Touch target ≥40×40 px where the control is interactive; a `Trigger` grows to 44 px tall on a coarse pointer (`pointer-coarse:min-h-11`), like `Tabs.Trigger` and the `SidebarMenu` rows.
 
 ## Examples
 
@@ -30768,6 +30822,32 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
                         close-on-click
                       >
                         See all solutions
+                      </NavigationMenu.Item>
+                    </NavigationMenu.List>
+                    <NavigationMenu.List label="By industry">
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/retail/"
+                        description="Keep stores fast through peak sales"
+                        close-on-click
+                      >
+                        Retail and e-commerce
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/financial-services/"
+                        description="Protect transactions and customer data"
+                        close-on-click
+                      >
+                        Financial services
+                      </NavigationMenu.Item>
+                      <NavigationMenu.Item
+                        layout="entry"
+                        href="https://example.com/solutions/media/"
+                        description="Stream live and on-demand video"
+                        close-on-click
+                      >
+                        Media and entertainment
                       </NavigationMenu.Item>
                     </NavigationMenu.List>
                   </div>
@@ -31636,7 +31716,7 @@ even when the row carries nothing but its title.
 - Root: `data-tabs-root` (and the legacy `data-tab-view-root`, kept for selectors written against the v5 name).
 - Panel motion: the incoming panel's inner element carries `data-motion="enter"` and `data-slide="start|end"` for the frame before it slides in; the attributes drop on the next animation frame.
 - Dirty: `data-dirty` on a `Tabs.Trigger` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
-- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. The indicator always sits exactly on the active tab: it is measured in the list's own layout pixels (the on-screen box divided by the list's scale), so a list inside a CSS-scaled or transformed container (a console mock-up drawn at a scale) keeps it on its label, and it re-measures whenever the list or any tab changes size (late web fonts, a label change, a resize). Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest. On mount and whenever the value changes, the list scrolls itself (never the page) so the active tab is in view, clear of the edge fade; a page that opens on its eighth tab on a phone shows that tab. Tests: `tabs.test.ts` › scrolls the active tab into the strip.
+- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. The indicator always sits exactly on the active tab: it is measured in the list's own layout pixels (the on-screen box divided by the list's scale), so a list inside a CSS-scaled or transformed container (a console mock-up drawn at a scale) keeps it on its label, and it re-measures whenever the list or any tab changes size (late web fonts, a label change, a resize). Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest. On mount and whenever the value changes, the list scrolls itself (never the page) so the active tab is in view, clear of the edge fade; a page that opens on its eighth tab on a phone shows that tab. A tab that takes focus (the arrow keys in `manual` activation, or `Tab`) is scrolled clear of the edge fade the same way. Tests: `tabs.test.ts` › scrolls the active tab into the strip, keeps a tab reached with the arrow keys clear of the end fade.
 
 ## Accessibility
 
@@ -31812,7 +31892,7 @@ The root composes, and does not re-implement:
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
   - Cancel is `variant="ghost"`, at the start of the footer.
-  - Previous is `variant="outline"`, at the end, so it reads lighter than the primary Next beside it. It is not rendered (`v-if`, not hidden) on step 1.
+  - Previous is `variant="outline"`, at the end, so the filled primary action is the only filled button in the footer. It is not rendered (`v-if`, not hidden) on step 1.
   - Next is `variant="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
     `submit` instead of `next`, and it carries `loading`.
 
@@ -31950,8 +32030,8 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
   import { ref } from 'vue'
 
   const step = ref(0)
-  const name = ref('storefront-api')
-  const region = ref('south-america')
+  const name = ref('')
+  const region = ref('')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')
@@ -31993,7 +32073,10 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item
@@ -32281,9 +32364,9 @@ packages/webkit/src/components/overlay/command/
     <CommandInput placeholder="Search commands…" />
     <CommandList>
       <CommandGroup label="Suggestions">
-        <CommandItem value="deploy">Deploy Project</CommandItem>
-        <CommandItem value="new-app">Create Application</CommandItem>
-        <CommandItem value="settings">Go to Settings</CommandItem>
+        <CommandItem value="deploy">Deploy project</CommandItem>
+        <CommandItem value="new-app">Create application</CommandItem>
+        <CommandItem value="settings">Go to settings</CommandItem>
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup label="Commands">
@@ -32295,12 +32378,12 @@ packages/webkit/src/components/overlay/command/
         <CommandItem
           value="new-app-cmd"
           shortcut="meta+n"
-          >New Application</CommandItem
+          >New application</CommandItem
         >
         <CommandItem
           value="toggle-theme"
           shortcut="meta+shift+l"
-          >Toggle Theme</CommandItem
+          >Toggle theme</CommandItem
         >
       </CommandGroup>
     </CommandList>
@@ -32415,7 +32498,7 @@ packages/webkit/src/components/overlay/command/
     v-model:open="open"
     title="Remove domain"
     description="shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response."
-    confirm-label="Remove Domain"
+    confirm-label="Remove domain"
     @confirm="open = false"
   >
     <template #trigger>

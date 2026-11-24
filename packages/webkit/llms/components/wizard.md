@@ -106,7 +106,7 @@ The root composes, and does not re-implement:
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
   - Cancel is `variant="ghost"`, at the start of the footer.
-  - Previous is `variant="outline"`, at the end, so it reads lighter than the primary Next beside it. It is not rendered (`v-if`, not hidden) on step 1.
+  - Previous is `variant="outline"`, at the end, so the filled primary action is the only filled button in the footer. It is not rendered (`v-if`, not hidden) on step 1.
   - Next is `variant="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
     `submit` instead of `next`, and it carries `loading`.
 
@@ -257,8 +257,8 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
   import { ref } from 'vue'
 
   const step = ref(0)
-  const name = ref('storefront-api')
-  const region = ref('south-america')
+  const name = ref('')
+  const region = ref('')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')
@@ -300,7 +300,10 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item
@@ -413,8 +416,8 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
   import { ref } from 'vue'
 
   const step = ref(0)
-  const name = ref('storefront-api')
-  const region = ref('south-america')
+  const name = ref('')
+  const region = ref('')
   const logging = ref(true)
 
   const regions = [
@@ -443,7 +446,10 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
         </Field>
         <Field>
           <Field.Label> Region </Field.Label>
-          <Select v-model="region">
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
             <Select.Trigger />
             <Select.Content>
               <Select.Item
@@ -504,7 +510,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
   const step = ref(3)
   const name = ref('storefront-api')
-  const region = ref('south-america')
+  const region = ref('north-america')
   const environment = ref('production')
   const logging = ref(true)
   const path = ref('/api/*')
