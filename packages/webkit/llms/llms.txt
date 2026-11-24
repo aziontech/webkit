@@ -79,6 +79,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Blocks: Detail
 
+- [DetailCustomer (detail/detail-customer)](blocks/detail/detail-customer.md): Preview. The page a support agent opens to learn who is asking: how to reach the customer, how happy they have been, every ticket they opened, what happened on their account, and the notes other agents left.
 - [DetailDeploymentLogs (detail/detail-deployment-logs)](blocks/detail/detail-deployment-logs.md): The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why.
 - [DetailDnsZone (detail/detail-dns-zone)](blocks/detail/detail-dns-zone.md): The detail page of a resource that owns a long list of records, here a DNS zone.
 - [DetailDomainsCard (detail/detail-domains-card)](blocks/detail/detail-domains-card.md): A short list of the things one resource is attached to, shown in place inside its Settings tab.

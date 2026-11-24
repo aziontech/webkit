@@ -6652,6 +6652,125 @@ What each prop and event does, and the go-live code: [blocks/dashboard/dashboard
 
 ---
 
+<!-- blocks/detail/detail-customer.md -->
+
+# DetailCustomer (`detail/detail-customer`)
+
+> The profile of one customer a support agent opens from a ticket or a search, as a page body for ConsoleLayout.
+
+- Surface: app
+- Source: `blocks/detail/detail-customer/detail-customer.vue` in `@aziontech/webkit`
+- MCP: `get_block("detail/detail-customer")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Avatar, Button, Card, ConfigProvider, CopyButton, Countdown, DataTable, DropdownMenu, EmptyState, Field, IconButton, KeyValueList, Link, MessageThread, PageHeader, PriorityTag, Rating, Skeleton, `TableCellStatus`, `TableCellTime`, Tabs, Tag, Textarea, Timeline, Tooltip, `use-locale`
+- Skills: `webkit-layout`, `webkit-ui-states`, `webkit-tables`, `webkit-form`, `webkit-lists`, `webkit-microcopy`
+
+## Asked as
+
+customer profile; customer details; contact profile; requester profile; customer tickets; customer activity; customer notes; support customer; end user profile; perfil do cliente; detalhes do cliente; perfil do contato; perfil do solicitante; tickets do cliente; atividade do cliente; notas do cliente
+
+The page a support agent opens to learn who is asking: how to reach the customer, how happy they have been, every ticket they opened, what happened on their account, and the notes other agents left. It reads from the person to the history. It is a page body for `ConsoleLayout`: the layout owns the rail, the header with the breadcrumb (Customers › Jane Doe) and the `main`.
+
+## When to use
+
+- An agent opens a requester from a ticket, a search result or the customers list and needs their profile.
+- The agent must see the customer's open tickets and their next-reply deadline before answering.
+- The person contacts support: a customer, a contact or a requester of an organization you serve.
+
+## When not to use
+
+- A member of your own team, their roles and invitations: use `account/account-users`.
+- The list of every customer, searched and filtered: use `view/view-table`.
+- The overview of a resource you run, with its own tabs: use `detail/detail-resource`.
+- Editing the customer's fields and tags: Edit emits `edit`, and the edit page is a settings form (`settings/settings-form`) with `TagEditor` for the tags.
+
+## Building blocks
+
+- A. Page heading — `PageHeader`, `Avatar`, `Button`, `DropdownMenu`, `IconButton`, `Tooltip`
+- B. Sample clock — `ConfigProvider`
+- C. States — `Skeleton`, `Alert`
+- D. Details — `Card`, `KeyValueList`, `CopyButton`, `Link`, `Tag`
+- E. Satisfaction — `Card`, `Rating`
+- F. Sections — `Tabs`
+- G. Tickets — `DataTable`, `Link`, `TableCellStatus`, `PriorityTag`, `Countdown`, `TableCellTime`, `EmptyState`, `Button`
+- H. Activity — `Timeline`
+- I. Notes — `MessageThread`, `Field`, `Textarea`, `Button`
+
+What each part takes: [blocks/detail/detail-customer.md](blocks/detail/detail-customer.md).
+
+## Data
+
+The block takes the customer and their history through props, owns the open tab and the note draft as models, and emits its actions; it fetches nothing. `DetailCustomerCustomer`, `DetailCustomerSatisfaction`, `DetailCustomerTicket`, `DetailCustomerEvent`, `DetailCustomerNote` and `DetailCustomerProps` are exported from `detail-customer.vue`, and `sample.ts` holds the sample customer the block renders when they are left out.
+
+Prop / model: `customer`, `satisfaction`, `tickets`, `activity`, `notes`, `now`, `loading`, `error`, `saving`, `v-model:tab`, `v-model:draft`.
+
+Event: `open-ticket`, `new-ticket`, `edit`, `customer-action`, `add-note`, `retry`.
+
+Then delete `sample.ts`, its import, and `parts/customer-clock.vue` if the app never passes `now`.
+
+What each prop and event does, and the go-live code: [blocks/detail/detail-customer.md](blocks/detail/detail-customer.md).
+
+## Do
+
+- Lead with who the customer is and how to reach them: copy buttons on the email and the phone.
+- Keep open tickets first in the table, with their next-reply countdown.
+- Write the satisfaction in words next to the stars ("4.5 out of 5 from 12 surveys").
+- Keep internal notes visibly internal: the `MessageThread` note band says Internal note.
+- Show the customer's local time, so the agent knows whether a call is welcome now.
+
+## Don't
+
+- Don't color a ticket status or a priority without its word; `TableCellStatus` and `PriorityTag` carry both.
+- Don't put a ticket's conversation on this page; the subject opens the ticket.
+- Don't prefill the note field or disable Add note while it is empty; show the error instead.
+- Don't show the sample while loading or failed, and don't wrap real data in a fixed clock.
+- Don't add a count to a tab label; the table and the timeline already say how many.
+
+## Copy
+
+- **Heading:** the customer's full name, with the organization ("Acme Inc.") as the description; "Customer" while loading or failed.
+- **Actions:** "Edit", "New ticket"; the menu "More actions" with "Merge customer", "Export data", "Delete customer".
+- **Details:** "Details" over "Email", "Phone", "Local time" ("9:45 AM" then "America/New_York"), "Language" ("English (United States)"), "Organization", "Tags", "Customer since" ("March 12, 2024"); copy buttons "Copy email", "Copy phone number".
+- **Satisfaction:** "Satisfaction", then "4.5 out of 5 from 12 surveys" ("1 survey" for one), or "No ratings yet".
+- **Tabs:** "Tickets", "Activity", "Notes".
+- **Tickets:** caption "Tickets from Jane Doe"; columns "Subject", "Status", "Priority", "Next reply", "Updated"; statuses "Open", "Pending", "Solved", "Closed"; "No SLA running" for the screen reader; empty "No tickets yet" with "Alex Morgan has not contacted support yet." and "New ticket".
+- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
+- **Notes:** "Add a note", "Only agents can read notes.", "Add note"; error "Write the note first."
+- **Error:** title "Couldn't load this customer", message "Check your connection and retry.", action "Retry".
+- Follow `skills/webkit-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
+
+## Accessibility
+
+- Heading order: the h1 is the customer's name (`PageHeader`); the Details and Satisfaction card titles are h2; each tab panel is named by its tab. The body renders no landmark of its own; `ConsoleLayout` owns `main`.
+- Focus order: Edit, More actions, New ticket; the copy buttons and the organization link; the tablist (one stop, arrow keys between tabs); the active panel: the ticket links, or the note field then Add note.
+- The tickets table has a caption naming the customer; each status and priority is a word; a ticket with no deadline running says "No SLA running" to the screen reader instead of the dash.
+- The read-only `Rating` is one image ("Rated 4.5 out of 5") followed by the count in text; the decorative avatar and glyphs are `aria-hidden`.
+- Loading sets `aria-busy` on the details list, the table, the timeline and the thread; the error `Alert` announces itself and Retry is a button in it.
+- Names, emails, phone numbers, tags, subjects and note bodies are isolated (`bdi`, `dir="auto"`), so they read correctly in right-to-left; the email and the phone stay left-to-right.
+
+## States
+
+- Tickets: the primary, Jane Doe of Acme Inc. with four tickets (open with its countdown, pending and paused, solved, closed), 4.5 out of 5 from 12 surveys.
+- Activity: `tab="activity"`, the timeline of the last days grouped by day.
+- Notes: `tab="notes"`, two internal notes and the Add a note field.
+- NoTickets: a customer created today, no phone and no tags, No ratings yet, the No tickets yet empty state with New ticket and one activity event.
+- Loading: `loading`, the Customer title, skeletons in the heading and the details, skeleton rows in the table, the actions disabled.
+- Error: `error`, the Customer title and a danger Alert with Retry in place of the details and tabs.
+
+## Related
+
+- `account/account-users` — your own team, not the people who contact support.
+- `view/view-table` — the list a customer is opened from.
+- `detail/detail-resource` — the same page shape for a resource.
+- `settings/settings-form` — the edit page Edit leads to.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
+
+## Variants
+
+`Tickets` (primary) · `Activity` · `Notes` · `NoTickets` · `Loading` · `Error`. Code: [blocks/detail/detail-customer.md](blocks/detail/detail-customer.md), `get_block("detail/detail-customer", { variant })`.
+
+---
+
 <!-- blocks/detail/detail-deployment-logs.md -->
 
 # DetailDeploymentLogs (`detail/detail-deployment-logs`)
