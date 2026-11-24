@@ -50,17 +50,21 @@ export const useFlowDiagramFit = (
     overflowBlock.value = el.scrollHeight - el.clientHeight > 1
   }
 
+  let probed = ''
+
   const fit = (): void => {
     const el = scrollEl.value
     const list = listEl.value
     if (!el || !list) return
-    let next = fixed()
-    if (!next) {
+    const size = () => [el.clientWidth, list.offsetWidth, list.offsetHeight].join()
+    const next = fixed()
+    if (next) direction.value = next
+    else if (size() !== probed) {
       list.setAttribute('data-direction', 'row')
-      next = overflows(el) ? 'column' : 'row'
-      list.setAttribute('data-direction', next)
+      direction.value = overflows(el) ? 'column' : 'row'
+      list.setAttribute('data-direction', direction.value)
+      probed = size()
     }
-    direction.value = next
     measureEdges()
   }
 
@@ -70,12 +74,18 @@ export const useFlowDiagramFit = (
     frame = globalThis.requestAnimationFrame(fit)
   }
 
+  const probe = (): void => {
+    probed = ''
+    globalThis.cancelAnimationFrame(frame)
+    fit()
+  }
+
   onMounted(fit)
   onScopeDispose(() => globalThis.cancelAnimationFrame(frame))
-  watch(() => toValue(orientation), schedule)
+  watch(() => toValue(orientation), probe, { flush: 'post' })
   useResizeObserver(() => scrollEl.value, schedule)
   useResizeObserver(() => listEl.value, schedule)
-  useMutationObserver(listEl, fit, { childList: true, subtree: true })
+  useMutationObserver(listEl, probe, { childList: true, subtree: true })
 
   return {
     direction: computed(() => direction.value),

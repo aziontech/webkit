@@ -1777,3 +1777,9 @@ Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a ro
 `check-size-ratchet.mjs` now asks for one `Budget-raise: <name> …: <reason>` line per raised entry, read from the PR body and from this file, instead of any single `Budget-raise:` line. Against `main` one raise had no line of its own:
 
 Budget-raise: network-map 6.5 KB → 7.1 KB (measured 6.97 KB): NetworkMap traffic (MapMesh rays and packets, a still frame under reduced motion), on in BannerArt network (M2.10 row 43); it peaked at 7.5 KB and was lowered to 7.1 KB.
+
+FlowDiagram's fit stops probing a row layout on every resize callback (A5P3-242): it remembers the scroller and list size it last probed at and skips the probe when they have not changed, and a step change cancels the pending frame instead of fitting twice. Measured on a height-only resize of the viewport, the row probes (two style and layout passes each) dropped from 2 to 0.
+
+Budget-raise: flow-diagram 22 KB → 22.1 KB (measured 22.05 KB): FlowDiagram fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242, resize-only layout work halved).
+Budget-raise: flow-diagram-root 19.75 KB → 19.85 KB (measured 19.79 KB): FlowDiagram fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242).
+Budget-raise: console-trace-scene 85.5 KB → 85.6 KB (measured 85.56 KB): carries FlowDiagram, whose fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242).
