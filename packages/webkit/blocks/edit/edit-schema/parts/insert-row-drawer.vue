@@ -106,7 +106,9 @@
                 size="large"
                 class="w-full"
                 :placeholder="
-                  isAuto(column) ? 'Automatically generated' : column.defaultValue || 'NULL'
+                  isAuto(column)
+                    ? 'Automatically generated'
+                    : column.defaultValue || (column.notNull ? '' : 'NULL')
                 "
                 autocomplete="off"
               />

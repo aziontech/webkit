@@ -7,6 +7,7 @@ import EditSchema from '../../../../blocks/edit/edit-schema/edit-schema.vue'
 import AddColumn from '../../../../blocks/edit/edit-schema/variants/add-column.vue'
 import ChangeType from '../../../../blocks/edit/edit-schema/variants/change-type.vue'
 import ImportCsv from '../../../../blocks/edit/edit-schema/variants/import-csv.vue'
+import InsertRow from '../../../../blocks/edit/edit-schema/variants/insert-row.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
@@ -186,6 +187,32 @@ describe('edit/edit-schema Type picker', () => {
       return el!
     })
     expect(trigger.textContent).not.toMatch(/[a-z0-9][A-Z][a-z]+/)
+  })
+
+  it('confirms the irreversible Change type with the danger look', async () => {
+    render(ChangeType)
+    const confirm = await waitFor(() => {
+      const el = Array.from(
+        document.querySelectorAll<HTMLButtonElement>(
+          '[role="alertdialog"] button, [role="dialog"] button'
+        )
+      ).find((button) => button.textContent?.trim() === 'Change type')
+      expect(el).toBeTruthy()
+      return el!
+    })
+    expect(confirm.getAttribute('data-variant')).toBe('danger')
+  })
+
+  it('offers NULL as the placeholder only for nullable columns', async () => {
+    render(InsertRow)
+    const email = await waitFor(() => {
+      const field = Array.from(drawer().querySelectorAll('[data-slot="field"]')).find(
+        (node) => node.querySelector('label')?.textContent?.trim() === 'email'
+      )
+      expect(field).toBeTruthy()
+      return field!.querySelector('input') as HTMLInputElement
+    })
+    expect(email.placeholder).not.toBe('NULL')
   })
 
   it('moves from the search field to the options with ArrowDown and closes on Escape', async () => {

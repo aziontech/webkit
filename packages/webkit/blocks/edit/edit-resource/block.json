@@ -85,6 +85,7 @@
     "parts/policy-settings-page.vue",
     "lib/data-stream-checks.ts",
     "lib/option-label.ts",
+    "lib/ttl-duration.ts",
     "parts/cache-key-group.vue",
     "parts/cache-settings-page.vue",
     "parts/data-stream-destination-group.vue",

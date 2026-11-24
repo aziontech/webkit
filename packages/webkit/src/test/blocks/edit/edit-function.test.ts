@@ -159,6 +159,8 @@ describe('edit-function#Saving', () => {
     render(FunctionEditorSaving)
     await waitFor(() => expect(buttonIn(document, 'Discard').disabled).toBe(true))
     expect(buttonIn(document, 'Save').getAttribute('aria-busy')).toBe('true')
+    expect(document.body.textContent).toContain('Saving changes…')
+    expect(document.body.textContent).not.toContain('You have unsaved changes.')
   })
 })
 

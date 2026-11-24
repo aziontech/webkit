@@ -132,6 +132,8 @@ describe('edit-resource#Saving', () => {
       expect(toggle.matches(':disabled')).toBe(true)
     }
     expect(screen.getByRole('button', { name: 'Discard' })).toBeDisabled()
+    expect(screen.getByTestId('settings-save-bar__saving').textContent).toBe('Saving changes…')
+    expect(document.body.textContent).not.toContain('You have unsaved changes.')
   })
 })
 
@@ -168,7 +170,22 @@ describe('edit-resource#CacheSettings', () => {
       await screen.findByText('The edge keeps an object for at least 60 seconds.')
     ).toBeTruthy()
     await waitFor(() => expect(document.activeElement).toBe(ttl))
-    expect(ttl.getAttribute('aria-describedby')).toBe('cache-edgeMaxAge-message')
+    expect(ttl.getAttribute('aria-describedby')).toBe(
+      'cache-edgeMaxAge-duration cache-edgeMaxAge-message'
+    )
+  })
+
+  it('reads each TTL as a duration beside the seconds', async () => {
+    const view = render(CacheSettings)
+    expect(view.getByTestId('cache-settings__browser-duration').textContent?.trim()).toBe('7 days')
+    expect(view.getByTestId('cache-settings__edge-duration').textContent?.trim()).toBe('30 days')
+    expect(view.getByText('Up to 1 year (31,536,000 seconds).')).toBeTruthy()
+    const ttl = screen.getByRole('spinbutton', { name: 'Edge maximum TTL in seconds' })
+    await fireEvent.update(ttl, '31536000')
+    await fireEvent.blur(ttl)
+    await waitFor(() =>
+      expect(view.getByTestId('cache-settings__edge-duration').textContent?.trim()).toBe('1 year')
+    )
   })
 
   it('saves through the deploy toast with Edit and Redeploy', async () => {

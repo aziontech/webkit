@@ -53,7 +53,12 @@
       v-if="visible"
       @save="onShortcut"
     >
-      <slot />
+      <span
+        v-if="saving"
+        data-testid="settings-save-bar__saving"
+        >Saving changes…</span
+      >
+      <slot v-else />
       <template #actions>
         <Button
           type="button"
