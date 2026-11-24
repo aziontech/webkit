@@ -3,19 +3,14 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../action/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import ThirdPartyLogo, {
     type ThirdPartyLogoArtwork
   } from '../../content/third-party-logo/third-party-logo.vue'
+  import Hint from '../../input/hint/hint.vue'
   import Module from '../../layout/module/module.vue'
   import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import Popover from '../../overlay/popover/popover.vue'
-  import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
-  import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'
-  import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
-  import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({
@@ -301,31 +296,16 @@
                 scope="row"
                 :class="ROW_HEADER_CELL_CLASS"
               >
-                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                   <span class="min-w-0 text-pretty wrap-break-word">{{ item.capability }}</span>
-                  <span
+                  <Hint
                     v-if="item.definition"
-                    class="-my-(--spacing-2xs) inline-flex shrink-0"
-                  >
-                    <Popover side="auto">
-                      <PopoverTrigger>
-                        <IconButton
-                          variant="ghost"
-                          size="small"
-                          icon="az az-circle-info"
-                          :ariaLabel="
-                            t('competitorComparisonSection.about', { capability: item.capability })
-                          "
-                        />
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
-                          <PopoverTitle>{{ item.capability }}</PopoverTitle>
-                          <PopoverDescription>{{ item.definition }}</PopoverDescription>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </span>
+                    :content="item.definition"
+                    side="auto"
+                    :aria-label="
+                      t('competitorComparisonSection.about', { capability: item.capability })
+                    "
+                  />
                 </span>
               </th>
               <td

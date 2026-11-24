@@ -264,9 +264,10 @@ export const STANDARDS = [
       { surface: 'ci', by: 'vitest' },
       { surface: 'ci', by: 'docs-smoke' },
       { surface: 'lint', by: 'require-accessible-name' },
+      { surface: 'lint', by: 'prefer-hint' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Static a11y via eslint-plugin-vuejs-accessibility, the full recommended set at error with no baseline (lint:quality); axe in every component test and over every block and example (vitest); axe in light and dark over the built docs site (docs-smoke, pnpm test:docs:smoke in the site job); focus and keyboard behaviour confirmed in review.'
+    note: 'Static a11y via eslint-plugin-vuejs-accessibility, the full recommended set at error with no baseline (lint:quality); prefer-hint (lint:quality over components, blocks and examples, check:blocks, and both consumer presets) fails hand-made help: a typed question mark or an info icon inside a Tooltip or Popover trigger, a Tooltip over 80 characters and a Hint over 280; axe in every component test and over every block and example (vitest); axe in light and dark over the built docs site (docs-smoke, pnpm test:docs:smoke in the site job); focus and keyboard behaviour confirmed in review.'
   },
   {
     id: 'testid',

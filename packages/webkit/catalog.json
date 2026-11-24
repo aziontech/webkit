@@ -27296,7 +27296,7 @@
      "type": "PlanComparisonSectionSection[]",
      "default": "[]",
      "required": "false",
-     "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover."
+     "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a `hint` note."
     },
     {
      "name": "primaryAction",
@@ -32180,6 +32180,7 @@
     "DropdownMenu",
     "EmptyState",
     "Field",
+    "Hint",
     "IconButton",
     "Input",
     "KeyValueList",
@@ -32216,6 +32217,7 @@
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
+    "@aziontech/webkit/hint",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/key-value-list",
