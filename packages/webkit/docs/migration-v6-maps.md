@@ -4,7 +4,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 ## Components, types and parts
 
-`v6.json`, 925 entries.
+`v6.json`, 924 entries.
 
 | Where | Old | New |
 | --- | --- | --- |
@@ -537,7 +537,6 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | types | `ClosingCallToActionNewsletterForm` | `NewsletterSectionForm` |
 | types | `ClosingCallToActionNewsletterProps` | `NewsletterSectionProps` |
 | types | `TickerLoopReduced` | `MarqueeLoopReduced` |
-| types | `TickerSize` | `MarqueeSize` |
 | types | `TickerVariant` | `MarqueeVariant` |
 | types | `TickerItem` | `MarqueeItem` |
 | types | `TickerProps` | `MarqueeProps` |
@@ -936,7 +935,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 ## Props, values, slots and events
 
-`v6-props.json`, 653 entries.
+`v6-props.json`, 654 entries.
 
 | Where | Old | New |
 | --- | --- | --- |
@@ -1504,6 +1503,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | quote | `kind` | `variant` |
 | call-to-action | `kind` | `variant` |
 | marquee | `kind` | `variant` |
+| marquee | `size` | (removed) |
 | carousel | `kind` | `variant` |
 | carousel-root | `kind` | `variant` |
 | texture | `kind` | `variant` |

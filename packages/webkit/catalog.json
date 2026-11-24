@@ -20930,13 +20930,6 @@
      "doc": "Eyebrow above the row, stating the claim the marks make."
     },
     {
-     "name": "size",
-     "type": "'small' | 'medium'",
-     "default": "'medium'",
-     "required": "false",
-     "doc": "Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column."
-    },
-    {
      "name": "duration",
      "type": "number",
      "default": "0",

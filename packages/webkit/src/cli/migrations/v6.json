@@ -1130,7 +1130,6 @@
     "ClosingCallToActionNewsletterForm": "NewsletterSectionForm",
     "ClosingCallToActionNewsletterProps": "NewsletterSectionProps",
     "TickerLoopReduced": "MarqueeLoopReduced",
-    "TickerSize": "MarqueeSize",
     "TickerVariant": "MarqueeVariant",
     "TickerItem": "MarqueeItem",
     "TickerProps": "MarqueeProps",
