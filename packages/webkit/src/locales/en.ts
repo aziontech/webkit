@@ -1105,6 +1105,18 @@ export const themeSwitcher = {
   light: 'Light'
 } as const
 
+export const countdown = {
+  label: '{label}:',
+  dueIn: 'Due in {duration}',
+  due: 'Due {relative}',
+  overdue: 'Overdue by {duration}',
+  duration: '{major} {minor}',
+  expiresIn: 'Expires in {duration}',
+  expires: 'Expires {relative}',
+  expired: 'Expired {relative}',
+  paused: 'Paused'
+} as const
+
 export const timestamp = {
   title: 'Timestamp details',
   utc: 'UTC',
@@ -1740,6 +1752,7 @@ export const en = {
   tagEditor,
   themeSwitcher,
   timestamp,
+  countdown,
   toast,
   toggleGroup,
   trace,

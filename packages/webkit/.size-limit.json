@@ -884,6 +884,11 @@
     "limit": "20.35 KB"
   },
   {
+    "name": "countdown",
+    "path": "src/components/content/countdown/countdown.vue",
+    "limit": "3.5 KB"
+  },
+  {
     "name": "error-boundary",
     "path": "src/components/feedback/error-boundary/error-boundary.vue",
     "limit": "7.3 KB"

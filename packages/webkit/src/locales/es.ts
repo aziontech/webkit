@@ -1240,6 +1240,17 @@ export const es: Messages = {
     dark: 'Oscuro',
     light: 'Claro'
   },
+  countdown: {
+    label: '{label}:',
+    dueIn: 'Vence en {duration}',
+    due: 'Vence {relative}',
+    overdue: 'Vencido hace {duration}',
+    duration: '{major} {minor}',
+    expiresIn: 'Caduca en {duration}',
+    expires: 'Caduca {relative}',
+    expired: 'Caducó {relative}',
+    paused: 'En pausa'
+  },
   timestamp: {
     title: 'Detalles de la marca de tiempo',
     utc: 'UTC',
