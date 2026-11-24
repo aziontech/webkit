@@ -188,7 +188,7 @@
       reduced="wrap"
     >
       <ul
-            :data-content="isItems ? 'items' : 'marks'"
+        :data-content="isItems ? 'items' : 'marks'"
         :data-duplicate="duplicate || null"
         :aria-label="!duplicate && ariaLabel ? ariaLabel : undefined"
         :aria-hidden="duplicate ? 'true' : undefined"
