@@ -88,6 +88,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DetailInvocations (detail/detail-invocations)](blocks/detail/detail-invocations.md): The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print.
 - [DetailProductionChecklist (detail/detail-production-checklist)](blocks/detail/detail-production-checklist.md): A service that is live on its generated hostname is not yet ready for real traffic.
 - [DetailResource (detail/detail-resource)](blocks/detail/detail-resource.md): The second-level page of one resource.
+- [DetailTicket (detail/detail-ticket)](blocks/detail/detail-ticket.md): Preview. The support agent's view of one ticket.
 - [DetailVersion (detail/detail-version)](blocks/detail/detail-version.md): One version of a resource, opened from its Versions tab.
 
 ## Blocks: Edit
