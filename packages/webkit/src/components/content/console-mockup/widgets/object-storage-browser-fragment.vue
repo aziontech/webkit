@@ -30,7 +30,7 @@
   const COLUMNS = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 as const },
     { accessorKey: 'size', header: 'Size' },
-    { accessorKey: 'lastModified', header: 'Last Modified' }
+    { accessorKey: 'lastModified', header: 'Last modified' }
   ]
 
   const ADD_TO_FILES = [

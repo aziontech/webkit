@@ -152,7 +152,7 @@
           </Input>
           <span class="ms-auto inline-flex shrink-0">
             <Button
-              label="Create Workload"
+              label="Create workload"
               variant="outline"
               size="medium"
               icon="az az-plus"
@@ -177,7 +177,7 @@
               <span>Name</span>
               <span class="hidden md:block">Domains</span>
               <span>Status</span>
-              <span class="hidden md:block">Last Modified</span>
+              <span class="hidden md:block">Last modified</span>
             </div>
 
             <ConsoleMockupShellItem

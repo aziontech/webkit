@@ -255,10 +255,10 @@ describe('KeyValueList', () => {
       const view = render(Split)
       const items = itemsOf(view)
       expect(items.map((item) => item.querySelector('dt')?.textContent?.trim())).toEqual([
-        'Plan Price',
-        'Billing Period',
-        'Next Invoice',
-        'Payment Method'
+        'Plan price',
+        'Billing period',
+        'Next invoice',
+        'Payment method'
       ])
       expect(items[0]?.querySelector('dd')?.textContent?.trim()).toBe('$0.00 / month')
       expect(items[3]?.querySelector('dd')?.textContent).toContain('Not set')

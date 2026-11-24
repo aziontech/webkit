@@ -5,6 +5,7 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import AccordionWithLog from '../../../../examples/accordion/with-log-viewer.vue'
 import Borderless from '../../../../examples/log-viewer/borderless.vue'
 import Default from '../../../../examples/log-viewer/default.vue'
 import Levels from '../../../../examples/log-viewer/levels.vue'
@@ -979,6 +980,29 @@ describe('LogViewer', () => {
       const times = view.getAllByTestId('log-viewer__line-time')
       expect(left(times[0]!)).toBeGreaterThanOrEqual(left(body) - 0.5)
       expect(left(times[0]!)).toBeLessThan(left(messages[0]!))
+    })
+
+    it('keeps the copy button off the text of a long first line', () => {
+      const message = 'Deploy started successfully and the build is now running '.repeat(4)
+      const view = renderLines([{ id: 'g1', time: '13:47:33', type: 'text', message }])
+      const copy = view.getByTestId('log-viewer__copy').getBoundingClientRect()
+      const text = document.createRange()
+      text.selectNodeContents(view.getByTestId('log-viewer__line-message'))
+      const rows = Array.from(text.getClientRects()).filter((rect) => rect.top < copy.bottom)
+      expect(rows.length).toBeGreaterThan(0)
+      for (const rect of rows) expect(rect.right).toBeLessThanOrEqual(copy.left + 0.5)
+    })
+
+    it('sizes a short log to its lines inside the accordion example', async () => {
+      const view = render(AccordionWithLog)
+      await nextTick()
+      const root = view.getByTestId('log-viewer')
+      const lines = view.getAllByTestId('log-viewer__line')
+      const body = view.getByTestId('log-viewer-content__body')
+      expect(root.getBoundingClientRect().height).toBeLessThan(420)
+      expect(
+        body.getBoundingClientRect().bottom - lines.at(-1)!.getBoundingClientRect().bottom
+      ).toBeLessThan(32)
     })
 
     it('drops the time and level columns when no line has them', () => {

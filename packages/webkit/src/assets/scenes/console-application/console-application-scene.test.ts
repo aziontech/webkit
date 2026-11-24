@@ -61,7 +61,7 @@ describe('ConsoleApplicationScene', () => {
     )
 
     expect(selected).toHaveLength(1)
-    expect(selected[0]).toHaveTextContent('Cache Settings')
+    expect(selected[0]).toHaveTextContent('Cache settings')
   })
 
   it('draws a list tab as a table with its rows and opens its create drawer when settled', () => {

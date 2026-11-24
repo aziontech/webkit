@@ -39,18 +39,16 @@
     <Accordion.Item value="deploy-482">
       <Accordion.Trigger>Deploy #482 — production</Accordion.Trigger>
       <Accordion.Content :padded="false">
-        <div class="h-[420px]">
-          <LogViewer
-            :lines="lines"
-            v-model:search="search"
-            v-model:level="level"
-            :bordered="false"
-            class="h-full"
-          >
-            <LogViewerHeader />
-            <LogViewerContent />
-          </LogViewer>
-        </div>
+        <LogViewer
+          :lines="lines"
+          v-model:search="search"
+          v-model:level="level"
+          :bordered="false"
+          class="max-h-[420px]"
+        >
+          <LogViewerHeader />
+          <LogViewerContent />
+        </LogViewer>
       </Accordion.Content>
     </Accordion.Item>
     <Accordion.Item value="deploy-481">

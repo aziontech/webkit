@@ -19,12 +19,12 @@
             />
           </Item.Media>
           <Item.Content>
-            <Item.Title>Basic Item</Item.Title>
-            <Item.Description>A simple item with title and description.</Item.Description>
+            <Item.Title>storefront-prod</Item.Title>
+            <Item.Description>Deployed 2 minutes ago</Item.Description>
           </Item.Content>
           <Item.Actions>
             <Button
-              label="Action"
+              label="Open"
               variant="outline"
               size="small"
             />
@@ -38,12 +38,12 @@
             />
           </Item.Media>
           <Item.Content>
-            <Item.Title>Basic Item</Item.Title>
-            <Item.Description>A simple item with title and description.</Item.Description>
+            <Item.Title>docs-site</Item.Title>
+            <Item.Description>Deployed yesterday</Item.Description>
           </Item.Content>
           <Item.Actions>
             <Button
-              label="Action"
+              label="Open"
               variant="outline"
               size="small"
             />
@@ -57,12 +57,12 @@
             />
           </Item.Media>
           <Item.Content>
-            <Item.Title>Basic Item</Item.Title>
-            <Item.Description>A simple item with title and description.</Item.Description>
+            <Item.Title>acme-store</Item.Title>
+            <Item.Description>Paused by Jane Doe</Item.Description>
           </Item.Content>
           <Item.Actions>
             <Button
-              label="Action"
+              label="Open"
               variant="outline"
               size="small"
             />

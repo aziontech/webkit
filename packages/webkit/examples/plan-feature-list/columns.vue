@@ -2,14 +2,14 @@
   import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
 
   const features = [
-    { label: 'Unlimited Applications' },
-    { label: 'Unlimited Workloads' },
-    { label: 'Custom Domains' },
-    { label: 'Priority Support' },
+    { label: 'Unlimited applications' },
+    { label: 'Unlimited workloads' },
+    { label: 'Custom domains' },
+    { label: 'Priority support' },
     { label: 'Real-Time Metrics' },
     { label: 'Data Stream' },
     { label: 'Web Application Firewall' },
-    { label: 'Team Permissions' }
+    { label: 'Team permissions' }
   ]
 </script>
 

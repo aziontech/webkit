@@ -3,15 +3,15 @@
 
   const features = [
     {
-      label: 'Unlimited Applications',
+      label: 'Unlimited applications',
       description: 'Deploy as many applications as your projects need.'
     },
     {
-      label: 'Custom Domains',
+      label: 'Custom domains',
       description: 'Serve every application from your own domain, with managed certificates.'
     },
     {
-      label: 'Priority Support',
+      label: 'Priority support',
       description: 'Reach the support team by chat and get an answer within one business day.'
     }
   ]

@@ -127,6 +127,14 @@ describe('CurrencyAmount', () => {
     expect(amount).not.toContainElement(getByTestId('currency-amount__suffix'))
   })
 
+  it('sets the symbol tight against the figure at every size', () => {
+    for (const size of ['small', 'medium', 'large'] as const) {
+      const { getByTestId, unmount } = render(CurrencyAmount, { props: { value: '20', size } })
+      expect(getByTestId('currency-amount__amount').className).not.toMatch(/(^|\s)(\S+:)?gap-/)
+      unmount()
+    }
+  })
+
   it('mirrors the size prop onto the root as data-size, for every step', () => {
     // The three text parts read the variant off the root through a named group, so
     // data-size on the root is the whole switch — if it stops being written, every

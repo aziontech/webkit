@@ -94,6 +94,7 @@
             <Button
               label="New service"
               icon="az az-plus"
+              variant="outline"
               size="medium"
             />
           </TutorialPanelHotspot>
@@ -122,7 +123,7 @@
             >
               <Button
                 label="Deploy"
-                variant="primary"
+                variant="outline"
                 size="medium"
               />
             </TutorialPanelHotspot>

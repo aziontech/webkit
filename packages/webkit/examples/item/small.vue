@@ -9,12 +9,12 @@
     size="small"
   >
     <Item.Content>
-      <Item.Title>Basic Item</Item.Title>
-      <Item.Description>A simple item with title and description.</Item.Description>
+      <Item.Title>site-assets</Item.Title>
+      <Item.Description>Deployed 3 days ago</Item.Description>
     </Item.Content>
     <Item.Actions>
       <Button
-        label="Action"
+        label="Open"
         variant="outline"
         size="small"
       />

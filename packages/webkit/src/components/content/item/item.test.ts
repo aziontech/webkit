@@ -3,10 +3,14 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/item/default.vue'
 import Groups from '../../../../examples/item/groups.vue'
+import Inline from '../../../../examples/item/inline.vue'
 import Muted from '../../../../examples/item/muted.vue'
 import Option from '../../../../examples/item/option.vue'
 import Outline from '../../../../examples/item/outline.vue'
 import Small from '../../../../examples/item/small.vue'
+import WithIconMedia from '../../../../examples/item/with-icon-media.vue'
+import WithList from '../../../../examples/item/with-list.vue'
+import WithListLinks from '../../../../examples/item/with-list-links.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Item from './index'
 
@@ -258,9 +262,30 @@ describe('Item', () => {
         const { getByTestId, getByText } = render(Default)
         expect(getByTestId('item').getAttribute('data-slot')).toBe('item')
         expect(getByTestId('item-content')).toBeTruthy()
-        expect(getByTestId('item-title').textContent?.trim()).toBe('Basic Item')
+        expect(getByTestId('item-title').textContent?.trim()).toBe('storefront-prod')
         expect(getByTestId('item-actions')).toBeTruthy()
-        expect(getByText(/simple item with title/i)).toBeTruthy()
+        expect(getByText('Deployed 2 minutes ago')).toBeTruthy()
+      })
+
+      it('gives every row of the list examples its own title', () => {
+        for (const Story of [WithList, WithListLinks]) {
+          const { getAllByTestId, unmount } = render(Story)
+          const titles = getAllByTestId('item-title').map((title) => title.textContent?.trim())
+          expect(new Set(titles).size).toBe(titles.length)
+          expect(titles).not.toContain('Basic Item')
+          unmount()
+        }
+      })
+
+      it('writes the inline and icon titles in sentence case', () => {
+        for (const Story of [Inline, WithIconMedia]) {
+          const { getAllByTestId, unmount } = render(Story)
+          for (const title of getAllByTestId('item-title')) {
+            const words = title.textContent?.trim().split(/\s+/) ?? []
+            expect(words.slice(1).every((word) => word === word.toLowerCase())).toBe(true)
+          }
+          unmount()
+        }
       })
 
       it.each([

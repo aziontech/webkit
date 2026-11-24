@@ -14,16 +14,16 @@
         "ariaLabel": "Pro plan features",
         "items": [
           {
-            "label": "Unlimited Applications"
+            "label": "Unlimited applications"
           },
           {
-            "label": "Unlimited Workloads"
+            "label": "Unlimited workloads"
           },
           {
-            "label": "Custom Domains"
+            "label": "Custom domains"
           },
           {
-            "label": "Priority Support"
+            "label": "Priority support"
           }
         ]
       }

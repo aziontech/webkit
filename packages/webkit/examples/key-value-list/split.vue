@@ -5,7 +5,7 @@
 
 <template>
   <Card
-    title="Subscription Plan"
+    title="Subscription plan"
     class="max-w-(--container-xs)"
   >
     <template #default>
@@ -13,10 +13,10 @@
         variant="split"
         aria-label="Subscription plan"
       >
-        <KeyValueList.Item label="Plan Price">$0.00 / month</KeyValueList.Item>
-        <KeyValueList.Item label="Billing Period">Nov 1, 2026 to Nov 30, 2026</KeyValueList.Item>
-        <KeyValueList.Item label="Next Invoice">Dec 1, 2026</KeyValueList.Item>
-        <KeyValueList.Item label="Payment Method" />
+        <KeyValueList.Item label="Plan price">$0.00 / month</KeyValueList.Item>
+        <KeyValueList.Item label="Billing period">Nov 1, 2026 to Nov 30, 2026</KeyValueList.Item>
+        <KeyValueList.Item label="Next invoice">Dec 1, 2026</KeyValueList.Item>
+        <KeyValueList.Item label="Payment method" />
       </KeyValueList>
     </template>
   </Card>

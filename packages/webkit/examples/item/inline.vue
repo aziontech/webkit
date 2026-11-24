@@ -15,7 +15,7 @@
         />
       </Item.Media>
       <Item.Content>
-        <Item.Title>Customize Domain</Item.Title>
+        <Item.Title>Customize domain</Item.Title>
         <Item.Description>Link custom domains and subdomains to Azion.</Item.Description>
       </Item.Content>
       <i
@@ -34,7 +34,7 @@
         />
       </Item.Media>
       <Item.Content>
-        <Item.Title>Point Traffic</Item.Title>
+        <Item.Title>Point traffic</Item.Title>
         <Item.Description>Redirect domain traffic to Azion.</Item.Description>
       </Item.Content>
       <i
@@ -53,7 +53,7 @@
         />
       </Item.Media>
       <Item.Content>
-        <Item.Title>View Analytics</Item.Title>
+        <Item.Title>View analytics</Item.Title>
         <Item.Description>Monitor performance, availability, and security.</Item.Description>
       </Item.Content>
       <i

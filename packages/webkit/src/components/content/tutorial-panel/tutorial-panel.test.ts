@@ -553,6 +553,14 @@ describe('TutorialPanel', () => {
       expect(openDialogs()).toHaveLength(0)
     })
 
+    it('shows one primary button in the default example', async () => {
+      const { container } = render(DefaultExample)
+      await tick()
+      const primaries = container.querySelectorAll('button[data-variant="primary"]')
+      expect(primaries).toHaveLength(1)
+      expect(primaries[0]?.getAttribute('data-testid')).toBe('tutorial-panel__start')
+    })
+
     const Twin = defineComponent({
       components: { TutorialPanel, TutorialPanelProvider, TutorialPanelHotspot },
       props: { name: { type: String, required: true }, preset: { type: Boolean, default: false } },

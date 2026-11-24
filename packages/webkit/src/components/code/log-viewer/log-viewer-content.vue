@@ -192,7 +192,7 @@
     >
       <template v-if="ctx.filteredLines.value.length">
         <div
-          class="max-sm:min-w-max"
+          class="max-sm:min-w-max in-data-[copyable]:pe-10"
           :style="{
             '--log-viewer-time-width': width(columns.time),
             '--log-viewer-level-width': width(columns.level)
