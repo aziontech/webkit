@@ -6,8 +6,8 @@ status: implemented
 spec_version: 9
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: 020c143d0925c302656e019f628c6319fe41855582782bddd26e01078aaaf96c
+last_updated: 2026-11-24
+checksum: ccd40051ef5361316992a3834d8dec1c14da143ba5e4b79c9da5af44b0891e60
 ---
 
 # ListingIndexSection — Component Spec
@@ -86,7 +86,7 @@ The full, browsable listing of a page such as the Careers jobs list: a headline 
     search-placeholder="Search by title, team, or location"
     search-short-placeholder="Search positions"
     search-aria-label="Search positions"
-    empty-title="Nothing here yet"
+    empty-title="No positions match"
     empty-description="No open positions match your search."
     empty-action-label="View all open positions"
   />
@@ -133,7 +133,7 @@ The full, browsable listing of a page such as the Careers jobs list: a headline 
 - Option search: a facet or order select with more than seven options renders a search field above its options and a `status` line when nothing matches
 - Marked: a row with `mark` draws the client's logo (flattened to one ink that inverts in the dark theme) before the name in the table and above the title in the list
 - Whole-row navigation: a click on a table row outside its link is forwarded to the link, keeping `ctrl`/`meta`/`shift`/`alt`; a click that ends a text selection is not forwarded
-- Metadata cells (every column after the first) render `text-overline-sm`, truncated to one line, with their full value as `title`; the list's description renders `text-overline-sm`
+- Metadata cells (every column after the first) render `text-overline-sm`, wrapping to at most two lines (`line-clamp-2`), with their full value as `title`; the list's description renders `text-overline-sm`
 - Sticky groups: each group heading row sticks under `var(--layout-header-height)` while its rows scroll
 - Server render and hydration: the large-breakpoint check runs only after mount, so the server HTML and the first client render both use `shortPlaceholder` and match; the full placeholder applies on mount.
 
@@ -200,7 +200,7 @@ _none_
 - Narrow (< `lg`): the toolbar folds to the filter button and the search field; the selects stack inside the disclosure; applied facets wrap as chips.
 - Narrow (< `sm`): the table is hidden and the rows render as an item list under sticky group headings.
 - Touch: each phone row is a whole-item link; each table row is a whole-row target; the button, field and selects are large.
-- Reflow: no horizontal scroll at 320 px; metadata truncates instead of widening the table, its full text in the tooltip.
+- Reflow: no horizontal scroll at 320 px; metadata wraps to two lines and then clamps instead of widening the table, its full text in the tooltip.
 
 ## Performance
 

@@ -432,7 +432,7 @@
                 </div>
                 <span
                   v-else
-                  class="min-w-0 truncate"
+                  class="min-w-0 line-clamp-2 whitespace-normal text-pretty"
                   :title="row.values[column.key]"
                   >{{ row.values[column.key] }}</span
                 >

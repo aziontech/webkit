@@ -151,7 +151,7 @@
     "searchPlaceholder": "Search by title, team, or location",
     "searchShortPlaceholder": "Search positions",
     "searchAriaLabel": "Search positions",
-    "emptyTitle": "Nothing here yet",
+    "emptyTitle": "No positions match",
     "emptyDescription": "No open positions match your search.",
     "emptyActionLabel": "View all open positions"
   }
