@@ -93,6 +93,7 @@
   const period = defineModel<string>('period', { default: '12m' })
 
   const comparison = 'this month vs previous month'
+  const LOADING_TREND = [0, 0]
 
   const tiles: { metric: BreakdownDashboardMetric; label: string; description: string }[] = [
     {
@@ -304,7 +305,7 @@
             :delta="kpis[tile.metric]?.delta ?? null"
             :delta-label="comparison"
             inverse
-            :trend="kpis[tile.metric]?.trend ?? []"
+            :trend="kpis[tile.metric]?.trend ?? (loading ? LOADING_TREND : [])"
             :loading="loading"
             :error="error"
           >

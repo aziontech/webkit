@@ -153,6 +153,20 @@ describe('StatTile', () => {
     expect(view.getByTestId('stat-tile').getAttribute('aria-busy')).toBe('true')
   })
 
+  it('reserves the delta line and the sparkline while loading, so the tile keeps its loaded shape', () => {
+    const skeletons = (props: Record<string, unknown>) => {
+      const view = mount({ loading: true, ...props })
+      const count = view
+        .getByTestId('stat-tile')
+        .querySelectorAll('[data-testid="stat-tile__loading"], [data-testid="skeleton"]').length
+      view.unmount()
+      return count
+    }
+    expect(skeletons({})).toBe(1)
+    expect(skeletons({ deltaLabel: 'vs last week' })).toBe(2)
+    expect(skeletons({ deltaLabel: 'vs last week', trend: [1, 2, 3] })).toBe(3)
+  })
+
   it('has no a11y violations with and without a delta', async () => {
     for (const props of [
       {},

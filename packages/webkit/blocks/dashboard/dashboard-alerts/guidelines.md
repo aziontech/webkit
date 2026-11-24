@@ -88,7 +88,9 @@ Ranks alert types by count, largest first, labelled `Alerts by type`.
 
 ### L. Highest risk and Open alerts — `DataTable` (required)
 
-Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert.
+Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert,
+and shows the top six. Loading skeletons match what loads: six rows in Highest risk, the page size in
+Open alerts, and tiles that reserve their delta line, so nothing jumps when the period arrives.
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
 Figures use tabular numbers. Both tables set `stackable`: on a phone each row becomes a card of
 label and value lines, so the deciding figure never sits off-screen.

@@ -1771,3 +1771,9 @@ Budget-raise: contact-hub-section 9.55 KB → 9.8 KB (measured 9.75 KB): the sec
 Budget-raise: newsletter-section 14 KB → 14.3 KB (measured 14.25 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
 Budget-raise: job-posting-section 63.05 KB → 63.35 KB (measured 63.32 KB): the click-open Hint (HELP-A-1) merged with the SectionBand frame (LA-2); both changes landed in the same entry.
 Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a rounding hair over): the SectionBand frame (LA-2) merged with the in-product help branch.
+
+## StatTile loading keeps the loaded shape (2026-11-24, audit-5 P3, A5P3-138)
+
+While `loading`, StatTile now reserves the delta line (when `deltaLabel` is set) and the sparkline (when `trend` has two or more points) with Skeletons, as its spec already promised, so a row of KPI tiles no longer grows by about 80 px when the data lands.
+
+Budget-raise: stat-tile 9.35 KB → 9.4 KB (measured 9.39 KB): two loading Skeletons that reserve the delta line and the sparkline height (A5P3-138), so dashboards do not shift on arrival.

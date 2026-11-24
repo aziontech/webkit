@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
@@ -46,6 +46,24 @@ describe('dashboard/dashboard-alerts', () => {
     expect(values.map((value) => value.textContent?.trim())).toEqual(['0', '0', '0', '0%'])
     await fireEvent.click(view.getByRole('button', { name: 'Show the last 90 days' }))
     await waitFor(() => expect(empty.textContent).toContain('No alerts in the last 90 days'))
+  })
+
+  it('loads Highest risk with as many skeleton rows as it shows, and tiles that keep their delta line', async () => {
+    const loaded = render(DashboardAlerts)
+    const tableOf = (root: HTMLElement) =>
+      within(root).getByRole('table', { name: /Highest risk/ }) as HTMLElement
+    const bodyRows = (table: HTMLElement) =>
+      table.querySelectorAll('[data-testid="table-body"] [data-testid="table-row"]').length
+    const shown = await waitFor(() => {
+      const count = bodyRows(tableOf(loaded.container as HTMLElement))
+      expect(count).toBeGreaterThan(0)
+      return count
+    })
+    loaded.unmount()
+    const loading = render(DashboardAlerts, { props: { loading: true } })
+    await waitFor(() => expect(bodyRows(tableOf(loading.container as HTMLElement))).toBe(shown))
+    const tile = loading.container.querySelector('[data-testid="stat-tile"]')!
+    expect(tile.querySelectorAll('[data-testid="skeleton"]').length).toBe(1)
   })
 
   it('hides the sample while loading', () => {
