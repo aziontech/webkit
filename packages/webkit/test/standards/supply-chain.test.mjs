@@ -82,3 +82,22 @@ test('no workflow runs on pull_request_target', () => {
     assert.ok(!/\bpull_request_target\b/.test(text), file)
   }
 })
+
+test('every ignored advisory carries a review date that has not passed', () => {
+  const workspace = readFileSync(resolve(ROOT, 'pnpm-workspace.yaml'), 'utf8')
+  const block = workspace.slice(workspace.indexOf('ignoreGhsas:'))
+  const lines = block.split('\n').slice(1)
+  for (const [index, line] of lines.entries()) {
+    const ghsa = line.match(/^\s*- (GHSA-[\w-]+)/)?.[1]
+    if (!ghsa) {
+      if (line.trim() && !line.trim().startsWith('#')) break
+      continue
+    }
+    const date = lines[index - 1]?.match(/Review by (\d{4}-\d{2}-\d{2})\./)?.[1]
+    assert.ok(date, `${ghsa} has no "Review by YYYY-MM-DD." comment above it`)
+    assert.ok(
+      new Date(`${date}T23:59:59Z`) >= new Date(),
+      `${ghsa}: its review date ${date} has passed`
+    )
+  }
+})
