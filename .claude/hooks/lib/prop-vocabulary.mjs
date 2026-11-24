@@ -31,6 +31,11 @@ const CONCEPTS = [
     aliases: ['tone']
   },
   {
+    concept: 'priority of a ticket or task (urgent | high | medium | low | none)',
+    canonical: 'priority',
+    aliases: ['urgency', 'importance']
+  },
+  {
     concept: 'job or step status (pending | running | success | error | canceled | skipped)',
     canonical: 'status',
     aliases: ['state', 'phase', 'outcome']
@@ -238,6 +243,14 @@ const VALUES = {
     secondary: 'neutral',
     alt: 'neutral'
   },
+  priority: {
+    highest: 'urgent',
+    critical: 'urgent',
+    blocker: 'urgent',
+    normal: 'medium',
+    lowest: 'low',
+    'no-priority': 'none'
+  },
   status: {
     done: 'success',
     ok: 'success',
@@ -303,6 +316,7 @@ const SHARED_VARIANTS = ['primary', 'secondary', 'outline', 'ghost', 'danger', '
 const SEVERITY_VALUES = ['neutral', 'info', 'success', 'warning', 'danger']
 const STATUS_VALUES = ['pending', 'running', 'success', 'error', 'canceled', 'skipped', 'streaming']
 const ORIENTATION_VALUES = ['horizontal', 'vertical']
+const PRIORITY_VALUES = ['urgent', 'high', 'medium', 'low', 'none']
 const ALIGN_WORDS = ['start', 'center', 'end', 'split', 'left', 'right']
 
 const VARIANT_EXTRAS = {
@@ -391,6 +405,12 @@ const VALUE_SETS = [
     extras: SEVERITY_EXTRAS
   },
   { axis: 'status', test: /^status$|[a-z]Status$/, values: STATUS_VALUES, extras: STATUS_EXTRAS },
+  {
+    axis: 'priority',
+    test: /^priority$|[a-z]Priority$/,
+    values: PRIORITY_VALUES,
+    extras: {}
+  },
   {
     axis: 'orientation',
     test: /^orientation$|[a-z]Orientation$/,
