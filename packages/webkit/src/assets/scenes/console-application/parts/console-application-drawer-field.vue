@@ -12,12 +12,12 @@
 
   defineOptions({ name: 'ConsoleApplicationDrawerField' })
 
-  interface Props {
+  export interface ConsoleApplicationDrawerFieldProps {
     /** The drawer field to draw. */
     field: ConsoleApplicationField
   }
 
-  defineProps<Props>()
+  defineProps<ConsoleApplicationDrawerFieldProps>()
 
   function displayAs(value: string): () => string {
     return () => value

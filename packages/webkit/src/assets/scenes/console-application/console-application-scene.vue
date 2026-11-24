@@ -32,7 +32,7 @@
 
   export type { ConsoleApplicationSceneTab } from './console-application-data'
 
-  interface Props {
+  export interface ConsoleApplicationSceneProps {
     /** Tab of the Application page the scene shows; empty or unknown shows the first, `build`. */
     tab?: ConsoleApplicationSceneTab | string
     /** Whether this scene is the one showing; its second move replays each time it turns back on. */
@@ -43,7 +43,7 @@
     animated?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConsoleApplicationSceneProps>(), {
     tab: '',
     active: true,
     width: 1200,
@@ -58,7 +58,7 @@
   const second = ref(!props.animated)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'assets-console-application-scene'
+    () => (attrs['data-testid'] as string | undefined) ?? 'console-application-scene'
   )
 
   const step = computed(

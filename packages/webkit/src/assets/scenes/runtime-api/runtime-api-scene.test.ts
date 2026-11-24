@@ -7,8 +7,8 @@ import RuntimeApiCloud from './runtime-api-cloud.vue'
 import { RUNTIME_API_ROWS, RUNTIME_APIS } from './runtime-api-data'
 import RuntimeApiScene from './runtime-api-scene.vue'
 
-const SCENE = 'assets-runtime-api-scene'
-const CLOUD = 'assets-runtime-api-cloud'
+const SCENE = 'runtime-api-scene'
+const CLOUD = 'runtime-api-cloud'
 
 const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 

@@ -219,10 +219,10 @@ describe('SitePage', () => {
   })
 
   it.each([
-    ['ConsoleApplicationScene', 'assets-console-application-scene'],
-    ['ConsoleTraceScene', 'assets-console-trace-scene'],
-    ['FunctionsHeroCanvas', 'assets-runtime-api-scene'],
-    ['RuntimeApiCloud', 'assets-runtime-api-cloud']
+    ['ConsoleApplicationScene', 'console-application-scene'],
+    ['ConsoleTraceScene', 'console-trace-scene'],
+    ['FunctionsHeroCanvas', 'runtime-api-scene'],
+    ['RuntimeApiCloud', 'runtime-api-cloud']
   ])('draws the ported %s scene by name', async (component, testId) => {
     const { findByTestId } = page({
       hero: [],

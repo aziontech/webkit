@@ -8,14 +8,14 @@
 
   defineOptions({ name: 'RuntimeApiCloud', inheritAttrs: false })
 
-  interface Props {
+  export interface RuntimeApiCloudProps {
     /** Accessible name of the list of globals; empty uses the built-in "Globals available in the Azion Runtime". */
     ariaLabel?: string
     /** Hands the highlight from pill to pill on a timer and drifts the rows with the page scroll; off draws the seeded field at rest. */
     animated?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<RuntimeApiCloudProps>(), {
     ariaLabel: '',
     animated: true
   })
@@ -36,9 +36,7 @@
 
   let timer: ReturnType<typeof globalThis.setInterval> | undefined
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'assets-runtime-api-cloud'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'runtime-api-cloud')
 
   const rows = computed(() => {
     const chunks: { label: string; azion: boolean; index: number }[][] = []

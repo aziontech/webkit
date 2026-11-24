@@ -5,23 +5,21 @@
 
   defineOptions({ name: 'RuntimeApiScene', inheritAttrs: false })
 
-  interface Props {
+  export interface RuntimeApiSceneProps {
     /** Accessible name of the list of globals; empty uses the built-in "Globals available in the Azion Runtime". */
     ariaLabel?: string
     /** Hands the highlight from pill to pill and drifts the rows with the page scroll; off draws the field at rest. */
     animated?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<RuntimeApiSceneProps>(), {
     ariaLabel: '',
     animated: true
   })
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'assets-runtime-api-scene'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'runtime-api-scene')
 </script>
 
 <template>
