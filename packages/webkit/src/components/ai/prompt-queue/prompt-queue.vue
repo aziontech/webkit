@@ -104,17 +104,24 @@
   }
 
   let observer: ResizeObserver | undefined
+  let frame = 0
   watch(
     listEl,
     (element) => {
       observer?.disconnect()
       if (!element) return
-      observer ??= new ResizeObserver(() => measure())
+      observer ??= new ResizeObserver(() => {
+        cancelAnimationFrame(frame)
+        frame = requestAnimationFrame(measure)
+      })
       observer.observe(element)
     },
     { flush: 'post' }
   )
-  onScopeDispose(() => observer?.disconnect())
+  onScopeDispose(() => {
+    cancelAnimationFrame(frame)
+    observer?.disconnect()
+  })
   watch(
     () => props.items.map((item) => `${item.id}:${item.text}`),
     () => {

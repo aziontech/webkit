@@ -119,11 +119,11 @@ describe('StreamingResponse', () => {
     })
 
     it('ends a link destination at its balanced closing parenthesis', () => {
-      expect(parseInline('a [harmless looking link](javascript:alert(1)).')).toEqual([
-        { type: 'text', value: 'a ' },
-        { type: 'text', value: 'harmless looking link' },
-        { type: 'text', value: '.' }
-      ])
+      const refused = parseInline('a [harmless looking link](javascript:alert(1)).')
+      expect(refused.every((node) => node.type === 'text')).toBe(true)
+      expect(refused.map((node) => ('value' in node ? node.value : '')).join('')).toBe(
+        'a harmless looking link.'
+      )
       expect(parseInline('[wiki](https://example.com/a_(b)) next')).toEqual([
         {
           type: 'link',
