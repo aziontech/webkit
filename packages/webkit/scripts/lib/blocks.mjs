@@ -4,7 +4,7 @@ import { dirname, join, normalize, relative } from 'node:path'
 import { GUIDELINE_FILE, guidelinesSummary } from './guidelines.mjs'
 
 const PKG_PREFIX = '@aziontech/webkit/'
-export const BLOCK_STABILITIES = ['preview', 'ga']
+const BLOCK_STABILITIES = ['preview', 'ga']
 
 const EXAMPLES_PER_COMPONENT = 3
 const EXAMPLE_MAX_CHARS = 8000

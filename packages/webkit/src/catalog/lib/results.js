@@ -27,8 +27,11 @@ export function deprecationOf(entry) {
   }
 }
 
-export const PREVIEW_NOTE =
-  'Preview: the API (props, events, slots, parts) may still change in a minor release, named in the changelog, before the owner marks it GA. Tell the user, and pin the WebKit version if they need it frozen.'
+export const PREVIEW_NOTE = [
+  'Preview: the API (props, events, slots, parts) may still change in a minor release,',
+  'named in the changelog, before the owner marks it GA.',
+  'Tell the user, and pin the WebKit version if they need it frozen.'
+].join(' ')
 
 export function stabilityOf(entry) {
   return entry?.stability === 'preview' ? { stability: 'preview', stabilityNote: PREVIEW_NOTE } : {}
