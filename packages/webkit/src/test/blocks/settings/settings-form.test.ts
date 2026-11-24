@@ -30,7 +30,7 @@ describe('settings/settings-form · Profile', () => {
     const view = render(Profile)
     expect(view.queryByRole('textbox', { name: 'Client ID' })).toBeNull()
     expect(view.getByRole('button', { name: 'Copy Client ID' })).toBeTruthy()
-    expect(view.getByText('9757a')).toBeTruthy()
+    expect(view.getByTestId('copy-text').textContent).toContain('9757a')
     const github = view.getByRole('link', { name: 'Manage GitHub (opens in a new tab)' })
     expect(github.getAttribute('target')).toBe('_blank')
     expect(github.querySelector('.az-external-link')).not.toBeNull()

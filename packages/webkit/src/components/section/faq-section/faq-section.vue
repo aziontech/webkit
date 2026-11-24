@@ -152,7 +152,7 @@
         :items="faqItems"
       >
         <template #answer="{ item }">
-          <template v-if="answersByValue.get(item.value)?.flat ?? true">
+          <p v-if="answersByValue.get(item.value)?.flat ?? true">
             <template
               v-for="(run, runIndex) in answersByValue.get(item.value)?.runs ?? []"
               :key="runIndex"
@@ -174,7 +174,7 @@
               <em v-else-if="run.emphasis">{{ run.text }}</em>
               <template v-else>{{ run.text }}</template>
             </template>
-          </template>
+          </p>
           <span
             v-else
             class="flex flex-col gap-(--spacing-sm)"
