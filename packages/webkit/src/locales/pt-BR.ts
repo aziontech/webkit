@@ -1111,7 +1111,9 @@ export const ptBR: Messages = {
     open: 'Abrir navegação',
     home: 'Página inicial da Azion',
     search: 'Buscar',
-    menu: 'Menu'
+    menu: 'Menu',
+    navigation: 'Principal',
+    menuNavigation: 'Menu principal'
   },
   splitButton: {
     moreActions: 'Mais ações',

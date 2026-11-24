@@ -954,7 +954,9 @@ export const siteHeaderSection = {
   open: 'Open navigation',
   home: 'Azion home',
   search: 'Search',
-  menu: 'Menu'
+  menu: 'Menu',
+  navigation: 'Main',
+  menuNavigation: 'Main menu'
 } as const
 
 export const splitButton = {
