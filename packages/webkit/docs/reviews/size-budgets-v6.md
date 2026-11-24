@@ -1695,3 +1695,7 @@ Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.13 KB): the Spanish c
 Budget-raise: config-provider 12.8 KB → 13.05 KB (measured 12.95 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
 Budget-raise: locales-pt-BR 12 KB → 12.25 KB (measured 12.15 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
 Budget-raise: locales-es 12.1 KB → 12.4 KB (measured 12.28 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: config-provider 12.8 KB → 13.25 KB (measured 13.19 KB): combined, the English catalog it bundles gains the strings of all six support components (MessageThread, Timeline, Countdown, Rating, PriorityTag, Avatar presence; SUP-01, preview); supersedes the per-lane lines above.
+Budget-raise: locales-pt-BR 12 KB → 12.45 KB (measured 12.40 KB): the same support-component strings in Portuguese, combined (SUP-01).
+Budget-raise: locales-es 12.1 KB → 12.6 KB (measured 12.54 KB): the same support-component strings in Spanish, combined (SUP-01).
+Budget-raise: table-cell-time 19.2 KB → 19.7 KB (measured 19.62 KB): the shared minute clock now pauses while the page is hidden (SUP-CD-2) and the catalog it reads grew with the support strings.

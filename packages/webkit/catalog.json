@@ -4070,6 +4070,7 @@
   "datatable": "data-table",
   "doc-tab": "tabs",
   "doc-tabs": "tabs",
+  "due-date": "countdown",
   "feature-grid": "capability-grid-section",
   "file-viewer": "file-preview",
   "image-viewer": "file-preview",
@@ -4087,6 +4088,7 @@
   "section-heading": "subheader",
   "segmented-control": "toggle-group",
   "sheet": "drawer",
+  "sla-badge": "countdown",
   "snackbar": "toast",
   "steps": "stepper",
   "testimonial": "client-quotes-section",
@@ -8892,6 +8894,62 @@
    "treeShakeableImport": "@aziontech/webkit/timeline-group",
    "stability": "preview",
    "surface": "app"
+  },
+  "countdown": {
+   "import": "@aziontech/webkit/countdown",
+   "target": "./src/components/content/countdown/countdown.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/countdown",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "deadline",
+     "type": "string | number | Date",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The deadline: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash."
+    },
+    {
+     "name": "warningThreshold",
+     "type": "number",
+     "default": "3600000",
+     "required": "false",
+     "doc": "Time left, in milliseconds, at or under which the countdown turns to warning. `0` stays neutral until the deadline passes."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Name of what is due (`First reply`, `Certificate`), shown before the phrase. Empty shows the phrase alone."
+    },
+    {
+     "name": "type",
+     "type": "'due' | 'expiry'",
+     "default": "'due'",
+     "required": "false",
+     "doc": "The words of the phrase: `due` says `Due in` and `Overdue by` (a task, an SLA); `expiry` says `Expires in` and `Expired` (a certificate, a key, a trial)."
+    },
+    {
+     "name": "paused",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The clock is stopped (an SLA waiting on the customer): the countdown says `Paused` with a pause icon, stays neutral and stops counting."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token of the tag; `medium` is 24px tall, `small` is 20px."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/countdown.json",
+   "docsFile": "catalog/components/countdown.json"
   },
   "avatar": {
    "import": "@aziontech/webkit/avatar",
