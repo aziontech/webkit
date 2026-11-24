@@ -497,7 +497,9 @@ Releases are automated by [release-please](https://github.com/googleapis/release
 - [`publish-webkit.yml`](./.github/workflows/publish-webkit.yml) → `@aziontech/webkit`
 - [`publish-webkit-mcp.yml`](./.github/workflows/publish-webkit-mcp.yml) → `@aziontech/webkit-mcp`
 
-Every publish job runs in the `npm` GitHub environment, so it waits for a required reviewer to approve the deployment before it gets an npm token. A publish run only starts from `main` or from a release tag of its own package, and it refuses a tag whose commit is not on `main`. Report a vulnerability as described in [`SECURITY.md`](./SECURITY.md).
+Each of them calls one shared workflow, [`release-package.yml`](./.github/workflows/release-package.yml), which runs in the `npm` GitHub environment, so it waits for a required reviewer to approve the deployment before it gets an npm token. A publish run only starts from `main` or from a release tag of its own package, and it refuses a tag whose commit is not on `main`. It packs the tarball once, writes an SBOM of what a consumer installs (Syft, SPDX and CycloneDX), stops on a high or critical vulnerability (Grype), signs the tarball (Cosign, keyless), publishes that exact tarball with npm provenance, and attaches the SBOM, the signature bundle and `SHA256SUMS` to the GitHub Release.
+
+[`security.yml`](./.github/workflows/security.yml) runs the Azion security scan on every pull request to `main`, on `main` and every week: Gitleaks over the full history, osv-scanner over the lockfiles and Semgrep. A reviewed Gitleaks finding goes in `.gitleaksignore`, which `@aziontech/security-office` owns. The repository follows the Azion Engineering Playbook compliance checks; the two that a four-package monorepo cannot meet (plain `vX.Y.Z` tags, one root `CHANGELOG.md`) are waived with a date in `.azion-compliance.yml`. Report a vulnerability as described in [`SECURITY.md`](./SECURITY.md).
 
 There is no manual release step. If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
 

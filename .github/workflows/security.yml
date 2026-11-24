@@ -1,0 +1,72 @@
+name: Security
+
+# The Azion security standard for a public repository, on a GitHub-hosted runner:
+# Gitleaks over the full history, Semgrep (community ERROR rules) and osv-scanner over the
+# lockfiles, with the tool versions, checksums and flags of aziontech/azion-action-security.
+# That action is private and runs on azion-runners, so a public repository runs the same
+# tools here. Exceptions live in .gitleaksignore, owned by @aziontech/security-office.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 4 * * 3'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Install Gitleaks, osv-scanner and Semgrep (pinned, checksum verified)
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+          OSV_VERSION: 2.7.0
+          OSV_SHA256: 160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b
+          SEMGREP_VERSION: 1.179.0
+        run: |
+          bin="$RUNNER_TEMP/security-tools"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/gitleaks.tar.gz" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$bin" gitleaks
+          curl -fsSL -o "$bin/osv-scanner" "https://github.com/google/osv-scanner/releases/download/v${OSV_VERSION}/osv-scanner_linux_amd64"
+          echo "${OSV_SHA256}  $bin/osv-scanner" | sha256sum -c -
+          chmod +x "$bin/osv-scanner"
+          python3 -m venv "$RUNNER_TEMP/semgrep-venv"
+          "$RUNNER_TEMP/semgrep-venv/bin/python" -m pip install --quiet "semgrep==${SEMGREP_VERSION}"
+          ln -s "$RUNNER_TEMP/semgrep-venv/bin/semgrep" "$bin/semgrep"
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Secrets — Gitleaks over the full history (reviewed findings in .gitleaksignore)
+        run: gitleaks detect --source . --redact --no-banner --verbose
+
+      - name: Dependencies — osv-scanner over every lockfile
+        run: osv-scanner scan --recursive .
+
+      - name: Code — Semgrep community rules at ERROR severity (the azion-action-security catch-all)
+        run: |
+          semgrep scan --config auto --severity ERROR --error --quiet \
+            --exclude=.git --exclude=build/ --exclude=vendor/ --exclude=dist/ --exclude='*.min.js' \
+            --exclude=node_modules/ --exclude=.npm/ --exclude=.yarn/ --exclude=.venv/ \
+            --exclude=test/ --exclude=tests/ \
+            --exclude-rule=dockerfile.security.missing-user.missing-user \
+            --exclude-rule=dockerfile.security.missing-user-entrypoint.missing-user-entrypoint \
+            .

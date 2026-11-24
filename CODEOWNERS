@@ -2,3 +2,15 @@
 lint-canaries/**/* @robsongajunior
 packages/webkit/eslint.config.js @robsongajunior
 eslint.config.js @robsongajunior
+
+/.github/ @aziontech/oss-review @aziontech/team-uxe
+/CODEOWNERS @aziontech/oss-review @aziontech/team-uxe
+/MAINTAINERS.md @aziontech/oss-review @aziontech/team-uxe
+/SECURITY.md @aziontech/oss-review @aziontech/security-office
+/.github/workflows/security.yml @aziontech/oss-review @aziontech/security-office
+/.github/workflows/release-supply-chain.yml @aziontech/oss-review @aziontech/security-office
+/.azion-compliance.yml @aziontech/oss-review @aziontech/security-office
+
+/.gitleaksignore @aziontech/oss-review @aziontech/security-office
+/.semgrepignore @aziontech/oss-review @aziontech/security-office
+/osv-scanner.toml @aziontech/oss-review @aziontech/security-office
