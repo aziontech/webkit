@@ -163,7 +163,7 @@ export default [...webkit.configs.recommended]
 | **Tokens, not colors**    | `class="text-[#fff]"`                                   | `class="text-(--text-default)"`                          |
 | **Icons**                 | `import Icons from '@aziontech/icons'`                  | `import '@aziontech/icons'` (side-effect)                |
 
-**Discover the API before you write it:** the webkit MCP server (`npx -y @aziontech/webkit-mcp`, wired
+**Discover the API before you write it:** the webkit MCP server (`npx -y @aziontech/webkit-mcp@^6`, wired
 into `.mcp.json` by `init`) answers
 `list_components`, `get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
 and `validate_usage` — so an AI (or you) gets the right import / token / prop _before_ the lint

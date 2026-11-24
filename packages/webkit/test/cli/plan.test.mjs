@@ -16,6 +16,9 @@ import {
 } from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
 import { FRAGMENT_START } from '../../src/cli/bundle.js'
+import { MCP_PACKAGE } from '../../src/cli/init/mcp.js'
+
+const PINNED_MCP = `@aziontech/webkit-mcp@^${JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')).version.split('.')[0]}`
 
 const MAIN_TS =
   "import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n"
@@ -440,7 +443,7 @@ test('planInit merges the webkit MCP server into .mcp.json', () => {
     assert.ok(mcp, 'expected .mcp.json merge action')
     assert.ok(mcp.merge.mcpServers[MCP_SERVER_NAME], 'expected webkit server in the merge')
     assert.equal(mcp.merge.mcpServers[MCP_SERVER_NAME].command, 'npx')
-    assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, ['-y', '@aziontech/webkit-mcp'])
+    assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, ['-y', PINNED_MCP])
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -465,9 +468,28 @@ test('planInit points a v5 webkit MCP entry at @aziontech/webkit-mcp and keeps o
     const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
     assert.deepEqual(mcp.mcpServers[MCP_SERVER_NAME], {
       command: 'npx',
-      args: ['-y', '@aziontech/webkit-mcp']
+      args: ['-y', PINNED_MCP]
     })
     assert.deepEqual(mcp.mcpServers.other, { command: 'node', args: ['x.js'] })
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit pins an unpinned webkit-mcp entry to the major of the installed WebKit', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, '.mcp.json'),
+      JSON.stringify({
+        mcpServers: { [MCP_SERVER_NAME]: { command: 'npx', args: ['-y', '@aziontech/webkit-mcp'] } }
+      })
+    )
+    applyPlan(dir, planInit(dir, {}))
+    const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+    assert.deepEqual(mcp.mcpServers[MCP_SERVER_NAME].args, ['-y', PINNED_MCP])
+    assert.equal(MCP_PACKAGE, PINNED_MCP)
+    assert.match(PINNED_MCP, /^@aziontech\/webkit-mcp@\^\d+$/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
