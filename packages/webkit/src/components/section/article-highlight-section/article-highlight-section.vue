@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { useIntervalFn, useMediaQuery, useMounted } from '@vueuse/core'
+  import { useMounted } from '@vueuse/core'
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useAutoplayProgress } from '../../../composables/use-autoplay-progress'
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
@@ -78,21 +77,13 @@
 
   const wallEl = ref<HTMLElement | null>(null)
 
-  const TICK_MS = 100
-
   const direction = ref<'forward' | 'back'>('forward')
 
-  const elapsed = ref(0)
-
-  const pointerInside = ref(false)
-
-  const focusInside = ref(false)
+  const highlightEl = ref<HTMLElement | null>(null)
 
   let pendingDirection: 'forward' | 'back' | null = null
 
   const mounted = useMounted()
-
-  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'article-highlight-section'
@@ -112,64 +103,41 @@
     return count === 4 ? 4 : 3
   })
 
-  const autoplaying = computed(
-    () => mounted.value && props.autoplay && props.items.length > 1 && !reducedMotion.value
-  )
-
-  const paused = ref(false)
-  const { t } = useTranslate({ common: en.common })
-  const pauseLabel = computed(() =>
-    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
-  )
-
-  const running = computed(
-    () => autoplaying.value && !paused.value && !pointerInside.value && !focusInside.value
-  )
-
-  const progress = computed(() =>
-    Math.min(100, (elapsed.value / Math.max(props.autoplayInterval, TICK_MS)) * 100)
-  )
-
   const tabId = (index: number): string => `${baseId}-tab-${index}`
 
-  const select = (index: number): void => {
-    elapsed.value = 0
-    model.value = index
-  }
-
-  const { pause, resume } = useIntervalFn(
-    () => {
-      elapsed.value += TICK_MS
-      if (elapsed.value < props.autoplayInterval) return
+  const {
+    autoplayEnabled,
+    autoplayRunning,
+    playing,
+    paused,
+    pauseLabel,
+    cycle,
+    restartProgress,
+    togglePause,
+    enterPointer,
+    leavePointer,
+    enterFocus,
+    leaveFocus
+  } = useAutoplayProgress({
+    enabled: () => mounted.value && props.autoplay && props.items.length > 1,
+    interval: () => props.autoplayInterval,
+    onAdvance: () => {
       pendingDirection = 'forward'
       select((selected.value + 1) % props.items.length)
     },
-    TICK_MS,
-    { immediate: false }
-  )
+    target: highlightEl
+  })
 
-  watch(
-    running,
-    (on) => {
-      if (on) resume()
-      else pause()
-    },
-    { immediate: true }
-  )
+  const select = (index: number): void => {
+    restartProgress()
+    model.value = index
+  }
 
   watch(selected, (next, previous) => {
     direction.value = pendingDirection ?? (next > previous ? 'forward' : 'back')
     pendingDirection = null
-    elapsed.value = 0
+    restartProgress()
   })
-
-  const onFocusin = (event: FocusEvent): void => {
-    focusInside.value = (event.target as Element | null)?.matches(':focus-visible') ?? false
-  }
-
-  const onFocusout = (): void => {
-    focusInside.value = false
-  }
 
   const focusTab = async (index: number): Promise<void> => {
     const count = props.items.length
@@ -236,23 +204,24 @@
     :filled="Boolean(current)"
   >
     <div
-      :data-autoplay="running || null"
-      :data-paused="(autoplaying && paused) || null"
+      ref="highlightEl"
+      :data-autoplay="autoplayRunning || null"
+      :data-paused="(autoplayEnabled && paused) || null"
       :data-fill="fill || null"
       class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-2xl)*2)]"
-      @pointerenter="pointerInside = true"
-      @pointerleave="pointerInside = false"
-      @focusin="onFocusin"
-      @focusout="onFocusout"
+      @pointerenter="enterPointer"
+      @pointerleave="leavePointer"
+      @focusin="enterFocus"
+      @focusout="leaveFocus"
     >
       <IconButton
-        v-if="autoplaying"
+        v-if="autoplayEnabled"
         :icon="paused ? 'az az-play' : 'az az-pause'"
         :aria-label="pauseLabel"
         variant="outline"
         size="small"
         class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
-        @click="paused = !paused"
+        @click="togglePause"
       />
       <RegistrationFrame
         :id="panelId"
@@ -344,11 +313,15 @@
         </div>
 
         <span
-          v-if="autoplaying"
+          v-if="autoplayEnabled"
+          :key="cycle"
           aria-hidden="true"
           :data-testid="`${testId}__progress`"
-          :style="{ width: `${progress}%` }"
-          class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+          :style="{
+            animationDuration: `${autoplayInterval}ms`,
+            animationPlayState: playing ? undefined : 'paused'
+          }"
+          class="absolute bottom-0 start-0 h-px w-full origin-left bg-(--primary) animate-autoplay-progress rtl:origin-right motion-reduce:animate-none"
         />
       </RegistrationFrame>
 

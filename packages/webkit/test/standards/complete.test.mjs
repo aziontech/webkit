@@ -15,9 +15,9 @@ import {
 } from '../../scripts/check-complete.mjs'
 import {
   baseRef,
-  hasBudgetRaise,
   limitToBytes,
-  raisedBudgets
+  raisedBudgets,
+  unjustifiedRaises
 } from '../../scripts/check-size-ratchet.mjs'
 import { initialOutputs, lazyEntries } from '../../scripts/check-size.mjs'
 
@@ -237,12 +237,26 @@ test('lazyEntries lists each chunk an entryOnly build excludes with what it woul
   )
 })
 
-test('hasBudgetRaise needs a line starting Budget-raise: with a reason', () => {
-  assert.equal(hasBudgetRaise('Summary\r\nBudget-raise: the chart gained a brush'), true)
-  assert.equal(hasBudgetRaise('  Budget-raise: indented is fine'), true)
-  assert.equal(hasBudgetRaise('Budget-raise:'), false)
-  assert.equal(hasBudgetRaise('No Budget-raise: mid-line'), false)
-  assert.equal(hasBudgetRaise(undefined), false)
+test('unjustifiedRaises needs one Budget-raise: line with a reason per raised entry', () => {
+  const raised = [
+    { name: 'chart', from: '2 KB', to: '2.5 KB' },
+    { name: 'chart-root', from: '1 KB', to: '1.2 KB' },
+    { name: 'table', from: '9 KB', to: '9.5 KB' }
+  ]
+  const body =
+    'Summary\r\nBudget-raise: chart 2 KB → 2.5 KB (measured 2.4 KB): the chart gained a brush'
+  const doc = '  Budget-raise: table 9 KB → 9.5 KB (measured 9.4 KB): sticky header'
+  assert.deepEqual(
+    unjustifiedRaises(raised, body, doc).map((r) => r.name),
+    ['chart-root']
+  )
+  assert.equal(unjustifiedRaises(raised, 'Budget-raise: the chart gained a brush').length, 3)
+  assert.equal(unjustifiedRaises(raised, 'Budget-raise: chart 2 KB → 2.5 KB').length, 3)
+  assert.equal(
+    unjustifiedRaises(raised, 'No Budget-raise: chart 2 KB → 2.5 KB: mid-line').length,
+    3
+  )
+  assert.equal(unjustifiedRaises(raised, undefined).length, 3)
 })
 
 test('baseRef uses the PR base, skips non-PR CI runs, falls back locally', () => {

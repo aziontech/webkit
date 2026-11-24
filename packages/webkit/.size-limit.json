@@ -381,7 +381,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "10.25 KB"
+    "limit": "10.45 KB"
   },
   {
     "name": "embed",
@@ -438,7 +438,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "24.6 KB",
+    "limit": "24.85 KB",
     "entryOnly": true
   },
   {
@@ -464,7 +464,7 @@
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "85.5 KB"
+    "limit": "85.6 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -495,7 +495,7 @@
   {
     "name": "article-highlight-section",
     "path": "src/components/section/article-highlight-section/article-highlight-section.vue",
-    "limit": "12.65 KB"
+    "limit": "13.05 KB"
   },
   {
     "name": "article-index-section",
@@ -616,7 +616,7 @@
   {
     "name": "client-quotes-section",
     "path": "src/components/section/client-quotes-section/client-quotes-section.vue",
-    "limit": "27.85 KB",
+    "limit": "28.05 KB",
     "entryOnly": true
   },
   {
@@ -687,7 +687,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "59.9 KB",
+    "limit": "60.1 KB",
     "entryOnly": true
   },
   {
@@ -1786,13 +1786,13 @@
   {
     "name": "flow-diagram",
     "path": "src/components/data/flow-diagram/index.ts",
-    "limit": "22 KB",
+    "limit": "22.1 KB",
     "entryOnly": true
   },
   {
     "name": "flow-diagram-root",
     "path": "src/components/data/flow-diagram/flow-diagram.vue",
-    "limit": "19.75 KB",
+    "limit": "19.85 KB",
     "entryOnly": true
   },
   {

@@ -478,7 +478,7 @@ jobs:
       - name: Spelling — no spelling mistake in code, docs or identifiers (typos, words in _typos.toml)
         run: pnpm run check:spelling
 
-      - name: Size budgets only ratchet down (a raise needs a Budget-raise line in the PR body)
+      - name: Size budgets only ratchet down (each raised entry needs its own Budget-raise line)
         run: pnpm --filter @aziontech/webkit run check:size-ratchet
         env:
           PR_BODY: ${{ github.event.pull_request.body }}

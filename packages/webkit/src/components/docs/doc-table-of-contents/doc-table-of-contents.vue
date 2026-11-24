@@ -81,8 +81,7 @@
   const highlightIndex = ref(-1)
 
   const highlightStyle = computed(() => ({
-    top: `${highlight.value.top}px`,
-    left: `${highlight.value.left}px`,
+    translate: `${highlight.value.left}px ${highlight.value.top}px`,
     width: `${highlight.value.width}px`,
     height: `${highlight.value.height}px`,
     opacity: highlighting.value ? '1' : '0'
@@ -182,7 +181,7 @@
   )
 
   const HIGHLIGHT_CLASS =
-    'pointer-events-none absolute z-0 rounded-(--shape-control) bg-(--bg-hover) transition-[top,left,width,height,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'pointer-events-none absolute top-0 left-0 z-0 rounded-(--shape-control) bg-(--bg-hover) transition-[translate,width,height,opacity] duration-moderate-02 ease-productive-entrance ' +
     'motion-reduce:transition-none'
 
   const ITEM_LINK_CLASS =

@@ -122,7 +122,7 @@ Two more gates hold the Change and Remove stages to their rules:
 - A `locked` spec passes CI but blocks edits to its component: bump `spec_version`, set it back
   to `approved`, re-validate, then edit. A shipped component's spec never goes back to `draft`.
 - The bundle budget only goes down. A PR that raises a limit in `.size-limit.json` needs a
-  `Budget-raise: <entry> <old> → <new>, <reason>` line in its body.
+  `Budget-raise: <entry> <old> → <new> (measured <n>): <reason>` line per raised entry, in its body or in `packages/webkit/docs/reviews/size-budgets-*.md`.
 
 ### For designers
 
@@ -299,7 +299,7 @@ pnpm gates             # lint + typecheck + format check + audit
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
 
-The `complete` gate (`pnpm --filter @aziontech/webkit run check:complete`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `check:size-ratchet` fails a PR that raises a size limit unless its body has a line starting `Budget-raise:`.
+The `complete` gate (`pnpm --filter @aziontech/webkit run check:complete`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `check:size-ratchet` fails a PR that raises a size limit unless each raised entry has its own `Budget-raise: <name> <old> → <new> (measured <n>): <reason>` line, in the PR body or in `packages/webkit/docs/reviews/size-budgets-*.md`.
 
 ## Testing
 

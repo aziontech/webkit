@@ -68,7 +68,7 @@ and reapply the content changes listed above.
 Outside this repository the same commands are `npx @aziontech/webkit add <block>`. The shared
 pieces are small: `src/lib/navigation.ts` (the rail and palette data), `src/lib/store.ts` (the resources), `src/lib/deploy.ts` (the deploy run and its
 toast), `src/lib/assistant.ts` (the assistant's canned answers), `src/lib/assistant-model.ts` (TanStack AI's `fakeText` model behind `useChat`, run in the browser with no server or key, with a deployment tool that asks for approval), `src/lib/settings.ts` (theme, direction, language) and `src/router.ts`. Styles come in through
-`src/webkit.css` (the theme and `@aziontech/webkit/styles/all`: the demos render every block, so they register every component instead of an app's `webkit.sources.css`) and `src/styles/main.css` (the app's own base styles), and the app
+`src/webkit.css` (the theme, `@aziontech/webkit/styles` and the `webkit.sources.css` the WebKit Vite plugin writes from the demos' imports, the setup `webkit init` gives an app) and `src/styles/main.css` (the app's own base styles), and the app
 lints with the strict `@aziontech/webkit/eslint-plugin` preset and the webkit Stylelint config. Blocks import their images from `@aziontech/webkit/assets/<file>`, so the demos have no public folder.
 
 Every route is screenshotted by the styled visual suite (`apps/visual`, `tests/demos.spec.ts`),

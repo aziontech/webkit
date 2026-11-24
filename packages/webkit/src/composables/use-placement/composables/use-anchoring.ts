@@ -9,6 +9,8 @@ import {
   watch
 } from 'vue'
 
+const SCROLL_LISTENER_OPTIONS = { capture: true, passive: true } as const
+
 function toggleViewportListeners(
   on: boolean,
   onResize: () => void,
@@ -16,10 +18,10 @@ function toggleViewportListeners(
 ): void {
   if (on) {
     globalThis.window?.addEventListener('resize', onResize)
-    globalThis.document?.addEventListener('scroll', onScroll, true)
+    globalThis.document?.addEventListener('scroll', onScroll, SCROLL_LISTENER_OPTIONS)
   } else {
     globalThis.window?.removeEventListener('resize', onResize)
-    globalThis.document?.removeEventListener('scroll', onScroll, true)
+    globalThis.document?.removeEventListener('scroll', onScroll, SCROLL_LISTENER_OPTIONS)
   }
 }
 

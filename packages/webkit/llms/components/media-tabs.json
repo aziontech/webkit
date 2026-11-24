@@ -33,7 +33,7 @@
   "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
   "Use scenes of the same shape. The frame does not resize between tabs.",
   "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.",
-  "Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion. Below `lg` it does not run either: there the media opens inside the active row, so a tick would move the page under the reader's thumb; a tap selects the tab instead."
+  "Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus and while the band is scrolled out of the viewport, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion. Below `lg` it does not run either: there the media opens inside the active row, so a tick would move the page under the reader's thumb; a tap selects the tab instead."
  ],
  "props": [
   {

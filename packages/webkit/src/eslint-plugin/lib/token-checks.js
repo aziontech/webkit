@@ -133,6 +133,16 @@ const TOKEN_CHECKS = [
       '(rules/webkit-tokens.md).'
   },
   {
+    id: 'color-logo-interpolated',
+    wide: true,
+    regex: /(?<![\w-])az-color\s+(?:az-)?(?:\$\{|["'`]\s*\+)/g,
+    message:
+      'A colour logo class built at runtime (`az-color az-${name}`). The stylesheet compiles only ' +
+      'the colour logos whose whole class appears in scanned source, so a built class paints ' +
+      "nothing. Write each full class ('az-color az-react'), or list a logo that only arrives in " +
+      'data with @source inline("az-react") in webkit.css (rules/webkit-performance.md).'
+  },
+  {
     id: 'class-in-defineprops',
     regex: /defineProps\s*[<(][^>)]*['"]?class['"]?\s*:/s,
     message:

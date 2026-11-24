@@ -380,7 +380,8 @@ describe('MediaTabs', () => {
     vi.advanceTimersByTime(INTERVAL / 2)
     await nextTick()
 
-    expect(hairline().style.width).toBe('50%')
+    expect(hairline()?.style.animationPlayState).toBe('')
+    expect(hairline().style.animationDuration).toBe(`${INTERVAL}ms`)
   })
 
   it('pauses autoplay while the pointer rests on the band, and resumes on leave', async () => {

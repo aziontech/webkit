@@ -798,6 +798,17 @@ describe('NavigationMenu', () => {
       expect(root).toHaveAttribute('data-track', 'nav')
     })
 
+    it('slides the list highlight with translate, not top and left', async () => {
+      const { getByRole, getAllByTestId } = renderTree(
+        COMPOSED.replace('<NavigationMenuList :show-highlight="false">', '<NavigationMenuList>')
+      )
+      await fireEvent.pointerEnter(getByRole('button', { name: /Solutions/ }))
+      const selector = getAllByTestId('navigation-menu-list__selector')[0]!
+      await waitFor(() => expect(selector.style.translate).toMatch(/px/))
+      expect(selector.style.top).toBe('')
+      expect(selector.style.left).toBe('')
+    })
+
     it('names the open panel with aria-controls on its trigger', async () => {
       const { getByRole } = renderTree(COMPOSED)
       const trigger = getByRole('button', { name: /Solutions/ })

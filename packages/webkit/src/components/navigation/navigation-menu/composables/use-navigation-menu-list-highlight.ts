@@ -33,8 +33,7 @@ function createHighlightTarget(resolveContainer: () => HTMLElement | null) {
   const metrics = ref({ left: 0, top: 0, width: 0, height: 0 })
 
   const selectorStyle = computed<CSSProperties>(() => ({
-    left: `${metrics.value.left}px`,
-    top: `${metrics.value.top}px`,
+    translate: `${metrics.value.left}px ${metrics.value.top}px`,
     width: `${metrics.value.width}px`,
     height: `${metrics.value.height}px`,
     opacity: isVisible.value ? 1 : 0

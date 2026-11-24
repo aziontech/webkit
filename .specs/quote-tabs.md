@@ -4,12 +4,12 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 9858278cabe0e737211a52128968850bf9e9939dff27a6d9bbb2972d67d10c04
+checksum: bc270625c15804b8f972ba72850c741cd3c99ff417a981f9fc4404ba44bdd639
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-11-16
+last_updated: 2026-11-24
 ---
 
 # Quote Tabs — Component Spec
@@ -141,7 +141,7 @@ _No plain events — selection flows through `v-model`._
 - `data-autoplay` marks the root while the timer runs. It runs when `autoplay` is on, the band has more than one client and the reader has not asked for reduced motion; it pauses while the pointer rests on the band or keyboard focus (`:focus-visible`) is inside it, and resumes on leave
 - `data-paused` marks the root while the reader has paused the rotation with the pause control
 - Every change of client restarts the count, whether the timer, a click, an arrow key or a bound `modelValue` made it; clicking the selected card restarts it too, and a click keeps the timer running with the pointer still on the band. The timer moves to the next card and wraps from the last to the first, travelling `forward`
-- While the timer runs and `showProgress` is on, a `--primary` hairline grows along the panel's bottom edge, across the panel's full width rather than the quotation's padded column, and reaches the right edge as the band advances; it is decorative and `aria-hidden`
+- While the timer runs and `showProgress` is on, a `--primary` hairline grows along the panel's bottom edge, across the panel's full width rather than the quotation's padded column, and reaches the right edge as the band advances; it is decorative and `aria-hidden`. The rotation also holds, hairline included, while the band is scrolled out of the viewport
 - During a change the leaving quotation travels out first and the entering one travels in once it has gone, both within that same cell, so two quotations never overlap and the wall below never moves
 - A client's mark resolves in order: its `logo`, drawn as-is in its own colours; else its registry `mark`, drawn in one ink; else its name, in heading type, on the card and in the panel alike
 - `shape` on a card's mark is `wide` (the default, 20px tall) or `compact` (28px), matching `logo-wall`
@@ -151,13 +151,13 @@ _No plain events — selection flows through `v-model`._
 
 ## Motion & Animations
 
-| Trigger                                                               | Animation / Transition                                                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                  |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| selection change — quotation entering, after the leaving one has gone | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity | `moderate-01` (150ms) + `productive-entrance`     | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly)   |
-| selection change — quotation leaving                                  | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity       | `moderate-01` (150ms) + `productive-exit`         | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly)   |
-| selection change (card)                                               | `transition-colors duration-moderate-01 ease-out`                                                                                                                 | `moderate-01` (150ms)                             | `motion-reduce:transition-none`                                                                          |
-| autoplay progress                                                     | `transition-[width] duration-fast-01 ease-linear` on the hairline, its width set from the elapsed share of `autoplayInterval`                                     | `fast-01` (70ms) + linear                         | `motion-reduce:transition-none` (and the timer never runs under reduced motion, so no hairline is drawn) |
-| hover (card)                                                          | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                            | `fast-02` (110ms) + `productive-entrance`         | `motion-reduce:before:transition-none`                                                                   |
+| Trigger                                                               | Animation / Transition                                                                                                                                                                                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| selection change — quotation entering, after the leaving one has gone | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity                                                                                            | `moderate-01` (150ms) + `productive-entrance`     | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
+| selection change — quotation leaving                                  | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity                                                                                                  | `moderate-01` (150ms) + `productive-exit`         | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
+| selection change (card)                                               | `transition-colors duration-moderate-01 ease-out`                                                                                                                                                                                                            | `moderate-01` (150ms)                             | `motion-reduce:transition-none`                                                                        |
+| autoplay progress                                                     | `animate-autoplay-progress` on the hairline: one `scale` from 0 to full width across the inline start, its `animation-duration` set on the element to `autoplayInterval`, restarted per slide and held with `animation-play-state` while the rotation pauses | `autoplay-progress` (linear)                      | `motion-reduce:animate-none` (and the timer never runs under reduced motion, so no hairline is drawn)  |
+| hover (card)                                                          | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                                                                                                                       | `fast-02` (110ms) + `productive-entrance`         | `motion-reduce:before:transition-none`                                                                 |
 
 ## Tokens
 

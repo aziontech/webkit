@@ -85,6 +85,7 @@
   const baseId = useId()
   const loaded = new Map<string, Component>()
   const tabElements: Array<globalThis.HTMLButtonElement | null> = []
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   let pendingDirection: QuoteTabsDirection | null = null
 
   const direction = ref<QuoteTabsDirection>('forward')
@@ -121,7 +122,8 @@
     autoplayRunning,
     paused,
     pauseLabel,
-    progress,
+    playing,
+    cycle,
     restartProgress,
     togglePause,
     enterPointer,
@@ -134,7 +136,8 @@
     onAdvance: () => {
       pendingDirection = 'forward'
       select(selected.value >= props.items.length - 1 ? 0 : selected.value + 1)
-    }
+    },
+    target: rootEl
   })
 
   watch(selected, (next, previous) => {
@@ -219,6 +222,7 @@
 <template>
   <div
     v-if="clients.length"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-autoplay="autoplayRunning || null"
@@ -345,10 +349,14 @@
 
       <span
         v-if="showProgress && autoplayEnabled"
+        :key="cycle"
         aria-hidden="true"
         :data-testid="`${testId}__progress`"
-        :style="{ width: `${progress}%` }"
-        class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+        :style="{
+          animationDuration: `${autoplayInterval}ms`,
+          animationPlayState: playing ? undefined : 'paused'
+        }"
+        class="absolute bottom-0 start-0 h-px w-full origin-left bg-(--primary) animate-autoplay-progress rtl:origin-right motion-reduce:animate-none"
       />
     </RegistrationFrame>
 

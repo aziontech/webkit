@@ -19,14 +19,16 @@ export interface UseAutoplayProgressOptions {
   enabled: MaybeRefOrGetter<boolean>
   interval: MaybeRefOrGetter<number>
   onAdvance: () => void
+  target?: MaybeRefOrGetter<globalThis.Element | null | undefined>
 }
 
 export interface UseAutoplayProgressReturn {
   autoplayEnabled: ComputedRef<boolean>
   autoplayRunning: ComputedRef<boolean>
+  playing: ComputedRef<boolean>
   paused: Readonly<Ref<boolean>>
   pauseLabel: ComputedRef<string>
-  progress: ComputedRef<number>
+  cycle: Readonly<Ref<number>>
   restartProgress: () => void
   togglePause: () => void
   enterPointer: () => void
@@ -35,25 +37,11 @@ export interface UseAutoplayProgressReturn {
   leaveFocus: () => void
 }
 
-const PROGRESS_TICK_MS = 100
-
 const setTo =
   <T>(target: Ref<T>, value: T) =>
   (): void => {
     target.value = value
   }
-
-function tickEvery(
-  elapsed: Ref<number>,
-  options: UseAutoplayProgressOptions
-): ReturnType<typeof globalThis.setInterval> {
-  return globalThis.setInterval(() => {
-    elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < toValue(options.interval)) return
-    elapsed.value = 0
-    options.onAdvance()
-  }, PROGRESS_TICK_MS)
-}
 
 export function useAutoplayProgress(
   options: UseAutoplayProgressOptions
@@ -61,11 +49,28 @@ export function useAutoplayProgress(
   const reducedMotion = usePreferredReducedMotion()
   const { t } = useTranslate({ common: en.common })
 
-  const elapsed = ref(0)
   const paused = ref(false)
   const pointerInside = ref(false)
   const focusInside = ref(false)
-  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
+  const visible = ref(true)
+  const cycle = ref(0)
+  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+  let startedAt = 0
+  let spent = 0
+
+  let observer: globalThis.IntersectionObserver | undefined
+  watch(
+    () => toValue(options.target),
+    (element) => {
+      observer?.disconnect()
+      if (!element) return
+      observer = new globalThis.IntersectionObserver((entries) => {
+        visible.value = entries[entries.length - 1]!.isIntersecting
+      })
+      observer.observe(element)
+    },
+    { immediate: true }
+  )
 
   const autoplayEnabled = computed(
     () => toValue(options.enabled) && reducedMotion.value !== 'reduce'
@@ -75,23 +80,39 @@ export function useAutoplayProgress(
     () => autoplayEnabled.value && !paused.value && !pointerInside.value && !focusInside.value
   )
 
+  const playing = computed(() => autoplayRunning.value && visible.value)
+
   const pauseLabel = computed(() =>
     paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
-  const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / toValue(options.interval)) * 100))
-  )
-
   function stop(): void {
-    if (marquee === null) return
-    globalThis.clearInterval(marquee)
-    marquee = null
+    if (timer === null) return
+    globalThis.clearTimeout(timer)
+    timer = null
+    spent += Date.now() - startedAt
+  }
+
+  function advance(): void {
+    timer = null
+    spent = 0
+    cycle.value += 1
+    options.onAdvance()
+    if (playing.value) start()
   }
 
   function start(): void {
+    if (timer !== null) return
+    startedAt = Date.now()
+    timer = globalThis.setTimeout(advance, Math.max(0, toValue(options.interval) - spent))
+  }
+
+  function restartProgress(): void {
+    const running = timer !== null
     stop()
-    marquee = tickEvery(elapsed, options)
+    spent = 0
+    cycle.value += 1
+    if (running) start()
   }
 
   function togglePause(): void {
@@ -103,21 +124,25 @@ export function useAutoplayProgress(
     focusInside.value = target.matches(':focus-visible')
   }
 
-  watch(autoplayRunning, (running) => (running ? start() : stop()))
+  watch(playing, (on) => (on ? start() : stop()))
 
   onMounted(() => {
-    if (autoplayRunning.value) start()
+    if (playing.value) start()
   })
 
-  onScopeDispose(stop)
+  onScopeDispose(() => {
+    stop()
+    observer?.disconnect()
+  })
 
   return {
     autoplayEnabled,
     autoplayRunning,
+    playing,
     paused: readonly(paused),
     pauseLabel,
-    progress,
-    restartProgress: setTo(elapsed, 0),
+    cycle: readonly(cycle),
+    restartProgress,
     togglePause,
     enterPointer: setTo(pointerInside, true),
     leavePointer: setTo(pointerInside, false),

@@ -75,7 +75,7 @@
     'focus-visible:ring-offset-(--bg-canvas)'
 
   const SELECTOR_CLASS =
-    'pointer-events-none absolute z-0 rounded-(--shape-button) bg-(--navigation-menu-highlight-background) transition-[left,top,width,height,opacity] duration-moderate-02 ' +
+    'pointer-events-none absolute top-0 left-0 z-0 rounded-(--shape-button) bg-(--navigation-menu-highlight-background) transition-[translate,width,height,opacity] duration-moderate-02 ' +
     'ease-productive-entrance motion-reduce:transition-none'
 </script>
 
