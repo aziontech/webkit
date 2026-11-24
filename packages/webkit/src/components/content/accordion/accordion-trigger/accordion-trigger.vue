@@ -109,9 +109,7 @@
       @click="onClick"
       @keydown="onKeydown"
     >
-      <span
-        class="min-w-0 flex-1 data-[icon-position=leading]:flex-none group-data-[icon-position=leading]:flex-none"
-      >
+      <span class="min-w-0 flex-1 group-data-[icon-position=leading]:flex-initial">
         <slot />
       </span>
       <i

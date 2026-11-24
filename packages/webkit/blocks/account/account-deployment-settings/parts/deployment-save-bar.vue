@@ -84,6 +84,7 @@
           <Kbd
             meta
             size="small"
+            class="pointer-coarse:hidden!"
             aria-hidden="true"
             >S</Kbd
           >

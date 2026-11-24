@@ -7,9 +7,9 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 1c46dd1282514e5fcf1deabfcbd9ca35f13faae0204ab106e1daf157c0e3d538
+checksum: 6b8b2e2831b92edb88afbc108ff64295ce4f877c70c1767241ea6b1b8a6a7c8a
 created: 2026-06-26
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 ---
 
 # Accordion — Component Spec
@@ -42,6 +42,7 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 - Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
 - Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
 - Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
+- With `icon-position="leading"` the trigger's label keeps its content width but may shrink, so a long label (or a row of label and tags) wraps inside the trigger instead of running out of it on a narrow screen.
 - `Accordion.Content` pads its body on the trigger's inset (`--accordion-inset`) with `--spacing-xs` above and `--spacing-md` below, so the answer starts on the question's left edge (after the chevron when `icon-position` is `leading`). Pass `:padded="false"` for edge-to-edge content (a `LogViewer`, a table) that owns its spacing.
 - Set `size` and `icon-position` on the root, not per item — they are provided to every item through context.
 

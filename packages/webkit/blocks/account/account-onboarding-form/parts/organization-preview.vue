@@ -13,7 +13,7 @@
 <template>
   <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-me-(--spacing-xl)">
     <div
-      class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden mask-r-from-72% mask-b-from-80% lg:block"
+      class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden ltr:mask-r-from-72% rtl:mask-l-from-72% mask-b-from-80% lg:block"
     >
       <figure
         :class="PREVIEW_FIGURE_CLASS"

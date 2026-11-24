@@ -33,7 +33,7 @@ Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionP
 
 ### E. Event table — `Card`, `DataTable`, `DataTablePagination`, `TableCellTime`, `Tag`, `CopyButton`, `useCollection` (required)
 
-One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `TableCellTime` (relative, exact time on the tooltip).
+One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small neutral `Tag` with one icon per category (Sign-in, Security, Deploy, Users, Billing): a category is not a status, so it never borrows the info, warning, success or brand colours, User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `TableCellTime` (relative, exact time on the tooltip).
 
 ### F. No match and empty period — `EmptyState` (required)
 

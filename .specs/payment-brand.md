@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: f5330adf508daa0051178adb2187a8fc1ccd588ed5c9e7816790e4375104fbdb
+checksum: d19513390f853e16cf03a81b213bcd1c5cc7af655b46e9306d35c4332160658d
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-24
 ---
 
 # PaymentBrand — Component Spec
@@ -76,6 +76,7 @@ _none_
 - `data-brand` on the root: `visa` | `mastercard` | `amex` | `diners` | `jcb` | `discover` | `elo` | `hipercard` | `unionpay` | `unknown`.
 - `data-size`: `small` | `medium`.
 - `data-glyph`: `mark` when the brand has a drawn mark, `generic` otherwise.
+- The Mastercard mark is two equal circles at the same opacity whose overlap reads darker, the network's own one-colour form; one solid circle beside a faded one would read as a switch knob in its track.
 
 ## Motion & Animations
 
