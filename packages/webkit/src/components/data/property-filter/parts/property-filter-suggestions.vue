@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { useEventListener } from '@vueuse/core'
   import { computed, ref, watch } from 'vue'
 
   import { usePlacement } from '../../../../composables/use-placement'
@@ -45,7 +44,6 @@
     },
     { immediate: true, flush: 'sync' }
   )
-  useEventListener('resize', readAnchor, { passive: true })
 
   const sections = computed(() => groupSections(props.suggestions, props.uid, t))
   const numberFormat = computed(() => new Intl.NumberFormat(locale.value))
@@ -58,6 +56,8 @@
     align: 'start',
     sideOffset: 4
   })
+
+  watch(panelStyle, readAnchor, { flush: 'sync' })
 
   const style = computed(() =>
     anchorWidth.value > 0

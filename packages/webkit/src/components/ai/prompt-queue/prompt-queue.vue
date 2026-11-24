@@ -1,10 +1,8 @@
 <script setup lang="ts">
-  import { useResizeObserver } from '@vueuse/core'
-  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
 
   defineOptions({
@@ -105,7 +103,18 @@
       : [...expanded.value, id]
   }
 
-  useResizeObserver(listEl, measure)
+  let observer: ResizeObserver | undefined
+  watch(
+    listEl,
+    (element) => {
+      observer?.disconnect()
+      if (!element) return
+      observer ??= new ResizeObserver(() => measure())
+      observer.observe(element)
+    },
+    { flush: 'post' }
+  )
+  onScopeDispose(() => observer?.disconnect())
   watch(
     () => props.items.map((item) => `${item.id}:${item.text}`),
     () => {
@@ -118,6 +127,11 @@
   function onRemove(event: MouseEvent, item: PromptQueueItem): void {
     emit('remove', event, item)
   }
+
+  const TOGGLE_CLASS =
+    'relative self-start rounded-(--shape-control) text-label-sm text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none ' +
+    "pointer-coarse:after:absolute pointer-coarse:after:-inset-y-3 pointer-coarse:after:inset-x-0 pointer-coarse:after:content-['']"
 
   const BOX_CLASS =
     'flex flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) ' +
@@ -175,17 +189,17 @@
             >
               {{ item.text }}
             </span>
-            <Button
+            <button
               v-if="isOpen(item.id) || clamped.includes(item.id)"
-              variant="link"
-              size="small"
-              class="self-start"
-              :label="isOpen(item.id) ? t('promptQueue.showLess') : t('promptQueue.showMore')"
+              type="button"
               :aria-expanded="isOpen(item.id) ? 'true' : 'false'"
               :aria-controls="textId(index)"
               :data-testid="`${testId}__toggle`"
+              :class="TOGGLE_CLASS"
               @click="onToggle(item.id)"
-            />
+            >
+              {{ isOpen(item.id) ? t('promptQueue.showLess') : t('promptQueue.showMore') }}
+            </button>
             <span
               v-if="(item.attachmentCount ?? 0) > 0"
               class="inline-flex items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
