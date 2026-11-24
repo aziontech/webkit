@@ -178,6 +178,8 @@ export const ptBR: Messages = {
     },
     empty: 'Nenhuma mensagem na fila',
     remove: 'Remover da fila',
+    showMore: 'Mostrar mais',
+    showLess: 'Mostrar menos',
     attachments: {
       one: '{count} anexo',
       other: '{count} anexos'

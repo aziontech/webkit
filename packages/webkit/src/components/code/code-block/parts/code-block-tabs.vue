@@ -37,6 +37,7 @@
 
   defineSlots<{
     'tab-icon'(props: { tab: CodeBlockTab }): unknown
+    actions(): unknown
   }>()
 
   const dir = useDirection()
@@ -130,13 +131,13 @@
 <template>
   <div
     v-bind="$attrs"
-    class="relative shrink-0 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-2xs)"
+    class="relative flex shrink-0 items-center gap-(--spacing-2xs) border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-2xs)"
     :data-testid="`${testId}__header`"
   >
     <div
       ref="listEl"
       role="tablist"
-      class="relative flex items-center gap-(--spacing-2xs)"
+      class="relative flex min-w-0 flex-1 items-center gap-(--spacing-2xs)"
       :data-testid="`${testId}__tabs`"
     >
       <span
@@ -178,5 +179,6 @@
         {{ tab.label }}
       </button>
     </div>
+    <slot name="actions" />
   </div>
 </template>

@@ -121,6 +121,18 @@ describe('FlowDiagram', () => {
     expect(viewport.hasAttribute('tabindex')).toBe(false)
   })
 
+  it('caps the stacked column at a readable width on a wide screen', async () => {
+    const { container } = render(() => h('div', { style: 'width: 1280px' }, [h(Topology)]))
+    const list = () => container.querySelector('[data-testid="flow-diagram__list"]') as HTMLElement
+    await waitFor(() => expect(list()?.dataset['direction']).toBe('column'))
+    const probe = document.createElement('div')
+    probe.style.width = 'var(--container-xl)'
+    container.appendChild(probe)
+    const cap = probe.getBoundingClientRect().width
+    expect(cap).toBeGreaterThan(0)
+    expect(list().getBoundingClientRect().width).toBeLessThanOrEqual(cap + 0.5)
+  })
+
   it('never leaves a lazily loaded row overflowing a viewport that cannot take focus', async () => {
     const { container } = render(() => h('div', { style: 'width: 414px' }, [h(RequestPath)]))
     await waitFor(() => expect(cards(container).length).toBe(3))

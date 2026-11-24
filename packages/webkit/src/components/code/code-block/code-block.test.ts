@@ -914,6 +914,22 @@ describe('CodeBlock', () => {
         expect(getByTestId('code-block').hasAttribute('data-bordered')).toBe(false)
       })
 
+      it('moves the copy control into the tab strip or the filename bar, off the first lines', () => {
+        const tabs = render(CodeBlock, { props: { tabs: twoTabs } })
+        expect(tabs.getByTestId('code-block').hasAttribute('data-copy-gutter')).toBe(false)
+        expect(tabs.queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(
+          within(tabs.getByTestId('code-block__header')).getByTestId('code-block__copy')
+        ).toBeTruthy()
+        tabs.unmount()
+        const file = render(CodeBlock, { props: { tabs: fileNameTab } })
+        expect(file.getByTestId('code-block').hasAttribute('data-copy-gutter')).toBe(false)
+        expect(file.queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(
+          within(file.getByTestId('code-block__filename')).getByTestId('code-block__copy')
+        ).toBeTruthy()
+      })
+
       it('gives way to the tab strip and to the filename bar', () => {
         const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
         expect(tabs.queryByTestId('code-block__label')).toBeNull()

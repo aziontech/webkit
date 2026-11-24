@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 6886a04c98ec24c3dba8f3afb732d4d3764f5da8f8e9d5b7ddf70c652442dfb4
+checksum: c86e1476d619be87fce14fb8548575e9e361ab0e5be72ff8bc5f8554defbb056
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -229,7 +229,7 @@ _None._
 ## Responsive
 
 - Container queries: none.
-- Narrow: buttons wrap; the title wraps anywhere, inline code included, so the whole command in it stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
+- Narrow: buttons wrap; the title wraps between words (inline code included, breaking inside a word only when it cannot fit), so a flag such as `--env` is never split and the whole command stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
 - Touch: medium buttons (44 px on coarse pointers).
 - Reflow: no page-level horizontal scroll at 320 px; the arguments field keeps each line of code whole (`wrap="off"`), grows to 12 lines, then scrolls inside itself, sideways for a long line.
 - Touch: on coarse pointers (`pointer-coarse:`) the confirmation-phrase field and the arguments field (a `Textarea`) type at 16 px (`text-body-md`), so iOS Safari does not zoom the page on focus.

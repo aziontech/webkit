@@ -153,7 +153,7 @@
 
   const LIST_CLASS =
     'relative flex w-full gap-(--spacing-xl) ' +
-    'data-[direction=column]:flex-col data-[direction=row]:w-fit data-[direction=row]:min-w-full data-[direction=row]:data-[align=start]:items-start ' +
+    'data-[direction=column]:flex-col data-[direction=column]:max-w-(--container-xl) data-[direction=row]:w-fit data-[direction=row]:min-w-full data-[direction=row]:data-[align=start]:items-start ' +
     'data-[direction=row]:data-[align=center]:items-center ' +
     'data-[labelled]:gap-x-(--spacing-2xl) ' +
     'data-[direction=row]:data-[uniform]:grid data-[direction=row]:data-[uniform]:auto-cols-fr data-[direction=row]:data-[uniform]:grid-flow-col ' +

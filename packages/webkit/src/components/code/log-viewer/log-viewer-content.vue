@@ -105,6 +105,7 @@
     'text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-2xs) transition-colors duration-150 ease-out ' +
     "before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] " +
     'hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 ' +
+    'in-data-[copyable]:data-[copy-gutter]:pe-12 ' +
     'data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) ' +
     'motion-reduce:transition-none motion-reduce:before:transition-none'
 
@@ -216,8 +217,9 @@
               :data-chunk-count="chunk.items.length"
             >
               <div
-                v-for="line in chunk.items"
+                v-for="(line, lineIndex) in chunk.items"
                 :key="line.id"
+                :data-copy-gutter="(chunk.index === 0 && lineIndex < 2) || null"
                 :data-testid="`${ctx.testId.value}__line`"
                 :data-type="line.type"
                 :data-level="line.level"

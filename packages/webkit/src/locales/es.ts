@@ -178,6 +178,8 @@ export const es: Messages = {
     },
     empty: 'No hay mensajes en cola',
     remove: 'Quitar de la cola',
+    showMore: 'Mostrar más',
+    showLess: 'Mostrar menos',
     attachments: {
       one: '{count} adjunto',
       other: '{count} adjuntos'

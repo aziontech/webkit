@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: f5f5e9360e725af85cf677f6ace2afb0cf695b27b0130b1df4387cec8733f953
+checksum: db20cd6975ec2c11531f07322d4a759fa018120b19c40020184131dd6eb7fa7f
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -159,7 +159,7 @@ _None._
 ## Responsive
 
 - Container queries: none.
-- Narrow: the title wraps to two lines before it clamps, and the tool name drops to its own line under it when the row has no room for both, truncating only past the row's width; the status stays visible.
+- Narrow: the title wraps to two lines before it clamps, and the tool name drops to its own line under it when the row has no room for both, and an identifier longer than the row wraps inside the chip instead of truncating, so it is read whole at 320 px; the status stays visible.
 - Touch: 40 px row.
 - Reflow: code in details scrolls inside its block.
 

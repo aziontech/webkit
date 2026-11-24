@@ -1455,6 +1455,8 @@ export const promptQueue = {
   },
   empty: 'No messages queued',
   remove: 'Remove from queue',
+  showMore: 'Show more',
+  showLess: 'Show less',
   attachments: {
     one: '{count} attachment',
     other: '{count} attachments'

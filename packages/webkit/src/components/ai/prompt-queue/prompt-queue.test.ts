@@ -108,6 +108,38 @@ describe('PromptQueue', () => {
     await waitFor(() => expect(document.activeElement).toBe(getAllByRole('button')[0]))
   })
 
+  it('lets the reader expand a clamped message and fold it back, and only a clamped one', async () => {
+    const style = document.createElement('style')
+    style.textContent =
+      '[data-testid="prompt-queue__text"][data-state="closed"]{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}'
+    document.head.appendChild(style)
+    const host = document.createElement('div')
+    host.style.width = '320px'
+    document.body.appendChild(host)
+    const view = render(PromptQueue, {
+      container: host,
+      props: {
+        items: [
+          { id: 'short', text: 'Purge the cache' },
+          { id: 'long', text: 'Check the asset path and the cache key of every image. '.repeat(8) }
+        ]
+      }
+    })
+    const toggle = await waitFor(() => view.getByRole('button', { name: 'Show more' }))
+    expect(view.getAllByTestId('prompt-queue__toggle')).toHaveLength(1)
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    const [, long] = view.getAllByTestId('prompt-queue__text')
+    expect(toggle).toHaveAttribute('aria-controls', long?.id)
+    await userEvent.click(toggle)
+    expect(long).toHaveAttribute('data-state', 'open')
+    const fold = view.getByRole('button', { name: 'Show less' })
+    expect(fold).toHaveAttribute('aria-expanded', 'true')
+    await userEvent.click(fold)
+    expect(long).toHaveAttribute('data-state', 'closed')
+    host.remove()
+    style.remove()
+  })
+
   it('follows the document direction and isolates message text', () => {
     const { getByTestId, getByText } = render(PromptQueue, {
       props: { items },
