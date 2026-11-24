@@ -1110,6 +1110,11 @@ export const themeSwitcher = {
   light: 'Light'
 } as const
 
+export const timeline = {
+  label: 'Activity',
+  loading: 'Loading activity'
+} as const
+
 export const timestamp = {
   title: 'Timestamp details',
   utc: 'UTC',
@@ -1744,6 +1749,7 @@ export const en = {
   tabs,
   tagEditor,
   themeSwitcher,
+  timeline,
   timestamp,
   toast,
   toggleGroup,

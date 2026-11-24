@@ -1245,6 +1245,10 @@ export const es: Messages = {
     dark: 'Oscuro',
     light: 'Claro'
   },
+  timeline: {
+    label: 'Actividad',
+    loading: 'Cargando actividad'
+  },
   timestamp: {
     title: 'Detalles de la marca de tiempo',
     utc: 'UTC',

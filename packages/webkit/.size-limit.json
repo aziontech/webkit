@@ -879,6 +879,26 @@
     "limit": "1.7 KB"
   },
   {
+    "name": "timeline",
+    "path": "src/components/content/timeline/index.ts",
+    "limit": "22.5 KB"
+  },
+  {
+    "name": "timeline-root",
+    "path": "src/components/content/timeline/timeline.vue",
+    "limit": "2.25 KB"
+  },
+  {
+    "name": "timeline-item",
+    "path": "src/components/content/timeline/timeline-item/timeline-item.vue",
+    "limit": "21.5 KB"
+  },
+  {
+    "name": "timeline-group",
+    "path": "src/components/content/timeline/timeline-group/timeline-group.vue",
+    "limit": "0.75 KB"
+  },
+  {
     "name": "timestamp",
     "path": "src/components/content/timestamp/timestamp.vue",
     "limit": "20.35 KB"

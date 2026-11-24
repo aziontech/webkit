@@ -264,6 +264,13 @@ export const COMPONENT_TERMS = {
   brand: ['azion logo'],
   'hover-card': ['hover card', 'preview on hover', 'link preview', 'user card'],
   'status-code': ['http status', 'status code', 'http status code', 'http method', 'get post'],
+  timeline: [
+    'activity feed',
+    'audit trail',
+    'deployment history',
+    'linha do tempo',
+    'línea de tiempo'
+  ],
   timestamp: ['timestamp', 'relative time', 'time ago', 'date time display'],
   'chart-reference': [
     'threshold',

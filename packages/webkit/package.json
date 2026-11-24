@@ -495,6 +495,22 @@
       "types": "./types/components/content/timestamp/timestamp.vue.d.ts",
       "default": "./src/components/content/timestamp/timestamp.vue"
     },
+    "./timeline": {
+      "types": "./types/components/content/timeline/index.d.ts",
+      "default": "./src/components/content/timeline/index.ts"
+    },
+    "./timeline-root": {
+      "types": "./types/components/content/timeline/timeline.vue.d.ts",
+      "default": "./src/components/content/timeline/timeline.vue"
+    },
+    "./timeline-item": {
+      "types": "./types/components/content/timeline/timeline-item/timeline-item.vue.d.ts",
+      "default": "./src/components/content/timeline/timeline-item/timeline-item.vue"
+    },
+    "./timeline-group": {
+      "types": "./types/components/content/timeline/timeline-group/timeline-group.vue.d.ts",
+      "default": "./src/components/content/timeline/timeline-group/timeline-group.vue"
+    },
     "./avatar": {
       "types": "./types/components/content/avatar/avatar.vue.d.ts",
       "default": "./src/components/content/avatar/avatar.vue"
@@ -2934,6 +2950,18 @@
       ],
       "timestamp": [
         "./types/components/content/timestamp/timestamp.vue.d.ts"
+      ],
+      "timeline": [
+        "./types/components/content/timeline/index.d.ts"
+      ],
+      "timeline-root": [
+        "./types/components/content/timeline/timeline.vue.d.ts"
+      ],
+      "timeline-item": [
+        "./types/components/content/timeline/timeline-item/timeline-item.vue.d.ts"
+      ],
+      "timeline-group": [
+        "./types/components/content/timeline/timeline-group/timeline-group.vue.d.ts"
       ],
       "avatar": [
         "./types/components/content/avatar/avatar.vue.d.ts"

@@ -8700,6 +8700,141 @@
    "examplesFile": "catalog/examples/timestamp.json",
    "docsFile": "catalog/components/timestamp.json"
   },
+  "timeline": {
+   "import": "@aziontech/webkit/timeline",
+   "target": "./src/components/content/timeline/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/timeline-root",
+   "subcomponents": [
+    "@aziontech/webkit/timeline-item",
+    "@aziontech/webkit/timeline-group"
+   ],
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Density of every item: `small` for a side panel or drawer, `medium` for a page body."
+    },
+    {
+     "name": "timeFormat",
+     "type": "'relative' | 'local' | 'utc'",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Activity`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "`Timeline.Item` children, or `Timeline.Group` children, in display order. Hidden while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/timeline.json",
+   "docsFile": "catalog/components/timeline.json"
+  },
+  "timeline-root": {
+   "import": "@aziontech/webkit/timeline-root",
+   "target": "./src/components/content/timeline/timeline.vue",
+   "kind": "root",
+   "rootOf": "timeline",
+   "treeShakeableImport": "@aziontech/webkit/timeline-root",
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Density of every item: `small` for a side panel or drawer, `medium` for a page body."
+    },
+    {
+     "name": "timeFormat",
+     "type": "'relative' | 'local' | 'utc'",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Activity`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "`Timeline.Item` children, or `Timeline.Group` children, in display order. Hidden while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "docsFile": "catalog/components/timeline-root.json"
+  },
+  "timeline-item": {
+   "import": "@aziontech/webkit/timeline-item",
+   "target": "./src/components/content/timeline/timeline-item/timeline-item.vue",
+   "kind": "subcomponent",
+   "parent": "timeline",
+   "treeShakeableImport": "@aziontech/webkit/timeline-item",
+   "stability": "preview",
+   "surface": "app"
+  },
+  "timeline-group": {
+   "import": "@aziontech/webkit/timeline-group",
+   "target": "./src/components/content/timeline/timeline-group/timeline-group.vue",
+   "kind": "subcomponent",
+   "parent": "timeline",
+   "treeShakeableImport": "@aziontech/webkit/timeline-group",
+   "stability": "preview",
+   "surface": "app"
+  },
   "avatar": {
    "import": "@aziontech/webkit/avatar",
    "target": "./src/components/content/avatar/avatar.vue",

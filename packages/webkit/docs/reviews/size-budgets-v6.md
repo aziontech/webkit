@@ -1680,3 +1680,4 @@ Budget-raise: avatar 12.25 KB → 12.8 KB (measured 12.77 KB): Avatar gains the 
 Budget-raise: table-filter 6.65 KB → 6.75 KB (measured 6.69 KB): the shared locale catalogs gain the five Avatar presence strings (SUP-04).
 Budget-raise: console-layout 84.7 KB → 85.2 KB (measured 85.15 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
 Budget-raise: app-header-account 13.85 KB → 14.4 KB (measured 14.34 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: locales-es 12.1 KB → 12.2 KB (measured 12.10 KB): the Timeline strings (`timeline.label`, `timeline.loading`, SUP-TL-1) in the shared catalog, a budget with no headroom.
