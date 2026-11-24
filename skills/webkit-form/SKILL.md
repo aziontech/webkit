@@ -112,34 +112,37 @@ it. A plain `Input` is for free text only. A typed value in a text box (a date a
 `2026-12-31T00:00:00Z`, a phone as digits, a port as text) makes the person learn a format, fails
 only at submit and loses the keyboard, locale and time zone handling the real control already has.
 
-| The field holds                                                 | Use                                                                                           | Bind                                                       | Never                                                         |
-| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
-| One date (due date, expiry, birthday)                           | `DatePicker`                                                                                  | `Date \| null`                                             | an `Input` that asks for `YYYY-MM-DD`                         |
-| One date **and** time (a schedule, a start, an expiry instant)  | `DatePicker` with `show-time`                                                                 | `Date \| null`                                             | an `Input` that asks for ISO 8601 text, two loose text fields |
-| A start and an end, or "the last N" (a period, a window, a log) | `DateRangePicker` (`:show-time="false"` for whole days)                                       | a `DateRangeValue` (relative, absolute or since)           | two `DatePicker`s, two text fields                            |
-| A duration or a count (TTL, retention days, port, replicas)     | `NumberInput` with `min` / `max` / `step`; the unit in `Field.Description` or an `InputGroup` | `number`                                                   | `Input`, a date picker for a number of days                   |
-| An approximate value inside a bounded range                     | `Slider`                                                                                      | `number`                                                   | a `NumberInput` when the exact digit does not matter          |
-| A phone number                                                  | `PhoneInput`                                                                                  | national digits + `v-model:country`; send the E.164 number | `Input` with a mask or a `+1` placeholder                     |
-| A password or another secret (token, client secret)             | `PasswordInput` (+ `PasswordRequirements` under a new password)                               | `string`                                                   | `Input` with dots, a hand-made reveal button                  |
-| A one-time code                                                 | `OtpInput`                                                                                    | `string`                                                   | six `Input`s                                                  |
-| One choice of two to seven, all visible                         | `RadioGroup` (`variant="card"` for cards)                                                     | the option's value                                         | a `Select` for three options                                  |
-| One choice from a longer list                                   | `Select` (a search box in its panel for a long list)                                          | the option's value                                         | a typed id or name                                            |
-| A value the list only suggests (a new one is valid)             | `Combobox`                                                                                    | `string`                                                   | an `Input` beside a list of examples                          |
-| Several choices from a list                                     | `MultiSelect`; a `Checkbox` per option for two to five                                        | an array of values                                         | a comma-separated `Input`                                     |
-| On or off, saved with the form                                  | `Checkbox`                                                                                    | `boolean`                                                  | a `Select` with Yes and No                                    |
-| On or off, applied at once                                      | `Switch`                                                                                      | `boolean`                                                  | a checkbox that saves on click                                |
-| A list of same-shaped rows (variables, headers, criteria)       | `AttributeEditor`                                                                             | an array of rows                                           | a `Textarea` of `KEY=value` lines                             |
-| Key and value tags of a resource                                | `TagEditor`                                                                                   | `key` / `value` pairs                                      | a comma-separated `Input`                                     |
-| Files to upload                                                 | `FileDropzone` + a Browse files `Button`, the picked files in `FileTokenGroup`                | the `File` list your form keeps                            | a native file input left unstyled                             |
-| Code, a query, JSON or YAML the person edits                    | `CodeEditor`                                                                                  | `string`                                                   | a `Textarea`                                                  |
-| Several lines of free text                                      | `Textarea`                                                                                    | `string`                                                   | an `Input`                                                    |
-| Text with a fixed part in the same box (`https://`, `.com`)     | `InputGroup` with `InputGroup.Addon`                                                          | `string`                                                   | the fixed part typed into the value                           |
-| The interface language                                          | `LanguageSelect`                                                                              | a BCP 47 tag                                               | a hand-made `Select` of languages                             |
-| The colour theme (system, light, dark)                          | `ThemeSwitcher`                                                                               | the mode                                                   | a `Select` or three buttons                                   |
-| A form described by a JSON schema                               | `SchemaForm`                                                                                  | the value object                                           | fields written by hand from the schema                        |
-| A score on a fixed scale (satisfaction, 1 to 5 stars)           | `Rating`                                                                                      | `number`                                                   | a `RadioGroup` of numbers                                     |
-| A reply or note with formatting and @mentions                   | `MarkdownEditor` (Write and Preview)                                                          | a Markdown `string`                                        | a `Textarea` with hand-made toolbar buttons                   |
-| One line of free text, an e-mail, a name, a slug                | `Input`                                                                                       | `string`                                                   | —                                                             |
+| The field holds                                                 | Use                                                                                                                                                                                            | Bind                                                       | Never                                                                |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
+| One date (due date, expiry, birthday)                           | `DatePicker`                                                                                                                                                                                   | `Date \| null`                                             | an `Input` that asks for `YYYY-MM-DD`                                |
+| One date **and** time (a schedule, a start, an expiry instant)  | `DatePicker` with `show-time`                                                                                                                                                                  | `Date \| null`                                             | an `Input` that asks for ISO 8601 text, two loose text fields        |
+| A start and an end, or "the last N" (a period, a window, a log) | `DateRangePicker` (`:show-time="false"` for whole days)                                                                                                                                        | a `DateRangeValue` (relative, absolute or since)           | two `DatePicker`s, two text fields                                   |
+| A duration or a count (TTL, retention days, port, replicas)     | `NumberInput` with `min` / `max` / `step` and the unit in the label (`TTL in seconds`) or an `InputGroup`; a `Select` or `RadioGroup` of presets (`1 hour`, `7 days`) when the API takes a few | `number`                                                   | `Input`, a date picker for a number of days, `1h30m` typed by hand   |
+| An approximate value inside a bounded range                     | `Slider`                                                                                                                                                                                       | `number`                                                   | a `NumberInput` when the exact digit does not matter                 |
+| Money                                                           | `NumberInput` with the currency in the label (`Monthly limit in USD`) or an `InputGroup.Addon`, and `min`                                                                                      | `number` in major units; convert minor units at the edge   | a string with a currency sign the API must parse                     |
+| A percentage                                                    | `NumberInput` with `:min="0"` `:max="100"` and `%` in an `InputGroup.Addon`                                                                                                                    | `number` from 0 to 100                                     | a fraction (`0.15`) the person has to convert                        |
+| A phone number                                                  | `PhoneInput`                                                                                                                                                                                   | national digits + `v-model:country`; send the E.164 number | `Input` with a mask or a `+1` placeholder                            |
+| A password or another secret (token, client secret)             | `PasswordInput` (+ `PasswordRequirements` under a new password)                                                                                                                                | `string`                                                   | `Input` with dots, a hand-made reveal button                         |
+| A one-time code                                                 | `OtpInput`                                                                                                                                                                                     | `string`                                                   | six `Input`s                                                         |
+| One choice of two to seven, all visible                         | `RadioGroup` (`variant="card"` for cards)                                                                                                                                                      | the option's value                                         | a `Select` for three options                                         |
+| One choice from a longer list                                   | `Select` (a search box in its panel for a long list)                                                                                                                                           | the option's value                                         | a typed id or name                                                   |
+| The ID of another resource (`organization_id`, `team_ids`)      | A resource picker searched by name: `Select` with a `#search` field and Load more, `Combobox` with server search, `MultiSelect` with `searchable` for several (below)                          | the ID, or an array of IDs                                 | an `Input` that asks for the ID, a label that says `Organization ID` |
+| A value the list only suggests (a new one is valid)             | `Combobox`                                                                                                                                                                                     | `string`                                                   | an `Input` beside a list of examples                                 |
+| Several choices from a list                                     | `MultiSelect`; a `Checkbox` per option for two to five                                                                                                                                         | an array of values                                         | a comma-separated `Input`                                            |
+| On or off, saved with the form                                  | `Checkbox`                                                                                                                                                                                     | `boolean`                                                  | a `Select` with Yes and No                                           |
+| On or off, applied at once                                      | `Switch`                                                                                                                                                                                       | `boolean`                                                  | a checkbox that saves on click                                       |
+| A list of same-shaped rows (variables, headers, criteria)       | `AttributeEditor`                                                                                                                                                                              | an array of rows                                           | a `Textarea` of `KEY=value` lines                                    |
+| Key and value tags of a resource                                | `TagEditor`                                                                                                                                                                                    | `key` / `value` pairs                                      | a comma-separated `Input`                                            |
+| Files to upload                                                 | `FileDropzone` + a Browse files `Button`, the picked files in `FileTokenGroup`                                                                                                                 | the `File` list your form keeps                            | a native file input left unstyled                                    |
+| Code, a query, JSON or YAML the person edits                    | `CodeEditor`                                                                                                                                                                                   | `string`                                                   | a `Textarea`                                                         |
+| Several lines of free text                                      | `Textarea`                                                                                                                                                                                     | `string`                                                   | an `Input`                                                           |
+| Text with a fixed part in the same box (`https://`, `.com`)     | `InputGroup` with `InputGroup.Addon`                                                                                                                                                           | `string`                                                   | the fixed part typed into the value                                  |
+| The interface language                                          | `LanguageSelect`                                                                                                                                                                               | a BCP 47 tag                                               | a hand-made `Select` of languages                                    |
+| The colour theme (system, light, dark)                          | `ThemeSwitcher`                                                                                                                                                                                | the mode                                                   | a `Select` or three buttons                                          |
+| A form described by a JSON schema                               | `SchemaForm`                                                                                                                                                                                   | the value object                                           | fields written by hand from the schema                               |
+| A score on a fixed scale (satisfaction, 1 to 5 stars)           | `Rating`                                                                                                                                                                                       | `number`                                                   | a `RadioGroup` of numbers                                            |
+| A reply or note with formatting and @mentions                   | `MarkdownEditor` (Write and Preview)                                                                                                                                                           | a Markdown `string`                                        | a `Textarea` with hand-made toolbar buttons                          |
+| One line of free text, an e-mail, a name, a slug                | `Input`                                                                                                                                                                                        | `string`                                                   | —                                                                    |
 
 - **The model is the typed value, not its text.** A date field binds a `Date` (or `null` while empty)
   and the picker prints it for the person's locale and time zone. Convert at the edge: send
@@ -147,9 +150,16 @@ only at submit and loses the keyboard, locale and time zone handling the real co
   when the form loads. The person never reads or types ISO 8601.
 - **Bound what can be picked** with the control's own props (`min` / `max` on `DatePicker`,
   `DateRangePicker` and `NumberInput`) instead of refusing the value after submit. A date that must
-  be in the future (a token expiry, a schedule) sets `:min` to today.
+  be in the future (a token expiry, a schedule) sets `:min` to today, a stored period sets
+  `:max-duration`, a percentage stops at 100; still validate on submit.
 - **Every one of these sits in a `Field`** and takes its label, description, `required`, `invalid`
   and `disabled` from it, like an `Input` does.
+- **Label the thing, not its storage.** The label is `Organization`, `Assignee`, `Expires`; the API
+  field name (`organization_id`, `expires_at`) never reaches the screen. The description says what
+  the value is for, with a concrete example.
+- **A closed set shows a human label per value**, never the raw value (`read_only`) as the label.
+  A code, key or slug the person creates is an `Input` with its rule in `Field.Description`
+  (`Lowercase letters, digits and _, 3 to 40 characters`), filled from the name until edited.
 - **To show a value the person does not edit**, use `Timestamp` for a moment in time and a readonly
   `Input` for text, never a disabled picker.
 - **Lint holds the clear cases.** `webkit/prefer-value-control` fails an `Input` with a native
@@ -200,6 +210,283 @@ only at submit and loses the keyboard, locale and time zone handling the real co
   </Field>
 </template>
 ```
+
+### Dates and times
+
+With `show-time` the value is an instant: send it with `toISOString()` (RFC 3339, UTC), as above. A
+date with no time is a calendar day: send its local parts, never `toISOString()`, which moves the day
+across zones. To pick in a zone that is not the browser's (the person's saved zone, the zone a
+schedule runs in), bind `v-model:time-zone`: the trigger, the grid, the time field and `min` / `max`
+all read in that zone while `v-model` stays the same instant. Name the zone beside the field (an
+`abbr` with the zone id as its `title`, or a Time zone `Select`), as `DateRangePicker` asks of the page.
+
+```vue
+<script setup lang="ts">
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import Field from '@aziontech/webkit/field'
+  import { ref } from 'vue'
+
+  const due = ref<Date | null>(null)
+
+  const calendarDay = (value: Date | null) =>
+    value
+      ? [
+          value.getFullYear(),
+          String(value.getMonth() + 1).padStart(2, '0'),
+          String(value.getDate()).padStart(2, '0')
+        ].join('-')
+      : null
+  // body: { due_date: calendarDay(due.value) }
+</script>
+
+<template>
+  <Field>
+    <Field.Label>Due date</Field.Label>
+    <DatePickerRoot v-model="due" />
+  </Field>
+</template>
+```
+
+A period is one `DateRangePicker` (`@aziontech/webkit/date-range-picker`). In a form, offer absolute
+ranges only; its value is `{ type: 'absolute', start, end }` with ISO strings, ready to send.
+Relative ranges (`Last 24 hours`) belong to filters and dashboards, not to a stored period.
+
+```vue
+<script setup lang="ts">
+  import DateRangePicker, { type DateRangeValue } from '@aziontech/webkit/date-range-picker'
+  import Field from '@aziontech/webkit/field'
+  import { ref } from 'vue'
+
+  const period = ref<DateRangeValue | null>(null)
+</script>
+
+<template>
+  <Field required>
+    <Field.Label>Billing period</Field.Label>
+    <DateRangePicker
+      v-model="period"
+      range-selector-mode="absolute-only"
+      :show-time="false"
+      :show-refresh="false"
+      :max-duration="{ amount: 1, unit: 'year' }"
+    />
+  </Field>
+</template>
+```
+
+### References to other resources — a picker, never an ID field
+
+A field whose value is the ID of another resource is a **searchable resource picker**: the person
+types part of a name, sees names, and picks one; the ID travels in `v-model` and never has to be
+read or typed. Each option shows the **name first**, with the kind or a shortened ID
+(`org_01a1…3f2a`) as secondary text, so two resources with the same name can still be told apart.
+
+The picker follows the long-list rule in `/webkit-ux-heuristics`: search past 7 options, a fixed
+first batch with Load more, a no-match line, and a `Create <noun>` action when the person may not
+have the resource yet (`/webkit-create-surface`, section 6). A whole resource the flow may reuse or
+create gets its own band instead: the `create/create-resource-picker` block (Existing / New).
+
+**A `Select` with a search field** is the default: the search sits in `Select.Content`'s `#search`
+slot, Load more and `Create <noun>` in its `#footer`, and `display-value` names the chosen resource
+even when the current page of results does not hold it (an edit form opens on a saved ID).
+
+```vue
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import { onBeforeUnmount, ref, watch } from 'vue'
+
+  type Organization = { id: string; name: string }
+  const props = defineProps<{
+    listOrganizations: (query: {
+      search: string
+      page: number
+      signal: AbortSignal
+    }) => Promise<{ items: Organization[]; total: number }>
+    selectedName?: string
+  }>()
+
+  const organizationId = ref('')
+  const search = ref('')
+  const items = ref<Organization[]>([])
+  const total = ref(0)
+  const page = ref(1)
+  const loading = ref(false)
+  const names = new Map<string, string>()
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let controller: AbortController | undefined
+
+  const shortId = (id: string) => (id.length > 12 ? `${id.slice(0, 8)}…${id.slice(-4)}` : id)
+
+  async function load(next: number) {
+    controller?.abort()
+    controller = new AbortController()
+    loading.value = true
+    try {
+      const result = await props.listOrganizations({
+        search: search.value.trim(),
+        page: next,
+        signal: controller.signal
+      })
+      result.items.forEach((item) => names.set(item.id, item.name))
+      items.value = next === 1 ? result.items : [...items.value, ...result.items]
+      total.value = result.total
+      page.value = next
+    } finally {
+      loading.value = false
+    }
+  }
+
+  watch(search, () => {
+    clearTimeout(timer)
+    timer = setTimeout(() => load(1), 250)
+  })
+  load(1)
+  onBeforeUnmount(() => {
+    clearTimeout(timer)
+    controller?.abort()
+  })
+</script>
+
+<template>
+  <Field required>
+    <Field.Label>Organization</Field.Label>
+    <Select
+      v-model="organizationId"
+      placeholder="Select an organization"
+      :display-value="(id: string) => names.get(id) ?? props.selectedName ?? shortId(id)"
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <template #search>
+          <Input
+            v-model="search"
+            size="small"
+            placeholder="Search by name"
+            aria-label="Search organizations"
+          />
+        </template>
+        <Select.Item
+          v-for="organization in items"
+          :key="organization.id"
+          :value="organization.id"
+        >
+          {{ organization.name }}
+          <span class="text-(--text-muted)">{{ shortId(organization.id) }}</span>
+        </Select.Item>
+        <template #footer>
+          <Button
+            v-if="items.length < total"
+            :label="`Load ${Math.min(7, total - items.length)} more`"
+            variant="ghost"
+            size="small"
+            class="w-full"
+            :loading="loading"
+            @click="load(page + 1)"
+          />
+        </template>
+      </Select.Content>
+    </Select>
+    <Field.Description>The organization that owns the new project.</Field.Description>
+  </Field>
+</template>
+```
+
+**A `Combobox` with server search** fits when typing is the way in (a directory of people, a large
+catalog) and a first batch of names is enough: `:filter="false"` hands filtering to the server,
+`:allow-custom="false"` rejects text that names no resource, `:loading` shows the spinner and the
+loading row, and each option's `description` carries the secondary text. `search` fires on every
+keystroke, so debounce it; keep the chosen option in `options`, or the field falls back to showing
+the raw value.
+
+```vue
+<script setup lang="ts">
+  import Combobox, { type ComboboxOption } from '@aziontech/webkit/combobox'
+  import Field from '@aziontech/webkit/field'
+  import { onBeforeUnmount, ref } from 'vue'
+
+  type Person = { id: string; name: string; email: string }
+  const props = defineProps<{ findPeople: (text: string) => Promise<Person[]> }>()
+
+  const assigneeId = ref('')
+  const options = ref<ComboboxOption[]>([])
+  const loading = ref(false)
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let latest = 0
+
+  function search(text: string) {
+    clearTimeout(timer)
+    timer = setTimeout(async () => {
+      const id = ++latest
+      loading.value = true
+      const people = await props.findPeople(text.trim())
+      if (id !== latest) return
+      const chosen = options.value.find((option) => option.value === assigneeId.value)
+      const found = people.map((person) => ({
+        value: person.id,
+        label: person.name,
+        description: person.email
+      }))
+      options.value =
+        chosen && !found.some((option) => option.value === chosen.value)
+          ? [chosen, ...found]
+          : found
+      loading.value = false
+    }, 250)
+  }
+
+  onBeforeUnmount(() => clearTimeout(timer))
+</script>
+
+<template>
+  <Field>
+    <Field.Label>Assignee</Field.Label>
+    <Combobox
+      v-model="assigneeId"
+      :options="options"
+      :filter="false"
+      :allow-custom="false"
+      :loading="loading"
+      placeholder="Search people by name or email"
+      @search="search"
+    />
+  </Field>
+</template>
+```
+
+Several references are a `MultiSelect` with `searchable` (and `:filter="false"` plus its `search`
+event when the server filters): the chosen resources show as chips with their names. A list filter
+on a referenced resource is a `PropertyFilter` property whose values come from `loadValues`, so the
+token prints the name while the URL keeps the ID (`/webkit-lists`, section 3).
+
+Pasting a full ID into the search is still useful to people who have one: when the text matches
+the ID's pattern, resolve it with the API's get-by-ID call and offer that one resource as the
+result.
+
+### Reading it back — IDs and times in read views
+
+The same values in a detail page or a table: **the name first**, linked by name; the ID as
+secondary mono text with a copy button (`TableCellId`, with `resource` naming what it copies); a time
+as `Timestamp` or `TableCellTime`, relative with the absolute date a hover away. `/webkit-tables`
+owns the cell recipes.
+
+### Do and Don't
+
+- **Do:** pick the control from the type of the value before you write the field.
+- **Do:** name the thing in the label and keep the API field name off the screen.
+- **Do:** send instants as RFC 3339 UTC and calendar days as `YYYY-MM-DD` from their local parts.
+- **Don't:** ask a person to type a date, a time, an enum value or another resource's ID.
+- **Don't:** put a format in the placeholder (`YYYY-MM-DD`, `org_…`) as the only guidance; the
+  right control makes the format disappear.
+
+The consumer lint backs this section beyond `prefer-value-control`: `webkit/prefer-date-picker` warns on a text field that holds a
+date or time by its key (`*_at` / `*At` / `*date` / `*time`) or label (`Start date`), or a `Textarea` or native input with a date format, and
+`webkit/no-raw-id-input` on one that asks for an ID (key `*_id` / `*Id`, a label ending in `ID`, an
+opaque identifier as placeholder). An identifier from another system that people copy in (a tax ID,
+an OAuth client ID) is the one legitimate text field for an ID; the rule skips those names, and a
+`readonly` field that only shows an ID.
 
 ## Label association — every control names itself (both approaches)
 
@@ -811,6 +1098,11 @@ copy-link appears in the gutter on hover or focus). An Advanced band whose defau
 Rules:
 
 - **Do not also set a `Card` `title`** on the card inside a band — the band's title would double it.
+- **A help button beside the title goes in the `info` slot** (`SettingsGroup` and `Subheader` both
+  have one): an `IconButton` `az az-circle-help`, `variant="ghost"`, `size="small"`, named after the
+  topic (`Help: Advanced`), that opens the page's `HelpPanel`. The slot sits outside the h2 and, on a
+  collapsible band, outside the disclosure, so pressing it never folds the band. A one-sentence note
+  stays in `hint`; never put a button in the `label` slot, which renders inside the h2 and the toggle.
 - **A band with a description line and its own actions** (Billing's Payment methods with Add payment
   method) is a `Subheader` (`@aziontech/webkit/subheader`) over its card, not a
   `SettingsGroup`.
@@ -965,15 +1257,15 @@ The browser, password managers and mobile keyboards read the `<input>`, so the h
 there. `Input` takes `type`, `autocomplete` and `spellcheck` on its `<input>`; `PasswordInput` takes
 `autocomplete`.
 
-| Field                               | `type`  | `autocomplete`     | `spellcheck` |
-| ----------------------------------- | ------- | ------------------ | ------------ |
-| Sign-in e-mail / username           | `email` | `username`         | `false`      |
-| Sign-up, contact or newsletter mail | `email` | `email`            | `false`      |
-| Current password                    | —       | `current-password` | —            |
-| New password (sign-up, reset)       | —       | `new-password`     | —            |
-| One-time code                       | `text`  | `one-time-code`    | `false`      |
-| Slug, ID, domain, token, code       | `text`  | `off`              | `false`      |
-| Search, filter (not a credential)   | `text`  | `off`              | —            |
+| Field                                  | `type`  | `autocomplete`     | `spellcheck` |
+| -------------------------------------- | ------- | ------------------ | ------------ |
+| Sign-in e-mail / username              | `email` | `username`         | `false`      |
+| Sign-up, contact or newsletter mail    | `email` | `email`            | `false`      |
+| Current password                       | —       | `current-password` | —            |
+| New password (sign-up, reset)          | —       | `new-password`     | —            |
+| One-time code                          | `text`  | `one-time-code`    | `false`      |
+| Slug, external ID, domain, token, code | `text`  | `off`              | `false`      |
+| Search, filter (not a credential)      | `text`  | `off`              | —            |
 
 - `Input`'s `type` is a keyboard and autofill hint for **text**. A date, a date and time, a phone
   number, a password or a one-time code is never an `Input` with a `type`, a mask or a format in its
@@ -1304,6 +1596,11 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       for the Card-with-independent-saves type.
 - [ ] Every field that needs another resource offers `Create <noun>` when it may not exist yet; the
       drawer creates it and selects it back, so the reader never leaves the form to create it.
+- [ ] Every control matches the type of its value (Pick the control from the kind of value): instants in a `DatePicker`
+      with `show-time`, dates in a `DatePicker`, periods in one `DateRangePicker`, enums in a
+      `RadioGroup` or `Select` with human labels, references to other resources in a searchable picker
+      labelled with the thing (never an `Input` asking for an ID), money and percentages in a
+      `NumberInput` with the unit in the label, known structures in `AttributeEditor` / `TagEditor`.
 - [ ] A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
       `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
       quick-add; the child creates the missing resource or item with its own create form and wires it

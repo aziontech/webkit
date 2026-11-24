@@ -31,6 +31,8 @@ const RULE_PURPOSE = {
   'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
   'prefer-value-control':
     'text Input used for a number, a date, a phone number or a secret (native type or a date format)',
+  'prefer-date-picker': 'date or time typed as text instead of DatePicker or DateRangePicker',
+  'no-raw-id-input': 'resource ID typed as text instead of a searchable picker',
   'no-dropped-children': 'content inside a webkit component with no default slot, never rendered',
   'prefer-hint': 'hand-made help (a typed ?, an info icon in a Tooltip) or a paragraph in a Tooltip'
 }
@@ -43,6 +45,8 @@ const TEMPLATE_ONLY_RULES = [
   'no-gap-after-closing-section',
   'require-accessible-name',
   'prefer-value-control',
+  'prefer-date-picker',
+  'no-raw-id-input',
   'no-dropped-children',
   'prefer-hint'
 ]

@@ -72,6 +72,11 @@
    "name": "actions",
    "scope": "—",
    "notes": "The band's own actions, on the right of the copy."
+  },
+  {
+   "name": "info",
+   "scope": "—",
+   "notes": "An affordance right after the title and outside the h2, before the copy-link: a help button that opens the page's `HelpPanel`."
   }
  ],
  "styleSeam": false,

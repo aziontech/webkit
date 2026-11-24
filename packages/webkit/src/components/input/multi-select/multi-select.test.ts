@@ -881,6 +881,40 @@ describe('MultiSelect', () => {
     ).filter((el) => el.style.display !== 'none' && el.dataset['variant'] !== 'create')
 
   describe('chips, typed filter and list states (spec v4)', () => {
+    it.each([
+      ['chips', { variant: 'chips' }],
+      ['searchable', { searchable: true }]
+    ] as const)(
+      'puts the name, description and id the trigger gets on the %s control, not on its wrapper',
+      async (_, props) => {
+        const { container } = render(MultiSelect, {
+          props,
+          slots: {
+            default: () => [
+              h(MultiSelectTrigger, {
+                id: 'teams-field',
+                'aria-label': 'Teams',
+                'aria-describedby': 'teams-help'
+              }),
+              h(MultiSelectContent, null, () => [h(MultiSelectItem, { value: 'a' }, () => 'Alpha')])
+            ]
+          }
+        })
+        await nextTick()
+        const wrapper = container.querySelector('[data-testid="multi-select-trigger"]')
+        const control = container.querySelector('[role="combobox"]')
+        expect(wrapper?.tagName).toBe('DIV')
+        expect(wrapper?.hasAttribute('aria-label')).toBe(false)
+        expect(wrapper?.hasAttribute('aria-describedby')).toBe(false)
+        expect(wrapper?.hasAttribute('id')).toBe(false)
+        expect(control?.getAttribute('aria-label')).toBe('Teams')
+        expect(control?.getAttribute('aria-describedby')).toBe('teams-help')
+        expect(container.querySelectorAll('#teams-field')).toHaveLength(1)
+        expect(control?.id).toBe('teams-field')
+        cleanupTeleported()
+      }
+    )
+
     it('renders one removable chip per selected value with its label', async () => {
       const { container } = render(FieldHarness)
       await nextTick()

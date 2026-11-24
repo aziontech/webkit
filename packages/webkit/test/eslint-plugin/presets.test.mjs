@@ -26,7 +26,13 @@ test('every rule ships in recommended or strict, never as warn except the layout
   const heuristics = new Set(HEURISTIC_RULES.map((rule) => `webkit/${rule}`))
   assert.deepEqual(
     [...HEURISTIC_RULES],
-    ['require-container-width', 'no-output-in-command', 'no-page-navigation-menu']
+    [
+      'require-container-width',
+      'no-output-in-command',
+      'no-page-navigation-menu',
+      'prefer-date-picker',
+      'no-raw-id-input'
+    ]
   )
   for (const preset of [recommended, strict, performance]) {
     for (const [key, severity] of Object.entries(preset.rules)) {
