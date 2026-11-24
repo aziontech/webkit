@@ -5,7 +5,6 @@
   import * as en from '../../../locales/en'
   import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import Separator from '../../layout/separator/separator.vue'
   import { ChartCardInjectionKey } from '../chart-card/injection-key'
   import { formatCompact, formatSignedPercent, isFiniteNumber } from '../lib'
   import SparkChart from '../spark-chart/spark-chart.vue'
@@ -15,6 +14,8 @@
   defineOptions({ name: 'StatTile', inheritAttrs: false })
 
   export type StatTileTrend = 'good' | 'bad' | 'flat'
+  /** What the band under the figure draws: the sparkline, or a gray placeholder curve and why. */
+  export type StatTileBand = 'sparkline' | 'loading' | 'not-enough-data' | 'no-data' | 'error'
   /** Figure face: the big-number mono figure or the large heading figure. */
   export type StatTileVariant = 'mono' | 'sans'
 
@@ -35,7 +36,7 @@
     deltaLabel?: string
     /** A rise is bad for this metric; flips the delta between success and danger. */
     inverse?: boolean
-    /** Sparkline values, oldest first. Empty hides the sparkline. */
+    /** Sparkline values, oldest first. Under two points draws a gray placeholder curve; empty leaves the figure alone unless a sibling in its group draws a band. */
     trend?: (number | null)[]
     /** Renders Skeleton lines in place of the figure, delta and sparkline. */
     loading?: boolean
@@ -117,7 +118,25 @@
     return t('statTile.unchanged')
   })
 
+  const GHOST_TREND = [3, 4, 3.4, 4.6, 4, 5, 4.4, 5.4]
+
   const hasTrend = computed(() => props.trend.filter(isFiniteNumber).length > 1)
+  const band = computed<StatTileBand>(() => {
+    if (props.loading) return 'loading'
+    if (failed.value) return 'error'
+    if (!hasValue.value) return 'no-data'
+    return hasTrend.value ? 'sparkline' : 'not-enough-data'
+  })
+  const bandShown = computed(() => {
+    if (props.loading) return props.trend.length > 0
+    return props.trend.length > 0 || band.value === 'error' || band.value === 'no-data'
+  })
+  const bandLabel = computed(() => {
+    if (band.value === 'error') return t('statTile.loadError')
+    if (band.value === 'no-data') return t('statTile.noData')
+    if (band.value === 'not-enough-data') return t('statTile.notEnoughData')
+    return ''
+  })
 
   const ROOT_CLASS =
     'group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) ' +
@@ -141,7 +160,7 @@
     :class="ROOT_CLASS"
   >
     <div
-      class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-2xs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"
+      class="flex min-h-20 flex-1 flex-col justify-start gap-(--spacing-2xs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"
     >
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <span
@@ -215,26 +234,41 @@
     </div>
 
     <SparkChart
-      v-if="!loading && hasTrend && hasValue"
+      v-if="band === 'sparkline' && bandShown"
       :values="trend"
       size="medium"
+      data-band="sparkline"
+      data-band-shown
       :data-testid="`${testId}__sparkline`"
-      class="mt-(--spacing-xs)"
+      class="mt-(--spacing-xs) shrink-0"
     />
     <div
-      v-else-if="!loading && !hasValue"
+      v-else-if="bandShown || group"
+      :data-band="band"
+      :data-band-shown="bandShown || null"
       :data-testid="`${testId}__empty`"
-      class="relative mt-(--spacing-xs) h-12"
+      class="relative mt-(--spacing-xs) hidden h-12 shrink-0 data-[band-shown]:block group-has-[[data-band-shown]]/stat-tile-group:block"
     >
-      <Separator class="absolute inset-x-0 top-0" />
-      <Tag
-        severity="neutral"
-        size="small"
-        rounded
-        :label="failed ? t('statTile.loadError') : t('statTile.noData')"
-        :data-testid="`${testId}__empty-label`"
-        class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2"
+      <SparkChart
+        :values="GHOST_TREND"
+        color="other"
+        size="medium"
+        from-zero
+        :data-testid="`${testId}__placeholder`"
+        class="opacity-40"
       />
+      <div
+        v-if="bandLabel"
+        class="absolute inset-0 flex items-center justify-center"
+      >
+        <Tag
+          severity="neutral"
+          size="small"
+          rounded
+          :label="bandLabel"
+          :data-testid="`${testId}__empty-label`"
+        />
+      </div>
     </div>
   </div>
 </template>

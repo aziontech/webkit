@@ -8430,7 +8430,7 @@
      "type": "(number | null)[]",
      "default": "[]",
      "required": "false",
-     "doc": "Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline."
+     "doc": "Sparkline values, oldest first. Under two points draws a gray placeholder curve; empty leaves the figure alone unless a sibling in its group draws a band."
     },
     {
      "name": "loading",

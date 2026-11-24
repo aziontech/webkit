@@ -3,11 +3,11 @@ name: stat-tile-group
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 49c5586e3def387af067b67514cb9e03dbbe50a5214d740c46f5d7a4c25cef68
+checksum: 9d747892778563c68a4f528d0d3c3f67a5eb061cbb5f7cc5fccd84171de42196
 created: 2026-11-12
-last_updated: 2026-11-18
+last_updated: 2026-11-22
 ---
 
 # StatTileGroup — Component Spec
@@ -115,6 +115,7 @@ _No events — the group is layout; each tile is content._
 
 - Visual states: `default` only; loading and empty are each tile's own (`loading`, a null `value`).
 - The group provides an injected context (`StatTileGroupInjectionKey`); a `StatTile` inside it sets `data-grouped`, drops its border, radius and surface, and draws `border-e` + `border-b` as dividers. The inner grid is pulled out by `-me-px -mb-px` and the root clips it (`overflow-hidden`), so the last column's end edge and the last row's bottom edge fall under the card border and every column count gets correct dividers with no `nth-child` rules.
+- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`group-has-[[data-band-shown]]/stat-tile-group:block` on the tile's band), so the labels and figures of a mixed row stay on one line. Pure CSS, so the server render already matches.
 - Not applicable: `disabled`, `readonly`, `invalid`, `open`/`closed`, `error`.
 
 ## Motion & Animations
@@ -176,6 +177,7 @@ _No events — the group is layout; each tile is content._
 
 - Default — four tiles with deltas in one card: the overview's usage strip.
 - BesideCard — justification: the stretch to a taller neighbour is layout behaviour no prop shows; the strip sits beside a taller card in a dashboard row and fills its height.
+- MissingData — justification: the row rule lives in the group (a cell with no trend shows its placeholder band once a sibling draws one), so only a mixed row shows it: two sparklines, Not enough data, No data and Couldn't load on one line.
 - Markdown — the same data as a `<StatTileGroup>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
 - Page JSON — the same data as a `StatTileGroup` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 

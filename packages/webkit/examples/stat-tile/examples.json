@@ -24,13 +24,18 @@
     },
     {
       "name": "Loading",
-      "summary": "A Skeleton line holds the place of the figure and the delta.",
+      "summary": "A Skeleton line holds the place of the figure and the delta; a tile with a trend keeps a gray placeholder curve in its band so nothing moves when the data lands.",
       "file": "loading.vue"
     },
     {
       "name": "Empty",
-      "summary": "No value for the range: a dash, announced as No value, over a muted placeholder line marked No data. Leave out the delta and the trend rather than showing a zero.",
+      "summary": "No value for the range: a dash, announced as No value, over a gray placeholder curve marked No data. The band keeps the tile as tall as its neighbours. Leave out the delta rather than showing a zero.",
       "file": "empty.vue"
+    },
+    {
+      "name": "NotEnoughData",
+      "summary": "The trend has fewer than two points: the band draws a gray placeholder curve marked Not enough data instead of a single dot, and the figure stays where a sparkline tile has it.",
+      "file": "not-enough-data.vue"
     },
     {
       "name": "Markdown",
