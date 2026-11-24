@@ -157,9 +157,14 @@ describe('SettingsRow', () => {
     expect(
       within(render(CompactRows).container as HTMLElement).getAllByRole('switch')
     ).toHaveLength(2)
-    expect(
-      within(render(WithMessage).container as HTMLElement).getByText('This field is required.')
-    ).toBeTruthy()
+    const withMessage = within(render(WithMessage).container as HTMLElement)
+    expect(withMessage.getByText('This field is required.')).toBeTruthy()
+    expect(withMessage.getByRole('textbox', { name: 'Name' }).getAttribute('aria-invalid')).toBe(
+      'true'
+    )
+    expect(withMessage.getByRole('textbox', { name: 'Name' }).getAttribute('placeholder')).toMatch(
+      /^For example/
+    )
     const depths = within(render(Nested).container as HTMLElement)
       .getAllByTestId('settings-row')
       .map((el) => el.dataset['depth'])
