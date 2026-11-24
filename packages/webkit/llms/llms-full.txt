@@ -13019,7 +13019,7 @@ never read as new.
 
 - Groups render only when they have items; inside a group, newest first.
 - Active row: `data-active` and `aria-current="page"`, the selected surface.
-- Empty: one muted line, `No conversations yet.`
+- Empty: a title, `No conversations yet.`, over one muted line that says chats appear here after the first question; compact enough for a sidebar.
 - No match: while the search field holds text that no title contains, one muted line, `No conversations match “{query}”.`; New chat and the search field stay.
 - Loading: `aria-busy="true"` and five skeleton rows; no group headings.
 
@@ -13876,14 +13876,15 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 
 - Empty: no box, only the hidden status region; `data-empty` on the root.
 - Populated: the box with the count line and one row per item.
-- No `disabled`, `loading`, `invalid`, `error` or `open` state: a message leaves only through the owner.
+- Clamped item: a message longer than two lines shows a `Show more` link under it; it expands that message in place (`data-state="open"` on the text) and reads `Show less` to fold it back, so the reader can review the whole message before it is sent.
+- No `disabled`, `loading`, `invalid` or `error` state, and no component-level `open` state: a message leaves only through the owner.
 
 ## Accessibility
 
 - Visible focus: the `IconButton` ring.
-- Keyboard map: `Tab` moves between remove buttons in queue order; `Enter` / `Space` removes.
-- Focus: when a focused row leaves (removed or sent), focus moves to the button now at that position, else the last; an empty queue hands focus to the owner.
-- ARIA: a native `ol` named `Queued messages` (`ariaLabel`); each button is named `Remove from queue` and described by its text; glyphs `aria-hidden`.
+- Keyboard map: `Tab` moves between the remove buttons (and the `Show more` toggle of a clamped message) in queue order; `Enter` / `Space` removes or toggles.
+- Focus: when a focused row leaves (removed or sent), focus moves to the remove button now at that position, else the last; an empty queue hands focus to the owner.
+- ARIA: a native `ol` named `Queued messages` (`ariaLabel`); each remove button is named `Remove from queue` and described by its text; the `Show more` / `Show less` toggle carries `aria-expanded` and `aria-controls` pointing at its message; glyphs `aria-hidden`.
 - Announcements: a hidden polite `role="status"` says `2 messages queued` on each count change after mount and `No messages queued` when empty.
 - Touch target: 44 px on coarse pointers.
 
@@ -14840,8 +14841,9 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
     >
       <KeyValueList aria-label="Command to run">
         <KeyValueList.Item label="Command">
-          <code class="text-label-code-sm [overflow-wrap:anywhere] text-(--text-default)"
-            >azion deploy --env production --workload storefront</code
+          <code class="text-label-code-sm [overflow-wrap:break-word] text-(--text-default)"
+            >azion deploy <span class="whitespace-nowrap">--env production</span>
+            <span class="whitespace-nowrap">--workload storefront</span></code
           >
         </KeyValueList.Item>
         <KeyValueList.Item label="Environment">production</KeyValueList.Item>
@@ -15131,7 +15133,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
-- Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`.
+- Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`. Place a labelled `Chart.Reference` after the series it frames: parts paint in order, so the label's canvas halo then sits over the line instead of under it, and the band's light tint does not hide the line.
 - Place a band (`from` + `to`) before the marks so it sits under them, and a line after the marks so it stays readable over them.
 - Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar type="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 
@@ -16379,7 +16381,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 # Code Block
 
-> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The **label header holds the copy control** at its end (`data-copy-gutter` marks the root only while the copy floats over the code instead) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look). The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
+> Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer. Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The **label header holds the copy control** at its end, and so does the tab strip, or the filename bar when there is one, so the control never covers the first lines of code on a phone (`data-copy-gutter` marks the root only while the copy floats over the code instead, which happens only when the block has no header at all) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look). The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
 
 - Import: `import CodeBlock from '@aziontech/webkit/code-block'`
 - Category: code · Surface: app · Structure: monolithic
@@ -16463,7 +16465,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
 - `data-split` on the panel when the active tab with an `original` draws side by side. A `split` diff draws unified while the content is narrower than 640px (an unmeasured block, as in the server render, draws split)
 - `data-disabled` not used (tabs are not disabled in v2)
-- `data-copy-gutter` on the root while the copy control floats over the code (no label header); the scroll area and every line keep its width free
+- `data-copy-gutter` on the root while the copy control floats over the code (no label header, tab strip or filename bar); the scroll area and every line keep its width free
 - `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
 #### Layout rules (derived from Figma)
@@ -16478,11 +16480,11 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line) | active tab has an `original` and `diffView="split"` |
 | Line highlight (info background + 2 px leading bar) | active tab `highlightedLine` is set |
 
-When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
+When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block). With a tab strip or a filename bar the copy control (`variant="ghost"` `size="small"`) sits at the end of that header row, the filename bar first.
 
 Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
-**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
+**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. In a block with no header, the copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
 - Computed diff: the common head and tail are trimmed, then the middle runs the Myers line diff; past 1,000 edits it falls back to the whole middle removed then added, so a rewrite stays linear. A 5,000-line pair with a few hundred edits diffs in a few milliseconds.
 
@@ -16508,10 +16510,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
   const tabs = [
     {
-      label: 'Javascript',
+      label: 'JavaScript',
       value: 'js',
       language: 'javascript',
-      fileName: 'file name.js',
+      fileName: 'main.js',
       code:
         'export default {\n' +
         '  async fetch(request) {\n' +
@@ -16530,10 +16532,10 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
         '}'
     },
     {
-      label: 'Typescript',
+      label: 'TypeScript',
       value: 'ts',
       language: 'typescript',
-      fileName: 'file name.ts',
+      fileName: 'main.ts',
       code:
         'export default {\n' +
         '  async fetch(request: Request) {\n' +
@@ -16836,7 +16838,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - Visible focus on the interactive controls in the header/footer.
 - LogViewerContent carries a visually hidden `role="log"` region (`aria-live="polite"`) that holds only the lines appended to `lines` since the last update (filtered by the current search and level). The scrolling log body is not a live region, so the lines already present at mount and the chunks that mount on scroll are never announced; replacing `lines` with a different log clears the region.
 - The level filter is a `role="group"` named `Log levels`; each toggle is a button with `aria-pressed` named with its level and line count (`warn, 3 lines`), the level also in visible text, so the state is never colour only.
-- The copy control (a CopyButton in LogViewerContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy.
+- The copy control (a CopyButton in LogViewerContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy. It floats at the top inline end of the content, so the first two lines (`data-copy-gutter`) reserve its footprint on their inline end and never run under it.
 - The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.
 - `motion-reduce:transition-none` on every motion-bearing class.
 - LogViewer.Steps: each step is an `Accordion` item (a button with `aria-expanded`); the status glyph is `aria-hidden` and the status is in the trigger's text (`sr-only`), so it is never colour or shape only; the view switch is a named `ToggleGroup`; the progress bar is a `progressbar` named `Run progress`.

@@ -93,7 +93,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 - Layout: logical utilities only; the panel's inner layout mirrors, Close sits at the inline end.
 - Icons: the pager chevrons mirror through `ResponseBranches`; the other icons are not directional.
 - Keyboard: none beyond the inner controls.
-- User data: code bodies keep their own direction (`CodeBlock` is LTR); the title is `dir="auto"`.
+- User data: code bodies keep their own direction (`CodeBlock` is LTR); the title text is isolated in `bdi`; the heading itself follows the page direction.
 
 ## Internationalization
 
@@ -106,7 +106,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 | `artifactCanvas.content`   | `{title} content`          | —             |
 | `artifactCanvas.streaming` | `Generating a new version` | —             |
 
-- The title and the meta are the owner's text; the title has `dir="auto"`.
+- The title and the meta are the owner's text; the title sits in page direction and its text is wrapped in `bdi`, so it stays beside the icon in right-to-left while a left-to-right file name keeps its own order.
 
 ## Responsive
 
