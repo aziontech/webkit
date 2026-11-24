@@ -1162,7 +1162,7 @@ export function buildLlms(catalog = loadCatalog()) {
       const p = catalog.block(id)
       files[`blocks/${id}.md`] = blockPage(catalog, id)
       index.push(
-        `- [${p.name} (${id})](blocks/${id}.md)${p.stability === 'preview' ? ' (preview)' : ''}: ${firstSentence(p.guidelinesSummary || p.summary)}`
+        `- [${p.name} (${id})](blocks/${id}.md): ${p.stability === 'preview' ? 'Preview. ' : ''}${firstSentence(p.guidelinesSummary || p.summary)}`
       )
       fullParts.push(
         `<!-- blocks/${id}.md -->\n\n${namesOnly(blockPage(catalog, id, { full: false }))}`
@@ -1180,7 +1180,7 @@ export function buildLlms(catalog = loadCatalog()) {
       files[`components/${n}.md`] = componentPage(catalog, n)
       files[`components/${n}.json`] = apiJson(componentApi(catalog, n), new Set(names))
       index.push(
-        `- [${binding(n)}](components/${n}.md)${catalog.imports[n].stability === 'preview' ? ' (preview)' : ''}: ${firstSentence(catalog.imports[n].purpose)}`
+        `- [${binding(n)}](components/${n}.md): ${catalog.imports[n].stability === 'preview' ? 'Preview. ' : ''}${firstSentence(catalog.imports[n].purpose)}`
       )
       const surface = catalog.imports[n].surface ?? 'app'
       ;(surface === 'app' ? fullParts : siteParts).push(
