@@ -229,6 +229,8 @@
           variant="outline"
           size="medium"
           :ariaLabel="t('siteHeaderSection.open')"
+          aria-haspopup="dialog"
+          :aria-expanded="navOpen ? 'true' : 'false'"
           class="shrink-0 xl:hidden"
           @click="navOpen = true"
         />
@@ -259,7 +261,7 @@
 
       <AppHeaderCenter class="justify-start! max-xl:hidden">
         <NavigationMenu
-          aria-label="Azion"
+          :aria-label="t('siteHeaderSection.navigation')"
           class="min-w-0"
         >
           <NavigationMenuList class="hidden items-center gap-(--spacing-2xs) xl:flex">
@@ -385,7 +387,7 @@
           <SidebarMenu
             v-model:path="navPath"
             :groups="navGroups"
-            aria-label="Azion"
+            :aria-label="t('siteHeaderSection.menuNavigation')"
             class="w-full p-(--spacing-md)"
             @navigate="onNavigate"
           >

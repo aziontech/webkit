@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 25382bb3988939d4859248491582c675eec15f1313d146218aa13b900aff2b06
+checksum: 88fd2f9fe9afcc9126b43d5b6e4c1c8df5e928cb2787a88475143cbe65855e5d
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-24
 ---
 
 # Backdrop — Component Spec
@@ -85,12 +85,12 @@ From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (
 
 ## Tokens
 
-| Region        | Token (DESIGN.md)                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| washes        | `var(--bg-canvas)` through `color-mix`                                                                              |
-| lattice       | From `Texture`                                                                                                      |
-| map and globe | From `NetworkMap` and `SpinningGlobe` (`--text-muted`, `--primary`, illustration tokens)                            |
-| globe width   | `var(--container-5xl)`, `var(--layout-measure-site)`; sized off the band height through a size container (`100cqh`) |
+| Region        | Token (DESIGN.md)                                                                                                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| fades         | alpha masks on the art (`mask-image` + `mask-composite: intersect`), never a canvas-coloured wash, so no banding shows on the light canvas |
+| lattice       | From `Texture`                                                                                                                             |
+| map and globe | From `NetworkMap` and `SpinningGlobe` (`--text-muted`, `--primary`, illustration tokens)                                                   |
+| globe width   | `var(--container-5xl)`, `var(--layout-measure-site)`; sized off the band height through a size container (`100cqh`)                        |
 
 ## Theme gaps
 
@@ -101,7 +101,7 @@ From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (
 ## Accessibility (WCAG 2.1 AA)
 
 - `aria-hidden="true"` and `pointer-events-none`: never announced, never in the way of a click.
-- The washes keep the copy column at canvas contrast.
+- The fades mask the art out of the copy column, so the copy sits on the plain canvas.
 
 ## Internationalization
 

@@ -195,7 +195,7 @@
           />
         </span>
         <span
-          class="flex min-w-0 flex-col text-overline-md group-data-[variant=inline]:gap-(--spacing-md) group-data-[variant=signed]:gap-(--spacing-md)"
+          class="flex min-w-0 flex-col text-overline-md group-data-[variant=inline]:gap-(--spacing-2xs) group-data-[variant=signed]:gap-(--spacing-2xs)"
         >
           <span
             v-if="name"

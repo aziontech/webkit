@@ -83,9 +83,9 @@
   }
 
   const GRID_CLASS =
-    'sm:grid-cols-3! lg:grid-cols-6! ' +
+    'max-sm:grid-cols-3! sm:grid-cols-3! lg:grid-cols-6! ' +
     'group-data-[aside]/logo-wall:lg:grid-cols-2! group-data-[aside]/logo-wall:xl:grid-cols-3! ' +
-    'group-data-[variant=rectangle]/logo-wall:max-sm:grid-cols-3! group-data-[variant=rectangle]/logo-wall:group-data-[aside]/logo-wall:lg:grid-cols-3!'
+    'group-data-[variant=rectangle]/logo-wall:group-data-[aside]/logo-wall:lg:grid-cols-3!'
 
   const LOGO_LINK_CLASS =
     'group/logo relative isolate flex aspect-square ' +
@@ -151,8 +151,13 @@
             :class="LINK_HINT_CLASS"
           >
             {{ linkText }}
-            <i class="az az-arrow-up-right leading-none" />
+            <i class="az az-arrow-right leading-none" />
           </span>
+          <i
+            aria-hidden="true"
+            :data-testid="`${testId}__link-cue`"
+            class="az az-arrow-right pointer-events-none absolute end-(--spacing-xs) bottom-(--spacing-xs) hidden text-body-xs leading-none text-(--text-muted) pointer-coarse:block"
+          />
         </a>
         <div
           v-else

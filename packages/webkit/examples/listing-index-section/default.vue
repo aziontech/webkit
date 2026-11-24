@@ -61,7 +61,7 @@
     search-placeholder="Search by title, team, or location"
     search-short-placeholder="Search positions"
     search-aria-label="Search positions"
-    empty-title="Nothing here yet"
+    empty-title="No positions match"
     empty-description="No open positions match your search."
     empty-action-label="View all open positions"
   />

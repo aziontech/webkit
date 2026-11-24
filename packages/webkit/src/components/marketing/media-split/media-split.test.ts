@@ -79,6 +79,16 @@ describe('MediaSplit', () => {
     expect(getByText(DESCRIPTION)).toBeInTheDocument()
   })
 
+  it('steps the medium description down to body-sm on a phone, under the heading-md headline', () => {
+    const { getByText } = render(MediaSplit, {
+      props: { title: TITLE, description: DESCRIPTION }
+    })
+
+    const classes = getByText(DESCRIPTION).classList
+    expect(classes.contains('group-data-[size=medium]/split:max-sm:text-body-sm')).toBe(true)
+    expect(classes.contains('group-data-[size=medium]/split:text-body-md')).toBe(true)
+  })
+
   it('lets the default slot replace the description prop', () => {
     const { getByText, queryByText } = render(MediaSplit, {
       props: { title: TITLE, description: DESCRIPTION },
@@ -467,6 +477,26 @@ describe('MediaSplit', () => {
     expect(link.getAttribute('href')).toBe('/site/docs')
     expect(link).toBe(getByTestId(`${TESTID}__media`))
     expect(getByTestId(TESTID).getAttribute('data-media-href')).toBe('true')
+  })
+
+  it('takes the media link out of the tab order when an action repeats its destination', async () => {
+    const { getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' },
+      slots: { actions: '<a href="/site/docs">Learn more</a>' }
+    })
+    await nextTick()
+
+    expect(getByTestId(`${TESTID}__media`).getAttribute('tabindex')).toBe('-1')
+  })
+
+  it('keeps the media link in the tab order when the action goes elsewhere', async () => {
+    const { getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' },
+      slots: { actions: '<a href="/site/pricing">Pricing</a>' }
+    })
+    await nextTick()
+
+    expect(getByTestId(`${TESTID}__media`).hasAttribute('tabindex')).toBe(false)
   })
 
   it('draws the chevron affordance as decoration inside that one link', () => {

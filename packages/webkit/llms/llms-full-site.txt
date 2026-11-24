@@ -3546,7 +3546,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Accessibility
 
 - `aria-hidden="true"` and `pointer-events-none`: never announced, never in the way of a click.
-- The washes keep the copy column at canvas contrast.
+- The fades mask the art out of the copy column, so the copy sits on the plain canvas.
 
 ## Examples
 
@@ -3847,7 +3847,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `answer` | { item: FaqItem } | Replaces the rendered answer for every item, so an answer can carry a link or richer content. |
+| `answer` | { item: FaqItem } | Replaces the rendered answer for every item, so an answer can carry a link or richer content; it renders in a padded block, so paragraphs, lists and code stay on the answer column, spaced `var(--spacing-xs)` apart. |
 
 ## States
 
@@ -4384,7 +4384,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Logo Wall
 
-> The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel framed like the cells, a registration mark in each of its corners and one shared hairline at its seam with the wall — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `variant` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.
+> The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel framed like the cells, a registration mark in each of its corners and one shared hairline at its seam with the wall — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `variant` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and, like the square wall, it runs three columns below `sm`.
 
 - Import: `import LogoWall from '@aziontech/webkit/logo-wall'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -4428,7 +4428,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `LogoWallVariant` | `'square'` | false | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. |
+| `variant` | `LogoWallVariant` | `'square'` | false | The cell's proportion; `rectangle` sets every cell at 3:2 and holds three columns beside `aside` from `lg`. |
 | `items` | `LogoWallItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, srcDark?, alt, href?, shape? }` where `src` is the mark's URL, `srcDark` its dark-theme file, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the group of marks, announced instead of an unnamed region. |
 | `linkLabel` | `string` | `''` | false | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`). |
@@ -4448,10 +4448,10 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## States
 
-- Visual states: an unlinked cell is static; a linked cell on `hover` / `focus-visible` raises a `--bg-hover` wash behind the whole square, lifts the mark by `--spacing-sm`, and fades the `linkLabel` in beneath it with a trailing arrow
+- Visual states: an unlinked cell is static; a linked cell on `hover` / `focus-visible` raises a `--bg-hover` wash behind the whole square, lifts the mark by `--spacing-sm`, and fades the `linkLabel` in beneath it with a trailing arrow; on a coarse pointer, where there is no hover, a linked cell keeps a small decorative arrow in its closing lower corner so a touch reader sees the cell is a link
 - `data-aside` is present when the `aside` slot is filled; from `lg` up it splits the band into two columns and narrows the wall from six columns to two, and to three from `xl`, so a cell is the same size in both layouts
 - `data-variant` on the root is `square` or `rectangle`; `rectangle` sets every cell at 3:2 instead of 1:1
-- Columns: two below `sm`, three from `sm`, six from `lg` (with `aside`: two from `lg`, three from `xl`); a `rectangle` wall is three below `sm` and three from `lg` beside `aside`
+- Columns: three below `sm` and from `sm`, six from `lg` (with `aside`: two from `lg`, three from `xl`), so a wall of six or twelve marks stays short on a phone and never leaves a ragged row; a `rectangle` wall holds three from `lg` beside `aside`
 - `data-shape` on the built image is `wide` or `compact`; `compact` sets the mark 28px tall instead of 20px
 - A cell's mark is the `mark` slot's content when it is filled, and the image built from the item otherwise
 - Empty: when `items` is empty the wall renders no grid, so a page with no customers to name shows nothing rather than an empty frame — an `aside` given without items still renders, since a statement stands on its own
@@ -4897,7 +4897,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Accessibility
 
 - Visible focus: not applicable to the band; controls composed into `actions` keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
-- Keyboard map: none of its own — `Tab` reaches the controls placed in the `actions` slot, in DOM order, which is the copy column first at every width, then the media cell's link when `mediaHref` is set. The band-wide click is a pointer convenience over that link, not a second tab stop.
+- Keyboard map: none of its own — `Tab` reaches the controls placed in the `actions` slot, in DOM order, which is the copy column first at every width, then the media cell's link when `mediaHref` is set. When a link in the `actions` slot already points at `mediaHref`, the media cell's link takes `tabindex="-1"`, so one destination is one tab stop. The band-wide click is a pointer convenience over that link, not a second tab stop.
 - ARIA: the headline is a real `h2` and the band is a `<section>` labelled by it; the image carries `alt`, and an image given no `alt` is marked `aria-hidden` rather than announced as an unnamed graphic.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
@@ -5585,9 +5585,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     {
       _id: 'customer-use-cases-section',
       props: {
-        eyebrow: 'SQL Database',
         title: 'What teams use SQL Database for',
-        description: 'Teams use it to:',
+        description: 'Four workloads teams run on SQL Database today.',
         primaryAction: { label: 'Docs', href: '/docs', trailing: true },
         items: [
           {
@@ -8024,7 +8023,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   <CustomerUseCasesSection
     eyebrow="SQL Database"
     title="What teams use SQL Database for"
-    description="Teams use it to:"
+    description="Four workloads teams run on SQL Database today."
     :primary-action="{ label: 'Docs', href: '/site/docs', trailing: true }"
     :items="[
       {
@@ -9435,7 +9434,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Option search: a facet or order select with more than seven options renders a search field above its options and a `status` line when nothing matches
 - Marked: a row with `mark` draws the client's logo (flattened to one ink that inverts in the dark theme) before the name in the table and above the title in the list
 - Whole-row navigation: a click on a table row outside its link is forwarded to the link, keeping `ctrl`/`meta`/`shift`/`alt`; a click that ends a text selection is not forwarded
-- Metadata cells (every column after the first) render `text-overline-sm`, truncated to one line, with their full value as `title`; the list's description renders `text-overline-sm`
+- Metadata cells (every column after the first) render `text-overline-sm`, wrapping to at most two lines (`line-clamp-2`), with their full value as `title`; the list's description renders `text-overline-sm`
 - Sticky groups: each group heading row sticks under `var(--layout-header-height)` while its rows scroll
 - Server render and hydration: the large-breakpoint check runs only after mount, so the server HTML and the first client render both use `shortPlaceholder` and match; the full placeholder applies on mount.
 
@@ -9516,7 +9515,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     search-placeholder="Search by title, team, or location"
     search-short-placeholder="Search positions"
     search-aria-label="Search positions"
-    empty-title="Nothing here yet"
+    empty-title="No positions match"
     empty-description="No open positions match your search."
     empty-action-label="View all open positions"
   />
@@ -9986,7 +9985,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); each band's action is named by its label and the band's title (`Learn more, Edge Functions`), so five "Learn more" links read apart, and the band's media link, which repeats the action's destination, leaves the tab order; illustrations are named by `illustrationLabel`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
@@ -11484,7 +11483,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visible focus: the mark link draws the ring token; triggers, items and buttons own theirs.
 - Keyboard map: `Tab` moves through the bar; ⌘K / Ctrl K fires `search` (a mounted `Command` claims the shortcut first); the mega-menu and the sheet own their keyboard models (arrows, `Enter`, `Esc` closes and restores focus to the trigger).
-- ARIA: the bar is the `app-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the menu button "Open navigation" is an icon button with a name; the search trigger is named "Search" and announces `aria-keyshortcuts` (`Meta+K Control+K`); the sheet is titled "Menu".
+- ARIA: the bar is the `app-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the bar's mega-menu navigation is named "Main" and the sheet's tree "Main menu", so no landmark repeats the banner's name; the menu button "Open navigation" is an icon button with a name that declares `aria-haspopup="dialog"` and mirrors the sheet in `aria-expanded`; the search trigger is named "Search" and announces `aria-keyshortcuts` (`Meta+K Control+K`); the sheet is titled "Menu".
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.

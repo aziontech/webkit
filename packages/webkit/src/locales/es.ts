@@ -1111,7 +1111,9 @@ export const es: Messages = {
     open: 'Abrir navegación',
     home: 'Página de inicio de Azion',
     search: 'Buscar',
-    menu: 'Menú'
+    menu: 'Menú',
+    navigation: 'Principal',
+    menuNavigation: 'Menú principal'
   },
   splitButton: {
     moreActions: 'Más acciones',

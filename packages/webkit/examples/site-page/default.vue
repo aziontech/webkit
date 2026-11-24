@@ -21,9 +21,8 @@
     {
       _id: 'customer-use-cases-section',
       props: {
-        eyebrow: 'SQL Database',
         title: 'What teams use SQL Database for',
-        description: 'Teams use it to:',
+        description: 'Four workloads teams run on SQL Database today.',
         primaryAction: { label: 'Docs', href: '/docs', trailing: true },
         items: [
           {

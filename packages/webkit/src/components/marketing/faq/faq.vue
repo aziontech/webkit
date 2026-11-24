@@ -98,16 +98,17 @@
                 <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
               </AccordionTrigger>
               <AccordionContent :padded="false">
-                <p
-                  class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
+                <div
+                  :data-testid="`${testId}__answer`"
+                  class="max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted) [&>*]:m-0 [&>*+*]:mt-(--spacing-xs)"
                 >
                   <slot
                     name="answer"
                     :item="item"
                   >
-                    {{ item.answer }}
+                    <p>{{ item.answer }}</p>
                   </slot>
-                </p>
+                </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>

@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 6
 created: 2026-11-05
-last_updated: 2026-11-19
-checksum: 1c408518260d160bfaf1d465e6d0e7b33fa0bf31ecac04f5563822f12a71ab7d
+last_updated: 2026-11-24
+checksum: 3006a98031503d37e29357f281b9149cf8b10716d14d08ffed0f56f19dca2edd
 template: 2
 ---
 
@@ -144,19 +144,21 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 
 - Visible focus: the mark link draws the ring token; triggers, items and buttons own theirs.
 - Keyboard map: `Tab` moves through the bar; ⌘K / Ctrl K fires `search` (a mounted `Command` claims the shortcut first); the mega-menu and the sheet own their keyboard models (arrows, `Enter`, `Esc` closes and restores focus to the trigger).
-- ARIA: the bar is the `app-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the menu button "Open navigation" is an icon button with a name; the search trigger is named "Search" and announces `aria-keyshortcuts` (`Meta+K Control+K`); the sheet is titled "Menu".
+- ARIA: the bar is the `app-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the bar's mega-menu navigation is named "Main" and the sheet's tree "Main menu", so no landmark repeats the banner's name; the menu button "Open navigation" is an icon button with a name that declares `aria-haspopup="dialog"` and mirrors the sheet in `aria-expanded`; the search trigger is named "Search" and announces `aria-keyshortcuts` (`Meta+K Control+K`); the sheet is titled "Menu".
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.
 
 ## Internationalization
 
-| Key                        | English source  | Override prop |
-| -------------------------- | --------------- | ------------- |
-| `siteHeaderSection.open`   | Open navigation | —             |
-| `siteHeaderSection.home`   | Azion home      | —             |
-| `siteHeaderSection.search` | Search          | —             |
-| `siteHeaderSection.menu`   | Menu            | —             |
+| Key                                | English source  | Override prop |
+| ---------------------------------- | --------------- | ------------- |
+| `siteHeaderSection.open`           | Open navigation | —             |
+| `siteHeaderSection.home`           | Azion home      | —             |
+| `siteHeaderSection.search`         | Search          | —             |
+| `siteHeaderSection.menu`           | Menu            | —             |
+| `siteHeaderSection.navigation`     | Main            | —             |
+| `siteHeaderSection.menuNavigation` | Main menu       | —             |
 
 - Formatting: none; menu, link and action labels are the page's own text.
 

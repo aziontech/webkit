@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 448cf8af41ae664d3d1974f3b717f40406082d2650b0e99dc3d081c5f8ed46fa
+checksum: 21a88f7a346f3cbb0a08b8385d431e9a9b28448641bcca847971edcc34a778cb
 created: 2026-09-23
-last_updated: 2026-11-16
+last_updated: 2026-11-24
 ---
 
 # Marquee — Component Spec
@@ -103,17 +103,17 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                      |
-| --------------------------------- | ------------------------------------------------------ |
-| typography (fallback wordmark)    | `.text-heading-2xs`                                    |
-| typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`         |
-| spacing (item row gap)            | `max(var(--spacing-2xl), calc(var(--spacing-xl) * 2))` |
-| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                    |
-| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover    |
-| spacing (label ↔ row)             | `var(--spacing-xl)`                                    |
-| spacing (row gap, medium)         | `var(--spacing-4)` / `var(--spacing-8)`                |
-| spacing (row gap, small)          | `var(--spacing-10)`, cells sized to the mark           |
-| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                    |
+| Region                            | Token (DESIGN.md)                                                                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| typography (fallback wordmark)    | `.text-heading-md` at `medium`, `.text-heading-xs` at `small`, medium weight, so a typed mark matches the drawn marks' visual height |
+| typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`                                                                                       |
+| spacing (item row gap)            | `max(var(--spacing-2xl), calc(var(--spacing-xl) * 2))`                                                                               |
+| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                                                                                                  |
+| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover                                                                                  |
+| spacing (label ↔ row)             | `var(--spacing-xl)`                                                                                                                  |
+| spacing (row gap, medium)         | `var(--spacing-4)` / `var(--spacing-8)`                                                                                              |
+| spacing (row gap, small)          | `var(--spacing-10)`, cells sized to the mark                                                                                         |
+| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                                                                                                  |
 
 ## Theme gaps
 

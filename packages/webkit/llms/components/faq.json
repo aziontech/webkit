@@ -63,7 +63,7 @@
   {
    "name": "answer",
    "scope": "{ item: FaqItem }",
-   "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content."
+   "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content; it renders in a padded block, so paragraphs, lists and code stay on the answer column, spaced `var(--spacing-xs)` apart."
   }
  ],
  "styleSeam": false,

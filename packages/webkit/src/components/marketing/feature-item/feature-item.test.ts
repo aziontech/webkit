@@ -110,10 +110,24 @@ describe('FeatureItem', () => {
 
   it('closes a linked headline on a decorative arrow', () => {
     const { container } = render(FeatureItem, { props: { title: TITLE, href: '/products/cache' } })
-    const arrow = container.querySelector('.az-arrow-up-right')
+    const arrow = container.querySelector('.az-arrow-right')
 
     expect(arrow).not.toBeNull()
     expect(arrow).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('keeps the up-right arrow for a link that opens in a new tab only', () => {
+    const internal = render(FeatureItem, { props: { title: 'Cache', href: '/products/cache' } })
+    expect(internal.container.querySelector('.az-arrow-up-right')).toBeNull()
+    expect(internal.container.querySelector('.az-arrow-right')).not.toBeNull()
+    internal.unmount()
+
+    const external = render(FeatureItem, {
+      props: { title: 'Status', href: 'https://example.com/status' },
+      attrs: { target: '_blank', rel: 'noopener' }
+    })
+    expect(external.container.querySelector('.az-arrow-up-right')).not.toBeNull()
+    expect(external.container.querySelector('.az-arrow-right')).toBeNull()
   })
 
   it('renders a div, with no arrow and no data-linked, without an href', () => {
@@ -121,7 +135,7 @@ describe('FeatureItem', () => {
 
     expect(getByTestId(TESTID).tagName).toBe('DIV')
     expect(getByTestId(TESTID)).not.toHaveAttribute('data-linked')
-    expect(container.querySelector('.az-arrow-up-right')).toBeNull()
+    expect(container.querySelector('.az-arrow-right, .az-arrow-up-right')).toBeNull()
     expect(queryByRole('link')).toBeNull()
   })
 

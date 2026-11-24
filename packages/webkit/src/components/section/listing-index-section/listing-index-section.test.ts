@@ -370,6 +370,24 @@ describe('ListingIndexSection', () => {
     cells.forEach((cell) => expect(cell.textContent).toBe('Hybrid · Full-time'))
   })
 
+  it('wraps a long metadata cell to two lines instead of cutting it to one', () => {
+    const { getByTestId } = band()
+
+    const cell = tableOf(getByTestId).getAllByTitle('Hybrid · Full-time')[0]
+    expect(cell?.classList.contains('line-clamp-2')).toBe(true)
+    expect(cell?.classList.contains('truncate')).toBe(false)
+  })
+
+  it('titles the no-match state of the examples as a miss, not as an empty list', async () => {
+    const sources = import.meta.glob('../../../../examples/listing-index-section/*.{vue,json}', {
+      query: '?raw',
+      import: 'default',
+      eager: true
+    })
+
+    Object.values(sources).forEach((source) => expect(source).not.toContain('Nothing here yet'))
+  })
+
   it('renders no toolbar without search, facets or sorts', () => {
     const { queryByRole } = band({
       searchPlaceholder: '',
