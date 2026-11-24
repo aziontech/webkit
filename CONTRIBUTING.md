@@ -193,8 +193,11 @@ It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blo
 listed in `test/catalog/azion-products.json` and `azion-solutions.json`, has no `az az-<name>` icon).
 It also runs, from the repository root and with the same commands as CI, the MCP, theme and icons
 package tests and the icons manifest, `test:docs`, Stylelint, the lint canaries, the tests TypeScript
-check (`typecheck:webkit:tests`) and the Prettier check (`check:webkit:format`, about 40 s); the last two
-were the most common reasons a Governance run went red. The `toolkit` job of
+check (`typecheck:webkit:tests`), the Prettier check (`check:webkit:format`, about 40 s), ESLint
+(`lint:webkit`), the source type check (`typecheck:webkit`), type coverage (`check:webkit:type-coverage`,
+`.ts` files only: the tool does not read `.vue`) and the server render of every block and example
+(`test:ssr`), about 2.5 min together. The Husky `pre-push` hook runs the gates with `--bail`, so a push
+cannot skip them; set `WEBKIT_GATES_DONE=1` for one push when you have just run them yourself. The `toolkit` job of
 `.github/workflows/governance.yml` runs the same commands on **every** PR, except `check:size`, which
 runs in the `build` job; the lint, type, size, Vitest browser (including
 `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run when
@@ -202,8 +205,7 @@ runs in the `build` job; the lint, type, size, Vitest browser (including
 `apps/docs`, `apps/demos`, `apps/visual` change.
 
 What runs only in CI is listed, with the reason, in `CI_ONLY` in
-`packages/webkit/test/standards/run-gates.test.mjs`: ESLint, the source and docs type checks and type
-coverage (run them with the root `pnpm gates`), `test:ssr`, `check:pack`, the audit, the docs and
+`packages/webkit/test/standards/run-gates.test.mjs`: the docs type check, `check:pack`, the audit, the docs and
 demos builds, the consumer-app checks, and the browser and visual suites. That test fails when CI
 gains a step that is neither a gate nor listed there.
 

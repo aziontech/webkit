@@ -46,10 +46,7 @@ const CI_ONLY = {
   'pnpm install --frozen-lockfile': 'setup',
   'pnpm exec playwright install --with-deps chromium': 'setup',
   'pnpm run check:audit': 'needs the npm advisory service; run pnpm gates at the root',
-  'pnpm run lint:webkit': 'about 25 s; pnpm lint:webkit, or pnpm gates at the root',
-  'pnpm run typecheck:webkit': 'about 25 s; pnpm gates at the root',
   'pnpm run typecheck:docs': 'pnpm gates at the root',
-  'pnpm run check:webkit:type-coverage': 'about 50 s; pnpm gates at the root',
   'pnpm check:pack': 'about 35 s of npm pack',
   'pnpm build:icons':
     'builds the icon font the styled browser tests load; build:docs builds it too',
@@ -65,7 +62,6 @@ const CI_ONLY = {
   'pnpm --filter @aziontech/webkit-docs run check:lighthouse':
     'needs both built sites, Chromium and the network (npx downloads Lighthouse); about 2 min',
   'pnpm build:demos': 'a full demos build',
-  'pnpm --filter @aziontech/webkit test:ssr': 'about 35 s; renders every block and example',
   'pnpm --filter @aziontech/webkit run test:consume': 'installs and builds a consumer app',
   'pnpm --filter @aziontech/webkit run check:package-lint':
     'packs theme, icons and webkit and downloads publint and arethetypeswrong (about 40 s)',
@@ -103,7 +99,7 @@ test('every governance workflow step is a local gate or a named CI-only check', 
 })
 
 test('the gates cover the checks that failed CI most often', () => {
-  for (const id of ['format', 'types-tests']) {
+  for (const id of ['format', 'types-tests', 'lint', 'typecheck', 'type-coverage', 'ssr']) {
     assert.ok(
       GATES.some((g) => g.id === id),
       `gate ${id} is missing`
@@ -126,4 +122,14 @@ test('formatTable prints one row per gate and the pass count', () => {
   assert.match(table, /\| A \| `node a.mjs` \| pass \| 1.0 s \|/)
   assert.match(table, /\| B \| .* \| \*\*FAIL\*\* \|/)
   assert.match(table, /1 of 2 gates passed\./)
+})
+
+test('a pre-push hook runs the gates, so a push never skips them', () => {
+  const hook = readFileSync(resolve(ROOT, '.husky/pre-push'), 'utf8')
+  assert.match(hook, /@aziontech\/webkit run gates/)
+})
+
+test('the type coverage gate names its scope, .ts files only', () => {
+  const gate = GATES.find((g) => g.id === 'type-coverage')
+  assert.match(gate.label, /\.ts files/)
 })
