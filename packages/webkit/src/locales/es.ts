@@ -1410,7 +1410,7 @@ export const es: Messages = {
   copyCommandSection: {
     command: 'Comando',
     prompt: 'Prompt',
-    copyCommandSection: 'Copiar comando',
+    copyCommand: 'Copiar comando',
     copyPrompt: 'Copiar prompt'
   },
   searchTrigger: {

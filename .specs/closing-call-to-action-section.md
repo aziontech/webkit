@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 9
 created: 2026-11-05
-last_updated: 2026-11-18
-checksum: 5006bed197352a588f13f584244ae020c956775d0e098ebd80d223ae1b2bf821
+last_updated: 2026-11-24
+checksum: 0b8a2439f9b4752a7fc092fceb0fb9ef8dde2eb5d2bc3a843907e00dc144b168
 template: 2
 ---
 
@@ -138,7 +138,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 ## Internationalization
 
-One built-in string pair: the typed line's pause control reads `common.pauseAnimation` / `common.playAnimation` from the locale catalogs. Every other visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `copy-command-section` (`copyCommandSection.command`, `copyCommandSection.copyCommandSection`).
+One built-in string pair: the typed line's pause control reads `common.pauseAnimation` / `common.playAnimation` from the locale catalogs. Every other visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `copy-command-section` (`copyCommandSection.command`, `copyCommandSection.copyCommand`).
 
 - Formatting: none.
 

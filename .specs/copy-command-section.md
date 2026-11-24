@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: d6f17474abfd4adad7adfe7bbc5db3c7c1ef73926a9e5dc90f2985be30151851
+checksum: 633132ce456407807b0155fef8b7bc8f643b6239864c05b308c1a937024a06d9
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-24
 ---
 
 # CopyCommandSection — Component Spec
@@ -98,7 +98,7 @@ _none_
 | --------------------------------------- | -------------- | ------------- |
 | `copyCommandSection.command`            | `Command`      | —             |
 | `copyCommandSection.prompt`             | `Prompt`       | —             |
-| `copyCommandSection.copyCommandSection` | `Copy command` | —             |
+| `copyCommandSection.copyCommand` | `Copy command` | —             |
 | `copyCommandSection.copyPrompt`         | `Copy prompt`  | —             |
 
 - The command itself is content.
