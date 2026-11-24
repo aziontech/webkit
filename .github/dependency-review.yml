@@ -27,3 +27,15 @@ allow-licenses:
   - Python-2.0
   - Unlicense
   - Zlib
+# Named exceptions. The Claude Code CLI is installed only by usage-check.yml
+# (.github/tools/claude-code) to run the agent usage check; it is never shipped in a package.
+allow-dependencies-licenses:
+  - pkg:npm/%40anthropic-ai/claude-code
+  - pkg:npm/%40anthropic-ai/claude-code-darwin-arm64
+  - pkg:npm/%40anthropic-ai/claude-code-darwin-x64
+  - pkg:npm/%40anthropic-ai/claude-code-linux-arm64
+  - pkg:npm/%40anthropic-ai/claude-code-linux-arm64-musl
+  - pkg:npm/%40anthropic-ai/claude-code-linux-x64
+  - pkg:npm/%40anthropic-ai/claude-code-linux-x64-musl
+  - pkg:npm/%40anthropic-ai/claude-code-win32-arm64
+  - pkg:npm/%40anthropic-ai/claude-code-win32-x64
