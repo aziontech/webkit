@@ -2,7 +2,7 @@
 name: echo-report
 description: Re-read every file written this run and diff its content against the spec. Independent parser (cross-check with `validate-spec-compliance.mjs`). Final defensive line.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-11-23
 scope: webkit
 enforced_by: [no-invention, props, emits, slots]
 ---
@@ -41,14 +41,14 @@ Two parsers agreeing is the precision boost.
    - Events in `.vue` ≠ spec.Events → block.
    - Slots in `.vue` ≠ spec.Slots → block.
    - Sub-components: every `<name>-<part>.vue` matches spec.Sub-components.
-   - Example names ≠ spec.Examples → block.
+   - Example names ≠ spec.Examples → block. `examples.json` ships at least as many examples as the spec lists (`check-complete` fails otherwise), the first is `default.vue`, and no file uses a banned example name (`naming.md` § 4).
    - `.figma.ts` enum keys ≠ spec.Props values → block.
 4. **Animations cross-check.** The spec's `## Motion & Animations` section lists the expected `animate-*` / `transition-*` classes per state. Grep the `.vue` files:
    - Every animation class in the spec must appear at least once in the `.vue`.
    - Every animation class in the `.vue` must appear in the spec.
    - Each `animate-*` class on a transformable element must be paired with `motion-reduce:animate-none` or `motion-reduce:transition-none` (or have a same-line escape). Spec says `_none_` → zero `animate-*` / `transition-*` classes allowed.
 5. **Cross-check with the hook.** Compare your diff with the `validate-spec-compliance.mjs` output. Same verdict → run continues. Different verdict → mark the run `degraded` and ask the user to investigate.
-6. **Emit the final report** using the structure in [`COMPONENT_REQUIREMENTS.md`](../../../.claude/docs/COMPONENT_REQUIREMENTS.md) (Summary / Files created / Exports added / Tokens mapped / Theme gaps / Reused utilities / Pending items / Validation / Accessibility checklist / Usability checklist / Suggested next steps).
+6. **Emit the final report** with these sections, in order: Summary, Files created, Exports added, Tokens mapped, Theme gaps, Reused utilities, Pending items, Validation, Accessibility checklist, Usability checklist, Suggested next steps.
 
 ## Outputs
 
@@ -72,5 +72,5 @@ Two parsers agreeing is the precision boost.
 - [ ] Diff against the spec produced.
 - [ ] Animations cross-check performed.
 - [ ] Cross-check with `validate-spec-compliance.mjs` produced.
-- [ ] Final report emitted with the canonical section structure.
+- [ ] Final report emitted with the eleven sections above.
 - [ ] Exit code reflects the outcome.
