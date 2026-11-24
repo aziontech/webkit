@@ -58,14 +58,14 @@ export const typography = {
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: { _: '-0.035em', md: tracking.tighter }
   },
   'text-heading-2xl': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize['3xl'], sm: fontSize['4xl'], md: fontSize['5xl'] },
     lineHeight: leading.none,
     fontWeight: fontWeight.normal,
-    letterSpacing: '-0.053em'
+    letterSpacing: { _: '-0.035em', md: '-0.053em' }
   },
   'text-heading-xl': {
     textWrapStyle: 'balance',
