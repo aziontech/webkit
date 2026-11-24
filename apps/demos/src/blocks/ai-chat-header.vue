@@ -79,7 +79,7 @@
         id="ai-chat-title"
         class="sr-only"
       >
-        AI assistant
+        Agent
       </h1>
       <span class="pointer-events-auto inline-flex min-w-0 max-md:hidden">
         <DropdownMenu
@@ -97,7 +97,7 @@
               :disabled="!models.length"
               class="min-w-0"
             >
-              <span class="truncate text-label-lg">AI assistant</span>
+              <span class="truncate text-label-lg">Agent</span>
               <span
                 v-if="modelLabel"
                 class="truncate text-(--text-muted)"

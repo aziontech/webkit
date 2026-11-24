@@ -219,6 +219,65 @@ test.describe('demo flows', () => {
     await expect(page).toHaveURL(/\/onboarding\/plan$/)
   })
 
+  test('an empty Create focuses the first invalid field', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources/new`)
+    await page.getByRole('button', { name: /^Create resource/ }).click()
+    await expect(page.getByText('This field is required.')).toHaveCount(2)
+    await expect(page.getByRole('textbox', { name: 'Name', exact: true })).toBeFocused()
+  })
+
+  test('arrow keys move between table rows and Enter opens one', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    const rows = page.locator('[data-focus-row]')
+    await expect(rows.first()).toHaveAttribute('tabindex', '0')
+    await expect(rows.nth(1)).toHaveAttribute('tabindex', '-1')
+    await rows.first().focus()
+    await page.keyboard.press('ArrowDown')
+    await expect(rows.nth(1)).toBeFocused()
+    await page.keyboard.press('Enter')
+    await expect(page).toHaveURL(/\/resources\/\d+$/)
+  })
+
+  test('a Documentation button says it opens a new tab', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    await expect(
+      page.getByRole('link', { name: 'Documentation (opens in a new tab)' }).first()
+    ).toBeVisible()
+  })
+
+  test('System stays selected in the account menu', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    const menu = page.getByRole('button', { name: /account menu/ }).first()
+    await menu.click()
+    await page.getByRole('menuitemradio', { name: 'System' }).click()
+    await menu.click()
+    await expect(page.getByRole('menuitemradio', { name: 'System' })).toHaveAttribute(
+      'aria-checked',
+      'true'
+    )
+  })
+
+  test('one name per place: Agent, AI provider keys, Profile', async ({ page }) => {
+    await page.goto(`${DEMOS}/assistant`)
+    await expect(page.getByRole('heading', { level: 1, name: 'Agent' })).toBeAttached()
+    await page.goto(`${DEMOS}/settings/ai-keys`)
+    await expect(page.getByRole('heading', { level: 1, name: 'AI provider keys' })).toBeVisible()
+    await page.goto(`${DEMOS}/settings`)
+    await expect(page.getByRole('heading', { level: 1, name: 'Profile' })).toBeVisible()
+  })
+
+  test('the sidebar Home never drops a signed-in user into onboarding', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources`)
+    await expect(page.locator('nav a[href="/onboarding"]')).toHaveCount(0)
+  })
+
+  test('in right to left the author line keeps its own direction', async ({ page }) => {
+    await page.goto(`${DEMOS}/resources/${FIRST}?dir=rtl`)
+    const created = page.getByTestId('resource-detail__created')
+    await expect(created).toHaveAttribute('dir', 'auto')
+    expect(await created.evaluate((el) => getComputedStyle(el).direction)).toBe('ltr')
+  })
+
   test('assistant answers a prompt', async ({ page }) => {
     await page.goto(`${DEMOS}/assistant`)
     await page.getByRole('textbox', { name: 'Prompt' }).fill('How do I purge one URL?')

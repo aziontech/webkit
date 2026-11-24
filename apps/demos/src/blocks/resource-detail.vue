@@ -253,6 +253,7 @@ jobs:
                     <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                       <Button
                         label="Visit"
+                        aria-label="Visit (opens in a new tab)"
                         :href="address"
                         target="_blank"
                         variant="secondary"
@@ -368,7 +369,11 @@ jobs:
                     <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Created</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                        <span class="truncate text-body-sm text-(--text-default)">
+                        <span
+                          dir="auto"
+                          data-testid="resource-detail__created"
+                          class="truncate text-body-sm text-(--text-default)"
+                        >
                           {{ created }}
                         </span>
                         <Avatar
@@ -435,6 +440,7 @@ jobs:
                       <Button
                         class="w-full"
                         label="Documentation"
+                        aria-label="Documentation (opens in a new tab)"
                         variant="outline"
                         size="medium"
                         icon="az az-book"

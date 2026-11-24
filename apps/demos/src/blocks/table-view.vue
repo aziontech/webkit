@@ -134,6 +134,10 @@
 
   const onRowAction = (event: Event, value: DropdownMenuItemValue, row: TableViewResource) =>
     emit('row-action', event, { value, resource: row })
+
+  const onRowOpen = (event: MouseEvent | KeyboardEvent, row: TableViewResource) => {
+    if (event instanceof KeyboardEvent) emit('row-action', event, { value: 'view', resource: row })
+  }
 </script>
 
 <template>
@@ -146,6 +150,7 @@
         <template #actions>
           <Button
             label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -237,6 +242,7 @@
                       />
                       <Button
                         label="Documentation"
+                        aria-label="Documentation (opens in a new tab)"
                         icon="az az-book"
                         variant="outline"
                         size="small"
@@ -261,6 +267,8 @@
                   sortable
                   stackable
                   :bordered="false"
+                  @row-click="onRowOpen"
+                  @row-remove="(event, row) => onRowAction(event, 'delete', row)"
                 >
                   <template #cell-name="{ row }">
                     <TableCellLink

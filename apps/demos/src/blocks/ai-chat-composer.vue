@@ -67,7 +67,7 @@
     </template>
     <template #hint>
       <span class="max-md:sr-only">
-        The AI assistant can make mistakes. Check important information before you act on it.
+        The Agent can make mistakes. Check important information before you act on it.
       </span>
     </template>
   </PromptInput>

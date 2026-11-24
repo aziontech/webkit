@@ -167,7 +167,7 @@
   >
     <div class="layout-column-form layout-boundary flex flex-1 flex-col">
       <PageHeader
-        title="Model provider keys"
+        title="AI provider keys"
         description="Run the AI features on your own model provider account."
         size="small"
         :title-id="titleId"

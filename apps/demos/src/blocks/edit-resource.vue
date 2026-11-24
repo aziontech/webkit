@@ -311,7 +311,7 @@
                               target="_blank"
                               rel="noopener noreferrer"
                               class="text-link"
-                              >Contact sales</a
+                              >Contact sales<span class="sr-only"> (opens in a new tab)</span></a
                             >
                           </template>
                           <Tooltip content="Contact sales to activate this module.">

@@ -6,7 +6,7 @@
   import { computed, ref, useId } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import { LOCALES, settings } from '../lib/settings'
+  import { LOCALES, resolvedTheme, settings } from '../lib/settings'
   import { resources } from '../lib/store'
 
   const router = useRouter()
@@ -27,7 +27,7 @@
       deploy: 'Deploy with a toast',
       settings: 'Account settings',
       onboarding: 'Onboarding',
-      assistant: 'AI assistant',
+      assistant: 'Agent',
       light: 'Switch to light theme',
       dark: 'Switch to dark theme',
       rtl: 'Switch to right-to-left',
@@ -47,7 +47,7 @@
       deploy: 'Deploy com toast',
       settings: 'Configurações da conta',
       onboarding: 'Onboarding',
-      assistant: 'Assistente de IA',
+      assistant: 'Agente',
       light: 'Mudar para o tema claro',
       dark: 'Mudar para o tema escuro',
       rtl: 'Mudar para direita para a esquerda',
@@ -77,7 +77,7 @@
   ])
 
   const onFlow = (_event: unknown, value: unknown) => router.push(String(value))
-  const toggleTheme = () => (settings.theme = settings.theme === 'dark' ? 'light' : 'dark')
+  const toggleTheme = () => (settings.theme = resolvedTheme.value === 'dark' ? 'light' : 'dark')
   const toggleBar = () => (expanded.value = !expanded.value)
   const toggleDir = () => (settings.dir = settings.dir === 'rtl' ? 'ltr' : 'rtl')
 </script>
@@ -135,12 +135,12 @@
           </DropdownMenu.Item>
         </DropdownMenu.Group>
       </DropdownMenu>
-      <Tooltip :content="settings.theme === 'dark' ? t.light : t.dark">
+      <Tooltip :content="resolvedTheme === 'dark' ? t.light : t.dark">
         <IconButton
-          :icon="settings.theme === 'dark' ? 'az az-sun' : 'az az-moon'"
+          :icon="resolvedTheme === 'dark' ? 'az az-sun' : 'az az-moon'"
           variant="outline"
           size="medium"
-          :aria-label="settings.theme === 'dark' ? t.light : t.dark"
+          :aria-label="resolvedTheme === 'dark' ? t.light : t.dark"
           @click="toggleTheme"
         />
       </Tooltip>
