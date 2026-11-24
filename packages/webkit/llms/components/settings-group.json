@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.",
+ "purpose": "A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence guidance on click, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.",
  "setup": null,
  "useWhen": [
   "Use SettingsGroup for a band of a settings page whose body is SettingsRow rows; any other band heading is a Subheader.",
@@ -45,7 +45,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "One-sentence guidance shown in a Hint glyph beside the label."
+   "doc": "One-sentence guidance in a click-open Hint note beside the label."
   },
   {
    "name": "anchor",

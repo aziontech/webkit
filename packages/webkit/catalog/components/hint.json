@@ -1,25 +1,30 @@
 {
- "purpose": "Small info affordance — a muted `az az-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a \"why does this matter?\" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.",
+ "purpose": "Click-open note (a \"toggletip\") on a small muted `az az-circle-info` glyph. A click, a tap, `Enter` or `Space` on the glyph opens a small panel, anchored below the glyph and aligned to its start, that holds one to three sentences and an optional \"Learn more\" link to the docs. It is level C of the in-product help standard: the way to attach a \"why does this matter?\" note to a field name, a setting or a column header without spending a line of vertical space on it. `Field.Label`, `SettingsRow` and `SettingsGroup` render it from their own `hint` prop.",
  "useWhen": [
-  "Use Hint for the info glyph beside a field label or column header that explains it in one sentence. Guidance that must stay visible goes in Field.Description (inside Field) or FieldDescription.",
   "A field, switch or setting whose name is clear but whose consequence is not (what \"Sensitive\" does to a stored value).",
-  "A short, self-contained sentence — one that reads fine in a tooltip and is not needed to complete the field.",
-  "Beside a label, a section heading, or a table column header, where a permanent line of helper text would add noise."
+  "A note of one to three sentences that is useful but not needed to complete the task, optionally with a link to the docs page that explains more.",
+  "Beside a label, a heading, a stat or a column header, where a permanent line of helper text would add noise."
  ],
  "avoidWhen": [
-  "Guidance the user needs while typing, or any validation message → use `field-error` (it stays on screen and is wired with `aria-describedby`).",
-  "More than a sentence, links, or formatted content → use `popover`, which is dismissible and can hold real content.",
-  "A plain description of an action already labelled by a control → use `tooltip` directly on that control."
+  "Information needed to fill the field → `field-description`, which stays on screen.",
+  "Naming a control or expanding an abbreviation → `tooltip`.",
+  "Help longer than three sentences, steps or several links → `help-panel`.",
+  "Validation messages → `field-error`."
  ],
  "related": [
-  "`tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.",
-  "`field-description` — persistent guidance under a field; the right choice when the text must always be visible.",
-  "`Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component."
+  "`field-description` — level A, the default: a short muted line under the field that is always visible.",
+  "`tooltip` — level B: names a control or expands an abbreviation in a few words (about 80 characters at most).",
+  "`help-panel` — level D: page-level help in the console's tools region, opened from an \"Info\" link after the page title.",
+  "`popover` — the overlay Hint composes; use it for interactive content.",
+  "`Field.Label`, `settings-row`, `settings-group` — render a Hint from their `hint` prop.",
+  "`/webkit-in-product-help` — the consumer skill that picks the level of help."
  ],
  "bestPractices": [
-  "One sentence, ending in a period. If it needs two, it belongs in `field-description` or a `popover`.",
-  "Never hide required information behind a hint — on touch it opens only when tapped, so treat it as an enhancement.",
-  "The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
-  "Place it immediately after the thing it explains, not at the end of a row."
+  "One to three plain sentences, each ending in a period.",
+  "Place the glyph 4px after the label text, on the same line. Never at the end of the row, never on its own line.",
+  "One Hint per label. Never stack two glyphs, and never put a Hint inside a Tooltip or another Hint.",
+  "Never draw a typed \"?\" or a boxed icon button as a help trigger; Hint is the only help glyph.",
+  "Add `href` when a docs page explains more; leave `linkLabel` empty for the localized \"Learn more\".",
+  "Never hide required information behind a Hint."
  ]
 }

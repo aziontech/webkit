@@ -102,7 +102,8 @@ describe('SettingsRow', () => {
 
     const glyph = getByTestId('settings-row__hint__trigger')
     expect(getByTestId('settings-row__title').contains(glyph)).toBe(true)
-    expect(getByRole('button', { name: hint })).toBe(glyph)
+    expect(getByRole('button', { name: 'More information' })).toBe(glyph)
+    expect(glyph).toHaveAccessibleDescription(hint)
   })
 
   it('marks a required row after its title, as a required field label does', () => {

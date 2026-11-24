@@ -3,13 +3,13 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: a8c635ccaae37586f19e35c8c9f6a80b4658d72692916e0f4d37376164359425
+checksum: 983c76e74bcbfa229d2f0a64af4e06fe1131cfbf04ff9bf2ca289d87cd849e4f
 created: 2026-06-02
-last_updated: 2026-11-17
+last_updated: 2026-11-23
 ---
 
 # Tooltip — Component Spec
@@ -28,21 +28,21 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 ## When NOT to use
 
 - The content has links, buttons or more than one line of structure → use `popover`.
-- An info glyph beside a field label or column header → use `hint`.
+- An explanation, an info glyph, or anything over a few words (about 80 characters) → use `hint`.
 - A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.
 - Guidance or errors the user needs to complete a field → use `field-error`.
 
 ## Related
 
 - `popover` — click-opened, interactive, with a header, body and footer.
-- `hint` — the focusable info glyph that renders a `Tooltip` for you.
+- `hint` — the info glyph that opens a short note on click; use it for explanations, never a tooltip.
 - `hover-card` — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.
 - `icon-button` — the most common trigger; it still needs its own `ariaLabel`.
 
 ## Best practices
 
 - Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.
-- Keep `content` to a few words. It renders as plain text, with no markup.
+- Keep `content` to a few words (about 80 characters at most): a name, a shortcut or an abbreviation, as plain text. Never an explanation.
 - The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
 - Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.
 - Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.

@@ -459,7 +459,7 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "123.95 KB"
+    "limit": "126.4 KB"
   },
   {
     "name": "console-trace-scene",
@@ -539,7 +539,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "54.25 KB",
+    "limit": "57.3 KB",
     "entryOnly": true
   },
   {
@@ -632,7 +632,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "59.9 KB",
+    "limit": "63.05 KB",
     "entryOnly": true
   },
   {
@@ -997,7 +997,7 @@
   {
     "name": "field",
     "path": "src/components/input/field/index.ts",
-    "limit": "9.25 KB"
+    "limit": "12.8 KB"
   },
   {
     "name": "field-root",
@@ -1007,7 +1007,7 @@
   {
     "name": "field-label",
     "path": "src/components/input/field/field-label/field-label.vue",
-    "limit": "7.65 KB"
+    "limit": "11.2 KB"
   },
   {
     "name": "field-description",
@@ -1068,12 +1068,12 @@
   {
     "name": "settings-group",
     "path": "src/components/layout/settings-group/settings-group.vue",
-    "limit": "8.6 KB"
+    "limit": "12.15 KB"
   },
   {
     "name": "settings-row",
     "path": "src/components/layout/settings-row/settings-row.vue",
-    "limit": "19 KB"
+    "limit": "22.4 KB"
   },
   {
     "name": "save-bar",
@@ -1286,7 +1286,7 @@
   {
     "name": "feedback-reason-dialog",
     "path": "src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
-    "limit": "34.6 KB"
+    "limit": "37.85 KB"
   },
   {
     "name": "response-branches",
@@ -1316,7 +1316,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/input/attribute-editor/attribute-editor.vue",
-    "limit": "20.85 KB"
+    "limit": "25.25 KB"
   },
   {
     "name": "code-editor",
@@ -1336,12 +1336,12 @@
   {
     "name": "tag-editor",
     "path": "src/components/input/tag-editor/tag-editor.vue",
-    "limit": "22.75 KB"
+    "limit": "27.2 KB"
   },
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "64.55 KB"
+    "limit": "68.85 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1959,7 +1959,7 @@
   {
     "name": "hint",
     "path": "src/components/input/hint/hint.vue",
-    "limit": "6.4 KB"
+    "limit": "10.7 KB"
   },
   {
     "name": "password-input",

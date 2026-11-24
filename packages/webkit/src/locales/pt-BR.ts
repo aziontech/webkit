@@ -818,6 +818,9 @@ export const ptBR: Messages = {
     label: 'Ajuda',
     learnMore: 'Saiba mais'
   },
+  hint: {
+    label: 'Mais informações'
+  },
   heroSection: {
     carouselLabel: 'Comprovada em cargas de trabalho críticas'
   },

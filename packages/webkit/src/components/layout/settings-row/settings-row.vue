@@ -29,7 +29,7 @@
     depth?: SettingsRowDepth
     /** Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. */
     stackable?: boolean
-    /** Extra guidance in a Hint glyph beside the title; empty renders no glyph. */
+    /** Extra guidance, one to three sentences, in a click-open Hint note beside the title; empty renders no glyph. */
     hint?: string
     /** Marks the setting as required after its title, as a required field label does. */
     required?: boolean

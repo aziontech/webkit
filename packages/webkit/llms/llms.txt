@@ -292,7 +292,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`,…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [FileTokenGroup](components/file-token-group.md): Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress.
-- [Hint](components/hint.md): Small info affordance — a muted `az az-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
+- [Hint](components/hint.md): Click-open note (a "toggletip") on a small muted `az az-circle-info` glyph.
 - [Input](components/input.md): Single-line text input for forms and inline editing.
 - [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it).
 - [LanguageSelect](components/language-select.md): A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the lan…
@@ -329,7 +329,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SaveBar](components/save-bar.md): The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions.
 - [ScrollArea](components/scroll-area.md): Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling.
 - [Separator](components/separator.md): Thin separator line that visually splits content into groups.
-- [SettingsGroup](components/settings-group.md): A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows).
+- [SettingsGroup](components/settings-group.md): A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence guidance on click, over the band body (usually a flush `Card` of `SettingsRow` rows).
 - [SettingsRow](components/settings-row.md): One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs.
 - [Sidebar](components/sidebar.md): Helps users move between views or sections.
 - [SiteLayout](components/site-layout.md): The marketing site's chrome, composed once in the app: `SiteHeaderSection` on top, the page's sections in the layout's `<main>`, `SiteFooterSection` at the foot, and the `Command` search palette wired to the bar's sea…

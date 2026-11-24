@@ -818,6 +818,9 @@ export const es: Messages = {
     label: 'Ayuda',
     learnMore: 'Más información'
   },
+  hint: {
+    label: 'Más información'
+  },
   heroSection: {
     carouselLabel: 'Probada en cargas de trabajo críticas'
   },
