@@ -79,6 +79,8 @@
   const tab = ref<'write' | 'preview'>('write')
   const previewReady = ref(false)
   const previewFailed = ref(false)
+  const hadFocus = ref(false)
+  const leftSelection = ref<{ start: number; end: number } | null>(null)
 
   const MentionList = defineAsyncComponent(
     () => import('../../ai/prompt-input/parts/prompt-input-menu-list.vue')
@@ -170,8 +172,33 @@
     if (event instanceof MouseEvent || event instanceof KeyboardEvent) mention.pick(event, picked)
   }
 
+  function rememberSelection(): void {
+    const field = fieldEl()
+    if (tab.value === 'write' && field && hadFocus.value)
+      leftSelection.value = { start: field.selectionStart, end: field.selectionEnd }
+  }
+
   function onTabChange(next: TabsValue | null | undefined): void {
+    if (next === 'preview') rememberSelection()
     if (next === 'write' || next === 'preview') tab.value = next
+    mention.close()
+  }
+
+  async function insert(text: string): Promise<void> {
+    if (!text || !editable.value) return
+    const fromPreview = tab.value !== 'write'
+    tab.value = 'write'
+    mention.close()
+    await nextTick()
+    const field = fieldEl()
+    if (!field || !editable.value) return
+    const length = field.value.length
+    const current = hadFocus.value ? { start: field.selectionStart, end: field.selectionEnd } : null
+    const range = fromPreview ? leftSelection.value : current
+    const from = Math.min(range?.start ?? length, length)
+    const to = Math.min(range?.end ?? length, length)
+    const caret = from + text.length
+    applyEdit(field, { from, to, text, selectStart: caret, selectEnd: caret })
     mention.close()
   }
 
@@ -180,7 +207,9 @@
     focus: (): void => {
       tab.value = 'write'
       void nextTick(() => fieldEl()?.focus())
-    }
+    },
+    /** Inserts the text at the caret, or in place of the selection, as one undo step; switches to Write and keeps focus after the text. */
+    insert
   })
 
   const PREVIEW_CLASS =
@@ -257,6 +286,7 @@
             @keyup="onKeyup"
             @input="mention.readQuery"
             @click="mention.readQuery"
+            @focus="hadFocus = true"
             @blur="mention.close"
           />
           <MentionList

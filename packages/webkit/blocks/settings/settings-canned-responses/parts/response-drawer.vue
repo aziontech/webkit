@@ -110,32 +110,11 @@
   )
 
   const editorEl = ref<InstanceType<typeof MarkdownEditor> | null>(null)
-  const bodyField = () => document.getElementById(ids.body) as HTMLTextAreaElement | null
-  const caret = ref<{ start: number; end: number } | null>(null)
-
-  const rememberCaret = (menuOpen: boolean) => {
-    if (!menuOpen) return
-    const field = bodyField()
-    caret.value = field ? { start: field.selectionStart, end: field.selectionEnd } : null
-  }
 
   const tokenOf = (value: DropdownMenuItemValue) => `{{${value}}}`
 
-  const insertPlaceholder = async (_event: Event, value: DropdownMenuItemValue) => {
-    const token = tokenOf(value)
-    const { start, end } = caret.value ?? { start: form.body.length, end: form.body.length }
-    form.body = form.body.slice(0, start) + token + form.body.slice(end)
-    errors.body = ''
-    const next = start + token.length
-    caret.value = { start: next, end: next }
-    editorEl.value?.focus()
-    await nextTick()
-    setTimeout(() => {
-      const field = bodyField()
-      field?.focus()
-      field?.setSelectionRange(next, next)
-    })
-  }
+  const insertPlaceholder = (_event: Event, value: DropdownMenuItemValue) =>
+    editorEl.value?.insert(tokenOf(value))
 
   const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
@@ -253,7 +232,6 @@
                   <template #footer>
                     <DropdownMenu
                       side="top"
-                      @update:open="rememberCaret"
                       @select="insertPlaceholder"
                     >
                       <DropdownMenu.Trigger>
