@@ -74,9 +74,10 @@
     api: 'az az-code'
   }
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'message-thread-item'
-  )
+  const testId = computed<string>(() => {
+    const own = attrs['data-testid']
+    return typeof own === 'string' ? own : 'message-thread-item'
+  })
   const isEvent = computed<boolean>(() => props.type === 'event')
   const isReply = computed<boolean>(() => props.type === 'reply')
   const hasTime = computed<boolean>(() => toDate(props.timestamp ?? null) !== null)
@@ -100,7 +101,7 @@
   const CARD_CLASS =
     'flex min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) outline-none ' +
     'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
-  const META_CLASS = 'inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-muted)'
+  const META_CLASS = 'text-body-sm text-(--text-muted)'
   const QUOTED_CLASS =
     'whitespace-pre-line break-words border-s-2 border-(--border-default) ps-(--spacing-sm) text-body-sm text-(--text-muted)'
 </script>
@@ -160,7 +161,7 @@
             size="medium"
             aria-hidden="true"
           />
-          <span class="flex min-w-0 flex-wrap items-baseline gap-x-(--spacing-xs)">
+          <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-(--spacing-xs)">
             <bdi
               v-if="author"
               :id="ids.author"
@@ -180,6 +181,7 @@
             >
               <i
                 :class="CHANNEL_ICONS[channel]"
+                class="me-(--spacing-2xs)"
                 aria-hidden="true"
               />
               {{ t('messageThread.via', { channel: t(`messageThread.${channel}`) }) }}

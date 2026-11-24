@@ -28,9 +28,10 @@
   const attrs = useAttrs()
   const { t } = useLocale({ messageThread: en.messageThread })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'message-thread-group'
-  )
+  const testId = computed<string>(() => {
+    const own = attrs['data-testid']
+    return typeof own === 'string' ? own : 'message-thread-group'
+  })
   const label = computed<string>(() =>
     props.count > 0
       ? t('messageThread.showEarlier', { count: props.count })

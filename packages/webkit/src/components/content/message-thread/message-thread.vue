@@ -34,9 +34,10 @@
   const { t } = useLocale({ messageThread: en.messageThread })
   const { announce } = useAnnouncer()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'message-thread'
-  )
+  const testId = computed<string>(() => {
+    const own = attrs['data-testid']
+    return typeof own === 'string' ? own : 'message-thread'
+  })
 
   provide(MessageThreadInjectionKey, {
     timestampFormat: computed(() => props.timestampFormat)

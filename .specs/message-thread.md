@@ -2,11 +2,11 @@
 name: message-thread
 category: content
 structure: composition
-status: approved
+status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: ed4e8e1cf2bace65ba3a075e920076fa28d9284908da6a0fb73312d9bf76ccb9
+checksum: 28920ae1fd6d9870d50a6f75f76d72d3f0df977239e069a817ee6ef0ddd55250
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -33,14 +33,14 @@ generative AI chat (decision SUP-03).
 ## When NOT to use
 
 - A chat with the generative AI assistant → `chat-message` inside `conversation`.
-- A log of what happened to a resource, with no messages (deploys, status changes, audit entries) → `timeline`.
+- A log of what happened to a resource, with no messages (deploys, status changes, audit entries) → the Timeline component planned in SUP-01.
 - A single notice on a page → `alert`.
 - Comments on a code line or a review → not this component; it carries support semantics (channels, recipients, internal notes).
 
 ## Related
 
 - `chat-message` — the AI conversation turn (`from: user | assistant | system`, feedback thumbs, regenerate). A ticket has customers and agents, notes, channels and recipients instead (SUP-03).
-- `timeline` — an activity log of events; a thread interleaves a few event lines between messages.
+- Timeline (planned in SUP-01) — an activity log of events; a thread interleaves a few event lines between messages.
 - `timestamp` — the sent time of each item; it opens the full date in every zone.
 - `avatar` — the author's picture or initials.
 - `file-token-group`, `file-preview` — the attachments composed into an item's `attachments` slot.
@@ -309,7 +309,7 @@ _None._
 
 ## Performance
 
-- Bundle budget: `message-thread-root` 6 KB gzip (list, context, placeholders, announcer, locale); `message-thread-item` 32 KB (it composes `Timestamp`, 20.35 KB alone with its `Popover`, `Avatar`, 12.25 KB, and `IconButton`, 2.7 KB, which share Vue helpers and the locale runtime); `message-thread-group` 6 KB; the compound `message-thread` 36 KB. The `.size-limit.json` entries are the measured gzip plus a small headroom, never above these numbers.
+- Bundle budget: `message-thread-root` 3.5 KB gzip (list, context, placeholders, announcer, locale); `message-thread-item` 35.5 KB (it composes `Timestamp`, 20.35 KB alone with its `Popover`, `Avatar`, 12.25 KB, and `IconButton`, 2.7 KB, which share Vue helpers and the locale runtime); `message-thread-group` 6 KB; the compound `message-thread` 38 KB (measured 2026-11-23: 3.12, 34.68, 5.50 and 37.13 KB). The `.size-limit.json` entries are the measured gzip plus a small headroom, never above these numbers.
 - Runtime budget: a thread of 200 items renders in under 100 ms; each item renders one `Timestamp` and no watchers of its own besides the quoted model.
 - Heavy parts: none; long threads collapse their middle with `MessageThread.Group` instead of virtualizing.
 

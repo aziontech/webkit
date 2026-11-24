@@ -1657,3 +1657,6 @@ Budget-raise: hero-form-section 54.2 KB → 54.25 KB (measured 54.20 KB): carrie
 Budget-raise: job-posting-section 59.8 KB → 59.9 KB (measured 59.85 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: newsletter-section 13.95 KB → 14 KB (measured 13.96 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: feedback-reason-dialog 34.55 KB → 34.6 KB (measured 34.56 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
+Budget-raise: config-provider 12.8 KB → 13.05 KB (measured 12.95 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: locales-pt-BR 12 KB → 12.25 KB (measured 12.15 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: locales-es 12.1 KB → 12.4 KB (measured 12.28 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
