@@ -187,7 +187,7 @@
             &lt;{{ requester.email }}&gt;</span
           >
         </p>
-        <Field>
+        <Field orientation="responsive">
           <Field.Label>Cc</Field.Label>
           <MultiSelect
             v-model="cc"

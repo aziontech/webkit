@@ -131,7 +131,7 @@ After a send succeeds, clear the draft, append the message and confirm in a toas
 - Don't send a reply and a note from one button: the mode decides who reads it.
 - Don't let the composer accept text on a solved ticket: reopen it first.
 - Don't hide the earlier messages of a short thread; collapse only past eight items.
-- Don't show presence by colour alone: it is part of the avatar's name and of the viewing line.
+- Don't show presence by colour alone: the assignee's avatar says it in its name, and each assignee option says it in words.
 
 ## Copy
 

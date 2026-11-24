@@ -39,6 +39,7 @@
     <Subheader title="Conversation" />
     <MessageThread
       :aria-label="label"
+      timestamp-format="relative"
       :loading="loading"
     >
       <TicketMessage

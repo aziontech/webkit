@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
+  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'

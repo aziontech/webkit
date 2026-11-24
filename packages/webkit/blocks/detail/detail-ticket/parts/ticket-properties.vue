@@ -45,20 +45,18 @@
     offline: 'Offline'
   }
 
-  const values = ref<Record<DetailTicketField, string | string[]>>(seed())
   const extraTags = ref<string[]>([])
+
+  const EMPTY = { status: '', priority: '', type: '', group: '', assignee: UNASSIGNED, tags: [] }
 
   function seed(): Record<DetailTicketField, string | string[]> {
     const ticket = props.ticket
-    return {
-      status: ticket?.status ?? '',
-      priority: ticket?.priority ?? '',
-      type: ticket?.type ?? '',
-      group: ticket?.group ?? '',
-      assignee: ticket?.assignee || UNASSIGNED,
-      tags: ticket?.tags ?? []
-    }
+    if (!ticket) return { ...EMPTY }
+    const { status, priority, type, group, assignee, tags } = ticket
+    return { status, priority, type, group, assignee: assignee || UNASSIGNED, tags }
   }
+
+  const values = ref<Record<DetailTicketField, string | string[]>>(seed())
 
   watch(
     () => props.ticket,
