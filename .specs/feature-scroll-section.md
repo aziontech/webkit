@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 7
 created: 2026-11-04
-last_updated: 2026-11-18
-checksum: cc2ff74fa036dedb71d658b30d80998abd1289836a1872b4d446e8765efc4ef3
+last_updated: 2026-11-24
+checksum: e048f01899b93ca558f669947e879aa5aa2b7e451a81aa1289e5f2abf8839861
 ---
 
 # FeatureScrollSection — Component Spec
@@ -34,7 +34,8 @@ The walkthrough band of a product page: a large section title over one screen pe
 ## Best practices
 
 - Four to six items; the stack needs enough steps to earn the scroll.
-- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself.
+- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself. Give a workload screen (`workloads-list`, `workload-topology`, `workload-domains`, `workload-rollout-rows`) `width: 600` so it fills the pinned pane near its true size; at its own 860 design width it shrinks to about two thirds and its table text cannot be read.
+- Describe illustration scenes as pictures of the product; only a `ConsoleMockup` scene is the console itself.
 - Keep `action` to a short label such as "Docs" — it sits under the step copy at the small size.
 
 ## Usage
