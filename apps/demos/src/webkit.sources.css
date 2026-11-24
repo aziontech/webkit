@@ -19,7 +19,12 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-more.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-read-aloud.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/citation/citation.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/composables/use-conversation-history-groups.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/composables/use-conversation-history-projects.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/composables/use-conversation-history-removal-focus.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/conversation-history.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/parts/conversation-history-project-sort.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/conversation-history/parts/conversation-history-row.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/composables/use-conversation-pin.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/conversation.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/conversation/injection-key.ts";
@@ -58,8 +63,8 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/reasoning/reasoning.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/response-branches/response-branches.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/response-loading/response-loading.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-item.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-mark.vue";
-@source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-panel.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/sources.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/types.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/streaming-response/streaming-response.vue";

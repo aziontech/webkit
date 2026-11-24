@@ -46,7 +46,7 @@ source block, shared with the `Sources` panel)._
 - A chip is a `button` that opens the card: after 300 ms of hover or focus, at once on a press; a mouse press keeps it open, a touch or keyboard press toggles it. `Escape`, a press outside or moving the pointer away closes it.
 - `data-state="open|closed"` on the chip; `data-slot="citation"` on the root, so `ChatMessage`'s Read aloud skips it.
 - The chip text is the first source's site name (else its host, else its title), cut with an ellipsis at `max-w-48`; `+N` counts the other sources.
-- The card stacks every cited source in an `<ol>`, dividers between items only. Each item: mark and site name; the title (a link when `href` is safe, external URLs in a new tab), two lines; `publisher · date` (`publishedAt` as a medium date in the reader's locale; either alone; none, no line). No `description`, no pager.
+- The card stacks every cited source in an `<ol>`, dividers between items only. Each item follows the `Sources` menu row: the 24 px mark at the inline start; the title (a link when `href` is safe, external URLs in a new tab), two lines; `site · publisher · date` (`publishedAt` as a medium date in the reader's locale; parts it lacks are left out). No hover fill, no underline, no `description`, no pager.
 - No resolvable source: a `role="note"` chip with the numbers and no card.
 - The mark is the source's `image` (favicon), else its `icon`, else its first letter on one of seven chart series colours picked by a stable hash of the host, so neighbouring sites rarely share a colour. A favicon that fails to load falls back to the letter.
 
