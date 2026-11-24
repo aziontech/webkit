@@ -60,9 +60,11 @@ describe('PropertyFilter', () => {
       '[data-testid="property-filter__suggestions"]'
     ) as HTMLElement
     expect(list.style.width).toBe('')
-    expect(list.style.getPropertyValue('--property-filter-suggestions-width')).toBe('1200px')
+    await waitFor(() =>
+      expect(list.style.getPropertyValue('--property-filter-suggestions-width')).toBe('1200px')
+    )
     expect(list.className).toContain(
-      'w-[min(var(--property-filter-suggestions-width),var(--container-md))]'
+      'w-[min(var(--property-filter-suggestions-width,100%),var(--container-md))]'
     )
   })
 

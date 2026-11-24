@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { useElementSize } from '@vueuse/core'
-  import { computed, ref } from 'vue'
+  import { useEventListener } from '@vueuse/core'
+  import { computed, ref, watch } from 'vue'
 
   import { usePlacement } from '../../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../../composables/use-translate'
@@ -34,9 +34,18 @@
   const { t, locale } = useTranslate({ propertyFilter: en.propertyFilter })
   const portalLocale = usePortalLocale()
   const panelEl = ref<HTMLElement | null>(null)
-  const { width: anchorWidth } = useElementSize(() => props.anchor, undefined, {
-    box: 'border-box'
-  })
+  const anchorWidth = ref(0)
+  const readAnchor = (): void => {
+    anchorWidth.value = props.anchor?.getBoundingClientRect().width ?? 0
+  }
+  watch(
+    () => props.open,
+    (open) => {
+      if (open) readAnchor()
+    },
+    { immediate: true, flush: 'sync' }
+  )
+  useEventListener('resize', readAnchor, { passive: true })
 
   const sections = computed(() => groupSections(props.suggestions, props.uid, t))
   const numberFormat = computed(() => new Intl.NumberFormat(locale.value))
@@ -50,10 +59,11 @@
     sideOffset: 4
   })
 
-  const style = computed(() => ({
-    ...panelStyle.value,
-    '--property-filter-suggestions-width': `${anchorWidth.value}px`
-  }))
+  const style = computed(() =>
+    anchorWidth.value > 0
+      ? { ...panelStyle.value, '--property-filter-suggestions-width': `${anchorWidth.value}px` }
+      : panelStyle.value
+  )
 
   const groupLabel = (group: Suggestion['group']): string => {
     if (group === 'properties') return t('propertyFilter.properties')
@@ -63,7 +73,7 @@
   }
 
   const SUGGESTIONS_CLASS =
-    'fixed z-(--z-control-overlay) flex w-[min(var(--property-filter-suggestions-width),var(--container-md))] max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
+    'fixed z-(--z-control-overlay) flex w-[min(var(--property-filter-suggestions-width,100%),var(--container-md))] max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
     'bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
 
   const OPTION_CLASS =
