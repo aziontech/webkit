@@ -350,6 +350,100 @@ describe('MarkdownEditor', () => {
     })
   })
 
+  describe('insert()', () => {
+    function mountWithRef(props: Record<string, unknown> = {}) {
+      const editor = ref<InstanceType<typeof MarkdownEditor> | null>(null)
+      const value = ref((props['modelValue'] as string | undefined) ?? '')
+      const Host = defineComponent({
+        setup: () => () =>
+          h('div', [
+            h(MarkdownEditor, {
+              ...props,
+              ref: editor,
+              modelValue: value.value,
+              'onUpdate:modelValue': (next: string) => {
+                value.value = next
+              }
+            }),
+            h('button', { type: 'button', 'data-testid': 'other' }, 'Other')
+          ])
+      })
+      const utils = render(Host)
+      const field = utils.getByTestId('markdown-editor__field') as HTMLTextAreaElement
+      return { ...utils, editor, value, field }
+    }
+
+    it('inserts at the caret, updates v-model and leaves the caret after the text', async () => {
+      const { editor, value, field } = mountWithRef({ modelValue: 'Hi , thanks' })
+      select(field, 3, 3)
+      await editor.value?.insert('{{requester.name}}')
+      expect(value.value).toBe('Hi {{requester.name}}, thanks')
+      expect(document.activeElement).toBe(field)
+      expect(field.selectionStart).toBe(21)
+      expect(field.selectionEnd).toBe(21)
+    })
+
+    it('replaces the selected text', async () => {
+      const { editor, value, field } = mountWithRef({ modelValue: 'Hello NAME' })
+      select(field, 6, 10)
+      await editor.value?.insert('Jane')
+      expect(value.value).toBe('Hello Jane')
+      expect(field.selectionStart).toBe(10)
+    })
+
+    it('is undone in one step', async () => {
+      const { editor, value, field } = mountWithRef({ modelValue: 'Hello ' })
+      select(field, 6, 6)
+      await editor.value?.insert('{{ticket.id}}')
+      expect(value.value).toBe('Hello {{ticket.id}}')
+      document.execCommand('undo')
+      await nextTick()
+      expect(value.value).toBe('Hello ')
+    })
+
+    it('keeps focus in the field when another control takes it in the same task', async () => {
+      const { editor, value, field, getByTestId } = mountWithRef({ modelValue: '' })
+      const pending = editor.value?.insert('{{agent.name}}')
+      getByTestId('other').focus()
+      await pending
+      expect(value.value).toBe('{{agent.name}}')
+      expect(document.activeElement).toBe(field)
+    })
+
+    it('switches from Preview back to Write and inserts at the remembered caret', async () => {
+      const { editor, value, field, getByRole, getByTestId } = mountWithRef({ modelValue: 'Hi' })
+      select(field, 0, 0)
+      await userEvent.click(getByRole('tab', { name: 'Preview' }))
+      expect(getByTestId('markdown-editor')).toHaveAttribute('data-tab', 'preview')
+      await editor.value?.insert('Oh, ')
+      expect(getByTestId('markdown-editor')).toHaveAttribute('data-tab', 'write')
+      expect(value.value).toBe('Oh, Hi')
+      expect(document.activeElement).toBe(getByTestId('markdown-editor__field'))
+    })
+
+    it('inserts at the end of the value when the field never had focus', async () => {
+      const { editor, value } = mountWithRef({ modelValue: 'Thanks, ' })
+      await editor.value?.insert('{{agent.name}}')
+      expect(value.value).toBe('Thanks, {{agent.name}}')
+    })
+
+    it('never opens the mention menu', async () => {
+      const { editor, value, getByTestId } = mountWithRef({ modelValue: '', mentions: PEOPLE })
+      await editor.value?.insert('@ja')
+      expect(value.value).toBe('@ja')
+      expect(getByTestId('markdown-editor')).toHaveAttribute('data-mention-state', 'closed')
+    })
+
+    it('does nothing when disabled, readonly or given empty text', async () => {
+      for (const props of [{ disabled: true }, { readonly: true }, {}]) {
+        const { editor, value, unmount } = mountWithRef({ ...props, modelValue: 'Hi' })
+        await editor.value?.insert(Object.keys(props).length ? 'x' : '')
+        expect(value.value).toBe('Hi')
+        unmount()
+      }
+    })
+  })
+
   describe('a11y', () => {
     it.each([
       ['default', DefaultExample],

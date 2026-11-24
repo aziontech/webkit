@@ -101,7 +101,7 @@
   const CARD_CLASS =
     'flex min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) outline-none ' +
     'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
-  const META_CLASS = 'text-body-sm text-(--text-muted)'
+  const META_CLASS = 'whitespace-nowrap text-body-sm text-(--text-muted)'
   const QUOTED_CLASS =
     'whitespace-pre-line break-words border-s-2 border-(--border-default) ps-(--spacing-sm) text-body-sm text-(--text-muted)'
 </script>
@@ -152,60 +152,63 @@
         {{ t('messageThread.internalNote') }}
       </p>
       <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-md)">
-        <header
-          class="flex min-w-0 flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
-        >
+        <header class="flex min-w-0 items-start gap-(--spacing-sm)">
           <Avatar
             :src="avatarSrc"
             :label="author"
             size="medium"
+            class="shrink-0"
             aria-hidden="true"
           />
-          <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-(--spacing-xs)">
-            <bdi
-              v-if="author"
-              :id="ids.author"
-              :data-testid="`${testId}__author`"
-              class="min-w-0 break-words text-label-md text-(--text-default)"
-              >{{ author }}</bdi
-            >
+          <span
+            class="flex min-h-8 min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
+          >
             <span
-              :data-testid="`${testId}__role`"
-              :class="META_CLASS"
-              >{{ t(from === 'agent' ? 'messageThread.agent' : 'messageThread.customer') }}</span
+              class="flex min-w-0 max-w-full grow flex-wrap items-baseline gap-x-(--spacing-xs)"
             >
-            <span
-              v-if="showChannel && channel"
-              :data-testid="`${testId}__channel`"
-              :class="META_CLASS"
-            >
-              <i
-                :class="CHANNEL_ICONS[channel]"
-                class="me-(--spacing-2xs)"
-                aria-hidden="true"
-              />
-              {{ t('messageThread.via', { channel: t(`messageThread.${channel}`) }) }}
+              <bdi
+                v-if="author"
+                :id="ids.author"
+                :data-testid="`${testId}__author`"
+                class="min-w-0 max-w-full text-label-md text-(--text-default) [overflow-wrap:anywhere]"
+                >{{ author }}</bdi
+              >
+              <span
+                :data-testid="`${testId}__role`"
+                :class="META_CLASS"
+                >{{ t(from === 'agent' ? 'messageThread.agent' : 'messageThread.customer') }}</span
+              >
+              <span
+                v-if="showChannel && channel"
+                :data-testid="`${testId}__channel`"
+                :class="META_CLASS"
+              >
+                <i
+                  :class="CHANNEL_ICONS[channel]"
+                  class="me-(--spacing-2xs)"
+                  aria-hidden="true"
+                />
+                {{ t('messageThread.via', { channel: t(`messageThread.${channel}`) }) }}
+              </span>
             </span>
-          </span>
-          <span class="ms-auto flex items-center gap-(--spacing-xs)">
             <span
               v-if="hasTime"
               :id="ids.time"
               :data-testid="`${testId}__time`"
-              class="text-body-sm text-(--text-muted)"
+              class="min-w-0 max-w-full text-body-sm text-(--text-muted)"
             >
               <Timestamp
                 :value="timestamp"
                 :format="context.timestampFormat.value"
               />
             </span>
-            <span
-              v-if="slots.actions"
-              :data-testid="`${testId}__actions`"
-              class="flex items-center gap-(--spacing-2xs)"
-            >
-              <slot name="actions" />
-            </span>
+          </span>
+          <span
+            v-if="slots.actions"
+            :data-testid="`${testId}__actions`"
+            class="flex shrink-0 items-center gap-(--spacing-2xs)"
+          >
+            <slot name="actions" />
           </span>
         </header>
         <div

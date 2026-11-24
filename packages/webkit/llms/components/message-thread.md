@@ -72,7 +72,7 @@ The root is an `ol` (`role="list"`): every Item is an `li`, and a Group is an `l
 `ol` of its Items once open. The parts never read their slot vnodes.
 
 - `message-thread-item/message-thread-item.vue` — one item of the thread, an `li`.
-  - `type="reply"` and `type="note"`: an `article` card. Header: the author's `Avatar` (`medium`, decorative, initials from `author` when `avatarSrc` is empty), the name (`__author`), the role (`Customer` / `Agent`, `__role`), the channel (`via Email`, with its glyph, `__channel`; replies only), the sent `Timestamp` (`__time`) and the `actions` slot (`__actions`) at the inline end. Under the header, for a reply with recipients, a line `To: …` and `Cc: …` (`__recipients`, one `To` and one `Cc` line, the address list isolated). Then the body (`__content`, the default slot), the quoted-text toggle and region (`__quoted-toggle`, `__quoted`) when the `quoted` slot is given, and the `attachments` slot (`__attachments`).
+  - `type="reply"` and `type="note"`: an `article` card. Header, three columns: the author's `Avatar` (`medium`, decorative, initials from `author` when `avatarSrc` is empty) at the inline start; in the middle a wrapping meta block of the identity (the name `__author`, the role `Customer` / `Agent` `__role`, the channel `via Email` with its glyph `__channel`, replies only) followed by the sent `Timestamp` (`__time`); and the `actions` slot (`__actions`) at the inline end, outside the meta block, so it never wraps away from the first line. Under the header, for a reply with recipients, a line `To: …` and `Cc: …` (`__recipients`, one `To` and one `Cc` line, the address list isolated). Then the body (`__content`, the default slot), the quoted-text toggle and region (`__quoted-toggle`, `__quoted`) when the `quoted` slot is given, and the `attachments` slot (`__attachments`).
   - `type="note"` adds a band across the top of the card (`__note`): a lock glyph and the words `Internal note`, on the warning fill. Channel and recipients are not shown on a note.
   - `type="event"`: no card, no article; one muted line (`__event`) with a history glyph, the default slot (the sentence) and the `Timestamp`. Author, avatar, role, channel, recipients, `quoted`, `attachments` and `actions` are not rendered.
   - Props: see the table below (`MessageThreadItemProps`).
@@ -146,7 +146,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 ## Right-to-left
 
-- Layout: logical utilities only (`ms-auto`, `ps-`, `border-s-2`, `text-start`); the avatar sits at the inline start, the time and actions at the inline end, and the quoted rule on the inline-start edge.
+- Layout: logical utilities only (`ps-`, `border-s-2`, `text-start`); the avatar sits at the inline start and the actions at the inline end; the time sits at the inline end of the meta block when it fits beside the identity, and under the name at the inline start when it wraps; the quoted rule is on the inline-start edge.
 - Icons: lock, history, ellipsis and the channel glyphs (mail, comments, phone, globe, code) are not mirrored; the app's `az-reply` glyph mirrors through the stylesheet's directional set (there is no forward-mail glyph; Forward is a text item in the More menu).
 - Keyboard: no arrow keys.
 - User data: the author name renders in `bdi` and the address list inside Unicode isolates (U+2068 … U+2069); the body is `dir="auto"` so a message written in another script keeps its own direction.
@@ -179,8 +179,10 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 ## Responsive
 
-- Container queries: none; the header is a wrapping flex row.
-- Narrow: there is no breakpoint; at any width the header wraps through `flex-wrap` — name and role stay on the first line, channel, time and actions move under it with the actions kept at the inline end; recipients wrap address by address; long words and URLs in the body break (`break-words`).
+- Container queries: none. The header is a non-wrapping row of three columns (avatar, meta block, actions), top-aligned (`items-start`): the avatar and the actions line up with the first line of the meta block, which is vertically centred against the avatar while it is one line tall. Only the meta block wraps.
+- Narrow: there is no breakpoint; at any width, and with every `timestampFormat` (a full `local` or `utc` date is the longest), the header wraps word by word and never letter by letter. The avatar and the `actions` stay on the first line at the inline start and end (they never shrink). The meta block between them takes the remaining width and wraps: the identity grows to fill its line, so on a wide card the time sits at the inline end next to the actions; when the identity and the time do not fit on one line, the time moves under the name, at the inline start. Inside the identity, the name, the role and the channel are separate pieces: the role and the channel never break inside (`whitespace-nowrap`) and move to the next line as a whole, and the name breaks only between words, unless one word is wider than the whole meta block (then it breaks inside that word, `[overflow-wrap:anywhere]`, which also lowers its min-content width so the card never overflows). The time text wraps at its spaces.
+- Recipients wrap address by address; long words and URLs in the body break (`break-words`).
+- Checked in a styled suite (`src/test/message-thread-header.test.ts`, with the theme): at 280, 320 and 390 px, with `timestampFormat` `local` and `utc`, under `dir="ltr"` and `dir="rtl"`, nothing overflows the card, the name is never narrower than its longest word, and the actions stay on the avatar's line.
 - Touch: every control is a `Button` or `IconButton` with a 44 px hit area on `pointer: coarse`; nothing appears only on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; attachments wrap inside their own group.
 

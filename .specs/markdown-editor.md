@@ -4,9 +4,9 @@ category: input
 structure: monolithic
 status: implemented
 stability: preview
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: d7cb4ef5b61c204483c0c0289cc81ce585e4decdc484028289b834f9947153b7
+checksum: 2576da4f4f720d46d5c223dccabdbcf11b84a292226d0468c8eb0a10018b5c83
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -130,6 +130,7 @@ Attributes: the consumer `class` and `data-testid` go on the root; every other a
 | Method    | Notes                                                                                                                                      |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `focus()` | Switches to the Write tab and moves focus to the field, for a host that opens the composer from a "Reply" button and wants the caret ready. |
+| `insert(text: string): Promise<void>` | Inserts `text` at the caret, or in place of the selected text, for a host that adds a token from its own control (an Insert placeholder menu, a saved reply, a snippet). It switches to the Write tab when Preview is open, closes the `@` menu, writes through the browser's editing command so Ctrl/⌘+Z undoes it in one step, updates `v-model`, and leaves focus in the field with the caret after the inserted text. The edit runs after the current task's focus changes settle, so a menu that returns focus to its trigger on select does not take it back; the promise resolves once the text is in. Where the text goes: the field's current selection; when Preview was open, the selection the field had when Write was last left (the component remembers it); when the field has never had focus, the end of the value. Inserted text never opens the `@` menu. Empty `text`, `disabled` (the prop or a disabled wrapping `Field`) and `readonly` resolve the promise with no change and do not move focus; so does an editor unmounted before the edit runs. |
 
 ## States
 
@@ -142,7 +143,7 @@ Attributes: the consumer `class` and `data-testid` go on the root; every other a
 - `readonly`: toolbar buttons disabled (so the toolbar has no focus stop and Tab skips it), keyboard shortcuts do nothing, the mention menu never opens; the tabs work.
 - Preview loading: the renderer is a lazy chunk (see Performance). Until it arrives the preview box keeps its `minRows` height, carries `aria-busy="true"` and `data-loading`, and shows the muted text "Loading preview" (`markdownEditor.previewLoading`). If the chunk fails to load, the box shows the Markdown source as plain text (`whitespace-pre-wrap`), so the writer still reads what they wrote; there is no retry button.
 - Empty: an empty value shows the muted "Nothing to preview" (`markdownEditor.emptyTitle`). A send error belongs to the host's `Field` error, not to the editor.
-- Every insertion (toolbar buttons, Ctrl/⌘+B, I, K, and a picked mention) keeps the browser's undo history: text goes in through `document.execCommand('insertText')`; where that returns false the component falls back to `setRangeText` plus an `input` event, which is not undoable.
+- Every insertion (toolbar buttons, Ctrl/⌘+B, I, K, a picked mention, and `insert()`) keeps the browser's undo history: text goes in through `document.execCommand('insertText')`; where that returns false the component falls back to `setRangeText` plus an `input` event, which is not undoable.
 - What each action inserts (GitHub's markers), on the selection or at the caret:
   - Bold `**text**`, Italic `_text_`; with no selection the empty markers go in with the caret between them; a selection already wrapped in the markers is unwrapped.
   - Link `[text](url)` with `url` selected; with no selection `[](url)` with the caret between the brackets. The `url` word is the `markdownEditor.linkPlaceholder` string.

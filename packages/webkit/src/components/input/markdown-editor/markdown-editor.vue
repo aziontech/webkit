@@ -79,6 +79,7 @@
   const tab = ref<'write' | 'preview'>('write')
   const previewReady = ref(false)
   const previewFailed = ref(false)
+  let leftSelection: [number, number] | undefined
 
   const MentionList = defineAsyncComponent(
     () => import('../../ai/prompt-input/parts/prompt-input-menu-list.vue')
@@ -171,8 +172,30 @@
   }
 
   function onTabChange(next: TabsValue | null | undefined): void {
+    const field = fieldEl()
+    if (next === 'preview' && field) leftSelection = [field.selectionStart, field.selectionEnd]
     if (next === 'write' || next === 'preview') tab.value = next
     mention.close()
+  }
+
+  function insert(text: string): Promise<void> {
+    const kept = tab.value === 'preview' && leftSelection
+    const run = text && editable.value
+    if (run) tab.value = 'write'
+    return nextTick(() => {
+      const field = fieldEl()
+      if (!field || !run) return
+      if (kept) field.setSelectionRange(...kept)
+      const from = field.selectionStart
+      applyEdit(field, {
+        from,
+        to: field.selectionEnd,
+        text,
+        selectStart: from + text.length,
+        selectEnd: from + text.length
+      })
+      mention.close()
+    })
   }
 
   defineExpose({
@@ -180,7 +203,9 @@
     focus: (): void => {
       tab.value = 'write'
       void nextTick(() => fieldEl()?.focus())
-    }
+    },
+    /** Inserts the text at the caret, or in place of the selection, as one undo step; switches to Write and keeps focus after the text. */
+    insert
   })
 
   const PREVIEW_CLASS =

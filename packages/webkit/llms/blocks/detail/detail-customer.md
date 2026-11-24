@@ -64,7 +64,7 @@ A `Timeline` with one `Timeline.Group` per day, labelled with the long date, new
 
 ### I. Notes — `MessageThread`, `Field`, `Textarea`, `Button`
 
-The internal notes, oldest first, as a `MessageThread` of `type="note"` items written by agents, each with the Internal note band and a relative time (the absolute one crowds the author name in a narrow column). Under it a `Field` labelled Add a note with an auto-resizing `Textarea`, the description "Only agents can read notes." and a secondary Add note `Button`. Add note stays enabled: with an empty field it shows the `Field.Error`; otherwise it emits `add-note` and shows its loading state while `saving`.
+The internal notes, oldest first, as a `MessageThread` of `type="note"` items written by agents, each with the Internal note band and a relative time, like the Activity timeline beside it. Under it a `Field` labelled Add a note with an auto-resizing `Textarea`, the description "Only agents can read notes." and a secondary Add note `Button`. Add note stays enabled: with an empty field it shows the `Field.Error`; otherwise it emits `add-note` and shows its loading state while `saving`.
 
 ## Data
 

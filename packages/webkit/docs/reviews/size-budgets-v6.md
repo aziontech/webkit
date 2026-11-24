@@ -1699,3 +1699,4 @@ Budget-raise: config-provider 12.8 KB → 13.25 KB (measured 13.19 KB): combined
 Budget-raise: locales-pt-BR 12 KB → 12.45 KB (measured 12.40 KB): the same support-component strings in Portuguese, combined (SUP-01).
 Budget-raise: locales-es 12.1 KB → 12.6 KB (measured 12.54 KB): the same support-component strings in Spanish, combined (SUP-01).
 Budget-raise: table-cell-time 19.2 KB → 19.7 KB (measured 19.62 KB): the shared minute clock now pauses while the page is hidden (SUP-CD-2) and the catalog it reads grew with the support strings.
+Budget-raise: markdown-editor 31.8 KB → 31.9 KB (measured 31.83 KB): the exposed `insert(text)` (caret or selection, one undo step, back to Write from Preview at the remembered selection) that blocks call instead of finding the textarea by id (SUP-PL-2); still under the 32 KB ceiling of its spec.
