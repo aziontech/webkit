@@ -1012,8 +1012,8 @@ export const dataGrid = {
 export const table = {
   selectAll: 'Select all rows',
   selectRow: 'Select row {row}',
-  emptyTitle: 'No results yet',
-  emptyDescription: 'Get started by creating your first resource.',
+  emptyTitle: 'No data yet',
+  emptyDescription: 'Rows appear here once there is data to show.',
   errorTitle: 'Could not load the data'
 } as const
 

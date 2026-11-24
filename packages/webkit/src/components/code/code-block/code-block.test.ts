@@ -1125,4 +1125,15 @@ describe('CodeBlock', () => {
       await expectNoA11yViolations(view.container)
     })
   })
+
+  it('spells the language names and file names of its examples the way apps copy them', () => {
+    const files = import.meta.glob('../../../../examples/code-block/*.vue', {
+      query: '?raw',
+      import: 'default',
+      eager: true
+    }) as Record<string, string>
+    const sources = Object.values(files).join('\n')
+    expect(sources).toContain("'JavaScript'")
+    expect(sources).not.toMatch(/'Javascript'|'Typescript'|file name\./)
+  })
 })

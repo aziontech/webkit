@@ -743,4 +743,20 @@ describe('Chart', () => {
     expect(view.getByRole('button', { name: 'Try again' })).toBeTruthy()
     await expectNoA11yViolations(view.container)
   })
+
+  it('paints the labelled band of the threshold example over its series line', async () => {
+    const { default: Example } = await import('../../../../examples/chart/threshold.vue')
+    const view = render(Example)
+    const band = await vi.waitFor(() => {
+      const found = view
+        .getAllByTestId('chart-reference')
+        .find((el) => el.dataset['type'] === 'band')
+      expect(found).toBeTruthy()
+      return found as Element
+    })
+    const line = view.getByTestId('chart-line')
+    expect(line.compareDocumentPosition(band) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    )
+  })
 })

@@ -3,7 +3,7 @@
 
   const tabs = [
     {
-      label: 'Javascript',
+      label: 'JavaScript',
       value: 'js',
       language: 'javascript',
       fileName: 'handler.js',
