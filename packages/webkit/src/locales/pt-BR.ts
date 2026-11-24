@@ -266,7 +266,12 @@ export const ptBR: Messages = {
   },
   avatar: {
     fallbackLabel: 'Avatar do usuário',
-    imageAlt: 'Avatar'
+    imageAlt: 'Avatar',
+    presenceOnline: 'online',
+    presenceAway: 'ausente',
+    presenceBusy: 'ocupado',
+    presenceOffline: 'offline',
+    withPresence: '{name}, {presence}'
   },
   avatarGroup: {
     people: {

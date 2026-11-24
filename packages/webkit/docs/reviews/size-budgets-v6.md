@@ -1657,3 +1657,26 @@ Budget-raise: hero-form-section 54.2 KB → 54.25 KB (measured 54.20 KB): carrie
 Budget-raise: job-posting-section 59.8 KB → 59.9 KB (measured 59.85 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: newsletter-section 13.95 KB → 14 KB (measured 13.96 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: feedback-reason-dialog 34.55 KB → 34.6 KB (measured 34.56 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
+Budget-raise: console-layout-root 83.4 KB → 83.9 KB (measured 83.87 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: doc-markdown 40.9 KB → 41 KB (measured 40.93 KB): the shared locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: quote 15.25 KB → 15.75 KB (measured 15.69 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: quote-tabs 24.6 KB → 25.1 KB (measured 25.05 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: console-application-scene 123.85 KB → 124.3 KB (measured 124.24 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: console-trace-scene 85.4 KB → 85.9 KB (measured 85.83 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: article-body-section 47.45 KB → 47.95 KB (measured 47.88 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: article-index-section 37.6 KB → 38.05 KB (measured 37.99 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: network-section 27.25 KB → 27.7 KB (measured 27.67 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: client-quotes-section 27.7 KB → 28.15 KB (measured 28.10 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: logo-wall-section 24.7 KB → 25.2 KB (measured 25.13 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: recognition-marquee-section 21.75 KB → 22.2 KB (measured 22.17 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.82 KB): the locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.00 KB): the locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: locales-es 12.1 KB → 12.2 KB (measured 12.15 KB): the locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: table-cell-time 19.05 KB → 19.55 KB (measured 19.52 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: filter-menu 37.2 KB → 37.6 KB (measured 37.55 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: filter-menu-root 33.35 KB → 33.7 KB (measured 33.65 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: filter-menu-chip-group 22 KB → 22.5 KB (measured 22.45 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: avatar 12.25 KB → 12.8 KB (measured 12.77 KB): Avatar gains the `presence` prop (SUP-04): the presence dot, its shape cut-out and its name in the accessible label, with four presence words and a template in the locale catalogs.
+Budget-raise: table-filter 6.65 KB → 6.75 KB (measured 6.69 KB): the shared locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: console-layout 84.7 KB → 85.2 KB (measured 85.15 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: app-header-account 13.85 KB → 14.4 KB (measured 14.34 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.

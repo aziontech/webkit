@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: ed86f4e5e40f3cd333700ea69e0093673b56755470dedf71f1cfc1f426832a53
+checksum: 09d9a3dfd0cbc5ad727d515f60c18e3b8ce392c53dab90688c649f0e92407a55
 created: 2026-05-22
 last_updated: 2026-11-23
 ---
@@ -173,7 +173,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 12.5 KB gzip for the initial chunk of `./avatar` (it carries the locale lookup) in `.size-limit.json`; the presence dot and its five strings added about 0.25 KB (recorded in `packages/webkit/docs/reviews/size-budgets-v6.md`).
+- Bundle budget: 12.8 KB gzip for the initial chunk of `./avatar` (it carries the locale lookup) in `.size-limit.json`; the presence dot, its cut-out and its five strings added about 0.5 KB to every entry that renders an avatar (recorded in `packages/webkit/docs/reviews/size-budgets-v6.md`).
 - Runtime budget: none: static; the pattern is a three-layer inline SVG computed once per `label` and `colors` change.
 - Heavy parts: the marble drawing loads in its own async chunk the first time an avatar sets `pattern`, so an avatar without a pattern pays nothing for it. Server rendering resolves the chunk before it writes the HTML, so hydration finds the same SVG; on a client-only render the avatar's surface shows until the chunk arrives.
 

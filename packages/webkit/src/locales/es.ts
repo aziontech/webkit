@@ -266,7 +266,12 @@ export const es: Messages = {
   },
   avatar: {
     fallbackLabel: 'Avatar del usuario',
-    imageAlt: 'Avatar'
+    imageAlt: 'Avatar',
+    presenceOnline: 'en línea',
+    presenceAway: 'ausente',
+    presenceBusy: 'ocupado',
+    presenceOffline: 'desconectado',
+    withPresence: '{name}, {presence}'
   },
   avatarGroup: {
     people: {
