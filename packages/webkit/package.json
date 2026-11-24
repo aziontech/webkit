@@ -1243,6 +1243,10 @@
       "types": "./types/components/input/textarea/textarea.vue.d.ts",
       "default": "./src/components/input/textarea/textarea.vue"
     },
+    "./markdown-editor": {
+      "types": "./types/components/input/markdown-editor/markdown-editor.vue.d.ts",
+      "default": "./src/components/input/markdown-editor/markdown-editor.vue"
+    },
     "./context-menu": {
       "types": "./types/components/navigation/context-menu/index.d.ts",
       "default": "./src/components/navigation/context-menu/index.ts"
@@ -3495,6 +3499,9 @@
       ],
       "textarea": [
         "./types/components/input/textarea/textarea.vue.d.ts"
+      ],
+      "markdown-editor": [
+        "./types/components/input/markdown-editor/markdown-editor.vue.d.ts"
       ],
       "context-menu": [
         "./types/components/navigation/context-menu/index.d.ts"

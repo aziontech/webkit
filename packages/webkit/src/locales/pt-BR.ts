@@ -1461,5 +1461,27 @@ export const ptBR: Messages = {
     reorderMoved: '{name} movido para a posição {position} de {total}.',
     reorderDropped: '{name} solto na posição {position} de {total}.',
     reorderCancelled: 'Reordenação cancelada.'
+  },
+  markdownEditor: {
+    label: 'Mensagem',
+    write: 'Escrever',
+    preview: 'Visualizar',
+    toolbar: 'Formatação',
+    bold: 'Negrito',
+    italic: 'Itálico',
+    link: 'Link',
+    bulletedList: 'Lista com marcadores',
+    numberedList: 'Lista numerada',
+    quote: 'Citação',
+    code: 'Código',
+    shortcut: '{label} ({keys})',
+    linkPlaceholder: 'url',
+    emptyTitle: 'Nada para visualizar',
+    previewLoading: 'Carregando a visualização',
+    mentionMenu: 'Pessoas',
+    mentionResults: {
+      one: '{count} pessoa',
+      other: '{count} pessoas'
+    }
   }
 }

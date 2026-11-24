@@ -1609,6 +1609,29 @@ export const dataTable = {
   reorderCancelled: 'Reorder cancelled.'
 } as const
 
+export const markdownEditor = {
+  label: 'Message',
+  write: 'Write',
+  preview: 'Preview',
+  toolbar: 'Formatting',
+  bold: 'Bold',
+  italic: 'Italic',
+  link: 'Link',
+  bulletedList: 'Bulleted list',
+  numberedList: 'Numbered list',
+  quote: 'Quote',
+  code: 'Code',
+  shortcut: '{label} ({keys})',
+  linkPlaceholder: 'url',
+  emptyTitle: 'Nothing to preview',
+  previewLoading: 'Loading preview',
+  mentionMenu: 'People',
+  mentionResults: {
+    one: '{count} person',
+    other: '{count} people'
+  }
+} as const
+
 export const en = {
   toolApproval,
   agentQuestion,
@@ -1764,5 +1787,6 @@ export const en = {
   docAgentCard,
   common,
   newsletterSection,
-  dataTable
+  dataTable,
+  markdownEditor
 }

@@ -6,7 +6,7 @@ status: approved
 stability: preview
 spec_version: 1
 template: 2
-checksum: 6a189c782fb347eb985c69ae40feb4e2fea139989310bbdee248b215767f064d
+checksum: d7cb4ef5b61c204483c0c0289cc81ce585e4decdc484028289b834f9947153b7
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -74,7 +74,8 @@ Changes this build makes to code it reuses, each with no public API change and i
 </script>
 
 <template>
-  <Field label="Reply">
+  <Field>
+    <Field.Label>Reply</Field.Label>
     <MarkdownEditor
       v-model="reply"
       placeholder="Write a reply"
