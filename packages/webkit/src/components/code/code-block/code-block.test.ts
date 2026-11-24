@@ -902,6 +902,9 @@ describe('CodeBlock', () => {
         const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
         expect(getByTestId('code-block').hasAttribute('data-copy-gutter')).toBe(true)
         expect(getByTestId('code-block__copy-anchor')).toBeTruthy()
+        expect(
+          getByTestId('code-block__scroll').classList.contains('in-data-[copy-gutter]:me-10')
+        ).toBe(true)
       })
 
       it('sticks to the top of the scroller and drops its divider when unbordered', () => {

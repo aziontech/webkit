@@ -153,4 +153,11 @@ describe('detail/detail-deployment-logs', () => {
       )
     }
   })
+
+  it('wraps the log view switch under the whole Deployment logs title instead of cutting it', () => {
+    const view = render(DeploymentDetail)
+    const title = within(view.container as HTMLElement).getByText('Deployment logs')
+    expect(title.classList.contains('truncate')).toBe(false)
+    expect(title.parentElement?.classList.contains('flex-wrap')).toBe(true)
+  })
 })
