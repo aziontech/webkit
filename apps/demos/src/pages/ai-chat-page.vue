@@ -4,8 +4,8 @@
   import { computed, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import AiChat from '../blocks/ai-chat.vue'
   import { sampleLongThread } from '../blocks/ai-chat.sample'
+  import AiChat from '../blocks/ai-chat.vue'
   import { answerFor } from '../lib/assistant'
   import { assistantConnection, assistantTools, deployWorkload } from '../lib/assistant-model'
 
