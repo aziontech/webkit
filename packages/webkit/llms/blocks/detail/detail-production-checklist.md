@@ -214,6 +214,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-prod
   }
 
   const doneCount = computed(() => steps.value.filter((step) => step.done).length)
+  const nextId = computed(() => steps.value.find((step) => !step.done)?.id ?? '')
   const complete = computed(() => steps.value.length > 0 && doneCount.value === steps.value.length)
 
   const STEP_MEDIA_CLASS =
@@ -263,7 +264,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-prod
           v-for="step in steps"
           :key="`${step.id}:${step.done ? 'done' : 'todo'}`"
           :data-done="step.done || null"
-          class="group/step transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
+          :data-next="step.id === nextId || null"
+          class="group/step transition-colors duration-fast-02 ease-productive-entrance data-next:bg-(--primary-mask) motion-reduce:transition-none"
         >
           <Item
             size="small"
@@ -273,24 +275,26 @@ Each variant is the same screen in another state: `get_block("detail/detail-prod
             <Item.Media>
               <i
                 :class="step.icon"
-                class="text-body-sm leading-none text-(--text-muted) group-data-done/step:text-(--primary)"
+                class="text-body-sm leading-none text-(--text-muted) group-data-next/step:text-(--primary)"
                 aria-hidden="true"
               />
             </Item.Media>
 
             <Item.Content>
               <Item.Title>
-                {{ step.title }}
+                <span class="group-data-done/step:text-(--text-muted)">{{ step.title }}</span>
               </Item.Title>
             </Item.Content>
 
             <Item.Actions>
               <i
                 v-if="step.done"
-                class="az az-check text-body-sm leading-none text-(--primary)"
+                class="az az-check text-body-sm leading-none text-(--success-mark)"
                 aria-hidden="true"
               />
-              <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
+              <span class="sr-only">{{
+                step.done ? 'Done' : step.id === nextId ? 'Next step' : 'Not started'
+              }}</span>
             </Item.Actions>
           </Item>
         </div>

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -394,6 +394,8 @@ export const neverDeployedResource: ResourceDetailResource = {
   frameworkIcon: 'az-color az-astro'
 }
 
+export const buildToken = 'azn_build_example_k3p9qa7f2m8x4w1c6v5b'
+
 export const resourceTabs: { value: ResourceDetailTab; label: string }[] = [
   { value: 'overview', label: 'Overview' },
   { value: 'versions', label: 'Versions' },
@@ -634,7 +636,7 @@ export const applicationVersions: ApplicationVersionRow[] = [
   {
     id: 'BW1K8RTE',
     name: 'BW1K8RTE',
-    description: 'Add rule"Redirect old checkout"',
+    description: 'Add rule "Redirect old checkout"',
     state: 'Ready',
     createdAgo: 'Yesterday'
   },
@@ -826,7 +828,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'APA7237R',
     name: 'APA7237R',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Riley Carter',
     createdAt: '2026-11-03T14:37:18.145Z',
     createdAgo: '3 days ago'
@@ -844,7 +846,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AS1UHU4P',
     name: 'AS1UHU4P',
     state: 'ready',
-    description: 'Add rule"Redirect /blog to docs"',
+    description: 'Add rule "Redirect /blog to docs"',
     author: 'Jordan Kim',
     createdAt: '2026-11-01T14:37:18.145Z',
     createdAgo: '5 days ago'
@@ -871,7 +873,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AW7BNGI4',
     name: 'AW7BNGI4',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Sam Lee',
     createdAt: '2026-10-29T14:37:18.145Z',
     createdAgo: '1 week ago'
@@ -889,7 +891,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AYYZ37F2',
     name: 'AYYZ37F2',
     state: 'ready',
-    description: 'Add rule"Redirect /blog to docs"',
+    description: 'Add rule "Redirect /blog to docs"',
     author: 'Chris Taylor',
     createdAt: '2026-10-27T14:37:18.145Z',
     createdAgo: '1 week ago'
@@ -916,7 +918,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'A44G8TSH',
     name: 'A44G8TSH',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Jordan Kim',
     createdAt: '2026-10-24T14:37:18.145Z',
     createdAgo: '2 weeks ago'
@@ -1920,6 +1922,8 @@ jobs:
     destination?: string
     /** The address Visit opens in a new tab; empty draws no Visit. */
     visit?: string
+    /** Why Visit is unavailable yet; set, Visit stays in place but disabled with this reason. */
+    visitDisabledReason?: string
     /** The accessible name and tooltip of the actions menu. */
     actionsLabel: string
     /** The groups of the actions menu. */
@@ -1935,6 +1939,7 @@ jobs:
     href: '',
     destination: '',
     visit: '',
+    visitDisabledReason: '',
     showMenuIcons: true,
     container: true
   })
@@ -1977,9 +1982,11 @@ jobs:
       <Button
         v-if="visit"
         label="Visit"
-        aria-label="Visit (opens in a new tab)"
-        :href="visit"
-        target="_blank"
+        :aria-label="visitDisabledReason ? 'Visit' : 'Visit (opens in a new tab)'"
+        :href="visitDisabledReason ? '' : visit"
+        :target="visitDisabledReason ? '_self' : '_blank'"
+        :disabled="Boolean(visitDisabledReason)"
+        :disabled-reason="visitDisabledReason"
         variant="secondary"
         size="medium"
         icon="az az-external-link"

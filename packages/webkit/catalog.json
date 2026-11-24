@@ -10699,7 +10699,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
     },
     {
      "name": "disabled",
@@ -10808,7 +10808,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
     },
     {
      "name": "disabled",
@@ -36282,7 +36282,6 @@
     "FlowDiagram",
     "IconButton",
     "Input",
-    "InputGroupRoot",
     "Item",
     "Item",
     "Kbd",
@@ -36292,6 +36291,7 @@
     "PanelBody",
     "PanelFooter",
     "PanelHeader",
+    "PasswordInput",
     "Popover",
     "SaveBar",
     "Select",
@@ -36331,7 +36331,6 @@
     "@aziontech/webkit/flow-diagram-root",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
     "@aziontech/webkit/item-root",
     "@aziontech/webkit/kbd",
@@ -36341,6 +36340,7 @@
     "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/password-input",
     "@aziontech/webkit/popover",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
@@ -37558,7 +37558,6 @@
     "Select",
     "StatusIndicator",
     "TableCellId",
-    "TableCellLink",
     "TableCellStatus",
     "Tabs",
     "Tag",
@@ -37598,7 +37597,6 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/table-cell-id",
-    "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-status",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",

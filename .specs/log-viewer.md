@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 0de22a22fc77d1e73f3e07d324b59f150f259d7bf861d455650d5eb495eb5240
+checksum: 318cf59015d9b54686f3c7fc5fa28443ae9b4f1cbc5975ddc5efa412a320c386
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -134,7 +134,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 | `lines`             | `LogViewerLine[]`      | `[]`    | false    | Log entries; filtered in LogViewerContent by search and level.                                                                                                                                                                                                      |
 | `bordered`          | `boolean`              | `true`  | false    | Draw the outer card border and corner radius around the log shell. On by default; set `:bordered="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
 | `searchPlaceholder` | `string`               | `''`    | false    | Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`).                                                                                                                                                                    |
-| `copyable`          | `boolean`              | `true`  | false    | Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent).                                                                                                                                                       |
+| `copyable`          | `boolean`              | `true`  | false    | Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent).                                                                                                                                                        |
 | `disabled`          | `boolean`              | `false` | false    | Disables toolbar controls in LogViewerHeader.                                                                                                                                                                                                                       |
 | `loading`           | `boolean`              | `false` | false    | Replaces the LogViewerContent log body with a centered spinner and label.                                                                                                                                                                                           |
 | `loadingLabel`      | `string`               | `''`    | false    | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`).                                                                                                                                                                        |
