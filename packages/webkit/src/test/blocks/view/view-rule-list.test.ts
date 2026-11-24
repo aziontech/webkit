@@ -1,8 +1,9 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { page } from 'vitest/browser'
 
 import EditRule from '../../../../blocks/view/view-rule-list/variants/edit-rule.vue'
+import Loading from '../../../../blocks/view/view-rule-list/variants/loading.vue'
 import Searching from '../../../../blocks/view/view-rule-list/variants/searching.vue'
 import RulesList from '../../../../blocks/view/view-rule-list/view-rule-list.vue'
 import { useToastRegion } from '../../toast-region'
@@ -266,6 +267,19 @@ describe('view/view-rule-list block', () => {
     expect(pair.classList.contains('[[data-reorder-row]:hover_&]:opacity-100')).toBe(true)
   })
 
+  it('loads each phase with a few skeleton rows, not a full page of ten', async () => {
+    const view = render(Loading)
+    const tables = await waitFor(() => {
+      const found = view.getAllByRole('table')
+      expect(found.length).toBe(2)
+      return found
+    })
+    for (const table of tables) {
+      const rows = table.querySelectorAll('[data-testid="table-body"] [data-testid="table-row"]')
+      expect(rows.length).toBe(3)
+    }
+  })
+
   it('disables the position of the locked rule with its reason', () => {
     const view = render(RulesList)
     const field = view.getByRole('textbox', {
@@ -421,6 +435,12 @@ describe('view/view-rule-list block', () => {
     )
     expect(view.queryByRole('textbox', { name: /^Position of Docs rewrite/ })).toBeNull()
     expect(view.container.querySelectorAll('[data-reorder-handle]')).toHaveLength(0)
+    for (const table of view.getAllByRole('table')) {
+      const headers = within(table)
+        .getAllByRole('columnheader')
+        .map((cell) => cell.textContent?.trim())
+      expect(headers).toEqual(['Name', 'Status', 'Move'])
+    }
     await fireEvent.click(trigger)
     const up = await waitFor(() => {
       const item = Array.from(document.body.querySelectorAll('[role="menuitem"]')).find((node) =>

@@ -5,6 +5,7 @@
   import Field from '@aziontech/webkit/field'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
 
   import type { UseRuleListPositionReturn } from '../composables/use-rule-list-position'
   import type { UseRuleListReorderReturn } from '../composables/use-rule-list-reorder'
@@ -47,6 +48,19 @@
     'clear-search': []
   }>()
 
+  const loadingRows = computed<RuleListRule[]>(() =>
+    Array.from({ length: props.group.total || 3 }, (_, index) => ({
+      id: `loading-${index}`,
+      name: '',
+      description: '',
+      phase: props.group.value,
+      author: '',
+      modified: '',
+      active: false,
+      locked: false
+    }))
+  )
+
   const { pinned, canMove, lockReason, position, step, reorderRows, reorderable } = props.reorder
   const { positionValue, onPositionInput, commitPosition, cancelPosition, onMoveSelect } =
     props.positioning
@@ -54,7 +68,7 @@
 
 <template>
   <DataTable
-    :data="loading ? [] : group.items"
+    :data="loading ? loadingRows : group.items"
     :columns="columns"
     row-key="id"
     :bordered="false"

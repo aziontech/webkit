@@ -167,8 +167,6 @@ export const ruleColumns = (narrow: boolean): TableColumn[] =>
   narrow
     ? [
         nameColumn,
-        descriptionColumn,
-        modifiedColumn,
         { ...statusColumn, width: 64, frozen: 'end' },
         { ...moveColumn, header: 'Move', width: 56, align: 'center', frozen: 'end' }
       ]
