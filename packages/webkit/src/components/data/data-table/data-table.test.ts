@@ -1604,6 +1604,11 @@ describe('DataTable', () => {
       expect(view.emitted()['row-click']).toBeUndefined()
     })
 
+    it('draws at most 10 skeleton rows while the first page of 25 loads', () => {
+      const { view } = paged({ pageSize: 25 }, { data: [], loading: true })
+      expect(view.getAllByRole('row').slice(1)).toHaveLength(10)
+    })
+
     it('states no row count while the first page loads, and hides only the count on a known total', async () => {
       const { view, tableProps } = paged({}, { data: [], loading: true })
       const footer = view.getByTestId('data-table-pagination')

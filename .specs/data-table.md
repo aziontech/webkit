@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 3f56428c487a0a58a495f0d5fecf1b54bbcd72dc6bda1fcd2e590386b4eaa165
+checksum: cbe1534fcea39e076a8de3e900dcb7b952cf6f4068cf50583ae3ab685e338546
 created: 2026-11-15
-last_updated: 2026-11-22
+last_updated: 2026-11-24
 ---
 
 # DataTable — Component Spec
@@ -267,7 +267,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`
-- Data states: `loading` (skeleton rows, `aria-busy`; `DataTablePagination` states no count it does not know, see Sub-components), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
+- Data states: `loading` (skeleton rows, `aria-busy`; as many rows as are already shown, or with no rows yet the page size capped at 10, so a first load is no taller than a typical page; `DataTablePagination` states no count it does not know, see Sub-components), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
 - The viewport is always a scroll container (`overflow: auto`): horizontal scroll is automatic when columns overflow; vertical scroll engages only when `maxHeight` constrains the content.
 - `data-frozen` on TableHeader (`true`), TableHeadCell / TableCell (`start` | `end`), and TableRow (`true`). A frozen head/body cell renders a CSS-only fade (gradient pseudo-element) just outside its inner edge that dissolves the horizontally scrolling content into the row background (`from-transparent` → `var(--table-row-bg)`, the row-published color, so it matches the row on hover/selected) — `frozen=start` fades on the right, `frozen=end` on the left. The fade tints nothing; it only masks the content sliding under the pinned column.
 - Scroll cue: the scroll viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` gradient as wide as the hidden distance (at most 24 px, none when 4 px or less, so it never sits over text that is otherwise in view) (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge of the viewport, so a phone shows that columns continue; it follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`). A frozen column on that edge draws its own fade and paints over the cue, which sits below frozen cells and the sticky header (`z-5`).

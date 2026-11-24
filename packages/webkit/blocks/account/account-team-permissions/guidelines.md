@@ -1,6 +1,6 @@
 # Team permissions
 
-Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).
+Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. Two parts make up access, said the same way here and in `account/account-users`: a person's role decides what they can do on the account, and their teams decide which resources they reach, so the list of teams is the whole resource model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).
 
 ## When to use
 

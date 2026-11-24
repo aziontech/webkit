@@ -3,10 +3,10 @@ name: key-value-list
 category: content
 structure: composition
 status: implemented
-checksum: affca7d0f01428086e0b83127d611edb04c75cf928566d32e0277223e20502d3
+checksum: 5eb35a93aa7a87926b4524c358c6f07bd4f91e5778aeaa743c9c375111c2d572
 spec_version: 6
 created: 2026-11-10
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # KeyValueList — Component Spec
@@ -148,7 +148,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   - Props: `label: string` (required — the key, rendered in the `<dt>`).
   - Events: _none_.
   - Slots: `default` — the value (text or composed components); fallback is the empty-value marker (`<span aria-hidden="true">—</span><span class="sr-only">Not set</span>`), shown when the slot is omitted or renders nothing. `info` — optional affordance after the label text inside the `<dt>`, such as a `Hint`.
-  - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible.
+  - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible. In the `split` variant the value cell shrinks to its content, so the skeleton there is `6rem` wide instead of the full cell.
   - `data-testid` fallback `${rootTestId}__item`; a consumer `data-testid` on the Item wins.
 - `key-value-list-group/key-value-list-group.vue` — a titled column: `<div>` → `<dt>` (label) + `<dd>` → nested `<dl>` stacking its Items in one column.
   - Props: `label: string` (required — the group's term, shown above its Items).

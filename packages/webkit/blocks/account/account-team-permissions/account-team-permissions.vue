@@ -186,12 +186,11 @@
     <div class="layout-column flex flex-col">
       <PageHeader
         title="Teams and permissions"
-        description="A team is a named set of permissions. Members inherit exactly what their teams grant; nothing is granted per person."
+        description="A team is a named set of permissions. A person's role decides what they can do on the account; their teams decide which resources they reach."
       >
         <template #actions>
           <Button
             label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"

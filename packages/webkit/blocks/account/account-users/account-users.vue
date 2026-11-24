@@ -298,7 +298,6 @@
         <template #actions>
           <Button
             label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"

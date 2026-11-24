@@ -28,6 +28,14 @@ const memberNames = () =>
     item.querySelector('[data-member-name]')?.textContent?.trim()
   )
 describe('account-team-permissions', () => {
+  it('says the access model the same way as Users: role for the account, teams for resources', () => {
+    const view = render(AccountTeamPermissions)
+    expect(view.container.textContent).toContain(
+      "A person's role decides what they can do on the account; their teams decide which resources they reach."
+    )
+    expect(view.container.textContent).not.toContain('nothing is granted per person')
+  })
+
   it('shows the view-table controls row over the teams', async () => {
     const view = render(AccountTeamPermissions)
     expect(view.getByRole('button', { name: 'Download CSV' })).not.toBeDisabled()

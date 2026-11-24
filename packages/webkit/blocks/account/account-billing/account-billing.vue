@@ -229,7 +229,9 @@
         description="Your plan, your invoices and the cards they are charged to."
       >
         <template #actions>
-          <span class="text-body-sm text-(--text-muted)"
+          <span
+            v-if="!blocked"
+            class="text-body-sm text-(--text-muted)"
             >Updated {{ updatedFormat(updatedAt) }}</span
           >
           <Tooltip
@@ -247,7 +249,6 @@
           </Tooltip>
           <Button
             label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
