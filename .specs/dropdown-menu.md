@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: c3e2939c95bb38734756d981fe04255a268b7314b82392af12487c5fd6f0b8d7
+checksum: 6917d081091be3838a65c054b27953d23853e4ac824f4bef2730ad8e6c63693e
 created: 2026-06-26
 last_updated: 2026-11-19
 ---
@@ -233,7 +233,7 @@ Sub-menus and checkable options:
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
-- `data-severity="danger"` on an option whose `severity` is `danger` (absent for `neutral`)
+- `data-severity` on option mirrors the `severity` prop (`neutral` | `danger`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)

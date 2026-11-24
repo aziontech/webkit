@@ -1771,3 +1771,4 @@ Budget-raise: contact-hub-section 9.55 KB → 9.8 KB (measured 9.75 KB): the sec
 Budget-raise: newsletter-section 14 KB → 14.3 KB (measured 14.25 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
 Budget-raise: job-posting-section 63.05 KB → 63.35 KB (measured 63.32 KB): the click-open Hint (HELP-A-1) merged with the SectionBand frame (LA-2); both changes landed in the same entry.
 Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a rounding hair over): the SectionBand frame (LA-2) merged with the in-product help branch.
+Budget-raise: context-menu 11.7 KB → 11.75 KB (measured 11.71 KB): its items gain the danger severity for destructive actions such as Delete (A5P3-066, A5P3-L04-2); the shared item row carries one more prop and one class.

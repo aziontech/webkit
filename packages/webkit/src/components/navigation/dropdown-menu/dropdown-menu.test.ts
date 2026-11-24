@@ -1001,7 +1001,7 @@ describe('DropdownMenu', () => {
       const neutral = within(getPanel() as HTMLElement)
         .getAllByRole('menuitem')
         .find((item) => item !== remove && !item.hasAttribute('aria-haspopup'))
-      expect(neutral?.hasAttribute('data-severity')).toBe(false)
+      expect(neutral?.dataset['severity']).toBe('neutral')
       await expectNoA11yViolations(getPanel() as HTMLElement)
     })
   })

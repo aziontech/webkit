@@ -154,7 +154,7 @@
       :aria-disabled="disabled || undefined"
       :data-testid="testId"
       :data-type="type"
-      :data-severity="severity === 'danger' ? 'danger' : null"
+      :data-severity="severity"
       :data-selected="selected || null"
       :data-disabled="disabled || null"
       :data-ungrouped="inGroup ? null : ''"

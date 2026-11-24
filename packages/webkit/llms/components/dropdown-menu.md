@@ -122,7 +122,7 @@
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
 - `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
-- `data-severity="danger"` on an option whose `severity` is `danger` (absent for `neutral`)
+- `data-severity` on option mirrors the `severity` prop (`neutral` | `danger`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-side` / `data-align` on the sub-panel mirror its resolved side and alignment (`end` or `start`, after flipping)
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
