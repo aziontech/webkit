@@ -482,6 +482,8 @@ export const es: Messages = {
     previous30: 'Últimos 30 días',
     older: 'Más antiguas',
     emptyTitle: 'Aún no hay conversaciones.',
+    emptyDescription:
+      'Tus conversaciones con el asistente aparecen aquí después de que le preguntes algo.',
     delete: 'Eliminar {title}',
     newChat: 'Nuevo chat',
     search: 'Buscar conversaciones',

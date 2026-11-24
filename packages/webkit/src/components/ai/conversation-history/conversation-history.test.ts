@@ -71,6 +71,11 @@ describe('ConversationHistory', () => {
     const [loading, empty] = view.getAllByRole('navigation')
     expect(loading).toHaveAttribute('aria-busy', 'true')
     expect(within(empty!).getByText('No conversations yet.')).toBeTruthy()
+    expect(
+      within(empty!).getByText(
+        'Your chats with the assistant appear here after you ask it something.'
+      )
+    ).toBeTruthy()
   })
 
   it('reads its strings from the locale catalog', () => {

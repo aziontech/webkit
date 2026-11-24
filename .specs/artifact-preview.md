@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: e0b11fc152a62794d71956232be0859607e196ff6151e0a7ef2a8c2667d19bcf
+checksum: 5b857255d48f29e168c0e11129f8b4641d16cf18b7ffc09330eccea4716ff4e2
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -147,7 +147,7 @@ _None._
 - Layout: logical utilities; actions at the inline end.
 - Icons: maximize (Open, which opens the in-page canvas, not a new tab) and download are not mirrored.
 - Keyboard: none.
-- User data: the title is `dir="auto"` (file names).
+- User data: the title text (a file name) is isolated in `bdi`; the heading follows the page direction, so it stays beside the icon in right-to-left.
 
 ## Responsive
 

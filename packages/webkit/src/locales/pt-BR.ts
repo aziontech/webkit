@@ -482,6 +482,8 @@ export const ptBR: Messages = {
     previous30: 'Últimos 30 dias',
     older: 'Mais antigas',
     emptyTitle: 'Nenhuma conversa ainda.',
+    emptyDescription:
+      'Suas conversas com o assistente aparecem aqui depois que você fizer uma pergunta.',
     delete: 'Excluir {title}',
     newChat: 'Novo chat',
     search: 'Buscar conversas',

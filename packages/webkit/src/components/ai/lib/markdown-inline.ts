@@ -63,6 +63,8 @@ function renderLeaf(node: LeafNode, { sources, citation }: RenderContext): VNode
 const CLOSING = /^\s+(?=[.,;:!?)\]])/
 const WORD_START = /^[\p{L}\p{N}]/u
 const OPEN_END = /[\s([{"'“‘]$/
+const TRAILING_SPACE = /\s+$/u
+const NO_BREAK_SPACE = '\u00A0'
 
 function citationSpacing(nodes: MarkdownInlineNode[]): MarkdownInlineNode[] {
   if (!nodes.some((node) => node.type === 'citation')) return nodes
@@ -71,7 +73,7 @@ function citationSpacing(nodes: MarkdownInlineNode[]): MarkdownInlineNode[] {
     const before = nodes[index - 1]
     const after = nodes[index + 1]
     if (node.type === 'citation') {
-      if (before?.type === 'citation') out.push({ type: 'text', value: ' ' })
+      if (before?.type === 'citation') out.push({ type: 'text', value: NO_BREAK_SPACE })
       out.push(node)
       return
     }
@@ -84,7 +86,10 @@ function citationSpacing(nodes: MarkdownInlineNode[]): MarkdownInlineNode[] {
       value = value.replace(CLOSING, '')
       if (WORD_START.test(value)) value = ` ${value}`
     }
-    if (after?.type === 'citation' && !OPEN_END.test(value)) value = `${value} `
+    if (after?.type === 'citation') {
+      const trimmed = value.replace(TRAILING_SPACE, '')
+      if (trimmed !== value || !OPEN_END.test(value)) value = `${trimmed}${NO_BREAK_SPACE}`
+    }
     out.push({ type: 'text', value })
   })
   return out

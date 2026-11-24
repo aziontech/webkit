@@ -259,13 +259,18 @@
         />
       </li>
     </ul>
-    <p
+    <div
       v-else-if="!items.length"
-      :class="NOTE_CLASS"
       :data-testid="`${testId}__empty`"
+      class="flex flex-col gap-(--spacing-2xs) px-(--spacing-sm)"
     >
-      {{ t('conversationHistory.emptyTitle') }}
-    </p>
+      <p class="m-0 text-label-md text-(--text-default)">
+        {{ t('conversationHistory.emptyTitle') }}
+      </p>
+      <p class="m-0 text-body-sm text-(--text-muted)">
+        {{ t('conversationHistory.emptyDescription') }}
+      </p>
+    </div>
     <p
       v-else-if="!visibleItems.length"
       :class="NOTE_CLASS"

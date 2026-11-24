@@ -140,6 +140,10 @@ describe('ArtifactCanvas', () => {
     })
     const header = view.container.querySelector('header')!
     expect(header.lastElementChild).toHaveAccessibleName('Close a.sql')
+    const title = view.getByTestId('artifact-canvas__title')
+    expect(title.hasAttribute('dir')).toBe(false)
+    expect(getComputedStyle(title).direction).toBe('rtl')
+    expect(title.querySelector('bdi')?.textContent).toBe('a.sql')
     host.remove()
   })
 

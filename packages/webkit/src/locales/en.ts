@@ -289,6 +289,7 @@ export const conversationHistory = {
   previous30: 'Previous 30 days',
   older: 'Older',
   emptyTitle: 'No conversations yet.',
+  emptyDescription: 'Your chats with the assistant appear here after you ask it something.',
   delete: 'Delete {title}',
   newChat: 'New chat',
   search: 'Search conversations',
