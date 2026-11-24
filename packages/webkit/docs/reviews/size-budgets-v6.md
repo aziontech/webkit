@@ -1747,3 +1747,5 @@ Budget-raise: attribute-editor 20.85 KB → 25.25 KB (measured 25.17 KB): render
 Budget-raise: tag-editor 22.75 KB → 27.2 KB (measured 27.12 KB): renders Hint, which is now the click-open note built on Popover and Link instead of the hover Tooltip (in-product help level C, owner-approved 2026-11-23).
 Budget-raise: schema-form 64.55 KB → 68.85 KB (measured 68.80 KB): renders Hint, which is now the click-open note built on Popover and Link instead of the hover Tooltip (in-product help level C, owner-approved 2026-11-23).
 Budget-raise: hint 6.4 KB → 10.7 KB (measured 10.64 KB): Hint is now the click-open note: it composes Popover (trigger, panel, focus return, light dismiss) and a docs Link instead of the hover Tooltip (in-product help level C, owner-approved 2026-11-23).
+
+Budget-raise: llms-full.txt 2,400,000 → 2,415,000 bytes (measured 2,405,402): in-product help (HELP-1 to HELP-C-3), the click-open Hint, the ConsoleLayout.ToolsTrigger part and their spec, example and guidance pages in the full AI bundle.

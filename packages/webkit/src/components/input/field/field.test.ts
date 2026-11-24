@@ -327,7 +327,9 @@ describe('Field', () => {
     it('renders the hint glyph beside a label with hint, described by the hint text', () => {
       const view = render(RequiredAndDisabled)
       const glyph = view.getByRole('button', { name: 'More information' })
-      expect(glyph).toHaveAccessibleDescription('Lowercase letters, numbers and hyphens.')
+      expect(glyph).toHaveAccessibleDescription(
+        "The name appears in the console and in the application's default domain."
+      )
     })
 
     it('opens the hint on a click without focusing or toggling the labelled control', async () => {
