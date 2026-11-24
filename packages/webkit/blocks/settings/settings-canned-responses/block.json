@@ -4,7 +4,7 @@
   "title": "Blocks/Settings/SettingsCannedResponses",
   "surface": "app",
   "stability": "preview",
-  "keyboard": { "entry": "field" },
+  "keyboard": { "entry": "page" },
   "summary": "The admin page for the saved replies support agents insert into a ticket (macros, canned responses, saved replies): a `PageHeader` with New response, a `PropertyFilter` that searches title and body and filters by folder and visibility, and a `DataTable` of responses (title with the first line of the reply, folder `Tag`, visibility Personal / Team / Everyone, last used with `TableCellTime`, usage count) with Edit, Duplicate and Delete in `TableCellActions`. A row opens a `Drawer` to edit: title, folder `Combobox` that takes a new folder, visibility `RadioGroup`, the reply in a `MarkdownEditor` with an Insert placeholder `DropdownMenu` that writes `{{ticket.requester.first_name}}` at the caret, and an optional ticket status `Select` applied when the reply is sent. Delete asks in a `ConfirmDialog`. The page owns loading, first-use empty, no match, a load error with Retry, saving and a save error that keeps the values. A page body for ConsoleLayout.",
   "preview": {
     "layout": "fullscreen",
