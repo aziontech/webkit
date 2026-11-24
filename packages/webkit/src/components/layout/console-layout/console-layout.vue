@@ -230,7 +230,7 @@
 
   const MAIN_CLASS =
     'flex min-h-full min-w-0 flex-col animate-page-enter ' +
-    'has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden ' +
+    'has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:min-h-0 has-[>[data-layout-fill]]:flex-1 has-[>[data-layout-fill]]:overflow-hidden ' +
     'motion-reduce:animate-none ' +
     '[&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1'
 </script>

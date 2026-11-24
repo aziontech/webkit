@@ -3,9 +3,9 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 14
+spec_version: 15
 template: 2
-checksum: 487a69c8ef8dcdb2a110808e9da77032e5423b99bffb47715c1e005dce7b16df
+checksum: 0f55a36bdcdaa83e632094614cb58ee00c21273150313ebe5c6941518dfbdb70
 created: 2026-11-12
 last_updated: 2026-11-23
 ---
@@ -189,7 +189,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
-- Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
+- Fill: a direct child of the `<main>` with `data-layout-fill` makes the main a `flex-1 min-h-0 h-full overflow-hidden` item of `AppLayout`'s body (which turns into a fixed-height flex column while it holds a fill page), and the child `flex-1 min-h-0`; pure CSS, right in the server render. The page then never scrolls as a whole: a chat keeps its composer pinned and scrolls only its thread, at every width (styled test `src/test/layout-fill.test.ts`).
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
 - Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.

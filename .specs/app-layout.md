@@ -3,11 +3,11 @@ name: app-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 0f94613b6dfd131a6ab7210e5d95ddceb357282203e63a6a520aa8a4de8c4237
+checksum: fb7eb660dfedc9b0d01f1eb16a34d15c47f7ba73218f233b36040ad44c830844
 created: 2026-11-11
-last_updated: 2026-11-19
+last_updated: 2026-11-23
 ---
 
 # AppLayout — Component Spec
@@ -167,6 +167,7 @@ The only events are the `update:*` of the models above.
 - `data-navigation`, `data-tools`, `data-split-panel` on the root: `open` | `closed`.
 - `data-split-panel-position` on the root: `bottom` | `side` (always `bottom` while compact).
 - `data-resizing` on the split separator while it is dragged.
+- Fill: while the body holds an element with `data-layout-fill`, the body is a `flex flex-col min-h-0` item of the content region, so a page that fills (a chat, an editor) gets the exact height under the header and scrolls inside itself instead of scrolling the content region.
 - First render (server and client) is the wide layout; the compact layout applies after mount, once the layout has measured itself.
 
 ## Motion & Animations

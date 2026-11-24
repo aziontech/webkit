@@ -318,7 +318,7 @@
             </div>
             <div
               :data-testid="`${testId}__body`"
-              class="min-w-0 flex-1"
+              class="min-w-0 flex-1 has-[[data-layout-fill]]:flex has-[[data-layout-fill]]:min-h-0 has-[[data-layout-fill]]:flex-col"
             >
               <slot />
             </div>
