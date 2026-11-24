@@ -39911,6 +39911,114 @@
    ],
    "file": "catalog/blocks/view/view-template-browser.json"
   },
+  "view/view-ticket-inbox": {
+   "name": "ViewTicketInbox",
+   "title": "Blocks/View/ViewTicketInbox",
+   "source": "blocks/view/view-ticket-inbox/view-ticket-inbox.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more) and Close, each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.",
+   "intents": [
+    "ticket inbox",
+    "support inbox",
+    "helpdesk",
+    "help desk views",
+    "ticket list",
+    "ticket queue",
+    "agent inbox",
+    "support queue",
+    "saved views",
+    "unassigned tickets",
+    "overdue tickets",
+    "sla countdown",
+    "bulk assign tickets",
+    "caixa de entrada de tickets",
+    "caixa de suporte",
+    "fila de chamados",
+    "lista de tickets",
+    "lista de chamados",
+    "visões salvas",
+    "chamados sem responsável",
+    "chamados atrasados",
+    "atribuir chamados em massa"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "CollectionPreferences",
+    "ConfigProvider",
+    "Countdown",
+    "DataTable",
+    "DataTablePagination",
+    "DropdownMenuItem",
+    "DropdownMenuRoot",
+    "DropdownMenuTrigger",
+    "EmptyState",
+    "IconButton",
+    "PageHeader",
+    "PriorityTag",
+    "PropertyFilter",
+    "Select",
+    "TableCellLink",
+    "TableCellStatus",
+    "TableCellTime",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/config-provider",
+    "@aziontech/webkit/countdown",
+    "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
+    "@aziontech/webkit/dropdown-menu-item",
+    "@aziontech/webkit/dropdown-menu-root",
+    "@aziontech/webkit/dropdown-menu-trigger",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/priority-tag",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/table-cell-link",
+    "@aziontech/webkit/table-cell-status",
+    "@aziontech/webkit/table-cell-time",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The support agent's inbox. An agent opens a saved view (their own open tickets, the unassigned queue, what is overdue), scans what needs an answer first, opens a ticket, and moves several tickets at once: assigns them, changes their status, merges duplicates or closes them. It follows Zendesk views, the Freshdesk ticket list and the Help Scout mailbox, on the house list page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
+   "variants": [
+    {
+     "name": "Empty"
+    },
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    },
+    {
+     "name": "Filtered"
+    },
+    {
+     "name": "Selected"
+    }
+   ],
+   "file": "catalog/blocks/view/view-ticket-inbox.json"
+  },
   "view/view-waf-tuning": {
    "name": "ViewWafTuning",
    "title": "Blocks/View/ViewWafTuning",

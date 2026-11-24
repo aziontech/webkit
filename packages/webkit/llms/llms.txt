@@ -132,6 +132,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ViewRuleList (view/view-rule-list)](blocks/view/view-rule-list.md): An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only).
 - [ViewTable (view/view-table)](blocks/view/view-table.md): The first-level index of one resource type, in rows.
 - [ViewTemplateBrowser (view/view-template-browser)](blocks/view/view-template-browser.md): The catalog of templates a person starts a project from.
+- [ViewTicketInbox (view/view-ticket-inbox)](blocks/view/view-ticket-inbox.md): Preview. The support agent's inbox.
 - [ViewWafTuning (view/view-waf-tuning)](blocks/view/view-waf-tuning.md): The Tuning tab of a WAF rule set.
 
 ## Components: Actions
