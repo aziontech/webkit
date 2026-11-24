@@ -4,6 +4,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import type { SplitButtonItem } from '../../action/split-button/split-button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import DocProse from '../../docs/doc-prose/doc-prose.vue'
@@ -181,6 +182,10 @@
 
   const hasRail = computed(() => Boolean(props.share || props.community || props.copyPage))
 
+  const parentCrumb = computed(() =>
+    [...props.trail].reverse().find((crumb) => !crumb.active && safeHref(crumb.href) !== null)
+  )
+
   const spy = (): void => {
     const nodes = proseEl.value?.querySelectorAll<HTMLElement>('h2[id], h3[id]') ?? []
     let current = ''
@@ -204,6 +209,11 @@
   useEventListener(globalThis.window, 'scroll', spy, { passive: true })
 
   onMounted(spy)
+
+  const BACK_LINK_CLASS =
+    'inline-flex min-h-10 items-center gap-(--spacing-2xs) self-start rounded-(--shape-control) text-body-sm text-(--text-muted) no-underline ' +
+    'transition-colors duration-150 ease-out hover:text-(--text-default) motion-reduce:transition-none ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) sm:hidden'
 
   const ARTICLE_GRID_CLASS =
     'grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(var(--size-44),1fr)_minmax(0,var(--container-2xl))_minmax(var(--size-44),1fr)] ' +
@@ -251,7 +261,20 @@
               <Breadcrumb
                 v-if="trail.length > 0"
                 :items="trail"
+                :class="parentCrumb ? 'max-sm:hidden' : undefined"
               />
+              <a
+                v-if="parentCrumb"
+                :href="safeHref(parentCrumb.href) ?? undefined"
+                :data-testid="`${testId}__back`"
+                :class="BACK_LINK_CLASS"
+              >
+                <i
+                  class="az az-chevron-left"
+                  aria-hidden="true"
+                />
+                {{ parentCrumb.label }}
+              </a>
               <HeroTitle
                 :eyebrow="eyebrow"
                 size="medium"
