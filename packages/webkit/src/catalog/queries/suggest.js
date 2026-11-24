@@ -45,7 +45,9 @@ function componentSuggestion(catalog, q, opts) {
       best: null,
       alternatives: [],
       weakMatches: search.matches.slice(0, 3),
-      message: `No WebKit component is made for "${q}". The weak matches only share a word with it: do not bend one into this job. Build the smallest custom piece from @aziontech/theme tokens and compose it with WebKit components (rule webkit-prefer-over-custom).`
+      message:
+        `No WebKit component is made for "${q}". The weak matches only share a word with it: do not bend one into this job. ` +
+        'Build the smallest custom piece from @aziontech/theme tokens and compose it with WebKit components (rule webkit-prefer-over-custom).'
     }
   }
   const [best, ...rest] = search.matches

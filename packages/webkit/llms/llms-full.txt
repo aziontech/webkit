@@ -1871,6 +1871,10 @@ table is in `/webkit-form` ("Pick the control from the kind of value"); for a ch
 | Another company's mark | `ThirdPartyLogo` | a hand-picked SVG |
 | Usage against a limit | `Progress` | a hand-drawn bar |
 | A file opened from a list (image, text, JSON, PDF) | `FilePreview` | an `iframe` or `img` by hand |
+| How urgent a ticket or task is (urgent, high, medium, low) | `PriorityTag` | a `Tag` with a hand-picked colour |
+| Time left before a deadline (a response target, an expiry) | `Countdown` | a relative-time string you refresh by hand |
+| The events of one record in order (ticket activity, audit history) | `Timeline` | a list of dated paragraphs |
+| The messages of a ticket or case (replies, internal notes) | `MessageThread` | chat bubbles built from `Card` |
 
 ### Look-alikes: which one
 

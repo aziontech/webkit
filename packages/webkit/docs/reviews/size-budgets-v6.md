@@ -1841,3 +1841,6 @@ Budget-raise: console-layout 85.95 KB → 86.45 KB (measured 86.38 KB): Avatar p
 Budget-raise: llms-full.txt 2,415,000 → 2,600,000 bytes (measured 2,526,886): seven new components and five new blocks, all preview (SUP-01).
 Budget-raise: package tarball packed 8,640,000 → 9,100,000 bytes (measured 8,907,697), unpacked 34,650,000 → 36,000,000 (measured 35,330,850): the same components, blocks, four editor icons and their generated docs (SUP-01).
 Budget-raise: css-icons 15.25 KB → 15.35 KB (measured 15.28 KB): the four MarkdownEditor toolbar glyphs (az-bold, az-italic, az-list-ordered, az-quote) in the icon font CSS (SUP-ME-5).
+Budget-raise: date-picker-root 14.9 KB → 14.95 KB (measured 14.93 KB): the merge of the quality-baselines stack into the 6.0 branch adds the branch's DatePicker `focus()` (exposed for a field that reports an error) to the stack's lazy panel split.
+Budget-raise: date-range-picker 56.75 KB → 58 KB (measured 57.98 KB): the merge into the 6.0 branch puts the branch's NumberInput for the relative duration (the text-only Input change) into the stack's relative part, so the picker now carries NumberInput.
+Budget-raise: filter-menu-root 33.7 KB → 33.75 KB (measured 33.73 KB): the merge into the 6.0 branch combines the branch's control changes with the stack's Avatar `presence`, both carried by the filter menu.
