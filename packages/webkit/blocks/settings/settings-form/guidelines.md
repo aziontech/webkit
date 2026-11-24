@@ -44,7 +44,7 @@ The Profile variant stacks one `SettingsGroup` per group (General, Company infor
 
 ### F. Shortcut keycap — `Kbd` (optional)
 
-A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`. The keycap sits in a `pointer-coarse:hidden` wrapper: a touch phone has no key to press, so the full-width button shows only its label there.
 
 ## Data
 

@@ -178,6 +178,11 @@ describe('settings/settings-form save shortcut', () => {
     const save = view.getByRole('button', { name: 'Save' })
     expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
     expect(save.querySelector('[data-testid="kbd"]')).not.toBeNull()
+    expect(
+      save
+        .querySelector('[data-testid="shortcut-hint"]')
+        ?.classList.contains('pointer-coarse:hidden')
+    ).toBe(true)
     const clean = pressShortcut('s')
     expect(clean.defaultPrevented).toBe(true)
     expect(view.emitted('submit')).toBeUndefined()

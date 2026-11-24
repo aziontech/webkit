@@ -289,12 +289,17 @@
                 aria-keyshortcuts="Meta+S Control+S"
               >
                 Save
-                <Kbd
-                  meta
-                  size="small"
+                <span
+                  class="pointer-coarse:hidden"
                   aria-hidden="true"
-                  >S</Kbd
+                  data-testid="shortcut-hint"
                 >
+                  <Kbd
+                    meta
+                    size="small"
+                    >S</Kbd
+                  >
+                </span>
               </Button>
             </template>
           </SaveBar>

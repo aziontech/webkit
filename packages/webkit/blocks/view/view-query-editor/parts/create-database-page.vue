@@ -262,12 +262,17 @@
                 :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
               >
                 Create Database
-                <Kbd
-                  meta
-                  key-name="enter"
-                  size="small"
+                <span
+                  class="pointer-coarse:hidden"
                   aria-hidden="true"
-                />
+                  data-testid="shortcut-hint"
+                >
+                  <Kbd
+                    meta
+                    key-name="enter"
+                    size="small"
+                  />
+                </span>
               </Button>
             </template>
           </SaveBar>
