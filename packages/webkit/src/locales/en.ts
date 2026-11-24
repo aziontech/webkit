@@ -1338,10 +1338,7 @@ export const citation = {
   label: 'Source {index}: {title}',
   labelMany: '{site} +{more}, sources {indexes}',
   labelUntitled: 'Source {index}',
-  labelWithSite: 'Source {index}, {site}: {title}',
-  next: 'Next source',
-  page: '{current}/{total}',
-  previous: 'Previous source'
+  labelWithSite: 'Source {index}, {site}: {title}'
 } as const
 
 export const conversation = {

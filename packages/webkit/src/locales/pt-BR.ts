@@ -72,10 +72,7 @@ export const ptBR: Messages = {
     label: 'Fonte {index}: {title}',
     labelUntitled: 'Fonte {index}',
     labelWithSite: 'Fonte {index}, {site}: {title}',
-    labelMany: '{site} +{more}, fontes {indexes}',
-    next: 'Próxima fonte',
-    page: '{current}/{total}',
-    previous: 'Fonte anterior'
+    labelMany: '{site} +{more}, fontes {indexes}'
   },
   conversation: {
     label: 'Conversa',

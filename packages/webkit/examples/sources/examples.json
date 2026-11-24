@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Four sources behind a response, collapsed into the `Sources` pill with the overlapping marks of the first three cited sites: an icon, or a letter on a colour of its own. Pressing it opens a side panel (a bottom sheet on a phone) that lists the cited sources under Citations and the one the answer searched but did not cite under More.",
+      "summary": "Four sources behind a response, collapsed into the `Sources` pill with the overlapping marks of the first three cited sites. Pressing it opens a panel in place, anchored to the pill, that lists the cited sources under Citations and the one the answer searched but did not cite under More.",
       "file": "default.vue"
     },
     {

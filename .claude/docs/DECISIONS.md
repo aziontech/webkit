@@ -878,3 +878,10 @@ This register starts from the review of 12–16 November 2026 (192 rows: 178 don
 | ----- | -------- | ------ | ----- |
 | OI-01 | OutcomeIcon stays a component: the filled two-colour disc, the draw-in animation and the translated screen-reader name are things an icon cannot do. It is for the moment a run ends (an outcome screen, a checklist of finished items). Steps that can still be running and every small static mark use the outline `az-circle-*` icons. | implemented | `.specs/outcome-icon.md` § When NOT to use |
 | OI-02 | A status icon on a surface takes its `-mark` colour, never `-foreground` (made for the pale fill, near black in light) or the raw fill colour. Fixed in DeploymentLogs, Trace, TutorialPanel (its `--text-success` token does not exist) and two blocks; the token descriptions now say the same. | implemented | `deployment-logs.vue`, `trace-rows.vue`, `tutorial-panel.vue`, `choose-settings-page.vue`, `import-preview.vue`, `token-purpose.js` |
+
+## 2026-11-23 — Citations and sources like ChatGPT
+
+| ID     | Decision | Status | Where |
+| ------ | -------- | ------ | ----- |
+| CITE-1 | Owner, 2026-11-23: hovering an inline citation shows one card that stacks every source it cites (mark and site, linked title, `publisher · date`, a line between sources), with no pager. `SourcesItem` gains `publisher` and `publishedAt`. | done | `.specs/citation.md`, `.specs/sources.md`, `sources/parts/sources-item.vue` |
+| CITE-2 | Owner, 2026-11-23: the `Sources` pill never opens a drawer; it opens its list in place, in a `Popover` anchored to the pill (Citations, then More). | done | `.specs/sources.md`, `sources.vue` |

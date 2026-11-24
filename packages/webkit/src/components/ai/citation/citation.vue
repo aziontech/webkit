@@ -3,11 +3,10 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import { safeHref } from '../../../utils/safe-href'
-  import IconButton from '../../action/icon-button/icon-button.vue'
   import HoverCard from '../../overlay/hover-card/hover-card.vue'
   import HoverCardContent from '../../overlay/hover-card/hover-card-content/hover-card-content.vue'
   import HoverCardTrigger from '../../overlay/hover-card/hover-card-trigger/hover-card-trigger.vue'
+  import SourcesItemPart from '../sources/parts/sources-item.vue'
   import SourcesMark from '../sources/parts/sources-mark.vue'
   import type { SourcesItem } from '../sources/types'
   import { sourceName, sourceSite } from '../sources/types'
@@ -34,11 +33,10 @@
   }
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ citation: en.citation, common: en.common })
+  const { t } = useTranslate({ citation: en.citation })
   const cardId = `${useId()}-card`
 
   const open = ref<boolean>(false)
-  const page = ref<number>(0)
   const chipEl = ref<globalThis.HTMLButtonElement | null>(null)
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'citation')
@@ -50,9 +48,6 @@
   )
   const first = computed<CitedSource | undefined>(() => cited.value[0])
   const more = computed<number>(() => cited.value.length - 1)
-  const current = computed<CitedSource | undefined>(
-    () => cited.value[Math.min(page.value, cited.value.length - 1)]
-  )
   const text = computed<string>(() => (first.value ? sourceName(first.value.item) : ''))
   const numbers = computed<string>(() => props.indexes.join(', '))
   const label = computed<string>(() => {
@@ -73,8 +68,6 @@
       })
     return t('citation.label', { index: source.index, title: source.item.title })
   })
-  const currentHref = computed<string | null>(() => safeHref(current.value?.item.href))
-  const external = computed<boolean>(() => /^https?:\/\//i.test(currentHref.value ?? ''))
 
   function onClick(event: globalThis.MouseEvent): void {
     const pointer = 'pointerType' in event ? event.pointerType : ''
@@ -94,7 +87,6 @@
 
   watch(open, (value) => {
     if (!value) return stopListening()
-    page.value = 0
     globalThis.document?.addEventListener('pointerdown', onDocumentPointerdown)
   })
 
@@ -104,10 +96,6 @@
     'relative inline-flex h-5 max-w-48 items-center gap-(--spacing-2xs) rounded-(--shape-control) bg-(--bg-selected) ps-(--spacing-2xs) pe-(--spacing-xs) align-middle ' +
     'text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
     'hover:bg-(--bg-active) data-[state=open]:bg-(--bg-active) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
-
-  const LINK_CLASS =
-    'line-clamp-2 rounded-(--shape-control) text-label-md text-(--text-default) underline-offset-2 hover:underline ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -153,77 +141,22 @@
       </button>
     </HoverCardTrigger>
     <HoverCardContent :data-testid="`${testId}__card`">
-      <div
-        v-if="current"
+      <ol
         :id="cardId"
-        class="flex flex-col gap-(--spacing-xs)"
+        :data-testid="`${testId}__list`"
+        class="m-0 flex list-none flex-col divide-y divide-(--border-default) p-0"
       >
-        <span
-          class="flex min-w-0 items-center gap-(--spacing-xs) text-label-sm text-(--text-muted)"
+        <li
+          v-for="(source, i) in cited"
+          :key="`${i}-${source.index}`"
+          class="py-(--spacing-sm) first:pt-0 last:pb-0"
         >
-          <SourcesMark :item="current.item" />
-          <span class="truncate">{{ sourceName(current.item) }}</span>
-        </span>
-        <a
-          v-if="currentHref"
-          :href="currentHref"
-          :target="external ? '_blank' : undefined"
-          :rel="external ? 'noopener noreferrer' : undefined"
-          :data-testid="`${testId}__link`"
-          :class="LINK_CLASS"
-        >
-          {{ current.item.title
-          }}<template v-if="external"
-            >{{ ' ' }}<span class="sr-only">{{ t('common.newTab') }}</span
-            ><i
-              class="az az-external-link ms-1 inline-block text-body-xs leading-none"
-              aria-hidden="true"
-          /></template>
-        </a>
-        <span
-          v-else
-          class="line-clamp-2 text-label-md text-(--text-default)"
-        >
-          {{ current.item.title }}
-        </span>
-        <p
-          v-if="current.item.description"
-          class="m-0 line-clamp-3 text-body-sm text-(--text-muted)"
-        >
-          {{ current.item.description }}
-        </p>
-        <div
-          v-if="more > 0"
-          :data-testid="`${testId}__pager`"
-          class="flex items-center justify-end gap-(--spacing-2xs)"
-        >
-          <IconButton
-            icon="az az-chevron-left"
-            :aria-label="t('citation.previous')"
-            variant="ghost"
-            size="small"
-            :disabled="page === 0"
-            :data-testid="`${testId}__previous`"
-            @click="page -= 1"
+          <SourcesItemPart
+            :item="source.item"
+            :data-testid="`${testId}__item`"
           />
-          <span
-            aria-live="polite"
-            :data-testid="`${testId}__page`"
-            class="text-label-sm text-(--text-muted) tabular-nums"
-          >
-            {{ t('citation.page', { current: page + 1, total: cited.length }) }}
-          </span>
-          <IconButton
-            icon="az az-chevron-right"
-            :aria-label="t('citation.next')"
-            variant="ghost"
-            size="small"
-            :disabled="page >= cited.length - 1"
-            :data-testid="`${testId}__next`"
-            @click="page += 1"
-          />
-        </div>
-      </div>
+        </li>
+      </ol>
     </HoverCardContent>
   </HoverCard>
   <span
