@@ -31,6 +31,11 @@
       "name": "Pattern",
       "summary": "Generated marble marks for organizations with no logo: each name seeds its own mark, in the default palette and in a palette passed through colors.",
       "file": "pattern.vue"
+    },
+    {
+      "name": "Presence",
+      "summary": "Each `presence` value on initials, and the dot on a photo and a square avatar at every size; the presence joins the accessible name (\"John Smith, away\").",
+      "file": "presence.vue"
     }
   ]
 }

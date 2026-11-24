@@ -1729,6 +1729,55 @@ Budget-raise: hero-form-section 54.2 KB → 54.25 KB (measured 54.20 KB): carrie
 Budget-raise: job-posting-section 59.8 KB → 59.9 KB (measured 59.85 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: newsletter-section 13.95 KB → 14 KB (measured 13.96 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
 Budget-raise: feedback-reason-dialog 34.55 KB → 34.6 KB (measured 34.56 KB): carries FieldLabel, which now renders the hidden "Required" text a control without aria-required points to; the visible "(Required)" word is gone (REQ-1).
+Budget-raise: console-layout-root 83.4 KB → 83.9 KB (measured 83.87 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: doc-markdown 40.9 KB → 41 KB (measured 40.93 KB): the shared locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: quote 15.25 KB → 15.75 KB (measured 15.69 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: quote-tabs 24.6 KB → 25.1 KB (measured 25.05 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: console-application-scene 123.85 KB → 124.3 KB (measured 124.24 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: console-trace-scene 85.4 KB → 85.9 KB (measured 85.83 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: article-body-section 47.45 KB → 47.95 KB (measured 47.88 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: article-index-section 37.6 KB → 38.05 KB (measured 37.99 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: network-section 27.25 KB → 27.7 KB (measured 27.67 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: client-quotes-section 27.7 KB → 28.15 KB (measured 28.10 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: logo-wall-section 24.7 KB → 25.2 KB (measured 25.13 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: recognition-marquee-section 21.75 KB → 22.2 KB (measured 22.17 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.82 KB): the locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.00 KB): the locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: locales-es 12.1 KB → 12.2 KB (measured 12.15 KB): the locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: table-cell-time 19.05 KB → 19.55 KB (measured 19.52 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: filter-menu 37.2 KB → 37.6 KB (measured 37.55 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: filter-menu-root 33.35 KB → 33.7 KB (measured 33.65 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: filter-menu-chip-group 22 KB → 22.5 KB (measured 22.45 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: avatar 12.25 KB → 12.8 KB (measured 12.77 KB): Avatar gains the `presence` prop (SUP-04): the presence dot, its shape cut-out and its name in the accessible label, with four presence words and a template in the locale catalogs.
+Budget-raise: table-filter 6.65 KB → 6.75 KB (measured 6.69 KB): the shared locale catalogs gain the five Avatar presence strings (SUP-04).
+Budget-raise: console-layout 84.7 KB → 85.2 KB (measured 85.15 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: app-header-account 13.85 KB → 14.4 KB (measured 14.34 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: locales-es 12.1 KB → 12.2 KB (measured 12.10 KB): the Timeline strings (`timeline.label`, `timeline.loading`, SUP-TL-1) in the shared catalog, a budget with no headroom.
+Budget-raise: timestamp 20.35 KB → 20.5 KB (measured 20.41 KB): the shared minute clock now stops while the document is hidden (SUP-CD-2), and the English catalog it carries gained the `countdown` strings.
+Budget-raise: table-cell-time 19.05 KB → 19.2 KB (measured 19.13 KB): the shared minute clock now stops while the document is hidden (SUP-CD-2), and the English catalog it carries gained the `countdown` strings.
+Budget-raise: config-provider 12.8 KB → 12.9 KB (measured 12.85 KB): the English catalog gained the `countdown` strings (SUP-CD-1).
+Budget-raise: locales-pt-BR 12 KB → 12.1 KB (measured 12.05 KB): the Portuguese catalog gained the `countdown` strings (SUP-CD-1).
+Budget-raise: locales-es 12.1 KB → 12.25 KB (measured 12.18 KB): the Spanish catalog gained the `countdown` strings (SUP-CD-1).
+Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.81 KB): carries the three locale catalogs, which gain the `rating` strings (star names in plural forms, the score summary, "Not rated", "Clear rating"; SUP-RT).
+Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.00 KB): the `rating` strings (SUP-RT).
+Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.13 KB): the `rating` strings (SUP-RT).
+Budget-raise: package packedBytes 8,620,000 → 8,630,000 bytes (measured 8,625,782): the `Rating` component, its test, five examples and its catalog and llms pages (SUP-RT).
+Budget-raise: config-provider 12.8 KB → 12.85 KB (measured 12.81 KB): the English catalog it bundles gains the six PriorityTag strings, the hidden "Priority:" prefix and the five level names (SUP-PT-2).
+Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.13 KB): the Spanish catalog gains the six PriorityTag strings (SUP-PT-2).
+Budget-raise: config-provider 12.8 KB → 13.05 KB (measured 12.95 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: locales-pt-BR 12 KB → 12.25 KB (measured 12.15 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: locales-es 12.1 KB → 12.4 KB (measured 12.28 KB): the 23 MessageThread strings (support-ticket conversation, SUP-01, preview) in the shared catalogs.
+Budget-raise: config-provider 12.8 KB → 13.25 KB (measured 13.19 KB): combined, the English catalog it bundles gains the strings of all six support components (MessageThread, Timeline, Countdown, Rating, PriorityTag, Avatar presence; SUP-01, preview); supersedes the per-lane lines above.
+Budget-raise: locales-pt-BR 12 KB → 12.45 KB (measured 12.40 KB): the same support-component strings in Portuguese, combined (SUP-01).
+Budget-raise: locales-es 12.1 KB → 12.6 KB (measured 12.54 KB): the same support-component strings in Spanish, combined (SUP-01).
+Budget-raise: table-cell-time 19.2 KB → 19.7 KB (measured 19.62 KB): the shared minute clock now pauses while the page is hidden (SUP-CD-2) and the catalog it reads grew with the support strings.
+Budget-raise: markdown-editor 31.8 KB → 31.9 KB (measured 31.83 KB): the exposed `insert(text)` (caret or selection, one undo step, back to Write from Preview at the remembered selection) that blocks call instead of finding the textarea by id (SUP-PL-2); still under the 32 KB ceiling of its spec.
+Budget-raise: config-provider 13.25 KB → 14.3 KB (measured 14.16 KB; 13.35 KB before this change, already over from the support strings): a provider now inherits every unset value from the provider above and reads the page's direction after mount through the shared `useDirection` observer (imported by ConfigProvider only, so no other entry grows), so overlays under `<html dir="rtl">` open on the correct side (SUP-CP-1).
+Budget-raise: locales-pt-BR 12.45 KB → 12.65 KB (measured 12.57 KB): the final support-component strings (MarkdownEditor, Countdown right-to-left, MessageThread v2) in Portuguese, combined (SUP-01).
+Budget-raise: locales-es 12.6 KB → 12.8 KB (measured 12.70 KB): the same strings in Spanish (SUP-01).
+Budget-raise: llms-full.txt 2,400,000 → 2,600,000 bytes (measured 2,522,167): seven new components and five new blocks, all preview (SUP-01); the base had 43 bytes of headroom.
+Budget-raise: catalog.json 1,400,000 → 1,470,000 bytes (measured 1,437,275) and catalog/ 1,415,000 → 1,490,000 (measured 1,453,840): the same components and blocks (SUP-01).
+Budget-raise: package tarball packed 8,630,000 → 9,100,000 bytes (measured 8,888,476), unpacked 34,650,000 → 36,000,000 (measured 35,270,443): the same components, blocks, four editor icons and their generated docs (SUP-01).
 
 Budget-raise: field 9.2 KB → 9.25 KB (measured 9.22 KB): the lone required asterisk (REQ-1) and the follow-up Tooltip fix, measured together after merging PR #1203's newer commits
 Budget-raise: schema-form 64.5 KB → 64.55 KB (measured 64.50 KB): same combination (REQ-1 field marker with the follow-up fixes)
@@ -1964,3 +2013,22 @@ Budget-raise: media-tabs 10.45 KB → 10.5 KB (measured 10.49 KB): `useAutoplayP
 Budget-raise: quote-tabs 24.85 KB → 24.9 KB (measured 24.85 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
 Budget-raise: client-quotes-section 28.05 KB → 28.1 KB (measured 28.07 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
 Budget-raise: feature-tabs-section 60.35 KB → 60.45 KB (measured 60.40 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
+Budget-raise: console-layout-root 84.25 KB → 84.8 KB (measured 84.74 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: doc-markdown 41.05 KB → 41.15 KB (measured 41.09 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: console-application-scene 126.4 KB → 126.85 KB (measured 126.79 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: console-trace-scene 85.5 KB → 86 KB (measured 85.92 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: article-body-section 47.5 KB → 48 KB (measured 47.93 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: article-index-section 37.95 KB → 38.45 KB (measured 38.37 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: feature-widgets-section 20.3 KB → 20.4 KB (measured 20.34 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: network-section 27.6 KB → 28.15 KB (measured 28.06 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: client-quotes-section 27.85 KB → 28.35 KB (measured 28.30 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: logo-wall-section 24.9 KB → 25.4 KB (measured 25.34 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: recognition-marquee-section 21.85 KB → 22.35 KB (measured 22.30 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: cli-terminal-section 47.65 KB → 47.75 KB (measured 47.66 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: config-provider 12.9 KB → 14.25 KB (measured 14.18 KB): the ConfigProvider page-direction and inheritance fix (SUP-CP-1) on top of #1203's own fix.
+Budget-raise: streaming-response 43.35 KB → 43.4 KB (measured 43.35 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: filter-menu 37.6 KB → 37.7 KB (measured 37.62 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: console-layout 85.95 KB → 86.45 KB (measured 86.38 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
+Budget-raise: llms-full.txt 2,415,000 → 2,600,000 bytes (measured 2,526,886): seven new components and five new blocks, all preview (SUP-01).
+Budget-raise: package tarball packed 8,640,000 → 9,100,000 bytes (measured 8,907,697), unpacked 34,650,000 → 36,000,000 (measured 35,330,850): the same components, blocks, four editor icons and their generated docs (SUP-01).
+Budget-raise: css-icons 15.25 KB → 15.35 KB (measured 15.28 KB): the four MarkdownEditor toolbar glyphs (az-bold, az-italic, az-list-ordered, az-quote) in the icon font CSS (SUP-ME-5).

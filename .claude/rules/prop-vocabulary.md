@@ -34,6 +34,7 @@ In the tables below, staged entries are marked _(staged)_.
 | Visual variant (the look)                    | `variant`                                                              | component union                                            | `appearance`, `intent`, `headerVariant`, `mediaKind`, `cardStyle`, `kind`, `look`, `styleVariant` |
 | Sort of part (cell, page button, axis)       | `type`                                                                 | component union                                            | `kind` (via the look entry)                                                                       |
 | Severity (colour meaning)                    | `severity`                                                             | `neutral · info · success · warning · danger`              | `tone`                                                                                            |
+| Priority of a ticket or task                 | `priority`                                                             | `urgent · high · medium · low · none`                      | `urgency`, `importance`                                                                           |
 | Job or step status                           | `status`                                                               | `pending · running · success · error · canceled · skipped` | `state`, `phase`, `outcome`                                                                       |
 | Light-dismiss (outside-click / Esc)          | `dismissible`                                                          | `boolean`                                                  | `dismissable`, `closeable`                                                                        |
 | Explicit close affordance (X)                | `closable`                                                             | `boolean`                                                  | — (a different concept from `dismissible`)                                                        |
@@ -103,6 +104,7 @@ against its value map.
 | ------------------------------ | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `variant`                      | `primary · secondary · outline · ghost · danger · link`                    | `outlined`→`outline`, `transparent`→`ghost`, `text`→`ghost`, `destructive`→`danger`, `error`→`danger`                                                                                                                  |
 | `severity`                     | `neutral · info · success · warning · danger`                              | `error`→`danger`, `destructive`→`danger`; `default`, `secondary`, `alt` → `neutral`                                                                                                                                    |
+| `priority`                     | `urgent · high · medium · low · none`                                      | `highest`, `critical`, `blocker` → `urgent`; `normal` → `medium`; `lowest` → `low`; `no-priority` → `none`                                                                                                             |
 | `status`                       | `pending · running · success · error · canceled · skipped` (+ `streaming`) | `done`, `ok`, `complete`, `completed`, `succeeded`, `finished` → `success`; `failed`, `failure`, `errored` → `error`; `cancelled` → `canceled`; `queued`, `waiting` → `pending`; `in-progress`, `progress` → `running` |
 | any `*Position`                | `leading · trailing`                                                       | `left`, `start`, `before`, `prefix` → `leading`; `right`, `end`, `after`, `suffix` → `trailing`                                                                                                                        |
 | `align`, `alignment`, `*Align` | `start · center · end`                                                     | `left`, `top` → `start`; `right`, `bottom` → `end`; `centered` → `center`                                                                                                                                              |
@@ -116,7 +118,7 @@ against its value map.
 
 ## Closed value sets
 
-The banned-value maps above catch the known wrong words. On top of them, five axes are a
+The banned-value maps above catch the known wrong words. On top of them, six axes are a
 **closed set**: every member of the union (resolved through local and imported aliases,
 `Exclude<…>` and `Extract<…>`) is a shared value or an extra the component documents in the
 machine source (`VARIANT_EXTRAS`, `SEVERITY_EXTRAS`, `STATUS_EXTRAS`, `ORIENTATION_EXTRAS` in
@@ -128,6 +130,7 @@ axis is the prop name or its `*<Axis>` suffix (`titleVariant`, `tagSeverity`).
 | `variant`     | `primary · secondary · outline · ghost · danger · link`                | the component's own looks, e.g. `avatar` circle·square, `chip` filled·dashed, `tag` accent·contrast·highlight, `texture` dots·grid·lines… |
 | `severity`    | `neutral · info · success · warning · danger`                          | `severity-tag` critical·high·medium·low (a security level); `chart` the `severity-*` palette                                              |
 | `status`      | `pending · running · success · error · canceled · skipped · streaming` | `prompt-input` ready; `tool-approval` approved·denied·expired; `tool-call` denied                                                         |
+| `priority`    | `urgent · high · medium · low · none`                                  | none (`priority-tag`, decision SUP-PT-1)                                                                                                  |
 | `orientation` | `horizontal · vertical`                                                | `field`, `flow-diagram` responsive; `scroll-area` both                                                                                    |
 | `size`        | `tiny · small · medium · large · xlarge`, ordered subset (see Size)    | none                                                                                                                                      |
 

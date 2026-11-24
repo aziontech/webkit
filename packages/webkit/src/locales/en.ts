@@ -61,7 +61,12 @@ export const attributeEditor = {
 
 export const avatar = {
   fallbackLabel: 'User avatar',
-  imageAlt: 'Avatar'
+  imageAlt: 'Avatar',
+  presenceOnline: 'online',
+  presenceAway: 'away',
+  presenceBusy: 'busy',
+  presenceOffline: 'offline',
+  withPresence: '{name}, {presence}'
 } as const
 
 export const avatarGroup = {
@@ -734,6 +739,31 @@ export const sidebarMenu = {
   expandNamed: 'Expand {label}'
 } as const
 
+export const messageThread = {
+  label: 'Conversation',
+  loading: 'Loading conversation',
+  loaded: 'Conversation loaded',
+  customer: 'Customer',
+  agent: 'Agent',
+  via: 'via {channel}',
+  email: 'Email',
+  chat: 'Chat',
+  phone: 'Phone',
+  web: 'Web form',
+  api: 'API',
+  internalNote: 'Internal note',
+  to: 'To: {addresses}',
+  cc: 'Cc: {addresses}',
+  showQuoted: 'Show quoted text',
+  hideQuoted: 'Hide quoted text',
+  showEarlier: {
+    one: 'Show {count} earlier message',
+    other: 'Show {count} earlier messages'
+  },
+  showEarlierAll: 'Show earlier messages',
+  earlier: 'Earlier messages'
+} as const
+
 export const multiSelect = {
   noMatch: 'No matches',
   loading: 'Loading options',
@@ -822,6 +852,15 @@ export const popover = {
   close: 'Close'
 } as const
 
+export const priorityTag = {
+  prefix: 'Priority:',
+  urgent: 'Urgent',
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low',
+  none: 'No priority'
+} as const
+
 export const progress = {
   label: 'Progress'
 } as const
@@ -879,6 +918,16 @@ export const propertyFilter = {
   expectedConnective: 'Join conditions with AND or OR before “{word}”.',
   danglingConnective: 'Add a condition after {connective}.',
   unclosedQuote: 'Close the quote that opens at character {position}.'
+} as const
+
+export const rating = {
+  star: {
+    one: '{count} star',
+    other: '{count} stars'
+  },
+  value: 'Rated {value} out of {max}',
+  empty: 'Not rated',
+  clear: 'Clear rating'
 } as const
 
 export const resizable = {
@@ -1111,6 +1160,23 @@ export const themeSwitcher = {
   system: 'System',
   dark: 'Dark',
   light: 'Light'
+} as const
+
+export const timeline = {
+  label: 'Activity',
+  loading: 'Loading activity'
+} as const
+
+export const countdown = {
+  label: '{label}:',
+  dueIn: 'Due in {duration}',
+  due: 'Due {relative}',
+  overdue: 'Overdue by {duration}',
+  duration: '{major} {minor}',
+  expiresIn: 'Expires in {duration}',
+  expires: 'Expires {relative}',
+  expired: 'Expired {relative}',
+  paused: 'Paused'
 } as const
 
 export const timestamp = {
@@ -1620,6 +1686,29 @@ export const dataTable = {
   reorderCancelled: 'Reorder cancelled.'
 } as const
 
+export const markdownEditor = {
+  label: 'Message',
+  write: 'Write',
+  preview: 'Preview',
+  toolbar: 'Formatting',
+  bold: 'Bold',
+  italic: 'Italic',
+  link: 'Link',
+  bulletedList: 'Bulleted list',
+  numberedList: 'Numbered list',
+  quote: 'Quote',
+  code: 'Code',
+  shortcut: '{label} ({keys})',
+  linkPlaceholder: 'url',
+  emptyTitle: 'Nothing to preview',
+  previewLoading: 'Loading preview',
+  mentionMenu: 'People',
+  mentionResults: {
+    one: '{count} person',
+    other: '{count} people'
+  }
+} as const
+
 export const en = {
   toolApproval,
   agentQuestion,
@@ -1701,6 +1790,7 @@ export const en = {
   logViewer,
   mapChart,
   sidebarMenu,
+  messageThread,
   multiSelect,
   navigationMenu,
   numberInput,
@@ -1712,12 +1802,14 @@ export const en = {
   phoneInput,
   transferList,
   popover,
+  priorityTag,
   progress,
   promptInput,
   promptQueue,
   propertyFilter,
   agentActivity,
   reasoning,
+  rating,
   resizable,
   schemaForm,
   subheader,
@@ -1751,7 +1843,9 @@ export const en = {
   tabs,
   tagEditor,
   themeSwitcher,
+  timeline,
   timestamp,
+  countdown,
   toast,
   toggleGroup,
   trace,
@@ -1776,5 +1870,6 @@ export const en = {
   docAgentCard,
   common,
   newsletterSection,
-  dataTable
+  dataTable,
+  markdownEditor
 }

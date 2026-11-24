@@ -87,9 +87,14 @@
         class="shrink-0 text-(--text-muted)"
         aria-hidden="true"
       />
-      <span class="min-w-0 truncate">{{ option.label }}</span>
+      <span
+        dir="auto"
+        class="min-w-0 truncate"
+        >{{ option.label }}</span
+      >
       <span
         v-if="option.description"
+        dir="auto"
         class="min-w-0 truncate text-body-xs text-(--text-muted)"
         >{{ option.description }}</span
       >

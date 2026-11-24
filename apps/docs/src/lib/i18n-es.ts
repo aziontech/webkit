@@ -75,6 +75,10 @@ export const es: Messages = {
   copied: 'Copiado',
   install: 'Añadir al proyecto',
   states: 'Estados',
+  stabilityPreview: 'Vista previa',
+  previewNote:
+    'Vista previa: la API todavía puede cambiar en una versión minor hasta que se marque como GA.',
+  previewLink: 'Cómo funcionan vista previa y GA',
   guidelines: 'Pautas',
   openInNewTab: 'Abrir en una pestaña nueva',
   usedComponents: 'Hecho con',

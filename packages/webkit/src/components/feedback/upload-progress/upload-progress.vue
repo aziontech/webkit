@@ -271,14 +271,14 @@
                 <span
                   v-else
                   class="truncate text-body-xs text-(--text-muted)"
-                  >{{
+                  ><bdi>{{
                     [
                       typeof item.size === 'number' ? formatFileSize(item.size) : '',
                       rowStatusText(item)
                     ]
                       .filter(Boolean)
                       .join(' · ')
-                  }}</span
+                  }}</bdi></span
                 >
               </div>
               <IconButton

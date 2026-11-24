@@ -9,6 +9,9 @@
   import { LOCALES, resolvedTheme, settings } from '../lib/settings'
   import { resources } from '../lib/store'
 
+  const SUPPORT_TICKET = '4812'
+  const SUPPORT_CUSTOMER = 'alex-morgan'
+
   const router = useRouter()
   const expanded = ref(false)
   const panelId = useId()
@@ -28,6 +31,11 @@
       settings: 'Account settings',
       onboarding: 'Onboarding',
       assistant: 'Agent',
+      inbox: 'Support: ticket inbox',
+      newTicket: 'Support: create a ticket',
+      ticket: 'Support: ticket',
+      customer: 'Support: customer',
+      cannedResponses: 'Support: canned responses',
       light: 'Switch to light theme',
       dark: 'Switch to dark theme',
       rtl: 'Switch to right-to-left',
@@ -48,6 +56,11 @@
       settings: 'Configurações da conta',
       onboarding: 'Onboarding',
       assistant: 'Agente',
+      inbox: 'Suporte: caixa de tickets',
+      newTicket: 'Suporte: criar um ticket',
+      ticket: 'Suporte: ticket',
+      customer: 'Suporte: cliente',
+      cannedResponses: 'Suporte: respostas prontas',
       light: 'Mudar para o tema claro',
       dark: 'Mudar para o tema escuro',
       rtl: 'Mudar para direita para a esquerda',
@@ -73,7 +86,20 @@
     },
     { value: '/settings', label: t.value.settings, icon: 'az az-settings' },
     { value: '/onboarding', label: t.value.onboarding, icon: 'az az-flag' },
-    { value: '/assistant', label: t.value.assistant, icon: 'az az-ask-azion' }
+    { value: '/assistant', label: t.value.assistant, icon: 'az az-ask-azion' },
+    { value: '/support', label: t.value.inbox, icon: 'az az-ticket' },
+    { value: '/support/tickets/new', label: t.value.newTicket, icon: 'az az-plus' },
+    { value: `/support/tickets/${SUPPORT_TICKET}`, label: t.value.ticket, icon: 'az az-comments' },
+    {
+      value: `/support/customers/${SUPPORT_CUSTOMER}`,
+      label: t.value.customer,
+      icon: 'az az-user'
+    },
+    {
+      value: '/support/settings/canned-responses',
+      label: t.value.cannedResponses,
+      icon: 'az az-reply'
+    }
   ])
 
   const onFlow = (_event: unknown, value: unknown) => router.push(String(value))

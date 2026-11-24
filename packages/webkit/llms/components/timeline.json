@@ -1,0 +1,112 @@
+{
+ "name": "timeline",
+ "binding": "Timeline",
+ "import": "@aziontech/webkit/timeline",
+ "treeShakeableImport": "@aziontech/webkit/timeline-root",
+ "category": "content",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/timeline-item",
+  "@aziontech/webkit/timeline-group"
+ ],
+ "purpose": "Use Timeline for the history of one record: a vertical list of dated events joined by a line, newest or oldest first, such as the activity of a ticket (status changed, assigned, SLA breached, merged), the audit trail of one resource or the deployment history of an application. Each event is a `Timeline.Item`: a marker (a dot or an icon in its severity's `-mark` colour, or any small component the app puts in its `marker` slot), a title that says what happened, an optional description, who did it, when it happened (a `Timestamp`) and any content the app adds under it (a quoted comment, a diff summary, a link). `Timeline.Group` gathers the events of one day (or any period) under a label. It is read-only and has no current position: unlike `Stepper` it does not move anyone through steps, unlike `Trace` it does not place spans on a clock, and unlike `LogViewer` it does not stream lines.",
+ "setup": null,
+ "useWhen": [
+  "Show the activity history of one ticket, order or incident: who changed the status, who it was assigned to, when an SLA was breached, when it was merged or closed.",
+  "Show the audit trail of one resource on its detail page: created, settings changed, key rotated, deleted.",
+  "Show the deployment or version history of one application, each deploy with its outcome and who started it.",
+  "Group a long history by day (\"Today\", \"November 21, 2026\") so a reader finds when something happened."
+ ],
+ "avoidWhen": [
+  "A searchable, sortable log of many records or a whole account (filter by user, export as CSV) → use `data-table` (the `account/account-activity-history` block).",
+  "Moving the reader through the ordered steps of a task, with a current step → use `stepper`.",
+  "The timed spans of one request or invocation → use `trace`.",
+  "Streaming build or runtime log lines with levels → use `log-viewer` (`log-viewer-steps` for known steps).",
+  "The state of a service across many periods at a glance (uptime) → use `tracker`.",
+  "The current state of one resource → use `status-indicator`.",
+  "The messages of an AI conversation → use `chat-message`; a timeline lists events about a record, not the messages themselves.",
+  "An agent's progress while it works → use `agent-activity`."
+ ],
+ "related": [
+  "`timestamp` — every item's `time` renders through it, so the reader can open the exact UTC and local value and copy it.",
+  "`status-indicator` — the current state of the record, usually in the detail header above its timeline.",
+  "`outcome-icon` — a small outcome mark the app can put in an item's `marker` slot when an event is a finished run.",
+  "`avatar` — the actor's picture, in an item's `marker` slot, when the people matter more than the event type.",
+  "`stepper` — the look-alike: a vertical rail of dots too, but for steps the reader moves through.",
+  "`empty-state` — what the page shows instead of a timeline that has no events."
+ ],
+ "bestPractices": [
+  "The title says what happened in plain words, past tense, with the changed value (\"Status changed to Solved\", \"Assigned to Sam Lee\"). Colour and icon only reinforce it; a reader who cannot see them still knows what happened.",
+  "Pick the severity from what the event means for the reader: `danger` for a breach or a failed deploy, `warning` for something that needs attention soon, `success` for a resolved or merged event, `info` for a notable but neutral change, `neutral` (the default) for routine changes. Most events are `neutral`, so the few coloured ones stand out.",
+  "Keep one order per timeline (newest first for activity people check often, oldest first for a history read as a story) and say which in the surrounding heading or copy when it is not obvious.",
+  "Use `Timeline.Group` for histories longer than a screen; format its `label` in the app with `useLocale` (a date, \"Today\", \"Yesterday\").",
+  "Put long content (a full comment, a diff) in the default slot, short and quoted; link to the full record rather than rendering it all.",
+  "`size=\"small\"` is for a side panel or a drawer; the page body uses `medium`.",
+  "When the history is empty, render an `EmptyState` in place of the timeline, not a timeline with no items."
+ ],
+ "props": [
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Density of every item: `small` for a side panel or drawer, `medium` for a page body."
+  },
+  {
+   "name": "timeFormat",
+   "type": "'relative' | 'local' | 'utc'",
+   "default": "'local'",
+   "required": "false",
+   "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`."
+  },
+  {
+   "name": "loadingLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`)."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list. Empty uses the locale catalog (`Activity`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "`Timeline.Item` children, or `Timeline.Group` children, in display order. Hidden while `loading`."
+  }
+ ],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/timeline/default.vue"
+  },
+  {
+   "name": "Groups",
+   "file": "examples/timeline/groups.vue"
+  },
+  {
+   "name": "Severities",
+   "file": "examples/timeline/severities.vue"
+  }
+ ],
+ "docs": "components/timeline.md"
+}

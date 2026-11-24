@@ -356,4 +356,14 @@ describe('StreamingResponse', () => {
     })
     await expectNoA11yViolations(container)
   })
+
+  it('merges the consumer class so it wins over the default typography', () => {
+    const { getByTestId } = render(StreamingResponse, {
+      props: { content: 'Plain text' },
+      attrs: { class: 'text-body-xs', 'data-testid': 'answer' }
+    })
+    const root = getByTestId('answer')
+    expect(root).toHaveClass('text-body-xs')
+    expect(root).not.toHaveClass('text-body-lg')
+  })
 })

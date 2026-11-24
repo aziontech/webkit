@@ -3613,6 +3613,14 @@
     ]
    },
    {
+    "concept": "priority of a ticket or task (urgent | high | medium | low | none)",
+    "canonical": "priority",
+    "aliases": [
+     "urgency",
+     "importance"
+    ]
+   },
+   {
     "concept": "job or step status (pending | running | success | error | canceled | skipped)",
     "canonical": "status",
     "aliases": [
@@ -3945,6 +3953,14 @@
     "secondary": "neutral",
     "alt": "neutral"
    },
+   "priority": {
+    "highest": "urgent",
+    "critical": "urgent",
+    "blocker": "urgent",
+    "normal": "medium",
+    "lowest": "low",
+    "no-priority": "none"
+   },
    "status": {
     "done": "success",
     "ok": "success",
@@ -4064,6 +4080,7 @@
   "datatable": "data-table",
   "doc-tab": "tabs",
   "doc-tabs": "tabs",
+  "due-date": "countdown",
   "feature-grid": "capability-grid-section",
   "file-viewer": "file-preview",
   "help-icon": "hint",
@@ -4085,6 +4102,7 @@
   "section-heading": "subheader",
   "segmented-control": "toggle-group",
   "sheet": "drawer",
+  "sla-badge": "countdown",
   "snackbar": "toast",
   "steps": "stepper",
   "testimonial": "client-quotes-section",
@@ -8615,6 +8633,48 @@
    "examplesFile": "catalog/examples/tag.json",
    "docsFile": "catalog/components/tag.json"
   },
+  "priority-tag": {
+   "import": "@aziontech/webkit/priority-tag",
+   "target": "./src/components/content/priority-tag/priority-tag.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/priority-tag",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "priority",
+     "type": "'urgent' | 'high' | 'medium' | 'low' | 'none'",
+     "default": "'none'",
+     "required": "false",
+     "doc": "Priority level (exported as `PriorityTagPriority`); sets the glyph (alert mark, filled bars or dots) and the default label."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the tag. Empty uses the locale catalog (`Urgent`, `High`, `Medium`, `Low`, `No priority`)."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Replaces the visible label text; the hidden `Priority:` prefix remains."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/priority-tag.json",
+   "docsFile": "catalog/components/priority-tag.json"
+  },
   "severity-tag": {
    "import": "@aziontech/webkit/severity-tag",
    "target": "./src/components/content/severity-tag/severity-tag.vue",
@@ -8724,6 +8784,197 @@
    "examplesFile": "catalog/examples/timestamp.json",
    "docsFile": "catalog/components/timestamp.json"
   },
+  "timeline": {
+   "import": "@aziontech/webkit/timeline",
+   "target": "./src/components/content/timeline/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/timeline-root",
+   "subcomponents": [
+    "@aziontech/webkit/timeline-item",
+    "@aziontech/webkit/timeline-group"
+   ],
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Density of every item: `small` for a side panel or drawer, `medium` for a page body."
+    },
+    {
+     "name": "timeFormat",
+     "type": "'relative' | 'local' | 'utc'",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Activity`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "`Timeline.Item` children, or `Timeline.Group` children, in display order. Hidden while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/timeline.json",
+   "docsFile": "catalog/components/timeline.json"
+  },
+  "timeline-root": {
+   "import": "@aziontech/webkit/timeline-root",
+   "target": "./src/components/content/timeline/timeline.vue",
+   "kind": "root",
+   "rootOf": "timeline",
+   "treeShakeableImport": "@aziontech/webkit/timeline-root",
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Density of every item: `small` for a side panel or drawer, `medium` for a page body."
+    },
+    {
+     "name": "timeFormat",
+     "type": "'relative' | 'local' | 'utc'",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`)."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Activity`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "`Timeline.Item` children, or `Timeline.Group` children, in display order. Hidden while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "docsFile": "catalog/components/timeline-root.json"
+  },
+  "timeline-item": {
+   "import": "@aziontech/webkit/timeline-item",
+   "target": "./src/components/content/timeline/timeline-item/timeline-item.vue",
+   "kind": "subcomponent",
+   "parent": "timeline",
+   "treeShakeableImport": "@aziontech/webkit/timeline-item",
+   "stability": "preview",
+   "surface": "app"
+  },
+  "timeline-group": {
+   "import": "@aziontech/webkit/timeline-group",
+   "target": "./src/components/content/timeline/timeline-group/timeline-group.vue",
+   "kind": "subcomponent",
+   "parent": "timeline",
+   "treeShakeableImport": "@aziontech/webkit/timeline-group",
+   "stability": "preview",
+   "surface": "app"
+  },
+  "countdown": {
+   "import": "@aziontech/webkit/countdown",
+   "target": "./src/components/content/countdown/countdown.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/countdown",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "deadline",
+     "type": "string | number | Date",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The deadline: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash."
+    },
+    {
+     "name": "warningThreshold",
+     "type": "number",
+     "default": "3600000",
+     "required": "false",
+     "doc": "Time left, in milliseconds, at or under which the countdown turns to warning. `0` stays neutral until the deadline passes."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Name of what is due (`First reply`, `Certificate`), shown before the phrase. Empty shows the phrase alone."
+    },
+    {
+     "name": "type",
+     "type": "'due' | 'expiry'",
+     "default": "'due'",
+     "required": "false",
+     "doc": "The words of the phrase: `due` says `Due in` and `Overdue by` (a task, an SLA); `expiry` says `Expires in` and `Expired` (a certificate, a key, a trial)."
+    },
+    {
+     "name": "paused",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The clock is stopped (an SLA waiting on the customer): the countdown says `Paused` with a pause icon, stays neutral and stops counting."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token of the tag; `medium` is 24px tall, `small` is 20px."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/countdown.json",
+   "docsFile": "catalog/components/countdown.json"
+  },
   "avatar": {
    "import": "@aziontech/webkit/avatar",
    "target": "./src/components/content/avatar/avatar.vue",
@@ -8787,6 +9038,13 @@
      "default": "['var(--primary)', 'var(--warning)', 'var(--brand-blue)']",
      "required": "false",
      "doc": "CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`."
+    },
+    {
+     "name": "presence",
+     "type": "AvatarPresence | ''",
+     "default": "''",
+     "required": "false",
+     "doc": "Whether the person is reachable now, drawn as a dot on the bottom inline-end edge and added to the accessible name; empty draws no dot."
     }
    ],
    "surface": "app",
@@ -10499,6 +10757,119 @@
    "kind": "subcomponent",
    "parent": "key-value-list",
    "treeShakeableImport": "@aziontech/webkit/key-value-list-group",
+   "surface": "app"
+  },
+  "message-thread": {
+   "import": "@aziontech/webkit/message-thread",
+   "target": "./src/components/content/message-thread/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/message-thread-root",
+   "subcomponents": [
+    "@aziontech/webkit/message-thread-item",
+    "@aziontech/webkit/message-thread-group"
+   ],
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "timestampFormat",
+     "type": "TimestampFormat",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows three placeholder messages in place of the items while the thread loads, and marks it busy."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `MessageThread.Item` and `MessageThread.Group` children, oldest first. Not rendered while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/message-thread.json",
+   "docsFile": "catalog/components/message-thread.json"
+  },
+  "message-thread-root": {
+   "import": "@aziontech/webkit/message-thread-root",
+   "target": "./src/components/content/message-thread/message-thread.vue",
+   "kind": "root",
+   "rootOf": "message-thread",
+   "treeShakeableImport": "@aziontech/webkit/message-thread-root",
+   "category": "content",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "timestampFormat",
+     "type": "TimestampFormat",
+     "default": "'local'",
+     "required": "false",
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows three placeholder messages in place of the items while the thread loads, and marks it busy."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `MessageThread.Item` and `MessageThread.Group` children, oldest first. Not rendered while `loading`."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "docsFile": "catalog/components/message-thread-root.json"
+  },
+  "message-thread-item": {
+   "import": "@aziontech/webkit/message-thread-item",
+   "target": "./src/components/content/message-thread/message-thread-item/message-thread-item.vue",
+   "kind": "subcomponent",
+   "parent": "message-thread",
+   "treeShakeableImport": "@aziontech/webkit/message-thread-item",
+   "models": [
+    "quotedOpen"
+   ],
+   "stability": "preview",
+   "surface": "app"
+  },
+  "message-thread-group": {
+   "import": "@aziontech/webkit/message-thread-group",
+   "target": "./src/components/content/message-thread/message-thread-group/message-thread-group.vue",
+   "kind": "subcomponent",
+   "parent": "message-thread",
+   "treeShakeableImport": "@aziontech/webkit/message-thread-group",
+   "models": [
+    "open"
+   ],
+   "stability": "preview",
    "surface": "app"
   },
   "network-map": {
@@ -16629,6 +17000,86 @@
    "surface": "app",
    "docsFile": "catalog/components/radio-group-root.json"
   },
+  "rating": {
+   "import": "@aziontech/webkit/rating",
+   "target": "./src/components/input/rating/rating.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/rating",
+   "models": [
+    "modelValue"
+   ],
+   "category": "input",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "max",
+     "type": "number",
+     "default": "5",
+     "required": "false",
+     "doc": "Number of stars, the highest score. Rounded to a whole number and kept between 1 and 10."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Star size: 16, 20 or 24 px glyphs in 24, 28 or 32 px targets. `RatingSize`, exported."
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name shared by every star radio; the score submits under it. Empty uses a generated name so the radios still group."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the score instead of asking for it: no radios, the value rounded to the nearest half star, announced as one image."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every star and the clear button; the row shows at 50 % opacity with a not-allowed cursor."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Requires a score: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the rating invalid: sets `aria-invalid` on the group and draws the empty stars in the danger mark colour."
+    },
+    {
+     "name": "clearable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a clear button after the stars that resets the score to 0 and moves focus to the first star. Not shown while `readonly`."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/rating.json",
+   "docsFile": "catalog/components/rating.json"
+  },
   "chip": {
    "import": "@aziontech/webkit/chip",
    "target": "./src/components/input/chip/chip.vue",
@@ -17079,6 +17530,107 @@
    "surface": "app",
    "examplesFile": "catalog/examples/textarea.json",
    "docsFile": "catalog/components/textarea.json"
+  },
+  "markdown-editor": {
+   "import": "@aziontech/webkit/markdown-editor",
+   "target": "./src/components/input/markdown-editor/markdown-editor.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/markdown-editor",
+   "models": [
+    "modelValue"
+   ],
+   "category": "input",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Placeholder shown in the empty field."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the field when no Field label or aria-labelledby names it; empty uses the built-in Message label. Write it as the aria-label attribute."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the field, the toolbar, the tabs and the mention menu."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the value without letting it change: the toolbar is disabled and the mention menu never opens; the Preview tab still works."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Applies the invalid border to the field and the preview and sets aria-invalid on the field."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the field as required and sets aria-required."
+    },
+    {
+     "name": "mentions",
+     "type": "MarkdownEditorMention[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "People the menu offers after `@`; each is `{ value, label, description?, icon? }` and inserts `@` plus its `value`. Empty turns the menu off."
+    },
+    {
+     "name": "minRows",
+     "type": "number",
+     "default": "4",
+     "required": "false",
+     "doc": "Lines the empty field shows; the field grows with its content from here."
+    },
+    {
+     "name": "maxRows",
+     "type": "number",
+     "default": "12",
+     "required": "false",
+     "doc": "Lines the field grows to before it scrolls; `0` sets no limit."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "mention-select",
+     "payload": "(event: MouseEvent | KeyboardEvent, mention: MarkdownEditorMention)",
+     "notes": "Fires when a person is picked from the `@` menu (click, Enter or Tab), after `@value` is inserted into the text."
+    }
+   ],
+   "slots": [
+    {
+     "name": "footer",
+     "scope": "—",
+     "notes": "A row under the field for attachments and actions (an attach button, a Send button); omitted when empty."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/markdown-editor.json",
+   "docsFile": "catalog/components/markdown-editor.json"
   },
   "context-menu": {
    "import": "@aziontech/webkit/context-menu",
@@ -23802,21 +24354,21 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty follows the device locale, `en-US` on the server and until mount."
+     "doc": "BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty inherits the provider above; at the root it follows the device locale, `en-US` on the server and until mount."
     },
     {
      "name": "catalogs",
      "type": "Record<string, Messages>",
      "default": "undefined",
      "required": "false",
-     "doc": "Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English."
+     "doc": "Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`), added to those of the provider above; a locale with no catalog falls back to English."
     },
     {
      "name": "messages",
      "type": "PartialMessages",
      "default": "undefined",
      "required": "false",
-     "doc": "Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`)."
+     "doc": "Partial catalog deep-merged over the built-in one and the provider above's overrides, keyed by component group (`{ pagination: { next: 'Seguinte' } }`)."
     },
     {
      "name": "dir",
@@ -23830,14 +24382,14 @@
      "type": "string | number | Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute."
+     "doc": "Reference time for every relative time below the provider (`TableCellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset inherits the provider above, and at the root reads the real clock, ticking each minute."
     },
     {
      "name": "timeZone",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone."
+     "doc": "IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty inherits the provider above, and at the root reads the browser's zone."
     }
    ],
    "slots": [
@@ -31779,7 +32331,7 @@
     "split-button",
     "tag"
    ],
-   "count": 554,
+   "count": 558,
    "file": "catalog/assets/icons.json"
   }
  },
@@ -34617,6 +35169,130 @@
    ],
    "file": "catalog/blocks/create/create-resource-picker.json"
   },
+  "create/create-ticket": {
+   "name": "CreateTicket",
+   "title": "Blocks/Create/CreateTicket",
+   "source": "blocks/create/create-ticket/create-ticket.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three `SettingsGroup` bands of `SettingsRow`s in flush `Card`s. Requester: a `Combobox` that searches contacts by name or email, each row an `Avatar` with the name and email, with Add new contact swapping it for Contact name and Contact email inputs, and CC as `MultiSelect` chips of email addresses. Request: Subject (`Input`), Description (`MarkdownEditor` with @mentions of agents and an attachments footer: Attach files and a `FileTokenGroup`), Channel, Type and Priority (`Select`, each priority a `PriorityTag`). Assignment: Group and Assignee (`Combobox`, the agents with `Avatar` presence and only those in the chosen group) and Tags (`MultiSelect` chips). Every field starts empty; Requester, Subject and Description carry the required mark. A raised `SaveBar` holds Cancel, Create and add another and Create ticket (⌘ Enter). Fields turn invalid only after a create press, with a `FieldError` under each and focus on the first; there is no summary. A failed request opens a danger `Alert` with Retry and keeps every value; a created ticket raises a success `toast` with Open ticket and clears the form for the next one. Escape cancels, and a changed form asks before it is discarded (`ConfirmDialog`). The block fetches nothing: it emits `create` with the typed ticket and whether to add another, and the page passes back `submitting`, `error` or `created`.",
+   "intents": [
+    "create ticket",
+    "new ticket",
+    "new support ticket",
+    "log a ticket for a customer",
+    "agent creates ticket",
+    "helpdesk new ticket form",
+    "support request form",
+    "ticket form with requester and assignee",
+    "create and add another",
+    "add new contact inline",
+    "criar ticket",
+    "novo ticket",
+    "novo chamado",
+    "abrir chamado em nome de alguém",
+    "formulário de chamado",
+    "criar chamado de suporte",
+    "registrar solicitação de suporte"
+   ],
+   "skills": [
+    "webkit-create-surface",
+    "webkit-form",
+    "webkit-errors",
+    "webkit-layout"
+   ],
+   "components": [
+    "Alert",
+    "AppHeader",
+    "AppHeaderAccount",
+    "Avatar",
+    "Brand",
+    "Breadcrumb",
+    "Button",
+    "Card",
+    "Combobox",
+    "ConfirmDialog",
+    "FieldError",
+    "FileTokenGroup",
+    "IconButton",
+    "Input",
+    "Item",
+    "Kbd",
+    "MarkdownEditor",
+    "MultiSelect",
+    "PageHeader",
+    "PriorityTag",
+    "SaveBar",
+    "Select",
+    "SettingsGroup",
+    "SettingsRow",
+    "Skeleton",
+    "toast",
+    "use-escape-to-cancel",
+    "use-file-picker",
+    "use-locale",
+    "use-shortcuts",
+    "use-unsaved-changes",
+    "utils/focus-invalid"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/app-header",
+    "@aziontech/webkit/app-header-account",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/brand",
+    "@aziontech/webkit/breadcrumb-root",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/combobox",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/field-error",
+    "@aziontech/webkit/file-token-group",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
+    "@aziontech/webkit/markdown-editor",
+    "@aziontech/webkit/multi-select",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/priority-tag",
+    "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/settings-group",
+    "@aziontech/webkit/settings-row",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-escape-to-cancel",
+    "@aziontech/webkit/use-file-picker",
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-shortcuts",
+    "@aziontech/webkit/use-unsaved-changes",
+    "@aziontech/webkit/utils/focus-invalid"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Create and add another, and Create ticket. A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).",
+   "variants": [
+    {
+     "name": "ValidationErrors"
+    },
+    {
+     "name": "ContactError"
+    },
+    {
+     "name": "Submitting"
+    },
+    {
+     "name": "SubmitError"
+    },
+    {
+     "name": "Success"
+    },
+    {
+     "name": "Loading"
+    }
+   ],
+   "file": "catalog/blocks/create/create-ticket.json"
+  },
   "create/create-wizard": {
    "name": "CreateWizard",
    "title": "Blocks/Create/CreateWizard",
@@ -35770,6 +36446,118 @@
    ],
    "file": "catalog/blocks/dashboard/dashboard-switcher.json"
   },
+  "detail/detail-customer": {
+   "name": "DetailCustomer",
+   "title": "Blocks/Detail/DetailCustomer",
+   "source": "blocks/detail/detail-customer/detail-customer.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The profile of one customer a support agent opens from a ticket or a search, as a page body for ConsoleLayout. A `PageHeader` names the customer with a square `Avatar`, their organization as the description, and the actions Edit, More actions (an `IconButton` with a `Tooltip` opening a `DropdownMenu`: Merge customer, Export data, Delete customer) and New ticket. Below it a details column (a `Card` with a `KeyValueList`: email and phone with a `CopyButton`, local time, language, the organization `Link`, the tags as `Tag`s and customer since, then a Satisfaction `Card` with a read-only `Rating` and the survey count) sits beside `Tabs`, and stacks above them in a narrow container. Tickets is a `DataTable` of the customer's tickets (subject `Link`, `TableCellStatus`, `PriorityTag`, the next-reply `Countdown`, `TableCellTime`) with an `EmptyState` for a customer with none; Activity is a `Timeline` grouped by day; Notes is a `MessageThread` of internal notes over a `Field` with a `Textarea` and Add note. Loading draws `Skeleton`s, the table's skeleton rows and the timeline and thread placeholders; a failed load shows a danger `Alert` with Retry. The sample renders under a `ConfigProvider` with a fixed clock.",
+   "intents": [
+    "customer profile",
+    "customer details",
+    "contact profile",
+    "requester profile",
+    "customer tickets",
+    "customer activity",
+    "customer notes",
+    "support customer",
+    "end user profile",
+    "perfil do cliente",
+    "detalhes do cliente",
+    "perfil do contato",
+    "perfil do solicitante",
+    "tickets do cliente",
+    "atividade do cliente",
+    "notas do cliente"
+   ],
+   "skills": [
+    "webkit-layout",
+    "webkit-ui-states",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-lists",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "ConfigProvider",
+    "CopyButton",
+    "Countdown",
+    "DataTable",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "IconButton",
+    "KeyValueList",
+    "Link",
+    "MessageThread",
+    "PageHeader",
+    "PriorityTag",
+    "Rating",
+    "Skeleton",
+    "TableCellStatus",
+    "TableCellTime",
+    "Tabs",
+    "Tag",
+    "Textarea",
+    "Timeline",
+    "Tooltip",
+    "use-locale"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/config-provider",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/countdown",
+    "@aziontech/webkit/data-table",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/key-value-list",
+    "@aziontech/webkit/link",
+    "@aziontech/webkit/message-thread",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/priority-tag",
+    "@aziontech/webkit/rating",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/table-cell-status",
+    "@aziontech/webkit/table-cell-time",
+    "@aziontech/webkit/tabs",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/timeline",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
+   ],
+   "primary": "Tickets",
+   "guidelinesSummary": "The page a support agent opens to learn who is asking: how to reach the customer, how happy they have been, every ticket they opened, what happened on their account, and the notes other agents left. It reads from the person to the history. It is a page body for `ConsoleLayout`: the layout owns the rail, the header with the breadcrumb (Customers › Jane Doe) and the `main`.",
+   "variants": [
+    {
+     "name": "Activity"
+    },
+    {
+     "name": "Notes"
+    },
+    {
+     "name": "NoTickets"
+    },
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    }
+   ],
+   "file": "catalog/blocks/detail/detail-customer.json"
+  },
   "detail/detail-deployment-logs": {
    "name": "DetailDeploymentLogs",
    "title": "Blocks/Detail/DetailDeploymentLogs",
@@ -36423,6 +37211,130 @@
     }
    ],
    "file": "catalog/blocks/detail/detail-resource.json"
+  },
+  "detail/detail-ticket": {
+   "name": "DetailTicket",
+   "title": "Blocks/Detail/DetailTicket",
+   "source": "blocks/detail/detail-ticket/detail-ticket.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The support agent's view of one ticket, as in Zendesk Agent Workspace, a Freshdesk ticket or a Help Scout conversation. A `PageHeader` carries the subject as the h1, the ticket number, the status `Tag`, a `PriorityTag` and the next SLA as a `Countdown` (paused while Pending or On hold), and its actions: the teammates who have the ticket open (an `Avatar` with presence each and Sam Lee is viewing), Merge and a More menu (Copy link, Print, Mark as spam, Delete ticket). The main column is a `MessageThread` of the conversation (customer emails with attachments and quoted text, agent replies, internal notes, system events, the middle of a long thread collapsed behind Show N earlier messages) over the composer: a `ToggleGroup` of Reply and Internal note, the To line and a Cc `MultiSelect` for a reply, a warning-edged card that says Only your team can see internal notes for a note, a `MarkdownEditor` with @mentions of teammates, and in its footer Attach files, Insert response (saved replies), the attached files and a `SplitButton` Send with Send and set Pending and Send and set Solved (Add note for a note); files dropped on the composer attach through a `FileDropzone`. The side column, under the thread on narrow screens, holds the ticket's properties (`Field` and `Select` for status, priority, type, group and the assignee with their `Avatar`, and a `MultiSelect` of tags), the requester card (avatar, name, email, organization, other tickets and View customer profile) and the ticket's activity as a small `Timeline`. A failed load is a danger `Alert` with Retry; a failed send keeps the draft and shows an `Alert` with Retry in the composer; a solved ticket replaces the composer with Reopen. A page body for ConsoleLayout, rendered in its default slot.",
+   "intents": [
+    "ticket detail",
+    "ticket view",
+    "support ticket",
+    "help desk ticket",
+    "agent workspace",
+    "support conversation",
+    "reply to customer",
+    "internal note",
+    "canned responses",
+    "saved replies",
+    "ticket properties",
+    "sla countdown",
+    "collision detection",
+    "requester card",
+    "detalhe do chamado",
+    "detalhe do ticket",
+    "conversa de suporte",
+    "responder ao solicitante",
+    "nota interna",
+    "respostas prontas",
+    "propriedades do chamado",
+    "espaço de trabalho do agente"
+   ],
+   "skills": [
+    "webkit-layout",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy",
+    "webkit-errors"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "ConfigProvider",
+    "Countdown",
+    "DropdownMenuGroup",
+    "DropdownMenuItem",
+    "DropdownMenuRoot",
+    "DropdownMenuTrigger",
+    "Field",
+    "FileDropzone",
+    "FileTokenGroup",
+    "IconButton",
+    "MarkdownEditor",
+    "MessageThread",
+    "MessageThreadItem",
+    "MultiSelect",
+    "PageHeader",
+    "PriorityTag",
+    "Select",
+    "Skeleton",
+    "SplitButton",
+    "Subheader",
+    "Tag",
+    "Timeline",
+    "ToggleGroup",
+    "Tooltip",
+    "use-file-picker"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/config-provider",
+    "@aziontech/webkit/countdown",
+    "@aziontech/webkit/dropdown-menu-group",
+    "@aziontech/webkit/dropdown-menu-item",
+    "@aziontech/webkit/dropdown-menu-root",
+    "@aziontech/webkit/dropdown-menu-trigger",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/file-dropzone",
+    "@aziontech/webkit/file-token-group",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/markdown-editor",
+    "@aziontech/webkit/message-thread",
+    "@aziontech/webkit/message-thread-item",
+    "@aziontech/webkit/multi-select",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/priority-tag",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/split-button",
+    "@aziontech/webkit/subheader",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/timeline",
+    "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-file-picker"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The support agent's view of one ticket. An agent reads the conversation with the customer, answers it or leaves a note for the team, sets the ticket's status, priority, group, assignee and tags, and checks who asked and what happened so far. It follows the Zendesk Agent Workspace, the Freshdesk ticket page and the Help Scout conversation, on the house detail page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb and the `main`.",
+   "variants": [
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    },
+    {
+     "name": "Sending"
+    },
+    {
+     "name": "SendError"
+    },
+    {
+     "name": "Solved"
+    },
+    {
+     "name": "InternalNote"
+    }
+   ],
+   "file": "catalog/blocks/detail/detail-ticket.json"
   },
   "detail/detail-version": {
    "name": "DetailVersion",
@@ -37364,6 +38276,129 @@
     }
    ],
    "file": "catalog/blocks/edit/edit-variables.json"
+  },
+  "settings/settings-canned-responses": {
+   "name": "SettingsCannedResponses",
+   "title": "Blocks/Settings/SettingsCannedResponses",
+   "source": "blocks/settings/settings-canned-responses/settings-canned-responses.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The admin page for the saved replies support agents insert into a ticket (macros, canned responses, saved replies): a `PageHeader` with New response, a `PropertyFilter` that searches title and body and filters by folder and visibility, and a `DataTable` of responses (title with the first line of the reply, folder `Tag`, visibility Personal / Team / Everyone, last used with `TableCellTime`, usage count) with Edit, Duplicate and Delete in `TableCellActions`. A row opens a `Drawer` to edit: title, folder `Combobox` that takes a new folder, visibility `RadioGroup`, the reply in a `MarkdownEditor` with an Insert placeholder `DropdownMenu` that writes `{{ticket.requester.first_name}}` at the caret, and an optional ticket status `Select` applied when the reply is sent. Delete asks in a `ConfirmDialog`. The page owns loading, first-use empty, no match, a load error with Retry, saving and a save error that keeps the values. A page body for ConsoleLayout.",
+   "intents": [
+    "canned responses",
+    "saved replies",
+    "macros",
+    "support macros",
+    "reply templates",
+    "response templates",
+    "email templates for agents",
+    "insert placeholder",
+    "template variables",
+    "respostas prontas",
+    "respostas salvas",
+    "macros de atendimento",
+    "modelos de resposta",
+    "respostas padrão"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Button",
+    "Card",
+    "Combobox",
+    "ConfigProvider",
+    "ConfirmDialog",
+    "DataTable",
+    "DataTablePagination",
+    "DrawerContent",
+    "Drawer",
+    "DrawerTitle",
+    "DropdownMenu",
+    "EmptyState",
+    "Field",
+    "IconButton",
+    "Input",
+    "MarkdownEditor",
+    "PageHeader",
+    "PanelBody",
+    "PanelFooter",
+    "PanelHeader",
+    "PropertyFilter",
+    "RadioGroup",
+    "Select",
+    "table",
+    "TableCellActions",
+    "TableCellTime",
+    "Tag",
+    "Tooltip",
+    "use-collection",
+    "use-locale"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/combobox",
+    "@aziontech/webkit/config-provider",
+    "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
+    "@aziontech/webkit/drawer-content",
+    "@aziontech/webkit/drawer-root",
+    "@aziontech/webkit/drawer-title",
+    "@aziontech/webkit/dropdown-menu",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/markdown-editor",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/panel-body",
+    "@aziontech/webkit/panel-footer",
+    "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/radio-group-root",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/table-cell-actions",
+    "@aziontech/webkit/table-cell-time",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-locale"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The admin page for the saved replies support agents insert into a ticket. Zendesk calls them macros, Freshdesk canned responses, Help Scout saved replies. An admin or an agent finds a response by its title or its text, files it in a folder, decides who can insert it, writes the reply in Markdown with placeholders the app fills in for each ticket (the requester's first name, the ticket number, the agent's signature), and can move the ticket to a status when the reply is sent. The list shows which replies the team actually uses. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
+   "variants": [
+    {
+     "name": "Empty"
+    },
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    },
+    {
+     "name": "NoMatch"
+    },
+    {
+     "name": "Editing"
+    },
+    {
+     "name": "Saving"
+    },
+    {
+     "name": "SaveError"
+    }
+   ],
+   "file": "catalog/blocks/settings/settings-canned-responses.json"
   },
   "settings/settings-form": {
    "name": "SettingsForm",
@@ -39486,6 +40521,114 @@
     }
    ],
    "file": "catalog/blocks/view/view-template-browser.json"
+  },
+  "view/view-ticket-inbox": {
+   "name": "ViewTicketInbox",
+   "title": "Blocks/View/ViewTicketInbox",
+   "source": "blocks/view/view-ticket-inbox/view-ticket-inbox.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more) and Close, each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.",
+   "intents": [
+    "ticket inbox",
+    "support inbox",
+    "helpdesk",
+    "help desk views",
+    "ticket list",
+    "ticket queue",
+    "agent inbox",
+    "support queue",
+    "saved views",
+    "unassigned tickets",
+    "overdue tickets",
+    "sla countdown",
+    "bulk assign tickets",
+    "caixa de entrada de tickets",
+    "caixa de suporte",
+    "fila de chamados",
+    "lista de tickets",
+    "lista de chamados",
+    "visões salvas",
+    "chamados sem responsável",
+    "chamados atrasados",
+    "atribuir chamados em massa"
+   ],
+   "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "CollectionPreferences",
+    "ConfigProvider",
+    "Countdown",
+    "DataTable",
+    "DataTablePagination",
+    "DropdownMenuItem",
+    "DropdownMenuRoot",
+    "DropdownMenuTrigger",
+    "EmptyState",
+    "IconButton",
+    "PageHeader",
+    "PriorityTag",
+    "PropertyFilter",
+    "Select",
+    "TableCellLink",
+    "TableCellStatus",
+    "TableCellTime",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/config-provider",
+    "@aziontech/webkit/countdown",
+    "@aziontech/webkit/data-table",
+    "@aziontech/webkit/data-table-pagination",
+    "@aziontech/webkit/dropdown-menu-item",
+    "@aziontech/webkit/dropdown-menu-root",
+    "@aziontech/webkit/dropdown-menu-trigger",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/priority-tag",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/table-cell-link",
+    "@aziontech/webkit/table-cell-status",
+    "@aziontech/webkit/table-cell-time",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The support agent's inbox. An agent opens a saved view (their own open tickets, the unassigned queue, what is overdue), scans what needs an answer first, opens a ticket, and moves several tickets at once: assigns them, changes their status, merges duplicates or closes them. It follows Zendesk views, the Freshdesk ticket list and the Help Scout mailbox, on the house list page. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
+   "variants": [
+    {
+     "name": "Empty"
+    },
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    },
+    {
+     "name": "Filtered"
+    },
+    {
+     "name": "Selected"
+    }
+   ],
+   "file": "catalog/blocks/view/view-ticket-inbox.json"
   },
   "view/view-waf-tuning": {
    "name": "ViewWafTuning",

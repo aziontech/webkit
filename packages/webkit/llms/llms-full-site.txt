@@ -1860,7 +1860,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 </template>
 ````
 
-1 more example(s) in [components/doc-markdown.md](components/doc-markdown.md).
+2 more example(s) in [components/doc-markdown.md](components/doc-markdown.md).
 
 ---
 

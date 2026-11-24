@@ -201,19 +201,21 @@
           :data-testid="`${testId}__meta`"
           class="flex min-w-0 text-body-xs text-(--text-muted)"
         >
-          <span
-            v-if="kind"
-            class="truncate"
-            >{{ kind }}</span
-          ><span
-            v-if="kind && size"
-            class="shrink-0 whitespace-pre"
-            >{{ ' · ' }}</span
-          ><span
-            v-if="size"
-            class="shrink-0 whitespace-nowrap"
-            >{{ size }}</span
-          >
+          <bdi class="flex min-w-0">
+            <span
+              v-if="kind"
+              class="truncate"
+              >{{ kind }}</span
+            ><span
+              v-if="kind && size"
+              class="shrink-0 whitespace-pre"
+              >{{ ' · ' }}</span
+            ><span
+              v-if="size"
+              class="shrink-0 whitespace-nowrap"
+              >{{ size }}</span
+            >
+          </bdi>
         </p>
       </div>
       <div class="flex shrink-0 items-center gap-(--spacing-xs)">

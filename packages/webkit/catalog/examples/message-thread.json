@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A support ticket: the customer's email with its recipients, an attachment and the quoted invoice behind the ellipsis toggle, a status event line, and the agent's reply with a Reply button and a More menu holding Forward.",
+   "file": "examples/message-thread/default.vue"
+  },
+  {
+   "name": "Types",
+   "summary": "One item of each `type`: a public reply, an internal note on its warning band labelled Internal note, and a system event line.",
+   "file": "examples/message-thread/types.vue"
+  },
+  {
+   "name": "Channels",
+   "summary": "One reply per `channel`: email, chat, phone, web form and API, each written beside its glyph.",
+   "file": "examples/message-thread/channels.vue"
+  }
+ ]
+}

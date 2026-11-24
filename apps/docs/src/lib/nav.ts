@@ -4,7 +4,8 @@ import { groupLabel, titleCase } from './words'
 
 export { groupLabel, titleCase, tokenGroupTitle } from './words'
 
-export type NavGroup = { id?: string; label: string; items: { label: string; to: string }[] }
+export type NavItem = { label: string; to: string; preview?: boolean }
+export type NavGroup = { id?: string; label: string; items: NavItem[] }
 
 const CATEGORY_ORDER = [
   'action',
@@ -65,7 +66,11 @@ export function componentGroups(): NavGroup[] {
   const groups = new Map<string, NavGroup['items']>()
   for (const item of index.components) {
     const list = groups.get(item.category) ?? []
-    list.push({ label: item.title, to: `/components/${item.name}` })
+    list.push({
+      label: item.title,
+      to: `/components/${item.name}`,
+      ...(item.stability === 'preview' ? { preview: true } : {})
+    })
     groups.set(item.category, list)
   }
   const rank = (category: string) => {
@@ -85,7 +90,11 @@ export function blockGroups(): NavGroup[] {
   const groups = new Map<string, NavGroup['items']>()
   for (const block of index.blocks) {
     const list = groups.get(block.group) ?? []
-    list.push({ label: block.title, to: `/blocks/${block.id}` })
+    list.push({
+      label: block.title,
+      to: `/blocks/${block.id}`,
+      ...(block.stability === 'preview' ? { preview: true } : {})
+    })
     groups.set(block.group, list)
   }
   return [...groups.entries()].map(([group, items]) => ({

@@ -39,6 +39,16 @@ describe('FilePreview', () => {
     await expectNoA11yViolations(view.container)
   })
 
+  it('isolates the type and size as one run under rtl', () => {
+    const view = render(FilePreview, {
+      props: { fileName: 'certificate-error.png', mimeType: 'image/png', bytes: 248_000 },
+      attrs: { dir: 'rtl' }
+    })
+    const meta = view.getByTestId(`${TEST_ID}__meta`).firstElementChild
+    expect(meta?.tagName).toBe('BDI')
+    expect(meta?.textContent).toBe('image/png · 242.2 kB')
+  })
+
   it('lets a consumer data-testid win', () => {
     const view = render(FilePreview, {
       props: { fileName: 'a.txt', content: 'hello' },

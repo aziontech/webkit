@@ -14,6 +14,7 @@
   import CodeView from '../components/code-view.vue'
   import DoDont from '../components/do-dont.vue'
   import MarkdownParts from '../components/markdown-parts.vue'
+  import PreviewNote from '../components/preview-note.vue'
   import RawHtml from '../components/raw-html.vue'
   import TableOfContents from '../components/table-of-contents.vue'
   import { blockMarkdown, copyText } from '../lib/copy'
@@ -178,17 +179,26 @@
         @action-click="onMetaAction"
       >
         <template #details>
-          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-            <Tag
-              :label="block.surface"
-              severity="neutral"
-              size="small"
-            />
-            <Tag
-              :label="`${block.states.length} ${t.states.toLowerCase()}`"
-              severity="neutral"
-              size="small"
-            />
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <Tag
+                v-if="block.stability === 'preview'"
+                :label="t.stabilityPreview"
+                severity="info"
+                size="small"
+              />
+              <Tag
+                :label="block.surface"
+                severity="neutral"
+                size="small"
+              />
+              <Tag
+                :label="`${block.states.length} ${t.states.toLowerCase()}`"
+                severity="neutral"
+                size="small"
+              />
+            </div>
+            <PreviewNote v-if="block.stability === 'preview'" />
           </div>
         </template>
       </DocPageHeader>

@@ -2971,6 +2971,46 @@
       "legacy": ["ai ai-align-justify", "pi pi-align-justify"]
     },
     {
+      "name": "bold",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "A bold capital letter B",
+      "means": "Bold text",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "italic",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "A slanted capital letter I with serifs",
+      "means": "Italic text",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "list-ordered",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Three lines numbered 1 and 2",
+      "means": "Numbered list",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "quote",
+      "set": "mono",
+      "group": "interface",
+      "category": "layout",
+      "shows": "Two closing quotation marks",
+      "means": "Quoted text or a block quote",
+      "status": "stable",
+      "legacy": []
+    },
+    {
       "name": "align-left",
       "set": "mono",
       "group": "interface",

@@ -196,7 +196,7 @@
               v-if="metaOf(item.file)"
               :data-testid="`${testId}__meta`"
               class="truncate text-body-xs text-(--text-muted)"
-              >{{ metaOf(item.file) }}</span
+              ><bdi>{{ metaOf(item.file) }}</bdi></span
             >
           </div>
           <span

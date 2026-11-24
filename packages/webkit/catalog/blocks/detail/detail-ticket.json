@@ -1,0 +1,48 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "The ticket is loading: the header shows Ticket with a placeholder line, the thread, the properties, the requester and the activity show their skeletons and the composer is disabled.",
+   "file": "blocks/detail/detail-ticket/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The ticket could not load: the header stays and a danger Alert with Retry takes the page body's place.",
+   "file": "blocks/detail/detail-ticket/variants/error.vue"
+  },
+  {
+   "name": "Sending",
+   "summary": "A reply is on its way: Send spins, the editor is read-only and the composer is marked busy, with the draft still in view.",
+   "file": "blocks/detail/detail-ticket/variants/sending.vue"
+  },
+  {
+   "name": "SendError",
+   "summary": "The reply was not sent: the composer keeps the draft and shows a danger Alert with Retry above the editor.",
+   "file": "blocks/detail/detail-ticket/variants/send-error.vue"
+  },
+  {
+   "name": "Solved",
+   "summary": "A solved ticket: the status Tag reads Solved, the SLA countdown is gone and the composer gives way to This ticket is solved with Reopen.",
+   "file": "blocks/detail/detail-ticket/variants/solved.vue"
+  },
+  {
+   "name": "InternalNote",
+   "summary": "The composer on Internal note: the warning edge, the lock line Only your team can see internal notes, no recipients, a draft that mentions a teammate and Add note in place of Send.",
+   "file": "blocks/detail/detail-ticket/variants/internal-note.vue"
+  }
+ ],
+ "sfcFile": "blocks/detail/detail-ticket/detail-ticket.vue",
+ "guidelinesFile": "blocks/detail/detail-ticket/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "lib/ticket-fields.ts",
+  "parts/ticket-header-actions.vue",
+  "parts/ticket-conversation.vue",
+  "parts/ticket-message.vue",
+  "parts/ticket-composer.vue",
+  "parts/composer-footer.vue",
+  "parts/ticket-properties.vue",
+  "parts/ticket-requester.vue",
+  "parts/ticket-activity.vue"
+ ]
+}

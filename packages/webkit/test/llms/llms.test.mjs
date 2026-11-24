@@ -277,3 +277,20 @@ test('every composable export has an llms page built from its typed options', ()
   assert.ok(page.indexOf('## `useCollection`') < page.indexOf('## `UseCollectionOptions'))
   assert.ok(page.indexOf('## `UseCollectionOptions') < page.indexOf('## `UseCollectionReturn'))
 })
+
+test('a preview component and block are marked on their pages, their JSON and in llms.txt', async () => {
+  const { catalogView } = await import('../../scripts/build-llms.mjs')
+  const copy = structuredClone(catalog)
+  for (const entry of Object.values(copy.imports)) delete entry.stability
+  for (const block of Object.values(copy.blocks)) delete block.stability
+  copy.imports.button.stability = 'preview'
+  copy.blocks['view/view-table'].stability = 'preview'
+  const read = (file) => JSON.parse(readFileSync(new URL(`../../${file}`, import.meta.url), 'utf-8'))
+  const out = buildLlms(catalogView(copy, read))
+  assert.match(out['components/button.md'], /^- Stability: preview\./m)
+  assert.equal(JSON.parse(out['components/button.json']).stability, 'preview')
+  assert.match(out['blocks/view/view-table.md'], /^- Stability: preview\./m)
+  assert.match(out['llms.txt'], /^- \[Button\]\(components\/button\.md\): Preview\. /m)
+  assert.doesNotMatch(out['components/badge.md'], /Stability/)
+  assert.equal('stability' in JSON.parse(out['components/badge.json']), false)
+})

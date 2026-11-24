@@ -79,6 +79,10 @@
   {
    "name": "Components",
    "file": "examples/doc-markdown/components.vue"
+  },
+  {
+   "name": "Term",
+   "file": "examples/doc-markdown/term.vue"
   }
  ],
  "docs": "components/doc-markdown.md"

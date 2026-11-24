@@ -9,6 +9,7 @@
   import { useRoute } from 'vue-router'
 
   import ExampleCard from '../components/example-card.vue'
+  import PreviewNote from '../components/preview-note.vue'
   import RawHtml from '../components/raw-html.vue'
   import TableOfContents from '../components/table-of-contents.vue'
   import { componentMarkdown, copyText } from '../lib/copy'
@@ -141,18 +142,29 @@
         @action-click="onMetaAction"
       >
         <template #details>
-          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-            <Tag
-              :label="item.surface"
-              severity="neutral"
-              size="small"
-            />
-            <Tag
-              v-if="doc.structure"
-              :label="doc.structure"
-              severity="neutral"
-              size="small"
-            />
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <Tag
+                v-if="item.stability === 'preview'"
+                key="stability"
+                :label="t.stabilityPreview"
+                severity="info"
+                size="small"
+              />
+              <Tag
+                :label="item.surface"
+                severity="neutral"
+                size="small"
+              />
+              <Tag
+                v-if="doc.structure"
+                key="structure"
+                :label="doc.structure"
+                severity="neutral"
+                size="small"
+              />
+            </div>
+            <PreviewNote v-if="item.stability === 'preview'" />
           </div>
         </template>
       </DocPageHeader>

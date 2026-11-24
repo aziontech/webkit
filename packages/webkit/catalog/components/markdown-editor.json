@@ -1,0 +1,35 @@
+{
+ "purpose": "The text area of a reply composer: a person writes Markdown in a `Textarea`, formats it from a toolbar (bold, italic, link, bulleted list, numbered list, quote, code) or with Ctrl/⌘+B, I and K, checks the result on a Preview tab, and mentions a teammate by typing `@`, which opens a filtered list of people. It is the GitHub comment box pattern (decision SUP-02): plain Markdown text with helpers, never a rich-text (WYSIWYG) editor, so no editor library enters the package. The value is the Markdown string.",
+ "useWhen": [
+  "Write a reply to a support ticket, a customer or a teammate.",
+  "Add an internal note or a comment that can carry bold text, links, lists, quotes and code.",
+  "Let the writer mention a teammate with `@` so the app can notify them.",
+  "Any long free-text field whose content is shown later as formatted Markdown (a release note, an incident update)."
+ ],
+ "avoidWhen": [
+  "Plain text that is never formatted (a description, a reason) → use `textarea`.",
+  "A question to an AI assistant, with send, model picker and attachments → use `prompt-input`.",
+  "Code that people edit with highlighting and line numbers → use `code-editor`.",
+  "Showing Markdown that nobody edits → use `streaming-response` (or `doc-markdown` on a docs page)."
+ ],
+ "related": [
+  "`textarea` — the field this component is built on; every field prop (`placeholder`, `disabled`, `readonly`, `invalid`, `required`) means the same here.",
+  "`prompt-input` — the AI prompt box; it shares the `@` menu list with this component (the private part `prompt-input/parts/prompt-input-menu-list.vue`, imported across components as `doc-layout` imports a `console-layout` part; it moves to a shared folder only if a third component needs it).",
+  "`streaming-response` — the Markdown renderer the Preview tab uses; render the sent message with it so the preview and the posted message match. This build changes its root to merge the consumer `class` with `cn` (no API change, its test extended).",
+  "`tabs` — Write and Preview are a controlled `Tabs` (the editor owns the value, `data-tab`, so a disabled editor still shows Write). This build moves `Tabs.Content`'s `tabindex=\"0\"` before its attribute passthrough, so a panel whose first content is focusable can take `tabindex=\"-1\"` (APG tabs pattern; no API change, its test extended).",
+  "`prompt-input/composables/use-prompt-input-menu.ts` exports its pure `findQuery` and `filterOptions` (the `@` token before the caret, at the start of the text or after whitespace; case-insensitive match on label or value; at most eight), which the editor reuses. The editor keeps its own small pick and key handler, because it inserts `@value` (not the label) through the undo-friendly path and stops Escape from propagating.",
+  "`prompt-input/parts/prompt-input-menu-list.vue` renders each option's label and description with `dir=\"auto\"`.",
+  "`streaming-response/streaming-response.vue` merges the consumer `class` with `cn`.",
+  "`navigation/tabs/tabs-content.vue` lets a consumer `tabindex` replace its default `0`.",
+  "`field` — wraps the editor with its label, description and error."
+ ],
+ "bestPractices": [
+  "Wrap it in a `Field` with a visible label (\"Reply\", \"Internal note\"); without one, the field is named by the built-in \"Message\" label.",
+  "Pass `mentions` only with the people who can be mentioned in this ticket; the menu shows the first eight matches, so a long list is filtered by typing.",
+  "Listen to `mention-select` to record who was mentioned; the inserted text is `@` plus the person's `value`, so `value` is a handle with no spaces (`jane.doe`).",
+  "Put the send button and the attachment control in the `footer` slot, not above the field.",
+  "Render the posted message with `StreamingResponse` so it reads as the preview did.",
+  "Keep `maxRows` so a long reply scrolls inside the field instead of pushing the page down.",
+  "The preview and the posted message read `[1]` or `[2, 3]` as a citation chip (the `StreamingResponse` rule); write a bracketed number as `\\[1]` when it is plain text."
+ ]
+}

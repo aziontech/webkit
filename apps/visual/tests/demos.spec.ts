@@ -3,6 +3,8 @@ import { expect, type Page, test } from '@playwright/test'
 import { DEMOS, label, type Mode, prepare, query, settle, shot } from './lib'
 
 const FIRST = '1020655'
+const TICKET = '4812'
+const CUSTOMER = 'alex-morgan'
 
 const ROUTES = [
   { name: 'resources', path: '/resources' },
@@ -16,7 +18,12 @@ const ROUTES = [
   { name: 'onboarding-plan', path: '/onboarding/plan' },
   { name: 'onboarding-profile', path: '/onboarding/profile' },
   { name: 'assistant', path: '/assistant' },
-  { name: 'ai-keys', path: '/settings/ai-keys' }
+  { name: 'ai-keys', path: '/settings/ai-keys' },
+  { name: 'support', path: '/support' },
+  { name: 'support-ticket-create', path: '/support/tickets/new' },
+  { name: 'support-ticket', path: `/support/tickets/${TICKET}` },
+  { name: 'support-customer', path: `/support/customers/${CUSTOMER}` },
+  { name: 'support-canned-responses', path: '/support/settings/canned-responses' }
 ]
 
 const MODES: Mode[] = [
@@ -207,6 +214,20 @@ test.describe('demo flows', () => {
     await expect(toast.getByRole('button', { name: 'Redeploy' })).toBeVisible()
     await toast.getByRole('button', { name: 'Edit' }).click()
     await expect(page).toHaveURL(new RegExp(`/resources/${FIRST}/edit$`))
+  })
+
+  test('inbox → ticket → send reply', async ({ page }) => {
+    await page.goto(`${DEMOS}/support`)
+    await page.getByRole('link', { name: 'Custom domain returns a certificate error' }).click()
+    await expect(page).toHaveURL(new RegExp(`/support/tickets/${TICKET}$`))
+    await expect(page.getByRole('heading', { level: 1, name: /certificate error/ })).toBeVisible()
+    await page.getByRole('textbox', { name: 'Reply to the customer' }).click()
+    await page.keyboard.type('A hard refresh picks up the new certificate.')
+    await page.getByRole('button', { name: 'Send', exact: true }).first().click()
+    await expect(toastTitle(page, 'Reply sent.')).toBeVisible()
+    await expect(
+      page.getByText('A hard refresh picks up the new certificate.').first()
+    ).toBeVisible()
   })
 
   test('onboarding → plan', async ({ page }) => {

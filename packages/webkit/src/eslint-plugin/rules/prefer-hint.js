@@ -17,12 +17,75 @@ const tagOf = (node) =>
 
 const squeeze = (text) => String(text).replace(/\s+/g, ' ').trim()
 
-function literalOf(expression) {
-  if (!expression) return null
-  if (expression.type === 'Literal' && typeof expression.value === 'string') return expression.value
-  if (expression.type === 'TemplateLiteral' && expression.expressions.length === 0)
-    return expression.quasis.map((quasi) => quasi.value.cooked ?? '').join('')
-  return null
+function templateOf(expression, next) {
+  let out = ''
+  for (const [index, quasi] of expression.quasis.entries()) {
+    out += quasi.value.cooked ?? ''
+    if (index >= expression.expressions.length) continue
+    const part = next(expression.expressions[index])
+    if (part === null) return null
+    out += part
+  }
+  return out
+}
+
+function joinOf(expression, next) {
+  if (expression.operator !== '+') return null
+  const left = next(expression.left)
+  const right = next(expression.right)
+  return left === null || right === null ? null : left + right
+}
+
+function longestBranchOf(expression, next) {
+  const branches =
+    expression.type === 'ConditionalExpression'
+      ? [expression.consequent, expression.alternate]
+      : [expression.left, expression.right]
+  const values = branches.map(next).filter((value) => value !== null)
+  return values.length ? values.reduce((a, b) => (b.length > a.length ? b : a)) : null
+}
+
+function fieldOf(expression, next, scope) {
+  if (expression.computed || expression.property.type !== 'Identifier') return null
+  const owner = expression.object.type === 'Identifier' ? scope.get(expression.object.name) : null
+  if (owner?.type !== 'ObjectExpression') return null
+  const property = owner.properties.find(
+    (entry) =>
+      entry.type === 'Property' &&
+      !entry.computed &&
+      (entry.key.name ?? entry.key.value) === expression.property.name
+  )
+  return property ? next(property.value) : null
+}
+
+const READERS = {
+  Literal: (expression) => (typeof expression.value === 'string' ? expression.value : null),
+  TemplateLiteral: templateOf,
+  BinaryExpression: joinOf,
+  ConditionalExpression: longestBranchOf,
+  LogicalExpression: longestBranchOf,
+  Identifier: (expression, next, scope) =>
+    scope.has(expression.name) ? next(scope.get(expression.name)) : null,
+  MemberExpression: fieldOf
+}
+
+function literalOf(expression, scope = new Map(), depth = 0) {
+  const read = READERS[expression?.type]
+  if (!read || depth > 8) return null
+  return read(expression, (node) => literalOf(node, scope, depth + 1), scope)
+}
+
+function constantsOf(program) {
+  const scope = new Map()
+  for (const statement of program?.body ?? []) {
+    const declaration =
+      statement.type === 'ExportNamedDeclaration' ? statement.declaration : statement
+    if (declaration?.type !== 'VariableDeclaration' || declaration.kind !== 'const') continue
+    for (const declarator of declaration.declarations)
+      if (declarator.id.type === 'Identifier' && declarator.init)
+        scope.set(declarator.id.name, declarator.init)
+  }
+  return scope
 }
 
 function boundName(attribute) {
@@ -31,15 +94,15 @@ function boundName(attribute) {
   return argument?.type === 'VIdentifier' ? argument.name : null
 }
 
-function attributeValue(attribute, name) {
+function attributeValue(attribute, name, scope) {
   if (!attribute.directive)
     return attribute.key?.name === name ? (attribute.value?.value ?? '') : null
-  return boundName(attribute) === name ? literalOf(attribute.value?.expression) : null
+  return boundName(attribute) === name ? literalOf(attribute.value?.expression, scope) : null
 }
 
-function staticAttribute(node, name) {
+function staticAttribute(node, name, scope) {
   for (const attribute of node.startTag?.attributes ?? []) {
-    const value = attributeValue(attribute, name)
+    const value = attributeValue(attribute, name, scope)
     if (value !== null) return value
   }
   return null
@@ -125,17 +188,18 @@ export default {
     const factory = templateBodyVisitorFactory(context)
     if (!factory) return {}
     if (isHintSource(context.filename ?? context.getFilename?.())) return {}
+    const scope = constantsOf((context.sourceCode ?? context.getSourceCode()).ast)
 
     return factory({
       VElement(node) {
         const tag = tagOf(node)
         if (tag === 'tooltip') {
-          const content = staticAttribute(node, 'content')
+          const content = staticAttribute(node, 'content', scope)
           if (content !== null && squeeze(content).length > TOOLTIP_LIMIT)
             context.report({ node: node.startTag, messageId: 'longTooltip' })
         }
         if (tag === 'hint') {
-          const content = staticAttribute(node, 'content')
+          const content = staticAttribute(node, 'content', scope)
           if (content !== null && squeeze(content).length > HINT_LIMIT)
             context.report({ node: node.startTag, messageId: 'longHint' })
           return

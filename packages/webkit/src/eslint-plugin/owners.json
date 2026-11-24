@@ -119,6 +119,7 @@
         "src/components/input/checkbox": "Checkbox: the checkbox.",
         "src/components/input/radio-group/radio-group-item": "RadioGroup.Item: the radio.",
         "src/components/input/slider": "Slider: the range input.",
+        "src/components/input/rating": "Rating: one native radio per star, named 1 star to N stars.",
         "src/components/input/multi-select/multi-select-trigger": "MultiSelect.Trigger: the search field of a searchable multi-select (combobox pattern).",
         "src/components/ai/prompt-input/prompt-input-attach-button": "PromptInput.AttachButton: the hidden file input its button opens.",
         "src/components/ai/prompt-input/parts/prompt-input-add-menu.vue": "PromptInput add menu: the hidden camera, photo and file inputs its menu items open.",

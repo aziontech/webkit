@@ -6,6 +6,7 @@ import {
   noExport,
   NOT_AVAILABLE,
   pickWithDefaults,
+  stabilityOf,
   subpathOf
 } from '../lib/results.js'
 import { pascalCase } from '../lib/text.js'
@@ -112,6 +113,7 @@ function componentDetails(catalog, key, e) {
     name: key,
     binding: pascalCase(key),
     ...deprecationOf(e),
+    ...stabilityOf(e),
     kind: e.kind,
     ...pickWithDefaults(e, { category: null, surface: null, channels: null, structure: null }),
     import: e.import,

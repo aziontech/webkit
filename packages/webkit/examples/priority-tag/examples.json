@@ -1,0 +1,21 @@
+{
+  "component": "priority-tag",
+  "title": "Components/Content/PriorityTag",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One tag at the high level, driven by the controls.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Priorities",
+      "summary": "Every level side by side, from urgent to no priority.",
+      "file": "priorities.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Both sizes side by side at one level.",
+      "file": "sizes.vue"
+    }
+  ]
+}

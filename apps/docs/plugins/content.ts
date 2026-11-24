@@ -434,6 +434,7 @@ export type ComponentIndexItem = {
   title: string
   category: string
   surface: string
+  stability: 'preview' | 'ga'
   purpose: string
   import: string
   exampleDir: string | null
@@ -449,6 +450,7 @@ export type BlockIndexItem = {
   title: string
   group: string
   surface: string
+  stability: 'preview' | 'ga'
   summary: string
   states: { name: string; slug: string; file: string }[]
   dir: string
@@ -516,6 +518,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         titlePath[titlePath.length - 2]?.toLowerCase() ??
         'other',
       surface: entry.surface ?? 'app',
+      stability: entry.stability === 'preview' ? 'preview' : 'ga',
       purpose: plainInline(
         firstSentence(
           stripReviewerNotes(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
@@ -535,6 +538,11 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     title: spacedTitle(block.name),
     group: block.dir.split('/').slice(0, -1).join('/') || block.dir,
     surface: block.surface ?? 'app',
+    stability:
+      (catalog.blocks as Record<string, { stability?: string }>)?.[block.id]?.stability ===
+      'preview'
+        ? 'preview'
+        : 'ga',
     summary: plainInline(firstSentence(stripReviewerNotes(block.summary ?? ''))),
     states: block.states,
     dir: block.dir,
