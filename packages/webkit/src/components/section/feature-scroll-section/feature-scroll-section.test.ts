@@ -272,7 +272,7 @@ describe('FeatureScrollSection', () => {
       'data-variant',
       'secondary'
     )
-    const external = getAllByRole('link', { name: 'Terraform registry (opens in a new tab)' })[0]
+    const external = getAllByRole('link', { name: 'Terraform registry' })[0]
     expect(external).toHaveAttribute('data-variant', 'outline')
     expect(external).toHaveAttribute('target', '_blank')
   })

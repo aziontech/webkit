@@ -3,8 +3,6 @@
 
   import { useAnnouncer } from '../../../composables/use-announcer'
   import { useButtonRoot } from '../../../composables/use-button-root'
-  import { useTranslate } from '../../../composables/use-translate'
-  import { common } from '../../../locales/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
@@ -76,7 +74,6 @@
 
   const { announce } = useAnnouncer()
   const attrs = useAttrs()
-  const { t } = useTranslate({ common })
   const { Root, rootAttrs, onClick } = useButtonRoot(props, 'button', (event) =>
     emit('click', event)
   )
@@ -90,8 +87,6 @@
         }
       : rootAttrs.value
   )
-
-  const opensNewTab = computed(() => rootAttrs.value['tag'] === 'a' && props.target === '_blank')
 
   watch(
     () => props.loading,
@@ -179,23 +174,8 @@
           v-if="label"
           data-slot="label"
           class="min-w-0 overflow-x-clip text-ellipsis"
-          >{{ label
-          }}<template v-if="opensNewTab"
-            >{{ ' '
-            }}<span
-              class="sr-only"
-              :data-testid="`${rootAttrs['data-testid']}__new-tab`"
-              >{{ t('common.newTab') }}</span
-            ></template
-          ></span
+          >{{ label }}</span
         ></slot
-      ><template v-if="opensNewTab && $slots.default"
-        >{{ ' '
-        }}<span
-          class="sr-only"
-          :data-testid="`${rootAttrs['data-testid']}__new-tab`"
-          >{{ t('common.newTab') }}</span
-        ></template
       >
     </span>
     <span
