@@ -138,7 +138,6 @@
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
 
-  // Inline on the server and during hydration: SSR hosts like Astro drop the <body> teleport buffer.
   const teleportReady = useMounted()
 </script>
 
