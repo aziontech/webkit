@@ -127,6 +127,19 @@ describe('MessageThread', () => {
       expect(lines[1]!.textContent!.startsWith('Cc: ')).toBe(true)
     })
 
+    it('reads each recipients line in its own direction on right-to-left pages', () => {
+      const host = document.createElement('div')
+      host.setAttribute('dir', 'rtl')
+      document.body.appendChild(host)
+      const view = render(WithQuotedText, { container: host })
+      const lines = view.getByTestId('message-thread-item__recipients').querySelectorAll('span')
+      for (const line of lines) {
+        expect(line).toHaveAttribute('dir', 'auto')
+        expect(line.matches(':dir(ltr)')).toBe(true)
+      }
+      host.remove()
+    })
+
     it('renders the attachments and actions slots', () => {
       const view = render(Default)
       expect(view.getAllByTestId('message-thread-item__attachments')).toHaveLength(1)

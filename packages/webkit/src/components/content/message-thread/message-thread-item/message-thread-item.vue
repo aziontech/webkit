@@ -216,8 +216,16 @@
           :data-testid="`${testId}__recipients`"
           class="flex min-w-0 flex-col break-words text-body-sm text-(--text-muted)"
         >
-          <span v-if="to.length">{{ t('messageThread.to', { addresses: addresses(to) }) }}</span>
-          <span v-if="cc.length">{{ t('messageThread.cc', { addresses: addresses(cc) }) }}</span>
+          <span
+            v-if="to.length"
+            dir="auto"
+            >{{ t('messageThread.to', { addresses: addresses(to) }) }}</span
+          >
+          <span
+            v-if="cc.length"
+            dir="auto"
+            >{{ t('messageThread.cc', { addresses: addresses(cc) }) }}</span
+          >
         </div>
         <div
           :data-testid="`${testId}__content`"
