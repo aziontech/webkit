@@ -1,13 +1,11 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Module from '../../layout/module/module.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import type { LinkDirectoryColumns } from '../../marketing/link-directory/link-directory.vue'
   import LinkDirectory from '../../marketing/link-directory/link-directory.vue'
   import LinkDirectoryColumn from '../../marketing/link-directory/link-directory-column/link-directory-column.vue'
   import LinkDirectoryItem from '../../marketing/link-directory/link-directory-item/link-directory-item.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'PlatformDirectorySection',
@@ -94,57 +92,37 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="hasHeader ? title : undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="hasHeader ? title : ''"
+    :filled="hasColumns"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
   >
-    <Module
-      v-if="hasColumns"
-      :divided="false"
-      :padded="false"
+    <LinkDirectory
+      :columns="trackCount"
+      :mobile-columns="1"
+      :aria-label="navigationLabel"
     >
-      <template
-        v-if="hasHeader"
-        #header
+      <LinkDirectoryColumn
+        v-for="(group, index) in columns"
+        :key="`${group.title}-${index}`"
+        :title="group.title"
+        :data-span="spanOf(index)"
+        class="data-[span=full]:col-span-full data-[span=pair]:sm:col-span-2 data-[span=pair]:lg:col-span-1"
       >
-        <ModuleHeader
-          :eyebrow="eyebrow"
-          :title="title"
-          :description="description"
+        <LinkDirectoryItem
+          v-for="item in group.items"
+          :key="item.href"
+          :icon="item.icon ?? ''"
+          :title="item.title"
+          :description="item.description ?? ''"
+          :href="item.href"
         />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
-      >
-        <LinkDirectory
-          :columns="trackCount"
-          :mobile-columns="1"
-          :aria-label="navigationLabel"
-        >
-          <LinkDirectoryColumn
-            v-for="(group, index) in columns"
-            :key="`${group.title}-${index}`"
-            :title="group.title"
-            :data-span="spanOf(index)"
-            class="data-[span=full]:col-span-full data-[span=pair]:sm:col-span-2 data-[span=pair]:lg:col-span-1"
-          >
-            <LinkDirectoryItem
-              v-for="item in group.items"
-              :key="item.href"
-              :icon="item.icon ?? ''"
-              :title="item.title"
-              :description="item.description ?? ''"
-              :href="item.href"
-            />
-          </LinkDirectoryColumn>
-        </LinkDirectory>
-      </RegistrationFrame>
-    </Module>
-  </section>
+      </LinkDirectoryColumn>
+    </LinkDirectory>
+  </SectionBand>
 </template>

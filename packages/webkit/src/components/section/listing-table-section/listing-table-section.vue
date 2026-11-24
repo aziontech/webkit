@@ -17,10 +17,8 @@
   import TableHeadCell from '../../data/table/table-head-cell/table-head-cell.vue'
   import TableHeader from '../../data/table/table-header/table-header.vue'
   import TableRow from '../../data/table/table-row/table-row.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ListingTableSection',
@@ -96,65 +94,120 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :filled="hasRows"
+    align="start"
+    :title="title"
+    marks="bottom"
   >
-    <Module
-      v-if="hasRows"
-      :divided="false"
-      :padded="false"
-    >
-      <template
-        v-if="title"
-        #header
-      >
-        <ModuleHeader
-          align="start"
-          :title="title"
-        />
-      </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <div class="sm:hidden">
-          <ItemList>
-            <LazyNodes :row-height="76">
-              <Item
-                v-for="row in data"
-                :key="row.href"
-                role="listitem"
-                class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
-              >
-                <ItemContent class="gap-(--spacing-xs)">
-                  <ItemTitle>
-                    <a
-                      :href="safeHref(row.href) ?? undefined"
-                      class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
-                    >
-                      {{ row.values[titleKey] }}
-                    </a>
-                  </ItemTitle>
-                  <ItemDescription
-                    v-if="descriptionKey && row.values[descriptionKey]"
-                    class="line-clamp-none! text-overline-sm! text-pretty"
-                  >
-                    {{ row.values[descriptionKey] }}
-                  </ItemDescription>
-                </ItemContent>
-              </Item>
-            </LazyNodes>
-          </ItemList>
-          <div
-            v-if="primaryAction"
-            class="flex border-t border-(--border-default) px-(--spacing-xl) py-(--spacing-lg)"
+    <div class="sm:hidden">
+      <ItemList>
+        <LazyNodes :row-height="76">
+          <Item
+            v-for="row in data"
+            :key="row.href"
+            role="listitem"
+            class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
           >
+            <ItemContent class="gap-(--spacing-xs)">
+              <ItemTitle>
+                <a
+                  :href="safeHref(row.href) ?? undefined"
+                  class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
+                >
+                  {{ row.values[titleKey] }}
+                </a>
+              </ItemTitle>
+              <ItemDescription
+                v-if="descriptionKey && row.values[descriptionKey]"
+                class="line-clamp-none! text-overline-sm! text-pretty"
+              >
+                {{ row.values[descriptionKey] }}
+              </ItemDescription>
+            </ItemContent>
+          </Item>
+        </LazyNodes>
+      </ItemList>
+      <div
+        v-if="primaryAction"
+        class="flex border-t border-(--border-default) px-(--spacing-xl) py-(--spacing-lg)"
+      >
+        <Button
+          :label="primaryAction.label"
+          :href="primaryAction.href"
+          variant="outline"
+          size="large"
+          :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
+          icon-position="trailing"
+          :animated="Boolean(primaryAction.trailing)"
+          class="w-full"
+        />
+      </div>
+    </div>
+
+    <Table class="max-sm:hidden!">
+      <TableHeader>
+        <TableRow>
+          <TableHeadCell
+            v-for="(column, index) in columns"
+            :key="column.key"
+            :grow="column.grow"
+            :align="column.align"
+            class="data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)!"
+            :data-first="index === 0 || null"
+            :data-last="index === lastIndex || null"
+          >
+            <span class="text-overline-md text-(--text-muted)">{{ column.label }}</span>
+          </TableHeadCell>
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        <LazyNodes :row-height="56">
+          <TableRow
+            v-for="row in data"
+            :key="row.href"
+            class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
+            @click="followRowLink"
+          >
+            <TableCell
+              v-for="(column, index) in columns"
+              :key="column.key"
+              :grow="column.grow"
+              :align="column.align"
+              :principal="index === 0"
+              class="py-(--spacing-lg)! data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)! data-[value]:text-overline-sm! data-[value]:text-(--text-muted)"
+              :data-first="index === 0 || null"
+              :data-last="index === lastIndex || null"
+              :data-value="index > 0 || null"
+            >
+              <a
+                v-if="index === 0"
+                :href="safeHref(row.href) ?? undefined"
+                class="text-label-lg text-(--text-default)"
+                >{{ row.values[column.key] }}</a
+              >
+              <span
+                v-else
+                class="min-w-0 truncate"
+                :title="row.values[column.key]"
+                >{{ row.values[column.key] }}</span
+              >
+            </TableCell>
+          </TableRow>
+        </LazyNodes>
+      </TableBody>
+
+      <template
+        v-if="primaryAction"
+        #footer
+      >
+        <TableFooter>
+          <div class="flex justify-end px-(--spacing-xl) py-(--spacing-lg)">
             <Button
               :label="primaryAction.label"
               :href="primaryAction.href"
@@ -163,84 +216,10 @@
               :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(primaryAction.trailing)"
-              class="w-full"
             />
           </div>
-        </div>
-
-        <Table class="max-sm:hidden!">
-          <TableHeader>
-            <TableRow>
-              <TableHeadCell
-                v-for="(column, index) in columns"
-                :key="column.key"
-                :grow="column.grow"
-                :align="column.align"
-                class="data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)!"
-                :data-first="index === 0 || null"
-                :data-last="index === lastIndex || null"
-              >
-                <span class="text-overline-md text-(--text-muted)">{{ column.label }}</span>
-              </TableHeadCell>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            <LazyNodes :row-height="56">
-              <TableRow
-                v-for="row in data"
-                :key="row.href"
-                class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
-                @click="followRowLink"
-              >
-                <TableCell
-                  v-for="(column, index) in columns"
-                  :key="column.key"
-                  :grow="column.grow"
-                  :align="column.align"
-                  :principal="index === 0"
-                  class="py-(--spacing-lg)! data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)! data-[value]:text-overline-sm! data-[value]:text-(--text-muted)"
-                  :data-first="index === 0 || null"
-                  :data-last="index === lastIndex || null"
-                  :data-value="index > 0 || null"
-                >
-                  <a
-                    v-if="index === 0"
-                    :href="safeHref(row.href) ?? undefined"
-                    class="text-label-lg text-(--text-default)"
-                    >{{ row.values[column.key] }}</a
-                  >
-                  <span
-                    v-else
-                    class="min-w-0 truncate"
-                    :title="row.values[column.key]"
-                    >{{ row.values[column.key] }}</span
-                  >
-                </TableCell>
-              </TableRow>
-            </LazyNodes>
-          </TableBody>
-
-          <template
-            v-if="primaryAction"
-            #footer
-          >
-            <TableFooter>
-              <div class="flex justify-end px-(--spacing-xl) py-(--spacing-lg)">
-                <Button
-                  :label="primaryAction.label"
-                  :href="primaryAction.href"
-                  variant="outline"
-                  size="large"
-                  :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-                  icon-position="trailing"
-                  :animated="Boolean(primaryAction.trailing)"
-                />
-              </div>
-            </TableFooter>
-          </template>
-        </Table>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        </TableFooter>
+      </template>
+    </Table>
+  </SectionBand>
 </template>

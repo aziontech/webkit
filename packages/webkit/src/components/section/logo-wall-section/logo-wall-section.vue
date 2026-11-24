@@ -7,12 +7,10 @@
     type ThirdPartyLogoTreatment,
     type ThirdPartyLogoVariant
   } from '../../content/third-party-logo/third-party-logo.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import Quote from '../../marketing/quote/quote.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'LogoWallSection',
@@ -126,170 +124,138 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-if="renders"
     v-bind="$attrs"
-    :id="anchor || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
     :data-testid="testId"
     :data-variant="variant"
-    :aria-label="title || undefined"
+    :label="title"
+    :filled="isQuoteBand || hasLogos"
+    :eyebrow="isQuoteBand ? '' : eyebrow"
+    :title="isQuoteBand ? '' : title"
+    :marks="isQuoteBand ? 'bottom' : 'all'"
   >
-    <Module
+    <div
       v-if="isQuoteBand && quote"
-      key="quote"
-      :divided="false"
-      :padded="false"
+      :data-variant="quoteVariant"
+      class="p-(--spacing-xl) lg:data-[variant=signed]:max-w-(--container-5xl)"
     >
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="bottom"
+      <Quote
+        :variant="quoteVariant"
+        :text="quote.text"
+        :name="quote.name"
+        :job-title="quote.jobTitle"
       >
-        <div
-          :data-variant="quoteVariant"
-          class="p-(--spacing-xl) lg:data-[variant=signed]:max-w-(--container-5xl)"
+        <template
+          v-if="quote.logo"
+          #mark
         >
-          <Quote
-            :variant="quoteVariant"
-            :text="quote.text"
-            :name="quote.name"
-            :job-title="quote.jobTitle"
-          >
-            <template
-              v-if="quote.logo"
-              #mark
-            >
-              <ThirdPartyLogo
-                :name="quote.logoAlt"
-                :src="quote.logo"
-                :src-light="quote.logoLight"
-                :artwork="quote.artwork"
-                class="h-8 max-w-(--size-40) group-data-[variant=highlight]:md:h-24 group-data-[variant=highlight]:md:max-w-none"
-              />
-            </template>
-            <template
-              v-if="hasActions"
-              #actions
-            >
-              <Button
-                v-if="primaryAction"
-                :label="primaryAction.label"
-                :href="primaryAction.href"
-                variant="secondary"
-                size="large"
-                :target="primaryAction.target"
-                :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-                icon-position="trailing"
-                :animated="Boolean(primaryAction.trailing)"
-              />
-              <Button
-                key="button-2"
-                v-if="secondaryAction"
-                :label="secondaryAction.label"
-                :href="secondaryAction.href"
-                variant="outline"
-                size="large"
-                :target="secondaryAction.target"
-                :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
-                icon-position="trailing"
-                :animated="Boolean(secondaryAction.trailing)"
-              />
-            </template>
-          </Quote>
-        </div>
-      </RegistrationFrame>
-    </Module>
-
-    <Module
-      v-else-if="hasLogos"
-      key="wall"
-      :divided="false"
-      :padded="false"
+          <ThirdPartyLogo
+            :name="quote.logoAlt"
+            :src="quote.logo"
+            :src-light="quote.logoLight"
+            :artwork="quote.artwork"
+            class="h-8 max-w-(--size-40) group-data-[variant=highlight]:md:h-24 group-data-[variant=highlight]:md:max-w-none"
+          />
+        </template>
+        <template
+          v-if="hasActions"
+          #actions
+        >
+          <Button
+            v-if="primaryAction"
+            :label="primaryAction.label"
+            :href="primaryAction.href"
+            variant="secondary"
+            size="large"
+            :target="primaryAction.target"
+            :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
+            icon-position="trailing"
+            :animated="Boolean(primaryAction.trailing)"
+          />
+          <Button
+            key="button-2"
+            v-if="secondaryAction"
+            :label="secondaryAction.label"
+            :href="secondaryAction.href"
+            variant="outline"
+            size="large"
+            :target="secondaryAction.target"
+            :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
+            icon-position="trailing"
+            :animated="Boolean(secondaryAction.trailing)"
+          />
+        </template>
+      </Quote>
+    </div>
+    <LogoWall
+      v-else
+      variant="rectangle"
+      :aria-label="ariaLabel || undefined"
+      :items="wallItems"
     >
-      <template
-        v-if="title"
-        #header
-      >
-        <ModuleHeader
-          :eyebrow="eyebrow"
-          :title="title"
+      <template #mark="{ index }">
+        <ThirdPartyLogo
+          v-if="logos[index]"
+          :name="logos[index].name"
+          :src="logos[index].logo"
+          :src-light="logos[index].logoLight"
+          :artwork="markArtwork(logos[index])"
+          :variant="markKind(logos[index])"
+          :data-treatment="logos[index].logoTreatment ?? 'color'"
+          class="h-5 sm:max-w-24"
         />
       </template>
-
-      <RegistrationFrame
-        flush
-        borders="y"
-        marks="all"
+      <template
+        v-if="quote"
+        #aside
       >
-        <LogoWall
-          variant="rectangle"
-          :aria-label="ariaLabel || undefined"
-          :items="wallItems"
+        <Quote
+          variant="signed"
+          :text="quote.text"
+          :name="quote.name"
+          :job-title="quote.jobTitle"
         >
-          <template #mark="{ index }">
+          <template #mark>
             <ThirdPartyLogo
-              v-if="logos[index]"
-              :name="logos[index].name"
-              :src="logos[index].logo"
-              :src-light="logos[index].logoLight"
-              :artwork="markArtwork(logos[index])"
-              :variant="markKind(logos[index])"
-              :data-treatment="logos[index].logoTreatment ?? 'color'"
-              class="h-5 sm:max-w-24"
+              :name="quote.logoAlt"
+              :src="quote.logo"
+              :src-light="quote.logoLight"
+              :artwork="quote.artwork"
+              class="h-8 max-w-40"
             />
           </template>
           <template
-            v-if="quote"
-            #aside
+            v-if="hasActions"
+            #actions
           >
-            <Quote
-              variant="signed"
-              :text="quote.text"
-              :name="quote.name"
-              :job-title="quote.jobTitle"
-            >
-              <template #mark>
-                <ThirdPartyLogo
-                  :name="quote.logoAlt"
-                  :src="quote.logo"
-                  :src-light="quote.logoLight"
-                  :artwork="quote.artwork"
-                  class="h-8 max-w-40"
-                />
-              </template>
-              <template
-                v-if="hasActions"
-                #actions
-              >
-                <Button
-                  v-if="primaryAction"
-                  :label="primaryAction.label"
-                  :href="primaryAction.href"
-                  variant="secondary"
-                  size="large"
-                  :target="primaryAction.target"
-                  :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
-                  icon-position="trailing"
-                  :animated="Boolean(primaryAction.trailing)"
-                />
-                <Button
-                  key="button-2"
-                  v-if="secondaryAction"
-                  :label="secondaryAction.label"
-                  :href="secondaryAction.href"
-                  variant="outline"
-                  size="large"
-                  :target="secondaryAction.target"
-                  :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
-                  icon-position="trailing"
-                  :animated="Boolean(secondaryAction.trailing)"
-                />
-              </template>
-            </Quote>
+            <Button
+              v-if="primaryAction"
+              :label="primaryAction.label"
+              :href="primaryAction.href"
+              variant="secondary"
+              size="large"
+              :target="primaryAction.target"
+              :icon="primaryAction.trailing ? 'az az-chevron-right' : ''"
+              icon-position="trailing"
+              :animated="Boolean(primaryAction.trailing)"
+            />
+            <Button
+              key="button-2"
+              v-if="secondaryAction"
+              :label="secondaryAction.label"
+              :href="secondaryAction.href"
+              variant="outline"
+              size="large"
+              :target="secondaryAction.target"
+              :icon="secondaryAction.trailing ? 'az az-chevron-right' : ''"
+              icon-position="trailing"
+              :animated="Boolean(secondaryAction.trailing)"
+            />
           </template>
-        </LogoWall>
-      </RegistrationFrame>
-    </Module>
-  </section>
+        </Quote>
+      </template>
+    </LogoWall>
+  </SectionBand>
 </template>

@@ -5,8 +5,8 @@
   import Texture from '../../content/texture/texture.vue'
   import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
+  import SectionHatch from '../parts/section-hatch.vue'
 
   defineOptions({
     name: 'ClosingCallToActionSection',
@@ -209,14 +209,9 @@
         </CallToAction>
       </Module>
     </template>
-    <RegistrationFrame
+    <SectionHatch
       v-if="isFrame || (title && hatch)"
-      borders="none"
-      marks="all"
-      data-hatch="true"
-      class="h-[calc(var(--spacing-2xl)*2)] group-data-[variant=panel]:h-(--spacing-2xl)"
-    >
-      <Texture variant="lines" />
-    </RegistrationFrame>
+      class="group-data-[variant=panel]:h-(--spacing-2xl)"
+    />
   </div>
 </template>

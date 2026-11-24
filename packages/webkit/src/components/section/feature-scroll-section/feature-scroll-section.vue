@@ -12,7 +12,7 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaScroll from '../../marketing/media-scroll/media-scroll.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'FeatureScrollSection',
@@ -95,6 +95,7 @@
   })
 
   const CodeBlock = defineAsyncComponent(() => import('../../code/code-block/code-block.vue'))
+  const SectionCodeWindow = defineAsyncComponent(() => import('../parts/section-code-window.vue'))
 
   const attrs = useAttrs()
 
@@ -131,14 +132,16 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="items.length"
+    :filled="items.length > 0"
+    :framed="false"
     header-size="large"
   >
     <RegistrationFrame
@@ -224,17 +227,13 @@
                     v-bind="{ ...items[index].scene?.props, active }"
                   />
                 </div>
-                <div
+                <SectionCodeWindow
                   v-else-if="items[index].code"
-                  class="w-full min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)"
-                >
-                  <CodeBlock
-                    :tabs="sampleTabs(items[index].code)"
-                    show-line-numbers
-                    v-bind="{ animateLines: true }"
-                    :copy-aria-label="items[index].code.copyAriaLabel || undefined"
-                  />
-                </div>
+                  :tabs="sampleTabs(items[index].code)"
+                  animated
+                  :copy-aria-label="items[index].code.copyAriaLabel"
+                  class="w-full"
+                />
                 <div
                   v-else-if="items[index].illustration"
                   class="w-full min-w-0"
@@ -260,5 +259,5 @@
         </template>
       </MediaScroll>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

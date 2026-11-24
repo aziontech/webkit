@@ -5,7 +5,9 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'ArchitectureTabsSection',
@@ -73,6 +75,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'architecture-tabs-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, undefined))
 
   const items = computed(() =>
     props.tabs.map((tab) => ({ title: tab.title, description: tab.description }))
@@ -80,18 +83,26 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-bind="$attrs"
     :data-testid="testId"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
-    :item-count="tabs.length"
+    :filled="tabs.length > 0"
+    :framed="false"
     align="split"
     header-padding="small"
-    :primary-action="primaryAction"
   >
+    <template
+      v-if="headerActions.length"
+      #header-actions
+    >
+      <SectionActions :actions="headerActions" />
+    </template>
+
     <RegistrationFrame
       flush
       borders="top"
@@ -115,5 +126,5 @@
         </template>
       </MediaTabs>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

@@ -4,13 +4,12 @@
   import type { SceneName } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
-  import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
-  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import SplitStack from '../../layout/split-stack/split-stack.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import { resolveMedia } from '../media-split-section/lib/media-split-media'
   import MediaSplitSectionMedia from '../media-split-section/parts/media-split-section-media.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({
     name: 'MediaSplitStackSection',
@@ -146,78 +145,68 @@
 </script>
 
 <template>
-  <section
+  <SectionBand
     v-bind="$attrs"
-    :id="anchor || undefined"
     :data-testid="testId"
-    :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-2xl)"
+    :anchor="anchor"
+    :label="title"
+    :filled="hasBands"
+    :framed="false"
+    align="center"
+    header-size="medium"
+    :eyebrow="eyebrow"
+    :title="title"
+    :description="description"
   >
-    <template v-if="hasBands">
-      <ModuleHeader
-        v-if="hasHeader"
+    <SplitStack
+      sticky
+      flush
+    >
+      <MediaSplit
+        v-for="(band, index) in views"
+        :key="band.title"
+        variant="media-end"
+        divided
+        :heading-level="hasHeader ? 3 : 2"
         align="center"
-        size="medium"
-        :eyebrow="eyebrow"
-        :title="title"
-        :description="description"
-      />
-
-      <Module
-        :divided="false"
-        :padded="false"
+        size="large"
+        media-fill="canvas"
+        texture="pixelate"
+        texture-size="small"
+        texture-fade="top"
+        :eyebrow="band.eyebrow ?? ''"
+        :title="band.title"
+        :description="band.description"
+        :media-href="bandHref(band)"
+        :media-padded="media[index]?.mockup"
+        @pointerenter="hovered = index"
+        @pointerleave="hovered = null"
       >
-        <SplitStack
-          sticky
-          flush
+        <template
+          v-if="media[index]?.kind"
+          #media
         >
-          <MediaSplit
-            v-for="(band, index) in views"
-            :key="band.title"
-            variant="media-end"
-            divided
-            :heading-level="hasHeader ? 3 : 2"
-            align="center"
-            size="large"
-            media-fill="canvas"
-            texture="pixelate"
-            texture-size="small"
-            texture-fade="top"
-            :eyebrow="band.eyebrow ?? ''"
-            :title="band.title"
-            :description="band.description"
-            :media-href="bandHref(band)"
-            :media-padded="media[index]?.mockup"
-            @pointerenter="hovered = index"
-            @pointerleave="hovered = null"
-          >
-            <template
-              v-if="media[index]?.kind"
-              #media
-            >
-              <MediaSplitSectionMedia
-                :source="band"
-                :illustration-aria-label="band.illustrationLabel ?? ''"
-                :hovered="hovered === index"
-              />
-            </template>
-            <template
-              v-if="band.action"
-              #actions
-            >
-              <Button
-                :label="band.action.label"
-                :href="band.action.href"
-                variant="outline"
-                size="medium"
-                icon="az az-chevron-right"
-                icon-position="trailing"
-                animated
-              />
-            </template>
-          </MediaSplit>
-        </SplitStack>
-      </Module>
-    </template>
-  </section>
+          <MediaSplitSectionMedia
+            :source="band"
+            :illustration-aria-label="band.illustrationLabel ?? ''"
+            :hovered="hovered === index"
+          />
+        </template>
+        <template
+          v-if="band.action"
+          #actions
+        >
+          <Button
+            :label="band.action.label"
+            :href="band.action.href"
+            variant="outline"
+            size="medium"
+            icon="az az-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </MediaSplit>
+    </SplitStack>
+  </SectionBand>
 </template>

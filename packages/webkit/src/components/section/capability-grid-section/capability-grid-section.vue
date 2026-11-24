@@ -6,7 +6,9 @@
   import type { ModuleHeaderAlign } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
-  import FeatureTabsSectionShell from '../feature-tabs-section/parts/feature-tabs-section-shell.vue'
+  import { sectionActions } from '../lib/section-actions'
+  import SectionActions from '../parts/section-actions.vue'
+  import SectionBand from '../parts/section-band.vue'
 
   defineOptions({ name: 'CapabilityGridSection', inheritAttrs: false })
 
@@ -84,6 +86,7 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'capability-grid-section'
   )
+  const headerActions = computed(() => sectionActions(props.primaryAction, props.secondaryAction))
 
   const headingLevel = computed(() => (props.title ? 3 : 2))
 
@@ -106,19 +109,26 @@
 </script>
 
 <template>
-  <FeatureTabsSectionShell
+  <SectionBand
     v-if="items.length"
     v-bind="$attrs"
     :data-testid="testId"
-    :item-count="items.length"
+    :filled="items.length > 0"
+    :framed="false"
     :anchor="anchor"
+    :label="title"
     :eyebrow="eyebrow"
     :title="title"
     :description="description"
     :align="titleAlign"
-    :primary-action="primaryAction"
-    :secondary-action="secondaryAction"
   >
+    <template
+      v-if="headerActions.length"
+      #header-actions
+    >
+      <SectionActions :actions="headerActions" />
+    </template>
+
     <RegistrationFrame
       flush
       borders="y"
@@ -156,5 +166,5 @@
         </CardGridCell>
       </CardGrid>
     </RegistrationFrame>
-  </FeatureTabsSectionShell>
+  </SectionBand>
 </template>

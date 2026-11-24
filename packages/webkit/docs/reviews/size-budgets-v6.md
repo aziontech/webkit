@@ -1751,3 +1751,23 @@ Budget-raise: hint 6.4 KB → 10.7 KB (measured 10.64 KB): Hint is now the click
 Budget-raise: llms-full.txt 2,400,000 → 2,415,000 bytes (measured 2,405,402): in-product help (HELP-1 to HELP-C-3), the click-open Hint, the ConsoleLayout.ToolsTrigger part and their spec, example and guidance pages in the full AI bundle.
 Budget-raise: css-console 24.25 KB → 24.6 KB (measured 24.54 KB): Field and SettingsRow now carry the click-open Hint, so a console screen compiles the Popover and Link classes (in-product help, HELP-A-1).
 Budget-raise: catalog/ 1,415,000 → 1,425,000 bytes (measured 1,417,876): the ConsoleLayout.ToolsTrigger part, the Hint and Info examples and the shell-console PageHelp state (in-product help).
+
+## Page sections on the shared SectionBand frame (2026-11-23, roadmap 1.7)
+
+Thirty-one page sections now draw their outer frame through the private `SectionBand` part (and `SectionHatch`, `SectionActions`) instead of a copy each. Measured alone, each entry carries the part; a page loads it once, and all 46 sections bundled together shrink from 1,615.95 KB to 1,615.56 KB.
+
+Budget-raise: customer-use-cases-section 7.95 KB → 8.2 KB (measured 8.16 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: article-cards-section 6.35 KB → 6.45 KB (measured 6.42 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: article-index-section 37.65 KB → 37.95 KB (measured 37.92 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: plan-comparison-section 39.95 KB → 40.1 KB (measured 40.09 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: feature-widgets-section 20.25 KB → 20.3 KB (measured 20.28 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: network-section 27.3 KB → 27.6 KB (measured 27.59 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: job-posting-section 59.9 KB → 60.2 KB (measured 60.18 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: photo-marquee-section 7.6 KB → 7.8 KB (measured 7.76 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: template-gallery-section 30.05 KB → 30.4 KB (measured 30.37 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: cli-terminal-section 47.55 KB → 47.65 KB (measured 47.60 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: feature-tabs-section 59.6 KB → 59.85 KB (measured 59.83 KB): the section draws its frame and its code window (`SectionCodeWindow`, shared with FeatureScrollSection) through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: contact-hub-section 9.55 KB → 9.8 KB (measured 9.75 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: newsletter-section 14 KB → 14.3 KB (measured 14.25 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
+Budget-raise: job-posting-section 63.05 KB → 63.35 KB (measured 63.32 KB): the click-open Hint (HELP-A-1) merged with the SectionBand frame (LA-2); both changes landed in the same entry.
+Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a rounding hair over): the SectionBand frame (LA-2) merged with the in-product help branch.
