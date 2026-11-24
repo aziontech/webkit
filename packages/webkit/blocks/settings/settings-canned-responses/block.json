@@ -1,0 +1,78 @@
+{
+  "id": "settings/settings-canned-responses",
+  "name": "SettingsCannedResponses",
+  "title": "Blocks/Settings/SettingsCannedResponses",
+  "surface": "app",
+  "stability": "preview",
+  "keyboard": { "entry": "field" },
+  "summary": "The admin page for the saved replies support agents insert into a ticket (macros, canned responses, saved replies): a `PageHeader` with New response, a `PropertyFilter` that searches title and body and filters by folder and visibility, and a `DataTable` of responses (title with the first line of the reply, folder `Tag`, visibility Personal / Team / Everyone, last used with `TableCellTime`, usage count) with Edit, Duplicate and Delete in `TableCellActions`. A row opens a `Drawer` to edit: title, folder `Combobox` that takes a new folder, visibility `RadioGroup`, the reply in a `MarkdownEditor` with an Insert placeholder `DropdownMenu` that writes `{{ticket.requester.first_name}}` at the caret, and an optional ticket status `Select` applied when the reply is sent. Delete asks in a `ConfirmDialog`. The page owns loading, first-use empty, no match, a load error with Retry, saving and a save error that keeps the values. A page body for ConsoleLayout.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "canned responses",
+    "saved replies",
+    "macros",
+    "support macros",
+    "reply templates",
+    "response templates",
+    "email templates for agents",
+    "insert placeholder",
+    "template variables",
+    "respostas prontas",
+    "respostas salvas",
+    "macros de atendimento",
+    "modelos de resposta",
+    "respostas padrão"
+  ],
+  "skills": [
+    "webkit-lists",
+    "webkit-tables",
+    "webkit-form",
+    "webkit-ui-states",
+    "webkit-microcopy"
+  ],
+  "primary": {
+    "name": "Default",
+    "file": "settings-canned-responses.vue"
+  },
+  "files": ["sample.ts", "parts/response-drawer.vue", "parts/responses-table.vue"],
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "First use: no response yet. A flush card explains what canned responses are and offers New response in place of the search and the table.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the search row and the table's loading rows, before the empty state can be decided.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The list could not load: a danger Alert with Retry replaces the search and the table.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "NoMatch",
+      "summary": "Filters that match nothing (folder Billing and visibility Personal): the table shows No matching responses with Clear filters.",
+      "file": "variants/no-match.vue"
+    },
+    {
+      "name": "Editing",
+      "summary": "The edit drawer open on Ask for the request ID: title, folder, visibility, the reply with Insert placeholder, and the status it sets.",
+      "file": "variants/editing.vue"
+    },
+    {
+      "name": "Saving",
+      "summary": "Save response in flight: the drawer's fields lock and the submit button spins; the drawer closes when the save ends without an error.",
+      "file": "variants/saving.vue"
+    },
+    {
+      "name": "SaveError",
+      "summary": "The save failed: a danger Alert at the top of the drawer says the previous version still applies, and every value stays as typed.",
+      "file": "variants/save-error.vue"
+    }
+  ]
+}

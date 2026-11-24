@@ -1,0 +1,46 @@
+{
+ "variants": [
+  {
+   "name": "Empty",
+   "summary": "First use: no response yet. A flush card explains what canned responses are and offers New response in place of the search and the table.",
+   "file": "blocks/settings/settings-canned-responses/variants/empty.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: the search row and the table's loading rows, before the empty state can be decided.",
+   "file": "blocks/settings/settings-canned-responses/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The list could not load: a danger Alert with Retry replaces the search and the table.",
+   "file": "blocks/settings/settings-canned-responses/variants/error.vue"
+  },
+  {
+   "name": "NoMatch",
+   "summary": "Filters that match nothing (folder Billing and visibility Personal): the table shows No matching responses with Clear filters.",
+   "file": "blocks/settings/settings-canned-responses/variants/no-match.vue"
+  },
+  {
+   "name": "Editing",
+   "summary": "The edit drawer open on Ask for the request ID: title, folder, visibility, the reply with Insert placeholder, and the status it sets.",
+   "file": "blocks/settings/settings-canned-responses/variants/editing.vue"
+  },
+  {
+   "name": "Saving",
+   "summary": "Save response in flight: the drawer's fields lock and the submit button spins; the drawer closes when the save ends without an error.",
+   "file": "blocks/settings/settings-canned-responses/variants/saving.vue"
+  },
+  {
+   "name": "SaveError",
+   "summary": "The save failed: a danger Alert at the top of the drawer says the previous version still applies, and every value stays as typed.",
+   "file": "blocks/settings/settings-canned-responses/variants/save-error.vue"
+  }
+ ],
+ "sfcFile": "blocks/settings/settings-canned-responses/settings-canned-responses.vue",
+ "guidelinesFile": "blocks/settings/settings-canned-responses/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "parts/response-drawer.vue",
+  "parts/responses-table.vue"
+ ]
+}
