@@ -63,7 +63,7 @@ When `status` is `no-match`, the table's `#empty` slot holds a medium `EmptyStat
 
 When `status` is `error`, a danger `Alert` ("Couldn't load the resources. Check your connection and retry.") with a Retry action bound to the collection's `refresh` takes the table's place; the heading and the controls row stay.
 
-When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then a small secondary `Create <Object>` with the heading's label and a small outlined Documentation on one row.
+When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then the primary medium `Create <Object>` with the heading's label. The empty state owns the call to action, so the heading hides its own Create while the list is empty and keeps only Documentation: one Create and one Documentation on the page, never two of each.
 
 ## Data
 

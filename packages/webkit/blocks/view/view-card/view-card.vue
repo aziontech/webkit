@@ -185,6 +185,7 @@
             target="_blank"
           />
           <Button
+            v-if="error || loading || status !== 'empty'"
             label="Create Application"
             icon="az az-plus"
             variant="primary"
@@ -267,8 +268,8 @@
                   <Button
                     label="Create Application"
                     icon="az az-plus"
-                    variant="secondary"
-                    size="small"
+                    variant="primary"
+                    size="medium"
                     @click="(event: MouseEvent) => emit('create', event)"
                   />
                 </template>
