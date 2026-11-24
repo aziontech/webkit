@@ -8,7 +8,7 @@ export const sampleNow = new Date(Date.UTC(2026, 10, 10, 12))
 const ago = (ms: number) => new Date(sampleNow.getTime() - ms)
 const ahead = (ms: number) => new Date(sampleNow.getTime() + ms)
 
-export const sampleAgent = 'Jane Doe'
+const sampleAgent = 'Jane Doe'
 
 export const sampleAgents: TicketInboxAgent[] = [
   { name: 'Jane Doe', presence: 'online' },
@@ -17,7 +17,7 @@ export const sampleAgents: TicketInboxAgent[] = [
   { name: 'Sam Lee', presence: 'offline' }
 ]
 
-export const sampleTickets: TicketInboxTicket[] = [
+const sampleTickets: TicketInboxTicket[] = [
   {
     id: '4812',
     subject: 'Custom domain returns a certificate error',
