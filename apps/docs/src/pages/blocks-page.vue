@@ -25,6 +25,7 @@
       items: group.items.map((item) => ({
         title: item.label,
         to: item.to,
+        preview: item.preview === true,
         text: cardPurpose(
           index.blocks.find((block) => `/blocks/${block.id}` === item.to)?.summary ?? ''
         )
