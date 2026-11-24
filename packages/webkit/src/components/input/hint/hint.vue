@@ -65,6 +65,7 @@
     :data-testid="testId"
     :side="side"
     align="start"
+    class="inline-flex shrink-0"
   >
     <PopoverTrigger>
       <button

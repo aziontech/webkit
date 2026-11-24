@@ -34,6 +34,13 @@ describe('Hint', () => {
     expect(panel()).toBeNull()
   })
 
+  it('lays its root out as inline-flex so the glyph adds no line height to the label row', async () => {
+    const { getByTestId } = render(Hint, { props: { content: TEXT } })
+    await settle()
+
+    expect(getByTestId('hint').classList.contains('inline-flex')).toBe(true)
+  })
+
   it('renders a non-submitting button with a catalog name and a decorative glyph', async () => {
     const { getByTestId } = render(Hint, { props: { content: TEXT } })
     await settle()
