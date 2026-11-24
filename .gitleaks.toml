@@ -16,4 +16,5 @@ regexes = [
   '''^pat_0123456789abcdef0123456789abcdef0123456789abcdef$''',
   '''^ij9076f1ujik17a81f938yhru5g713422$''',
   '''^crfe25d2-23j8-48gf-a9ks-6b75w3ska674$''',
+  '''^azn_7Kq0lO1Il9xR4vT2mW8pZ3$''',
 ]

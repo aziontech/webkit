@@ -2134,3 +2134,4 @@ Budget-raise: split-button 17.6 KB → 17.65 KB (measured 17.62 KB): merging the
 Budget-raise: date-picker 15.45 KB → 15.5 KB (measured 15.46 KB): merging the audit-5 P3 fixes with the single 6.0 branch (AI Copilot, #1201, #1202, #1205, ST-BAND) adds both sides' growth in parts it imports; each fit its own budget.
 Budget-raise: console-layout 86.95 KB → 87.05 KB (measured 87.02 KB): merging the audit-5 P3 fixes with the single 6.0 branch (AI Copilot, #1201, #1202, #1205, ST-BAND) adds both sides' growth in parts it imports; each fit its own budget.
 Budget-raise: conversation-history 41.95 KB → 42.1 KB (measured 42.06 KB): Today and Yesterday are found in the configured time zone, in UTC until the list mounts, so a server-rendered page hydrates without mismatches.
+Budget-raise: feature-widgets-section 20.55 KB → 20.6 KB (measured 20.55 KB locally, a few bytes over in CI): the merged section sits on its limit, and the CI build rounds it over.
