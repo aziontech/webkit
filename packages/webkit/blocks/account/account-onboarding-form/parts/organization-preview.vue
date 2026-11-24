@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-me-(--spacing-xl)">
+  <div class="min-w-0 max-w-full lg:sticky lg:top-(--spacing-xl) lg:my-auto">
     <div
       class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden mask-r-from-72% mask-b-from-80% lg:block"
     >
