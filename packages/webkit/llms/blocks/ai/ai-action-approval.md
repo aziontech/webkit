@@ -143,6 +143,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 
 - Show exactly what will run, with the real identifiers.
 - Label the approve button with the verb of the title.
+- Give a tool that waits for approval a neutral title in the imperative (`Deploy storefront to production`), never the progressive (`Deploying…`): the same title stays on the call after Denied, where an in-progress verb would claim it ran.
 - Dismiss the buttons as soon as the reader decides and show the outcome in text.
 - Acknowledge a denial and say nothing ran.
 - Expire a request the reader leaves undecided and say nothing ran.
@@ -667,17 +668,17 @@ const deploy = (state: AiChatToolCallPart['state'], approved?: boolean): AiChatT
 const deployRequest = request('m1', 'Deploy the current build of storefront to production')
 
 export const sampleTools: Record<string, AiChatTool> = {
-  get_build: { title: 'Reading the latest build of storefront' },
+  get_build: { title: 'Read the latest build of storefront' },
   deploy_workload: {
-    title: 'Deploying storefront to production',
+    title: 'Deploy storefront to production',
     question: 'Allow `deploy_workload` on production?',
     description:
       'Deploys build `b-4821` of storefront to production. The current version stays available for rollback.',
     approveLabel: 'Deploy'
   },
-  get_domain_traffic: { title: 'Reading the traffic of old.example.com' },
+  get_domain_traffic: { title: 'Read the traffic of old.example.com' },
   delete_domain: {
-    title: 'Deleting old.example.com',
+    title: 'Delete old.example.com',
     question: 'Delete the domain `old.example.com`?',
     description:
       'The domain stops answering at once and its certificate is revoked. This cannot be undone.',
@@ -841,7 +842,10 @@ export const sampleDeleteMessages: AiChatMessage[] = [
     <template #end>
       <PromptInputDictateButton />
     </template>
-    <template #hint>The assistant runs nothing in your account without your approval.</template>
+    <template #hint>
+      The AI assistant can make mistakes. Check important information before you act on it. It runs
+      nothing in your account without your approval.
+    </template>
   </PromptInput>
 </template>
 ```

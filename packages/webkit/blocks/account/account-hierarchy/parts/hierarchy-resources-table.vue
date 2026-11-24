@@ -2,7 +2,6 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Card from '@aziontech/webkit/card'
   import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
   import { type TableColumn } from '@aziontech/webkit/table'
@@ -10,12 +9,14 @@
   import TableCellId from '@aziontech/webkit/table-cell-id'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
+  import TableFooter from '@aziontech/webkit/table-footer'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { computed } from 'vue'
 
   import type { AccountHierarchyResource } from '../account-hierarchy.vue'
-  import { initials, type ResourceNode, statusSeverity, types } from '../hierarchy-model'
+  import { initials, plural, type ResourceNode, statusSeverity, types } from '../hierarchy-model'
 
   export interface HierarchyResourcesTableProps {
     /** The tree the table shows, pruned by the search. */
@@ -28,7 +29,7 @@
     labelledby: string
   }
 
-  defineProps<HierarchyResourcesTableProps>()
+  const props = defineProps<HierarchyResourcesTableProps>()
 
   const tableExpanded = defineModel<string[]>('openKeys', { required: true })
   const selectedKeys = defineModel<string[]>('selectedKeys', { required: true })
@@ -52,6 +53,10 @@
   ]
 
   const { formatNumber } = useLocale()
+
+  const countNodes = (nodes: ResourceNode[]): number =>
+    nodes.reduce((sum, node) => sum + 1 + countNodes(node.children ?? []), 0)
+  const resourceCount = computed(() => countNodes(props.visibleTree))
 
   const money = (value: number) => formatNumber(value, { style: 'currency', currency: 'USD' })
 </script>
@@ -183,7 +188,11 @@
           </TableCellActions>
         </template>
         <template #footer>
-          <DataTablePagination :page-size="25" />
+          <TableFooter v-if="!loading">
+            <p class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)">
+              {{ plural(resourceCount, 'resource', 'resources') }}
+            </p>
+          </TableFooter>
         </template>
       </DataTable>
     </template>

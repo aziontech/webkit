@@ -157,6 +157,7 @@
                   meta
                   key-name="enter"
                   size="small"
+                  class="pointer-coarse:hidden!"
                   aria-hidden="true"
                 />
               </Button>

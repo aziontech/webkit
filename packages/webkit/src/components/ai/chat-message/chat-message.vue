@@ -241,7 +241,7 @@
         ref="bodyEl"
         :data-from="from"
         :data-testid="`${testId}__content`"
-        :title="from === 'user' && timestamp ? timestamp : undefined"
+        :title="from === 'user' && timestamp ? `\u2068${timestamp}\u2069` : undefined"
         :class="CONTENT_CLASS"
       >
         <slot />

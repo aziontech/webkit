@@ -151,7 +151,6 @@
             />
             <Button
               label="Contact sales"
-              aria-label="Contact sales (opens in a new tab)"
               variant="primary"
               size="medium"
               href="https://example.com/contact-sales"

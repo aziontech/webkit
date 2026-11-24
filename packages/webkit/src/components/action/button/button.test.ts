@@ -55,10 +55,28 @@ describe('Button', () => {
       const { getByRole } = render(Button, {
         props: { label: 'Docs', href: 'https://example.com', target: '_blank' }
       })
-      const link = getByRole('link', { name: 'Docs' })
+      const link = getByRole('link', { name: 'Docs (opens in a new tab)' })
       expect(link.tagName).toBe('A')
       expect(link.getAttribute('href')).toBe('https://example.com')
       expect(link.getAttribute('rel')).toBe('noopener noreferrer')
+    })
+
+    it('says a new tab after slotted content too', () => {
+      const view = render(Button, {
+        props: { href: 'https://example.com', target: '_blank' },
+        slots: { default: 'Read the docs' }
+      })
+      expect(view.getByRole('link', { name: 'Read the docs (opens in a new tab)' })).toBeTruthy()
+    })
+
+    it('says a new tab only on an anchor that opens one', () => {
+      const same = render(Button, { props: { label: 'Docs', href: 'https://example.com' } })
+      expect(same.getByRole('link', { name: 'Docs' })).toBeTruthy()
+      expect(same.queryByTestId('button__new-tab')).toBeNull()
+      same.unmount()
+      const plain = render(Button, { props: { label: 'Save', target: '_blank' } })
+      expect(plain.getByRole('button', { name: 'Save' })).toBeTruthy()
+      expect(plain.queryByTestId('button__new-tab')).toBeNull()
     })
 
     it('honors a consumer-provided data-testid over the fallback', () => {

@@ -40,6 +40,13 @@ describe('PaymentBrand', () => {
     expect(view.getByRole('img', { name })).toHaveAttribute('data-brand', id)
   })
 
+  it('draws the Mastercard circles as equals, never a solid knob beside a faded one', () => {
+    const view = render(PaymentBrand, { props: { brand: 'mastercard' } })
+    const circles = [...view.getByTestId('payment-brand').querySelectorAll('circle')]
+    expect(circles).toHaveLength(2)
+    expect(new Set(circles.map((circle) => circle.getAttribute('fill-opacity'))).size).toBe(1)
+  })
+
   it('draws the generic glyph for a brand without a mark and keeps its name', () => {
     const view = render(PaymentBrand, { props: { brand: 'maestro' } })
     const img = view.getByRole('img', { name: 'Card' })

@@ -169,13 +169,14 @@ describe.each([
   ['OauthConsent', OauthConsent],
   ['DeviceAuthorization', DeviceAuthorization]
 ])('auth/auth-sign-in#%s signed-in account', (_, Variant) => {
-  it('ends a long name or email on an ellipsis and keeps the full value in its title', () => {
+  it('ends a long name on an ellipsis with its title, and wraps the email so all of it shows', () => {
     const view = render(Variant)
-    for (const value of ['Jane Doe', 'jane.doe@example.com']) {
-      const text = view.getByText(value)
-      expect(text).toHaveAttribute('title', value)
-      expect(text.classList.contains('truncate')).toBe(true)
-    }
+    const name = view.getByText('Jane Doe')
+    expect(name).toHaveAttribute('title', 'Jane Doe')
+    expect(name.classList.contains('truncate')).toBe(true)
+    const email = view.getByText('jane.doe@example.com')
+    expect(email.classList.contains('truncate')).toBe(false)
+    expect(email.classList.contains('break-all')).toBe(true)
   })
 })
 

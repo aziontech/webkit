@@ -23,7 +23,7 @@
     </span>
     <code
       dir="ltr"
-      class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-body-code-sm text-(--text-muted)"
+      class="max-w-full break-all rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-body-code-sm text-(--text-muted)"
       >{{ name }}</code
     >
   </span>

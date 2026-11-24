@@ -163,6 +163,7 @@
     </template>
 
     <Link
+      v-if="!error"
       label="Resources pending deletion"
       size="medium"
       href="/account/resources/pending-deletion"

@@ -111,4 +111,15 @@ describe('account/account-billing', () => {
     expect(view.emitted<unknown[]>('refresh')).toHaveLength(2)
     expect(view.container.textContent).toContain('INV-A12401')
   })
+
+  it('drops the Updated time while loading and after an error, and keeps it with data', () => {
+    const ready = render(AccountBilling)
+    expect(ready.container.textContent).toContain('Updated ')
+    ready.unmount()
+    const loading = render(AccountBilling, { props: { loading: true } })
+    expect(loading.container.textContent).not.toContain('Updated ')
+    loading.unmount()
+    const failed = render(AccountBilling, { props: { error: 'The billing API answered 503.' } })
+    expect(failed.container.textContent).not.toContain('Updated ')
+  })
 })

@@ -363,8 +363,7 @@
   }
 
   const INFO_ALERT_LABEL =
-    'A Deployment Setting says how a deploy routes: its binding policy, its deployment policy and its rollout defaults. Every environment is linked to one automatically, matching its ' +
-    'own deployment policy, and only a matching setting can be chosen. Point two environments at the same setting and a deploy into it publishes to both.'
+    'A Deployment Setting holds a binding policy, a deployment policy and rollout defaults. Only a setting with the same deployment policy as an environment can be chosen for it.'
 </script>
 
 <template>
@@ -377,7 +376,6 @@
         <template #actions>
           <Button
             label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"

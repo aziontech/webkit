@@ -88,6 +88,7 @@
 - With `disabledReason` set on a `disabled` button, the root carries `aria-disabled` instead of the native `disabled` attribute, so it keeps its place in the tab order; `click` is still suppressed and the look is the disabled one. The reason is the root's `title`: the browser shows it on hover and assistive technology reads it as the button's description. The button depends on no overlay: a styled `Tooltip` around it is the consumer's choice, and it now opens on focus too, because the button can take focus.
 - When `loading` turns on and `loadingLabel` is set, it is announced once through the shared polite live region (`useAnnouncer`). With no `loadingLabel` only `aria-busy` marks the state: the button has no built-in string.
 - The root is one element: an anchor when `href` is set, otherwise a button. Its inner parts carry `data-slot`: `content`, `icon`, `label`, `touch-target`.
+- An anchor with `target="_blank"` ends its content with a visually hidden `common.newTab` text ("(opens in a new tab)", `${testId}__new-tab`), as `Link` does, so its accessible name warns that it opens a new tab. A `button` root never carries it.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 

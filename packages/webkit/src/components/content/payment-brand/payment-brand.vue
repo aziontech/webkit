@@ -141,13 +141,14 @@
         cy="8"
         r="5"
         fill="currentColor"
+        fill-opacity="0.7"
       />
       <circle
         cx="15"
         cy="8"
         r="5"
         fill="currentColor"
-        fill-opacity="0.5"
+        fill-opacity="0.7"
       />
     </svg>
     <svg

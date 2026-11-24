@@ -420,7 +420,6 @@ Each variant is the same screen in another state: `get_block("account/account-pe
         <template #actions>
           <Button
             label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
             icon="az az-book"
             variant="outline"
             size="medium"
@@ -1011,6 +1010,13 @@ export const sampleTokens: PersonalTokensToken[] = [
             :label="row.status"
             :severity="statusOf(row).severity"
           />
+        </template>
+        <template #cell-expires="{ row, value }">
+          <span
+            class="text-body-sm text-(--text-default) data-[ended]:text-(--text-muted)"
+            :data-ended="row.revoked || row.status === 'Expired' || null"
+            >{{ value }}</span
+          >
         </template>
         <template #cell-lastUsedAt="{ value }">
           <TableCellTime

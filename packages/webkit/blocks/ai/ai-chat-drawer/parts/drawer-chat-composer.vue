@@ -62,6 +62,9 @@
     <template #end>
       <PromptInputDictateButton />
     </template>
-    <template #hint>The AI assistant can make mistakes. Check important information.</template>
+    <template #hint
+      >The AI assistant can make mistakes. Check important information before you act on
+      it.</template
+    >
   </PromptInput>
 </template>

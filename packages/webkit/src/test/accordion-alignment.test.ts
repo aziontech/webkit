@@ -65,6 +65,38 @@ describe('Accordion alignment and dividers (styled)', () => {
     }
   }
 
+  it('wraps a long leading-chevron label inside the trigger on a narrow screen', async () => {
+    const view = render(
+      defineComponent({
+        components: {
+          Accordion,
+          AccordionItem: Accordion.Item,
+          AccordionTrigger: Accordion.Trigger
+        },
+        template: `
+          <div style="width: 240px">
+            <Accordion icon-position="leading">
+              <AccordionItem value="all">
+                <AccordionTrigger>
+                  <span style="display: flex; flex-wrap: wrap; gap: 8px">
+                    <span>All services</span><span>4 services</span><span>4 on a shared setting</span>
+                  </span>
+                </AccordionTrigger>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        `
+      })
+    )
+    await nextTick()
+    await document.fonts.ready
+    const trigger = view.getByTestId('accordion-trigger')
+    const label = trigger.querySelector(':scope > span') as HTMLElement
+    expect(label.getBoundingClientRect().right).toBeLessThanOrEqual(
+      trigger.getBoundingClientRect().right + 0.5
+    )
+  })
+
   it('draws one divider under every item but the last, open or closed, and none under a trigger', async () => {
     const view = await mount({})
     const items = view.getAllByTestId('accordion-item')

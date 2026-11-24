@@ -171,7 +171,6 @@
           <template #actions>
             <Button
               label="How billing works"
-              aria-label="How billing works (opens in a new tab)"
               variant="outline"
               size="small"
               icon="az az-external-link"

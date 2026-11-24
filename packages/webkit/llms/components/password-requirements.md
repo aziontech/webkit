@@ -39,6 +39,7 @@
 ## States
 
 - Each chip carries `data-validated` when its rule passes.
+- `DEFAULT_PASSWORD_REQUIREMENTS` lists its rules in the order people expect to read them: length, lowercase, uppercase, number, special character.
 - The row animates its height as chips wrap.
 
 ## Accessibility

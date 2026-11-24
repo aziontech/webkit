@@ -167,6 +167,22 @@ describe('KeyValueList', () => {
       expect(view.getByText('Workload ID')).toBeInTheDocument()
       expect(view.getByText('Region')).toBeInTheDocument()
     })
+
+    it('draws a visible skeleton beside the label in the split variant', () => {
+      const SplitLoading = defineComponent({
+        components: { KeyValueList, KeyValueListItem },
+        template: `
+          <div style="width: 360px">
+            <KeyValueList variant="split" loading aria-label="Plan">
+              <KeyValueListItem label="Next charge date">Dec 1, 2026</KeyValueListItem>
+            </KeyValueList>
+          </div>
+        `
+      })
+      const view = render(SplitLoading)
+      const skeleton = view.getByTestId('skeleton')
+      expect(skeleton.getBoundingClientRect().width).toBeGreaterThan(40)
+    })
   })
 
   describe('groups', () => {

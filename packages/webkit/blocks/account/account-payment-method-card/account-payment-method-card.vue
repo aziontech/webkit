@@ -129,6 +129,12 @@
     editingCard.value = false
   }
 
+  const onFormKeydown = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || event.defaultPrevented || locked.value) return
+    event.preventDefault()
+    cancelEditingCard()
+  }
+
   watch(editingCard, (editing, wasEditing) => {
     if (!editing && wasEditing) focusById('card-change')
   })
@@ -171,6 +177,7 @@
             variant="outline"
             size="small"
             :disabled="disabled"
+            disabled-reason="You can change the card once the current request finishes."
             @click="startEditingCard"
           />
         </div>
@@ -180,6 +187,7 @@
           aria-label="Change payment method"
           novalidate
           @submit.prevent="updateCard"
+          @keydown="onFormKeydown"
         >
           <Alert
             v-if="error"

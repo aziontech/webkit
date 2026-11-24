@@ -54,6 +54,9 @@
     <template #end>
       <PromptInputDictateButton />
     </template>
-    <template #hint>The assistant runs nothing in your account without your approval.</template>
+    <template #hint>
+      The AI assistant can make mistakes. Check important information before you act on it. It runs
+      nothing in your account without your approval.
+    </template>
   </PromptInput>
 </template>

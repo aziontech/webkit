@@ -131,6 +131,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 
 - Show exactly what will run, with the real identifiers.
 - Label the approve button with the verb of the title.
+- Give a tool that waits for approval a neutral title in the imperative (`Deploy storefront to production`), never the progressive (`Deploying…`): the same title stays on the call after Denied, where an in-progress verb would claim it ran.
 - Dismiss the buttons as soon as the reader decides and show the outcome in text.
 - Acknowledge a denial and say nothing ran.
 - Expire a request the reader leaves undecided and say nothing ran.

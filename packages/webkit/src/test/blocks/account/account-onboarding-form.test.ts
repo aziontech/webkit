@@ -26,6 +26,22 @@ describe('account/account-onboarding-form', () => {
     }
   })
 
+  it('paints each named mark mostly in the colour it is named after', () => {
+    for (const accent of accents.filter((item) => item.value !== 'gray')) {
+      const lead = accent.colors[0]
+      expect(accent.colors.filter((color) => color === lead).length, accent.label).toBeGreaterThan(
+        accent.colors.length / 2
+      )
+    }
+  })
+
+  it('fades the preview on its end edge in either direction', () => {
+    const view = render(AccountOnboardingForm)
+    const faded = view.container.querySelector('[class*="mask-b-from-80%"]') as HTMLElement
+    expect(faded.classList).toContain('ltr:mask-r-from-72%')
+    expect(faded.classList).toContain('rtl:mask-l-from-72%')
+  })
+
   it('renders the step card on the layout column, with the Wizard holding the step', async () => {
     const view = render(AccountOnboardingForm)
     const column = view.container.querySelector('.layout-column.layout-boundary')

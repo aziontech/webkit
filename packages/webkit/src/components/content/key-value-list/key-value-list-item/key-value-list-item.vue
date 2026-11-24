@@ -61,7 +61,10 @@
       :data-variant="context.variant.value"
       :class="VALUE_CLASS"
     >
-      <Skeleton v-if="context.loading.value" />
+      <Skeleton
+        v-if="context.loading.value"
+        :width="context.variant.value === 'split' ? '6rem' : '100%'"
+      />
       <slot v-else-if="hasValue()" />
       <template v-else>
         <span
