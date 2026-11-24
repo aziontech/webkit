@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-configurable/dashboard-configurable.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-configurable")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DashboardGrid](../../components/dashboard-grid.md), [DonutChart](../../components/donut-chart.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [Tag](../../components/tag.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DashboardGrid](../../components/dashboard-grid.md), [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [Tag](../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
@@ -150,7 +150,7 @@ Then delete `sample.ts` and its import.
 - Give every `DashboardGrid.Item` the card title as its `label`; it is what moves and resizes announce.
 - Announce a reset yourself in a polite live region (`Layout reset to the default.`); the board
   announces only what it did.
-- Keep every card at its place and size in loading and empty states, so the reader can arrange it
+- Keep every card at its place and size in loading and partly empty states, so the reader can arrange it
   before data arrives.
 
 ## Don't
@@ -168,7 +168,7 @@ Then delete `sample.ts` and its import.
 - **Help line:** two short sentences on how, no layout positions. `Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use the arrow keys.`
 - **Handle labels:** verb plus card title. `Move Requests over time`, `Resize Requests over time`.
 - **Announcements:** full sentences with a period. `Layout reset to the default.`
-- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.`
+- **Empty state:** `No requests yet` / `Metrics appear here once a service serves requests.` for one card; the page-level one says what fills the page and offers Create Application.
 
 ## Accessibility
 
@@ -184,7 +184,7 @@ Then delete `sample.ts` and its import.
 - Default: the arranged dashboard, read-only (`v-model:layout`).
 - Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
 - Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
-- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
+- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); one bordered page-level `EmptyState` (`No requests yet`, with Create Application as the next step) replaces the grid and the layout controls, instead of the same empty state in every card. A card left empty while others have data keeps its place and size and shows its own empty state.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -199,7 +199,7 @@ Then delete `sample.ts` and its import.
 - `Default` — primary (the code below)
 - `Editing` — Edit mode. Drag a card by its handle onto another to swap their order, or drag its corner to change the span and the height. Focus the handle and use the arrow keys to move a card, or focus the corner and use Left and Right for the span, Up and Down for the height.
 - `Loading` — While the data loads, every chart renders its own Skeleton inside its card, so the layout holds its shape.
-- `Empty` — Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives.
+- `Empty` — Nothing recorded yet. One bordered page-level EmptyState, No requests yet with Create Application as the next step, replaces the grid and its layout controls instead of repeating the same empty card six times.
 - `Error` — The request for the cards failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-configurable", { variant })`, or the file under `blocks/dashboard/dashboard-configurable/variants/`.
@@ -215,6 +215,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import ChartCard from '@aziontech/webkit/chart-card'
   import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/webkit/dashboard-grid'
   import DonutChart from '@aziontech/webkit/donut-chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -337,6 +338,13 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const labels = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
   const chartSeries = computed(() => props.series ?? (blocked.value ? {} : sampleSeries))
   const sources = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      sources.value.length === 0 &&
+      Object.values(chartSeries.value).every((entry) => !entry?.length)
+  )
+
   const cardOf = (id: string) => cards[id as ConfigurableDashboardCardId]
   const seriesOf = (id: string) => chartSeries.value[id as ConfigurableDashboardChartId] ?? []
 
@@ -393,7 +401,28 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         data-testid="dashboard-configurable__error"
         @action="(event: MouseEvent) => emit('retry', event)"
       />
-      <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-chart-bar"
+        title="No requests yet"
+        description="Requests, regions, errors and response time appear here once a service serves its first request."
+        data-testid="dashboard-configurable__empty"
+      >
+        <template #actions>
+          <Button
+            label="Create Application"
+            icon="az az-plus"
+            size="medium"
+            href="/applications/new"
+          />
+        </template>
+      </EmptyState>
+
+      <div
+        v-if="!nothing"
+        class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+      >
         <p
           v-if="editing"
           class="m-0 min-w-0 grow text-body-sm text-(--text-muted)"
@@ -422,6 +451,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       </div>
 
       <DashboardGrid
+        v-if="!nothing"
         v-model:layout="layout"
         :editing="editing"
         aria-label="Traffic overview cards"

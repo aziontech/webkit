@@ -7,7 +7,7 @@
   },
   {
    "name": "Empty",
-   "summary": "A period with no alerts. The tiles show a dash with no delta, and every region keeps its box with an EmptyState that says why it is empty and what to do next.",
+   "summary": "A period with no alerts. The tiles print 0 with no delta, and one bordered page-level EmptyState, No alerts in the last 30 days with Show the last 90 days as the next step, replaces the cards.",
    "file": "blocks/dashboard/dashboard-alerts/variants/empty.vue"
   },
   {

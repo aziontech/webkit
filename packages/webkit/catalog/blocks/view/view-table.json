@@ -2,7 +2,7 @@
  "variants": [
   {
    "name": "Empty",
-   "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Documentation button.",
+   "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with the primary Create Resource; the heading hides its own Create and keeps Documentation, so neither action appears twice.",
    "file": "blocks/view/view-table/variants/empty.vue"
   },
   {

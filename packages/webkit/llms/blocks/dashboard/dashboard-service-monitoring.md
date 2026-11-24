@@ -313,6 +313,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const deltaLabel = computed(() => `p95 latency vs previous ${windowNames[timeWindow.value]}`)
 
   const formatLatency = (value: number) => `${Math.round(value)} ms`
+  const formatLatencyFigure = (value: number) => String(Math.round(value))
   const formatRate = (value: number) => {
     const digits = value === 0 || value >= 10 ? 0 : value >= 1 ? 1 : 2
     return `${value.toFixed(digits)}%`
@@ -375,8 +376,9 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             <StatTile
               :label="service.name"
               :value="service.latency"
-              :format-value="formatLatency"
-              :delta="service.delta"
+              :format-value="formatLatencyFigure"
+              unit="ms"
+              :delta="service.status.severity === 'danger' ? null : service.delta"
               :delta-label="deltaLabel"
               inverse
               :trend="service.trend"
