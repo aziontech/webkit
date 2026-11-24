@@ -119,6 +119,8 @@ export const ptBR: Messages = {
     dictationFailed: 'O ditado parou. Tente de novo',
     model: 'Modelo',
     mode: 'Modo',
+    searchModels: 'Buscar modelos...',
+    allProviders: 'Todos os provedores',
     context: 'Escolher contexto',
     contextRemove: 'Remover contexto',
     tools: 'Ferramentas',

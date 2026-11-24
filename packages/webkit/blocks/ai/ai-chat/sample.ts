@@ -320,7 +320,67 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
   }
 ]
 
+export interface AiChatProject {
+  id: string
+  code: string
+  title: string
+  kind: 'workload' | 'dns' | 'firewall' | 'function' | 'storage'
+  icon: string
+  pinned?: boolean
+  cloud?: boolean
+}
+
+export interface AiChatThreadChange {
+  ref: string
+  title: string
+}
+
+export interface AiChatThread {
+  id: string
+  title: string
+  projectId: string
+  age: string
+  environment: string
+  modelLabel: string
+  providerIcon: string
+  draft?: boolean
+  snoozed?: boolean
+  settled?: boolean
+  changeRef?: string
+  chainCount?: number
+  changes?: AiChatThreadChange[]
+}
+
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
+
+export const sampleProjects: AiChatProject[] = [
+  {
+    id: 'workloads',
+    code: 'WL',
+    title: 'Workloads',
+    kind: 'workload',
+    icon: 'az az-workloads',
+    pinned: true
+  },
+  { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
+  { id: 'firewall', code: 'FW', title: 'Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+  {
+    id: 'functions',
+    code: 'FN',
+    title: 'Edge Functions',
+    kind: 'function',
+    icon: 'az az-functions',
+    cloud: true
+  },
+  {
+    id: 'storage',
+    code: 'OS',
+    title: 'Object Storage',
+    kind: 'storage',
+    icon: 'az az-object-storage',
+    cloud: true
+  }
+]
 
 export const sampleHistory: ConversationHistoryItem[] = [
   { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00Z' },
@@ -331,16 +391,148 @@ export const sampleHistory: ConversationHistoryItem[] = [
   { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00Z' }
 ]
 
+export const sampleThreads: AiChatThread[] = [
+  {
+    id: 'h1',
+    title: 'Why does storefront return 502 errors?',
+    projectId: 'workloads',
+    age: '12m',
+    environment: 'prod-us-east',
+    modelLabel: 'Claude Opus 4.5',
+    providerIcon: 'az az-claude',
+    draft: true,
+    chainCount: 3,
+    changes: [
+      { ref: '#1170', title: 'feat(workload): renew origin TLS cert for api.example.com' },
+      { ref: '#1200', title: 'fix(cache): allowlist q and page query params on /search' },
+      { ref: '#1203', title: 'chore(edge): enable stale-while-revalidate fallback' }
+    ]
+  },
+  {
+    id: 'h2',
+    title: 'Purge the cache after a deploy',
+    projectId: 'workloads',
+    age: '2h',
+    environment: 'prod-us-east',
+    modelLabel: 'Gemini 4 Neon',
+    providerIcon: 'az az-gemini',
+    changeRef: '1170',
+    changes: [{ ref: '#1170', title: 'ci(purge): trigger Real-Time Purge on release tag' }]
+  },
+  {
+    id: 'h3',
+    title: 'A WAF rule for login attempts',
+    projectId: 'firewall',
+    age: '1d',
+    environment: 'edge-global',
+    modelLabel: 'Claude Sonnet 4',
+    providerIcon: 'az az-claude',
+    changeRef: '1142',
+    changes: [{ ref: '#1142', title: 'sec(waf): rate-limit /auth/login to 20 req/min' }]
+  },
+  {
+    id: 'h4',
+    title: 'Top orders query for acme-store',
+    projectId: 'functions',
+    age: '3d',
+    environment: 'edge-sql-eu',
+    modelLabel: 'GPT-5.2',
+    providerIcon: 'az az-openai'
+  },
+  {
+    id: 'h5',
+    title: 'Move DNS records to Azion',
+    projectId: 'edge-dns',
+    age: '2w',
+    environment: 'dns-anycast',
+    modelLabel: 'Gemini 4 Carbon',
+    providerIcon: 'az az-gemini'
+  },
+  {
+    id: 'h6',
+    title: 'Image optimization for docs-site',
+    projectId: 'storage',
+    age: '1mo',
+    environment: 'media-bucket',
+    modelLabel: 'Azion Auto',
+    providerIcon: 'az az-azion',
+    settled: true
+  }
+]
+
+export const sampleProviders: PromptInputMenuOption[] = [
+  { value: 'azion', label: 'Azion AI', icon: 'az az-azion' },
+  { value: 'google', label: 'Google', icon: 'az az-gemini' },
+  { value: 'anthropic', label: 'Anthropic', icon: 'az az-claude' },
+  { value: 'openai', label: 'OpenAI', icon: 'az az-openai' },
+  { value: 'meta', label: 'Meta', icon: 'az az-meta' }
+]
+
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
-  { value: 'fast', label: 'Fast', description: 'Answers right away' },
-  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+  {
+    value: 'gemini-4-neon',
+    label: 'Gemini 4 Neon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘1'
+  },
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Carbon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘2'
+  },
+  {
+    value: 'gemini-3-8-flash',
+    label: 'Gemini 3.8 Flash',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘3'
+  },
+  {
+    value: 'claude-opus-4-5',
+    label: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘4'
+  },
+  {
+    value: 'claude-sonnet-4',
+    label: 'Claude Sonnet 4',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘5'
+  },
+  { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
+  {
+    value: 'gpt-5-mini',
+    label: 'GPT-5 Mini',
+    provider: 'openai',
+    icon: 'az az-openai',
+    shortcut: '⌘7'
+  },
+  {
+    value: 'llama-4-maverick',
+    label: 'Llama 4 Maverick',
+    provider: 'meta',
+    icon: 'az az-meta',
+    shortcut: '⌘8'
+  },
+  {
+    value: 'auto',
+    label: 'Azion Auto',
+    provider: 'azion',
+    icon: 'az az-azion',
+    description: 'AI Gateway router'
+  }
 ]
 
 export const sampleModes: PromptInputMenuOption[] = [
   { value: 'low', label: 'Low' },
   { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' }
+  { value: 'high', label: 'High' },
+  { value: 'extra', label: 'Extra' }
 ]
 
 export const sampleContexts: PromptInputMenuOption[] = [

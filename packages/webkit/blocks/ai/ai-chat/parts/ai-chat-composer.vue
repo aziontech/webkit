@@ -12,7 +12,7 @@
   import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { nextTick, ref } from 'vue'
 
-  import { sampleContexts, sampleModes } from '../sample'
+  import { sampleContexts, sampleModes, sampleProviders } from '../sample'
   import AiChatVoice from './ai-chat-voice.vue'
 
   defineProps<{
@@ -97,9 +97,10 @@
         v-if="models.length"
         v-model="modelKey"
         v-model:mode="modeKey"
+        :providers="sampleProviders"
         :models="models"
         :modes="modes"
-        mode-label="Effort"
+        mode-label="Thinking Level"
       />
       <PromptInputDictateButton />
     </template>

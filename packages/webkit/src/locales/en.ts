@@ -1496,6 +1496,8 @@ export const promptInput = {
   dictationFailed: 'Dictation stopped. Try again',
   model: 'Model',
   mode: 'Mode',
+  searchModels: 'Search models...',
+  allProviders: 'All providers',
   context: 'Choose context',
   contextRemove: 'Remove context',
   tools: 'Tools',

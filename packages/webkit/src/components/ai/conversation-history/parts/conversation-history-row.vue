@@ -145,7 +145,7 @@
       data-slot="conversation-history-item"
       :data-key="item.id"
       :data-active="active || null"
-      :data-description="(item.description && !ctx.slots['item']) || null"
+      :data-description="Boolean(item.description) || null"
       :aria-current="active ? 'page' : undefined"
       :aria-labelledby="ctx.slots['item'] ? `${uid}-content` : `${uid}-title`"
       :aria-describedby="describedBy()"

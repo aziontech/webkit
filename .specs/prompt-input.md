@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 7be92e2ac5f617df3d60276b46c5ad86fa45b9caad892d07accabb7a13f2b098
+checksum: 45cb9141d2425272e05d4cf5705070c7dca20e047ffaa30c2d719d423b2c9ebd
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -224,13 +224,14 @@ renders; their standalone paths are static.
   - Slots: _none_.
   - `data-testid` fallback: `prompt-input-dictate-button`.
 - `prompt-input-model-picker/prompt-input-model-picker.vue` — the model and mode picker: a ghost
-  small `Button` showing the model's label and the mode's label (muted), with a chevron, that opens
-  a `DropdownMenu` above it with a `Model` group of radio options (label, description muted at the
-  end of the row) and, when `modes` is not empty, a mode group of radio options. The panel stays
-  open on a choice, as radio items do; Escape or an outside click closes it. With no `models` the
-  control is disabled; a `v-model` that matches no model shows `Model`, and a mode that matches
-  none shows no mode label.
-  - Props: `models?: PromptInputMenuOption[]` (default `[]`); `modes?: PromptInputMenuOption[]` (default `[]`); `modeLabel?: string` (default `''` — empty uses `Mode`; the mode group's label, such as `Effort`).
+  small `Button` showing the selected model's provider icon (when set), the model's label and the
+  mode's label (muted), with a chevron, that opens a spacious `Popover` above it with an optional
+  vertical provider filter rail (`providers`), a search input (`Search models...`), a scrollable
+  `Model` menu of radio options (provider icon, label, checkmark, and shortcut or muted description)
+  and, when `modes` is not empty, a side-by-side mode column of radio options. The panel stays open
+  on a choice; Escape or an outside click closes it. With no `models` the control is disabled; a
+  `v-model` that matches no model shows `Model`, and a mode that matches none shows no mode label.
+  - Props: `models?: PromptInputMenuOption[]` (default `[]`); `providers?: PromptInputMenuOption[]` (default `[]` — optional provider rail at the inline start); `modes?: PromptInputMenuOption[]` (default `[]`); `modeLabel?: string` (default `''` — empty uses `Mode`; the mode column's label, such as `Thinking Level` or `Effort`).
   - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the model; `v-model:mode` `string` (default `''`; emits `update:mode`).
   - Events: _none_.
   - Slots: _none_.
@@ -295,7 +296,7 @@ packages/webkit/src/components/ai/prompt-input/
 | `voiceActive` | `boolean`                             | `false`   | false    | Marks a live voice conversation as active: swaps the voice control to End voice conversation (`voice-end`) and disables `PromptInput.DictateButton` with a muted microphone icon.               |
 | `queueable`   | `boolean`                             | `false`   | false    | While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response.                                             |
 
-Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInputMenuOption[] }`, `PromptInputMenuOption = { value: string; label: string; description?: string; icon?: string }` (also the option shape of the model, mode, context and tools pickers), `PromptInputReference = { trigger: string; value: string; label: string }`, `PromptInputFile = FileTokenGroupItem` (`{ file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`), `PromptInputRejectReason = 'accept' | 'max-files' | 'max-file-size'`, `PromptInputDictateTranscriber = 'browser' | 'app'`.
+Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInputMenuOption[] }`, `PromptInputMenuOption = { value: string; label: string; description?: string; icon?: string; provider?: string; shortcut?: string }` (also the option shape of the model, provider, mode, context and tools pickers), `PromptInputReference = { trigger: string; value: string; label: string }`, `PromptInputFile = FileTokenGroupItem` (`{ file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`), `PromptInputRejectReason = 'accept' | 'max-files' | 'max-file-size'`, `PromptInputDictateTranscriber = 'browser' | 'app'`.
 
 ## v-model
 
@@ -407,6 +408,8 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 | `promptInput.dictationFailed`  | `Dictation stopped. Try again`                             | —                             |
 | `promptInput.model`            | `Model`                                                    | —                             |
 | `promptInput.mode`             | `Mode`                                                     | `modeLabel` (ModelPicker)     |
+| `promptInput.searchModels`     | `Search models...`                                         | —                             |
+| `promptInput.allProviders`     | `All providers`                                            | —                             |
 | `promptInput.context`          | `Choose context`                                           | `placeholder` (ContextPicker) |
 | `promptInput.contextRemove`    | `Remove context`                                           | —                             |
 | `promptInput.tools`            | `Tools`                                                    | `label` (Tools)               |

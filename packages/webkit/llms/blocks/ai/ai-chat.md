@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [McpAppFrame](../../components/mcp-app-frame.md), `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
   /** The model chosen in the header or composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
-  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  const modelKey = defineModel<string>('modelKey', { default: 'gemini-4-neon' })
   /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
@@ -1101,7 +1101,46 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
   }
 ]
 
+export interface AiChatProject {
+  id: string
+  code: string
+  title: string
+  kind: 'workload' | 'dns' | 'firewall' | 'function' | 'storage'
+  icon: string
+  pinned?: boolean
+  cloud?: boolean
+}
+
+export interface AiChatThreadChange {
+  ref: string
+  title: string
+}
+
+export interface AiChatThread {
+  id: string
+  title: string
+  projectId: string
+  age: string
+  environment: string
+  modelLabel: string
+  providerIcon: string
+  draft?: boolean
+  snoozed?: boolean
+  settled?: boolean
+  changeRef?: string
+  chainCount?: number
+  changes?: AiChatThreadChange[]
+}
+
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
+
+export const sampleProjects: AiChatProject[] = [
+  { id: 'workloads', code: 'WL', title: 'Workloads', kind: 'workload', icon: 'az az-workloads', pinned: true },
+  { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
+  { id: 'firewall', code: 'FW', title: 'Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+  { id: 'functions', code: 'FN', title: 'Edge Functions', kind: 'function', icon: 'az az-functions', cloud: true },
+  { id: 'storage', code: 'OS', title: 'Object Storage', kind: 'storage', icon: 'az az-object-storage', cloud: true }
+]
 
 export const sampleHistory: ConversationHistoryItem[] = [
   { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00Z' },
@@ -1112,16 +1151,100 @@ export const sampleHistory: ConversationHistoryItem[] = [
   { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00Z' }
 ]
 
+export const sampleThreads: AiChatThread[] = [
+  {
+    id: 'h1',
+    title: 'Why does storefront return 502 errors?',
+    projectId: 'workloads',
+    age: '12m',
+    environment: 'prod-us-east',
+    modelLabel: 'Claude Opus 4.5',
+    providerIcon: 'az az-claude',
+    draft: true,
+    chainCount: 3,
+    changes: [
+      { ref: '#1170', title: 'feat(workload): renew origin TLS cert for api.example.com' },
+      { ref: '#1200', title: 'fix(cache): allowlist q and page query params on /search' },
+      { ref: '#1203', title: 'chore(edge): enable stale-while-revalidate fallback' }
+    ]
+  },
+  {
+    id: 'h2',
+    title: 'Purge the cache after a deploy',
+    projectId: 'workloads',
+    age: '2h',
+    environment: 'prod-us-east',
+    modelLabel: 'Gemini 4 Neon',
+    providerIcon: 'az az-gemini',
+    changeRef: '1170',
+    changes: [{ ref: '#1170', title: 'ci(purge): trigger Real-Time Purge on release tag' }]
+  },
+  {
+    id: 'h3',
+    title: 'A WAF rule for login attempts',
+    projectId: 'firewall',
+    age: '1d',
+    environment: 'edge-global',
+    modelLabel: 'Claude Sonnet 4',
+    providerIcon: 'az az-claude',
+    changeRef: '1142',
+    changes: [{ ref: '#1142', title: 'sec(waf): rate-limit /auth/login to 20 req/min' }]
+  },
+  {
+    id: 'h4',
+    title: 'Top orders query for acme-store',
+    projectId: 'functions',
+    age: '3d',
+    environment: 'edge-sql-eu',
+    modelLabel: 'GPT-5.2',
+    providerIcon: 'az az-openai'
+  },
+  {
+    id: 'h5',
+    title: 'Move DNS records to Azion',
+    projectId: 'edge-dns',
+    age: '2w',
+    environment: 'dns-anycast',
+    modelLabel: 'Gemini 4 Carbon',
+    providerIcon: 'az az-gemini'
+  },
+  {
+    id: 'h6',
+    title: 'Image optimization for docs-site',
+    projectId: 'storage',
+    age: '1mo',
+    environment: 'media-bucket',
+    modelLabel: 'Azion Auto',
+    providerIcon: 'az az-azion',
+    settled: true
+  }
+]
+
+export const sampleProviders: PromptInputMenuOption[] = [
+  { value: 'azion', label: 'Azion AI', icon: 'az az-azion' },
+  { value: 'google', label: 'Google', icon: 'az az-gemini' },
+  { value: 'anthropic', label: 'Anthropic', icon: 'az az-claude' },
+  { value: 'openai', label: 'OpenAI', icon: 'az az-openai' },
+  { value: 'meta', label: 'Meta', icon: 'az az-meta' }
+]
+
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
-  { value: 'fast', label: 'Fast', description: 'Answers right away' },
-  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+  { value: 'gemini-4-neon', label: 'Gemini 4 Neon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘1' },
+  { value: 'gemini-4-carbon', label: 'Gemini 4 Carbon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘2' },
+  { value: 'gemini-3-8-flash', label: 'Gemini 3.8 Flash', provider: 'google', icon: 'az az-gemini', shortcut: '⌘3' },
+  { value: 'claude-opus-4-5', label: 'Claude Opus 4.5', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘4' },
+  { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘5' },
+  { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
+  { value: 'gpt-5-mini', label: 'GPT-5 Mini', provider: 'openai', icon: 'az az-openai', shortcut: '⌘7' },
+  { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', icon: 'az az-meta', shortcut: '⌘8' },
+  { value: 'auto', label: 'Azion Auto', provider: 'azion', icon: 'az az-azion', description: 'AI Gateway router' }
 ]
 
 export const sampleModes: PromptInputMenuOption[] = [
   { value: 'low', label: 'Low' },
   { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' }
+  { value: 'high', label: 'High' },
+  { value: 'extra', label: 'Extra' }
 ]
 
 export const sampleContexts: PromptInputMenuOption[] = [
@@ -1171,7 +1294,7 @@ export const turnTime = (
   import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { nextTick, ref } from 'vue'
 
-  import { sampleContexts, sampleModes } from '../sample'
+  import { sampleContexts, sampleModes, sampleProviders } from '../sample'
   import AiChatVoice from './ai-chat-voice.vue'
 
   defineProps<{
@@ -1256,9 +1379,10 @@ export const turnTime = (
         v-if="models.length"
         v-model="modelKey"
         v-model:mode="modeKey"
+        :providers="sampleProviders"
         :models="models"
         :modes="modes"
-        mode-label="Effort"
+        mode-label="Thinking Level"
       />
       <PromptInputDictateButton />
     </template>
@@ -1377,9 +1501,11 @@ export const turnTime = (
 
   const modelKey = defineModel<string>('modelKey', { required: true })
 
-  const modelLabel = computed(
-    () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
+  const selectedModel = computed(() =>
+    props.models.find((option) => option.value === modelKey.value)
   )
+  const modelLabel = computed(() => selectedModel.value?.label ?? '')
+  const modelIcon = computed(() => selectedModel.value?.icon ?? '')
 
   const actions: { value: AiChatHeaderAction; label: string; severity?: 'danger' }[] = [
     { value: 'share', label: 'Share' },
@@ -1450,6 +1576,11 @@ export const turnTime = (
               class="min-w-0"
             >
               <span class="truncate text-label-lg">AI assistant</span>
+              <i
+                v-if="modelIcon"
+                :class="[modelIcon, 'shrink-0 text-(--text-muted)']"
+                aria-hidden="true"
+              />
               <span
                 v-if="modelLabel"
                 class="truncate text-(--text-muted)"
@@ -1572,15 +1703,33 @@ export const turnTime = (
 
 ```ts
 <script setup lang="ts">
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import Button from '@aziontech/webkit/button'
+  import ConversationHistory, {
+    type ConversationHistoryItem
+  } from '@aziontech/webkit/conversation-history'
   import DrawerBody from '@aziontech/webkit/drawer-body'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerHeader from '@aziontech/webkit/drawer-header'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import { watch } from 'vue'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import Popover from '@aziontech/webkit/popover-root'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, ref, watch } from 'vue'
 
-  import { sampleHistory, sampleHistoryNow } from '../sample'
+  import {
+    type AiChatProject,
+    type AiChatThread,
+    sampleHistory,
+    sampleHistoryNow,
+    sampleProjects,
+    sampleThreads
+  } from '../sample'
+  import AiChatHistoryRow from './ai-chat-history-row.vue'
+  import AiChatProjectFilter from './ai-chat-project-filter.vue'
 
   defineProps<{ panelOpen: boolean }>()
 
@@ -1588,6 +1737,68 @@ export const turnTime = (
 
   const active = defineModel<string | null>({ required: true })
   const drawerOpen = defineModel<boolean>('drawerOpen', { required: true })
+
+  const projects = ref<AiChatProject[]>(sampleProjects.map((item) => ({ ...item })))
+  const threads = ref<AiChatThread[]>(sampleThreads.map((item) => ({ ...item })))
+  const search = ref('')
+  const selectedProject = ref('')
+  const viewMode = ref<'detailed' | 'compact'>('detailed')
+  const addProjectOpen = ref(false)
+  const settledOpen = ref(false)
+
+  const projectTemplates: Omit<AiChatProject, 'id'>[] = [
+    { code: 'WL', title: 'New Workload', kind: 'workload', icon: 'az az-workloads' },
+    { code: 'DN', title: 'New Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
+    { code: 'FW', title: 'New Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+    {
+      code: 'FN',
+      title: 'New Edge Function',
+      kind: 'function',
+      icon: 'az az-functions',
+      cloud: true
+    },
+    {
+      code: 'OS',
+      title: 'New Object Storage',
+      kind: 'storage',
+      icon: 'az az-object-storage',
+      cloud: true
+    }
+  ]
+
+  const projectMap = computed(() => new Map(projects.value.map((item) => [item.id, item])))
+  const threadMap = computed(() => new Map(threads.value.map((item) => [item.id, item])))
+  const updatedMap = new Map(sampleHistory.map((item) => [item.id, item.updatedAt]))
+
+  const matchingThreads = computed(() => {
+    const needle = search.value.trim().toLowerCase()
+    return threads.value.filter((item) => {
+      if (selectedProject.value && item.projectId !== selectedProject.value) return false
+      if (!needle) return true
+      const projectTitle = projectMap.value.get(item.projectId)?.title ?? ''
+      return (
+        item.title.toLowerCase().includes(needle) ||
+        projectTitle.toLowerCase().includes(needle)
+      )
+    })
+  })
+
+  const toHistoryItem = (thread: AiChatThread): ConversationHistoryItem => ({
+    id: thread.id,
+    title: thread.title,
+    updatedAt: updatedMap.get(thread.id) ?? sampleHistoryNow,
+    description: viewMode.value === 'detailed' ? thread.environment : undefined
+  })
+
+  const activeItems = computed(() =>
+    matchingThreads.value.filter((item) => !item.settled && !item.snoozed).map(toHistoryItem)
+  )
+  const snoozedItems = computed(() =>
+    matchingThreads.value.filter((item) => item.snoozed && !item.settled).map(toHistoryItem)
+  )
+  const settledItems = computed(() =>
+    matchingThreads.value.filter((item) => item.settled).map(toHistoryItem)
+  )
 
   watch(active, () => {
     drawerOpen.value = false
@@ -1597,6 +1808,36 @@ export const turnTime = (
     drawerOpen.value = false
     emit('create', event)
   }
+
+  function addProject(template: Omit<AiChatProject, 'id'>) {
+    const id = `${template.kind}-${projects.value.length + 1}`
+    projects.value = [...projects.value, { ...template, id }]
+    selectedProject.value = id
+    addProjectOpen.value = false
+  }
+
+  function togglePinProject(id: string) {
+    projects.value = projects.value.map((item) =>
+      item.id === id ? { ...item, pinned: !item.pinned } : item
+    )
+  }
+
+  function toggleSnooze(id: string) {
+    threads.value = threads.value.map((item) =>
+      item.id === id ? { ...item, snoozed: !item.snoozed } : item
+    )
+  }
+
+  function toggleSettle(id: string) {
+    threads.value = threads.value.map((item) =>
+      item.id === id ? { ...item, settled: !item.settled, snoozed: false } : item
+    )
+  }
+
+  function discardDraft(id: string) {
+    threads.value = threads.value.filter((item) => item.id !== id)
+    if (active.value === id) active.value = null
+  }
 </script>
 
 <template>
@@ -1604,17 +1845,174 @@ export const turnTime = (
     v-if="panelOpen"
     id="ai-chat-history"
     aria-label="Conversation history"
-    class="flex w-(--container-3xs) shrink-0 flex-col overflow-y-auto bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
+    class="flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto border-e border-(--border-subtle) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
   >
+    <div class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)">
+      <Input
+        v-model="search"
+        size="small"
+        placeholder="Search"
+        aria-label="Search conversations"
+        role="searchbox"
+        autocomplete="off"
+        class="min-w-0 flex-1"
+      >
+        <template #leading>
+          <i
+            class="az az-search"
+            aria-hidden="true"
+          />
+        </template>
+      </Input>
+      <AiChatProjectFilter
+        v-model="selectedProject"
+        :projects="projects"
+        @toggle-pin="togglePinProject"
+      />
+      <Popover
+        v-model:open="addProjectOpen"
+        side="bottom"
+        align="end"
+        size="small"
+      >
+        <PopoverTrigger>
+          <IconButton
+            icon="az az-folder-plus"
+            aria-label="Add project"
+            variant="ghost"
+            size="small"
+          />
+        </PopoverTrigger>
+        <PopoverContent>
+          <div class="flex flex-col gap-0.5 p-(--spacing-xs)">
+            <span class="px-(--spacing-sm) py-1 text-label-xs text-(--text-muted)">
+              Add Azion resource
+            </span>
+            <Button
+              v-for="template in projectTemplates"
+              :key="template.title"
+              :label="template.title"
+              :icon="template.icon"
+              variant="ghost"
+              size="small"
+              class="w-full"
+              @click="addProject(template)"
+            />
+          </div>
+        </PopoverContent>
+      </Popover>
+      <Tooltip content="New thread">
+        <IconButton
+          icon="az az-square-pen"
+          aria-label="New thread"
+          variant="ghost"
+          size="small"
+          @click="create"
+        />
+      </Tooltip>
+    </div>
+
+    <div class="flex items-center justify-between px-(--spacing-xs)">
+      <span class="text-label-xs text-(--text-muted)">
+        {{ selectedProject ? projectMap.get(selectedProject)?.title : 'Threads' }}
+      </span>
+      <Tooltip
+        :content="
+          viewMode === 'detailed' ? 'Switch to single-line view' : 'Switch to detailed view'
+        "
+      >
+        <IconButton
+          :icon="viewMode === 'detailed' ? 'az az-list' : 'az az-layout-grid'"
+          :aria-label="
+            viewMode === 'detailed' ? 'Switch to single-line view' : 'Switch to detailed view'
+          "
+          variant="ghost"
+          size="small"
+          @click="viewMode = viewMode === 'detailed' ? 'compact' : 'detailed'"
+        />
+      </Tooltip>
+    </div>
+
     <ConversationHistory
       v-model="active"
-      :items="sampleHistory"
+      :items="activeItems"
       :now="sampleHistoryNow"
-      creatable
-      searchable
-      @create="create"
-    />
+    >
+      <template #item="{ item }">
+        <AiChatHistoryRow
+          v-if="threadMap.get(item.id)"
+          :thread="threadMap.get(item.id)!"
+          :project="projectMap.get(threadMap.get(item.id)!.projectId)"
+          :view-mode="viewMode"
+          @snooze="toggleSnooze"
+          @settle="toggleSettle"
+          @discard="discardDraft"
+        />
+      </template>
+    </ConversationHistory>
+
+    <div
+      v-if="snoozedItems.length"
+      class="flex flex-col gap-(--spacing-2xs) pt-(--spacing-xs)"
+    >
+      <span class="px-(--spacing-xs) text-label-xs text-(--text-muted)">
+        Snoozed ({{ snoozedItems.length }})
+      </span>
+      <ConversationHistory
+        v-model="active"
+        :items="snoozedItems"
+        :now="sampleHistoryNow"
+        aria-label="Snoozed conversations"
+      >
+        <template #item="{ item }">
+          <AiChatHistoryRow
+            v-if="threadMap.get(item.id)"
+            :thread="threadMap.get(item.id)!"
+            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
+            :view-mode="viewMode"
+            @snooze="toggleSnooze"
+            @settle="toggleSettle"
+            @discard="discardDraft"
+          />
+        </template>
+      </ConversationHistory>
+    </div>
+
+    <div
+      v-if="settledItems.length"
+      class="flex flex-col gap-(--spacing-2xs) pt-(--spacing-xs)"
+    >
+      <Button
+        :label="`Settled (${settledItems.length})`"
+        :icon="settledOpen ? 'az az-chevron-down' : 'az az-chevron-right'"
+        icon-position="trailing"
+        variant="ghost"
+        size="small"
+        class="w-full"
+        @click="settledOpen = !settledOpen"
+      />
+      <ConversationHistory
+        v-if="settledOpen"
+        v-model="active"
+        :items="settledItems"
+        :now="sampleHistoryNow"
+        aria-label="Settled conversations"
+      >
+        <template #item="{ item }">
+          <AiChatHistoryRow
+            v-if="threadMap.get(item.id)"
+            :thread="threadMap.get(item.id)!"
+            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
+            :view-mode="viewMode"
+            @snooze="toggleSnooze"
+            @settle="toggleSettle"
+            @discard="discardDraft"
+          />
+        </template>
+      </ConversationHistory>
+    </div>
   </aside>
+
   <Drawer
     v-model:open="drawerOpen"
     side="start"
@@ -1627,12 +2025,21 @@ export const turnTime = (
       <DrawerBody>
         <ConversationHistory
           v-model="active"
-          :items="sampleHistory"
+          :items="activeItems"
           :now="sampleHistoryNow"
-          creatable
-          searchable
-          @create="create"
-        />
+        >
+          <template #item="{ item }">
+            <AiChatHistoryRow
+              v-if="threadMap.get(item.id)"
+              :thread="threadMap.get(item.id)!"
+              :project="projectMap.get(threadMap.get(item.id)!.projectId)"
+              :view-mode="viewMode"
+              @snooze="toggleSnooze"
+              @settle="toggleSettle"
+              @discard="discardDraft"
+            />
+          </template>
+        </ConversationHistory>
       </DrawerBody>
     </DrawerContent>
   </Drawer>

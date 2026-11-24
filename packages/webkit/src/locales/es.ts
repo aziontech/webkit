@@ -119,6 +119,8 @@ export const es: Messages = {
     dictationFailed: 'El dictado se detuvo. Inténtalo de nuevo',
     model: 'Modelo',
     mode: 'Modo',
+    searchModels: 'Buscar modelos...',
+    allProviders: 'Todos los proveedores',
     context: 'Elegir contexto',
     contextRemove: 'Quitar contexto',
     tools: 'Herramientas',

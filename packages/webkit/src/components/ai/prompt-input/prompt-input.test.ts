@@ -697,12 +697,48 @@ describe('PromptInput', () => {
       const trigger = await findByTestId('prompt-input-model-picker')
       expect(trigger).toHaveTextContent('Sol 6.1')
       expect(trigger).toHaveTextContent('Low')
-      expect(trigger).toHaveAttribute('aria-haspopup', 'menu')
+      expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
       await userEvent.click(trigger)
       await userEvent.click(await screen.findByRole('menuitemradio', { name: /Terra 6\.1/ }))
       await userEvent.click(screen.getByRole('menuitemradio', { name: 'High' }))
       expect(scope.model!.value).toBe('terra')
       expect(scope.mode!.value).toBe('high')
+      await keys.keyboard('{Escape}')
+    })
+
+    it('filters models by provider and search, and renders the provider icon on the trigger', async () => {
+      const { findByTestId, scope } = composer({ model: 'gemini-4', mode: 'medium' }, (scope) => ({
+        slots: {
+          end: () =>
+            h(P.ModelPicker, {
+              ...bind(scope, 'model'),
+              ...bind(scope, 'mode', 'mode'),
+              providers: [
+                { value: 'google', label: 'Google', icon: 'az az-gemini' },
+                { value: 'anthropic', label: 'Anthropic', icon: 'az az-claude' }
+              ],
+              models: [
+                { value: 'gemini-4', label: 'Gemini 4 Neon', provider: 'google', shortcut: '⌘1' },
+                {
+                  value: 'claude-4',
+                  label: 'Claude Sonnet 4',
+                  provider: 'anthropic',
+                  shortcut: '⌘2'
+                }
+              ],
+              modes: [{ value: 'medium', label: 'Medium' }]
+            })
+        }
+      }))
+      const trigger = await findByTestId('prompt-input-model-picker')
+      expect(trigger.querySelector('.az-gemini')).toBeTruthy()
+      await userEvent.click(trigger)
+      await userEvent.click(await screen.findByRole('tab', { name: 'Anthropic' }))
+      expect(screen.queryByRole('menuitemradio', { name: /Gemini 4 Neon/ })).toBeNull()
+      await userEvent.click(screen.getByRole('menuitemradio', { name: /Claude Sonnet 4/ }))
+      expect(scope.model!.value).toBe('claude-4')
+      await nextTick()
+      expect(trigger.querySelector('.az-claude')).toBeTruthy()
       await keys.keyboard('{Escape}')
     })
 
@@ -872,7 +908,7 @@ describe('PromptInput', () => {
       expect(getByRole('button', { name: 'Start voice conversation' })).toBeTruthy()
       expect(getByRole('button', { name: 'Attach files' })).toBeTruthy()
       expect(await findByRole('button', { name: /Choose project/ })).toBeTruthy()
-      expect(await findByRole('button', { name: /Sol 6\.1/ })).toBeTruthy()
+      expect(await findByRole('button', { name: /Gemini 4 Neon/ })).toBeTruthy()
       await expectNoA11yViolations(container)
     })
   })

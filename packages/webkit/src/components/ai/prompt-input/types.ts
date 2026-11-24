@@ -7,6 +7,8 @@ export interface PromptInputMenuOption {
   label: string
   description?: string
   icon?: string
+  provider?: string
+  shortcut?: string
 }
 
 export interface PromptInputMenu {

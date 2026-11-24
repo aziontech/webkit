@@ -1138,12 +1138,12 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "14.5 KB"
+    "limit": "14.55 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "12.95 KB"
+    "limit": "13 KB"
   },
   {
     "name": "locales-es",
@@ -1262,7 +1262,7 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "15.95 KB",
+    "limit": "16 KB",
     "entryOnly": true
   },
   {
@@ -1274,7 +1274,7 @@
   {
     "name": "prompt-input-attach-button",
     "path": "src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue",
-    "limit": "6.85 KB",
+    "limit": "6.9 KB",
     "entryOnly": true
   },
   {
@@ -1298,7 +1298,7 @@
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "18.4 KB",
+    "limit": "18.3 KB",
     "entryOnly": true
   },
   {

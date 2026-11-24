@@ -156,7 +156,7 @@
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
   /** The model chosen in the header or composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
-  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
+  const modelKey = defineModel<string>('modelKey', { default: 'gemini-4-neon' })
   /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 

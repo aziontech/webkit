@@ -141,13 +141,14 @@ renders; their standalone paths are static.
   - Slots: _none_.
   - `data-testid` fallback: `prompt-input-dictate-button`.
 - `prompt-input-model-picker/prompt-input-model-picker.vue` — the model and mode picker: a ghost
-  small `Button` showing the model's label and the mode's label (muted), with a chevron, that opens
-  a `DropdownMenu` above it with a `Model` group of radio options (label, description muted at the
-  end of the row) and, when `modes` is not empty, a mode group of radio options. The panel stays
-  open on a choice, as radio items do; Escape or an outside click closes it. With no `models` the
-  control is disabled; a `v-model` that matches no model shows `Model`, and a mode that matches
-  none shows no mode label.
-  - Props: `models?: PromptInputMenuOption[]` (default `[]`); `modes?: PromptInputMenuOption[]` (default `[]`); `modeLabel?: string` (default `''` — empty uses `Mode`; the mode group's label, such as `Effort`).
+  small `Button` showing the selected model's provider icon (when set), the model's label and the
+  mode's label (muted), with a chevron, that opens a spacious `Popover` above it with an optional
+  vertical provider filter rail (`providers`), a search input (`Search models...`), a scrollable
+  `Model` menu of radio options (provider icon, label, checkmark, and shortcut or muted description)
+  and, when `modes` is not empty, a side-by-side mode column of radio options. The panel stays open
+  on a choice; Escape or an outside click closes it. With no `models` the control is disabled; a
+  `v-model` that matches no model shows `Model`, and a mode that matches none shows no mode label.
+  - Props: `models?: PromptInputMenuOption[]` (default `[]`); `providers?: PromptInputMenuOption[]` (default `[]` — optional provider rail at the inline start); `modes?: PromptInputMenuOption[]` (default `[]`); `modeLabel?: string` (default `''` — empty uses `Mode`; the mode column's label, such as `Thinking Level` or `Effort`).
   - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the model; `v-model:mode` `string` (default `''`; emits `update:mode`).
   - Events: _none_.
   - Slots: _none_.
@@ -265,6 +266,8 @@ packages/webkit/src/components/ai/prompt-input/
 | `promptInput.dictationFailed`  | `Dictation stopped. Try again`                             | —                             |
 | `promptInput.model`            | `Model`                                                    | —                             |
 | `promptInput.mode`             | `Mode`                                                     | `modeLabel` (ModelPicker)     |
+| `promptInput.searchModels`     | `Search models...`                                         | —                             |
+| `promptInput.allProviders`     | `All providers`                                            | —                             |
 | `promptInput.context`          | `Choose context`                                           | `placeholder` (ContextPicker) |
 | `promptInput.contextRemove`    | `Remove context`                                           | —                             |
 | `promptInput.tools`            | `Tools`                                                    | `label` (Tools)               |
@@ -300,22 +303,35 @@ packages/webkit/src/components/ai/prompt-input/
 
   const prompt = ref('')
   const files = ref([])
-  const model = ref('sol')
+  const model = ref('gemini-4-neon')
   const mode = ref('medium')
   const project = ref('')
   const tools = ref([])
   const last = ref('')
   const voiceActive = ref(false)
 
+  const providers = [
+    { value: 'azion', label: 'Azion AI', icon: 'az az-azion' },
+    { value: 'google', label: 'Google', icon: 'az az-gemini' },
+    { value: 'anthropic', label: 'Anthropic', icon: 'az az-claude' },
+    { value: 'openai', label: 'OpenAI', icon: 'az az-openai' },
+    { value: 'meta', label: 'Meta', icon: 'az az-meta' }
+  ]
   const models = [
-    { value: 'sol', label: 'Sol 6.1', description: 'Best for everyday tasks' },
-    { value: 'terra', label: 'Terra 6.1', description: 'Fastest answers' },
-    { value: 'luna', label: 'Luna 6.1', description: 'Deep reasoning on hard problems' }
+    { value: 'gemini-4-neon', label: 'Gemini 4 Neon', provider: 'google', shortcut: '⌘1' },
+    { value: 'gemini-4-carbon', label: 'Gemini 4 Carbon', provider: 'google', shortcut: '⌘2' },
+    { value: 'gemini-3-8-flash', label: 'Gemini 3.8 Flash', provider: 'google', shortcut: '⌘3' },
+    { value: 'claude-opus-4-5', label: 'Claude Opus 4.5', provider: 'anthropic', shortcut: '⌘4' },
+    { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', shortcut: '⌘5' },
+    { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', shortcut: '⌘6' },
+    { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', shortcut: '⌘7' },
+    { value: 'azion-auto', label: 'Azion Auto', provider: 'azion', description: 'AI Gateway router' }
   ]
   const modes = [
     { value: 'low', label: 'Low' },
     { value: 'medium', label: 'Medium' },
-    { value: 'high', label: 'High' }
+    { value: 'high', label: 'High' },
+    { value: 'extra', label: 'Extra' }
   ]
   const projects = [
     { value: 'acme-store', label: 'acme-store', description: 'Storefront and checkout' },
@@ -388,9 +404,10 @@ packages/webkit/src/components/ai/prompt-input/
         <PromptInput.ModelPicker
           v-model="model"
           v-model:mode="mode"
+          :providers="providers"
           :models="models"
           :modes="modes"
-          mode-label="Effort"
+          mode-label="Thinking Level"
         />
         <PromptInput.DictateButton />
       </template>

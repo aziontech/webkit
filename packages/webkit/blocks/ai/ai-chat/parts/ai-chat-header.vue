@@ -25,9 +25,11 @@
 
   const modelKey = defineModel<string>('modelKey', { required: true })
 
-  const modelLabel = computed(
-    () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
+  const selectedModel = computed(() =>
+    props.models.find((option) => option.value === modelKey.value)
   )
+  const modelLabel = computed(() => selectedModel.value?.label ?? '')
+  const modelIcon = computed(() => selectedModel.value?.icon ?? '')
 
   const actions: { value: AiChatHeaderAction; label: string; severity?: 'danger' }[] = [
     { value: 'share', label: 'Share' },
@@ -98,6 +100,11 @@
               class="min-w-0"
             >
               <span class="truncate text-label-lg">AI assistant</span>
+              <i
+                v-if="modelIcon"
+                :class="[modelIcon, 'shrink-0 text-(--text-muted)']"
+                aria-hidden="true"
+              />
               <span
                 v-if="modelLabel"
                 class="truncate text-(--text-muted)"
