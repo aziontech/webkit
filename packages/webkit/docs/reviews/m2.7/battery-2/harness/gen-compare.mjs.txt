@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 
 const [profile, outDir] = process.argv.slice(2)
-const KIT = '/data/claude/webkit/packages/webkit/docs/reviews/m2.7/battery-2-kit'
+const KIT = `${process.env.WEBKIT_REPO ?? '.'}/packages/webkit/docs/reviews/m2.7/battery-2-kit`
 const pages = JSON.parse(fs.readFileSync(`${KIT}/pages.json`, 'utf8'))
 const scores = fs.existsSync('/data/eval-m27b/compare/scores.json')
   ? JSON.parse(fs.readFileSync('/data/eval-m27b/compare/scores.json', 'utf8'))

@@ -14,7 +14,7 @@ difference exists. Work only under `/data/eval-m27b/`; do not edit any app or an
   `/data/eval-m27b/ai-shots/<id>--<profile>.png`.
 - The page brief the builder got: `pages.json` in its job folder (`/data/eval-m27b/jobs/<JOB>/pages.json`).
   The evaluator version with WebKit block-name hints (`▸` lines) is
-  `/data/claude/webkit/packages/webkit/docs/reviews/m2.7/battery-2-kit/pages.json` (read-only).
+  `<repo>/packages/webkit/docs/reviews/m2.7/battery-2-kit/pages.json` (read-only).
 - The builder's code: `/data/eval-m27b/jobs/<JOB>/app/src/` (read-only), its `JOURNAL.md` and `DONE.md`.
 - The WebKit package the builder used: `/data/eval-m27b/jobs/<JOB>/app/node_modules/@aziontech/webkit/` (read-only).
 
