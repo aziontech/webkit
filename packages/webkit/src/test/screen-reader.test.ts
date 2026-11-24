@@ -301,7 +301,7 @@ describe('screen-reader smoke · form blocks', () => {
               - textbox "Domain name":
                 - /placeholder: example.com
           - heading "Tags" [level=2]
-          - button "Labels for ownership, cost and search. The same keys across resources keep them easy to find."
+          - button "More information"
           - group:
             - paragraph: No tags associated with the resource.
             - button "Add new tag"
