@@ -46,7 +46,7 @@ import type {
 type Priority = TicketInboxTicket['priority']
 
 export const SUPPORT_NOW = new Date(Date.UTC(2026, 10, 10, 12))
-export const SUPPORT_AGENT = 'Jane Doe'
+const SUPPORT_AGENT = 'Jane Doe'
 
 const HOUR = 3_600_000
 
@@ -135,7 +135,7 @@ function seedTicket(ticket: TicketInboxTicket): SupportTicket {
   }
 }
 
-export const tickets = ref<SupportTicket[]>(sampleTicketsOf('').map(seedTicket))
+const tickets = ref<SupportTicket[]>(sampleTicketsOf('').map(seedTicket))
 
 const sampleCustomerName = 'Alex Morgan'
 
@@ -167,7 +167,7 @@ const seedCustomer = (name: string, email: string): SupportCustomer => {
 
 const people = new Map<string, string>()
 for (const ticket of tickets.value) people.set(ticket.requesterEmail, ticket.requester)
-export const customers = ref<SupportCustomer[]>(
+const customers = ref<SupportCustomer[]>(
   [...people].map(([email, name]) => seedCustomer(name, email))
 )
 
@@ -289,7 +289,7 @@ export function setStatus(id: string, status: TicketInboxStatus) {
   )
 }
 
-export function setAssignee(id: string, assignee: string) {
+function setAssignee(id: string, assignee: string) {
   patchTicket(id, (ticket) =>
     ticket.assignee === assignee
       ? {}
@@ -358,7 +358,7 @@ export function deleteTickets(ids: string[]) {
   tickets.value = tickets.value.filter((ticket) => !ids.includes(ticket.id))
 }
 
-export function mergeTickets(targetId: string, sourceIds: string[]) {
+function mergeTickets(targetId: string, sourceIds: string[]) {
   const sources = tickets.value.filter((ticket) => sourceIds.includes(ticket.id))
   patchTicket(targetId, (ticket) => ({
     tags: [...new Set([...ticket.tags, ...sources.flatMap((source) => source.tags)])],
