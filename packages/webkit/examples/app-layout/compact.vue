@@ -93,7 +93,7 @@
       <main class="p-(--spacing-md)">
         <PageHeader
           title="Home"
-          description="On a narrow screen the navigation and the help open as drawers."
+          description="Applications and functions running in this account."
         />
       </main>
 

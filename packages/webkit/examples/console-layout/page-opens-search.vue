@@ -42,7 +42,7 @@
       <div class="layout-column flex flex-col gap-(--layout-group-gap)">
         <PageHeader
           title="Workloads"
-          description="Open the same palette as the header search, from the page."
+          description="Find a workload by name, domain or tag."
         >
           <template #actions>
             <FindWorkload />
