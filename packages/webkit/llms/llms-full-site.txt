@@ -12134,6 +12134,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - A card without an `href` is not interactive: no hand pointer, no hover light
 - Empty: when no template carries a title the band renders nothing — not the split, not the marquee, not the closing frame
 - `closing`: the tall hatched closing frame (`data-hatch="true"`, decorative) follows the band; `hatch` off drops it
+- A template `icon` that is a colour logo (`az-color az-<name>`) paints only when the app's stylesheet compiles that logo: the site lists every logo its page JSON may name with `@source inline("az-<name>")` in its `webkit.css`, since page JSON is not scanned source
 
 ## Accessibility
 

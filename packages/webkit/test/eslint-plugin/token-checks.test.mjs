@@ -257,6 +257,34 @@ test('has-on-scroll-frame stays silent on a data attribute or another group', ()
   }
 })
 
+test('color-logo-interpolated fires on a colour logo class built at runtime', () => {
+  for (const content of [
+    ':class="`az-color az-${template.logo}`"',
+    "const icon = 'az-color az-' + name",
+    'const icon = `az-color ${name}`',
+    ':class="\'az-color \' + logo"'
+  ]) {
+    assert.ok(
+      ids(content).includes('color-logo-interpolated'),
+      `expected color-logo-interpolated for: ${content}`
+    )
+  }
+})
+
+test('color-logo-interpolated stays silent on a whole colour logo class', () => {
+  for (const content of [
+    "const icon = 'az-color az-react'",
+    'class="az-color az-astro"',
+    ':class="template.icon"',
+    'const icon = `az az-${name}`'
+  ]) {
+    assert.ok(
+      !ids(content).includes('color-logo-interpolated'),
+      `expected color-logo-interpolated silent for: ${content}`
+    )
+  }
+})
+
 test('rtl-double-flip fires when a directional icon also rotates under rtl', () => {
   for (const content of [
     'class="az az-arrow-right rtl:rotate-180"',
@@ -334,7 +362,12 @@ test('off-brand-orange stays silent on the logo orange and on the primary roles'
 })
 
 test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
-  const WIDE = ['rtl-double-flip', 'off-brand-orange', 'status-fill-as-text']
+  const WIDE = [
+    'rtl-double-flip',
+    'off-brand-orange',
+    'status-fill-as-text',
+    'color-logo-interpolated'
+  ]
   const idsFor = (rel, dirs) => tokenChecksFor(rel, dirs).map((c) => c.id)
   assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
   for (const rel of [

@@ -6,8 +6,8 @@ template: 2
 status: implemented
 spec_version: 10
 created: 2026-11-05
-last_updated: 2026-11-18
-checksum: 9912b714d6731140d4b03a6ced5e33ed2556732de819539a202500ca94c5efac
+last_updated: 2026-11-24
+checksum: 27463ac55a9de44687c370bccd7c64b4dede3a133583c99099d090e68c4efff7
 ---
 
 # TemplateGallerySection — Component Spec
@@ -112,6 +112,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 - A card without an `href` is not interactive: no hand pointer, no hover light
 - Empty: when no template carries a title the band renders nothing — not the split, not the marquee, not the closing frame
 - `closing`: the tall hatched closing frame (`data-hatch="true"`, decorative) follows the band; `hatch` off drops it
+- A template `icon` that is a colour logo (`az-color az-<name>`) paints only when the app's stylesheet compiles that logo: the site lists every logo its page JSON may name with `@source inline("az-<name>")` in its `webkit.css`, since page JSON is not scanned source
 
 ## Motion & Animations
 
