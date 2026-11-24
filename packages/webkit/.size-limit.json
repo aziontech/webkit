@@ -473,7 +473,7 @@
   {
     "name": "customer-use-cases-section",
     "path": "src/components/section/customer-use-cases-section/customer-use-cases-section.vue",
-    "limit": "7.9 KB"
+    "limit": "8.2 KB"
   },
   {
     "name": "article-body-section",
@@ -484,23 +484,23 @@
   {
     "name": "article-cards-section",
     "path": "src/components/section/article-cards-section/article-cards-section.vue",
-    "limit": "6.3 KB"
+    "limit": "6.45 KB"
   },
   {
     "name": "article-highlight-section",
     "path": "src/components/section/article-highlight-section/article-highlight-section.vue",
-    "limit": "12.5 KB"
+    "limit": "12.65 KB"
   },
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "37.6 KB",
+    "limit": "37.95 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "36.25 KB",
+    "limit": "36.6 KB",
     "entryOnly": true
   },
   {
@@ -512,7 +512,7 @@
   {
     "name": "capability-grid-section",
     "path": "src/components/section/capability-grid-section/capability-grid-section.vue",
-    "limit": "8.25 KB"
+    "limit": "8.35 KB"
   },
   {
     "name": "console-showcase-section",
@@ -539,7 +539,7 @@
   {
     "name": "media-split-section",
     "path": "src/components/section/media-split-section/media-split-section.vue",
-    "limit": "17.25 KB",
+    "limit": "17.6 KB",
     "entryOnly": true
   },
   {
@@ -550,13 +550,13 @@
   {
     "name": "competitor-comparison-section",
     "path": "src/components/section/competitor-comparison-section/competitor-comparison-section.vue",
-    "limit": "25.75 KB",
+    "limit": "25.95 KB",
     "entryOnly": true
   },
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "39.85 KB"
+    "limit": "40.1 KB"
   },
   {
     "name": "pricing-plans-section",
@@ -572,25 +572,25 @@
   {
     "name": "feature-tiles-section",
     "path": "src/components/section/feature-tiles-section/feature-tiles-section.vue",
-    "limit": "6.35 KB",
+    "limit": "6.55 KB",
     "entryOnly": true
   },
   {
     "name": "feature-widgets-section",
     "path": "src/components/section/feature-widgets-section/feature-widgets-section.vue",
-    "limit": "20.2 KB",
+    "limit": "20.35 KB",
     "entryOnly": true
   },
   {
     "name": "network-section",
     "path": "src/components/section/network-section/network-section.vue",
-    "limit": "27.25 KB",
+    "limit": "27.6 KB",
     "entryOnly": true
   },
   {
     "name": "stats-section",
     "path": "src/components/section/stats-section/stats-section.vue",
-    "limit": "4.8 KB"
+    "limit": "5.05 KB"
   },
   {
     "name": "card-carousel-section",
@@ -600,71 +600,71 @@
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "7.95 KB"
+    "limit": "8.2 KB"
   },
   {
     "name": "client-story-columns-section",
     "path": "src/components/section/client-story-columns-section/client-story-columns-section.vue",
-    "limit": "8.9 KB"
+    "limit": "9.2 KB"
   },
   {
     "name": "client-quotes-section",
     "path": "src/components/section/client-quotes-section/client-quotes-section.vue",
-    "limit": "27.7 KB",
+    "limit": "27.85 KB",
     "entryOnly": true
   },
   {
     "name": "compliance-logos-section",
     "path": "src/components/section/compliance-logos-section/compliance-logos-section.vue",
-    "limit": "8.25 KB"
+    "limit": "8.55 KB"
   },
   {
     "name": "investor-marks-section",
     "path": "src/components/section/investor-marks-section/investor-marks-section.vue",
-    "limit": "5 KB"
+    "limit": "5.1 KB"
   },
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "59.8 KB",
+    "limit": "60.15 KB",
     "entryOnly": true
   },
   {
     "name": "logo-wall-section",
     "path": "src/components/section/logo-wall-section/logo-wall-section.vue",
-    "limit": "24.7 KB"
+    "limit": "24.9 KB"
   },
   {
     "name": "photo-marquee-section",
     "path": "src/components/section/photo-marquee-section/photo-marquee-section.vue",
-    "limit": "7.55 KB"
+    "limit": "7.8 KB"
   },
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "43.25 KB",
+    "limit": "43.5 KB",
     "entryOnly": true
   },
   {
     "name": "platform-directory-section",
     "path": "src/components/section/platform-directory-section/platform-directory-section.vue",
-    "limit": "4.8 KB"
+    "limit": "5 KB"
   },
   {
     "name": "subject-grid-section",
     "path": "src/components/section/subject-grid-section/subject-grid-section.vue",
-    "limit": "8.7 KB"
+    "limit": "8.95 KB"
   },
   {
     "name": "template-gallery-section",
     "path": "src/components/section/template-gallery-section/template-gallery-section.vue",
-    "limit": "30 KB",
+    "limit": "30.4 KB",
     "entryOnly": true
   },
   {
     "name": "recognition-marquee-section",
     "path": "src/components/section/recognition-marquee-section/recognition-marquee-section.vue",
-    "limit": "21.75 KB"
+    "limit": "21.85 KB"
   },
   {
     "name": "architecture-tabs-section",
@@ -675,19 +675,19 @@
   {
     "name": "cli-terminal-section",
     "path": "src/components/section/cli-terminal-section/cli-terminal-section.vue",
-    "limit": "47.5 KB",
+    "limit": "47.65 KB",
     "entryOnly": true
   },
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "59.55 KB",
+    "limit": "59.7 KB",
     "entryOnly": true
   },
   {
     "name": "media-split-stack-section",
     "path": "src/components/section/media-split-stack-section/media-split-stack-section.vue",
-    "limit": "17.6 KB",
+    "limit": "17.9 KB",
     "entryOnly": true
   },
   {
@@ -698,12 +698,12 @@
   {
     "name": "contact-hub-section",
     "path": "src/components/section/contact-hub-section/contact-hub-section.vue",
-    "limit": "9.5 KB"
+    "limit": "9.8 KB"
   },
   {
     "name": "listing-table-section",
     "path": "src/components/section/listing-table-section/listing-table-section.vue",
-    "limit": "26.5 KB"
+    "limit": "26.7 KB"
   },
   {
     "name": "site-footer-section",
@@ -714,13 +714,13 @@
   {
     "name": "closing-call-to-action-section",
     "path": "src/components/section/closing-call-to-action-section/closing-call-to-action-section.vue",
-    "limit": "9.8 KB",
+    "limit": "9.85 KB",
     "entryOnly": true
   },
   {
     "name": "newsletter-section",
     "path": "src/components/section/newsletter-section/newsletter-section.vue",
-    "limit": "13.95 KB"
+    "limit": "14.3 KB"
   },
   {
     "name": "stepper",

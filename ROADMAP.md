@@ -76,6 +76,15 @@ check joins the CI with no baseline, then the branch is pushed.
 | 8    | Docs-site page speed and links (Lighthouse, link check): the docs home and a component page draw their main content after 17–21 s on Lighthouse's throttled phone (a 1.37 MB data file and a 762 KB stylesheet load before anything draws; the local preview server sends them uncompressed); the link check has one dead link (fixed) and sample-data links | Done: docs home LCP 17.9 s → 2.0 s, button page 21.1 s → 2.3 s, accessibility 100; the link check and Lighthouse block CI (decision CQ-E12)                                                                       |
 | 7    | The 249 hard-coded site strings                                                                                                                                                                                                                                                                                                                              | Item 1.9                                                                                                                                                                                                          |
 
+**Progress: page sections on one frame (2026-11-23, decision LA-2).** The page sections no longer
+each draw their own outer frame (band, module, header row, registration frame). 35 of the 46
+sections draw it through the private `SectionBand` part; the hatched closing strip is
+`SectionHatch` and the header buttons are `SectionActions`. `FeatureTabsSectionShell`, the second
+copy of the frame, is gone. No public API changed, and a pixel-exact before/after comparison of
+all 238 examples of the sections and pages (light, dark, 390 px, right-to-left: 952 captures,
+pixels and accessibility tree) found no difference. The 11 left out are a different kind of band
+(the reasons are in LA-2). Linked cells keep their current hover until the visual review (1.5).
+
 **1.8 in detail — every browser engine and real devices, in CI (owner, 2026-11-20).** Today CI
 runs the component suite and the visual suite on Chromium only. Firefox and the Safari engine run
 only by hand (`test:browser-firefox`, `test:browser-webkit`, last full run in M1.11), real Edge and
