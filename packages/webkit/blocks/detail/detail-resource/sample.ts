@@ -289,7 +289,7 @@ export const applicationVersions: ApplicationVersionRow[] = [
   {
     id: 'BW1K8RTE',
     name: 'BW1K8RTE',
-    description: 'Add rule"Redirect old checkout"',
+    description: 'Add rule "Redirect old checkout"',
     state: 'Ready',
     createdAgo: 'Yesterday'
   },
@@ -481,7 +481,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'APA7237R',
     name: 'APA7237R',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Riley Carter',
     createdAt: '2026-11-03T14:37:18.145Z',
     createdAgo: '3 days ago'
@@ -499,7 +499,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AS1UHU4P',
     name: 'AS1UHU4P',
     state: 'ready',
-    description: 'Add rule"Redirect /blog to docs"',
+    description: 'Add rule "Redirect /blog to docs"',
     author: 'Jordan Kim',
     createdAt: '2026-11-01T14:37:18.145Z',
     createdAgo: '5 days ago'
@@ -526,7 +526,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AW7BNGI4',
     name: 'AW7BNGI4',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Sam Lee',
     createdAt: '2026-10-29T14:37:18.145Z',
     createdAgo: '1 week ago'
@@ -544,7 +544,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AYYZ37F2',
     name: 'AYYZ37F2',
     state: 'ready',
-    description: 'Add rule"Redirect /blog to docs"',
+    description: 'Add rule "Redirect /blog to docs"',
     author: 'Chris Taylor',
     createdAt: '2026-10-27T14:37:18.145Z',
     createdAgo: '1 week ago'
@@ -571,7 +571,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'A44G8TSH',
     name: 'A44G8TSH',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Jordan Kim',
     createdAt: '2026-10-24T14:37:18.145Z',
     createdAgo: '2 weeks ago'

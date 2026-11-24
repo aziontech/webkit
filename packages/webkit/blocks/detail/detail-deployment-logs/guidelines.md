@@ -87,10 +87,10 @@ Then delete `sample.ts` and its import.
 
 - **Header:** "Deployment logs"; inside a card, "Logs" under a card titled "Deployment" or "Provisioning".
 - **Running status:** count and step, e.g. "3/8 steps", "Build"; the card indicator a progressive word, e.g. "Cloning", "Building".
-- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing Rules".
+- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing rules".
 - **Run time:** past tense with the duration, e.g. "Deployed in 42s", "Failed after 42s".
-- **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing Rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
-- **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing Rules."
+- **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
+- **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing rules."
 - **Splash line:** names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - Follow `skills/webkit-microcopy` and `skills/webkit-errors`: say what failed and why, no "please", no exclamation in console copy.
 
@@ -107,7 +107,7 @@ Then delete `sample.ts` and its import.
 
 - Running: the run is in flight (a step is `running` or `pending`); the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
 - Success: every step checked (every `steps` status is `success`, `duration` set), the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
-- Error: a step has status `error`; the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
+- Error: a step has status `error`; the Routing rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
 - ContinuousLog: a finished run in the Complete view (`view` is `complete`), every line as one `LogViewer` with its copy button.
 - ContinuousLogError: the failed run in the Complete view (`view` is `complete`), the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
