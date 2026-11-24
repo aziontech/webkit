@@ -45,31 +45,36 @@
     class="w-full"
   >
     <template #header>
-      <p class="min-w-0 truncate text-heading-xs text-(--text-default)">Deployment logs</p>
-
-      <StatusIndicator
-        v-if="!steps.length"
-        v-bind="status"
-      />
       <div
-        v-else
-        class="flex shrink-0 items-center gap-(--spacing-sm)"
+        class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xs)"
       >
+        <p class="shrink-0 text-heading-xs text-(--text-default)">Deployment logs</p>
+
         <StatusIndicator
-          v-if="failedStep"
+          v-if="!steps.length"
           v-bind="status"
+          class="ms-auto"
         />
-        <span
+        <div
           v-else
-          class="text-label-sm text-(--text-muted)"
-          >{{ duration }}</span
+          class="ms-auto flex shrink-0 items-center gap-(--spacing-sm)"
         >
-        <ToggleGroup
-          v-model="logViewer"
-          :options="logViews"
-          size="medium"
-          aria-label="Log view"
-        />
+          <StatusIndicator
+            v-if="failedStep"
+            v-bind="status"
+          />
+          <span
+            v-else
+            class="text-label-sm text-(--text-muted)"
+            >{{ duration }}</span
+          >
+          <ToggleGroup
+            v-model="logViewer"
+            :options="logViews"
+            size="medium"
+            aria-label="Log view"
+          />
+        </div>
       </div>
     </template>
 

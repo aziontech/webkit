@@ -99,10 +99,10 @@ Then delete `sample.ts` and its import.
 
 - **Header:** "Deployment logs"; inside a card, "Logs" under a card titled "Deployment" or "Provisioning".
 - **Running status:** count and step, e.g. "3/8 steps", "Build"; the card indicator a progressive word, e.g. "Cloning", "Building".
-- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing Rules".
+- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing rules".
 - **Run time:** past tense with the duration, e.g. "Deployed in 42s", "Failed after 42s".
-- **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing Rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
-- **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing Rules."
+- **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
+- **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing rules."
 - **Splash line:** names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - Follow `skills/webkit-microcopy` and `skills/webkit-errors`: say what failed and why, no "please", no exclamation in console copy.
 
@@ -119,7 +119,7 @@ Then delete `sample.ts` and its import.
 
 - Running: the run is in flight (a step is `running` or `pending`); the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
 - Success: every step checked (every `steps` status is `success`, `duration` set), the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
-- Error: a step has status `error`; the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
+- Error: a step has status `error`; the Routing rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
 - ContinuousLog: a finished run in the Complete view (`view` is `complete`), every line as one `LogViewer` with its copy button.
 - ContinuousLogError: the failed run in the Complete view (`view` is `complete`), the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
@@ -473,7 +473,7 @@ const serviceStep: DeploymentLogsStep = {
 
 const rulesStep: DeploymentLogsStep = {
   id: 'rules',
-  title: 'Routing Rules',
+  title: 'Routing rules',
   description: 'Request rules and cache policies applied',
   status: 'success',
   duration: '4s',
@@ -578,11 +578,17 @@ export const sampleSteps: DeploymentLogsStep[] = [
   tokenStep,
   cloneStep,
   installStep,
-  { ...buildStep, status: 'running' },
+  {
+    ...buildStep,
+    status: 'running',
+    description: 'Building for production',
+    duration: '',
+    lines: buildStep.lines.filter((line) => line.type !== 'success')
+  },
   notRun(uploadStep, 'pending', 'Runs after Build'),
   notRun(serviceStep, 'pending', 'Runs after Upload'),
   notRun(rulesStep, 'pending', 'Runs after Service'),
-  notRun(publishStep, 'pending', 'Runs after Routing Rules')
+  notRun(publishStep, 'pending', 'Runs after Routing rules')
 ]
 
 export const sampleSucceededSteps: DeploymentLogsStep[] = [
@@ -604,13 +610,11 @@ export const sampleFailedSteps: DeploymentLogsStep[] = [
   uploadStep,
   serviceStep,
   failedRulesStep,
-  notRun(publishStep, 'skipped', 'Never ran. The deployment stopped at Routing Rules')
+  notRun(publishStep, 'skipped', 'Never ran. The deployment stopped at Routing rules')
 ]
 
 export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSteps.map((step) => ({
   ...step,
-  title: step.id === 'rules' ? 'Routing rules' : step.title,
-  description: step.description?.replace('Routing Rules', 'Routing rules'),
   lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
 }))
 
@@ -829,19 +833,19 @@ const deploymentRulesStep: DeploymentLogsStep = {
       time: '14:02:59',
       type: 'success',
       message:
-        '[manifest] Rule"Set storage origin for all requests" with id 604943 successfully updated'
+        '[manifest] Rule "Set storage origin for all requests" with id 604943 successfully updated'
     },
     {
       id: '1',
       time: '14:03:00',
       type: 'success',
-      message: '[manifest] Rule"Deliver static assets" with id 604944 successfully updated'
+      message: '[manifest] Rule "Deliver static assets" with id 604944 successfully updated'
     },
     {
       id: '2',
       time: '14:03:01',
       type: 'success',
-      message: '[manifest] Rule"Redirect to index.html" with id 604945 successfully updated'
+      message: '[manifest] Rule "Redirect to index.html" with id 604945 successfully updated'
     },
     {
       id: '3',
@@ -977,7 +981,7 @@ const failedDeploymentRules = (step: DeploymentLogsStep): DeploymentLogsStep => 
       time: '14:03:01',
       type: 'text',
       level: 'error',
-      message: '[ERROR] [manifest] Error while creating rule"Deliver static assets"'
+      message: '[ERROR] [manifest] Error while creating rule "Deliver static assets"'
     },
     {
       id: '2',

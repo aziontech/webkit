@@ -345,7 +345,7 @@
         orientation="both"
         :class="
           cn(
-            'min-h-0 min-w-0 flex-1 py-(--spacing-sm) in-data-[copy-gutter]:pe-10',
+            'min-h-0 min-w-0 flex-1 py-(--spacing-sm) in-data-[copy-gutter]:me-10',
             'focus-visible:ring-offset-(--bg-surface)'
           )
         "

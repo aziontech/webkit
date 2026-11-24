@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 3282a77ea67b5acbd589b140e195b5290c461170b94e144202fb1247f3700663
+checksum: 8c1c335574e03902f75a0c3bb864c378428c1310723a38dd8d0aa0ab5a039926
 created: 2026-05-28
 last_updated: 2026-11-22
 ---
@@ -28,7 +28,7 @@ Read-only code viewer for docs, API examples, and configuration previews. Suppor
 
 Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks.
 
-The **label header holds the copy control** at its end (`data-copy-gutter` marks the root only while the copy floats over the code instead) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look).
+The **label header holds the copy control** at its end (`data-copy-gutter` marks the root only while the copy sits in a column of its own at the end of the code instead, so no line runs under it) and is `sticky` at the top of the nearest scroller, so a long block keeps its language and copy in view. Its divider shows only when `bordered`; unbordered, header and code share one fill (the `StreamingResponse` look).
 
 The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
 

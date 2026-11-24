@@ -125,7 +125,7 @@
     v-bind="attrs"
     :data-testid="testId"
     :data-copyable="(ctx.copyable.value && !ctx.loading.value && !ctx.error.value) || null"
-    class="relative min-h-0 flex-1 data-[copyable]:min-h-13"
+    class="group/log-viewer-content relative min-h-0 flex-1 data-[copyable]:min-h-13 data-[copyable]:bg-(--bg-canvas)"
   >
     <div
       v-if="ctx.copyable.value && !ctx.loading.value && !ctx.error.value"
@@ -188,7 +188,7 @@
       fade
       dir="ltr"
       :data-testid="`${testId}__body`"
-      class="h-full min-h-0 bg-(--bg-canvas) sm:data-[orientation=both]:overflow-x-hidden"
+      class="h-full min-h-0 bg-(--bg-canvas) group-data-[copyable]/log-viewer-content:me-10 sm:data-[orientation=both]:overflow-x-hidden"
     >
       <template v-if="ctx.filteredLines.value.length">
         <div

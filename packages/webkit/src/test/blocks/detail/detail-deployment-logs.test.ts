@@ -6,6 +6,7 @@ import DetailDeploymentLogs, {
 } from '../../../../blocks/detail/detail-deployment-logs/detail-deployment-logs.vue'
 import {
   sampleFailedSteps,
+  sampleSteps,
   sampleSucceededSteps
 } from '../../../../blocks/detail/detail-deployment-logs/sample'
 import DeploymentDetail from '../../../../blocks/detail/detail-deployment-logs/variants/deployment-detail.vue'
@@ -56,11 +57,11 @@ describe('detail/detail-deployment-logs', () => {
 
   it('opens a failed run on the failed step and says why the next one never ran', async () => {
     const view = render(DeploymentLogsFailed)
-    expect(view.getByRole('button', { expanded: true }).textContent).toContain('Routing Rules')
+    expect(view.getByRole('button', { expanded: true }).textContent).toContain('Routing rules')
     await fireEvent.click(within(view.container as HTMLElement).getByText('Publish'))
     await waitFor(() =>
       expect(view.container.textContent).toContain(
-        'Never ran. The deployment stopped at Routing Rules.'
+        'Never ran. The deployment stopped at Routing rules.'
       )
     )
   })
@@ -122,7 +123,7 @@ describe('detail/detail-deployment-logs', () => {
     const failed = render(DetailDeploymentLogs, {
       props: { steps: sampleFailedSteps, duration: '9s' }
     })
-    expect(failed.container.textContent).toContain('Failed on Routing Rules')
+    expect(failed.container.textContent).toContain('Failed on Routing rules')
     expect(failed.container.textContent).toContain('Failed after 9s')
     expect(failed.container.textContent).not.toMatch(/\d\/8 steps/)
     failed.unmount()
@@ -137,5 +138,26 @@ describe('detail/detail-deployment-logs', () => {
     const view = render(DeploymentQueued)
     expect(view.container.textContent).toContain('Queued, not started')
     expect(view.queryByLabelText('Log view')).toBeNull()
+  })
+
+  it('keeps a running step free of its finished output and duration', () => {
+    const running = sampleSteps.find((step) => step.status === 'running')
+    expect(running?.duration).toBe('')
+    expect(running?.lines.some((line) => /completed successfully/.test(line.message))).toBe(false)
+  })
+
+  it('titles every step in sentence case', () => {
+    for (const step of [...sampleSucceededSteps, ...sampleFailedSteps]) {
+      expect(step.title.split(' ').slice(1).join(' ')).toBe(
+        step.title.split(' ').slice(1).join(' ').toLowerCase()
+      )
+    }
+  })
+
+  it('wraps the log view switch under the whole Deployment logs title instead of cutting it', () => {
+    const view = render(DeploymentDetail)
+    const title = within(view.container as HTMLElement).getByText('Deployment logs')
+    expect(title.classList.contains('truncate')).toBe(false)
+    expect(title.parentElement?.classList.contains('flex-wrap')).toBe(true)
   })
 })

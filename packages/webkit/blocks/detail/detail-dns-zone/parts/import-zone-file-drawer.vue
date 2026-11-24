@@ -170,6 +170,7 @@
                 v-model="zoneText"
                 class="w-full"
                 :rows="8"
+                monospace
                 placeholder="www IN CNAME example.com."
                 @paste="onPaste"
               />

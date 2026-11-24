@@ -12,6 +12,12 @@ describe('detail/detail-domains-card', () => {
     expect(view.container.textContent).toContain('3 domains')
   })
 
+  it('pins the row actions on the end edge so cells scroll under them', () => {
+    const view = render(DetailDomainsCard)
+    const actions = view.getAllByRole('button', { name: /actions/i })[0]?.closest('[data-frozen]')
+    expect(actions?.getAttribute('data-frozen')).toBe('end')
+  })
+
   it('renders the domains it is given and emits Add Domain', async () => {
     const view = render(DetailDomainsCard, {
       props: {

@@ -3,17 +3,17 @@
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Input from '@aziontech/webkit/input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PasswordInput from '@aziontech/webkit/password-input'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
 
-  import { resourceTabs as tabs } from '../sample'
+  import { buildToken, resourceTabs as tabs } from '../sample'
   import ResourceBuildRepository from './resource-build-repository.vue'
   import ResourceTabBar from './resource-tab-bar.vue'
   import TabRouteEmpty from './tab-route-empty.vue'
@@ -198,25 +198,22 @@
                           description="Stored as the PLATFORM_TOKEN GitHub secret."
                           stackable
                         >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <InputGroupRoot class="w-full">
-                              <div class="flex flex-1">
-                                <Input
-                                  model-value="analytics-app build token"
-                                  size="large"
-                                  class="w-full"
-                                  aria-label="API token"
-                                  monospace
-                                  readonly
-                                />
-                              </div>
-                              <CopyButton
-                                variant="ghost"
-                                value="analytics-app build token"
-                                aria-label="Copy API token"
-                                size="small"
+                          <div class="flex w-full items-center gap-(--spacing-xs)">
+                            <div class="min-w-0 flex-1">
+                              <PasswordInput
+                                :model-value="buildToken"
+                                aria-label="API token"
+                                autocomplete="off"
+                                monospace
+                                readonly
                               />
-                            </InputGroupRoot>
+                            </div>
+                            <CopyButton
+                              variant="outline"
+                              size="large"
+                              :value="buildToken"
+                              aria-label="Copy API token"
+                            />
                           </div>
                         </SettingsRow>
                       </Item.List>

@@ -180,4 +180,14 @@ describe('detail-version data', () => {
     const [[, version]] = earlier.emitted('revert') as [[MouseEvent, VersionDetailVersion]]
     expect(version.id).toBe('B0OLD001')
   })
+
+  it('keeps a space before every quoted name in the detail samples', () => {
+    const samples = import.meta.glob<string>('../../../../blocks/detail/*/sample.ts', {
+      query: '?raw',
+      import: 'default',
+      eager: true
+    })
+    expect(Object.keys(samples).length).toBeGreaterThan(3)
+    for (const source of Object.values(samples)) expect(source).not.toMatch(/[A-Za-z]"[A-Z]/)
+  })
 })

@@ -385,6 +385,17 @@ describe('LogViewer', () => {
         expect(payload.split('\n')).toHaveLength(LINES.length)
       })
 
+      it('reserves a column for the copy control so no line runs under it', () => {
+        const { Host } = makeHost({})
+        const { getByTestId } = render(Host)
+        expect(getByTestId('log-viewer-content').hasAttribute('data-copyable')).toBe(true)
+        expect(
+          getByTestId('log-viewer-content__body').classList.contains(
+            'group-data-[copyable]/log-viewer-content:me-10'
+          )
+        ).toBe(true)
+      })
+
       it('does not render the copy control when copyable is false', () => {
         const { Host } = makeHost({ copyable: false })
         const { queryByTestId } = render(Host)

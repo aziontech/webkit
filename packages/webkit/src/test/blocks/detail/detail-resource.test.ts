@@ -5,7 +5,9 @@ import { type Component, defineComponent, h } from 'vue'
 import DetailsPage from '../../../../blocks/detail/detail-resource/detail-resource.vue'
 import Application from '../../../../blocks/detail/detail-resource/variants/application.vue'
 import ApplicationBuild from '../../../../blocks/detail/detail-resource/variants/application-build.vue'
+import FirstDeploy from '../../../../blocks/detail/detail-resource/variants/first-deploy.vue'
 import NoDeployment from '../../../../blocks/detail/detail-resource/variants/no-deployment.vue'
+import ResourceBuild from '../../../../blocks/detail/detail-resource/variants/resource-build.vue'
 import Service from '../../../../blocks/detail/detail-resource/variants/service.vue'
 import ServiceOverview from '../../../../blocks/detail/detail-resource/variants/service-overview.vue'
 import ConsoleLayout from '../../../components/layout/console-layout/console-layout.vue'
@@ -45,6 +47,16 @@ describe('detail-resource#ApplicationBuild', () => {
     root.dispatchEvent(new DragEvent('drop', { dataTransfer, bubbles: true, cancelable: true }))
     const drawer = await screen.findByRole('dialog', { name: 'Deploy storefront-app' })
     expect(drawer.textContent).toContain('site.zip')
+  })
+})
+
+describe('detail-resource#ResourceBuild', () => {
+  it('masks the API token and copies the token, not its name', async () => {
+    const view = render(ResourceBuild)
+    const token = (await view.findByLabelText('API token')) as HTMLInputElement
+    expect(token.type).toBe('password')
+    expect(token.value).toMatch(/^azn_/)
+    expect(view.getByRole('button', { name: 'Copy API token' })).toBeTruthy()
   })
 })
 
@@ -134,6 +146,22 @@ describe('detail/detail-resource', () => {
   it('adds a custom domain from an IconButton', () => {
     const view = render(Service)
     expect(view.getByRole('button', { name: 'Add a custom domain' })).toBeTruthy()
+  })
+
+  it('holds Visit back with a reason on a service still deploying or inactive', () => {
+    const view = render(FirstDeploy)
+    const visits = view.getAllByRole('button', { name: 'Visit' })
+    expect(visits).toHaveLength(2)
+    for (const visit of visits) expect(visit.getAttribute('aria-disabled')).toBe('true')
+    expect(visits[0]?.getAttribute('title')).toBe('Available once the first deploy finishes')
+    expect(view.queryByRole('link', { name: /Visit/ })).toBeNull()
+  })
+
+  it('opens the other domains from a native button with the touch layer', () => {
+    const view = render(Service)
+    const more = view.getByRole('button', { name: 'Show all 8 domains' })
+    expect(more.tagName).toBe('BUTTON')
+    expect(more.querySelector('[data-slot="touch-target"]')).toBeTruthy()
   })
 })
 

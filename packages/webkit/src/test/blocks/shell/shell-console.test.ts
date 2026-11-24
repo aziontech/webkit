@@ -253,6 +253,16 @@ describe('shell/shell-console states render the shell', () => {
     expect(view.getAllByRole('main')).toHaveLength(1)
   })
 
+  it('DetailPage: names the resource in an h1 above the tabs at every width', () => {
+    const view = at(DetailPage, 1280)
+    const title = view.getByRole('heading', { level: 1, name: 'azion-site' })
+    expect(title.parentElement?.classList.contains('md:hidden')).toBe(false)
+    expect(
+      title.compareDocumentPosition(view.getByRole('tab', { name: 'Overview' })) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy()
+  })
+
   it('AccountSwitch: the stand-in body and the actions come from the shell', () => {
     const view = at(AccountSwitch, 1280)
     expect(view.getByRole('heading', { level: 1, name: 'Applications' })).toBeTruthy()
