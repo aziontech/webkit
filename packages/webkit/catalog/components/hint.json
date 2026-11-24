@@ -1,30 +1,30 @@
 {
- "purpose": "Click-open note (a \"toggletip\") on a small muted `az az-circle-info` glyph. A click, a tap, `Enter` or `Space` on the glyph opens a small panel, anchored below the glyph and aligned to its start, that holds one to three sentences and an optional \"Learn more\" link to the docs. It is level C of the in-product help standard: the way to attach a \"why does this matter?\" note to a field name, a setting or a column header without spending a line of vertical space on it. `Field.Label`, `SettingsRow` and `SettingsGroup` render it from their own `hint` prop. It opens on activation only, never on hover, so the note stays put while the reader reads it or follows its link, and it works the same with a mouse, a finger and a keyboard.",
+ "purpose": "Click-open note (a \"toggletip\") on a small muted `az az-circle-info` glyph. A click, a tap, `Enter` or `Space` on the glyph opens a small panel, anchored below the glyph and aligned to its start, that holds one to three sentences and an optional \"Learn more\" link to the docs. It is level C of the in-product help standard: the way to attach a \"why does this matter?\" note to a field name, a setting or a column header without spending a line of vertical space on it. `Field.Label`, `SettingsRow` and `SettingsGroup` render it from their own `hint` prop.",
  "useWhen": [
   "A field, switch or setting whose name is clear but whose consequence is not (what \"Sensitive\" does to a stored value).",
   "A note of one to three sentences that is useful but not needed to complete the task, optionally with a link to the docs page that explains more.",
-  "Beside a label, a section heading, a stat or a table column header, where a permanent line of helper text would add noise."
+  "Beside a label, a heading, a stat or a column header, where a permanent line of helper text would add noise."
  ],
  "avoidWhen": [
-  "Information the user needs to fill the field or to avoid an error → use `field-description` (`Field.Description`), which stays on screen. A Hint never holds required information.",
-  "Naming a control or expanding an abbreviation in a few words → use `tooltip` on that control. A tooltip only names; a Hint explains.",
-  "Help longer than three sentences, steps, or several links → page-level help in `help-panel`, opened from the console's tools region.",
+  "Information needed to fill the field → `field-description`, which stays on screen.",
+  "Naming a control or expanding an abbreviation → `tooltip`.",
+  "Help longer than three sentences, steps or several links → `help-panel`.",
   "Validation messages → `field-error`."
  ],
  "related": [
   "`field-description` — level A, the default: a short muted line under the field that is always visible.",
   "`tooltip` — level B: names a control or expands an abbreviation in a few words (about 80 characters at most).",
   "`help-panel` — level D: page-level help in the console's tools region, opened from an \"Info\" link after the page title.",
-  "`popover` — the overlay Hint composes; reach for it directly for interactive content (forms, menus, rich layouts).",
-  "`Field.Label`, `settings-row`, `settings-group` — render a Hint from their own `hint` prop, so a label and its note stay one component.",
+  "`popover` — the overlay Hint composes; use it for interactive content.",
+  "`Field.Label`, `settings-row`, `settings-group` — render a Hint from their `hint` prop.",
   "`/webkit-in-product-help` — the consumer skill that picks the level of help."
  ],
  "bestPractices": [
-  "Write one to three plain sentences, each ending in a period. Longer help goes in `help-panel`.",
+  "One to three plain sentences, each ending in a period.",
   "Place the glyph 4px after the label text, on the same line. Never at the end of the row, never on its own line.",
   "One Hint per label. Never stack two glyphs, and never put a Hint inside a Tooltip or another Hint.",
   "Never draw a typed \"?\" or a boxed icon button as a help trigger; Hint is the only help glyph.",
-  "Add `href` when a docs page explains more; leave `linkLabel` empty so the link reads \"Learn more\" in every locale.",
+  "Add `href` when a docs page explains more; leave `linkLabel` empty for the localized \"Learn more\".",
   "Never hide required information behind a Hint."
  ]
 }
