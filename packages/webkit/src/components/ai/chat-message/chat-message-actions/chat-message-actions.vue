@@ -147,6 +147,12 @@
   onScopeDispose(() => cancelAnimationFrame(frame))
   onMounted(refreshCopy)
   watch(() => props.copyText, refreshCopy)
+
+  const ACTIONS_CLASS =
+    'flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end ' +
+    '[&_button[data-size=medium]_[data-transition]]:size-5 [&_button[data-size=medium]_i]:text-body-lg ' +
+    '[&_button[data-size=medium]:not([data-inert])_i]:text-(--text-muted) ' +
+    '[&_button[data-size=medium]:not([data-inert]):hover_i]:text-(--text-default)'
 </script>
 
 <template>
@@ -159,7 +165,7 @@
     :data-testid="testId"
     :data-from="from"
     :data-compact="compact || null"
-    class="flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end [&_button[data-size=medium]_[data-transition]]:size-5 [&_button[data-size=medium]_i]:text-body-lg [&_button[data-size=medium]:not([data-inert])_i]:text-(--text-muted) [&_button[data-size=medium]:not([data-inert]):hover_i]:text-(--text-default)"
+    :class="ACTIONS_CLASS"
     @focusin="refreshCopy"
     @pointerenter="refreshCopy"
   >

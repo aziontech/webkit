@@ -219,6 +219,10 @@
 
   const SCROLL_CLASS =
     'pointer-events-auto border-(--border-default) bg-[color-mix(in_srgb,var(--bg-surface-raised)_88%,transparent)]! shadow-(--shadow-md) backdrop-blur-md'
+
+  const COMPOSER_INNER_CLASS =
+    'pointer-events-auto mx-auto flex w-full max-w-[calc(var(--container-2xl)+2*var(--spacing-md))] flex-col ' +
+    'gap-(--spacing-xs) px-(--spacing-md) pb-[max(var(--spacing-md),env(safe-area-inset-bottom))]'
 </script>
 
 <template>
@@ -286,9 +290,7 @@
       :data-testid="`${testId}__composer`"
       :class="COMPOSER_CLASS"
     >
-      <div
-        class="pointer-events-auto mx-auto flex w-full max-w-[calc(var(--container-2xl)+2*var(--spacing-md))] flex-col gap-(--spacing-xs) px-(--spacing-md) pb-[max(var(--spacing-md),env(safe-area-inset-bottom))]"
-      >
+      <div :class="COMPOSER_INNER_CLASS">
         <slot name="composer" />
       </div>
     </div>
