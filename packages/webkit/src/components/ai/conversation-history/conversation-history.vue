@@ -9,6 +9,7 @@
   import { useConversationHistoryGroups } from './composables/use-conversation-history-groups'
   import { useConversationHistoryProjects } from './composables/use-conversation-history-projects'
   import { useConversationHistoryRemovalFocus } from './composables/use-conversation-history-removal-focus'
+  import { titleWhenTruncated } from './lib/truncated-title'
   import ConversationHistoryRow from './parts/conversation-history-row.vue'
 
   defineOptions({
@@ -154,16 +155,27 @@
   }
 
   const ROW_ACTION_CLASS =
-    'flex h-11 min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-sm) text-start text-label-lg text-(--text-default) outline-none ' +
-    'pointer-fine:h-9 pointer-fine:text-label-md transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none ' +
-    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
+    'group relative flex h-8 pointer-coarse:min-h-11 w-full min-w-0 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding ' +
+    'forced-colors:border-y-0 pe-(--spacing-xs) py-(--spacing-2xs) ps-(--spacing-2xs) text-start text-label-md ' +
+    'text-(--text-default) transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover)'
+
+  const ICON_BOX_CLASS = 'flex size-8 shrink-0 items-center justify-center overflow-hidden'
+
+  const ICON_CLASS =
+    'size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted) ' +
+    'group-hover:text-(--text-default) group-focus-visible:text-(--text-default)'
 
   const SECTION_BUTTON_CLASS =
-    'flex h-11 min-w-0 flex-1 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-sm) text-start text-label-sm text-(--text-muted) outline-none ' +
-    'pointer-fine:h-8 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) motion-reduce:transition-none ' +
-    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
+    'group relative flex h-8 pointer-coarse:min-h-11 min-w-0 flex-1 items-center gap-(--spacing-2xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding ' +
+    'forced-colors:border-y-0 pe-(--spacing-xs) py-(--spacing-2xs) ps-(--spacing-sm) text-start text-label-sm text-(--text-muted) ' +
+    'transition-colors motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:bg-(--bg-hover) focus-visible:text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
 
-  const LIST_CLASS = 'm-0 flex list-none flex-col gap-(--spacing-2xs) p-0'
+  const GROUP_LABEL_CLASS =
+    'm-0 flex min-h-8 w-full shrink-0 items-center px-(--spacing-sm) text-label-sm text-(--text-muted)'
+
+  const LIST_CLASS = 'm-0 flex list-none flex-col p-0'
 
   const NOTE_CLASS = 'm-0 px-(--spacing-sm) text-body-sm text-(--text-muted)'
 </script>
@@ -189,11 +201,17 @@
         :data-testid="`${testId}__create`"
         @click="(event: MouseEvent) => emit('create', event)"
       >
-        <i
-          class="az az-square-pen shrink-0 text-(--text-muted)"
+        <span
+          :class="ICON_BOX_CLASS"
           aria-hidden="true"
-        />
-        <span class="truncate">{{ t('conversationHistory.newChat') }}</span>
+        >
+          <i
+            class="az az-square-pen"
+            :class="ICON_CLASS"
+            aria-hidden="true"
+          />
+        </span>
+        <span class="min-w-0 flex-1 truncate">{{ t('conversationHistory.newChat') }}</span>
       </button>
       <Input
         v-if="searchable"
@@ -213,13 +231,13 @@
     </div>
     <ul
       v-if="loading"
-      class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
+      :class="LIST_CLASS"
       :data-testid="`${testId}__loading`"
     >
       <li
         v-for="n in 5"
         :key="n"
-        class="px-(--spacing-sm)"
+        class="flex h-8 pointer-coarse:min-h-11 items-center px-(--spacing-sm)"
       >
         <Skeleton
           variant="rectangle"
@@ -238,7 +256,7 @@
     <template v-else>
       <div
         v-if="showProjects"
-        class="flex flex-col gap-(--spacing-2xs)"
+        class="flex flex-col"
         :data-state="sectionOpen ? 'open' : 'closed'"
       >
         <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
@@ -251,9 +269,10 @@
             :data-testid="`${testId}__projects`"
             @click="projectsOpen = !projectsOpen"
           >
-            <span class="truncate">{{ t('conversationHistory.projects') }}</span>
+            <span class="min-w-0 truncate">{{ t('conversationHistory.projects') }}</span>
             <i
               :class="sectionOpen ? 'az az-chevron-down' : 'az az-chevron-right'"
+              class="shrink-0"
               aria-hidden="true"
             />
           </button>
@@ -281,7 +300,7 @@
           <li
             v-for="row in projectRows"
             :key="row.project.id"
-            class="flex flex-col gap-(--spacing-2xs)"
+            class="flex flex-col"
             :data-state="isProjectOpen(row.project.id) ? 'open' : 'closed'"
           >
             <button
@@ -289,19 +308,26 @@
               type="button"
               :aria-expanded="isProjectOpen(row.project.id)"
               :aria-controls="`${uid}-project-${row.index}-list`"
-              :title="row.project.title"
               :class="ROW_ACTION_CLASS"
               :data-testid="`${testId}__project`"
+              @pointerenter="titleWhenTruncated"
               @click="toggleProject(row.project.id)"
             >
-              <i
-                :class="isProjectOpen(row.project.id) ? 'az az-folder-open' : 'az az-folder'"
-                class="shrink-0 text-(--text-muted)"
+              <span
+                :class="ICON_BOX_CLASS"
                 aria-hidden="true"
-              />
+              >
+                <i
+                  :class="[
+                    isProjectOpen(row.project.id) ? 'az az-folder-open' : 'az az-folder',
+                    ICON_CLASS
+                  ]"
+                  aria-hidden="true"
+                />
+              </span>
               <bdi
                 dir="auto"
-                class="truncate"
+                class="min-w-0 flex-1 truncate"
                 >{{ row.project.title }}</bdi
               >
             </button>
@@ -315,7 +341,7 @@
               <li
                 v-if="!row.items.length"
                 :class="NOTE_CLASS"
-                class="py-(--spacing-2xs)"
+                class="flex min-h-8 items-center"
                 :data-testid="`${testId}__project-empty`"
               >
                 {{ t('conversationHistory.projectEmptyTitle') }}
@@ -343,11 +369,11 @@
       </p>
       <div
         v-if="groups.length"
-        class="flex flex-col gap-(--spacing-md)"
+        class="flex flex-col gap-(--spacing-sm)"
       >
         <p
           v-if="showProjects"
-          class="m-0 flex h-11 items-center px-(--spacing-sm) text-label-sm text-(--text-muted) pointer-fine:h-8"
+          :class="GROUP_LABEL_CLASS"
           :data-testid="`${testId}__recents`"
         >
           {{ t('conversationHistory.recents') }}
@@ -355,12 +381,12 @@
         <div
           v-for="group in groups"
           :key="group.key"
-          class="flex flex-col gap-(--spacing-2xs)"
+          class="flex flex-col"
           :data-group="group.key"
         >
           <p
             :id="`${uid}-${group.key}`"
-            class="m-0 px-(--spacing-sm) pb-(--spacing-2xs) text-label-sm text-(--text-muted)"
+            :class="GROUP_LABEL_CLASS"
           >
             {{ t(`conversationHistory.${group.key}`) }}
           </p>

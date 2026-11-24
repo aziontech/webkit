@@ -46,7 +46,7 @@ export function useConversationHistoryGroups(
   now: MaybeRefOrGetter<string | number | Date>
 ): UseConversationHistoryGroupsReturn {
   const lazy = Object.fromEntries(
-    ORDER.map((key) => [key, useLazyChunks({ rowHeight: 40 })])
+    ORDER.map((key) => [key, useLazyChunks({ rowHeight: 32 })])
   ) as Record<ConversationHistoryGroupKey, ReturnType<typeof useLazyChunks>>
 
   const groups = computed<ConversationHistoryGroup[]>(() => {

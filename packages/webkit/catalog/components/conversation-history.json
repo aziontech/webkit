@@ -14,7 +14,7 @@
   "`drawer` — holds the history on narrow screens."
  ],
  "bestPractices": [
-  "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",
+  "Title each conversation from its first prompt, short; a title cut off by the panel width shows in full on hover through `title`.",
   "Put it in a side panel beside the conversation on wide screens and in a `Drawer` (`side=\"start\"`) opened from a menu button on phones; close the drawer from `update:modelValue` and `create` so the chosen conversation shows at once (the Default example).",
   "Turn on `creatable` when the page has no other New chat control, and `searchable` once the list is long enough to scroll.",
   "Pass `projects` once people can file chats into projects; set `projectId` on each chat that belongs to one. Turn on `projectCreatable` and open the owner's own create-project dialog from `project-create`. Keep `v-model:openKeys`, `v-model:projectsOpen` and `v-model:projectSort` in the app's preferences when the panel should reopen the way the person left it.",

@@ -3,9 +3,9 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: 590694593deae3bed72dff65a8c1004a8868347cf0a757385cf30b868a423dc5
+checksum: 8008e66953e50d2af77d0b86472e8e4cd12be8f11ca3f7a206a0dddd228fd1c1
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -34,7 +34,7 @@ The list of past conversations with an assistant, in a side panel on wide screen
 
 ## Best practices
 
-- Title each conversation from its first prompt, short; the full title shows on hover through `title`.
+- Title each conversation from its first prompt, short; a title cut off by the panel width shows in full on hover through `title`.
 - Put it in a side panel beside the conversation on wide screens and in a `Drawer` (`side="start"`) opened from a menu button on phones; close the drawer from `update:modelValue` and `create` so the chosen conversation shows at once (the Default example).
 - Turn on `creatable` when the page has no other New chat control, and `searchable` once the list is long enough to scroll.
 - Pass `projects` once people can file chats into projects; set `projectId` on each chat that belongs to one. Turn on `projectCreatable` and open the owner's own create-project dialog from `project-create`. Keep `v-model:openKeys`, `v-model:projectsOpen` and `v-model:projectSort` in the app's preferences when the panel should reopen the way the person left it.
@@ -118,31 +118,34 @@ _none_
 - Projects (with `projects` or `projectCreatable`): a Projects header (`data-state="open|closed"`, chevron down when open, toward the inline end when closed), then one row per project with a folder glyph (`az-folder`, `az-folder-open` while expanded). An expanded project lists its chats indented under it, newest first, or one muted line `No chats in this project yet.`. A Recents label then heads the date groups of the chats outside any project; with no such chat it is not shown. A `projectId` that matches no project leaves the chat in Recents.
 - Organize: an `IconButton` (`az-sliders-horizontal`) shown with two or more projects opens a `DropdownMenu` with a Sort by group of two radio items, Recent activity and Name; the checked one is `v-model:projectSort`.
 - Search across projects: while the search field holds text, the Projects section and every project with a matching chat show expanded with only their matches, projects without a match are hidden, and Recents keeps only its matches; `v-model:openKeys` and `v-model:projectsOpen` are not changed, so clearing the search restores the previous layout.
+- Rows: every row (New chat, the Projects header, project rows, chats in a project, chats in Recents and the date groups) is the menu row of `SidebarMenuItem`: 32 px tall (44 px on coarse pointers), the fill inset 1 px from the top and bottom edge (`border-y border-transparent bg-clip-padding`, `forced-colors:border-y-0`) so two filled rows keep a 2 px gap, and no gap between the rows of a list.
+- Hover and keyboard focus: the row fills with the hover surface; the Projects header also turns its label to the default text colour.
 - Active row: `data-active` and `aria-current="page"`, the selected surface.
+- Cut-off title: a chat or project title too long for the row truncates on one line; when the pointer enters a row whose title is cut off, the row's `title` holds the full title, and a row whose title fits has no `title`.
 - Empty: one muted line, `No conversations yet.`; the Projects section still shows above it when it has projects or `projectCreatable`.
 - No match: while the search field holds text that no title contains, one muted line, `No conversations match “{query}”.`; New chat and the search field stay.
 - Loading: `aria-busy="true"` and five skeleton rows; no group headings.
 
 ## Motion & Animations
 
-| Trigger              | Animation / Transition               | Token                                       | Reduced-motion fallback         |
-| -------------------- | ------------------------------------ | ------------------------------------------- | ------------------------------- |
-| row hover / active   | background colour                    | `duration-fast-02 ease-productive-entrance` | `motion-reduce:transition-none` |
-| row hover / focus    | Delete fades in (fine pointers only) | `duration-fast-02 ease-productive-entrance` | `motion-reduce:transition-none` |
-| section header hover | text colour                          | `duration-fast-02 ease-productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                    | Animation / Transition               | Token                                           | Reduced-motion fallback         |
+| -------------------------- | ------------------------------------ | ----------------------------------------------- | ------------------------------- |
+| row hover / focus / active | background colour                    | `transition-colors` (the `SidebarMenuItem` row) | `motion-reduce:transition-none` |
+| row hover / focus          | Delete fades in (fine pointers only) | `duration-fast-02 ease-productive-entrance`     | `motion-reduce:transition-none` |
+| section header hover       | background and text colour           | `transition-colors` (the `SidebarMenuItem` row) | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region                             | Token                                                                                                                  |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| group label                        | `.text-label-sm`, `var(--text-muted)`                                                                                  |
-| section header (Projects, Recents) | `.text-label-sm`, `var(--text-muted)`, `var(--text-default)` on hover                                                  |
-| project row                        | the row tokens above, the folder glyph in `var(--text-muted)`; its chats indented by `var(--spacing-md)`               |
-| Organize, New project              | `IconButton` `variant="ghost"` `size="small"`; the menu is `DropdownMenu`                                              |
-| row                                | `.text-label-md` (`.text-label-lg` on coarse pointers), `var(--text-default)`, `var(--bg-hover)`, `var(--bg-selected)` |
-| row radius                         | `var(--shape-control)`                                                                                                 |
-| search                             | `Input` (its own `var(--shape-control)`) with the `az-search` glyph                                                    |
-| empty                              | `.text-body-sm`, `var(--text-muted)`                                                                                   |
+| Region                    | Token                                                                                                                                                                                                                                                                                                          |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| group label, Recents      | the `SidebarMenuGroup` label: `min-h-8`, `var(--spacing-sm)` inline padding, `.text-label-sm`, `var(--text-muted)`                                                                                                                                                                                             |
+| section header (Projects) | the row geometry below with `.text-label-sm`, `var(--text-muted)`; `var(--bg-hover)` and `var(--text-default)` on hover                                                                                                                                                                                        |
+| project row, New chat     | the row below with a 32 px icon box (`var(--spacing-2xs)` start padding) and a 16 px glyph in `var(--text-muted)`, `var(--text-default)` on hover; a project's chats indent by `var(--spacing-md)`                                                                                                             |
+| Organize, New project     | `IconButton` `variant="ghost"` `size="small"`; the menu is `DropdownMenu`                                                                                                                                                                                                                                      |
+| row                       | `SidebarMenuItem`'s row: `h-8`, `pointer-coarse:min-h-11`, padding `var(--spacing-xs)` end, `var(--spacing-2xs)` block, `var(--spacing-sm)` start, `.text-label-md`, `var(--text-default)`, `var(--bg-hover)`, `var(--bg-selected)`, focus ring `var(--ring-color)` 2 px with a 2 px `var(--bg-canvas)` offset |
+| row radius                | `var(--shape-control)`                                                                                                                                                                                                                                                                                         |
+| search                    | `Input` (its own `var(--shape-control)`) with the `az-search` glyph                                                                                                                                                                                                                                            |
+| empty                     | `.text-body-sm`, `var(--text-muted)`                                                                                                                                                                                                                                                                           |
 
 ## Theme gaps
 
@@ -153,7 +156,7 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
-- Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
+- Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`. A row's `title` is set only while its visible title is cut off, so it never repeats a name the row already shows.
 - Delete is an `IconButton` named `Delete <title>` on every row. On touch it is always shown; with a fine pointer it fades in on hover, on keyboard focus inside the row and on the open row, and it is always in the tab order, so it is reachable by keyboard, pointer and touch.
 - The Projects header is a `button` named `Projects` with `aria-expanded` and `aria-controls` on the project list, which is a `ul` labelled by it. Each project is a `button` named by its title with `aria-expanded` and `aria-controls`; its chats are a `ul` labelled by that button. Recents is a visible label; the date groups under it keep their own labelled lists.
 - Organize is an `IconButton` named `Organize projects` that opens a `menu` (`DropdownMenu`: arrow keys move, `Enter`/`Space` check, `Esc` closes and returns focus); Sort by is a `group` of two `menuitemradio`s with `aria-checked`. New project is an `IconButton` named `New project`.
@@ -200,14 +203,14 @@ _none_
 ## Responsive
 
 - Container queries: none; it fills the width it is given.
-- Narrow: titles truncate on one line with the full title in `title`.
-- Touch: rows are 44 px tall on coarse pointers (36 px with a fine pointer), titles one step larger, so the row and its Delete button share one 44 px band; Delete keeps its 40 px touch target and is always shown. The section headers are 44 px tall on coarse pointers (32 px with a fine pointer); Organize and New project keep the `IconButton` touch target.
+- Narrow: titles truncate on one line; a cut-off title shows in full in `title` on hover.
+- Touch: every row is 44 px tall on coarse pointers (32 px with a fine pointer), the menu row of `SidebarMenuItem`; Delete sits at the row's inline end inside that 44 px band, keeps its 40 px touch target and is always shown. Organize and New project keep the `IconButton` touch target.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance
 
-- Bundle budget: 11.85 KB gzip for `./conversation-history` in `.size-limit.json`, entry only (includes `useLazyChunks` and the search `Input`). The Organize menu (`DropdownMenu`) is a lazy chunk that loads when a list has two or more projects; until it lands a disabled Organize button holds its place.
-- Runtime budget: one linear grouping pass per `items` change, plus one sort of the projects. Project chat lists are not chunked; a project holds a handful of chats. A group longer than 300 rows mounts in chunks of 100 (`useLazyChunks`): the first chunk renders, the rest are sized placeholders that mount as they scroll near the viewport. `conversation-history-5k` in `perf-budgets.json` holds mounting 5k conversations and selecting one.
+- Bundle budget: 12.1 KB gzip for `./conversation-history` in `.size-limit.json`, entry only (includes `useLazyChunks` and the search `Input`). The Organize menu (`DropdownMenu`) is a lazy chunk that loads when a list has two or more projects; until it lands a disabled Organize button holds its place.
+- Runtime budget: one linear grouping pass per `items` change, plus one sort of the projects. Project chat lists are not chunked; a project holds a handful of chats. A group longer than 300 rows mounts in chunks of 100 (`useLazyChunks`): the first chunk renders, the rest are placeholders sized at 32 px a row that mount as they scroll near the viewport. `conversation-history-5k` in `perf-budgets.json` holds mounting 5k conversations and selecting one.
 - Heavy parts: none.
 
 ## Examples

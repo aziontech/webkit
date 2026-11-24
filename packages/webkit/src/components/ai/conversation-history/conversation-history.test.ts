@@ -93,6 +93,41 @@ describe('ConversationHistory', () => {
     host.remove()
   })
 
+  it('names a row in a hover title only when its title is cut off', async () => {
+    const style = document.createElement('style')
+    style.textContent =
+      'nav ul { padding: 0; } nav button { display: block; width: 100%; } bdi { display: block; overflow: hidden; white-space: nowrap; }'
+    document.head.appendChild(style)
+    const host = document.createElement('div')
+    host.style.width = '160px'
+    document.body.appendChild(host)
+    const long = 'A conversation title far too long to fit the narrow panel'
+    const view = render(ConversationHistory, {
+      props: {
+        items: [
+          { id: 'a', title: 'Short', updatedAt: '2026-11-11T10:00:00', projectId: 'p1' },
+          { id: 'b', title: long, updatedAt: '2026-11-11T09:00:00' }
+        ],
+        projects: [{ id: 'p1', title: 'Hi' }],
+        openKeys: ['p1'],
+        now
+      },
+      container: host
+    })
+    const short = view.getByRole('button', { name: 'Short' })
+    const cut = view.getByRole('button', { name: long })
+    const folder = view.getByRole('button', { name: 'Hi' })
+    for (const row of [short, cut, folder]) {
+      expect(row).not.toHaveAttribute('title')
+      await fireEvent.pointerEnter(row)
+    }
+    expect(short).not.toHaveAttribute('title')
+    expect(folder).not.toHaveAttribute('title')
+    expect(cut).toHaveAttribute('title', long)
+    host.remove()
+    style.remove()
+  })
+
   it('asks before it removes a row in the example and has no axe violations', async () => {
     await page.viewport(1280, 800)
     const view = render(Default)

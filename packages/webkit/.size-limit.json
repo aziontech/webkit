@@ -1274,7 +1274,7 @@
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "11.85 KB",
+    "limit": "12.1 KB",
     "entryOnly": true
   },
   {
