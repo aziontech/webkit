@@ -118,6 +118,13 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Query explorer',
     summary: 'A Metrics and Events GraphQL explorer built from WebKit components.',
     markdown: 'skills/webkit-query-explorer/SKILL.md'
+  },
+  {
+    slug: 'in-product-help',
+    title: 'In-product help',
+    summary:
+      'A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.',
+    markdown: 'skills/webkit-in-product-help/SKILL.md'
   }
 ]
 
