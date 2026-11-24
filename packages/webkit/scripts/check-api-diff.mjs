@@ -265,7 +265,7 @@ export function evaluate(changes, ctx) {
   const failures = []
   for (const c of changes.filter((x) => x.kind === 'demoted to preview')) {
     failures.push(
-      `${c.subpath}: GA → preview is not allowed. A GA API is frozen (deprecation applies); keep stability ga in .specs/${(ctx.specOf?.[c.subpath] || [c.subpath])[0]}.md.`
+      `${c.subpath}: GA → preview is not allowed. A GA API is frozen (deprecation applies); keep stability ga in .specs/${ctx.parents?.[c.subpath] || c.subpath}.md.`
     )
   }
   const breaking = changes.filter((c) => c.breaking)
