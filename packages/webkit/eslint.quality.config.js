@@ -88,6 +88,9 @@ export default [
       'examples/**/*.{js,ts,vue}'
     ],
     plugins: { webkit },
-    rules: { 'webkit/no-unowned-element': ['error', { owners: true }] }
+    rules: {
+      'webkit/no-unowned-element': ['error', { owners: true }],
+      'webkit/prefer-hint': 'error'
+    }
   }
 ]
