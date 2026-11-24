@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import DonutChart from '@aziontech/webkit/donut-chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -123,6 +124,14 @@
   const split = computed(() => props.split ?? (blocked.value ? [] : sampleSplit))
   const contributors = computed(
     () => props.contributors ?? (blocked.value ? [] : sampleContributors)
+  )
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      series.value.length === 0 &&
+      split.value.length === 0 &&
+      contributors.value.length === 0 &&
+      Object.values(kpis.value).every((kpi) => !kpi?.value)
   )
   const exportable = computed(
     () =>
@@ -306,7 +315,29 @@
         </li>
       </ul>
 
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-chart-bar"
+        title="No spend in this period"
+        description="Nothing was billed to the organization yet. Spend by category, the split and the top contributors fill in once a resource runs."
+        data-testid="dashboard-breakdown__empty"
+      >
+        <template
+          v-if="period !== '12m'"
+          #actions
+        >
+          <Button
+            label="Show the last 12 months"
+            variant="outline"
+            size="medium"
+            @click="period = '12m'"
+          />
+        </template>
+      </EmptyState>
+
       <div
+        v-else
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
         <SpendCard

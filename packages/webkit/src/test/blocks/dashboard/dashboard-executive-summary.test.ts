@@ -64,7 +64,12 @@ describe('dashboard/dashboard-executive-summary', () => {
 
   it('names the quarter when nothing was reported and disables Export', () => {
     const view = render(ExecutiveSummaryEmpty)
-    expect(view.container.textContent).toContain('No goal results for Q3 2025')
+    const empty = view.container.querySelector(
+      '[data-testid="dashboard-executive-summary__empty"]'
+    )!
+    expect(empty.textContent).toContain('No results reported for Q3 2025')
+    expect(view.container.textContent).not.toContain('No goal results for Q3 2025')
+    expect(view.getByRole('button', { name: 'Show Q4 2025' })).toBeTruthy()
     expect((view.getByRole('button', { name: 'Export' }) as HTMLButtonElement).disabled).toBe(true)
   })
 
