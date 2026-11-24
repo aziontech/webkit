@@ -7,6 +7,7 @@ import { createHighlighter, type Highlighter } from 'shiki'
 import { previewPair } from '../../../packages/theme/src/tokens/contrast-pairs.js'
 import { tokenPurpose } from '../../../packages/theme/src/tokens/token-purpose.js'
 import { FOUNDATIONS } from '../src/lib/foundations.ts'
+import { spacedTitle } from '../src/lib/words.ts'
 import {
   type Catalog,
   type CatalogEntry,
@@ -534,7 +535,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
   const blocks: BlockIndexItem[] = readBlocks().map((block) => ({
     id: block.id,
     name: block.name,
-    title: block.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2'),
+    title: spacedTitle(block.name),
     group: block.dir.split('/').slice(0, -1).join('/') || block.dir,
     surface: block.surface ?? 'app',
     stability:

@@ -4,9 +4,9 @@
   import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'
   import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
   import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.jpg'
+  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.webp'
   import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.jpg'
+  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.webp'
   import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
   import ClientMosaicSection from '@aziontech/webkit/client-mosaic-section'
@@ -26,7 +26,7 @@
       logo: dafitiExtendedMono,
       logoAlt: 'Dafiti',
       href: 'https://www.azion.com/en/success-case/dafiti/',
-      fill: 'white'
+      fill: 'canvas'
     },
     {
       logo: agibankExtendedReversed,
@@ -52,7 +52,7 @@
       logo: fourbankExtendedReversed,
       logoAlt: 'Fourbank',
       href: 'https://www.azion.com/en/success-case/fourbank/',
-      fill: 'primary'
+      fill: 'canvas'
     },
     {
       logo: exameExtendedMono,

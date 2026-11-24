@@ -11,6 +11,12 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
 import NumberInputRoot from './number-input.vue'
 
+const describedText = (control: Element) =>
+  (control.getAttribute('aria-describedby') ?? '')
+    .split(' ')
+    .map((id) => (id ? document.getElementById(id)?.textContent?.trim() : ''))
+    .join(' ')
+
 const NumberInput = hostable(NumberInputRoot)
 
 describe('NumberInput', () => {
@@ -463,9 +469,11 @@ describe('NumberInput', () => {
       await expectNoA11yViolations(container)
     })
 
-    it('renders the Invalid story with aria-invalid', () => {
+    it('renders the Invalid story with aria-invalid and its error', async () => {
       const { getByTestId } = render(Invalid)
+      await nextTick()
       expect(getByTestId('number-input').getAttribute('aria-invalid')).toBe('true')
+      expect(describedText(getByTestId('number-input'))).toContain('Use 10 instances or fewer')
     })
   })
 

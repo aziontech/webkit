@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: d6a9b6d15bd59b4139b46d5e208bad088a4d5d331d5764f903034b274efcdf98
+checksum: d268809be8792f4a1d5f5a0386a4194971a99d77d7d3b8f4aad52aacc11f3032
 created: 2026-08-10
 last_updated: 2026-11-21
 ---
@@ -105,7 +105,7 @@ Content (links, labels, languages, status, brand) always comes from the consumer
     <template #status>
       <StatusIndicator
         severity="success"
-        label="All Systems Operational"
+        label="All systems operational"
       />
     </template>
     <template #language>

@@ -9,7 +9,7 @@
       code: 'npx azion deploy --local'
     },
     {
-      label: 'Javascript',
+      label: 'JavaScript',
       value: 'js',
       language: 'javascript',
       code: "const response = await fetch('https://api.azion.com/v4/workspace/workloads', {\n  headers: { Authorization: `Token ${token}` }\n})\n\nconst { results } = await response.json()"

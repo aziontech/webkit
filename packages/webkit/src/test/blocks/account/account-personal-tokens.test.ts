@@ -26,6 +26,14 @@ describe('account/tokens', () => {
     expect(view.getByRole('button', { name: 'Download CSV' })).not.toBeDisabled()
   })
 
+  it('mutes the Expires date of a revoked token and keeps the active ones in default text', () => {
+    const view = render(Tokens)
+    const rowOf = (name: string) =>
+      view.getAllByRole('row').find((row) => row.textContent?.includes(name)) as HTMLElement
+    expect(rowOf('Nightly export').querySelector('[data-ended]')).not.toBeNull()
+    expect(rowOf('Development laptop').querySelector('[data-ended]')).toBeNull()
+  })
+
   it('creates a token, shows it once, and clears it on close', async () => {
     const view = render(Tokens)
     await fireEvent.click(buttonByText('Create Personal Token'))

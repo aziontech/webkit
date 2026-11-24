@@ -1,13 +1,14 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import Default from '../../../../examples/customer-use-cases-section/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CustomerUseCasesSection from './customer-use-cases-section.vue'
 
 const TESTID = 'customer-use-cases-section'
 const EYEBROW = 'SQL Database'
 const TITLE = 'What teams use SQL Database for'
-const DESCRIPTION = 'Teams use it to:'
+const DESCRIPTION = 'Four ways teams put vector search and SQL to work.'
 const primaryAction = { label: 'Docs', href: '/docs', trailing: true }
 
 const items = [
@@ -147,5 +148,12 @@ describe('CustomerUseCasesSection', () => {
 
     expect(eyebrow.textContent?.trim()).toBe('SQL Database')
     expect(eyebrow.textContent).not.toContain('//')
+  })
+
+  it('opens the example with a whole sentence, not a lead-in to nothing', () => {
+    const { getByText } = render(Default)
+
+    const description = getByText(/vector search and SQL/)
+    expect(description.textContent?.trim()).toMatch(/\.$/)
   })
 })

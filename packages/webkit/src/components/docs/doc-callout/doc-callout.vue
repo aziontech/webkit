@@ -29,7 +29,7 @@
 
   const VARIANTS = {
     note: { severity: 'info', icon: 'az az-circle-info', neutral: false },
-    info: { severity: 'info', icon: 'az az-circle-info', neutral: false },
+    info: { severity: 'info', icon: 'az az-circle-info', neutral: true },
     tip: { severity: 'info', icon: 'az az-lightbulb', neutral: true },
     check: { severity: 'success', icon: 'az az-circle-check', neutral: false },
     warning: { severity: 'warning', icon: 'az az-triangle-alert', neutral: false },

@@ -69,6 +69,14 @@ describe('Quote', () => {
     expect(caption).toHaveTextContent(props.jobTitle)
   })
 
+  it('stacks the name and the role one step apart, as one attribution', () => {
+    const { getByTestId } = render(Quote, { props })
+    const lines = getByTestId('quote__name').parentElement?.classList
+
+    expect(lines?.contains('group-data-[variant=signed]:gap-(--spacing-2xs)')).toBe(true)
+    expect(lines?.contains('group-data-[variant=inline]:gap-(--spacing-2xs)')).toBe(true)
+  })
+
   it('renders no figcaption when there is no one to attribute', () => {
     const { container } = render(Quote, { props: { text: props.text } })
 

@@ -8,14 +8,14 @@
 
   defineOptions({ name: 'RuntimeApiCloud', inheritAttrs: false })
 
-  interface Props {
+  export interface RuntimeApiCloudProps {
     /** Accessible name of the list of globals; empty uses the built-in "Globals available in the Azion Runtime". */
     ariaLabel?: string
     /** Hands the highlight from pill to pill on a timer and drifts the rows with the page scroll; off draws the seeded field at rest. */
     animated?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<RuntimeApiCloudProps>(), {
     ariaLabel: '',
     animated: true
   })
@@ -36,9 +36,7 @@
 
   let timer: ReturnType<typeof globalThis.setInterval> | undefined
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'assets-runtime-api-cloud'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'runtime-api-cloud')
 
   const rows = computed(() => {
     const chunks: { label: string; azion: boolean; index: number }[][] = []
@@ -117,7 +115,7 @@
         role="listitem"
         :data-active="lit[pill.index] || null"
         :data-look="toneOf(pill)"
-        class="inline-flex shrink-0 items-center rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) whitespace-nowrap text-overline-sm shadow-(--shadow-sm) [border:var(--border-width-default)_solid_transparent] [background-clip:padding-box,border-box] [background-origin:padding-box,border-box] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)] text-(--text-muted) transition-colors duration-slow-01 ease-productive-entrance data-active:[background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--primary)_0%,var(--primary)_18%,transparent_45%,transparent_55%,var(--primary)_82%,var(--primary)_100%)] data-[look=azion]:text-(--primary) data-[look=lit]:text-(--text-default) motion-reduce:transition-none"
+        class="inline-flex shrink-0 items-center rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) whitespace-nowrap text-label-code-sm shadow-(--shadow-sm) [border:var(--border-width-default)_solid_transparent] [background-clip:padding-box,border-box] [background-origin:padding-box,border-box] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)] text-(--text-muted) transition-colors duration-slow-01 ease-productive-entrance data-active:[background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--primary)_0%,var(--primary)_18%,transparent_45%,transparent_55%,var(--primary)_82%,var(--primary)_100%)] data-[look=azion]:text-(--primary) data-[look=lit]:text-(--text-default) motion-reduce:transition-none"
         >{{ pill.label }}</span
       >
     </div>

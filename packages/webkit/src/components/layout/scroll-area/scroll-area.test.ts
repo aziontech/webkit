@@ -2,6 +2,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent } from 'vue'
 
+import Default from '../../../../examples/scroll-area/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ScrollArea from './scroll-area.vue'
 
@@ -305,5 +306,13 @@ describe('ScrollArea', () => {
       await vi.waitFor(() => expect(area(view).hasAttribute('data-fade')).toBe(true))
       await expectNoA11yViolations(view.container)
     })
+  })
+
+  it('scrolls a deployment log in the default example', async () => {
+    const { container, getAllByRole } = render(Default)
+    expect(getAllByRole('listitem').length).toBeGreaterThan(5)
+    expect(container.textContent).toContain('Deployed to production')
+    expect(container.textContent).not.toMatch(/Jokester|jester/)
+    await expectNoA11yViolations(container)
   })
 })

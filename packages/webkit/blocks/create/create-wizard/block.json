@@ -71,7 +71,7 @@
     },
     {
       "name": "Review",
-      "summary": "The Review step that closes the create, after List settings: three bands under small `Subheader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.",
+      "summary": "The Review step that closes the create, after List settings: three bands under small `Subheader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value under its plain label (Name with its own Edit back to General), the entries as `Tag`s with a count and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.",
       "file": "variants/review.vue"
     },
     {

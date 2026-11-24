@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+  import PageHeader from '@aziontech/webkit/page-header'
   import { toast } from '@aziontech/webkit/toast'
   import { ref, useId, watch } from 'vue'
 
@@ -18,7 +19,7 @@
   provideVariablesForm(form)
   const { view } = form
 
-  const drawerOpen = ref(false)
+  const drawerOpen = ref(true)
   const submitting = ref(false)
   const pasteId = useId()
   const pasteOpen = ref(false)
@@ -35,14 +36,17 @@
     await cancelPaste()
   }
 
-  watch(drawerOpen, (isOpen) => {
-    if (!isOpen) return
-    pasteOpen.value = true
-    pasteText.value = sampleEnv
-    pasteStatus.value = ''
-    form.reset([form.createEntry('CACHE_TTL', '120')])
-    submitting.value = false
-  })
+  watch(
+    drawerOpen,
+    (isOpen) => {
+      if (!isOpen) return
+      pasteOpen.value = true
+      pasteText.value = sampleEnv
+      pasteStatus.value = ''
+      form.reset([form.createEntry('CACHE_TTL', '120')])
+    },
+    { immediate: true }
+  )
 
   const submit = async (_event: Event, formEl: HTMLFormElement | null) => {
     if (submitting.value || !(await form.check(formEl))) return
@@ -52,68 +56,72 @@
     submitting.value = false
     drawerOpen.value = false
     toast.success(
-      created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
+      `${created.length === 1 ? created[0].key : plural(created.length, 'variable', 'variables')} created.`
     )
   }
 </script>
 
 <template>
-  <Drawer
-    v-model:open="drawerOpen"
-    size="large"
-    side="end"
-  >
-    <DrawerTrigger>
-      <div class="w-full md:w-fit">
-        <Button
-          label="Create Variable"
-          icon="az az-plus"
-          variant="primary"
-          size="large"
-          class="w-full"
-        />
-      </div>
-    </DrawerTrigger>
-    <VariablesDrawerForm
-      title="Create Variable"
-      description="Create one or more variables and define where they are available."
-      shortcut-label="Save variable"
-      :active="drawerOpen"
-      :submitting="submitting"
-      @submit="submit"
+  <div class="layout-column layout-boundary flex flex-col">
+    <PageHeader
+      title="Variables"
+      description="Configure variable names, values, and settings for use across your projects."
     >
-      <VariablesEntries>
-        <template #toolbar>
-          <Button
-            ref="pasteToggleEl"
-            label="Paste .env"
-            icon="az az-clipboard"
-            variant="outline"
-            size="medium"
-            :aria-expanded="pasteOpen"
-            :aria-controls="pasteOpen ? `${pasteId}-panel` : undefined"
-            :disabled="view !== 'Form'"
-            @click="pasteOpen = !pasteOpen"
-          />
-        </template>
-        <template #panel>
-          <EnvPastePanel
-            v-if="pasteOpen"
-            :id="pasteId"
-            v-model="pasteText"
-            @apply="applyPaste"
-            @cancel="cancelPaste"
-          />
-          <p
-            class="sr-only"
-            role="status"
-            aria-live="polite"
+      <template #actions>
+        <Drawer
+          v-model:open="drawerOpen"
+          size="large"
+          side="end"
+        >
+          <DrawerTrigger>
+            <Button
+              label="Create variable"
+              icon="az az-plus"
+              variant="primary"
+              size="medium"
+            />
+          </DrawerTrigger>
+          <VariablesDrawerForm
+            title="Create variable"
+            description="Create one or more variables and define where they are available."
+            shortcut-label="Save variable"
+            :active="drawerOpen"
+            :submitting="submitting"
+            @submit="submit"
           >
-            {{ pasteStatus }}
-          </p>
-        </template>
-      </VariablesEntries>
-      <VariablesScopeGroup />
-    </VariablesDrawerForm>
-  </Drawer>
+            <VariablesEntries>
+              <template #toolbar>
+                <Button
+                  ref="pasteToggleEl"
+                  label="Paste .env"
+                  icon="az az-clipboard"
+                  variant="outline"
+                  size="medium"
+                  :aria-expanded="pasteOpen"
+                  :aria-controls="pasteOpen ? `${pasteId}-panel` : undefined"
+                  :disabled="view !== 'Form'"
+                  @click="pasteOpen = !pasteOpen"
+                />
+              </template>
+              <template #panel>
+                <EnvPastePanel
+                  v-if="pasteOpen"
+                  :id="pasteId"
+                  v-model="pasteText"
+                  @apply="applyPaste"
+                  @cancel="cancelPaste"
+                />
+                <p
+                  class="sr-only"
+                  role="status"
+                  v-text="pasteStatus"
+                />
+              </template>
+            </VariablesEntries>
+            <VariablesScopeGroup />
+          </VariablesDrawerForm>
+        </Drawer>
+      </template>
+    </PageHeader>
+  </div>
 </template>

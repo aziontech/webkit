@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import ManageResources from '../../../../blocks/account/account-hierarchy/account-hierarchy.vue'
+import { sampleResources } from '../../../../blocks/account/account-hierarchy/sample'
 import Selected from '../../../../blocks/account/account-hierarchy/variants/selected.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -178,5 +179,17 @@ describe('account/account-hierarchy', () => {
     const view = render(Selected)
     expect(view.getByRole('heading', { name: '1 resource selected' })).toBeTruthy()
     expect(row('ws-30418').getAttribute('aria-selected')).toBe('true')
+  })
+
+  it('counts every resource of the tree in the footer, not the top-level rows', () => {
+    const view = render(ManageResources)
+    expect(view.container.textContent).toContain(`${sampleResources.length} resources`)
+    expect(view.container.textContent).not.toMatch(/Showing 1 to 2 of 2/)
+  })
+
+  it('drops the details panel and the pending-deletion link while the list is in error', () => {
+    const view = render(ManageResources, { props: { error: 'The API answered 503.' } })
+    expect(view.queryByRole('heading', { name: 'No resource selected' })).toBeNull()
+    expect(view.queryByRole('link', { name: 'Resources pending deletion' })).toBeNull()
   })
 })

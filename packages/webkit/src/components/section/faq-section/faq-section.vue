@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { safeHref } from '../../../utils/safe-href'
   import Module from '../../layout/module/module.vue'
   import Faq from '../../marketing/faq/faq.vue'
@@ -55,6 +57,8 @@
   const LIST_ITEM = /^[ \t]*- (.*)$/
 
   const attrs = useAttrs()
+
+  const { t } = useTranslate({ common: en.common })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'faq-section')
 
@@ -148,7 +152,7 @@
         :items="faqItems"
       >
         <template #answer="{ item }">
-          <template v-if="answersByValue.get(item.value)?.flat ?? true">
+          <p v-if="answersByValue.get(item.value)?.flat ?? true">
             <template
               v-for="(run, runIndex) in answersByValue.get(item.value)?.runs ?? []"
               :key="runIndex"
@@ -159,13 +163,18 @@
                 :target="run.external ? '_blank' : undefined"
                 :rel="run.external ? 'noopener noreferrer' : undefined"
                 class="text-link"
-                >{{ run.text }}</a
+                >{{ run.text
+                }}<span
+                  v-if="run.external"
+                  class="sr-only"
+                  >{{ ' ' + t('common.newTab') }}</span
+                ></a
               >
               <strong v-else-if="run.strong">{{ run.text }}</strong>
               <em v-else-if="run.emphasis">{{ run.text }}</em>
               <template v-else>{{ run.text }}</template>
             </template>
-          </template>
+          </p>
           <span
             v-else
             class="flex flex-col gap-(--spacing-sm)"
@@ -194,7 +203,12 @@
                     :target="run.external ? '_blank' : undefined"
                     :rel="run.external ? 'noopener noreferrer' : undefined"
                     class="text-link"
-                    >{{ run.text }}</a
+                    >{{ run.text
+                    }}<span
+                      v-if="run.external"
+                      class="sr-only"
+                      >{{ ' ' + t('common.newTab') }}</span
+                    ></a
                   >
                   <strong v-else-if="run.strong">{{ run.text }}</strong>
                   <em v-else-if="run.emphasis">{{ run.text }}</em>

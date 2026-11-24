@@ -1,14 +1,47 @@
-import { fireEvent, render, within } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import AccountOnboardingForm from '../../../../blocks/account/account-onboarding-form/account-onboarding-form.vue'
+import { accents } from '../../../../blocks/account/account-onboarding-form/onboarding-form-data'
 import Plan from '../../../../blocks/account/account-onboarding-form/variants/plan.vue'
 import Profile from '../../../../blocks/account/account-onboarding-form/variants/profile.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 describe('account/account-onboarding-form', () => {
+  it('builds each named mark swatch from its own hue', () => {
+    const hues: Record<string, RegExp> = {
+      orange: /^var\(--(primary|warning)\)$/,
+      green: /^var\(--success(-mark)?\)$/,
+      red: /^var\(--(danger(-mark)?|primary)\)$/,
+      yellow: /^var\(--(warning(-mark)?|primary)\)$/
+    }
+    for (const [value, hue] of Object.entries(hues)) {
+      const accent = accents.find((item) => item.value === value)
+      expect(
+        accent?.colors.every((color) => hue.test(color)),
+        value
+      ).toBe(true)
+    }
+  })
+
+  it('paints each named mark mostly in the colour it is named after', () => {
+    for (const accent of accents.filter((item) => item.value !== 'gray')) {
+      const lead = accent.colors[0]
+      expect(accent.colors.filter((color) => color === lead).length, accent.label).toBeGreaterThan(
+        accent.colors.length / 2
+      )
+    }
+  })
+
+  it('fades the preview on its end edge in either direction', () => {
+    const view = render(AccountOnboardingForm)
+    const faded = view.container.querySelector('[class*="mask-b-from-80%"]') as HTMLElement
+    expect(faded.classList).toContain('ltr:mask-r-from-72%')
+    expect(faded.classList).toContain('rtl:mask-l-from-72%')
+  })
+
   it('renders the step card on the layout column, with the Wizard holding the step', async () => {
     const view = render(AccountOnboardingForm)
     const column = view.container.querySelector('.layout-column.layout-boundary')
@@ -19,6 +52,21 @@ describe('account/account-onboarding-form', () => {
       await view.findByRole('heading', { level: 2, name: 'Create your organization' })
     ).toBeTruthy()
     expect(view.getByTestId('wizard__progress').textContent).toContain('Step 1 of 3')
+  })
+
+  it("focuses the open step's first field on mount, unless autofocus is off", async () => {
+    const view = render(AccountOnboardingForm)
+    const fullName = view.getByRole('textbox', { name: /Your full name/ })
+    await waitFor(() => expect(document.activeElement).toBe(fullName))
+    view.unmount()
+    const plan = render(Plan)
+    await waitFor(() =>
+      expect((document.activeElement as HTMLInputElement | null)?.type).toBe('radio')
+    )
+    plan.unmount()
+    const quiet = render(AccountOnboardingForm, { props: { autofocus: false } })
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(quiet.container.contains(document.activeElement)).toBe(false)
   })
 
   it('gates Next on the required fields, then moves to the plan step', async () => {

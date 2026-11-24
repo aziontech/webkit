@@ -186,11 +186,26 @@ export function evaluateUsage({ target, scan, doctorExitCode, minCoverage = 0.8,
   return { pass: checks.every((c) => c.pass), checks }
 }
 
+export const USAGE_ALLOWED_TOOLS = [
+  'Read',
+  'Write',
+  'Edit',
+  'MultiEdit',
+  'Glob',
+  'Grep',
+  'LS',
+  'mcp__webkit',
+  'Bash(npx @aziontech/webkit:*)'
+]
+
 export function claudeArgs(prompt, maxTurns) {
   return [
     '-p',
     prompt,
-    '--dangerously-skip-permissions',
+    '--permission-mode',
+    'acceptEdits',
+    '--allowedTools',
+    USAGE_ALLOWED_TOOLS.join(','),
     '--max-turns',
     String(maxTurns),
     '--output-format',

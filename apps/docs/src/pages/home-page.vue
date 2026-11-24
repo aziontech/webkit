@@ -62,7 +62,7 @@
   <div class="flex w-full flex-col">
     <Hero
       max-width="7xl"
-      size="large"
+      size="medium"
     >
       <Hero.Title
         :eyebrow="`${t.homeEyebrow} ${index.version}`"

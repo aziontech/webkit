@@ -15,6 +15,18 @@ describe('ArtifactPreview', () => {
     ).toBeTruthy()
   })
 
+  it('keeps the title in page direction beside its icon under rtl, isolating only the text', () => {
+    const host = document.createElement('div')
+    host.dir = 'rtl'
+    document.body.appendChild(host)
+    const view = render(ArtifactPreview, { container: host, props: base })
+    const heading = view.getByRole('heading', { level: 3 })
+    expect(heading.hasAttribute('dir')).toBe(false)
+    expect(getComputedStyle(heading).direction).toBe('rtl')
+    expect(heading.querySelector('bdi')?.textContent).toBe(base.title)
+    host.remove()
+  })
+
   it('is an article named by its title, with description and meta', () => {
     const { getByRole } = render(ArtifactPreview, { props: base })
     const article = getByRole('article', { name: 'cache-rules.json' })

@@ -87,7 +87,7 @@
 
 ## Internationalization
 
-One built-in string pair: the typed line's pause control reads `common.pauseAnimation` / `common.playAnimation` from the locale catalogs. Every other visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `copy-command-section` (`copyCommandSection.command`, `copyCommandSection.copyCommandSection`).
+One built-in string pair: the typed line's pause control reads `common.pauseAnimation` / `common.playAnimation` from the locale catalogs. Every other visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `copy-command-section` (`copyCommandSection.command`, `copyCommandSection.copyCommand`).
 
 - Formatting: none.
 

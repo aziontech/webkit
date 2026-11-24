@@ -11,6 +11,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import { useHydrationHost } from '../../../test/hydration-shared'
 import ConsoleMockup, { type ConsoleMockupName } from './console-mockup.vue'
 import { ConsoleMockupInjectionKey } from './injection-key'
+import { APPLICATION_VERSION_TABS } from './lib/application-version-data'
 import DeploymentLogs from './parts/deployment-logs.vue'
 import { productWidgets } from './registry'
 import ObjectStorageBrowser from './widgets/object-storage-browser-fragment.vue'
@@ -592,12 +593,29 @@ describe('ConsoleMockup', () => {
       await expectNoA11yViolations(view.container)
     })
 
+    it('writes its console copy in sentence case', async () => {
+      expect(APPLICATION_VERSION_TABS.map((tab) => tab.label)).toEqual([
+        'Main settings',
+        'Cache settings',
+        'Device groups',
+        'Functions',
+        'Rules Engine'
+      ])
+      const view = render(host({ name: 'workloads-list' }))
+      await frameOf(view)
+      await view.findByText('Create workload', {}, { timeout: 5000 })
+      const text = view.container.textContent ?? ''
+      expect(text).toContain('Create workload')
+      expect(text).toContain('Last modified')
+      expect(text).not.toMatch(/Create Workload|Last Modified/)
+    })
+
     it('marks each step with a job status and lets a fragment take hovered', async () => {
       const view = render(DeploymentLogs, { props: { failAt: 'build' } })
       const status = (title: string) =>
         view.getByText(title, { selector: 'span[data-status]' }).getAttribute('data-status')
 
-      expect(status('Clone Template')).toBe('success')
+      expect(status('Clone template')).toBe('success')
       expect(status('Build')).toBe('error')
       expect(status('Upload')).toBe('skipped')
 

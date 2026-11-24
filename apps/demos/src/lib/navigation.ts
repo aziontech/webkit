@@ -24,7 +24,7 @@ const markPageless = (item: ConsoleLayoutNavItem): ConsoleLayoutNavItem => {
 const tree: ConsoleLayoutNavGroup[] = [
   {
     items: [
-      { id: 'home', label: 'Home', icon: 'az az-home', href: '/onboarding' },
+      { id: 'home', label: 'Home', icon: 'az az-home' },
       { id: 'projects', label: 'Projects', icon: 'az az-folder' },
       { id: 'deployments', label: 'Deployments', icon: 'az az-cloud-upload' }
     ]
@@ -119,7 +119,7 @@ const tree: ConsoleLayoutNavGroup[] = [
           {
             label: 'Settings',
             items: [
-              { id: 'settings-general', label: 'General', href: '/settings' },
+              { id: 'settings-general', label: 'Profile', href: '/settings' },
               { id: 'settings-build-deployment', label: 'Build and deployment' },
               { id: 'settings-environments', label: 'Environments' },
               { id: 'settings-users', label: 'Users management' },

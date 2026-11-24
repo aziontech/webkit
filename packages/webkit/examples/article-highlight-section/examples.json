@@ -26,7 +26,6 @@
       "json": "site-featured.json"
     }
   ],
-  "siteTitle": "Templates/Marketing/Articles/ArticleHighlightSection",
   "sitePreview": {
     "layout": "fullscreen",
     "background": "dark"

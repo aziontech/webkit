@@ -2062,11 +2062,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
           >
         </Item.Title>
         <Item.Description>
-          <span
-            class="block truncate"
-            :title="account.email"
-            >{{ account.email }}</span
-          >
+          <span class="block break-all">{{ account.email }}</span>
         </Item.Description>
       </Item.Content>
       <Item.Actions>

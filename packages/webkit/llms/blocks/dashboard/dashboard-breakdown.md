@@ -43,7 +43,7 @@ Title `Cost breakdown` with one sentence on what it shows. Its actions hold the 
 
 The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
 
-`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes every region.
+`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes the Spend by category trend and the sparklines; the tiles, Current split and Top contributors always read this month, and say so on screen (`this month vs previous month` under each figure), never only in a hint. The ghost trigger sizes to its label, so it sits next to Export CSV with no gap.
 
 ### C. Export — `Button` (optional)
 
@@ -93,7 +93,10 @@ change against last month. Amounts and shares use tabular numbers and align righ
 
 ### M. Empty regions — `EmptyState` (required)
 
-Each chart and the table keep their box with an empty state: `No spend in this range` /
+When the whole period is empty, the tiles print `$0` (nothing was billed, so zero is the truth) and
+one bordered page-level `EmptyState` (`No spend in this period`, with `Show the last 12 months` when a
+shorter period is picked) replaces the cards. When only some regions are empty, each chart and the
+table keep their box with an empty state: `No spend in this range` /
 `Nothing was billed to the organization in the selected period.`
 
 ### N. Category and change — `Tag` (required)
@@ -192,7 +195,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the populated breakdown for the period (`v-model:period`).
 - Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
-- Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
+- Empty: nothing billed in the period (every kpi `0` and every list `[]`); tiles print `$0` with no delta or trend, the exports disable, and one page-level `EmptyState` replaces the stacked chart, the donut and the table.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -206,7 +209,7 @@ Then delete `sample.ts` and its import.
 
 - `Default` — primary (the code below)
 - `Loading` — While the first response loads, every tile, both charts and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.
-- `Empty` — Nothing was billed in the selected period. The tiles show a dash with no delta or trend, and the stacked chart, the donut and the table each keep their box with an EmptyState that names the reason.
+- `Empty` — Nothing was billed in the selected period. The tiles print $0 with no delta or trend, and one bordered page-level EmptyState, No spend in this period, replaces the stacked chart, the donut and the table.
 - `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-breakdown", { variant })`, or the file under `blocks/dashboard/dashboard-breakdown/variants/`.
@@ -219,6 +222,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import DonutChart from '@aziontech/webkit/donut-chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -307,7 +311,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
   const period = defineModel<string>('period', { default: '12m' })
 
-  const comparison = 'vs previous month'
+  const comparison = 'this month vs previous month'
+  const LOADING_TREND = [0, 0]
 
   const tiles: { metric: BreakdownDashboardMetric; label: string; description: string }[] = [
     {
@@ -339,6 +344,14 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const split = computed(() => props.split ?? (blocked.value ? [] : sampleSplit))
   const contributors = computed(
     () => props.contributors ?? (blocked.value ? [] : sampleContributors)
+  )
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      series.value.length === 0 &&
+      split.value.length === 0 &&
+      contributors.value.length === 0 &&
+      Object.values(kpis.value).every((kpi) => !kpi?.value)
   )
   const exportable = computed(
     () =>
@@ -458,7 +471,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         description="How the organization’s spend splits across categories and the resources that drive it."
       >
         <template #actions>
-          <div class="w-full md:w-48">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"
@@ -511,7 +524,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             :delta="kpis[tile.metric]?.delta ?? null"
             :delta-label="comparison"
             inverse
-            :trend="kpis[tile.metric]?.trend ?? []"
+            :trend="kpis[tile.metric]?.trend ?? (loading ? LOADING_TREND : [])"
             :loading="loading"
             :error="error"
           >
@@ -522,14 +535,36 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         </li>
       </ul>
 
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-chart-bar"
+        title="No spend in this period"
+        description="Nothing was billed to the organization yet. Spend by category, the split and the top contributors fill in once a resource runs."
+        data-testid="dashboard-breakdown__empty"
+      >
+        <template
+          v-if="period !== '12m'"
+          #actions
+        >
+          <Button
+            label="Show the last 12 months"
+            variant="outline"
+            size="medium"
+            @click="period = '12m'"
+          />
+        </template>
+      </EmptyState>
+
       <div
+        v-else
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
         <SpendCard
           v-model:form="trendForm"
           :span="8"
           title="Spend by category"
-          hint="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
+          hint="Monthly spend stacked by category over the period picked in the header; the top edge is the total. Legend totals sum the whole range."
           :forms="forms"
           :exportable="exportable"
           :error="error"
@@ -1002,7 +1037,7 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
 <template>
   <ChartCard :span="span">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+      <span class="inline-flex min-w-0 flex-1 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>{{ title }}</ChartCard.Title>
         <Hint :content="hint" />
       </span>

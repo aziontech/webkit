@@ -705,4 +705,32 @@ describe('Sidebar', () => {
       await expectNoA11yViolations(container)
     })
   })
+
+  it.each([
+    ['default', Default],
+    ['resizable', Resizable]
+  ])(
+    'paints the Preview lifecycle tag in the %s example as info, not brand orange',
+    (_, Example) => {
+      const { getAllByTestId } = render(Example)
+      const preview = getAllByTestId('tag').filter((tag) => tag.textContent?.trim() === 'Preview')
+      expect(preview.length).toBeGreaterThan(0)
+      for (const tag of preview) {
+        expect(tag.getAttribute('data-severity')).toBe('info')
+        expect(tag.getAttribute('data-variant')).not.toBe('primary')
+      }
+    }
+  )
+
+  it('leaves the rail example lifecycle tag on the default info colour', () => {
+    const [iconRailSource] = Object.values(
+      import.meta.glob<string>('../../../../examples/sidebar/icon-rail.vue', {
+        query: '?raw',
+        import: 'default',
+        eager: true
+      })
+    )
+    expect(iconRailSource).toContain('tag-value="Preview"')
+    expect(iconRailSource).not.toContain('tag-variant="primary"')
+  })
 })

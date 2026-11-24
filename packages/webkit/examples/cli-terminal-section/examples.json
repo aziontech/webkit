@@ -21,7 +21,6 @@
       "json": "site-terminal.json"
     }
   ],
-  "siteTitle": "Templates/Marketing/CLI/CliTerminalSection",
   "sitePreview": {
     "layout": "fullscreen",
     "background": "dark"

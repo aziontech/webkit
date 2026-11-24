@@ -67,6 +67,7 @@
       :data-path="node.path"
       data-widget="section"
       :data-testid="`${testId}__section`"
+      class="[--accordion-inset:0]"
       @update:model-value="toggleSection(node, $event)"
     >
       <AccordionItem :value="node.path">

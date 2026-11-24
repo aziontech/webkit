@@ -46,17 +46,59 @@ module.exports = {
       name: 'icons-gallery',
       cache: [
         {
-          name: 'icons-gallery',
+          name: 'icons-gallery-hashed',
           browser: {
-            maxAgeSeconds: 7200
+            maxAgeSeconds: 31536000
           },
           edge: {
-            maxAgeSeconds: 7200
+            maxAgeSeconds: 31536000
+          }
+        },
+        {
+          name: 'icons-gallery',
+          browser: {
+            maxAgeSeconds: 300
+          },
+          edge: {
+            maxAgeSeconds: 300
           }
         }
       ],
       rules: {
         request: [
+          {
+            name: 'Deliver Hashed Build Assets with an Immutable Cache',
+            description:
+              'Files under /assets/ carry a content hash in their name, so they are cached for a year',
+            active: true,
+            criteria: [
+              [
+                {
+                  variable: '${uri}',
+                  conditional: 'if',
+                  operator: 'matches',
+                  argument: '^/assets/'
+                }
+              ]
+            ],
+            behaviors: [
+              {
+                type: 'set_connector',
+                attributes: {
+                  value: 'icons-gallery'
+                }
+              },
+              {
+                type: 'set_cache_policy',
+                attributes: {
+                  value: 'icons-gallery-hashed'
+                }
+              },
+              {
+                type: 'deliver'
+              }
+            ]
+          },
           {
             name: 'Deliver Static Assets and Set Cache Policy',
             description: 'Deliver static assets directly from storage and set cache policy',
@@ -107,6 +149,12 @@ module.exports = {
             behaviors: [
               {
                 type: 'set_connector',
+                attributes: {
+                  value: 'icons-gallery'
+                }
+              },
+              {
+                type: 'set_cache_policy',
                 attributes: {
                   value: 'icons-gallery'
                 }

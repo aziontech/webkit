@@ -234,6 +234,7 @@
       :alt="shortcutHint.alt"
       :key-name="shortcutHint.keyName"
       size="small"
+      class="pointer-coarse:hidden!"
       >{{ shortcutHint.key }}</Kbd
     >
     <span

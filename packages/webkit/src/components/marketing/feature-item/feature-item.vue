@@ -44,6 +44,8 @@
 
   const isLink = computed<boolean>(() => safeHref(props.href) !== null)
 
+  const opensElsewhere = computed<boolean>(() => attrs['target'] === '_blank')
+
   const ROOT_CLASS =
     'group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out ' +
     'motion-reduce:transition-none ' +
@@ -52,6 +54,10 @@
     'data-[linked]:focus-visible:outline-offset-(--spacing-xs) data-[linked]:focus-visible:outline-(--ring-color)'
 
   const LINK_ARROW_CLASS =
+    'az az-arrow-right ms-(--spacing-2xs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
+    'motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
+
+  const EXTERNAL_ARROW_CLASS =
     'az az-arrow-up-right ms-(--spacing-2xs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
     'motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
 </script>
@@ -83,7 +89,12 @@
       >
         {{ title }}
         <i
-          v-if="isLink"
+          v-if="isLink && opensElsewhere"
+          aria-hidden="true"
+          :class="EXTERNAL_ARROW_CLASS"
+        />
+        <i
+          v-else-if="isLink"
           aria-hidden="true"
           :class="LINK_ARROW_CLASS"
         />

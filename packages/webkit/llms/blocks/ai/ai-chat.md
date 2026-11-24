@@ -269,7 +269,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Empty state:** "What can I help with?".
 - **Support prompts and follow-ups:** written as the reader would ask, under 72 characters, e.g. "How do I purge the cache of one URL?".
 - **Placeholder:** `Ask a question`, no end punctuation.
-- **Disclaimer (hint):** "The AI assistant can make mistakes. Check important information before you act on it."
+- **Disclaimer (hint):** "The AI assistant can make mistakes. Check important information before you act on it." The three AI blocks share this sentence; `ai/ai-action-approval` appends "It runs nothing in your account without your approval."
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
@@ -1294,11 +1294,11 @@ export const sampleTools: PromptInputMenuOption[] = [
     () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
   )
 
-  const actions: { value: AiChatHeaderAction; label: string }[] = [
+  const actions: { value: AiChatHeaderAction; label: string; severity?: 'danger' }[] = [
     { value: 'share', label: 'Share' },
     { value: 'rename', label: 'Rename' },
     { value: 'archive', label: 'Archive' },
-    { value: 'remove', label: 'Delete' }
+    { value: 'remove', label: 'Delete', severity: 'danger' }
   ]
 
   function onModel(_event: MouseEvent | KeyboardEvent, value: string | number) {
@@ -1431,6 +1431,7 @@ export const sampleTools: PromptInputMenuOption[] = [
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>
@@ -1470,6 +1471,7 @@ export const sampleTools: PromptInputMenuOption[] = [
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>

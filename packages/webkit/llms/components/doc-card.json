@@ -77,7 +77,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Call-to-action text; when set the card closes on a link row."
+   "doc": "Call-to-action text; when set the card closes on a link row. A linked card without it shows the link glyph alone in its top-end corner."
   }
  ],
  "events": [],

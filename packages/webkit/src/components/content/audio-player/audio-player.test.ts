@@ -194,6 +194,17 @@ describe('AudioPlayer', () => {
     expect(details.textContent).toContain('acme-store is live')
   })
 
+  it('gives the transcript summary a 40 px hit area on a coarse pointer', () => {
+    const view = render(Default)
+    const summary = view.getByTestId(`${TEST_ID}__transcript`).querySelector('summary')!
+    const layer = summary.querySelector('[data-slot="touch-target"]')
+    expect(summary.classList.contains('relative')).toBe(true)
+    expect(layer?.getAttribute('aria-hidden')).toBe('true')
+    expect(layer?.classList.contains('pointer-coarse:block')).toBe(true)
+    expect(layer?.classList.contains('inset-y-[min(0rem,calc(50%-20px))]')).toBe(true)
+    expect(summary.textContent?.trim()).toBe('Transcript')
+  })
+
   it('reads its strings from the ConfigProvider locale', () => {
     const view = render(ConfigProvider, {
       props: { locale: 'pt-BR', catalogs: LOCALES },

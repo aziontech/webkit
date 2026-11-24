@@ -133,7 +133,6 @@
             icon="az az-sql-database"
             href="/sql-database"
             tag-value="Preview"
-            tag-variant="primary"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Account">
@@ -208,7 +207,7 @@
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   value="logout"
-                  label="Log Out"
+                  label="Log out"
                 >
                   <template #trailing
                     ><i

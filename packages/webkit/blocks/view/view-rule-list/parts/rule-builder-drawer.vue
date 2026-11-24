@@ -75,13 +75,13 @@
       <form
         ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
-        :aria-label="editing ? 'Edit Rule' : 'Add Rule'"
+        :aria-label="editing ? 'Edit rule' : 'Add rule'"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>{{ editing ? 'Edit Rule' : 'Add Rule' }}</DrawerTitle>
+            <DrawerTitle>{{ editing ? 'Edit rule' : 'Add rule' }}</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Handle the conditional execution of behaviors through logical operators.
             </p>
@@ -93,7 +93,7 @@
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">{{ editing ? 'Edit Rule' : 'Add Rule' }}</legend>
+            <legend class="sr-only">{{ editing ? 'Edit rule' : 'Add rule' }}</legend>
             <SettingsGroup
               label="General"
               hint="Names the rule in the list and in the deployment log."

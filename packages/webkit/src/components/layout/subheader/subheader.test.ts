@@ -39,6 +39,15 @@ describe('Subheader', () => {
     expect(anchored.getByRole('button', { name: 'Copy link to the General section' })).toBeTruthy()
   })
 
+  it('draws the copy-link with the link glyph, like SettingsGroup', () => {
+    const view = within(
+      render(Subheader, { props: { title: 'General', anchor: 'general' } }).container as HTMLElement
+    )
+    const button = view.getByRole('button', { name: 'Copy link to the General section' })
+    expect(button.querySelector('.az-link')).toBeTruthy()
+    expect(button.querySelector('.az-copy')).toBeNull()
+  })
+
   it.each(['small', 'medium'] as const)('mirrors size=%s onto data-size', (size) => {
     const { getByTestId } = within(
       render(Subheader, { props: { title: 'General', size } }).container as HTMLElement

@@ -29,7 +29,7 @@
     bordered?: boolean
     /** Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`). */
     searchPlaceholder?: string
-    /** Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewerContent). */
+    /** Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent). */
     copyable?: boolean
     /** Disables toolbar controls in LogViewerHeader. */
     disabled?: boolean

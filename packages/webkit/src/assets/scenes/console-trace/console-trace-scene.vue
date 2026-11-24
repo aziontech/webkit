@@ -27,7 +27,7 @@
 
   export type { ConsoleTraceSceneTab } from './console-trace-data'
 
-  interface Props {
+  export interface ConsoleTraceSceneProps {
     /** Document of the invocation the scene shows; empty or unknown shows the first, `trace`. */
     tab?: ConsoleTraceSceneTab | string
     /** Whether this scene is the one showing; the page entrance replays each time it turns back on. */
@@ -38,7 +38,7 @@
     animated?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConsoleTraceSceneProps>(), {
     tab: '',
     active: true,
     width: 760,
@@ -48,7 +48,7 @@
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'assets-console-trace-scene'
+    () => (attrs['data-testid'] as string | undefined) ?? 'console-trace-scene'
   )
 
   const step = computed(

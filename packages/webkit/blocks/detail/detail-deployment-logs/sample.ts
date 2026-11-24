@@ -188,7 +188,7 @@ const serviceStep: DeploymentLogsStep = {
 
 const rulesStep: DeploymentLogsStep = {
   id: 'rules',
-  title: 'Routing Rules',
+  title: 'Routing rules',
   description: 'Request rules and cache policies applied',
   status: 'success',
   duration: '4s',
@@ -293,11 +293,17 @@ export const sampleSteps: DeploymentLogsStep[] = [
   tokenStep,
   cloneStep,
   installStep,
-  { ...buildStep, status: 'running' },
+  {
+    ...buildStep,
+    status: 'running',
+    description: 'Building for production',
+    duration: '',
+    lines: buildStep.lines.filter((line) => line.type !== 'success')
+  },
   notRun(uploadStep, 'pending', 'Runs after Build'),
   notRun(serviceStep, 'pending', 'Runs after Upload'),
   notRun(rulesStep, 'pending', 'Runs after Service'),
-  notRun(publishStep, 'pending', 'Runs after Routing Rules')
+  notRun(publishStep, 'pending', 'Runs after Routing rules')
 ]
 
 export const sampleSucceededSteps: DeploymentLogsStep[] = [
@@ -319,13 +325,11 @@ export const sampleFailedSteps: DeploymentLogsStep[] = [
   uploadStep,
   serviceStep,
   failedRulesStep,
-  notRun(publishStep, 'skipped', 'Never ran. The deployment stopped at Routing Rules')
+  notRun(publishStep, 'skipped', 'Never ran. The deployment stopped at Routing rules')
 ]
 
 export const sampleCreateFlowFailedSteps: DeploymentLogsStep[] = sampleFailedSteps.map((step) => ({
   ...step,
-  title: step.id === 'rules' ? 'Routing rules' : step.title,
-  description: step.description?.replace('Routing Rules', 'Routing rules'),
   lines: step.lines.map((line) => ({ ...line, message: line.message.replace(/!$/, '.') }))
 }))
 
@@ -544,19 +548,19 @@ const deploymentRulesStep: DeploymentLogsStep = {
       time: '14:02:59',
       type: 'success',
       message:
-        '[manifest] Rule"Set storage origin for all requests" with id 604943 successfully updated'
+        '[manifest] Rule "Set storage origin for all requests" with id 604943 successfully updated'
     },
     {
       id: '1',
       time: '14:03:00',
       type: 'success',
-      message: '[manifest] Rule"Deliver static assets" with id 604944 successfully updated'
+      message: '[manifest] Rule "Deliver static assets" with id 604944 successfully updated'
     },
     {
       id: '2',
       time: '14:03:01',
       type: 'success',
-      message: '[manifest] Rule"Redirect to index.html" with id 604945 successfully updated'
+      message: '[manifest] Rule "Redirect to index.html" with id 604945 successfully updated'
     },
     {
       id: '3',
@@ -692,7 +696,7 @@ const failedDeploymentRules = (step: DeploymentLogsStep): DeploymentLogsStep => 
       time: '14:03:01',
       type: 'text',
       level: 'error',
-      message: '[ERROR] [manifest] Error while creating rule"Deliver static assets"'
+      message: '[ERROR] [manifest] Error while creating rule "Deliver static assets"'
     },
     {
       id: '2',

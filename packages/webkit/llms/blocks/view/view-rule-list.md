@@ -1,6 +1,6 @@
 # ViewRuleList (`view/view-rule-list`)
 
-> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `TableCellTime`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `TableCellTime`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
@@ -25,14 +25,14 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## When not to use
 
 - Records whose order does not matter: use `view/view-table`.
-- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add Rule and from a rule's name.
+- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add rule and from a rule's name.
 - Fewer than two rules that can move: show the list without the Order controls.
 
 ## Building blocks
 
 ### A. Header — `PageHeader`, `Button` (required)
 
-`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add Rule on the outer edge.
+`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add rule on the outer edge.
 
 ### B. Search — `Input`, `Alert` (required)
 
@@ -44,13 +44,13 @@ A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, th
 
 ### D. Rules table — `DataTable`, `Tag`, `Field`, `Switch`, `TableCellTime` (required)
 
-A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel, after the narrow reorder below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified (`TableCellTime` with the instant and its `author`: the relative time and who changed it; the data holds a `Date` or an ISO string, never typed text). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
+A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`: on a phone it switches to the narrow column set below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified (`TableCellTime` with the instant and its `author`: the relative time and who changed it; the data holds a `Date` or an ISO string, never typed text). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
 ### E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 
-The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Position cell starts with a small numeric `Input` showing the rule's position: type a number and press Enter (or leave the field) to move the rule there, clamped below the pinned rules and to the end of the phase; Escape or a value that is not a number keeps the rule in place, and after Enter focus stays in the field on the moved rule. On a locked rule, while searching and while saving the field is disabled and its name and `Tooltip` carry the reason ("Position 1 of Default rule in the Request phase. The default rule runs first and stays first."). Then the cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7); each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
+The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Position cell starts with a small numeric `Input` showing the rule's position: type a number and press Enter (or leave the field) to move the rule there, clamped below the pinned rules and to the end of the phase; Escape or a value that is not a number keeps the rule in place, and after Enter focus stays in the field on the moved rule. On a locked rule, while searching and while saving the field is disabled and its name and `Tooltip` carry the reason ("Position 1 of Default rule in the Request phase. The default rule runs first and stays first."). Then the cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7), revealed when the row is hovered or a control in the cell has focus (always shown on a coarse pointer), so a row at rest shows the grip and the position field, not four reorder controls; each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
 
-Below 48rem of the viewport the row leads with Name, Description and Last modified, and the `Switch` (its Active or Inactive text kept for screen readers only) and a Move column are pinned to the end edge (`frozen: 'end'`, 64 px and 56 px), so both stay in view while the rest scrolls under them; the Position cell folds into one medium ghost `IconButton` named "Move Docs rewrite, position 5 of 5" that opens a `DropdownMenu` with Move to top, Move up, Move down and Move to bottom, each disabled when the rule cannot go that way; the typed position is left to the wide layout and the grip still drags. Focus returns to the menu button on the moved rule.
+Below 48rem of the viewport every phase table shows the same narrow column set: Name, filling the row, then the `Switch` (its Active or Inactive text kept for screen readers only) and a Move column pinned to the end edge (`frozen: 'end'`, 64 px and 56 px). Description and Last modified are left to the wide layout and the rule builder, so no phase table lets a cut column peek out between Name and Status; the Position cell folds into one medium ghost `IconButton` named "Move Docs rewrite, position 5 of 5" that opens a `DropdownMenu` with Move to top, Move up, Move down and Move to bottom, each disabled when the rule cannot go that way; the typed position and the drag grip are left to the wide layout (the table is not `reorderable` there), so a phone row carries one reorder control. Focus returns to the menu button on the moved rule.
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 
@@ -58,7 +58,7 @@ Any move or status change raises a `SaveBar` counting the changes, with Discard 
 
 ### G. States — `EmptyState`, `Alert` (required)
 
-Loading: triggers read Loading, the search and Add Rule are disabled and each `DataTable` shows its skeleton rows (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
+Loading: triggers read Loading, the search and Add rule are disabled and each `DataTable` shows as many skeleton rows as the phase had when it last loaded, or three, never a full page of ten, so the page does not jump when the rules land (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
 
 A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/edit-rule-builder` from it, as EditRule shows.
 
@@ -76,7 +76,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `subject`           | `'application' \| 'firewall'` | What runs the rules: an application has Request and Response phases, a firewall only Request. Sets the copy. |
 | `rules`             | `RuleListRule[]`              | The saved rules, each phase in run order. Pass `[]` for none.                                                |
-| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add Rule disable.    |
+| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add rule disable.    |
 | `error`             | `string`                      | Why the rules failed to load, shown in the danger `Alert` with Retry that replaces the phases.               |
 | `saving`            | `boolean`                     | The save is in flight. When it turns off with no `saveError`, the draft becomes the saved order.             |
 | `saveError`         | `string`                      | Why the save failed, shown at the top of the review dialog; Save reads Save again.                           |
@@ -87,7 +87,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | Event    | Payload           | When                                                            |
 | -------- | ----------------- | --------------------------------------------------------------- |
 | `edit`   | `(event, rule)`   | A rule's name.                                                  |
-| `create` | `(event, phase?)` | Add Rule in the heading, or in an empty phase (with its phase). |
+| `create` | `(event, phase?)` | Add rule in the heading, or in an empty phase (with its phase). |
 | `retry`  | `(event)`         | Retry in the load error alert.                                  |
 | `save`   | `(event, rules)`  | Save in the review dialog; every rule of every phase, in order. |
 
@@ -169,9 +169,9 @@ Then delete `sample.ts` and its import.
 - SaveError: the same with `saveError` set: the failure `Alert` and Save again.
 - Searching: `defaultSearch` "cache": reordering off with its `Alert`, phases reading "n of total".
 - Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
-- Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
+- Loading: `loading`: skeleton rows in each phase, the search and Add rule disabled.
 - LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
-- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
+- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit rule, seeded with the rule and its phase locked; Add rule in the header or in an empty phase opens it as Add rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 
@@ -187,10 +187,10 @@ Then delete `sample.ts` and its import.
 - `ReviewChanges` — After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase.
 - `SaveError` — The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; pressing it emits `save` once more, and when `saving` turns off with no `saveError` the dialog closes with the success toast.
 - `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
-- `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
+- `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add rule instead of the table.
 - `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
-- `LoadError` — The rules could not load: the heading and the disabled search stay, Add Rule is disabled, and a danger Alert with Retry takes the phases' place.
-- `EditRule` — The list composed with `edit/edit-rule-builder`: a rule's name opens the large edit-rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.
+- `LoadError` — The rules could not load: the heading and the disabled search stay, Add rule is disabled, and a danger Alert with Retry takes the phases' place.
+- `EditRule` — The list composed with `edit/edit-rule-builder`: a rule's name opens the large edit-rule-builder `Drawer` as Edit rule, seeded with that rule's criteria and behaviors and its phase locked; Add rule in the header (or in an empty phase) opens it as Add rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.
 
 Each variant is the same screen in another state: `get_block("view/view-rule-list", { variant })`, or the file under `blocks/view/view-rule-list/variants/`.
 
@@ -269,7 +269,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
     subject?: RuleListSubject
     /** The saved rules of every phase, each phase in run order. Pass an empty list for none. Left out, the sample renders. */
     rules?: RuleListRule[]
-    /** The rules are loading: each phase shows skeleton rows and the search and Add Rule disable. */
+    /** The rules are loading: each phase shows skeleton rows and the search and Add rule disable. */
     loading?: boolean
     /** Why the rules could not load; a danger alert with Retry takes the phases' place. */
     error?: string
@@ -451,7 +451,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
             target="_blank"
           />
           <Button
-            label="Add Rule"
+            label="Add rule"
             icon="az az-plus"
             variant="outline"
             size="medium"
@@ -561,7 +561,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
                     >
                       <template #actions>
                         <Button
-                          label="Add Rule"
+                          label="Add rule"
                           icon="az az-plus"
                           variant="outline"
                           size="medium"
@@ -610,12 +610,17 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
             aria-keyshortcuts="Meta+S Control+S"
           >
             Review changes
-            <Kbd
-              meta
-              size="small"
+            <span
+              class="pointer-coarse:hidden"
               aria-hidden="true"
-              >S</Kbd
+              data-testid="shortcut-hint"
             >
+              <Kbd
+                meta
+                size="small"
+                >S</Kbd
+              >
+            </span>
           </Button>
         </template>
       </SaveBar>
@@ -1401,7 +1406,7 @@ import { phaseLabel } from '../lib/rule-list'
 import { sampleApplicationRules } from '../sample'
 import type { RuleListPhase, RuleListRule } from '../view-rule-list.vue'
 
-/** The rules of the Edit Rule variant and the rule open in the builder. */
+/** The rules of the Edit rule variant and the rule open in the builder. */
 export interface UseRuleEditingReturn {
   /** The rules, as saved. */
   rules: ComputedRef<RuleListRule[]>
@@ -2221,8 +2226,6 @@ export const ruleColumns = (narrow: boolean): TableColumn[] =>
   narrow
     ? [
         nameColumn,
-        descriptionColumn,
-        modifiedColumn,
         { ...statusColumn, width: 64, frozen: 'end' },
         { ...moveColumn, header: 'Move', width: 56, align: 'center', frozen: 'end' }
       ]
@@ -2620,13 +2623,13 @@ export const pageDescription = (subject: string) =>
       <form
         ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
-        :aria-label="editing ? 'Edit Rule' : 'Add Rule'"
+        :aria-label="editing ? 'Edit rule' : 'Add rule'"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>{{ editing ? 'Edit Rule' : 'Add Rule' }}</DrawerTitle>
+            <DrawerTitle>{{ editing ? 'Edit rule' : 'Add rule' }}</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Handle the conditional execution of behaviors through logical operators.
             </p>
@@ -2638,7 +2641,7 @@ export const pageDescription = (subject: string) =>
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">{{ editing ? 'Edit Rule' : 'Add Rule' }}</legend>
+            <legend class="sr-only">{{ editing ? 'Edit rule' : 'Add rule' }}</legend>
             <SettingsGroup
               label="General"
               hint="Names the rule in the list and in the deployment log."
@@ -2907,7 +2910,7 @@ export const pageDescription = (subject: string) =>
     phaseLabel: string
     /** How many rules the phase has. */
     total: number
-    /** The narrow layout: one Move menu instead of the position field and the arrows. */
+    /** The narrow layout: one Move menu instead of the position field and the arrows, and no drag handle. */
     narrow: boolean
     /** Why the rule cannot move, or nothing. */
     lockReason: string
@@ -2932,6 +2935,10 @@ export const pageDescription = (subject: string) =>
     commit: [refocus: boolean]
     cancel: []
   }>()
+
+  const STEP_BUTTONS_CLASS =
+    'flex items-center gap-(--spacing-2xs) opacity-0 transition-opacity ' +
+    'duration-fast-02 ease-productive-entrance focus-within:opacity-100 pointer-coarse:opacity-100 motion-reduce:transition-none [[data-reorder-row]:hover_&]:opacity-100'
 </script>
 
 <template>
@@ -3012,28 +3019,35 @@ export const pageDescription = (subject: string) =>
         />
       </span>
     </Tooltip>
-    <Tooltip :content="lockReason || 'Move up'">
-      <IconButton
-        icon="az az-chevron-up"
-        variant="outline"
-        size="small"
-        data-control="up"
-        :aria-label="lockReason ? `Move ${row.name} up. ${lockReason}` : `Move ${row.name} up`"
-        :disabled="!canMoveUp"
-        @click="emit('step', -1, 'up')"
-      />
-    </Tooltip>
-    <Tooltip :content="lockReason || 'Move down'">
-      <IconButton
-        icon="az az-chevron-down"
-        variant="outline"
-        size="small"
-        data-control="down"
-        :aria-label="lockReason ? `Move ${row.name} down. ${lockReason}` : `Move ${row.name} down`"
-        :disabled="!canMoveDown"
-        @click="emit('step', 1, 'down')"
-      />
-    </Tooltip>
+    <span
+      data-slot="step-buttons"
+      :class="STEP_BUTTONS_CLASS"
+    >
+      <Tooltip :content="lockReason || 'Move up'">
+        <IconButton
+          icon="az az-chevron-up"
+          variant="outline"
+          size="small"
+          data-control="up"
+          :aria-label="lockReason ? `Move ${row.name} up. ${lockReason}` : `Move ${row.name} up`"
+          :disabled="!canMoveUp"
+          @click="emit('step', -1, 'up')"
+        />
+      </Tooltip>
+      <Tooltip :content="lockReason || 'Move down'">
+        <IconButton
+          icon="az az-chevron-down"
+          variant="outline"
+          size="small"
+          data-control="down"
+          :aria-label="
+            lockReason ? `Move ${row.name} down. ${lockReason}` : `Move ${row.name} down`
+          "
+          :disabled="!canMoveDown"
+          @click="emit('step', 1, 'down')"
+        />
+      </Tooltip>
+    </span>
   </div>
 </template>
 ```
@@ -3049,6 +3063,7 @@ export const pageDescription = (subject: string) =>
   import Switch from '@aziontech/webkit/switch'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
 
   import type { UseRuleListPositionReturn } from '../composables/use-rule-list-position'
   import type { UseRuleListReorderReturn } from '../composables/use-rule-list-reorder'
@@ -3091,6 +3106,19 @@ export const pageDescription = (subject: string) =>
     'clear-search': []
   }>()
 
+  const loadingRows = computed<RuleListRule[]>(() =>
+    Array.from({ length: props.group.total || 3 }, (_, index) => ({
+      id: `loading-${index}`,
+      name: '',
+      description: '',
+      phase: props.group.value,
+      author: '',
+      modified: '',
+      active: false,
+      locked: false
+    }))
+  )
+
   const { pinned, canMove, lockReason, position, step, reorderRows, reorderable } = props.reorder
   const { positionValue, onPositionInput, commitPosition, cancelPosition, onMoveSelect } =
     props.positioning
@@ -3098,12 +3126,12 @@ export const pageDescription = (subject: string) =>
 
 <template>
   <DataTable
-    :data="loading ? [] : group.items"
+    :data="loading ? loadingRows : group.items"
     :columns="columns"
     row-key="id"
     :bordered="false"
     :loading="loading"
-    reorderable
+    :reorderable="!narrow"
     :row-reorderable="reorderable(group.value)"
     :aria-label="`${group.label} phase rules, in the order they run`"
     @update:data="(next: RuleListRule[]) => reorderRows(group.value, next)"

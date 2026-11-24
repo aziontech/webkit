@@ -3,7 +3,7 @@ name: subheader
 category: layout
 structure: monolithic
 status: implemented
-checksum: f37b5db9741f8d43f590aca616f3f7bf7500bc0d6faa3572ff76bdc932e63269
+checksum: aa7b220f9217f1290b1d192ae5d49f135fec36ac39ad5ecc5061125151335f19
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-23
@@ -31,7 +31,7 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 - `page-header` — the page's h1.
 - `settings-group` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.
 - `module-header` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.
-- `copy-button` — the copy-link affordance it renders.
+- `copy-button` — the copy-link affordance it renders, with the `az az-link` glyph that `settings-group` uses for the same action.
 
 ## Best practices
 

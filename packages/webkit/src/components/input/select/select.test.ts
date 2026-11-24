@@ -7,6 +7,7 @@ import Default from '../../../../examples/select/default.vue'
 import Disabled from '../../../../examples/select/disabled.vue'
 import Ghost from '../../../../examples/select/ghost.vue'
 import Groups from '../../../../examples/select/groups.vue'
+import Invalid from '../../../../examples/select/invalid.vue'
 import WithSearchAndFooter from '../../../../examples/select/with-search-and-footer.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
@@ -96,6 +97,23 @@ afterEach(() => {
 })
 
 describe('Select', () => {
+  it('caps the Default example at a realistic field width', () => {
+    const view = render(Default)
+    expect((view.container.firstElementChild as HTMLElement).classList).toContain(
+      'max-w-(--container-xs)'
+    )
+  })
+
+  it('pairs the Invalid example with a Field.Error the trigger is described by', async () => {
+    const view = render(Invalid)
+    await nextTick()
+    const trigger = view.getByRole('combobox', { name: 'Region' })
+    expect(trigger.getAttribute('aria-invalid')).toBe('true')
+    const ids = (trigger.getAttribute('aria-describedby') ?? '').split(' ').filter(Boolean)
+    const text = ids.map((id) => document.getElementById(id)?.textContent?.trim()).join(' ')
+    expect(text).toContain('Choose a region.')
+  })
+
   describe('keyboard and naming (APG select-only combobox)', () => {
     const focusedText = () => (document.activeElement as HTMLElement | null)?.textContent?.trim()
 

@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: c64c18ba358627be9d1dde3a95851db3b1b466cb2e9eccdd4fd8319a3c275254
+checksum: ae7299eca81a51a5dad9353a5cbe37f0f02b035c336806701ab11269f5e24e10
 created: 2026-07-23
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 ---
 
 # Command Menu — Component Spec
@@ -141,7 +141,7 @@ packages/webkit/src/components/overlay/command/
   - Props: `placeholder: string` default `''` — input placeholder text; empty uses the locale catalog (`Search everything` in English). `ariaLabel: string` default `''` — accessible name for the search field; when empty it falls back to `placeholder`, so the field keeps its name after the placeholder disappears on the first keystroke.
   - Events: _none_ (the query lives in the injected context).
   - Slots: _none_.
-- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible; with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part. While the query is not empty it carries `data-ranked` and becomes a flex column, so groups and ungrouped items take their rank as a CSS `order`, and the root also moves the visible groups and rows in the DOM into that ranked order (nothing is re-created), so a screen reader reads the results in the order they are seen (WCAG 1.3.2). When the query empties, every moved node goes back to its original place.
+- `command-list/command-list.vue` — the scrollable results region. `role="listbox"` while at least one item is visible, named `Command menu` from the locale catalog (`command.title`, `aria-label`); with no visible item it drops the role (an empty listbox fails `aria-required-children`) and shows the `Empty` part. While the query is not empty it carries `data-ranked` and becomes a flex column, so groups and ungrouped items take their rank as a CSS `order`, and the root also moves the visible groups and rows in the DOM into that ranked order (nothing is re-created), so a screen reader reads the results in the order they are seen (WCAG 1.3.2). When the query empties, every moved node goes back to its original place.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`, plus an optional `<Command.Empty>`.
@@ -289,7 +289,7 @@ _none_
 
 - The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
-- Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate.
+- Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate. The keycaps (the input's `Esc` hint and every item `shortcut` hint) hide on a coarse pointer (`pointer-coarse:hidden`), since a phone has no key to press.
 
 ## Performance
 

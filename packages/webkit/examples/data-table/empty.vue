@@ -1,9 +1,11 @@
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
@@ -28,7 +30,7 @@
       { value: 'edit', label: 'Edit', icon: 'az az-pencil' },
       { value: 'duplicate', label: 'Duplicate', icon: 'az az-copy' }
     ],
-    [{ value: 'delete', label: 'Delete', icon: 'az az-trash' }]
+    [{ value: 'delete', label: 'Delete', icon: 'az az-trash', severity: 'danger' }]
   ]
 
   const statusSeverity = (status) =>
@@ -48,6 +50,21 @@
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >
+    <template #empty>
+      <EmptyState
+        title="No workloads yet"
+        description="Create a workload to serve your application from Azion."
+        icon="az az-inbox"
+        size="small"
+      >
+        <template #actions>
+          <Button
+            label="Create workload"
+            icon="az az-plus"
+          />
+        </template>
+      </EmptyState>
+    </template>
     <template #cell-name="{ row, value }">
       <TableCellLink
         :label="value"
@@ -80,6 +97,7 @@
             :key="option.value"
             :value="option.value"
             :label="option.label"
+            :severity="option.severity"
           >
             <template #leading
               ><i

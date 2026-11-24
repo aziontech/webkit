@@ -79,6 +79,8 @@
     }))
   )
 
+  const isoDate = computed(() => /^\d{4}-\d{2}-\d{2}$/.test(props.lastUpdated.trim()))
+
   const updatedLabel = computed(() => {
     const raw = props.lastUpdated.trim()
     if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw
@@ -137,10 +139,11 @@
           class="az az-history shrink-0 text-label-sm leading-none"
           aria-hidden="true"
         />
-        <span>
+        <span v-if="isoDate">
           {{ t('docPageHeader.lastUpdated') }}
-          <time :datetime="lastUpdated">{{ updatedLabel }}</time>
+          <time :datetime="lastUpdated.trim()">{{ updatedLabel }}</time>
         </span>
+        <span v-else>{{ updatedLabel }}</span>
       </p>
       <template
         v-for="(action, index) in metaActions"

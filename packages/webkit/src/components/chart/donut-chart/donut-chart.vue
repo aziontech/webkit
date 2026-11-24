@@ -340,7 +340,7 @@
     <ul
       v-if="legend.length > 1"
       :data-testid="`${testId}__legend`"
-      class="m-0 flex min-w-0 grow basis-48 list-none flex-col gap-(--spacing-2xs) p-0"
+      class="m-0 flex min-w-0 max-w-(--container-sm) grow basis-48 list-none flex-col gap-(--spacing-2xs) p-0"
     >
       <li
         v-for="entry in legend"

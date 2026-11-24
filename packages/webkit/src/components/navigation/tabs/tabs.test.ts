@@ -7,6 +7,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 
 import Centered from '../../../../examples/tabs/centered.vue'
 import Default from '../../../../examples/tabs/default.vue'
+import Scrollable from '../../../../examples/tabs/scrollable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tabs from './index'
 import { getTabViewPanelTransitionStyle } from './presets/transitions'
@@ -834,6 +835,34 @@ describe('Tabs', () => {
       await settle()
       expect(inView('Settings 0')).toBe(true)
     })
+
+    it.each(['automatic', 'manual'] as const)(
+      'keeps a tab reached with the arrow keys clear of the end fade (%s)',
+      async (activationMode) => {
+        const { container } = render(
+          defineComponent({
+            components: { Scrollable },
+            setup: () => ({ activationMode }),
+            template: `<div style="width: 300px"><Scrollable :activation-mode="activationMode" /></div>`
+          })
+        )
+        await settle()
+        const list = container.querySelector<HTMLElement>('[role="tablist"]')!
+        const tabs = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]'))
+        tabs[0]!.focus()
+        for (let step = 0; step < 4; step++) {
+          await keyboardUser.keyboard('{ArrowRight}')
+          await settle()
+        }
+        const focused = document.activeElement as HTMLElement
+        expect(focused.textContent).toContain('Security')
+        const fade = container.querySelector<HTMLElement>('[data-testid="tabs-list__fade-end"]')
+        const visibleEnd = fade
+          ? fade.getBoundingClientRect().left
+          : list.getBoundingClientRect().right
+        expect(focused.getBoundingClientRect().right).toBeLessThanOrEqual(visibleEnd + 1)
+      }
+    )
 
     it('sits on the active tab of a scrolled right-to-left list', async () => {
       const value = ref('t0')

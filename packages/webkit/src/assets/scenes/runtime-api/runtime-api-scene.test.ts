@@ -7,8 +7,8 @@ import RuntimeApiCloud from './runtime-api-cloud.vue'
 import { RUNTIME_API_ROWS, RUNTIME_APIS } from './runtime-api-data'
 import RuntimeApiScene from './runtime-api-scene.vue'
 
-const SCENE = 'assets-runtime-api-scene'
-const CLOUD = 'assets-runtime-api-cloud'
+const SCENE = 'runtime-api-scene'
+const CLOUD = 'runtime-api-cloud'
 
 const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -62,6 +62,15 @@ describe('RuntimeApiScene', () => {
 
     expect(items).toHaveLength(RUNTIME_APIS.length)
     expect(items[0]).toHaveTextContent('fetch')
+  })
+
+  it('sets every global in the code token, so identifiers keep their case', () => {
+    const { getAllByRole } = render(host())
+
+    getAllByRole('listitem').forEach((pill) => {
+      expect(pill.classList.contains('text-label-code-sm')).toBe(true)
+      expect(pill.classList.contains('text-overline-sm')).toBe(false)
+    })
   })
 
   it('opens with the seeded highlight and keeps the Azion globals lit', () => {

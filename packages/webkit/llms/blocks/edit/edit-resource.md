@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-unsaved-changes`, `utils/focus-invalid`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-unsaved-changes`, `utils/focus-invalid`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -1472,7 +1472,12 @@ export function useDeployOnSave<T extends object>(
       v-if="visible"
       @save="onShortcut"
     >
-      <slot />
+      <span
+        v-if="saving"
+        data-testid="settings-save-bar__saving"
+        >Saving changes…</span
+      >
+      <slot v-else />
       <template #actions>
         <Button
           type="button"
@@ -2031,6 +2036,37 @@ export const optionLabel =
     options.find((option) => option.value === value)?.label ?? String(value)
 ```
 
+## `lib/ttl-duration.ts`
+
+```ts
+const UNITS: ReadonlyArray<[unit: 'year' | 'day' | 'hour' | 'minute' | 'second', seconds: number]> =
+  [
+    ['year', 31_536_000],
+    ['day', 86_400],
+    ['hour', 3_600],
+    ['minute', 60],
+    ['second', 1]
+  ]
+
+export const ttlDuration = (
+  seconds: number | null | undefined,
+  formatNumber: (value: number, options?: Intl.NumberFormatOptions) => string
+): string => {
+  if (seconds === null || seconds === undefined || !Number.isFinite(seconds) || seconds <= 0)
+    return ''
+  const [unit, size] =
+    UNITS.find(([, step]) => seconds % step === 0) ??
+    UNITS.find(([, step]) => seconds >= step) ??
+    UNITS[UNITS.length - 1]!
+  return formatNumber(seconds / size, {
+    style: 'unit',
+    unit,
+    unitDisplay: 'long',
+    maximumFractionDigits: 1
+  })
+}
+```
+
 ## `parts/cache-key-group.vue`
 
 ```ts
@@ -2217,7 +2253,9 @@ export const optionLabel =
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
+  import { useLocale } from '@aziontech/webkit/use-locale'
 
+  import { ttlDuration } from '../lib/ttl-duration'
   import {
     sampleCacheBrowserBehaviors as browserBehaviors,
     sampleCacheEdgeBehaviors as edgeBehaviors,
@@ -2231,6 +2269,9 @@ export const optionLabel =
     options.find((option) => option.value === value)?.label ?? value
 
   const { form, saving, dirty, errors, clear, save, discard, leave } = provideCacheSettings()
+
+  const { formatNumber } = useLocale()
+  const duration = (seconds: number | null | undefined) => ttlDuration(seconds, formatNumber)
 </script>
 
 <template>
@@ -2334,7 +2375,7 @@ export const optionLabel =
                       v-if="form.browserBehavior === 'override'"
                       key="browserMaxAge"
                       title="Maximum TTL in seconds"
-                      description="Up to 31536000 seconds, one year."
+                      description="Up to 1 year (31,536,000 seconds)."
                       :depth="1"
                     >
                       <NumberInput
@@ -2345,8 +2386,16 @@ export const optionLabel =
                         :min="0"
                         :max="31536000"
                         aria-label="Browser maximum TTL in seconds"
+                        aria-describedby="cache-browserMaxAge-duration"
                         :disabled="saving"
                       />
+                      <p
+                        id="cache-browserMaxAge-duration"
+                        class="text-body-xs text-(--text-muted)"
+                        data-testid="cache-settings__browser-duration"
+                      >
+                        {{ duration(form.browserMaxAge) }}
+                      </p>
                     </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
@@ -2392,7 +2441,7 @@ export const optionLabel =
                       v-if="form.edgeBehavior === 'override'"
                       key="edgeMaxAge"
                       title="Maximum TTL in seconds"
-                      description="From 60 to 31536000 seconds."
+                      description="From 1 minute (60 seconds) to 1 year (31,536,000 seconds)."
                       :depth="1"
                     >
                       <NumberInput
@@ -2406,10 +2455,19 @@ export const optionLabel =
                         :disabled="saving"
                         :invalid="Boolean(errors.edgeMaxAge)"
                         :aria-describedby="
-                          errors.edgeMaxAge ? 'cache-edgeMaxAge-message' : undefined
+                          errors.edgeMaxAge
+                            ? 'cache-edgeMaxAge-duration cache-edgeMaxAge-message'
+                            : 'cache-edgeMaxAge-duration'
                         "
                         @update:model-value="clear('edgeMaxAge')"
                       />
+                      <p
+                        id="cache-edgeMaxAge-duration"
+                        class="text-body-xs text-(--text-muted)"
+                        data-testid="cache-settings__edge-duration"
+                      >
+                        {{ duration(form.edgeMaxAge) }}
+                      </p>
                       <FieldError
                         v-if="errors.edgeMaxAge"
                         id="cache-edgeMaxAge-message"
@@ -3575,6 +3633,7 @@ export const optionLabel =
                   <DropdownMenu.Item
                     value="delete"
                     label="Delete"
+                    severity="danger"
                   >
                     <template #leading
                       ><i
@@ -3595,7 +3654,7 @@ export const optionLabel =
             >
             <Button
               type="button"
-              label="Add Domain"
+              label="Add domain"
               variant="outline"
               size="medium"
               icon="az az-plus"

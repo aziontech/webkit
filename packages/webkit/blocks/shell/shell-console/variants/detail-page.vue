@@ -3,7 +3,6 @@
   import Card from '@aziontech/webkit/card'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
@@ -26,25 +25,22 @@
   <ShellConsole @sign-out="(event) => emit('sign-out', event)">
     <EnvironmentBreadcrumb />
 
-    <nav
-      aria-label="Application"
-      class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
+    <div
+      class="flex min-h-(--size-14) min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs)"
     >
-      <Tooltip content="Back to Applications">
-        <IconButton
-          icon="az az-arrow-left"
-          variant="ghost"
-          size="medium"
-          href="/applications"
-          aria-label="Back to Applications"
-        />
-      </Tooltip>
-      <TableCellLink
-        label="azion-site"
-        href="/applications/azion-site"
-        destination="Applications"
-      />
-    </nav>
+      <div class="shrink-0 md:hidden">
+        <Tooltip content="Back to Applications">
+          <IconButton
+            icon="az az-arrow-left"
+            variant="ghost"
+            size="medium"
+            href="/applications"
+            aria-label="Back to Applications"
+          />
+        </Tooltip>
+      </div>
+      <h1 class="min-w-0 truncate text-heading-xs text-(--text-default)">azion-site</h1>
+    </div>
 
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">

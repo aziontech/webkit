@@ -79,6 +79,17 @@ describe('Tooltip', () => {
       })
     })
 
+    describe('long content', () => {
+      it('starts every wrapped line at the start edge instead of centring it', async () => {
+        const { getByTestId } = render(composed())
+        await settle()
+        await fireEvent.focusIn(getByTestId('tooltip'))
+        await settle()
+        expect(panel()!.classList).toContain('text-start')
+        expect(panel()!.classList).not.toContain('text-center')
+      })
+    })
+
     describe('closing behaviors', () => {
       it('mouseleave closes an open tooltip', async () => {
         const { getByTestId } = render(composed())

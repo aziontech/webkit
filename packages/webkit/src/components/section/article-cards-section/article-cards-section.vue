@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -67,6 +67,8 @@
 
   const { t } = useTranslate({ common: en.common })
 
+  const failedCovers = ref<ReadonlySet<string>>(new Set())
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'article-cards-section'
   )
@@ -111,8 +113,9 @@
             class="flex aspect-video items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface)"
           >
             <img
-              v-if="item.image"
+              v-if="item.image && !failedCovers.has(item.id)"
               :src="item.image"
+              @error="failedCovers = new Set(failedCovers).add(item.id)"
               alt=""
               loading="lazy"
               decoding="async"

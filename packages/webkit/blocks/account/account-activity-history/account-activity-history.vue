@@ -18,7 +18,7 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -80,20 +80,13 @@
   )
   const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
 
-  const categorySeverity = (category: ActivityHistoryCategory): TagSeverity | undefined =>
-    category === 'Billing'
-      ? undefined
-      : ((
-          {
-            'Sign-in': 'info',
-            Security: 'warning',
-            Deploy: 'success',
-            Users: 'neutral'
-          } as const
-        )[category] ?? 'neutral')
-
-  const categoryVariant = (category: ActivityHistoryCategory): TagVariant | undefined =>
-    category === 'Billing' ? 'primary' : undefined
+  const categoryIcons: Record<ActivityHistoryCategory, string> = {
+    'Sign-in': 'az az-log-in',
+    Security: 'az az-shield',
+    Deploy: 'az az-cloud-upload',
+    Users: 'az az-users',
+    Billing: 'az az-credit-card'
+  }
 
   const relativeOptions: RelativeOption[] = [
     { key: 'last-15-minutes', amount: 15, unit: 'minute' },
@@ -324,8 +317,8 @@
               <template #cell-category="{ value }">
                 <Tag
                   :label="value"
-                  :variant="categoryVariant(value)"
-                  :severity="categorySeverity(value)"
+                  :icon="categoryIcons[value as ActivityHistoryCategory] ?? 'az az-tag'"
+                  severity="neutral"
                   size="small"
                 />
               </template>

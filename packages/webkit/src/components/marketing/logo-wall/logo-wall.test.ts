@@ -99,6 +99,22 @@ describe('LogoWall', () => {
     )
   })
 
+  it('shows touch readers a persistent, decorative link cue on each linked cell only', () => {
+    const { getAllByTestId, getByRole } = render(LogoWall, { props: { items } })
+
+    const cues = getAllByTestId('logo-wall__link-cue')
+    expect(cues).toHaveLength(1)
+    expect(getByRole('link', { name: 'Read story, Contoso' }).contains(cues[0] ?? null)).toBe(true)
+    expect(cues[0]).toHaveAttribute('aria-hidden', 'true')
+    expect(cues[0]?.classList.contains('pointer-coarse:block')).toBe(true)
+  })
+
+  it('runs three columns on phones so a wall of six or twelve stays short', () => {
+    const { getByRole } = render(LogoWall, { props: { items } })
+
+    expect(getByRole('list').classList.contains('max-sm:grid-cols-3!')).toBe(true)
+  })
+
   it('uses a consumer linkLabel for the revealed words and the link name', () => {
     const { getByRole, getByText } = render(LogoWall, {
       props: { items, linkLabel: 'Ver caso' }

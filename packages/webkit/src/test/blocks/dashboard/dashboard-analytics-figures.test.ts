@@ -57,4 +57,13 @@ describe('dashboard/dashboard-analytics figures', () => {
     }
     expect(colours.get('5xx')).toBe('danger')
   })
+
+  it('stacks every multi-class Status codes chart, so 4xx and 5xx are not flat on the 2xx scale', () => {
+    const all = [...products.flatMap((product) => product.panels), ...overviewHighlights]
+    const statusCharts = all.filter(
+      (plot) => plot.series.filter((series) => /^[2345]xx$/.test(series.id)).length > 1
+    )
+    expect(statusCharts.length).toBeGreaterThan(0)
+    for (const plot of statusCharts) expect(plot.form).toBe('stacked')
+  })
 })

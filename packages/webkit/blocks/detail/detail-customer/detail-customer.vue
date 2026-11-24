@@ -253,6 +253,7 @@
               <DropdownMenu.Item
                 value="delete"
                 label="Delete customer"
+                severity="danger"
               >
                 <template #leading>
                   <i

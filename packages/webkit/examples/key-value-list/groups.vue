@@ -26,14 +26,14 @@
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     </KeyValueList.Group>
     <KeyValueList.Group label="Networking">
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
       <KeyValueList.Item label="Region">

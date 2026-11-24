@@ -118,10 +118,11 @@ export function createShortcutRegistry(): ShortcutRegistry {
     }
     const target = eventTarget(event)
     const typing = isTypingTarget(target)
-    const layer = topModalLayer(target)
+    let layer: Element | null | undefined
     for (let index = entries.length - 1; index >= 0; index -= 1) {
       const { shortcut } = entries[index]!
       if (!matchesPress(shortcut, event, typing)) continue
+      if (layer === undefined) layer = topModalLayer(target)
       if (layer) {
         const owner = toValue(shortcut.element)
         if (!owner || !layer.contains(owner)) continue

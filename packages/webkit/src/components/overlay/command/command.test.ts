@@ -486,6 +486,17 @@ describe('Command', () => {
       expect(keycaps).toContain('Espaço')
       view.unmount()
     })
+
+    it('names the listbox from the catalog and hides every keycap on a touch screen', async () => {
+      const view = render(localized('en-US'))
+      await settle()
+      expect(byTestId('command-list')).toHaveAttribute('role', 'listbox')
+      expect(byTestId('command-list')).toHaveAttribute('aria-label', 'Command menu')
+      const keycaps = [...document.body.querySelectorAll('[data-testid="kbd"]')]
+      expect(keycaps.length).toBeGreaterThan(1)
+      for (const keycap of keycaps) expect(keycap.classList).toContain('pointer-coarse:hidden!')
+      view.unmount()
+    })
   })
 
   describe('keyboard map (spec)', () => {

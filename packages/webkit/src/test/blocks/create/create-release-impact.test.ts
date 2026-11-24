@@ -9,14 +9,17 @@ import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 describe('create-release-impact', () => {
-  it('names each resource card and gives the read-only resource a real control', async () => {
+  it('names each resource card and shows the fixed resource names as text, not fields', async () => {
     const view = render(CreateReleaseImpact)
     expect(screen.getByRole('heading', { level: 1, name: 'Review and deploy' })).toBeTruthy()
     const regions = screen.getAllByRole('region')
     expect(regions.length).toBeGreaterThan(1)
-    const resources = screen.getAllByRole('textbox', { name: 'Resource' })
-    expect(resources.length).toBeGreaterThan(0)
-    resources.forEach((input) => expect(input.hasAttribute('readonly')).toBe(true))
+    expect(screen.queryAllByRole('textbox', { name: 'Resource' })).toHaveLength(0)
+    expect(view.getAllByTestId('release-resource-card__resource').length).toBeGreaterThan(0)
+    const kept = view.getByTestId('release-resource-card__kept')
+    expect(kept.textContent).toContain('web-app-assets')
+    expect(kept.textContent).toContain('AJ2B4D6F')
+    expect(kept.querySelector('button, input, [role="combobox"]')).toBeNull()
     expect(screen.getByRole('button', { name: /Deploy release/ })).toBeTruthy()
     await expectNoA11yViolations(view.container as HTMLElement)
   })

@@ -15,7 +15,8 @@
  ],
  "bestPractices": [
   "Four to six items; the stack needs enough steps to earn the scroll.",
-  "Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself.",
+  "Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself. Give a workload screen (`workloads-list`, `workload-topology`, `workload-domains`, `workload-rollout-rows`) `width: 600` so it fills the pinned pane near its true size; at its own 860 design width it shrinks to about two thirds and its table text cannot be read.",
+  "Describe illustration scenes as pictures of the product; only a `ConsoleMockup` scene is the console itself.",
   "Keep `action` to a short label such as \"Docs\" — it sits under the step copy at the small size."
  ]
 }

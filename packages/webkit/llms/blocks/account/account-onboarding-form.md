@@ -206,7 +206,7 @@ Each variant is the same screen in another state: `get_block("account/account-on
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { accents, blankAddress, blankCard } from './onboarding-form-data'
   import OrganizationPreview from './parts/organization-preview.vue'
@@ -317,6 +317,8 @@ Each variant is the same screen in another state: `get_block("account/account-on
     loading?: boolean
     /** Why the organization was not created, shown in the danger alert with Retry; the answers are kept. */
     error?: string
+    /** Focus the open step's first field when the screen mounts; turn off when the form is embedded in a longer page. */
+    autofocus?: boolean
   }
 
   const props = withDefaults(defineProps<OnboardingFormProps>(), {
@@ -324,7 +326,8 @@ Each variant is the same screen in another state: `get_block("account/account-on
     plans: undefined,
     defaultValues: () => ({}),
     loading: false,
-    error: ''
+    error: '',
+    autofocus: true
   })
 
   const emit = defineEmits<{
@@ -417,8 +420,16 @@ Each variant is the same screen in another state: `get_block("account/account-on
     })
   }
 
+  const wizardEl = ref<HTMLElement | null>(null)
+  const FIRST_FIELD = 'input:not([type=hidden]):not([disabled]), textarea:not([disabled])'
+
   onMounted(() => {
     if (props.error) outcome.value = 'failed'
+    if (!props.autofocus) return
+    void nextTick(() => {
+      const fields = [...(wizardEl.value?.querySelectorAll<HTMLElement>(FIRST_FIELD) ?? [])]
+      fields.find((field) => field.getClientRects().length > 0)?.focus()
+    })
   })
 
   watch(
@@ -501,7 +512,10 @@ Each variant is the same screen in another state: `get_block("account/account-on
             class="w-full"
           >
             <template #default>
-              <div class="p-(--spacing-md)">
+              <div
+                ref="wizardEl"
+                class="p-(--spacing-md)"
+              >
                 <h1 class="sr-only">Set up your organization</h1>
                 <Wizard
                   v-model="step"
@@ -783,37 +797,37 @@ export const accents: Accent[] = [
     value: 'orange',
     label: 'Orange',
     ariaLabel: 'Orange mark',
-    colors: ['var(--primary)', 'var(--warning)', 'var(--brand-blue)']
+    colors: ['var(--primary)', 'var(--primary)', 'var(--warning)']
   },
   {
     value: 'yellow',
     label: 'Yellow',
     ariaLabel: 'Yellow mark',
-    colors: ['var(--warning)', 'var(--warning-mark)', 'var(--primary)']
+    colors: ['var(--warning)', 'var(--warning)', 'var(--warning-mark)']
   },
   {
     value: 'red',
     label: 'Red',
     ariaLabel: 'Red mark',
-    colors: ['var(--danger)', 'var(--danger-mark)', 'var(--primary)']
+    colors: ['var(--danger)', 'var(--danger)', 'var(--danger-mark)']
   },
   {
     value: 'green',
     label: 'Green',
     ariaLabel: 'Green mark',
-    colors: ['var(--success)', 'var(--success-mark)', 'var(--brand-blue)']
+    colors: ['var(--success)', 'var(--success)', 'var(--success-mark)']
   },
   {
     value: 'blue',
     label: 'Blue',
     ariaLabel: 'Blue mark',
-    colors: ['var(--info)', 'var(--info-mark)', 'var(--accent)']
+    colors: ['var(--info)', 'var(--info)', 'var(--info-mark)']
   },
   {
     value: 'violet',
     label: 'Violet',
     ariaLabel: 'Violet mark',
-    colors: ['var(--chart-sequential-2)', 'var(--chart-series-3)', 'var(--brand-blue)']
+    colors: ['var(--chart-series-3)', 'var(--chart-series-3)', 'var(--chart-series-8)']
   },
   {
     value: 'gray',
@@ -899,9 +913,9 @@ export const roleOptions = [
 </script>
 
 <template>
-  <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-me-(--spacing-xl)">
+  <div class="min-w-0 max-w-full lg:sticky lg:top-(--spacing-xl) lg:my-auto">
     <div
-      class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden mask-r-from-72% mask-b-from-80% lg:block"
+      class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden ltr:mask-r-from-72% rtl:mask-l-from-72% mask-b-from-80% lg:block"
     >
       <figure
         :class="PREVIEW_FIGURE_CLASS"

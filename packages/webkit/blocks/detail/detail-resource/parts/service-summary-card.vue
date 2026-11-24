@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -7,7 +8,6 @@
   import Item from '@aziontech/webkit/item-root'
   import Popover from '@aziontech/webkit/popover'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   import { serviceDomains as domains } from '../sample'
@@ -50,13 +50,13 @@
             size="small"
           >
             <Popover.Trigger>
-              <div class="shrink-0 cursor-pointer">
-                <Tag
-                  label="+7"
-                  severity="neutral"
-                  size="small"
-                />
-              </div>
+              <Button
+                class="shrink-0"
+                variant="outline"
+                size="small"
+                label="+7"
+                aria-label="Show all 8 domains"
+              />
             </Popover.Trigger>
 
             <Popover.Content>
@@ -78,7 +78,6 @@
                   variant="option"
                 >
                   <span class="truncate">{{ domain }}</span>
-                  <span class="sr-only"> (opens in a new tab)</span>
                   <i
                     class="az az-external-link ms-auto shrink-0 text-body-xs leading-none"
                     aria-hidden="true"

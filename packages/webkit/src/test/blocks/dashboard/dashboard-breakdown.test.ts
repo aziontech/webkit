@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import DashboardBreakdown from '../../../../blocks/dashboard/dashboard-breakdown/dashboard-breakdown.vue'
+import BreakdownEmpty from '../../../../blocks/dashboard/dashboard-breakdown/variants/empty.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
@@ -48,6 +49,31 @@ describe('dashboard/dashboard-breakdown', () => {
     )
     await fireEvent.click(view.getAllByRole('button', { name: 'Retry' })[0])
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
+  })
+
+  it('says on screen that the tiles read this month, apart from the header period', () => {
+    const view = render(DashboardBreakdown)
+    const deltas = view.container.querySelectorAll('[data-testid="stat-tile__delta"]')
+    expect(deltas.length).toBe(4)
+    for (const delta of deltas) expect(delta.textContent).toContain('this month vs previous month')
+  })
+
+  it('lets the ghost period trigger size to its label instead of a fixed box', () => {
+    const view = render(DashboardBreakdown)
+    const wrapper = view.getByRole('combobox', { name: 'Period' }).closest('div.shrink-0')
+    expect(wrapper).not.toBeNull()
+    expect(wrapper!.className).not.toMatch(/\bw-(?:\d|full)/)
+  })
+
+  it('shows one page-level empty state and zero spend in the tiles for an empty period', () => {
+    const view = render(BreakdownEmpty)
+    expect(
+      view.container.querySelector('[data-testid="dashboard-breakdown__empty"]')?.textContent
+    ).toContain('No spend in this period')
+    expect(view.queryByText('Current split')).toBeNull()
+    const values = [...view.container.querySelectorAll('[data-testid="stat-tile__value"]')]
+    expect(values).toHaveLength(4)
+    for (const value of values) expect(value.textContent).toContain('$0')
   })
 
   it('hides the sample while loading', () => {

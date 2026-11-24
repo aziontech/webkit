@@ -39,7 +39,7 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state applying the danger border and ring tokens.",
+      "summary": "Invalid state inside a Field: the danger border and a Field.Error, which clear once a region is picked.",
       "file": "invalid.vue"
     },
     {

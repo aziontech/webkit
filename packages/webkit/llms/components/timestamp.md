@@ -61,7 +61,7 @@
 - Visible focus: the trigger and the copy buttons draw the ring token.
 - Contrast: `var(--text-default)` and `var(--text-muted)` on `var(--bg-surface-raised)` are theme-guaranteed.
 - `motion-reduce:*`: the panel and the hover colour transition both pair with a reduced-motion fallback.
-- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in.
+- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in; on a coarse pointer an invisible layer (`data-slot="touch-target"`) extends its hit area to 40 px tall, the WebKit floor, without moving the text.
 
 ## Right-to-left
 
@@ -90,7 +90,7 @@
 
 - Container queries: none.
 - Narrow: the trigger wraps with the surrounding text; the panel is at most `--container-xs` wide and long values wrap (`break-all`) instead of overflowing at 320 px.
-- Touch: the trigger opens on tap; the panel closes on outside tap.
+- Touch: the trigger opens on tap, through a 40 px tall hit area on `pointer: coarse`; the panel closes on outside tap.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples

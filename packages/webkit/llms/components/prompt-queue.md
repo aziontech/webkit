@@ -49,14 +49,15 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 
 - Empty: no box, only the hidden status region; `data-empty` on the root.
 - Populated: the box with the count line and one row per item.
-- No `disabled`, `loading`, `invalid`, `error` or `open` state: a message leaves only through the owner.
+- Clamped item: a message longer than two lines shows a `Show more` link under it; it expands that message in place (`data-state="open"` on the text) and reads `Show less` to fold it back, so the reader can review the whole message before it is sent.
+- No `disabled`, `loading`, `invalid` or `error` state, and no component-level `open` state: a message leaves only through the owner.
 
 ## Accessibility
 
 - Visible focus: the `IconButton` ring.
-- Keyboard map: `Tab` moves between remove buttons in queue order; `Enter` / `Space` removes.
-- Focus: when a focused row leaves (removed or sent), focus moves to the button now at that position, else the last; an empty queue hands focus to the owner.
-- ARIA: a native `ol` named `Queued messages` (`ariaLabel`); each button is named `Remove from queue` and described by its text; glyphs `aria-hidden`.
+- Keyboard map: `Tab` moves between the remove buttons (and the `Show more` toggle of a clamped message) in queue order; `Enter` / `Space` removes or toggles.
+- Focus: when a focused row leaves (removed or sent), focus moves to the remove button now at that position, else the last; an empty queue hands focus to the owner.
+- ARIA: a native `ol` named `Queued messages` (`ariaLabel`); each remove button is named `Remove from queue` and described by its text; the `Show more` / `Show less` toggle carries `aria-expanded` and `aria-controls` pointing at its message; glyphs `aria-hidden`.
 - Announcements: a hidden polite `role="status"` says `2 messages queued` on each count change after mount and `No messages queued` when empty.
 - Touch target: 44 px on coarse pointers.
 
@@ -76,6 +77,8 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 | `promptQueue.empty`       | `No messages queued`                                          | —             |
 | `promptQueue.remove`      | `Remove from queue`                                           | —             |
 | `promptQueue.attachments` | `{count} attachment` / `{count} attachments` (plural)         | —             |
+| `promptQueue.showMore`    | `Show more`                                                   | —             |
+| `promptQueue.showLess`    | `Show less`                                                   | —             |
 
 - Formatting: the counts go through the catalog plural rules of the active locale.
 

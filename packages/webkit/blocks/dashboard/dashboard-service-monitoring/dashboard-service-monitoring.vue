@@ -112,6 +112,7 @@
   const { formatNumber } = useLocale()
   const fixed = (value: number, digits: number) =>
     formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+  const formatLatencyFigure = (value: number) => String(Math.round(value))
   const formatRate = (value: number) => {
     const digits = value === 0 || value >= 10 ? 0 : value >= 1 ? 1 : 2
     return `${fixed(value, digits)}%`
@@ -177,8 +178,9 @@
             <StatTile
               :label="service.name"
               :value="service.latency"
-              :format-value="formatLatency"
-              :delta="service.delta"
+              :format-value="formatLatencyFigure"
+              unit="ms"
+              :delta="service.status.severity === 'danger' ? null : service.delta"
               :delta-label="deltaLabel"
               inverse
               :trend="service.trend"

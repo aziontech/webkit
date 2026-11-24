@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+  import PageHeader from '@aziontech/webkit/page-header'
   import { toast } from '@aziontech/webkit/toast'
   import { ref, watch } from 'vue'
 
@@ -14,12 +15,16 @@
   const form = useNetworkListForm()
   provideNetworkListForm(form)
 
-  const drawerOpen = ref(false)
+  const drawerOpen = ref(true)
   const submitting = ref(false)
 
-  watch(drawerOpen, (isOpen) => {
-    if (isOpen) form.reset('Office and partners', sampleNetworkList)
-  })
+  watch(
+    drawerOpen,
+    (isOpen) => {
+      if (isOpen) form.reset('Office and partners', sampleNetworkList)
+    },
+    { immediate: true }
+  )
 
   const submit = async (_event: Event, formEl: HTMLFormElement | null) => {
     if (submitting.value || !(await form.check(formEl))) return
@@ -35,31 +40,37 @@
 </script>
 
 <template>
-  <Drawer
-    v-model:open="drawerOpen"
-    size="large"
-    side="end"
-  >
-    <DrawerTrigger>
-      <div class="w-full md:w-fit">
-        <Button
-          label="Create Network List"
-          icon="az az-plus"
-          variant="primary"
-          size="large"
-          class="w-full"
-        />
-      </div>
-    </DrawerTrigger>
-    <VariablesDrawerForm
-      title="Create Network List"
-      description="A list of addresses, ASNs or countries that firewall rules allow or refuse."
-      shortcut-label="Save network list"
-      :active="drawerOpen"
-      :submitting="submitting"
-      @submit="submit"
+  <div class="layout-column layout-boundary flex flex-col">
+    <PageHeader
+      title="Network lists"
+      description="Lists of addresses, ASNs or countries that firewall rules allow or refuse."
     >
-      <NetworkListFields />
-    </VariablesDrawerForm>
-  </Drawer>
+      <template #actions>
+        <Drawer
+          v-model:open="drawerOpen"
+          size="large"
+          side="end"
+        >
+          <DrawerTrigger>
+            <Button
+              label="Create network list"
+              icon="az az-plus"
+              variant="primary"
+              size="medium"
+            />
+          </DrawerTrigger>
+          <VariablesDrawerForm
+            title="Create network list"
+            description="A list of addresses, ASNs or countries that firewall rules allow or refuse."
+            shortcut-label="Save network list"
+            :active="drawerOpen"
+            :submitting="submitting"
+            @submit="submit"
+          >
+            <NetworkListFields />
+          </VariablesDrawerForm>
+        </Drawer>
+      </template>
+    </PageHeader>
+  </div>
 </template>

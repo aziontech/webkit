@@ -70,7 +70,7 @@
     subject?: RuleListSubject
     /** The saved rules of every phase, each phase in run order. Pass an empty list for none. Left out, the sample renders. */
     rules?: RuleListRule[]
-    /** The rules are loading: each phase shows skeleton rows and the search and Add Rule disable. */
+    /** The rules are loading: each phase shows skeleton rows and the search and Add rule disable. */
     loading?: boolean
     /** Why the rules could not load; a danger alert with Retry takes the phases' place. */
     error?: string
@@ -252,7 +252,7 @@
             target="_blank"
           />
           <Button
-            label="Add Rule"
+            label="Add rule"
             icon="az az-plus"
             variant="outline"
             size="medium"
@@ -362,7 +362,7 @@
                     >
                       <template #actions>
                         <Button
-                          label="Add Rule"
+                          label="Add rule"
                           icon="az az-plus"
                           variant="outline"
                           size="medium"
@@ -411,12 +411,17 @@
             aria-keyshortcuts="Meta+S Control+S"
           >
             Review changes
-            <Kbd
-              meta
-              size="small"
+            <span
+              class="pointer-coarse:hidden"
               aria-hidden="true"
-              >S</Kbd
+              data-testid="shortcut-hint"
             >
+              <Kbd
+                meta
+                size="small"
+                >S</Kbd
+              >
+            </span>
           </Button>
         </template>
       </SaveBar>

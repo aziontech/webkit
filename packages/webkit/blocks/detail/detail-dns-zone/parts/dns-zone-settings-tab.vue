@@ -217,7 +217,7 @@
                         :key="key.label"
                         :title="key.label"
                         :description="key.description"
-                        stackable
+                        variant="stacked"
                       >
                         <InputGroupRoot class="w-full">
                           <div class="flex flex-1">

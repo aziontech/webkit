@@ -147,6 +147,8 @@
 
   const { t } = useTranslate({ articleIndexSection: en.articleIndexSection, common: en.common })
 
+  const failedCovers = ref<ReadonlySet<string>>(new Set())
+
   const rootEl = useTemplateRef<InstanceType<typeof SectionBand>>('rootEl')
 
   const category = ref<string | undefined>(props.allLabel)
@@ -378,8 +380,9 @@
                 class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) md:border-e md:border-b-0"
               >
                 <img
-                  v-if="item.image"
+                  v-if="item.image && !failedCovers.has(item.id)"
                   :src="item.image"
+                  @error="failedCovers = new Set(failedCovers).add(item.id)"
                   alt=""
                   loading="lazy"
                   class="size-full object-cover"

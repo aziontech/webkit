@@ -47,7 +47,7 @@
     :data-testid="testId"
     role="complementary"
     :aria-labelledby="title ? titleId : undefined"
-    class="w-full"
+    class="w-full max-w-(--container-3xs)"
   >
     <div class="flex flex-col bg-(--bg-surface) px-(--spacing-lg) py-(--spacing-md)">
       <Brand

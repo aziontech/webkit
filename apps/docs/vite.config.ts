@@ -8,6 +8,7 @@ import type { ViteSSGOptions } from 'vite-ssg'
 import { bundlerRuntimePlugin, chunkGraphPlugin } from './plugins/chunk-graph.ts'
 import { buildIndex } from './plugins/content.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
+import { fontPreloadPlugin } from './plugins/font-preload.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
 
 function staticRoutes(): string[] {
@@ -52,6 +53,7 @@ export default defineConfig({
     docsPlugin(),
     bundlerRuntimePlugin(),
     chunkGraphPlugin(),
+    fontPreloadPlugin(),
     vue({ template: { transformAssetUrls: { includeAbsolute: false } } }),
     tailwindcss()
   ],

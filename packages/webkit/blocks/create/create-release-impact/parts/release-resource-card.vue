@@ -5,7 +5,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
@@ -105,15 +105,32 @@
           Kept from the active release.
         </p>
 
-        <div class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2">
-          <Field>
-            <Field.Label>Resource</Field.Label>
-            <Input
-              :model-value="card.name"
-              size="medium"
-              readonly
-            />
-          </Field>
+        <KeyValueList
+          v-if="card.readonly"
+          :columns="2"
+          :aria-label="`${card.name} release`"
+          data-testid="release-resource-card__kept"
+        >
+          <KeyValueList.Item label="Resource">
+            <bdi>{{ card.name }}</bdi>
+          </KeyValueList.Item>
+          <KeyValueList.Item label="Version">
+            <bdi>{{ versionLabel(card, card.versionId) }}</bdi>
+          </KeyValueList.Item>
+        </KeyValueList>
+
+        <div
+          v-else
+          class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2"
+        >
+          <KeyValueList
+            :aria-label="`${card.name} resource`"
+            data-testid="release-resource-card__resource"
+          >
+            <KeyValueList.Item label="Resource">
+              <bdi>{{ card.name }}</bdi>
+            </KeyValueList.Item>
+          </KeyValueList>
 
           <Field :invalid="!card.versions.length">
             <Field.Label>Version</Field.Label>
@@ -121,7 +138,7 @@
               v-model="card.versionId"
               size="medium"
               placeholder="Select a version"
-              :disabled="deploying || card.readonly || !card.versions.length"
+              :disabled="deploying || !card.versions.length"
               :invalid="!card.versions.length"
               :display-value="(value) => versionLabel(card, value)"
             >

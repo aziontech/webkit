@@ -13,7 +13,7 @@
 
   defineOptions({ name: 'SpinningGlobe', inheritAttrs: false })
 
-  interface Props {
+  export interface SpinningGlobeProps {
     /** Which part of the world has its data centers lit; the globe always shows the whole world. */
     region?: NetworkMapRegion
     /** How many data centers are lit, from `none` to `high`. */
@@ -40,7 +40,7 @@
     longitude?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SpinningGlobeProps>(), {
     region: 'world',
     density: 'medium',
     animated: false,
@@ -72,9 +72,7 @@
       .filter((node) => node.x >= x && node.x < x + width && node.y >= y && node.y < y + height)
   })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'assets-spinning-globe'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'spinning-globe')
 
   let frame = 0
   let last = 0

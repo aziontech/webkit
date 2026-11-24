@@ -109,7 +109,7 @@ jobs:
         run: pnpm run check:audit
 
       - name: Run TruffleHog (secret detection)
-        uses: trufflesecurity/trufflehog@3bd2b5887eb0efb8fa18bfd1d296032924e4ffdc # main
+        uses: trufflesecurity/trufflehog@3bd2b5887eb0efb8fa18bfd1d296032924e4ffdc # v3.99.9
         with:
           path: ./
           base: ${{ github.event.repository.default_branch }}
@@ -478,7 +478,7 @@ jobs:
       - name: Spelling — no spelling mistake in code, docs or identifiers (typos, words in _typos.toml)
         run: pnpm run check:spelling
 
-      - name: Size budgets only ratchet down (a raise needs a Budget-raise line in the PR body)
+      - name: Size budgets only ratchet down (each raised entry needs its own Budget-raise line)
         run: pnpm --filter @aziontech/webkit run check:size-ratchet
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
@@ -595,7 +595,7 @@ jobs:
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
     container:
-      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      image: mcr.microsoft.com/playwright:v1.62.0-noble@sha256:baed2032d533817f3dbe6425de795788430ba345e819a1201337009ba17c9d07
       options: --ipc=host
     strategy:
       fail-fast: false

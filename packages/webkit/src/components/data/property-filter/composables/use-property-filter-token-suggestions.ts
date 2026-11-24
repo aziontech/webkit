@@ -43,6 +43,7 @@ const propertyStage = (options: Builder): Suggestion[] => {
       group: 'properties',
       label: p.label,
       description: '',
+      section: 'properties',
       apply: () => setDraft(`${p.label} `)
     }))
   if (!needle) return out
@@ -55,6 +56,7 @@ const propertyStage = (options: Builder): Suggestion[] => {
           group: 'values',
           label: `${p.label} = ${optionLabel(o)}`,
           description: '',
+          section: 'values',
           count: o.count,
           apply: () => addToken({ propertyKey: p.key, operator: '=', value: o.value })
         })
@@ -102,6 +104,7 @@ const valueStage = (
       group: 'values',
       label: `${property.label} ${operator} ${optionLabel(o)}`,
       description: '',
+      section: 'values',
       count: o.count,
       apply: () => addToken({ propertyKey: property.key, operator, value: o.value })
     }))

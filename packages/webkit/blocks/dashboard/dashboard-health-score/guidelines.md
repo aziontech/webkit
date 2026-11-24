@@ -46,11 +46,12 @@ the reader.
 The overall score's `Hint` states the bands:
 `Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50.`
 
-### E. Overall figure — `StatTile` (required)
+### E. Overall figure — `Skeleton` (required)
 
-The overall score as a `StatTile` with `variant="sans"`, labelled `Overall score`, the unit `/ 100` and
-no delta, with the top cause of poor samples under it. The tile owns its loading Skeleton and prints
-a dash when the period has no score; never hand-build the figure.
+The overall score is the card's own figure, unboxed: the number in `text-heading-lg` with a muted
+`/ 100`, no second label (the card title already says `Overall score`) and no delta, with the top
+cause of poor samples under it. A `Skeleton` takes its place while loading, and a dash prints when
+the period has no score. A bordered `StatTile` inside the card would box the figure twice.
 
 ### F. Band — `Tag` (required)
 
@@ -73,7 +74,9 @@ Each row names its top cause (`Video calls · packet loss`).
 ### J. Hourly strips — `Tracker` (required)
 
 One strip per application, one block per hour colored by band, with an `aria-label`
-(`Video calls, score per hour`) and a label on each block (`08:00 · 35 · Poor`).
+(`Video calls, score per hour`) and a label on each block (`08:00 · 35 · Poor`). Under the strips,
+the first and last hour mark the time axis. The band at the end of each row comes from the same
+thresholds as the score per application (`Video calls` at 48 is `Poor`), never from a separate field.
 
 ### K. Empty regions — `EmptyState` (required)
 

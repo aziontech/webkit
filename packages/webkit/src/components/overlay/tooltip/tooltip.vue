@@ -223,7 +223,7 @@
   const portalLocale = usePortalLocale()
 
   const PANEL_CLASS =
-    'flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-control) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs ' +
+    'flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-control) bg-(--bg-contrast) p-(--spacing-xs) text-start text-body-xs ' +
     'text-(--text-contrast) [transform-origin:var(--popup-origin,center)] ' +
     'data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance ' +
     'motion-reduce:transition-none'

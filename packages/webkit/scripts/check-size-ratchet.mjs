@@ -8,7 +8,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
 const SIZE_LIMIT = 'packages/webkit/.size-limit.json'
-export const FALLBACK_BASE = 'origin/feat/webkit-ai-ready'
+export const FALLBACK_BASE = 'origin/main'
+const RECORD = 'packages/webkit/docs/reviews/size-budgets-v6.md'
 
 export function limitToBytes(limit) {
   const m = String(limit)
@@ -38,8 +39,32 @@ export function raisedBudgets(baseEntries, headEntries) {
   return raised.sort((a, b) => a.name.localeCompare(b.name))
 }
 
-export function hasBudgetRaise(body) {
-  return /^[ \t]*Budget-raise:[ \t]*\S/m.test(String(body ?? '').replace(/\r\n?/g, '\n'))
+const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+export function budgetRaiseLines(text) {
+  return String(text ?? '')
+    .replace(/\r\n?/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => /^Budget-raise:[ \t]*\S/.test(line))
+}
+
+export function justifies(line, raise) {
+  const head = line.match(new RegExp(`^Budget-raise:\\s*${escape(raise.name)}\\s+(.*)$`))
+  if (!head) return false
+  const to = String(raise.to).trim()
+  const limit = to.split(' (')[0]
+  if (limit !== to) return true
+  const target = limitToBytes(limit)
+  const unit = limit.match(/(B|KB|MB)$/i)[1]
+  return [...head[1].matchAll(/(?:→|->)\s*([\d.]+)\s*(B|KB|MB)?/gi)].some(
+    (m) => limitToBytes(`${m[1]} ${m[2] ?? unit}`) >= target
+  )
+}
+
+export function unjustified(raised, ...texts) {
+  const lines = texts.flatMap(budgetRaiseLines)
+  return raised.filter((raise) => !lines.some((line) => justifies(line, raise)))
 }
 
 export function baseRef(env) {
@@ -84,15 +109,19 @@ function main() {
     return 0
   }
   const list = raised.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n')
-  if (hasBudgetRaise(process.env.PR_BODY)) {
+  const record = readFileSync(join(ROOT, RECORD), 'utf-8')
+  const missing = unjustified(raised, process.env.PR_BODY, record)
+  if (!missing.length) {
     console.log(
-      `✓ size ratchet: ${raised.length} budget(s) raised, justified by a Budget-raise: line in the PR body:\n${list}`
+      `✓ size ratchet: ${raised.length} budget(s) raised, each with its Budget-raise: line (PR body or ${RECORD}):\n${list}`
     )
     return 0
   }
+  const missingList = missing.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n')
   console.error(
     `✖ ${raised.length} size budget(s) raised against ${base.ref} (merge base ${short}):\n${list}\n\n` +
-      'Budgets only ratchet down. Shrink the entry, or add a line starting "Budget-raise:" with the reason to the PR body (.claude/rules/bundle-budget.md).'
+      `${missing.length} have no Budget-raise: line naming the entry and its new limit:\n${missingList}\n\n` +
+      `Budgets only ratchet down. Shrink the entry, or add one line per entry, "Budget-raise: <name> <old> → <new> (measured …): <reason>", to ${RECORD} or the PR body (.claude/rules/bundle-budget.md).`
   )
   return 1
 }

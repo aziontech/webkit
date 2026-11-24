@@ -19,7 +19,7 @@
     },
     {
       "name": "Invalid",
-      "summary": "Invalid state with the danger border applied. Interaction still works.",
+      "summary": "Invalid state inside a Field: the danger border and a Field.Error naming the limit. Interaction still works.",
       "file": "invalid.vue"
     },
     {

@@ -5,7 +5,7 @@
   import CardIndex from '../components/card-index.vue'
   import { blockThumbnailFile } from '../lib/block-thumbnails'
   import { index } from '../lib/data'
-  import { messages } from '../lib/i18n'
+  import { format, messages } from '../lib/i18n'
   import { blockGroups } from '../lib/nav'
 
   const t = messages
@@ -45,7 +45,7 @@
 <template>
   <CardIndex
     :title="t.blocks"
-    :description="`${index.blocks.length} screens and fragments, each with its states, code and guidelines. Copy one with npx @aziontech/webkit add <id>.`"
+    :description="format(t.blocksLead, { count: index.blocks.length })"
     :groups="groups"
   />
 </template>

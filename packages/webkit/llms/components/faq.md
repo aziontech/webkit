@@ -48,7 +48,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `answer` | { item: FaqItem } | Replaces the rendered answer for every item, so an answer can carry a link or richer content. |
+| `answer` | { item: FaqItem } | Replaces the rendered answer for every item, so an answer can carry a link or richer content; it renders in a padded block, so paragraphs, lists and code stay on the answer column, spaced `var(--spacing-xs)` apart. |
 
 ## States
 

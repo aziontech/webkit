@@ -3,8 +3,10 @@ import '../../../test/reflow.css'
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import AccordionWithLog from '../../../../examples/accordion/with-log-viewer.vue'
 import Borderless from '../../../../examples/log-viewer/borderless.vue'
 import Default from '../../../../examples/log-viewer/default.vue'
 import Levels from '../../../../examples/log-viewer/levels.vue'
@@ -383,6 +385,17 @@ describe('LogViewer', () => {
         expect(payload).toContain('13:47:42 dist/index.js asset 12.4 kB | gzip: 4.1 kB')
         // 4 lines joined by newline
         expect(payload.split('\n')).toHaveLength(LINES.length)
+      })
+
+      it('reserves a column for the copy control so no line runs under it', () => {
+        const { Host } = makeHost({})
+        const { getByTestId } = render(Host)
+        expect(getByTestId('log-viewer-content').hasAttribute('data-copyable')).toBe(true)
+        expect(
+          getByTestId('log-viewer-content__body').classList.contains(
+            'group-data-[copyable]/log-viewer-content:me-10'
+          )
+        ).toBe(true)
       })
 
       it('does not render the copy control when copyable is false', () => {
@@ -981,6 +994,48 @@ describe('LogViewer', () => {
       expect(left(times[0]!)).toBeLessThan(left(messages[0]!))
     })
 
+    const textRowsUnder = (message: HTMLElement, copy: DOMRect) => {
+      const text = document.createRange()
+      text.selectNodeContents(message)
+      return Array.from(text.getClientRects()).filter((rect) => rect.top < copy.bottom)
+    }
+
+    it('keeps the copy button off the text of a long first line', async () => {
+      await page.viewport(1280, 900)
+      try {
+        const message = 'Deploy started successfully and the build is now running '.repeat(4)
+        const view = renderLines([{ id: 'g1', time: '13:47:33', type: 'text', message }])
+        const copy = view.getByTestId('log-viewer__copy').getBoundingClientRect()
+        const rows = textRowsUnder(view.getByTestId('log-viewer__line-message'), copy)
+        expect(rows.length).toBeGreaterThan(0)
+        for (const rect of rows) expect(rect.right).toBeLessThanOrEqual(copy.left + 0.5)
+      } finally {
+        await page.viewport(414, 896)
+      }
+    })
+
+    it('keeps the copy button off the first line of the accordion example on a phone', async () => {
+      const view = render(AccordionWithLog)
+      await nextTick()
+      const copy = view.getByTestId('log-viewer__copy').getBoundingClientRect()
+      const first = view.getAllByTestId('log-viewer__line-message')[0]!
+      for (const rect of textRowsUnder(first, copy)) {
+        expect(rect.right).toBeLessThanOrEqual(copy.left + 0.5)
+      }
+    })
+
+    it('sizes a short log to its lines inside the accordion example', async () => {
+      const view = render(AccordionWithLog)
+      await nextTick()
+      const root = view.getByTestId('log-viewer')
+      const lines = view.getAllByTestId('log-viewer__line')
+      const body = view.getByTestId('log-viewer-content__body')
+      expect(root.getBoundingClientRect().height).toBeLessThan(420)
+      expect(
+        body.getBoundingClientRect().bottom - lines.at(-1)!.getBoundingClientRect().bottom
+      ).toBeLessThan(32)
+    })
+
     it('drops the time and level columns when no line has them', () => {
       const view = renderLines([{ id: 'p1', time: '', type: 'text', message: 'Plain line' }])
       expect(view.queryByTestId('log-viewer__line-time')).toBeNull()
@@ -1052,5 +1107,28 @@ describe('LogViewer', () => {
         expect(summary.getAttribute('dir')).toBe('auto')
       }
     )
+  })
+
+  it('keeps the first lines clear of the floating copy control', async () => {
+    await page.viewport(1280, 900)
+    try {
+      const { container } = render(() => h('div', { style: 'width: 720px' }, [h(Default)]))
+      const anchor = await vi.waitFor(() => {
+        const found = container.querySelector<HTMLElement>('[data-testid$="__copy-anchor"]')
+        expect(found).toBeTruthy()
+        return found as HTMLElement
+      })
+      const lines = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-testid="log-viewer__line"]')
+      ).slice(0, 2)
+      expect(lines).toHaveLength(2)
+      const control = anchor.getBoundingClientRect()
+      for (const line of lines) {
+        const message = line.querySelector<HTMLElement>('[data-testid="log-viewer__line-message"]')
+        expect(message!.getBoundingClientRect().right).toBeLessThanOrEqual(control.left + 0.5)
+      }
+    } finally {
+      await page.viewport(414, 896)
+    }
   })
 })

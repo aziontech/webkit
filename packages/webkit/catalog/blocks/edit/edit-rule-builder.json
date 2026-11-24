@@ -2,7 +2,7 @@
  "variants": [
   {
    "name": "Composed",
-   "summary": "Editing the seeded Docs rewrite rule: the drawer titled Edit Rule, the phase locked with its note, one condition on the URI, and two behaviors that rewrite the path and set the Static Assets cache policy.",
+   "summary": "Editing the seeded Docs rewrite rule: the drawer titled Edit rule, the phase locked with its note, one condition on the URI, and two behaviors that rewrite the path and set the Static Assets cache policy.",
    "file": "blocks/edit/edit-rule-builder/variants/composed.vue"
   }
  ],

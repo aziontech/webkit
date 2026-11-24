@@ -21,9 +21,9 @@
     <CommandInput placeholder="Search commands…" />
     <CommandList>
       <CommandGroup label="Suggestions">
-        <CommandItem value="deploy">Deploy Project</CommandItem>
-        <CommandItem value="new-app">Create Application</CommandItem>
-        <CommandItem value="settings">Go to Settings</CommandItem>
+        <CommandItem value="deploy">Deploy project</CommandItem>
+        <CommandItem value="new-app">Create application</CommandItem>
+        <CommandItem value="settings">Go to settings</CommandItem>
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup label="Commands">
@@ -35,12 +35,12 @@
         <CommandItem
           value="new-app-cmd"
           shortcut="meta+n"
-          >New Application</CommandItem
+          >New application</CommandItem
         >
         <CommandItem
           value="toggle-theme"
           shortcut="meta+shift+l"
-          >Toggle Theme</CommandItem
+          >Toggle theme</CommandItem
         >
       </CommandGroup>
     </CommandList>

@@ -174,7 +174,7 @@
   const saveError = ref(props.defaultOpen ? props.saveError : '')
   const pendingSave = ref<VariablesSavePayload | null>(null)
 
-  const drawerTitle = computed(() => (editing.value ? 'Edit Variable' : 'Create Variable'))
+  const drawerTitle = computed(() => (editing.value ? 'Edit variable' : 'Create variable'))
   const drawerDescription = computed(() => {
     if (!editing.value) return 'Create one or more variables and define where they are available.'
     if (editing.value.secret) return 'Leave the value empty to keep the saved secret.'
@@ -267,7 +267,7 @@
           size="medium"
         />
         <Button
-          label="Create Variable"
+          label="Create variable"
           icon="az az-plus"
           variant="primary"
           size="medium"

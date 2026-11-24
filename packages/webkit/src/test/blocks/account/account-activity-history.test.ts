@@ -10,6 +10,11 @@ describe('account/account-activity-history', () => {
     const table = view.getByRole('table', { name: 'Activity history' })
     expect(table.querySelector('[data-testid="tag"]')).not.toBeNull()
     expect(table.querySelector('[data-testid$="cell-status"]')).toBeNull()
+    const tags = [...table.querySelectorAll<HTMLElement>('[data-testid="tag"]')]
+    expect(new Set(tags.map((tag) => tag.getAttribute('data-severity')))).toEqual(
+      new Set(['neutral'])
+    )
+    expect(tags.every((tag) => tag.querySelector('[data-testid="tag__icon"]'))).toBe(true)
   })
 
   it('offers the next longer period from an empty range', async () => {

@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <InputGroup>
+  <InputGroup class="w-full max-w-(--container-xs)">
     <InputGroup.Addon>$</InputGroup.Addon>
     <InputGroup.Input
       aria-label="Amount"

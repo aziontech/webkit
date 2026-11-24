@@ -264,7 +264,8 @@
         <span
           v-if="count > 0"
           aria-hidden="true"
-          class="pointer-events-none absolute -top-2 -end-2 min-w-5"
+          :data-size="size"
+          class="pointer-events-none absolute -top-2 -end-2 min-w-5 data-[size=small]:-end-3.5"
         >
           <Badge
             :data-testid="`${testId}__count`"

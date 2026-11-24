@@ -7,7 +7,7 @@
   },
   {
    "name": "CreateOrganization",
-   "summary": "Create Organization: General with Name and a Mark picked from six RadioGroup card colors built from semantic tokens, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Create Organization shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry.",
+   "summary": "Create Organization: General with Name and a Mark picked from six compact RadioGroup card colors (three per row on a phone, one row of six from the small breakpoint) built from semantic tokens, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Create Organization shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry.",
    "file": "blocks/create/create-page/variants/create-organization.vue"
   },
   {

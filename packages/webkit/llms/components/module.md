@@ -139,15 +139,19 @@
   <div>
     <Module
       :divided="false"
-      title="First module"
+      title="Deploy from Git"
+      description="Connect a repository and every push builds a preview."
     >
       <p class="m-0 text-body-md text-(--text-muted)">
-        Its top edge belongs to the hero above it, so it draws none.
+        Merges to the main branch go to production; every other branch gets its own preview URL.
       </p>
     </Module>
-    <Module title="Second module">
+    <Module
+      title="Roll back in one click"
+      description="Every deploy stays available, so the previous release is always one step away."
+    >
       <p class="m-0 text-body-md text-(--text-muted)">
-        This one draws the rule that divides the two.
+        Promote any earlier deploy to production without rebuilding it.
       </p>
     </Module>
   </div>

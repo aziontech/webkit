@@ -20,7 +20,7 @@
   import { blockMarkdown, copyText } from '../lib/copy'
   import { cached, findBlock, index, keys } from '../lib/data'
   import { messages } from '../lib/i18n'
-  import { titleCase } from '../lib/nav'
+  import { groupLabel } from '../lib/nav'
   import type { GuidelinesDoc, Highlighted } from '../lib/types'
   import NotFound from './not-found-page.vue'
 
@@ -141,7 +141,7 @@
       value: 'copy',
       label: t.value.copyForAi,
       icon: 'az az-copy',
-      tip: 'Copy this block as Markdown, ready to paste into an assistant.'
+      tip: t.value.copyBlockTip
     },
     ...(block.value?.llms
       ? [
@@ -174,7 +174,7 @@
       <DocPageHeader
         :title="block.title"
         :description="guidelines?.lead || block.summary"
-        :breadcrumbs="[{ label: t.blocks, href: '/blocks' }, { label: titleCase(block.group) }]"
+        :breadcrumbs="[{ label: t.blocks, href: '/blocks' }, { label: groupLabel(block.group) }]"
         :meta-actions="metaActions"
         @action-click="onMetaAction"
       >

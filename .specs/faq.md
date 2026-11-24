@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 47ab3977fb428eba81ef0a72ef9791b1eb2f24e45b5643ae3bf42bc7c4a1287b
+checksum: 29037313239de1b9d9dacf3a4f8bb70037270bd93d9915360a5b2a28fd0a2531
 created: 2026-09-22
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # Faq — Component Spec
@@ -93,9 +93,9 @@ The band is drawn in the hairline register: the two columns and every row are se
 
 ## Slots
 
-| Slot     | Scope               | Notes                                                                                         |
-| -------- | ------------------- | --------------------------------------------------------------------------------------------- |
-| `answer` | `{ item: FaqItem }` | Replaces the rendered answer for every item, so an answer can carry a link or richer content. |
+| Slot     | Scope               | Notes                                                                                                                                                                                                                  |
+| -------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `answer` | `{ item: FaqItem }` | Replaces the rendered answer for every item, so an answer can carry a link or richer content; it renders in a padded block, so paragraphs, lists and code stay on the answer column, spaced `var(--spacing-xs)` apart. |
 
 ## States
 

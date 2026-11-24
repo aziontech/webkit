@@ -19,7 +19,7 @@ WebKit was unclear, missing or wrong.
 1. **Learn WebKit only from the package.** Once installed, read `node_modules/@aziontech/webkit` (its README,
    `llms/`, `skills/`, `rules/`, `adapters/`, `catalog.json`, `catalog/`, `blocks/`, `examples/`, `MIGRATION-v6.md`)
    and use its CLI (`npx @aziontech/webkit --help`: `init`, `search`, `view`, `add`, `check`, `doctor`). Do
-   **not** read, list or search anything under `/data/claude/`, anything under `/data/eval-m27b/` outside
+   **not** read, list or search anything in the WebKit checkout, anything under `/data/eval-m27b/` outside
    `{{DIR}}` (except running `/data/eval-m27b/bin/shoot.sh`), or any other job's folder. Do not use the web
    (no WebFetch/WebSearch); the npm registry for installs is fine.
 2. Work only in `{{DIR}}/app`. Start it as an **empty Vite + Vue 3 + TypeScript app** (`npm create vite@latest`

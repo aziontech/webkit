@@ -38,7 +38,7 @@
     'text-(--text-default) pointer-coarse:text-label-code-lg'
 
   const copyLabel = computed(() =>
-    t(props.shell ? 'copyCommandSection.copyCommandSection' : 'copyCommandSection.copyPrompt')
+    t(props.shell ? 'copyCommandSection.copyCommand' : 'copyCommandSection.copyPrompt')
   )
 </script>
 

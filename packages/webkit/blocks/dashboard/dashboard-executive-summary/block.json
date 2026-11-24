@@ -40,7 +40,7 @@
     },
     {
       "name": "Empty",
-      "summary": "A quarter with nothing reported. The tiles show a dash with no delta, every trend card keeps its box with an EmptyState that names the quarter and points to a later one, and the goals and commentary each say what fills them.",
+      "summary": "A quarter with nothing reported. The tiles show a dash with no delta, and one bordered page-level EmptyState names the quarter and offers the next later one in place of the trend cards, goals and commentary.",
       "file": "variants/empty.vue"
     },
     {

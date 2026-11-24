@@ -48,9 +48,12 @@ const hopNames = (diagram: Element): string[] =>
 
 const cardsLoaded = async (container: Element): Promise<void> => {
   await vi.waitFor(() =>
-    expect(container.querySelectorAll('[data-slot="flow-diagram-header"]')).toHaveLength(6)
+    expect(container.querySelectorAll('[data-slot="flow-diagram-header"]')).toHaveLength(3)
   )
 }
+
+const directionOf = (diagram: Element): string | null =>
+  diagram.querySelector('[data-testid$="__list"]')?.getAttribute('data-direction') ?? null
 
 const expectSameSize = (boxes: DOMRect[]): void => {
   expect(boxes).toHaveLength(3)
@@ -90,6 +93,7 @@ describe('state/state-edge-error-page', () => {
       for (const label of actions) expect(label).not.toMatch(ACCOUNT_WORDS)
       expect(view.container.textContent).not.toMatch(/sign in|switch account|request access/i)
       expect(view.getByText('8f3c91ab2e4d7a10')).toBeTruthy()
+      expect(view.getAllByText('Ashburn, US (IAD)').length).toBeGreaterThan(0)
       await expectNoA11yViolations(view.container)
     }
   )
@@ -101,9 +105,10 @@ describe('state/state-edge-error-page', () => {
       const view = render(state)
       await cardsLoaded(view.container)
       expect(
-        view.getByTestId('state-edge-error-page__path-stacked').getBoundingClientRect().width
-      ).toBe(0)
+        view.container.querySelectorAll('[data-testid="state-edge-error-page__path"]')
+      ).toHaveLength(1)
       const diagram = view.getByTestId('state-edge-error-page__path')
+      await vi.waitFor(() => expect(directionOf(diagram)).toBe('row'))
       const boxes = nodeBoxes(diagram)
       expectSameSize(boxes)
       for (const box of boxes) expect(Math.abs(box.top - boxes[0]!.top)).toBeLessThan(0.5)
@@ -119,11 +124,8 @@ describe('state/state-edge-error-page', () => {
     await atWidth(375)
     const view = render(state)
     await cardsLoaded(view.container)
-    expect(view.getByTestId('state-edge-error-page__path').getBoundingClientRect().width).toBe(0)
-    const diagram = view.getByTestId('state-edge-error-page__path-stacked')
-    expect(diagram.querySelector('[role="list"]')?.getAttribute('data-orientation')).toBe(
-      'vertical'
-    )
+    const diagram = view.getByTestId('state-edge-error-page__path')
+    await vi.waitFor(() => expect(directionOf(diagram)).toBe('column'))
     expect(hopNames(diagram)).toEqual(HOPS)
     const boxes = nodeBoxes(diagram)
     expectSameSize(boxes)

@@ -5,7 +5,7 @@ import { defineComponent, nextTick } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ConsoleApplicationScene from './console-application-scene.vue'
 
-const TESTID = 'assets-console-application-scene'
+const TESTID = 'console-application-scene'
 
 const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -61,7 +61,7 @@ describe('ConsoleApplicationScene', () => {
     )
 
     expect(selected).toHaveLength(1)
-    expect(selected[0]).toHaveTextContent('Cache Settings')
+    expect(selected[0]).toHaveTextContent('Cache settings')
   })
 
   it('draws a list tab as a table with its rows and opens its create drawer when settled', () => {
@@ -70,7 +70,7 @@ describe('ConsoleApplicationScene', () => {
 
     expect(table).toHaveTextContent('mobiledevices')
     expect(table).toHaveTextContent('consoles')
-    expect(drawer(container)).toHaveTextContent('Add Device Group')
+    expect(drawer(container)).toHaveTextContent('Add device group')
     expect(drawer(container)).toHaveTextContent('Regular expression')
     expect(saveBar(container)).toBeNull()
   })
@@ -98,7 +98,7 @@ describe('ConsoleApplicationScene', () => {
     for (const label of ['Name', 'Description', 'Variable', 'Operator', 'Argument', 'Active']) {
       expect(panel).toHaveTextContent(label)
     }
-    expect(panel).toHaveTextContent('Response Phase')
+    expect(panel).toHaveTextContent('Response phase')
   })
 
   it('plays the second move after the page settles', async () => {

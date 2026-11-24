@@ -231,14 +231,13 @@
               @click="pickCertificate"
             />
           </div>
-          <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
-            <Textarea
-              v-model="form.certificate"
-              :rows="8"
-              spellcheck="false"
-              placeholder="-----BEGIN CERTIFICATE-----"
-            />
-          </div>
+          <Textarea
+            v-model="form.certificate"
+            :rows="8"
+            monospace
+            spellcheck="false"
+            placeholder="-----BEGIN CERTIFICATE-----"
+          />
           <Field.Description
             >Paste the certificate, or upload a .pem, .crt or .cer file.</Field.Description
           >
@@ -302,15 +301,14 @@
           :invalid="Boolean(errors.privateKey)"
         >
           <Field.Label>Private key (PEM)</Field.Label>
-          <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
-            <Textarea
-              v-model="form.privateKey"
-              :rows="6"
-              spellcheck="false"
-              autocomplete="off"
-              placeholder="-----BEGIN PRIVATE KEY-----"
-            />
-          </div>
+          <Textarea
+            v-model="form.privateKey"
+            :rows="6"
+            monospace
+            spellcheck="false"
+            autocomplete="off"
+            placeholder="-----BEGIN PRIVATE KEY-----"
+          />
           <Field.Description
             >Stored encrypted and never shown again; paste a new key to replace
             it.</Field.Description

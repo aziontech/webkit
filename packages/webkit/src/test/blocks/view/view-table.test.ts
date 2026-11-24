@@ -75,8 +75,12 @@ describe('view/view-table block', () => {
     expect(resourceNames(view.container as HTMLElement)).toEqual([])
     view.unmount()
     const empty = render(TableViewEmpty)
-    expect(empty.container.textContent).toContain('No resources yet')
-    await fireEvent.click(empty.getAllByRole('button', { name: 'Create Resource' })[0])
+    await waitFor(() => expect(empty.container.textContent).toContain('No resources yet'))
+    expect(empty.getAllByRole('button', { name: 'Create Resource' })).toHaveLength(1)
+    expect(empty.getAllByRole('link', { name: 'Documentation (opens in a new tab)' })).toHaveLength(
+      1
+    )
+    await fireEvent.click(empty.getByRole('button', { name: 'Create Resource' }))
   })
 
   it('emits create, refresh and the row actions instead of faking them', async () => {

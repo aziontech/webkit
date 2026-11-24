@@ -57,6 +57,7 @@ export const animate = {
   'slide-out-end': `slideOutEnd ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
   'progress-indeterminate': `progressIndeterminate ${SLOW_04} ${PRODUCTIVE_ENTRANCE} infinite`,
   'progress-indeterminate-short': `progressIndeterminateShort ${SLOW_04} ${EXPRESSIVE_ENTRANCE} ${SLOW_03} infinite`,
+  'autoplay-progress': `autoplayProgress ${SLOW_04} linear forwards`,
   'flow-dash': `flowDash ${SLOW_02} linear infinite`,
   'flow-dash-settle': `flowDash ${SLOW_02} linear 6`,
   'texture-wave-a': `textureWaveA ${SETTLE_WAVE} ${PRODUCTIVE_ENTRANCE} forwards`,
@@ -102,6 +103,8 @@ export const useWhen = {
   'slide-out-end': 'End-anchored panel leaving (pair of slide-in-end).',
   'progress-indeterminate': 'Indeterminate linear progress bar (primary sweep).',
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
+  'autoplay-progress':
+    'The hairline that fills while a rotating band (tabs, quotes, highlights) waits to advance. Set animation-duration ON THE ELEMENT to the rotation interval, key the element on the slide so it restarts, pause it with animation-play-state while the rotation holds, and anchor its transform origin at the inline start.',
   'flow-dash':
     'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.',
   'flow-dash-settle':

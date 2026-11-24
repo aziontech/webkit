@@ -36,7 +36,7 @@ A medium search `Input` across events, hosts, paths and addresses, then the time
 
 ### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
 
-A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `variant="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
+A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, opened from the field's value count drawn as a framed target of at least 24 px with a hover fill, so it reads as a control and not a stray digit; each value is an option `Item` (`clickable`, `variant="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
 ### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
 

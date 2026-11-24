@@ -117,4 +117,14 @@ describe('ToolCall', () => {
       expect(queryByTestId('probe')).toBeNull()
     })
   })
+
+  it('wraps a long tool name inside its chip instead of truncating it', () => {
+    const view = render(ToolCall, {
+      props: { name: 'create_cache_rule_for_every_static_asset', status: 'success' }
+    })
+    const chip = view.getByText('create_cache_rule_for_every_static_asset')
+    expect(chip.tagName).toBe('CODE')
+    expect(chip.classList.contains('truncate')).toBe(false)
+    expect(chip.classList.contains('break-all')).toBe(true)
+  })
 })

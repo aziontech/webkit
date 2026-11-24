@@ -13,6 +13,12 @@ import Required from '../../../../examples/textarea/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Textarea from './textarea.vue'
 
+const describedText = (control: Element) =>
+  (control.getAttribute('aria-describedby') ?? '')
+    .split(' ')
+    .map((id) => (id ? document.getElementById(id)?.textContent?.trim() : ''))
+    .join(' ')
+
 describe('Textarea', () => {
   it('renders a <textarea> root carrying the default data-testid', () => {
     const { getByTestId } = render(Textarea)
@@ -301,13 +307,15 @@ describe('Textarea', () => {
       expect(control).toBeDisabled()
     })
 
-    it('composes the Invalid story with invalid semantics and a filled value', () => {
+    it('composes the Invalid story with invalid semantics, a filled value and its error', async () => {
       const { getByTestId } = render(Invalid)
+      await nextTick()
 
       const control = getByTestId('textarea')
       expect(control).toHaveAttribute('data-invalid')
       expect(control).toHaveAttribute('data-filled')
       expect(control).toHaveAttribute('aria-invalid', 'true')
+      expect(describedText(control)).toContain('Use at least 20 characters')
     })
 
     it('composes the Required story with required semantics', () => {

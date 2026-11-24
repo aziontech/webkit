@@ -36,7 +36,7 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 In your own components, `useLocale()` from `@aziontech/webkit/use-locale` returns the active `locale`, `dir`, `t(key, params)` and the `Intl` helpers (`formatNumber`, `formatDate`, `formatRelativeTime`, `formatList`, `formatFileSize`, `plural`), so your numbers and dates match WebKit's. `t` reads the provider's catalog; pass the English messages it should fall back to when no provider is mounted (`useLocale(en)`, with `en` from the same import).
 
-Webkit components carry their own interface text: close buttons, pagination, empty states,
+WebKit components carry their own interface text: close buttons, pagination, empty states,
 calendar fields, keycaps, wizard steps, screen-reader labels. Each one is read from a locale
 catalog (`en`, `pt-BR`, `es`) through `useLocale`, so it follows the language set on
 `ConfigProvider`. A string typed by hand next to the component, or passed into a prop to repeat the
@@ -81,7 +81,7 @@ default, is stuck in one language and drifts from the rest of the product.
 - Hard-code key names (`Ctrl`, `Esc`, `Enter`) next to a `Kbd`: use its modifier props and
   `key-name`; `⌘`, `⌥` and `⇧` stay symbols on macOS.
 - Build a sentence from fragments (`'Step ' + n + ' of ' + total`): plural rules and word order
-  differ by language. Webkit's catalog keys take parameters (`Step {step} of {total}`).
+  differ by language. WebKit's catalog keys take parameters (`Step {step} of {total}`).
 
 ## Example
 

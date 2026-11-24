@@ -7,7 +7,7 @@ It reads the **installed** webkit `catalog.json` (the version-locked manifest of
 ## Run
 
 ```bash
-npx -y @aziontech/webkit-mcp
+npx -y @aziontech/webkit-mcp@^6
 ```
 
 Register it with your MCP client (`npx @aziontech/webkit init` does this for you):
@@ -16,7 +16,7 @@ Register it with your MCP client (`npx @aziontech/webkit init` does this for you
 // .mcp.json
 {
   "mcpServers": {
-    "webkit": { "command": "npx", "args": ["-y", "@aziontech/webkit-mcp"] }
+    "webkit": { "command": "npx", "args": ["-y", "@aziontech/webkit-mcp@^6"] }
   }
 }
 ```

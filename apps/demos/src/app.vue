@@ -17,7 +17,7 @@
 
   import DemoBar from './components/demo-bar.vue'
   import { account, navigation } from './lib/navigation'
-  import { settings } from './lib/settings'
+  import { resolvedTheme, settings } from './lib/settings'
   import { resources } from './lib/store'
   import { announcement } from './router'
 
@@ -39,12 +39,7 @@
   const theme = computed<ThemeSwitcherValue>({
     get: () => settings.theme,
     set: (value) => {
-      settings.theme =
-        value === 'system'
-          ? globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light'
-          : value
+      settings.theme = value
     }
   })
 
@@ -52,7 +47,7 @@
     const [scope, id] = String(value).split(':')
     if (scope === 'recent') router.push(`/resources/${id}`)
     if (value === 'action:create') router.push('/resources/new')
-    if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
+    if (value === 'action:theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
   }
 
   const ACCOUNT_ROUTES: Record<string, string> = {

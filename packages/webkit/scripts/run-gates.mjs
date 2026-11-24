@@ -174,6 +174,30 @@ export const GATES = [
     steps: [['node', 'lint-canaries/index.js']]
   },
   {
+    id: 'lint',
+    label: 'ESLint on the package source, no warning',
+    root: true,
+    steps: [['pnpm', 'run', 'lint:webkit']]
+  },
+  {
+    id: 'typecheck',
+    label: 'TypeScript check (vue-tsc)',
+    root: true,
+    steps: [['pnpm', 'run', 'typecheck:webkit']]
+  },
+  {
+    id: 'type-coverage',
+    label: 'Type coverage of the .ts files, at least 95%',
+    root: true,
+    steps: [['pnpm', 'run', 'check:webkit:type-coverage']]
+  },
+  {
+    id: 'ssr',
+    label: 'Server render of every block and example',
+    root: true,
+    steps: [['pnpm', '--filter', '@aziontech/webkit', 'test:ssr']]
+  },
+  {
     id: 'types-tests',
     label: 'Tests TypeScript check',
     root: true,

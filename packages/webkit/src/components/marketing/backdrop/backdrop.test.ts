@@ -28,7 +28,7 @@ describe('Backdrop', () => {
   it('draws the globe over the dot lattice', () => {
     const { getByTestId } = render(Backdrop, { props: { variant: 'globe' } })
     const root = getByTestId('backdrop')
-    expect(root.querySelector('[data-testid="assets-spinning-globe"]')).not.toBeNull()
+    expect(root.querySelector('[data-testid="spinning-globe"]')).not.toBeNull()
     expect(root.querySelector('[data-testid="texture"]')).not.toBeNull()
   })
 
@@ -43,6 +43,19 @@ describe('Backdrop', () => {
     const map = getByTestId('backdrop').querySelector('[data-testid="network-map"]')
     expect(map?.querySelector('[data-animated]')).toBeNull()
   })
+
+  it.each(['map', 'network'] as const)(
+    'fades the %s art with an alpha mask, never a canvas-coloured wash',
+    (variant) => {
+      const { getByTestId } = render(Backdrop, { props: { variant } })
+      const root = getByTestId('backdrop')
+
+      expect(root.innerHTML).not.toContain('var(--bg-canvas)')
+      const fade = root.querySelector('[data-slot="backdrop-fade"]')
+      expect(fade?.classList.contains('[mask-composite:intersect]')).toBe(true)
+      expect(fade?.querySelector('[data-testid="network-map"]')).not.toBeNull()
+    }
+  )
 
   it('mirrors its washes under rtl', () => {
     const { getByTestId } = render({

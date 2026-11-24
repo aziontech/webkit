@@ -1,5 +1,8 @@
 import { index } from './data'
 import { FOUNDATIONS } from './foundations'
+import { groupLabel, titleCase } from './words'
+
+export { groupLabel, titleCase, tokenGroupTitle } from './words'
 
 export type NavItem = { label: string; to: string; preview?: boolean }
 export type NavGroup = { id?: string; label: string; items: NavItem[] }
@@ -59,31 +62,6 @@ export function categoryLabel(category: string): string {
   return CATEGORY_LABELS[category] ?? titleCase(category)
 }
 
-export function titleCase(value: string): string {
-  return value
-    .split(/[-/ ]/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ')
-}
-
-const ACRONYMS: Record<string, string> = {
-  ai: 'AI',
-  cli: 'CLI',
-  dns: 'DNS',
-  faq: 'FAQ',
-  mfa: 'MFA',
-  waf: 'WAF'
-}
-
-function words(value: string): string[] {
-  return value
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .split(/[\s-]+/)
-    .filter(Boolean)
-    .map((word) => ACRONYMS[word.toLowerCase()] ?? word)
-}
-
 export function componentGroups(): NavGroup[] {
   const groups = new Map<string, NavGroup['items']>()
   for (const item of index.components) {
@@ -120,7 +98,7 @@ export function blockGroups(): NavGroup[] {
     groups.set(block.group, list)
   }
   return [...groups.entries()].map(([group, items]) => ({
-    label: words(titleCase(group)).join(' '),
+    label: groupLabel(group),
     items: items.sort((a, b) => a.label.localeCompare(b.label))
   }))
 }

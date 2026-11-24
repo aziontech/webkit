@@ -46,7 +46,7 @@
     >
       Run query
       <span
-        class="max-lg:hidden"
+        class="max-lg:hidden pointer-coarse:hidden"
         aria-hidden="true"
       >
         <Kbd

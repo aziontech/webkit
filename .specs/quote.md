@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 2a23771fa2400b93d1dea7eef07093f011e423d845f8423f73653747287a48b5
+checksum: e06096cb63528204e8fb71b03f30841aae49199574f32d8d34e57a74d0745b81
 created: 2026-09-22
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # Quote — Component Spec
@@ -91,10 +91,10 @@ The register changes the weight and the arrangement, never the anatomy: every re
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                         |
-| --------- | ----- | --------------------------------------------------------------------------------------------- |
-| `default` | —     | Quotation body; replaces the `text` prop when provided.                                       |
-| `mark`    | —     | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
+| Slot      | Scope | Notes                                                                                                                                                   |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | Quotation body; replaces the `text` prop when provided.                                                                                                 |
+| `mark`    | —     | The company mark; replaces the image built from `logo`, for a mark that owns its own theming.                                                           |
 | `actions` | —     | A trailing control under the attribution, floored so a row of quotes aligns on it; several controls sit in a row that wraps, `var(--spacing-sm)` apart. |
 
 ## States
@@ -115,28 +115,28 @@ _none_
 
 ## Tokens
 
-| Region                                           | Token (DESIGN.md)                                               |
-| ------------------------------------------------ | --------------------------------------------------------------- |
-| typography (quotation, `inline`)                 | `.text-heading-xs`                                              |
-| typography (quotation, `signed`)                 | `.text-body-lg`                                                 |
-| typography (quotation, `highlight`)              | `.text-heading-lg`                                              |
-| typography (attribution, every register)         | `.text-overline-md`                                             |
-| quotation text                                   | `var(--text-default)`                                           |
-| quotation text (highlighted, outside a phrase)   | `var(--text-muted)`                                             |
-| highlighted phrase                               | `var(--text-default)`                                           |
-| quotation glyph                                  | `var(--text-muted)`                                             |
-| attribution name                                 | `var(--text-default)` after a 2px start bar in `var(--primary)` |
-| attribution role                                 | `var(--text-muted)`                                             |
-| quotation measure (every variant)                | `var(--container-2xl)`                                          |
-| spacing (mark to quotation, `inline`)            | `var(--spacing-lg)`                                             |
-| spacing (mark to quotation, `signed`)            | `var(--spacing-sm)` + `var(--spacing-md)`                       |
-| spacing (glyph to quotation, `signed`)           | `var(--spacing-xs)`                                             |
-| spacing (glyph to quotation, `highlight`)        | `var(--spacing-md)`                                             |
-| spacing (quotation to attribution)               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xl)` |
-| spacing (quotation to mark column, `highlight`)  | `var(--spacing-xl)`                                             |
-| spacing (attribution lines, `inline` / `signed`) | `var(--spacing-md)`                                             |
-| spacing (attribution) | none: the name and the role start on the quotation's edge |
-| spacing (between actions) | `var(--spacing-sm)` |
+| Region                                           | Token (DESIGN.md)                                                      |
+| ------------------------------------------------ | ---------------------------------------------------------------------- |
+| typography (quotation, `inline`)                 | `.text-heading-xs`                                                     |
+| typography (quotation, `signed`)                 | `.text-body-lg`                                                        |
+| typography (quotation, `highlight`)              | `.text-heading-lg`                                                     |
+| typography (attribution, every register)         | `.text-overline-md`                                                    |
+| quotation text                                   | `var(--text-default)`                                                  |
+| quotation text (highlighted, outside a phrase)   | `var(--text-muted)`                                                    |
+| highlighted phrase                               | `var(--text-default)`                                                  |
+| quotation glyph                                  | `var(--text-muted)`                                                    |
+| attribution name                                 | `var(--text-default)` after a 2px start bar in `var(--primary)`        |
+| attribution role                                 | `var(--text-muted)`                                                    |
+| quotation measure (every variant)                | `var(--container-2xl)`                                                 |
+| spacing (mark to quotation, `inline`)            | `var(--spacing-lg)`                                                    |
+| spacing (mark to quotation, `signed`)            | `var(--spacing-sm)` + `var(--spacing-md)`                              |
+| spacing (glyph to quotation, `signed`)           | `var(--spacing-xs)`                                                    |
+| spacing (glyph to quotation, `highlight`)        | `var(--spacing-md)`                                                    |
+| spacing (quotation to attribution)               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xl)`        |
+| spacing (quotation to mark column, `highlight`)  | `var(--spacing-xl)`                                                    |
+| spacing (attribution lines, `inline` / `signed`) | `var(--spacing-2xs)`, so the name and the role read as one attribution |
+| spacing (attribution)                            | none: the name and the role start on the quotation's edge              |
+| spacing (between actions)                        | `var(--spacing-sm)`                                                    |
 
 ## Theme gaps
 

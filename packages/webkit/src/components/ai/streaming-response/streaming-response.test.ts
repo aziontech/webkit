@@ -118,6 +118,22 @@ describe('StreamingResponse', () => {
       expect(next.blocks[1]).not.toBe(first.blocks[1])
     })
 
+    it('ends a link destination at its balanced closing parenthesis', () => {
+      const refused = parseInline('a [harmless looking link](javascript:alert(1)).')
+      expect(refused.every((node) => node.type === 'text')).toBe(true)
+      expect(refused.map((node) => ('value' in node ? node.value : '')).join('')).toBe(
+        'a harmless looking link.'
+      )
+      expect(parseInline('[wiki](https://example.com/a_(b)) next')).toEqual([
+        {
+          type: 'link',
+          href: 'https://example.com/a_(b)',
+          children: [{ type: 'text', value: 'wiki' }]
+        },
+        { type: 'text', value: ' next' }
+      ])
+    })
+
     it('allows only safe link protocols', () => {
       expect(safeHref('https://a.b')).toBe('https://a.b')
       expect(safeHref('/docs')).toBe('/docs')
@@ -310,7 +326,7 @@ describe('StreamingResponse', () => {
     ])
   })
 
-  it('puts a citation chip one space after the word and right before punctuation', () => {
+  it('puts a citation chip one no-break space after the word and right before punctuation', () => {
     const sources = [
       { title: 'Cache settings', href: 'https://www.azion.com/docs' },
       { title: 'Purge', href: 'https://example.com/purge' }
@@ -325,7 +341,7 @@ describe('StreamingResponse', () => {
     paragraph.querySelectorAll('[data-testid="sources-mark"]').forEach((mark) => mark.remove())
     const text = paragraph.textContent
     expect(text).toBe(
-      'Served by azion azion.com. Then (see example.com), more azion.com+1; and azion.com: done example.com next'
+      'Served by azion\u00A0azion.com. Then (see\u00A0example.com), more\u00A0azion.com+1; and\u00A0azion.com: done\u00A0example.com next'
     )
   })
 

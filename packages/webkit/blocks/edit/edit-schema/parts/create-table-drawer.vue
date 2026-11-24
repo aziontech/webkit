@@ -142,13 +142,13 @@
     <DrawerContent>
       <form
         class="flex min-h-0 flex-1 flex-col"
-        aria-label="Create Table"
+        aria-label="Create table"
         novalidate
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Create Table</DrawerTitle>
+            <DrawerTitle>Create table</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Define the table name and its columns in {{ database }}, or start from a CSV file.
               Drag a column's grip, or focus it and use the arrow keys, to reorder.
@@ -161,7 +161,7 @@
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">Create Table</legend>
+            <legend class="sr-only">Create table</legend>
             <SettingsGroup
               label="General"
               hint="Names the table inside this database."
@@ -222,7 +222,7 @@
         </PanelBody>
 
         <DrawerFormFooter
-          submit-label="Create Table"
+          submit-label="Create table"
           :submitting="submitting"
           @cancel="open = false"
         />

@@ -109,8 +109,7 @@
     {
       "tool": "components",
       "query": "transfer list",
-      "top1": "transfer-list",
-      "pending": "pick-list is renamed to transfer-list by the inputs lane; un-skip after the catalog is regenerated"
+      "top1": "transfer-list"
     },
     {
       "tool": "components",
@@ -315,14 +314,12 @@
     {
       "tool": "components",
       "query": "banner",
-      "top1": "alert",
-      "pending": "the marketing banner merges into call-to-action (marketing lane); until then the export named banner wins; un-skip after the catalog is regenerated"
+      "top1": "alert"
     },
     {
       "tool": "suggest",
       "query": "banner",
-      "top1": "alert",
-      "pending": "the marketing banner merges into call-to-action (marketing lane); until then the export named banner wins; un-skip after the catalog is regenerated"
+      "top1": "alert"
     },
     {
       "tool": "components",
@@ -352,14 +349,12 @@
     {
       "tool": "components",
       "query": "choose a date",
-      "top1": "date-picker",
-      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+      "top1": "date-picker"
     },
     {
       "tool": "components",
       "query": "date picker",
-      "top1": "date-picker",
-      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+      "top1": "date-picker"
     },
     {
       "tool": "components",
@@ -389,8 +384,7 @@
     {
       "tool": "components",
       "query": "toggle",
-      "top1": "switch",
-      "pending": "the committed catalog.json still carries the removed alias toggle → toggle-group; un-skip after the catalog is regenerated"
+      "top1": "switch"
     },
     {
       "tool": "components",
@@ -475,14 +469,12 @@
     {
       "tool": "components",
       "query": "context menu",
-      "top1": "context-menu",
-      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+      "top1": "context-menu"
     },
     {
       "tool": "components",
       "query": "right click menu",
-      "top1": "context-menu",
-      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+      "top1": "context-menu"
     },
     {
       "tool": "components",
@@ -648,44 +640,37 @@
     {
       "tool": "components",
       "query": "hover card",
-      "top1": "hover-card",
-      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+      "top1": "hover-card"
     },
     {
       "tool": "components",
       "query": "timestamp",
-      "top1": "timestamp",
-      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+      "top1": "timestamp"
     },
     {
       "tool": "components",
       "query": "relative time",
-      "top1": "timestamp",
-      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+      "top1": "timestamp"
     },
     {
       "tool": "components",
       "query": "http status code",
-      "top1": "status-code",
-      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+      "top1": "status-code"
     },
     {
       "tool": "components",
       "query": "editable grid",
-      "top1": "data-grid",
-      "pending": "data-grid is a new component another lane is adding; un-skip after the catalog is regenerated"
+      "top1": "data-grid"
     },
     {
       "tool": "components",
       "query": "spreadsheet",
-      "top1": "data-grid",
-      "pending": "data-grid is a new component another lane is adding; un-skip after the catalog is regenerated"
+      "top1": "data-grid"
     },
     {
       "tool": "components",
       "query": "threshold line",
-      "top1": "chart-reference",
-      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+      "top1": "chart-reference"
     },
     {
       "tool": "suggest",
@@ -728,8 +713,7 @@
     {
       "tool": "suggest",
       "query": "blog index",
-      "top1": "article-index-section",
-      "pending": "article-index-blog and article-index-resource-hub merge into article-index-section (marketing lane); un-skip after the catalog is regenerated"
+      "top1": "article-index-section"
     },
     {
       "tool": "suggest",

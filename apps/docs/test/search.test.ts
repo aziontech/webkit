@@ -4,8 +4,9 @@ import { test } from 'node:test'
 import { matchCommand } from '../../../packages/webkit/src/components/overlay/command/command-match.ts'
 import { buildIndex } from '../plugins/content.ts'
 import { searchKeywords } from '../src/lib/search.ts'
+import { groupLabel, spacedTitle, tokenGroupTitle } from '../src/lib/words.ts'
 
-const { components } = buildIndex()
+const { components, blocks } = buildIndex()
 
 const ranked = (query: string) =>
   components
@@ -40,4 +41,27 @@ test('no search hint carries a benchmark note meant for reviewers', () => {
     components.filter((item) => notes.test(item.purpose)).map((item) => item.name),
     []
   )
+})
+
+test('a block title keeps its acronyms', () => {
+  const title = (id: string) => blocks.find((block) => block.id === id)?.title
+  assert.equal(title('ai/ai-chat'), 'AI Chat')
+  assert.equal(title('ai/ai-api-key'), 'AI API Key')
+  assert.equal(title('account/account-mfa-settings'), 'Account MFA Settings')
+  assert.deepEqual(
+    blocks.filter((block) => /\b(Ai|Api|Mfa|Dns|Cli|Waf)\b/.test(block.title)).map((b) => b.id),
+    []
+  )
+})
+
+test('an example name reads as words in its heading and in the page outline', () => {
+  assert.equal(spacedTitle('FormSubmit'), 'Form Submit')
+  assert.equal(spacedTitle('CompactHeaderWithStickyColumn'), 'Compact Header With Sticky Column')
+})
+
+test('a group heading spells words out: Background, AI', () => {
+  assert.equal(tokenGroupTitle('bg'), 'Background')
+  assert.equal(tokenGroupTitle('text'), 'Text')
+  assert.equal(groupLabel('ai'), 'AI')
+  assert.equal(groupLabel('top-bar'), 'Top Bar')
 })

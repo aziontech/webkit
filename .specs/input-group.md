@@ -7,9 +7,9 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 3b634d7b3d9da152085b5717d9962f05a901cdbee4a3fb68486686d3d8f71046
+checksum: 0f00db278da780b07b2eff0bfa6f59bfc72ffc0157f229799581557a5dd00443
 created: 2026-07-01
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 ---
 
 # InputGroup — Component Spec
@@ -188,6 +188,7 @@ Root props:
   - `[&>*:last-child]:rounded-r-(--shape-control)` and `[&>*:not(:last-child)]:rounded-r-none`
   - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
   - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the _inner-facing_ border only
+- No clip: the root does not set `overflow`, so the `aria-hidden` touch-target layers of the controls inside (`data-slot="touch-target"`, shown under `pointer-coarse:`) reach the 44 px hit height past the frame. Instead of being clipped to the rounded frame, fills stay inside it by rounding: the outer corners of the first and last child are the frame's `--shape-control` radius (`!` so a child `Button` cannot override them), and every control inside a child (`button`, `a`, `[role=combobox]`, `[data-slot=input]`) and every wrapper between them takes `rounded-[inherit]`, so a hover or selected fill follows the frame's corner.
 
 ## Motion & Animations
 

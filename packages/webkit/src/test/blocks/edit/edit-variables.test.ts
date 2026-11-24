@@ -14,15 +14,6 @@ useToastRegion()
 
 const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
 
-const openDrawer = async (label: RegExp) => {
-  const trigger = Array.from(document.querySelectorAll('button')).find((button) =>
-    label.test(button.textContent ?? '')
-  ) as HTMLButtonElement
-  await userEvent.click(trigger)
-  await waitFor(() => expect(dialog()).not.toBeNull())
-  return dialog() as HTMLElement
-}
-
 const visibleText = (element: HTMLElement) => {
   const copy = element.cloneNode(true) as HTMLElement
   copy.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove())
@@ -41,8 +32,13 @@ afterEach(() => {
   document.body.style.overflow = ''
 })
 
+const openedDrawer = async () => {
+  await waitFor(() => expect(dialog()).not.toBeNull())
+  return dialog() as HTMLElement
+}
+
 const openCreate = async () => {
-  await userEvent.click(buttonIn(document, 'Create Variable'))
+  await userEvent.click(buttonIn(document, 'Create variable'))
   await waitFor(() => expect(dialog()).not.toBeNull())
   const panel = dialog() as HTMLElement
   const [key, value] = Array.from(
@@ -53,7 +49,7 @@ const openCreate = async () => {
 describe('variables#NetworkList', () => {
   it('reports invalid and repeated lines, adds every new line as a row and shows each invalid row its error', async () => {
     render(NetworkList)
-    const panel = await openDrawer(/Create Network List/)
+    const panel = await openedDrawer()
     await waitFor(() => expect(panel.textContent).toContain('7 entries found.'))
     expect(panel.textContent).toContain(
       'Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.'
@@ -72,10 +68,22 @@ describe('variables#NetworkList', () => {
   })
 })
 
+describe('variables states open on what they name', () => {
+  it.each([
+    ['PasteEnv', PasteEnv, 'Variables'],
+    ['NetworkList', NetworkList, 'Network lists']
+  ])('%s renders inside its page with the drawer open', async (_, state, title) => {
+    const view = render(state)
+    expect(view.getByRole('heading', { level: 1, name: title })).toBeTruthy()
+    expect(view.container.querySelector('.layout-boundary')).not.toBeNull()
+    await openedDrawer()
+  })
+})
+
 describe('variables#PasteEnv', () => {
   it('adds the pasted pairs as rows and confirms a save in a toast, as the list does', async () => {
     render(PasteEnv)
-    const panel = await openDrawer(/Create Variable/)
+    const panel = await openedDrawer()
     await waitFor(() => expect(panel.textContent).toContain('3 variables found.'))
     await fireEvent.click(buttonIn(panel, 'Add 3 variables'))
     await waitFor(() => expect(panel.querySelectorAll('input[id*="-key-"]').length).toBe(3))
@@ -91,7 +99,7 @@ describe('variables#PasteEnv', () => {
 
   it('confirms a single created variable by name', async () => {
     render(PasteEnv)
-    const panel = await openDrawer(/Create Variable/)
+    const panel = await openedDrawer()
     await fireEvent.click(buttonIn(panel, 'Cancel'))
     await fireEvent.click(buttonIn(panel, 'Save'))
     await waitFor(() => expect(document.body.textContent).toContain('CACHE_TTL created.'), wait)
@@ -197,7 +205,7 @@ describe('variables data contract', () => {
 
   it('opens on the create drawer with defaultOpen', async () => {
     render(VariablesList, { props: { variables: given, defaultOpen: true } })
-    await waitFor(() => expect(dialog()?.textContent).toContain('Create Variable'))
+    await waitFor(() => expect(dialog()?.textContent).toContain('Create variable'))
   })
 })
 

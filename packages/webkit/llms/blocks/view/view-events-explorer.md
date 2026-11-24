@@ -48,7 +48,7 @@ A medium search `Input` across events, hosts, paths and addresses, then the time
 
 ### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
 
-A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `variant="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
+A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, opened from the field's value count drawn as a framed target of at least 24 px with a hover fill, so it reads as a control and not a stray digit; each value is an option `Item` (`clickable`, `variant="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
 ### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
 
@@ -3711,6 +3711,10 @@ export const tokensForFilters = (
   const FIELD_COUNT_CLASS =
     'shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
     'hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none'
+
+  const COUNT_CLASS =
+    'inline-flex min-h-6 min-w-6 items-center justify-center rounded-(--shape-control) border ' +
+    'border-(--border-muted) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -3760,7 +3764,11 @@ export const tokensForFilters = (
           tabindex="0"
           :aria-label="`Filter by ${field.label}, ${count} values`"
         >
-          {{ count }}
+          <span
+            data-testid="field-row__count"
+            :class="COUNT_CLASS"
+            >{{ count }}</span
+          >
         </Popover.Trigger>
       </div>
 
@@ -4582,9 +4590,20 @@ export const tokensForFilters = (
               width="4rem"
               height="1.5rem"
             />
-            <template v-else>{{
-              summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
-            }}</template>
+            <bdi
+              v-else
+              dir="ltr"
+              data-testid="log-summary__request-time"
+              >{{
+                summary.avgRequestTimeMs === null
+                  ? '—'
+                  : formatNumber(summary.avgRequestTimeMs, {
+                      style: 'unit',
+                      unit: 'millisecond',
+                      unitDisplay: 'short'
+                    })
+              }}</bdi
+            >
           </dd>
         </div>
       </dl>

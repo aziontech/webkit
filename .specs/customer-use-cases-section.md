@@ -6,8 +6,8 @@ template: 2
 status: implemented
 spec_version: 9
 created: 2026-11-04
-last_updated: 2026-11-18
-checksum: df233dc139fb80657c592531eadb65fce5c4360da2df30f660ecd8c1b64eb074
+last_updated: 2026-11-24
+checksum: 541e51db336ec9de056c0767c0c114a68b1185a62d20fc013aaad3adf6d2e737
 ---
 
 # CustomerUseCasesSection — Component Spec
@@ -51,7 +51,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
   <CustomerUseCasesSection
     eyebrow="SQL Database"
     title="What teams use SQL Database for"
-    description="Teams use it to:"
+    description="Four ways teams put vector search and SQL to work."
     :primary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     :items="[
       {

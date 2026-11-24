@@ -10,7 +10,11 @@
   import DropdownMenuPanel from '../dropdown-menu/parts/dropdown-menu-panel.vue'
   import { ContextMenuInjectionKey } from './injection-key'
 
-  export type { DropdownMenuItemType, DropdownMenuItemValue } from '../dropdown-menu/injection-key'
+  export type {
+    DropdownMenuItemSeverity,
+    DropdownMenuItemType,
+    DropdownMenuItemValue
+  } from '../dropdown-menu/injection-key'
 
   defineOptions({
     name: 'ContextMenu',

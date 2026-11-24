@@ -70,7 +70,7 @@
 - `data-muted` is set while the audio is muted; the mute control shows Unmute and the volume slider reads 0.
 - Empty: `src` empty with `loading` false sets `data-disabled`; the times show `--:--` and the Download link is not rendered.
 - Unknown duration (no `duration` and the file not read yet): the times show `--:--` and the seek bar is disabled until the browser reports the length.
-- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root.
+- The transcript is a native `details` disclosure, closed by default; its `open` attribute is the only open state, with no `data-state` on the root. On a coarse pointer an invisible layer (`data-slot="touch-target"`) extends the summary's hit area to 40 px tall.
 - Not applicable: `readonly` and `invalid` (the player takes no value input).
 - A new `src` resets the time, the playing state and the error.
 
@@ -100,23 +100,23 @@
 
 ## Internationalization
 
-| Key                       | English source               | Override prop |
-| ------------------------- | ---------------------------- | ------------- |
-| `audioPlayer.label`       | `Audio player`               | `ariaLabel`   |
-| `audioPlayer.play`        | `Play`                       | —             |
-| `audioPlayer.pause`       | `Pause`                      | —             |
-| `audioPlayer.seek`        | `Seek`                       | —             |
-| `audioPlayer.position`    | `{current} of {total}`       | —             |
-| `audioPlayer.mute`        | `Mute`                       | —             |
-| `audioPlayer.unmute`      | `Unmute`                     | —             |
-| `audioPlayer.volume`      | `Volume`                     | —             |
-| `audioPlayer.rate`        | `{rate}×`                    | —             |
-| `audioPlayer.speed`       | `Playback speed {rate}`      | —             |
-| `audioPlayer.download`    | `Download audio`             | —             |
-| `audioPlayer.downloadTitle` | `Download {title}`         | —             |
-| `audioPlayer.loading`     | `Loading audio`              | —             |
-| `audioPlayer.error`       | `The audio could not play.`  | `error`       |
-| `audioPlayer.transcript`  | `Transcript`                 | —             |
+| Key                         | English source              | Override prop |
+| --------------------------- | --------------------------- | ------------- |
+| `audioPlayer.label`         | `Audio player`              | `ariaLabel`   |
+| `audioPlayer.play`          | `Play`                      | —             |
+| `audioPlayer.pause`         | `Pause`                     | —             |
+| `audioPlayer.seek`          | `Seek`                      | —             |
+| `audioPlayer.position`      | `{current} of {total}`      | —             |
+| `audioPlayer.mute`          | `Mute`                      | —             |
+| `audioPlayer.unmute`        | `Unmute`                    | —             |
+| `audioPlayer.volume`        | `Volume`                    | —             |
+| `audioPlayer.rate`          | `{rate}×`                   | —             |
+| `audioPlayer.speed`         | `Playback speed {rate}`     | —             |
+| `audioPlayer.download`      | `Download audio`            | —             |
+| `audioPlayer.downloadTitle` | `Download {title}`          | —             |
+| `audioPlayer.loading`       | `Loading audio`             | —             |
+| `audioPlayer.error`         | `The audio could not play.` | `error`       |
+| `audioPlayer.transcript`    | `Transcript`                | —             |
 
 - Formatting: `formatNumber` (`Intl.NumberFormat`, the `ConfigProvider` locale) for the shown time, `m:ss` under an hour and `h:mm:ss` from an hour on, and for the rate inside `audioPlayer.rate` (a locale can move the sign: `×1,5`). The spoken `aria-valuetext` uses `formatNumber` with `style: 'unit'` (`hour`, `minute`, `second`, long) joined by `formatList` (`type: 'unit'`). An unknown duration shows `--:--`; the seek bar is disabled then, so it announces nothing. `audioPlayer.downloadTitle` names the link when `title` is set (the title fills `{title}`), so two players in one message have distinct link names.
 

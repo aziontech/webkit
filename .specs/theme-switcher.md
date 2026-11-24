@@ -7,9 +7,9 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 2893b740974e84a38acd893537936c0a838071b298fb7db36b52d496c22a027a
+checksum: cb8fc788867a9cf1104b767b7c74603923ef3719dcd0b2e55bbf8145ec678a20
 created: 2026-07-13
-last_updated: 2026-11-22
+last_updated: 2026-11-24
 ---
 
 # Theme Switcher — Component Spec
@@ -106,6 +106,7 @@ A compact segmented control drawn like `toggle-group` (same radius, surface and 
 | icon color               | `var(--text-default)` (active, hover), `var(--text-muted)` (inactive) |
 | icon size                | `text-label-sm` (`small`, `medium`), `text-label-md` (`large`)        |
 | disabled icon            | `var(--text-disabled)`                                                |
+| disabled group surface   | `var(--bg-disabled)`, the selected segment on `var(--bg-surface)`     |
 | gap / padding            | `var(--spacing-2xs)`                                                  |
 | ring                     | `var(--ring-color)`                                                   |
 | ring offset              | `var(--bg-canvas)`                                                    |

@@ -1,4 +1,4 @@
-import { h, type VNodeChild } from 'vue'
+import { defineAsyncComponent, h, type VNodeChild } from 'vue'
 
 import Link from '../../../navigation/link/link.vue'
 import HoverCard from '../../../overlay/hover-card/hover-card.vue'
@@ -45,6 +45,21 @@ function renderTooltip(ctx: Ctx, attributes: DocMarkdownAttributes, children: VN
   ])
 }
 
+const StatusIndicator = defineAsyncComponent(
+  () => import('../../../feedback/status-indicator/status-indicator.vue')
+)
+
+const STATUS_SEVERITIES = ['neutral', 'info', 'success', 'warning', 'danger'] as const
+
+function renderStatus(attributes: DocMarkdownAttributes): VNodeChild {
+  const severity = STATUS_SEVERITIES.find((value) => value === attributes['severity'])
+  return h(StatusIndicator, {
+    severity,
+    label: text(attributes['label']),
+    loading: attributes['loading'] === true || attributes['loading'] === 'true'
+  })
+}
+
 function renderLink(ctx: Ctx, href: string, children: VNodeChild[]): VNodeChild {
   const external = EXTERNAL.test(href)
   return h(
@@ -77,6 +92,7 @@ export function renderTokens(ctx: Ctx, tokens: DocMarkdownInline[]): VNodeChild[
       case 'citation':
         return `[${token.indexes.join('][')}]`
       case 'component':
+        if (token.name === 'StatusIndicator') return renderStatus(token.props)
         if (token.name !== 'Tooltip') return null
         return renderTooltip(ctx, token.props, renderTokens(ctx, token.children))
     }

@@ -1,6 +1,6 @@
 # DetailVersion (`detail/detail-version`)
 
-> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
+> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the `edit/edit-rule-builder` block. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
 
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
@@ -672,7 +672,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'AEO25I38',
     name: 'AEO25I38',
     state: 'deployed',
-    comment: 'Remove rule"Legacy load balancer"',
+    comment: 'Remove rule "Legacy load balancer"',
     author: 'Sam Lee',
     createdAt: '2026-11-09T12:00:00Z',
     createdOn: 'Nov 5, 2026'
@@ -699,7 +699,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'AITJB4GN',
     name: 'AITJB4GN',
     state: 'ready',
-    comment: 'Add variable"API_URL"',
+    comment: 'Add variable "API_URL"',
     author: 'Riley Carter',
     createdAt: '2026-11-06T12:00:00Z',
     createdOn: 'Nov 5, 2026'
@@ -717,7 +717,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'ALL6QVDL',
     name: 'ALL6QVDL',
     state: 'ready',
-    comment: 'Remove rule"Legacy load balancer"',
+    comment: 'Remove rule "Legacy load balancer"',
     author: 'Jordan Kim',
     createdAt: '2026-11-03T12:00:00Z',
     createdOn: 'Nov 5, 2026'
@@ -751,7 +751,7 @@ export const sampleRevertDiff: VersionDetailRevertDiff = {
   ],
   rulesAdded: 1,
   rulesRemoved: 0,
-  rulesNote: 'The rule"Legacy load balancer" comes back.'
+  rulesNote: 'The rule "Legacy load balancer" comes back.'
 }
 
 export const sampleEnvironments: VersionDetailEnvironment[] = [

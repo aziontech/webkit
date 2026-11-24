@@ -101,10 +101,8 @@
     indicatorVisible.value = true
   }
 
-  const revealActive = () => {
+  const revealTab = (tabEl: HTMLElement | null | undefined) => {
     const list = listEl.value
-    const tabEl = context.tabs.value.find((entry) => entry.value === indicatorTarget.value)?.el
-      .value
     if (!list || !tabEl || list.scrollWidth <= list.clientWidth) return
     const listRect = list.getBoundingClientRect()
     const tabRect = tabEl.getBoundingClientRect()
@@ -114,6 +112,18 @@
     } else if (tabRect.right > listRect.right - edge) {
       list.scrollLeft += tabRect.right - (listRect.right - edge)
     }
+  }
+
+  const revealActive = () =>
+    revealTab(context.tabs.value.find((entry) => entry.value === indicatorTarget.value)?.el.value)
+
+  const onFocusin = (event: globalThis.FocusEvent) => {
+    const tabEl = context.tabs.value.find((entry) => entry.el.value === event.target)?.el.value
+    if (!tabEl) return
+    nextTick(() => {
+      revealTab(tabEl)
+      updateScrollAffordance()
+    })
   }
 
   const scheduleReveal = () => {
@@ -176,6 +186,7 @@
       :data-fade-start="canScrollStart || null"
       :data-fade-end="canScrollEnd || null"
       @keydown="context.onListKeydown"
+      @focusin="onFocusin"
     >
       <span
         v-show="indicatorVisible"

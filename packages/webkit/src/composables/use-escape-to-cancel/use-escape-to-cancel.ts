@@ -49,43 +49,65 @@ const overlayOpen = () =>
   Array.from(document.querySelectorAll(OVERLAY_SELECTOR)).some(isShown) ||
   Array.from(document.querySelectorAll(':popover-open')).length > 0
 
+interface EscapeEntry {
+  onEscape: (event: globalThis.KeyboardEvent) => void
+  enabled: () => boolean
+}
+
+const entries = new Set<EscapeEntry>()
+let claimed = false
+
+const onKeydownCapture = (event: globalThis.KeyboardEvent) => {
+  if (event.key !== 'Escape') return
+  claimed =
+    event.isComposing ||
+    event.keyCode === 229 ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.shiftKey ||
+    usesEscape(event.target) ||
+    usesEscape(document.activeElement) ||
+    overlayOpen()
+}
+
+const onKeydown = (event: globalThis.KeyboardEvent) => {
+  if (event.key !== 'Escape') return
+  const skip = claimed || event.defaultPrevented
+  claimed = false
+  if (skip) return
+  for (const entry of entries) {
+    if (!entry.enabled()) continue
+    event.preventDefault()
+    entry.onEscape(event)
+    return
+  }
+}
+
+const toggleListeners = (on: boolean) => {
+  if (on) {
+    document.addEventListener('keydown', onKeydownCapture, true)
+    document.addEventListener('keydown', onKeydown)
+  } else {
+    document.removeEventListener('keydown', onKeydownCapture, true)
+    document.removeEventListener('keydown', onKeydown)
+    claimed = false
+  }
+}
+
 export function useEscapeToCancel(
   onEscape: (event: globalThis.KeyboardEvent) => void,
   options: UseEscapeToCancelOptions = {}
 ): void {
   if (typeof document === 'undefined') return
 
-  let claimed = false
-
-  const onKeydownCapture = (event: globalThis.KeyboardEvent) => {
-    if (event.key !== 'Escape') return
-    claimed =
-      event.isComposing ||
-      event.keyCode === 229 ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.metaKey ||
-      event.shiftKey ||
-      usesEscape(event.target) ||
-      usesEscape(document.activeElement) ||
-      overlayOpen()
-  }
-
-  const onKeydown = (event: globalThis.KeyboardEvent) => {
-    if (event.key !== 'Escape') return
-    const skip = claimed || event.defaultPrevented
-    claimed = false
-    if (skip || !(toValue(options.enabled) ?? true)) return
-    event.preventDefault()
-    onEscape(event)
-  }
-
-  document.addEventListener('keydown', onKeydownCapture, true)
-  document.addEventListener('keydown', onKeydown)
+  const entry: EscapeEntry = { onEscape, enabled: () => toValue(options.enabled) ?? true }
+  entries.add(entry)
+  if (entries.size === 1) toggleListeners(true)
   if (getCurrentScope()) {
     onScopeDispose(() => {
-      document.removeEventListener('keydown', onKeydownCapture, true)
-      document.removeEventListener('keydown', onKeydown)
+      if (!entries.delete(entry)) return
+      if (entries.size === 0) toggleListeners(false)
     })
   }
 }

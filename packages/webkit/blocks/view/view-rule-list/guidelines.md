@@ -13,14 +13,14 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## When not to use
 
 - Records whose order does not matter: use `view/view-table`.
-- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add Rule and from a rule's name.
+- Writing or editing one rule's criteria and behaviors: use `edit/edit-rule-builder`, which this list opens from Add rule and from a rule's name.
 - Fewer than two rules that can move: show the list without the Order controls.
 
 ## Building blocks
 
 ### A. Header — `PageHeader`, `Button` (required)
 
-`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add Rule on the outer edge.
+`PageHeader` at `size="small"` titled Rules, with a one-sentence description that says order is behavior and that an inactive rule keeps its place. Actions: outlined Documentation, then outlined Add rule on the outer edge.
 
 ### B. Search — `Input`, `Alert` (required)
 
@@ -32,13 +32,13 @@ A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, th
 
 ### D. Rules table — `DataTable`, `Tag`, `Field`, `Switch`, `TableCellTime` (required)
 
-A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel, after the narrow reorder below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified (`TableCellTime` with the instant and its `author`: the relative time and who changed it; the data holds a `Date` or an ISO string, never typed text). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
+A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`: on a phone it switches to the narrow column set below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified (`TableCellTime` with the instant and its `author`: the relative time and who changed it; the data holds a `Date` or an ISO string, never typed text). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
 ### E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 
-The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Position cell starts with a small numeric `Input` showing the rule's position: type a number and press Enter (or leave the field) to move the rule there, clamped below the pinned rules and to the end of the phase; Escape or a value that is not a number keeps the rule in place, and after Enter focus stays in the field on the moved rule. On a locked rule, while searching and while saving the field is disabled and its name and `Tooltip` carry the reason ("Position 1 of Default rule in the Request phase. The default rule runs first and stays first."). Then the cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7); each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
+The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Position cell starts with a small numeric `Input` showing the rule's position: type a number and press Enter (or leave the field) to move the rule there, clamped below the pinned rules and to the end of the phase; Escape or a value that is not a number keeps the rule in place, and after Enter focus stays in the field on the moved rule. On a locked rule, while searching and while saving the field is disabled and its name and `Tooltip` carry the reason ("Position 1 of Default rule in the Request phase. The default rule runs first and stays first."). Then the cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7), revealed when the row is hovered or a control in the cell has focus (always shown on a coarse pointer), so a row at rest shows the grip and the position field, not four reorder controls; each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
 
-Below 48rem of the viewport the row leads with Name, Description and Last modified, and the `Switch` (its Active or Inactive text kept for screen readers only) and a Move column are pinned to the end edge (`frozen: 'end'`, 64 px and 56 px), so both stay in view while the rest scrolls under them; the Position cell folds into one medium ghost `IconButton` named "Move Docs rewrite, position 5 of 5" that opens a `DropdownMenu` with Move to top, Move up, Move down and Move to bottom, each disabled when the rule cannot go that way; the typed position is left to the wide layout and the grip still drags. Focus returns to the menu button on the moved rule.
+Below 48rem of the viewport every phase table shows the same narrow column set: Name, filling the row, then the `Switch` (its Active or Inactive text kept for screen readers only) and a Move column pinned to the end edge (`frozen: 'end'`, 64 px and 56 px). Description and Last modified are left to the wide layout and the rule builder, so no phase table lets a cut column peek out between Name and Status; the Position cell folds into one medium ghost `IconButton` named "Move Docs rewrite, position 5 of 5" that opens a `DropdownMenu` with Move to top, Move up, Move down and Move to bottom, each disabled when the rule cannot go that way; the typed position and the drag grip are left to the wide layout (the table is not `reorderable` there), so a phone row carries one reorder control. Focus returns to the menu button on the moved rule.
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 
@@ -46,7 +46,7 @@ Any move or status change raises a `SaveBar` counting the changes, with Discard 
 
 ### G. States — `EmptyState`, `Alert` (required)
 
-Loading: triggers read Loading, the search and Add Rule are disabled and each `DataTable` shows its skeleton rows (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
+Loading: triggers read Loading, the search and Add rule are disabled and each `DataTable` shows as many skeleton rows as the phase had when it last loaded, or three, never a full page of ten, so the page does not jump when the rules land (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
 
 A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/edit-rule-builder` from it, as EditRule shows.
 
@@ -64,7 +64,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `subject`           | `'application' \| 'firewall'` | What runs the rules: an application has Request and Response phases, a firewall only Request. Sets the copy. |
 | `rules`             | `RuleListRule[]`              | The saved rules, each phase in run order. Pass `[]` for none.                                                |
-| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add Rule disable.    |
+| `loading`           | `boolean`                     | The rules are loading: each phase reads Loading and shows skeleton rows; the search and Add rule disable.    |
 | `error`             | `string`                      | Why the rules failed to load, shown in the danger `Alert` with Retry that replaces the phases.               |
 | `saving`            | `boolean`                     | The save is in flight. When it turns off with no `saveError`, the draft becomes the saved order.             |
 | `saveError`         | `string`                      | Why the save failed, shown at the top of the review dialog; Save reads Save again.                           |
@@ -75,7 +75,7 @@ The block takes its rules through props and emits every action; it fetches nothi
 | Event    | Payload           | When                                                            |
 | -------- | ----------------- | --------------------------------------------------------------- |
 | `edit`   | `(event, rule)`   | A rule's name.                                                  |
-| `create` | `(event, phase?)` | Add Rule in the heading, or in an empty phase (with its phase). |
+| `create` | `(event, phase?)` | Add rule in the heading, or in an empty phase (with its phase). |
 | `retry`  | `(event)`         | Retry in the load error alert.                                  |
 | `save`   | `(event, rules)`  | Save in the review dialog; every rule of every phase, in order. |
 
@@ -157,9 +157,9 @@ Then delete `sample.ts` and its import.
 - SaveError: the same with `saveError` set: the failure `Alert` and Save again.
 - Searching: `defaultSearch` "cache": reordering off with its `Alert`, phases reading "n of total".
 - Empty: `subject="firewall"` and `rules` `[]`: the Request phase shows its `EmptyState`.
-- Loading: `loading`: skeleton rows in each phase, the search and Add Rule disabled.
+- Loading: `loading`: skeleton rows in each phase, the search and Add rule disabled.
 - LoadError: `error` set: a danger `Alert` with Retry replaces the phases.
-- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
+- EditRule: the list composed with `edit/edit-rule-builder`, opening on the builder for Docs rewrite. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit rule, seeded with the rule and its phase locked; Add rule in the header or in an empty phase opens it as Add rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
 

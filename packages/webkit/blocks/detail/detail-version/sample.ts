@@ -28,7 +28,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'AEO25I38',
     name: 'AEO25I38',
     state: 'deployed',
-    comment: 'Remove rule"Legacy load balancer"',
+    comment: 'Remove rule "Legacy load balancer"',
     author: 'Sam Lee',
     createdAt: '2026-11-09T12:00:00Z',
     createdOn: 'Nov 5, 2026'
@@ -55,7 +55,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'AITJB4GN',
     name: 'AITJB4GN',
     state: 'ready',
-    comment: 'Add variable"API_URL"',
+    comment: 'Add variable "API_URL"',
     author: 'Riley Carter',
     createdAt: '2026-11-06T12:00:00Z',
     createdOn: 'Nov 5, 2026'
@@ -73,7 +73,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'ALL6QVDL',
     name: 'ALL6QVDL',
     state: 'ready',
-    comment: 'Remove rule"Legacy load balancer"',
+    comment: 'Remove rule "Legacy load balancer"',
     author: 'Jordan Kim',
     createdAt: '2026-11-03T12:00:00Z',
     createdOn: 'Nov 5, 2026'
@@ -107,7 +107,7 @@ export const sampleRevertDiff: VersionDetailRevertDiff = {
   ],
   rulesAdded: 1,
   rulesRemoved: 0,
-  rulesNote: 'The rule"Legacy load balancer" comes back.'
+  rulesNote: 'The rule "Legacy load balancer" comes back.'
 }
 
 export const sampleEnvironments: VersionDetailEnvironment[] = [

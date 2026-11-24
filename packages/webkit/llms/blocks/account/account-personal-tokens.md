@@ -1057,6 +1057,13 @@ export const sampleTokens: PersonalTokensToken[] = [
             :severity="statusOf(row).severity"
           />
         </template>
+        <template #cell-expires="{ row, value }">
+          <span
+            class="text-body-sm text-(--text-default) data-[ended]:text-(--text-muted)"
+            :data-ended="row.revoked || row.status === 'Expired' || null"
+            >{{ value }}</span
+          >
+        </template>
         <template #cell-lastUsedAt="{ value }">
           <TableCellTime
             v-if="value"
@@ -1089,6 +1096,7 @@ export const sampleTokens: PersonalTokensToken[] = [
               <DropdownMenu.Item
                 value="revoke"
                 label="Revoke"
+                severity="danger"
               />
             </DropdownMenu.Group>
             <DropdownMenu.Group
@@ -1098,6 +1106,7 @@ export const sampleTokens: PersonalTokensToken[] = [
               <DropdownMenu.Item
                 value="delete"
                 label="Delete"
+                severity="danger"
               />
             </DropdownMenu.Group>
           </TableCellActions>

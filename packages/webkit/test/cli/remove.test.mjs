@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { cleanup, cli, cliJson, makeProject } from './lib/cli-project.mjs'
@@ -92,6 +92,27 @@ test('remove of a block that was never copied fails and names what is recorded',
     assert.equal(r.code, 1)
     assert.match(r.stderr, /not recorded in webkit\.blocks\.json \(recorded: create\/create-hub\)/)
   } finally {
+    cleanup(dir)
+  }
+})
+
+test('remove never deletes a manifest path that resolves outside the project', () => {
+  const dir = makeProject()
+  const outside = join(dir, '..', `outside-${process.pid}-${Date.now()}.txt`)
+  try {
+    assert.equal(cli(dir, 'add', BLOCK).code, 0)
+    writeFileSync(outside, 'keep me\n')
+    const manifest = manifestOf(dir)
+    manifest.blocks[BLOCK].files.push({ path: `../${outside.split('/').at(-1)}` })
+    writeFileSync(join(dir, 'webkit.blocks.json'), `${JSON.stringify(manifest, null, 2)}\n`)
+
+    const r = cli(dir, 'remove', BLOCK)
+    assert.equal(r.code, 0, r.stderr)
+    assert.ok(existsSync(outside), 'the file outside the project was deleted')
+    assert.match(r.stdout, /outside the project, left in place/)
+    for (const path of HUB_FILES) assert.ok(!existsSync(join(dir, path)), `${path} is left`)
+  } finally {
+    rmSync(outside, { force: true })
     cleanup(dir)
   }
 })

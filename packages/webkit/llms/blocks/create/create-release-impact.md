@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-release-impact")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [OverflowCount](../../components/overflow-count.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-shortcuts`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [OverflowCount](../../components/overflow-count.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -41,9 +41,9 @@ When a run ends, one `Alert` above the columns says how it ended: `severity="dan
 
 One flush `Card` per resource (a named `section`, its `header` slot holding the type, the tags and the switch), in the order of the request path (service, policy, storage, error page). The header has the type icon and label and, on the end side, a Required `Tag` (warning), a Read-only `Tag` with a lock when the release keeps the active version, or an include `Switch` named by `aria-label` and explained by a `Tooltip` ("Leave edge-policy out of this release"). A left-out resource collapses to one sentence saying what keeps serving.
 
-### D. Resource and version — `Field`, `Input`, `Select`, `Tag` (required)
+### D. Resource and version — `KeyValueList`, `Field`, `Select`, `Tag` (required)
 
-Two `Field`s side by side from `sm` up: the resource as a `readonly` `Input` (so its `Field.Label` names a real control) and its version. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
+Side by side from `sm` up: the resource name as text in a `KeyValueList` (it is fixed, so it is not a field and takes no Tab stop) and its version `Field`. A Read-only resource shows both the name and the kept version as text in one two-column `KeyValueList`; its header already carries the Read-only `Tag`, so no disabled `Select` is drawn. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
 
 ### E. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
 
@@ -1145,7 +1145,7 @@ export const dependencyCount = (card: ReleaseImpactResource) =>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
@@ -1245,15 +1245,32 @@ export const dependencyCount = (card: ReleaseImpactResource) =>
           Kept from the active release.
         </p>
 
-        <div class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2">
-          <Field>
-            <Field.Label>Resource</Field.Label>
-            <Input
-              :model-value="card.name"
-              size="medium"
-              readonly
-            />
-          </Field>
+        <KeyValueList
+          v-if="card.readonly"
+          :columns="2"
+          :aria-label="`${card.name} release`"
+          data-testid="release-resource-card__kept"
+        >
+          <KeyValueList.Item label="Resource">
+            <bdi>{{ card.name }}</bdi>
+          </KeyValueList.Item>
+          <KeyValueList.Item label="Version">
+            <bdi>{{ versionLabel(card, card.versionId) }}</bdi>
+          </KeyValueList.Item>
+        </KeyValueList>
+
+        <div
+          v-else
+          class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2"
+        >
+          <KeyValueList
+            :aria-label="`${card.name} resource`"
+            data-testid="release-resource-card__resource"
+          >
+            <KeyValueList.Item label="Resource">
+              <bdi>{{ card.name }}</bdi>
+            </KeyValueList.Item>
+          </KeyValueList>
 
           <Field :invalid="!card.versions.length">
             <Field.Label>Version</Field.Label>
@@ -1261,7 +1278,7 @@ export const dependencyCount = (card: ReleaseImpactResource) =>
               v-model="card.versionId"
               size="medium"
               placeholder="Select a version"
-              :disabled="deploying || card.readonly || !card.versions.length"
+              :disabled="deploying || !card.versions.length"
               :invalid="!card.versions.length"
               :display-value="(value) => versionLabel(card, value)"
             >

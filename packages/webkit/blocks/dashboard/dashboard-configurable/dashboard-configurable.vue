@@ -6,6 +6,7 @@
   import ChartCard from '@aziontech/webkit/chart-card'
   import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/webkit/dashboard-grid'
   import DonutChart from '@aziontech/webkit/donut-chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -128,6 +129,13 @@
   const labels = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
   const chartSeries = computed(() => props.series ?? (blocked.value ? {} : sampleSeries))
   const sources = computed(() => props.sources ?? (blocked.value ? [] : sampleSources))
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      sources.value.length === 0 &&
+      Object.values(chartSeries.value).every((entry) => !entry?.length)
+  )
+
   const cardOf = (id: string) => cards[id as ConfigurableDashboardCardId]
   const seriesOf = (id: string) => chartSeries.value[id as ConfigurableDashboardChartId] ?? []
 
@@ -186,7 +194,28 @@
         data-testid="dashboard-configurable__error"
         @action="(event: MouseEvent) => emit('retry', event)"
       />
-      <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-chart-bar"
+        title="No requests yet"
+        description="Requests, regions, errors and response time appear here once a service serves its first request."
+        data-testid="dashboard-configurable__empty"
+      >
+        <template #actions>
+          <Button
+            label="Create Application"
+            icon="az az-plus"
+            size="medium"
+            href="/applications/new"
+          />
+        </template>
+      </EmptyState>
+
+      <div
+        v-if="!nothing"
+        class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+      >
         <p
           v-if="editing"
           class="m-0 min-w-0 grow text-body-sm text-(--text-muted)"
@@ -215,6 +244,7 @@
       </div>
 
       <DashboardGrid
+        v-if="!nothing"
         v-model:layout="layout"
         :editing="editing"
         aria-label="Traffic overview cards"

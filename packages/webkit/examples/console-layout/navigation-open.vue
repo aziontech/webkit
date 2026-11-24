@@ -48,7 +48,7 @@
       <div class="layout-column">
         <PageHeader
           title="Workloads"
-          description="Press ⌘K or Ctrl K and choose Collapse sidebar to fold the rail."
+          description="Applications and functions running in this account."
         />
       </div>
     </div>

@@ -119,7 +119,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 ## Responsive
 
 - Container queries: none.
-- Narrow: buttons wrap; the title wraps anywhere, inline code included, so the whole command in it stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
+- Narrow: buttons wrap; the title wraps between words (inline code included, breaking inside a word only when it cannot fit), so a flag such as `--env` is never split and the whole command stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
 - Touch: medium buttons (44 px on coarse pointers).
 - Reflow: no page-level horizontal scroll at 320 px; the arguments field keeps each line of code whole (`wrap="off"`), grows to 12 lines, then scrolls inside itself, sideways for a long line.
 - Touch: on coarse pointers (`pointer-coarse:`) the confirmation-phrase field and the arguments field (a `Textarea`) type at 16 px (`text-body-md`), so iOS Safari does not zoom the page on focus.
@@ -149,8 +149,9 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
     >
       <KeyValueList aria-label="Command to run">
         <KeyValueList.Item label="Command">
-          <code class="text-label-code-sm [overflow-wrap:anywhere] text-(--text-default)"
-            >azion deploy --env production --workload storefront</code
+          <code class="text-label-code-sm [overflow-wrap:break-word] text-(--text-default)"
+            >azion deploy <span class="whitespace-nowrap">--env production</span>
+            <span class="whitespace-nowrap">--workload storefront</span></code
           >
         </KeyValueList.Item>
         <KeyValueList.Item label="Environment">production</KeyValueList.Item>

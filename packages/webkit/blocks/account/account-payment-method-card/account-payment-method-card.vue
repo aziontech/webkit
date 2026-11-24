@@ -6,6 +6,7 @@
   import Input from '@aziontech/webkit/input'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { computed, nextTick, reactive, watch } from 'vue'
 
   import { sampleCard } from './sample'
@@ -129,6 +130,8 @@
     editingCard.value = false
   }
 
+  useEscapeToCancel(cancelEditingCard, { enabled: () => editingCard.value && !locked.value })
+
   watch(editingCard, (editing, wasEditing) => {
     if (!editing && wasEditing) focusById('card-change')
   })
@@ -171,6 +174,7 @@
             variant="outline"
             size="small"
             :disabled="disabled"
+            disabled-reason="You can change the card once the current request finishes."
             @click="startEditingCard"
           />
         </div>

@@ -89,7 +89,10 @@ beside it in tabular numbers.
 
 ### L. Empty regions — `EmptyState` (required)
 
-Each region names the quarter in its empty state: trend cards
+When the whole quarter has nothing reported, the tiles keep their dash (nothing was reported, so zero
+would be false) and one bordered page-level `EmptyState` replaces the trends, goals and commentary:
+`No results reported for Q3 2025`, what fills the page, and `Show Q4 2025` as the next step. When only
+some regions are empty, each names the quarter in its own empty state: trend cards
 (`No results for Q3` / `Nothing was reported in this period. Select a later quarter.`), goals and
 commentary (`Leads add notes here when they review the quarter.`).
 
@@ -186,7 +189,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the reported quarter (`v-model:quarter`).
 - Loading: `loading` is set; tiles and charts render their own `Skeleton`; goals and commentary hold Skeleton rows.
-- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, every trend card keeps its box with an `EmptyState` that names the quarter, and goals and commentary say what fills them.
+- Empty: a quarter with nothing reported (`kpis` and `trends` are `{}`, `goals` and `notes` are `[]`); tiles show a dash with no delta, and one page-level `EmptyState` names the quarter and offers the next later one in place of the trend cards, goals and commentary.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related
@@ -198,7 +201,7 @@ Then delete `sample.ts` and its import.
 
 - `Default` — primary (the code below)
 - `Loading` — While the quarter loads, the tiles and charts render their own Skeleton and the goals and commentary hold Skeleton rows, so the page does not reflow when data arrives.
-- `Empty` — A quarter with nothing reported. The tiles show a dash with no delta, every trend card keeps its box with an EmptyState that names the quarter and points to a later one, and the goals and commentary each say what fills them.
+- `Empty` — A quarter with nothing reported. The tiles show a dash with no delta, and one bordered page-level EmptyState names the quarter and offers the next later one in place of the trend cards, goals and commentary.
 - `Error` — The request for the quarter failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-executive-summary", { variant })`, or the file under `blocks/dashboard/dashboard-executive-summary/variants/`.
@@ -211,6 +214,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -353,6 +357,18 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const months = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
   const trendData = computed(() => props.trends ?? (blocked.value ? {} : sampleTrends))
   const notes = computed(() => props.notes ?? (blocked.value ? [] : sampleNotes))
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      goals.value.length === 0 &&
+      notes.value.length === 0 &&
+      Object.values(trendData.value).every((trend) => !trend?.values.length) &&
+      Object.values(kpis.value).every((kpi) => kpi?.value == null)
+  )
+  const laterQuarter = computed(() => {
+    const index = quarters.indexOf(quarter.value)
+    return index > 0 ? quarters[index - 1] : ''
+  })
 
   const trendCards = computed(() =>
     trendCharts.map((chart) => {
@@ -439,7 +455,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         description="Headline results for the quarter, progress on its goals, twelve-month trends and notes from the leads."
       >
         <template #actions>
-          <div class="w-36">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="quarter"
@@ -503,7 +519,31 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         </ul>
       </section>
 
-      <div class="grid grid-cols-1 items-start gap-(--spacing-md) xl:grid-cols-12">
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-chart-line"
+        :title="'No results reported for ' + quarter"
+        description="The scorecard, trends, goals and notes fill in once the quarter reports its first month."
+        data-testid="dashboard-executive-summary__empty"
+      >
+        <template
+          v-if="laterQuarter"
+          #actions
+        >
+          <Button
+            :label="'Show ' + laterQuarter"
+            variant="outline"
+            size="medium"
+            @click="quarter = laterQuarter"
+          />
+        </template>
+      </EmptyState>
+
+      <div
+        v-else
+        class="grid grid-cols-1 items-start gap-(--spacing-md) xl:grid-cols-12"
+      >
         <section
           aria-label="Trends"
           class="grid min-w-0 grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] md:grid-cols-2 md:[--chart-grid-columns:2] xl:col-span-8"
@@ -738,7 +778,7 @@ export const sampleNotes: ExecutiveSummaryDashboardNote[] = [
   {
     id: 'note-04',
     author: 'Emma Wilson',
-    initials: 'MS',
+    initials: 'EW',
     role: 'Head of Finance',
     date: '2026-09-30',
     dateLabel: 'Sep 30, 2026',
@@ -765,7 +805,7 @@ export const sampleNotes: ExecutiveSummaryDashboardNote[] = [
   {
     id: 'note-01',
     author: 'Daniel Moore',
-    initials: 'LM',
+    initials: 'DM',
     role: 'VP of Engineering',
     date: '2026-09-12',
     dateLabel: 'Sep 12, 2026',

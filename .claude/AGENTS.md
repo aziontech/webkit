@@ -30,7 +30,7 @@ Current main workspaces:
 
 ## 3) Environment and tooling
 
-- Node.js: `>= 22.18.0`
+- Node.js: `>= 24` (`.nvmrc`, `engines.node`)
 - Package manager: `pnpm` (workspace-first)
 - Install dependencies from root only:
 
@@ -213,7 +213,7 @@ The trigger logic now lives in the orchestrator command [`.claude/commands/compo
 - Colors, spacing, max-width, and shape come from semantic `var(--*)` tokens. No hex, no Tailwind palette names (`bg-gray-*`), no external/legacy color utilities (`text-color`, `surface-*`).
 - `defineOptions({ name, inheritAttrs: false })` + `useAttrs()`; the root merges the consumer `class` with `cn()` over a flat literal (no `rootClasses` computed, no class presets — see [`rules/styling.md`](rules/styling.md)). Never declare `class` in `defineProps`.
 - `data-testid`: the root falls back to the component's own kebab name (`'button'`, a sub-component its own name, `'dialog-header'`); inner parts are `${testId}__<part>` (two underscores). No category in a test id.
-- Composition Pattern only when the consumer needs to swap the order or omit parts (Dialog, Card composto, Tabs, Accordion, DropdownMenu, Sheet/Drawer, Form). When in doubt, stay monolithic. When applying it, ship the complete shadcn-vue anatomy (e.g. Dialog = Root + Trigger + Portal + Overlay + Content + Title + Description + Close).
+- Composition Pattern only when the consumer needs to swap the order or omit parts (Dialog, a composed Card, Tabs, Accordion, DropdownMenu, Drawer, Form). When in doubt, stay monolithic. When applying it, ship the complete shadcn-vue anatomy (e.g. Dialog = Root + Trigger + Content + Header + Title + Description + Body + Footer + Close; Content renders the overlay and the teleport, so there is no Portal or Overlay part).
 - **shadcn-vue patterns** (see COMPONENT_REQUIREMENTS § 2.5-2.9):
   - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components; variant unions exported as named types (`export type ButtonVariant = ...`); `cn` helper from `@aziontech/webkit/utils/cn` for class merging; `<name>.figma.ts` Code Connect mappings (config at `packages/webkit/figma.config.json`; publishing requires `FIGMA_ACCESS_TOKEN`); `userEvent` from `@testing-library/user-event` in browser tests.
   - **No `asChild` / `as`** (`.claude/rules/root-element.md`; `webkit/no-polymorphic-as-prop` blocks it): link-or-button switches on `href`, and overlay Trigger parts forward onto the control in their slot. No Slot helper exists or is planned.
@@ -249,13 +249,14 @@ For deeper, package-specific instructions, agents should also read [`packages/we
 
 ## 12) Active enforcement (Claude Code hooks)
 
-Eight hooks in [`.claude/hooks/`](hooks/) act as physical guard rails on top of the cultural rules above. They are wired up in [`.claude/settings.json`](settings.json) and run automatically — the agent cannot bypass them.
+Nine hooks in [`.claude/hooks/`](hooks/) act as physical guard rails on top of the cultural rules above. They are wired up in [`.claude/settings.json`](settings.json) and run automatically — the agent cannot bypass them.
 
 ### 12.1) Tokens, references and authoring
 
 - **[`.claude/hooks/validate-tokens.mjs`](hooks/validate-tokens.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks new content introducing hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`), legacy UI-kit color utilities (`text-color`, `surface-*`), `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations are not retroactively flagged.
 - **[`.claude/hooks/validate-references.mjs`](hooks/validate-references.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks imports that don't resolve: `@aziontech/webkit/<subpath>` without a matching `package.json#exports`, relative paths to no file, uninstalled npm packages, missing workspaces.
 - **[`.claude/hooks/validate-authoring.mjs`](hooks/validate-authoring.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — runs the shared authoring checks (prose comments, composable signatures, `as`/`asChild` props) over every write under `packages/` and blocks a write that adds a violation; the CI ratchet `check-authoring.mjs` runs the same engine.
+- **[`.claude/hooks/validate-naming.mjs`](hooks/validate-naming.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — runs the naming engine (`packages/webkit/scripts/lib/naming-rules.mjs`) on the file being written and blocks only the naming violations the write adds ([`rules/naming.md`](rules/naming.md)).
 - **[`.claude/hooks/enforce-component-create.mjs`](hooks/enforce-component-create.mjs)** (PreToolUse `Write`) — blocks the first `Write` of a new `.vue` under `packages/webkit/src/components/<category>/<name>/` when the session transcript shows no reference to the `component-create` skill/command. Forces the agent to invoke the orchestrator first.
 
 ### 12.2) Spec-driven enforcement

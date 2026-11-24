@@ -68,6 +68,7 @@
 - Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
 - `data-variant` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
 - A row with no `image` draws its `mark` (the client's logo, flattened to one ink that inverts in the dark theme); an author with an `avatar` URL shows the photo, otherwise the initials
+- Broken cover: an `image` that fails to load is dropped, so the cover shows its `mark` when it has one and otherwise the plain `--bg-surface` panel, never the browser's broken-image glyph.
 - A row whose `target` is `_blank` opens in a new tab (with `rel="noopener"`)
 - `categoryParam` (`category-search`): on mount (client only) a query value that matches one of `categories` selects it and scrolls the band into view
 

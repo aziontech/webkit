@@ -37,10 +37,15 @@
     '[mask-image:linear-gradient(to_right,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)] ' +
     'rtl:-translate-x-1/2 rtl:[mask-image:linear-gradient(to_left,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)]'
 
-  const MAP_FADE_CLASS =
-    'absolute inset-0 ' +
-    '[background-image:linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)] ' +
-    'rtl:[background-image:linear-gradient(to_left,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)]'
+  const MAP_MASK_CLASS =
+    'absolute inset-0 [mask-composite:intersect] ' +
+    '[mask-image:linear-gradient(to_right,transparent_0%,black_50%),linear-gradient(to_top,transparent_0%,black_25%)] ' +
+    'rtl:[mask-image:linear-gradient(to_left,transparent_0%,black_50%),linear-gradient(to_top,transparent_0%,black_25%)]'
+
+  const NETWORK_MASK_CLASS =
+    'absolute inset-0 [mask-composite:intersect] ' +
+    '[mask-image:linear-gradient(to_bottom,transparent_0%,black_18%),linear-gradient(to_right,transparent_0%,color-mix(in_srgb,black_28%,transparent)_22%,color-mix(in_srgb,black_72%,transparent)_40%,black_56%)] ' +
+    'rtl:[mask-image:linear-gradient(to_bottom,transparent_0%,black_18%),linear-gradient(to_left,transparent_0%,color-mix(in_srgb,black_28%,transparent)_22%,color-mix(in_srgb,black_72%,transparent)_40%,black_56%)]'
 </script>
 
 <template>
@@ -68,28 +73,28 @@
     </template>
 
     <template v-else-if="backdrop === 'map'">
-      <div class="absolute inset-y-0 end-0 w-full md:w-3/5">
-        <NetworkMap
-          region="atlantic"
-          density="medium"
-          position="right"
-          fade="vignette"
-          :scale="1"
-          :opacity="0.5"
-          :animated="animated"
-        />
+      <div
+        data-slot="backdrop-fade"
+        :class="MAP_MASK_CLASS"
+      >
+        <div class="absolute inset-y-0 end-0 w-full md:w-3/5">
+          <NetworkMap
+            region="atlantic"
+            density="medium"
+            position="right"
+            fade="vignette"
+            :scale="1"
+            :opacity="0.5"
+            :animated="animated"
+          />
+        </div>
       </div>
-      <div
-        class="absolute inset-0 [background-image:linear-gradient(to_right,var(--bg-canvas)_0%,transparent_50%)] rtl:[background-image:linear-gradient(to_left,var(--bg-canvas)_0%,transparent_50%)]"
-      />
-      <div
-        class="absolute inset-x-0 bottom-0 h-1/4 [background-image:linear-gradient(to_top,var(--bg-canvas),transparent)]"
-      />
     </template>
 
     <template v-else>
       <div
-        class="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent_0%,black_18%)]"
+        data-slot="backdrop-fade"
+        :class="NETWORK_MASK_CLASS"
       >
         <NetworkMap
           region="atlantic"
@@ -101,7 +106,6 @@
           :animated="animated"
           traffic
         />
-        <div :class="MAP_FADE_CLASS" />
       </div>
     </template>
   </div>

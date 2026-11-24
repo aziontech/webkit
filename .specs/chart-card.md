@@ -3,10 +3,10 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 5b904a57c99e40e6a9881106a7fe9eecd81a03e1ec29023b954bbd0573dfaa0d
+checksum: 008cfe3e1c7b78b67e27b4867e928859442f29091f1522f5d7a302f6246039c0
 spec_version: 6
 created: 2026-10-20
-last_updated: 2026-11-15
+last_updated: 2026-11-24
 ---
 
 # ChartCard — Component Spec
@@ -184,7 +184,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-draggable`, `data-resizable` mirror the props
 - `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
 - `data-flush` on the content is set when the padding is off (`padded` false)
-- Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
+- Responsive: the root is the `@container/chart-card`. The header and footer wrap; the controls stay at the end of the title row, and when they cannot fit beside the title they wrap to a line of their own, still aligned to the end, never stretched to full width under a start-aligned title.
 
 ## Motion & Animations
 
@@ -215,7 +215,7 @@ A pointer resize follows the pointer 1:1 with no transition; it is direct manipu
 ## Accessibility (WCAG 2.1 AA)
 
 - The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
-- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
+- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them), 44 px on a coarse pointer (10 px around them).
 - Drag handle: a real `<button>` named "Move" plus the card title ("Move card" without a title), described by the arrow-key hint. Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle, and the handle announces "Moved to position 2 of 3" through the shared polite live region. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.

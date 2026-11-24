@@ -1822,6 +1822,199 @@ Budget-raise: contact-hub-section 9.55 KB → 9.8 KB (measured 9.75 KB): the sec
 Budget-raise: newsletter-section 14 KB → 14.3 KB (measured 14.25 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once.
 Budget-raise: job-posting-section 63.05 KB → 63.35 KB (measured 63.32 KB): the click-open Hint (HELP-A-1) merged with the SectionBand frame (LA-2); both changes landed in the same entry.
 Budget-raise: feature-tabs-section 59.85 KB → 59.9 KB (measured 59.85 KB, a rounding hair over): the SectionBand frame (LA-2) merged with the in-product help branch.
+Budget-raise: doc-markdown 41.05 KB → 41.5 KB (measured 41.44 KB): the inline `<StatusIndicator>` tag (A5P3-L02-1, the component itself stays an async chunk) plus the DocCallout, DocCard, DocFrame and DocPrompt fixes of audit-5 P3 lane L02 that the entry imports statically.
+Budget-raise: doc-card 2.45 KB → 2.5 KB (measured 2.48 KB): a linked card without `linkLabel` draws its link glyph so it differs from a plain card at rest (A5P3-032).
+Budget-raise: doc-frame 9.9 KB → 9.95 KB (measured 9.91 KB): no zoom on a coarse pointer and lazy, async-decoded stills (A5P3-L02-4).
+Budget-raise: doc-prompt 13.2 KB → 13.35 KB (measured 13.33 KB): the prompt drops the whitespace that opens and closes its slot, so a block prompt no longer starts one space in (A5P3-027).
+Budget-raise: doc-page-header 32.9 KB → 32.95 KB (measured 32.92 KB): a free `lastUpdated` string renders alone, without "Last updated" and a `time` element whose `datetime` is not a date (A5P3-027).
+Budget-raise: timestamp 20.35 KB → 20.4 KB (measured 20.39 KB): the 40 px coarse-pointer hit layer on the trigger (A5P3-034).
+Budget-raise: file-preview 8.2 KB → 8.25 KB (measured 8.23 KB): the meta line splits the type and the size so the size never truncates on a phone (A5P3-033).
+Budget-raise: copy-text 10.5 KB → 10.65 KB (measured 10.61 KB): middle truncation that keeps the end of a long value visible (A5P3-L02-3).
+
+## StatTile loading keeps the loaded shape (2026-11-24, audit-5 P3, A5P3-138)
+
+While `loading`, StatTile now reserves the delta line (when `deltaLabel` is set) and the sparkline (when `trend` has two or more points) with Skeletons, as its spec already promised, so a row of KPI tiles no longer grows by about 80 px when the data lands.
+
+Budget-raise: stat-tile 9.35 KB → 9.4 KB (measured 9.39 KB): two loading Skeletons that reserve the delta line and the sparkline height (A5P3-138), so dashboards do not shift on arrival.
+Budget-raise: context-menu 11.7 KB → 11.75 KB (measured 11.71 KB): its items gain the danger severity for destructive actions such as Delete (A5P3-066, A5P3-L04-2); the shared item row carries one more prop and one class.
+
+## One reason per raised entry (2026-11-24, audit-5 P3 lane L13)
+
+`check-size-ratchet.mjs` now asks for one `Budget-raise: <name> …: <reason>` line per raised entry, read from the PR body and from this file, instead of any single `Budget-raise:` line. Against `main` one raise had no line of its own:
+
+Budget-raise: network-map 6.5 KB → 7.1 KB (measured 6.97 KB): NetworkMap traffic (MapMesh rays and packets, a still frame under reduced motion), on in BannerArt network (M2.10 row 43); it peaked at 7.5 KB and was lowered to 7.1 KB.
+
+FlowDiagram's fit stops probing a row layout on every resize callback (A5P3-242): it remembers the scroller and list size it last probed at and skips the probe when they have not changed, and a step change cancels the pending frame instead of fitting twice. Measured on a height-only resize of the viewport, the row probes (two style and layout passes each) dropped from 2 to 0.
+
+Budget-raise: flow-diagram 22 KB → 22.1 KB (measured 22.05 KB): FlowDiagram fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242, resize-only layout work halved).
+Budget-raise: flow-diagram-root 19.75 KB → 19.85 KB (measured 19.79 KB): FlowDiagram fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242).
+Budget-raise: console-trace-scene 85.5 KB → 85.6 KB (measured 85.56 KB): carries FlowDiagram, whose fit skips the row probe when the scroller and list size are unchanged (audit-5 P3 A5P3-242).
+
+The autoplay hairline of QuoteTabs, MediaTabs and ArticleHighlightSection (A5P3-235) no longer re-renders ten times a second: one `setTimeout` per slide advances the band, the hairline is one catalogued `animate-autoplay-progress` (a `scale`, not a `width`) restarted per slide and held with `animation-play-state`, and an IntersectionObserver holds the rotation while the band is off screen. Before: 10 reactive updates and 10 style recalculations of the bar per second, off screen too; after: none between slides, none off screen.
+
+Budget-raise: media-tabs 10.25 KB → 10.45 KB (measured 10.41 KB): MediaTabs autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: quote-tabs 24.6 KB → 24.85 KB (measured 24.78 KB): QuoteTabs autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: article-highlight-section 12.65 KB → 13.05 KB (measured 12.98 KB): ArticleHighlightSection, now on the shared useAutoplayProgress instead of its own copy, autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: client-quotes-section 27.85 KB → 28.05 KB (measured 28.00 KB): carries QuoteTabs, whose autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+Budget-raise: feature-tabs-section 59.9 KB → 60.1 KB (measured 60.06 KB): carries MediaTabs, whose autoplay advances on one timeout per slide with a CSS hairline and holds off screen (audit-5 P3 A5P3-235).
+
+## PR #1170 push 8e86a5b59 to e106f1a04 (copied from the PR body, audit A5P3-209)
+
+Budget-raise: date-picker-root 42.15 KB → 42.2 KB — imports Select (list minimum width)
+Budget-raise: date-range-picker 53.2 KB → 53.3 KB — imports Select (list minimum width)
+Budget-raise: table-root 1.95 KB → 2.3 KB — scroll cue fade spans and wrapper (measured 1.89 → 2.25)
+Budget-raise: data-table 57.05 KB → 57.45 KB — scroll cue fade spans and wrapper (57.02 → 57.40)
+Budget-raise: data-grid 10.5 KB → 11.15 KB — scroll cue plus edge measuring the grid lacked before (10.50 → 11.12)
+Budget-raise: console-application-scene 118.35 KB → 118.75 KB — includes DataTable scroll cue (118.34 → 118.70)
+Budget-raise: console-trace-scene 82.35 KB → 82.8 KB — embeds FlowDiagram
+Budget-raise: article-index-section 35.2 KB → 35.25 KB — imports Select (list minimum width)
+Budget-raise: story-index-section 33.7 KB → 33.75 KB — imports Select (list minimum width)
+Budget-raise: hero-form-section 51.15 KB → 51.25 KB — imports Select (list minimum width)
+Budget-raise: plan-comparison-section 37.55 KB → 37.6 KB — imports Select (list minimum width)
+Budget-raise: job-posting-section 56.95 KB → 57 KB — imports Select (list minimum width)
+Budget-raise: listing-index-section 40.2 KB → 40.55 KB — includes DataTable scroll cue and the Select list minimum width (measured 40.48)
+Budget-raise: listing-table-section 25.05 KB → 25.25 KB — includes Table scroll cue (24.92 → 25.19)
+Budget-raise: timestamp 19.45 KB → 19.5 KB — date and time formatted separately so Safari and the server render the same text (hydration fix, measured 19.48)
+Budget-raise: phone-input 33.5 KB → 33.55 KB — imports Select (list minimum width)
+Budget-raise: select 22.4 KB → 22.45 KB — outline list gets a 256 px minimum width (R5 Type picker fix)
+Budget-raise: attribute-editor 17.75 KB → 17.95 KB — rows stack until every column fits (data-fit breakpoints, R5 Type picker fix)
+Budget-raise: tag-editor 19.65 KB → 19.85 KB — imports AttributeEditor (data-fit breakpoints)
+Budget-raise: schema-form 61.4 KB → 61.7 KB — imports AttributeEditor (data-fit breakpoints)
+Budget-raise: table 7.6 KB → 7.9 KB — scroll cue fade spans and wrapper (7.55 → 7.85)
+Budget-raise: flow-diagram 21.55 KB → 21.95 KB — same code, the compound includes the root
+Budget-raise: flow-diagram-root 19.3 KB → 19.75 KB — row-fit measuring, re-fit when lazy cards render, and inline-edge scroll fade (nodes were clipped off-screen)
+Budget-raise: date-picker 42.35 KB → 42.4 KB — imports Select (list minimum width)
+
+## Lines restored from history (audit A5P3-209, 2026-11-24)
+
+The per-entry ratchet found raises whose line a later merge had dropped from this file. The SectionBand lines and the NetworkMap line come back as they were written in 5ec1d66d2; the two Select lines record the merge 7571abba9, which added the A5-015 and A5-028 raises (each measured from 23 KB and 19.35 KB on its own lane, both recorded above) together.
+
+Budget-raise: article-highlight-section 12.5 KB → 12.65 KB (measured 12.61 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: capability-grid-section 8.25 KB → 8.35 KB (measured 8.33 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: client-mosaic-section 7.95 KB → 8.2 KB (measured 8.17 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: client-quotes-section 27.7 KB → 28.15 KB (measured 28.10 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: client-story-columns-section 8.9 KB → 9.2 KB (measured 9.16 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: competitor-comparison-section 25.75 KB → 25.95 KB (measured 25.94 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: compliance-logos-section 8.25 KB → 8.55 KB (measured 8.53 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: feature-tiles-section 6.35 KB → 6.55 KB (measured 6.54 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: investor-marks-section 5 KB → 5.1 KB (measured 5.09 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: listing-index-section 43.25 KB → 43.5 KB (measured 43.48 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: listing-table-section 26.5 KB → 26.7 KB (measured 26.68 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: logo-wall-section 24.7 KB → 25.2 KB (measured 25.13 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: media-split-section 17.25 KB → 17.6 KB (measured 17.56 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: media-split-stack-section 17.6 KB → 17.9 KB (measured 17.88 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: platform-directory-section 4.8 KB → 5 KB (measured 4.99 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: recognition-marquee-section 21.75 KB → 22.2 KB (measured 22.17 KB): carries Avatar, which gains the `presence` prop (SUP-04): the presence dot and its name in the accessible label, and five locale strings.
+Budget-raise: stats-section 4.8 KB → 5.05 KB (measured 5.03 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: story-index-section 36.25 KB → 36.6 KB (measured 36.57 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: subject-grid-section 8.7 KB → 8.95 KB (measured 8.91 KB): the section draws its frame through the shared SectionBand part (roadmap 1.7, LA-2); measured alone it carries the part, while a page of sections loads it once (all 46 sections together: 1,615.95 KB → 1,615.56 KB).
+Budget-raise: select 23.3 KB → 23.35 KB: the merge 7571abba9 carries both the A5-015 panel Tab order and the A5-028 named ScrollArea, each recorded above from 23 KB on its own lane.
+Budget-raise: select-content 19.65 KB → 19.7 KB: the merge 7571abba9 carries both the A5-015 panel Tab order and the A5-028 named ScrollArea, each recorded above from 19.35 KB on its own lane.
+Budget-raise: network-map 6.5 KB → 7.1 KB (measured 6.97 KB): NetworkMap traffic (MapMesh rays and packets, a still frame under reduced motion), on in BannerArt network (M2.10 row 43); it peaked at 7.5 KB and was lowered to 7.1 KB.
+Budget-raise: embed 1.1 KB → 1.15 KB (measured 1.13 KB): Embed frames only https and decides allow-same-origin after mount, from the page origin, so a same-origin page cannot lift its sandbox (A5P3-223).
+Budget-raise: doc-markdown 41.05 KB → 41.15 KB (measured 41.12 KB): it embeds CodeBlock and StreamingResponse text (A5P3-044, A5P3-046, A5P3-051).
+Budget-raise: property-filter 36.65 KB → 36.8 KB (measured 36.78 KB): one Properties section heading and the 28rem cap from the field start (A5P3-036).
+Budget-raise: doc-code-group 34.6 KB → 34.65 KB (measured 34.64 KB): it embeds CodeBlock, whose copy moves into the header (A5P3-051).
+Budget-raise: console-application-scene 126.4 KB → 126.45 KB (measured 126.42 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: console-trace-scene 85.5 KB → 85.55 KB (measured 85.52 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: feature-widgets-section 20.3 KB → 20.35 KB (measured 20.30 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: cli-terminal-section 47.65 KB → 47.7 KB (measured 47.69 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: feature-tabs-section 59.9 KB → 59.95 KB (measured 59.93 KB): it embeds CodeBlock, whose copy moves into the header, and the locale strings of lane L03 (A5P3-051).
+Budget-raise: config-provider 12.9 KB → 12.95 KB (measured 12.92 KB): it bundles the English catalog, which gains three strings (A5P3-045, A5P3-050).
+Budget-raise: locales-pt-BR 12 KB → 12.05 KB (measured 12.01 KB): three new strings and the neutral DataTable empty copy (A5P3-043, A5P3-045, A5P3-050).
+Budget-raise: locales-es 12.1 KB → 12.15 KB (measured 12.14 KB): three new strings and the neutral DataTable empty copy (A5P3-043, A5P3-045, A5P3-050).
+Budget-raise: code-block 34.2 KB → 34.25 KB (measured 34.21 KB): the copy control moves into the tab strip or filename bar (A5P3-051).
+Budget-raise: log-viewer-content 29.6 KB → 29.65 KB (measured 29.63 KB): the first two lines reserve the copy footprint (A5P3-051).
+Budget-raise: streaming-response 43.35 KB → 43.55 KB (measured 43.52 KB): no-break space before a citation and balanced parentheses in link destinations (A5P3-044, A5P3-046).
+Budget-raise: conversation-history 9.05 KB → 9.15 KB (measured 9.12 KB): the empty state gains its description line (A5P3-045).
+Budget-raise: prompt-queue 4.75 KB → 5.4 KB (measured 5.37 KB): a clamped message gets a Show more / Show less toggle (A5P3-050); Button and VueUse were left out to keep it small.
+Budget-raise: tool-call 3.5 KB → 3.55 KB (measured 3.52 KB): the tool name chip wraps instead of truncating (A5P3-053).
+Budget-raise: log-viewer 43.8 KB → 43.85 KB (measured 43.84 KB): the first two lines reserve the copy footprint (A5P3-051).
+Budget-raise: log-viewer-steps 42.2 KB → 42.25 KB (measured 42.22 KB): it embeds LogViewer content (A5P3-051).
+Budget-raise: console-layout-root 84.25 KB → 84.35 KB (measured 84.34 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: doc-layout 75.6 KB → 75.65 KB (measured 75.64 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: doc-markdown 41.5 KB → 41.55 KB (measured 41.52 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: browser-frame 14.95 KB → 15 KB (measured 14.96 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: search-trigger 9.85 KB → 9.9 KB (measured 9.85 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: copy-prompt-button 9.35 KB → 9.4 KB (measured 9.35 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: doc-agent-card 15.3 KB → 15.35 KB (measured 15.33 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: date-picker-root 14.9 KB → 14.95 KB (measured 14.92 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: date-range-picker 56.75 KB → 56.8 KB (measured 56.76 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: property-filter 36.8 KB → 36.85 KB (measured 36.81 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: chip 7.95 KB → 8 KB (measured 7.96 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: doc-code-group 34.65 KB → 34.7 KB (measured 34.66 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: doc-prompt 13.35 KB → 13.4 KB (measured 13.35 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: doc-page-header 32.95 KB → 33.05 KB (measured 33.01 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: logo-wall 4.95 KB → 5.05 KB (measured 5.00 KB): square cells run three columns on phones and linked cells show a touch cue (A5P3-087).
+Budget-raise: media-split 5.5 KB → 5.65 KB (measured 5.62 KB): the media link leaves the tab order when an action points at the same URL, and the phone description steps down (A5P3-070, A5P3-074).
+Budget-raise: console-application-scene 126.45 KB → 126.55 KB (measured 126.50 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: console-trace-scene 85.6 KB → 85.7 KB (measured 85.66 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: article-body-section 47.5 KB → 47.9 KB (measured 47.88 KB): links say when they open a new tab and the phone trail becomes one back link (A5P3-088, A5P3-097).
+Budget-raise: article-cards-section 6.45 KB → 6.5 KB (measured 6.47 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: article-index-section 37.95 KB → 38 KB (measured 37.99 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: capability-grid-section 8.35 KB → 8.4 KB (measured 8.35 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: hero-form-section 57.3 KB → 57.55 KB (measured 57.51 KB): shared section pieces it imports grew in the P3 run (new-tab notices, tracking, autoplay).
+Budget-raise: media-split-section 17.6 KB → 17.9 KB (measured 17.88 KB): it embeds MediaSplit (A5P3-070, A5P3-074).
+Budget-raise: site-header-section 59.95 KB → 60.05 KB (measured 60.01 KB): the menu button mirrors the sheet state and the navigations are named apart (A5P3-069).
+Budget-raise: plan-comparison-section 40.1 KB → 40.15 KB (measured 40.11 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: feature-scroll-section 20.95 KB → 21 KB (measured 20.99 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: feature-widgets-section 20.35 KB → 20.5 KB (measured 20.49 KB): illustrations sit inset like the scenes, plus the merged scene fixes (A5P3-094).
+Budget-raise: network-section 27.6 KB → 27.65 KB (measured 27.63 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: client-mosaic-section 8.2 KB → 8.3 KB (measured 8.26 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: client-story-columns-section 9.2 KB → 9.25 KB (measured 9.22 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: compliance-logos-section 8.55 KB → 8.75 KB (measured 8.70 KB): it embeds LogoWall, whose square cells run three columns on phones with a touch link cue (A5P3-087).
+Budget-raise: job-posting-section 63.35 KB → 63.55 KB (measured 63.51 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: logo-wall-section 24.9 KB → 25 KB (measured 24.95 KB): it embeds LogoWall (A5P3-087).
+Budget-raise: template-gallery-section 30.4 KB → 30.55 KB (measured 30.53 KB): colour logo lookups and shared section fixes of the P3 run (A5P3-243).
+Budget-raise: cli-terminal-section 47.7 KB → 47.75 KB (measured 47.71 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: feature-tabs-section 60.1 KB → 60.35 KB (measured 60.33 KB): the autoplay hairline, the phone code-tile label strip and the merged lanes add up (A5P3-235, A5P3-098).
+Budget-raise: media-split-stack-section 17.9 KB → 18.25 KB (measured 18.23 KB): each action is named with its band title and it embeds MediaSplit (A5P3-070).
+Budget-raise: faq-section 7.55 KB → 8.5 KB (measured 8.47 KB): the answer slot renders in a padded block and answer links announce a new tab (A5P3-083, A5P3-088).
+Budget-raise: contact-hub-section 9.8 KB → 9.85 KB (measured 9.81 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: chart-card-drag-handle 2.7 KB → 2.75 KB (measured 2.71 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: timestamp 20.4 KB → 20.45 KB (measured 20.43 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: tutorial-panel-hotspot 14.1 KB → 14.15 KB (measured 14.12 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: locales-es 12.15 KB → 12.2 KB (measured 12.17 KB): the message keys the P3 run added (new-tab notice, empty table, prompt queue, schema form, site header).
+Budget-raise: phone-input 35.15 KB → 35.3 KB (measured 35.28 KB): its number field gains the 44px touch layer InputGroup no longer clips (A5P3-018).
+Budget-raise: language-select 29.05 KB → 29.1 KB (measured 29.07 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: select 23.35 KB → 23.4 KB (measured 23.37 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: chat-message 20.35 KB → 20.4 KB (measured 20.38 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: chat-message-feedback 9.5 KB → 9.55 KB (measured 9.52 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: citation 11.45 KB → 11.5 KB (measured 11.46 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: prompt-input 15.6 KB → 15.65 KB (measured 15.62 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: prompt-input-attach-button 6.7 KB → 6.75 KB (measured 6.73 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: prompt-input-model-picker 15.35 KB → 15.45 KB (measured 15.40 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: prompt-input-context-picker 15.25 KB → 15.3 KB (measured 15.28 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: prompt-input-tools 17.75 KB → 17.85 KB (measured 17.80 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: button-group 16.9 KB → 17 KB (measured 16.95 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: schema-form 68.85 KB → 69.05 KB (measured 69.00 KB): a repeat names its Add button after the item and Advanced settings lines up with the fields (A5P3-008).
+Budget-raise: file-preview 8.25 KB → 8.3 KB (measured 8.25 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: table-cell-link 20.65 KB → 20.7 KB (measured 20.66 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: table-cell-time 19.05 KB → 19.1 KB (measured 19.09 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: filter-menu 37.2 KB → 37.25 KB (measured 37.22 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: filter-menu-chip-group 22 KB → 22.1 KB (measured 22.05 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: split-button 17.15 KB → 17.2 KB (measured 17.16 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: log-viewer 43.85 KB → 43.9 KB (measured 43.85 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: table-filter 6.65 KB → 6.7 KB (measured 6.67 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: flow-diagram-bind 16.2 KB → 16.25 KB (measured 16.24 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: input-group 2.25 KB → 2.3 KB (measured 2.25 KB): inner touch layers reach past the frame instead of being clipped (A5P3-018).
+Budget-raise: theme-switcher 18.3 KB → 18.35 KB (measured 18.32 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: dropdown-menu 12.75 KB → 12.8 KB (measured 12.76 KB): items take the danger severity for Delete (A5P3-066).
+Budget-raise: multi-select-trigger 10.3 KB → 10.35 KB (measured 10.30 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: select-content 19.7 KB → 19.75 KB (measured 19.71 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: console-layout 85.95 KB → 86.05 KB (measured 86.01 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: breadcrumb 26.9 KB → 27 KB (measured 26.95 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: breadcrumb-root 26.85 KB → 26.95 KB (measured 26.91 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: navigation-menu 26.9 KB → 26.95 KB (measured 26.90 KB): shared parts it imports grew in the audit-5 P3 run (Tooltip start-aligned text, new catalog keys, the menu danger severity, InputGroup touch layers, Kbd hidden on touch screens).
+Budget-raise: tooltip 5.8 KB → 5.85 KB (measured 5.80 KB): long content aligns to the start (A5P3-004).
+Budget-raise: command-input 7.6 KB → 7.65 KB (measured 7.60 KB): the Esc keycap hides on a touch screen (A5P3-001).
+Budget-raise: command-list 0.65 KB → 1.5 KB (measured 1.49 KB): the listbox takes its accessible name from the catalog (`command.title`), which brings the translator (A5P3-001).
+Budget-raise: css-button 11 KB → 11.05 KB (measured 11.02 KB gzip): the theme stylesheet every app compiles gains the phone tracking step of the display headings (A5P3-080) and the `animate-autoplay-progress` keyframes (A5P3-235).
+Budget-raise: css-icons 15.25 KB → 15.3 KB (measured 15.29 KB gzip): the same theme additions (A5P3-080, A5P3-235), plus `font-display: block` on the icon font face (A5P3-238).
+Budget-raise: media-tabs 10.45 KB → 10.5 KB (measured 10.49 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
+Budget-raise: quote-tabs 24.85 KB → 24.9 KB (measured 24.85 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
+Budget-raise: client-quotes-section 28.05 KB → 28.1 KB (measured 28.07 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
+Budget-raise: feature-tabs-section 60.35 KB → 60.45 KB (measured 60.40 KB): `useAutoplayProgress` splits its slide timer and visibility observer into helpers to meet the 60-line function limit (CODE_QUALITY.md 3.1).
 Budget-raise: console-layout-root 84.25 KB → 84.8 KB (measured 84.74 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
 Budget-raise: doc-markdown 41.05 KB → 41.15 KB (measured 41.09 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
 Budget-raise: console-application-scene 126.4 KB → 126.85 KB (measured 126.79 KB): Avatar presence (SUP-AV-1, about 0.5 KB wherever an avatar renders) and the shared minute-clock pause (SUP-CD-2), re-measured after merging #1203's newer budgets.
@@ -1844,3 +2037,21 @@ Budget-raise: css-icons 15.25 KB → 15.35 KB (measured 15.28 KB): the four Mark
 Budget-raise: date-picker-root 14.9 KB → 14.95 KB (measured 14.93 KB): the merge of the quality-baselines stack into the 6.0 branch adds the branch's DatePicker `focus()` (exposed for a field that reports an error) to the stack's lazy panel split.
 Budget-raise: date-range-picker 56.75 KB → 58 KB (measured 57.98 KB): the merge into the 6.0 branch puts the branch's NumberInput for the relative duration (the text-only Input change) into the stack's relative part, so the picker now carries NumberInput.
 Budget-raise: filter-menu-root 33.7 KB → 33.75 KB (measured 33.73 KB): the merge into the 6.0 branch combines the branch's control changes with the stack's Avatar `presence`, both carried by the filter menu.
+Budget-raise: console-layout-root 84.8 KB → 84.85 KB (measured 84.84 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: doc-markdown 41.55 KB → 41.6 KB (measured 41.58 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: quote-tabs 25.1 KB → 25.35 KB (measured 25.31 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: console-application-scene 126.85 KB → 127 KB (measured 126.95 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: console-trace-scene 86 KB → 86.15 KB (measured 86.10 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: article-body-section 48 KB → 48.4 KB (measured 48.36 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: feature-widgets-section 20.5 KB → 20.55 KB (measured 20.53 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: client-quotes-section 28.35 KB → 28.55 KB (measured 28.53 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: logo-wall-section 25.4 KB → 25.45 KB (measured 25.43 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: cli-terminal-section 47.75 KB → 47.8 KB (measured 47.76 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: timestamp 20.5 KB → 20.55 KB (measured 20.51 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: locales-pt-BR 12.65 KB → 12.7 KB (measured 12.66 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: streaming-response 43.55 KB → 43.6 KB (measured 43.57 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: filter-menu 37.7 KB → 37.75 KB (measured 37.71 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: filter-menu-root 33.7 KB → 33.8 KB (measured 33.76 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: filter-menu-chip-group 22.5 KB → 22.55 KB (measured 22.52 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: markdown-editor 31.9 KB → 31.95 KB (measured 31.91 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.
+Budget-raise: console-layout 86.45 KB → 86.5 KB (measured 86.49 KB): the audit-5 P3 fixes and PR #1203's in-product help and support work both grew parts it imports; each side fit its own budget, the merge adds the two.

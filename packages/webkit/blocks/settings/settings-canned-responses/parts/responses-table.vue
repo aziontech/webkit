@@ -188,6 +188,7 @@
               <DropdownMenu.Item
                 value="remove"
                 label="Delete"
+                severity="danger"
               />
             </DropdownMenu.Group>
           </TableCellActions>

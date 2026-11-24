@@ -325,7 +325,13 @@
                 v-for="column in definition"
                 :key="column.key"
                 class="min-w-0 truncate"
-                >{{ column.label }}</span
+                >{{ column.label
+                }}<span
+                  v-if="column.required"
+                  :data-testid="`${testId}__header-required`"
+                  class="ms-(--spacing-2xs) text-label-sm text-(--text-default)"
+                  >*</span
+                ></span
               >
               <span class="flex justify-end gap-(--spacing-2xs)">
                 <span

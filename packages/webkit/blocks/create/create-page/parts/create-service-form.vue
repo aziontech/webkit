@@ -112,7 +112,7 @@
             <legend class="sr-only">Create Service</legend>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</h2>
+              <h2 class="text-heading-2xs text-(--text-default)">General</h2>
               <Card :padded="false">
                 <template #default>
                   <Item.List>
@@ -150,9 +150,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
-                Delivery settings
-              </h2>
+              <h2 class="text-heading-2xs text-(--text-default)">Delivery settings</h2>
               <Card :padded="false">
                 <template #default>
                   <Item.List>
@@ -253,7 +251,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Origins</h2>
+              <h2 class="text-heading-2xs text-(--text-default)">Origins</h2>
               <Card :padded="false">
                 <template #default>
                   <Item.List>
@@ -362,7 +360,7 @@
             />
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Debug rules</h2>
+              <h2 class="text-heading-2xs text-(--text-default)">Debug rules</h2>
               <Card :padded="false">
                 <template #default>
                   <Item.List>

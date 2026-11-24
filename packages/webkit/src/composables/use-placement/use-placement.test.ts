@@ -496,6 +496,8 @@ describe('usePlacement listeners', () => {
       await nextTick()
       expect(scrolls(addDoc)).toBe(1)
       expect(resizes()).toBe(1)
+      const scrollOptions = addDoc.mock.calls.find(([type]) => type === 'scroll')?.[2]
+      expect(scrollOptions).toEqual({ capture: true, passive: true })
       isOpen.value = false
       await nextTick()
       expect(scrolls(removeDoc)).toBe(1)

@@ -153,12 +153,18 @@
         <slot name="aside" />
       </div>
 
-      <Skeleton
-        v-if="loading"
-        width="60%"
-        height="1.5rem"
-        :data-testid="`${testId}__loading`"
-      />
+      <template v-if="loading">
+        <Skeleton
+          width="60%"
+          height="1.5rem"
+          :data-testid="`${testId}__loading`"
+        />
+        <Skeleton
+          v-if="deltaLabel"
+          width="40%"
+          height="1.25rem"
+        />
+      </template>
       <div
         v-else
         class="flex min-w-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) group-data-[grouped]/stat-tile:justify-between"
@@ -214,8 +220,13 @@
       </div>
     </div>
 
+    <Skeleton
+      v-if="loading && hasTrend"
+      height="3rem"
+      class="mt-(--spacing-xs)"
+    />
     <SparkChart
-      v-if="!loading && hasTrend && hasValue"
+      v-else-if="!loading && hasTrend && hasValue"
       :values="trend"
       size="medium"
       :data-testid="`${testId}__sparkline`"

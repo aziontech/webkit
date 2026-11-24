@@ -178,6 +178,8 @@ export const ptBR: Messages = {
     },
     empty: 'Nenhuma mensagem na fila',
     remove: 'Remover da fila',
+    showMore: 'Mostrar mais',
+    showLess: 'Mostrar menos',
     attachments: {
       one: '{count} anexo',
       other: '{count} anexos'
@@ -487,6 +489,8 @@ export const ptBR: Messages = {
     previous30: 'Últimos 30 dias',
     older: 'Mais antigas',
     emptyTitle: 'Nenhuma conversa ainda.',
+    emptyDescription:
+      'Suas conversas com o assistente aparecem aqui depois que você fizer uma pergunta.',
     delete: 'Excluir {title}',
     newChat: 'Novo chat',
     search: 'Buscar conversas',
@@ -1113,6 +1117,7 @@ export const ptBR: Messages = {
     optionsError: 'Não foi possível carregar as opções.',
     writeOnlyPlaceholder: 'Deixe vazio para manter o valor atual',
     item: 'Item {index}',
+    addItem: 'Adicionar {item}',
     advanced: 'Configurações avançadas',
     mapKey: 'Chave',
     mapValue: 'Valor',
@@ -1157,7 +1162,9 @@ export const ptBR: Messages = {
     open: 'Abrir navegação',
     home: 'Página inicial da Azion',
     search: 'Buscar',
-    menu: 'Menu'
+    menu: 'Menu',
+    navigation: 'Principal',
+    menuNavigation: 'Menu principal'
   },
   splitButton: {
     moreActions: 'Mais ações',
@@ -1208,8 +1215,8 @@ export const ptBR: Messages = {
   table: {
     selectAll: 'Selecionar todas as linhas',
     selectRow: 'Selecionar a linha {row}',
-    emptyTitle: 'Nenhum resultado ainda',
-    emptyDescription: 'Comece criando seu primeiro recurso.',
+    emptyTitle: 'Nenhum dado ainda',
+    emptyDescription: 'As linhas aparecem aqui quando houver dados para mostrar.',
     errorTitle: 'Não foi possível carregar os dados'
   },
   tableExportButton: {
@@ -1473,7 +1480,7 @@ export const ptBR: Messages = {
   copyCommandSection: {
     command: 'Comando',
     prompt: 'Prompt',
-    copyCommandSection: 'Copiar comando',
+    copyCommand: 'Copiar comando',
     copyPrompt: 'Copiar prompt'
   },
   searchTrigger: {

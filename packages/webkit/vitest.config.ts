@@ -7,6 +7,7 @@ import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
 import { ariaSnapshot } from './src/test/aria-snapshot'
+import { DurationSequencer } from './src/test/duration-sequencer'
 import { emulateMedia } from './src/test/emulate-media'
 import { emulateTouch } from './src/test/emulate-touch'
 import { renderOnServer } from './src/test/server-render'
@@ -42,6 +43,7 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,js}'],
     setupFiles: ['./src/test/setup.ts'],
     retry: process.env.CI ? 2 : 0,
+    sequence: { sequencer: DurationSequencer },
     provide: { perfOnCi: Boolean(process.env.CI) },
     browser: {
       enabled: true,

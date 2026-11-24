@@ -2,7 +2,7 @@ import '../../../test/reflow.css'
 
 import userEvent from '@testing-library/user-event'
 import { render, waitFor, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
 import Composed from '../../../../examples/flow-diagram/composed.vue'
@@ -121,6 +121,18 @@ describe('FlowDiagram', () => {
     expect(viewport.hasAttribute('tabindex')).toBe(false)
   })
 
+  it('caps the stacked column at a readable width on a wide screen', async () => {
+    const { container } = render(() => h('div', { style: 'width: 1280px' }, [h(Topology)]))
+    const list = () => container.querySelector('[data-testid="flow-diagram__list"]') as HTMLElement
+    await waitFor(() => expect(list()?.dataset['direction']).toBe('column'))
+    const probe = document.createElement('div')
+    probe.style.width = 'var(--container-xl)'
+    container.appendChild(probe)
+    const cap = probe.getBoundingClientRect().width
+    expect(cap).toBeGreaterThan(0)
+    expect(list().getBoundingClientRect().width).toBeLessThanOrEqual(cap + 0.5)
+  })
+
   it('never leaves a lazily loaded row overflowing a viewport that cannot take focus', async () => {
     const { container } = render(() => h('div', { style: 'width: 414px' }, [h(RequestPath)]))
     await waitFor(() => expect(cards(container).length).toBe(3))
@@ -145,6 +157,44 @@ describe('FlowDiagram', () => {
     await waitFor(() => expect(list().dataset['direction']).toBe('column'))
     frame.style.width = '1400px'
     await waitFor(() => expect(list().dataset['direction']).toBe('row'))
+  })
+
+  it('probes the row again only when the width or the steps change', async () => {
+    const { container } = render(() =>
+      h('div', { 'data-testid': 'frame', style: 'width: 720px' }, [h(Default)])
+    )
+    const frame = container.querySelector('[data-testid="frame"]') as HTMLElement
+    const list = () => container.querySelector('[data-testid="flow-diagram__list"]') as HTMLElement
+    const viewport = container.querySelector(
+      '[data-testid="flow-diagram__viewport"]'
+    ) as HTMLElement
+    await waitFor(() => expect(cards(container).length).toBe(5))
+    await waitFor(() => expect(list().dataset['direction']).toBe('column'))
+    const nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve))
+    await nextFrame()
+    await nextFrame()
+    const setAttribute = vi.spyOn(list(), 'setAttribute')
+    const probes = () =>
+      setAttribute.mock.calls.filter(
+        ([name, value]) => name === 'data-direction' && value === 'row'
+      ).length
+    try {
+      viewport.style.minHeight = `${viewport.offsetHeight + 40}px`
+      await nextFrame()
+      await nextFrame()
+      expect(probes()).toBe(0)
+      list().append(document.createElement('span'))
+      await Promise.resolve()
+      expect(probes()).toBe(1)
+      await nextFrame()
+      await nextFrame()
+      expect(probes()).toBe(1)
+      frame.style.width = '700px'
+      await waitFor(() => expect(probes()).toBe(2))
+      expect(list().dataset['direction']).toBe('column')
+    } finally {
+      setAttribute.mockRestore()
+    }
   })
 
   it.each(['ltr', 'rtl'])(

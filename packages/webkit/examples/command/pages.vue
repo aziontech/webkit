@@ -47,9 +47,9 @@
           value="switch-project"
           page="projects"
           :keywords="['change', 'open']"
-          >Switch Project</CommandItem
+          >Switch project</CommandItem
         >
-        <CommandItem value="new-project">Create Project</CommandItem>
+        <CommandItem value="new-project">Create project</CommandItem>
       </CommandGroup>
       <CommandPage
         name="projects"

@@ -2,7 +2,9 @@
   import Alert from '@aziontech/webkit/alert'
   import type { BarListItem } from '@aziontech/webkit/bar-list'
   import BarList from '@aziontech/webkit/bar-list'
+  import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -189,6 +191,17 @@
   const entities = computed(() => props.entities ?? (blocked.value ? [] : sampleEntities))
   const alerts = computed(() => props.alerts ?? (blocked.value ? [] : sampleAlerts))
 
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      series.value.length === 0 &&
+      openByLevel.value.length === 0 &&
+      types.value.length === 0 &&
+      entities.value.length === 0 &&
+      alerts.value.length === 0 &&
+      Object.values(kpis.value).every((kpi) => !kpi?.value)
+  )
+
   const { formatNumber } = useLocale()
   const fixed = (value: number, digits: number) =>
     formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
@@ -212,7 +225,7 @@
         description="What is open, how severe it is, what kind it is and who is involved."
       >
         <template #actions>
-          <div class="w-44 shrink-0">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"
@@ -269,7 +282,29 @@
         </ul>
       </section>
 
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-bell"
+        :title="`No alerts in the ${periodPhrase}`"
+        description="Alerts appear here when a detection rule flags a user, a device or a service account."
+        data-testid="dashboard-alerts__empty"
+      >
+        <template
+          v-if="period !== '90d'"
+          #actions
+        >
+          <Button
+            label="Show the last 90 days"
+            variant="outline"
+            size="medium"
+            @click="period = '90d'"
+          />
+        </template>
+      </EmptyState>
+
       <div
+        v-else
         class="grid grid-cols-1 items-stretch gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
         <AlertsCard

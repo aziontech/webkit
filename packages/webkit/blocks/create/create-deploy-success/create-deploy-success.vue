@@ -50,7 +50,7 @@
   const emit = defineEmits<{
     /** A next-step tile without href was activated. */
     'next-step': [event: MouseEvent, step: DeploySuccessNextStep]
-    /** Manage service was pressed. */
+    /** Manage service, or Manage resource when nothing serves it yet, was pressed. */
     manage: [event: MouseEvent]
   }>()
 
@@ -63,6 +63,9 @@
   const lead = computed(() => (source.value ? `${props.description} Source:` : props.description))
   const currentResources = computed(() => props.resources ?? sampleResources)
   const currentNextSteps = computed(() => props.nextSteps ?? sampleNextSteps)
+  const manageLabel = computed(() =>
+    currentDeployment.value ? 'Manage service' : 'Manage resource'
+  )
 </script>
 
 <template>
@@ -139,7 +142,10 @@
 
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Next steps</h2>
-              <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
+              <div
+                class="grid grid-cols-1 gap-(--spacing-sm)"
+                data-testid="create-deploy-success__next-steps"
+              >
                 <IntegrationCard
                   v-for="step in currentNextSteps"
                   :key="step.title"
@@ -160,7 +166,7 @@
 
             <Button
               class="w-full"
-              label="Manage service"
+              :label="manageLabel"
               variant="secondary"
               size="large"
               @click="(event: MouseEvent) => emit('manage', event)"

@@ -985,6 +985,7 @@ export const activityDays = (items: DetailTicketActivity[]) => {
         <DropdownMenuItem
           value="delete"
           label="Delete ticket"
+          severity="danger"
         >
           <template #leading
             ><i

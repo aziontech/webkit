@@ -119,6 +119,12 @@
     "assets/americamovil-extended-color.svg": {
       "to": "assets/america-movil-extended-color.svg"
     },
+    "assets/gpa-photo.jpg": {
+      "to": "assets/gpa-photo.webp"
+    },
+    "assets/netshoes-photo.jpg": {
+      "to": "assets/netshoes-photo.webp"
+    },
     "assets/calvinklein-extended-mono.svg": {
       "to": "assets/calvin-klein-extended-mono.svg"
     },

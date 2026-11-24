@@ -273,6 +273,7 @@
   --animate-slide-out-end: slideOutEnd 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
+  --animate-autoplay-progress: autoplayProgress 2100ms linear forwards;
   --animate-flow-dash: flowDash 700ms linear infinite;
   --animate-flow-dash-settle: flowDash 700ms linear 6;
   --animate-texture-wave-a: textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards;
@@ -493,6 +494,7 @@
   --animate-slide-out-end: slideOutEnd 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
+  --animate-autoplay-progress: autoplayProgress 2100ms linear forwards;
   --animate-flow-dash: flowDash 700ms linear infinite;
   --animate-flow-dash-settle: flowDash 700ms linear 6;
   --animate-texture-wave-a: textureWaveA 4800ms cubic-bezier(0.39, 0.57, 0.56, 1) forwards;
@@ -557,12 +559,12 @@
   --text-heading-3xl-font-size: 1.875rem;
   --text-heading-3xl-line-height: 1.25;
   --text-heading-3xl-font-weight: 400;
-  --text-heading-3xl-letter-spacing: -0.046em;
+  --text-heading-3xl-letter-spacing: -0.035em;
   --text-heading-2xl-text-wrap-style: balance;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1;
   --text-heading-2xl-font-weight: 400;
-  --text-heading-2xl-letter-spacing: -0.053em;
+  --text-heading-2xl-letter-spacing: -0.035em;
   --text-heading-xl-text-wrap-style: balance;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
@@ -728,7 +730,9 @@
     --text-amount-lg-font-size: 3.5rem;
     --text-amount-md-font-size: 1.5rem;
     --text-heading-3xl-font-size: 3.5rem;
+    --text-heading-3xl-letter-spacing: -0.046em;
     --text-heading-2xl-font-size: 3rem;
+    --text-heading-2xl-letter-spacing: -0.053em;
     --text-heading-xl-font-size: 2.25rem;
     --text-heading-lg-font-size: 1.875rem;
     --text-heading-md-font-size: 1.5rem;
@@ -1227,6 +1231,11 @@
   0% { inset-inline-start: -200%; inset-inline-end: 100%; }
   60% { inset-inline-start: 107%; inset-inline-end: -8%; }
   100% { inset-inline-start: 107%; inset-inline-end: -8%; }
+}
+
+@keyframes autoplayProgress {
+  0% { scale: 0 1; }
+  100% { scale: 1 1; }
 }
 
 @keyframes flowDash {

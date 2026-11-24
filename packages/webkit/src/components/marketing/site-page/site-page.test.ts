@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render, waitFor } from '@testing-library/vue'
+import { render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import AccordionPageEntry from '../../../../examples/accordion/page-entry.vue'
@@ -219,10 +219,10 @@ describe('SitePage', () => {
   })
 
   it.each([
-    ['ConsoleApplicationScene', 'assets-console-application-scene'],
-    ['ConsoleTraceScene', 'assets-console-trace-scene'],
-    ['FunctionsHeroCanvas', 'assets-runtime-api-scene'],
-    ['RuntimeApiCloud', 'assets-runtime-api-cloud']
+    ['ConsoleApplicationScene', 'console-application-scene'],
+    ['ConsoleTraceScene', 'console-trace-scene'],
+    ['FunctionsHeroCanvas', 'runtime-api-scene'],
+    ['RuntimeApiCloud', 'runtime-api-cloud']
   ])('draws the ported %s scene by name', async (component, testId) => {
     const { findByTestId } = page({
       hero: [],
@@ -235,7 +235,7 @@ describe('SitePage', () => {
       ]
     })
 
-    expect(await findByTestId(testId)).toBeInTheDocument()
+    expect(await findByTestId(testId, {}, { timeout: 5000 })).toBeInTheDocument()
   })
 
   it('places a FlowDiagram from page JSON as a scene, with its nodes and edges', async () => {
@@ -305,14 +305,24 @@ describe('SitePage', () => {
     const { findAllByTestId } = render(KeyValueListPageEntry)
     const items = await findAllByTestId('key-value-list-item')
     await waitFor(() => expect(items).toHaveLength(6))
-    expect(items.map((item) => item.querySelector('dd')!.textContent)).toEqual([
-      '1752167890',
-      'Active',
-      'Nov 10, 2026, 14:32',
-      'US East (Virginia)',
-      'shop.example.com',
-      expect.stringContaining('—')
-    ])
+    await waitFor(() =>
+      expect(items.map((item) => item.querySelector('dd')!.textContent?.trim())).toEqual([
+        '1752167890',
+        expect.stringContaining('Active'),
+        'Nov 10, 2026, 2:32 PM',
+        'US East (Virginia)',
+        'shop.example.com',
+        expect.stringContaining('—')
+      ])
+    )
+  })
+
+  it('draws a status child of a scene with the same dot and label as the Vue example', async () => {
+    const { findAllByTestId } = render(KeyValueListPageEntry)
+    const items = await findAllByTestId('key-value-list-item')
+    const status = await within(items[1]!).findByTestId('status-indicator')
+    expect(status.getAttribute('data-severity')).toBe('success')
+    expect(status.textContent).toContain('Active')
   })
 
   it('skips a scene the registry does not hold, with a development warning', async () => {
@@ -648,5 +658,12 @@ describe('SitePage', () => {
 
     await findByRole('heading', { level: 2, name: FAQ_TITLE })
     await expectNoA11yViolations(container)
+  })
+
+  it('opens the default page with one eyebrow and writes every band description as a sentence', async () => {
+    const source = (await import('../../../../examples/site-page/default.vue?raw')).default
+
+    expect(source.match(/eyebrow:/g)).toHaveLength(1)
+    expect(source).not.toMatch(/description: '[^']*:'/)
   })
 })

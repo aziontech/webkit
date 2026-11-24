@@ -28,7 +28,7 @@
     title: string
     /** One sentence that defines the metric. */
     hint: string
-    /** The aggregation tag. */
+    /** The aggregation, written as muted text beside the title. */
     aggregation?: string
     /** The change tag; null hides it. */
     variation?: MetricCardVariation | null
@@ -79,7 +79,7 @@
 <template>
   <ChartCard :span="span">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+      <span class="inline-flex min-w-0 flex-1 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>{{ title }}</ChartCard.Title>
         <Hint :content="hint" />
       </span>
@@ -89,12 +89,11 @@
           class="hidden items-center gap-(--spacing-xs) sm:flex"
           :class="{ 'lg:hidden xl:flex': fit !== 'sm', 'data-wide:lg:flex': fit === 'wide' }"
         >
-          <Tag
-            :label="aggregation"
-            severity="neutral"
-            size="small"
-            icon="az az-calculator"
-          />
+          <span
+            class="text-label-sm text-(--text-muted)"
+            data-testid="metric-card__aggregation"
+            >{{ aggregation }}</span
+          >
           <Tag
             v-if="variation"
             :label="variation.label"

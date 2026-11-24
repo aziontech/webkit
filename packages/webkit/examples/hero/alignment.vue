@@ -8,7 +8,7 @@
       variant="screen"
       align="start"
       max-width="full"
-      offset="75dvh"
+      offset="40dvh"
     >
       <Hero.Title
         align="center"
@@ -21,7 +21,7 @@
       variant="screen"
       align="center"
       max-width="full"
-      offset="75dvh"
+      offset="40dvh"
     >
       <Hero.Title
         align="center"
@@ -34,7 +34,7 @@
       variant="screen"
       align="end"
       max-width="full"
-      offset="75dvh"
+      offset="40dvh"
     >
       <Hero.Title
         align="center"

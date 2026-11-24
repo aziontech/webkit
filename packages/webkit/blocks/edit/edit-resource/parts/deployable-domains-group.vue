@@ -96,6 +96,7 @@
                   <DropdownMenu.Item
                     value="delete"
                     label="Delete"
+                    severity="danger"
                   >
                     <template #leading
                       ><i
@@ -116,7 +117,7 @@
             >
             <Button
               type="button"
-              label="Add Domain"
+              label="Add domain"
               variant="outline"
               size="medium"
               icon="az az-plus"

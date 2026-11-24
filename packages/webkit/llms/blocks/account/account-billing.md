@@ -417,7 +417,9 @@ Each variant is the same screen in another state: `get_block("account/account-bi
         description="Your plan, your invoices and the cards they are charged to."
       >
         <template #actions>
-          <span class="text-body-sm text-(--text-muted)"
+          <span
+            v-if="!blocked"
+            class="text-body-sm text-(--text-muted)"
             >Updated {{ updatedFormat(updatedAt) }}</span
           >
           <Tooltip
@@ -1088,6 +1090,7 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
                 <DropdownMenu.Item
                   value="remove"
                   label="Remove"
+                  severity="danger"
                   :disabled="row.default"
                 />
               </DropdownMenu.Group>

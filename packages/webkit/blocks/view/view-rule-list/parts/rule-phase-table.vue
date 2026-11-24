@@ -6,6 +6,7 @@
   import Switch from '@aziontech/webkit/switch'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
 
   import type { UseRuleListPositionReturn } from '../composables/use-rule-list-position'
   import type { UseRuleListReorderReturn } from '../composables/use-rule-list-reorder'
@@ -48,6 +49,19 @@
     'clear-search': []
   }>()
 
+  const loadingRows = computed<RuleListRule[]>(() =>
+    Array.from({ length: props.group.total || 3 }, (_, index) => ({
+      id: `loading-${index}`,
+      name: '',
+      description: '',
+      phase: props.group.value,
+      author: '',
+      modified: '',
+      active: false,
+      locked: false
+    }))
+  )
+
   const { pinned, canMove, lockReason, position, step, reorderRows, reorderable } = props.reorder
   const { positionValue, onPositionInput, commitPosition, cancelPosition, onMoveSelect } =
     props.positioning
@@ -55,12 +69,12 @@
 
 <template>
   <DataTable
-    :data="loading ? [] : group.items"
+    :data="loading ? loadingRows : group.items"
     :columns="columns"
     row-key="id"
     :bordered="false"
     :loading="loading"
-    reorderable
+    :reorderable="!narrow"
     :row-reorderable="reorderable(group.value)"
     :aria-label="`${group.label} phase rules, in the order they run`"
     @update:data="(next: RuleListRule[]) => reorderRows(group.value, next)"

@@ -147,7 +147,7 @@ Two more gates hold the Change and Remove stages to their rules:
 - A `locked` spec passes CI but blocks edits to its component: bump `spec_version`, set it back
   to `approved`, re-validate, then edit. A shipped component's spec never goes back to `draft`.
 - The bundle budget only goes down. A PR that raises a limit in `.size-limit.json` needs a
-  `Budget-raise: <entry> <old> → <new>, <reason>` line in its body.
+  `Budget-raise: <entry> <old> → <new> (measured <n>): <reason>` line per raised entry, in its body or in `packages/webkit/docs/reviews/size-budgets-*.md`.
 
 ### For designers
 
@@ -231,7 +231,9 @@ or Solution has no `az az-<name>` icon, and checks that every locale catalog has
 repository root, with the same commands as CI, it also runs the MCP, theme and icons package tests and
 the icons manifest, `test:docs`, Stylelint, the lint canaries, the tests TypeScript check
 (`typecheck:webkit:tests`), the Prettier check (`check:webkit:format`), knip (`check:unused`),
-`check:versions`, `check:spelling` and the workflow linters. The `toolkit` job of
+`check:versions`, `check:spelling` and the workflow linters. The Husky `pre-push` hook runs the gates
+with `--bail`, so a push cannot skip them; set `WEBKIT_GATES_DONE=1` for one push when you have just
+run them yourself. The `toolkit` job of
 `.github/workflows/governance.yml` runs the same commands on **every** PR, except `check:size`, which
 runs in the `build` job; the lint, type, size, Vitest browser (including
 `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run when
@@ -239,8 +241,7 @@ runs in the `build` job; the lint, type, size, Vitest browser (including
 `apps/docs`, `apps/demos`, `apps/visual` change.
 
 What runs only in CI is listed, with the reason, in `CI_ONLY` in
-`packages/webkit/test/standards/run-gates.test.mjs`: ESLint, the source and docs type checks and type
-coverage (run them with the root `pnpm gates`), `test:ssr`, `check:pack`, the audit, the docs and
+`packages/webkit/test/standards/run-gates.test.mjs`: the docs type check, `check:pack`, the audit, the docs and
 demos builds, the consumer-app checks, and the browser and visual suites. That test fails when CI
 gains a step that is neither a gate nor listed there.
 
@@ -259,8 +260,10 @@ pnpm --filter @aziontech/webkit run check:usage -- auth/auth-sign-in "A sign-in 
 
 It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs
 `npx @aziontech/webkit init --yes`, points the app's `.mcp.json` at the packed MCP server (`@aziontech/webkit-mcp`), and runs
-`claude -p "<prompt>" --dangerously-skip-permissions --max-turns 40 --output-format json
---mcp-config .mcp.json --strict-mcp-config` there. It passes when a generated `src/**/*.vue`
+`claude -p "<prompt>" --permission-mode acceptEdits --allowedTools <list> --max-turns 40
+--output-format json --mcp-config .mcp.json --strict-mcp-config` there; the list is
+`USAGE_ALLOWED_TOOLS` in `scripts/check-usage.mjs` (the file tools, the `webkit` MCP server and
+`npx @aziontech/webkit`), so the session never runs with permissions skipped. It passes when a generated `src/**/*.vue`
 imports the component (for a block: at least 80 % of the components its primary SFC imports) and
 `webkit doctor` passes. It needs the `claude` CLI and an API key and costs one agent session, so
 it is not in the PR pipeline: run it locally or through the **Usage check** workflow
@@ -339,7 +342,7 @@ pnpm gates             # lint + Stylelint + format check + every typecheck + typ
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
 
-The `complete` gate (`pnpm --filter @aziontech/webkit run check:complete`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `check:size-ratchet` fails a PR that raises a size limit unless its body has a line starting `Budget-raise:`.
+The `complete` gate (`pnpm --filter @aziontech/webkit run check:complete`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `check:size-ratchet` fails a PR that raises a size limit unless each raised entry has its own `Budget-raise: <name> <old> → <new> (measured <n>): <reason>` line, in the PR body or in `packages/webkit/docs/reviews/size-budgets-*.md`.
 
 ## Testing
 

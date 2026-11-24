@@ -1,6 +1,6 @@
 # EditVariables
 
-A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
+A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
 ## When to use
 
@@ -20,7 +20,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create Variable`, the same height as Documentation, which opens the drawer.
+`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create variable`, the same height as Documentation, which opens the drawer.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -36,7 +36,7 @@ The same controls row as `view/view-table`, all bound to one client-mode `useCol
 
 ### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
+A right-side `Drawer` whose content is one `form` labeled Create variable or Edit variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
 
 ### F. Variables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
 
@@ -64,7 +64,7 @@ A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a
 
 ### L. List states — `EmptyState`, `Button` (required)
 
-With no variables at all, the card holds a state-first-use `EmptyState` (`No variables yet`) with Create Variable and Documentation. When the filter matches nothing, the table's `#empty` slot holds a no-match `EmptyState` (`No matching variables`) with an outlined Clear filters `Button`.
+With no variables at all, the card holds a state-first-use `EmptyState` (`No variables yet`) with Create variable and Documentation. When the filter matches nothing, the table's `#empty` slot holds a no-match `EmptyState` (`No matching variables`) with an outlined Clear filters `Button`.
 
 ### M. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
 
@@ -149,14 +149,14 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 
 ## Copy
 
-- **Title and create action:** "Variables" and "Create Variable"; the drawer title repeats "Create Variable", or reads "Edit Variable" from a row.
+- **Title and create action:** "Variables" and "Create variable"; the drawer title repeats "Create variable", or reads "Edit variable" from a row.
 - **Empty states:** "No variables yet" / "Create a variable to store a value your services read at runtime."; "No matching variables" / "No variable matches these filters."
 - **Delete dialog:** title and danger button "Delete variable"; the prompt reads "Type API_BASE_URL to confirm."
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
 - **Toasts:** "API_KEY created.", "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted."; save failure "Variables not saved. You are offline; check your connection and save again."
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
-- **Network list:** title "Create Network List"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
+- **Network list:** title "Create network list"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
 - **Paste panel:** label "Paste .env contents"; report "3 variables found. Lines starting with # are ignored.", "Line 5 is not KEY=value with an uppercase key and will be skipped.", "CACHE_TTL is already in the list; its value will be replaced."; buttons "Paste .env", "Add 3 variables", "Cancel".
 - **Buttons:** verb first, three words or fewer, e.g. "Upload", "Add variable", "Save".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -169,7 +169,7 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 - The `ToggleGroup` is labeled "Variables view"; the Upload button opens the system file picker through `useFilePicker`, so no hidden input sits in the tab order.
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
-- The drawer traps focus while open and returns it to Create Variable on close.
+- The drawer traps focus while open and returns it to Create variable on close.
 - `/` focuses the property filter from anywhere on the page, except while typing in a field.
 - The table rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused variable in the edit drawer as the row menu's Edit does, and Delete or Backspace opens the delete dialog. After a delete, focus lands on the next row.
 - `⌘ Enter` (`Ctrl Enter` off Apple) submits the open drawer's form from any field, the same as Save, in the create and edit drawer, the Paste .env drawer and the network list drawer. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
@@ -177,14 +177,14 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 ## States
 
 - List: the variables list page with the controls row and table, from `variables` (the sample when left out); the drawer is closed. `loading` spins Refresh and puts the table in its loading state.
-- First use: `variables` is `[]`; the card holds the state-first-use `EmptyState` with Create Variable.
+- First use: `variables` is `[]`; the card holds the state-first-use `EmptyState` with Create variable.
 - No match: the filter matches nothing; the table shows the no-match `EmptyState` with Clear filters.
 - Edit: a row's Edit opens the drawer on that variable; Save emits `save` with the variable and replaces it in the list and raises "<KEY> updated.".
 - Save failed: `saveError` is set when the save ends; the drawer stays open with its rows and a danger `Alert` above the sections.
 - Delete: a row's Delete opens the typed confirmation; confirming emits `delete`, removes the row and raises "<KEY> deleted.".
 - Create: `defaultOpen`; the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
-- PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
-- NetworkList: Create Network List opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
+- PasteEnv: Create variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
+- NetworkList: Create network list opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
 
 ## Related
 

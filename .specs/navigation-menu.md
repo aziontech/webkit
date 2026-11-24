@@ -7,9 +7,9 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 9850dcb600feac0d151d57460e515e389583ed601309ca029a05108d2b0d84d5
+checksum: b7147101f0a48d117f2dc2a14f3c137fdd723946d799b47d2ea2afe13bd2acc0
 created: 2026-05-22
-last_updated: 2026-11-17
+last_updated: 2026-11-24
 ---
 
 # Navigation Menu — Component Spec
@@ -175,15 +175,15 @@ list must name those properties; naming `transform` does not cover them and the
 animation silently snaps. Only the positioner, whose placement is an inline
 `transform: translate3d(...)`, transitions `transform`.
 
-| Trigger                             | Animation / Transition                                                                         | Token                                               | Reduced-motion fallback         |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------- |
-| trigger / entry hover, focus, press | `transition-colors`                                                                            | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| popup open / close                  | `transition-[opacity,scale]` — fade + `scale-95`, origin `--popup-origin` (the active trigger) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| popup box morph between panels      | `transition-[width,height]` driven by `--popup-width` / `--popup-height`                       | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| positioner move between triggers    | `transition-[transform]` (placement is a `translate3d`); suppressed on the first placement     | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| panel content swap                  | `transition-[opacity,translate]`, directional 24px slide keyed on `data-activation-direction`  | `duration-moderate-01` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| trigger chevron                     | `transition-[rotate]` (180° on open)                                                           | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| list sliding highlight              | `transition-[left,top,width,height,opacity]`                                                   | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                             | Animation / Transition                                                                           | Token                                               | Reduced-motion fallback         |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------- | ------------------------------- |
+| trigger / entry hover, focus, press | `transition-colors`                                                                              | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| popup open / close                  | `transition-[opacity,scale]` — fade + `scale-95`, origin `--popup-origin` (the active trigger)   | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| popup box morph between panels      | `transition-[width,height]` driven by `--popup-width` / `--popup-height`                         | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| positioner move between triggers    | `transition-[transform]` (placement is a `translate3d`); suppressed on the first placement       | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| panel content swap                  | `transition-[opacity,translate]`, directional 24px slide keyed on `data-activation-direction`    | `duration-moderate-01` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| trigger chevron                     | `transition-[rotate]` (180° on open)                                                             | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| list sliding highlight              | `transition-[translate,width,height,opacity]` (placed with `translate` from the list's top left) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -209,7 +209,7 @@ animation silently snaps. Only the positioner, whose placement is an inline
 - ARIA: the root is a `nav` landmark. A panel trigger is a disclosure button: `aria-expanded` reflects its panel and, while open, `aria-controls` names the panel (`role="region"`); it carries no `aria-haspopup`, since the panel is navigation, not a menu. A link trigger carries `aria-current="page"` when `active`. Tests: `navigation-menu.test.ts` › axe on the closed bar, the open panel and the vertical menu.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Touch target ≥40×40 px where the control is interactive; a `Trigger` grows to 44 px tall on a coarse pointer (`pointer-coarse:min-h-11`), like `Tabs.Trigger` and the `SidebarMenu` rows.
 
 ## Right-to-left
 

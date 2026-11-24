@@ -94,6 +94,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
   - `[&>*:last-child]:rounded-r-(--shape-control)` and `[&>*:not(:last-child)]:rounded-r-none`
   - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
   - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the _inner-facing_ border only
+- No clip: the root does not set `overflow`, so the `aria-hidden` touch-target layers of the controls inside (`data-slot="touch-target"`, shown under `pointer-coarse:`) reach the 44 px hit height past the frame. Instead of being clipped to the rounded frame, fills stay inside it by rounding: the outer corners of the first and last child are the frame's `--shape-control` radius (`!` so a child `Button` cannot override them), and every control inside a child (`button`, `a`, `[role=combobox]`, `[data-slot=input]`) and every wrapper between them takes `rounded-[inherit]`, so a hover or selected fill follows the frame's corner.
 
 ## Accessibility
 
@@ -120,7 +121,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <InputGroupRoot>
+  <InputGroupRoot class="w-full max-w-(--container-xs)">
     <InputGroupInput
       aria-label="Domain"
       placeholder="domain"
@@ -137,7 +138,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex w-full max-w-(--container-xs) flex-col gap-4">
     <InputGroup
       dir="ltr"
       size="small"
@@ -183,7 +184,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </script>
 
 <template>
-  <InputGroup dir="ltr">
+  <InputGroup
+    dir="ltr"
+    class="w-full max-w-(--container-xs)"
+  >
     <InputGroup.Addon>https://</InputGroup.Addon>
     <InputGroup.Input
       aria-label="Domain"

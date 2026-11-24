@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 83b5d0eb4ce605ec78e719c012cd1e4c115a5bc64063afcebe8b36f8b27c9031
+checksum: ae10e06ca6ec9c793f9c51baadc62f7c50d0e8698d159a31e4d5f314d58756cc
 created: 2026-11-16
-last_updated: 2026-11-19
+last_updated: 2026-11-24
 ---
 
 # FilePreview — Component Spec
@@ -157,7 +157,7 @@ _none_
 | `filePreview.document`        | `Preview of {name}`                                                         | —             |
 | `filePreview.truncated`       | `Showing the first {shown} characters. Download the file to see all of it.` | —             |
 
-- Formatting: `formatFileSize` (`Intl.NumberFormat` units) for `bytes`, `formatNumber` for the truncation count, both with the `ConfigProvider` locale.
+- Formatting: `formatFileSize` (`Intl.NumberFormat` units, the byte step as `B`: `182 B`, then `kB`, `MB`) for `bytes`, `formatNumber` for the truncation count, both with the `ConfigProvider` locale.
 
 ## Right-to-left
 
@@ -170,7 +170,7 @@ _none_
 ## Responsive
 
 - Container queries: none; it fills its column or drawer.
-- Narrow (≤ 640 px): the name truncates with an ellipsis, the meta line stays under it, the Download label stays.
+- Narrow (≤ 640 px): the name truncates with an ellipsis, the meta line stays under it, the Download label stays. On the meta line the type truncates first and the size never does, so a phone reads `application/js… · 182 B`.
 - Touch: the Download button and the `actions` slot keep the `Button` touch target.
 - Reflow: no horizontal page scroll at 320 px; long text lines wrap, an image scales down to the body width, and the PDF viewer fills the body width at a fixed height.
 
@@ -191,7 +191,7 @@ The component has no `variant` or `size`; its axis is the file type it is given,
 - Text — a long text file cut at `maxLength`, with the truncation note.
 - Unknown — a binary file with the no-preview state and Download.
 - Loading — the placeholder while the file loads.
-- Error — the error state with the app's message.
+- Error — the error state with the app's message (a preview failure that Download does not share, such as a timed-out preview service).
 
 ## Constraints — DO NOT
 

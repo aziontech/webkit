@@ -110,9 +110,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 <template>
   <CardGridRoot :columns="3">
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">One</div>
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">Two</div>
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">Three</div>
+    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
+      Deploy from Git with a preview for every branch.
+    </div>
+    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
+      Cache static assets in every region.
+    </div>
+    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
+      Block bots before they reach your code.
+    </div>
   </CardGridRoot>
 </template>
 ```

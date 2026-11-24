@@ -5,10 +5,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
 import { h } from 'vue'
 
+import DeploymentSettings from '../../blocks/account/account-deployment-settings/account-deployment-settings.vue'
+import OauthConsent from '../../blocks/auth/auth-sign-in/variants/oauth-consent.vue'
 import DeleteSettingsRow from '../../blocks/edit/edit-delete-dialog/variants/settings-row.vue'
 import FunctionArguments from '../../blocks/edit/edit-function/variants/arguments.vue'
 import FunctionTestRun from '../../blocks/edit/edit-function/variants/test-run.vue'
 import FirstUseLoading from '../../blocks/state/state-first-use/variants/loading.vue'
+import ToolCall from '../components/ai/tool-call/tool-call.vue'
 import Skeleton from '../components/feedback/skeleton/skeleton.vue'
 
 const overlaps = (a: DOMRect, b: DOMRect) =>
@@ -55,6 +58,41 @@ describe('clipped content', () => {
       expect(key.getBoundingClientRect().width).toBeGreaterThan(0)
       expect(key.scrollWidth).toBeLessThanOrEqual(key.clientWidth + 1)
     }
+  })
+
+  it('shows the whole signed-in email on the consent screen at 320px', async () => {
+    await page.viewport(320, 700)
+    const view = render(OauthConsent)
+    const email = await vi.waitFor(() => view.getByText('jane.doe@example.com'))
+    expect(email.scrollWidth).toBeLessThanOrEqual(email.clientWidth + 1)
+    expect(email.getBoundingClientRect().right).toBeLessThanOrEqual(320)
+  })
+
+  it('keeps the shared-setting tag inside the All services row at 320px', async () => {
+    await page.viewport(320, 700)
+    const view = render(DeploymentSettings)
+    const tag = await vi.waitFor(() => view.getByText(/on a shared setting/))
+    const trigger = tag.closest('button') as HTMLElement
+    expect(tag.getBoundingClientRect().right).toBeLessThanOrEqual(
+      trigger.getBoundingClientRect().right + 0.5
+    )
+  })
+
+  it('shows the whole tool title and name of a call 288px wide', async () => {
+    const view = render(() =>
+      h('div', { style: 'width: 288px' }, [
+        h(ToolCall, {
+          name: 'get_build_artifacts',
+          title: 'Read the latest build of storefront',
+          status: 'success'
+        })
+      ])
+    )
+    await document.fonts.ready
+    const code = view.container.querySelector('code') as HTMLElement
+    expect(code.scrollWidth).toBeLessThanOrEqual(code.clientWidth + 1)
+    const title = view.getByText('Read the latest build of storefront')
+    expect(title.scrollHeight).toBeLessThanOrEqual(title.clientHeight + 1)
   })
 
   it('reads the whole test run below the editor on a phone, with no pane to scroll', async () => {

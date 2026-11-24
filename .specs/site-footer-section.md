@@ -7,7 +7,7 @@ spec_version: 9
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-20
-checksum: 44e3b090adf90ed7814df1663ad737423fece195cc69ae0fdd2decc5dda5fac2
+checksum: 4f220fc2cceb2ee071e4a943210b502d9e9165f865c6a17d7215457404300caf
 ---
 
 # SiteFooterSection — Component Spec
@@ -56,7 +56,7 @@ The footer under every marketing page: the link columns, then the social row bes
     :socials="[
       { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
     ]"
-    status-label="All Systems Operational"
+    status-label="All systems operational"
     :languages="['EN', 'PT-BR', 'ES']"
   />
 </template>

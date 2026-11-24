@@ -28,6 +28,14 @@ const memberNames = () =>
     item.querySelector('[data-member-name]')?.textContent?.trim()
   )
 describe('account-team-permissions', () => {
+  it('says the access model the same way as Users: role for the account, teams for resources', () => {
+    const view = render(AccountTeamPermissions)
+    expect(view.container.textContent).toContain(
+      "A person's role decides what they can do on the account; their teams decide which resources they reach."
+    )
+    expect(view.container.textContent).not.toContain('nothing is granted per person')
+  })
+
   it('shows the view-table controls row over the teams', async () => {
     const view = render(AccountTeamPermissions)
     expect(view.getByRole('button', { name: 'Download CSV' })).not.toBeDisabled()
@@ -243,6 +251,9 @@ describe('account/account-team-permissions keyboard', () => {
     const name = view.getByLabelText(/^Name/) as HTMLInputElement
     const create = buttonByText('Create')
     expect(create.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    expect(create.querySelector('[data-testid="kbd"]')?.classList).toContain(
+      'pointer-coarse:in-[button]:hidden'
+    )
     await fireEvent.update(name, '')
     expect(pressShortcut('Enter', name).defaultPrevented).toBe(true)
     await waitFor(() => expect(view.getByText('This field is required.')).toBeTruthy())
@@ -252,6 +263,9 @@ describe('account/account-team-permissions keyboard', () => {
     const view = render(EditTeam)
     const save = view.getByRole('button', { name: 'Save changes' })
     expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
+    expect(save.querySelector('[data-testid="kbd"]')?.classList).toContain(
+      'pointer-coarse:in-[button]:hidden'
+    )
     pressShortcut('s')
     expect(save.getAttribute('aria-busy')).not.toBe('true')
     const name = view.getByLabelText(/^Name\b/) as HTMLInputElement

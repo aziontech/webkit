@@ -38,7 +38,7 @@ const navigation: SiteLayoutNavigation = {
 const footer: SiteLayoutFooter = {
   home: '/',
   columns: [{ title: 'Company', links: [{ label: 'About us', href: '/about' }] }],
-  statusLabel: 'All Systems Operational'
+  statusLabel: 'All systems operational'
 }
 
 const fakeRouter = () => ({

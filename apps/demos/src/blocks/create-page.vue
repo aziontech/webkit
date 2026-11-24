@@ -20,6 +20,7 @@
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import { onMounted, reactive, ref, watch } from 'vue'
 
   /** The values of the Create Resource form. */
@@ -144,7 +145,11 @@
   onMounted(() => nameEl.value?.focus())
 
   const submit = (event: Event) => {
-    if (props.loading || !validate()) return
+    if (props.loading) return
+    if (!validate()) {
+      focusFirstInvalid(formEl.value)
+      return
+    }
     emit('submit', event, values())
   }
 
@@ -173,7 +178,7 @@
           @click="onCancel"
         />
         <AppHeader.Brand
-          href="/home"
+          href="/resources"
           aria-label="Azion home"
         >
           <Brand

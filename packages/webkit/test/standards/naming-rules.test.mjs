@@ -849,3 +849,35 @@ test('testid: a public part that builds its test id from the parent context is f
   assert.deepEqual(hits(rel, good, 'testid'), [])
   assert.deepEqual(hits(`${C}/data/tree/parts/tree-node.vue`, inner, 'testid'), [])
 })
+
+test('block-word flags a retired Templates path in a block summary or an examples.json field', () => {
+  const block = 'packages/webkit/blocks/detail/detail-resource/block.json'
+  const examples = 'packages/webkit/examples/hero-section/examples.json'
+  assert.equal(
+    hits(
+      block,
+      pkg({ surface: 'product', summary: 'Built from Templates/Platform/Detail/DeploymentLogs.' }),
+      'block-word'
+    ).length,
+    1
+  )
+  assert.equal(
+    hits(
+      block,
+      pkg({ surface: 'product', summary: 'Built from `detail/detail-deployment-logs`.' }),
+      'block-word'
+    ).length,
+    0
+  )
+  assert.equal(
+    hits(
+      examples,
+      pkg({
+        title: 'Components/Marketing/Sections/HeroSection',
+        siteTitle: 'Templates/Marketing/Hero Band/HeroSection'
+      }),
+      'block-word'
+    ).length,
+    1
+  )
+})

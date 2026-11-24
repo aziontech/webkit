@@ -110,14 +110,16 @@
   const formEl = ref<HTMLFormElement | null>(null)
   const nameEl = ref<InstanceType<typeof Input> | null>(null)
 
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Create domain',
-    group: 'Page',
-    element: formEl,
-    when: () => !props.loading,
-    handler: () => formEl.value?.requestSubmit()
-  })
+  useShortcuts(
+    ['meta+enter', 'meta+s'].map((keys) => ({
+      keys,
+      label: 'Create domain',
+      group: 'Page',
+      element: formEl,
+      when: () => !props.loading,
+      handler: () => formEl.value?.requestSubmit()
+    }))
+  )
 
   onMounted(() => nameEl.value?.focus())
 
@@ -339,7 +341,7 @@
                 size="medium"
                 type="submit"
                 :loading="loading"
-                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                :aria-keyshortcuts="`${toAriaKeyshortcuts('meta+enter')} ${toAriaKeyshortcuts('meta+s')}`"
               >
                 Save
                 <Kbd

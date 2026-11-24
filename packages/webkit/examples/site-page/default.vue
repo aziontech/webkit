@@ -21,9 +21,8 @@
     {
       _id: 'customer-use-cases-section',
       props: {
-        eyebrow: 'SQL Database',
         title: 'What teams use SQL Database for',
-        description: 'Teams use it to:',
+        description: 'Four ways teams put vector search and SQL to work.',
         primaryAction: { label: 'Docs', href: '/docs', trailing: true },
         items: [
           {

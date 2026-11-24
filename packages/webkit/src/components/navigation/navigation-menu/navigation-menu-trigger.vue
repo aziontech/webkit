@@ -56,7 +56,7 @@
   const componentTag = computed(() => (isLink.value ? 'a' : 'button'))
 
   const ROOT_CLASS =
-    'relative z-1 inline-flex cursor-pointer items-center gap-(--spacing-xs) ' +
+    'relative z-1 inline-flex cursor-pointer items-center gap-(--spacing-xs) pointer-coarse:min-h-11 ' +
     'rounded-(--shape-button) bg-transparent px-(--spacing-sm) py-(--spacing-xs) ' +
     'no-underline transition-colors duration-moderate-02 ease-in-out motion-reduce:transition-none ' +
     'text-label-md text-(--text-default) ' +

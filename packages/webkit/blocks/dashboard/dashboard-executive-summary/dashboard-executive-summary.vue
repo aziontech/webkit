@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -145,6 +146,18 @@
   const months = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
   const trendData = computed(() => props.trends ?? (blocked.value ? {} : sampleTrends))
   const notes = computed(() => props.notes ?? (blocked.value ? [] : sampleNotes))
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      goals.value.length === 0 &&
+      notes.value.length === 0 &&
+      Object.values(trendData.value).every((trend) => !trend?.values.length) &&
+      Object.values(kpis.value).every((kpi) => kpi?.value == null)
+  )
+  const laterQuarter = computed(() => {
+    const index = quarters.indexOf(quarter.value)
+    return index > 0 ? quarters[index - 1] : ''
+  })
 
   const trendCards = computed(() =>
     trendCharts.map((chart) => {
@@ -231,7 +244,7 @@
         description="Headline results for the quarter, progress on its goals, twelve-month trends and notes from the leads."
       >
         <template #actions>
-          <div class="w-36">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="quarter"
@@ -295,7 +308,31 @@
         </ul>
       </section>
 
-      <div class="grid grid-cols-1 items-start gap-(--spacing-md) xl:grid-cols-12">
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-chart-line"
+        :title="'No results reported for ' + quarter"
+        description="The scorecard, trends, goals and notes fill in once the quarter reports its first month."
+        data-testid="dashboard-executive-summary__empty"
+      >
+        <template
+          v-if="laterQuarter"
+          #actions
+        >
+          <Button
+            :label="'Show ' + laterQuarter"
+            variant="outline"
+            size="medium"
+            @click="quarter = laterQuarter"
+          />
+        </template>
+      </EmptyState>
+
+      <div
+        v-else
+        class="grid grid-cols-1 items-start gap-(--spacing-md) xl:grid-cols-12"
+      >
         <section
           aria-label="Trends"
           class="grid min-w-0 grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] md:grid-cols-2 md:[--chart-grid-columns:2] xl:col-span-8"

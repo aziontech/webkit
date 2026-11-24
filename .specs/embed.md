@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: c894e6980b6e9291948a5c781c6a0cd69930853bd06a0c1c251d464361b69550
+checksum: 876194ac3514b79648c9c2597f201fd0a62302a6b119af6f8142faf750c5f153
 created: 2026-09-22
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # Embed — Component Spec
@@ -65,7 +65,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 | Prop    | Type                            | Default   | Required | JSDoc                                                                    |
 | ------- | ------------------------------- | --------- | -------- | ------------------------------------------------------------------------ |
-| `src`   | `string`                        | `—`       | true     | URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text. |
+| `src`   | `string`                        | `—`       | true     | URL of the document to embed. Only an absolute `https` URL is framed; anything else renders the title as text. |
 | `title` | `string`                        | `—`       | true     | Accessible name for the embedded document, announced before its content. |
 | `ratio` | `'video' \| 'square' \| 'wide'` | `'video'` | false    | Aspect ratio the frame holds while it scales.                            |
 
@@ -79,7 +79,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 ## States
 
-- Visual states: `default`, `unavailable` (the `src` is not an absolute `http(s)` URL: no `iframe`, the `title` shows as muted text in the reserved box)
+- Visual states: `default`, `unavailable` (the `src` is not an absolute `https` URL: no `iframe`, the `title` shows as muted text in the reserved box)
 - `data-ratio` mirrors the `ratio` prop and drives the frame's aspect ratio
 - The frame reserves its aspect ratio before the document loads, so the page does not shift when it arrives
 
@@ -108,7 +108,8 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the embedded document carries its own contrast; the frame contributes only its border.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the frame is static.
 - Touch target ≥40×40 px — not applicable; any control belongs to the embedded document.
-- Only an absolute `http(s)` `src` is framed, always with a fixed `sandbox` (no top-level navigation); any other `src` shows the `title` as text.
+- Only an absolute `https` `src` is framed, always with a fixed `sandbox` (no top-level navigation); any other `src`, `http:` included, shows the `title` as text.
+- The frame is rendered once the component is mounted in the browser, where the page origin is known: a `src` of another origin gets `allow-same-origin` so the embedded page keeps its own storage, while a `src` of the embedding page's own origin is framed without it, because `allow-scripts` with `allow-same-origin` would let a same-origin page remove its own sandbox. On the server the reserved box renders empty.
 
 ## Examples
 

@@ -78,7 +78,7 @@
       />
       <Button
         label="Change type"
-        variant="primary"
+        variant="danger"
         size="medium"
         :loading="submitting"
         :disabled="type === current?.type"

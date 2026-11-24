@@ -23,15 +23,15 @@ Titled "New production deployment" (the environment in lower case), with the dia
 
 ### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeIcon` (required)
 
-`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying… 2 of 5 done" while running (the settled count, never the position of the one in progress), "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
+`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying… 2 of 5 done" while running (the settled count, never the position of the one in progress), "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and, while running or after a failure, the rule that the ones that succeeded stay live; a run where every deploy succeeded just says they are all live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
 
 ### C. Progress — `PanelBody`, `Progress` (required)
 
-The share of settled settings, named "Deploy progress", with "Deploying <name>" under it while one runs.
+The share of settled settings while the run goes on, named "Deploy progress", with "Deploying <name>" under it while one runs. Once settled the bar shows the share that succeeded, so a partial failure never reads as a full, successful bar.
 
 ### D. Filter — `ToggleGroup` (required)
 
-Small, named "Filter deploys by status": All, Remaining n (deploying and queued), Failed n, Done n. An empty filter shows a small `EmptyState` ("Nothing failed.").
+Small, named "Filter deploys by status": All, Remaining n (deploying and queued), Failed n, Done n. It shows while the run goes on and after a failure; a run where everything succeeded has nothing to filter, so it hides. An empty filter shows a small `EmptyState` ("Nothing failed.").
 
 ### E. Rows — `Item`, `OutcomeIcon`, `Spinner`, `Tag`, `EmptyState` (required)
 
@@ -39,7 +39,7 @@ An `Item.List` with one small `Item variant="outline"` per Deployment Setting: i
 
 ### F. Footer — `PanelFooter`, `Button` (required)
 
-Retry failed (outlined) appears only when the run settled with failures; the primary button reads Hide while the run goes on and Close once it settled; both close the dialog, and Show progress reopens it.
+Retry failed appears only when the run settled with failures, and is then the primary action with Close outlined beside it; otherwise the primary button reads Hide while the run goes on and Close once it settled; both close the dialog, and Show progress reopens it.
 
 ### Outcome toast — through `toast`
 

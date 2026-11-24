@@ -5,6 +5,6 @@
 <template>
   <StatusIndicator
     severity="success"
-    label="Status"
+    label="Healthy"
   />
 </template>

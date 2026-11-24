@@ -329,7 +329,7 @@
         />
 
         <HierarchyDetails
-          v-show="detailsOpen"
+          v-show="detailsOpen && !error"
           v-model:tab="detailsTab"
           :uid="uid"
           :details-title="detailsTitle"

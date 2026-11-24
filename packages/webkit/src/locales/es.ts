@@ -178,6 +178,8 @@ export const es: Messages = {
     },
     empty: 'No hay mensajes en cola',
     remove: 'Quitar de la cola',
+    showMore: 'Mostrar más',
+    showLess: 'Mostrar menos',
     attachments: {
       one: '{count} adjunto',
       other: '{count} adjuntos'
@@ -487,6 +489,8 @@ export const es: Messages = {
     previous30: 'Últimos 30 días',
     older: 'Más antiguas',
     emptyTitle: 'Aún no hay conversaciones.',
+    emptyDescription:
+      'Tus conversaciones con el asistente aparecen aquí después de que le preguntes algo.',
     delete: 'Eliminar {title}',
     newChat: 'Nuevo chat',
     search: 'Buscar conversaciones',
@@ -1113,6 +1117,7 @@ export const es: Messages = {
     optionsError: 'No se pudieron cargar las opciones.',
     writeOnlyPlaceholder: 'Déjalo vacío para conservar el valor actual',
     item: 'Elemento {index}',
+    addItem: 'Añadir {item}',
     advanced: 'Configuración avanzada',
     mapKey: 'Clave',
     mapValue: 'Valor',
@@ -1157,7 +1162,9 @@ export const es: Messages = {
     open: 'Abrir navegación',
     home: 'Página de inicio de Azion',
     search: 'Buscar',
-    menu: 'Menú'
+    menu: 'Menú',
+    navigation: 'Principal',
+    menuNavigation: 'Menú principal'
   },
   splitButton: {
     moreActions: 'Más acciones',
@@ -1208,8 +1215,8 @@ export const es: Messages = {
   table: {
     selectAll: 'Seleccionar todas las filas',
     selectRow: 'Seleccionar la fila {row}',
-    emptyTitle: 'Aún no hay resultados',
-    emptyDescription: 'Empieza creando tu primer recurso.',
+    emptyTitle: 'Aún no hay datos',
+    emptyDescription: 'Las filas aparecen aquí cuando haya datos para mostrar.',
     errorTitle: 'No se pudieron cargar los datos'
   },
   tableExportButton: {
@@ -1472,7 +1479,7 @@ export const es: Messages = {
   copyCommandSection: {
     command: 'Comando',
     prompt: 'Prompt',
-    copyCommandSection: 'Copiar comando',
+    copyCommand: 'Copiar comando',
     copyPrompt: 'Copiar prompt'
   },
   searchTrigger: {

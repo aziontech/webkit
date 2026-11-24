@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 904451dcb4e087d9bb56600063cef176ef1bb50707523358073b9070e6468353
+checksum: 2788db0aa51c1ef2c82ac40aed44d8a7d6ed1480fc78dcb48d6de3143959b648
 created: 2026-08-22
-last_updated: 2026-11-22
+last_updated: 2026-11-24
 ---
 
 # DocTableOfContents — Component Spec
@@ -67,17 +67,17 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 ## Props
 
-| Prop       | Type                   | Default | Required | JSDoc                                                                   |
-| ---------- | ---------------------- | ------- | -------- | ----------------------------------------------------------------------- |
+| Prop       | Type                        | Default | Required | JSDoc                                                                   |
+| ---------- | --------------------------- | ------- | -------- | ----------------------------------------------------------------------- |
 | `items`    | `DocTableOfContentsItem[]`  | `[]`    | false    | The headings, in document order.                                        |
-| `activeId` | `string`               | `''`    | false    | The id of the heading currently in view.                                |
-| `title`    | `string`               | `''`    | false    | The rail's own heading. Empty uses the locale catalog (`On this page`). |
+| `activeId` | `string`                    | `''`    | false    | The id of the heading currently in view.                                |
+| `title`    | `string`                    | `''`    | false    | The rail's own heading. Empty uses the locale catalog (`On this page`). |
 | `groups`   | `DocTableOfContentsGroup[]` | `[]`    | false    | Complementary groups rendered below the outline, in order.              |
 
 ## Events
 
-| Event    | Payload                                        | Notes                                                                                                              |
-| -------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Event    | Payload                                             | Notes                                                                                                              |
+| -------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `select` | `(event: MouseEvent, item: DocTableOfContentsItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
 
 ## Slots
@@ -92,10 +92,10 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                                                     | Token (see `.claude/docs/DESIGN.md` § Animations)   | Reduced-motion fallback         |
-| ----------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------- |
-| active heading changes        | the dash travels along the path (`stroke-dasharray` / `stroke-dashoffset`) | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| pointer moves between entries | `transition-[top,left,width,height,opacity]` on the hover highlight        | inline (matches catalog)                            | `motion-reduce:transition-none` |
+| Trigger                       | Animation / Transition                                                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations)   | Reduced-motion fallback         |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------- |
+| active heading changes        | the dash travels along the path (`stroke-dasharray` / `stroke-dashoffset`)                                              | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| pointer moves between entries | `transition-[translate,width,height,opacity]` on the hover highlight (placed with `translate` from the list's top left) | inline (matches catalog)                            | `motion-reduce:transition-none` |
 
 ## Tokens
 

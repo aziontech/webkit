@@ -1,12 +1,21 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Link from '@aziontech/webkit/link'
   import { useHead } from '@unhead/vue'
+  import { computed } from 'vue'
 
   import { messages } from '../lib/i18n'
+  import { searchOpen } from '../lib/search-open'
 
   const t = messages
   useHead({ title: 'Not found — WebKit' })
+
+  const sections = computed(() => [
+    { to: '/components', label: t.value.components },
+    { to: '/blocks', label: t.value.blocks },
+    { to: '/foundations', label: t.value.foundations }
+  ])
 </script>
 
 <template>
@@ -18,11 +27,34 @@
       icon="az az-compass"
     >
       <template #actions>
-        <Button
-          :label="t.backHome"
-          variant="primary"
-          href="/"
-        />
+        <div class="flex flex-col items-center gap-(--spacing-md)">
+          <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+            <Button
+              :label="t.search"
+              variant="primary"
+              icon="az az-search"
+              @click="searchOpen = true"
+            />
+            <Button
+              :label="t.backHome"
+              variant="outline"
+              href="/"
+            />
+          </div>
+          <nav :aria-label="t.sections">
+            <ul class="m-0 flex list-none flex-wrap justify-center gap-(--spacing-md) p-0">
+              <li
+                v-for="section in sections"
+                :key="section.to"
+              >
+                <Link
+                  :label="section.label"
+                  :href="section.to"
+                />
+              </li>
+            </ul>
+          </nav>
+        </div>
       </template>
     </EmptyState>
   </div>

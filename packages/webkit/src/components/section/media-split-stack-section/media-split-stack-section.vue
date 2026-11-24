@@ -199,6 +199,7 @@
           <Button
             :label="band.action.label"
             :href="band.action.href"
+            :aria-label="`${band.action.label}, ${band.title}`"
             variant="outline"
             size="medium"
             icon="az az-chevron-right"

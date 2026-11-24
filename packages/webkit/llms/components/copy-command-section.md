@@ -57,7 +57,7 @@
 | --------------------------------------- | -------------- | ------------- |
 | `copyCommandSection.command`            | `Command`      | —             |
 | `copyCommandSection.prompt`             | `Prompt`       | —             |
-| `copyCommandSection.copyCommandSection` | `Copy command` | —             |
+| `copyCommandSection.copyCommand` | `Copy command` | —             |
 | `copyCommandSection.copyPrompt`         | `Copy prompt`  | —             |
 
 - The command itself is content.

@@ -1,11 +1,11 @@
 # DetailResource (`detail/detail-resource`)
 
-> The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `FlowDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of `edit/edit-resource`. Built from `PageHeader`, `PageTabs`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `FlowDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.
+> The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the `detail/detail-deployment-logs` block and one function run is the `detail/detail-invocations` block. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `FlowDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the `detail/detail-version` block and the deploy drawers opened from these pages are the `create/create-deploy-drawer` block. The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of `edit/edit-resource`. Built from `PageHeader`, `PageTabs`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `PasswordInput`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `FlowDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.
 
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -394,6 +394,8 @@ export const neverDeployedResource: ResourceDetailResource = {
   frameworkIcon: 'az-color az-astro'
 }
 
+export const buildToken = 'azn_build_example_k3p9qa7f2m8x4w1c6v5b'
+
 export const resourceTabs: { value: ResourceDetailTab; label: string }[] = [
   { value: 'overview', label: 'Overview' },
   { value: 'versions', label: 'Versions' },
@@ -634,7 +636,7 @@ export const applicationVersions: ApplicationVersionRow[] = [
   {
     id: 'BW1K8RTE',
     name: 'BW1K8RTE',
-    description: 'Add rule"Redirect old checkout"',
+    description: 'Add rule "Redirect old checkout"',
     state: 'Ready',
     createdAt: '2026-11-09T12:00:00Z'
   },
@@ -823,7 +825,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'APA7237R',
     name: 'APA7237R',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Riley Carter',
     createdAt: '2026-11-03T14:37:18.145Z'
   },
@@ -839,7 +841,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AS1UHU4P',
     name: 'AS1UHU4P',
     state: 'ready',
-    description: 'Add rule"Redirect /blog to docs"',
+    description: 'Add rule "Redirect /blog to docs"',
     author: 'Jordan Kim',
     createdAt: '2026-11-01T14:37:18.145Z'
   },
@@ -863,7 +865,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AW7BNGI4',
     name: 'AW7BNGI4',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Sam Lee',
     createdAt: '2026-10-29T14:37:18.145Z'
   },
@@ -879,7 +881,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'AYYZ37F2',
     name: 'AYYZ37F2',
     state: 'ready',
-    description: 'Add rule"Redirect /blog to docs"',
+    description: 'Add rule "Redirect /blog to docs"',
     author: 'Chris Taylor',
     createdAt: '2026-10-27T14:37:18.145Z'
   },
@@ -903,7 +905,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'A44G8TSH',
     name: 'A44G8TSH',
     state: 'ready',
-    description: 'Add rule"Security headers"',
+    description: 'Add rule "Security headers"',
     author: 'Jordan Kim',
     createdAt: '2026-10-24T14:37:18.145Z'
   },
@@ -1913,6 +1915,8 @@ jobs:
     destination?: string
     /** The address Visit opens in a new tab; empty draws no Visit. */
     visit?: string
+    /** Why Visit is unavailable yet; set, Visit stays in place but disabled with this reason. */
+    visitDisabledReason?: string
     /** The accessible name and tooltip of the actions menu. */
     actionsLabel: string
     /** The groups of the actions menu. */
@@ -1928,6 +1932,7 @@ jobs:
     href: '',
     destination: '',
     visit: '',
+    visitDisabledReason: '',
     showMenuIcons: true,
     container: true
   })
@@ -1970,9 +1975,11 @@ jobs:
       <Button
         v-if="visit"
         label="Visit"
-        aria-label="Visit (opens in a new tab)"
-        :href="visit"
-        target="_blank"
+        :aria-label="visitDisabledReason ? 'Visit' : 'Visit (opens in a new tab)'"
+        :href="visitDisabledReason ? '' : visit"
+        :target="visitDisabledReason ? '_self' : '_blank'"
+        :disabled="Boolean(visitDisabledReason)"
+        :disabled-reason="visitDisabledReason"
         variant="secondary"
         size="medium"
         icon="az az-external-link"

@@ -9,7 +9,9 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
+  import { useLocale } from '@aziontech/webkit/use-locale'
 
+  import { ttlDuration } from '../lib/ttl-duration'
   import {
     sampleCacheBrowserBehaviors as browserBehaviors,
     sampleCacheEdgeBehaviors as edgeBehaviors,
@@ -23,6 +25,9 @@
     options.find((option) => option.value === value)?.label ?? value
 
   const { form, saving, dirty, errors, clear, save, discard, leave } = provideCacheSettings()
+
+  const { formatNumber } = useLocale()
+  const duration = (seconds: number | null | undefined) => ttlDuration(seconds, formatNumber)
 </script>
 
 <template>
@@ -126,7 +131,7 @@
                       v-if="form.browserBehavior === 'override'"
                       key="browserMaxAge"
                       title="Maximum TTL in seconds"
-                      description="Up to 31536000 seconds, one year."
+                      description="Up to 1 year (31,536,000 seconds)."
                       :depth="1"
                     >
                       <NumberInput
@@ -137,8 +142,16 @@
                         :min="0"
                         :max="31536000"
                         aria-label="Browser maximum TTL in seconds"
+                        aria-describedby="cache-browserMaxAge-duration"
                         :disabled="saving"
                       />
+                      <p
+                        id="cache-browserMaxAge-duration"
+                        class="text-body-xs text-(--text-muted)"
+                        data-testid="cache-settings__browser-duration"
+                      >
+                        {{ duration(form.browserMaxAge) }}
+                      </p>
                     </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
@@ -184,7 +197,7 @@
                       v-if="form.edgeBehavior === 'override'"
                       key="edgeMaxAge"
                       title="Maximum TTL in seconds"
-                      description="From 60 to 31536000 seconds."
+                      description="From 1 minute (60 seconds) to 1 year (31,536,000 seconds)."
                       :depth="1"
                     >
                       <NumberInput
@@ -198,10 +211,19 @@
                         :disabled="saving"
                         :invalid="Boolean(errors.edgeMaxAge)"
                         :aria-describedby="
-                          errors.edgeMaxAge ? 'cache-edgeMaxAge-message' : undefined
+                          errors.edgeMaxAge
+                            ? 'cache-edgeMaxAge-duration cache-edgeMaxAge-message'
+                            : 'cache-edgeMaxAge-duration'
                         "
                         @update:model-value="clear('edgeMaxAge')"
                       />
+                      <p
+                        id="cache-edgeMaxAge-duration"
+                        class="text-body-xs text-(--text-muted)"
+                        data-testid="cache-settings__edge-duration"
+                      >
+                        {{ duration(form.edgeMaxAge) }}
+                      </p>
                       <FieldError
                         v-if="errors.edgeMaxAge"
                         id="cache-edgeMaxAge-message"

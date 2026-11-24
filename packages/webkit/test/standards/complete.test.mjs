@@ -14,10 +14,13 @@ import {
   summarize
 } from '../../scripts/check-complete.mjs'
 import {
+  FALLBACK_BASE,
   baseRef,
-  hasBudgetRaise,
+  budgetRaiseLines,
+  justifies,
   limitToBytes,
-  raisedBudgets
+  raisedBudgets,
+  unjustified
 } from '../../scripts/check-size-ratchet.mjs'
 import { initialOutputs, lazyEntries } from '../../scripts/check-size.mjs'
 
@@ -237,12 +240,51 @@ test('lazyEntries lists each chunk an entryOnly build excludes with what it woul
   )
 })
 
-test('hasBudgetRaise needs a line starting Budget-raise: with a reason', () => {
-  assert.equal(hasBudgetRaise('Summary\r\nBudget-raise: the chart gained a brush'), true)
-  assert.equal(hasBudgetRaise('  Budget-raise: indented is fine'), true)
-  assert.equal(hasBudgetRaise('Budget-raise:'), false)
-  assert.equal(hasBudgetRaise('No Budget-raise: mid-line'), false)
-  assert.equal(hasBudgetRaise(undefined), false)
+test('budgetRaiseLines keeps only lines starting Budget-raise: with a reason', () => {
+  assert.deepEqual(
+    budgetRaiseLines(
+      'Summary\r\n  Budget-raise: a 1 KB → 2 KB: why\nBudget-raise:\nNo Budget-raise: x'
+    ),
+    ['Budget-raise: a 1 KB → 2 KB: why']
+  )
+  assert.deepEqual(budgetRaiseLines(undefined), [])
+})
+
+test('a raise needs its own line naming the entry and its new limit', () => {
+  const raise = { name: 'table-root', from: '1.95 KB', to: '2.3 KB' }
+  assert.equal(justifies('Budget-raise: table-root 1.95 KB → 2.3 KB: why', raise), true)
+  assert.equal(justifies('Budget-raise: table-root 1.95 → 2.3 KB (measured 2.2 KB)', raise), true)
+  assert.equal(justifies('Budget-raise: table-root 1.95 KB -> 2.3 KB', raise), true)
+  assert.equal(justifies('Budget-raise: table-root 1.9 KB → 1.95 KB', raise), false)
+  assert.equal(justifies('Budget-raise: table-root-extra 1.95 KB → 2.3 KB', raise), false)
+  assert.equal(justifies('Budget-raise: the chart gained a brush', raise), false)
+  const other = { name: 'data-grid', from: '10.5 KB', to: '11.15 KB' }
+  assert.deepEqual(unjustified([raise, other], 'Budget-raise: table-root 1.95 KB → 2.3 KB'), [
+    other
+  ])
+  assert.deepEqual(
+    unjustified(
+      [raise, other],
+      'Budget-raise: table-root 1.95 KB → 2.3 KB',
+      'Budget-raise: data-grid 10.5 KB → 11.15 KB'
+    ),
+    []
+  )
+})
+
+test('every raise in the 8e86a5b59 to e106f1a04 push has its line in size-budgets-v6.md', () => {
+  const record = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), '../../docs/reviews/size-budgets-v6.md'),
+    'utf-8'
+  )
+  for (const [name, from, limit] of [
+    ['table-root', '1.95 KB', '2.3 KB'],
+    ['data-table', '57.05 KB', '57.45 KB'],
+    ['flow-diagram-root', '19.3 KB', '19.75 KB'],
+    ['listing-index-section', '40.2 KB', '40.55 KB']
+  ]) {
+    assert.deepEqual(unjustified([{ name, from, to: limit }], record), [], name)
+  }
 })
 
 test('baseRef uses the PR base, skips non-PR CI runs, falls back locally', () => {
@@ -250,5 +292,6 @@ test('baseRef uses the PR base, skips non-PR CI runs, falls back locally', () =>
     ref: 'origin/main'
   })
   assert.ok(baseRef({ GITHUB_ACTIONS: 'true' }).skip)
-  assert.deepEqual(baseRef({}), { ref: 'origin/feat/webkit-ai-ready' })
+  assert.deepEqual(baseRef({}), { ref: 'origin/main' })
+  assert.equal(FALLBACK_BASE, 'origin/main')
 })

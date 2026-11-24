@@ -102,12 +102,14 @@ describe('DocPageHeader', () => {
       expect(time?.getAttribute('datetime')).toBe('2026-06-30')
     })
 
-    it('prints a non-date string verbatim', () => {
-      const { getByTestId } = render(DocPageHeader, {
+    it('prints a non-date string alone, with no prefix and no time element', () => {
+      const { getByTestId, getByText } = render(DocPageHeader, {
         props: { title: 'T', lastUpdated: 'Updated this morning' }
       })
-      const time = getByTestId('doc-page-header').querySelector('time')
-      expect(time?.textContent?.trim()).toBe('Updated this morning')
+      const root = getByTestId('doc-page-header')
+      expect(root.querySelector('time')).toBeNull()
+      expect(getByText('Updated this morning').textContent?.trim()).toBe('Updated this morning')
+      expect(root.textContent).not.toMatch(/Last updated/i)
     })
   })
 

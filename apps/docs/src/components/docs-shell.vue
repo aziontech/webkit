@@ -19,6 +19,7 @@
 
   import { useRouteFocus } from '../composables/use-route-focus'
   import { LOCALES, messages } from '../lib/i18n'
+  import { searchOpen } from '../lib/search-open'
   import { settings } from '../lib/settings'
   import DirectionToggle from './direction-toggle.vue'
   import SearchCommand from './search-command.vue'
@@ -36,7 +37,6 @@
   const route = useRoute()
   const t = messages
   const navOpen = ref(false)
-  const searchOpen = ref(false)
 
   const sections = computed(() => [
     { to: '/foundations', label: t.value.foundations },
@@ -138,7 +138,7 @@
             icon="az az-github"
             variant="outline"
             size="medium"
-            :aria-label="t.github"
+            :aria-label="`${t.github} ${t.newTab}`"
             href="https://github.com/aziontech/webkit"
             target="_blank"
             class="hidden shrink-0 sm:inline-flex"

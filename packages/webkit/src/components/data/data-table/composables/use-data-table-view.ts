@@ -26,6 +26,8 @@ import { useDataTableResize } from './use-data-table-resize'
 import { useDataTableRowFocus } from './use-data-table-row-focus'
 import { useDataTableWindow } from './use-data-table-window'
 
+const FIRST_LOAD_ROWS = 10
+
 const STACK_FALLBACK_WIDTH = 552
 
 export interface DataTableViewHost extends DataTableHost {
@@ -259,10 +261,8 @@ const assembleView = (host: DataTableViewHost, parts: ViewParts) => {
     headers: core.headers,
     rowTotal: core.rowTotal,
     skeletonRowCount: computed(() => {
-      const displayed = core.paging.active.value
-        ? core.rowTotal.value || core.paging.pageSize.value
-        : core.records().length || core.paging.pageSize.value
-      return Math.max(displayed, 1)
+      const known = core.paging.active.value ? core.rowTotal.value : core.records().length
+      return Math.max(known || Math.min(core.paging.pageSize.value, FIRST_LOAD_ROWS), 1)
     }),
     tableAttrs: host.tableAttrs,
     selectAllId: `${useId()}-select-all`,

@@ -475,14 +475,16 @@ describe('QuoteTabs', () => {
     await nextTick()
 
     expect(selectedIndex(container)).toBe(0)
-    expect(progressOf(container)?.style.width).toBe('50%')
+    const firstBar = progressOf(container)
+    expect(firstBar?.style.animationDuration).toBe(`${INTERVAL}ms`)
+    expect(firstBar?.style.animationPlayState).toBe('')
 
     vi.advanceTimersByTime(INTERVAL / 2)
     await nextTick()
 
     expect(selectedIndex(container)).toBe(1)
     expect(emitted()['update:modelValue']).toEqual([[1]])
-    expect(progressOf(container)?.style.width).toBe('0%')
+    expect(progressOf(container)).not.toBe(firstBar)
   })
 
   it('wraps from the last client to the first, travelling forward', async () => {
@@ -553,11 +555,14 @@ describe('QuoteTabs', () => {
     const root = getByTestId(TESTID)
 
     vi.advanceTimersByTime(INTERVAL / 2)
+    const before = progressOf(container)
     await fireEvent.pointerEnter(root)
+    expect(progressOf(container)?.style.animationPlayState).toBe('paused')
     await fireEvent.click(tabsOf(container)[2])
 
     expect(root.getAttribute('data-autoplay')).not.toBeNull()
-    expect(progressOf(container)?.style.width).toBe('0%')
+    expect(progressOf(container)).not.toBe(before)
+    expect(progressOf(container)?.style.animationPlayState).toBe('')
 
     vi.advanceTimersByTime(INTERVAL)
     await nextTick()

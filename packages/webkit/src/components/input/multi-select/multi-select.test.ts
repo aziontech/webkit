@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/multi-select/default.vue'
+import Invalid from '../../../../examples/multi-select/invalid.vue'
 import ListStates from '../../../../examples/multi-select/list-states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { hostable } from '../../../test/hostable'
@@ -100,6 +101,16 @@ const Harness = defineComponent({
 })
 
 describe('MultiSelect', () => {
+  it('pairs the Invalid example with a Field.Error the trigger is described by', async () => {
+    const view = render(Invalid)
+    await nextTick()
+    const trigger = view.getByRole('combobox', { name: 'Regions' })
+    expect(trigger.getAttribute('aria-invalid')).toBe('true')
+    const ids = (trigger.getAttribute('aria-describedby') ?? '').split(' ').filter(Boolean)
+    const text = ids.map((id) => document.getElementById(id)?.textContent?.trim()).join(' ')
+    expect(text).toContain('Choose at least one region.')
+  })
+
   describe('composition / overlay', () => {
     it('mounts a 1,000-option list in chunks and mounts every option on the first arrow key', async () => {
       cleanupTeleported()

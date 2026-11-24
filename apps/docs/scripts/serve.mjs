@@ -25,6 +25,12 @@ const TYPES = {
   '.woff2': 'font/woff2'
 }
 
+export const SECURITY_HEADERS = {
+  'Content-Security-Policy': "frame-ancestors 'self'; object-src 'none'; base-uri 'self'",
+  'X-Content-Type-Options': 'nosniff',
+  'Referrer-Policy': 'strict-origin-when-cross-origin'
+}
+
 const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.md', '.txt', '.svg'])
 
 const ENCODERS = {
@@ -52,6 +58,7 @@ function tlsFromEnv() {
 
 function locator(root, spa) {
   const locate = (pathname) => {
+    if (pathname.split('/').some((segment) => segment.startsWith('.'))) return null
     const file = normalize(join(root, decodeURIComponent(pathname)))
     if (!file.startsWith(root)) return null
     if (existsSync(file) && statSync(file).isFile()) return file
@@ -81,7 +88,7 @@ function responder(root, spa) {
     const file = locate(pathname)
     const target = file ?? join(root, '404/index.html')
     if (!existsSync(target)) {
-      res.writeHead(404, { 'Content-Type': TYPES['.txt'] })
+      res.writeHead(404, { ...SECURITY_HEADERS, 'Content-Type': TYPES['.txt'] })
       res.end('Not found')
       return
     }
@@ -89,6 +96,7 @@ function responder(root, spa) {
     const encoding = COMPRESSIBLE.has(type) ? pickEncoding(req.headers['accept-encoding']) : null
     const payload = body(target, encoding)
     res.writeHead(file ? 200 : 404, {
+      ...SECURITY_HEADERS,
       'Content-Type': TYPES[type] ?? 'application/octet-stream',
       'Content-Length': payload.length,
       Vary: 'Accept-Encoding',

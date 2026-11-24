@@ -41,6 +41,10 @@
     () => props.ariaLabel || t('copyText.copy', { value: props.value })
   )
 
+  const tailLength = computed(() => Math.min(12, Math.floor(props.value.length / 3)))
+  const head = computed(() => props.value.slice(0, props.value.length - tailLength.value))
+  const tail = computed(() => props.value.slice(props.value.length - tailLength.value))
+
   function onCopy(event: MouseEvent, value: string) {
     emit('copy', event, value)
   }
@@ -61,9 +65,14 @@
     <span
       dir="ltr"
       :title="value"
-      class="min-w-0 truncate py-0.5 text-start"
+      class="flex min-w-0 whitespace-nowrap text-start"
       :data-testid="`${testId}__value`"
-      >{{ value }}</span
+      ><span class="min-w-0 truncate py-0.5">{{ head }}</span
+      ><span
+        v-if="tail"
+        class="shrink-0 py-0.5"
+        >{{ tail }}</span
+      ></span
     >
     <CopyButton
       :value="value"

@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
+import { render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -119,9 +119,36 @@ describe('ArticleBodySection', () => {
   })
 
   it('renders the breadcrumb trail', () => {
-    const { getByRole } = band()
+    const { getByTestId } = band()
 
-    expect(getByRole('link', { name: 'Success cases' }).getAttribute('href')).toBe('/success-cases')
+    expect(
+      within(getByTestId('breadcrumb'))
+        .getByRole('link', { name: 'Success cases' })
+        .getAttribute('href')
+    ).toBe('/success-cases')
+  })
+
+  it('swaps the trail for a back link to the parent crumb on phones', () => {
+    const { getByTestId } = band({
+      trail: [
+        { label: 'Success cases', href: '/success-cases' },
+        { label: 'Retail', href: '/success-cases?industry=Retail' },
+        { label: article.title, active: true }
+      ]
+    })
+
+    const back = getByTestId('article-body-section__back')
+    expect(back.textContent?.trim()).toBe('Retail')
+    expect(back.getAttribute('href')).toBe('/success-cases?industry=Retail')
+    expect(back.classList.contains('sm:hidden')).toBe(true)
+    expect(getByTestId('breadcrumb').classList.contains('max-sm:hidden')).toBe(true)
+  })
+
+  it('keeps the full trail on phones when no crumb links back', () => {
+    const { getByTestId, queryByTestId } = band({ trail: [{ label: article.title, active: true }] })
+
+    expect(queryByTestId('article-body-section__back')).toBeNull()
+    expect(getByTestId('breadcrumb').classList.contains('max-sm:hidden')).toBe(false)
   })
 
   it('marks the active breadcrumb entry with aria-current', () => {
@@ -185,10 +212,14 @@ describe('ArticleBodySection', () => {
   it('builds the share links from the article URL', () => {
     const { getByRole } = band()
 
-    expect(getByRole('link', { name: share.shareX }).getAttribute('href')).toBe(
-      `https://x.com/intent/tweet?url=${article.href}&via=aziontech`
-    )
-    expect(getByRole('link', { name: share.shareLinkedIn }).getAttribute('href')).toBe(
+    expect(
+      getByRole('link', { name: `${share.shareX} (opens in a new tab)` }).getAttribute('href')
+    ).toBe(`https://x.com/intent/tweet?url=${article.href}&via=aziontech`)
+    expect(
+      getByRole('link', { name: `${share.shareLinkedIn} (opens in a new tab)` }).getAttribute(
+        'href'
+      )
+    ).toBe(
       `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(article.href)}`
     )
   })
@@ -317,7 +348,7 @@ describe('ArticleBodySection', () => {
       ].join('\n')
     })
 
-    const link = getByRole('link', { name: 'guide' })
+    const link = getByRole('link', { name: /^guide ?\(opens in a new tab\)$/ })
     expect(link.getAttribute('href')).toBe('https://example.com/docs')
     expect(link.getAttribute('target')).toBe('_blank')
     expect(container.querySelector('article strong')?.textContent).toBe('care')
@@ -363,7 +394,11 @@ describe('ArticleBodySection', () => {
   it('opens external community links in a new tab', () => {
     const { getByRole } = band()
 
-    expect(getByRole('link', { name: 'Join us on Discord' }).getAttribute('target')).toBe('_blank')
+    expect(
+      getByRole('link', { name: /^Join us on Discord ?\(opens in a new tab\)$/ }).getAttribute(
+        'target'
+      )
+    ).toBe('_blank')
     expect(getByRole('link', { name: 'Read our blog posts' }).hasAttribute('target')).toBe(false)
   })
 

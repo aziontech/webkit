@@ -17,11 +17,11 @@ import DocFrame from './doc-frame.vue'
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0))
 
-const emulateReducedMotion = () => {
+const emulateMedia = (feature: string) => {
   const original = window.matchMedia
   const stub = (query: string) =>
     ({
-      matches: query.includes('prefers-reduced-motion'),
+      matches: query.includes(feature),
       media: query,
       onchange: null,
       addEventListener: () => {},
@@ -35,6 +35,8 @@ const emulateReducedMotion = () => {
     window.matchMedia = original
   }
 }
+
+const emulateReducedMotion = () => emulateMedia('prefers-reduced-motion')
 
 const zoomDialog = () => document.body.querySelector('[data-testid="doc-frame__zoom"]')
 
@@ -112,6 +114,30 @@ describe('DocFrame', () => {
         'View full screen: Step 3 of Create application'
       )
       expect(getByAltText('Step 3 of Create application')).toBeInTheDocument()
+    })
+
+    it('loads a still lazily and decodes it off the main thread', () => {
+      const { getByAltText } = render(DocFrame, {
+        props: { src: '/docs/shot.png', alt: 'Step 3 of Create application' }
+      })
+      const image = getByAltText('Step 3 of Create application')
+      expect(image.getAttribute('loading')).toBe('lazy')
+      expect(image.getAttribute('decoding')).toBe('async')
+    })
+
+    it('renders a plain still with no zoom trigger on a coarse pointer', () => {
+      const restore = emulateMedia('pointer: coarse')
+      try {
+        const { queryByTestId, getByAltText } = render(DocFrame, {
+          props: { src: '/docs/shot.png', alt: 'Step 3 of Create application' }
+        })
+        expect(queryByTestId('doc-frame__zoom-trigger')).toBeNull()
+        const image = getByAltText('Step 3 of Create application')
+        expect(image.closest('button')).toBeNull()
+        expect(image.getAttribute('loading')).toBe('lazy')
+      } finally {
+        restore()
+      }
     })
 
     it('renders a clip source as a labelled player with controls, and no zoom trigger', () => {

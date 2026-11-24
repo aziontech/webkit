@@ -106,6 +106,17 @@ describe('ChartCard', () => {
     expect(both.getByTestId('chart-card-resize-handle').getAttribute('role')).toBe('separator')
   })
 
+  it('widens both handle hit areas to 44px on a coarse pointer', async () => {
+    const view = render(card({ draggable: true, resizable: true }))
+    await nextTick()
+    expect(view.getByTestId('chart-card-drag-handle').classList).toContain(
+      'pointer-coarse:before:-inset-2.5'
+    )
+    expect(view.getByTestId('chart-card-resize-handle').classList).toContain(
+      'pointer-coarse:before:-inset-2.5'
+    )
+  })
+
   it('emits move with the event first and the direction second from the drag handle', async () => {
     const moves: unknown[][] = []
     const view = render(card({ draggable: true, onMove: (...args: unknown[]) => moves.push(args) }))
@@ -257,14 +268,15 @@ describe('ChartCard', () => {
   })
 
   describe('on devices', () => {
-    it('is a named container whose header and controls wrap in a narrow card', () => {
+    it('is a named container whose header wraps and keeps the controls at the end', () => {
       const view = render(card())
 
       expect(view.getByTestId('chart-card').className).toContain('@container/chart-card')
       expect(view.getByTestId('chart-card-header').className).toContain('flex-wrap')
-      expect(view.getByTestId('chart-card-controls').className).toContain(
-        '@max-xs/chart-card:w-full'
-      )
+      const controls = view.getByTestId('chart-card-controls').className
+      expect(controls).toContain('ms-auto')
+      expect(controls).not.toContain('@max-xs/chart-card:w-full')
+      expect(controls).not.toContain('@max-xs/chart-card:ms-0')
     })
   })
 

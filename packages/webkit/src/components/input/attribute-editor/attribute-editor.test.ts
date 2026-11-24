@@ -51,6 +51,16 @@ const GroupedHarness = (initial: AttributeEditorItem[][], extra: Record<string, 
 
 describe('AttributeEditor', () => {
   describe('basics', () => {
+    it('marks a required column in the grid header as it does in the stacked label', async () => {
+      const view = render(Default)
+      await nextTick()
+      const header = view.getByTestId('attribute-editor__header')
+      const marks = header.querySelectorAll('[data-testid="attribute-editor__header-required"]')
+      expect(marks).toHaveLength(1)
+      expect(marks[0]!.textContent).toBe('*')
+      expect(marks[0]!.parentElement!.textContent).toBe('Key*')
+    })
+
     it('renders one row per item with a labelled control per cell', () => {
       const view = render(Harness([{ key: 'A', value: '1' }]))
       expect(view.getAllByTestId('attribute-editor__row')).toHaveLength(1)

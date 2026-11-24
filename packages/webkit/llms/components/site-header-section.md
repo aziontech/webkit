@@ -67,7 +67,7 @@
 
 - Visible focus: the mark link draws the ring token; triggers, items and buttons own theirs.
 - Keyboard map: `Tab` moves through the bar; ⌘K / Ctrl K fires `search` (a mounted `Command` claims the shortcut first); the mega-menu and the sheet own their keyboard models (arrows, `Enter`, `Esc` closes and restores focus to the trigger).
-- ARIA: the bar is the `app-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the menu button "Open navigation" is an icon button with a name; the search trigger is named "Search" and announces `aria-keyshortcuts` (`Meta+K Control+K`); the sheet is titled "Menu".
+- ARIA: the bar is the `app-header` landmark named "Azion", so the root is a plain `div`; the mark link is named "Azion home"; the bar's mega-menu navigation is named "Main" and the sheet's tree "Main menu", so no landmark repeats the banner's name; the menu button "Open navigation" is an icon button with a name that declares `aria-haspopup="dialog"` and mirrors the sheet in `aria-expanded`; the search trigger is named "Search" and announces `aria-keyshortcuts` (`Meta+K Control+K`); the sheet is titled "Menu".
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.
@@ -81,12 +81,14 @@
 
 ## Internationalization
 
-| Key                        | English source  | Override prop |
-| -------------------------- | --------------- | ------------- |
-| `siteHeaderSection.open`   | Open navigation | —             |
-| `siteHeaderSection.home`   | Azion home      | —             |
-| `siteHeaderSection.search` | Search          | —             |
-| `siteHeaderSection.menu`   | Menu            | —             |
+| Key                                | English source  | Override prop |
+| ---------------------------------- | --------------- | ------------- |
+| `siteHeaderSection.open`           | Open navigation | —             |
+| `siteHeaderSection.home`           | Azion home      | —             |
+| `siteHeaderSection.search`         | Search          | —             |
+| `siteHeaderSection.menu`           | Menu            | —             |
+| `siteHeaderSection.navigation`     | Main            | —             |
+| `siteHeaderSection.menuNavigation` | Main menu       | —             |
 
 - Formatting: none; menu, link and action labels are the page's own text.
 

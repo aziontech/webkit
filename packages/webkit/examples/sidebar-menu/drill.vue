@@ -23,6 +23,7 @@
           <SidebarMenuSubTrigger
             label="Settings"
             type="drill"
+            icon="az az-settings"
           />
           <SidebarMenuSubContent>
             <SidebarMenuItem

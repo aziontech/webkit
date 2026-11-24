@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, inject, onMounted, onScopeDispose, onUpdated, ref, useAttrs } from 'vue'
 
   import { safeHref } from '../../../utils/safe-href'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
@@ -125,6 +125,8 @@
   const stack = inject(SplitStackInjectionKey, null)
 
   const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const actionsEl = ref<globalThis.HTMLElement | null>(null)
+  const actionRepeatsMedia = ref(false)
 
   const EYEBROW_PREFIX = '//' as const
 
@@ -148,8 +150,19 @@
     framesCells.value ? { borders: 'none', marks: 'all' } : {}
   )
 
-  onMounted(() => rootEl.value?.addEventListener('click', followBand))
+  onMounted(() => {
+    rootEl.value?.addEventListener('click', followBand)
+    syncActionRepeatsMedia()
+  })
+  onUpdated(syncActionRepeatsMedia)
   onScopeDispose(() => rootEl.value?.removeEventListener('click', followBand))
+
+  function syncActionRepeatsMedia() {
+    const href = mediaLink.value
+    const links = actionsEl.value?.querySelectorAll<globalThis.HTMLAnchorElement>('a[href]') ?? []
+    const target = href ? new globalThis.URL(href, globalThis.location.href).href : ''
+    actionRepeatsMedia.value = target !== '' && [...links].some((link) => link.href === target)
+  }
 
   function followBand(event: MouseEvent) {
     const href = mediaLink.value
@@ -249,7 +262,7 @@
 
               <p
                 v-if="hasDescription()"
-                class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=large]/split:text-body-lg"
+                class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=medium]/split:max-sm:text-body-sm group-data-[size=large]/split:text-body-lg"
               >
                 <slot>{{ description }}</slot>
               </p>
@@ -259,6 +272,7 @@
 
             <div
               v-if="slots.actions"
+              ref="actionsEl"
               :class="ACTIONS_CLASS"
             >
               <slot name="actions" />
@@ -277,6 +291,7 @@
             :is="isMediaLink ? 'a' : 'div'"
             :href="mediaLink ?? undefined"
             :aria-label="isMediaLink ? title : undefined"
+            :tabindex="isMediaLink && actionRepeatsMedia ? -1 : undefined"
             :data-testid="`${testId}__media`"
             :class="MEDIA_CLASS"
           >

@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: d23998d19ac8a4af15f71c62cdb13bdc45225eaba820b61a072c940245390231
+checksum: 907fe7a1b6c4b5a4818f7aabc0adf3fac3a19a3f76336a340a36eb5040c3c47c
 created: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-24
 ---
 
 # ChatMessage — Component Spec
@@ -174,7 +174,7 @@ packages/webkit/src/components/ai/chat-message/
 ## States
 
 - `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `status`), `data-alignment` (from the conversation), `data-grouped`.
-- A visually hidden line (`__author`, dropped when `grouped`) reads the accessible name; the user bubble has the time as `title`.
+- A visually hidden line (`__author`, dropped when `grouped`) reads the accessible name; the user bubble has the time as `title`, wrapped in first-strong isolate marks (U+2068 … U+2069) so `03:02 PM` keeps its order inside a right-to-left page.
 - `aria-busy="true"` while `pending` or `streaming`.
 - `pending`: `ResponseLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.

@@ -113,11 +113,10 @@
           :id="titleId"
           ref="headingEl"
           tabindex="-1"
-          dir="auto"
           :data-testid="`${testId}__title`"
           class="m-0 truncate rounded-(--shape-control) text-label-md text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         >
-          {{ title }}
+          <bdi>{{ title }}</bdi>
         </h2>
         <p
           v-if="meta"

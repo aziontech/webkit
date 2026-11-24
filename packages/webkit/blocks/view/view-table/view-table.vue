@@ -178,6 +178,7 @@
             target="_blank"
           />
           <Button
+            v-if="error || loading || status !== 'empty'"
             label="Create Resource"
             icon="az az-plus"
             variant="primary"
@@ -219,24 +220,13 @@
                   description="Create a resource to start serving traffic on your domains."
                 >
                   <template #actions>
-                    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
-                      <Button
-                        label="Create Resource"
-                        icon="az az-plus"
-                        variant="secondary"
-                        size="small"
-                        @click="(event: MouseEvent) => emit('create', event)"
-                      />
-                      <Button
-                        label="Documentation"
-                        aria-label="Documentation (opens in a new tab)"
-                        icon="az az-book"
-                        variant="outline"
-                        size="small"
-                        href="https://example.com/docs/resources"
-                        target="_blank"
-                      />
-                    </div>
+                    <Button
+                      label="Create Resource"
+                      icon="az az-plus"
+                      variant="primary"
+                      size="medium"
+                      @click="(event: MouseEvent) => emit('create', event)"
+                    />
                   </template>
                 </EmptyState>
               </template>
@@ -333,6 +323,7 @@
                         <DropdownMenuItem
                           value="delete"
                           label="Delete"
+                          severity="danger"
                         >
                           <template #leading
                             ><i

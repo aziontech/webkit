@@ -11,14 +11,14 @@
     <ModuleHeader
       align="split"
       description-width="narrow"
-      eyebrow="Narrow"
+      eyebrow="Platform"
       title="Builders, not spectators"
       :description="DESCRIPTION"
     />
     <ModuleHeader
       align="split"
       description-width="wide"
-      eyebrow="Wide"
+      eyebrow="Platform"
       title="Builders, not spectators"
       :description="DESCRIPTION"
     />

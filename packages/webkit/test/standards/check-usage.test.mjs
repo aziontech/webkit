@@ -147,9 +147,18 @@ test('evaluateUsage measures block use by the share of its imports', () => {
 test('claudeArgs and parseClaudeResult match the documented session', () => {
   const args = claudeArgs('make a page', 40)
   assert.deepEqual(args.slice(0, 2), ['-p', 'make a page'])
-  for (const flag of ['--dangerously-skip-permissions', '--strict-mcp-config']) {
-    assert.ok(args.includes(flag), flag)
-  }
+  assert.ok(args.includes('--strict-mcp-config'))
+  assert.ok(
+    !args.includes('--dangerously-skip-permissions'),
+    'the session must not skip permissions'
+  )
+  assert.equal(args[args.indexOf('--permission-mode') + 1], 'acceptEdits')
+  const allowed = args[args.indexOf('--allowedTools') + 1].split(',')
+  assert.ok(allowed.includes('mcp__webkit'))
+  assert.ok(
+    allowed.every((tool) => !/^Bash$|^Bash\(\*|WebFetch|WebSearch/.test(tool)),
+    allowed.join(',')
+  )
   assert.equal(args[args.indexOf('--max-turns') + 1], '40')
   assert.equal(args[args.indexOf('--mcp-config') + 1], '.mcp.json')
   assert.deepEqual(

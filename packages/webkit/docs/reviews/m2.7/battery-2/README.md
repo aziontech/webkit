@@ -51,7 +51,7 @@ The reference and AI screenshots, the tiles and the builders' apps are not in th
 
 ## Reproduce
 
-Copy `harness/` out and drop the `.txt` suffix from the scripts first (`for f in *.txt; do mv "$f" "${f%.txt}"; done`). The scripts carry the absolute paths of the run machine (`/data/eval-m27b` for the run, `/data/claude/webkit` for this repository); change them, or recreate that layout. Prerequisites: Node 22+, pnpm, podman (or docker) with `mcr.microsoft.com/playwright:v1.62.0-noble`, Python 3 with Pillow, and the `claude` CLI.
+Copy `harness/` out and drop the `.txt` suffix from the scripts first (`for f in *.txt; do mv "$f" "${f%.txt}"; done`). The scripts carry the absolute paths of the run machine (`/data/eval-m27b` for the run; this repository is read from `$WEBKIT_REPO`); change them, or recreate that layout. Prerequisites: Node 22+, pnpm, podman (or docker) with `mcr.microsoft.com/playwright:v1.62.0-noble`, Python 3 with Pillow, and the `claude` CLI.
 
 1. **References.** Put the 132 reference PNGs in `<run>/ref/shots/` (`battery-2-ref-shots.tar.gz` on the preview server, or recapture them as [`../battery-2-kit/README.md`](../battery-2-kit/README.md) describes).
 2. **Tarballs.** `pnpm icons:build`, then `pnpm pack` in `packages/webkit`, `packages/theme` and `packages/icons`; put the three `.tgz` files in `<run>/pkgs/`. Exclude `docs/reviews` from the webkit tarball first (H5).

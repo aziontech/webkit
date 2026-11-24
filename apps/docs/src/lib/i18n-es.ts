@@ -42,6 +42,7 @@ export const es: Messages = {
   rightToLeft: 'Derecha a izquierda',
   leftToRight: 'Izquierda a derecha',
   github: 'WebKit en GitHub',
+  newTab: '(se abre en una pestaña nueva)',
   footer: 'Pie de página',
   footerWebkit: 'WebKit',
   footerAzion: 'Azion',
@@ -241,5 +242,10 @@ export const es: Messages = {
   whyNextBody:
     'Fundamentos con criterio y patrones componibles, para que el sistema siga el ritmo del oficio.',
   openComponent: 'Abrir',
-  categoryLead: '{count} componentes'
+  categoryLead: '{count} componentes',
+  componentsLead: '{count} componentes, cada uno con sus ejemplos, API y pautas.',
+  blocksLead:
+    '{count} pantallas y fragmentos, cada uno con sus estados, código y pautas. Copia uno con npx @aziontech/webkit add <id>.',
+  copyPageTip: 'Copia esta página en Markdown, lista para pegar en un asistente.',
+  copyBlockTip: 'Copia este bloque en Markdown, listo para pegar en un asistente.'
 }

@@ -57,6 +57,7 @@
 - A cell's copy button writes `copy.text` to the clipboard on activation, then reads `copiedLabel` (or the catalog's `Copied`) with a check icon for two seconds before it returns to its label; the timer is cleared when the band unmounts. A failed write leaves the label as it was
 - A cell with both `action` and `copy` renders the link button first, then the copy button
 - Media per cell: `scene` wins over `illustration`; the scene receives `hover: true` while the pointer is over its cell (also on `pointermove`, so a pointer left still while the page scrolls under it counts). A scene name that is not registered draws nothing
+- A scene and an illustration share one inset: `var(--spacing-xl)` from the cell's top and side edges, so no art runs into the cell frame.
 
 ## Accessibility
 

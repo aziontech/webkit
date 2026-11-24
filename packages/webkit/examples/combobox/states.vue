@@ -1,5 +1,6 @@
 <script setup>
   import Combobox from '@aziontech/webkit/combobox'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
   const region = ref('us-east-1')
@@ -15,12 +16,15 @@
       aria-label="Region (disabled)"
       disabled
     />
-    <Combobox
-      v-model="missing"
-      :options="options"
-      aria-label="Region (invalid)"
-      invalid
-    />
+    <Field invalid>
+      <Field.Label>Region</Field.Label>
+      <Combobox
+        v-model="missing"
+        :options="options"
+        placeholder="Select a region"
+      />
+      <Field.Error>Choose a region.</Field.Error>
+    </Field>
     <Combobox
       v-model="missing"
       :options="[]"

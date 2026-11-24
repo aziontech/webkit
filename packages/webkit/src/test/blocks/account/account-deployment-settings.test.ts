@@ -29,6 +29,13 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   Array.from(root.querySelectorAll('button')).find((button) => visibleText(button) === text) as
     HTMLButtonElement | undefined
 describe('account/account-deployment-settings', () => {
+  it('keeps the info alert to what the page description does not say', () => {
+    const view = render(BuildDeployment)
+    const text = view.container.textContent ?? ''
+    expect(text).toContain('A Deployment Setting holds a binding policy')
+    expect(text.match(/Point two environments/g)).toHaveLength(1)
+  })
+
   it('shows the SaveBar after a default changes, and Discard restores it', async () => {
     const view = render(UnsavedChanges)
     expect(view.container.textContent).toContain('You have unsaved changes.')
@@ -233,7 +240,9 @@ describe('account/account-deployment-settings save shortcut', () => {
     const view = render(BuildDeployment, { props: { defaultDraft: { bindingPolicy: 'FLEXIBLE' } } })
     const save = buttonByText('Save', view.container as HTMLElement)!
     expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
-    expect(save.querySelector('[data-testid="kbd"]')).not.toBeNull()
+    expect(save.querySelector('[data-testid="kbd"]')?.classList).toContain(
+      'pointer-coarse:in-[button]:hidden'
+    )
     const event = pressShortcut('s')
     expect(event.defaultPrevented).toBe(true)
     const [payload, values] = view.emitted<unknown[]>('save')?.[0] ?? []

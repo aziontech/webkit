@@ -181,6 +181,24 @@ describe('SiteHeaderSection', () => {
     expect(tree.getByRole('link', { name: 'Start for free' })).toBeInTheDocument()
   })
 
+  it('mirrors the sheet on the menu button and names each navigation apart from the banner', async () => {
+    const { getByRole, getByTestId } = nav()
+
+    const opener = getByRole('button', { name: 'Open navigation' })
+    expect(opener.getAttribute('aria-haspopup')).toBe('dialog')
+    expect(opener.getAttribute('aria-expanded')).toBe('false')
+    expect(getByTestId(TESTID).querySelector('nav')?.getAttribute('aria-label')).toBe('Main')
+
+    await userEvent.click(opener)
+    const sheet = await waitFor(() => body().getByRole('dialog', { name: 'Menu' }), {
+      timeout: OPEN_TIMEOUT
+    })
+
+    await waitFor(() => expect(opener.getAttribute('aria-expanded')).toBe('true'))
+    expect(sheet.querySelector('[aria-label="Main menu"]')).not.toBeNull()
+    expect(sheet.querySelector('[aria-label="Azion"]')).toBeNull()
+  })
+
   it('closes the sheet on Escape and restores focus to the menu button', async () => {
     const { getByRole } = nav()
 

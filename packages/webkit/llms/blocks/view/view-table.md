@@ -1,6 +1,6 @@
 # ViewTable (`view/view-table`)
 
-> The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary medium Create Resource at the same height (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the edit-delete-dialog pattern: a warning `Alert` and its typed confirmation phrase, the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create Resource and a small outlined Documentation on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary medium Create Resource at the same height (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the edit-delete-dialog pattern: a warning `Alert` and its typed confirmation phrase, the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then the primary Create Resource, the page's only Create while the heading hides its own), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
@@ -75,7 +75,7 @@ When `status` is `no-match`, the table's `#empty` slot holds a medium `EmptyStat
 
 When `status` is `error`, a danger `Alert` ("Couldn't load the resources. Check your connection and retry.") with a Retry action bound to the collection's `refresh` takes the table's place; the heading and the controls row stay.
 
-When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then a small secondary `Create <Object>` with the heading's label and a small outlined Documentation on one row.
+When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then the primary medium `Create <Object>` with the heading's label. The empty state owns the call to action, so the heading hides its own Create while the list is empty and keeps only Documentation: one Create and one Documentation on the page, never two of each.
 
 ## Data
 
@@ -186,7 +186,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 ## Variants
 
 - `Default` — primary (the code below)
-- `Empty` — Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Documentation button.
+- `Empty` — Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with the primary Create Resource; the heading hides its own Create and keeps Documentation, so neither action appears twice.
 - `Loading` — The first load: the heading stays, the PropertyFilter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows under the column header.
 - `Error` — The resources could not load: the heading and the disabled controls row stay, and a danger Alert with Retry takes the table's place, as the primary does when `useCollection` reports `error`.
 - `Deployments` — The deployments list, the same page with its own columns: a PropertyFilter over Version, Status, Project, Environment and Author with Refresh, Download CSV and preferences; Version with a Current `Tag`, a hidden ID, Status as a `StatusIndicator` (a spinner while Building) with the run's duration, the project as a `TableCellLink`, the environment as a rounded `Tag` and the author avatar with the relative time. Clicking a row opens the deployment; its menu holds View details, Redeploy and Promote to production (disabled unless the run is Ready and not already in Production): Redeploy queues a new run at the top and says so in a toast, and Promote to production asks in a `ConfirmDialog`, then makes the run the Current production deployment of its project. Refresh shows the table's loading state, a filter with no match shows No matching deployments, and an account with no deployments shows the flush empty card. The detail-resource Deployments tabs reuse this table without the page heading.
@@ -376,6 +376,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
             target="_blank"
           />
           <Button
+            v-if="error || loading || status !== 'empty'"
             label="Create Resource"
             icon="az az-plus"
             variant="primary"
@@ -417,24 +418,13 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
                   description="Create a resource to start serving traffic on your domains."
                 >
                   <template #actions>
-                    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
-                      <Button
-                        label="Create Resource"
-                        icon="az az-plus"
-                        variant="secondary"
-                        size="small"
-                        @click="(event: MouseEvent) => emit('create', event)"
-                      />
-                      <Button
-                        label="Documentation"
-                        aria-label="Documentation (opens in a new tab)"
-                        icon="az az-book"
-                        variant="outline"
-                        size="small"
-                        href="https://example.com/docs/resources"
-                        target="_blank"
-                      />
-                    </div>
+                    <Button
+                      label="Create Resource"
+                      icon="az az-plus"
+                      variant="primary"
+                      size="medium"
+                      @click="(event: MouseEvent) => emit('create', event)"
+                    />
                   </template>
                 </EmptyState>
               </template>
@@ -531,6 +521,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
                         <DropdownMenuItem
                           value="delete"
                           label="Delete"
+                          severity="danger"
                         >
                           <template #leading
                             ><i

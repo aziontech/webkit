@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/dashboard-alerts")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -85,11 +85,14 @@ Holds the Open by severity rows while the period loads, so the column keeps its 
 The level, on the severity ramp, in Open by severity, Highest risk and as the lead column of Open
 alerts. The word is always visible; color never carries severity alone.
 
-### J. Empty regions — `EmptyState` (required)
+### J. Empty regions — `EmptyState`, `Button` (required)
 
-Every region renders its own empty state with a reason and the next step: the chart
-(`No alerts in this period` / `Select a longer period.`), Open by severity (`No open alerts`), Highest
-risk (`No entities at risk yet`) and the table.
+When the whole period is empty, the tiles print `0` (zero is the truth, never a dash) and one
+bordered page-level `EmptyState` replaces the cards: `No alerts in the last 30 days`, what fills the
+page, and `Show the last 90 days` as the next step. Six copies of the same empty card teach nothing.
+When only some regions are empty, each renders its own empty state with a reason and the next step:
+the chart (`No alerts in this period` / `Select a longer period.`), Open by severity
+(`No open alerts`), Highest risk (`No entities at risk yet`) and the table.
 
 ### K. Alerts by type — `BarList` (required)
 
@@ -97,7 +100,9 @@ Ranks alert types by count, largest first, labelled `Alerts by type`.
 
 ### L. Highest risk and Open alerts — `DataTable` (required)
 
-Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert.
+Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert,
+and shows the top six. Loading skeletons match what loads: six rows in Highest risk, the page size in
+Open alerts, and tiles that reserve their delta line, so nothing jumps when the period arrives.
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
 Figures use tabular numbers. Both tables set `stackable`: on a phone each row becomes a card of
 label and value lines, so the deciding figure never sits off-screen.
@@ -210,7 +215,7 @@ Then delete `sample.ts` and its import.
 
 - `Default` — primary (the code below)
 - `Loading` — While the period loads, the tiles, the chart, the bar list and both tables render their own Skeleton, and Open by severity holds Skeleton rows, so nothing reflows when data arrives.
-- `Empty` — A period with no alerts. The tiles show a dash with no delta, and every region keeps its box with an EmptyState that says why it is empty and what to do next.
+- `Empty` — A period with no alerts. The tiles print 0 with no delta, and one bordered page-level EmptyState, No alerts in the last 30 days with Show the last 90 days as the next step, replaces the cards.
 - `Error` — The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.
 
 Each variant is the same screen in another state: `get_block("dashboard/dashboard-alerts", { variant })`, or the file under `blocks/dashboard/dashboard-alerts/variants/`.
@@ -222,7 +227,9 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import Alert from '@aziontech/webkit/alert'
   import type { BarListItem } from '@aziontech/webkit/bar-list'
   import BarList from '@aziontech/webkit/bar-list'
+  import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -409,6 +416,17 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const entities = computed(() => props.entities ?? (blocked.value ? [] : sampleEntities))
   const alerts = computed(() => props.alerts ?? (blocked.value ? [] : sampleAlerts))
 
+  const nothing = computed(
+    () =>
+      !blocked.value &&
+      series.value.length === 0 &&
+      openByLevel.value.length === 0 &&
+      types.value.length === 0 &&
+      entities.value.length === 0 &&
+      alerts.value.length === 0 &&
+      Object.values(kpis.value).every((kpi) => !kpi?.value)
+  )
+
   const { formatNumber } = useLocale()
   const fixed = (value: number, digits: number) =>
     formatNumber(value, { minimumFractionDigits: digits, maximumFractionDigits: digits })
@@ -432,7 +450,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         description="What is open, how severe it is, what kind it is and who is involved."
       >
         <template #actions>
-          <div class="w-44 shrink-0">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"
@@ -489,7 +507,29 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         </ul>
       </section>
 
+      <EmptyState
+        v-if="nothing"
+        bordered
+        icon="az az-bell"
+        :title="`No alerts in the ${periodPhrase}`"
+        description="Alerts appear here when a detection rule flags a user, a device or a service account."
+        data-testid="dashboard-alerts__empty"
+      >
+        <template
+          v-if="period !== '90d'"
+          #actions
+        >
+          <Button
+            label="Show the last 90 days"
+            variant="outline"
+            size="medium"
+            @click="period = '90d'"
+          />
+        </template>
+      </EmptyState>
+
       <div
+        v-else
         class="grid grid-cols-1 items-stretch gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
         <AlertsCard
@@ -957,17 +997,33 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
   import EmptyState from '@aziontech/webkit/empty-state'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
 
   import type { AlertsDashboardEntity } from '../dashboard-alerts.vue'
 
   export interface EntityTableProps {
-    /** The entities with the highest risk score. */
+    /** The entities with the highest risk score; the first six show. */
     entities: AlertsDashboardEntity[]
     /** The period is loading. */
     loading?: boolean
   }
 
-  withDefaults(defineProps<EntityTableProps>(), { loading: false })
+  const props = withDefaults(defineProps<EntityTableProps>(), { loading: false })
+
+  const TOP_ENTITIES = 6
+
+  const rows = computed<AlertsDashboardEntity[]>(() =>
+    props.loading && !props.entities.length
+      ? Array.from({ length: TOP_ENTITIES }, (_, index) => ({
+          id: `loading-${index}`,
+          name: '',
+          type: '',
+          score: 0,
+          level: 'info',
+          alerts: 0
+        }))
+      : props.entities.slice(0, TOP_ENTITIES)
+  )
 
   const entityColumns: TableColumn[] = [
     {
@@ -1003,8 +1059,9 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 <template>
   <DataTable
     v-if="loading || entities.length"
-    :data="entities"
+    :data="rows"
     :columns="entityColumns"
+    aria-label="Highest risk"
     row-key="id"
     sortable
     density="compact"

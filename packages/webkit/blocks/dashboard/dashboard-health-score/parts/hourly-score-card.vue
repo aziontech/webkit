@@ -5,6 +5,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import Tracker from '@aziontech/webkit/tracker'
+  import { computed } from 'vue'
 
   import type { HealthScoreHourlyRow } from '../dashboard-health-score.vue'
 
@@ -19,7 +20,11 @@
     phrase: string
   }
 
-  defineProps<HourlyScoreCardProps>()
+  const props = defineProps<HourlyScoreCardProps>()
+
+  const hourOf = (label: string | undefined) => (label ?? '').split(' · ')[0] ?? ''
+  const firstHour = computed(() => hourOf(props.hourly[0]?.blocks[0]?.label))
+  const lastHour = computed(() => hourOf(props.hourly[0]?.blocks.at(-1)?.label))
 </script>
 
 <template>
@@ -81,6 +86,18 @@
               :severity="application.band.severity"
               size="small"
             />
+          </span>
+        </li>
+        <li
+          v-if="firstHour"
+          aria-hidden="true"
+          class="grid grid-cols-1 gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
+          data-testid="dashboard-health-score__hours"
+        >
+          <span class="hidden md:block" />
+          <span class="flex justify-between text-label-sm text-(--text-muted) tabular-nums">
+            <span>{{ firstHour }}</span>
+            <span>{{ lastHour }}</span>
           </span>
         </li>
       </ul>

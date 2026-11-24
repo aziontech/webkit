@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/card/default.vue'
+import Footer from '../../../../examples/card/footer.vue'
 import LinkCard from '../../../../examples/card/link.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Card from './card.vue'
@@ -146,9 +147,17 @@ describe('Card', () => {
   it('renders the composed Default story fixture', () => {
     const { getByTestId, getByText } = render(Default)
     expect(getByTestId(TESTID)).toBeTruthy()
-    // The story sets title "Card Title" and fills the content slot.
-    expect(getByTestId(`${TESTID}__title`).textContent).toContain('Card Title')
-    expect(getByText(/Card body content/)).toBeTruthy()
+    expect(getByTestId(`${TESTID}__title`).textContent).toContain('Production')
+    expect(getByText(/Serves acme-store/)).toBeTruthy()
+  })
+
+  it('makes Save the one primary action of the Footer example', () => {
+    const { getByRole } = render(Footer)
+    expect(getByRole('button', { name: 'Save' }).getAttribute('data-variant')).toBe('primary')
+    expect(getByRole('button', { name: 'Cancel' }).getAttribute('data-variant')).toBe('outline')
+    expect(getByRole('link', { name: /Read the caching guide/ }).textContent?.trim()).not.toMatch(
+      /:$/
+    )
   })
 
   describe('on devices', () => {

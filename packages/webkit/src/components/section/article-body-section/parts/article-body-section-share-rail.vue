@@ -27,7 +27,7 @@
     assistants: Record<string, string>
   }>()
 
-  const { t } = useTranslate({ articleBodySection: en.articleBodySection })
+  const { t } = useTranslate({ articleBodySection: en.articleBodySection, common: en.common })
 
   const RAIL_CLASS =
     'flex flex-col gap-(--spacing-xl) lg:sticky lg:top-[calc(3.5rem+var(--spacing-xl))] lg:max-h-[calc(100dvh-3.5rem-var(--spacing-xl))] lg:overflow-y-auto lg:pb-(--spacing-lg)'
@@ -141,7 +141,7 @@
               variant="outline"
               size="medium"
               icon="az az-x-brand"
-              :ariaLabel="share.shareX"
+              :ariaLabel="`${share.shareX} ${t('common.newTab')}`"
               :href="shareX"
               target="_blank"
             />
@@ -151,7 +151,7 @@
               variant="outline"
               size="medium"
               icon="az az-linkedin"
-              :ariaLabel="share.shareLinkedIn"
+              :ariaLabel="`${share.shareLinkedIn} ${t('common.newTab')}`"
               :href="shareLinkedIn"
               target="_blank"
             />
@@ -185,6 +185,11 @@
                 aria-hidden="true"
               />
               {{ link.label }}
+              <span
+                v-if="isExternal(link.href)"
+                class="sr-only"
+                >{{ ' ' + t('common.newTab') }}</span
+              >
             </a>
           </li>
         </ul>

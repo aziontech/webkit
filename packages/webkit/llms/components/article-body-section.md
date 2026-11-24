@@ -90,6 +90,7 @@
 
 - Container queries: none; from `lg` the grid has three columns with sticky rails.
 - Narrow (< `lg`): the column stands alone; the outline is a closed `details` disclosure ("On this page") between the byline and the prose, and the share rail follows the prose under a divider, so no control is dropped; code blocks scroll sideways inside themselves.
+- Phone (< `sm`): when the trail holds a linked crumb before the active one, the breadcrumb gives way to one back link to that parent crumb (a leading `az-chevron-left`, at least 40 px tall, `data-testid` `${testId}__back`); the headline under it names the page.
 - Touch: owned by `icon-button` and `split-button`.
 - Reflow: no horizontal page scroll at 320 px; only a code block scrolls.
 

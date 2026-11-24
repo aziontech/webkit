@@ -89,6 +89,14 @@ describe('detail/detail-dns-zone', () => {
     })
   })
 
+  it('gives the DNSSEC values the full row so the algorithm and digest show whole', () => {
+    const view = render(DetailDnsZone)
+    for (const name of ['Algorithm', 'Digest']) {
+      const row = view.getByRole('textbox', { name }).closest('[data-row-variant]')
+      expect(row?.getAttribute('data-row-variant')).toBe('stacked')
+    }
+  })
+
   it('offers table preferences instead of a hand-made columns popover', () => {
     const view = render(Records)
     expect(view.getByRole('button', { name: 'Table preferences' })).toBeTruthy()
@@ -111,6 +119,7 @@ describe('detail-dns-zone#ImportZoneFile', () => {
     render(ImportZoneFile)
     const drawer = await screen.findByRole('dialog', { name: 'Import zone file' })
     const text = within(drawer).getByRole('textbox', { name: 'Or paste it' })
+    expect(text.hasAttribute('data-monospace')).toBe(true)
     await fireEvent.update(text, 'www 300 IN A 192.0.2.7\nbad IN A nowhere')
     expect(within(drawer).getByRole('status').textContent).toMatch(/5 ready, 3 skipped,\s*1 error/)
     await waitFor(() =>

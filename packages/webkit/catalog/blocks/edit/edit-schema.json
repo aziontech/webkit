@@ -22,12 +22,12 @@
   },
   {
    "name": "ImportCsv",
-   "summary": "Create Table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `DataTable` preview, and a foreign key from customer_id to customers.id with On delete Cascade.",
+   "summary": "Create table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `DataTable` preview, and a foreign key from customer_id to customers.id with On delete Cascade.",
    "file": "blocks/edit/edit-schema/variants/import-csv.vue"
   },
   {
    "name": "Error",
-   "summary": "Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were.",
+   "summary": "Create table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were.",
    "file": "blocks/edit/edit-schema/variants/error.vue"
   }
  ],

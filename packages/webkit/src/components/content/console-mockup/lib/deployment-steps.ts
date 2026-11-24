@@ -19,7 +19,7 @@ export type DeploymentLogView = 'phased' | 'complete'
 export const DEFAULT_DEPLOYMENT_STEPS: DeploymentStep[] = [
   {
     key: 'token',
-    title: 'Azion Token',
+    title: 'Azion token',
     description: 'Deploy token created and added to the CLI',
     duration: 3,
     logs: [
@@ -38,7 +38,7 @@ export const DEFAULT_DEPLOYMENT_STEPS: DeploymentStep[] = [
   },
   {
     key: 'clone',
-    title: 'Clone Template',
+    title: 'Clone template',
     description: 'Template cloned into the GitHub scope',
     duration: 4,
     logs: [

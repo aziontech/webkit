@@ -42,6 +42,7 @@
    "--accent-foreground",
    "--accent-mask",
    "--accent-selected",
+   "--animate-autoplay-progress",
    "--animate-blink",
    "--animate-blink-settle",
    "--animate-bounce",
@@ -854,6 +855,7 @@
     "--accent-selected"
    ],
    "animate": [
+    "--animate-autoplay-progress",
     "--animate-blink",
     "--animate-blink-settle",
     "--animate-bounce",
@@ -1694,6 +1696,7 @@
    ]
   },
   "animations": [
+   "autoplay-progress",
    "blink",
    "blink-settle",
    "bounce",
@@ -1726,6 +1729,10 @@
    "texture-wave-b"
   ],
   "animationGuide": {
+   "autoplay-progress": {
+    "value": "autoplayProgress 2100ms linear forwards",
+    "useWhen": "The hairline that fills while a rotating band (tabs, quotes, highlights) waits to advance. Set animation-duration ON THE ELEMENT to the rotation interval, key the element on the slide so it restarts, pause it with animation-play-state while the rotation holds, and anchor its transform origin at the inline start."
+   },
    "blink": {
     "value": "blink 1s step-end infinite",
     "useWhen": "Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does)."
@@ -3149,7 +3156,7 @@
      "font-size": "1.875rem",
      "line-height": "1.25",
      "font-weight": "400",
-     "letter-spacing": "-0.046em"
+     "letter-spacing": "-0.035em"
     },
     "purpose": "The largest page heading, for a marketing hero.",
     "breakpoints": {
@@ -3157,7 +3164,8 @@
       "font-size": "3rem"
      },
      "md": {
-      "font-size": "3.5rem"
+      "font-size": "3.5rem",
+      "letter-spacing": "-0.046em"
      }
     }
    },
@@ -3169,7 +3177,7 @@
      "font-size": "1.875rem",
      "line-height": "1",
      "font-weight": "400",
-     "letter-spacing": "-0.053em"
+     "letter-spacing": "-0.035em"
     },
     "purpose": "A marketing section heading.",
     "breakpoints": {
@@ -3177,7 +3185,8 @@
       "font-size": "2.25rem"
      },
      "md": {
-      "font-size": "3rem"
+      "font-size": "3rem",
+      "letter-spacing": "-0.053em"
      }
     }
    },
@@ -4126,6 +4135,7 @@
   "assets/getninjas-extended-reversed.svg": "assets/get-ninjas-extended-reversed.svg",
   "assets/gfg-extended-mono.svg": "assets/global-fashion-group-extended-mono.svg",
   "assets/gfg-extended-reversed.svg": "assets/global-fashion-group-extended-reversed.svg",
+  "assets/gpa-photo.jpg": "assets/gpa-photo.webp",
   "assets/gruposabemi-extended-color.svg": "assets/grupo-sabemi-extended-color.svg",
   "assets/gruposabemi-extended-mono.svg": "assets/grupo-sabemi-extended-mono.svg",
   "assets/gruposabemi-extended-reversed.svg": "assets/grupo-sabemi-extended-reversed.svg",
@@ -4134,6 +4144,7 @@
   "assets/lojadomecanico-extended-reversed.svg": "assets/loja-do-mecanico-extended-reversed.svg",
   "assets/lojaintegrada-extended-color.svg": "assets/loja-integrada-extended-color.svg",
   "assets/lojaintegrada-extended-reversed.svg": "assets/loja-integrada-extended-reversed.svg",
+  "assets/netshoes-photo.jpg": "assets/netshoes-photo.webp",
   "assets/newbalance-extended-color.svg": "assets/new-balance-extended-color.svg",
   "assets/newbalance-extended-mono.svg": "assets/new-balance-extended-mono.svg",
   "assets/newbalance-extended-reversed.svg": "assets/new-balance-extended-reversed.svg",
@@ -6515,6 +6526,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables interaction and applies disabled tokens."
+    },
+    {
+     "name": "icon",
+     "type": "string",
+     "default": "'az az-copy'",
+     "required": "false",
+     "doc": "Idle glyph; `az az-link` when the value is a link to a section. The check glyph replaces it after a copy."
     }
    ],
    "events": [
@@ -11074,7 +11092,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
     },
     {
      "name": "disabled",
@@ -11183,7 +11201,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
     },
     {
      "name": "disabled",
@@ -13372,7 +13390,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Call-to-action text; when set the card closes on a link row."
+     "doc": "Call-to-action text; when set the card closes on a link row. A linked card without it shows the link glyph alone in its top-end corner."
     }
    ],
    "slots": [
@@ -13918,7 +13936,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The prompt itself: one or more sentences of literal text. Also the string the copy control carries."
+     "notes": "The prompt itself: one or more sentences of literal text, drawn without the whitespace that opens and closes the slot. Also the string the copy control carries."
     }
    ],
    "surface": "docs",
@@ -20490,7 +20508,7 @@
      "type": "LogoWallVariant",
      "default": "'square'",
      "required": "false",
-     "doc": "The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`."
+     "doc": "The cell's proportion; `rectangle` sets every cell at 3:2 and holds three columns beside `aside` from `lg`."
     },
     {
      "name": "items",
@@ -21749,7 +21767,7 @@
      "type": "string",
      "default": "—",
      "required": "true",
-     "doc": "URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text."
+     "doc": "URL of the document to embed. Only an absolute `https` URL is framed; anything else renders the title as text."
     },
     {
      "name": "title",
@@ -21804,7 +21822,7 @@
     {
      "name": "answer",
      "scope": "{ item: FaqItem }",
-     "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content."
+     "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content; it renders in a padded block, so paragraphs, lists and code stay on the answer column, spaced `var(--spacing-xs)` apart."
     }
    ],
    "surface": "site",
@@ -25383,11 +25401,11 @@
    "treeShakeableImport": "@aziontech/webkit/assets/gpa-extended-reversed.svg",
    "surface": "site"
   },
-  "assets/gpa-photo.jpg": {
-   "import": "@aziontech/webkit/assets/gpa-photo.jpg",
-   "target": "./src/assets/logos/clients/photos/gpa-photo.jpg",
+  "assets/gpa-photo.webp": {
+   "import": "@aziontech/webkit/assets/gpa-photo.webp",
+   "target": "./src/assets/logos/clients/photos/gpa-photo.webp",
    "kind": "asset",
-   "treeShakeableImport": "@aziontech/webkit/assets/gpa-photo.jpg",
+   "treeShakeableImport": "@aziontech/webkit/assets/gpa-photo.webp",
    "surface": "site"
   },
   "assets/gpa-symbol-color.svg": {
@@ -25943,11 +25961,11 @@
    "treeShakeableImport": "@aziontech/webkit/assets/netshoes-extended-reversed.svg",
    "surface": "site"
   },
-  "assets/netshoes-photo.jpg": {
-   "import": "@aziontech/webkit/assets/netshoes-photo.jpg",
-   "target": "./src/assets/logos/clients/photos/netshoes-photo.jpg",
+  "assets/netshoes-photo.webp": {
+   "import": "@aziontech/webkit/assets/netshoes-photo.webp",
+   "target": "./src/assets/logos/clients/photos/netshoes-photo.webp",
    "kind": "asset",
-   "treeShakeableImport": "@aziontech/webkit/assets/netshoes-photo.jpg",
+   "treeShakeableImport": "@aziontech/webkit/assets/netshoes-photo.webp",
    "surface": "site"
   },
   "assets/new-balance-extended-color.svg": {
@@ -32303,6 +32321,7 @@
     "avatar",
     "button",
     "combobox",
+    "copy-button",
     "doc-card",
     "doc-item",
     "doc-prompt",
@@ -32772,7 +32791,6 @@
     "Card",
     "ConfirmDialog",
     "DataTable",
-    "DataTablePagination",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -32797,6 +32815,7 @@
     "TableCellStatus",
     "TableCellTags",
     "TableCellTime",
+    "TableFooter",
     "Tabs",
     "Tag",
     "toast",
@@ -32810,7 +32829,6 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
-    "@aziontech/webkit/data-table-pagination",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -32835,6 +32853,7 @@
     "@aziontech/webkit/table-cell-status",
     "@aziontech/webkit/table-cell-tags",
     "@aziontech/webkit/table-cell-time",
+    "@aziontech/webkit/table-footer",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
@@ -33081,7 +33100,8 @@
     "Field",
     "Input",
     "PaymentBrand",
-    "Select"
+    "Select",
+    "use-escape-to-cancel"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -33090,7 +33110,8 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
     "@aziontech/webkit/payment-brand",
-    "@aziontech/webkit/select"
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/use-escape-to-cancel"
    ],
    "primary": "Default",
    "guidelinesSummary": "The Payment method card of the Upgrade to Pro drawer. The user needs to confirm which card will be charged and, if needed, replace it without leaving the upgrade: the card on file shows as one row (brand plate, last four digits, Change), and Change swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade submits.",
@@ -33343,7 +33364,7 @@
     "@aziontech/webkit/utils/leave-link"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).",
+   "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. Two parts make up access, said the same way here and in `account/account-users`: a person's role decides what they can do on the account, and their teams decide which resources they reach, so the list of teams is the whole resource model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).",
    "variants": [
     {
      "name": "CreateTeam"
@@ -34375,7 +34396,7 @@
    "title": "Blocks/Create/CreateDeploySuccess",
    "source": "blocks/create/create-deploy-success/create-deploy-success.vue",
    "surface": "app",
-   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
+   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
    "intents": [
     "deploy success",
     "deployment successful",
@@ -34430,7 +34451,7 @@
    "title": "Blocks/Create/CreateDeployTemplate",
    "source": "blocks/create/create-deploy-template/create-deploy-template.vue",
    "surface": "app",
-   "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the InCreateFlow state of the DeploymentLogs template) and then to the success screen (the DeploySuccess template). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. WhereItRuns opens the flow on the service the project deploys to: a search over the services, six at a time, an inline Create Service row and a way to continue without one, before the Git step. InstallIntegration is the same page for an integration template (Origin Proxy): no Git and no build, its settings with the required origin, What gets added previewing the origin record, the request-phase rule and its behaviors on the service, and Add to the service. Built from `AppHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton`, `Item`, `Tag` and `Button`.",
+   "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the InCreateFlow state of the `detail/detail-deployment-logs` block) and then to the success screen (the `create/create-deploy-success` block). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. WhereItRuns opens the flow on the service the project deploys to: a search over the services, six at a time, an inline Create Service row and a way to continue without one, before the Git step. InstallIntegration is the same page for an integration template (Origin Proxy): no Git and no build, its settings with the required origin, What gets added previewing the origin record, the request-phase rule and its behaviors on the service, and Add to the service. Built from `AppHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton`, `Item`, `Tag` and `Button`.",
    "intents": [
     "deploy template",
     "clone template",
@@ -35029,6 +35050,7 @@
     "Field",
     "Input",
     "Kbd",
+    "KeyValueList",
     "OverflowCount",
     "PageHeader",
     "SaveBar",
@@ -35055,6 +35077,7 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
     "@aziontech/webkit/kbd",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/overflow-count",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/save-bar",
@@ -35452,6 +35475,7 @@
    "components": [
     "Alert",
     "BarList",
+    "Button",
     "Card",
     "Chart",
     "ChartCard",
@@ -35471,6 +35495,7 @@
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
+    "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
@@ -35507,7 +35532,7 @@
    "title": "Blocks/Dashboard/DashboardAnalytics",
    "source": "blocks/dashboard/dashboard-analytics/dashboard-analytics.vue",
    "surface": "app",
-   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A StatTileGroup of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTileGroup`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A StatTileGroup of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation as muted text and the variation Tag, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTileGroup`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "metrics",
     "metric panel",
@@ -35771,6 +35796,7 @@
     "ChartCard",
     "DashboardGrid",
     "DonutChart",
+    "EmptyState",
     "Hint",
     "IconButton",
     "PageHeader",
@@ -35785,6 +35811,7 @@
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/dashboard-grid",
     "@aziontech/webkit/donut-chart",
+    "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/page-header",
@@ -37026,7 +37053,7 @@
    "title": "Blocks/Detail/DetailResource",
    "source": "blocks/detail/detail-resource/detail-resource.vue",
    "surface": "app",
-   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `FlowDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of `edit/edit-resource`. Built from `PageHeader`, `PageTabs`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `FlowDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
+   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the `detail/detail-deployment-logs` block and one function run is the `detail/detail-invocations` block. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `FlowDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the `detail/detail-version` block and the deploy drawers opened from these pages are the `create/create-deploy-drawer` block. The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of `edit/edit-resource`. Built from `PageHeader`, `PageTabs`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `PasswordInput`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `FlowDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
    "intents": [
     "overview page",
     "resource overview",
@@ -37092,7 +37119,6 @@
     "FlowDiagram",
     "IconButton",
     "Input",
-    "InputGroupRoot",
     "Item",
     "Item",
     "Kbd",
@@ -37102,6 +37128,7 @@
     "PanelBody",
     "PanelFooter",
     "PanelHeader",
+    "PasswordInput",
     "Popover",
     "SaveBar",
     "Select",
@@ -37142,7 +37169,6 @@
     "@aziontech/webkit/flow-diagram-root",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
     "@aziontech/webkit/item-root",
     "@aziontech/webkit/kbd",
@@ -37152,6 +37178,7 @@
     "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
+    "@aziontech/webkit/password-input",
     "@aziontech/webkit/popover",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
@@ -37338,7 +37365,7 @@
    "title": "Blocks/Detail/DetailVersion",
    "source": "blocks/detail/detail-version/detail-version.vue",
    "surface": "app",
-   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
+   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the `edit/edit-rule-builder` block. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
    "intents": [
     "version detail",
     "resource version",
@@ -37835,6 +37862,7 @@
     "Textarea",
     "toast",
     "Tooltip",
+    "use-locale",
     "use-unsaved-changes",
     "utils/focus-invalid"
    ],
@@ -37880,6 +37908,7 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-unsaved-changes",
     "@aziontech/webkit/utils/focus-invalid"
    ],
@@ -37927,7 +37956,7 @@
    "title": "Blocks/Edit/EditRuleBuilder",
    "source": "blocks/edit/edit-rule-builder/edit-rule-builder.vue",
    "surface": "app",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add rule or Edit rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -38005,7 +38034,7 @@
    "title": "Blocks/Edit/EditSchema",
    "source": "blocks/edit/edit-schema/edit-schema.vue",
    "surface": "app",
-   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the state-form-validation rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.",
+   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create table, Truncate table). Create table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the state-form-validation rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.",
    "intents": [
     "schema editor",
     "create table",
@@ -38096,7 +38125,7 @@
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "CreateTable",
-   "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
+   "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create table, Add column, Insert and table menu buttons of `view/view-query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
    "variants": [
     {
      "name": "AddColumn"
@@ -38124,7 +38153,7 @@
    "title": "Blocks/Edit/EditVariables",
    "source": "blocks/edit/edit-variables/edit-variables.vue",
    "surface": "app",
-   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `TableCellTime`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
+   "summary": "A key/value editor, drawn as a variables list page and the Create variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `TableCellTime`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
    "intents": [
     "variables",
     "environment variables",
@@ -38260,7 +38289,7 @@
     "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "List",
-   "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
+   "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
    "variants": [
     {
      "name": "Create"
@@ -38402,7 +38431,7 @@
    "title": "Blocks/Settings/SettingsForm",
    "source": "blocks/settings/settings-form/settings-form.vue",
    "surface": "app",
-   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `Subheader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveError); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsGroup`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `account/account-mfa-settings`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileError are its first load and its load failure. Each group or card is its own form: its Save stays disabled until that card changes, emits `submit` with the card's values, and its `loading` and `error` props drive the spinner, the success toast and an error toast with Retry; saving one disables just its own fieldset while the others stay editable. Built from `PageHeader`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `FieldError`, `ConfirmDialog`, `Skeleton` and `Button`.",
+   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `Subheader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveError); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsGroup`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `account/account-mfa-settings`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileError are its first load and its load failure. Each group or card is its own form: its Save stays disabled until that card changes, emits `submit` with the card's values, and its `loading` and `error` props drive the spinner, the success toast and an error toast with Retry; saving one disables just its own fieldset while the others stay editable. Built from `PageHeader`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `FieldError`, `ConfirmDialog`, `CopyText`, `Skeleton` and `Button`.",
    "intents": [
     "account settings form",
     "organization or account settings",
@@ -38458,6 +38487,7 @@
     "Button",
     "Card",
     "ConfirmDialog",
+    "CopyText",
     "Field",
     "FieldError",
     "Input",
@@ -38483,6 +38513,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/copy-text",
     "@aziontech/webkit/field",
     "@aziontech/webkit/field-error",
     "@aziontech/webkit/input",
@@ -38619,7 +38650,6 @@
     "Select",
     "StatusIndicator",
     "TableCellId",
-    "TableCellLink",
     "TableCellStatus",
     "Tabs",
     "Tag",
@@ -38659,7 +38689,6 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/table-cell-id",
-    "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-status",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
@@ -38915,7 +38944,7 @@
    "title": "Blocks/State/StateAsyncSubmit",
    "source": "blocks/state/state-async-submit/state-async-submit.vue",
    "surface": "app",
-   "summary": "The async counterpart of the server rejection in the SectionRejected state of the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of Templates/Platform/Detail/DeploymentLogs (`Card`, `StatusIndicator`, `LogViewer` with its `LogViewer.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The async counterpart of the server rejection in the SectionRejected state of the `state/state-form-validation` block: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of `detail/detail-deployment-logs` (`Card`, `StatusIndicator`, `LogViewer` with its `LogViewer.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "async submit",
     "long running action",
@@ -38977,7 +39006,7 @@
    "title": "Blocks/State/StateEdgeErrorPage",
    "source": "blocks/state/state-edge-error-page/state-edge-error-page.vue",
    "surface": "edge",
-   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.",
+   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; one `orientation=\"responsive\"` diagram, side by side when the row fits and stacked when it does not), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.",
    "intents": [
     "edge error page",
     "502 bad gateway page",
@@ -40169,7 +40198,7 @@
    "title": "Blocks/View/ViewRuleList",
    "source": "blocks/view/view-rule-list/view-rule-list.vue",
    "surface": "app",
-   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `TableCellTime`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `TableCellTime`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "rules list",
     "rules engine list",
@@ -40307,7 +40336,7 @@
    "title": "Blocks/View/ViewTable",
    "source": "blocks/view/view-table/view-table.vue",
    "surface": "app",
-   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary medium Create Resource at the same height (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the edit-delete-dialog pattern: a warning `Alert` and its typed confirmation phrase, the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create Resource and a small outlined Documentation on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary medium Create Resource at the same height (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the edit-delete-dialog pattern: a warning `Alert` and its typed confirmation phrase, the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then the primary Create Resource, the page's only Create while the heading hides its own), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "list",
     "list page",

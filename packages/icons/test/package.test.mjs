@@ -52,3 +52,9 @@ test('every export points into a published folder', () => {
     assert.match(target, /^\.\/dist\//, `${target} is outside dist/`)
   }
 })
+
+test('the icon font face blocks briefly instead of painting fallback glyphs', () => {
+  const template = readFileSync(join(ROOT, 'templates/css.hbs'), 'utf8')
+  const face = template.slice(template.indexOf('@font-face'), template.indexOf('}') + 1)
+  assert.match(face, /font-display: block;/)
+})

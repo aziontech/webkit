@@ -9,7 +9,7 @@
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { accents, blankAddress, blankCard } from './onboarding-form-data'
   import OrganizationPreview from './parts/organization-preview.vue'
@@ -120,6 +120,8 @@
     loading?: boolean
     /** Why the organization was not created, shown in the danger alert with Retry; the answers are kept. */
     error?: string
+    /** Focus the open step's first field when the screen mounts; turn off when the form is embedded in a longer page. */
+    autofocus?: boolean
   }
 
   const props = withDefaults(defineProps<OnboardingFormProps>(), {
@@ -127,7 +129,8 @@
     plans: undefined,
     defaultValues: () => ({}),
     loading: false,
-    error: ''
+    error: '',
+    autofocus: true
   })
 
   const emit = defineEmits<{
@@ -220,8 +223,16 @@
     })
   }
 
+  const wizardEl = ref<HTMLElement | null>(null)
+  const FIRST_FIELD = 'input:not([type=hidden]):not([disabled]), textarea:not([disabled])'
+
   onMounted(() => {
     if (props.error) outcome.value = 'failed'
+    if (!props.autofocus) return
+    void nextTick(() => {
+      const fields = [...(wizardEl.value?.querySelectorAll<HTMLElement>(FIRST_FIELD) ?? [])]
+      fields.find((field) => field.getClientRects().length > 0)?.focus()
+    })
   })
 
   watch(
@@ -304,7 +315,10 @@
             class="w-full"
           >
             <template #default>
-              <div class="p-(--spacing-md)">
+              <div
+                ref="wizardEl"
+                class="p-(--spacing-md)"
+              >
                 <h1 class="sr-only">Set up your organization</h1>
                 <Wizard
                   v-model="step"

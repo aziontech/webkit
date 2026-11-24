@@ -31,9 +31,9 @@
               class="az az-cloud-upload"
               aria-hidden="true"
           /></template>
-          Deploy Project
+          Deploy project
         </CommandItem>
-        <CommandItem value="new-app">Create Application</CommandItem>
+        <CommandItem value="new-app">Create application</CommandItem>
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup label="Navigation">
@@ -43,9 +43,9 @@
               class="az az-settings"
               aria-hidden="true"
           /></template>
-          Go to Settings
+          Go to settings
         </CommandItem>
-        <CommandItem value="billing">Go to Billing</CommandItem>
+        <CommandItem value="billing">Go to billing</CommandItem>
       </CommandGroup>
       <CommandGroup label="Account">
         <CommandItem value="profile">
@@ -54,9 +54,9 @@
               class="az az-user"
               aria-hidden="true"
           /></template>
-          View Profile
+          View profile
         </CommandItem>
-        <CommandItem value="logout">Log Out</CommandItem>
+        <CommandItem value="logout">Log out</CommandItem>
       </CommandGroup>
     </CommandList>
   </CommandRoot>

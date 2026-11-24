@@ -147,9 +147,11 @@
               <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
             </slot>
             <Button
+              class="ms-auto"
               variant="primary"
               size="medium"
               type="submit"
+              data-testid="create-deploy-drawer__deploy"
               :disabled="blocked"
               :aria-describedby="reasonId || undefined"
               :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"

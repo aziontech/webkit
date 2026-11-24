@@ -169,7 +169,7 @@
         :title="title"
         :description="description"
         :test-id="testId"
-        title-class="[overflow-wrap:anywhere]"
+        title-class="[overflow-wrap:break-word]"
       />
     </div>
     <div

@@ -76,12 +76,14 @@
             <ChartCard.DragHandle :aria-label="'Move ' + cards[item.id].title" />
             <ChartCard.Title>{{ cards[item.id].title }}</ChartCard.Title>
             <ChartCard.Action v-if="editing">
-              <Tag
-                :label="item.span + '/12'"
-                severity="neutral"
-                size="small"
-                icon="az az-move-horizontal"
-              />
+              <span class="inline-flex @max-3xl/dashboard-grid:hidden">
+                <Tag
+                  :label="item.span + '/12'"
+                  severity="neutral"
+                  size="small"
+                  icon="az az-move-horizontal"
+                />
+              </span>
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>

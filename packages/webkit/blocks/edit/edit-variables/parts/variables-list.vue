@@ -149,7 +149,7 @@
               <template #actions>
                 <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                   <Button
-                    label="Create Variable"
+                    label="Create variable"
                     icon="az az-plus"
                     variant="secondary"
                     size="small"
@@ -268,6 +268,7 @@
                     <DropdownMenu.Item
                       value="delete"
                       label="Delete"
+                      severity="danger"
                     >
                       <template #leading>
                         <i

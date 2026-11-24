@@ -81,11 +81,11 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
   },
   {
     value: 'device-groups',
-    label: 'Device Groups',
-    heading: 'Device Groups',
-    action: 'Add Device Group',
+    label: 'Device groups',
+    heading: 'Device groups',
+    action: 'Add device group',
     table: {
-      columns: ['Name', 'ID', 'User-agent match', 'Last Editor', 'Last Modified'],
+      columns: ['Name', 'ID', 'User-agent match', 'Last editor', 'Last modified'],
       rows: [
         ['mobiledevices', 'dg-mobile', '(Mobile|iPhone|Android|BlackBerry)', 'gab', '9 days ago'],
         ['desktop', 'dg-desktop', 'Mozilla.*(Windows|Macintosh)', 'gab', '9 days ago'],
@@ -96,7 +96,7 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
     },
     second: {
       kind: 'drawer',
-      title: 'Add Device Group',
+      title: 'Add device group',
       action: 'Save',
       sections: [
         { title: 'General', fields: [{ kind: 'text', label: 'Name', value: 'smart-tv' }] },
@@ -109,15 +109,15 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
   },
   {
     value: 'cache-settings',
-    label: 'Cache Settings',
-    heading: 'Cache Settings',
-    action: 'Add Cache Settings',
+    label: 'Cache settings',
+    heading: 'Cache settings',
+    action: 'Add cache settings',
     table: {
       statusColumn: 4,
       columns: ['Name', 'ID', 'Browser cache', 'Edge cache', 'Tiered cache'],
       rows: [
-        ['Default Cache', 'cs-default', 'Honor origin', '60 seconds', 'Disabled'],
-        ['Static Assets', 'cs-static', '7 days', '30 days', 'Enabled'],
+        ['Default cache', 'cs-default', 'Honor origin', '60 seconds', 'Disabled'],
+        ['Static assets', 'cs-static', '7 days', '30 days', 'Enabled'],
         ['API responses', 'cs-api', 'No cache', '5 seconds', 'Disabled'],
         ['Image variants', 'cs-images', '1 day', '7 days', 'Enabled'],
         ['Feed endpoints', 'cs-feeds', 'No cache', '30 seconds', 'Disabled']
@@ -125,12 +125,12 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
     },
     second: {
       kind: 'drawer',
-      title: 'Add Cache Settings',
+      title: 'Add cache settings',
       action: 'Save',
       sections: [
         { title: 'General', fields: [{ kind: 'text', label: 'Name', value: 'Product pages' }] },
         {
-          title: 'Browser Cache',
+          title: 'Browser cache',
           fields: [
             { kind: 'select', label: 'Behavior', value: 'Override cache settings' },
             { kind: 'text', label: 'Maximum TTL (seconds)', value: '3600' }
@@ -148,9 +148,9 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
   },
   {
     value: 'functions-instances',
-    label: 'Functions Instances',
-    heading: 'Functions Instances',
-    action: 'Add Functions Instance',
+    label: 'Function instances',
+    heading: 'Function instances',
+    action: 'Add function instance',
     table: {
       statusColumn: 4,
       columns: ['Name', 'ID', 'Function', 'Arguments', 'Status'],
@@ -164,7 +164,7 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
     },
     second: {
       kind: 'drawer',
-      title: 'Add Functions Instance',
+      title: 'Add function instance',
       action: 'Save',
       sections: [
         { title: 'General', fields: [{ kind: 'text', label: 'Name', value: 'ab-test' }] },
@@ -182,7 +182,7 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
     value: 'rules-engine',
     label: 'Rules Engine',
     heading: 'Rules Engine',
-    action: 'Add Rule',
+    action: 'Add rule',
     table: {
       reorderable: true,
       statusColumn: 4,
@@ -197,7 +197,7 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
     },
     second: {
       kind: 'drawer',
-      title: 'Add Rule',
+      title: 'Add rule',
       action: 'Save',
       sections: [
         {
@@ -217,8 +217,8 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
             {
               kind: 'choice',
               label: 'Phase',
-              options: ['Request Phase', 'Response Phase'],
-              value: 'Response Phase'
+              options: ['Request phase', 'Response phase'],
+              value: 'Response phase'
             }
           ]
         },
@@ -233,7 +233,7 @@ export const CONSOLE_APPLICATION_STEPS: ConsoleApplicationStep[] = [
         },
         {
           title: 'Behaviors',
-          fields: [{ kind: 'select', label: 'Behavior', value: 'Enable Gzip' }]
+          fields: [{ kind: 'select', label: 'Behavior', value: 'Enable gzip' }]
         },
         { title: 'Status', fields: [{ kind: 'switch', label: 'Active', on: true }] }
       ]

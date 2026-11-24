@@ -282,6 +282,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             <Button
               label="New service"
               icon="az az-plus"
+              variant="outline"
               size="medium"
             />
           </TutorialPanelHotspot>
@@ -310,7 +311,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             >
               <Button
                 label="Deploy"
-                variant="primary"
+                variant="outline"
                 size="medium"
               />
             </TutorialPanelHotspot>

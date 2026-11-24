@@ -1,8 +1,9 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { page } from 'vitest/browser'
 
 import EditRule from '../../../../blocks/view/view-rule-list/variants/edit-rule.vue'
+import Loading from '../../../../blocks/view/view-rule-list/variants/loading.vue'
 import Searching from '../../../../blocks/view/view-rule-list/variants/searching.vue'
 import RulesList from '../../../../blocks/view/view-rule-list/view-rule-list.vue'
 import { useToastRegion } from '../../toast-region'
@@ -202,9 +203,9 @@ describe('view/view-rule-list block', () => {
     expect(view.getByText('No response rules yet')).toBeTruthy()
   })
 
-  it('emits create from Add Rule in the heading and with the phase from an empty phase', async () => {
+  it('emits create from Add rule in the heading and with the phase from an empty phase', async () => {
     const view = render(RulesList, { props: { subject: 'firewall', rules: [] } })
-    const adds = view.getAllByRole('button', { name: 'Add Rule' })
+    const adds = view.getAllByRole('button', { name: 'Add rule' })
     await fireEvent.click(adds[0])
     await fireEvent.click(adds[1])
     const calls = view.emitted<unknown[]>('create') as [MouseEvent, string?][]
@@ -254,6 +255,31 @@ describe('view/view-rule-list block', () => {
     expect(requestNames(view.container as HTMLElement)[2]).toBe('Redirect www')
   })
 
+  it('shows the drag handle and the position field, and reveals Move up and down on hover or focus', async () => {
+    const view = render(RulesList)
+    await waitFor(() =>
+      expect(view.container.querySelector('[data-reorder-handle]')).not.toBeNull()
+    )
+    const up = view.getByRole('button', { name: 'Move Docs rewrite up' })
+    const pair = up.closest('[data-slot="step-buttons"]')!
+    expect(pair.classList.contains('opacity-0')).toBe(true)
+    expect(pair.classList.contains('focus-within:opacity-100')).toBe(true)
+    expect(pair.classList.contains('[[data-reorder-row]:hover_&]:opacity-100')).toBe(true)
+  })
+
+  it('loads each phase with a few skeleton rows, not a full page of ten', async () => {
+    const view = render(Loading)
+    const tables = await waitFor(() => {
+      const found = view.getAllByRole('table')
+      expect(found.length).toBe(2)
+      return found
+    })
+    for (const table of tables) {
+      const rows = table.querySelectorAll('[data-testid="table-body"] [data-testid="table-row"]')
+      expect(rows.length).toBe(3)
+    }
+  })
+
   it('disables the position of the locked rule with its reason', () => {
     const view = render(RulesList)
     const field = view.getByRole('textbox', {
@@ -281,16 +307,16 @@ describe('view/view-rule-list block', () => {
   it('opens on the rule builder with a rule loaded (EditRule)', async () => {
     render(EditRule)
     const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
-    expect(drawer.textContent).toContain('Edit Rule')
+    expect(drawer.textContent).toContain('Edit rule')
     expect(drawer.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('Docs rewrite')
   })
 
-  it('opens the rule builder as Edit Rule from a name and as Add Rule from the header (EditRule)', async () => {
+  it('opens the rule builder as Edit rule from a name and as Add rule from the header (EditRule)', async () => {
     const view = await renderEditRuleClosed()
     await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const drawer = document.querySelector('[role="dialog"]') as HTMLElement
-    expect(drawer.textContent).toContain('Edit Rule')
+    expect(drawer.textContent).toContain('Edit rule')
     const name = drawer.querySelector<HTMLInputElement>('#rule-name')!
     expect(name.value).toBe('Docs rewrite')
     await fireEvent.update(name, 'Docs rewrite v2')
@@ -304,10 +330,10 @@ describe('view/view-rule-list block', () => {
     expect(view.getByRole('button', { name: 'Edit Docs rewrite v2' })).toBeTruthy()
     expect(view.queryByRole('button', { name: 'Review changes' })).toBeNull()
 
-    await fireEvent.click(view.getAllByRole('button', { name: 'Add Rule' })[0])
+    await fireEvent.click(view.getAllByRole('button', { name: 'Add rule' })[0])
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const adding = document.querySelector('[role="dialog"]') as HTMLElement
-    expect(adding.textContent).toContain('Add Rule')
+    expect(adding.textContent).toContain('Add rule')
     expect(adding.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('')
   })
 
@@ -335,7 +361,7 @@ describe('view/view-rule-list block', () => {
     ])
     expect(view.container.textContent).toMatch(/2\s+changes to the rules, not saved yet\./)
 
-    await fireEvent.click(view.getAllByRole('button', { name: 'Add Rule' })[0])
+    await fireEvent.click(view.getAllByRole('button', { name: 'Add rule' })[0])
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     const adding = document.querySelector('[role="dialog"]') as HTMLElement
     await fireEvent.update(adding.querySelector<HTMLInputElement>('#rule-name')!, 'Geo block')
@@ -396,7 +422,7 @@ describe('view/view-rule-list block', () => {
     })
     expect(view.getByText("Couldn't load the rules. Check your connection and retry.")).toBeTruthy()
     expect(view.queryByText('Docs rewrite')).toBeNull()
-    expect(view.getByRole('button', { name: 'Add Rule' }).hasAttribute('disabled')).toBe(true)
+    expect(view.getByRole('button', { name: 'Add rule' }).hasAttribute('disabled')).toBe(true)
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted<unknown[]>('retry')).toHaveLength(1)
   })
@@ -408,6 +434,13 @@ describe('view/view-rule-list block', () => {
       view.getByRole('button', { name: 'Move Docs rewrite, position 5 of 5' })
     )
     expect(view.queryByRole('textbox', { name: /^Position of Docs rewrite/ })).toBeNull()
+    expect(view.container.querySelectorAll('[data-reorder-handle]')).toHaveLength(0)
+    for (const table of view.getAllByRole('table')) {
+      const headers = within(table)
+        .getAllByRole('columnheader')
+        .map((cell) => cell.textContent?.trim())
+      expect(headers).toEqual(['Name', 'Status', 'Move'])
+    }
     await fireEvent.click(trigger)
     const up = await waitFor(() => {
       const item = Array.from(document.body.querySelectorAll('[role="menuitem"]')).find((node) =>

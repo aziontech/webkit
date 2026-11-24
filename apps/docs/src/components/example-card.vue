@@ -2,9 +2,10 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import { type Component, computed, onMounted, onScopeDispose, ref } from 'vue'
 
-  import { cached, keys } from '../lib/route-data'
   import { scheduleMount } from '../lib/mount-queue'
+  import { cached, keys } from '../lib/route-data'
   import type { Highlighted } from '../lib/types'
+  import { spacedTitle } from '../lib/words'
   import CodeView from './code-view.vue'
   import RawHtml from './raw-html.vue'
 
@@ -56,7 +57,7 @@
     cancel?.()
   })
 
-  const title = computed(() => props.example.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))
+  const title = computed(() => spacedTitle(props.example.name))
 </script>
 
 <template>

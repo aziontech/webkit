@@ -183,7 +183,6 @@
       <ApplicationBuildForm
         v-if="activeTab === 'build'"
         :form="build"
-        :name="APP.name"
         :repository="APP.repository"
         :dirty="dirty"
         :saving="saving"

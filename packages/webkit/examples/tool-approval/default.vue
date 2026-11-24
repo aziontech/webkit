@@ -18,8 +18,9 @@
     >
       <KeyValueList aria-label="Command to run">
         <KeyValueList.Item label="Command">
-          <code class="text-label-code-sm [overflow-wrap:anywhere] text-(--text-default)"
-            >azion deploy --env production --workload storefront</code
+          <code class="text-label-code-sm [overflow-wrap:break-word] text-(--text-default)"
+            >azion deploy <span class="whitespace-nowrap">--env production</span>
+            <span class="whitespace-nowrap">--workload storefront</span></code
           >
         </KeyValueList.Item>
         <KeyValueList.Item label="Environment">production</KeyValueList.Item>

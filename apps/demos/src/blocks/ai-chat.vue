@@ -346,7 +346,7 @@
       </AiChatStart>
       <Conversation
         v-else
-        aria-label="Conversation with the AI assistant"
+        aria-label="Conversation with the Agent"
         :more-messages="moreMessages"
         :loading-more="loadingMore"
         @load-more="emit('load-more', $event)"

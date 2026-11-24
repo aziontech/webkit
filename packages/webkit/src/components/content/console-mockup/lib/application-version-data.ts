@@ -14,9 +14,9 @@ export interface ApplicationVersionRow {
 export const APPLICATION_VERSION_EDITOR = 'user-956415@example.com'
 
 export const APPLICATION_VERSION_TABS = [
-  { value: 'main-settings', label: 'Main Settings' },
-  { value: 'cache-settings', label: 'Cache Settings' },
-  { value: 'device-groups', label: 'Device Groups' },
+  { value: 'main-settings', label: 'Main settings' },
+  { value: 'cache-settings', label: 'Cache settings' },
+  { value: 'device-groups', label: 'Device groups' },
   { value: 'functions', label: 'Functions' },
   { value: 'rules-engine', label: 'Rules Engine' }
 ]
@@ -55,7 +55,7 @@ export const APPLICATION_VERSION_TABLES: Record<
   'cache-settings': {
     columns: [
       { key: 'name', label: 'Name', width: '300px' },
-      { key: 'browser', label: 'Browser Cache', width: '463px' },
+      { key: 'browser', label: 'Browser cache', width: '463px' },
       { key: 'cache', label: 'Cache', width: '1fr' }
     ],
     rows: [
@@ -63,16 +63,16 @@ export const APPLICATION_VERSION_TABLES: Record<
         key: 'qa-p-cache',
         cells: {
           name: 'qa-p-cache',
-          browser: 'Override Cache Settings',
-          cache: 'Override Cache Settings'
+          browser: 'Override cache settings',
+          cache: 'Override cache settings'
         }
       },
       {
         key: 'qa-p-cache2',
         cells: {
           name: 'qa-p-cache2',
-          browser: 'Honor Origin Cache Headers',
-          cache: 'Override Cache Settings'
+          browser: 'Honor origin cache headers',
+          cache: 'Override cache settings'
         }
       }
     ]
@@ -81,7 +81,7 @@ export const APPLICATION_VERSION_TABLES: Record<
     columns: [
       { key: 'name', label: 'Name', width: '300px' },
       { key: 'id', label: 'ID', width: '344px' },
-      { key: 'userAgent', label: 'User Agent', width: '1fr' }
+      { key: 'userAgent', label: 'User agent', width: '1fr' }
     ],
     rows: [
       {
@@ -94,8 +94,8 @@ export const APPLICATION_VERSION_TABLES: Record<
     columns: [
       { key: 'name', label: 'Name', width: '412px' },
       { key: 'fn', label: 'Function', width: '341px' },
-      { key: 'editor', label: 'Last Editor', width: '210px' },
-      { key: 'modified', label: 'Last Modified', width: '1fr' }
+      { key: 'editor', label: 'Last editor', width: '210px' },
+      { key: 'modified', label: 'Last modified', width: '1fr' }
     ],
     rows: [
       {
@@ -123,8 +123,8 @@ export const APPLICATION_VERSION_TABLES: Record<
       { key: 'name', label: 'Name', width: '234px' },
       { key: 'status', label: 'Status', width: '144px' },
       { key: 'description', label: 'Description', width: '193px' },
-      { key: 'editor', label: 'Last Editor', width: '390px' },
-      { key: 'modified', label: 'Last Modified', width: '1fr' }
+      { key: 'editor', label: 'Last editor', width: '390px' },
+      { key: 'modified', label: 'Last modified', width: '1fr' }
     ],
     rows: [
       { key: 'request', group: true, cells: { name: 'Request' } },

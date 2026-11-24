@@ -192,6 +192,8 @@ export function createTranslator(
       value /= 1024
       index += 1
     }
+    if (index === 0 && !options?.unitDisplay)
+      return `${formatNumber(value, { maximumFractionDigits: 0, ...options })} B`
     return formatNumber(value, {
       style: 'unit',
       unit: FILE_SIZE_UNITS[index],

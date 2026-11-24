@@ -152,7 +152,7 @@ npx @aziontech/webkit diff delete-dialog # your copy vs the canonical block
 npx @aziontech/webkit remove delete-dialog # delete the copy and its webkit.blocks.json entry
 npx @aziontech/webkit check    # CI gate: doctor + v5 names + imports + lint + block drift
 npx @aziontech/webkit doctor   # verify the wiring is healthy (lint, MCP, theme)
-npx -y @aziontech/webkit-mcp   # the MCP server your AI tools connect to (its own package)
+npx -y @aziontech/webkit-mcp@^6   # the MCP server your AI tools connect to (its own package)
 ```
 
 ## Using WebKit with an AI agent

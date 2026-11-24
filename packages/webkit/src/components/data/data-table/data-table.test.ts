@@ -218,7 +218,7 @@ describe('DataTable', () => {
       const rowsFound = queryByRole('row')
       // header row still present
       expect(rowsFound).toBeTruthy()
-      expect(getByTestId('data-table__empty').textContent).toContain('No results yet')
+      expect(getByTestId('data-table__empty').textContent).toContain('No data yet')
     })
 
     it('emits row-click with the original record when an inert row is clicked', async () => {
@@ -718,10 +718,11 @@ describe('DataTable', () => {
       expect(getByLabelText('Select all rows')).toBeTruthy()
     })
 
-    it('renders the Empty story with the empty state', () => {
-      const { getByTestId } = render(Empty)
+    it('renders the Empty story with the empty state and a way to create the first row', () => {
+      const { getByTestId, getByRole } = render(Empty)
 
-      expect(getByTestId('data-table__empty')).toBeTruthy()
+      expect(getByTestId('data-table__empty').textContent).toContain('No workloads yet')
+      expect(getByRole('button', { name: 'Create workload' })).toBeTruthy()
     })
   })
 
@@ -1602,6 +1603,11 @@ describe('DataTable', () => {
       const body = view.getAllByRole('row').slice(1)
       if (body[0]) await fireEvent.click(body[0])
       expect(view.emitted()['row-click']).toBeUndefined()
+    })
+
+    it('draws at most 10 skeleton rows while the first page of 25 loads', () => {
+      const { view } = paged({ pageSize: 25 }, { data: [], loading: true })
+      expect(view.getAllByRole('row').slice(1)).toHaveLength(10)
     })
 
     it('states no row count while the first page loads, and hides only the count on a known total', async () => {

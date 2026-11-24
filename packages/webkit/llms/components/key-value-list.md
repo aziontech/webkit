@@ -76,7 +76,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   - Props: `label: string` (required — the key, rendered in the `<dt>`).
   - Events: _none_.
   - Slots: `default` — the value (text or composed components); fallback is the empty-value marker (`<span aria-hidden="true">—</span><span class="sr-only">Not set</span>`), shown when the slot is omitted or renders nothing. `info` — optional affordance after the label text inside the `<dt>`, such as a `Hint`.
-  - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible.
+  - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible. In the `split` variant the value cell shrinks to its content, so the skeleton there is `6rem` wide instead of the full cell.
   - `data-testid` fallback `${rootTestId}__item`; a consumer `data-testid` on the Item wins.
 - `key-value-list-group/key-value-list-group.vue` — a titled column: `<div>` → `<dt>` (label) + `<dd>` → nested `<dl>` stacking its Items in one column.
   - Props: `label: string` (required — the group's term, shown above its Items).
@@ -136,13 +136,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         label="Active"
       />
     </KeyValueList.Item>
-    <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+    <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
     <KeyValueList.Item label="Domain">
       <Link
         label="shop.example.com"
         href="https://shop.example.com"
-        size="small"
+        inline
       />
     </KeyValueList.Item>
   </KeyValueList>
@@ -179,13 +179,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
       <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
     </KeyValueList>
@@ -207,13 +207,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
       <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
     </KeyValueList>
@@ -235,13 +235,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
       <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
     </KeyValueList>
@@ -280,14 +280,14 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
           label="Active"
         />
       </KeyValueList.Item>
-      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 2:32 PM</KeyValueList.Item>
     </KeyValueList.Group>
     <KeyValueList.Group label="Networking">
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
-          size="small"
+          inline
         />
       </KeyValueList.Item>
       <KeyValueList.Item label="Region">

@@ -3,7 +3,7 @@
   import { computed, defineAsyncComponent, hydrateOnVisible } from 'vue'
 
   import { messages } from '../lib/i18n'
-  import { titleCase } from '../lib/nav'
+  import { titleCase, tokenGroupTitle } from '../lib/nav'
   import { typeGroups, usageSections } from '../lib/tokens'
   import ArchitectureIntro from './tokens/architecture-intro.vue'
   import ColorPlayground from './tokens/color-playground.vue'
@@ -27,7 +27,7 @@
     usageSections(tokens.semantic).map((section) => ({
       ...section,
       id: section.ids.join('-'),
-      title: section.ids.map(titleCase).join(', ')
+      title: section.ids.map(tokenGroupTitle).join(', ')
     }))
   )
   const rhythm = computed(() => tokens.spacing.filter((token) => token.responsive))

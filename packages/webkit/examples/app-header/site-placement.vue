@@ -44,8 +44,7 @@
         Distributed infrastructure for modern workloads
       </h1>
       <p class="text-body-md text-(--text-muted)">
-        The page frame is one rung narrower than the bar above it: the two share an inset until the
-        window passes their caps.
+        Deploy applications, secure them and watch them run, on one platform close to your users.
       </p>
     </section>
   </div>

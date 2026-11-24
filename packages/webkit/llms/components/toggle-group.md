@@ -112,21 +112,21 @@
   import { ref } from 'vue'
 
   const options = [
-    { label: 'Label', value: 'option-1' },
-    { label: 'Label', value: 'option-2' },
-    { label: 'Label', value: 'option-3' },
-    { label: 'Label', value: 'option-4' },
-    { label: 'Label', value: 'option-5' }
+    { label: 'Overview', value: 'overview' },
+    { label: 'Requests', value: 'requests' },
+    { label: 'Errors', value: 'errors' },
+    { label: 'Latency', value: 'latency' },
+    { label: 'Bandwidth', value: 'bandwidth' }
   ]
 
-  const selected = ref('option-1')
+  const selected = ref('overview')
 </script>
 
 <template>
   <ToggleGroup
     v-model="selected"
     :options="options"
-    aria-label="Segmented options"
+    aria-label="Metrics view"
   />
 </template>
 ```
@@ -139,20 +139,20 @@
   import { ref } from 'vue'
 
   const options = [
-    { label: 'Label', value: 'option-1' },
-    { label: 'Label', value: 'option-2', disabled: true },
-    { label: 'Label', value: 'option-3' },
-    { label: 'Label', value: 'option-4' }
+    { label: 'Hourly', value: 'hourly' },
+    { label: 'Daily', value: 'daily', disabled: true },
+    { label: 'Weekly', value: 'weekly' },
+    { label: 'Monthly', value: 'monthly' }
   ]
 
-  const selected = ref('option-1')
+  const selected = ref('hourly')
 </script>
 
 <template>
   <ToggleGroup
     v-model="selected"
     :options="options"
-    aria-label="Segmented options"
+    aria-label="Report frequency"
   />
 </template>
 ```
@@ -164,9 +164,9 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
 
   const options = [
-    { label: 'Label', value: 'option-1' },
-    { label: 'Label', value: 'option-2' },
-    { label: 'Label', value: 'option-3' }
+    { label: 'Day', value: 'day' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' }
   ]
 </script>
 
@@ -174,19 +174,19 @@
   <div class="flex flex-col items-start gap-4">
     <ToggleGroup
       :options="options"
-      default-value="option-1"
+      default-value="day"
       size="small"
       aria-label="Small"
     />
     <ToggleGroup
       :options="options"
-      default-value="option-1"
+      default-value="day"
       size="medium"
       aria-label="Medium"
     />
     <ToggleGroup
       :options="options"
-      default-value="option-1"
+      default-value="day"
       size="large"
       aria-label="Large"
     />

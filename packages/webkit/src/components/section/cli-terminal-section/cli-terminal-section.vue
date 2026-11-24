@@ -68,7 +68,7 @@
 
   const tabs = computed(() =>
     props.session.length > 0
-      ? [{ label: 'session', value: 'session', code: props.session, language: 'bash' }]
+      ? [{ label: '', value: 'session', code: props.session, language: 'bash' }]
       : []
   )
 
@@ -156,6 +156,7 @@
         >
           <CodeBlock
             :tabs="tabs"
+            show-label
             :show-line-numbers="false"
             v-bind="{ animateLines: true }"
             :copy-aria-label="copyAriaLabel || undefined"

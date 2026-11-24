@@ -44,6 +44,7 @@
 - `data-brand` on the root: `visa` | `mastercard` | `amex` | `diners` | `jcb` | `discover` | `elo` | `hipercard` | `unionpay` | `unknown`.
 - `data-size`: `small` | `medium`.
 - `data-glyph`: `mark` when the brand has a drawn mark, `generic` otherwise.
+- The Mastercard mark is two equal circles at the same opacity whose overlap reads darker, the network's own one-colour form; one solid circle beside a faded one would read as a switch knob in its track.
 
 ## Accessibility
 

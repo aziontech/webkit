@@ -6,7 +6,7 @@ import { phaseLabel } from '../lib/rule-list'
 import { sampleApplicationRules } from '../sample'
 import type { RuleListPhase, RuleListRule } from '../view-rule-list.vue'
 
-/** The rules of the Edit Rule variant and the rule open in the builder. */
+/** The rules of the Edit rule variant and the rule open in the builder. */
 export interface UseRuleEditingReturn {
   /** The rules, as saved. */
   rules: ComputedRef<RuleListRule[]>

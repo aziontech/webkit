@@ -3,17 +3,33 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
 
   import type { AlertsDashboardEntity } from '../dashboard-alerts.vue'
 
   export interface EntityTableProps {
-    /** The entities with the highest risk score. */
+    /** The entities with the highest risk score; the first six show. */
     entities: AlertsDashboardEntity[]
     /** The period is loading. */
     loading?: boolean
   }
 
-  withDefaults(defineProps<EntityTableProps>(), { loading: false })
+  const props = withDefaults(defineProps<EntityTableProps>(), { loading: false })
+
+  const TOP_ENTITIES = 6
+
+  const rows = computed<AlertsDashboardEntity[]>(() =>
+    props.loading && !props.entities.length
+      ? Array.from({ length: TOP_ENTITIES }, (_, index) => ({
+          id: `loading-${index}`,
+          name: '',
+          type: '',
+          score: 0,
+          level: 'info',
+          alerts: 0
+        }))
+      : props.entities.slice(0, TOP_ENTITIES)
+  )
 
   const entityColumns: TableColumn[] = [
     {
@@ -49,8 +65,9 @@
 <template>
   <DataTable
     v-if="loading || entities.length"
-    :data="entities"
+    :data="rows"
     :columns="entityColumns"
+    aria-label="Highest risk"
     row-key="id"
     sortable
     density="compact"

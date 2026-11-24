@@ -67,6 +67,12 @@ afterEach(() => {
   document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
 })
 
+const visibleText = (cell: HTMLElement) => {
+  const copy = cell.cloneNode(true) as HTMLElement
+  copy.querySelectorAll('[hidden], [aria-hidden="true"]').forEach((node) => node.remove())
+  return (copy.textContent ?? '').replace(/\s+/g, ' ').trim()
+}
+
 describe('PlanComparisonSection', () => {
   it('renders the band under the default testid with its anchor', () => {
     const { getByTestId } = band()
@@ -119,7 +125,7 @@ describe('PlanComparisonSection', () => {
     expect(
       getAllByRole('rowheader')
         .filter((cell) => !isBandHead(cell))
-        .map((cell) => cell.innerText.replace(/\s+/g, ' ').trim())
+        .map(visibleText)
     ).toEqual([
       'Applications',
       'Rules Engine',

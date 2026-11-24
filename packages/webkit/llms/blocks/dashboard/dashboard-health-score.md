@@ -58,11 +58,12 @@ the reader.
 The overall score's `Hint` states the bands:
 `Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50.`
 
-### E. Overall figure — `StatTile` (required)
+### E. Overall figure — `Skeleton` (required)
 
-The overall score as a `StatTile` with `variant="sans"`, labelled `Overall score`, the unit `/ 100` and
-no delta, with the top cause of poor samples under it. The tile owns its loading Skeleton and prints
-a dash when the period has no score; never hand-build the figure.
+The overall score is the card's own figure, unboxed: the number in `text-heading-lg` with a muted
+`/ 100`, no second label (the card title already says `Overall score`) and no delta, with the top
+cause of poor samples under it. A `Skeleton` takes its place while loading, and a dash prints when
+the period has no score. A bordered `StatTile` inside the card would box the figure twice.
 
 ### F. Band — `Tag` (required)
 
@@ -85,7 +86,9 @@ Each row names its top cause (`Video calls · packet loss`).
 ### J. Hourly strips — `Tracker` (required)
 
 One strip per application, one block per hour colored by band, with an `aria-label`
-(`Video calls, score per hour`) and a label on each block (`08:00 · 35 · Poor`).
+(`Video calls, score per hour`) and a label on each block (`08:00 · 35 · Poor`). Under the strips,
+the first and last hour mark the time axis. The band at the end of each row comes from the same
+thresholds as the score per application (`Video calls` at 48 is `Poor`), never from a separate field.
 
 ### K. Empty regions — `EmptyState` (required)
 
@@ -230,7 +233,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import type { TrackerItem } from '@aziontech/webkit/tracker'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -385,7 +388,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         description="How people experience each application: the overall score, the score per application and location, each hour of the period and the incidents still open."
       >
         <template #actions>
-          <div class="w-44 shrink-0">
+          <div class="shrink-0">
             <Select
               variant="ghost"
               v-model="period"
@@ -446,15 +449,32 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <StatTile
-                  label="Overall score"
-                  variant="sans"
-                  unit="/ 100"
-                  :value="overall.score"
-                  :format-value="formatScore"
-                  :loading="loading"
-                  :error="error"
+                <Skeleton
+                  v-if="loading"
+                  width="60%"
+                  height="2rem"
                 />
+                <p
+                  v-else
+                  class="flex items-baseline gap-(--spacing-2xs) tabular-nums"
+                  dir="ltr"
+                  data-testid="dashboard-health-score__score"
+                >
+                  <template v-if="overall.score === null">
+                    <span
+                      aria-hidden="true"
+                      class="text-heading-lg text-(--text-muted)"
+                      >–</span
+                    >
+                    <span class="sr-only">No score</span>
+                  </template>
+                  <template v-else>
+                    <span class="text-heading-lg text-(--text-default)">{{
+                      formatScore(overall.score)
+                    }}</span>
+                    <span class="text-body-md text-(--text-muted)">/ 100</span>
+                  </template>
+                </p>
                 <p
                   v-if="overall.cause && !loading"
                   class="text-pretty text-body-sm text-(--text-muted)"
@@ -679,14 +699,20 @@ export const sampleLocations: BarListItem[] = [
   }
 ]
 
+const bandFor = (score: number): HealthScoreHourlyRow['band'] => {
+  if (score >= 80) return { label: 'Good', severity: 'success' }
+  if (score >= 50) return { label: 'Fair', severity: 'warning' }
+  return { label: 'Poor', severity: 'danger' }
+}
+
+const scoreOf = (id: string): number =>
+  sampleApplications.find((application) => application.id === id)?.value ?? 0
+
 export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'video-calls',
     name: 'Video calls',
-    band: {
-      label: 'Fair',
-      severity: 'warning'
-    },
+    band: bandFor(scoreOf('video-calls')),
     blocks: [
       {
         id: 'video-calls-00:00',
@@ -813,10 +839,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'file-storage',
     name: 'File storage',
-    band: {
-      label: 'Fair',
-      severity: 'warning'
-    },
+    band: bandFor(scoreOf('file-storage')),
     blocks: [
       {
         id: 'file-storage-00:00',
@@ -943,10 +966,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'crm',
     name: 'CRM',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('crm')),
     blocks: [
       {
         id: 'crm-00:00',
@@ -1073,10 +1093,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'mail',
     name: 'Mail',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('mail')),
     blocks: [
       {
         id: 'mail-00:00',
@@ -1203,10 +1220,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'chat',
     name: 'Chat',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('chat')),
     blocks: [
       {
         id: 'chat-00:00',
@@ -1333,10 +1347,7 @@ export const sampleHourly: HealthScoreHourlyRow[] = [
   {
     id: 'docs',
     name: 'Docs',
-    band: {
-      label: 'Good',
-      severity: 'success'
-    },
+    band: bandFor(scoreOf('docs')),
     blocks: [
       {
         id: 'docs-00:00',
@@ -1605,6 +1616,7 @@ export const sampleFractions = (seed: string, count: number): number[] => {
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import Tracker from '@aziontech/webkit/tracker'
+  import { computed } from 'vue'
 
   import type { HealthScoreHourlyRow } from '../dashboard-health-score.vue'
 
@@ -1619,7 +1631,11 @@ export const sampleFractions = (seed: string, count: number): number[] => {
     phrase: string
   }
 
-  defineProps<HourlyScoreCardProps>()
+  const props = defineProps<HourlyScoreCardProps>()
+
+  const hourOf = (label: string | undefined) => (label ?? '').split(' · ')[0] ?? ''
+  const firstHour = computed(() => hourOf(props.hourly[0]?.blocks[0]?.label))
+  const lastHour = computed(() => hourOf(props.hourly[0]?.blocks.at(-1)?.label))
 </script>
 
 <template>
@@ -1681,6 +1697,18 @@ export const sampleFractions = (seed: string, count: number): number[] => {
               :severity="application.band.severity"
               size="small"
             />
+          </span>
+        </li>
+        <li
+          v-if="firstHour"
+          aria-hidden="true"
+          class="grid grid-cols-1 gap-(--spacing-xs) md:grid-cols-[minmax(0,9rem)_1fr_4rem] md:gap-(--spacing-md)"
+          data-testid="dashboard-health-score__hours"
+        >
+          <span class="hidden md:block" />
+          <span class="flex justify-between text-label-sm text-(--text-muted) tabular-nums">
+            <span>{{ firstHour }}</span>
+            <span>{{ lastHour }}</span>
           </span>
         </li>
       </ul>

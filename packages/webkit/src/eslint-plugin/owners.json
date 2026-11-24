@@ -54,7 +54,8 @@
         "src/components/input/chip": "Chip: the remove button is part of the token itself, a round 16 or 24 px hit inside the 24 or 32 px pill with its own coarse-pointer target; IconButton's smallest step (28 px) does not fit inside the chip.",
         "src/components/layout/app-header/app-header-account.vue": "AppHeaderAccount: the account control at the end of the header, an avatar that opens the account menu (or acts alone).",
         "src/components/ai/suggestion-group": "SuggestionGroup: each prompt is a suggestion chip whose label wraps to the reader's whole question, a group of buttons Button cannot draw (one line, fixed height).",
-        "src/components/content/avatar-group": "AvatarGroup: the +N overflow is the last circle of the overlapping avatar stack and the disclosure button (popovertarget) of the hidden names."
+        "src/components/content/avatar-group": "AvatarGroup: the +N overflow is the last circle of the overlapping avatar stack and the disclosure button (popovertarget) of the hidden names.",
+        "src/components/ai/prompt-queue/prompt-queue.vue": "PromptQueue: the Show more toggle of a clamped message, a native button so the entry stays small (A5P3-050)."
       }
     },
     "a": {

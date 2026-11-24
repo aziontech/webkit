@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 5de7e2b587d5fe5848b0e1890a0db238f95106a28dc98e1f304f7382676f48dc
+checksum: a1bd0028fc4e40e558f0a4b28e0adee79409a3d0af949471e7ad0c1acd3913b1
 created: 2026-09-24
-last_updated: 2026-11-16
+last_updated: 2026-11-24
 ---
 
 # FeatureItem — Component Spec
@@ -136,7 +136,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
-- Icons: the external-link arrow does not mirror; its hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
+- Icons: a same-site link closes on `az-arrow-right`, which the stylesheet mirrors under `rtl`; only a link given `target="_blank"` closes on the external `az-arrow-up-right`, which does not mirror. Either arrow's hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
 

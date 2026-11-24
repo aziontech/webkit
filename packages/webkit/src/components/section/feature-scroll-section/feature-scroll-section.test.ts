@@ -252,6 +252,28 @@ describe('FeatureScrollSection', () => {
     expect(queryByTestId('illustration')).toBeNull()
   })
 
+  it('keeps the tile copy button in the label strip, off the first code line', async () => {
+    const { findAllByTestId, queryAllByTestId } = render(FeatureScrollSection, {
+      props: {
+        title: TITLE,
+        items: [
+          {
+            title: 'Automated deployment via Git or CLI',
+            description: 'Run one command from the project you already have.',
+            code: { fileName: 'deploy.sh', language: 'bash', code: 'azion deploy --auto' }
+          }
+        ]
+      }
+    })
+
+    const copies = await findAllByTestId('code-block__copy', {}, { timeout: 5000 })
+    expect(copies.length).toBeGreaterThanOrEqual(1)
+    expect(queryAllByTestId('code-block__copy-anchor')).toHaveLength(0)
+    expect((await findAllByTestId('code-block__label-text'))[0]!.textContent?.trim()).toBe(
+      'deploy.sh'
+    )
+  })
+
   it('draws an item action secondary unless it sets its variant, and carries its target', () => {
     const { getAllByRole } = band({
       items: [

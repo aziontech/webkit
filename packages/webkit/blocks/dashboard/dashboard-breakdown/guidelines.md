@@ -31,7 +31,7 @@ Title `Cost breakdown` with one sentence on what it shows. Its actions hold the 
 
 The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
 
-`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes every region.
+`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes the Spend by category trend and the sparklines; the tiles, Current split and Top contributors always read this month, and say so on screen (`this month vs previous month` under each figure), never only in a hint. The ghost trigger sizes to its label, so it sits next to Export CSV with no gap.
 
 ### C. Export — `Button` (optional)
 
@@ -81,7 +81,10 @@ change against last month. Amounts and shares use tabular numbers and align righ
 
 ### M. Empty regions — `EmptyState` (required)
 
-Each chart and the table keep their box with an empty state: `No spend in this range` /
+When the whole period is empty, the tiles print `$0` (nothing was billed, so zero is the truth) and
+one bordered page-level `EmptyState` (`No spend in this period`, with `Show the last 12 months` when a
+shorter period is picked) replaces the cards. When only some regions are empty, each chart and the
+table keep their box with an empty state: `No spend in this range` /
 `Nothing was billed to the organization in the selected period.`
 
 ### N. Category and change — `Tag` (required)
@@ -180,7 +183,7 @@ Then delete `sample.ts` and its import.
 
 - Default: the populated breakdown for the period (`v-model:period`).
 - Loading: `loading` is set; every tile, both charts and the table hold their place with a `Skeleton`.
-- Empty: nothing billed in the period (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta or trend, the exports disable, and the stacked chart, donut and table each keep their box with an `EmptyState` that names the reason.
+- Empty: nothing billed in the period (every kpi `0` and every list `[]`); tiles print `$0` with no delta or trend, the exports disable, and one page-level `EmptyState` replaces the stacked chart, the donut and the table.
 - Error: `error` is set; one danger `Alert` under the heading names what did not load, carries the message and offers Retry; tiles show a dash over a quiet band and every region keeps its header over `Not available.`
 
 ## Related

@@ -34,6 +34,7 @@ export {
 }
 export type {
   DropdownMenuAlign,
+  DropdownMenuItemSeverity,
   DropdownMenuItemType,
   DropdownMenuItemValue,
   DropdownMenuSide

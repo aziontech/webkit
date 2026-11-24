@@ -181,10 +181,12 @@
                 v-bind="{ ...item.scene?.props, hovered: hovered === index }"
               />
             </div>
-            <Illustration
+            <div
               v-else-if="item.illustration"
-              :name="item.illustration"
-            />
+              class="w-full min-w-0 px-(--spacing-xl) pt-(--spacing-xl)"
+            >
+              <Illustration :name="item.illustration" />
+            </div>
             <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
               <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                 <strong class="font-medium text-(--text-default)">{{ item.title }}</strong>

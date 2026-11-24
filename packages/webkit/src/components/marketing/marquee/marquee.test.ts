@@ -169,6 +169,16 @@ describe('Marquee', () => {
     expect(container.textContent).not.toContain(name)
   })
 
+  it('sets a typed wordmark on the heading step that matches the drawn marks', async () => {
+    const { container, getAllByText } = render(Marquee, { props: { marks: ['magalu', 'splunk'] } })
+    await markFor(container, 'magalu')
+
+    const wordmark = getAllByText('Splunk')[0]?.classList
+    expect(wordmark?.contains('group-data-[size=medium]/strip:text-heading-md')).toBe(true)
+    expect(wordmark?.contains('group-data-[size=small]/strip:text-heading-xs')).toBe(true)
+    expect(wordmark?.contains('text-heading-2xs')).toBe(false)
+  })
+
   it('renders the label as an overline and omits it when empty', () => {
     const { getAllByText, rerender, queryByText } = render(Marquee, {
       props: { marks: MARKS, label: 'Trusted by mission-critical workloads' }

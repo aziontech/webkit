@@ -115,7 +115,7 @@
   onScopeDispose(release)
 
   const ROOT_CLASS =
-    "absolute bottom-0 end-0 z-1 flex size-6 before:absolute before:-inset-2 before:content-[''] " +
+    "absolute bottom-0 end-0 z-1 flex size-6 before:absolute before:-inset-2 pointer-coarse:before:-inset-2.5 before:content-[''] " +
     'cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     '@max-3xl/dashboard-grid:hidden'

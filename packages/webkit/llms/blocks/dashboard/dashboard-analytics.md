@@ -1,6 +1,6 @@
 # DashboardAnalytics (`dashboard/dashboard-analytics`)
 
-> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A StatTileGroup of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTileGroup`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A StatTileGroup of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation as muted text and the variation Tag, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTileGroup`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/webkit`
@@ -70,8 +70,9 @@ menu.
 
 ### E. Aggregation and variation — `Tag` (required)
 
-`Sum` names the aggregation; a second tag states the change for the period (`+10.03%`). Tags state
-facts; they are not buttons. A tile and the card that charts the same metric come from one series:
+`Sum` names the aggregation as muted text with no frame and no icon, so it never reads as a button;
+a tag states the change for the period (`+10.03%`). Tags state facts; they are not buttons. On a
+phone the header actions stay on the title row, at its end, and the title truncates. A tile and the card that charts the same metric come from one series:
 the Requests tile is the sum of the Requests over time points, its delta is the card's change tag,
 and the Status codes classes add up to the same requests, so no number on the page contradicts
 another.
@@ -108,7 +109,8 @@ mounts the toast region; this page body never renders a `Toaster`.
 
 ### J. Charts — `Chart` (required)
 
-`Requests over time` as an area, `Status codes` as a multi-series line (2xx, 3xx, 4xx, 5xx), and
+`Requests over time` as an area, `Status codes` as stacked bars by default (2xx, 3xx, 4xx, 5xx), so the error classes read as their
+part of each interval instead of flat lines on the 2xx scale (Line stays one toggle away), and
 `Requests by country` as labeled horizontal bars. The series take the categorical role in declaration
 order; reserve the status role for a series whose color means a state.
 
@@ -271,7 +273,7 @@ Then delete `sample.ts` and its import.
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
 - **Overview:** footer links read `Open <Product> dashboard`; breakdown searches name what they match (`Search addresses, networks or countries`).
 - **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
-- **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
+- **Metrics:** title `Real-time metrics`; tab labels are product names; the aggregation names the math in muted text (`Sum`, `Median`, `Percentile`).
 - **Usage:** title `Data usage`, description `What your projects consumed in the period, against the previous period.`; card titles say what is compared (`Data transferred, this period vs previous`); series `This period`, `Previous period`.
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
@@ -526,7 +528,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   }
 
   const requestsForm = ref('line')
-  const statusForm = ref('line')
+  const statusForm = ref('bar')
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 
@@ -1237,7 +1239,8 @@ export const trafficCards: Record<AnalyticsDashboardCardId, TrafficCard> = {
   },
   'status-codes': {
     label: 'Status codes',
-    description: 'Sum of requests per status class. Switch to Bar to stack the classes.',
+    description:
+      'Sum of requests per status class, stacked as bars so 4xx and 5xx show as their part of every interval. Switch to Line to compare the classes on one scale.',
     limit: 10000,
     groupBy: ['ts', 'status'],
     orderBy: 'ts_ASC',
@@ -1582,7 +1585,7 @@ export const chartForms = [
     title: string
     /** One sentence that defines the metric. */
     hint: string
-    /** The aggregation tag. */
+    /** The aggregation, written as muted text beside the title. */
     aggregation?: string
     /** The change tag; null hides it. */
     variation?: MetricCardVariation | null
@@ -1633,7 +1636,7 @@ export const chartForms = [
 <template>
   <ChartCard :span="span">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+      <span class="inline-flex min-w-0 flex-1 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>{{ title }}</ChartCard.Title>
         <Hint :content="hint" />
       </span>
@@ -1643,12 +1646,11 @@ export const chartForms = [
           class="hidden items-center gap-(--spacing-xs) sm:flex"
           :class="{ 'lg:hidden xl:flex': fit !== 'sm', 'data-wide:lg:flex': fit === 'wide' }"
         >
-          <Tag
-            :label="aggregation"
-            severity="neutral"
-            size="small"
-            icon="az az-calculator"
-          />
+          <span
+            class="text-label-sm text-(--text-muted)"
+            data-testid="metric-card__aggregation"
+            >{{ aggregation }}</span
+          >
           <Tag
             v-if="variation"
             :label="variation.label"

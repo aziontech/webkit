@@ -51,6 +51,7 @@ const loaders = {
   StatTile: () => import('../components/chart/stat-tile/stat-tile.vue'),
   StatTileGroup: () => import('../components/chart/stat-tile-group/stat-tile-group.vue'),
   Stats: () => import('../components/marketing/stats/stats.vue'),
+  StatusIndicator: () => import('../components/feedback/status-indicator/status-indicator.vue'),
   ThirdPartyLogo: () => import('../components/content/third-party-logo/third-party-logo.vue'),
   Tracker: () => import('../components/chart/tracker/tracker.vue')
 } satisfies Record<string, ContentSceneLoader>

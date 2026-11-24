@@ -7,6 +7,7 @@ import { defineComponent, h, nextTick } from 'vue'
 import Button from '../components/action/button/button.vue'
 import DataTableRoot from '../components/data/data-table/data-table.vue'
 import type { TableColumn } from '../components/data/table/injection-key'
+import TableCellLink from '../components/data/table/table-cell-link/table-cell-link.vue'
 import { hostable } from './hostable'
 
 const DataTable = hostable(DataTableRoot)
@@ -84,5 +85,28 @@ describe('a long cell value in a narrow table', () => {
     const cell = getAllByRole('cell').find((el) => el.textContent?.includes(LONG_NAME))!
     const text = cell.querySelector<HTMLElement>('.truncate')!
     expect(text.scrollWidth).toBeLessThanOrEqual(text.clientWidth)
+  })
+})
+
+describe('a copyable link in a wide cell', () => {
+  it('keeps the copy button right after the value and its +N count', async () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h('div', { style: { width: '900px' } }, [
+            h(TableCellLink, {
+              label: 'resource-01.example.com',
+              href: 'https://resource-01.example.com',
+              more: [{ label: 'www.example.com', href: 'https://www.example.com' }],
+              copyable: true
+            })
+          ])
+      })
+    )
+    await settle()
+    const more = view.getByTestId('table-cell-link__more').getBoundingClientRect()
+    const copy = view.getByTestId('table-cell-link__copy').getBoundingClientRect()
+    expect(copy.left).toBeGreaterThanOrEqual(more.right)
+    expect(copy.left - more.right).toBeLessThan(24)
   })
 })

@@ -22,6 +22,10 @@
     if (props.service.deployStep) return `Deploying · ${props.service.deployStep}`
     return props.service.live ? 'Live' : 'Inactive'
   })
+  const visitDisabledReason = computed(() => {
+    if (props.service.deployStep) return 'Available once the first deploy finishes'
+    return props.service.live ? '' : 'Available once the service is active'
+  })
   const statusSeverity = computed(() => {
     if (props.service.deployStep) return 'info'
     return props.service.live ? 'success' : 'neutral'
@@ -41,6 +45,7 @@
         :label="service.domain"
         :href="address"
         :visit="address"
+        :visit-disabled-reason="visitDisabledReason"
         actions-label="Service actions"
         :menu="menu"
       />

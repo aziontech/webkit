@@ -43,6 +43,7 @@ export const en = {
   rightToLeft: 'Right-to-left',
   leftToRight: 'Left-to-right',
   github: 'WebKit on GitHub',
+  newTab: '(opens in a new tab)',
   footer: 'Footer',
   footerWebkit: 'WebKit',
   footerAzion: 'Azion',
@@ -250,7 +251,12 @@ export const en = {
   whyNextBody:
     'Opinionated foundations with composable patterns, so the system keeps pace as the craft changes.',
   openComponent: 'Open',
-  categoryLead: '{count} components'
+  categoryLead: '{count} components',
+  componentsLead: '{count} components, each with its examples, API and guidelines.',
+  blocksLead:
+    '{count} screens and fragments, each with its states, code and guidelines. Copy one with npx @aziontech/webkit add <id>.',
+  copyPageTip: 'Copy this page as Markdown, ready to paste into an assistant.',
+  copyBlockTip: 'Copy this block as Markdown, ready to paste into an assistant.'
 }
 
 export type Messages = typeof en

@@ -6,6 +6,8 @@ import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
 import { defineComponent, nextTick } from 'vue'
 
+import Default from '../../../../examples/wizard/default.vue'
+import Optional from '../../../../examples/wizard/optional.vue'
 import Validation from '../../../../examples/wizard/validation.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -149,6 +151,7 @@ describe('Wizard', () => {
       expect(rootOf(view).getAttribute('data-active-step')).toBe('1')
       expect(headingOf(view).textContent?.trim()).toBe('Settings')
       expect(within(view.getByRole('group')).getByText('Step 2 of 3')).toBeInTheDocument()
+      expect(button(view, 'Previous').getAttribute('data-variant')).toBe('outline')
 
       await userEvent.click(button(view, 'Previous'))
       expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
@@ -543,6 +546,21 @@ describe('Wizard', () => {
       expect(getComputedStyle(counter).display).not.toBe('none')
     })
 
+    it('writes the counter as plain sentence-case body text, not a monospace kicker', async () => {
+      const wide = render(inBox(1200))
+      await nextTick()
+      await nextTick()
+      const counter = within(wide.getByRole('group')).getByText('Step 1 of 3')
+      expect(getComputedStyle(counter).textTransform).toBe('none')
+      expect(getComputedStyle(counter).fontFamily).not.toMatch(/mono/i)
+      wide.unmount()
+      const narrow = render(inBox(400))
+      await nextTick()
+      await nextTick()
+      expect(getComputedStyle(progressOf(narrow)).textTransform).toBe('none')
+      expect(getComputedStyle(progressOf(narrow)).fontFamily).not.toMatch(/mono/i)
+    })
+
     const footerButtons = (view: ReturnType<typeof render>) =>
       within(view.getByTestId('wizard__footer')).getAllByRole('button')
 
@@ -605,5 +623,16 @@ describe('Wizard', () => {
 
       expect(progressOf(view).textContent?.trim()).toBe('Etapa 1 de 3')
     })
+  })
+
+  it.each([
+    ['default', Default],
+    ['optional', Optional],
+    ['validation', Validation]
+  ])('opens the %s example on a blank first step', (_, Example) => {
+    const view = render(Example)
+    expect((view.getByRole('textbox', { name: /Name/ }) as HTMLInputElement).value).toBe('')
+    expect(view.container.textContent).toContain('Choose a region')
+    expect(view.container.textContent).not.toContain('South America')
   })
 })
