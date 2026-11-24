@@ -51,7 +51,7 @@
     requestId?: string
     /** When the request was answered, as an ISO string. */
     time?: string
-    /** The code of the Azion data center that answered (IAD). */
+    /** The Azion data center that answered: its place, then its code (Ashburn, US (IAD)). */
     location?: string
     /** The state of each hop of the request path. */
     path?: StateEdgeErrorPagePath
@@ -70,7 +70,7 @@
     host: 'www.example.com',
     requestId: '8f3c91ab2e4d7a10',
     time: '2026-11-18T14:02:11Z',
-    location: 'IAD',
+    location: 'Ashburn, US (IAD)',
     path: () => ({
       visitor: { status: 'Working', severity: 'success' },
       azion: { status: 'Working', severity: 'success' },
@@ -161,24 +161,14 @@
         >
           Request path
         </h2>
-        <div class="-mx-(--spacing-md) hidden lg:block">
+        <div class="-mx-(--spacing-md)">
           <FlowDiagram
             :nodes="nodes"
             :edges="edges"
-            orientation="horizontal"
+            orientation="responsive"
             uniform
             :aria-labelledby="pathId"
             data-testid="state-edge-error-page__path"
-          />
-        </div>
-        <div class="-mx-(--spacing-md) lg:hidden">
-          <FlowDiagram
-            :nodes="nodes"
-            :edges="edges"
-            orientation="vertical"
-            uniform
-            :aria-labelledby="pathId"
-            data-testid="state-edge-error-page__path-stacked"
           />
         </div>
       </div>

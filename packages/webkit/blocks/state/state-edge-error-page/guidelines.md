@@ -31,7 +31,7 @@ The HTTP code as a `StatusCode` (4xx warning, 5xx danger) followed by the reason
 
 ### B. Request path — `FlowDiagram`
 
-Three hops, always in this order: You (the browser), Azion (the code of the data center that answered) and Application (the site's host). Each hop is a `FlowDiagram` data card: an icon and the hop's name in the header with its state as a status dot and text (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, data center or host as the card's name, and a one-line explanation of the hop when the card is opened. The edges give one node per column and `uniform` gives every card the same width and height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a dashed rail, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
+Three hops, always in this order: You (the browser), Azion (the data center that answered: its place, then its code, Ashburn, US (IAD)) and Application (the site's host). Each hop is a `FlowDiagram` data card: an icon and the hop's name in the header with its state as a status dot and text (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, data center or host as the card's name, and a one-line explanation of the hop when the card is opened. The edges give one node per column and `uniform` gives every card the same width and height. One `FlowDiagram` with `orientation="responsive"` draws it: the cards sit side by side joined by the connectors when the whole row fits, and stack at full width joined by a dashed rail when it does not, so the path never scrolls sideways and the page mounts the diagram once. The path answers "whose fault is it" before the visitor reads a word.
 
 ### C. Next steps — `Button`
 
@@ -51,19 +51,19 @@ Four facts in a two-column `KeyValueList` (one column on a phone): the request I
 
 The block fetches nothing: Azion fills the props from the request it failed to serve.
 
-| Prop        | Type                     | What it does                                                           |
-| ----------- | ------------------------ | ---------------------------------------------------------------------- |
-| `code`      | `number`                 | HTTP status (`502`).                                                   |
-| `reason`    | `string`                 | Reason phrase beside the code (`Bad gateway`).                         |
-| `title`     | `string`                 | What happened, in the visitor's words; the page's `h1`.                |
-| `cause`     | `string`                 | The answer to What happened?                                           |
-| `advice`    | `string`                 | The answer to What can I do?; never an account action.                 |
-| `host`      | `string`                 | The host the visitor asked for; the Application hop and the Host fact. |
-| `requestId` | `string`                 | The request ID to quote.                                               |
-| `time`      | `string`                 | When the request was answered, ISO 8601.                               |
-| `location`  | `string`                 | The code of the Azion data center (`IAD`); the Azion hop and its fact. |
-| `path`      | `StateEdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.        |
-| `recovery`  | `'retry' \| 'home'`      | The primary button: Try again, or Go to home page.                     |
+| Prop        | Type                     | What it does                                                                                      |
+| ----------- | ------------------------ | ------------------------------------------------------------------------------------------------- |
+| `code`      | `number`                 | HTTP status (`502`).                                                                              |
+| `reason`    | `string`                 | Reason phrase beside the code (`Bad gateway`).                                                    |
+| `title`     | `string`                 | What happened, in the visitor's words; the page's `h1`.                                           |
+| `cause`     | `string`                 | The answer to What happened?                                                                      |
+| `advice`    | `string`                 | The answer to What can I do?; never an account action.                                            |
+| `host`      | `string`                 | The host the visitor asked for; the Application hop and the Host fact.                            |
+| `requestId` | `string`                 | The request ID to quote.                                                                          |
+| `time`      | `string`                 | When the request was answered, ISO 8601.                                                          |
+| `location`  | `string`                 | The Azion data center, its place then its code (`Ashburn, US (IAD)`); the Azion hop and its fact. |
+| `path`      | `StateEdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.                                   |
+| `recovery`  | `'retry' \| 'home'`      | The primary button: Try again, or Go to home page.                                                |
 
 | Event   | Payload   | When                                                                         |
 | ------- | --------- | ---------------------------------------------------------------------------- |
@@ -117,5 +117,5 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 ## Related
 
 - `state/state-error-page` — the error pages of Azion's own console, site and docs.
-- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`), with `orientation="vertical"` on a phone.
+- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`, `orientation="responsive"`).
 - `state/state-async-submit` — a failed build or deploy inside the console.

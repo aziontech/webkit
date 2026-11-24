@@ -1,5 +1,8 @@
+import '../../reflow.css'
+
 import { cleanup, fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import type { Component } from 'vue'
 
 import StateErrorPage from '../../../../blocks/state/state-error-page/state-error-page.vue'
@@ -21,7 +24,12 @@ const STATES: Array<[string, Component, string, string]> = [
   ['ResourceNotFound', ResourceNotFound, '404', 'RESOURCE_NOT_FOUND']
 ]
 
-afterEach(() => cleanup())
+afterEach(async () => {
+  cleanup()
+  await page.viewport(1280, 900)
+})
+
+const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
 describe('state/state-error-page', () => {
   it.each(STATES)(
     '%s shows the status code, at most two buttons and the reference line',
@@ -63,4 +71,22 @@ describe('state/state-error-page', () => {
     await fireEvent.click(home)
     expect(view.emitted<unknown[]>('home')?.[0][0]).toBeInstanceOf(MouseEvent)
   })
+
+  it.each([320, 390])(
+    'stacks the Code and ID pairs at %ipx without an orphaned separator',
+    async (width) => {
+      await page.viewport(width, 900)
+      await vi.waitFor(() => expect(window.innerWidth).toBe(width))
+      await frame()
+      const view = render(SessionExpired)
+      const separator = view.getByTestId('state-error-page__separator')
+      expect(getComputedStyle(separator).display).toBe('none')
+      const [code, id] = [...view.getByTestId('state-error-page__reference').children].filter(
+        (child) => child !== separator
+      )
+      expect(id!.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+        code!.getBoundingClientRect().bottom - 1
+      )
+    }
+  )
 })

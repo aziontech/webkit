@@ -170,11 +170,12 @@
         description="Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are."
         size="large"
       >
-        <template #actions>
+        <template #meta>
           <Tag
             :label="statusTag.label"
             :severity="statusTag.severity"
             size="medium"
+            data-testid="state-async-submit__status"
           />
         </template>
       </PageHeader>
