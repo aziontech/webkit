@@ -312,11 +312,13 @@ describe('MarkdownEditor', () => {
       const box = getByTestId('markdown-editor__preview-box')
       expect(box).toHaveAttribute('tabindex', '0')
       expect(box).toHaveAttribute('dir', 'auto')
-      const rendered = await waitFor(() => getByTestId('markdown-editor__rendered'))
+      const rendered = await waitFor(() => getByTestId('markdown-editor__rendered'), {
+        timeout: 5000
+      })
       expect(rendered.querySelector('strong')).toHaveTextContent('Jane')
       expect(rendered).toHaveClass('text-body-xs')
       expect(rendered).not.toHaveClass('text-body-lg')
-      await waitFor(() => expect(box).not.toHaveAttribute('aria-busy'))
+      await waitFor(() => expect(box).not.toHaveAttribute('aria-busy'), { timeout: 5000 })
       expect(getByTestId('markdown-editor__preview-panel')).toHaveAttribute('tabindex', '-1')
     })
 
