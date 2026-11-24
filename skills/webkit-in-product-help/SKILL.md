@@ -3,7 +3,7 @@ name: webkit-in-product-help
 description: Add in-product help to an Azion product screen built on @aziontech/webkit — the explanation beside a field, a section or a whole page. Picks the level (a visible description first, then a Hint glyph that opens a short note on click, then an Info trigger beside the page title that opens a HelpPanel in the console's tools region; a Tooltip only names a control in a few words), places it (the glyph 4px after the label text, the Info trigger after the page title), and writes it (1 to 3 sentences, one Learn more link). Use whenever a screen needs to explain a field, a setting, a metric, a column or a page, or when someone asks for help text, an info icon, a question-mark icon, a help tooltip, a toggletip, contextual help or in-product documentation.
 scope: general
 status: active
-last_updated: 2026-11-23
+last_updated: 2026-11-24
 enforced_by: [webkit-prefer-over-custom, webkit-accessibility, webkit-strings, ui-verify, review]
 ---
 
@@ -31,7 +31,11 @@ Two more pieces, each for one job:
   abbreviation). It is never an explanation: no sentence, no link, never more than about 80
   characters.
 - **`HoverCard`** on a term in running text gives its definition (documentation and long
-  descriptions only, never a label).
+  descriptions only, never a label). The term keeps a dotted underline and opens on hover and on
+  focus; the card holds the term, one sentence and at most one Learn more link (the
+  `DocMarkdown` `Term` example). In a Markdown page write it as
+  `<Tooltip title="Origin shield" tip="One cache layer between the edge and your origin." href="/docs/cache/origin-shield" linkLabel="Learn more">origin shield</Tooltip>`;
+  `DocMarkdown` renders it as that term and card.
 
 ## Which level
 

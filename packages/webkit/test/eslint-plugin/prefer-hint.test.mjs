@@ -9,6 +9,14 @@ const vue = new RuleTester({
 })
 
 const sfc = (body, filename = 'a.vue') => ({ code: `<template>${body}</template>`, filename })
+const withScript = (script, body) => ({
+  code: `<script setup>${script}</script><template>${body}</template>`,
+  filename: 'a.vue'
+})
+const badScript = (script, body, messageId) => ({
+  ...withScript(script, body),
+  errors: [{ messageId }]
+})
 const bad = (body, messageId, count = 1) => ({
   ...sfc(body),
   errors: Array.from({ length: count }, () => ({ messageId }))
@@ -28,6 +36,14 @@ test('prefer-hint', () => {
       ),
       sfc(`<Tooltip :content="t('long.key')"><Button label="Save" /></Tooltip>`),
       sfc('<Tooltip :content="label"><Button label="Save" /></Tooltip>'),
+      withScript(
+        "const label = 'Copy'",
+        '<Tooltip :content="label"><Button label="Save" /></Tooltip>'
+      ),
+      withScript(
+        'let note = `${LONG}`',
+        '<Tooltip :content="note"><Button label="Save" /></Tooltip>'
+      ),
       sfc('<label>Name <Hint content="The name other people see." /></label>'),
       sfc('<Hint content="Short note." side="end" />'),
       sfc('<Hint :content="note" />'),
@@ -50,6 +66,26 @@ test('prefer-hint', () => {
       )
     ],
     invalid: [
+      badScript(
+        `const help = '${LONG_TOOLTIP}'`,
+        '<Tooltip :content="help"><span tabindex="0">Top bots</span></Tooltip>',
+        'longTooltip'
+      ),
+      badScript(
+        `const copy = { help: '${LONG_TOOLTIP}' }`,
+        '<Tooltip :content="copy.help"><span tabindex="0">Top bots</span></Tooltip>',
+        'longTooltip'
+      ),
+      badScript(
+        `const name = 'Top bots'`,
+        `<Tooltip :content="name + ': ${LONG_TOOLTIP}'"><span tabindex="0">Top bots</span></Tooltip>`,
+        'longTooltip'
+      ),
+      bad(
+        `<Tooltip :content="open ? 'Close' : '${LONG_TOOLTIP}'"><span tabindex="0">Top bots</span></Tooltip>`,
+        'longTooltip'
+      ),
+      badScript(`const note = \`${LONG_HINT}\``, '<Hint :content="note" />', 'longHint'),
       bad(
         `<Tooltip content="${LONG_TOOLTIP}"><span tabindex="0">Top bots</span></Tooltip>`,
         'longTooltip'
