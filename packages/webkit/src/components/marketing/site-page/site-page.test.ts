@@ -305,14 +305,16 @@ describe('SitePage', () => {
     const { findAllByTestId } = render(KeyValueListPageEntry)
     const items = await findAllByTestId('key-value-list-item')
     await waitFor(() => expect(items).toHaveLength(6))
-    expect(items.map((item) => item.querySelector('dd')!.textContent?.trim())).toEqual([
-      '1752167890',
-      expect.stringContaining('Active'),
-      'Nov 10, 2026, 2:32 PM',
-      'US East (Virginia)',
-      'shop.example.com',
-      expect.stringContaining('—')
-    ])
+    await waitFor(() =>
+      expect(items.map((item) => item.querySelector('dd')!.textContent?.trim())).toEqual([
+        '1752167890',
+        expect.stringContaining('Active'),
+        'Nov 10, 2026, 2:32 PM',
+        'US East (Virginia)',
+        'shop.example.com',
+        expect.stringContaining('—')
+      ])
+    )
   })
 
   it('draws a status child of a scene with the same dot and label as the Vue example', async () => {

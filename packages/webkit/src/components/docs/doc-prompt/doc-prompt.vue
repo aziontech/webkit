@@ -63,12 +63,14 @@
     nodes[index] = createTextVNode(trim(node.children))
   }
 
-  const TrimmedPrompt = () => {
-    const nodes = [...(slots['default']?.() ?? [createTextVNode(props.label)])]
+  const promptNodes = (): VNode[] => {
+    const nodes = [...(slots['default']?.() ?? [createTextVNode(props.label)])] as VNode[]
     trimEdge(nodes, 0, (value) => value.trimStart())
     trimEdge(nodes, nodes.length - 1, (value) => value.trimEnd())
     return nodes
   }
+
+  const TrimmedPrompt = (attributes: { nodes?: VNode[] }) => attributes.nodes ?? []
 
   const promptEl = ref<globalThis.HTMLElement | null>(null)
   const expanded = ref(false)
@@ -250,7 +252,7 @@
             :class="PROMPT_CLASS"
             @scroll="measure"
           >
-            <TrimmedPrompt />
+            <TrimmedPrompt :nodes="promptNodes()" />
           </p>
 
           <div
