@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 
 export const navigation: ConsoleLayoutNavGroup[] = [
   {
-    items: [{ id: 'copilot', label: 'AI Copilot', icon: 'az az-ask-azion', href: '/assistant' }]
+    items: [{ id: 'copilot', label: 'Agent', icon: 'az az-ask-azion', href: '/assistant' }]
   },
   {
     label: 'Build',

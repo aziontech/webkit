@@ -123,14 +123,14 @@
             />
           </DropdownMenu>
           <Tooltip
-            content="AI Copilot"
+            content="Agent"
             side="bottom"
           >
             <IconButton
               icon="az az-ask-azion"
               variant="outline"
               size="medium"
-              aria-label="AI Copilot"
+              aria-label="Agent"
               @click="router.push('/assistant')"
             />
           </Tooltip>
@@ -153,7 +153,7 @@
             />
           </DropdownMenu>
           <HighlightButton
-            label="AI Copilot"
+            label="Agent"
             size="medium"
             icon="az az-ask-azion"
             @click="router.push('/assistant')"
