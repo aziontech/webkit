@@ -64,6 +64,11 @@
     'group-data-[state=open]/toggle:rotate-180 ' +
     'motion-reduce:transition-none'
 
+  const ROUTE_DOT_CLASS =
+    'size-2 shrink-0 rounded-full bg-(--border-strong) ' +
+    'group-data-[severity=danger]/route:bg-(--danger-mark) group-data-[severity=warning]/route:bg-(--warning-mark) ' +
+    'group-data-[severity=success]/route:bg-(--success-mark) group-data-[severity=info]/route:bg-(--info-mark)'
+
   const FIELD_LINK_CLASS =
     'min-w-0 truncate rounded-(--shape-control) text-body-xs text-(--text-default) underline-offset-2 outline-none ' +
     'hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)'
@@ -125,7 +130,7 @@
       >
         <span
           aria-hidden="true"
-          class="size-2 shrink-0 rounded-full bg-(--border-strong) group-data-[severity=danger]/route:bg-(--danger-mark) group-data-[severity=warning]/route:bg-(--warning-mark) group-data-[severity=success]/route:bg-(--success-mark) group-data-[severity=info]/route:bg-(--info-mark)"
+          :class="ROUTE_DOT_CLASS"
         />
         <span class="min-w-0 truncate">{{ t('flowDiagram.route', { to: route.to }) }}</span>
         <bdi

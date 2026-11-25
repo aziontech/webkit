@@ -97,6 +97,18 @@ export type AddLink = (
   label?: FlowDiagramLabel
 ) => void
 
+const railBetween = (
+  from: HTMLElement,
+  to: HTMLElement,
+  list: FlowDiagramEdgeData[]
+): { edge: FlowDiagramEdgeData | undefined } | null => {
+  if (!list.length) return from.hasAttribute('data-terminal') ? null : { edge: undefined }
+  const edge = list.find(
+    (e) => e.from === from.dataset['nodeKey'] && e.to === to.dataset['nodeKey']
+  )
+  return edge ? { edge } : null
+}
+
 export const stackedLinks = (
   container: HTMLElement,
   base: Origin,
@@ -109,14 +121,12 @@ export const stackedLinks = (
   for (let i = 0; i < nodes.length - 1; i += 1) {
     const from = nodes[i]
     const to = nodes[i + 1]
-    if (from.hasAttribute('data-terminal') && !list.length) continue
+    const joined = railBetween(from, to, list)
+    if (!joined) continue
+    const { edge } = joined
     const a = measureBox(from, base)
     const b = measureBox(to, base)
     const x = rtl ? a.right - RAIL_INSET : a.left + RAIL_INSET
-    const edge = list.find(
-      (e) => e.from === from.dataset['nodeKey'] && e.to === to.dataset['nodeKey']
-    )
-    if (list.length && !edge) continue
     const severity = edge?.severity ?? null
     add(
       from,

@@ -38,8 +38,9 @@
   const problemCount = computed(() => t('codeEditor.problemCount', { count: props.markers.length }))
 
   const PROBLEM_CLASS =
-    'flex min-h-8 w-full cursor-pointer items-baseline gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-start text-body-xs text-(--text-default) transition-colors ' +
-    'duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11'
+    'flex min-h-8 w-full cursor-pointer items-baseline gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) ' +
+    'text-start text-body-xs text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11'
 </script>
 
 <template>
