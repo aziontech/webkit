@@ -2365,3 +2365,17 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: media-scroll 5.75 KB → 5.85 KB (measured 5.84 KB): MediaScroll renders each claim title as a plain heading below lg and the button only from lg, through useMediaQuery, so phones get no dead tab stops (A6-096).
+
+Budget-raise: console-showcase-section 22.3 KB → 22.35 KB (measured 22.31 KB): the view switcher lays out as an even grid on a phone instead of wrapping one view onto its own row (A6-098, A6-110).
+
+Budget-raise: feature-scroll-section 21 KB → 21.1 KB (measured 21.07 KB): an odd last tile spans both tablet columns and a phone code sample drops its side inset (A6-115, A6-117).
+
+Budget-raise: client-mosaic-section 8.3 KB → 8.8 KB (measured 8.79 KB): the band works out the tablet grid placement (lib/trailing-spans.ts) so a short last row of marks ends flush instead of leaving empty framed slots (A6-105).
+
+Budget-raise: client-story-columns-section 9.25 KB → 9.5 KB (measured 9.49 KB): a face without an explicit ink takes dark ink when white falls under 4.5:1 (lib/face-ink.ts), and the default layout draws a link cue under each story (A6-107, A6-108).
+
+Budget-raise: feature-tabs-section 60.6 KB → 60.65 KB (measured 60.62 KB): the band scene sits inside the pane's spacing-xl inset in its own wrapper (A6-119).
+
+Budget-raise: closing-call-to-action-section 9.85 KB → 9.9 KB (measured 9.86 KB): CallToAction's panel copy takes a fixed measure so stacked bands start their actions at one place (A6-109).
