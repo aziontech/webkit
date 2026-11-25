@@ -4,9 +4,6 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import CopyButton from '../../action/copy-button/copy-button.vue'
-  import InputGroup from '../../input/input-group/input-group.vue'
-  import InputGroupAddon from '../../input/input-group/input-group-addon/input-group-addon.vue'
-  import InputGroupInput from '../../input/input-group/input-group-input/input-group-input.vue'
 
   defineOptions({ name: 'CopyCommandSection', inheritAttrs: false })
 
@@ -29,13 +26,9 @@
   const label = computed(() =>
     t(props.shell ? 'copyCommandSection.command' : 'copyCommandSection.prompt')
   )
-  const COMMAND_CLASS =
-    'px-(--spacing-md)! text-label-code-sm! pointer-coarse:text-label-code-lg! ' +
-    '[mask-image:linear-gradient(to_right,black_calc(100%-var(--spacing-xl)),transparent)]'
-
-  const PROMPT_TEXT_CLASS =
-    'm-0 flex min-h-10 min-w-0 flex-1 items-center px-(--spacing-md) py-(--spacing-xs) text-start text-label-code-sm break-words whitespace-pre-wrap ' +
-    'text-(--text-default) pointer-coarse:text-label-code-lg'
+  const TEXT_CLASS =
+    'm-0 flex min-h-10 min-w-0 flex-1 items-center px-(--spacing-md) py-(--spacing-xs) text-start text-label-code-sm whitespace-pre-wrap text-(--text-default) ' +
+    'break-words group-data-[shell]:break-all'
 
   const copyLabel = computed(() =>
     t(props.shell ? 'copyCommandSection.copyCommand' : 'copyCommandSection.copyPrompt')
@@ -47,36 +40,24 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-shell="shell || null"
-    class="w-full max-w-(--container-md) min-w-0 data-[shell]:lg:w-(--container-md)"
+    class="group w-full max-w-(--container-md) min-w-0 data-[shell]:lg:w-(--container-md)"
   >
-    <InputGroup
-      v-if="shell"
-      size="large"
-    >
-      <InputGroupAddon aria-hidden="true">$</InputGroupAddon>
-      <InputGroupInput
-        readonly
-        dir="ltr"
-        :model-value="value"
-        :aria-label="label"
-        :class="COMMAND_CLASS"
-      />
-      <CopyButton
-        size="large"
-        :value="value"
-        :aria-label="copyLabel"
-      />
-    </InputGroup>
     <div
-      v-else
       role="group"
       :aria-label="label"
       class="flex items-start rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface)"
     >
+      <span
+        v-if="shell"
+        aria-hidden="true"
+        :data-testid="`${testId}__prompt`"
+        class="flex min-h-10 shrink-0 items-center border-e border-(--border-input) px-(--spacing-md) text-label-code-sm text-(--text-muted)"
+        >$</span
+      >
       <p
         dir="ltr"
         :data-testid="`${testId}__text`"
-        :class="PROMPT_TEXT_CLASS"
+        :class="TEXT_CLASS"
       >
         {{ value }}
       </p>
