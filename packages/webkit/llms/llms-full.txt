@@ -9713,7 +9713,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-error-p
 - Surface: app
 - Source: `blocks/state/state-first-use/state-first-use.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-first-use")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CopyButton, EmptyState, Input, Item, Link, Skeleton, ThirdPartyLogo
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CopyButton, EmptyState, Input, `InputGroupRoot`, Item, Link, Skeleton, ThirdPartyLogo
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -9746,7 +9746,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - D. Documentation — `Link` (required)
 - E. Methods — `Item` (required)
 - F. Method action — `Button` (required)
-- G. Command row — `Input`, `CopyButton` (CLI method)
+- G. Command row — `InputGroupRoot` (CLI method)
 - H. Command — `Input` (CLI method)
 - I. Copy — `CopyButton` (CLI method)
 - J. Placeholder — `Skeleton` (Loading)

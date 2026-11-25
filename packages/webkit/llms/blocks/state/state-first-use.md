@@ -1,11 +1,11 @@
 # StateFirstUse (`state/state-first-use`)
 
-> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media type="icon"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media type="icon"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/state/state-first-use/state-first-use.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-first-use")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [Skeleton](../../components/skeleton.md), [ThirdPartyLogo](../../components/third-party-logo.md)
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [Skeleton](../../components/skeleton.md), [ThirdPartyLogo](../../components/third-party-logo.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -56,9 +56,9 @@ An `Item.List` under the `EmptyState`, one `Item` per way to create the first re
 
 One per method. The recommended method takes `variant="primary"` (`Import`); the others take `variant="outline"` (`Create`). Only one primary on the block.
 
-### G. Command row — `Input`, `CopyButton` (CLI method)
+### G. Command row — `InputGroupRoot` (CLI method)
 
-A read-only monospace `Input` holds the command with its `CopyButton` in the `trailing` slot, so one framed control carries both, full width.
+Joins the read-only command and its copy button into one control, full width.
 
 ### H. Command — `Input` (CLI method)
 
@@ -180,6 +180,7 @@ Each variant is the same screen in another state: `get_block("state/state-first-
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -394,24 +395,25 @@ Each variant is the same screen in another state: `get_block("state/state-first-
                 class="flex basis-full md:basis-auto md:max-w-(--container-3xs) md:flex-1 justify-end"
               >
                 <Item.Actions class="w-full">
-                  <Input
-                    :model-value="command"
-                    size="large"
-                    class="w-full"
-                    aria-label="Via CLI command"
-                    readonly
-                    monospace
-                    :spellcheck="false"
-                  >
-                    <template #trailing>
-                      <CopyButton
-                        :value="command"
-                        aria-label="Copy the Via CLI command"
-                        copied-label="Command copied"
-                        size="small"
+                  <InputGroupRoot class="w-full">
+                    <div class="flex min-w-0 flex-1">
+                      <Input
+                        :model-value="command"
+                        size="large"
+                        class="w-full"
+                        aria-label="Via CLI command"
+                        readonly
+                        monospace
+                        :spellcheck="false"
                       />
-                    </template>
-                  </Input>
+                    </div>
+                    <CopyButton
+                      :value="command"
+                      aria-label="Copy the Via CLI command"
+                      copied-label="Command copied"
+                      size="small"
+                    />
+                  </InputGroupRoot>
                 </Item.Actions>
               </div>
             </Item>

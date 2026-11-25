@@ -628,7 +628,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       />
       <div
         :data-updating="refetching || undefined"
-        class="data-[updating]:[&>div>div]:opacity-60"
+        class="data-[updating]:[&_[data-testid$=__sparkline]]:opacity-60"
       >
         <StatTileGroup
           aria-label="Key figures"
@@ -1910,7 +1910,7 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
 </script>
 
 <template>
-  <div class="group/search-table flex min-w-0 flex-col gap-(--spacing-sm)">
+  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
     <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
       <div class="min-w-36 grow basis-(--container-3xs)">
         <Input
@@ -1937,7 +1937,7 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
       />
     </div>
 
-    <div class="min-w-0 group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60">
+    <div class="min-w-0">
       <DataTable
         :data="matchingRows"
         :columns="columns"
