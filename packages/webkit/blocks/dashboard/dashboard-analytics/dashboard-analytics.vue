@@ -294,7 +294,7 @@
       />
       <div
         :data-updating="refetching || undefined"
-        class="data-[updating]:[&>div>div]:opacity-60"
+        class="data-[updating]:[&_[data-testid$=__sparkline]]:opacity-60"
       >
         <StatTileGroup
           aria-label="Key figures"

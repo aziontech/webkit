@@ -249,7 +249,9 @@ describe('dashboard/dashboard-analytics data shapes', () => {
     expect(figures.getAttribute('aria-busy')).toBe('true')
     expect(figures.parentElement?.hasAttribute('data-updating')).toBe(true)
     expect(
-      figures.parentElement?.classList.contains('data-[updating]:[&>div>div]:opacity-60')
+      figures.parentElement?.classList.contains(
+        'data-[updating]:[&_[data-testid$=__sparkline]]:opacity-60'
+      )
     ).toBe(true)
     const hostsTable = view.getByTestId('data-table')
     expect(hostsTable.closest('[aria-busy="true"]')).not.toBeNull()
