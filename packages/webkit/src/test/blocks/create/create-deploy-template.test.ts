@@ -129,6 +129,16 @@ describe('create-deploy-template#InstallIntegration', () => {
 })
 
 describe('create-deploy-template#Form', () => {
+  it('labels the repository name plainly and gives visibility its own labelled switch', async () => {
+    render(DeployTemplateForm)
+    expect(screen.getByRole('textbox', { name: 'Repository name' })).toBeTruthy()
+    const visibility = screen.getByRole('switch', { name: 'Public repository' })
+    expect(visibility.getAttribute('aria-checked')).toBe('true')
+    await fireEvent.click(visibility)
+    expect(await screen.findByText('Only people you give access can see the code.')).toBeTruthy()
+    expect(screen.getByRole('textbox', { name: 'Repository name' })).toBeTruthy()
+  })
+
   it('asks before Back discards an edited form, and not while it is untouched', async () => {
     render(DeployTemplateForm)
     const back = screen.getByRole('button', { name: 'Back to Creation Center' })
