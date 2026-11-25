@@ -741,7 +741,8 @@ export const ptBR: Messages = {
     downloadTitle: 'Baixar {title}',
     loading: 'Carregando áudio',
     error: 'Não foi possível reproduzir o áudio.',
-    transcript: 'Transcrição'
+    transcript: 'Transcrição',
+    retry: 'Tentar novamente'
   },
   filePreview: {
     download: 'Baixar',
@@ -765,7 +766,8 @@ export const ptBR: Messages = {
     ready: 'Imagens prontas',
     error: 'Não foi possível carregar as imagens',
     broken: 'Não foi possível carregar esta imagem',
-    empty: 'Nenhuma imagem'
+    empty: 'Nenhuma imagem',
+    retry: 'Tentar novamente'
   },
   fileTokenGroup: {
     label: 'Arquivos',
@@ -1486,7 +1488,8 @@ export const ptBR: Messages = {
     exitFullscreen: 'Sair da tela cheia',
     pending: 'Aguardando para gerar',
     running: 'Gerando vídeo',
-    error: 'Não foi possível carregar o vídeo'
+    error: 'Não foi possível carregar o vídeo',
+    retry: 'Tentar novamente'
   },
   wizard: {
     stepOf: 'Etapa {step} de {total}',

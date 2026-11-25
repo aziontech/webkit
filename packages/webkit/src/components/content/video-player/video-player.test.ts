@@ -169,13 +169,31 @@ describe('VideoPlayer', () => {
     expect(failed.getAttribute('data-status')).toBe('error')
     expect(failed.hasAttribute('aria-busy')).toBe(false)
     expect(failed.textContent).toContain('The model stopped before the video was done')
-    expect(failed.textContent).not.toMatch(/try again/i)
 
     for (const root of [pending, running, failed]) {
       expect(root.querySelector('video')).toBeNull()
-      expect(root.querySelector('button')).toBeNull()
     }
+    expect(pending.querySelector('button')).toBeNull()
+    expect(running.querySelector('button')).toBeNull()
+    expect(failed.querySelectorAll('button')).toHaveLength(1)
     await expectNoA11yViolations(view.container)
+
+    await userEvent.click(failed.querySelector(`[data-testid="${TEST_ID}__retry"]`) as HTMLElement)
+    await waitFor(() => expect(failed.getAttribute('data-status')).toBe('pending'))
+  })
+
+  it('emits retry from Try again, and shows it only with a retry listener', async () => {
+    const bare = render(VideoPlayer, { props: { status: 'error' } })
+    expect(bare.queryByRole('button')).toBeNull()
+    bare.unmount()
+
+    const calls: MouseEvent[] = []
+    const view = render(VideoPlayer, {
+      props: { status: 'error', onRetry: (event: MouseEvent) => calls.push(event) }
+    })
+    await userEvent.click(view.getByRole('button', { name: 'Try again' }))
+    expect(calls).toHaveLength(1)
+    expect(calls[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('shows the error state when a ready video has no src', () => {

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: a9f8f52bde3f429343c4107ceb1ecad1cfb2d35455fcffac8d579e177186dd27
+checksum: 205d8f03503a6610b211b195fe824b981329c1a1103bf654af43980bee17404f
 created: 2026-11-19
-last_updated: 2026-11-19
+last_updated: 2026-11-25
 ---
 
 # VideoPlayer — Component Spec
@@ -75,7 +75,9 @@ A native video player with play and pause, seek with time, mute and volume, capt
 
 ## Events
 
-| _none_ | — | — |
+| Event   | Payload      | Notes |
+| ------- | ------------ | ----- |
+| `retry` | `MouseEvent` | Try again in the error state was pressed. The button renders only when this event has a listener; a file that failed to load is loaded again, and the app sets `status` back to `pending` or `running` when it generates the video again. |
 
 ## Slots
 
@@ -85,7 +87,7 @@ A native video player with play and pause, seek with time, mute and volume, capt
 
 - `data-status` mirrors `status`; a file that fails to load, or no `src`, shows `error`.
 - `pending` / `running`: `Skeleton`, a `role="status"` message, `Progress` and the percentage; no controls.
-- `error`: `EmptyState` with `error` or the default message; no controls.
+- `error`: `EmptyState` with `error` or the default message; no playback controls. With a `retry` listener it shows a Try again `Button` (`az az-refresh`, outline, medium) under the message.
 - `success`: the video and its controls; `data-paused`, `data-muted`.
 
 ## Motion & Animations
@@ -140,6 +142,7 @@ The video never plays on its own: there is no autoplay, so nothing moves until t
 | `videoPlayer.pending`        | `Waiting to generate`    | —             |
 | `videoPlayer.running`        | `Generating video`       | —             |
 | `videoPlayer.error`          | `The video could not load` | `error`     |
+| `videoPlayer.retry`          | `Try again`              | —             |
 
 - Formatting: the percentage goes through `formatNumber` with `style: 'percent'` and the `ConfigProvider` locale (so `42 %` or `%42` where a locale writes it so); the time digits through `formatNumber`, reading `m:ss` (`h:mm:ss` from one hour).
 
@@ -169,7 +172,7 @@ The video never plays on its own: there is no autoplay, so nothing moves until t
 The component has no `variant` or `size`; its axis is `status`, so one composite Statuses example shows the generating and error states side by side next to the Default (ready) example.
 
 - Default — a ready video with a poster and an English caption track.
-- Statuses — the pending, running (with a percentage) and error states side by side.
+- Statuses — the pending, running (with a percentage) and error (with Try again) states side by side.
 
 ## Constraints — DO NOT
 

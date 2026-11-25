@@ -741,7 +741,8 @@ export const es: Messages = {
     downloadTitle: 'Descargar {title}',
     loading: 'Cargando audio',
     error: 'No se pudo reproducir el audio.',
-    transcript: 'Transcripción'
+    transcript: 'Transcripción',
+    retry: 'Intentar de nuevo'
   },
   filePreview: {
     download: 'Descargar',
@@ -765,7 +766,8 @@ export const es: Messages = {
     ready: 'Imágenes listas',
     error: 'No se pudieron cargar las imágenes',
     broken: 'No se pudo cargar esta imagen',
-    empty: 'No hay imágenes'
+    empty: 'No hay imágenes',
+    retry: 'Intentar de nuevo'
   },
   fileTokenGroup: {
     label: 'Archivos',
@@ -1485,7 +1487,8 @@ export const es: Messages = {
     exitFullscreen: 'Salir de pantalla completa',
     pending: 'Esperando para generar',
     running: 'Generando video',
-    error: 'No se pudo cargar el video'
+    error: 'No se pudo cargar el video',
+    retry: 'Intentar de nuevo'
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',

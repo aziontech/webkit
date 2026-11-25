@@ -154,10 +154,33 @@ describe('AudioPlayer', () => {
     const root = view.getByTestId(TEST_ID)
     expect(root.hasAttribute('data-error')).toBe(true)
     expect(view.getByRole('alert').textContent).toContain('The speech service did not answer')
-    expect(view.getByRole('alert').textContent).not.toMatch(/try again/i)
     expect(view.getByRole('button', { name: 'Play' }).hasAttribute('disabled')).toBe(true)
     expect(view.queryByTestId(`${TEST_ID}__seek`)).toBeNull()
     await expectNoA11yViolations(view.container)
+
+    await browserUser.click(view.getByRole('button', { name: 'Try again' }))
+    await waitFor(() => expect(root.hasAttribute('data-error')).toBe(false))
+    expect(root.hasAttribute('data-loading')).toBe(true)
+  })
+
+  it('emits retry from Try again, and shows it only with a retry listener', async () => {
+    const bare = render(AudioPlayer, {
+      props: { src: 'https://example.com/a.mp3', error: 'No audio.' }
+    })
+    expect(bare.queryByRole('button', { name: 'Try again' })).toBeNull()
+    bare.unmount()
+
+    const calls: MouseEvent[] = []
+    const view = render(AudioPlayer, {
+      props: {
+        src: 'https://example.com/a.mp3',
+        error: 'No audio.',
+        onRetry: (event: MouseEvent) => calls.push(event)
+      }
+    })
+    await browserUser.click(view.getByTestId(`${TEST_ID}__retry`))
+    expect(calls).toHaveLength(1)
+    expect(calls[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('falls back to the catalog error when the audio element fails', async () => {
