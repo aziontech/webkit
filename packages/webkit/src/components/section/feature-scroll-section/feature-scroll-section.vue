@@ -166,6 +166,8 @@
           :key="item.title"
           variant="canvas"
           :padded="false"
+          :data-wide="(index === items.length - 1 && items.length % 2 === 1) || null"
+          class="sm:data-[wide]:col-span-2"
         >
           <MediaTile
             variant="plain"
@@ -184,7 +186,7 @@
               </div>
               <div
                 v-else-if="item.code"
-                class="w-full min-w-0 p-(--spacing-md)"
+                class="w-full min-w-0 p-(--spacing-md) max-sm:px-0"
               >
                 <CodeBlock
                   :tabs="tileTabs(item.code)"
