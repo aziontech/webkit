@@ -1,4 +1,5 @@
 import {
+  computed,
   type ComputedRef,
   type MaybeRefOrGetter,
   readonly,
@@ -9,7 +10,7 @@ import {
   watch
 } from 'vue'
 
-import { useOpenState } from '../use-open-state'
+import { useControllable } from '../use-controllable'
 
 export interface UseModalRootOptions {
   /** Initial open state while the model is unbound. */
@@ -40,7 +41,15 @@ export function useModalRoot(
   const triggerEl = ref<HTMLElement | null>(null)
   const returnFocusEl = ref<HTMLElement | null>(null)
   const hasDescription = ref(false)
-  const { isOpen, setOpen } = useOpenState(model, { defaultOpen, disabled: false })
+  const state = useControllable<boolean>({
+    prop: model,
+    defaultProp: defaultOpen,
+    onChange: (value) => {
+      model.value = value
+    }
+  })
+  const isOpen = computed(() => state.value)
+  const setOpen = (value: boolean) => state.set(value)
 
   watch(
     () => isOpen.value,
