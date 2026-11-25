@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: a68be6291e85b317f7459bed9a563e4fecd0177ad26508a214291072f1120864
+checksum: e8ae04c9d84df6445091b53e10fbf5794c87e44a0cd7a90fa84771eaa772b411
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-25
 ---
 
 # FileTokenGroup — Component Spec
