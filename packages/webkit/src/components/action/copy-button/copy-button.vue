@@ -98,7 +98,7 @@
   <span
     v-bind="$attrs"
     ref="rootEl"
-    class="inline-flex"
+    class="relative inline-flex"
     :data-state="copied ? 'copied' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     :data-testid="testId"

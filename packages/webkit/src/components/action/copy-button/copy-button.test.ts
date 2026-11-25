@@ -132,6 +132,14 @@ describe('CopyButton', () => {
     })
   })
 
+  describe('status region containment', () => {
+    it('positions the root so the visually hidden status stays inside the button', () => {
+      const { getByTestId } = render(CopyButton, { props: { value: 'token' } })
+      expect(getByTestId('copy-button').classList.contains('relative')).toBe(true)
+      expect(getByTestId('copy-button__status').classList.contains('sr-only')).toBe(true)
+    })
+  })
+
   describe('attribute forwarding', () => {
     it('lands consumer class, id and aria-describedby on the root', () => {
       const { getByTestId } = render(CopyButton, {
