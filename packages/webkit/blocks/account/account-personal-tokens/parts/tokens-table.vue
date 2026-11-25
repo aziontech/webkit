@@ -57,7 +57,7 @@
       >
         <template #cell-name="{ row, value }">
           <div class="flex min-w-0 flex-col">
-            <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>
+            <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
             <div
               aria-hidden="true"
               data-slot="narrow-summary"
