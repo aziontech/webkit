@@ -27,6 +27,8 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'eyebrow')
+
+  const WORD_JOINER = '\u2060'
 </script>
 
 <template>
@@ -37,16 +39,20 @@
     :data-single-line="singleLine || null"
     class="group/eyebrow relative flex w-fit max-w-full items-center ps-(--spacing-2xs) pe-(--spacing-2xs) data-[cursor]:pe-0"
   >
-    <span class="min-w-0 text-pretty text-(--text-default) font-medium text-overline-md"
+    <span class="min-w-0 text-pretty font-medium text-overline-md"
       ><span
         v-if="prefix"
         aria-hidden="true"
-        class="me-(--spacing-2xs) group-data-[single-line]/eyebrow:whitespace-nowrap"
+        class="me-(--spacing-2xs) text-(--text-default) group-data-[single-line]/eyebrow:whitespace-nowrap"
         >{{ prefix }}</span
-      ><template v-if="prefix">&#8288;</template
+      ><span
+        v-if="prefix"
+        aria-hidden="true"
+        data-slot="prefix-joiner"
+        >{{ WORD_JOINER }}</span
       ><span
         :data-testid="`${testId}__label`"
-        class="uppercase"
+        class="text-(--text-default) uppercase"
         ><slot /><span
           v-if="cursor"
           aria-hidden="true"

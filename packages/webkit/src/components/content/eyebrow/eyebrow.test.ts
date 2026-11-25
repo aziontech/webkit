@@ -15,9 +15,8 @@ describe('Eyebrow', () => {
 
   it('does not render a prefix span when prefix is the empty default', () => {
     const { container, queryByText } = render(Eyebrow, { slots: { default: 'NO PREFIX' } })
-    const spans = container.querySelectorAll('span')
-    expect(spans).toHaveLength(1)
-    expect(spans[0]?.getAttribute('aria-hidden')).toBeNull()
+    expect(container.querySelector('span[aria-hidden]')).toBeNull()
+    expect(container.querySelector('[data-slot="prefix-joiner"]')).toBeNull()
     expect(queryByText('//')).not.toBeInTheDocument()
   })
 
@@ -70,8 +69,11 @@ describe('Eyebrow', () => {
     const prefix = getByText('//')
     const label = getByTestId('eyebrow__label')
     expect(prefix.parentElement).toBe(label.parentElement)
-    expect(prefix.nextSibling?.textContent).toBe('\u2060')
-    expect(prefix.nextSibling?.nextSibling).toBe(label)
+    const joiner = prefix.nextElementSibling
+    expect(joiner?.getAttribute('data-slot')).toBe('prefix-joiner')
+    expect(joiner?.textContent).toBe('\u2060')
+    expect(joiner?.getAttribute('aria-hidden')).toBe('true')
+    expect(joiner?.nextElementSibling).toBe(label)
   })
 
   it('renders angle-bracket and closing-tag prefixes verbatim', () => {
