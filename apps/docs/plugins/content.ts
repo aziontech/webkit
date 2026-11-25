@@ -620,7 +620,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         ? 'preview'
         : 'ga',
     summary: plainInline(firstSentence(stripReviewerNotes(block.summary ?? ''))),
-    states: block.states,
+    states: block.states.map(({ name, file, slug }) => ({ name, file, slug })),
     dir: block.dir,
     uses: (
       ((catalog.blocks as Record<string, { imports?: string[] }>)?.[block.id]?.imports ??
@@ -636,6 +636,25 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     llmsTxt: existsSync(join(LLMS, 'llms.txt')),
     foundationLlms: foundationLlms(llms, foundationSlugs),
     version: (catalog.webkitVersion as string) ?? ''
+  }
+}
+
+export function navIndex(index: ReturnType<typeof buildIndex>) {
+  return {
+    components: index.components.map(({ name, title, category, stability, exampleCount }) => ({
+      name,
+      title,
+      category,
+      stability,
+      exampleCount
+    })),
+    blocks: index.blocks.map(({ id, title, group, stability }) => ({
+      id,
+      title,
+      group,
+      stability
+    })),
+    version: index.version
   }
 }
 
