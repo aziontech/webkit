@@ -34,7 +34,7 @@
     },
     {
       "name": "DisabledReason",
-      "summary": "`disabled-reason` says why the action is unavailable: the button stays focusable and the reason is its description.",
+      "summary": "`disabled-reason` says why the action is unavailable: the button stays focusable, and the reason is also shown beside it so keyboard and touch users can read it.",
       "file": "disabled-reason.vue"
     },
     {
