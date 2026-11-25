@@ -291,7 +291,10 @@
         </div>
       </div>
 
-      <SaveBar variant="docked">
+      <SaveBar
+        variant="docked"
+        column="focused"
+      >
         <template #leading>
           <p
             v-if="blocker"

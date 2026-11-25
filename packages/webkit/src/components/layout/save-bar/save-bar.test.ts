@@ -22,6 +22,23 @@ describe('SaveBar', () => {
     expect(root.getAttribute('data-variant')).toBe('floating')
   })
 
+  it('keeps the docked content on the focused page column while the bar spans the region', () => {
+    const view = render(
+      defineComponent({
+        components: { SaveBar },
+        template: `<div style="width: 1600px"><SaveBar variant="docked" column="focused">Unsaved</SaveBar></div>`
+      })
+    )
+    const message = view.getByTestId('save-bar__message')
+    const row = message.parentElement!
+    expect(row.getAttribute('data-column')).toBe('focused')
+    const bar = view.getByTestId('save-bar').getBoundingClientRect()
+    const content = row.getBoundingClientRect()
+    expect(bar.width).toBe(1600)
+    expect(content.width).toBeLessThan(1600)
+    expect(content.left).toBeGreaterThan(bar.left)
+  })
+
   it('honours a consumer data-testid', () => {
     const { getByTestId } = within(
       render(SaveBar, {
