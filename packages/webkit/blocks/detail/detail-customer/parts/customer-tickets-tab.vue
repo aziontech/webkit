@@ -52,6 +52,7 @@
     :columns="columns"
     row-key="id"
     bordered
+    stackable
     :loading="loading"
   >
     <template #caption>

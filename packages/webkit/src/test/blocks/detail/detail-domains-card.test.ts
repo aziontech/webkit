@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import DetailDomainsCard from '../../../../blocks/detail/detail-domains-card/detail-domains-card.vue'
@@ -16,6 +16,18 @@ describe('detail/detail-domains-card', () => {
     const view = render(DetailDomainsCard)
     const actions = view.getAllByRole('button', { name: /actions/i })[0]?.closest('[data-frozen]')
     expect(actions?.getAttribute('data-frozen')).toBe('end')
+  })
+
+  it('stacks each domain into a card on a phone, so the environment is never cut', async () => {
+    const host = document.createElement('div')
+    host.style.width = '320px'
+    document.body.appendChild(host)
+    const view = render(DetailDomainsCard, { container: host })
+    const table = view.getByTestId('data-table')
+    await waitFor(() => expect(table.hasAttribute('data-stacked')).toBe(true))
+    const labels = view.getAllByTestId('data-table__stacked-label').map((el) => el.textContent)
+    expect(labels).toContain('Environment')
+    host.remove()
   })
 
   it('renders the domains it is given and emits Add Domain', async () => {
