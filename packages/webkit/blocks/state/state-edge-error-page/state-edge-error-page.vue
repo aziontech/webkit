@@ -161,7 +161,7 @@
         >
           Request path
         </h2>
-        <div class="-mx-(--spacing-md)">
+        <div class="-mx-(--spacing-md) [&_[data-slot=flow-diagram-port]]:hidden">
           <FlowDiagram
             :nodes="nodes"
             :edges="edges"
