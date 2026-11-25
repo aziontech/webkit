@@ -69,7 +69,7 @@ A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`
 
 ### I. Field message — `FieldError` (conditional)
 
-Shows only after the primary action, under the email input, with a message that says what to enter: `This field is required.` when the value is empty, `Enter a valid email address.` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
+Shows only after the primary action, under the email input, with a message that says what to enter: `Enter your email address.` when the value is empty, `Enter a valid email address.` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
 
 ### J. Step hint — `Tooltip` (password and reset steps)
 
@@ -260,7 +260,7 @@ To go live, render the block from the route that owns the session and pass what 
 - **Primary action:** a verb for what happens: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`, `Return to sign in`.
 - **Field labels:** one to two words, no colon, no parentheses: `Email`, `Work email`, `Password`, `New password`, `Confirm password`.
 - **Links:** sentence case: `Forgot your password?`, `Resend email`.
-- **Field errors:** what is wrong, with a period: `This field is required.`, `Enter a valid email address.`, `Passwords don't match.`
+- **Field errors:** what is wrong or what to enter, with a period: `Enter your email address.`, `Enter your password.`, `Enter a valid email address.`, `Passwords don't match.`
 - **401 notice:** `Incorrect email or password. Check both and try again.`
 - **503 notice:** says what is down and what is not lost, never a claim the server did not check (it never read the credentials): `Sign-in is unavailable right now. What you entered is kept; retry in a few minutes.`
 - **500 notice:** says what failed and what state the user is in, code last: `Sign-in failed on our side. You are still signed out. Error 500.`
@@ -309,7 +309,7 @@ To go live, render the block from the route that owns the session and pass what 
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice, then the recovery codes the API issues once: eight 8-character codes in a monospace list with Download and Copy, and an `I saved these codes` checkbox that Continue to Console waits for, so the recovery path MfaCode offers always has codes behind it.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
-- DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValueList`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
+- DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValueList`, the account and the two scopes, Cancel / Confirm. `Code does not match? Enter the code` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
 
 - PersonalToken: sign in with an Azion personal token. One masked, monospace field with show and hide, a link to how tokens are made, required and no-spaces checks, Remember for this tab (off), then `sign-in` `(event, token)`; the app answers with `loading` and `error`.
 - RejectedToken: `error="rejected"`, the card after a 401, the danger notice under the heading and the empty field focused.
