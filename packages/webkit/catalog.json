@@ -9363,6 +9363,13 @@
      "default": "false",
      "required": "false",
      "doc": "Hides the mark from assistive tech when visible text beside it already says Azion."
+    },
+    {
+     "name": "treatment",
+     "type": "'color' | 'monochrome' | 'knockout'",
+     "default": "'color'",
+     "required": "false",
+     "doc": "How the mark is inked: `color` keeps the orange mark, `monochrome` paints it in one colour (black on light, white on dark), `knockout` paints it in the label colour of an orange fill."
     }
    ],
    "surface": "app",

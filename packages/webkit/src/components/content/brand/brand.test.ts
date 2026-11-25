@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/brand/default.vue'
 import Sizes from '../../../../examples/brand/sizes.vue'
+import Treatments from '../../../../examples/brand/treatments.vue'
 import Types from '../../../../examples/brand/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Brand from './brand.vue'
@@ -16,6 +17,7 @@ const KIND_VIEWBOX = {
 
 const VARIANTS = ['default', 'reduced', 'extended'] as const
 const SIZES = ['small', 'medium', 'large'] as const
+const TREATMENTS = ['color', 'monochrome', 'knockout'] as const
 
 describe('Brand', () => {
   // --- render + testid ----------------------------------------------------
@@ -131,5 +133,35 @@ describe('Brand', () => {
     const roots = getAllByTestId('brand')
     expect(roots).toHaveLength(3)
     expect(roots.map((r) => r.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
+  })
+
+  // --- treatment -> data-treatment ----------------------------------------
+  it('defaults to treatment "color"', () => {
+    expect(render(Brand).getByTestId('brand')).toHaveAttribute('data-treatment', 'color')
+  })
+
+  it.each(TREATMENTS)('treatment=%s sets data-treatment on the root', (treatment) => {
+    const { getByTestId } = render(Brand, { props: { treatment } })
+    expect(getByTestId('brand')).toHaveAttribute('data-treatment', treatment)
+  })
+
+  it('draws the extended tagline in the surrounding text colour, so it reads on white', () => {
+    const { container } = render(Brand, { props: { variant: 'extended' } })
+    const fills = [...container.querySelectorAll('path')].map((path) => path.getAttribute('fill'))
+    expect(fills).toContain('currentColor')
+  })
+
+  it.each(TREATMENTS)('has no accessibility violations for treatment=%s', async (treatment) => {
+    const { container } = render(Brand, { props: { treatment } })
+    await expectNoA11yViolations(container)
+  })
+
+  it('renders the three treatments in the composed Treatments fixture', () => {
+    const { getAllByTestId } = render(Treatments)
+    expect(getAllByTestId('brand').map((r) => r.getAttribute('data-treatment'))).toEqual([
+      'color',
+      'monochrome',
+      'knockout'
+    ])
   })
 })

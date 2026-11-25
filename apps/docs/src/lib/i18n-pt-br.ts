@@ -203,7 +203,7 @@ export const ptBR: Messages = {
   iconsEmpty: 'Nenhum ícone corresponde a essa busca',
   iconsEmptyLead: 'Tente outro nome ou palavra-chave.',
   iconsCopy: 'Copiar a classe',
-  assetsLead: 'As marcas e ilustrações de produto que o WebKit entrega.',
+  assetsLead: 'As marcas, ilustrações de produto e ícones que o WebKit entrega.',
   brand: 'Marca',
   brandLead:
     'As versões da marca Azion do Brand. Mantenha a marca limpa e sem alterações e escolha a versão que cabe no espaço.',
@@ -214,6 +214,15 @@ export const ptBR: Messages = {
   illustrationsLead:
     'Cenas de produto em SVG inline, repintadas pelo tema. Passe o nome para Illustration.',
   iconsAssetLead: 'Todas as classes de @aziontech/icons, com busca e clique para copiar.',
+  iconsLead:
+    'Todos os ícones de @aziontech/icons, agrupados em produtos e plataforma Azion, glifos de interface e logos de terceiros. Selecione um para copiá-lo.',
+  brandOnDark: 'No escuro',
+  brandOnLight: 'No branco',
+  brandTreatments: 'Versões em uma cor',
+  brandTreatmentsLead:
+    'Para impressão em uma cor, um documento ou uma página de parceiro que pede o logo preto ou branco. Defina treatment em Brand; nunca recolora uma cópia.',
+  brandMonochrome: 'Monocromático: preto no branco, branco no escuro.',
+  brandKnockout: 'Vazado: sobre um fundo laranja.',
   openIcons: 'Abrir a galeria de ícones',
   homeTitle: 'Um design system. Todos os componentes, prontos para compor.',
   homeLead:
@@ -223,11 +232,11 @@ export const ptBR: Messages = {
   exploreLead:
     'Quatro entradas: os fundamentos, todos os componentes, os blocos e os recursos da marca.',
   exploreFoundations:
-    'Tokens, cor, tipografia, ícones, idiomas, direita para a esquerda, acessibilidade e teclado.',
+    'Tokens, cor, tipografia, idiomas, direita para a esquerda, acessibilidade e teclado.',
   exploreComponents:
     'Todos os componentes por categoria, renderizados ao vivo pelo primeiro exemplo.',
   exploreBlocks: 'Telas inteiras feitas com os componentes, num quadro redimensionável.',
-  exploreAssets: 'As versões da marca e ilustrações de produto.',
+  exploreAssets: 'As versões da marca, ilustrações de produto e ícones.',
   whyTitle: 'Um kit move todas as interfaces da Azion',
   whyLead:
     '{components} componentes, {examples} exemplos ao vivo e {blocks} blocos: as mesmas peças do Azion Console, moldadas pelas equipes que as usam todo dia.',

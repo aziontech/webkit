@@ -212,7 +212,7 @@ export const en = {
   iconsEmpty: 'No icons match that search',
   iconsEmptyLead: 'Try another name or keyword.',
   iconsCopy: 'Copy the class',
-  assetsLead: 'The brand lockups and product illustrations WebKit ships.',
+  assetsLead: 'The brand lockups, product illustrations and icons WebKit ships.',
   brand: 'Brand',
   brandLead:
     'The Azion lockups of Brand. Keep the mark clear and unmodified, and pick the lockup that fits the space.',
@@ -223,6 +223,15 @@ export const en = {
   illustrationsLead:
     'Product scenes drawn as inline SVG and repainted from the theme. Pass the name to Illustration.',
   iconsAssetLead: 'Every class of @aziontech/icons, searchable, with click to copy.',
+  iconsLead:
+    'Every icon of @aziontech/icons, grouped as Azion products and platform, interface glyphs and third-party logos. Select one to copy it.',
+  brandOnDark: 'On dark',
+  brandOnLight: 'On white',
+  brandTreatments: 'One-colour versions',
+  brandTreatmentsLead:
+    'For a one-colour print, a document or a partner page that asks for a black or white logo. Set treatment on Brand; never recolour a copy.',
+  brandMonochrome: 'Monochrome: black on white, white on dark.',
+  brandKnockout: 'Knockout: on an orange fill.',
   openIcons: 'Open the icon gallery',
   homeEyebrow: 'WebKit',
   homeTitle: 'One design system. Every component, ready to compose.',
@@ -233,11 +242,10 @@ export const en = {
     "Build my UI with the Azion design system. Install @aziontech/webkit, @aziontech/theme and @aziontech/icons, run npx @aziontech/webkit init, import the theme once, and compose the app from WebKit's Vue components and design tokens instead of hand-rolled UI, following each component's documented props and compound API.",
   exploreTitle: 'Explore the docs',
   exploreLead: 'Four ways in: the foundations, every component, the blocks and the brand assets.',
-  exploreFoundations:
-    'Tokens, color, type, icons, languages, right-to-left, accessibility and keyboard.',
+  exploreFoundations: 'Tokens, color, type, languages, right-to-left, accessibility and keyboard.',
   exploreComponents: 'Every component by category, rendered live from its first example.',
   exploreBlocks: 'Whole screens built from the components, in a resizable frame.',
-  exploreAssets: 'The brand lockups and product illustrations.',
+  exploreAssets: 'The brand lockups, product illustrations and icons.',
   whyTitle: 'One kit powers every Azion interface',
   whyLead:
     '{components} components, {examples} live examples and {blocks} blocks: the same pieces behind the Azion Console, shaped by the teams who use them every day.',

@@ -133,7 +133,7 @@ export function foundationGroups(labels: {
       items: [
         { label: labels.brand, to: '/assets#brand' },
         { label: labels.illustrations, to: '/assets#illustrations' },
-        { label: labels.icons, to: '/assets#icons' }
+        { label: labels.icons, to: '/assets/icons' }
       ]
     }
   ]

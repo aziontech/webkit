@@ -29,7 +29,7 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "75.8 KB"
+    "limit": "75.9 KB"
   },
   {
     "name": "doc-markdown",
@@ -205,7 +205,7 @@
   {
     "name": "doc-call-to-action",
     "path": "src/components/docs/doc-call-to-action/doc-call-to-action.vue",
-    "limit": "12.55 KB"
+    "limit": "12.65 KB"
   },
   {
     "name": "doc-callout",
@@ -454,17 +454,17 @@
   {
     "name": "brand-globe-scene",
     "path": "src/assets/globe/brand-globe-scene.vue",
-    "limit": "14.85 KB"
+    "limit": "14.9 KB"
   },
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "127.1 KB"
+    "limit": "127.2 KB"
   },
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "86.3 KB"
+    "limit": "86.4 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -2185,7 +2185,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "87.2 KB"
+    "limit": "87.3 KB"
   },
   {
     "name": "use-console-layout",
