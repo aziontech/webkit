@@ -128,7 +128,7 @@
   onScopeDispose(() => clearTimeout(copiedTimer))
 
   const COPY_TEXT_CLASS =
-    'm-0 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs) text-start text-label-code-sm break-words ' +
+    'm-0 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs) text-start text-body-code-sm break-words ' +
     'whitespace-pre-wrap text-(--text-default)'
 </script>
 

@@ -542,6 +542,9 @@
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
   --text-big-number-lg-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
+  --text-big-number-unit-line-height: 1;
+  --text-big-number-unit-font-weight: 400;
+  --text-big-number-unit-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-amount-lg-text-wrap-style: balance;
   --text-amount-lg-font-size: 1.875rem;
   --text-amount-lg-line-height: 1.25;
@@ -1311,6 +1314,12 @@
   line-height: var(--text-big-number-lg-line-height);
   font-weight: var(--text-big-number-lg-font-weight);
   font-family: var(--text-big-number-lg-font-family);
+}
+
+@utility text-big-number-unit {
+  line-height: var(--text-big-number-unit-line-height);
+  font-weight: var(--text-big-number-unit-font-weight);
+  font-family: var(--text-big-number-unit-font-family);
 }
 
 @utility text-amount-lg {

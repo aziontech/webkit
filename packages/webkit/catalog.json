@@ -622,6 +622,9 @@
    "--text-big-number-sm-font-weight",
    "--text-big-number-sm-line-height",
    "--text-big-number-sm-white-space",
+   "--text-big-number-unit-font-family",
+   "--text-big-number-unit-font-weight",
+   "--text-big-number-unit-line-height",
    "--text-body-2xs-font-size",
    "--text-body-2xs-font-weight",
    "--text-body-2xs-line-height",
@@ -823,6 +826,7 @@
    "text-big-number-lg",
    "text-big-number-md",
    "text-big-number-sm",
+   "text-big-number-unit",
    "text-body-2xs",
    "text-body-code-lg",
    "text-body-code-sm",
@@ -1511,6 +1515,9 @@
     "--text-big-number-sm-font-weight",
     "--text-big-number-sm-line-height",
     "--text-big-number-sm-white-space",
+    "--text-big-number-unit-font-family",
+    "--text-big-number-unit-font-weight",
+    "--text-big-number-unit-line-height",
     "--text-body-2xs-font-size",
     "--text-body-2xs-font-weight",
     "--text-body-2xs-line-height",
@@ -3115,6 +3122,16 @@
       "font-size": "3.5rem"
      }
     }
+   },
+   "text-big-number-unit": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "line-height": "1",
+     "font-weight": "400",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif"
+    },
+    "purpose": "A word unit in a big-number figure (ms, Tbps), in the text face so it keeps its case."
    },
    "text-amount-lg": {
     "group": "typography",

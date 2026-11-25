@@ -27,7 +27,7 @@
     t(props.shell ? 'copyCommandSection.command' : 'copyCommandSection.prompt')
   )
   const TEXT_CLASS =
-    'm-0 flex min-h-10 min-w-0 flex-1 items-center px-(--spacing-md) py-(--spacing-xs) text-start text-label-code-sm whitespace-pre-wrap text-(--text-default) ' +
+    'm-0 flex min-h-10 min-w-0 flex-1 items-center px-(--spacing-md) py-(--spacing-xs) text-start text-body-code-sm whitespace-pre-wrap text-(--text-default) ' +
     'break-words group-data-[shell]:break-all'
 
   const copyLabel = computed(() =>

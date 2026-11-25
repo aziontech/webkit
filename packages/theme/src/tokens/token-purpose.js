@@ -165,6 +165,8 @@ export const tokenPurpose = {
   'text-big-number-lg': 'The largest numeric figure on one line, shrunk to fit its container.',
   'text-big-number-md': 'A numeric figure in a stat card, on one line, shrunk to fit.',
   'text-big-number-sm': 'A compact numeric figure, on one line, shrunk to fit.',
+  'text-big-number-unit':
+    'A word unit in a big-number figure (ms, Tbps), in the text face so it keeps its case.',
   'text-amount-lg': 'The largest price or amount.',
   'text-amount-md': 'A price or amount in a card.',
   'text-amount-sm': 'A compact price or amount.',

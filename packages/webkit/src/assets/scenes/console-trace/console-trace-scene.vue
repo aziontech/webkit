@@ -133,7 +133,7 @@
           v-if="step.value === 'trace'"
           :spans="CONSOLE_TRACE_SPANS"
           :aria-label="step.title"
-          class="min-h-0"
+          class="min-h-0 max-md:[&>div:first-child]:hidden"
         />
 
         <LogViewer

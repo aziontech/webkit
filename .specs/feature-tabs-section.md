@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 23eb01a25357aa32ad2e6d8d10e691d769020c9f4e3a3b96ab16abe65a694b1d
+checksum: bb11b93a57287153827b270fd9f9f7a0a14929ed40508b6482097479b4405cc5
 ---
 
 # FeatureTabsSection — Component Spec
@@ -54,13 +54,13 @@ The feature walkthrough band of a product page: a horizontal section title, with
         title: 'Trace',
         description: 'The run as a waterfall.',
         illustration: 'live-debugging',
-        illustrationLabel: 'A trace waterfall'
+        illustrationLabel: 'A time window of requests, errors and events, with its trace bar'
       },
       {
         title: 'Logs',
         description: 'Structured output on the same clock.',
-        illustration: 'traffic-and-cost-bar-chart',
-        illustrationLabel: 'Structured logs'
+        illustration: 'real-time-metrics-error-rate',
+        illustrationLabel: 'An error-rate spike with the real-time events behind it'
       }
     ]"
     :primary-action="{ label: 'Open an invocation', href: '/docs', trailing: true }"

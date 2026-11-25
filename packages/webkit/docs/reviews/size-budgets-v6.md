@@ -2673,3 +2673,7 @@ Budget-raise: carousel 6.7 KB → 6.75 KB (measured 6.71 KB): useButtonRoot trea
 Budget-raise: breadcrumb 28.2 KB → 28.25 KB (measured 28.22 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
 
 Budget-raise: drawer-content 18.35 KB → 18.4 KB (measured 18.35 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: stats-section 5.05 KB → 5.1 KB (measured 5.08 KB): Stats sets a suffix that holds a letter in the new text-face unit role, so `ms` and `Tbps` keep their case (A6-099, lane W3); the binding and the class add about 70 bytes after removing its test id.
+
+Budget-raise: network-section 28.2 KB → 28.25 KB (measured 28.21 KB): renders Stats, so it carries the same unit-role binding (A6-099, lane W3).

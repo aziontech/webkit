@@ -324,7 +324,6 @@
             align="start"
             :side-offset="12"
             :collision-padding="{ x: columnInset, y: 8 }"
-            variant="contrast"
             arrow
           />
         </NavigationMenu>

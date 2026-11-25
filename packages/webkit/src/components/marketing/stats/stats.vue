@@ -120,7 +120,8 @@
             <span class="text-(--text-default)">{{ item.value }}</span>
             <span
               v-if="item.suffix"
-              class="text-(--text-muted)"
+              :data-word-unit="/\p{L}/u.test(item.suffix) || null"
+              class="text-(--text-muted) data-[word-unit]:text-big-number-unit"
               >{{ item.suffix }}</span
             >
           </span>

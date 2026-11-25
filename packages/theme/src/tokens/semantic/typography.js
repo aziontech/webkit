@@ -33,6 +33,11 @@ export const typography = {
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
+  'text-big-number-unit': {
+    lineHeight: leading.none,
+    fontWeight: fontWeight.normal,
+    fontFamily: fontFamily.sans
+  },
   'text-amount-lg': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
