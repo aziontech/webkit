@@ -1,12 +1,12 @@
 # ViewTicketInbox (`view/view-ticket-inbox`)
 
-> The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more) and Close, each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
+> The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more; a `ConfirmDialog` asks which ticket to keep) and Close (confirmed with the count), each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/view/view-ticket-inbox/view-ticket-inbox.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-ticket-inbox")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [Countdown](../../components/countdown.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PriorityTag](../../components/priority-tag.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [Countdown](../../components/countdown.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PriorityTag](../../components/priority-tag.md), [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -36,13 +36,13 @@ Title `Tickets` and one sentence. The one action is the primary medium Create ti
 
 The controls band (`parts/inbox-controls.vue`). A `Select` labelled View leads it: each saved view with its count (`My open tickets (4)`), and a view marked `urgent` (Overdue) says `needs action` with its count above zero. The views are presets of this one list, not pages, so they never become a side menu (the rail navigates, the page does not). The `PropertyFilter` grows beside it, with Status, Priority, Assignee, Group, Channel and Tag as properties and free text over subject, requester, email and number. Refresh and `CollectionPreferences` (page size 25, 50 or 100; columns, Group and Channel hidden by default) close the row. Below `@2xl` of the band the select takes its own line.
 
-### C. Bulk actions — `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Avatar` (conditional)
+### C. Bulk actions — `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Avatar`, `ConfirmDialog`, `RadioGroup` (conditional)
 
-`parts/ticket-bulk-actions.vue`, under the filter in the controls band while tickets are selected: `3 selected` (a polite status), `Select all 12 tickets` once the whole page is ticked and more match (`selectAllMatching`), Clear selection, then Assign (an agent menu, each agent with their avatar and presence), Change status (the five statuses), Merge (disabled with a reason under two tickets) and Close. Every label counts the selection: `Assign (3)`. An action emits `bulk-action` and clears the selection; the app saves, refreshes the list and confirms in a toast.
+`parts/ticket-bulk-actions.vue`, under the filter in the controls band while tickets are selected: `3 selected` (a polite status), `Select all 12 tickets` once the whole page is ticked and more match (`selectAllMatching`), Clear selection, then Assign (an agent menu, each agent with their avatar and presence), Change status (the five statuses), Merge (disabled with a reason under two tickets) and Close. Every label counts the selection: `Assign (3)`. Merge and Close ask first, in a `ConfirmDialog`: Merge lists the selected tickets in a `RadioGroup` named Ticket to keep (the first one picked by default) and confirms with `Merge 3 tickets`; Close confirms with `Close 3 tickets`. Assign and Change status act on the pick. An action emits `bulk-action` and clears the selection; the app saves, refreshes the list and confirms in a toast.
 
 ### D. Ticket table — `Card`, `DataTable`, `DataTablePagination`, `TableCellLink`, `TableCellStatus`, `PriorityTag`, `Countdown`, `TableCellTime`, `useCollection` (required)
 
-One `useCollection` over the view's tickets (selection on, sorted by Next SLA, most urgent first; tickets with no SLA last), `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Subject (`parts/ticket-subject-cell.vue`: a `TableCellLink` to the ticket, an unread mark in `--info-mark` with the hidden word Unread, then the requester's avatar, name and `#number` in muted text), Status as `TableCellStatus` (New warning, since it waits for triage; Open info; Pending and On hold neutral; Solved success), Priority as a small `PriorityTag` sorted by rank, Assignee (`parts/ticket-assignee-cell.vue`: the `Avatar` with presence and the name, or muted Unassigned), Next SLA as a small `Countdown` (paused while Pending or On hold, a dash when no target runs), Updated as `TableCellTime`, then the hidden Group and Channel. A row click or Enter on a focused row emits `open`; clicks on the link, the checkbox or a button do not.
+One `useCollection` over the view's tickets (selection on, sorted by Next SLA, most urgent first; tickets with no SLA last), `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Subject (`parts/ticket-subject-cell.vue`: a `TableCellLink` to the ticket, an unread mark in `--info-mark` with the hidden word Unread, then the requester's avatar, name and `#number` in muted text; below `sm` a third line carries the triage facts, the status, the `PriorityTag` and the running SLA `Countdown`, and the cell takes 60% of the screen so the Status column visibly peeks), Status as `TableCellStatus` (New warning, since it waits for triage; Open info; Pending and On hold neutral; Solved success), Priority as a small `PriorityTag` sorted by rank, Assignee (`parts/ticket-assignee-cell.vue`: the `Avatar` with presence and the name, or muted Unassigned), Next SLA as a small `Countdown` (paused while Pending or On hold, a dash when no target runs), Updated as `TableCellTime`, then the hidden Group and Channel. A row click or Enter on a focused row emits `open`; clicks on the link, the checkbox or a button do not.
 
 ### E. Empty view and no match — `EmptyState` (required)
 
@@ -68,14 +68,14 @@ The block takes its records through props and emits every action; it fetches not
 | `defaultQuery`        | `PropertyFilterQuery` | Filter tokens applied on mount, for a link that opens the inbox already filtered.                               |
 | `defaultSelectedKeys` | `string[]`            | Ticket numbers selected on mount.                                                                               |
 
-| Event            | Payload                               | When                                                                            |
-| ---------------- | ------------------------------------- | ------------------------------------------------------------------------------- |
-| `create`         | `(event)`                             | Create ticket.                                                                  |
-| `open`           | `(event, ticket)`                     | A row click or Enter on a focused row.                                          |
-| `bulk-action`    | `(event, { action, value, tickets })` | Assign (`value` the agent), Change status (`value` the status), Merge or Close. |
-| `refresh`        | `(event)`                             | Refresh.                                                                        |
-| `retry`          | `(event)`                             | Retry in the error alert.                                                       |
-| `update:viewKey` | `(key)`                               | Another view was picked.                                                        |
+| Event            | Payload                               | When                                                                                                                    |
+| ---------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `create`         | `(event)`                             | Create ticket.                                                                                                          |
+| `open`           | `(event, ticket)`                     | A row click or Enter on a focused row.                                                                                  |
+| `bulk-action`    | `(event, { action, value, tickets })` | Assign (`value` the agent), Change status (`value` the status), Merge (`value` the number of the ticket kept) or Close. |
+| `refresh`        | `(event)`                             | Refresh.                                                                                                                |
+| `retry`          | `(event)`                             | Retry in the error alert.                                                                                               |
+| `update:viewKey` | `(key)`                               | Another view was picked.                                                                                                |
 
 To go live, render the block from a page that owns the requests and pass what they return:
 
@@ -123,7 +123,7 @@ Then delete `sample.ts` and its import. A queue too large for the browser moves 
 
 - **Title:** `Tickets`. **Create:** `Create ticket`. **View select:** `View`. **Filter:** `Filter tickets`.
 - **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **Unassigned:** `Unassigned`.
-- **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`
+- **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`; the confirmations `Merge 3 tickets` (with Ticket to keep) and `Close 3 tickets`.
 - **Empty view:** `You're all caught up`, `No tickets in <view>.`, `Show all open tickets`. **No match:** `No matching tickets`, `No ticket in this view matches these filters.`, `Clear filters`.
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -266,7 +266,7 @@ Each variant is the same screen in another state: `get_block("view/view-ticket-i
   export interface TicketInboxBulkPayload {
     /** The action. */
     action: TicketInboxBulkAction
-    /** The agent name for assign, the status for status; empty otherwise. */
+    /** The agent name for assign, the status for status, the number of the ticket kept for merge; empty for close. */
     value: string
     /** The selected tickets. */
     tickets: TicketInboxTicket[]
@@ -435,6 +435,7 @@ Each variant is the same screen in another state: `get_block("view/view-ticket-i
               :can-select-all="canSelectAll"
               :agents="agentList"
               :statuses="TICKET_STATUSES"
+              :tickets="selectedItems"
               @select-all="selectAllMatching"
               @clear="clearSelection"
               @action="onBulk"
@@ -972,15 +973,19 @@ export const ticketHiddenColumns = [
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+  import RadioGroup from '@aziontech/webkit/radio-group'
+  import { ref, watch } from 'vue'
 
   import type {
     TicketInboxAgent,
     TicketInboxBulkAction,
-    TicketInboxStatus
+    TicketInboxStatus,
+    TicketInboxTicket
   } from '../view-ticket-inbox.vue'
 
   export interface TicketBulkActionsProps {
@@ -994,9 +999,11 @@ export const ticketHiddenColumns = [
     agents: TicketInboxAgent[]
     /** The statuses Change status offers. */
     statuses: TicketInboxStatus[]
+    /** The selected tickets, which Merge lists to pick the one to keep. */
+    tickets: TicketInboxTicket[]
   }
 
-  defineProps<TicketBulkActionsProps>()
+  const props = defineProps<TicketBulkActionsProps>()
 
   const emit = defineEmits<{
     'select-all': [event: MouseEvent]
@@ -1008,6 +1015,24 @@ export const ticketHiddenColumns = [
     (action: TicketInboxBulkAction) =>
     (event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) =>
       emit('action', event, action, String(value))
+
+  const mergeOpen = ref(false)
+  const closeOpen = ref(false)
+  const kept = ref('')
+
+  watch(mergeOpen, (open) => {
+    if (open) kept.value = props.tickets[0]?.id ?? ''
+  })
+
+  const confirmMerge = (event: MouseEvent) => {
+    mergeOpen.value = false
+    emit('action', event, 'merge', kept.value)
+  }
+
+  const confirmClose = (event: MouseEvent) => {
+    closeOpen.value = false
+    emit('action', event, 'close', '')
+  }
 </script>
 
 <template>
@@ -1087,22 +1112,58 @@ export const ticketHiddenColumns = [
           :label="status"
         />
       </DropdownMenuRoot>
-      <Button
-        :label="`Merge (${selectedCount})`"
-        icon="az az-git-merge"
-        variant="outline"
+      <ConfirmDialog
+        v-model:open="mergeOpen"
+        :title="`Merge ${selectedCount} tickets`"
+        description="The other tickets close and their messages move into the ticket you keep."
+        :confirm-label="`Merge ${selectedCount} tickets`"
+        variant="primary"
+        size="medium"
+        :disabled="!kept"
+        @confirm="confirmMerge"
+      >
+        <template #trigger>
+          <Button
+            :label="`Merge (${selectedCount})`"
+            icon="az az-git-merge"
+            variant="outline"
+            size="small"
+            :disabled="selectedCount < 2"
+            disabled-reason="Select two or more tickets to merge them."
+          />
+        </template>
+        <RadioGroup
+          v-model="kept"
+          name="ticket-to-keep"
+          aria-label="Ticket to keep"
+        >
+          <RadioGroup.Item
+            v-for="ticket in tickets"
+            :key="ticket.id"
+            :value="ticket.id"
+          >
+            <bdi dir="ltr">#{{ ticket.id }}</bdi> {{ ticket.subject }}
+          </RadioGroup.Item>
+        </RadioGroup>
+      </ConfirmDialog>
+      <ConfirmDialog
+        v-model:open="closeOpen"
+        :title="`Close ${selectedCount} tickets`"
+        description="They leave the open views. A reply from the requester opens a ticket again."
+        :confirm-label="`Close ${selectedCount} tickets`"
+        variant="primary"
         size="small"
-        :disabled="selectedCount < 2"
-        disabled-reason="Select two or more tickets to merge them."
-        @click="(event: MouseEvent) => emit('action', event, 'merge', '')"
-      />
-      <Button
-        :label="`Close (${selectedCount})`"
-        icon="az az-circle-check"
-        variant="outline"
-        size="small"
-        @click="(event: MouseEvent) => emit('action', event, 'close', '')"
-      />
+        @confirm="confirmClose"
+      >
+        <template #trigger>
+          <Button
+            :label="`Close (${selectedCount})`"
+            icon="az az-circle-check"
+            variant="outline"
+            size="small"
+          />
+        </template>
+      </ConfirmDialog>
     </div>
   </div>
 </template>
@@ -1113,8 +1174,12 @@ export const ticketHiddenColumns = [
 ```ts
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
+  import Countdown from '@aziontech/webkit/countdown'
+  import PriorityTag from '@aziontech/webkit/priority-tag'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
 
+  import { slaPaused, statusSeverity } from '../lib/ticket-fields'
   import type { TicketInboxTicket } from '../view-ticket-inbox.vue'
 
   export interface TicketSubjectCellProps {
@@ -1126,7 +1191,7 @@ export const ticketHiddenColumns = [
 </script>
 
 <template>
-  <div class="flex min-w-0 items-start gap-(--spacing-xs)">
+  <div class="flex min-w-0 items-start gap-(--spacing-xs) max-sm:w-[60vw]">
     <span
       class="mt-(--spacing-xs) size-2 shrink-0 rounded-full data-[unread]:bg-(--info-mark)"
       :data-unread="ticket.unread || null"
@@ -1161,6 +1226,25 @@ export const ticketHiddenColumns = [
           dir="ltr"
           >#{{ ticket.id }}</span
         >
+      </div>
+      <div
+        data-testid="ticket-triage"
+        class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) sm:hidden"
+      >
+        <TableCellStatus
+          :label="ticket.status"
+          :severity="statusSeverity[ticket.status]"
+        />
+        <PriorityTag
+          v-if="ticket.priority !== 'none'"
+          :priority="ticket.priority"
+          size="small"
+        />
+        <Countdown
+          v-if="ticket.slaDueAt && !slaPaused(ticket)"
+          :deadline="ticket.slaDueAt"
+          size="small"
+        />
       </div>
     </div>
   </div>

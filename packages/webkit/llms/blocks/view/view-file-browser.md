@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`, `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -38,15 +38,15 @@ One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`
 
 ### B. Storage title and search — `TableSearch` (required)
 
-The toolbar opens with the storage glyph and the storage name, the page's `h1`, truncated on one line. Below it a large `TableSearch` fills the row, searching inside the table with the placeholder "Search in folder"; it searches the current folder, not the whole bucket.
+The toolbar opens with the storage glyph and the storage name, the page's `h1`, truncated on one line. Below it a medium `TableSearch` fills the row, searching inside the table with the placeholder "Search in folder"; it searches the current folder, not the whole bucket.
 
 ### C. Toolbar actions — `Tooltip`, `IconButton` (optional)
 
-Large outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
+Medium outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
 
 ### D. Columns — `CollectionPreferences` (optional)
 
-The last toolbar control is `CollectionPreferences` with only its columns section (`:sections="['columns']"`), which reads the table's columns from context: one switch per column with its order, Name locked, and Confirm writes them back to the table. Do not build a popover of `Switch`es by hand.
+The last toolbar control is `CollectionPreferences` with only its columns section (`:sections="['columns']"`), which reads the table's columns from context: one switch per column with its order, Name locked, and Confirm writes them back to the table. Its trigger is medium, so every control of the search row is medium and the row reads as one height. Do not build a popover of `Switch`es by hand.
 
 ### E. Path and create — `Breadcrumb`, `SplitButton` (required)
 
@@ -84,7 +84,7 @@ When a transfer finishes the page reports it with a toast as well as the card, b
 
 ### L. Selection and Move — `DataTable`, `DropdownMenuItem`, `Field`, `Combobox` (optional)
 
-With `movable`, `selectable` with `v-model:selected-keys` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move), and the selected names are the `selection` model. Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of the `destinations` (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves. A valid path emits `move` with the files and the destination.
+With `movable`, `selectable` with `v-model:selected-keys` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move), and the selected names are the `selection` model. Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`, with focus on the list of files (`data-autofocus`), so the destination list opens only when the person clicks or types in the field; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of the `destinations` (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves. A valid path emits `move` with the files and the destination.
 
 ## Data
 
@@ -233,7 +233,7 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - InsideAFolder: `path` is a build folder; the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
 - Uploading: `transfers` holds a running upload in the floating card; Add to files opens the upload dialog and the page drop overlay adds more.
 - Empty: `entries` is `[]` inside `assets/` of a build; the `..` row stays and the empty state offers Add to files.
-- Error: `error` is set; the storage name, the path and Refresh stay, Add to files is disabled and a danger `Alert` with the message and Retry takes the table's place.
+- Error: `error` is set; the storage name, the search row (search, Download CSV and the column settings disabled, Refresh live) and the path stay, Add to files is disabled and a danger `Alert` with the message and Retry takes the table's place. Every view block's error state follows one rule: the filter or search stays in place, disabled; Download CSV and the preferences are disabled; Refresh stays live.
 - MoveObject: `movable` with two files in `selectedKeys` and `defaultMoveOpen`; the Move dialog is open and Move emits `move`.
 
 ## Related
@@ -1279,11 +1279,10 @@ export const destinationOptionsOf = (paths: string[]) => [
   import Alert from '@aziontech/webkit/alert'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Card from '@aziontech/webkit/card'
-  import IconButton from '@aziontech/webkit/icon-button'
   import SplitButton from '@aziontech/webkit/split-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
 
   import { addToFilesActions } from '../lib/file-rows'
+  import FolderSearchRow from './folder-search-row.vue'
   import StorageTitle from './storage-title.vue'
 
   defineProps<{
@@ -1304,6 +1303,12 @@ export const destinationOptionsOf = (paths: string[]) => [
     <template #default>
       <div class="flex w-full flex-col gap-(--spacing-sm)">
         <StorageTitle :name="rootName" />
+        <FolderSearchRow
+          :loading="false"
+          :exportable="false"
+          disabled
+          @refresh="(event: MouseEvent) => emit('refresh', event)"
+        />
         <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
           <div class="min-w-0 flex-1">
             <Breadcrumb
@@ -1313,15 +1318,6 @@ export const destinationOptionsOf = (paths: string[]) => [
             />
           </div>
           <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-            <Tooltip content="Refresh">
-              <IconButton
-                icon="az az-refresh"
-                variant="outline"
-                size="medium"
-                aria-label="Refresh"
-                @click="(event: MouseEvent) => emit('refresh', event)"
-              />
-            </Tooltip>
             <SplitButton
               label="Add to files"
               icon="az az-plus"
@@ -1350,10 +1346,13 @@ export const destinationOptionsOf = (paths: string[]) => [
 <script setup lang="ts">
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
 
-  defineProps<{ loading: boolean; exportable: boolean }>()
+  withDefaults(defineProps<{ loading: boolean; exportable: boolean; disabled?: boolean }>(), {
+    disabled: false
+  })
 
   const search = defineModel<string>('search', { default: '' })
 
@@ -1366,9 +1365,25 @@ export const destinationOptionsOf = (paths: string[]) => [
 <template>
   <div class="flex w-full items-center gap-(--spacing-xs)">
     <div class="flex flex-1">
+      <Input
+        v-if="disabled"
+        size="medium"
+        placeholder="Search in folder"
+        aria-label="Search the table"
+        disabled
+        class="w-full"
+      >
+        <template #leading>
+          <i
+            class="az az-search text-button-md"
+            aria-hidden="true"
+          />
+        </template>
+      </Input>
       <TableSearch
+        v-else
         v-model="search"
-        size="large"
+        size="medium"
         placeholder="Search in folder"
         class="w-full"
       />
@@ -1380,7 +1395,7 @@ export const destinationOptionsOf = (paths: string[]) => [
       <IconButton
         icon="az az-refresh"
         variant="outline"
-        size="large"
+        size="medium"
         :loading="loading"
         aria-label="Refresh"
         @click="(event: MouseEvent) => emit('refresh', event)"
@@ -1393,14 +1408,15 @@ export const destinationOptionsOf = (paths: string[]) => [
       <IconButton
         icon="az az-download"
         variant="outline"
-        size="large"
-        :disabled="!exportable"
+        size="medium"
+        :disabled="disabled || !exportable"
         aria-label="Download CSV"
         @click="(event: MouseEvent) => emit('download', event)"
       />
     </Tooltip>
     <CollectionPreferences
       :sections="['columns']"
+      :disabled="disabled"
       class="shrink-0"
     />
   </div>
@@ -1488,7 +1504,9 @@ export const destinationOptionsOf = (paths: string[]) => [
         >
           <ul
             aria-label="Files to move"
-            class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
+            tabindex="-1"
+            data-autofocus
+            class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0 outline-none"
           >
             <li
               v-for="item in moving"
