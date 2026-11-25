@@ -69,6 +69,7 @@
         :align="viewOf(header.column.id).align"
         :frozen="viewOf(header.column.id).frozen"
         :style="viewOf(header.column.id).style"
+        :class="viewOf(header.column.id).cellClass"
         :sortable="header.column.getCanSort()"
         :sort-direction="sortDirectionOf(header)"
         :resizable="isResizable(header)"

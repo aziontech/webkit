@@ -14,6 +14,7 @@ import {
 const STACKED_FIELD_CLASS =
   'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
 const STACKED_CELL_CLASS = 'static! before:hidden! after:hidden!'
+const NARROW_HIDDEN_CLASS = '@max-sm/table:hidden'
 
 export interface DataTableLayoutOptions {
   columns: () => TableColumn[]
@@ -96,7 +97,13 @@ export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayou
       align: meta.align ?? 'start',
       frozen: meta.frozen,
       style: cellStyleOf(column),
-      stackedClass: stacked ? (stackedField ? STACKED_FIELD_CLASS : STACKED_CELL_CLASS) : undefined,
+      cellClass: stacked
+        ? stackedField
+          ? STACKED_FIELD_CLASS
+          : STACKED_CELL_CLASS
+        : meta.narrow === false
+          ? NARROW_HIDDEN_CLASS
+          : undefined,
       stackedField,
       principal: Boolean(meta.principal)
     }

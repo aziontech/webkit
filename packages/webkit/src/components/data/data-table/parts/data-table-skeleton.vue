@@ -54,7 +54,7 @@
         :align="viewOf(header.column.id).align"
         :frozen="viewOf(header.column.id).frozen"
         :type="viewOf(header.column.id).type"
-        :class="viewOf(header.column.id).stackedClass"
+        :class="viewOf(header.column.id).cellClass"
       >
         <Skeleton
           v-if="viewOf(header.column.id).type !== 'action'"

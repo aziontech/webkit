@@ -241,7 +241,7 @@ const EMPTY_VIEW: DataTableColumnView = {
   align: 'start',
   frozen: undefined,
   style: undefined,
-  stackedClass: undefined,
+  cellClass: undefined,
   stackedField: false,
   principal: false
 }
