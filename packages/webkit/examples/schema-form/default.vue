@@ -46,13 +46,9 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-sm) flex-col gap-(--spacing-lg)">
-    <SchemaForm
-      v-model="args"
-      :schema="schema"
-    />
-    <pre
-      class="m-0 overflow-auto rounded-(--shape-control) bg-(--bg-surface) p-(--spacing-sm) font-code text-body-xs text-(--text-muted)"
-      >{{ JSON.stringify(args, null, 2) }}</pre>
-  </div>
+  <SchemaForm
+    v-model="args"
+    class="w-full max-w-(--container-sm)"
+    :schema="schema"
+  />
 </template>

@@ -42,6 +42,12 @@ const lastValue = (emitted: Record<string, unknown[][]>) =>
 
 describe('SchemaForm', () => {
   describe('schema helpers', () => {
+    it('ships the Default example without a debug dump of the model', () => {
+      const view = render(Default)
+      expect(view.container.querySelector('pre')).toBeNull()
+      expect(view.container.textContent).not.toContain('"greeting"')
+    })
+
     it('maps types to widgets, infers types and orders keys', () => {
       const nodes = buildNodes(
         {

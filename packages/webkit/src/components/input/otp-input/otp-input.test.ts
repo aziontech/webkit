@@ -134,6 +134,16 @@ describe('OtpInput', () => {
     expect(input).toHaveAccessibleDescription(/6-digit code/)
   })
 
+  it('never prints the typed code back on the page in the Default example', async () => {
+    const view = render(Default)
+    await userEvent.click(field())
+    await userEvent.keyboard('123456')
+    await nextTick()
+    const status = view.getByRole('status').textContent ?? ''
+    expect(status).toContain('Code complete')
+    expect(status).not.toContain('123456')
+  })
+
   it('names a standalone field from the catalog, in the active locale', () => {
     render(OtpInput)
     expect(field()).toHaveAttribute('aria-label', 'One-time code')
