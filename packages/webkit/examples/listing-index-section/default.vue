@@ -16,7 +16,7 @@
         group: 'Engineering',
         values: {
           role: 'Software Engineer (Go)',
-          team: 'Engineering · San Francisco',
+          team: 'Platform · San Francisco',
           type: 'Hybrid · Full-time'
         },
         facets: { area: ['Engineering'], location: ['San Francisco'] }
@@ -59,7 +59,7 @@
     ]"
     sort-aria-label="Sort positions"
     search-placeholder="Search by title, team, or location"
-    search-short-placeholder="Search positions"
+    search-short-placeholder="Search"
     search-aria-label="Search positions"
     empty-title="No positions match"
     empty-description="No open positions match your search."

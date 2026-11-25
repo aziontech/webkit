@@ -167,7 +167,7 @@
       :sorts="sorts"
       sort-aria-label="Sort positions"
       search-placeholder="Search by title, team, or location"
-      search-short-placeholder="Search positions"
+      search-short-placeholder="Search"
       search-aria-label="Search positions"
       empty-title="No positions match"
       empty-description="No open positions match your search."
