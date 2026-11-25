@@ -3,7 +3,7 @@ name: tracker
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-18
 checksum: f657ab19faa670fe0a7cf206b4fd8b011662a57a6acb634060415c16d6edbd21

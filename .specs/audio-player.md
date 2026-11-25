@@ -3,7 +3,7 @@ name: audio-player
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: 00a1a731c41ea38916497bc940ef06722e15897710bc019057994bbf25273846
 created: 2026-11-19

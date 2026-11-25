@@ -3,7 +3,7 @@ name: video-player
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: 9e873700bb4f063311759e48e94dbd1c6e73dff2e61b68fd0078a24c8c6633f5
 created: 2026-11-19

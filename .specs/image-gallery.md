@@ -3,7 +3,7 @@ name: image-gallery
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 created: 2026-11-19
 last_updated: 2026-11-25

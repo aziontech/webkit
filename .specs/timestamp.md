@@ -3,7 +3,7 @@ name: timestamp
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 checksum: 0172307347dc663c473586aacf8554269b25a2c39d2d5496647f4e8cb5604b65
 created: 2026-11-14
