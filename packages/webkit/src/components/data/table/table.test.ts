@@ -246,6 +246,7 @@ describe('Table', () => {
         )
         expect(focusable).toHaveLength(1)
         expect(within(nameHead).getByRole('button', { name: 'Sort by Name' })).toBe(focusable[0])
+        expect((focusable[0] as HTMLElement).hasAttribute('aria-label')).toBe(false)
       })
     })
 

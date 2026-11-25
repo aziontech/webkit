@@ -39,6 +39,7 @@
   })
 
   const ariaLabel = computed<string>(() => {
+    if (attrs['aria-labelledby']) return ''
     if (props.sortDirection === 'ascending') return t('tableSortButton.ascending')
     if (props.sortDirection === 'descending') return t('tableSortButton.descending')
     return t('tableSortButton.unsorted')
