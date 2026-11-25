@@ -2,7 +2,7 @@
 name: webkit-lists
 description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `CardList`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or CardList), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
 ---
@@ -280,7 +280,8 @@ Bind `totalCount` (it comes in `propertyFilterProps`) so the count is announced 
   pass `url: { prefix: 'domains.' }`. With Vue Router, pass `url: { adapter: routerAdapter(useRouter()) }`
   (`routerAdapter` from `@aziontech/webkit/use-collection`), which also works during server rendering.
 - **`preferences: { storageKey }`** saves the page size, the visible columns and their order, wrapped
-  lines, striped rows and density in `localStorage` under that key, read after mount so server and
+  lines, striped rows, density and the widths of the columns someone resized in `localStorage` under
+  that key, read after mount so server and
   client render the same first page. `defaults.columns` hides columns until someone shows them.
 - `CollectionPreferences` edits a draft and confirms it; it is the only place those settings change.
   Lock the column that names the row (`hideable: false` on the column → `locked` in the panel).

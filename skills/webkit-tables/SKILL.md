@@ -2,7 +2,7 @@
 name: webkit-tables
 description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, type:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.ChipGroup and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — TableCellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), TableCellId, TableCellStatus (one chip per row), TableCellTags, TableCellTime (avatar + relative time) and TableCellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -97,7 +97,15 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
 
 `tableProps` sets `manualSorting` / `manualFiltering` and `<DataTablePagination v-bind="paginationProps" manual />`
 in the `footer` slot pages it, so the table renders the one page it is given; the header checkbox selects that page and the selection survives paging. The columns
-arrive ordered and hidden per the saved preferences, with `density`, `wrapLines` and `striped`. Pass
+arrive ordered and hidden per the saved preferences, with `density`, `wrapLines` and `striped`.
+
+Every column resizes: its header has a drag handle, on by default. Leave it on; set `resizable: false`
+only on a column whose width must not change (frozen and action columns never resize). When a drag
+ends the table emits `column-resize` with the column id and its new width; `tableProps` listens, keeps
+the width in the saved preferences and passes it back as the column's `width`, so with
+`preferences: { storageKey }` a resized column keeps its width after a reload. A table without
+`useCollection` does the same itself: save the width from `@column-resize` in `localStorage` under a
+key unique to that table and merge it into the column's `width`. Pass
 `:data` and a plain `DataTablePagination` by hand only for a short, static table with no filter (a settings
 sub-list).
 
@@ -601,6 +609,8 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] A table that lists a collection is bound with `v-bind="tableProps"` from `useCollection`; filters, sort, page and selection are not kept in loose refs.
 - [ ] More than a few hundred rows on one screen → `virtual` with a `max-height`; otherwise paginate.
 - [ ] Density, wrap and stripes come from the saved preferences, not hard-coded per page.
+- [ ] Columns resize (no `resizable: false` without a reason) and the widths are saved: `tableProps`
+      with a `storageKey`, or `@column-resize` kept in `localStorage`.
 - [ ] Exactly one `principal: true` column; the actions column is `{ type: 'action', hideable: false }`.
 - [ ] `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
 - [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.ChipGroup` (menu kind).
