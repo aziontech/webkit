@@ -32,7 +32,8 @@
         description:
           'Get emergency mitigation for an attack in progress, even before you become a customer.',
         href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
-        target: '_blank'
+        target: '_blank',
+        severity: 'danger'
       },
       {
         icon: 'az az-discord',

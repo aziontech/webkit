@@ -86,8 +86,8 @@ describe('state/state-edge-error-page', () => {
         view.getByRole('heading', { name: 'Request path' }).id
       )
       expect(
-        diagram.parentElement?.classList.contains('[&_[data-slot=flow-diagram-port]]:hidden')
-      ).toBe(true)
+        view.getByTestId('state-edge-error-page__path__list').hasAttribute('data-show-ports')
+      ).toBe(false)
       expect(view.container.textContent).not.toMatch(/\bedge\b|\borigin\b/i)
       const actions = [...view.container.querySelectorAll('button, a')]
         .map((el) => el.textContent?.trim() ?? '')

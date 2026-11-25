@@ -147,7 +147,7 @@
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2, minWidth: 200 },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 160 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 160, narrow: false },
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
     { accessorKey: 'lastUsedAt', header: 'Last used', minWidth: 140 },
     { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 160 },

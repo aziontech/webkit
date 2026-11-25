@@ -682,13 +682,28 @@ describe('DataTable', () => {
         }
       })
 
+      expect(inlineWidth(getAllByRole('columnheader')[1])).not.toBeNull()
       await waitFor(() => {
-        expect(inlineWidth(getAllByRole('columnheader')[1])).not.toBeNull()
+        expect(inlineWidth(getAllByRole('columnheader')[1])).toBeGreaterThan(8)
       })
-      // The floor is 8px; the cell holds a long string, so content decides.
       const resolved = inlineWidth(getAllByRole('columnheader')[1]) as number
       expect(resolved).toBeGreaterThan(8)
       expect(inlineWidth(getAllByRole('row')[1].children[1])).toBe(resolved)
+    })
+
+    it('holds a column at its floor before the first measurement, so loading rows keep the loaded columns', async () => {
+      const { getAllByRole } = render(DataTable, {
+        props: {
+          data: [],
+          loading: true,
+          columns: [
+            { accessorKey: 'name', header: 'Name' },
+            { accessorKey: 'status', header: 'Status', minWidth: 140 }
+          ]
+        }
+      })
+      const skeletonRow = getAllByRole('row').at(-1)!
+      expect(inlineWidth(skeletonRow.children[1])).toBe(140)
     })
 
     it('lets an explicit width win over the floor, and leaves other columns flexible', async () => {
@@ -762,6 +777,32 @@ describe('DataTable', () => {
         'Name',
         'Status'
       ])
+    })
+
+    it('drops a narrow: false column from the header, the rows and the skeleton below --container-sm', async () => {
+      const narrowColumns = columns.map((column, index) =>
+        index === 1 ? { ...column, narrow: false } : column
+      )
+      const view = mountIn(320, { columns: narrowColumns })
+      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+      const [nameHead, statusHead] = view.getAllByRole('columnheader')
+      expect(statusHead?.classList.contains('@max-sm/table:hidden')).toBe(true)
+      expect(nameHead?.classList.contains('@max-sm/table:hidden')).toBe(false)
+      const bodyRows = view.getAllByRole('row').slice(1)
+      for (const row of bodyRows) {
+        const cells = within(row).getAllByRole('cell')
+        expect(cells[1]?.classList.contains('@max-sm/table:hidden')).toBe(true)
+        expect(cells[0]?.classList.contains('@max-sm/table:hidden')).toBe(false)
+      }
+      await view.rerender({ columns: narrowColumns, data: rows, loading: true })
+      await waitFor(() =>
+        expect(view.container.querySelector('[role="cell"] [data-testid="skeleton"]')).toBeTruthy()
+      )
+      const skeletonRow = view.container
+        .querySelector('[role="cell"] [data-testid="skeleton"]')!
+        .closest('[role="row"]') as HTMLElement
+      const skeletonCells = within(skeletonRow).getAllByRole('cell')
+      expect(skeletonCells[1]?.classList.contains('@max-sm/table:hidden')).toBe(true)
     })
 
     it('keeps the scrolling grid in a wide box when stackable', async () => {

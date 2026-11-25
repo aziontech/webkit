@@ -145,8 +145,8 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 ## Responsive
 
 - Container queries: the root is a size container (`@container`), so long lines scroll inside the block instead of widening the layout above it.
-- Narrow (≤ 640 px or a narrow container): the shell takes the container width; lines never wrap and scroll horizontally inside `scroll-area`; the tab strip keeps one row. The split view halves the width, so it suits wide containers; `unified` is the narrow form.
-- Touch: tabs are 32 px tall inside the 40 px strip; the copy control is a 28 px CopyButton with its own touch target.
+- Narrow (≤ 640 px or a narrow container): the shell takes the container width; lines never wrap and scroll horizontally inside `scroll-area`; the tab strip keeps one row. The split view halves the width, so it suits wide containers; `unified` is the narrow form. Below `var(--container-sm)` of block width the lines keep a `var(--spacing-sm)` inline inset instead of `var(--spacing-lg)`, so a phone shows more of each line.
+- Touch: tabs are 32 px tall inside the 40 px strip (44 px on a coarse pointer), and each tab carries a `data-slot="touch-target"` layer that a scaled-down `ConsoleMockup` frame scales back up; the layer is narrowed by the frame's scale first, so it grows only in height and never takes a neighbouring tab's taps. The copy control is a 28 px CopyButton with its own touch target.
 - Reflow: no page-level horizontal scroll at 320 px; the code region scrolls on its own (code is an allowed two-dimensional exception, WCAG 1.4.10).
 
 ## Examples

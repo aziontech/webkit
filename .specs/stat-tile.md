@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 63d86b4918b3d3602ab74fb10c3d92999020c9eb88383c98e5e3b5ac6fcbf1e5
+checksum: a41c81662e8333032b313b03b360fc4f0e0018113671bfb942537c0f267d4b1d
 spec_version: 10
 created: 2026-10-20
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # StatTile — Component Spec
@@ -115,6 +115,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
+- The figure row is laid out from the tile's width alone, never from the figure's: from `var(--container-3xs)` (256px) of tile width the delta stays on the figure line (its label truncates), and below it the delta sits under the figure. A web font arriving after first paint therefore never re-wraps the row and shifts the page
 - `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its border, radius and surface; use an unpadded `ChartCard.Content`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.

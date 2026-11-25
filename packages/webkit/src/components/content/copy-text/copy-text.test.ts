@@ -40,6 +40,18 @@ describe('CopyText', () => {
       expect(head?.classList.contains('truncate')).toBe(true)
     })
 
+    it('shows the whole value on more lines with wrapLines, never truncating it', () => {
+      const value = 'acme-store-production-europe-west.example.com'
+      const { getByTestId } = render(CopyText, { props: { value, wrapLines: true } })
+      const root = getByTestId('copy-text')
+      const shown = getByTestId('copy-text__value')
+      expect(root.hasAttribute('data-wrap')).toBe(true)
+      expect(shown.textContent).toBe(value)
+      expect(shown.children).toHaveLength(0)
+      expect(shown.classList.contains('wrap-anywhere')).toBe(true)
+      expect(shown.getAttribute('dir')).toBe('ltr')
+    })
+
     it('honors a consumer data-testid and derives the part testids from it', () => {
       const { getByTestId } = render(CopyText, {
         props: { value: 'p-(--spacing-2xl)' },

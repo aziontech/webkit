@@ -3,14 +3,16 @@
   import Tabs, { type TabsValue } from '@aziontech/webkit/tabs'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import {
     copyQuery,
     exportCsv,
+    hiddenForStatusForm,
     metricFormatters,
     seriesColumns,
-    seriesRows
+    seriesRows,
+    statusForms
   } from '../analytics-report'
   import {
     type Breakdown,
@@ -79,6 +81,14 @@
   )
 
   type PanelCard = (typeof panels.value)[number]
+
+  const statusForm = ref('bar')
+  const hidden = ref<Record<string, string[]>>({})
+  watch(
+    [statusForm, () => panels.value.find((panel) => panel.id === 'status')?.series ?? []],
+    ([form, series]) => (hidden.value['status'] = hiddenForStatusForm(form, series)),
+    { immediate: true }
+  )
 
   const sectionLabel = computed(
     () =>
@@ -192,14 +202,18 @@
             :aggregation="panel.aggregation"
             fit="sm"
             :expandable="false"
+            :forms="panel.id === 'status' ? statusForms : []"
+            :form="panel.id === 'status' ? statusForm : ''"
+            @update:form="(value) => panel.id === 'status' && (statusForm = value)"
             @select="(_event, value) => onPanelOption(panel, value)"
           >
             <SeriesChart
               v-model:active-index="activeIndex"
+              v-model:hidden-series="hidden[panel.id]"
               :series="panel.series"
               :labels="currentPeriod.labels"
               :format-value="formatters[panel.format]"
-              :bar="panel.form === 'stacked'"
+              :bar="panel.id === 'status' ? statusForm !== 'line' : panel.form === 'stacked'"
               stacked
               :shape="panel.form === 'line' ? 'line' : 'area'"
               :total="!panel.rate"

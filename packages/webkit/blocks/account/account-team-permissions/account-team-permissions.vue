@@ -114,7 +114,7 @@
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'permissionNames', header: 'Permissions', grow: 2 },
     { accessorKey: 'members', header: 'Members', sortable: true, minWidth: 100 },
-    { accessorKey: 'status', header: 'Status', minWidth: 110 },
+    { accessorKey: 'status', header: 'Status', minWidth: 110, narrow: false },
     { id: 'actions', type: 'action', hideable: false }
   ]
 

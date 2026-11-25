@@ -1,13 +1,15 @@
 <script setup lang="ts">
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import {
     chartForms,
+    hiddenForStatusForm,
     metricFormatters,
     runCardOption,
     seriesColumns,
-    seriesRows
+    seriesRows,
+    statusForms
   } from '../analytics-report'
   import {
     overviewHighlights,
@@ -44,6 +46,10 @@
       ])
     )
   )
+  const hidden = ref<Record<string, string[]>>(
+    Object.fromEntries(overviewHighlights.map((highlight) => [highlight.id, []]))
+  )
+  const formsOf = (id: string) => (id === 'status' ? statusForms : chartForms)
   const expanded = ref(false)
   const expandedId = ref(overviewHighlights[0]?.id ?? '')
 
@@ -69,6 +75,15 @@
       ...highlight,
       series: seededSeries('overview', highlight.series, currentPeriod.value)
     }))
+  )
+
+  watch(
+    () => forms.value['status'],
+    (form) => {
+      const status = overviewHighlights.find((highlight) => highlight.id === 'status')
+      if (status) hidden.value['status'] = hiddenForStatusForm(form ?? '', status.series)
+    },
+    { immediate: true }
   )
 
   type HighlightCard = (typeof cards.value)[number]
@@ -125,7 +140,7 @@
             :span="6"
             :title="card.title"
             :hint="card.hint"
-            :forms="chartForms"
+            :forms="formsOf(card.id)"
             fit="xl"
             :footer-label="`Open ${card.product} dashboard`"
             :footer-href="card.href"
@@ -134,10 +149,11 @@
           >
             <SeriesChart
               v-model:active-index="activeIndex"
+              v-model:hidden-series="hidden[card.id]"
               :series="card.series"
               :labels="currentPeriod.labels"
               :format-value="formatters[card.format]"
-              :bar="forms[card.id] === 'bar'"
+              :bar="forms[card.id] !== 'line'"
               :stacked="card.series.length > 1"
               :shape="card.form === 'area' ? 'area' : 'line'"
               :refetching="refetching"
@@ -154,13 +170,14 @@
       v-model:form="forms[expandedCard.id]"
       :title="expandedCard.title"
       :description="expandedCard.hint"
-      :forms="chartForms"
+      :forms="formsOf(expandedCard.id)"
     >
       <SeriesChart
+        v-model:hidden-series="hidden[expandedCard.id]"
         :series="expandedCard.series"
         :labels="currentPeriod.labels"
         :format-value="formatters[expandedCard.format]"
-        :bar="forms[expandedCard.id] === 'bar'"
+        :bar="forms[expandedCard.id] !== 'line'"
         :stacked="expandedCard.series.length > 1"
         :shape="expandedCard.form === 'area' ? 'area' : 'line'"
         :height="420"

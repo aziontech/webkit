@@ -3,11 +3,11 @@ name: copy-text
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: fc60fac878ce34ae64cabcccb03f2b83b5ffc3d9be179524398401a050e1c539
+checksum: 800d70731e38a75ac88c0e27c59989f6e0510a149ac1891c5730a6e7c3dacf3a
 created: 2026-11-16
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # Copy Text — Component Spec
@@ -40,6 +40,7 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 
 - Pass the exact text in `value`; CopyText shows and copies the same string.
 - Keep values to one line. A long value truncates in the middle: the start ends in an ellipsis and its last characters (up to 12, a third of the value at most) stay visible, so `acme-store-pr…example.com` still shows how the value ends (decision A5P3-L02-3). The full value stays in the `title`, in the accessible name of the copy button and in the clipboard.
+- Set `wrapLines` where the reader must see the whole value to choose it (an asset name, an import path in a reference list), so it wraps instead of losing its middle.
 - Pass `ariaLabel` when the value alone does not say what it is (`Copy CNAME`); the default reads `Copy {value}`.
 - Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
 - Use `size="small"` in dense tables and lists.
@@ -58,11 +59,12 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 
 ## Props
 
-| Prop        | Type                  | Default    | Required | JSDoc                                                                                  |
-| ----------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------------- |
-| `value`     | `string`              | `—`        | true     | The code value shown and copied to the clipboard.                                      |
-| `ariaLabel` | `string`              | `''`       | false    | Accessible name of the copy button. Empty uses the locale catalog (`Copy {value}`).    |
-| `size`      | `'small' \| 'medium'` | `'medium'` | false    | Size token; sets the code typography and the size of the copy button (28 px or 32 px). |
+| Prop        | Type                  | Default    | Required | JSDoc                                                                                          |
+| ----------- | --------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `value`     | `string`              | `—`        | true     | The code value shown and copied to the clipboard.                                              |
+| `ariaLabel` | `string`              | `''`       | false    | Accessible name of the copy button. Empty uses the locale catalog (`Copy {value}`).            |
+| `size`      | `'small' \| 'medium'` | `'medium'` | false    | Size token; sets the code typography and the size of the copy button (28 px or 32 px).         |
+| `wrapLines` | `boolean`             | `false`    | false    | Wraps a long value onto more lines, breaking anywhere, instead of truncating it in the middle. |
 
 ## Events
 
@@ -78,6 +80,7 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 
 - Visual states: `idle`, `copied` (owned by the composed `CopyButton`: check glyph, tooltip and `role="status"` announcement for 2 s), `focus-visible` on the copy button.
 - `data-size` mirrors `size` on the root.
+- `data-wrap` is present while `wrapLines` is on; the copy button then sits at the top of the first line.
 - The composed `CopyButton` carries `data-state` (`idle` | `copied`).
 - Clipboard blocked: the composed `CopyButton` opens its manual-copy popover (see `.specs/copy-button.md`); CopyText adds nothing.
 - Empty `value`: the box renders empty and the copy click is a no-op (CopyButton ignores an empty value).
@@ -140,7 +143,7 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 ## Responsive
 
 - Container queries: none; the box is inline and as wide as its value, capped at `max-w-full`.
-- Narrow (≤ 640 px or a narrow container): the value never wraps (`whitespace-nowrap`, no break at hyphens) and truncates in the middle, keeping its last characters; the copy button never shrinks.
+- Narrow (≤ 640 px or a narrow container): the value never wraps (`whitespace-nowrap`, no break at hyphens) and truncates in the middle, keeping its last characters; the copy button never shrinks. With `wrapLines` the value breaks anywhere onto more lines instead.
 - The truncating value keeps 2 px of block padding (`py-0.5`) inside its clip, because the code typography sets a line height of 1: without it the clip cuts descenders (`g` in `--bg-canvas` reads as `q`).
 - Touch: the copy button is always visible (no hover-only affordance); 28 / 32 px with a 44 px hit area on `pointer: coarse`.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom — the value truncates instead.

@@ -14,6 +14,7 @@
 
 - Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.
 - Don't pad `channels` to three or drop one to make the row fit.
+- Put an emergency channel (an attack in progress) first and give it `severity: 'danger'`, so a reader under attack finds it at a glance; no other channel takes a severity.
 - Keep each lane's description to one sentence that states what that team handles.
 - Set `target: '_blank'` on a channel or status link that leaves the site.
 - Lead each lane with its `action`; add a `secondaryAction` only for a second route to the same team (an outlined button after the first).
@@ -36,7 +37,7 @@
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `lanes` | `ContactHubSectionLane[]` | `[]` | false | The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them (its optional `severity` draws the live status). |
-| `channels` | `ContactHubSectionChannel[]` | `[]` | false | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. |
+| `channels` | `ContactHubSectionChannel[]` | `[]` | false | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic; `severity: 'danger'` draws the glyph in `var(--danger-mark)` for the emergency channel. |
 
 ## States
 
@@ -97,7 +98,8 @@
         description:
           'Get emergency mitigation for an attack in progress, even before you become a customer.',
         href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
-        target: '_blank'
+        target: '_blank',
+        severity: 'danger'
       },
       {
         icon: 'az az-discord',

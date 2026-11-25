@@ -3,9 +3,12 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import type { Severity } from '../../../utils/severity'
 
   export type ProgressVariant = 'rounded' | 'flat'
   export type ProgressSize = 'small' | 'medium' | 'large'
+  /** Status colour of the fill: the shared severity scale. */
+  export type ProgressSeverity = Severity
 
   defineOptions({
     name: 'Progress',
@@ -23,6 +26,8 @@
     size?: ProgressSize
     /** Loading state; animates a sliding segment and ignores `value`. */
     indeterminate?: boolean
+    /** Status colour of the fill; unset keeps the brand fill. */
+    severity?: ProgressSeverity
   }
 
   const props = withDefaults(defineProps<ProgressProps>(), {
@@ -30,7 +35,8 @@
     max: 100,
     variant: 'flat',
     size: 'medium',
-    indeterminate: false
+    indeterminate: false,
+    severity: undefined
   })
 
   const attrs = useAttrs()
@@ -55,6 +61,8 @@
   const INDICATOR_CLASS =
     'absolute inset-y-0 start-0 rounded-[inherit] bg-(--primary) transition-[width] duration-moderate-02 ease-productive-entrance ' +
     'motion-reduce:transition-none motion-reduce:animate-none ' +
+    'data-[severity=neutral]:bg-(--text-muted) data-[severity=info]:bg-(--info-mark) data-[severity=success]:bg-(--success-mark) ' +
+    'data-[severity=warning]:bg-(--warning-mark) data-[severity=danger]:bg-(--danger-mark) ' +
     'data-[indeterminate]:end-0 data-[indeterminate]:bg-transparent data-[indeterminate]:before:absolute data-[indeterminate]:before:inset-y-0 ' +
     "data-[indeterminate]:before:rounded-[inherit] data-[indeterminate]:before:bg-(--primary) data-[indeterminate]:before:content-[''] " +
     'data-[indeterminate]:before:animate-progress-indeterminate ' +
@@ -72,6 +80,7 @@
     :data-testid="testId"
     :data-variant="variant"
     :data-size="size"
+    :data-severity="severity"
     :data-indeterminate="indeterminate || null"
     :aria-valuemin="indeterminate ? undefined : 0"
     :aria-valuemax="indeterminate ? undefined : max"
@@ -80,6 +89,7 @@
     :class="ROOT_CLASS"
   >
     <div
+      :data-severity="severity"
       :data-indeterminate="indeterminate || null"
       :style="indeterminate ? undefined : { width: percent + '%' }"
       :class="INDICATOR_CLASS"

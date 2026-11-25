@@ -90,6 +90,8 @@ X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
 ```
 
+`object-src 'none'` also stops `FilePreview` from showing a PDF; where an app previews documents (an AI chat that draws document parts), use `object-src 'self' blob:` instead.
+
 `style-src 'unsafe-inline'` is there because components set a few inline styles and custom properties;
 add the origins your app frames (`frame-src`, for `Embed`) or fetches (`connect-src`).
 

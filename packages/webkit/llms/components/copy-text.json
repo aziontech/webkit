@@ -30,6 +30,7 @@
  "bestPractices": [
   "Pass the exact text in `value`; CopyText shows and copies the same string.",
   "Keep values to one line. A long value truncates in the middle: the start ends in an ellipsis and its last characters (up to 12, a third of the value at most) stay visible, so `acme-store-pr…example.com` still shows how the value ends (decision A5P3-L02-3). The full value stays in the `title`, in the accessible name of the copy button and in the clipboard.",
+  "Set `wrapLines` where the reader must see the whole value to choose it (an asset name, an import path in a reference list), so it wraps instead of losing its middle.",
   "Pass `ariaLabel` when the value alone does not say what it is (`Copy CNAME`); the default reads `Copy {value}`.",
   "Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.",
   "Use `size=\"small\"` in dense tables and lists."
@@ -55,6 +56,13 @@
    "default": "'medium'",
    "required": "false",
    "doc": "Size token; sets the code typography and the size of the copy button (28 px or 32 px)."
+  },
+  {
+   "name": "wrapLines",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Wraps a long value onto more lines, breaking anywhere, instead of truncating it in the middle."
   }
  ],
  "events": [

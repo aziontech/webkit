@@ -192,10 +192,11 @@
           :key="cell.id"
           :style="viewOf(cell.column.id).style"
           :grow="viewOf(cell.column.id).grow"
+          :principal="viewOf(cell.column.id).principal"
           :align="viewOf(cell.column.id).align"
           :frozen="viewOf(cell.column.id).frozen"
           :type="viewOf(cell.column.id).type"
-          :class="viewOf(cell.column.id).stackedClass"
+          :class="viewOf(cell.column.id).cellClass"
         >
           <span
             v-if="viewOf(cell.column.id).stackedField"

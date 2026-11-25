@@ -68,7 +68,7 @@
   }
 
   const LINE_CLASS =
-    'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-2xs) text-label-code-sm ' +
+    'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-sm) @sm:px-(--spacing-lg) py-(--spacing-2xs) text-label-code-sm ' +
     'data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40'
 
   const LINE_MOTION_CLASS =

@@ -2677,3 +2677,57 @@ Budget-raise: drawer-content 18.35 KB → 18.4 KB (measured 18.35 KB): useButton
 Budget-raise: stats-section 5.05 KB → 5.1 KB (measured 5.08 KB): Stats sets a suffix that holds a letter in the new text-face unit role, so `ms` and `Tbps` keep their case (A6-099, lane W3); the binding and the class add about 70 bytes after removing its test id.
 
 Budget-raise: network-section 28.2 KB → 28.25 KB (measured 28.21 KB): renders Stats, so it carries the same unit-role binding (A6-099, lane W3).
+
+## Audit-6 wave 2, lane W2 (2026-11-25)
+
+Budget-raise: data-table 58.6 KB → 58.7 KB (measured 58.68 KB): DataTable takes the principal-cell cap and the narrow column option, passes principal to its cells and holds minWidth floors before measuring (A6-174, A6-208, A6-209).
+
+Budget-raise: doc-code-group 34.8 KB → 34.9 KB (measured 34.87 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: console-application-scene 127.45 KB → 127.7 KB (measured 127.68 KB): CodeBlock tabs gain a touch-target layer, the table parts the principal-cell cap and the narrow column option, and FlowDiagram showPorts (A6-048, A6-174, A6-208, A6-149); the scene renders all three.
+
+Budget-raise: console-trace-scene 87.15 KB → 87.2 KB (measured 87.17 KB): CodeBlock tabs gain a touch-target layer and the table parts the principal-cell cap and the narrow column option (A6-048, A6-174, A6-208); the scene renders both.
+
+Budget-raise: job-posting-section 63.8 KB → 63.9 KB (measured 63.88 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress through FileTokenGroup.
+
+Budget-raise: listing-index-section 43.7 KB → 43.75 KB (measured 43.72 KB): The table parts gain the principal-cell cap (A6-174); the entry renders Table.
+
+Budget-raise: cli-terminal-section 48 KB → 48.05 KB (measured 48.04 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: feature-tabs-section 60.65 KB → 60.8 KB (measured 60.76 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: listing-table-section 26.75 KB → 26.8 KB (measured 26.77 KB): The table parts gain the principal-cell cap (A6-174); the entry renders Table.
+
+Budget-raise: code-block 34.4 KB → 34.45 KB (measured 34.43 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117).
+
+Budget-raise: response-loading 2.6 KB → 2.65 KB (measured 2.61 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress.
+
+Budget-raise: chat-message 20.6 KB → 20.7 KB (measured 20.67 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: streaming-response 43.9 KB → 43.95 KB (measured 43.94 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: video-player 12.7 KB → 12.8 KB (measured 12.77 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress as its seek bar.
+
+Budget-raise: table-cell-time 19.8 KB → 19.85 KB (measured 19.83 KB): TableCellTime prints the UTC date until mount and the relative phrase after, so a server render hydrates cleanly (A6-148, A6-206).
+
+Budget-raise: file-token-group 8.1 KB → 8.15 KB (measured 8.14 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress for uploads.
+
+Budget-raise: log-viewer 44.45 KB → 44.5 KB (measured 44.48 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: log-viewer-steps 42.45 KB → 42.5 KB (measured 42.50 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: table 9.05 KB → 9.1 KB (measured 9.07 KB): The table parts gain the principal-cell cap, max(var(--size-48), 50cqi), so a long principal value no longer widens every row (A6-174).
+
+Budget-raise: table-head-cell 5.5 KB → 5.55 KB (measured 5.51 KB): The head cell carries data-principal and the principal-cell cap (A6-174).
+
+Budget-raise: flow-diagram 22.25 KB → 22.3 KB (measured 22.27 KB): FlowDiagram gains showPorts and centres a stacked rail (A6-149, A6-198).
+
+Budget-raise: flow-diagram-root 20 KB → 20.05 KB (measured 20.02 KB): FlowDiagram gains showPorts and centres a stacked rail (A6-149, A6-198).
+
+Budget-raise: toast 12 KB → 12.1 KB (measured 12.06 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress in its timer bar.
+
+Budget-raise: toast-root 11.75 KB → 11.8 KB (measured 11.77 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress in its timer bar.
+
+Budget-raise: progress 1.85 KB → 1.95 KB (measured 1.93 KB): Progress gains a severity fill: five data-severity classes and the attribute (A6-161).
+
+Budget-raise: css-console 24.95 KB → 25.05 KB (measured 25.02 KB gzip): the console fixture's stylesheet gains the Progress severity fills (A6-161), the narrow-table column hiding and the principal-cell cap (A6-208, A6-174), the StatTile figure row container query (A6-279), the FlowDiagram centred rail and showPorts (A6-198, A6-149), and the CodeBlock tab hit area and narrow line inset (A6-048, A6-117).

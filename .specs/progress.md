@@ -3,13 +3,13 @@ name: progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: a8b00ca7dcf196ed3c408ead0eab5b5bb19a33dc0f7c5e0c43b8bc151ee95269
+spec_version: 7
+checksum: fc928fe72a48ae2c23c597660b979c5975299ac6a85caab4f75c039e2861d08e
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
 created: 2026-06-26
-last_updated: 2026-11-17
+last_updated: 2026-11-25
 ---
 
 # Progress Bar — Component Spec
@@ -46,6 +46,7 @@ quantity.
 - Pass `value` on the scale of `max`, for example `:value="3" :max="5"` for steps. Don't convert it to a percentage yourself.
 - Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.
 - There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.
+- Set `severity` when the bar reports a status that is good or bad, such as a goal that is on track (`success`), at risk (`warning`) or off track (`danger`), so the fill agrees with the status tag next to it. Without it the fill is the brand orange, which is not a status colour.
 - The default is the `medium` bar with `flat` corners. Set `size="small"` for a thin inline strip (table rows, upload rows, the top of a region); use `variant="rounded"` and a larger `size` only when the bar stands alone.
 
 ## Usage
@@ -62,13 +63,14 @@ quantity.
 
 ## Props
 
-| Prop            | Type                                    | Default                            | Required | JSDoc                                                                                   |
-| --------------- | --------------------------------------- | ---------------------------------- | -------- | --------------------------------------------------------------------------------------- |
-| `value`         | `number`                                | `0`                                | false    | Current progress, relative to `max`.                                                    |
-| `max`           | `number`                                | `100`                              | false    | Upper bound; percentage = `value / max * 100`.                                          |
-| `variant`          | `ProgressVariant` (`'rounded' \| 'flat'`)  | `'flat'`                           | false    | Track and fill corner-radius variant.                                                   |
-| `size`          | `'small' \| 'medium' \| 'large'`        | `'medium'`                         | false    | Bar height token.                                                                       |
-| `indeterminate` | `boolean`                               | `false`                            | false    | Loading state; animates a sliding segment and ignores `value`.                          |
+| Prop            | Type                                                                             | Default    | Required | JSDoc                                                                                              |
+| --------------- | -------------------------------------------------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `value`         | `number`                                                                         | `0`        | false    | Current progress, relative to `max`.                                                               |
+| `max`           | `number`                                                                         | `100`      | false    | Upper bound; percentage = `value / max * 100`.                                                     |
+| `variant`       | `ProgressVariant` (`'rounded' \| 'flat'`)                                        | `'flat'`   | false    | Track and fill corner-radius variant.                                                              |
+| `size`          | `'small' \| 'medium' \| 'large'`                                                 | `'medium'` | false    | Bar height token.                                                                                  |
+| `indeterminate` | `boolean`                                                                        | `false`    | false    | Loading state; animates a sliding segment and ignores `value`.                                     |
+| `severity`      | `ProgressSeverity` (`'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'`) | —          | false    | Status colour of the fill; unset keeps the brand fill. The values are the shared `Severity` scale. |
 
 ## Events
 
@@ -84,21 +86,23 @@ quantity.
 - `data-variant` mirrors `variant`: `rounded` | `flat`.
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-indeterminate` is present while `indeterminate` is `true`
+- `data-severity` mirrors the `severity` prop when it is set (`neutral` | `info` | `success` | `warning` | `danger`), on the root and the fill.
 
 ## Motion & Animations
 
-| Trigger                         | Animation / Transition                                                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations)                      | Reduced-motion fallback                    |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------ |
-| `value` change (determinate)    | `transition-[width] duration-moderate-02 ease-productive-entrance` (width morph)                                                                                  | duration/curve aliases from `animate.js` (240ms · productive-entrance) | `motion-reduce:transition-none`            |
+| Trigger                         | Animation / Transition                                                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations)                      | Reduced-motion fallback                                                                                                                                |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `value` change (determinate)    | `transition-[width] duration-moderate-02 ease-productive-entrance` (width morph)                                                                                  | duration/curve aliases from `animate.js` (240ms · productive-entrance) | `motion-reduce:transition-none`                                                                                                                        |
 | `indeterminate` (loading sweep) | `animate-progress-indeterminate` + `animate-progress-indeterminate-short` (two offset bars sweeping across the track via `inset-inline-start`/`inset-inline-end`) | semantic (2.1s · infinite)                                             | `motion-reduce:animate-none` + `motion-reduce:before:inset-x-1/3` (a still segment over the middle third of the track, so the bar never reads as done) |
 
 ## Tokens
 
-| Region          | Token (DESIGN.md)       |
-| --------------- | ----------------------- |
-| fill            | `var(--primary)`        |
-| shape (rounded) | `var(--shape-control)` |
-| shape (flat)    | `var(--shape-flat)`     |
+| Region          | Token (DESIGN.md)                                                                                                     |
+| --------------- | --------------------------------------------------------------------------------------------------------------------- |
+| fill            | `var(--primary)`                                                                                                      |
+| fill (severity) | `var(--success-mark)`, `var(--warning-mark)`, `var(--danger-mark)`, `var(--info-mark)`; `neutral` `var(--text-muted)` |
+| shape (rounded) | `var(--shape-control)`                                                                                                |
+| shape (flat)    | `var(--shape-flat)`                                                                                                   |
 
 <!-- Height is a sizing utility, not a DESIGN.md token: small/medium/large → `h-2`/`h-3`/`h-4`
      (8/12/16px from `height.js`), per DESIGN.md § Sizing. The track surface is recorded in Theme gaps. -->

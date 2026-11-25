@@ -191,6 +191,8 @@ export interface TableColumn {
   label?: string
   /** Lists the column as hideable in CollectionPreferences (defaults true; action columns default false). */
   hideable?: boolean
+  /** Shows the column while the table is narrower than var(--container-sm) (defaults true); set false on a column whose value the principal cell already repeats there. */
+  narrow?: boolean
   /** Opt this column into columnOrder serialization. */
   orderable?: boolean
 }

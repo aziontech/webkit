@@ -132,7 +132,9 @@ describe('CodeBlock', () => {
         props: { tabs: twoTabs, defaultValue: 'first' }
       })
 
-      getAllByRole('tab').forEach((tab) => expect(tab.querySelector('span')).toBeNull())
+      getAllByRole('tab').forEach((tab) =>
+        expect(tab.querySelector('span:not([data-slot="touch-target"])')).toBeNull()
+      )
     })
 
     it('does not render a tab header when only one tab is given', () => {
@@ -363,6 +365,15 @@ describe('CodeBlock', () => {
   })
 
   describe('line numbers gutter', () => {
+    it('insets each line less in a block narrower than --container-sm', () => {
+      const { queryAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+      const line = queryAllByTestId('code-block__line-number')[0]!.parentElement!
+      expect(line.classList.contains('px-(--spacing-sm)')).toBe(true)
+      expect(line.classList.contains('@sm:px-(--spacing-lg)')).toBe(true)
+    })
+
     it('renders the line-number gutter by default', () => {
       const { queryAllByTestId } = render(CodeBlock, {
         props: { tabs: singleTab, defaultValue: 'only' }

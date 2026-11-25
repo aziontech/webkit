@@ -79,6 +79,19 @@ describe('a long cell value in a narrow table', () => {
     }
   )
 
+  it('never widens the rows past a table whose other columns fit, so no column is pushed out of view', async () => {
+    const { getAllByRole, getByTestId } = mount(600, false)
+    await settle()
+    const viewport = getByTestId('data-table__viewport')
+    expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth + 1)
+    const header = getAllByRole('columnheader').find((el) => el.textContent?.includes('cache'))!
+    expect(header.getBoundingClientRect().right).toBeLessThanOrEqual(
+      viewport.getBoundingClientRect().right + 0.5
+    )
+    const cell = getAllByRole('cell').find((el) => el.textContent?.includes(LONG_NAME))!
+    expect(cell.getBoundingClientRect().width).toBeGreaterThanOrEqual(192 - 0.5)
+  })
+
   it('shows the whole value when the table has room for it', async () => {
     const { getAllByRole } = mount(1280, true)
     await settle()

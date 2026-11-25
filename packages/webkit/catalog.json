@@ -3158,16 +3158,13 @@
     "type": "typography",
     "value": {
      "text-wrap-style": "balance",
-     "font-size": "1rem",
+     "font-size": "1.25rem",
      "line-height": "1.25",
      "font-weight": "400",
      "letter-spacing": "-0.08em"
     },
     "purpose": "A price or amount in a card.",
     "breakpoints": {
-     "sm": {
-      "font-size": "1.25rem"
-     },
      "md": {
       "font-size": "1.5rem"
      }
@@ -6809,6 +6806,13 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Size token; sets the code typography and the size of the copy button (28 px or 32 px)."
+    },
+    {
+     "name": "wrapLines",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Wraps a long value onto more lines, breaking anywhere, instead of truncating it in the middle."
     }
    ],
    "events": [
@@ -11870,7 +11874,7 @@
      "type": "TableColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, type?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `type: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
+     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, type?, resizable?, hideable?, narrow?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; Until the first measurement (and while loading placeholders draw) the column holds its floor, so a loading table on a phone shows the same columns it shows once loaded. `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `type: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`. **`narrow: false`** drops the column (its header, its cells and its loading placeholders) while the table's own box is narrower than `var(--container-sm)`, for a column whose value the principal cell already repeats there in a phone summary line; the column comes back in a wider box."
     },
     {
      "name": "rowKey",
@@ -13020,6 +13024,13 @@
      "doc": "Shows placeholder steps while the diagram loads."
     },
     {
+     "name": "showPorts",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Draws the port squares where connectors meet the steps; turn off for a diagram a reader only views."
+    },
+    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
@@ -13108,6 +13119,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows placeholder steps while the diagram loads."
+    },
+    {
+     "name": "showPorts",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Draws the port squares where connectors meet the steps; turn off for a diagram a reader only views."
     },
     {
      "name": "ariaLabel",
@@ -15201,6 +15219,13 @@
      "default": "false",
      "required": "false",
      "doc": "Loading state; animates a sliding segment and ignores `value`."
+    },
+    {
+     "name": "severity",
+     "type": "`ProgressSeverity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`)",
+     "default": "—",
+     "required": "false",
+     "doc": "Status colour of the fill; unset keeps the brand fill. The values are the shared `Severity` scale."
     }
    ],
    "surface": "app",
@@ -28366,7 +28391,7 @@
      "type": "ContactHubSectionChannel[]",
      "default": "[]",
      "required": "false",
-     "doc": "The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic."
+     "doc": "The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic; `severity: 'danger'` draws the glyph in `var(--danger-mark)` for the emergency channel."
     }
    ],
    "surface": "site",

@@ -1126,6 +1126,7 @@ export const trendCharts: {
             :value="goal.current"
             :max="goal.target"
             size="small"
+            :severity="goal.status.severity"
             :aria-label="goal.label"
             :aria-valuetext="
               formatters[goal.format](goal.current) + ' of ' + formatters[goal.format](goal.target)
