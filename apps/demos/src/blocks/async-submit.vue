@@ -121,7 +121,7 @@
     <div class="layout-column-focused flex min-h-full flex-col">
       <PageHeader
         :title="`Deploy ${REPO.name}`"
-        :description="`Builds ${REPO.scope}/${REPO.name} and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`"
+        :description="`Builds ${REPO.scope}/${REPO.name} and publishes it to production.`"
       >
         <template #meta>
           <Tag
