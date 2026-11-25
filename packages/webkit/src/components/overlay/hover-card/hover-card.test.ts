@@ -187,6 +187,14 @@ describe('HoverCard', () => {
     expect(link().hasAttribute('aria-describedby')).toBe(false)
   })
 
+  it('adds no document key listener while the card is closed', async () => {
+    const spy = vi.spyOn(document, 'addEventListener')
+    render(Default)
+    await nextTick()
+    expect(spy.mock.calls.some(([type]) => type === 'keydown')).toBe(false)
+    spy.mockRestore()
+  })
+
   it('Escape closes the card without moving focus', async () => {
     render(Host)
     link().focus()
