@@ -66,6 +66,7 @@
         :key="header.id"
         :type="viewOf(header.column.id).type"
         :grow="viewOf(header.column.id).grow"
+        :principal="viewOf(header.column.id).principal"
         :align="viewOf(header.column.id).align"
         :frozen="viewOf(header.column.id).frozen"
         :style="viewOf(header.column.id).style"

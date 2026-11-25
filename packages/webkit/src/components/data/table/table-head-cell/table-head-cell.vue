@@ -114,6 +114,7 @@
     'data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center ' +
     'data-[align=end]:justify-end ' +
     'data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] ' +
+    'data-[principal]:max-w-[max(var(--size-48),50cqi)] ' +
     'data-[type=checkbox]:w-10 data-[type=checkbox]:flex-none data-[type=checkbox]:justify-center data-[type=checkbox]:px-0 data-[type=action]:ms-auto data-[type=action]:w-10 ' +
     'data-[type=action]:flex-none data-[type=action]:justify-center data-[type=action]:px-0 ' +
     'data-[frozen=start]:sticky data-[frozen=start]:start-0 data-[frozen=end]:sticky data-[frozen=end]:end-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] ' +
@@ -151,6 +152,7 @@
     :data-align="align"
     :data-grow="growAttr"
     :data-frozen="frozen ?? null"
+    :data-principal="(growAttr !== null && principal) || null"
     :data-compact="compact || null"
     :aria-sort="ariaSort"
     :class="ROOT_CLASS"

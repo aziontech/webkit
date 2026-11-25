@@ -192,6 +192,7 @@
           :key="cell.id"
           :style="viewOf(cell.column.id).style"
           :grow="viewOf(cell.column.id).grow"
+          :principal="viewOf(cell.column.id).principal"
           :align="viewOf(cell.column.id).align"
           :frozen="viewOf(cell.column.id).frozen"
           :type="viewOf(cell.column.id).type"
