@@ -125,12 +125,15 @@
   >
     <DropdownMenu
       side="bottom"
-      align="end"
+      align="start"
       :disabled="disabled || loading"
       :data-testid="`${testId}__menu`"
       @select="onSelect"
     >
-      <div class="inline-flex w-fit items-stretch [&_[data-slot=touch-target]]:inset-x-0">
+      <div
+        data-slot="dropdown-menu-anchor"
+        class="inline-flex w-fit items-stretch [&_[data-slot=touch-target]]:inset-x-0"
+      >
         <Button
           :label="displayLabel"
           :icon="displayIcon"

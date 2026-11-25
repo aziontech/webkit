@@ -58,6 +58,7 @@
   const attrs = useAttrs()
   const uid = useId()
 
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const triggerEl = ref<globalThis.HTMLElement | null>(null)
   const panelEl = ref<globalThis.HTMLElement | null>(null)
   const bodyTargetEl = ref<globalThis.HTMLElement | null>(null)
@@ -67,13 +68,20 @@
   const triggerId = `${uid}-trigger`
   const panelId = `${uid}-panel`
 
+  const anchorEl = computed(() => {
+    const anchor = triggerEl.value?.closest<globalThis.HTMLElement>(
+      '[data-slot="dropdown-menu-anchor"]'
+    )
+    return anchor && rootEl.value?.contains(anchor) ? anchor : triggerEl.value
+  })
+
   const disabledRef = computed(() => props.disabled)
   const { isOpen: isOpenRef, setOpen } = useOpenState(openModel, {
     defaultOpen: props.defaultOpen,
     disabled: disabledRef
   })
   const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
-    triggerRef: triggerEl,
+    triggerRef: anchorEl,
     panelRef: panelEl,
     isOpen: isOpenRef,
     side: () => props.side,
@@ -108,6 +116,7 @@
 
 <template>
   <div
+    ref="rootEl"
     v-bind="attrs"
     :data-testid="testId"
     :data-state="isOpenRef ? 'open' : 'closed'"

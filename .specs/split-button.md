@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 450ab40a9bc11da20aed0f6f57ce09fe3184fc50f1792e6405329aa6cdf39289
+checksum: 7f3fe7d9eb63c8d8228ab5abf356ca7102c6654f41069ab40fdf5f78d3a6f34e
 created: 2026-06-30
 last_updated: 2026-11-25
 ---
@@ -108,6 +108,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 - `data-disabled` mirrors the `disabled` prop
 - `data-loading` mirrors the `loading` prop
 - `data-state` on the menu toggle: `open` | `closed` (provided by the composed `DropdownMenu.Trigger`)
+- The menu opens below the whole control, its start edge lined up with the primary segment's start (the segments' wrapper is the `dropdown-menu-anchor`); where that would overflow the viewport it is clamped inside it
 - When `loading`, the control takes the disabled status: the primary button shows the spinner over the disabled tokens and blocks activation (owned by `Button`), the menu toggle is natively disabled with the disabled tokens, and the composed `DropdownMenu` is disabled so the menu cannot open. No `click` or `item-click` is emitted while loading.
 
 ## Motion & Animations
