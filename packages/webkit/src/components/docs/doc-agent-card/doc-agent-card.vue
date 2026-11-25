@@ -112,7 +112,7 @@
               :class="ART_CLASS"
             />
           </div>
-          <p class="m-0 max-w-(--container-3xs) text-heading-md text-(--text-default)">
+          <p class="m-0 max-w-(--container-2xs) text-heading-md text-balance text-(--text-default)">
             {{ asideTitle || t('docAgentCard.asideTitle') }}
           </p>
           <Button
