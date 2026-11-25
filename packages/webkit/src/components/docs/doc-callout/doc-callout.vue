@@ -44,17 +44,23 @@
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-callout')
 
+  const ROOT_CLASS =
+    'bg-(--bg-surface)! data-[neutral]:border-(--border-default)! data-[neutral]:[&_i[aria-hidden=true]]:text-(--primary)! ' +
+    'not-data-[neutral]:data-[severity=info]:[&_i[aria-hidden=true]]:text-(--info-mark)! ' +
+    'data-[severity=success]:[&_i[aria-hidden=true]]:text-(--success-mark)! data-[severity=warning]:[&_i[aria-hidden=true]]:text-(--warning-mark)! ' +
+    'data-[severity=danger]:[&_i[aria-hidden=true]]:text-(--danger-mark)!'
+
   const COPY_CLASS =
     'text-body-sm tracking-normal text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) ' +
     '[&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code:not(pre_*,[data-testid])]:rounded-(--shape-control) ' +
     '[&_code:not(pre_*,[data-testid])]:inset-ring [&_code:not(pre_*,[data-testid])]:forced-colors:border [&_code:not(pre_*,[data-testid])]:px-(--spacing-2xs) ' +
-    '[&_code:not(pre_*,[data-testid])]:text-label-code-sm ' +
+    '[&_code:not(pre_*,[data-testid])]:text-label-code-sm [&_code:not(pre_*,[data-testid])]:bg-(--bg-hover) ' +
     '[&_code:not(pre_*,[data-testid])]:text-(--text-default) [&_code:not(pre_*,[data-testid])]:wrap-anywhere [&_code:not(pre_*,[data-testid])]:box-decoration-clone ' +
-    'data-[severity=info]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--info-border) data-[severity=info]:[&_code:not(pre_*,[data-testid])]:bg-(--info-foreground)/10 ' +
-    'data-[severity=success]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--success-border) data-[severity=success]:[&_code:not(pre_*,[data-testid])]:bg-(--success-foreground)/10 ' +
-    'data-[severity=warning]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--warning-border) data-[severity=warning]:[&_code:not(pre_*,[data-testid])]:bg-(--warning-foreground)/10 ' +
-    'data-[severity=danger]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--danger-border) data-[severity=danger]:[&_code:not(pre_*,[data-testid])]:bg-(--danger-foreground)/10 ' +
-    'data-[neutral]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--border-default)! data-[neutral]:[&_code:not(pre_*,[data-testid])]:bg-(--bg-hover)! ' +
+    'data-[severity=info]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--info-border) ' +
+    'data-[severity=success]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--success-border) ' +
+    'data-[severity=warning]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--warning-border) ' +
+    'data-[severity=danger]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--danger-border) ' +
+    'data-[neutral]:[&_code:not(pre_*,[data-testid])]:inset-ring-(--border-default)! ' +
     '[&_:not(a,pre)>code:not([data-testid])]:cursor-pointer [&_:not(a,pre)>code:not([data-testid])]:hover:ring-1 [&_:not(a,pre)>code:not([data-testid])]:hover:ring-(--border-default) ' +
     '[&_code[data-command]]:outline-none [&_code[data-command]:focus-visible]:ring-2 [&_code[data-command]:focus-visible]:ring-(--ring-color)'
 </script>
@@ -69,7 +75,7 @@
     :severity="preset.severity"
     :icon="preset.icon"
     :data-testid="testId"
-    class="data-[neutral]:border-(--border-default)! data-[neutral]:bg-(--bg-surface)! data-[neutral]:[&_i]:text-(--primary)!"
+    :class="ROOT_CLASS"
   >
     <div
       ref="copyEl"

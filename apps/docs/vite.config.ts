@@ -5,7 +5,11 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig, type UserConfig } from 'vite'
 import type { ViteSSGOptions } from 'vite-ssg'
 
-import { bundlerRuntimePlugin, chunkGraphPlugin } from './plugins/chunk-graph.ts'
+import {
+  bundlerRuntimePlugin,
+  chunkGraphPlugin,
+  moveBuildManifests
+} from './plugins/chunk-graph.ts'
 import { buildIndex } from './plugins/content.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
 import { fontPreloadPlugin } from './plugins/font-preload.ts'
@@ -43,6 +47,7 @@ const ssgOptions: Partial<ViteSSGOptions> = {
     const page = html.replace(/<link\b[^>]*rel="modulepreload"[^>]*>/g, '')
     return body ? page.replace(/<body([^>]*)>\s*/, (open) => `${open.trimEnd()}${body}`) : page
   },
+  onFinished: () => moveBuildManifests(),
   includedRoutes: () => {
     const only = process.env.DOCS_ROUTES?.split(',').filter(Boolean)
     return only?.length ? only : staticRoutes()

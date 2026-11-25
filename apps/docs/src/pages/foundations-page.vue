@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { useHead } from '@unhead/vue'
+  import { computed } from 'vue'
 
   import CardIndex from '../components/card-index.vue'
   import { FOUNDATIONS } from '../lib/foundations'
@@ -8,16 +9,16 @@
   const t = messages
   useHead({ title: 'Foundations — WebKit' })
 
-  const groups = [
+  const groups = computed(() => [
     {
-      label: 'WebKit',
+      label: t.value.guides,
       items: FOUNDATIONS.map((page) => ({
         title: page.title,
         to: `/foundations/${page.slug}`,
         text: page.summary
       }))
     }
-  ]
+  ])
 </script>
 
 <template>

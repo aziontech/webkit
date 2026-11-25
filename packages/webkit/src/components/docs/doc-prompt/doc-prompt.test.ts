@@ -52,6 +52,9 @@ describe('DocPrompt', () => {
         expect(button.getAttribute('aria-controls')).toBe(prompt.id)
         expect(button.getAttribute('aria-expanded')).toBe('false')
 
+        const copy = getByRole('button', { name: /copy/i })
+        expect(copy.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+
         await fireEvent.click(button)
         await waitFor(() => expect(button.getAttribute('aria-expanded')).toBe('true'))
       } finally {
@@ -132,6 +135,36 @@ describe('DocPrompt', () => {
       })
       const text = getByTestId('doc-prompt').querySelector('[data-variant]')
       expect(text?.getAttribute('data-variant')).toBe('line')
+    })
+
+    it('isolates the prompt direction so an English prompt runs left to right in a right-to-left page', () => {
+      const { getByTestId } = render(DocPrompt, {
+        props: { variant: 'line' },
+        slots: { default: PROMPT },
+        attrs: { dir: 'rtl' }
+      })
+      const text = getByTestId('doc-prompt').querySelector('p[data-variant]') as HTMLElement
+      expect(text.getAttribute('dir')).toBe('auto')
+      expect(getComputedStyle(text).direction).toBe('ltr')
+    })
+
+    it('places the line fades on the sides of the resolved prompt direction', async () => {
+      const style = document.createElement('style')
+      style.textContent =
+        '[data-testid="doc-prompt"] p[data-variant="line"] { width: 8rem; overflow-x: auto; white-space: nowrap; }'
+      document.head.append(style)
+      try {
+        const { getByTestId } = render(DocPrompt, {
+          props: { variant: 'line' },
+          slots: { default: PROMPT },
+          attrs: { dir: 'rtl' }
+        })
+        const fade = await waitFor(() => getByTestId('doc-prompt__fade-end'))
+        expect(fade.style.backgroundImage).toContain('to left')
+        expect(fade.parentElement?.getAttribute('dir')).toBe('ltr')
+      } finally {
+        style.remove()
+      }
     })
 
     it('gives the line shape a tab stop and the block shape none', () => {

@@ -271,7 +271,7 @@
   {
     "name": "doc-prompt",
     "path": "src/components/docs/doc-prompt/doc-prompt.vue",
-    "limit": "13.5 KB",
+    "limit": "13.7 KB",
     "entryOnly": true
   },
   {

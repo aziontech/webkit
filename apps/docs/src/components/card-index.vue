@@ -126,7 +126,7 @@
               severity="info"
               size="small"
             />
-            <span class="line-clamp-2">{{ item.text }}</span>
+            <span class="line-clamp-3">{{ item.text }}</span>
           </span>
         </DocCard>
       </DocCardGroup>

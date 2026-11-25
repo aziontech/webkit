@@ -15,12 +15,12 @@
   const boxWidth = ref(0)
   let observer: ResizeObserver | null = null
 
-  const VIEWPORTS = [
-    { value: '375', label: 'Mobile 375' },
-    { value: '768', label: 'Tablet 768' },
-    { value: '1280', label: 'Desktop 1280' },
-    { value: 'full', label: 'Full' }
-  ]
+  const VIEWPORTS = computed(() => [
+    { value: '375', label: `${t.value.viewportMobile} 375` },
+    { value: '768', label: `${t.value.viewportTablet} 768` },
+    { value: '1280', label: `${t.value.viewportDesktop} 1280` },
+    { value: 'full', label: t.value.viewportFull }
+  ])
 
   const preset = computed(() => (viewport.value === 'full' ? 0 : Number(viewport.value)))
   const scale = computed(() =>

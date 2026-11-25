@@ -74,7 +74,7 @@
         text: spacedTitle(firstExample.value.name),
         depth: 2
       })
-    items.push({ id: 'usage', text: t.value.whenToUse, depth: 2 })
+    items.push({ id: 'usage', text: t.value.usage, depth: 2 })
     if (moreExamples.value.length && doc.value.exampleDir) {
       items.push({ id: 'examples', text: t.value.moreExamples, depth: 2 })
       for (const example of moreExamples.value)
@@ -129,7 +129,7 @@
     class="flex w-full gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-lg) lg:px-(--spacing-xl)"
   >
     <article
-      class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) xl:max-w-[calc(100%-var(--container-3xs)-var(--spacing-xl))]"
+      class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) 2xl:max-w-[calc(100%-var(--container-3xs)-var(--spacing-xl))]"
     >
       <DocPageHeader
         :title="item.title"
@@ -193,8 +193,12 @@
         id="usage"
         class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
+        <h2 class="text-heading-md">{{ t.usage }}</h2>
         <DoDont
           type="usage"
+          :level="3"
+          do-id="usage-do"
+          dont-id="usage-dont"
           :do-items="doc.useWhen"
           :dont-items="doc.avoidWhen"
         />
@@ -202,7 +206,7 @@
           v-if="doc.related.length"
           class="flex flex-col gap-(--spacing-xs)"
         >
-          <h2 class="text-heading-xs">{{ t.related }}</h2>
+          <h3 class="text-heading-xs">{{ t.related }}</h3>
           <ul class="flex list-disc flex-col gap-(--spacing-2xs) ps-(--spacing-md) text-body-sm">
             <RawHtml
               v-for="line in doc.related"
@@ -292,9 +296,13 @@
       <section
         v-if="doc.bestPractices.length || doc.avoidPractices.length"
         id="do-dont"
-        class="scroll-mt-20"
+        class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
+        <h2 class="text-heading-md">{{ t.do }} / {{ t.dont }}</h2>
         <DoDont
+          :level="3"
+          do-id="do-dont-do"
+          dont-id="do-dont-dont"
           :do-items="doc.bestPractices"
           :dont-items="doc.avoidPractices"
         />

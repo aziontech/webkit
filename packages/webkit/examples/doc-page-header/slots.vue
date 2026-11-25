@@ -9,7 +9,7 @@
 <template>
   <DocPageHeader
     description="Terminal agent that reads your codebase, runs commands, and edits files. One CLI command connects the Azion MCP server."
-    :breadcrumbs="[{ label: 'Agent Setup', href: '/docs/agent-setup' }, { label: 'Claude Code' }]"
+    :breadcrumbs="[{ label: 'Agent setup', href: '/docs/agent-setup' }, { label: 'Claude Code' }]"
     :meta-actions="[
       {
         value: 'copy',
@@ -51,16 +51,19 @@
       <div class="flex flex-wrap items-center gap-(--spacing-xs)">
         <Tag
           label="Terminal"
+          severity="neutral"
           size="medium"
           rounded
         />
         <Tag
           label="Subscription"
+          severity="neutral"
           size="medium"
           rounded
         />
         <Tag
           label="Project memory"
+          severity="neutral"
           size="medium"
           rounded
         />

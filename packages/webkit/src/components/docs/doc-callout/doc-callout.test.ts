@@ -101,6 +101,19 @@ describe('DocCallout', () => {
       expect(new Set(looks).size).toBe(VARIANTS.length)
     })
 
+    it.each(VARIANTS)('variant=$variant pins the calm surface and its severity mark', (entry) => {
+      const { getByTestId } = render(DocCallout, {
+        props: { variant: entry.variant },
+        slots: { default: 'Copy.' }
+      })
+      const root = getByTestId('doc-callout')
+      expect(root.classList.contains('bg-(--bg-surface)!')).toBe(true)
+      const mark = entry.neutral
+        ? 'data-[neutral]:[&_i[aria-hidden=true]]:text-(--primary)!'
+        : `data-[severity=${entry.severity}]:[&_i[aria-hidden=true]]:text-(--${entry.severity}-mark)!`
+      expect([...root.classList].some((name) => name.endsWith(mark))).toBe(true)
+    })
+
     it('marks only the info and tip variants as neutral', () => {
       for (const entry of VARIANTS) {
         const { getByTestId, unmount } = render(DocCallout, {

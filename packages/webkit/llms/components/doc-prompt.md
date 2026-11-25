@@ -59,6 +59,7 @@
 - `data-variant` mirrors the `variant` prop: `block` | `line`
 - `data-state` — `open` | `closed` on the prompt text of a capped `block`: `open` once the reader has opened it
 - `data-capped` — present on the root when a `block` prompt is taller than its four-line cap; absent when it fits, so a prompt that fits earns no disclosure control
+- Narrow container: below the `sm` container width (`@container/doc-prompt`) the `line` shape wraps instead of scrolling, so on a phone the reader sees the whole prompt the Copy button sends; it then has no overflow and draws no fades.
 - `data-overflow` — on the `line` shape: `start` | `end` | `both`, whichever edge has text scrolled behind it; absent when the line fits
 - `data-single-line` — on the prompt row when the prompt occupies exactly one line (`line` always; a `block` whose sentence fits its column). The row then centres the prompt against the copy control instead of top-aligning it — the control is 28px and one line of the prompt face is 19.5px, so a top-aligned pair leaves the sentence 4.25px above the control's middle. Absent the moment the prompt wraps.
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
@@ -67,7 +68,7 @@
 ## Accessibility
 
 - Visible focus: `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)` on the `line` shape
-- Keyboard map: the `line` shape takes a tab stop because it is a scroll container — a scroll container holding no focusable child is unreachable by keyboard (and an axe `scrollable-region-focusable` violation); arrow keys then scroll it. The `block` shape scrolls nothing, so it takes no tab stop. `Tab` reaches the disclosure control and the copy control; `Enter` / `Space` activate them.
+- Keyboard map: the `line` shape takes a tab stop because it is a scroll container — a scroll container holding no focusable child is unreachable by keyboard (and an axe `scrollable-region-focusable` violation); arrow keys then scroll it. The `block` shape scrolls nothing, so it takes no tab stop. `Tab` reaches the copy control, then the disclosure control, which sits in a full-width row under the prompt and the copy control, so focus order matches reading order; `Enter` / `Space` activate them.
 - ARIA: the full prompt text is in the DOM in every state, so the cap hides nothing from a screen reader — the disclosure is a visual convenience and the state it reports is the change in its own label (`Show more` / `Show less`). Every fade gradient is `aria-hidden="true"`; the title glyph is `aria-hidden="true"`. The copy control carries its own accessible name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the prompt is `--text-default`, not the muted body ink, because the prompt IS the payload and everything around it is chrome
 - `motion-reduce:transition-none` on both animated states; the disclosure move is skipped rather than shortened
@@ -76,9 +77,9 @@
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
-- Edge fades: the horizontal fades of a `line` prompt pair each physical gradient with its mirror (`bg-gradient-to-r rtl:bg-gradient-to-l`), so the fade always darkens toward the clipped edge.
+- Edge fades: the horizontal fades of a `line` prompt follow the prompt's own resolved direction (the fade row takes that `dir`, and each fade, `<testid>__fade-start` / `<testid>__fade-end`, draws its gradient toward the text), not the page's, so an English prompt in a right-to-left page fades on its real clipped edge.
 - Keyboard: no horizontal arrow-key logic.
-- User data: the prompt text is code-like and keeps its own direction.
+- User data: the prompt paragraph is `dir="auto"`: an English prompt runs left to right (its period stays at the end, the `line` shape opens on its first words) and an Arabic prompt still runs right to left.
 
 ## Examples
 

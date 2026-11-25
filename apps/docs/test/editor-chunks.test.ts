@@ -94,3 +94,18 @@ test('page seeds are the module script and the module preloads', () => {
     '_app/runtime.js'
   ])
 })
+
+test('the build leaves no .vite manifests in dist and keeps the chunk graph beside it', async () => {
+  const { mkdtempSync, mkdirSync, writeFileSync, existsSync } = await import('node:fs')
+  const { tmpdir } = await import('node:os')
+  const { join } = await import('node:path')
+  const { moveBuildManifests } = await import('../plugins/chunk-graph.ts')
+  const root = mkdtempSync(join(tmpdir(), 'docs-build-'))
+  const dist = join(root, 'dist')
+  mkdirSync(join(dist, '.vite'), { recursive: true })
+  writeFileSync(join(dist, '.vite/ssr-manifest.json'), '{}')
+  writeFileSync(join(dist, '.vite/chunk-graph.json'), '{"version":1,"chunks":[]}')
+  moveBuildManifests(dist, join(root, '.build'))
+  assert.equal(existsSync(join(dist, '.vite')), false)
+  assert.equal(existsSync(join(root, '.build/chunk-graph.json')), true)
+})

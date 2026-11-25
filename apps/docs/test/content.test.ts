@@ -7,6 +7,7 @@ import { scanMarkdown } from '../../../packages/webkit/scripts/lib/docs-markdown
 import {
   buildComponent,
   buildTokens,
+  dropToolingSections,
   firstSentence,
   markdown,
   markdownParts,
@@ -171,6 +172,12 @@ test('a component page shows the purpose after the header sentence, never both',
     rest: 'Two `a.b` here.'
   })
   assert.deepEqual(splitLead('Only one sentence'), { lead: 'Only one sentence', rest: '' })
+  const long =
+    'The composer of a chat: a text area that grows with the prompt, a toolbar under it, files attached by a button, a model picker, dictation and a Submit control that becomes Stop.'
+  assert.deepEqual(splitLead(`${long} More.`), {
+    lead: 'The composer of a chat.',
+    rest: 'A text area that grows with the prompt, a toolbar under it, files attached by a button, a model picker, dictation and a Submit control that becomes Stop. More.'
+  })
   const doc = await buildComponent('button')
   const lead = firstSentence(String(readCatalog().imports.button?.purpose ?? ''))
   assert.ok(lead)
@@ -246,4 +253,63 @@ test('a search hint drops the benchmark notes a purpose carries for reviewers', 
     stripReviewerNotes('A list of rows (environment variables, headers) or columns.'),
     'A list of rows (environment variables, headers) or columns.'
   )
+})
+
+test('every Do and Don’t heading of a rendered page carries an id the outline can link', async () => {
+  const withIds = await markdown('', { headingIds: true })
+  const parts = markdownParts(
+    withIds,
+    [
+      '## Do',
+      '',
+      '- a',
+      '',
+      "## Don't",
+      '',
+      '- b',
+      '',
+      '## Example',
+      '',
+      '### Do',
+      '',
+      '- c',
+      '',
+      "### Don't",
+      '',
+      '- d'
+    ].join('\n')
+  )
+  const pairs = parts.flatMap((part) => ('pair' in part ? [part.pair] : []))
+  assert.equal(pairs.length, 2)
+  assert.deepEqual(
+    pairs.map((pair) => [pair.doId, pair.dontId]),
+    [
+      ['do', 'dont'],
+      ['example-do', 'example-dont']
+    ]
+  )
+})
+
+test('a foundation page drops the Enforcement section written for maintainers', () => {
+  const source = [
+    '## Do',
+    '',
+    'a',
+    '',
+    '## Enforcement',
+    '',
+    'lint gaps',
+    '',
+    '### Known gaps (review still owns these)',
+    '',
+    'more',
+    '',
+    '## Why',
+    '',
+    'b'
+  ].join('\n')
+  const kept = dropToolingSections(source)
+  assert.doesNotMatch(kept, /Enforcement|lint gaps|Known gaps/)
+  assert.match(kept, /## Do/)
+  assert.match(kept, /## Why/)
 })

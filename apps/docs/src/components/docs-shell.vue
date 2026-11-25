@@ -14,7 +14,15 @@
   import SkipLink from '@aziontech/webkit/skip-link'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
-  import { computed, defineAsyncComponent, hydrateOnIdle, ref, watch } from 'vue'
+  import {
+    computed,
+    defineAsyncComponent,
+    hydrateOnIdle,
+    nextTick,
+    onMounted,
+    ref,
+    watch
+  } from 'vue'
   import { useRoute } from 'vue-router'
 
   import { useRouteFocus } from '../composables/use-route-focus'
@@ -25,12 +33,17 @@
   import SearchCommand from './search-command.vue'
   import SideNav from './side-nav.vue'
 
+  const emit = defineEmits<{ hydrated: [] }>()
+
+  const loadSidebar = () => import('./docs-sidebar.vue')
+  const loadHeaderNav = () => import('./header-nav.vue')
+
   const DocsSidebar = defineAsyncComponent({
-    loader: () => import('./docs-sidebar.vue'),
+    loader: loadSidebar,
     hydrate: hydrateOnIdle()
   })
   const HeaderNav = defineAsyncComponent({
-    loader: () => import('./header-nav.vue'),
+    loader: loadHeaderNav,
     hydrate: hydrateOnIdle()
   })
 
@@ -60,6 +73,19 @@
   )
 
   const announcement = useRouteFocus()
+
+  const whenIdle = (callback: () => void) => {
+    if (typeof globalThis.requestIdleCallback === 'function')
+      globalThis.requestIdleCallback(callback, { timeout: 2000 })
+    else globalThis.setTimeout(callback, 0)
+  }
+
+  onMounted(async () => {
+    await Promise.all([loadSidebar(), loadHeaderNav()]).catch(() => undefined)
+    whenIdle(() => {
+      void nextTick(() => emit('hydrated'))
+    })
+  })
 
   watch(
     () => route.fullPath,

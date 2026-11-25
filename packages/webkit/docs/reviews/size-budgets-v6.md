@@ -2425,3 +2425,5 @@ Budget-raise: audio-player 10.5 KB → 10.6 KB (measured 10.56 KB): a retry even
 Budget-raise: video-player 12.65 KB → 12.7 KB (measured 12.69 KB): a retry event and a Try again button in the error state that also reloads a failed file (A6-039, owner call).
 
 Budget-raise: image-gallery 27.6 KB → 27.75 KB (measured 27.72 KB): a retry event and a Try again button in the error state (A6-039, owner call).
+
+Budget-raise: doc-prompt 13.5 KB → 13.7 KB (measured 13.66 KB): audit-6 lane L07 (A6-086, A6-087, A6-088) isolates the prompt direction with dir=auto and draws the line fades from the prompt's resolved direction, lets the line shape wrap below the sm container width, and moves Show more after the copy control; about 0.2 KB of logic and classes, nothing left to cut without dropping one of the fixes.
