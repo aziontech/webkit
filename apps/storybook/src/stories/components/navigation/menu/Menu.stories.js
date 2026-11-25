@@ -352,14 +352,14 @@ const ROOT_BACK_TEMPLATE = `<div class="${HOST_CLASS}">
   <Menu aria-label="Docs navigation">
     <MenuBack href="/docs/" label="Docs" />
     <MenuGroup label="Firewall">
-      <MenuItem label="Overview" href="/docs/firewall/" selected />
-      <MenuItem label="Quickstart" href="/docs/firewall/quickstart/" />
+      <MenuItem label="Overview" icon="" href="/docs/firewall/" selected />
+      <MenuItem label="Quickstart" icon="" href="/docs/firewall/quickstart/" />
       <MenuSub>
         <MenuSubTrigger label="WAF" kind="drill" />
         <MenuSubContent>
           <MenuGroup>
-            <MenuItem label="Quickstart" href="/docs/firewall/waf/quickstart/" />
-            <MenuItem label="Reference" href="/docs/firewall/waf/reference/" />
+            <MenuItem label="Quickstart" icon="" href="/docs/firewall/waf/quickstart/" />
+            <MenuItem label="Reference" icon="" href="/docs/firewall/waf/reference/" />
           </MenuGroup>
         </MenuSubContent>
       </MenuSub>
