@@ -247,6 +247,9 @@ jobs:
       - name: Type coverage (enforce 95% threshold)
         run: pnpm run check:webkit:type-coverage
 
+      - name: SFC type coverage — the any count in component SFCs does not grow
+        run: pnpm --filter @aziontech/webkit run check:sfc-type-coverage
+
   build:
     name: Build
     runs-on: ubuntu-latest

@@ -237,6 +237,7 @@ const CI_ENFORCERS = new Set([
   'check-maintainability',
   'check-duplication',
   'check-assertions',
+  'check-sfc-type-coverage',
   'check-unused',
   'check-spelling',
   'check-workflows',

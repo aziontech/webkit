@@ -40,6 +40,7 @@
     "check:duplication": "node scripts/check-duplication.mjs",
     "check:maintainability": "node scripts/check-maintainability.mjs",
     "check:assertions": "node scripts/check-assertions.mjs",
+    "check:sfc-type-coverage": "node scripts/check-sfc-type-coverage.mjs",
     "check:package-lint": "node scripts/check-package-lint.mjs",
     "test:toolkit": "node --test \"test/**/*.test.mjs\"",
     "test:ssr": "node --test src/test/ssr.test.mjs",
