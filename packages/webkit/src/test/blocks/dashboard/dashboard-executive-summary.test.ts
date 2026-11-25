@@ -38,6 +38,9 @@ describe('dashboard/dashboard-executive-summary', () => {
       }
     })
     await waitFor(() => expect(view.container.textContent).toContain('Acme sign-ups'))
+    expect(
+      view.getByRole('progressbar', { name: 'Acme sign-ups' }).getAttribute('data-severity')
+    ).toBe('warning')
     expect(view.container.textContent).toContain('Sign-ups slowed in September.')
     expect(view.container.textContent).not.toContain('Enterprise deals closed')
     expect(view.container.textContent).not.toContain('Emma Wilson')
