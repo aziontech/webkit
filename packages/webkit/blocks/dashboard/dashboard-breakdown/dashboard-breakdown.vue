@@ -11,7 +11,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
-  import { computed, ref } from 'vue'
+  import { computed, ref, useId } from 'vue'
 
   import ContributorsTable from './parts/contributors-table.vue'
   import SpendCard from './parts/spend-card.vue'
@@ -93,6 +93,7 @@
   const period = defineModel<string>('period', { default: '12m' })
 
   const comparison = 'this month vs previous month'
+  const kpisHeadingId = useId()
   const LOADING_TREND = [0, 0]
 
   const tiles: { metric: BreakdownDashboardMetric; label: string; description: string }[] = [
@@ -292,29 +293,40 @@
         @action="(event: MouseEvent) => emit('retry', event)"
       />
 
-      <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
-        <li
-          v-for="tile in tiles"
-          :key="tile.metric"
-          class="flex min-w-0 flex-col"
+      <section
+        :aria-labelledby="kpisHeadingId"
+        class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+      >
+        <h2
+          :id="kpisHeadingId"
+          class="text-heading-xs text-(--text-default)"
         >
-          <StatTile
-            :label="tile.label"
-            :value="kpis[tile.metric]?.value ?? null"
-            :format-value="formatters.spend"
-            :delta="kpis[tile.metric]?.delta ?? null"
-            :delta-label="comparison"
-            inverse
-            :trend="kpis[tile.metric]?.trend ?? (loading ? LOADING_TREND : [])"
-            :loading="loading"
-            :error="error"
+          This month
+        </h2>
+        <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
+          <li
+            v-for="tile in tiles"
+            :key="tile.metric"
+            class="flex min-w-0 flex-col"
           >
-            <template #aside>
-              <Hint :content="tile.description" />
-            </template>
-          </StatTile>
-        </li>
-      </ul>
+            <StatTile
+              :label="tile.label"
+              :value="kpis[tile.metric]?.value ?? null"
+              :format-value="formatters.spend"
+              :delta="kpis[tile.metric]?.delta ?? null"
+              :delta-label="comparison"
+              inverse
+              :trend="kpis[tile.metric]?.trend ?? (loading ? LOADING_TREND : [])"
+              :loading="loading"
+              :error="error"
+            >
+              <template #aside>
+                <Hint :content="tile.description" />
+              </template>
+            </StatTile>
+          </li>
+        </ul>
+      </section>
 
       <EmptyState
         v-if="nothing"
