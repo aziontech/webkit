@@ -120,7 +120,8 @@
             <span class="text-(--text-default)">{{ item.value }}</span>
             <span
               v-if="item.suffix"
-              class="text-(--text-muted)"
+              :data-testid="`${testId}__suffix`"
+              class="text-(--text-muted) group-data-[size=large]:text-heading-xl group-data-[size=medium]:text-heading-md group-data-[size=small]:text-heading-sm"
               >{{ item.suffix }}</span
             >
           </span>

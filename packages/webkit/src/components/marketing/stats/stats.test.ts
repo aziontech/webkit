@@ -112,6 +112,18 @@ describe('Stats', () => {
     ).toEqual(['<', '15', 'ms'])
   })
 
+  it('sets a unit in the text face, so a case-sensitive unit like ms is not drawn as MS', () => {
+    const { container } = render(Stats, { props: { items } })
+    const latency = container.querySelectorAll('figure')[2]
+    const suffix = latency.querySelector('[data-testid="stats__suffix"]')!
+    const value = latency.querySelector('[data-testid="stats__figure"]')!
+
+    expect(suffix).toHaveTextContent('ms')
+    expect(getComputedStyle(value).fontFamily).toContain('Proto Mono')
+    expect(getComputedStyle(suffix).fontFamily).not.toContain('Proto Mono')
+    expect(getComputedStyle(suffix).textTransform).toBe('none')
+  })
+
   it('omits the prefix and the suffix when the item carries neither', () => {
     const { container } = render(Stats, {
       props: { items: [{ value: '42', label: 'Regions' }] }
