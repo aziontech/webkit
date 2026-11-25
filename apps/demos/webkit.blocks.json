@@ -752,7 +752,7 @@
           "imports": {
             "../settings-canned-responses.vue": "./settings-canned-responses.vue"
           },
-          "checksum": "sha256:f4a3a94d74441c204c79daca0ee25b463046edb7fff644a502d753bb32947242"
+          "checksum": "sha256:8b5e2454c231fdac9947244f08128dbf72177256f55492bb4ac0587c28eaa689"
         },
         {
           "path": "src/blocks/settings-canned-responses.sample.ts",
