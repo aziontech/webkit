@@ -387,6 +387,7 @@
           :aria-pressed="muted"
           variant="ghost"
           size="large"
+          class="ms-auto"
           @click="onMuteClick"
         />
         <div class="hidden w-24 @md/video-player:block">

@@ -48,6 +48,7 @@ describe('VideoPlayer', () => {
     expect(view.getByRole('button', { name: 'Play' })).toBeTruthy()
     expect(view.getByRole('slider', { name: 'Seek' })).toBeTruthy()
     expect(view.getByRole('button', { name: 'Mute' }).getAttribute('aria-pressed')).toBe('false')
+    expect(view.getByRole('button', { name: 'Mute' }).classList.contains('ms-auto')).toBe(true)
     expect(view.getByRole('slider', { name: 'Volume' })).toBeTruthy()
     expect(view.getByRole('button', { name: 'Captions (CC)' }).textContent).toContain('CC')
     await expectNoA11yViolations(view.container)

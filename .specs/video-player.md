@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 205d8f03503a6610b211b195fe824b981329c1a1103bf654af43980bee17404f
+checksum: 9e873700bb4f063311759e48e94dbd1c6e73dff2e61b68fd0078a24c8c6633f5
 created: 2026-11-19
 last_updated: 2026-11-25
 ---
@@ -159,7 +159,7 @@ The video never plays on its own: there is no autoplay, so nothing moves until t
 - Container queries: the root is a container; below `@md` the volume bar is hidden (Mute stays) and the seek bar takes the remaining width.
 - Narrow (≤ 640 px or a narrow chat bubble): the frame keeps a 16:9 ratio and scales down; the controls stay on one row.
 - Touch: 40 px targets; the buttons take a 44 px hit area under `pointer: coarse`, the two bars stay 40 px tall (see Accessibility); no hover-only affordance (the controls are always visible under the video).
-- Reflow: no horizontal scroll at 320 px or at 200 % zoom; the controls bar wraps (`flex-wrap`), putting the seek bar on its own full-width row when the row runs out of room, and the time text does not wrap inside itself (`whitespace-nowrap`).
+- Reflow: no horizontal scroll at 320 px or at 200 % zoom; the controls bar wraps (`flex-wrap`), putting the seek bar on its own full-width row when the row runs out of room, and the time text does not wrap inside itself (`whitespace-nowrap`). Mute carries `ms-auto`, so when Mute, Captions and full screen wrap to a second row (a 320 px column) they sit together at the inline end instead of scattering from the start.
 
 ## Performance
 
