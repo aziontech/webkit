@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: ae10e06ca6ec9c793f9c51baadc62f7c50d0e8698d159a31e4d5f314d58756cc
+checksum: 63a5216766fcb08b0b100b70a8b4b8b0e418bfc051888f953aa919878f6a00b4
 created: 2026-11-16
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # FilePreview — Component Spec
@@ -44,6 +44,7 @@ The preview of one stored file in a storage or object browser, or of a document 
 - Fetch only the first part of a large text file (a ranged request) and pass `bytes` with the full size, so the header shows the real size while the body shows the first part.
 - Handle `download` with the app's own signed or authorized URL; the component never builds one.
 - Pass an object URL (`URL.createObjectURL`) or a short-lived signed URL as `src`; revoke an object URL when the preview closes.
+- `src` goes through `safeHref` (file schemes allowed): `javascript:`, `file:`, a protocol-relative `//host` URL and any other scheme draw nothing, as every other URL-taking component does. An image or PDF URL loads with no click, so an app that shows URLs a model or a tool returned should allow only its own origins before it passes them, or show a click-to-load placeholder. A `Content-Security-Policy` with `object-src 'none'` blocks the PDF viewer; allow `object-src 'self' blob:` where PDFs are previewed.
 - When the app holds the bytes rather than a URL (a chat message part with base64 data), pass them as `base64` with `mimeType`; the component makes its own object URL for an image or PDF and revokes it when the source changes or the preview unmounts. Text and JSON are decoded into the body.
 - A PDF is drawn by the browser's own viewer; where there is none (most phones, a viewer turned off), the body shows the no-preview state and Download stays.
 
@@ -74,7 +75,7 @@ The preview of one stored file in a storage or object browser, or of a document 
 | `fileName`  | `string`  | —         | true     | Name of the file, shown in the header and used as the image's alternative text.                                                                                                                |
 | `mimeType`  | `string`  | `''`      | false    | Media type of the file (`image/png`, `application/json`). Empty reads the type from the file extension.                                                                                        |
 | `bytes`     | `number`  | undefined | false    | Size of the whole file in bytes, shown beside the type. Unset hides the size.                                                                                                                  |
-| `src`       | `string`  | `''`      | false    | URL of an image or PDF file to draw. Set, it wins over `base64`.                                                                                                                               |
+| `src`       | `string`  | `''`      | false    | URL of an image or PDF file to draw: https, http, blob, data or a relative path; any other scheme draws nothing. Set, it wins over `base64`. |
 | `base64`    | `string`  | `''`      | false    | Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them. |
 | `content`   | `string`  | `''`      | false    | Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`.                                                                 |
 | `maxLength` | `number`  | `20000`   | false    | Characters of text shown before the rest is cut, with a note that says how much is shown.                                                                                                      |
