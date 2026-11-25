@@ -44,7 +44,7 @@
     'has-[>[data-slot=field]]:hover:bg-(--bg-hover) has-[>[data-slot=field]]:has-[:focus-visible]:outline-none has-[>[data-slot=field]]:has-[:focus-visible]:ring-2 ' +
     'has-[>[data-slot=field]]:has-[:focus-visible]:ring-(--ring-color) has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-1 ' +
     'has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-(--bg-canvas) has-[>[data-slot=field]]:has-[[data-checked]]:border-(--border-selected) ' +
-    'has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--bg-selected) has-[>[data-slot=field][data-disabled]]:cursor-not-allowed has-[>[data-slot=field][data-disabled]]:opacity-50 ' +
+    'has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--primary-selected) has-[>[data-slot=field][data-disabled]]:cursor-not-allowed has-[>[data-slot=field][data-disabled]]:opacity-50 ' +
     'has-[>[data-slot=field][data-disabled]]:hover:bg-(--bg-surface)'
 </script>
 

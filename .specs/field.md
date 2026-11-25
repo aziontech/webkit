@@ -4,9 +4,9 @@ category: input
 structure: composition
 status: implemented
 spec_version: 10
-checksum: a694609fe5dd4cfa25f5d74666f8827c0806aff92bdf42df38f581f5c7e8172b
+checksum: e68d991bac83e34d0ec0c7f30783a5dc701030b5f5f5cd156a6d367db6310ef2
 created: 2026-11-10
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # Field — Component Spec
@@ -200,7 +200,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | error text            | `var(--text-danger)`     |
 | card border           | `var(--border-muted)`    |
 | card selected border  | `var(--border-selected)` |
-| card selected surface | `var(--bg-selected)`     |
+| card selected surface | `var(--primary-selected)` (the RadioGroup card's selected fill) |
 | card surface          | `var(--bg-surface)`      |
 | card hover            | `var(--bg-hover)`        |
 | card shape            | `var(--shape-button)`    |

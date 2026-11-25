@@ -269,6 +269,17 @@ describe('Field', () => {
     expect(getByRole('switch').getAttribute('aria-checked')).toBe('true')
   })
 
+  it('gives a selected choice card the RadioGroup card fill, --primary-selected', () => {
+    const { container } = mount(
+      '<FieldLabel><Field orientation="horizontal"><Switch /><FieldContent><FieldTitle>WAF</FieldTitle></FieldContent></Field></FieldLabel>'
+    )
+    const card = container.querySelector('label') as HTMLElement
+    expect(card.classList).toContain(
+      'has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--primary-selected)'
+    )
+    expect(card.className).not.toContain('bg-(--bg-selected)')
+  })
+
   it('renders a fieldset named by its legend', () => {
     const { getByRole } = mount(
       '<FieldSet><FieldLegend type="label">Plan</FieldLegend><FieldSeparator>Or</FieldSeparator></FieldSet>'
