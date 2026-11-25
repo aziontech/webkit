@@ -52,10 +52,18 @@
     router.push(href)
   }
 
-  onMounted(() => {
+  let restored = false
+
+  function restore() {
+    if (restored) return
+    restored = true
     const isFrame = route.meta.bare === true
     restoreSettings(isFrame ? new URLSearchParams(location.search) : null)
     if (!isFrame) persistSettings()
+  }
+
+  onMounted(() => {
+    if (route.meta.bare === true) restore()
     document.addEventListener('click', onClick)
   })
 </script>
@@ -68,7 +76,10 @@
     class="min-h-screen bg-(--bg-canvas) text-(--text-default)"
   >
     <RouterView v-if="route.meta.bare" />
-    <DocsShell v-else>
+    <DocsShell
+      v-else
+      @hydrated="restore"
+    >
       <RouterView />
     </DocsShell>
   </ConfigProvider>
