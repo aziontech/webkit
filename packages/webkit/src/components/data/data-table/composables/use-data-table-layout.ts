@@ -62,6 +62,11 @@ const frozenOffsets = (
   }
 }
 
+const resolvedWidthOf = (o: DataTableLayoutOptions, id: string): number | undefined => {
+  const column = o.columns().find((c) => columnId(c) === id)
+  return o.resizeWidths.value[id] ?? column?.width ?? o.autoWidths.value[id] ?? column?.minWidth
+}
+
 export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayoutReturn {
   const { leftFrozen, startOf, endOf } = frozenOffsets(o)
   const selectionFrozen = computed(() => o.selectable() && leftFrozen.value.length > 0)
@@ -69,21 +74,11 @@ export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayou
   const lead = (): number =>
     (selectionFrozen.value ? SELECTION_WIDTH : 0) +
     (o.reorderable() && leftFrozen.value.length > 0 ? SELECTION_WIDTH : 0)
-  const widthOf = (id: string): number | undefined =>
-    o.columns().find((c) => columnId(c) === id)?.width
-  const floorOf = (id: string): number | undefined =>
-    o.columns().find((c) => columnId(c) === id)?.minWidth
   const cellStyleOf = (column: ColumnLike): Record<string, string> | undefined => {
     if (o.stacked()) return undefined
     const style: Record<string, string> = {}
     const meta = metaOf(column)
-    const width =
-      meta.type === 'action'
-        ? undefined
-        : (o.resizeWidths.value[column.id] ??
-          widthOf(column.id) ??
-          o.autoWidths.value[column.id] ??
-          floorOf(column.id))
+    const width = meta.type === 'action' ? undefined : resolvedWidthOf(o, column.id)
     if (width) {
       style['flex'] = `0 0 ${width}px !important`
       style['width'] = `${width}px !important`

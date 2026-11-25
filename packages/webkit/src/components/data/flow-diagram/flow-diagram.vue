@@ -169,6 +169,10 @@
     'motion-reduce:animate-none ' +
     'data-[faded]:animate-none data-[faded]:opacity-50'
 
+  const FRAME_CLASS =
+    'relative w-fit min-w-full has-[>[data-direction=column]]:mx-auto has-[>[data-direction=column]]:w-full ' +
+    'has-[>[data-direction=column]]:max-w-(--container-xl) has-[>[data-direction=column]]:min-w-0'
+
   const LIST_CLASS =
     'relative flex w-full gap-(--spacing-xl) ' +
     'data-[direction=column]:flex-col data-[direction=column]:max-w-(--container-xl) data-[direction=row]:w-fit data-[direction=row]:min-w-full data-[direction=row]:data-[align=start]:items-start ' +
@@ -229,9 +233,7 @@
         class="sr-only"
         >{{ t('flowDiagram.loading') }}</span
       >
-      <div
-        class="relative w-fit min-w-full has-[>[data-direction=column]]:mx-auto has-[>[data-direction=column]]:w-full has-[>[data-direction=column]]:max-w-(--container-xl) has-[>[data-direction=column]]:min-w-0"
-      >
+      <div :class="FRAME_CLASS">
         <svg
           v-if="paths.length"
           :viewBox="viewBox"
