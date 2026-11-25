@@ -35,8 +35,8 @@ export function useDataTableRowTabOrder(host: DataTableRowTabOrderHost): void {
     observer.observe(root, { childList: true, subtree: true })
   }
   const onFocusout = (event: globalThis.FocusEvent): void => {
-    const next = event.relatedTarget as globalThis.Node | null
-    if (next && host.root()?.contains(next)) return
+    const next = event.relatedTarget
+    if (next instanceof globalThis.Node && host.root()?.contains(next)) return
     within = false
     observer?.disconnect()
     observer = null
