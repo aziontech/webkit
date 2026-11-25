@@ -49,7 +49,7 @@ Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assist
 
 ### F. Body — `PanelBody` (required)
 
-The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards sit two to a row from the `@md` container width (Free beside Pro, the tiers people compare most) and three to a row at `@4xl`, the upgrade body keeps What's included above the charge, and the two-field form rows start at `@md`. A wider surface gets the side column at `@3xl`; below `@md` the cards stack.
+The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards sit two to a row from the `@md` container width (Free beside Pro, the tiers people compare most) and three to a row at `@4xl`, the upgrade body opens on the charge (plan, period and total) and lists What's included after the form, so what you pay is on the first screen, and the two-field form rows start at `@md`. A wider surface gets What's included as a side column at the end at `@3xl`; below `@md` the cards stack.
 
 ### G. Description — `DrawerDescription` (plan drawer)
 
@@ -614,9 +614,8 @@ Each variant is the same screen in another state: `get_block("account/account-ch
             data-autofocus
           >
             <div
-              class="grid grid-cols-1 gap-(--spacing-lg) @3xl:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] @3xl:gap-(--spacing-xl)"
+              class="grid grid-cols-1 gap-(--spacing-lg) @3xl:grid-cols-[minmax(0,1fr)_minmax(0,18rem)] @3xl:gap-(--spacing-xl)"
             >
-              <UpgradeIncluded :included-features="includedFeatures" />
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <UpgradeChargeCard
                   v-model:period="upgradePeriod"
@@ -650,6 +649,7 @@ Each variant is the same screen in another state: `get_block("account/account-ch
                   :submitting="submitting"
                 />
               </div>
+              <UpgradeIncluded :included-features="includedFeatures" />
             </div>
           </div>
         </PanelBody>

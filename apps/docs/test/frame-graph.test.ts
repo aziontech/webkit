@@ -44,3 +44,14 @@ test('an example frame loads neither the catalog index nor the docs shell up fro
     assert.ok(!bare.has('virtual:docs-index'), `${entry} imports the catalog index`)
   }
 })
+
+test('the docs shell and the home page load the slim nav index, never the full catalog index', () => {
+  for (const entry of ['components/docs-shell.vue', 'pages/home-page.vue']) {
+    const { files, bare } = staticGraph(resolve(SRC, entry))
+    const names = relative(files)
+    assert.ok(!names.includes('lib/data.ts'), `${entry} reaches lib/data.ts: ${names.join(', ')}`)
+    assert.ok(!bare.has('virtual:docs-index'), `${entry} imports the catalog index`)
+  }
+  const nav = staticGraph(resolve(SRC, 'lib/nav.ts'))
+  assert.ok(nav.bare.has('virtual:docs-nav'))
+})

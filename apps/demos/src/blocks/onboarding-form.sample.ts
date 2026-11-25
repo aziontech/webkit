@@ -1,3 +1,5 @@
+import type { SelectOptionItem } from '@aziontech/webkit/select'
+
 import type { OnboardingFormAccount, OnboardingFormPlan } from './onboarding-form.vue'
 
 export const sampleAccount: OnboardingFormAccount = {
@@ -47,18 +49,18 @@ export const samplePlans: OnboardingFormPlan[] = [
     charge: {
       monthly: {
         rows: [
-          { label: 'Next charge', value: '$20' },
-          { label: 'Subtotal', value: '$20', suffix: 'per month' }
+          { label: 'Next charge', value: '$25', suffix: 'on Dec 16, 2026' },
+          { label: 'Subtotal', value: '$25', suffix: 'per month' }
         ],
-        total: { value: '$20', suffix: 'per month' }
+        total: { value: '$25', suffix: 'per month' }
       },
       yearly: {
         rows: [
-          { label: 'Next charge', value: '$192' },
-          { label: 'Subtotal', value: '$240', suffix: 'per year' },
-          { label: 'Yearly discount', value: '-$48', suffix: 'per year' }
+          { label: 'Next charge', value: '$240', suffix: 'on Nov 16, 2027' },
+          { label: 'Subtotal', value: '$300', suffix: 'per year' },
+          { label: 'Yearly discount', value: '−$60', suffix: 'per year' }
         ],
-        total: { value: '$192', suffix: 'per year' }
+        total: { value: '$240', suffix: 'per year' }
       }
     }
   },
@@ -88,19 +90,39 @@ export const samplePlans: OnboardingFormPlan[] = [
     charge: {
       monthly: {
         rows: [
-          { label: 'Next charge', value: '$2,000' },
+          { label: 'Next charge', value: '$2,000', suffix: 'on Dec 16, 2026' },
           { label: 'Subtotal', value: '$2,000', suffix: 'per month' }
         ],
         total: { value: '$2,000', suffix: 'per month' }
       },
       yearly: {
         rows: [
-          { label: 'Next charge', value: '$19,200' },
+          { label: 'Next charge', value: '$19,200', suffix: 'on Nov 16, 2027' },
           { label: 'Subtotal', value: '$24,000', suffix: 'per year' },
-          { label: 'Yearly discount', value: '-$4,800', suffix: 'per year' }
+          { label: 'Yearly discount', value: '−$4,800', suffix: 'per year' }
         ],
         total: { value: '$19,200', suffix: 'per year' }
       }
     }
   }
+]
+
+export const countryOptions: SelectOptionItem[] = [
+  { value: 'Brazil', label: 'Brazil' },
+  { value: 'Canada', label: 'Canada' },
+  { value: 'Germany', label: 'Germany' },
+  { value: 'Japan', label: 'Japan' },
+  { value: 'United Kingdom', label: 'United Kingdom' },
+  { value: 'United States', label: 'United States' }
+]
+export const stateOptions: SelectOptionItem[] = [
+  { value: 'California', label: 'California' },
+  { value: 'New York', label: 'New York' },
+  { value: 'Texas', label: 'Texas' },
+  { value: 'Washington', label: 'Washington' }
+]
+export const cityOptions: SelectOptionItem[] = [
+  { value: 'Los Angeles', label: 'Los Angeles' },
+  { value: 'San Diego', label: 'San Diego' },
+  { value: 'San Francisco', label: 'San Francisco' }
 ]

@@ -407,7 +407,13 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     percentage: (value) => `${fixed(value, 0)}%`,
     uptime: (value) => `${fixed(value, 2)}%`,
     score: (value) => fixed(value, 0),
-    cost: (value) => `${fixed(value, 4)}`
+    cost: (value) =>
+      formatNumber(value, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
+      })
   }
 
   const reportColumns: CsvColumn[] = Object.entries({
@@ -1120,6 +1126,7 @@ export const trendCharts: {
             :value="goal.current"
             :max="goal.target"
             size="small"
+            :severity="goal.status.severity"
             :aria-label="goal.label"
             :aria-valuetext="
               formatters[goal.format](goal.current) + ' of ' + formatters[goal.format](goal.target)

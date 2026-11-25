@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import AppHeader from '@aziontech/webkit/app-header'
   import AppHeaderAccount from '@aziontech/webkit/app-header-account'
   import Brand from '@aziontech/webkit/brand'
@@ -16,12 +17,14 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
-  import { toast } from '@aziontech/webkit/toast'
+  import TagEditor, { type TagEditorTag } from '@aziontech/webkit/tag-editor'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
-  import { onMounted, reactive, ref, watch } from 'vue'
+  import { nextTick, onMounted, reactive, ref, watch } from 'vue'
+
+  import { type CreatePageDomainErrors, validateDomainForm } from './create-page.domain-validation'
 
   /** The values of the Create Resource form. */
   export interface CreatePageValues {
@@ -33,24 +36,19 @@
     dnssec: boolean
     /** Whether it serves traffic. */
     active: boolean
+    /** Key and value tags of the resource; a tag with an empty key is left out. */
+    tags: { key: string; value: string }[]
   }
 
   export interface CreatePageProps {
     /** The values the form starts from; each field falls back to empty, DNSSEC off and Active on. */
     defaultValues?: Partial<CreatePageValues>
-    /** The create request is in flight; the form locks and Create resource spins. */
+    /** The create request is in flight; the form locks and Save spins. */
     loading?: boolean
-    /** Why the create request failed, shown in an error toast with Retry. */
+    /** Why the create request failed, shown in an inline error with Retry under the page title. */
     error?: string
     /** Name of the signed-in account, shown by the account button. */
     accountName?: string
-  }
-
-  interface FormErrors {
-    name: string
-    nameKind: 'helper' | 'invalid' | 'required'
-    domain: string
-    domainKind: 'helper' | 'invalid' | 'required'
   }
 
   const props = withDefaults(defineProps<CreatePageProps>(), {
@@ -68,14 +66,17 @@
 
   const breadcrumb = [{ label: 'Resources', href: '/resources' }, { label: 'Create Resource' }]
 
-  const form = reactive<CreatePageValues>({
+  const form = reactive<Omit<CreatePageValues, 'tags'> & { tags: TagEditorTag[] }>({
     name: '',
     domain: '',
     dnssec: false,
     active: true,
-    ...props.defaultValues
+    ...props.defaultValues,
+    tags: (props.defaultValues.tags ?? []).map((tag) => ({ ...tag }))
   })
-  const errors = reactive<FormErrors>({
+  const tagKeySuggestions = ['team', 'environment', 'owner', 'cost-center']
+  const tagEditorEl = ref<InstanceType<typeof TagEditor> | null>(null)
+  const errors = reactive<CreatePageDomainErrors>({
     name: '',
     nameKind: 'required',
     domain: '',
@@ -83,39 +84,19 @@
   })
   const advancedOpen = ref(false)
 
-  const NAME_MAX = 50
-  const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
-
   const validate = () => {
-    const name = form.name.trim()
-    if (!name) {
-      errors.nameKind = 'required'
-      errors.name = 'This field is required.'
-    } else if (name.length > NAME_MAX) {
-      errors.nameKind = 'invalid'
-      errors.name = 'Use at most ' + NAME_MAX + ' characters.'
-    } else {
-      errors.name = ''
-    }
-
-    const domain = form.domain.trim()
-    if (!domain) {
-      errors.domainKind = 'required'
-      errors.domain = 'This field is required.'
-    } else if (!DOMAIN_PATTERN.test(domain)) {
-      errors.domainKind = 'invalid'
-      errors.domain = 'Enter a valid domain name. Example: example.com.'
-    } else {
-      errors.domain = ''
-    }
-
-    return !errors.name && !errors.domain
+    const fieldsValid = validateDomainForm(form, errors)
+    const tagsValid = tagEditorEl.value?.validate() ?? true
+    return fieldsValid && tagsValid
   }
 
   const values = (): CreatePageValues => ({
     ...form,
     name: form.name.trim(),
-    domain: form.domain.trim()
+    domain: form.domain.trim(),
+    tags: form.tags
+      .filter((tag) => tag.key.trim() && !tag.markedForRemoval)
+      .map((tag) => ({ key: tag.key.trim(), value: tag.value.trim() }))
   })
 
   const guard = useUnsavedChanges(() => form, {
@@ -133,14 +114,16 @@
   const formEl = ref<HTMLFormElement | null>(null)
   const nameEl = ref<InstanceType<typeof Input> | null>(null)
 
-  useShortcuts({
-    keys: 'meta+enter',
-    label: 'Create resource',
-    group: 'Page',
-    element: formEl,
-    when: () => !props.loading,
-    handler: () => formEl.value?.requestSubmit()
-  })
+  useShortcuts(
+    ['meta+enter', 'meta+s'].map((keys) => ({
+      keys,
+      label: 'Create resource',
+      group: 'Page',
+      element: formEl,
+      when: () => !props.loading,
+      handler: () => formEl.value?.requestSubmit()
+    }))
+  )
 
   onMounted(() => nameEl.value?.focus())
 
@@ -153,17 +136,23 @@
     emit('submit', event, values())
   }
 
+  const attempt = ref(0)
+
   watch(
-    () => props.error,
-    (message) => {
-      if (!message) return
-      toast.error('Could not create the resource.', {
-        description: message,
-        action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
-      })
-    },
-    { immediate: true }
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) attempt.value += 1
+    }
   )
+
+  watch([() => props.error, attempt], async ([next]) => {
+    if (!next) return
+    await nextTick()
+    formEl.value?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
+  })
+
+  const DNSSEC_DESCRIPTION =
+    "Signs the DNS answers for the resource's domain so a resolver can detect spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
 </script>
 
 <template>
@@ -217,6 +206,16 @@
               title-id="create-resource-title"
             />
 
+            <Alert
+              v-if="error"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="Could not create the resource."
+              :label="error"
+              action-label="Retry"
+              @action="submit"
+            />
             <fieldset
               :disabled="loading"
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
@@ -231,6 +230,8 @@
                   <template #default>
                     <Item.List>
                       <SettingsRow
+                        required
+                        stackable
                         title="Name"
                         description="Identifies the resource in this list. It is not the domain."
                       >
@@ -256,6 +257,8 @@
                         >
                       </SettingsRow>
                       <SettingsRow
+                        required
+                        stackable
                         title="Domain name"
                         description="The hostname the resource serves, such as example.com."
                       >
@@ -285,6 +288,23 @@
               </SettingsGroup>
 
               <SettingsGroup
+                label="Tags"
+                hint="Labels for ownership, cost and search. The same keys across resources keep them easy to find."
+              >
+                <Card>
+                  <template #default>
+                    <TagEditor
+                      ref="tagEditorEl"
+                      v-model:tags="form.tags"
+                      :key-suggestions="tagKeySuggestions"
+                      :disabled="loading"
+                      aria-label="Resource tags"
+                    />
+                  </template>
+                </Card>
+              </SettingsGroup>
+
+              <SettingsGroup
                 label="Advanced"
                 v-model:open="advancedOpen"
                 icon="az az-settings"
@@ -295,7 +315,7 @@
                     <Item.List>
                       <SettingsRow
                         title="DNSSEC"
-                        description="Signs the DNS answers for the resource's domain so a resolver can detect spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
+                        :description="DNSSEC_DESCRIPTION"
                         variant="compact"
                       >
                         <Switch
@@ -333,9 +353,9 @@
                 size="medium"
                 type="submit"
                 :loading="loading"
-                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                :aria-keyshortcuts="`${toAriaKeyshortcuts('meta+enter')} ${toAriaKeyshortcuts('meta+s')}`"
               >
-                Create resource
+                Save
                 <Kbd
                   meta
                   key-name="enter"

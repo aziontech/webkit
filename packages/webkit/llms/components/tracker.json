@@ -69,7 +69,13 @@
   }
  ],
  "events": [],
- "slots": [],
+ "slots": [
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the inline error banner shown in place of the blocks while `error` is set. The strip is too short for the chart family's centred error card, so it keeps a banner; the slot lets a page add the family's `Try again` action (a danger `Alert` with `action-label=\"Try again\"`)."
+  }
+ ],
  "styleSeam": false,
  "assets": [],
  "examples": [

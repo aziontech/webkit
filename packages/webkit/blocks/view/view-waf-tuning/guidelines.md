@@ -14,7 +14,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A plain list of records to browse and act on one at a time: use `view/view-table`.
 - Charts of attack volume over time: use `dashboard/dashboard-security`.
-- Editing the allowed rules once created: an `edit-resource` form on the Allowed Rules tab.
+- Editing the allowed rules once created: an `edit-resource` form on the Allowed rules tab.
 
 ## Building blocks
 
@@ -24,11 +24,11 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Threshold settings — `Field`, `Select`, `NumberInput`, `Input`, `IconButton`, `Tooltip` (required)
 
-A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `NumberInput` (whole numbers from 0), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
+A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `NumberInput` (whole numbers from 0), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. The row stays when the rule set has no match in the range, so the range can be widened from the empty state; the search and Minimum hits are disabled then, with nothing to filter.
 
 ### C. Matches table — `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Alert` (required)
 
-A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Hits (tabular, grouped thousands; second, so a phone shows it without scrolling), Threat, Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
+A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Hits (tabular, grouped thousands; second, so a phone shows it without scrolling), Threat, Top IP addresses and Top paths (code font), Top countries; list cells are `TableCellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The list columns and Rule ID take a measured `minWidth`, so a cell always holds one whole value (a full IPv4 address, country or path) and the table scrolls sideways on a tablet instead of cutting a chip; Threat is the one column that grows. The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
 ### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
@@ -44,7 +44,7 @@ The block takes its matches through props and emits every action; it fetches not
 
 | Prop                  | Type                    | What it does                                                                                                                                                   |
 | --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `matches`             | `WafTuningMatch[]`      | The matched rules for the range; the minimum hits and the search filter them in the browser. Pass `[]` for a rule set with no match yet.                       |
+| `matches`             | `WafTuningMatch[]`      | The matched rules for the range; the minimum hits and the search filter them in the browser. Pass `[]` for a rule set with no match in the range.              |
 | `v-model:range`       | `'1h' \| '24h' \| '7d'` | The time range; refetch the matches when it changes. Defaults to `24h`.                                                                                        |
 | `loading`             | `boolean`               | The matches are loading: the settings and actions disable and the table shows skeleton rows.                                                                   |
 | `error`               | `string`                | Why the matches failed to load, shown in the danger `Alert` with Retry that replaces the table.                                                                |
@@ -115,7 +115,7 @@ Then delete `sample.ts` and its import.
 - **No match:** "No matching rules", "No rule, IP address, country or path matches “cache”.", "Clear search".
 - **Settings labels:** "Time range", "Minimum hits".
 - **Empty after threshold:** "No rule reaches the minimum", "No rule matched 100 times or more in the last 24 hours. Lower the minimum hits or widen the time range."
-- **First use:** "No matches yet", "This rule set has not matched any request. Matches appear here as traffic arrives."
+- **No match in the range:** "No matches in the last 24 hours", "This rule set matched no request in the last 24 hours. Widen the time range, or come back as traffic arrives.", with an outlined "Show the last 7 days" while a shorter range is set.
 - **Dialog:** title "Allow 2 rules", submit "Allow rules", reason error "Enter why these requests are legitimate."
 - **Outcome:** "6 allowed rules created." and "The allowed rules weren't created. Nothing changed in the rule set; try again."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -133,7 +133,7 @@ Then delete `sample.ts` and its import.
 - Default: the matches passed in `matches` (the sample when it is left out), minimum 100 hits.
 - Allow: `defaultSelectedKeys` checks two rules and `defaultOpen` opens the dialog.
 - AllowError: the same dialog with `allowError` set and the submitted reason kept (`defaultReason`): the failure `Alert` and Try again.
-- Empty: `matches` is `[]`: no match yet, no settings.
+- Empty: `matches` is `[]`: no match in the range; the settings row stays, the empty state names the range and offers Show the last 7 days.
 - Loading: `loading`: settings disabled, skeleton rows.
 - LoadError: `error` set: a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
 

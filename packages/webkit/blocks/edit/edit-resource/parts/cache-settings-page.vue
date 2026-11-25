@@ -45,10 +45,7 @@
           size="small"
         />
 
-        <fieldset
-          class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-          :disabled="saving"
-        >
+        <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
           <legend class="sr-only">Cache settings</legend>
 
           <SettingsGroup
@@ -78,7 +75,7 @@
                         required
                         :invalid="!!errors.name"
                         :aria-describedby="errors.name ? 'cache-name-message' : undefined"
-                        :disabled="saving"
+                        :readonly="saving"
                         @update:model-value="clear('name')"
                       />
                       <FieldError
@@ -113,7 +110,7 @@
                         size="large"
                         class="w-full"
                         :display-value="labelOf(browserBehaviors)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Browser cache behavior" />
                         <Select.Content>
@@ -143,7 +140,7 @@
                         :max="31536000"
                         aria-label="Browser maximum TTL in seconds"
                         aria-describedby="cache-browserMaxAge-duration"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                       <p
                         id="cache-browserMaxAge-duration"
@@ -179,7 +176,7 @@
                         size="large"
                         class="w-full"
                         :display-value="labelOf(edgeBehaviors)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Edge cache behavior" />
                         <Select.Content>
@@ -208,7 +205,7 @@
                         :min="0"
                         :max="31536000"
                         aria-label="Edge maximum TTL in seconds"
-                        :disabled="saving"
+                        :readonly="saving"
                         :invalid="Boolean(errors.edgeMaxAge)"
                         :aria-describedby="
                           errors.edgeMaxAge
@@ -239,7 +236,7 @@
                       <Switch
                         v-model="form.staleCache"
                         aria-label="Stale cache"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -251,7 +248,7 @@
                       <Switch
                         v-model="form.largeFileCache"
                         aria-label="Large file optimization"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -268,7 +265,7 @@
                         class="w-full"
                         :min="1"
                         aria-label="Fragment size in kilobytes"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -280,7 +277,7 @@
                       <Switch
                         v-model="form.tieredCache"
                         aria-label="Tiered cache"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -295,7 +292,7 @@
                         size="large"
                         class="w-full"
                         :display-value="labelOf(topologies)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Tiered cache topology" />
                         <Select.Content>

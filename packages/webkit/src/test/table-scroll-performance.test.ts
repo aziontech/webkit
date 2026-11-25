@@ -4,6 +4,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { commands, server } from 'vitest/browser'
 
+import StickyColumn from '../../examples/data-table/sticky-column.vue'
 import VirtualRows from '../../examples/data-table/virtual-rows.vue'
 import budgets from '../../perf-budgets.json'
 import DataTableRoot from '../components/data/data-table/data-table.vue'
@@ -40,23 +41,29 @@ const scrollerIn = (root: HTMLElement): HTMLElement => {
   return el
 }
 
+async function restyled(run: () => Promise<void>): Promise<number> {
+  await commands.styleTraceStart()
+  await run()
+  return commands.styleTraceStop()
+}
+
 async function scrollCost(scroller: HTMLElement): Promise<number> {
-  const before = await commands.styleRecalcMs()
-  for (let i = 0; i < STEPS; i++) {
-    scroller.scrollTop += 60
-    await frame()
-  }
-  return (await commands.styleRecalcMs()) - before
+  return restyled(async () => {
+    for (let i = 0; i < STEPS; i++) {
+      scroller.scrollTop += 60
+      await frame()
+    }
+  })
 }
 
 async function fullRestyleCost(root: HTMLElement): Promise<number> {
-  const before = await commands.styleRecalcMs()
-  for (let i = 0; i < STEPS; i++) {
-    root.style.setProperty('color', i % 2 ? 'currentcolor' : 'canvastext')
-    await frame()
-  }
-  root.style.removeProperty('color')
-  return (await commands.styleRecalcMs()) - before
+  return restyled(async () => {
+    for (let i = 0; i < STEPS; i++) {
+      root.style.setProperty('color', i % 2 ? 'currentcolor' : 'canvastext')
+      await frame()
+    }
+    root.style.removeProperty('color')
+  })
 }
 
 describe('virtual DataTable scroll performance (styled)', () => {
@@ -86,12 +93,59 @@ describe('virtual DataTable scroll performance (styled)', () => {
       const scroll = await scrollCost(scroller)
       const full = await fullRestyleCost(root)
       const ratio = scroll / full
+      expect(full).toBeGreaterThan(0)
       const budget = budgets.styleRecalc['data-table-10k-virtual-scroll']
       console.warn(
-        `[perf] data-table-10k-virtual-scroll (${_name}): style recalc ${scroll.toFixed(1)} ms over ${STEPS} frames, a full table restyle per frame ${full.toFixed(1)} ms, ratio ${ratio.toFixed(2)} (budget ${budget.maxRatio})`
+        `[perf] data-table-10k-virtual-scroll (${_name}): ${scroll} elements restyled over ${STEPS} scroll frames, ${full} over ${STEPS} full table restyles, ratio ${ratio.toFixed(3)} (budget ${budget.maxRatio})`
       )
       if (server.browser !== 'chromium') return
       expect(ratio).toBeLessThanOrEqual(budget.maxRatio)
     }
   )
+})
+
+async function sidewaysCost(scroller: HTMLElement): Promise<number> {
+  return restyled(async () => {
+    for (let i = 0; i < STEPS; i++) {
+      scroller.scrollLeft += i < STEPS / 2 ? 2 : -2
+      scroller.dispatchEvent(new Event('scroll'))
+      await frame()
+    }
+  })
+}
+
+describe('frozen-column DataTable sideways scroll (styled)', () => {
+  it('scrolling sideways through the fade ramp toggles the scroll frame state only at the edges', async () => {
+    const { container } = render(StickyColumn, { attrs: { style: 'width: 390px' } })
+    await frame()
+    await frame()
+    const scroll = container.querySelector<HTMLElement>('[data-testid$="__scroll"]')!
+    const viewport = container.querySelector<HTMLElement>('[data-testid$="__viewport"]')!
+    const scroller =
+      [viewport, ...viewport.querySelectorAll<HTMLElement>('*')].find(
+        (node) => node.scrollWidth > node.clientWidth + 100
+      ) ?? viewport
+    expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth)
+    const writes: string[] = []
+    const observer = new MutationObserver((records) => {
+      for (const record of records) writes.push(record.attributeName ?? '')
+    })
+    observer.observe(scroll, { attributeFilter: ['data-overflow-start', 'data-overflow-end'] })
+
+    await sidewaysCost(scroller)
+    observer.disconnect()
+    expect(writes.length).toBeLessThanOrEqual(2)
+    expect(scroll.getAttribute('data-overflow-end')).toBe('')
+
+    const sideways = await sidewaysCost(scroller)
+    const full = await fullRestyleCost(scroll)
+    const ratio = sideways / full
+    expect(full).toBeGreaterThan(0)
+    const budget = budgets.styleRecalc['data-table-frozen-sideways-scroll']
+    console.warn(
+      `[perf] data-table-frozen-sideways-scroll: ${sideways} elements restyled over ${STEPS} sideways frames, ${full} over ${STEPS} full table restyles, ratio ${ratio.toFixed(3)} (budget ${budget.maxRatio})`
+    )
+    if (server.browser !== 'chromium') return
+    expect(ratio).toBeLessThanOrEqual(budget.maxRatio)
+  })
 })

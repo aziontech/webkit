@@ -28,7 +28,7 @@ An outlined Agent `Button` with the assistant mark in the page header actions, `
 
 ### C. Drawer frame — `Drawer`, `DrawerContent`
 
-A medium end-side `Drawer` with no backdrop (`:modal="false"`), so the resource page beside it stays undimmed and readable while the reader asks about it. From the `lg` breakpoint the page reserves the drawer's width while it is open (`data-drawer-open` on the block root sets `padding-inline-end` to the medium drawer width), so nothing on the page sits under the conversation; below `lg` the drawer overlays the page. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
+A medium end-side `Drawer` with no backdrop (`:modal="false"`), so the resource page beside it stays undimmed and readable while the reader asks about it. From the `lg` breakpoint the page reserves the drawer's width while it is open (`data-drawer-open` on the block root sets `padding-inline-end` to the medium drawer width), so nothing on the page sits under the conversation; below `lg` the drawer covers the page, so it turns modal there (`:modal="!wide"`): focus stays in the conversation and Tab never reaches the hidden page. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
 
 ### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`
 
@@ -60,7 +60,7 @@ A `tool-call` part draws in its place in the response as a `ToolCall` with the t
 
 ### K. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
 
-Media parts draw in their place in the response. Consecutive `image` parts are one `ImageGallery` (a URL becomes `src`, base64 data becomes `data` with its `mimeType`, `metadata.alt` its alternative text); an `audio` part is an `AudioPlayer` and a `video` part a `VideoPlayer`, each from its URL or a `data:` URL; a `document` part is a `FilePreview` from its URL or base64, named by `metadata.name` (else `Document`). A `file` source (a provider file handle) has no bytes to draw and is skipped.
+Media parts draw in their place in the response. Consecutive `image` parts are one `ImageGallery` (a URL becomes `src`, base64 data becomes `data` with its `mimeType`, `metadata.alt` its alternative text); an `audio` part is an `AudioPlayer` and a `video` part a `VideoPlayer`, each from its URL or a `data:` URL; a `document` part is a `FilePreview` from its URL or base64, named by `metadata.name` (else `Document`). A `file` source (a provider file handle) has no bytes to draw and is skipped. A media or document part given as a URL loads as soon as it draws, with no click from the reader, so the browser fetches whatever address the model or a tool returned. Before the parts reach the block, keep URLs only from origins the app trusts (its own, its storage bucket) and turn any other into a plain link the reader chooses to open. `FilePreview` accepts only `http(s)`, `blob:` and `data:` addresses; a policy with `object-src 'none'` stops its PDF viewer, so allow `object-src 'self' blob:` where documents preview.
 
 ### L. Agent work — `AgentActivity`, `SubagentCard`, `AgentQuestion`
 

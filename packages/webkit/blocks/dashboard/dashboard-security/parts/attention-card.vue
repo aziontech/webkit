@@ -25,7 +25,7 @@
 <template>
   <ChartCard :span="4">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+      <span class="inline-flex min-w-0 flex-1 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Needs attention</ChartCard.Title>
         <Hint content="Settings and traffic on your services that ask for a decision." />
       </span>

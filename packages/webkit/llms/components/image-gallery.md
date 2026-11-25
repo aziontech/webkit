@@ -50,13 +50,14 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `download` | `(event: MouseEvent, item: ImageGalleryItem)` | Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download). |
+| `retry` | `(event: MouseEvent)` | Try again in the error state was pressed. The button renders only when this event has a listener, so a gallery whose app cannot run the request again shows no dead button; the app starts the request again and clears `error`. |
 
 ## States
 
 - Precedence: `error` wins over everything (no image, placeholder or empty state shows). Otherwise the images in `items` render first, then, while `loading`, one placeholder for each of `expectedCount - items.length` (none when `expectedCount` is at most `items.length`). With no image and no placeholder the empty state shows.
 - `data-layout`: `single` (one tile) | `pair` (two tiles) | `grid` (three or more), counted over the images and the placeholders.
 - `data-loading` mirrors `loading`; the root has `aria-busy`, and each placeholder is a `Skeleton` tile hidden from assistive technology.
-- `data-error` is set while `error` is set: the grid is replaced by an `EmptyState` titled `The images could not load` with the `error` text as its description, inside a `role="alert"` region.
+- `data-error` is set while `error` is set: the grid is replaced by an `EmptyState` titled `The images could not load` with the `error` text as its description, inside a `role="alert"` region. With a `retry` listener the error state also shows a Try again `Button` (`az az-refresh`, outline, medium) under the message.
 - `data-empty` is set when there is no image, no placeholder and no error: an `EmptyState` that says `No images`.
 - `data-broken` is set on a thumbnail whose image fails to load (it then shows the `az az-image` glyph on the surface and keeps its name) and on the viewer body for that image, which shows an `EmptyState` (`This image could not load`); Download stays.
 - Viewer: `Dialog` with `data-state="open|closed"` (from `Dialog`); Previous is disabled on the first image and Next on the last.
@@ -97,6 +98,7 @@
 | `imageGallery.error`      | `The images could not load`    | — (title; the `error` prop is the description under it) |
 | `imageGallery.broken`     | `This image could not load`    | —             |
 | `imageGallery.empty`      | `No images`                    | —             |
+| `imageGallery.retry`      | `Try again`                    | —             |
 
 - Formatting: `formatNumber` (`Intl.NumberFormat`) for `position` and `total`, with the `ConfigProvider` locale.
 

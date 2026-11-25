@@ -6,7 +6,7 @@ import { matchesApplied } from './applied-filter'
 
 export type TableColumnMeta = Pick<
   TableColumn,
-  'grow' | 'frozen' | 'align' | 'type' | 'resizable' | 'label' | 'principal'
+  'grow' | 'frozen' | 'align' | 'type' | 'resizable' | 'label' | 'principal' | 'narrow'
 >
 
 export type ColumnLike = { id: string; columnDef: { meta?: unknown; header?: unknown } }
@@ -52,6 +52,7 @@ export const toColumnDefs = (
       type: col.type,
       resizable: col.resizable,
       label: col.label,
+      narrow: col.narrow,
       principal: index === principal
     } satisfies TableColumnMeta
   }))

@@ -298,9 +298,9 @@ Each variant is the same screen in another state: `get_block("account/account-us
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'email', header: 'Email', grow: 2, minWidth: 220 },
-    { accessorKey: 'role', header: 'Role', sortable: true, minWidth: 120 },
+    { accessorKey: 'role', header: 'Role', sortable: true, minWidth: 120, narrow: false },
     { accessorKey: 'teams', header: 'Teams', grow: 2, minWidth: 220 },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110, narrow: false },
     { accessorKey: 'lastActive', header: 'Last active', minWidth: 160 },
     { id: 'actions', type: 'action', hideable: false }
   ]
@@ -425,8 +425,14 @@ Each variant is the same screen in another state: `get_block("account/account-us
       removeOpen.value = true
     }
   }
+  const ROW_CONTROLS = 'a, button, input, select, textarea, [role="combobox"], [role="button"]'
+  const fromRowControl = (event: MouseEvent | KeyboardEvent): boolean =>
+    event instanceof MouseEvent &&
+    (event.target instanceof Element ? event.target.closest(ROW_CONTROLS) !== null : true)
   const onRowOpen = (event: MouseEvent | KeyboardEvent, user: UsersUser) => {
-    if (event instanceof KeyboardEvent) onAction(event, 'view', user)
+    if (fromRowControl(event)) return
+    if (event instanceof MouseEvent && window.getSelection()?.toString()) return
+    onAction(event, 'view', user)
   }
   const onRowRemove = (event: KeyboardEvent, user: UsersUser) => {
     if (!user.owner) onAction(event, 'remove', user)

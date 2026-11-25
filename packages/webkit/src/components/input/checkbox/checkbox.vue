@@ -129,7 +129,8 @@
     'data-[indeterminate]:after:hidden ' +
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) ' +
     'data-[disabled]:not-data-[checked]:not-data-[indeterminate]:opacity-50 data-[disabled]:data-[checked]:border-(--border-input) ' +
-    'data-[disabled]:data-[checked]:bg-(--bg-disabled) data-[disabled]:data-[indeterminate]:border-(--border-input) data-[disabled]:data-[indeterminate]:bg-(--bg-disabled) ' +
+    'data-[disabled]:data-[checked]:bg-(--bg-disabled) data-[disabled]:data-[checked]:text-(--text-muted) data-[disabled]:data-[indeterminate]:border-(--border-input) ' +
+    'data-[disabled]:data-[indeterminate]:bg-(--bg-disabled) data-[disabled]:data-[indeterminate]:text-(--text-muted) ' +
     'data-[disabled]:before:hidden data-[disabled]:after:hidden ' +
     'data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden'
 </script>

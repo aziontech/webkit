@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { copyText } from '../../../utils/clipboard'
-  import Tooltip from '../../overlay/tooltip/tooltip.vue'
+  import { LazyTooltip } from '../../overlay/tooltip/lib/lazy-tooltip'
   import type { IconButtonSize, IconButtonVariant } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
@@ -98,12 +98,12 @@
   <span
     v-bind="$attrs"
     ref="rootEl"
-    class="inline-flex"
+    class="relative inline-flex"
     :data-state="copied ? 'copied' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     :data-testid="testId"
   >
-    <Tooltip
+    <LazyTooltip
       :content="label"
       :disabled="disabled"
       :data-testid="`${testId}__tooltip`"
@@ -117,7 +117,7 @@
         iconTransition
         @click="onCopy"
       />
-    </Tooltip>
+    </LazyTooltip>
     <span
       role="status"
       class="sr-only"

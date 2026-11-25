@@ -9,7 +9,7 @@
     },
     {
       "name": "Variants",
-      "summary": "All brand lockups side by side: default (AZION wordmark), reduced (the \"A\" glyph), and extended (wordmark over \"technologies\").",
+      "summary": "All brand lockups side by side: default (AZION wordmark), reduced (the \"A\" glyph), and extended (wordmark over \"technologies\"), each at the large size and captioned with its value.",
       "file": "variants.vue"
     },
     {
@@ -19,7 +19,7 @@
     },
     {
       "name": "Treatments",
-      "summary": "The mark inked three ways: color (the orange mark, with the tagline in the text colour so it reads on white and on dark), monochrome (black on light, white on dark) and knockout (on an orange fill).",
+      "summary": "The mark inked three ways: color (the orange mark, with the tagline in the text colour so it reads on white and on dark), monochrome (black on light, white on dark) and knockout (on an orange fill), each tile captioned with its treatment and the extended lockup at the large size.",
       "file": "treatments.vue"
     }
   ]

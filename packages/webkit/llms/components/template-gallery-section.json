@@ -87,7 +87,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+   "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. The button is named `<label>, <template title>`, so each card's action is told apart."
   },
   {
    "name": "templatesAriaLabel",

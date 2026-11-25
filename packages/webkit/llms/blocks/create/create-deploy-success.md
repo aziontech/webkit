@@ -1,11 +1,11 @@
 # CreateDeploySuccess (`create/create-deploy-success`)
 
-> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
+> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
 
 - Surface: app
 - Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-success")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [Subheader](../../components/subheader.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -35,7 +35,7 @@ A large `h1` stating the outcome and one muted lead sentence under it. For a Git
 
 ### B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 
-The live service: the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
+The live service: the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (an `inline` `Link` in body-sm text, the same size as the link `Button` beside it, with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (the same `inline` `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
 
 ### C. Resources list — `Card`, `Item`, `Tag` (required)
 
@@ -45,13 +45,13 @@ A small heading, "Resources", over `Card :padded="false"` holding an `Item` list
 
 `IntegrationCard` tiles stacked one per row, each the full width of the column so its title and sentence never clip, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
-### E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
+### E. Get started — `ToggleGroup`, `CodeBlock`, `Card` (optional)
 
-Only for a resource nothing serves yet (`getStarted` set to its name): a `Subheader` with a link to the CLI docs and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
+Only for a resource nothing serves yet (`getStarted` set to its name): a heading flush with Resources and Next steps, a line with a link to the CLI docs, and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
 
 ### F. Manage — `Button` (required)
 
-One full-width secondary large `Button` at the end of the column that opens the resource: "Manage service" when a service serves it, "Manage resource" when nothing serves it yet (`deployment` is null). It is the only exit; do not add a second.
+One secondary large `Button` at the end of the column, sized to its label and aligned to the end (full width on a phone), that opens the resource: "Manage service" when a service serves it, "Manage resource" when nothing serves it yet (`deployment` is null). It is the only exit; do not add a second.
 
 ## Data
 
@@ -315,13 +315,15 @@ Each variant is the same screen in another state: `get_block("create/create-depl
               :get-started="getStarted"
             />
 
-            <Button
-              class="w-full"
-              :label="manageLabel"
-              variant="secondary"
-              size="large"
-              @click="(event: MouseEvent) => emit('manage', event)"
-            />
+            <div class="flex self-end max-sm:self-stretch">
+              <Button
+                class="flex-1"
+                :label="manageLabel"
+                variant="secondary"
+                size="large"
+                @click="(event: MouseEvent) => emit('manage', event)"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -562,7 +564,6 @@ jobs:
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Link from '@aziontech/webkit/link'
-  import Subheader from '@aziontech/webkit/subheader'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, ref } from 'vue'
 
@@ -583,25 +584,26 @@ jobs:
 
 <template>
   <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-    <Subheader title="Get started">
-      <template #description>
-        Two ways to build and deploy this resource. Select one and follow the steps, or read the
-        <Link
-          href="https://example.com/docs/cli"
-          target="_blank"
-          inline
-          >CLI docs</Link
-        >.
-      </template>
-      <template #actions>
-        <ToggleGroup
-          v-model="path"
-          :options="PATHS"
-          size="large"
-          aria-label="Deploy with"
-        />
-      </template>
-    </Subheader>
+    <div class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+      <div class="flex min-w-0 grow basis-64 flex-col gap-(--spacing-2xs)">
+        <h2 class="text-label-md text-(--text-default)">Get started</h2>
+        <p class="text-pretty text-body-sm text-(--text-muted)">
+          Two ways to build and deploy this resource. Select one and follow the steps, or read the
+          <Link
+            href="https://example.com/docs/cli"
+            target="_blank"
+            inline
+            >CLI docs</Link
+          >.
+        </p>
+      </div>
+      <ToggleGroup
+        v-model="path"
+        :options="PATHS"
+        size="large"
+        aria-label="Deploy with"
+      />
+    </div>
 
     <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
       <div
@@ -718,12 +720,14 @@ jobs:
                   :content="`Open ${deployment.domain} in a new tab`"
                   class="w-full"
                 >
-                  <Link
-                    :label="deployment.domain"
-                    :href="deployment.url"
-                    target="_blank"
-                    size="small"
-                  />
+                  <span class="text-body-sm">
+                    <Link
+                      :label="deployment.domain"
+                      :href="deployment.url"
+                      target="_blank"
+                      inline
+                    />
+                  </span>
                 </Tooltip>
               </div>
             </span>
@@ -750,12 +754,14 @@ jobs:
                   :content="`Open ${source.repository} in a new tab`"
                   class="w-full"
                 >
-                  <Link
-                    :label="source.repository"
-                    :href="source.href"
-                    target="_blank"
-                    size="small"
-                  />
+                  <span class="text-body-sm">
+                    <Link
+                      :label="source.repository"
+                      :href="source.href"
+                      target="_blank"
+                      inline
+                    />
+                  </span>
                 </Tooltip>
               </div>
             </span>

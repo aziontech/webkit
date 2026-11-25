@@ -47,7 +47,7 @@
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the title cell, not the frame — because a use-case band with no use cases is absent from the page, not an `empty-state`
 - The title cell spans two rows from `lg`, so four items fill a three-column grid exactly
-- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
+- The eyebrow carries the `//` prefix that marks every marketing section header (decision EB-1).
 
 ## Accessibility
 

@@ -32,7 +32,7 @@ The page a support agent opens to learn who is asking: how to reach the customer
 
 ### A. Page heading — `PageHeader`, `Avatar`, `Button`, `DropdownMenu`, `IconButton`, `Tooltip`
 
-A medium `PageHeader` titled with the customer's name, the page's only h1, and their organization as the description. The icon slot holds a square medium `Avatar` with the initials (or the photo), decorative because the title names the person. The actions, in this order: Edit (outline), More actions (an outline `IconButton` with the ellipsis glyph inside `DropdownMenu.Trigger`, its `Tooltip` inside the trigger) opening one group with Merge customer, Export data and Delete customer, and New ticket (primary) on the outer edge.
+A medium `PageHeader` titled with the customer's name, the page's only h1, and their organization as the description. The icon slot holds a square medium `Avatar` with the initials (or the photo), decorative because the title names the person. The actions, in this order: Edit (outline), More actions (an outline `IconButton` with the ellipsis glyph inside `DropdownMenu.Trigger`, its `Tooltip` inside the trigger) opening one group with Merge customer, Export data and Delete customer, and New ticket (primary) on the outer edge. The three sit in one wrapping row, so on a phone they stay side by side instead of stretching to three full-width rows.
 
 ### B. Sample clock — `ConfigProvider`
 
@@ -56,7 +56,7 @@ A second `Card` titled Satisfaction: a small read-only `Rating` of the average, 
 
 ### G. Tickets — `DataTable`, `Link`, `TableCellStatus`, `PriorityTag`, `Countdown`, `TableCellTime`, `EmptyState`, `Button`
 
-A bordered `DataTable` of the customer's tickets, open ones first, with an sr-only caption naming the customer. Subject is the ticket number, muted, then a small `Link` to the ticket that emits `open-ticket`. Status is a `TableCellStatus` (Open info, Pending warning, Solved success, Closed neutral), Priority a small `PriorityTag`, Next reply a small `Countdown` to the due time (paused while the ticket is Pending, because the clock waits on the customer) and a muted dash with "No SLA running" for the screen reader once a ticket is Solved or Closed, Updated a `TableCellTime`. While loading the table draws its own skeleton rows. With no ticket the `empty` slot holds a small `EmptyState` with New ticket.
+A bordered `DataTable` of the customer's tickets, open ones first, with an sr-only caption naming the customer. Subject is the ticket number, muted, then a small `Link` to the ticket that emits `open-ticket`. Status is a `TableCellStatus` (Open info, Pending warning, Solved success, Closed neutral), Priority a small `PriorityTag`, Next reply a small `Countdown` to the due time (paused while the ticket is Pending, because the clock waits on the customer) and a muted dash with "No SLA running" for the screen reader once a ticket is Solved or Closed, Updated a `TableCellTime`. It sets `stackable`: a customer's tickets are a short list read one at a time, so on a phone each ticket becomes a card with its status, priority and next reply under the subject instead of hiding them behind a sideways scroll. While loading the table draws its own skeleton rows. With no ticket the `empty` slot holds a small `EmptyState` with New ticket.
 
 ### H. Activity — `Timeline`
 
@@ -164,7 +164,7 @@ Then delete `sample.ts`, its import, and `parts/customer-clock.vue` if the app n
 - **Satisfaction:** "Satisfaction", then "4.5 out of 5 from 12 surveys" ("1 survey" for one), or "No ratings yet".
 - **Tabs:** "Tickets", "Activity", "Notes".
 - **Tickets:** caption "Tickets from Jane Doe"; columns "Subject", "Status", "Priority", "Next reply", "Updated"; statuses "Open", "Pending", "Solved", "Closed"; "No SLA running" for the screen reader; empty "No tickets yet" with "Alex Morgan has not contacted support yet." and "New ticket".
-- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
+- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 with 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
 - **Notes:** "Add a note", "Only agents can read notes.", "Add note"; error "Write the note first."
 - **Error:** title "Couldn't load this customer", message "Check your connection and retry.", action "Retry".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
@@ -413,76 +413,78 @@ Each variant is the same screen in another state: `get_block("detail/detail-cust
           v-if="!error"
           #actions
         >
-          <Button
-            label="Edit"
-            icon="az az-pencil"
-            variant="outline"
-            size="medium"
-            :disabled="loading"
-            @click="(event: MouseEvent) => emit('edit', event)"
-          />
-          <DropdownMenu
-            side="bottom"
-            align="end"
-            :disabled="loading"
-            @select="(event, value) => emit('customer-action', event, value)"
-          >
-            <DropdownMenu.Trigger>
-              <Tooltip content="More actions">
-                <IconButton
-                  icon="az az-ellipsis"
-                  variant="outline"
-                  size="medium"
-                  aria-label="More actions"
-                  :disabled="loading"
-                />
-              </Tooltip>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Group>
-              <DropdownMenu.Item
-                value="merge"
-                label="Merge customer"
-              >
-                <template #leading>
-                  <i
-                    class="az az-git-merge"
-                    aria-hidden="true"
+          <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
+            <Button
+              label="Edit"
+              icon="az az-pencil"
+              variant="outline"
+              size="medium"
+              :disabled="loading"
+              @click="(event: MouseEvent) => emit('edit', event)"
+            />
+            <DropdownMenu
+              side="bottom"
+              align="end"
+              :disabled="loading"
+              @select="(event, value) => emit('customer-action', event, value)"
+            >
+              <DropdownMenu.Trigger>
+                <Tooltip content="More actions">
+                  <IconButton
+                    icon="az az-ellipsis"
+                    variant="outline"
+                    size="medium"
+                    aria-label="More actions"
+                    :disabled="loading"
                   />
-                </template>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                value="export"
-                label="Export data"
-              >
-                <template #leading>
-                  <i
-                    class="az az-download"
-                    aria-hidden="true"
-                  />
-                </template>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                value="delete"
-                label="Delete customer"
-                severity="danger"
-              >
-                <template #leading>
-                  <i
-                    class="az az-trash"
-                    aria-hidden="true"
-                  />
-                </template>
-              </DropdownMenu.Item>
-            </DropdownMenu.Group>
-          </DropdownMenu>
-          <Button
-            label="New ticket"
-            icon="az az-plus"
-            variant="primary"
-            size="medium"
-            :disabled="loading"
-            @click="(event: MouseEvent) => emit('new-ticket', event)"
-          />
+                </Tooltip>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Item
+                  value="merge"
+                  label="Merge customer"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-git-merge"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  value="export"
+                  label="Export data"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-download"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  value="delete"
+                  label="Delete customer"
+                  severity="danger"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-trash"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </DropdownMenu>
+            <Button
+              label="New ticket"
+              icon="az az-plus"
+              variant="primary"
+              size="medium"
+              :disabled="loading"
+              @click="(event: MouseEvent) => emit('new-ticket', event)"
+            />
+          </div>
         </template>
       </PageHeader>
 
@@ -653,7 +655,7 @@ export const sampleActivity: DetailCustomerEvent[] = [
   {
     id: 'evt_3',
     type: 'rated',
-    title: 'Rated ticket #4755 5 out of 5',
+    title: 'Rated ticket #4755 with 5 out of 5',
     description: 'Quick and clear, thank you.',
     actor: 'Jane Doe',
     at: '2026-11-20T12:30:00Z'
@@ -965,6 +967,7 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
     :columns="columns"
     row-key="id"
     bordered
+    stackable
     :loading="loading"
   >
     <template #caption>

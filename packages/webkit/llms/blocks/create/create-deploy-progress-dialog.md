@@ -171,7 +171,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import { sampleRunningItems } from './sample'
 
@@ -362,6 +362,18 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
   watch([started, running, open], report)
 
+  const actionsEl = ref<HTMLElement | null>(null)
+
+  watch(open, async (now, before) => {
+    if (now || !before) return
+    await nextTick()
+    await nextTick()
+    const active = document.activeElement
+    const lost = !active || active === document.body || active.closest('[role="dialog"]')
+    if (!lost) return
+    actionsEl.value?.querySelector<HTMLElement>('button, a[href]')?.focus()
+  })
+
   onMounted(report)
 
   onBeforeUnmount(() => {
@@ -377,7 +389,10 @@ Each variant is the same screen in another state: `get_block("create/create-depl
         Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
       </p>
     </header>
-    <div class="flex flex-wrap items-center gap-(--spacing-sm)">
+    <div
+      ref="actionsEl"
+      class="flex flex-wrap items-center gap-(--spacing-sm)"
+    >
       <slot name="actions">
         <Button
           label="Show progress"

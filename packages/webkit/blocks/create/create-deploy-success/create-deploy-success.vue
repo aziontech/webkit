@@ -164,13 +164,15 @@
               :get-started="getStarted"
             />
 
-            <Button
-              class="w-full"
-              :label="manageLabel"
-              variant="secondary"
-              size="large"
-              @click="(event: MouseEvent) => emit('manage', event)"
-            />
+            <div class="flex self-end max-sm:self-stretch">
+              <Button
+                class="flex-1"
+                :label="manageLabel"
+                variant="secondary"
+                size="large"
+                @click="(event: MouseEvent) => emit('manage', event)"
+              />
+            </div>
           </div>
         </div>
       </div>

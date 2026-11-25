@@ -1371,7 +1371,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
             <Item.Title class="min-w-0">
               <span
                 :data-empty="!field.key || null"
-                class="truncate font-code text-label-code-sm data-empty:text-(--text-muted)"
+                class="truncate text-label-code-sm data-empty:text-(--text-muted)"
               >
                 {{ field.key || 'Unnamed field' }}
               </span>
@@ -1494,7 +1494,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
       title="Name"
       description="The key in the arguments object, and what the service reads."
     >
-      <div class="contents font-code">
+      <div class="contents">
         <Input
           :id="formId + '-key-' + field.id"
           v-model="field.key"
@@ -1627,7 +1627,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
               </Select>
               <div
                 v-else-if="field.type === 'array'"
-                class="contents font-code"
+                class="contents"
               >
                 <Textarea
                   :model-value="listToLines(field.default)"
@@ -1640,7 +1640,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
               </div>
               <div
                 v-else
-                class="contents font-code"
+                class="contents"
               >
                 <Input
                   v-model="field.default"
@@ -1695,7 +1695,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
       description="A regular expression the value has to match."
       variant="stacked"
     >
-      <div class="contents font-code">
+      <div class="contents">
         <Input
           v-model="field.pattern"
           size="medium"
@@ -1744,7 +1744,7 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
       description="One per line. These are the values the form offers."
       variant="stacked"
     >
-      <div class="contents font-code">
+      <div class="contents">
         <Textarea
           :model-value="listToLines(field.options)"
           :rows="3"

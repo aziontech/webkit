@@ -151,6 +151,10 @@ const headingSlug = (text: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
+function focusableTables(state: CoreState): void {
+  for (const token of state.tokens) if (token.type === 'table_open') token.attrSet('tabindex', '0')
+}
+
 function addHeadingIds(state: CoreState): void {
   const seen = new Map<string, number>()
   state.tokens.forEach((token, at) => {
@@ -174,6 +178,7 @@ export async function markdown(
   })
   md.core.ruler.after('inline', 'drop-html-comments', dropHtmlComments)
   md.core.ruler.after('drop-html-comments', 'drop-task-markers', dropTaskMarkers)
+  md.core.ruler.after('drop-task-markers', 'focusable-tables', focusableTables)
   if (headingIds) md.core.ruler.after('drop-task-markers', 'heading-ids', addHeadingIds)
   if (file) {
     const render = md.renderer.rules.link_open
@@ -201,7 +206,14 @@ function stripFrontMatter(source: string): string {
 }
 
 export type PairType = 'usage' | 'guidance'
-export type DocPair = { type: PairType; level: number; do: string; dont: string }
+export type DocPair = {
+  type: PairType
+  level: number
+  doId?: string
+  dontId?: string
+  do: string
+  dont: string
+}
 export type DocCode = { code: string; html: string; lang: string }
 export type DocPart = { html: string } | { pair: DocPair } | { code: DocCode }
 export type DocHeading = { id: string; text: string; depth: number }
@@ -272,6 +284,24 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
   const parts: DocPart[] = []
   let pending: MdToken[] = []
   let level = 1
+  const taken = new Set(
+    tokens.map((token, at) =>
+      token.type === 'heading_open' && !pairWord(tokens[at + 1]?.content ?? '')
+        ? token.attrGet('id')
+        : null
+    )
+  )
+  const parents: { level: number; id: string }[] = []
+  const pairId = (pairLevel: number) => {
+    const parent = [...parents].reverse().find((heading) => heading.level < pairLevel)
+    const base = parent?.id ? `${parent.id}-` : ''
+    let id = base
+    for (let count = 2; taken.has(`${id}do`) || taken.has(`${id}dont`); count++)
+      id = `${base}${count}-`
+    taken.add(`${id}do`)
+    taken.add(`${id}dont`)
+    return { doId: `${id}do`, dontId: `${id}dont` }
+  }
   const flush = () => {
     if (pending.length) parts.push({ html: render(pending) })
     pending = []
@@ -306,6 +336,7 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
         push({
           type: word.type,
           level: own,
+          ...pairId(own),
           do: word.side === 'do' ? first : second,
           dont: word.side === 'do' ? second : first
         })
@@ -313,6 +344,8 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
         continue
       }
       level = own
+      while (parents.length && (parents.at(-1)?.level ?? 0) >= own) parents.pop()
+      parents.push({ level: own, id: String(token.attrGet('id') ?? '') })
     }
     if (token.type === 'bullet_list_open' && token.level === 0) {
       const close = closeOf(tokens, at)
@@ -336,6 +369,7 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
         push({
           type: doItem.word.type,
           level: Math.min(level + 1, 6),
+          ...pairId(Math.min(level + 1, 6)),
           do: body(doItem),
           dont: body(dontItem)
         })
@@ -364,13 +398,32 @@ function headingsOf(parts: DocPart[]): DocHeading[] {
   }))
 }
 
+const TOOLING_SECTION = /^(enforcement|how it is checked)$/i
+
+export function dropToolingSections(source: string): string {
+  const kept: string[] = []
+  let fence = false
+  let dropping = 0
+  for (const line of source.split('\n')) {
+    if (/^\s*(```|~~~)/.test(line)) fence = !fence
+    const heading = fence ? null : /^(#{2,6})\s+(.+?)\s*$/.exec(line)
+    if (heading) {
+      const depth = heading[1]?.length ?? 0
+      if (dropping && depth <= dropping) dropping = 0
+      if (!dropping && TOOLING_SECTION.test(heading[2] ?? '')) dropping = depth
+    }
+    if (!dropping) kept.push(line)
+  }
+  return kept.join('\n')
+}
+
 export async function renderMarkdownFile(
   file: string
 ): Promise<{ parts: DocPart[]; title: string; toc: DocHeading[] }> {
   const md = await markdown(file, { headingIds: true })
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(file, '.md')
-  const body = source.replace(/^#\s+.+\n/m, '')
+  const body = dropToolingSections(source.replace(/^#\s+.+\n/m, ''))
   const parts = markdownParts(md, body)
   return { parts, title, toc: headingsOf(parts) }
 }
@@ -385,6 +438,12 @@ function readExampleDirs(): { dir: string; data: ExamplesFile }[] {
     dir: relative(join(WEBKIT, 'examples'), dirname(file)),
     data: JSON.parse(readFileSync(file, 'utf8')) as ExamplesFile
   }))
+}
+
+export function exampleFrameRoutes(): string[] {
+  return readExampleDirs().flatMap(({ dir, data }) =>
+    data.examples.map((example) => `/frame/example/${dir}/${example.file.replace(/\.vue$/, '')}`)
+  )
 }
 
 function pascal(name: string): string {
@@ -489,11 +548,35 @@ function plainInline(text: string): string {
     .trim()
 }
 
+const LEAD_WORDS = 25
+
+function clauseBreak(sentence: string): number {
+  let depth = 0
+  let code = false
+  for (let at = 0; at < sentence.length; at++) {
+    const char = sentence[at]
+    if (char === '`') code = !code
+    else if (code) continue
+    else if (char === '(' || char === '[') depth++
+    else if (char === ')' || char === ']') depth = Math.max(0, depth - 1)
+    else if (depth === 0 && (char === ':' || char === ';')) return at
+  }
+  return -1
+}
+
 export function splitLead(text: string): { lead: string; rest: string } {
   const source = text.replace(/<!--[\s\S]*?-->/g, '').trim()
   const match = /^([\s\S]+?[.!?])(\s|$)/.exec(source)
   if (!match?.[1]) return { lead: plainInline(source), rest: '' }
-  return { lead: plainInline(match[1]), rest: source.slice(match[0].length).trim() }
+  const sentence = match[1]
+  const rest = source.slice(match[0].length).trim()
+  const cut = plainInline(sentence).split(' ').length > LEAD_WORDS ? clauseBreak(sentence) : -1
+  if (cut <= 0) return { lead: plainInline(sentence), rest }
+  const tail = sentence.slice(cut + 1).trim()
+  return {
+    lead: `${plainInline(sentence.slice(0, cut))}.`,
+    rest: [tail.charAt(0).toUpperCase() + tail.slice(1), rest].filter(Boolean).join(' ')
+  }
 }
 
 export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: string[] = []) {
@@ -519,11 +602,9 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         'other',
       surface: entry.surface ?? 'app',
       stability: entry.stability === 'preview' ? 'preview' : 'ga',
-      purpose: plainInline(
-        firstSentence(
-          stripReviewerNotes(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
-        )
-      ),
+      purpose: splitLead(
+        stripReviewerNotes(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
+      ).lead,
       import: entry.import ?? `@aziontech/webkit/${name}`,
       exampleDir: examples?.dir ?? null,
       exampleCount: examples?.data.examples.length ?? 0,
@@ -544,7 +625,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         ? 'preview'
         : 'ga',
     summary: plainInline(firstSentence(stripReviewerNotes(block.summary ?? ''))),
-    states: block.states,
+    states: block.states.map(({ name, file, slug }) => ({ name, file, slug })),
     dir: block.dir,
     uses: (
       ((catalog.blocks as Record<string, { imports?: string[] }>)?.[block.id]?.imports ??
@@ -560,6 +641,25 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     llmsTxt: existsSync(join(LLMS, 'llms.txt')),
     foundationLlms: foundationLlms(llms, foundationSlugs),
     version: (catalog.webkitVersion as string) ?? ''
+  }
+}
+
+export function navIndex(index: ReturnType<typeof buildIndex>) {
+  return {
+    components: index.components.map(({ name, title, category, stability, exampleCount }) => ({
+      name,
+      title,
+      category,
+      stability,
+      exampleCount
+    })),
+    blocks: index.blocks.map(({ id, title, group, stability }) => ({
+      id,
+      title,
+      group,
+      stability
+    })),
+    version: index.version
   }
 }
 

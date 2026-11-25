@@ -167,6 +167,7 @@
             :edges="edges"
             orientation="responsive"
             uniform
+            :show-ports="false"
             :aria-labelledby="pathId"
             data-testid="state-edge-error-page__path"
           />

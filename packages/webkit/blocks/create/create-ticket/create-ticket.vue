@@ -92,7 +92,7 @@
     attachments: File[]
   }
 
-  /** What Create ticket and Create and add another send. */
+  /** What Save and Save and add another send. */
   export interface CreateTicketPayload {
     /** The ticket to create. */
     ticket: CreateTicketValues
@@ -119,7 +119,7 @@
     tagOptions?: string[]
     /** Values the form opens with, such as a kept draft; every field falls back to empty. */
     defaultValues?: Partial<CreateTicketValues>
-    /** Opens with the validation messages shown, as after a press on Create ticket. */
+    /** Opens with the validation messages shown, as after a press on Save. */
     defaultSubmitted?: boolean
     /** The contacts, groups and agents are still arriving: skeleton rows hold the bands and creating waits. */
     loading?: boolean
@@ -210,18 +210,24 @@
 
   useShortcuts({
     keys: 'meta+enter',
-    label: 'Create ticket',
+    label: 'Save',
     group: 'Page',
     element: formEl,
     when: () => !locked.value,
     handler: () => formEl.value?.requestSubmit()
   })
 
+  const focusInvalid = async () => {
+    const moved = await focusFirstInvalid(formEl.value)
+    requesterEl.value?.closeList()
+    return moved
+  }
+
   const submit = (event: Event, another: boolean) => {
     if (locked.value) return
     submitted.value = true
     if (Object.values(errors.value).some(Boolean)) {
-      focusFirstInvalid(formEl.value)
+      focusInvalid()
       return
     }
     addAnother.value = another
@@ -250,7 +256,7 @@
   onMounted(async () => {
     if (props.created) return reportCreated(props.created)
     await nextTick()
-    if (!submitted.value || !(await focusFirstInvalid(formEl.value))) requesterEl.value?.focus()
+    if (!submitted.value || !(await focusInvalid())) requesterEl.value?.focus()
   })
 
   watch(
@@ -266,6 +272,12 @@
       if (before && !now) attempt.value += 1
     }
   )
+
+  watch([() => props.error, attempt], async ([next]) => {
+    if (!next || props.loading) return
+    await nextTick()
+    formEl.value?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
+  })
 </script>
 
 <template>
@@ -286,12 +298,22 @@
             class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
             <PageHeader
-              title="Create ticket"
+              title="Create Ticket"
               description="Log a request on behalf of a customer. They get an email with the ticket number."
               size="small"
               title-id="create-ticket-title"
             />
 
+            <Alert
+              v-if="error && !loading"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="The ticket wasn't created."
+              :label="error"
+              action-label="Retry"
+              @action="(event: MouseEvent) => submit(event, addAnother)"
+            />
             <TicketLoadingBands
               v-if="loading"
               class="mt-(--layout-section-gap)"
@@ -302,7 +324,7 @@
               :disabled="submitting"
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
             >
-              <legend class="sr-only">Create ticket</legend>
+              <legend class="sr-only">Create Ticket</legend>
 
               <TicketRequesterBand
                 ref="requesterEl"
@@ -341,17 +363,6 @@
                 :disabled="submitting"
               />
             </fieldset>
-
-            <Alert
-              v-if="error && !loading"
-              :key="attempt"
-              class="mt-(--layout-section-gap)"
-              severity="danger"
-              title="The ticket wasn't created."
-              :label="error"
-              action-label="Retry"
-              @action="(event: MouseEvent) => submit(event, addAnother)"
-            />
           </div>
           <SaveBar variant="centered">
             <template #actions>

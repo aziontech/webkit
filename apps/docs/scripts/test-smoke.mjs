@@ -9,7 +9,7 @@ import { serve } from './serve.mjs'
 
 const DIST = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
 const require = createRequire(import.meta.url)
-const AXE = require.resolve('axe-core/axe.min.js')
+const AXE_SOURCE = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8')
 const KNOWN_FILE = resolve(
   dirname(fileURLToPath(import.meta.url)),
   '../../../packages/webkit/src/test/a11y-known.json'
@@ -91,7 +91,7 @@ async function visit(route) {
     const text = await page.evaluate(() => document.body.innerText.trim().length)
     if (!route.startsWith('/frame') && text < 20) errors.push('empty page')
     if (axeRoutes.has(route)) {
-      await page.addScriptTag({ path: AXE })
+      await page.evaluate(AXE_SOURCE)
       const result = await page.evaluate(
         async ({ known, chrome, accepted }) => {
           const style = document.createElement('style')

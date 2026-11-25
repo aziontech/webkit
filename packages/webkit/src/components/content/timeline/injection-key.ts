@@ -14,3 +14,10 @@ export interface TimelineContext {
 }
 
 export const TimelineInjectionKey: InjectionKey<TimelineContext> = Symbol('Timeline')
+
+export interface TimelineGroupContext {
+  /** True inside a Timeline.Group, whose label already carries the date. */
+  grouped: boolean
+}
+
+export const TimelineGroupInjectionKey: InjectionKey<TimelineGroupContext> = Symbol('TimelineGroup')

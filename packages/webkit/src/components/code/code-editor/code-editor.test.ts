@@ -215,6 +215,10 @@ describe('CodeEditor', () => {
       'Warning: Line 2 Careful',
       'Error: Line 3 Broken'
     ])
+    for (const message of view.getAllByTestId('code-editor__problem-message')) {
+      expect(message.classList.contains('truncate')).toBe(false)
+      expect(message.classList.contains('break-words')).toBe(true)
+    }
     await fireEvent.click(problems[1] as HTMLElement)
     const input = textarea(view.container)
     expect(document.activeElement).toBe(input)

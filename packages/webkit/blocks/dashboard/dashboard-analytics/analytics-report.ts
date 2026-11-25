@@ -157,3 +157,10 @@ export const chartForms = [
   { label: 'Line', value: 'line' },
   { label: 'Bar', value: 'bar' }
 ]
+
+export const statusForms = [...chartForms, { label: 'Errors', value: 'errors' }]
+
+export const hiddenForStatusForm = (form: string, series: { id: string }[]): string[] =>
+  form === 'errors'
+    ? series.filter((entry) => !/^[45]xx$/.test(entry.id)).map((entry) => entry.id)
+    : []

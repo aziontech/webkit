@@ -69,7 +69,11 @@
 
   defineExpose({
     /** Moves focus to the first requester control. */
-    focus: () => (newContact.value ? nameEl.value?.focus() : focusSearch())
+    focus: () => (newContact.value ? nameEl.value?.focus() : focusSearch()),
+    /** Closes the contact list that focusing the search opened. */
+    closeList: () => {
+      listOpen.value = false
+    }
   })
 </script>
 

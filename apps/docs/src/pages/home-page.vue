@@ -7,10 +7,11 @@
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import Hero from '@aziontech/webkit/hero'
   import Module from '@aziontech/webkit/module'
+  import ModuleHeader from '@aziontech/webkit/module-header'
   import { useHead } from '@unhead/vue'
+  import index from 'virtual:docs-nav'
   import { computed } from 'vue'
 
-  import { index } from '../lib/data'
   import { format, messages } from '../lib/i18n'
 
   const t = messages
@@ -94,9 +95,15 @@
       <Module
         :divided="false"
         :padded="false"
-        :title="t.exploreTitle"
-        :description="t.exploreLead"
       >
+        <template #header>
+          <ModuleHeader
+            :title="t.exploreTitle"
+            :description="t.exploreLead"
+            size="small"
+            padding="small"
+          />
+        </template>
         <DocCardGroup
           :columns="4"
           :mobile-columns="1"

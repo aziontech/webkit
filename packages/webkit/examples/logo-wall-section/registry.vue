@@ -27,8 +27,8 @@
     :logos="logos"
     :quote="{
       text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',
-      name: 'Ismael Aguilar',
-      jobTitle: 'Information Security Manager at Zoop',
+      name: 'Priya Patel',
+      jobTitle: 'Information security manager at Zoop',
       logo: zoop.logo,
       logoLight: zoop.logoLight,
       artwork: zoop.artwork,

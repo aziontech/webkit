@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, watch } from 'vue'
+  import { computed, getCurrentInstance, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { resolveDirection } from '../../../composables/use-direction'
   import { useLocale } from '../../../composables/use-locale/use-locale'
@@ -45,9 +45,12 @@
   const emit = defineEmits<{
     /** Download in the viewer was pressed for `item`; call `preventDefault()` to download it another way. */
     download: [event: MouseEvent, item: ImageGalleryItem]
+    /** Try again in the error state was pressed; the button shows only when this event has a listener. */
+    retry: [event: MouseEvent]
   }>()
 
   const attrs = useAttrs()
+  const instance = getCurrentInstance()
   const { t, formatNumber } = useLocale({ imageGallery: en.imageGallery })
 
   const open = ref(false)
@@ -88,6 +91,8 @@
   )
 
   const empty = computed(() => !props.error && tileCount.value === 0)
+
+  const retryable = computed(() => Boolean(instance?.vnode.props?.['onRetry']))
 
   const active = computed(() => tiles.value[activeIndex.value])
 
@@ -201,7 +206,21 @@
         :description="error"
         icon="az az-triangle-alert"
         size="small"
-      />
+      >
+        <template
+          v-if="retryable"
+          #actions
+        >
+          <Button
+            :data-testid="`${testId}__retry`"
+            :label="t('imageGallery.retry')"
+            icon="az az-refresh"
+            variant="outline"
+            size="medium"
+            @click="emit('retry', $event)"
+          />
+        </template>
+      </EmptyState>
     </div>
     <EmptyState
       v-if="empty"

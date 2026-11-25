@@ -92,6 +92,19 @@ describe('FilePreview', () => {
     expect(noSrc.getByTestId(`${TEST_ID}__unsupported`)).toBeTruthy()
   })
 
+  it('draws nothing from a src with an unsafe scheme', () => {
+    for (const src of ['javascript:alert(1)', 'file:///etc/passwd', '//example.org/a.png']) {
+      const view = render(FilePreview, { props: { fileName: 'photo.png', src } })
+      expect(view.container.querySelector('img')).toBeNull()
+      expect(view.getByTestId(`${TEST_ID}__unsupported`)).toBeTruthy()
+      view.unmount()
+    }
+    const pdf = render(FilePreview, {
+      props: { fileName: 'report.pdf', src: 'javascript:alert(1)' }
+    })
+    expect(pdf.container.querySelector('object')).toBeNull()
+  })
+
   it('cuts long text at maxLength and says how much is shown', async () => {
     const view = render(Text)
     const text = view.getByTestId(`${TEST_ID}__text`)

@@ -35,31 +35,54 @@ const dayIndex = (time: number, timeZone?: string): number => {
   const key = timeZone ?? ''
   let format = dayFormats.get(key)
   if (!format) {
-    format = new Intl.DateTimeFormat('en-US', {
+    format = new Intl.DateTimeFormat('en-CA', {
       timeZone,
       year: 'numeric',
-      month: 'numeric',
-      day: 'numeric'
+      month: '2-digit',
+      day: '2-digit'
     })
     dayFormats.set(key, format)
   }
-  const part = (type: string): number =>
-    Number(format.formatToParts(time).find((item) => item.type === type)?.value)
-  return Math.round(Date.UTC(part('year'), part('month') - 1, part('day')) / DAY)
+  return Date.parse(format.format(time)) / DAY
+}
+
+const MINUTE = 60_000
+
+const dayStarts = new Map<string, number[]>()
+
+const startsOf = (current: number, timeZone?: string): number[] => {
+  const key = `${timeZone ?? ''}|${current}`
+  const cached = dayStarts.get(key)
+  if (cached) return cached
+  const starts = [0, 1, 6, 29].map((back) => {
+    const day = current - back
+    let low = day * 1440 - 900
+    let high = day * 1440 + 900
+    while (low < high) {
+      const mid = Math.floor((low + high) / 2)
+      if (dayIndex(mid * MINUTE, timeZone) >= day) high = mid
+      else low = mid + 1
+    }
+    return low * MINUTE
+  })
+  if (dayStarts.size >= 16) dayStarts.clear()
+  dayStarts.set(key, starts)
+  return starts
+}
+
+const groupClassifier = (
+  today: number,
+  timeZone?: string
+): ((time: number) => ConversationHistoryGroupKey) => {
+  const starts = startsOf(dayIndex(today, timeZone), timeZone)
+  return (time) => ORDER[starts.findIndex((start) => time >= start)] ?? 'older'
 }
 
 export const groupOf = (
   time: number,
   today: number,
   timeZone?: string
-): ConversationHistoryGroupKey => {
-  const days = dayIndex(today, timeZone) - dayIndex(time, timeZone)
-  if (days <= 0) return 'today'
-  if (days === 1) return 'yesterday'
-  if (days < 7) return 'previous7'
-  if (days < 30) return 'previous30'
-  return 'older'
-}
+): ConversationHistoryGroupKey => groupClassifier(today, timeZone)(time)
 
 export function useConversationHistoryGroups(
   items: MaybeRefOrGetter<readonly ConversationHistoryItem[]>,
@@ -77,11 +100,6 @@ export function useConversationHistoryGroups(
   })
   const zone = (): string | undefined => toValue(timeZone) || (mounted.value ? undefined : 'UTC')
 
-  const keyOf = (item: ConversationHistoryItem, today: number): ConversationHistoryGroupKey => {
-    if (toValue(groupBy) === 'date') return groupOf(timeOf(item), today, zone())
-    return item.status === 'running' && !item.archived ? 'working' : 'settled'
-  }
-
   const groups = computed<ConversationHistoryGroup[]>(() => {
     const today = new Date(toValue(now)).getTime()
     const byStatus = toValue(groupBy) === 'status'
@@ -90,10 +108,16 @@ export function useConversationHistoryGroups(
       { item: ConversationHistoryItem; time: number }[]
     >()
     const all = byStatus ? [...toValue(items), ...toValue(archived)] : toValue(items)
+    const byDate = byStatus ? null : groupClassifier(today, zone())
     for (const item of all) {
-      const key = keyOf(item, today)
+      const time = timeOf(item)
+      const key = byDate
+        ? byDate(time)
+        : item.status === 'running' && !item.archived
+          ? 'working'
+          : 'settled'
       const bucket = buckets.get(key) ?? []
-      bucket.push({ item, time: timeOf(item) })
+      bucket.push({ item, time })
       buckets.set(key, bucket)
     }
     return ORDER.filter((key) => buckets.has(key)).map((key) => {

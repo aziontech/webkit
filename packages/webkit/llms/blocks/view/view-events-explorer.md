@@ -52,11 +52,11 @@ A resizable, collapsible start `Sidebar` named Fields with its own Search fields
 
 ### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState`, `Alert` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. While the explorer is too narrow for the document pane, Time, Level and Source fold into the Event cell: Level `Tag`, the clock time and the source on top, the event message wrapped under them, so a phone or tablet reads what happened without scrolling sideways. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window. When `error` is set, a danger `Alert` with the message and Retry takes the place of the summary, the chart and the table; the fields panel stays.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), a `Chart.Legend` under the bars names each level (so a touch reader, who never sees the tooltip, still reads the colours), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. While the explorer is too narrow for the document pane, Time, Level and Source fold into the Event cell: Level `Tag`, the clock time and the source on top, the event message wrapped under them, so a phone or tablet reads what happened without scrolling sideways. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window. When `error` is set, a danger `Alert` with the message and Retry takes the place of the summary, the chart and the table; the fields panel stays.
 
 ### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `Trace`, `CodeBlock` (required)
 
-Each row's detail cell is an `IconButton` named Open event <id> with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON. When the event carries the `spans` of its request, a Trace section sits between the fields and the JSON: an unbordered `Trace` with `highlight-critical-path`, named Trace of request <request id>, so the reader goes from "this request was slow or failed" to the step that held it up without leaving the log.
+Each row's detail cell is an `IconButton` named from what the reader sees, Open event: <message>, <time>, with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON. When the event carries the `spans` of its request, a Trace section sits between the fields and the JSON: an unbordered `Trace` with `highlight-critical-path`, named Trace of request <request id>, so the reader goes from "this request was slow or failed" to the step that held it up without leaving the log.
 
 ### G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `Trace`, `CodeBlock` (required)
 
@@ -220,7 +220,7 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - Loading: the first load (`loading` with no `events`); `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
 - Filtered: errors from the Security and Access Control sources (`v-model:filters` seeded with them); the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
 - Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
-- Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
+- Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`. The filter menu and the search stay, disabled, Download CSV is disabled and Refresh stays live. Every view block's error state follows one rule: the filter or search stays in place, disabled; Download CSV and the preferences are disabled; Refresh stays live.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
 - Sessions: three investigation tabs, API errors active; the tabs sit above the block, which each tab feeds through `v-model:filters` and `v-model:search`.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.
@@ -508,6 +508,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
           :time-zone="timeZone"
           :loading="loading"
           :export-disabled="!tableEl"
+          :disabled="error !== ''"
           @refresh="(event: MouseEvent) => emit('refresh', event)"
           @export="exportCsv"
         />
@@ -3145,7 +3146,7 @@ export const tokensForFilters = (
           {{ row.label }}
         </dt>
         <dd class="m-0 flex min-w-0 items-center gap-(--spacing-xs)">
-          <span class="min-w-0 flex-1 break-words text-label-code-sm text-(--text-default)">
+          <span class="min-w-0 flex-1 break-words text-body-code-sm text-(--text-default)">
             <template
               v-for="(part, index) in row.parts"
               :key="index"
@@ -3272,7 +3273,7 @@ export const tokensForFilters = (
             :key="row.id"
           >
             <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-            <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+            <dd class="m-0 min-w-0 break-words text-body-code-sm text-(--text-default)">
               {{ row.value }}
             </dd>
           </template>
@@ -3415,7 +3416,7 @@ export const tokensForFilters = (
             :icon="row.id === selectedKey ? 'az az-chevron-down' : 'az az-chevron-right'"
             variant="ghost"
             size="small"
-            :aria-label="`Open event ${row.id}`"
+            :aria-label="`Open event: ${row.message}, ${row.time}`"
             :aria-expanded="row.id === selectedKey"
             :data-open-event="row.id === selectedKey || undefined"
             @click.stop="emit('open', $event, row)"
@@ -3557,9 +3558,11 @@ export const tokensForFilters = (
     loading: boolean
     /** Download CSV is not available yet. */
     exportDisabled: boolean
+    /** Nothing is loaded to filter: the filter and the search show, disabled. */
+    disabled?: boolean
   }
 
-  defineProps<EventsToolbarProps>()
+  withDefaults(defineProps<EventsToolbarProps>(), { disabled: false })
 
   const emit = defineEmits<{
     refresh: [event: MouseEvent]
@@ -3583,6 +3586,7 @@ export const tokensForFilters = (
       <FilterMenu
         v-model="filters"
         :fields="menuFields"
+        :disabled="disabled"
         class="shrink-0"
         data-testid="filter-button"
       />
@@ -3591,6 +3595,7 @@ export const tokensForFilters = (
           ref="searchEl"
           v-model="search"
           size="medium"
+          :disabled="disabled"
           placeholder="Search events, hosts, paths or addresses"
           aria-keyshortcuts="/"
           aria-label="Search events"
@@ -4633,6 +4638,7 @@ export const tokensForFilters = (
         stacked
       />
       <Chart.Crosshair />
+      <Chart.Legend />
       <Chart.Tooltip total>
         <template #footer>Click to filter to this bucket, or drag to select a span.</template>
       </Chart.Tooltip>

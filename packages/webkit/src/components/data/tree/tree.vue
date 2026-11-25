@@ -315,12 +315,15 @@
               </span>
               <span class="flex min-w-0 flex-1 items-baseline gap-(--spacing-2xs)">
                 <span
+                  dir="auto"
                   class="min-w-0 truncate text-label-md text-(--text-default) group-data-[disabled]/tree-row:text-(--text-disabled) group-data-[size=large]/tree:text-label-lg"
                 >
                   {{ scope.item.label }}
                 </span>
                 <span
                   v-if="scope.item.description"
+                  dir="auto"
+                  :data-testid="`${testId}__description`"
                   class="min-w-0 truncate text-label-sm text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled) group-data-[size=large]/tree:text-label-md"
                 >
                   {{ scope.item.description }}

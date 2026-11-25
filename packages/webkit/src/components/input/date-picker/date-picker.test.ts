@@ -3,7 +3,13 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import ClearPart from '../../../../examples/date-picker/clear-part.vue'
+import Clearable from '../../../../examples/date-picker/clearable.vue'
 import Default from '../../../../examples/date-picker/default.vue'
+import Horizontal from '../../../../examples/date-picker/horizontal.vue'
+import MinMax from '../../../../examples/date-picker/min-max.vue'
+import Sizes from '../../../../examples/date-picker/sizes.vue'
+import WithTime from '../../../../examples/date-picker/with-time.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
@@ -945,6 +951,32 @@ describe('DatePicker', () => {
       value.value = new Date(2026, 9, 3)
       await nextTick()
       expect(getByTestId('date-picker__trigger').textContent).not.toBe(before)
+    })
+  })
+
+  describe('examples name every trigger', () => {
+    it.each([
+      ['Default', Default, ['Start date']],
+      ['Clearable', Clearable, ['Expiry date']],
+      ['ClearPart', ClearPart, ['Release date']],
+      ['Horizontal', Horizontal, ['Maintenance start']],
+      ['MinMax', MinMax, ['Report date']],
+      ['WithTime', WithTime, ['Scheduled deploy']],
+      ['Sizes', Sizes, ['Start date', 'Review date', 'End date']]
+    ])('gives the %s example a named date field', (_name, example, names) => {
+      const { getAllByTestId, getByRole } = render(example)
+      const triggers = getAllByTestId('date-picker__trigger')
+      expect(triggers).toHaveLength(names.length)
+      names.forEach((name, index) => {
+        expect(getByRole('button', { name: new RegExp(`^${name}`) })).toBe(triggers[index])
+      })
+    })
+  })
+
+  describe('trailing icons', () => {
+    it('sets the clear glyph at the trigger label size, like the chevron', () => {
+      const { getByTestId } = render(DatePicker, { props: { modelValue: OCT_8, clearable: true } })
+      expect(getByTestId('date-picker__clear-trigger').classList).toContain('text-label-sm')
     })
   })
 

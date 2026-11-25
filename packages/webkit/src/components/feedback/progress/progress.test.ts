@@ -3,6 +3,7 @@ import '../../../test/reflow.css'
 import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { commands } from 'vitest/browser'
+import type { Component } from 'vue'
 
 import Default from '../../../../examples/progress/default.vue'
 import Indeterminate from '../../../../examples/progress/indeterminate.vue'
@@ -114,6 +115,21 @@ describe('Progress', () => {
     expect(getByRole('progressbar').getAttribute('data-size')).toBe('medium')
   })
 
+  it.each(['neutral', 'info', 'success', 'warning', 'danger'] as const)(
+    'reflects severity=%s on the bar and its fill',
+    (severity) => {
+      const { getByRole } = render(Progress, { props: { value: 40, severity } })
+      const bar = getByRole('progressbar')
+      expect(bar.getAttribute('data-severity')).toBe(severity)
+      expect(bar.firstElementChild?.getAttribute('data-severity')).toBe(severity)
+    }
+  )
+
+  it('keeps the brand fill with no data-severity when severity is unset', () => {
+    const { getByRole } = render(Progress, { props: { value: 40 } })
+    expect(getByRole('progressbar').hasAttribute('data-severity')).toBe(false)
+  })
+
   it.each(['small', 'medium', 'large'] as const)('reflects size=%s on data-size', (size) => {
     const { getByRole } = render(Progress, { props: { size } })
     expect(getByRole('progressbar').getAttribute('data-size')).toBe(size)
@@ -190,6 +206,22 @@ describe('Progress', () => {
       const { before } = segment(getByRole)
 
       expect(before.animationName).not.toBe('none')
+    })
+  })
+
+  describe('Progress examples', () => {
+    const examples = import.meta.glob<{ default: Component }>(
+      '../../../../examples/progress/*.vue',
+      {
+        eager: true
+      }
+    )
+
+    it.each(Object.entries(examples))('%s names the task each bar tracks', (_, mod) => {
+      const { container } = render(mod.default)
+      const bars = Array.from(container.querySelectorAll('[role="progressbar"]'))
+      expect(bars.length).toBeGreaterThan(0)
+      for (const bar of bars) expect(bar.getAttribute('aria-label')).not.toBe('Progress')
     })
   })
 })

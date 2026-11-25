@@ -5,13 +5,24 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig, type UserConfig } from 'vite'
 import type { ViteSSGOptions } from 'vite-ssg'
 
-import { bundlerRuntimePlugin, chunkGraphPlugin } from './plugins/chunk-graph.ts'
-import { buildIndex } from './plugins/content.ts'
+import {
+  bundlerRuntimePlugin,
+  chunkGraphPlugin,
+  moveBuildManifests
+} from './plugins/chunk-graph.ts'
+import { buildIndex, exampleFrameRoutes } from './plugins/content.ts'
+import { cssSourcesPlugin, writeDocsSources } from './plugins/css-sources.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
 import { fontPreloadPlugin } from './plugins/font-preload.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
+import { localizedRoutes } from './src/lib/locale-path.ts'
 
 function staticRoutes(): string[] {
+  const routes = pageRoutes()
+  return [...routes, ...localizedRoutes(routes)]
+}
+
+function pageRoutes(): string[] {
   const { components, blocks } = buildIndex()
   return [
     '/',
@@ -27,6 +38,7 @@ function staticRoutes(): string[] {
       block.states.map((state) => `/frame/block/${block.id}/${state.slug}`)
     ),
     '/frame/example',
+    ...exampleFrameRoutes(),
     '/404'
   ]
 }
@@ -35,7 +47,7 @@ const ssgOptions: Partial<ViteSSGOptions> = {
   entry: 'src/main.ts',
   dirStyle: 'nested',
   formatting: 'none',
-  concurrency: 2,
+  concurrency: 1,
   beastiesOptions: false,
   onPageRendered: (_route, html, appCtx) => {
     const ssr = (appCtx.app as { ssrContext?: { teleports?: Record<string, string> } }).ssrContext
@@ -43,15 +55,19 @@ const ssgOptions: Partial<ViteSSGOptions> = {
     const page = html.replace(/<link\b[^>]*rel="modulepreload"[^>]*>/g, '')
     return body ? page.replace(/<body([^>]*)>\s*/, (open) => `${open.trimEnd()}${body}`) : page
   },
+  onFinished: () => moveBuildManifests(),
   includedRoutes: () => {
     const only = process.env.DOCS_ROUTES?.split(',').filter(Boolean)
     return only?.length ? only : staticRoutes()
   }
 }
 
+writeDocsSources()
+
 export default defineConfig({
   plugins: [
     docsPlugin(),
+    cssSourcesPlugin(),
     bundlerRuntimePlugin(),
     chunkGraphPlugin(),
     fontPreloadPlugin(),

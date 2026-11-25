@@ -6,9 +6,9 @@ status: implemented
 stability: preview
 spec_version: 7
 template: 2
-checksum: b1fa9184b3556d6500a672e1b903ae949f99b7d07f362ec1f30186d26b48829b
+checksum: fd01cf5760abefdbe5a9bb7944cf29b5af004fed23b7fc184de03c1e864e9a65
 created: 2026-11-11
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # ChatMessage — Component Spec
@@ -266,7 +266,7 @@ _None._
 ## Performance
 
 - Bundle budget: see `.size-limit.json` (`chat-message`, `chat-message-root`, `chat-message-actions`, `chat-message-feedback`).
-- Runtime budget: no work per token; the announcement reads `textContent` once on completion; the action row has one resize observer.
+- Runtime budget: no work per token; the announcement reads `textContent` once on completion; the action row has one resize observer. Inside a `Conversation` the action row renders its actions (and its `leading`, `default` and `trailing` slots) only once it comes within 600 px of the log's visible area, watched with one intersection observer on the log, so a long thread mounts only the rows near the view; the empty row keeps its 32 px height, so nothing shifts when the actions arrive. The perf suite holds it to the `ai-chat-long-thread` budget.
 - Heavy parts: More (`parts/chat-message-more.vue`) and the Feedback menu (`parts/chat-message-feedback-menu.vue`), both `DropdownMenu`s, load as lazy chunks when first shown; until then an inert `IconButton` holds each place, so the row does not shift.
 
 ## Examples

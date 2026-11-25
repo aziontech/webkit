@@ -50,3 +50,11 @@ test('the two display headings open their tracking to -0.035em on phones, so wor
     )
   }
 })
+
+test('the two display headings open their word spaces on phones only', () => {
+  for (const name of ['text-heading-3xl', 'text-heading-2xl']) {
+    const { wordSpacing } = typography[name]
+    assert.ok(parseFloat(phoneStep(wordSpacing)) >= 0.06, `${name} phone word spacing`)
+    assert.equal(desktopStep(wordSpacing), '0', `${name} desktop word spacing`)
+  }
+})

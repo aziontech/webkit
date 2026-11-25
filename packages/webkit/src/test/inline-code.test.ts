@@ -59,6 +59,24 @@ describe('inline code chips on wrapped lines', () => {
     expectWrappedWithoutCollision(container.querySelector('td') as HTMLElement)
   })
 
+  it('keep a hyphenated token on one line in a DocProse table cell, the table scrolling instead', () => {
+    const { container } = render(() =>
+      h(Narrow, { width: 120 }, () =>
+        h(DocProse, null, () =>
+          h('table', [
+            h('tbody', [
+              h('tr', [h('td', { innerHTML: '<code>--layout-measure-form-create</code>' })])
+            ])
+          ])
+        )
+      )
+    )
+    const chip = container.querySelector('td code') as HTMLElement
+    expect(chip.getClientRects()).toHaveLength(1)
+    const table = container.querySelector('table') as HTMLElement
+    expect(table.scrollWidth).toBeGreaterThan(table.clientWidth)
+  })
+
   it('keep a gap in a DocProse paragraph and list item', () => {
     const { container } = render(() =>
       h(Narrow, null, () =>

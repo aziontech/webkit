@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 15
 template: 2
-checksum: 1e22a70b1a3dbc4ad6757fde0418ed4933b4bf2906c657ccbfc67007ab8a4bea
+checksum: 5e0951ce0fca93ea75823a75fde1a64d184188922f4c59b9746a23674fd0313f
 created: 2026-11-12
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # ConsoleLayout — Component Spec
@@ -33,7 +33,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - `AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
-- `Breadcrumb` — the header trail (`breadcrumbs`); while compact it stays from a 28rem header up (collapsed by `Breadcrumb` to first › … › current), or only a page's control crumbs when the page has them.
+- `Breadcrumb` — the header trail (`breadcrumbs`), given the free width of the header start so it shows whole whenever it fits and `Breadcrumb` folds it only when it does not; while compact it stays from a 28rem header up, or only a page's control crumbs when the page has them.
 - `shell/shell-console` — the block that shows this layout with sample console navigation.
 
 ## Best practices
@@ -215,7 +215,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## States
 
-- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer), the palette `open` / `closed`.
+- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer; otherwise the brand is in the header beside the hamburger, so the drawer drops its brand row and the navigation starts under the close button), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main a `flex-1 min-h-0 h-full overflow-hidden` item of `AppLayout`'s body (which turns into a fixed-height flex column while it holds a fill page), and the child `flex-1 min-h-0`; pure CSS, right in the server render. The page then never scrolls as a whole: a chat keeps its composer pinned and scrolls only its thread, at every width (styled test `src/test/layout-fill.test.ts`).
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.

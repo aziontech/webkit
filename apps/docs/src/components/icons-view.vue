@@ -11,6 +11,7 @@
   import { format, messages } from '../lib/i18n'
   import { copyValue } from '../lib/tokens'
   import type { IconAsset } from '../lib/types'
+  import CategoryJump from './category-jump.vue'
 
   const t = messages
   const query = ref('')
@@ -56,6 +57,19 @@
     })
   )
 
+  const categoryId = (group: string, category: string) =>
+    `${group}-${category}`.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
+  const jumps = computed(() =>
+    groups.value.flatMap((group) =>
+      group.categories.map((category) => ({
+        id: categoryId(group.id, category.id),
+        label: category.title,
+        count: category.icons.length
+      }))
+    )
+  )
+
   const shortName = (icon: IconAsset) => icon.name.replace(/^az-/, '')
 </script>
 
@@ -99,6 +113,7 @@
         {{ filtered.length }} / {{ assets.icons.length }}
       </p>
     </div>
+    <CategoryJump :groups="jumps" />
 
     <template
       v-for="group in groups"
@@ -123,12 +138,15 @@
         </div>
         <div
           v-for="category in group.categories"
+          :id="`category-${categoryId(group.id, category.id)}`"
           :key="category.id"
-          class="flex flex-col gap-(--spacing-xs)"
+          class="flex scroll-mt-20 flex-col gap-(--spacing-xs) md:scroll-mt-40"
         >
           <h3 class="text-label-md text-(--text-muted)">{{ category.title }}</h3>
           <div class="overflow-hidden rounded-(--shape-card) border border-(--border-default)">
-            <ul class="-me-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))]">
+            <ul
+              class="-me-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))]"
+            >
               <li
                 v-for="icon in category.icons"
                 :key="icon.class"
@@ -138,7 +156,7 @@
                   clickable
                   size="small"
                   :title="`${icon.label} · ${format('{label}: {value}', { label: t.iconsCopy, value: icon.class })}`"
-                  class="min-h-24 flex-col justify-center gap-(--spacing-xs) rounded-none bg-(--bg-canvas) focus-visible:z-1 focus-visible:ring-inset focus-visible:ring-offset-0"
+                  class="min-h-20 flex-col sm:min-h-24 justify-center gap-(--spacing-xs) rounded-none bg-(--bg-canvas) focus-visible:z-1 focus-visible:ring-inset focus-visible:ring-offset-0"
                   @click="copyValue(icon.class)"
                 >
                   <i

@@ -171,11 +171,11 @@ describe('ClosingCallToActionSection', () => {
         command: 'npm create azion@latest'
       })
 
-      const field = await findByRole('textbox', { name: 'Command' })
-      expect(field).toHaveValue('npm create azion@latest')
+      const line = await findByRole('group', { name: 'Command' })
+      expect(line).toHaveTextContent('npm create azion@latest')
       expect(getByRole('button', { name: 'Copy command' })).toBeInTheDocument()
       const first = getAllByRole('link')[0]!
-      expect(field.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+      expect(line.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     }
   )
 
@@ -191,7 +191,7 @@ describe('ClosingCallToActionSection', () => {
       command: 'npm create azion@latest'
     })
 
-    await findByRole('textbox', { name: 'Command' })
+    await findByRole('group', { name: 'Command' })
     await expectNoA11yViolations(container)
   })
 

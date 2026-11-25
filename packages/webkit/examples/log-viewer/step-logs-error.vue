@@ -52,7 +52,7 @@
       <template #header>
         <h2 class="m-0 text-heading-2xs text-(--text-default)">Deployment logs</h2>
         <Tag
-          label="Failed on Routing Rules"
+          label="Failed: Routing Rules"
           severity="danger"
         />
       </template>

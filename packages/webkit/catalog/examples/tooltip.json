@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Outlined button trigger. Hover or focus “Hover me” to reveal the tooltip.",
+   "summary": "An icon-only button named by its tooltip. Hover or focus the copy button to reveal the hint.",
    "file": "examples/tooltip/default.vue"
   },
   {

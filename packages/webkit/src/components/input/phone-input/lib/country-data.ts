@@ -6,18 +6,6 @@ export interface PhoneInputCountry {
 }
 
 export const defaultCountries: PhoneInputCountry[] = [
-  { code: 'US', dialCode: '+1', mask: '(###) ###-####', label: 'United States' },
-  { code: 'BR', dialCode: '+55', mask: ['(##) ####-####', '(##) #####-####'], label: 'Brazil' },
-  { code: 'GB', dialCode: '+44', mask: '#### ######', label: 'United Kingdom' },
-  { code: 'PT', dialCode: '+351', mask: '### ### ###', label: 'Portugal' },
-  { code: 'ES', dialCode: '+34', mask: '### ### ###', label: 'Spain' },
-  { code: 'AR', dialCode: '+54', mask: ['## ####-####', '# ## ####-####'], label: 'Argentina' },
-  { code: 'MX', dialCode: '+52', mask: '## #### ####', label: 'Mexico' },
-  { code: 'CL', dialCode: '+56', mask: '# #### ####', label: 'Chile' },
-  { code: 'CO', dialCode: '+57', mask: '### ### ####', label: 'Colombia' },
-  { code: 'DE', dialCode: '+49', mask: ['### #######', '#### #######'], label: 'Germany' },
-  { code: 'FR', dialCode: '+33', mask: '# ## ## ## ##', label: 'France' },
-  { code: 'IT', dialCode: '+39', mask: '### ### ####', label: 'Italy' },
   { code: 'AF', dialCode: '+93', mask: ['### ### ###', '### ### ####'], label: 'Afghanistan' },
   {
     code: 'AX',
@@ -42,6 +30,7 @@ export const defaultCountries: PhoneInputCountry[] = [
   { code: 'AO', dialCode: '+244', mask: '### ### ###', label: 'Angola' },
   { code: 'AI', dialCode: '+1', mask: '(###) ###-####', label: 'Anguilla' },
   { code: 'AG', dialCode: '+1', mask: '(###) ###-####', label: 'Antigua and Barbuda' },
+  { code: 'AR', dialCode: '+54', mask: ['## ####-####', '# ## ####-####'], label: 'Argentina' },
   { code: 'AM', dialCode: '+374', mask: ['### ## ###', '### ######'], label: 'Armenia' },
   { code: 'AW', dialCode: '+297', mask: '### ####', label: 'Aruba' },
   { code: 'AC', dialCode: '+247', mask: '#####', label: 'Ascension Island' },
@@ -87,6 +76,7 @@ export const defaultCountries: PhoneInputCountry[] = [
     label: 'Bosnia and Herzegovina'
   },
   { code: 'BW', dialCode: '+267', mask: ['### ####', '## ### ###'], label: 'Botswana' },
+  { code: 'BR', dialCode: '+55', mask: ['(##) ####-####', '(##) #####-####'], label: 'Brazil' },
   { code: 'IO', dialCode: '+246', mask: '### ####', label: 'British Indian Ocean Territory' },
   { code: 'VG', dialCode: '+1', mask: '(###) ###-####', label: 'British Virgin Islands' },
   { code: 'BN', dialCode: '+673', mask: '### ####', label: 'Brunei' },
@@ -106,6 +96,7 @@ export const defaultCountries: PhoneInputCountry[] = [
   { code: 'KY', dialCode: '+1', mask: '(###) ###-####', label: 'Cayman Islands' },
   { code: 'CF', dialCode: '+236', mask: '## ## ## ##', label: 'Central African Republic' },
   { code: 'TD', dialCode: '+235', mask: '## ## ## ##', label: 'Chad' },
+  { code: 'CL', dialCode: '+56', mask: '# #### ####', label: 'Chile' },
   { code: 'CN', dialCode: '+86', mask: ['## #### ####', '### #### ####'], label: 'China' },
   { code: 'CX', dialCode: '+61', mask: ['### ### ###', '#### ### ###'], label: 'Christmas Island' },
   {
@@ -114,6 +105,7 @@ export const defaultCountries: PhoneInputCountry[] = [
     mask: ['### ### ###', '#### ### ###'],
     label: 'Cocos (Keeling) Islands'
   },
+  { code: 'CO', dialCode: '+57', mask: '### ### ####', label: 'Colombia' },
   { code: 'KM', dialCode: '+269', mask: '### ## ##', label: 'Comoros' },
   { code: 'CG', dialCode: '+242', mask: '## ### ####', label: 'Congo' },
   {
@@ -166,11 +158,13 @@ export const defaultCountries: PhoneInputCountry[] = [
     mask: ['## ###', '### ###', '### ####', '### ## ###', '### ### ###', '### #######'],
     label: 'Finland'
   },
+  { code: 'FR', dialCode: '+33', mask: '# ## ## ## ##', label: 'France' },
   { code: 'GF', dialCode: '+594', mask: ['### ### ###', '#### ## ## ##'], label: 'French Guiana' },
   { code: 'PF', dialCode: '+689', mask: '## ## ## ##', label: 'French Polynesia' },
   { code: 'GA', dialCode: '+241', mask: ['### ####', '## ## ## ##'], label: 'Gabon' },
   { code: 'GM', dialCode: '+220', mask: ['### ####', '### ### ###'], label: 'Gambia' },
   { code: 'GE', dialCode: '+995', mask: '### ## ## ##', label: 'Georgia' },
+  { code: 'DE', dialCode: '+49', mask: ['### #######', '#### #######'], label: 'Germany' },
   { code: 'GH', dialCode: '+233', mask: ['### ### ###', '### ### ####'], label: 'Ghana' },
   { code: 'GI', dialCode: '+350', mask: '########', label: 'Gibraltar' },
   { code: 'GR', dialCode: '+30', mask: '### ### ####', label: 'Greece' },
@@ -222,6 +216,7 @@ export const defaultCountries: PhoneInputCountry[] = [
   { code: 'IE', dialCode: '+353', mask: ['# ### ####', '## ### ####'], label: 'Ireland' },
   { code: 'IM', dialCode: '+44', mask: ['### ### ####', '##### ######'], label: 'Isle of Man' },
   { code: 'IL', dialCode: '+972', mask: ['#-###-####', '##-###-####'], label: 'Israel' },
+  { code: 'IT', dialCode: '+39', mask: '### ### ####', label: 'Italy' },
   { code: 'JM', dialCode: '+1', mask: '(###) ###-####', label: 'Jamaica' },
   { code: 'JP', dialCode: '+81', mask: ['#-####-####', '##-####-####'], label: 'Japan' },
   { code: 'JE', dialCode: '+44', mask: ['### ### ####', '##### ######'], label: 'Jersey' },
@@ -302,6 +297,7 @@ export const defaultCountries: PhoneInputCountry[] = [
   { code: 'MR', dialCode: '+222', mask: '## ## ## ##', label: 'Mauritania' },
   { code: 'MU', dialCode: '+230', mask: ['### ####', '#### ####'], label: 'Mauritius' },
   { code: 'YT', dialCode: '+262', mask: ['### ### ###', '#### ## ## ##'], label: 'Mayotte' },
+  { code: 'MX', dialCode: '+52', mask: '## #### ####', label: 'Mexico' },
   { code: 'FM', dialCode: '+691', mask: '### ####', label: 'Micronesia' },
   { code: 'MD', dialCode: '+373', mask: ['### ## ###', '#### ## ###'], label: 'Moldova' },
   {
@@ -381,6 +377,7 @@ export const defaultCountries: PhoneInputCountry[] = [
     label: 'Philippines'
   },
   { code: 'PL', dialCode: '+48', mask: '### ### ###', label: 'Poland' },
+  { code: 'PT', dialCode: '+351', mask: '### ### ###', label: 'Portugal' },
   { code: 'PR', dialCode: '+1', mask: '(###) ###-####', label: 'Puerto Rico' },
   { code: 'QA', dialCode: '+974', mask: '#### ####', label: 'Qatar' },
   { code: 'RE', dialCode: '+262', mask: ['### ### ###', '#### ## ## ##'], label: 'Réunion' },
@@ -458,6 +455,7 @@ export const defaultCountries: PhoneInputCountry[] = [
   { code: 'ZA', dialCode: '+27', mask: '## ### ####', label: 'South Africa' },
   { code: 'KR', dialCode: '+82', mask: ['#-####-####', '##-####-####'], label: 'South Korea' },
   { code: 'SS', dialCode: '+211', mask: ['### ### ###', '#### ### ###'], label: 'South Sudan' },
+  { code: 'ES', dialCode: '+34', mask: '### ### ###', label: 'Spain' },
   { code: 'LK', dialCode: '+94', mask: ['### ### ###', '### ### ####'], label: 'Sri Lanka' },
   { code: 'SD', dialCode: '+249', mask: ['### ### ###', '### ### ####'], label: 'Sudan' },
   { code: 'SR', dialCode: '+597', mask: ['### ###', '###-####'], label: 'Suriname' },
@@ -509,6 +507,8 @@ export const defaultCountries: PhoneInputCountry[] = [
     mask: ['# ### ####', '## ### ####'],
     label: 'United Arab Emirates'
   },
+  { code: 'GB', dialCode: '+44', mask: '#### ######', label: 'United Kingdom' },
+  { code: 'US', dialCode: '+1', mask: '(###) ###-####', label: 'United States' },
   { code: 'UY', dialCode: '+598', mask: '#### ####', label: 'Uruguay' },
   { code: 'UZ', dialCode: '+998', mask: '## ### ## ##', label: 'Uzbekistan' },
   { code: 'VU', dialCode: '+678', mask: ['## ###', '### ####'], label: 'Vanuatu' },

@@ -258,6 +258,7 @@
           <template #header>
             <div class="-m-(--spacing-md) flex flex-col">
               <div
+                v-if="!drawer || pageTrail?.hasControl()"
                 class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
               >
                 <AppHeaderBrand
@@ -344,7 +345,7 @@
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container">
           <AppHeader :data-testid="`${testId}__header`">
-            <AppHeaderStart>
+            <AppHeaderStart class="grow">
               <ConsoleLayoutHeaderStart
                 :compact="compact"
                 :home="home"

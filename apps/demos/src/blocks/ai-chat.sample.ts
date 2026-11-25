@@ -1,7 +1,3 @@
-import type {
-  ConversationHistoryItem,
-  ConversationHistoryProject
-} from '@aziontech/webkit/conversation-history'
 import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
@@ -98,7 +94,7 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://github.com/aziontech/azion',
         description: 'Purge URLs, wildcards and cache keys from a terminal.',
         site: 'GitHub',
-        image: 'https://github.com/favicon.ico'
+        icon: 'az az-github'
       }
     ]
   })
@@ -172,14 +168,13 @@ const cacheKeySources: SourcesItem[] = [
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
     publisher: 'aziontech',
-    image: 'https://github.com/favicon.ico'
+    icon: 'az az-github'
   },
   {
     title: 'HTTP Caching (RFC 9111)',
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico',
     publisher: 'World Wide Web Consortium',
     publishedAt: '2022-06-01'
   },
@@ -203,8 +198,8 @@ export const sampleLongThread: AiChatMessage[] = history.flatMap(
 )
 
 export const sampleLongThreadFollowUps: SuggestionGroupItem[] = [
-  { id: 'apply', label: 'Apply the allowlist to storefront' },
-  { id: 'ratio', label: 'How much would the hit ratio improve?' }
+  { id: 'apply', label: 'Apply the allowlist to storefront', icon: 'az az-bolt' },
+  { id: 'ratio', label: 'How much would the hit ratio improve?', icon: 'az az-chart-line' }
 ]
 
 export const sampleSuggestions: SuggestionGroupItem[] = [
@@ -214,8 +209,7 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
     label: 'Why is storefront answering with 502 errors?',
     icon: 'az az-triangle-alert'
   },
-  { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' },
-  { id: 'waf', label: 'Protect my site with a WAF', icon: 'az az-shield' }
+  { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' }
 ]
 
 export const sampleArtifactVersions: string[] = [
@@ -237,8 +231,8 @@ export const sampleArtifactThread: (AiChatMessage & { version?: number })[] = [
 ]
 
 export const sampleArtifactFollowUps: SuggestionGroupItem[] = [
-  { id: 'email', label: 'Show the customer email too' },
-  { id: 'items', label: 'Count the items of each order' }
+  { id: 'email', label: 'Show the customer email too', icon: 'az az-mail' },
+  { id: 'items', label: 'Count the items of each order', icon: 'az az-list' }
 ]
 
 export const sampleReportCsv =
@@ -324,78 +318,256 @@ export const sampleAgentInterrupts: AiChatInterrupt[] = [
   }
 ]
 
+export interface AiChatProject {
+  id: string
+  code: string
+  title: string
+  kind: 'workload' | 'dns' | 'firewall' | 'function' | 'storage'
+  icon: string
+  pinned?: boolean
+  inCloud?: boolean
+}
+
+export interface AiChatProduct {
+  label: string
+  icon: string
+}
+
+export interface AiChatThreadChange {
+  ref: string
+  title: string
+}
+
+export interface AiChatThread {
+  id: string
+  title: string
+  projectId: string
+  updatedAt: string
+  age: string
+  environment: string
+  modelLabel: string
+  providerIcon: string
+  products: string[]
+  version?: string
+  draft?: boolean
+  snoozed?: boolean
+  settled?: boolean
+  changes?: AiChatThreadChange[]
+}
+
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
 
-export const sampleProjects: ConversationHistoryProject[] = [
-  { id: 'storefront', title: 'storefront' },
-  { id: 'docs-site', title: 'docs-site' },
-  { id: 'security-review', title: 'Security review' }
+export const sampleProducts: Record<string, AiChatProduct> = {
+  applications: { label: 'Applications', icon: 'az az-applications' },
+  firewall: { label: 'Firewall', icon: 'az az-firewall' },
+  functions: { label: 'Functions', icon: 'az az-functions' },
+  waf: { label: 'WAF', icon: 'az az-waf' },
+  'real-time-purge': { label: 'Real-Time Purge', icon: 'az az-real-time-purge' },
+  'sql-database': { label: 'SQL Database', icon: 'az az-sql-database' },
+  'edge-dns': { label: 'Edge DNS', icon: 'az az-edge-dns' },
+  'object-storage': { label: 'Object Storage', icon: 'az az-object-storage' },
+  'image-processor': { label: 'Image Processor', icon: 'az az-image-processor' }
+}
+
+export const sampleProjects: AiChatProject[] = [
+  {
+    id: 'workloads',
+    code: 'WL',
+    title: 'Workloads',
+    kind: 'workload',
+    icon: 'az az-workloads',
+    pinned: true
+  },
+  { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
+  { id: 'firewall', code: 'FW', title: 'Firewall', kind: 'firewall', icon: 'az az-firewall' },
+  {
+    id: 'functions',
+    code: 'FN',
+    title: 'Functions',
+    kind: 'function',
+    icon: 'az az-functions',
+    inCloud: true
+  },
+  {
+    id: 'storage',
+    code: 'OS',
+    title: 'Object Storage',
+    kind: 'storage',
+    icon: 'az az-object-storage',
+    inCloud: true
+  }
 ]
 
-export const sampleHistory: ConversationHistoryItem[] = [
+export const sampleThreads: AiChatThread[] = [
   {
     id: 'h1',
     title: 'Why does storefront return 502 errors?',
-    updatedAt: '2026-11-19T11:02:00Z',
-    projectId: 'storefront',
-    tag: 'Bug',
-    description: 'fix/checkout-timeout'
+    projectId: 'workloads',
+    updatedAt: '2026-11-19T11:48:00Z',
+    age: '12m',
+    environment: 'prod-us-east',
+    modelLabel: 'Claude Opus 4.5',
+    providerIcon: 'az az-claude',
+    products: ['applications', 'firewall', 'functions'],
+    draft: true,
+    changes: [
+      { ref: '#1170', title: 'feat(workload): renew origin TLS cert for api.example.com' },
+      { ref: '#1200', title: 'fix(cache): allowlist q and page query params on /search' },
+      { ref: '#1203', title: 'chore(edge): enable stale-while-revalidate fallback' }
+    ]
+  },
+  {
+    id: 'h7',
+    title:
+      'Checkout on acme-store times out for customers in the EU region after the latest deploy',
+    projectId: 'workloads',
+    updatedAt: '2026-11-19T11:05:00Z',
+    age: '55m',
+    environment: 'prod-eu-west',
+    modelLabel: 'Azion Auto',
+    providerIcon: 'az az-azion',
+    products: ['applications', 'functions']
   },
   {
     id: 'h2',
     title: 'Purge the cache after a deploy',
+    projectId: 'workloads',
     updatedAt: '2026-11-19T09:40:00Z',
-    pinned: true
+    age: '2h',
+    environment: 'prod-us-east',
+    modelLabel: 'Gemini 4 Neon',
+    providerIcon: 'az az-gemini',
+    products: ['real-time-purge'],
+    changes: [{ ref: '#1170', title: 'ci(purge): trigger Real-Time Purge on release tag' }]
   },
   {
     id: 'h3',
     title: 'A WAF rule for login attempts',
+    projectId: 'firewall',
     updatedAt: '2026-11-18T17:15:00Z',
-    projectId: 'security-review',
-    status: 'error'
+    age: '1d',
+    environment: 'edge-global',
+    modelLabel: 'Claude Sonnet 4',
+    providerIcon: 'az az-claude',
+    products: ['waf'],
+    version: 'v42',
+    changes: [{ ref: '#1142', title: 'sec(waf): rate-limit /auth/login to 20 req/min' }]
   },
   {
     id: 'h4',
     title: 'Top orders query for acme-store',
+    projectId: 'functions',
     updatedAt: '2026-11-16T10:20:00Z',
-    projectId: 'storefront',
-    description: 'acme-store',
-    status: 'success'
+    age: '3d',
+    environment: 'edge-sql-eu',
+    modelLabel: 'GPT-5.2',
+    providerIcon: 'az az-openai',
+    products: ['sql-database'],
+    version: 'v7'
   },
-  { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00Z' },
+  {
+    id: 'h5',
+    title: 'Move DNS records to Azion',
+    projectId: 'edge-dns',
+    updatedAt: '2026-11-04T14:05:00Z',
+    age: '2w',
+    environment: 'dns-anycast',
+    modelLabel: 'Gemini 4 Carbon',
+    providerIcon: 'az az-gemini',
+    products: ['edge-dns']
+  },
   {
     id: 'h6',
     title: 'Image optimization for docs-site',
+    projectId: 'storage',
     updatedAt: '2026-09-28T08:30:00Z',
-    projectId: 'docs-site'
-  },
-  { id: 'h7', title: 'Set up a custom domain', updatedAt: '2026-11-12T15:30:00Z' },
-  {
-    id: 'h8',
-    title: 'Migrate acme-store to the new runtime',
-    updatedAt: '2026-11-19T11:50:00Z',
-    status: 'running',
-    description: 'feat/runtime-upgrade'
-  },
-  {
-    id: 'h9',
-    title: 'Write the cache tests',
-    updatedAt: '2026-11-19T11:40:00Z',
-    status: 'running',
-    description: 'test/cache'
-  },
-  {
-    id: 'h10',
-    title: 'Draft the docs-site navigation',
-    updatedAt: '2026-11-02T09:30:00Z',
-    archived: true
+    age: '1mo',
+    environment: 'media-bucket',
+    modelLabel: 'Azion Auto',
+    providerIcon: 'az az-azion',
+    products: ['image-processor', 'object-storage'],
+    settled: true
   }
 ]
 
+export const sampleProviders: PromptInputMenuOption[] = [
+  { value: 'azion', label: 'Azion AI', icon: 'az az-azion' },
+  { value: 'google', label: 'Google', icon: 'az az-gemini' },
+  { value: 'anthropic', label: 'Anthropic', icon: 'az az-claude' },
+  { value: 'openai', label: 'OpenAI', icon: 'az az-openai' },
+  { value: 'meta', label: 'Meta', icon: 'az az-meta' }
+]
+
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
-  { value: 'fast', label: 'Fast', description: 'Answers right away' },
-  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+  {
+    value: 'gemini-4-neon',
+    label: 'Gemini 4 Neon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘1'
+  },
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Carbon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘2'
+  },
+  {
+    value: 'gemini-3-8-flash',
+    label: 'Gemini 3.8 Flash',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘3'
+  },
+  {
+    value: 'claude-opus-4-5',
+    label: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘4'
+  },
+  {
+    value: 'claude-sonnet-4',
+    label: 'Claude Sonnet 4',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘5'
+  },
+  { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
+  {
+    value: 'gpt-5-mini',
+    label: 'GPT-5 Mini',
+    provider: 'openai',
+    icon: 'az az-openai',
+    shortcut: '⌘7'
+  },
+  {
+    value: 'llama-4-maverick',
+    label: 'Llama 4 Maverick',
+    provider: 'meta',
+    icon: 'az az-meta',
+    shortcut: '⌘8'
+  },
+  {
+    value: 'auto',
+    label: 'Azion Auto',
+    provider: 'azion',
+    icon: 'az az-azion',
+    description: 'AI Gateway router'
+  }
+]
+
+export const sampleModes: PromptInputMenuOption[] = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' },
+  { value: 'extra', label: 'Extra' }
+]
+
+export const sampleContexts: PromptInputMenuOption[] = [
+  { value: 'acme-store', label: 'acme-store', description: 'Storefront and checkout' },
+  { value: 'docs-site', label: 'docs-site', description: 'Product documentation' }
 ]
 
 export const sampleTools: PromptInputMenuOption[] = [

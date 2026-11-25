@@ -32,6 +32,18 @@ afterEach(() => {
   document.documentElement.style.overflow = ''
   document.body.style.overflow = ''
 })
+describe('edit-resource#ResourceSettings list', () => {
+  it('types addresses in the code face and keeps the --LT syntax on one line', async () => {
+    render(ResourceSettings)
+    const list = await screen.findByRole('textbox', { name: 'List' })
+    expect(list.getAttribute('data-monospace')).not.toBeNull()
+    const syntax = Array.from(document.querySelectorAll('code')).find(
+      (code) => code.textContent === '--LT'
+    )
+    expect(syntax?.classList.contains('whitespace-nowrap')).toBe(true)
+  })
+})
+
 describe('edit-resource locked modules', () => {
   it.each([
     ['primary', EditResource],
@@ -124,12 +136,19 @@ describe('edit-resource#DangerZone', () => {
 })
 
 describe('edit-resource#Saving', () => {
-  it('locks every field while the save is in flight', async () => {
-    render(Saving)
+  it('holds every field read-only, not disabled, while the save is in flight', async () => {
+    const view = render(Saving)
     const name = (await screen.findByRole('textbox', { name: 'Name' })) as HTMLInputElement
-    expect(name.disabled).toBe(true)
-    for (const toggle of screen.getAllByRole('switch')) {
-      expect(toggle.matches(':disabled')).toBe(true)
+    expect(name.readOnly).toBe(true)
+    expect(name.disabled).toBe(false)
+    expect(view.container.querySelector('fieldset:disabled')).toBeNull()
+    const toggles = screen.getAllByRole('switch').filter((toggle) => !toggle.matches(':disabled'))
+    expect(toggles.length).toBeGreaterThan(0)
+    for (const toggle of toggles) {
+      expect(toggle.getAttribute('aria-readonly')).toBe('true')
+      const checked = toggle.getAttribute('aria-checked')
+      await fireEvent.click(toggle)
+      expect(toggle.getAttribute('aria-checked')).toBe(checked)
     }
     expect(screen.getByRole('button', { name: 'Discard' })).toBeDisabled()
     expect(screen.getByTestId('settings-save-bar__saving').textContent).toBe('Saving changes…')
@@ -316,6 +335,15 @@ describe('edit/edit-resource DataStream', () => {
     ])
     expect(within(editor).getAllByRole('button', { name: /Show/ })).toHaveLength(1)
     await expectNoA11yViolations(editor)
+  })
+
+  it('says a locked module is always on, so it never reads as switched off', () => {
+    const view = render(PolicySettings)
+    const ddos = view.getByRole('switch', { name: 'DDoS Protection' })
+    expect(ddos.getAttribute('aria-checked')).toBe('true')
+    expect(ddos.getAttribute('aria-readonly')).toBe('true')
+    expect(ddos.matches(':disabled')).toBe(false)
+    expect(view.getByText(/Always on for every policy\./)).toBeTruthy()
   })
 
   it('names the header cell that is missing before it saves', async () => {

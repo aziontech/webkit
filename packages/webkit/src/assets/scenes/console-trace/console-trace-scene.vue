@@ -121,7 +121,7 @@
         :key="pageKey"
         :data-animated="animated || null"
         :data-testid="`${testId}__page`"
-        class="flex min-h-0 flex-1 flex-col gap-(--spacing-sm) overflow-hidden p-(--spacing-md) [--page-enter-distance:var(--spacing-lg)] data-animated:animate-page-enter motion-reduce:animate-none"
+        class="flex min-h-0 flex-1 flex-col gap-(--spacing-sm) overflow-hidden p-(--spacing-md) [--page-enter-distance:var(--spacing-lg)] data-animated:animate-page-enter motion-reduce:animate-none max-md:mask-[linear-gradient(to_bottom,black_calc(100%-var(--spacing-2xl)),transparent)]"
       >
         <span
           :data-testid="`${testId}__title`"
@@ -133,7 +133,7 @@
           v-if="step.value === 'trace'"
           :spans="CONSOLE_TRACE_SPANS"
           :aria-label="step.title"
-          class="min-h-0"
+          class="min-h-0 max-md:[&>div:first-child]:hidden"
         />
 
         <LogViewer

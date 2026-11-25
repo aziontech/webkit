@@ -2,10 +2,9 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, ref, useId, watch } from 'vue'
+  import { computed, watch } from 'vue'
 
   import { sampleResourceName } from './delete-dialog.sample'
 
@@ -16,8 +15,6 @@
     loading?: boolean
     /** Why the delete was refused, shown in a danger alert in place of the warning; the dialog stays open. */
     error?: string
-    /** The text the confirmation input opens with. */
-    defaultConfirmation?: string
     /** Whether the dialog starts open when open is not bound. */
     defaultOpen?: boolean
   }
@@ -26,7 +23,6 @@
     name: '',
     loading: false,
     error: '',
-    defaultConfirmation: '',
     defaultOpen: false
   })
 
@@ -38,18 +34,8 @@
   if (props.defaultOpen) open.value = true
 
   const name = computed(() => props.name || sampleResourceName)
-  const confirmation = ref(props.defaultConfirmation)
   const deleting = computed(() => props.loading)
   const deleteError = computed(() => props.error)
-  const confirmLabelId = useId()
-
-  const canDelete = computed(
-    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name.value
-  )
-
-  watch(open, (isOpen) => {
-    if (isOpen) confirmation.value = ''
-  })
 
   watch(
     () => props.loading,
@@ -61,7 +47,7 @@
   )
 
   const confirm = (event: Event) => {
-    if (!canDelete.value || deleting.value) return
+    if (deleting.value) return
     emit('delete', event, name.value)
   }
 </script>
@@ -74,7 +60,7 @@
     confirm-label="Delete resource"
     cancel-label="Cancel"
     :loading="deleting"
-    :disabled="!canDelete"
+    :confirmation-phrase="name"
     @confirm="confirm"
   >
     <template #trigger>
@@ -100,36 +86,13 @@
       <p class="m-0 text-body-sm text-(--text-muted)">
         The selected resource will be deleted, along with all associated settings or instances.
         Check the
-        <a
+        <Link
           href="https://example.com/docs"
-          class="text-link"
-          >Help Center</a
+          inline
+          >Help Center</Link
         >
         for more details.
       </p>
-      <p
-        :id="confirmLabelId"
-        class="m-0 flex flex-wrap items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
-      >
-        <span>Type</span>
-        <span class="text-label-code-sm text-(--text-default)">{{ name }}</span>
-        <CopyButton
-          :value="name"
-          :aria-label="`Copy ${name}`"
-          copied-label="Copied"
-          size="small"
-        />
-        <span>to confirm.</span>
-      </p>
-      <Input
-        v-model="confirmation"
-        :aria-labelledby="confirmLabelId"
-        autocomplete="off"
-        class="w-full"
-        data-autofocus
-        :disabled="deleting"
-        @keydown.enter="confirm"
-      />
     </div>
   </ConfirmDialog>
 </template>

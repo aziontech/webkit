@@ -267,7 +267,7 @@
     <template v-else>
       <div
         :data-testid="`${testId}__header`"
-        class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-subtle) px-(--spacing-sm) py-(--spacing-xs)"
+        class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
       >
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
           <i
@@ -278,7 +278,7 @@
         </div>
         <span
           v-if="resource.uri"
-          class="max-w-56 shrink-0 truncate text-label-code-sm text-(--text-muted) max-sm:hidden"
+          class="max-w-56 shrink-0 truncate text-body-code-sm text-(--text-muted) max-sm:hidden"
           >{{ resource.uri }}</span
         >
       </div>

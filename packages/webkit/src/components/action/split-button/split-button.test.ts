@@ -61,6 +61,13 @@ describe('SplitButton', () => {
       expect(panel()).toBeNull()
     })
 
+    it('widens the menu segment to the 44px touch floor on a coarse pointer', () => {
+      const { getByTestId } = render(host({ size: 'small' }))
+      expect(getByTestId('split-button__toggle-button').className).toContain(
+        'pointer-coarse:min-w-11'
+      )
+    })
+
     it('falls back to the plain "More actions" toggle label when label is empty', () => {
       const { getByTestId } = render(host({ label: '' }))
       expect(getByTestId('split-button__toggle-button').getAttribute('aria-label')).toBe(
@@ -127,6 +134,29 @@ describe('SplitButton', () => {
       // The declared icon renders as a decorative element inside its row.
       const icon = rows[0].querySelector('i[aria-hidden="true"]')
       expect(icon).not.toBeNull()
+    })
+
+    it('lines the menu up with the start of the whole control, not the toggle', async () => {
+      const view = render(
+        defineComponent({
+          components: { SplitButton },
+          setup: () => ({ model }),
+          template: `<div style="padding-inline-start: 64px"><SplitButton label="Deploy" :items="model" /></div>`
+        })
+      )
+      await openMenu(view)
+
+      const anchor = view
+        .getByTestId('split-button__toggle')
+        .closest('[data-slot="dropdown-menu-anchor"]')
+      expect(anchor).not.toBeNull()
+      expect(panel()?.getAttribute('data-align')).toBe('start')
+      await waitFor(() => {
+        const left = panel()?.getBoundingClientRect().left ?? -1
+        expect(Math.abs(left - (anchor as HTMLElement).getBoundingClientRect().left)).toBeLessThan(
+          1
+        )
+      })
     })
 
     it('opens from the toggle on ArrowDown keydown', async () => {

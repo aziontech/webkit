@@ -44,6 +44,8 @@ export function restoreSettings(overrides: URLSearchParams | null = null) {
   if (locale && ['en', 'pt-BR', 'es'].includes(locale)) settings.locale = locale
   if (dir === 'ltr' || dir === 'rtl') settings.dir = dir
   applyTheme(settings.theme)
+  const root = globalThis.document?.documentElement
+  if (root) root.lang = settings.locale
 }
 
 export function persistSettings() {

@@ -24,6 +24,25 @@ describe('detail/detail-customer', () => {
     await expectNoA11yViolations(view.container as HTMLElement)
   })
 
+  it('stacks each ticket into a card on a phone, with its status under the subject', async () => {
+    const host = document.createElement('div')
+    host.style.width = '360px'
+    document.body.appendChild(host)
+    const view = render(DetailCustomer, { container: host })
+    const table = view.getByTestId('data-table')
+    await waitFor(() => expect(table.hasAttribute('data-stacked')).toBe(true))
+    const labels = view.getAllByTestId('data-table__stacked-label').map((el) => el.textContent)
+    expect(labels).toContain('Status')
+    host.remove()
+  })
+
+  it('keeps the three header actions in one row so a phone does not stack them', () => {
+    render(DetailCustomer)
+    const row = screen.getByRole('button', { name: 'Edit' }).parentElement as HTMLElement
+    expect(within(row).getByRole('button', { name: 'More actions' })).toBeTruthy()
+    expect(within(row).getByRole('button', { name: 'New ticket' })).toBeTruthy()
+  })
+
   it('emits the header actions with the DOM event first', async () => {
     const view = render(DetailCustomer)
     await fireEvent.click(screen.getByRole('button', { name: 'Edit' }))

@@ -109,7 +109,10 @@
   const mounted = ref(false)
   onMounted(() => (mounted.value = true))
 
-  const metaOf = (file: FileTokenGroupFile): string => {
+  const uploading = (item: FileTokenGroupItem): boolean => Boolean(item.loading && !item.error)
+
+  const metaOf = (item: FileTokenGroupItem): string => {
+    const file: FileTokenGroupFile = item.file
     const parts: string[] = []
     if (props.showFileSize && typeof file.size === 'number') parts.push(formatFileSize(file.size))
     if (props.showFileLastModified && typeof file.lastModified === 'number') {
@@ -120,6 +123,13 @@
             ...(mounted.value ? {} : { timeZone: 'UTC' })
           })
         })
+      )
+    }
+    if (uploading(item)) {
+      parts.push(
+        typeof item.progress === 'number'
+          ? t('fileTokenGroup.uploadProgress', { percent: Math.round(item.progress) })
+          : t('fileTokenGroup.uploadPending')
       )
     }
     return parts.join(' · ')
@@ -193,10 +203,10 @@
               ><bdi>{{ relativePathOf(item.file) }}</bdi></span
             >
             <span
-              v-if="metaOf(item.file)"
+              v-if="metaOf(item)"
               :data-testid="`${testId}__meta`"
               class="truncate text-body-xs text-(--text-muted)"
-              ><bdi>{{ metaOf(item.file) }}</bdi></span
+              ><bdi>{{ metaOf(item) }}</bdi></span
             >
           </div>
           <span
@@ -208,7 +218,11 @@
               icon="az az-x"
               variant="ghost"
               size="small"
-              :ariaLabel="t('fileTokenGroup.remove', { name: relativePathOf(item.file) })"
+              :ariaLabel="
+                t(uploading(item) ? 'fileTokenGroup.cancelUpload' : 'fileTokenGroup.remove', {
+                  name: relativePathOf(item.file)
+                })
+              "
               :aria-describedby="item.error || item.warning ? messageId(index) : undefined"
               :data-testid="`${testId}__remove`"
               @click="onDismiss($event, index)"
@@ -216,7 +230,7 @@
           </span>
         </div>
         <Progress
-          v-if="item.loading && !item.error"
+          v-if="uploading(item)"
           :value="item.progress ?? 0"
           :indeterminate="typeof item.progress !== 'number'"
           size="small"

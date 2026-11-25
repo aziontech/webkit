@@ -10,12 +10,13 @@
 
 <template>
   <div class="flex max-w-(--container-xs) flex-col gap-(--spacing-sm)">
-    <Combobox
-      v-model="region"
-      :options="options"
-      aria-label="Region (disabled)"
-      disabled
-    />
+    <Field disabled>
+      <Field.Label>Region</Field.Label>
+      <Combobox
+        v-model="region"
+        :options="options"
+      />
+    </Field>
     <Field invalid>
       <Field.Label>Region</Field.Label>
       <Combobox
@@ -25,11 +26,13 @@
       />
       <Field.Error>Choose a region.</Field.Error>
     </Field>
-    <Combobox
-      v-model="missing"
-      :options="[]"
-      aria-label="Region (loading)"
-      loading
-    />
+    <Field>
+      <Field.Label>Region</Field.Label>
+      <Combobox
+        v-model="missing"
+        :options="[]"
+        loading
+      />
+    </Field>
   </div>
 </template>

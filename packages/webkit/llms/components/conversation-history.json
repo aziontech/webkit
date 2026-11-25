@@ -248,10 +248,14 @@
    "name": "item-meta",
    "scope": "{ item: ConversationHistoryItem }",
    "notes": "Replaces the end of a chat row (age, lock, status)."
+  },
+  {
+   "name": "item-actions",
+   "scope": "{ item: ConversationHistoryItem }",
+   "notes": "Replaces the row actions (Pin, More, Delete) with the app's own controls, outside the row button; they show like the built-in actions. The row content keeps its place while they show; set `--conversation-history-item-actions-width` on the list to make the row end that wide while they show (default: the row's own end padding, so nothing moves)."
   }
  ],
  "styleSeam": false,
- "stability": "preview",
  "assets": [],
  "examples": [
   {

@@ -1,6 +1,20 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, useAttrs, useId, useSlots, watch } from 'vue'
+  import {
+    computed,
+    inject,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs,
+    useId,
+    useSlots,
+    watch
+  } from 'vue'
 
+  import {
+    isMac as platformIsMac,
+    shortcutLabel
+  } from '../../../../composables/use-menu-root/lib/shortcut-registry'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { safeHref } from '../../../../utils/safe-href'
@@ -27,8 +41,9 @@
     /** Plain-text label; falls back to the default slot when omitted. */
     label?: string
     /**
-     * Keyboard-shortcut hint rendered on the trailing side. A shared window listener
-     * matches the shortcut and emits `select` for this option. Mutually exclusive with
+     * Keyboard shortcut such as mod+P, drawn as a key hint on the trailing side; mod is
+     * Meta on macOS and Ctrl elsewhere. A shared window listener matches the shortcut and
+     * emits `select` for this option. Mutually exclusive with
      * the trailing slot.
      */
     command?: string
@@ -74,6 +89,11 @@
   )
 
   const hasCommand = computed(() => props.command.length > 0)
+  const isMac = ref(false)
+  onMounted(() => {
+    isMac.value = platformIsMac()
+  })
+  const commandLabel = computed(() => shortcutLabel(props.command, isMac.value))
   const linkHref = computed(() => safeHref(props.href))
   const isLink = computed(() => linkHref.value !== null && !props.disabled)
   const newTab = computed(() => isLink.value && props.target === '_blank')
@@ -242,9 +262,13 @@
       <span
         v-else-if="hasCommand"
         :data-testid="`${testId}__command`"
-        class="flex shrink-0 items-center text-label-sm text-(--text-muted)"
+        class="flex shrink-0 items-center text-label-sm text-(--text-muted) pointer-coarse:hidden"
       >
-        {{ command }}
+        <kbd
+          dir="ltr"
+          class="font-[inherit]"
+          >{{ commandLabel }}</kbd
+        >
       </span>
 
       <i

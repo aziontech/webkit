@@ -38,9 +38,24 @@ describe('dashboard/dashboard-executive-summary', () => {
       }
     })
     await waitFor(() => expect(view.container.textContent).toContain('Acme sign-ups'))
+    expect(
+      view.getByRole('progressbar', { name: 'Acme sign-ups' }).getAttribute('data-severity')
+    ).toBe('warning')
     expect(view.container.textContent).toContain('Sign-ups slowed in September.')
     expect(view.container.textContent).not.toContain('Enterprise deals closed')
     expect(view.container.textContent).not.toContain('Emma Wilson')
+  })
+
+  it('writes Cost per request in dollars, like Revenue', async () => {
+    const view = render(DashboardExecutiveSummary)
+    const tile = Array.from(view.container.querySelectorAll('[data-testid="stat-tile"]')).find(
+      (node) => node.textContent?.includes('Cost per request')
+    ) as HTMLElement
+    await waitFor(() =>
+      expect(tile.querySelector('[data-testid="stat-tile__value"]')?.textContent).toContain(
+        '$0.0022'
+      )
+    )
   })
 
   it('gives every sample note the initials of its author', () => {

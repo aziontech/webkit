@@ -154,6 +154,21 @@ describe('SiteHeaderSection', () => {
     ).toBe('#')
   })
 
+  it('opens the mega-menu on the default popover surface, which follows the page theme', async () => {
+    const { getByRole } = nav()
+
+    await userEvent.click(getByRole('button', { name: /Solutions/ }))
+
+    await waitFor(
+      () =>
+        expect(
+          document.body.querySelector('[data-variant="default"][data-state="open"]')
+        ).not.toBeNull(),
+      { timeout: OPEN_TIMEOUT }
+    )
+    expect(document.body.querySelector('[data-variant="contrast"]')).toBeNull()
+  })
+
   it('mirrors the column count of a panel on data-columns', async () => {
     const { getByRole } = nav()
 
@@ -271,6 +286,13 @@ describe('SiteHeaderSection', () => {
     const events = emitted<[Event]>('search')
     expect(events).toHaveLength(1)
     expect(events[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+  })
+
+  it('draws the login as an outline button, so sign-up is the one filled action in the bar', () => {
+    const { getByTestId } = nav()
+
+    const login = getByTestId(`${TESTID}__secondary-action`).querySelector('[data-testid="button"]')
+    expect(login).toHaveAttribute('data-variant', 'outline')
   })
 
   it('lets the login button step out of the phone bar unless secondaryActionOnPhones is set', async () => {

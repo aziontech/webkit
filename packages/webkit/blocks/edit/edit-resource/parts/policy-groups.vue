@@ -37,13 +37,13 @@
     modules: PolicyModuleField[]
     /** The name failed validation: the field is marked and the message shows. */
     nameInvalid?: boolean
-    /** Locks the name field while a save is in flight. */
-    disabled?: boolean
+    /** Holds every field read-only while a save is in flight. */
+    readonly?: boolean
   }
 
   const props = withDefaults(defineProps<PolicyGroupsProps>(), {
     nameInvalid: false,
-    disabled: false
+    readonly: false
   })
 
   const name = defineModel<string>('name', { required: true })
@@ -72,7 +72,7 @@
                 id="resource-name"
                 v-model="name"
                 size="large"
-                :disabled="disabled"
+                :readonly="readonly"
                 class="w-full"
                 aria-label="Name"
                 autocomplete="off"
@@ -110,7 +110,9 @@
             v-for="field in modules"
             :key="field.key"
             :title="field.title"
-            :description="field.description"
+            :description="
+              field.locked ? field.description + ' Always on for every policy.' : field.description
+            "
             variant="compact"
           >
             <Tooltip
@@ -121,7 +123,7 @@
                 <Switch
                   :model-value="true"
                   :aria-label="field.title"
-                  disabled
+                  readonly
                 />
               </span>
             </Tooltip>
@@ -130,6 +132,7 @@
               :model-value="selectedKeys.includes(field.key)"
               @update:model-value="(on) => setModule(field.key, on)"
               :aria-label="field.title"
+              :readonly="readonly"
             />
           </SettingsRow>
         </Item.List>
@@ -151,6 +154,7 @@
           >
             <Switch
               v-model="debugRules"
+              :readonly="readonly"
               aria-label="Debug rules"
             />
           </SettingsRow>
@@ -170,6 +174,7 @@
           >
             <Switch
               v-model="active"
+              :readonly="readonly"
               aria-label="Active"
             />
           </SettingsRow>

@@ -3,31 +3,31 @@
   import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
-  const small = ref('')
-  const medium = ref('')
-  const large = ref('')
+  const name = ref('')
+  const region = ref('')
+  const description = ref('')
 </script>
 
 <template>
   <div class="flex w-full max-w-(--container-xs) flex-col items-stretch gap-(--spacing-md)">
     <Field>
-      <Field.Label>Small (28px)</Field.Label>
+      <Field.Label>Name</Field.Label>
       <Input
-        v-model="small"
+        v-model="name"
         size="small"
       />
     </Field>
     <Field>
-      <Field.Label>Medium (32px)</Field.Label>
+      <Field.Label>Region</Field.Label>
       <Input
-        v-model="medium"
+        v-model="region"
         size="medium"
       />
     </Field>
     <Field>
-      <Field.Label>Large (40px)</Field.Label>
+      <Field.Label>Description</Field.Label>
       <Input
-        v-model="large"
+        v-model="description"
         size="large"
       />
     </Field>

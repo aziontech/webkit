@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import type { Severity } from '../../../utils/severity'
   import Button from '../../action/button/button.vue'
   import StatusIndicator, {
     type StatusIndicatorSeverity
@@ -48,6 +49,9 @@
     statusLink?: ContactHubSectionStatusLink
   }
 
+  /** Status colour of a channel's glyph: danger marks the emergency channel. */
+  export type ContactHubSectionChannelSeverity = Extract<Severity, 'danger'>
+
   /** One self-serve channel, rendered as a linked topic of the channel row. */
   export type ContactHubSectionChannel = {
     /** Icon class for the glyph that leads the channel's heading. */
@@ -60,6 +64,8 @@
     href: string
     /** Browsing context the link opens in, such as `_blank` for a new tab. */
     target?: string
+    /** Draws the channel's glyph in the danger mark so an emergency channel is found at a glance. Omitted, the glyph is the brand mark. */
+    severity?: ContactHubSectionChannelSeverity
   }
 
   export interface ContactHubSectionProps {
@@ -71,7 +77,7 @@
      * outlined button after it, and `statusLink` the system status link beside them.
      */
     lanes?: ContactHubSectionLane[]
-    /** The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. */
+    /** The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic. */
     channels?: ContactHubSectionChannel[]
   }
 
@@ -204,6 +210,8 @@
           :href="channel.href"
           :target="channel.target"
           :rel="relOf(channel.target)"
+          :data-severity="channel.severity"
+          class="data-[severity=danger]:[&_i]:text-(--danger-mark)"
         >
           {{ channel.description }}
           <span

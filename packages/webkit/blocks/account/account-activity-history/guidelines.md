@@ -15,9 +15,9 @@ The account's audit log. An admin or a security reviewer answers "who did this, 
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Button` (required)
+### A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 
-Title `Activity history` and one sentence that says what is logged and how long it is kept. The only action is the outlined Documentation button: the log is read-only.
+Title `Activity history` and one sentence that says what is logged and how long it is kept. The only action is the outlined Documentation button: the log is read-only. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render, so the relative periods and times read the same everywhere; with live data and no `now` they read the real clock.
 
 ### B. Filter — `PropertyFilter` (required)
 

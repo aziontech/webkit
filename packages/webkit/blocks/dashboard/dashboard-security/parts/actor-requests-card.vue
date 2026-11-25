@@ -56,7 +56,7 @@
 <template>
   <ChartCard :span="12">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
+      <span class="inline-flex min-w-0 flex-1 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Requests</ChartCard.Title>
         <Hint content="The latest requests, newest first, with the rule that decided each one." />
       </span>

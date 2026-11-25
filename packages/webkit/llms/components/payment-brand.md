@@ -45,6 +45,7 @@
 - `data-size`: `small` | `medium`.
 - `data-glyph`: `mark` when the brand has a drawn mark, `generic` otherwise.
 - The Mastercard mark is two equal circles at the same opacity whose overlap reads darker, the network's own one-colour form; one solid circle beside a faded one would read as a switch knob in its track.
+- The plate has a card's corner (`--radius-sm`, 2 px), not the control radius: at 20 × 32 px the 6 px control radius made a pill, and two discs inside a pill read as a toggle switch.
 
 ## Accessibility
 

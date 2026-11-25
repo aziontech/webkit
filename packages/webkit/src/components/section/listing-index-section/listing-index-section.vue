@@ -214,6 +214,10 @@
     sort.value = typeof value === 'string' ? value : ''
   }
 
+  const PHONE_LINK_CLASS =
+    "text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-[''] focus-visible:outline-none " +
+    'focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)'
+
   const clearFilters = () => {
     query.value = ''
     props.facets.forEach((facet) => {
@@ -332,7 +336,7 @@
                   <ItemTitle>
                     <a
                       :href="safeHref(row.href) ?? undefined"
-                      class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
+                      :class="PHONE_LINK_CLASS"
                     >
                       {{ row.values[nameKey] }}
                     </a>

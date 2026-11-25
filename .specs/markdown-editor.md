@@ -6,9 +6,9 @@ status: implemented
 stability: preview
 spec_version: 2
 template: 2
-checksum: 2576da4f4f720d46d5c223dccabdbcf11b84a292226d0468c8eb0a10018b5c83
+checksum: 051432db5cf82e7d9713a8ad3f1b8b6a546c0fb2fbc459af5af00616607e689c
 created: 2026-11-23
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # MarkdownEditor — Component Spec
@@ -96,7 +96,7 @@ Changes this build makes to code it reuses, each with no public API change and i
 | `placeholder` | `string`                  | `''`    | false    | Placeholder shown in the empty field.                                                                                                      |
 | `ariaLabel`   | `string`                  | `''`    | false    | Accessible name of the field when no Field label or aria-labelledby names it; empty uses the built-in Message label. Write it as the aria-label attribute. |
 | `disabled`    | `boolean`                 | `false` | false    | Disables the field, the toolbar, the tabs and the mention menu.                                                                            |
-| `readonly`    | `boolean`                 | `false` | false    | Shows the value without letting it change: the toolbar is disabled and the mention menu never opens; the Preview tab still works.        |
+| `readonly`    | `boolean`                 | `false` | false    | Shows the value without letting it change: opens on the Preview tab, hides the toolbar and never opens the mention menu; the Write tab still shows the source. |
 | `invalid`     | `boolean`                 | `false` | false    | Applies the invalid border to the field and the preview and sets aria-invalid on the field.                                                |
 | `required`    | `boolean`                 | `false` | false    | Marks the field as required and sets aria-required.                                                                                        |
 | `mentions`    | `MarkdownEditorMention[]` | `[]`    | false    | People the menu offers after `@`; each is `{ value, label, description?, icon? }` and inserts `@` plus its `value`. Empty turns the menu off. |
@@ -140,7 +140,7 @@ Attributes: the consumer `class` and `data-testid` go on the root; every other a
 - Write tab: the toolbar shows; each button inserts its Markdown at the selection. Preview tab: the toolbar hides and the Markdown renders in a box the shape of the field (`data-slot="preview"`); an empty value shows the muted text "Nothing to preview".
 - Mention menu: `data-mention-state="open|closed"` on the root. Open while the `@` token before the caret matches at least one person and the field is editable: the listbox renders above the field (or below it, when there is not enough room above and more below), the match count is spoken in the polite live region, and the field carries `aria-controls` (the listbox) and `aria-activedescendant` (the highlighted option). Closed: no listbox in the DOM, and the field carries neither attribute (`aria-autocomplete="list"` stays while `mentions` is not empty). No match, Escape, a pick, or the caret leaving the token closes it.
 - `disabled`: field, toolbar buttons and tab triggers disabled; the mention menu never opens.
-- `readonly`: toolbar buttons disabled (so the toolbar has no focus stop and Tab skips it), keyboard shortcuts do nothing, the mention menu never opens; the tabs work.
+- `readonly`: the editor opens on the Preview tab, so a reader sees the rendered note first; the toolbar is not rendered (nothing in it could act), keyboard shortcuts do nothing, the mention menu never opens; the Write tab still shows the source for copying.
 - Preview loading: the renderer is a lazy chunk (see Performance). Until it arrives the preview box keeps its `minRows` height, carries `aria-busy="true"` and `data-loading`, and shows the muted text "Loading preview" (`markdownEditor.previewLoading`). If the chunk fails to load, the box shows the Markdown source as plain text (`whitespace-pre-wrap`), so the writer still reads what they wrote; there is no retry button.
 - Empty: an empty value shows the muted "Nothing to preview" (`markdownEditor.emptyTitle`). A send error belongs to the host's `Field` error, not to the editor.
 - Every insertion (toolbar buttons, Ctrl/⌘+B, I, K, a picked mention, and `insert()`) keeps the browser's undo history: text goes in through `document.execCommand('insertText')`; where that returns false the component falls back to `setRangeText` plus an `input` event, which is not undoable.

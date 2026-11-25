@@ -247,10 +247,10 @@ export const ptBR: Messages = {
     addGroup: 'Adicionar grupo OU',
     emptyTitle: 'Nenhum item ainda.',
     remaining: {
-      one: 'Você pode adicionar mais {count} item.',
-      other: 'Você pode adicionar mais {count} itens.'
+      one: 'Você pode adicionar mais {count}.',
+      other: 'Você pode adicionar mais {count}.'
     },
-    limitReached: 'Você atingiu o limite de {limit} itens.',
+    limitReached: 'Você atingiu o limite de {limit}.',
     added: 'Item {index} adicionado.',
     removed: 'Item {index} removido.',
     group: 'Grupo {index}',
@@ -437,7 +437,8 @@ export const ptBR: Messages = {
   confirmDialog: {
     confirm: 'Confirmar',
     cancel: 'Cancelar',
-    typeToConfirm: 'Digite {phrase} para confirmar.'
+    typeToConfirm: 'Digite {phrase} para confirmar.',
+    phraseMismatch: 'O texto não corresponde a {phrase}. Digite exatamente para confirmar.'
   },
   consoleLayout: {
     navigation: 'Navegação principal',
@@ -741,7 +742,8 @@ export const ptBR: Messages = {
     downloadTitle: 'Baixar {title}',
     loading: 'Carregando áudio',
     error: 'Não foi possível reproduzir o áudio.',
-    transcript: 'Transcrição'
+    transcript: 'Transcrição',
+    retry: 'Tentar novamente'
   },
   filePreview: {
     download: 'Baixar',
@@ -765,12 +767,16 @@ export const ptBR: Messages = {
     ready: 'Imagens prontas',
     error: 'Não foi possível carregar as imagens',
     broken: 'Não foi possível carregar esta imagem',
-    empty: 'Nenhuma imagem'
+    empty: 'Nenhuma imagem',
+    retry: 'Tentar novamente'
   },
   fileTokenGroup: {
     label: 'Arquivos',
     remove: 'Remover {name}',
     uploading: 'Enviando {name}',
+    cancelUpload: 'Cancelar o envio de {name}',
+    uploadProgress: '{percent}%',
+    uploadPending: 'Enviando…',
     modified: 'Modificado em {date}',
     showMore: {
       one: 'Mostrar mais {count} arquivo',
@@ -1018,7 +1024,7 @@ export const ptBR: Messages = {
   },
   passwordRequirements: {
     title: 'Deve conter:',
-    length: '8 a 128 caracteres',
+    length: '12 a 128 caracteres',
     uppercase: 'Letra maiúscula',
     special: 'Caractere especial',
     number: 'Número',
@@ -1420,6 +1426,7 @@ export const ptBR: Messages = {
     details: 'Detalhes',
     connections: 'Conexões',
     connection: '{from} para {to}',
+    route: 'Para {to}',
     emptyTitle: 'Nada conectado ainda.',
     loading: 'Carregando o diagrama'
   },
@@ -1486,7 +1493,8 @@ export const ptBR: Messages = {
     exitFullscreen: 'Sair da tela cheia',
     pending: 'Aguardando para gerar',
     running: 'Gerando vídeo',
-    error: 'Não foi possível carregar o vídeo'
+    error: 'Não foi possível carregar o vídeo',
+    retry: 'Tentar novamente'
   },
   wizard: {
     stepOf: 'Etapa {step} de {total}',

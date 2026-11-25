@@ -114,7 +114,8 @@
             @update:model-value="codeCheck.clearError"
             @complete="verify"
           />
-          <Field.Description>{{ codeError || codeField.description }}</Field.Description>
+          <Field.Description>{{ codeField.description }}</Field.Description>
+          <Field.Error v-if="codeError">{{ codeError }}</Field.Error>
         </Field>
 
         <Button

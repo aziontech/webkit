@@ -152,12 +152,17 @@
                 :copy-aria-label="copyAriaLabel"
               />
             </div>
-            <component
-              :is="sceneComponent"
+            <div
               v-else-if="sceneComponent"
-              v-bind="{ ...scene?.props, tab: tabs[index]?.value, active }"
-              class="size-full"
-            />
+              :data-testid="`${testId}__scene`"
+              class="size-full min-w-0 p-(--spacing-xl)"
+            >
+              <component
+                :is="sceneComponent"
+                v-bind="{ ...scene?.props, tab: tabs[index]?.value, active }"
+                class="size-full"
+              />
+            </div>
             <Illustration
               v-else-if="tabs[index]?.illustration"
               :name="tabs[index]?.illustration ?? ''"

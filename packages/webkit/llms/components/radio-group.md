@@ -50,6 +50,7 @@
 | `options` | `TOption[]` | `[]` | false | Options rendered as `RadioGroup.Item` rows, in place of composed items (`TOption extends RadioGroupOption`: `{ value, label, description?, icon?, ariaLabel?, disabled? }`, exported); extra fields reach the `option` and `tag` slots. Empty renders the default slot. |
 | `disabled` | `boolean` | `false` | false | Disables every option and applies the disabled tokens. |
 | `required` | `boolean` | `false` | false | Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit. |
+| `readonly` | `boolean` | `false` | false | Shows the selection but blocks changing it: the radios stay focusable and keep their selected look. |
 | `invalid` | `boolean` | `false` | false | Marks the group invalid: sets `aria-invalid` on the group and on every radio. |
 | `modelValue` | `TOption['value'] \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
@@ -90,16 +91,17 @@ packages/webkit/src/components/input/radio-group/
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `checked`, `disabled`, `invalid`
-- Root: `role="radiogroup"`; `data-orientation` (`vertical` | `horizontal`); `data-variant` (`default` | `card`); `data-disabled`, `data-required` and `data-invalid` mirror the group state (the `Field` state included).
+- Visual states: `default`, `hover`, `focus-visible`, `checked`, `disabled`, `readonly`, `invalid`
+- Root: `role="radiogroup"`; `data-orientation` (`vertical` | `horizontal`); `data-variant` (`default` | `card`); `data-disabled`, `data-readonly`, `data-required` and `data-invalid` mirror the group state (the `Field` state included); `aria-readonly` mirrors `readonly`.
 - Item: `data-variant` mirrors the group's; `data-checked` while selected, `data-disabled` while the item or the group is disabled, `data-invalid` while the group is invalid. A card shows `var(--border-selected)` and `var(--primary-selected)` while checked, `var(--bg-hover)` on hover and the focus ring on the card itself.
 - The circle: `var(--border-input)` ring on `var(--bg-surface)`, `var(--primary)` when checked with a `var(--primary-foreground)` dot, `var(--danger-border)` when invalid, disabled tokens at 50 % opacity.
-- Not states of this component: `loading`, `empty`, `error` (the `Field.Error` carries the message) and `readonly` (a fixed choice is plain text, not a disabled group).
+- Not states of this component: `loading`, `empty`, `error` (the `Field.Error` carries the message).
+- Read-only (`readonly`) is a state of the group: every item carries `data-readonly`, keeps its checked tokens, drops the hover feedback and shows `cursor-default`; a click or an arrow key on a radio is cancelled (the click's default is prevented, so the native radio never changes) and `update:modelValue` never fires. Use it while a form saves or where a choice is locked; a choice that never changes is plain text.
 
 ## Accessibility
 
 - Visible focus: `ring-2 ring-(--ring-color) ring-offset-1` on the focused circle, or on the whole card with `variant="card"`.
-- Keyboard map (APG radio group, native radios sharing one `name`): `Tab` enters the group on the checked radio, or the first one when none is checked, and the next `Tab` leaves it; `ArrowDown` / `ArrowRight` select the next enabled option and `ArrowUp` / `ArrowLeft` the previous one, wrapping at the ends and skipping disabled options; `Space` selects the focused option.
+- Keyboard map (APG radio group, native radios sharing one `name`): `Tab` enters the group on the checked radio, or the first one when none is checked, and the next `Tab` leaves it; `ArrowDown` / `ArrowRight` select the next enabled option and `ArrowUp` / `ArrowLeft` the previous one, wrapping at the ends and skipping disabled options; `Space` selects the focused option. When `readonly`, `Tab` still enters the group and the arrow keys and `Space` change nothing.
 - ARIA: root `role="radiogroup"` with `aria-labelledby` (the `Field.Title` ids) or the consumer's `aria-label`, `aria-describedby` (the `Field.Description` / `Field.Error` ids), `aria-required` and `aria-invalid`; each option is a native `type="radio"` input named by its wrapping `label`. No `aria-checked` on the native radios: the checked state is native.
 - Contrast ≥4.5:1 for the label text, ≥3:1 for the circle, including the disabled state.
 - Touch target: the whole label is clickable, and the native input extends to 44 × 44 px on a coarse pointer.
@@ -130,27 +132,37 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import { ref } from 'vue'
+  import { ref, useId } from 'vue'
+
+  const labelId = useId()
 
   const cycle = ref('monthly')
 </script>
 
 <template>
-  <RadioGroup
-    v-model="cycle"
-    name="billing-cycle"
-    aria-label="Billing cycle"
-  >
-    <RadioGroup.Item value="monthly">Monthly</RadioGroup.Item>
-    <RadioGroup.Item value="yearly">Yearly, two months free</RadioGroup.Item>
-    <RadioGroup.Item
-      value="contract"
-      disabled
+  <Field.Set>
+    <Field.Legend
+      :id="labelId"
+      type="label"
+      >Billing cycle</Field.Legend
     >
-      Annual contract
-    </RadioGroup.Item>
-  </RadioGroup>
+    <RadioGroup
+      :aria-labelledby="labelId"
+      v-model="cycle"
+      name="billing-cycle"
+    >
+      <RadioGroup.Item value="monthly">Monthly</RadioGroup.Item>
+      <RadioGroup.Item value="yearly">Yearly, two months free</RadioGroup.Item>
+      <RadioGroup.Item
+        value="contract"
+        disabled
+      >
+        Annual contract
+      </RadioGroup.Item>
+    </RadioGroup>
+  </Field.Set>
 </template>
 ```
 
@@ -158,23 +170,33 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import { ref } from 'vue'
+  import { ref, useId } from 'vue'
+
+  const labelId = useId()
 
   const protocol = ref('https')
 </script>
 
 <template>
-  <RadioGroup
-    v-model="protocol"
-    name="protocol"
-    orientation="horizontal"
-    aria-label="Protocol"
-  >
-    <RadioGroup.Item value="http">HTTP</RadioGroup.Item>
-    <RadioGroup.Item value="https">HTTPS</RadioGroup.Item>
-    <RadioGroup.Item value="both">Both</RadioGroup.Item>
-  </RadioGroup>
+  <Field.Set>
+    <Field.Legend
+      :id="labelId"
+      type="label"
+      >Protocol</Field.Legend
+    >
+    <RadioGroup
+      :aria-labelledby="labelId"
+      v-model="protocol"
+      name="protocol"
+      orientation="horizontal"
+    >
+      <RadioGroup.Item value="http">HTTP</RadioGroup.Item>
+      <RadioGroup.Item value="https">HTTPS</RadioGroup.Item>
+      <RadioGroup.Item value="both">Both</RadioGroup.Item>
+    </RadioGroup>
+  </Field.Set>
 </template>
 ```
 
@@ -182,22 +204,32 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import { ref } from 'vue'
+  import { ref, useId } from 'vue'
+
+  const labelId = useId()
 
   const plan = ref('pro')
 </script>
 
 <template>
-  <RadioGroup
-    v-model="plan"
-    name="plan"
-    disabled
-    aria-label="Plan"
-  >
-    <RadioGroup.Item value="free">Free</RadioGroup.Item>
-    <RadioGroup.Item value="pro">Pro</RadioGroup.Item>
-    <RadioGroup.Item value="enterprise">Enterprise</RadioGroup.Item>
-  </RadioGroup>
+  <Field.Set>
+    <Field.Legend
+      :id="labelId"
+      type="label"
+      >Plan</Field.Legend
+    >
+    <RadioGroup
+      :aria-labelledby="labelId"
+      v-model="plan"
+      name="plan"
+      disabled
+    >
+      <RadioGroup.Item value="free">Free</RadioGroup.Item>
+      <RadioGroup.Item value="pro">Pro</RadioGroup.Item>
+      <RadioGroup.Item value="enterprise">Enterprise</RadioGroup.Item>
+    </RadioGroup>
+  </Field.Set>
 </template>
 ```

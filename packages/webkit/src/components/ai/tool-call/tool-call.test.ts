@@ -45,6 +45,11 @@ describe('ToolCall', () => {
     expect(getByTestId('tool-call__status')).not.toHaveAttribute('aria-busy')
   })
 
+  it('keeps a wrapped status at the end edge, beside its call', () => {
+    const { getByRole } = render(ToolCall, { props: { name: 'create_cache_rule' } })
+    expect(getByRole('status').classList.contains('ms-auto')).toBe(true)
+  })
+
   it('shows the name as code and the title as text', () => {
     const { getByText } = render(ToolCall, {
       props: { name: 'list_workloads', title: 'Listing your workloads' }

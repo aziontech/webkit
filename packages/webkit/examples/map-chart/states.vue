@@ -1,5 +1,6 @@
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import MapChart from '@aziontech/webkit/map-chart'
   import { ref } from 'vue'
 
@@ -28,12 +29,28 @@
       aria-label="Requests by country, failed"
     >
       <template #error>
-        <Alert
-          severity="danger"
-          label="Could not load requests by country."
-          action-label="Retry"
-          @action="failed = false"
-        />
+        <div
+          role="alert"
+          class="w-full"
+        >
+          <EmptyState
+            title="Could not load requests by country"
+            description="The analytics service did not answer. Check your connection and try again."
+            icon="az az-triangle-alert"
+            size="small"
+            bordered
+          >
+            <template #actions>
+              <Button
+                label="Try again"
+                variant="secondary"
+                size="small"
+                icon="az az-refresh"
+                @click="failed = false"
+              />
+            </template>
+          </EmptyState>
+        </div>
       </template>
     </MapChart>
     <MapChart

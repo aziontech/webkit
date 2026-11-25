@@ -39,7 +39,9 @@
           class="shrink-0"
         />
       </span>
-      <Item.Description>Building…</Item.Description>
+      <Item.Description
+        >Building… Project and environment unlock when the build finishes.</Item.Description
+      >
     </Item.Content>
     <Item.Actions>
       <span

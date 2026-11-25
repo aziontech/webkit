@@ -23,7 +23,7 @@ A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) wi
 
 ### B. Key card — `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator` (required)
 
-A `Subheader` at `size="small"` (an `h2`) over a flush `Card :padded="false"` whose `Item.List` holds three `SettingsRow`s; their controls stack under the copy below the row's `md` container. Provider is a large full-width `Select` of the integrations or services the app supports. API key is a large full-width `PasswordInput` in the code face (`monospace`) with its reveal toggle and `autocomplete="off"`; it has no placeholder until a key is saved, then `Paste a new key to replace ••••3f9a` (the saved tail), so the empty field reads as kept, not missing; it starts empty, is never filled from the saved key, and clears once the saved key's masked tail changes (the app confirmed the save). Its row description is the storage note, tied to the field with `aria-describedby`; the field's own `dir="auto"` keeps a pasted key in order in right-to-left. Submitting an empty field emits nothing: the field turns `invalid`, a `FieldError` under it says `Enter an API key.` (tied through `aria-describedby`) and focus moves to the field; typing clears the error. Status is a row whose `StatusIndicator`, starting on the controls' column, says what is in place for the picked provider (No key saved, Saved, Testing, Connected, Connection failed) next to the masked tail in the code face (in a `bdi` with `dir="ltr"`, so its dots and characters keep their order in right-to-left), inside a `role="status"` region so a test result is announced.
+A `Subheader` at `size="small"` (an `h2`) over a flush `Card :padded="false"` whose `Item.List` holds three `SettingsRow`s; their controls stack under the copy below the row's `md` container. Provider is a large full-width `Select` of the integrations or services the app supports. API key is a large full-width `PasswordInput` in the code face (`monospace`) with its reveal toggle and `autocomplete="off"`; it has no placeholder until a key is saved, then `Replace ••••3f9a` (the saved tail first, so it shows on a phone too), so the empty field reads as kept, not missing; it starts empty, is never filled from the saved key, and clears once the saved key's masked tail changes (the app confirmed the save). Its row description is the storage note, tied to the field with `aria-describedby`; the field's own `dir="auto"` keeps a pasted key in order in right-to-left. Submitting an empty field emits nothing: the field turns `invalid`, a `FieldError` under it says `Enter an API key.` (tied through `aria-describedby`) and focus moves to the field; typing clears the error. Status is a row whose `StatusIndicator`, starting on the controls' column, says what is in place for the picked provider (No key saved, Saved, Testing, Connected, Connection failed) next to the masked tail in the code face (in a `bdi` with `dir="ltr"`, so its dots and characters keep their order in right-to-left), inside a `role="status"` region so a test result is announced.
 
 ### C. Actions — `Button` (required)
 
@@ -52,9 +52,10 @@ The block takes the providers, the saved keys' masked tails and the request stat
 | `error`       | `string`                   | Why the test (with `status="error"`) or else the save failed, shown in the danger `Alert`.                                                     |
 | `storageNote` | `string`                   | Where the key is kept, under the API key field. Match it to the app's actual storage (server-side encrypted store or browser-only storage).    |
 
-| Model              | Type     | What it does                                                        |
-| ------------------ | -------- | ------------------------------------------------------------------- |
-| `v-model:provider` | `string` | The picked provider id; empty picks the first provider in the list. |
+| Model              | Type     | What it does                                                                                                          |
+| ------------------ | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `v-model:provider` | `string` | The picked provider id; empty picks the first provider in the list.                                                   |
+| `v-model:apiKey`   | `string` | The key the reader is typing; starts empty, never the saved key, and clears once the saved key's masked tail changes. |
 
 | Event    | Payload                      | When                                                                     |
 | -------- | ---------------------------- | ------------------------------------------------------------------------ |
@@ -187,11 +188,11 @@ For browser-only AI bring-your-own-key (BYOK) with TanStack AI, wire the same ev
 
 - Saved: the default props; GitHub has a saved key, not tested: Saved with its masked tail, Test connection, Remove key and Replace key.
 - Empty: `savedKeys` is `[]`; the status reads No key saved and only Save key shows.
-- Saving: `loading`; every control but Replace key locks and Replace key spins. The variant opens on an empty field (the block never seeds the key).
+- Saving: `loading` with a typed replacement key (`v-model:apiKey`), the only way a save starts; every control but Replace key locks and Replace key spins.
 - Testing: `status="running"`; Testing with a spinner, Remove key and the Provider lock, Replace key stays available.
 - Success: `status="success"`; the status reads Connected.
 - Error: `status="error"` with `error`; the status reads Connection failed and the danger `Alert` gives the provider's message with Test again.
-- SaveError: `error` with `status="pending"`; the `Alert` says `The key wasn't saved.` with no action; Replace key retries.
+- SaveError: `error` with `status="pending"` and the typed key still in the field (`v-model:apiKey`); the `Alert` says `The key wasn't saved.` with no action; Replace key retries.
 
 ## Related
 

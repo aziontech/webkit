@@ -70,13 +70,17 @@
   })
 
   const select = () => {
-    if (inactive.value) return
+    if (inactive.value || ctx.readonly.value) return
     ctx.select(props.value)
+  }
+
+  const onControlClick = (event: globalThis.MouseEvent) => {
+    if (ctx.readonly.value) event.preventDefault()
   }
 
   const ROOT_CLASS =
     'group/radio-item relative inline-flex w-fit max-w-full cursor-pointer items-start gap-(--spacing-xs) text-label-sm text-(--text-default) ' +
-    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[readonly]:cursor-default ' +
     'data-[variant=card]:flex data-[variant=card]:w-full data-[variant=card]:min-w-0 data-[variant=card]:rounded-(--shape-button) data-[variant=card]:border ' +
     'data-[variant=card]:border-(--border-muted) data-[variant=card]:bg-(--bg-surface) data-[variant=card]:p-(--spacing-sm) data-[variant=card]:transition-colors ' +
     'data-[variant=card]:duration-fast-02 data-[variant=card]:ease-productive-entrance ' +
@@ -85,7 +89,7 @@
     'data-[variant=card]:has-[:focus-visible]:ring-(--ring-color) data-[variant=card]:has-[:focus-visible]:ring-offset-1 ' +
     'data-[variant=card]:has-[:focus-visible]:ring-offset-(--bg-canvas) data-[variant=card]:data-[invalid]:not-data-[checked]:border-(--danger-border) ' +
     'data-[variant=card]:data-[checked]:border-(--border-selected) data-[variant=card]:data-[checked]:bg-(--primary-selected) data-[variant=card]:data-[disabled]:opacity-50 ' +
-    'data-[variant=card]:data-[disabled]:hover:bg-(--bg-surface) ' +
+    'data-[variant=card]:data-[disabled]:hover:bg-(--bg-surface) data-[variant=card]:data-[readonly]:hover:bg-(--bg-surface) ' +
     'group-data-[orientation=horizontal]/radio-group:data-[variant=card]:flex-1 group-data-[orientation=horizontal]/radio-group:data-[variant=card]:basis-48'
 
   const INDICATOR_CLASS =
@@ -99,7 +103,12 @@
     'data-[invalid]:not-data-[checked]:border-(--danger-border) ' +
     'data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:after:hidden ' +
     'data-[disabled]:pointer-events-none data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 data-[disabled]:before:hidden ' +
-    'data-[disabled]:after:hidden'
+    'data-[disabled]:after:hidden data-[readonly]:before:hidden data-[readonly]:after:hidden ' +
+    'data-[readonly]:[&:not([data-checked])]:hover:border-(--border-input)'
+
+  const CONTROL_CLASS =
+    'absolute inset-[min(0rem,calc(50%-12px))] cursor-pointer opacity-0 pointer-coarse:inset-[min(0rem,calc(50%-22px))] ' +
+    'disabled:cursor-not-allowed group-data-[readonly]/radio-item:cursor-default'
 </script>
 
 <template>
@@ -109,6 +118,7 @@
     :data-variant="ctx.variant.value"
     :data-checked="checked || null"
     :data-disabled="inactive || null"
+    :data-readonly="ctx.readonly.value || null"
     :data-invalid="isInvalid || null"
     :class="ROOT_CLASS"
   >
@@ -125,13 +135,15 @@
       :aria-labelledby="labelledBy"
       :aria-describedby="descriptionId"
       :data-testid="`${testId}__control`"
-      class="absolute inset-0 size-full cursor-pointer appearance-none rounded-[inherit] opacity-0 disabled:cursor-not-allowed"
+      class="absolute inset-0 size-full cursor-pointer appearance-none rounded-[inherit] opacity-0 disabled:cursor-not-allowed group-data-[readonly]/radio-item:cursor-default"
+      @click="onControlClick"
       @change="select"
     />
     <span
       v-else
       :data-checked="checked || null"
       :data-disabled="inactive || null"
+      :data-readonly="ctx.readonly.value || null"
       :data-invalid="isInvalid || null"
       :class="INDICATOR_CLASS"
     >
@@ -147,7 +159,8 @@
         :aria-labelledby="labelledBy"
         :aria-describedby="descriptionId"
         :data-testid="`${testId}__control`"
-        class="absolute inset-[min(0rem,calc(50%-12px))] cursor-pointer opacity-0 pointer-coarse:inset-[min(0rem,calc(50%-22px))] disabled:cursor-not-allowed"
+        :class="CONTROL_CLASS"
+        @click="onControlClick"
         @change="select"
       />
       <span

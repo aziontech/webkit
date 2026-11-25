@@ -24,7 +24,7 @@
       <DropdownMenuItem
         value="command"
         label="With command hint"
-        command="⌘P"
+        command="mod+P"
       />
       <DropdownMenuItem value="leading">
         <template #leading>

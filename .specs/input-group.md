@@ -7,9 +7,9 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 0f00db278da780b07b2eff0bfa6f59bfc72ffc0157f229799581557a5dd00443
+checksum: b51182c6e12665f85c8481da24893acfd6cee4d6db7fa99e533dd3b19df24a90
 created: 2026-07-01
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # InputGroup — Component Spec
@@ -173,7 +173,7 @@ Root props:
 ## States
 
 - Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`
-- `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`)
+- `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`); every direct child is capped at the root height (`max-h-full`), so a child left at a larger size cannot stick out of the frame
 - Only one focus indicator is visible when a descendant is focused: the group draws the single `focus-within` ring on its root, and the inner input primitives' own focus rings are suppressed via `[&_*]:focus-visible:!ring-0 [&_*]:focus-within:!ring-0` so `Button`, `Select.Trigger`, `Input` wrappers, and raw `<input>` share the group's ring instead of stacking their own on top
 - `data-invalid` mirrors the `invalid` prop; `aria-invalid` lands on the controls inside, not on the root
 - `data-required` mirrors the `required` prop (no `aria-required` on the group root)

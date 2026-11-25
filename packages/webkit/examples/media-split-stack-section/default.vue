@@ -27,7 +27,7 @@
     {
       scene: { component: 'ConsoleMockup', props: { name: 'ai-inference-model' } },
       illustration: 'ai-applications',
-      eyebrow: 'AI Inference',
+      eyebrow: 'AI inference',
       title: 'AI applications',
       description:
         'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
@@ -38,6 +38,7 @@
     },
     {
       illustration: 'automate-threat-mitigation',
+      eyebrow: 'Security',
       title: 'Protected applications and APIs',
       description:
         'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',
@@ -48,6 +49,7 @@
     },
     {
       illustration: 'content-and-media-delivery',
+      eyebrow: 'Media',
       title: 'Media and streaming content',
       description:
         'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',

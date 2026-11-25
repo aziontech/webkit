@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render, screen } from '@testing-library/vue'
+import { render, screen, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { commands, userEvent as keys } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
@@ -699,8 +699,12 @@ describe('PromptInput', () => {
       expect(trigger).toHaveTextContent('Low')
       expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
       await userEvent.click(trigger)
-      await userEvent.click(await screen.findByRole('menuitemradio', { name: /Terra 6\.1/ }))
-      await userEvent.click(screen.getByRole('menuitemradio', { name: 'High' }))
+      await userEvent.click(await screen.findByRole('button', { name: /Terra 6\.1/ }))
+      await userEvent.click(screen.getByRole('button', { name: 'High' }))
+      expect(screen.getByRole('button', { name: 'Terra 6.1' })).toHaveAttribute(
+        'aria-pressed',
+        'true'
+      )
       expect(scope.model!.value).toBe('terra')
       expect(scope.mode!.value).toBe('high')
       await keys.keyboard('{Escape}')
@@ -733,9 +737,11 @@ describe('PromptInput', () => {
       const trigger = await findByTestId('prompt-input-model-picker')
       expect(trigger.querySelector('.az-gemini')).toBeTruthy()
       await userEvent.click(trigger)
-      await userEvent.click(await screen.findByRole('tab', { name: 'Anthropic' }))
-      expect(screen.queryByRole('menuitemradio', { name: /Gemini 4 Neon/ })).toBeNull()
-      await userEvent.click(screen.getByRole('menuitemradio', { name: /Claude Sonnet 4/ }))
+      await userEvent.click(await screen.findByRole('button', { name: 'Anthropic' }))
+      const panel = within(screen.getByTestId('prompt-input-model-picker__panel'))
+      expect(panel.queryByRole('button', { name: /Gemini 4 Neon/ })).toBeNull()
+      expect(panel.getByText('⌘2').classList.contains('pointer-coarse:hidden')).toBe(true)
+      await userEvent.click(panel.getByRole('button', { name: /Claude Sonnet 4/ }))
       expect(scope.model!.value).toBe('claude-4')
       await nextTick()
       expect(trigger.querySelector('.az-claude')).toBeTruthy()

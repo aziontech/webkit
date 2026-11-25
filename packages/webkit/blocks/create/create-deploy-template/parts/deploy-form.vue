@@ -4,14 +4,10 @@
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
-  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
-  import InputGroupInput from '@aziontech/webkit/input-group-input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Kbd from '@aziontech/webkit/kbd'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
@@ -180,26 +176,34 @@
                 required
                 :invalid="Boolean(repoNameError)"
               >
-                <Field.Label for="repoName">
-                  {{ isPublic ? 'Public repository name' : 'Private repository name' }}
-                </Field.Label>
-                <InputGroupRoot size="large">
-                  <InputGroupInput
-                    id="repoName"
-                    v-model="repoName"
-                    placeholder="my-repository"
-                  />
-                  <InputGroupAddon>
-                    <Tooltip content="Repository visibility">
-                      <Switch
-                        v-model="isPublic"
-                        variant="privacy"
-                        aria-label="Public repository"
-                      />
-                    </Tooltip>
-                  </InputGroupAddon>
-                </InputGroupRoot>
+                <Field.Label for="repoName">Repository name</Field.Label>
+                <Input
+                  id="repoName"
+                  v-model="repoName"
+                  size="large"
+                  placeholder="my-repository"
+                />
                 <Field.Error v-if="repoNameError">{{ repoNameError }}</Field.Error>
+              </Field>
+
+              <Field
+                orientation="horizontal"
+                class="sm:col-span-2"
+              >
+                <Switch
+                  v-model="isPublic"
+                  variant="privacy"
+                />
+                <Field.Content>
+                  <Field.Label>Public repository</Field.Label>
+                  <Field.Description>
+                    {{
+                      isPublic
+                        ? 'Anyone can see the code. Turn it off to keep the repository private.'
+                        : 'Only people you give access can see the code.'
+                    }}
+                  </Field.Description>
+                </Field.Content>
               </Field>
             </div>
 

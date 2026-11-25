@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, h, useAttrs } from 'vue'
 
   import Item from '../../content/item/item.vue'
   import ItemActions from '../../content/item/item-actions.vue'
   import ItemContent from '../../content/item/item-content.vue'
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemTitle from '../../content/item/item-title.vue'
-  import Hint from '../../input/hint/hint.vue'
 
   /** Where the control sits: `field` in a right cell capped at the 3xs container, `compact` hard right at its natural width, `stacked` under the copy at the full measure. */
   export type SettingsRowVariant = 'field' | 'compact' | 'stacked'
@@ -53,13 +52,20 @@
     description(): unknown
   }>()
 
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../input/hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
+  })
+
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'settings-row')
 
   const TEXT_CLASS =
     'flex flex-col ' +
-    '[&>[data-slot=item-description]]:line-clamp-none ' +
+    '[&>[data-slot=item-description]]:line-clamp-none [&>[data-slot=item-description]]:text-pretty ' +
     'data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) ' +
     'data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)'
 

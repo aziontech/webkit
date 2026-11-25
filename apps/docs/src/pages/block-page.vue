@@ -22,6 +22,7 @@
   import { messages } from '../lib/i18n'
   import { groupLabel } from '../lib/nav'
   import type { GuidelinesDoc, Highlighted } from '../lib/types'
+  import { sentenceTitle } from '../lib/words'
   import NotFound from './not-found-page.vue'
 
   const route = useRoute()
@@ -118,7 +119,7 @@
 
   const toc = computed(() => {
     const items = [{ id: 'preview', text: t.value.preview, depth: 2 }]
-    items.push({ id: 'usage', text: t.value.whenToUse, depth: 2 })
+    items.push({ id: 'usage', text: t.value.usage, depth: 2 })
     items.push({ id: 'code', text: t.value.code, depth: 2 })
     if (uses.value.length || anatomy.value)
       items.push({ id: 'anatomy', text: t.value.anatomy, depth: 2 })
@@ -169,7 +170,7 @@
     class="flex w-full gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-lg) lg:px-(--spacing-xl)"
   >
     <article
-      class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) xl:max-w-[calc(100%-var(--container-3xs)-var(--spacing-xl))]"
+      class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) 2xl:max-w-[calc(100%-var(--container-3xs)-var(--spacing-xl))]"
     >
       <DocPageHeader
         :title="block.title"
@@ -241,7 +242,7 @@
                 v-for="entry in block.states"
                 :key="entry.slug"
                 :value="entry.slug"
-                >{{ entry.name }}</Select.Item
+                >{{ sentenceTitle(entry.name) }}</Select.Item
               >
             </Select.Content>
           </Select>
@@ -252,7 +253,9 @@
         >
           <ToggleGroup
             v-model="stateSlug"
-            :options="block.states.map((entry) => ({ label: entry.name, value: entry.slug }))"
+            :options="
+              block.states.map((entry) => ({ label: sentenceTitle(entry.name), value: entry.slug }))
+            "
             :aria-label="t.states"
             size="small"
           />
@@ -266,7 +269,7 @@
         <BlockFrame
           v-if="state"
           :src="`/frame/block/${block.id}/${state.slug}/`"
-          :title="`${block.title}: ${state.name}`"
+          :title="`${block.title}: ${sentenceTitle(state.name)}`"
         />
       </section>
 
@@ -274,11 +277,15 @@
         id="usage"
         class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
+        <h2 class="text-heading-md">{{ t.usage }}</h2>
         <DocProse v-if="guidelines?.intro">
           <RawHtml :html="guidelines.intro" />
         </DocProse>
         <DoDont
           type="usage"
+          :level="3"
+          do-id="usage-do"
+          dont-id="usage-dont"
           :do-html="useWhen"
           :dont-html="avoidWhen"
         />
@@ -286,7 +293,7 @@
           v-if="related"
           class="flex flex-col gap-(--spacing-xs)"
         >
-          <h2 class="text-heading-xs">{{ t.related }}</h2>
+          <h3 class="text-heading-xs">{{ t.related }}</h3>
           <DocProse>
             <RawHtml :html="related" />
           </DocProse>
@@ -352,9 +359,13 @@
       <section
         v-if="doList || dontList"
         id="do-dont"
-        class="scroll-mt-20"
+        class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
+        <h2 class="text-heading-md">{{ t.do }} / {{ t.dont }}</h2>
         <DoDont
+          :level="3"
+          do-id="do-dont-do"
+          dont-id="do-dont-dont"
           :do-html="doList"
           :dont-html="dontList"
         />

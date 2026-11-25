@@ -18,7 +18,7 @@
     'data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] ' +
     'data-[live-boundary]:shadow-[inset_0_2px_0_var(--success)] ' +
     'outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
-  const STACKED_ROW_CLASS = 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)'
+  const STACKED_ROW_CLASS = 'flex-wrap py-(--spacing-2xs) before:hidden'
   const STACKED_CELL_CLASS = 'static! before:hidden! after:hidden!'
   const STRIPE_CLASS = '[--table-row-bg:var(--bg-surface-raised)]'
 
@@ -85,7 +85,6 @@
 
 <template>
   <Transition
-    appear
     :enter-active-class="bodyTransition.active"
     :enter-from-class="bodyTransition.from"
     :enter-to-class="bodyTransition.to"
@@ -95,7 +94,6 @@
     <TableBody
       v-if="!props.loading && !props.error && rowTotal > 0"
       key="rows"
-      :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
       :style="virtualPadding"
     >
       <TableRow
@@ -191,10 +189,11 @@
           :key="cell.id"
           :style="viewOf(cell.column.id).style"
           :grow="viewOf(cell.column.id).grow"
+          :principal="viewOf(cell.column.id).principal"
           :align="viewOf(cell.column.id).align"
           :frozen="viewOf(cell.column.id).frozen"
           :type="viewOf(cell.column.id).type"
-          :class="viewOf(cell.column.id).stackedClass"
+          :class="viewOf(cell.column.id).cellClass"
         >
           <span
             v-if="viewOf(cell.column.id).stackedField"
@@ -235,6 +234,7 @@
           />
           <span
             v-else
+            dir="auto"
             class="min-w-0 flex-1 truncate"
             >{{ cell.getValue() }}</span
           >

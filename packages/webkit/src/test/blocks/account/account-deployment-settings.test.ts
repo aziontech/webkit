@@ -29,6 +29,15 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   Array.from(root.querySelectorAll('button')).find((button) => visibleText(button) === text) as
     HTMLButtonElement | undefined
 describe('account/account-deployment-settings', () => {
+  it('isolates every service count, so right-to-left keeps the number before the word', () => {
+    const view = render(BuildDeployment)
+    const counts = [...view.container.querySelectorAll<HTMLElement>('span')].filter(
+      (span) => span.children.length === 0 && /^\d+ services?$/.test(span.textContent?.trim() ?? '')
+    )
+    expect(counts.length).toBeGreaterThan(0)
+    for (const count of counts) expect(count.getAttribute('dir')).toBe('auto')
+  })
+
   it('keeps the info alert to what the page description does not say', () => {
     const view = render(BuildDeployment)
     const text = view.container.textContent ?? ''

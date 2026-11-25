@@ -102,7 +102,7 @@
           v-model="pasteText"
           :label="`Paste one ${copy.noun} per line`"
           :rows="7"
-          code-font
+          monospace
           :apply-label="`Add ${found}`"
           apply-testid="network-list-paste-apply"
           :apply-disabled="!pasteReport.lines.length"
@@ -157,17 +157,16 @@
           :aria-label="`${copy.column} entries`"
         >
           <template #cell-value="{ value, update, invalid }">
-            <div class="contents font-code">
-              <Input
-                :model-value="value"
-                size="large"
-                :placeholder="copy.placeholder"
-                autocomplete="off"
-                :spellcheck="false"
-                :invalid="invalid"
-                @update:model-value="update"
-              />
-            </div>
+            <Input
+              :model-value="value"
+              size="large"
+              :placeholder="copy.placeholder"
+              autocomplete="off"
+              :spellcheck="false"
+              monospace
+              :invalid="invalid"
+              @update:model-value="update"
+            />
           </template>
         </AttributeEditor>
       </template>

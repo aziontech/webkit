@@ -167,7 +167,11 @@ describe('FeatureTabsSection', () => {
 
     const widgets = await wide.findAllByTestId('console-mockup')
     await vi.waitFor(() => expect(wide.getAllByTestId('console-mockup')).toHaveLength(2))
-    widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'functions-start'))
+    widgets.forEach((widget) => {
+      expect(widget).toHaveAttribute('data-name', 'functions-start')
+      expect(widget.closest(`[data-testid="${TESTID}__scene"]`)).not.toBeNull()
+    })
+    expect(wide.getAllByTestId(`${TESTID}__scene`)[0]!.className).toContain('p-(--spacing-xl)')
     wide.unmount()
 
     await page.viewport(390, 844)

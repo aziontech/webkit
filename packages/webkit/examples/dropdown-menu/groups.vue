@@ -19,7 +19,7 @@
       <DropdownMenuItem
         value="profile"
         label="Profile"
-        command="⌘P"
+        command="mod+P"
       />
       <DropdownMenuItem
         value="settings"

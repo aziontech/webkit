@@ -145,6 +145,7 @@
   --color-alpha-orange-800: #FE601FCC;
   --color-alpha-orange-900: #FE601FE5;
   --color-alpha-white-50: #FFFFFF0D;
+  --color-alpha-white-75: #FFFFFF14;
   --color-alpha-white-100: #FFFFFF1A;
   --color-alpha-white-200: #FFFFFF33;
   --color-alpha-white-300: #FFFFFF4D;
@@ -541,13 +542,16 @@
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
   --text-big-number-lg-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
+  --text-big-number-unit-line-height: 1;
+  --text-big-number-unit-font-weight: 400;
+  --text-big-number-unit-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-amount-lg-text-wrap-style: balance;
   --text-amount-lg-font-size: 1.875rem;
   --text-amount-lg-line-height: 1.25;
   --text-amount-lg-font-weight: 400;
   --text-amount-lg-letter-spacing: -0.08em;
   --text-amount-md-text-wrap-style: balance;
-  --text-amount-md-font-size: 1rem;
+  --text-amount-md-font-size: 1.25rem;
   --text-amount-md-line-height: 1.25;
   --text-amount-md-font-weight: 400;
   --text-amount-md-letter-spacing: -0.08em;
@@ -560,11 +564,13 @@
   --text-heading-3xl-line-height: 1.25;
   --text-heading-3xl-font-weight: 400;
   --text-heading-3xl-letter-spacing: -0.035em;
+  --text-heading-3xl-word-spacing: 0.06em;
   --text-heading-2xl-text-wrap-style: balance;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1;
   --text-heading-2xl-font-weight: 400;
   --text-heading-2xl-letter-spacing: -0.035em;
+  --text-heading-2xl-word-spacing: 0.06em;
   --text-heading-xl-text-wrap-style: balance;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
@@ -633,6 +639,12 @@
   --text-body-code-sm-line-height: 1.625;
   --text-body-code-sm-font-weight: 400;
   --text-body-code-sm-letter-spacing: 0.025rem;
+  --text-body-code-lg-text-wrap-style: pretty;
+  --text-body-code-lg-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-body-code-lg-font-size: 1rem;
+  --text-body-code-lg-line-height: 1.5;
+  --text-body-code-lg-font-weight: 400;
+  --text-body-code-lg-letter-spacing: 0.025rem;
   --text-label-code-md-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --text-label-code-md-font-size: 0.875rem;
   --text-label-code-md-line-height: 1;
@@ -643,6 +655,12 @@
   --text-label-code-lg-line-height: 1;
   --text-label-code-lg-font-weight: 400;
   --text-label-code-lg-letter-spacing: 0.025rem;
+  --text-heading-code-md-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-heading-code-md-font-size: 1.5rem;
+  --text-heading-code-md-line-height: 1.375;
+  --text-heading-code-md-font-weight: 400;
+  --text-heading-code-md-letter-spacing: 0;
+  --text-heading-code-md-font-variant-numeric: tabular-nums;
   --text-body-lg-text-wrap-style: pretty;
   --text-body-lg-font-size: 1rem;
   --text-body-lg-font-weight: 400;
@@ -714,7 +732,6 @@
     --text-big-number-sm-font-size: 1.25rem;
     --text-big-number-lg-font-size: 2.25rem;
     --text-amount-lg-font-size: 3rem;
-    --text-amount-md-font-size: 1.25rem;
     --text-heading-3xl-font-size: 3rem;
     --text-heading-2xl-font-size: 2.25rem;
     --text-heading-xl-font-size: 1.875rem;
@@ -731,8 +748,10 @@
     --text-amount-md-font-size: 1.5rem;
     --text-heading-3xl-font-size: 3.5rem;
     --text-heading-3xl-letter-spacing: -0.046em;
+    --text-heading-3xl-word-spacing: 0;
     --text-heading-2xl-font-size: 3rem;
     --text-heading-2xl-letter-spacing: -0.053em;
+    --text-heading-2xl-word-spacing: 0;
     --text-heading-xl-font-size: 2.25rem;
     --text-heading-lg-font-size: 1.875rem;
     --text-heading-md-font-size: 1.5rem;
@@ -900,7 +919,7 @@
   --bg-surface-overlay: #4D4D4D;
   --bg-placeholder: #FFFFFF1A;
   --bg-placeholder-highlight: #FFFFFF1A;
-  --bg-hover: #FFFFFF1A;
+  --bg-hover: #FFFFFF14;
   --bg-active: #FFFFFF0D;
   --bg-backdrop: #000000CC;
   --bg-selected: #2B2B2B;
@@ -1037,7 +1056,7 @@
     --bg-surface-overlay: #4D4D4D;
     --bg-placeholder: #FFFFFF1A;
     --bg-placeholder-highlight: #FFFFFF1A;
-    --bg-hover: #FFFFFF1A;
+    --bg-hover: #FFFFFF14;
     --bg-active: #FFFFFF0D;
     --bg-backdrop: #000000CC;
     --bg-selected: #2B2B2B;
@@ -1302,6 +1321,12 @@
   font-family: var(--text-big-number-lg-font-family);
 }
 
+@utility text-big-number-unit {
+  line-height: var(--text-big-number-unit-line-height);
+  font-weight: var(--text-big-number-unit-font-weight);
+  font-family: var(--text-big-number-unit-font-family);
+}
+
 @utility text-amount-lg {
   text-wrap-style: var(--text-amount-lg-text-wrap-style);
   font-size: var(--text-amount-lg-font-size);
@@ -1331,6 +1356,7 @@
   line-height: var(--text-heading-3xl-line-height);
   font-weight: var(--text-heading-3xl-font-weight);
   letter-spacing: var(--text-heading-3xl-letter-spacing);
+  word-spacing: var(--text-heading-3xl-word-spacing);
 }
 
 @utility text-heading-2xl {
@@ -1339,6 +1365,7 @@
   line-height: var(--text-heading-2xl-line-height);
   font-weight: var(--text-heading-2xl-font-weight);
   letter-spacing: var(--text-heading-2xl-letter-spacing);
+  word-spacing: var(--text-heading-2xl-word-spacing);
 }
 
 @utility text-heading-xl {
@@ -1451,6 +1478,15 @@
   letter-spacing: var(--text-body-code-sm-letter-spacing);
 }
 
+@utility text-body-code-lg {
+  text-wrap-style: var(--text-body-code-lg-text-wrap-style);
+  font-family: var(--text-body-code-lg-font-family);
+  font-size: var(--text-body-code-lg-font-size);
+  line-height: var(--text-body-code-lg-line-height);
+  font-weight: var(--text-body-code-lg-font-weight);
+  letter-spacing: var(--text-body-code-lg-letter-spacing);
+}
+
 @utility text-label-code-md {
   font-family: var(--text-label-code-md-font-family);
   font-size: var(--text-label-code-md-font-size);
@@ -1465,6 +1501,15 @@
   line-height: var(--text-label-code-lg-line-height);
   font-weight: var(--text-label-code-lg-font-weight);
   letter-spacing: var(--text-label-code-lg-letter-spacing);
+}
+
+@utility text-heading-code-md {
+  font-family: var(--text-heading-code-md-font-family);
+  font-size: var(--text-heading-code-md-font-size);
+  line-height: var(--text-heading-code-md-line-height);
+  font-weight: var(--text-heading-code-md-font-weight);
+  letter-spacing: var(--text-heading-code-md-letter-spacing);
+  font-variant-numeric: var(--text-heading-code-md-font-variant-numeric);
 }
 
 @utility text-body-lg {
@@ -1784,6 +1829,11 @@
 
   :where(:lang(ar), :lang(fa), :lang(ur)) {
     line-height: 1.75;
+  }
+
+  ::selection {
+    background-color: var(--primary-mask);
+    color: var(--text-default);
   }
 
   button:not(:disabled),

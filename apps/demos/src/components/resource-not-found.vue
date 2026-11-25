@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import PageHeader from '@aziontech/webkit/page-header'
   import { useRouter } from 'vue-router'
 
   defineOptions({ name: 'ResourceNotFound' })
@@ -18,11 +19,12 @@
 <template>
   <div class="layout-boundary">
     <div class="layout-column flex flex-col">
+      <PageHeader title="Resource not found" />
       <section class="layout-section-start pb-(--layout-section-gap)">
         <EmptyState
           bordered
           icon="az az-search"
-          :title="id ? `Resource ${id} not found` : 'Resource not found'"
+          :title="id ? `No resource matches ${id}` : 'No resource matches this link'"
           description="No resource with this ID exists in the account. It may have been deleted, or the link may be out of date."
         >
           <template #actions>

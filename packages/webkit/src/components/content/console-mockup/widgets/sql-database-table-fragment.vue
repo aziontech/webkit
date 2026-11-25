@@ -131,7 +131,8 @@
                     <Input
                       :model-value="column.name"
                       size="large"
-                      class="w-full min-w-0 font-code"
+                      monospace
+                      class="w-full min-w-0"
                       aria-label="Column name"
                       placeholder="column_name"
                     />
@@ -144,7 +145,7 @@
                       <Select.Trigger aria-label="Column type">
                         <template #leading>
                           <span
-                            class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
+                            class="shrink-0 text-label-code-sm text-(--text-muted)"
                             aria-hidden="true"
                           >
                             {{ column.glyph }}
@@ -155,7 +156,8 @@
                     <Input
                       :model-value="column.defaultValue"
                       size="large"
-                      class="w-full min-w-0 font-code"
+                      monospace
+                      class="w-full min-w-0"
                       aria-label="Default value"
                       placeholder="NULL"
                     />
@@ -202,7 +204,8 @@
                         <Input
                           :model-value="frame.name"
                           size="large"
-                          class="w-full min-w-0 font-code"
+                          monospace
+                          class="w-full min-w-0"
                           aria-label="Column name"
                           placeholder="column_name"
                         />
@@ -216,7 +219,7 @@
                         <Select.Trigger aria-label="Column type">
                           <template #leading>
                             <span
-                              class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
+                              class="shrink-0 text-label-code-sm text-(--text-muted)"
                               aria-hidden="true"
                             >
                               T
@@ -227,7 +230,8 @@
                       <Input
                         model-value=""
                         size="large"
-                        class="w-full min-w-0 font-code"
+                        monospace
+                        class="w-full min-w-0"
                         aria-label="Default value"
                         placeholder="NULL"
                       />

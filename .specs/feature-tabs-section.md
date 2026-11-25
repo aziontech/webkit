@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: a809b4227c88df2301497a76a4c8eb92f33146c9217a0e7257295511abc2fb7b
+checksum: bb11b93a57287153827b270fd9f9f7a0a14929ed40508b6482097479b4405cc5
 ---
 
 # FeatureTabsSection — Component Spec
@@ -54,13 +54,13 @@ The feature walkthrough band of a product page: a horizontal section title, with
         title: 'Trace',
         description: 'The run as a waterfall.',
         illustration: 'live-debugging',
-        illustrationLabel: 'A trace waterfall'
+        illustrationLabel: 'A time window of requests, errors and events, with its trace bar'
       },
       {
         title: 'Logs',
         description: 'Structured output on the same clock.',
-        illustration: 'traffic-and-cost-bar-chart',
-        illustrationLabel: 'Structured logs'
+        illustration: 'real-time-metrics-error-rate',
+        illustrationLabel: 'An error-rate spike with the real-time events behind it'
       }
     ]"
     :primary-action="{ label: 'Open an invocation', href: '/docs', trailing: true }"
@@ -97,7 +97,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
 - The frame draws no rule of its own under the tabs: the tab cells close the band with their own bottom rules, so the frame adds its bottom rule only when the under-frame link follows them
 - The header renders only when `title` is set; the action renders only when `primaryAction` is set — as a secondary `button` in the header, or as a `link` under the frame when there is no header
-- Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing.
+- Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing. The band scene sits inset in the pane (`--spacing-xl`, as the code file does), so the scene's own frame never runs into the pane's rules.
 
 ## Motion & Animations
 

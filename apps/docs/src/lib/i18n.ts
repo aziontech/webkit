@@ -46,6 +46,7 @@ export const en = {
   newTab: '(opens in a new tab)',
   footer: 'Footer',
   footerWebkit: 'WebKit',
+  guides: 'Guides',
   footerAzion: 'Azion',
   footerGithub: 'GitHub',
   footerNpm: 'npm',
@@ -86,6 +87,10 @@ export const en = {
   previewLink: 'How preview and GA work',
   guidelines: 'Guidelines',
   viewport: 'Viewport',
+  viewportMobile: 'Mobile',
+  viewportTablet: 'Tablet',
+  viewportDesktop: 'Desktop',
+  viewportFull: 'Full',
   openInNewTab: 'Open in a new tab',
   usedComponents: 'Built from',
   anatomy: 'Building blocks',
@@ -276,7 +281,7 @@ const LOADERS: Record<string, () => Promise<Messages>> = {
 
 const catalogs = shallowReactive<Record<string, Messages>>({ en })
 
-async function loadMessages(locale: string): Promise<void> {
+export async function loadMessages(locale: string): Promise<void> {
   const load = LOADERS[locale]
   if (!load || catalogs[locale]) return
   catalogs[locale] = await load()

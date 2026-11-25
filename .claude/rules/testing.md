@@ -35,6 +35,8 @@ What that decides:
 
 Do not add theme CSS to `setup.ts`: every suite would compile the full stylesheet, which slows the whole run for the handful that read it.
 
+The styled stylesheet holds every class Tailwind finds: the `@source` folders, its automatic detection of the package and every module the suite imports. `reflow.css` excludes `test/` so a fixture string never becomes a rule, and a JSON or fixture a styled suite imports never spells a class (`perf-budgets.json` once compiled its own note into a rule that slowed the table it measures).
+
 ## The stack (already wired — do not reinvent)
 
 - `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. `tailwindcss()` compiles only the stylesheet a suite imports (see the two modes above). Example imports of `@aziontech/webkit/*` resolve through the package's own `exports` (no alias needed).

@@ -1,5 +1,6 @@
 <script setup>
   import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
   const today = new Date(2026, 10, 10)
@@ -9,10 +10,13 @@
 </script>
 
 <template>
-  <DatePickerRoot
-    v-model="date"
-    :min="min"
-    :max="max"
-    clearable
-  />
+  <Field>
+    <Field.Label>Report date</Field.Label>
+    <DatePickerRoot
+      v-model="date"
+      :min="min"
+      :max="max"
+      clearable
+    />
+  </Field>
 </template>

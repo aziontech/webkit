@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, h, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import Hint from '../../hint/hint.vue'
   import { FieldInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -26,6 +25,13 @@
     default(): unknown
   }>()
 
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
+  })
+
   const field = inject(FieldInjectionKey, null)
   const attrs = useAttrs()
   const { t } = useTranslate({ field: en.field })
@@ -44,7 +50,7 @@
     'has-[>[data-slot=field]]:hover:bg-(--bg-hover) has-[>[data-slot=field]]:has-[:focus-visible]:outline-none has-[>[data-slot=field]]:has-[:focus-visible]:ring-2 ' +
     'has-[>[data-slot=field]]:has-[:focus-visible]:ring-(--ring-color) has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-1 ' +
     'has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-(--bg-canvas) has-[>[data-slot=field]]:has-[[data-checked]]:border-(--border-selected) ' +
-    'has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--bg-selected) has-[>[data-slot=field][data-disabled]]:cursor-not-allowed has-[>[data-slot=field][data-disabled]]:opacity-50 ' +
+    'has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--primary-selected) has-[>[data-slot=field][data-disabled]]:cursor-not-allowed has-[>[data-slot=field][data-disabled]]:opacity-50 ' +
     'has-[>[data-slot=field][data-disabled]]:hover:bg-(--bg-surface)'
 </script>
 

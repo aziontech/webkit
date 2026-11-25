@@ -73,7 +73,8 @@
               id="device-group-name"
               model-value="mobiledevices"
               size="large"
-              class="w-full font-code"
+              monospace
+              class="w-full"
               placeholder="mobiledevices"
               aria-label="Name"
             />
@@ -102,7 +103,8 @@
               <Textarea
                 id="device-group-expression"
                 :model-value="expression"
-                class="w-full font-code"
+                monospace
+                class="w-full"
                 placeholder="(Mobile|iP(hone|od)|BlackBerry|IEMobile)"
                 aria-label="Regular expression"
               />

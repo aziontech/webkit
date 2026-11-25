@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The same moment in each format: local time, UTC and a relative phrase. Activate one to open the panel with UTC, local, relative and raw values, each with a copy button.",
+      "summary": "The same moment in each format: local time, UTC, a relative phrase and the time alone (for a row under a date header). Activate one to open the panel with UTC, local, relative and raw values, each with a copy button.",
       "file": "default.vue"
     },
     {

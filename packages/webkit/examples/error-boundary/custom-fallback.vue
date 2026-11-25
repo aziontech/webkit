@@ -25,7 +25,7 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
+  <div class="flex w-full max-w-(--container-lg) flex-col gap-(--spacing-sm)">
     <Card title="Requests by region">
       <template #default>
         <ErrorBoundary @retry="broken = false">

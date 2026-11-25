@@ -16,6 +16,7 @@
 - Pass `value` on the scale of `max`, for example `:value="3" :max="5"` for steps. Don't convert it to a percentage yourself.
 - Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.
 - There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.
+- Set `severity` when the bar reports a status that is good or bad, such as a goal that is on track (`success`), at risk (`warning`) or off track (`danger`), so the fill agrees with the status tag next to it. Without it the fill is the brand orange, which is not a status colour.
 - The default is the `medium` bar with `flat` corners. Set `size="small"` for a thin inline strip (table rows, upload rows, the top of a region); use `variant="rounded"` and a larger `size` only when the bar stands alone.
 
 ## Don’t
@@ -40,6 +41,7 @@
 | `variant` | ``ProgressVariant` (`'rounded' \| 'flat'`)` | `'flat'` | false | Track and fill corner-radius variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Bar height token. |
 | `indeterminate` | `boolean` | `false` | false | Loading state; animates a sliding segment and ignores `value`. |
+| `severity` | ``ProgressSeverity` (`'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'`)` | `—` | false | Status colour of the fill; unset keeps the brand fill. The values are the shared `Severity` scale. |
 
 ## States
 
@@ -47,6 +49,7 @@
 - `data-variant` mirrors `variant`: `rounded` | `flat`.
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-indeterminate` is present while `indeterminate` is `true`
+- `data-severity` mirrors the `severity` prop when it is set (`neutral` | `info` | `success` | `warning` | `danger`), on the root and the fill.
 
 ## Accessibility
 
@@ -66,7 +69,10 @@
 </script>
 
 <template>
-  <Progress :value="60" />
+  <Progress
+    :value="60"
+    aria-label="Uploading site-assets.zip"
+  />
 </template>
 ```
 
@@ -78,14 +84,16 @@
 </script>
 
 <template>
-  <div class="flex w-[320px] flex-col gap-4">
+  <div class="flex w-(--container-2xs) flex-col gap-(--spacing-md)">
     <Progress
       :value="60"
       variant="rounded"
+      aria-label="Uploading site-assets.zip"
     />
     <Progress
       :value="60"
       variant="flat"
+      aria-label="Building docs-site"
     />
   </div>
 </template>
@@ -99,18 +107,21 @@
 </script>
 
 <template>
-  <div class="flex w-[320px] flex-col gap-4">
+  <div class="flex w-(--container-2xs) flex-col gap-(--spacing-md)">
     <Progress
       :value="60"
       size="small"
+      aria-label="Uploading logo.svg"
     />
     <Progress
       :value="60"
       size="medium"
+      aria-label="Uploading site-assets.zip"
     />
     <Progress
       :value="60"
       size="large"
+      aria-label="Uploading backup.tar.gz"
     />
   </div>
 </template>

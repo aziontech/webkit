@@ -487,6 +487,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
         :uid="uid"
         :selected-count="selectedCount"
         :refreshing="refreshing"
+        :details-available="!error"
         @move="openMove(selectedResources)"
         @labels="openLabels(selectedResources)"
         @delete="openDelete(selectedResources)"
@@ -1549,6 +1550,8 @@ export const descendantsIn = (
     selectedCount: number
     /** A refresh is in flight. */
     refreshing: boolean
+    /** The details panel has something to show; false hides its toggle (a failed load). */
+    detailsAvailable: boolean
   }
 
   defineProps<HierarchyToolbarProps>()
@@ -1616,6 +1619,7 @@ export const descendantsIn = (
         />
       </Tooltip>
       <Button
+        v-if="detailsAvailable"
         :label="detailsOpen ? 'Hide details' : 'Show details'"
         :icon="detailsOpen ? 'az az-eye-off' : 'az az-eye'"
         variant="ghost"

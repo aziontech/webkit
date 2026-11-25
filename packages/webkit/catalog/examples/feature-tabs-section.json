@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The band as the Functions page places it: Trace, Logs and Request path, each shown by its illustration, with the button in the section title. A band with no tabs renders nothing at all.",
+   "summary": "The Observability band: Error rate, Status codes and Data streams, each shown by an illustration that fills the frame, with the button in the section title. A band with no tabs renders nothing at all.",
    "file": "examples/feature-tabs-section/default.vue"
   },
   {

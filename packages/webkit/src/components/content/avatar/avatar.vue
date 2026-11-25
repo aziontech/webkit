@@ -122,7 +122,7 @@
 
   const PRESENCE_CLASS =
     'absolute bottom-0 end-0 size-3 overflow-hidden rounded-full border-2 border-current text-[color:var(--avatar-presence-ring,var(--bg-surface))] ' +
-    'group-data-[size=small]/avatar:size-2.5 group-data-[size=large]/avatar:size-4 ' +
+    'group-data-[size=small]/avatar:size-2.5 group-data-[size=small]/avatar:translate-1/4 group-data-[size=small]/avatar:rtl:-translate-x-1/4 group-data-[size=large]/avatar:size-4 ' +
     'data-[presence=online]:bg-(--success-mark) data-[presence=away]:bg-(--warning-mark) data-[presence=busy]:bg-(--danger-mark) data-[presence=offline]:bg-(--text-muted)'
 
   const PRESENCE_GLYPH_CLASS =
@@ -142,7 +142,7 @@
     :data-content="content"
     :data-pattern="showPattern ? pattern : undefined"
     :role="hasImage ? undefined : 'img'"
-    :aria-label="hasImage ? undefined : accessibleLabel"
+    :aria-label="hasImage ? undefined : String(attrs['aria-label'] ?? '') || accessibleLabel"
     :data-presence="presence || undefined"
   >
     <span class="flex size-full items-center justify-center overflow-hidden rounded-[inherit]">

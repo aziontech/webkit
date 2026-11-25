@@ -7,11 +7,12 @@ import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
 import { ariaSnapshot } from './src/test/aria-snapshot'
+import { keepConsoleLog } from './src/test/console-noise'
 import { DurationSequencer } from './src/test/duration-sequencer'
 import { emulateMedia } from './src/test/emulate-media'
 import { emulateTouch } from './src/test/emulate-touch'
 import { renderOnServer } from './src/test/server-render'
-import { styleRecalcMs } from './src/test/style-metrics'
+import { styleTraceStart, styleTraceStop } from './src/test/style-metrics'
 
 const EXPORTS: Record<string, string | { default: string }> = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf8')
@@ -36,12 +37,14 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify('test')
   },
+  server: { forwardConsole: false },
   optimizeDeps: {
     include: ['monaco-editor']
   },
   test: {
     include: ['src/**/*.test.{ts,js}'],
     setupFiles: ['./src/test/setup.ts'],
+    onConsoleLog: keepConsoleLog,
     retry: process.env.CI ? 2 : 0,
     sequence: { sequencer: DurationSequencer },
     provide: { perfOnCi: Boolean(process.env.CI) },
@@ -50,7 +53,14 @@ export default defineConfig({
       provider: playwright({ contextOptions: { locale: 'en-US', timezoneId: 'UTC' } }),
       headless: true,
       instances: [{ browser: 'chromium' }],
-      commands: { ariaSnapshot, emulateMedia, emulateTouch, renderOnServer, styleRecalcMs }
+      commands: {
+        ariaSnapshot,
+        emulateMedia,
+        emulateTouch,
+        renderOnServer,
+        styleTraceStart,
+        styleTraceStop
+      }
     },
     coverage: {
       provider: 'v8',

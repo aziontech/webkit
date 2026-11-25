@@ -32,7 +32,6 @@
     ]"
     search-placeholder="Search by company or story"
     search-aria-label="Search success stories"
-    empty-title="No stories match these filters."
-    empty-action-label="View all success stories"
+    empty-title="No success stories published yet."
   />
 </template>

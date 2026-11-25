@@ -88,7 +88,7 @@
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
-    - `command: string` default `''` — keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
+    - `command: string` default `''` — keyboard shortcut, written as keys joined by `+` (`'mod+P'`, `'shift+mod+P'`, `'ctrl+,'`); `mod` (or `⌘`, `cmd`, `meta`) is the platform's primary modifier, `Meta` on macOS and `Ctrl` elsewhere, and the glyphs `⇧ ⌥ ⌃` work as well as `shift`, `alt`, `ctrl`. The hint is a `kbd` in `text-label-sm` `--text-muted` that names the keys the way `Kbd` does (`⌘P` on macOS, `Ctrl P` elsewhere; the key caps `Ctrl` and `Alt` are not translated), and it is hidden on a coarse pointer, where no keyboard is assumed. A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
@@ -131,6 +131,7 @@
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
 - `data-side` / `data-align` on the panel mirror the resolved side and alignment after flipping
 - `start` and `end` follow the text direction: under `dir="rtl"`, `align="start"` lines the panel up with the trigger's right edge and `side="end"` opens on the left
+- Anchor: when an element marked `data-slot="dropdown-menu-anchor"` inside the root wraps the trigger, the panel is positioned against that element instead of the trigger (the nearest one to the trigger), so a menu opened by one segment of a compound control lines up with the whole control (`SplitButton`). Focus still returns to the trigger
 
 ## Accessibility
 
@@ -187,8 +188,8 @@ Labels come from the consumer (`label` props and slots); the one built-in string
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"
-        icon="az az-plus"
-        aria-label="Open menu"
+        icon="az az-user"
+        aria-label="Account menu"
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup>
@@ -245,7 +246,7 @@ Labels come from the consumer (`label` props and slots); the one built-in string
       <DropdownMenuItem
         value="profile"
         label="Profile"
-        command="⌘P"
+        command="mod+P"
       />
       <DropdownMenuItem
         value="settings"

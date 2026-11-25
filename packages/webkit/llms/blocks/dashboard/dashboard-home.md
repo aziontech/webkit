@@ -607,7 +607,7 @@ export const sampleSummaryZones: SummaryZone[] = [
 export const sampleSummaryActivity: SummaryActivity[] = [
   {
     id: 'act-1',
-    date: 'Jul 13, 2026, 1:52 PM',
+    date: 'Jul 13, 1:52 PM',
     operation: 'Created',
     type: 'User login',
     resource: 'User login for Jane Doe',
@@ -615,7 +615,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-2',
-    date: 'Jun 30, 2026, 6:54 PM',
+    date: 'Jun 30, 6:54 PM',
     operation: 'Deleted',
     type: 'DNS zone',
     resource: 'DNS zone example.org',
@@ -623,7 +623,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-3',
-    date: 'Jun 30, 2026, 6:54 PM',
+    date: 'Jun 30, 6:54 PM',
     operation: 'Created',
     type: 'DNS zone',
     resource: 'DNS zone example.org',
@@ -631,7 +631,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-4',
-    date: 'Jun 30, 2026, 6:53 PM',
+    date: 'Jun 30, 6:53 PM',
     operation: 'Created',
     type: 'User login',
     resource: 'User login for Jane Doe',
@@ -639,7 +639,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-5',
-    date: 'Jun 24, 2026, 1:55 AM',
+    date: 'Jun 24, 1:55 AM',
     operation: 'Edited',
     type: 'Response rule',
     resource: 'Response rule Set storage origin for acme-store',
@@ -1243,8 +1243,10 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
   ]
 
   const AGENT_STACK_CLASS =
-    'flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover/item:[&>*+*]:-ms-1.5 ' +
-    'group-focus-visible/item:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none'
+    'flex items-center [&>*:not(:first-child)]:-ms-2 [&>*:not(:first-child)]:transition-[margin-left] ' +
+    '[&>*:not(:first-child)]:duration-moderate-01 [&>*:not(:first-child)]:ease-productive-entrance ' +
+    'group-hover/item:[&>*:not(:first-child)]:-ms-1.5 group-focus-visible/item:[&>*:not(:first-child)]:-ms-1.5 ' +
+    'motion-reduce:[&>*:not(:first-child)]:transition-none'
 
   const AGENT_MARK_CLASS =
     'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) ' +

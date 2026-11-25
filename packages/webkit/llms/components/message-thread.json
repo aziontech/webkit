@@ -47,7 +47,7 @@
    "type": "TimestampFormat",
    "default": "'local'",
    "required": "false",
-   "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+   "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union."
   },
   {
    "name": "loading",

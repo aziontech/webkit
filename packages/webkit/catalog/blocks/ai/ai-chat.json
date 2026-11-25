@@ -17,7 +17,7 @@
   },
   {
    "name": "Artifact",
-   "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question fills the composer. While a new version is written the canvas takes `streaming`, which locks its pager.",
+   "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane of the same chat shell (the `turn-end` and `canvas` slots of the chat) (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question is sent like in every other state. While a new version is written the canvas takes `streaming`, which locks its pager.",
    "file": "blocks/ai/ai-chat/variants/artifact.vue"
   },
   {
@@ -36,12 +36,18 @@
  "fileSources": [
   "sample.ts",
   "lib/ai-chat-failure.ts",
+  "composables/use-composer-focus.ts",
+  "composables/use-wide-screen.ts",
+  "parts/ai-chat-artifact.vue",
   "parts/ai-chat-composer.vue",
   "parts/ai-chat-connection-status.vue",
   "parts/ai-chat-header.vue",
   "parts/ai-chat-history.vue",
+  "parts/ai-chat-history-list.vue",
+  "parts/ai-chat-remove-dialog.vue",
   "parts/ai-chat-media-segment.vue",
   "parts/ai-chat-skeleton.vue",
+  "parts/ai-chat-split.vue",
   "parts/ai-chat-start.vue",
   "parts/ai-chat-tool-segment.vue",
   "parts/ai-chat-turn.vue",

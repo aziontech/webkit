@@ -36,7 +36,14 @@
   }>()
 
   const columns: TableColumn[] = [
-    { accessorKey: 'key', header: 'Key', sortable: true, principal: true, hideable: false },
+    {
+      accessorKey: 'key',
+      header: 'Key',
+      sortable: true,
+      principal: true,
+      hideable: false,
+      frozen: 'start'
+    },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'scope', header: 'Scope', minWidth: 80 },

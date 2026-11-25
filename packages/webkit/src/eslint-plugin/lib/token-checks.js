@@ -45,7 +45,8 @@ const TOKEN_CHECKS = [
   },
   {
     id: 'font-family-raw',
-    regex: /\b(?:font-(?:sans|serif|mono|rubik|proto-mono)\b|font-[[(]family-name:)/g,
+    regex:
+      /\b(?:font-(?:sans|serif|mono|rubik|proto-mono)\b|(?<![\w-])font-(?:code|display)\b|font-[[(]family-name:)/g,
     message:
       'Raw font-family. Font family is part of the generated typography class (ask the webkit MCP: list_tokens); do not override.'
   },
@@ -97,6 +98,18 @@ const TOKEN_CHECKS = [
       '3,580 ms of style recalc). Get the result from the stacking order (the table scroll cue ' +
       'sits below the frozen cells), or measure the state in script, set a data attribute on ' +
       'the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
+  },
+  {
+    id: 'universal-sibling-selector',
+    wide: true,
+    regex: /\[&[^\]\s"'`]*?[+~]_?\*\]:/g,
+    message:
+      'A sibling variant whose subject is the universal selector (`[&+*]:`, `[&~*]:`, ' +
+      '`[&>*+*]:`). It compiles to a rule like `.x + *`, so Chromium checks every element ' +
+      'inserted anywhere the stylesheet applies against it (one such rule made each scroll frame ' +
+      'of the virtual DataTable restyle three quarters of the table). Put the spacing on the ' +
+      'element itself with `not-last:` or `not-first:`, use `[&>*:not(:first-child)]:`, or name ' +
+      'the sibling (.claude/rules/styling.md).'
   },
   {
     id: 'rtl-double-flip',

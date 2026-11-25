@@ -26,7 +26,7 @@
     v-bind="$attrs"
     role="rowgroup"
     :data-testid="testId"
-    class="flex w-full flex-col [&>[role=row]:last-child]:border-b-0"
+    class="flex w-full flex-col [&>[role=row]:last-child]:border-b-0 [&>[role=row]:last-child]:before:hidden"
   >
     <slot />
   </div>

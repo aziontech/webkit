@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { defaultDocument, useEventListener } from '@vueuse/core'
-  import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
+  import { computed, getCurrentInstance, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../locales/en'
@@ -59,7 +59,13 @@
     ariaLabel: ''
   })
 
+  const emit = defineEmits<{
+    /** Try again in the error state was pressed; the button shows only when this event has a listener. */
+    retry: [event: MouseEvent]
+  }>()
+
   const attrs = useAttrs()
+  const instance = getCurrentInstance()
   const { t, formatNumber } = useLocale({ videoPlayer: en.videoPlayer })
 
   const rootEl = ref<HTMLDivElement | null>(null)
@@ -83,6 +89,8 @@
       ? 'error'
       : props.status
   )
+
+  const retryable = computed(() => Boolean(instance?.vnode.props?.['onRetry']))
 
   const generating = computed(
     () => shownStatus.value === 'pending' || shownStatus.value === 'running'
@@ -149,6 +157,11 @@
   onMounted(() => {
     fullscreenAvailable.value = defaultDocument?.fullscreenEnabled === true
   })
+
+  function onRetryClick(event: MouseEvent) {
+    mediaFailed.value = false
+    emit('retry', event)
+  }
 
   function onPlay() {
     paused.value = false
@@ -279,7 +292,21 @@
         :title="error || t('videoPlayer.error')"
         icon="az az-circle-alert"
         size="small"
-      />
+      >
+        <template
+          v-if="retryable"
+          #actions
+        >
+          <Button
+            :data-testid="`${testId}__retry`"
+            :label="t('videoPlayer.retry')"
+            icon="az az-refresh"
+            variant="outline"
+            size="medium"
+            @click="onRetryClick"
+          />
+        </template>
+      </EmptyState>
     </div>
 
     <template v-else>
@@ -360,6 +387,7 @@
           :aria-pressed="muted"
           variant="ghost"
           size="large"
+          class="ms-auto"
           @click="onMuteClick"
         />
         <div class="hidden w-24 @md/video-player:block">

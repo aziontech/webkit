@@ -1,3 +1,5 @@
+import { safeWebUrl } from './safe-href'
+
 const isPlainClick = (event: MouseEvent): boolean =>
   event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
 
@@ -23,5 +25,6 @@ export function leavingLink(
   const target = event.target instanceof Element ? event.target : null
   const link = target?.closest<HTMLAnchorElement>('a[href]')
   if (!link || (root && !root.contains(link))) return null
+  if (!safeWebUrl(link.href)) return null
   return opensElsewhere(link) || jumpsInPage(link) ? null : link
 }

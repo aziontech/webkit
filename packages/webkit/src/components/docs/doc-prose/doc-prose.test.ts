@@ -270,4 +270,22 @@ describe('DocProse', () => {
       expect(rules.filter((cls) => cls.endsWith(':pt-0!'))).toHaveLength(2)
     })
   })
+
+  describe('tables', () => {
+    it('puts a prose table in the tab order, so a wide table scrolls from the keyboard', async () => {
+      const { container } = render(DocProse, {
+        slots: {
+          default:
+            '<table><thead><tr><th>Token</th></tr></thead><tbody><tr><td>--primary</td></tr></tbody></table>' +
+            '<div data-doc-chrome><table><tbody><tr><td>Chrome</td></tr></tbody></table></div>'
+        }
+      })
+      const [prose, chrome] = container.querySelectorAll('table')
+      await waitFor(() => expect(prose).toHaveAttribute('tabindex', '0'))
+      expect(chrome).not.toHaveAttribute('tabindex')
+      prose.focus()
+      expect(document.activeElement).toBe(prose)
+      await expectNoA11yViolations(container)
+    })
+  })
 })

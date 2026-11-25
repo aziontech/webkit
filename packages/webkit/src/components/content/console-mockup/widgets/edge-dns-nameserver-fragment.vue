@@ -72,7 +72,8 @@
                 <Input
                   :model-value="nameserver"
                   size="medium"
-                  class="flex-1 font-code"
+                  monospace
+                  class="flex-1"
                   :aria-label="`Nameserver ${index + 1}`"
                   readonly
                 />

@@ -125,12 +125,15 @@
   >
     <DropdownMenu
       side="bottom"
-      align="end"
+      align="start"
       :disabled="disabled || loading"
       :data-testid="`${testId}__menu`"
       @select="onSelect"
     >
-      <div class="inline-flex w-fit items-stretch [&_[data-slot=touch-target]]:inset-x-0">
+      <div
+        data-slot="dropdown-menu-anchor"
+        class="inline-flex w-fit items-stretch [&_[data-slot=touch-target]]:inset-x-0"
+      >
         <Button
           :label="displayLabel"
           :icon="displayIcon"
@@ -151,7 +154,7 @@
             :size="size"
             :disabled="disabled || loading"
             :data-testid="`${testId}__toggle-button`"
-            class="rounded-s-none! -ms-px border-s border-(--border-default) focus-visible:z-1"
+            class="rounded-s-none! -ms-px border-s border-(--border-default) focus-visible:z-1 pointer-coarse:min-w-11"
           />
         </DropdownMenu.Trigger>
       </div>

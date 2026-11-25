@@ -230,7 +230,7 @@
         <div
           :data-testid="`${testId}__content`"
           dir="auto"
-          class="min-w-0 whitespace-pre-line break-words text-body-md text-(--text-default)"
+          class="min-w-0 max-w-(--layout-measure-content) whitespace-pre-line break-words text-body-md text-(--text-default)"
         >
           <slot />
         </div>

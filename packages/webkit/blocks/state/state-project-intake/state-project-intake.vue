@@ -21,7 +21,7 @@
 
   const props = withDefaults(defineProps<ProjectIntakeProps>(), {
     uploads: undefined,
-    title: 'Drop your project to deploy it',
+    title: 'Drop or choose your project to deploy it',
     description: 'A project folder, or the files inside one. We detect what it is built with.'
   })
 
@@ -34,6 +34,7 @@
   const MAX_ROWS = 50
 
   const folderPicker = useFilePicker({ directory: true, multiple: true })
+  const filePicker = useFilePicker({ multiple: true })
   const { formatFileSize } = useLocale()
   const received = ref(0)
   const files = ref<ProjectIntakeUpload[]>([])
@@ -54,14 +55,19 @@
   )
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
+  const pausedTitle = computed(() => {
+    const uploaded = files.value.filter((file) => file.status === 'success').length
+    return `Paused: ${uploaded} of ${files.value.length} uploaded, ${failedCount.value} failed`
+  })
+
   const failedLabel = computed(() =>
     failedCount.value === 1
       ? '1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.'
       : `${failedCount.value} files could not be uploaded. Retry them, or remove them from the folder and drop the project again.`
   )
 
-  const chooseFolder = async (event: MouseEvent) => {
-    const chosen = await folderPicker.open()
+  const choose = async (event: MouseEvent, picker: typeof folderPicker) => {
+    const chosen = await picker.open()
     if (!chosen.length) return
     received.value = chosen.length
     emit('select', event, chosen)
@@ -123,6 +129,7 @@
 
       <UploadProgress
         :items="shownFiles"
+        :title="failedCount ? pausedTitle : ''"
         :floating="false"
         class="w-full max-w-(--container-md)"
         @retry="retry"
@@ -145,13 +152,24 @@
       class="flex-1"
       @drop="onDrop"
     >
-      <Button
-        label="Choose a folder"
-        variant="outline"
-        size="medium"
-        icon="az az-folder-open"
-        @click="chooseFolder"
-      />
+      <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+        <span class="contents pointer-coarse:hidden">
+          <Button
+            label="Choose a folder"
+            variant="outline"
+            size="medium"
+            icon="az az-folder-open"
+            @click="(event: MouseEvent) => choose(event, folderPicker)"
+          />
+        </span>
+        <Button
+          label="Choose files"
+          variant="outline"
+          size="medium"
+          icon="az az-file"
+          @click="(event: MouseEvent) => choose(event, filePicker)"
+        />
+      </div>
     </FileDropzone>
     <p
       class="sr-only"

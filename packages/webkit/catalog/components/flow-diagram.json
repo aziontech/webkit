@@ -17,6 +17,7 @@
   "Join adjacent columns; an edge that skips a column can cross it.",
   "Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.",
   "Use `orientation=\"horizontal\"` for fixed-size scenes and mock-ups.",
+  "Set `:show-ports=\"false\"` on a diagram a reader only views, such as a request path on an error page, so it draws no editor-style port squares.",
   "A one-resource slot puts `flow-diagram-bind` in the `actions` slot."
  ],
  "channels": [

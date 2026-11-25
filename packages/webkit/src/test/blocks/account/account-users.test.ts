@@ -17,6 +17,18 @@ const button = (root: HTMLElement, label: string) =>
     (item) => item.textContent?.trim() === label
   ) as HTMLButtonElement
 describe('account/account-users', () => {
+  it('opens the profile on a row click as it does on Enter, but not from a control in the row', async () => {
+    const view = render(AccountUsers)
+    await fireEvent.click(view.getByRole('button', { name: 'Actions for Avery Stone' }))
+    await waitFor(() => view.getByRole('menuitem', { name: 'View profile' }))
+    expect(dialog()).toBeNull()
+    await userEvent.keyboard('{Escape}')
+    await fireEvent.click(
+      view.getByText('avery.stone@example.com', { selector: 'span[dir="ltr"]' })
+    )
+    await waitFor(() => expect(dialog()?.textContent).toContain('avery.stone@example.com'))
+  })
+
   it('validates the invitation after Send, then adds the person as Invited', async () => {
     const view = render(Invite)
     await waitFor(() => expect(dialog()).not.toBeNull())

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-activity-history/account-activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-activity-history")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [Table](../../components/table.md), `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [Table](../../components/table.md), `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -27,9 +27,9 @@ The account's audit log. An admin or a security reviewer answers "who did this, 
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Button` (required)
+### A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 
-Title `Activity history` and one sentence that says what is logged and how long it is kept. The only action is the outlined Documentation button: the log is read-only.
+Title `Activity history` and one sentence that says what is logged and how long it is kept. The only action is the outlined Documentation button: the log is read-only. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render, so the relative periods and times read the same everywhere; with live data and no `now` they read the real clock.
 
 ### B. Filter — `PropertyFilter` (required)
 
@@ -157,6 +157,7 @@ Each variant is the same screen in another state: `get_block("account/account-ac
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DataTable from '@aziontech/webkit/data-table'
   import DataTablePagination from '@aziontech/webkit/data-table-pagination'
@@ -205,7 +206,7 @@ Each variant is the same screen in another state: `get_block("account/account-ac
   export interface ActivityHistoryProps {
     /** The events to list; the period, the filter, the sort and the pages run in the browser. Left out, the sample renders. */
     events?: ActivityHistoryEvent[]
-    /** The moment relative periods count back from. Left out, the sample clock is used. */
+    /** The moment relative periods and the relative times count from. Left out, the sample clock with the sample, the real clock with your events. */
     now?: Date
     /** A request is in flight: with no events it is the first load, with events a refresh. */
     loading?: boolean
@@ -233,6 +234,9 @@ Each variant is the same screen in another state: `get_block("account/account-ac
     () => props.events ?? (props.loading || props.error ? [] : sampleEvents)
   )
   const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
+  const clock = computed(
+    () => props.now ?? (props.events || props.loading || props.error ? undefined : sampleNow)
+  )
 
   const categoryIcons: Record<ActivityHistoryCategory, string> = {
     'Sign-in': 'az az-log-in',
@@ -285,7 +289,14 @@ Each variant is the same screen in another state: `get_block("account/account-ac
   ])
 
   const columns: TableColumn[] = [
-    { accessorKey: 'event', header: 'Event', principal: true, hideable: false, grow: 2 },
+    {
+      accessorKey: 'event',
+      header: 'Event',
+      principal: true,
+      hideable: false,
+      grow: 2,
+      minWidth: 320
+    },
     { accessorKey: 'category', header: 'Category', sortable: true, minWidth: 120 },
     { accessorKey: 'user', header: 'User', sortable: true, minWidth: 200 },
     { accessorKey: 'ip', header: 'IP address', minWidth: 150 },
@@ -339,209 +350,216 @@ Each variant is the same screen in another state: `get_block("account/account-ac
 </script>
 
 <template>
-  <div class="layout-boundary">
-    <div class="layout-column flex flex-col">
-      <PageHeader
-        title="Activity history"
-        description="Who did what in this account, from where and when. Events are kept for 90 days."
-      >
-        <template #actions>
-          <Button
-            label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
-            icon="az az-book"
-            variant="outline"
-            size="medium"
-            href="https://example.com/docs/activity-history"
-            target="_blank"
-          />
-        </template>
-      </PageHeader>
-
-      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <header class="flex flex-wrap items-start gap-(--layout-group-gap)">
-          <div class="flex min-w-0 grow basis-(--container-2xs)">
-            <PropertyFilter
-              v-bind="propertyFilterProps"
-              placeholder="Filter activity"
-              aria-label="Filter activity"
-            />
-          </div>
-          <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
-            <DateRangePicker
-              v-model="range"
-              :relative-options="relativeOptions"
-              aria-label="Activity period"
-              :show-time-zone="false"
-              :show-refresh="false"
-            />
-            <Tooltip
-              content="Refresh"
-              class="shrink-0"
-            >
-              <IconButton
-                icon="az az-refresh"
-                variant="outline"
-                size="medium"
-                :loading="loading"
-                aria-label="Refresh"
-                @click="emit('refresh', $event)"
-              />
-            </Tooltip>
-            <Tooltip
-              content="Download CSV"
-              class="shrink-0"
-            >
-              <IconButton
-                icon="az az-download"
-                variant="outline"
-                size="medium"
-                :disabled="!matchingItems.length"
-                aria-label="Download CSV"
-                @click="exportCsv"
-              />
-            </Tooltip>
-            <CollectionPreferences
-              v-bind="preferencesProps"
-              title="Table preferences"
-            />
-          </div>
-        </header>
-
-        <Alert
-          v-if="error"
-          severity="danger"
+  <ConfigProvider :now="clock">
+    <div class="layout-boundary">
+      <div class="layout-column flex flex-col">
+        <PageHeader
+          title="Activity history"
+          description="Who did what in this account, from where and when. Events are kept for 90 days."
         >
-          {{ error }}
           <template #actions>
             <Button
-              label="Retry"
-              variant="secondary"
-              size="small"
-              @click="emit('retry', $event)"
+              label="Documentation"
+              aria-label="Documentation (opens in a new tab)"
+              icon="az az-book"
+              variant="outline"
+              size="medium"
+              href="https://example.com/docs/activity-history"
+              target="_blank"
             />
           </template>
-        </Alert>
+        </PageHeader>
 
-        <Card
-          key="card-1"
-          v-else-if="!loading && status === 'empty'"
-          :padded="false"
-        >
-          <template #default>
-            <EmptyState
-              size="medium"
-              icon="az az-history"
-              title="No activity in this period"
-              :description="
-                widerRange
-                  ? 'Nothing happened in the account in the selected period. Select a longer period to see older events.'
-                  : 'Nothing happened in the account in the last 90 days, the longest period events are kept.'
-              "
-            >
-              <template
-                v-if="widerRange"
-                #actions
+        <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
+          <header class="flex flex-wrap items-start gap-(--layout-group-gap)">
+            <div class="flex min-w-0 grow basis-(--container-2xs)">
+              <PropertyFilter
+                v-bind="propertyFilterProps"
+                placeholder="Filter activity"
+                aria-label="Filter activity"
+              />
+            </div>
+            <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+              <DateRangePicker
+                v-model="range"
+                :relative-options="relativeOptions"
+                aria-label="Activity period"
+                :show-time-zone="false"
+                :show-refresh="false"
+              />
+              <Tooltip
+                content="Refresh"
+                class="shrink-0"
               >
-                <Button
-                  :label="widenLabel"
-                  variant="secondary"
-                  size="small"
-                  @click="widenRange"
+                <IconButton
+                  icon="az az-refresh"
+                  variant="outline"
+                  size="medium"
+                  :loading="loading"
+                  aria-label="Refresh"
+                  @click="emit('refresh', $event)"
                 />
-              </template>
-            </EmptyState>
-          </template>
-        </Card>
+              </Tooltip>
+              <Tooltip
+                content="Download CSV"
+                class="shrink-0"
+              >
+                <IconButton
+                  icon="az az-download"
+                  variant="outline"
+                  size="medium"
+                  :disabled="!matchingItems.length"
+                  aria-label="Download CSV"
+                  @click="exportCsv"
+                />
+              </Tooltip>
+              <CollectionPreferences
+                v-bind="preferencesProps"
+                title="Table preferences"
+              />
+            </div>
+          </header>
 
-        <Card
-          key="card-2"
-          v-else
-          :padded="false"
-        >
-          <template #default>
-            <DataTable
-              ref="activityTableEl"
-              v-bind="tableProps"
-              :loading="loading"
-              sortable
-              :bordered="false"
-              aria-label="Activity history"
-            >
-              <template #cell-category="{ value }">
-                <Tag
-                  :label="value"
-                  :icon="categoryIcons[value as ActivityHistoryCategory] ?? 'az az-tag'"
-                  severity="neutral"
-                  size="small"
-                />
-              </template>
-              <template #cell-event="{ row, value }">
-                <div class="flex min-w-0 flex-col">
-                  <span class="truncate">{{ value }}</span>
-                  <div
-                    aria-hidden="true"
-                    data-slot="narrow-summary"
-                    class="mt-(--spacing-2xs) sm:hidden"
-                  >
-                    <TableCellTime :value="row.at" />
-                  </div>
-                </div>
-              </template>
-              <template #cell-user="{ value }">
-                <span
-                  class="truncate"
-                  dir="auto"
-                  >{{ value }}</span
+          <Alert
+            v-if="error"
+            severity="danger"
+          >
+            {{ error }}
+            <template #actions>
+              <Button
+                label="Retry"
+                variant="secondary"
+                size="small"
+                @click="emit('retry', $event)"
+              />
+            </template>
+          </Alert>
+
+          <Card
+            key="card-1"
+            v-else-if="!loading && status === 'empty'"
+            :padded="false"
+          >
+            <template #default>
+              <EmptyState
+                size="medium"
+                icon="az az-history"
+                title="No activity in this period"
+                :description="
+                  widerRange
+                    ? 'Nothing happened in the account in the selected period. Select a longer period to see older events.'
+                    : 'Nothing happened in the account in the last 90 days, the longest period events are kept.'
+                "
+              >
+                <template
+                  v-if="widerRange"
+                  #actions
                 >
-              </template>
-              <template #cell-ip="{ value }">
-                <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                  <span
-                    class="min-w-0 flex-1 truncate tabular-nums"
-                    dir="ltr"
-                    >{{ value }}</span
-                  >
-                  <CopyButton
-                    variant="outline"
-                    :value="value"
-                    aria-label="Copy IP address"
+                  <Button
+                    :label="widenLabel"
+                    variant="secondary"
+                    size="small"
+                    @click="widenRange"
+                  />
+                </template>
+              </EmptyState>
+            </template>
+          </Card>
+
+          <Card
+            key="card-2"
+            v-else
+            :padded="false"
+          >
+            <template #default>
+              <DataTable
+                ref="activityTableEl"
+                v-bind="tableProps"
+                :loading="loading"
+                sortable
+                :bordered="false"
+                aria-label="Activity history"
+              >
+                <template #cell-category="{ value }">
+                  <Tag
+                    :label="value"
+                    :icon="categoryIcons[value as ActivityHistoryCategory] ?? 'az az-tag'"
+                    severity="neutral"
                     size="small"
                   />
-                </div>
-              </template>
-              <template #cell-at="{ value }">
-                <TableCellTime :value="value" />
-              </template>
-              <template #empty>
-                <EmptyState
-                  size="small"
-                  icon="az az-search"
-                  title="No matching events"
-                  description="No event in this period matches these filters."
-                >
-                  <template #actions>
-                    <Button
-                      label="Clear filters"
+                </template>
+                <template #cell-event="{ row, value }">
+                  <div class="flex min-w-0 flex-col">
+                    <span class="truncate">{{ value }}</span>
+                    <div
+                      aria-hidden="true"
+                      data-slot="narrow-summary"
+                      class="mt-(--spacing-2xs) flex min-w-0 flex-col gap-(--spacing-2xs) sm:hidden"
+                    >
+                      <span
+                        class="truncate text-body-xs text-(--text-muted)"
+                        dir="auto"
+                        >{{ row.user }}</span
+                      >
+                      <TableCellTime :value="row.at" />
+                    </div>
+                  </div>
+                </template>
+                <template #cell-user="{ value }">
+                  <span
+                    class="truncate"
+                    dir="auto"
+                    >{{ value }}</span
+                  >
+                </template>
+                <template #cell-ip="{ value }">
+                  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+                    <span
+                      class="min-w-0 flex-1 truncate tabular-nums"
+                      dir="ltr"
+                      >{{ value }}</span
+                    >
+                    <CopyButton
                       variant="outline"
+                      :value="value"
+                      aria-label="Copy IP address"
                       size="small"
-                      @click="clearFilters"
                     />
-                  </template>
-                </EmptyState>
-              </template>
-              <template #footer>
-                <DataTablePagination
-                  v-bind="paginationProps"
-                  manual
-                />
-              </template>
-            </DataTable>
-          </template>
-        </Card>
-      </section>
+                  </div>
+                </template>
+                <template #cell-at="{ value }">
+                  <TableCellTime :value="value" />
+                </template>
+                <template #empty>
+                  <EmptyState
+                    size="small"
+                    icon="az az-search"
+                    title="No matching events"
+                    description="No event in this period matches these filters."
+                  >
+                    <template #actions>
+                      <Button
+                        label="Clear filters"
+                        variant="outline"
+                        size="small"
+                        @click="clearFilters"
+                      />
+                    </template>
+                  </EmptyState>
+                </template>
+                <template #footer>
+                  <DataTablePagination
+                    v-bind="paginationProps"
+                    manual
+                  />
+                </template>
+              </DataTable>
+            </template>
+          </Card>
+        </section>
+      </div>
     </div>
-  </div>
+  </ConfigProvider>
 </template>
 ```
 

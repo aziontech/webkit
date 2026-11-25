@@ -1,12 +1,12 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import TicketInboxEmpty from '../../../../blocks/view/view-ticket-inbox/variants/empty.vue'
 import TicketInboxError from '../../../../blocks/view/view-ticket-inbox/variants/error.vue'
 import TicketInboxFiltered from '../../../../blocks/view/view-ticket-inbox/variants/filtered.vue'
 import TicketInboxLoading from '../../../../blocks/view/view-ticket-inbox/variants/loading.vue'
-import TicketInboxSelected from '../../../../blocks/view/view-ticket-inbox/variants/selected.vue'
 import ViewTicketInbox, {
+  type TicketInboxBulkPayload,
   type TicketInboxTicket
 } from '../../../../blocks/view/view-ticket-inbox/view-ticket-inbox.vue'
 import { expectNoA11yViolations } from '../../axe'
@@ -51,6 +51,15 @@ describe('view/view-ticket-inbox block', () => {
     expect(opened[0][1].id).toBe('9001')
   })
 
+  it('starts with Updated, Group and Channel hidden so the visible columns fit', () => {
+    const view = render(ViewTicketInbox, { props: { tickets: [ticket] } })
+    const headers = view.getAllByRole('columnheader').map((cell) => cell.textContent ?? '')
+    const shown = (name: string) => headers.some((text) => text.includes(name))
+    for (const name of ['Subject', 'Status', 'Next SLA']) expect(shown(name)).toBe(true)
+    for (const name of ['Updated', 'Group', 'Channel']) expect(shown(name)).toBe(false)
+    view.unmount()
+  })
+
   it('does not open the ticket when the row checkbox is clicked', async () => {
     const view = render(ViewTicketInbox, { props: { tickets: [ticket] } })
     await waitFor(() => expect(subjects(view.container).length).toBe(1))
@@ -62,13 +71,40 @@ describe('view/view-ticket-inbox block', () => {
     await waitFor(() => expect(view.container.textContent).toContain('1 selected'))
   })
 
-  it('emits a bulk action with the selected tickets and clears the selection', async () => {
-    const view = render(TicketInboxSelected)
+  it('asks before Close, then emits the bulk action and clears the selection', async () => {
+    const view = render(ViewTicketInbox, {
+      props: { defaultSelectedKeys: ['4812', '4821', '4833'] }
+    })
     await waitFor(() => expect(view.container.textContent).toContain('3 selected'))
-    const merge = view.getByRole('button', { name: 'Merge (3)' })
     await fireEvent.click(view.getByRole('button', { name: 'Close (3)' }))
-    expect(merge).toBeTruthy()
+    expect(view.emitted('bulk-action')).toBeUndefined()
+    const dialog = await waitFor(() => screen.getByRole('alertdialog', { name: 'Close 3 tickets' }))
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Close 3 tickets' }))
+    const [[, payload]] = view.emitted('bulk-action') as [Event, TicketInboxBulkPayload][]
+    expect(payload.action).toBe('close')
+    expect(payload.tickets.map((item) => item.id).sort()).toEqual(['4812', '4821', '4833'])
     await waitFor(() => expect(view.container.textContent).not.toContain('3 selected'))
+  })
+
+  it('asks which ticket Merge keeps and emits it as the value', async () => {
+    const view = render(ViewTicketInbox, {
+      props: { defaultSelectedKeys: ['4812', '4821', '4833'] }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('3 selected'))
+    await fireEvent.click(view.getByRole('button', { name: 'Merge (3)' }))
+    expect(view.emitted('bulk-action')).toBeUndefined()
+    const dialog = await waitFor(() => screen.getByRole('alertdialog', { name: 'Merge 3 tickets' }))
+    const keep = within(dialog).getByRole('radiogroup', { name: 'Ticket to keep' })
+    const choices = within(keep).getAllByRole('radio')
+    expect(choices).toHaveLength(3)
+    await fireEvent.click(choices[1]!)
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Merge 3 tickets' }))
+    const [[, payload]] = view.emitted('bulk-action') as [Event, TicketInboxBulkPayload][]
+    expect(payload.action).toBe('merge')
+    expect(payload.tickets.map((item) => item.id)).toContain(payload.value)
+    const picked =
+      choices[1]!.closest('label')?.textContent ?? choices[1]!.parentElement?.textContent
+    expect(picked).toContain(`#${payload.value}`)
   })
 
   it('switches the view through the View select and emits update:viewKey', async () => {

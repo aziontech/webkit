@@ -42,11 +42,17 @@
 | `error` | `string` | `''` | false | Message of the error state. |
 | `ariaLabel` | `string` | `''` | false | Accessible name; empty reads Video. |
 
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `retry` | `MouseEvent` | Try again in the error state was pressed. The button renders only when this event has a listener; a file that failed to load is loaded again, and the app sets `status` back to `pending` or `running` when it generates the video again. |
+
 ## States
 
 - `data-status` mirrors `status`; a file that fails to load, or no `src`, shows `error`.
 - `pending` / `running`: `Skeleton`, a `role="status"` message, `Progress` and the percentage; no controls.
-- `error`: `EmptyState` with `error` or the default message; no controls.
+- `error`: `EmptyState` with `error` or the default message; no playback controls. With a `retry` listener it shows a Try again `Button` (`az az-refresh`, outline, medium) under the message.
 - `success`: the video and its controls; `data-paused`, `data-muted`.
 
 ## Accessibility
@@ -81,6 +87,7 @@
 | `videoPlayer.pending`        | `Waiting to generate`    | —             |
 | `videoPlayer.running`        | `Generating video`       | —             |
 | `videoPlayer.error`          | `The video could not load` | `error`     |
+| `videoPlayer.retry`          | `Try again`              | —             |
 
 - Formatting: the percentage goes through `formatNumber` with `style: 'percent'` and the `ConfigProvider` locale (so `42 %` or `%42` where a locale writes it so); the time digits through `formatNumber`, reading `m:ss` (`h:mm:ss` from one hour).
 
@@ -89,7 +96,7 @@
 - Container queries: the root is a container; below `@md` the volume bar is hidden (Mute stays) and the seek bar takes the remaining width.
 - Narrow (≤ 640 px or a narrow chat bubble): the frame keeps a 16:9 ratio and scales down; the controls stay on one row.
 - Touch: 40 px targets; the buttons take a 44 px hit area under `pointer: coarse`, the two bars stay 40 px tall (see Accessibility); no hover-only affordance (the controls are always visible under the video).
-- Reflow: no horizontal scroll at 320 px or at 200 % zoom; the controls bar wraps (`flex-wrap`), putting the seek bar on its own full-width row when the row runs out of room, and the time text does not wrap inside itself (`whitespace-nowrap`).
+- Reflow: no horizontal scroll at 320 px or at 200 % zoom; the controls bar wraps (`flex-wrap`), putting the seek bar on its own full-width row when the row runs out of room, and the time text does not wrap inside itself (`whitespace-nowrap`). Mute carries `ms-auto`, so when Mute, Captions and full screen wrap to a second row (a 320 px column) they sit together at the inline end instead of scattering from the start.
 
 ## Examples
 
@@ -129,6 +136,13 @@
 ```vue
 <script setup>
   import VideoPlayer from '@aziontech/webkit/video-player'
+  import { ref } from 'vue'
+
+  const failedStatus = ref('error')
+
+  const onRetry = () => {
+    failedStatus.value = 'pending'
+  }
 </script>
 
 <template>
@@ -143,9 +157,10 @@
       aria-label="Product tour, generating"
     />
     <VideoPlayer
-      status="error"
+      :status="failedStatus"
       error="The model stopped before the video was done, so nothing was saved."
       aria-label="Product tour, failed"
+      @retry="onRetry"
     />
   </div>
 </template>

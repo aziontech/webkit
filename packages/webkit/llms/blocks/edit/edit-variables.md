@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`, `use-shortcuts`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -30,9 +30,9 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Button` (required)
+### A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 
-`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create variable`, the same height as Documentation, which opens the drawer.
+`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create variable`, the same height as Documentation, which opens the drawer. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render, so the relative update times read the same everywhere; with live data and no `now` they read the real clock.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -68,7 +68,7 @@ The JSON view replaces the rows with one `Textarea` labeled Variables JSON over 
 
 ### J. Scope — `SettingsGroup`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
 
-A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account, while no other scope is on" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
+A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account. Turns off by itself when another scope is on" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
@@ -98,13 +98,14 @@ The block takes its variables through props and emits every action; it fetches n
 
 The block is a folder. `edit-variables.vue` is the wiring: the props, the list rows, the row actions and the save. `parts/` holds its regions: `variables-list.vue` (the controls row and the table, on `useCollection`), `variables-drawer-form.vue` (the drawer form with its header, alert, fieldset and Save), `variables-entries.vue` (the Variables section: rows, JSON view and import tools), `variables-scope-group.vue` (the Scope section), `paste-panel.vue` with `env-paste-panel.vue` (the inline paste panel), and `network-list-fields.vue` (the network list sections). `composables/use-variables-form.ts` owns the drawer form state and validation and provides it to the parts, `composables/use-network-list-form.ts` does the same for the network list, and `lib/` holds the pure helpers (the `.env` and JSON parsing, the scopes, the row updates, the network list rules). The PasteEnv and NetworkList variants render the same parts with their own sample text from `sample.ts`. `webkit add` copies every file listed in `block.json` `files`.
 
-| Prop          | Type                  | What it does                                                                                                      |
-| ------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `variables`   | `VariablesVariable[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.      |
-| `loading`     | `boolean`             | The list is loading or refreshing: Refresh spins and the table shows its loading state.                           |
-| `saving`      | `boolean`             | The save is in flight: the drawer locks and Save spins. When it turns off with no `saveError`, the drawer closes. |
-| `saveError`   | `string`              | Why the save failed, in the danger `Alert` at the top of the drawer; every pair is kept so Save retries.          |
-| `defaultOpen` | `boolean`             | The create drawer starts open.                                                                                    |
+| Prop          | Type                  | What it does                                                                                                                 |
+| ------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `variables`   | `VariablesVariable[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.                 |
+| `loading`     | `boolean`             | The list is loading or refreshing: Refresh spins and the table shows its loading state.                                      |
+| `saving`      | `boolean`             | The save is in flight: the drawer locks and Save spins. When it turns off with no `saveError`, the drawer closes.            |
+| `saveError`   | `string`              | Why the save failed, in the danger `Alert` at the top of the drawer; every pair is kept so Save retries.                     |
+| `defaultOpen` | `boolean`             | The create drawer starts open.                                                                                               |
+| `now`         | `Date`                | A fixed clock the Last modified times read, for a test or a server render. Leave it out in the app; the sample uses its own. |
 
 | Event     | Payload                         | When                                                                                          |
 | --------- | ------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -222,6 +223,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Drawer from '@aziontech/webkit/drawer-root'
   import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
@@ -243,7 +245,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
   import VariablesEntries from './parts/variables-entries.vue'
   import VariablesList from './parts/variables-list.vue'
   import VariablesScopeGroup from './parts/variables-scope-group.vue'
-  import { sampleVariables } from './sample'
+  import { sampleNow, sampleVariables } from './sample'
 
   /** Where a variable applies: the whole account, or one environment, project, service or policy. */
   export interface VariablesScope {
@@ -306,6 +308,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
     saveError?: string
     /** The create drawer starts open. */
     defaultOpen?: boolean
+    /** A fixed moment the Last modified times read (a test, a server render). Left out, the real clock; the sample uses its own. */
+    now?: Date
   }
 
   const props = withDefaults(defineProps<VariablesProps>(), {
@@ -313,7 +317,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
     loading: false,
     saving: false,
     saveError: '',
-    defaultOpen: false
+    defaultOpen: false,
+    now: undefined
   })
 
   const emit = defineEmits<{
@@ -325,6 +330,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 
   const source = computed<VariablesVariable[]>(
     () => props.variables ?? (props.loading ? [] : sampleVariables)
+  )
+  const clock = computed(
+    () => props.now ?? (props.variables || props.loading ? undefined : sampleNow)
   )
   const rows = ref<VariablesRow[]>([])
   watch(
@@ -472,81 +480,83 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 </script>
 
 <template>
-  <div class="layout-column layout-boundary flex flex-col">
-    <PageHeader
-      title="Variables"
-      description="Configure variable names, values, and settings for use across your projects."
-    >
-      <template #actions>
-        <Button
-          label="Documentation"
-          aria-label="Documentation (opens in a new tab)"
-          icon="az az-book"
-          variant="outline"
-          href="https://example.com/docs/variables"
-          target="_blank"
-          size="medium"
-        />
-        <Button
-          label="Create variable"
-          icon="az az-plus"
-          variant="primary"
-          size="medium"
-          @click="openCreate"
-        />
-      </template>
-    </PageHeader>
-
-    <VariablesList
-      :rows="rows"
-      :loading="loading"
-      @refresh="refresh"
-      @create="openCreate"
-      @row-action="onRowAction"
-    />
-
-    <Drawer
-      v-model:open="drawerOpen"
-      size="large"
-      side="end"
-    >
-      <VariablesDrawerForm
-        :title="drawerTitle"
-        :description="drawerDescription"
-        shortcut-label="Save variable"
-        :active="drawerOpen"
-        :submitting="submitting"
-        :save-error="saveError"
-        @submit="submit"
+  <ConfigProvider :now="clock">
+    <div class="layout-column layout-boundary flex flex-col">
+      <PageHeader
+        title="Variables"
+        description="Configure variable names, values, and settings for use across your projects."
       >
-        <VariablesEntries
-          :editing="!!editing"
-          :secret-locked="Boolean(editing?.secret)"
-        />
-        <VariablesScopeGroup />
-      </VariablesDrawerForm>
-    </Drawer>
+        <template #actions>
+          <Button
+            label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
+            icon="az az-book"
+            variant="outline"
+            href="https://example.com/docs/variables"
+            target="_blank"
+            size="medium"
+          />
+          <Button
+            label="Create variable"
+            icon="az az-plus"
+            variant="primary"
+            size="medium"
+            @click="openCreate"
+          />
+        </template>
+      </PageHeader>
 
-    <ConfirmDialog
-      v-model:open="deleteOpen"
-      title="Delete variable"
-      size="medium"
-      confirm-label="Delete variable"
-      :confirmation-phrase="pending?.key ?? ''"
-      @confirm="confirmDelete"
-    >
-      <div class="flex flex-col gap-(--spacing-md)">
-        <Alert
-          severity="warning"
-          label="Once confirmed, this action can't be reversed."
-        />
-        <p class="m-0 text-body-sm text-(--text-muted)">
-          The selected variable will be deleted, and services in its scope stop reading it on their
-          next deployment.
-        </p>
-      </div>
-    </ConfirmDialog>
-  </div>
+      <VariablesList
+        :rows="rows"
+        :loading="loading"
+        @refresh="refresh"
+        @create="openCreate"
+        @row-action="onRowAction"
+      />
+
+      <Drawer
+        v-model:open="drawerOpen"
+        size="large"
+        side="end"
+      >
+        <VariablesDrawerForm
+          :title="drawerTitle"
+          :description="drawerDescription"
+          shortcut-label="Save variable"
+          :active="drawerOpen"
+          :submitting="submitting"
+          :save-error="saveError"
+          @submit="submit"
+        >
+          <VariablesEntries
+            :editing="!!editing"
+            :secret-locked="Boolean(editing?.secret)"
+          />
+          <VariablesScopeGroup />
+        </VariablesDrawerForm>
+      </Drawer>
+
+      <ConfirmDialog
+        v-model:open="deleteOpen"
+        title="Delete variable"
+        size="medium"
+        confirm-label="Delete variable"
+        :confirmation-phrase="pending?.key ?? ''"
+        @confirm="confirmDelete"
+      >
+        <div class="flex flex-col gap-(--spacing-md)">
+          <Alert
+            severity="warning"
+            label="Once confirmed, this action can't be reversed."
+          />
+          <p class="m-0 text-body-sm text-(--text-muted)">
+            The selected variable will be deleted, and services in its scope stop reading it on
+            their next deployment.
+          </p>
+        </div>
+      </ConfirmDialog>
+    </div>
+  </ConfigProvider>
 </template>
 ```
 
@@ -554,6 +564,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 
 ```ts
 import type { VariablesVariable } from './edit-variables.vue'
+
+export const sampleNow = new Date(Date.UTC(2026, 10, 10, 12))
 
 export const sampleVariables: VariablesVariable[] = [
   {
@@ -1671,7 +1683,14 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
   }>()
 
   const columns: TableColumn[] = [
-    { accessorKey: 'key', header: 'Key', sortable: true, principal: true, hideable: false },
+    {
+      accessorKey: 'key',
+      header: 'Key',
+      sortable: true,
+      principal: true,
+      hideable: false,
+      frozen: 'start'
+    },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'scope', header: 'Scope', minWidth: 80 },
@@ -2366,7 +2385,7 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
             v-if="scope.type === 'global'"
             class="flex h-full min-w-0 flex-1 items-center bg-(--bg-canvas) px-(--spacing-md) text-label-sm text-(--text-default)"
           >
-            The entire account, while no other scope is on
+            The entire account. Turns off by itself when another scope is on
           </span>
           <div
             v-else
@@ -2392,7 +2411,6 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
                     size="small"
                     placeholder="Search"
                     aria-label="Search"
-                    @keydown.stop
                   >
                     <template #leading>
                       <i
@@ -2457,15 +2475,12 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
     invalid?: boolean
     /** Writes the text in the code font through the Textarea monospace look. */
     monospace?: boolean
-    /** Writes the text in the code font family only. */
-    codeFont?: boolean
   }
 
   withDefaults(defineProps<PastePanelProps>(), {
     applyDisabled: false,
     invalid: false,
-    monospace: false,
-    codeFont: false
+    monospace: false
   })
 
   const text = defineModel<string>({ default: '' })
@@ -2488,17 +2503,15 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
   >
     <Field>
       <Field.Label :for="id">{{ label }}</Field.Label>
-      <div :class="codeFont ? '[&_textarea]:font-code' : undefined">
-        <Textarea
-          :id="id"
-          v-model="text"
-          :rows="rows"
-          :monospace="monospace"
-          spellcheck="false"
-          :invalid="invalid"
-          :aria-describedby="`${id}-report`"
-        />
-      </div>
+      <Textarea
+        :id="id"
+        v-model="text"
+        :rows="rows"
+        :monospace="monospace"
+        spellcheck="false"
+        :invalid="invalid"
+        :aria-describedby="`${id}-report`"
+      />
     </Field>
     <div
       :id="`${id}-report`"
@@ -2716,7 +2729,7 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
           v-model="pasteText"
           :label="`Paste one ${copy.noun} per line`"
           :rows="7"
-          code-font
+          monospace
           :apply-label="`Add ${found}`"
           apply-testid="network-list-paste-apply"
           :apply-disabled="!pasteReport.lines.length"
@@ -2771,17 +2784,16 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
           :aria-label="`${copy.column} entries`"
         >
           <template #cell-value="{ value, update, invalid }">
-            <div class="contents font-code">
-              <Input
-                :model-value="value"
-                size="large"
-                :placeholder="copy.placeholder"
-                autocomplete="off"
-                :spellcheck="false"
-                :invalid="invalid"
-                @update:model-value="update"
-              />
-            </div>
+            <Input
+              :model-value="value"
+              size="large"
+              :placeholder="copy.placeholder"
+              autocomplete="off"
+              :spellcheck="false"
+              monospace
+              :invalid="invalid"
+              @update:model-value="update"
+            />
           </template>
         </AttributeEditor>
       </template>

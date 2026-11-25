@@ -406,7 +406,7 @@
                       >
                       <span
                         v-if="row.option.description"
-                        class="shrink-0 truncate text-body-sm text-(--text-muted)"
+                        class="shrink-0 truncate text-label-sm text-(--text-muted)"
                         >{{ row.option.description }}</span
                       >
                     </slot>

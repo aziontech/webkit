@@ -19,7 +19,7 @@
         <Item.Description>Link custom domains and subdomains to Azion.</Item.Description>
       </Item.Content>
       <i
-        class="az az-arrow-right text-(--text-muted)"
+        class="az az-chevron-right text-(--text-muted)"
         aria-hidden="true"
       />
     </Item>
@@ -38,7 +38,7 @@
         <Item.Description>Redirect domain traffic to Azion.</Item.Description>
       </Item.Content>
       <i
-        class="az az-arrow-right text-(--text-muted)"
+        class="az az-chevron-right text-(--text-muted)"
         aria-hidden="true"
       />
     </Item>
@@ -57,7 +57,7 @@
         <Item.Description>Monitor performance, availability, and security.</Item.Description>
       </Item.Content>
       <i
-        class="az az-arrow-right text-(--text-muted)"
+        class="az az-chevron-right text-(--text-muted)"
         aria-hidden="true"
       />
     </Item>

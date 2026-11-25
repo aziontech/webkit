@@ -23,7 +23,7 @@
   <div class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)">
     <FileDropzone
       directories
-      title="Drop files or folders to upload"
+      title="Upload files or folders"
       description="Folders keep their structure: each file goes up with its path."
       @drop="(event, files) => add(files)"
     >
@@ -34,13 +34,15 @@
           size="medium"
           @click="browseFiles"
         />
-        <Button
-          label="Browse folder"
-          variant="secondary"
-          size="medium"
-          icon="az az-folder-open"
-          @click="browseFolder"
-        />
+        <span class="contents pointer-coarse:hidden">
+          <Button
+            label="Browse folder"
+            variant="secondary"
+            size="medium"
+            icon="az az-folder-open"
+            @click="browseFolder"
+          />
+        </span>
       </div>
     </FileDropzone>
     <FileTokenGroup

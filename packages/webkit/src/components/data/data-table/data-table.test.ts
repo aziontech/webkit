@@ -46,6 +46,13 @@ const columns = [
 ]
 
 describe('DataTable', () => {
+  it('isolates the direction of plain cell text, so an email truncates from its end in right-to-left', () => {
+    const { container } = render(Default, { attrs: { dir: 'rtl' } })
+    const texts = container.querySelectorAll<HTMLElement>('[role="cell"] > span.truncate')
+    expect(texts.length).toBeGreaterThan(0)
+    for (const text of texts) expect(text.getAttribute('dir')).toBe('auto')
+  })
+
   describe('frame and accessibility', () => {
     // A realistic composed tree wired through the dot-notation sub-components.
     const CompositionTree = defineComponent({
@@ -448,6 +455,27 @@ describe('DataTable', () => {
       expect(onRowClick.mock.calls[0]![1]).toEqual(rows[2])
     })
 
+    it('once focused, keeps the links and buttons of the other rows out of the Tab order, so a table is one stop', async () => {
+      const Host = defineComponent({
+        components: { DataTable },
+        setup: () => ({ rows, columns, onRowClick: vi.fn() }),
+        template: `<DataTable :data="rows" :columns="columns" row-key="id" @row-click="onRowClick">
+            <template #cell-name="{ value }"><a href="#row">{{ value }}</a><button type="button">Copy</button></template>
+          </DataTable>`
+      })
+      render(Host)
+      await nextTick()
+      const stops = (row: HTMLElement) =>
+        Array.from(row.querySelectorAll<HTMLElement>('a, button')).map((el) => el.tabIndex)
+      bodyRows()[0]!.focus()
+      await waitFor(() => expect(stops(bodyRows()[1]!)).toEqual([-1, -1]))
+      expect(stops(bodyRows()[0]!)).toEqual([0, 0])
+      expect(stops(bodyRows()[2]!)).toEqual([-1, -1])
+      key(bodyRows()[0]!, { key: 'ArrowDown' })
+      await waitFor(() => expect(stops(bodyRows()[1]!)).toEqual([0, 0]))
+      expect(stops(bodyRows()[0]!)).toEqual([-1, -1])
+    })
+
     it('selects on Space and asks to remove on Delete, never with a modifier', async () => {
       const onRowRemove = vi.fn()
       const selected = ref<string[]>([])
@@ -675,13 +703,28 @@ describe('DataTable', () => {
         }
       })
 
+      expect(inlineWidth(getAllByRole('columnheader')[1])).not.toBeNull()
       await waitFor(() => {
-        expect(inlineWidth(getAllByRole('columnheader')[1])).not.toBeNull()
+        expect(inlineWidth(getAllByRole('columnheader')[1])).toBeGreaterThan(8)
       })
-      // The floor is 8px; the cell holds a long string, so content decides.
       const resolved = inlineWidth(getAllByRole('columnheader')[1]) as number
       expect(resolved).toBeGreaterThan(8)
       expect(inlineWidth(getAllByRole('row')[1].children[1])).toBe(resolved)
+    })
+
+    it('holds a column at its floor before the first measurement, so loading rows keep the loaded columns', async () => {
+      const { getAllByRole } = render(DataTable, {
+        props: {
+          data: [],
+          loading: true,
+          columns: [
+            { accessorKey: 'name', header: 'Name' },
+            { accessorKey: 'status', header: 'Status', minWidth: 140 }
+          ]
+        }
+      })
+      const skeletonRow = getAllByRole('row').at(-1)!
+      expect(inlineWidth(skeletonRow.children[1])).toBe(140)
     })
 
     it('lets an explicit width win over the floor, and leaves other columns flexible', async () => {
@@ -726,6 +769,16 @@ describe('DataTable', () => {
     })
   })
 
+  describe('first render', () => {
+    it('shows rows it has at mount at once, so server-rendered rows never fade out and back', async () => {
+      const view = render(DataTable, { props: { data: rows, columns } })
+      const body = view.getAllByRole('rowgroup').at(-1)!
+      expect(body.classList.contains('opacity-0')).toBe(false)
+      await nextTick()
+      expect(body.classList.contains('opacity-0')).toBe(false)
+    })
+  })
+
   describe('stacked rows in a narrow box', () => {
     const mountIn = (width: number, props: Record<string, unknown> = {}) => {
       const host = document.createElement('div')
@@ -751,10 +804,40 @@ describe('DataTable', () => {
       expect(labels).toHaveLength(rows.length)
       expect(labels[0]?.textContent).toBe('Status')
       expect(labels[0]?.getAttribute('aria-hidden')).toBe('true')
+      for (const row of view.getAllByRole('row').slice(1)) {
+        expect(row.classList.contains('border!')).toBe(false)
+        expect(row.classList.contains('rounded-(--shape-control)')).toBe(false)
+      }
       expect(view.getAllByRole('columnheader').map((cell) => cell.textContent?.trim())).toEqual([
         'Name',
         'Status'
       ])
+    })
+
+    it('drops a narrow: false column from the header, the rows and the skeleton below --container-sm', async () => {
+      const narrowColumns = columns.map((column, index) =>
+        index === 1 ? { ...column, narrow: false } : column
+      )
+      const view = mountIn(320, { columns: narrowColumns })
+      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+      const [nameHead, statusHead] = view.getAllByRole('columnheader')
+      expect(statusHead?.classList.contains('@max-sm/table:hidden')).toBe(true)
+      expect(nameHead?.classList.contains('@max-sm/table:hidden')).toBe(false)
+      const bodyRows = view.getAllByRole('row').slice(1)
+      for (const row of bodyRows) {
+        const cells = within(row).getAllByRole('cell')
+        expect(cells[1]?.classList.contains('@max-sm/table:hidden')).toBe(true)
+        expect(cells[0]?.classList.contains('@max-sm/table:hidden')).toBe(false)
+      }
+      await view.rerender({ columns: narrowColumns, data: rows, loading: true })
+      await waitFor(() =>
+        expect(view.container.querySelector('[role="cell"] [data-testid="skeleton"]')).toBeTruthy()
+      )
+      const skeletonRow = view.container
+        .querySelector('[role="cell"] [data-testid="skeleton"]')!
+        .closest('[role="row"]') as HTMLElement
+      const skeletonCells = within(skeletonRow).getAllByRole('cell')
+      expect(skeletonCells[1]?.classList.contains('@max-sm/table:hidden')).toBe(true)
     })
 
     it('keeps the scrolling grid in a wide box when stackable', async () => {

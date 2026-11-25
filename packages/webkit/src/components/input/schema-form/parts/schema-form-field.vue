@@ -257,7 +257,8 @@
         :readonly="isReadonly(node)"
         :rows="node.widget === 'json' ? 5 : 3"
         spellcheck="false"
-        class="w-full font-code"
+        monospace
+        class="w-full"
         @update:model-value="node.widget === 'list' ? setList(node, $event) : setJson(node, $event)"
       />
       <Input

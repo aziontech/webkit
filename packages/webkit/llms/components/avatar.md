@@ -60,7 +60,7 @@
 - Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
 - Root attributes: `data-variant` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
 - Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
-- Presence: `presence` is `online`, `away`, `busy` or `offline` (`AvatarPresence`); `''` (default) renders nothing. When set, the root carries `data-presence` and a dot (`data-slot="presence"`, test id `${testId}__presence`) sits inside the avatar's box, in its bottom inline-end corner, overlapping only the picture, at 10 / 12 / 16 px for `small` / `medium` / `large` (its 2 px ring included), the same for `circle` and `square`. The content is clipped to the avatar shape by an inner box, so the dot is never clipped by the avatar itself, and a parent that clips its content never cuts it off. Each value has its own shape, so colour is not the only signal: `online` a filled dot, `away` a crescent, `busy` a dot with a horizontal bar, `offline` a hollow ring. A 2 px ring in `--avatar-presence-ring` (default `var(--bg-surface)`) separates the dot from the picture and from the background; an app on another background sets that variable on the avatar or an ancestor.
+- Presence: `presence` is `online`, `away`, `busy` or `offline` (`AvatarPresence`); `''` (default) renders nothing. When set, the root carries `data-presence` and a dot (`data-slot="presence"`, test id `${testId}__presence`) sits inside the avatar's box, in its bottom inline-end corner, overlapping only the picture, at 10 / 12 / 16 px for `small` / `medium` / `large` (its 2 px ring included), the same for `circle` and `square`. On `small` the dot is pushed a quarter of its size past the corner (`translate-1/4`, mirrored under `rtl`), so on a 24 px avatar it no longer covers the second initial; only its ring leaves the box. The content is clipped to the avatar shape by an inner box, so the dot is never clipped by the avatar itself, and a parent that clips its content never cuts it off. Each value has its own shape, so colour is not the only signal: `online` a filled dot, `away` a crescent, `busy` a dot with a horizontal bar, `offline` a hollow ring. A 2 px ring in `--avatar-presence-ring` (default `var(--bg-surface)`) separates the dot from the picture and from the background; an app on another background sets that variable on the avatar or an ancestor.
 - Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
 - Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
@@ -68,7 +68,7 @@
 
 - Visible focus: none; the avatar is not focusable. A parent control (account menu trigger) owns focus.
 - Keyboard map: none.
-- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
+- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization; an `aria-label` the consumer passes, such as the purpose of a menu trigger the avatar sits in, replaces the derived name), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
 - Contrast ≥4.5:1 for the initials on `var(--bg-surface-raised)`; the generated pattern is decorative and carries no text.
 - Presence: the dot is presentational (`aria-hidden`); the presence joins the accessible name of the root (`aria-label`) or of the image (`alt`) through `avatar.withPresence`, for example "Jane Doe, away"; it wraps whichever name applies (`alt`, the label, the initials or the fallback, so "User avatar, away"). The dot colours are the documented `-mark` colours (`--text-muted` for `offline`, the neutral mark), solid marks at APCA Lc 30 and WCAG 3:1 on the surface, and each value differs in shape as well as colour (WCAG 1.4.1). A change of `presence` is not announced (no live region): the avatar is a label, and a live roster announces through the app.
 
@@ -81,15 +81,15 @@
 
 ## Internationalization
 
-| Key                    | English source | Override prop |
-| ---------------------- | -------------- | ------------- |
-| `avatar.imageAlt`      | Avatar         | `alt`         |
-| `avatar.fallbackLabel` | User avatar    | `alt`         |
-| `avatar.presenceOnline` | online        | —             |
-| `avatar.presenceAway`  | away           | —             |
-| `avatar.presenceBusy`  | busy           | —             |
-| `avatar.presenceOffline` | offline      | —             |
-| `avatar.withPresence`  | {name}, {presence} | —         |
+| Key                      | English source     | Override prop |
+| ------------------------ | ------------------ | ------------- |
+| `avatar.imageAlt`        | Avatar             | `alt`         |
+| `avatar.fallbackLabel`   | User avatar        | `alt`         |
+| `avatar.presenceOnline`  | online             | —             |
+| `avatar.presenceAway`    | away               | —             |
+| `avatar.presenceBusy`    | busy               | —             |
+| `avatar.presenceOffline` | offline            | —             |
+| `avatar.withPresence`    | {name}, {presence} | —             |
 
 - Formatting: none. With `pattern`, the accessible name is `alt`, then the full `label`, then `avatar.fallbackLabel`.
 

@@ -1,8 +1,8 @@
 import './reflow.css'
 
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { page } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { h } from 'vue'
 
 import DeploymentSettings from '../../blocks/account/account-deployment-settings/account-deployment-settings.vue'
@@ -11,6 +11,7 @@ import DeleteSettingsRow from '../../blocks/edit/edit-delete-dialog/variants/set
 import FunctionArguments from '../../blocks/edit/edit-function/variants/arguments.vue'
 import FunctionTestRun from '../../blocks/edit/edit-function/variants/test-run.vue'
 import FirstUseLoading from '../../blocks/state/state-first-use/variants/loading.vue'
+import NavigationMenuDefault from '../../examples/navigation-menu/default.vue'
 import ToolCall from '../components/ai/tool-call/tool-call.vue'
 import Skeleton from '../components/feedback/skeleton/skeleton.vue'
 
@@ -53,7 +54,9 @@ describe('clipped content', () => {
     const headers = view.container.querySelectorAll<HTMLElement>('[data-slot="field-header"]')
     expect(headers.length).toBeGreaterThan(0)
     for (const header of headers) {
-      const key = header.querySelector<HTMLElement>('[data-slot="item-content"] .font-code')!
+      const key = header.querySelector<HTMLElement>(
+        '[data-slot="item-content"] .text-label-code-sm'
+      )!
       expect(key.textContent?.trim()).not.toBe('')
       expect(key.getBoundingClientRect().width).toBeGreaterThan(0)
       expect(key.scrollWidth).toBeLessThanOrEqual(key.clientWidth + 1)
@@ -115,4 +118,32 @@ describe('clipped content', () => {
 
 afterEach(async () => {
   await page.viewport(414, 896)
+})
+
+describe('a navigation menu panel on a phone (A6-074)', () => {
+  it.each([320, 390])(
+    'keeps every link of the Solutions panel inside the panel at %ipx',
+    async (width) => {
+      await page.viewport(width, 844)
+      const view = render(NavigationMenuDefault)
+      view.getByRole('button', { name: 'Solutions' }).focus()
+      await userEvent.keyboard('{Enter}')
+      const popover = () =>
+        Array.from(
+          document.body.querySelectorAll<HTMLElement>('[data-testid="navigation-menu-popover"]')
+        ).find((el) => el.querySelectorAll('a').length > 3)
+      await waitFor(() => expect(popover()?.textContent).toContain('Media and entertainment'))
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      const box = popover()!.getBoundingClientRect()
+      expect(box.right).toBeLessThanOrEqual(width)
+      const links = Array.from(popover()!.querySelectorAll<HTMLElement>('a'))
+      expect(links.length).toBeGreaterThan(3)
+      for (const link of links) {
+        const rect = link.getBoundingClientRect()
+        expect(rect.left).toBeGreaterThanOrEqual(box.left - 1)
+        expect(rect.right).toBeLessThanOrEqual(box.right + 1)
+      }
+      view.unmount()
+    }
+  )
 })

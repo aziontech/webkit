@@ -269,6 +269,17 @@ describe('Field', () => {
     expect(getByRole('switch').getAttribute('aria-checked')).toBe('true')
   })
 
+  it('gives a selected choice card the RadioGroup card fill, --primary-selected', () => {
+    const { container } = mount(
+      '<FieldLabel><Field orientation="horizontal"><Switch /><FieldContent><FieldTitle>WAF</FieldTitle></FieldContent></Field></FieldLabel>'
+    )
+    const card = container.querySelector('label') as HTMLElement
+    expect(card.classList).toContain(
+      'has-[>[data-slot=field]]:has-[[data-checked]]:bg-(--primary-selected)'
+    )
+    expect(card.className).not.toContain('bg-(--bg-selected)')
+  })
+
   it('renders a fieldset named by its legend', () => {
     const { getByRole } = mount(
       '<FieldSet><FieldLegend type="label">Plan</FieldLegend><FieldSeparator>Or</FieldSeparator></FieldSet>'
@@ -324,9 +335,9 @@ describe('Field', () => {
   })
 
   describe('Field.Label hint and the RequiredAndDisabled example', () => {
-    it('renders the hint glyph beside a label with hint, described by the hint text', () => {
+    it('renders the hint glyph beside a label with hint, described by the hint text', async () => {
       const view = render(RequiredAndDisabled)
-      const glyph = view.getByRole('button', { name: 'More information' })
+      const glyph = await view.findByRole('button', { name: 'More information' })
       expect(glyph).toHaveAccessibleDescription(
         "The name appears in the console and in the application's default domain."
       )
@@ -342,7 +353,7 @@ describe('Field', () => {
             '<Field orientation="horizontal"><Checkbox v-model="checked" /><FieldLabel hint="Values are encrypted at rest.">Sensitive</FieldLabel></Field>'
         })
       )
-      const glyph = view.getByTestId('field-label__hint__trigger')
+      const glyph = await view.findByTestId('field-label__hint__trigger')
       await userEvent.click(glyph)
       await nextTick()
       expect(checked.value).toBe(false)

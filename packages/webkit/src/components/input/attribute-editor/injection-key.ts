@@ -13,7 +13,7 @@ export interface AttributeEditorContext {
   groupCount: ComputedRef<number>
   rowErrors: (index: number, groupIndex: number | undefined) => AttributeEditorRowErrors
   position: (index: number, groupIndex: number | undefined) => number
-  removeLabel: (position: number) => string
+  removeLabel: (position: number, item?: object) => string
   update: (index: number, groupIndex: number | undefined, key: string, value: unknown) => void
   remove: (event: MouseEvent | KeyboardEvent, index: number, groupIndex?: number) => void
   move: UseAttributeEditorRowsReturn

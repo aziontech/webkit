@@ -95,14 +95,14 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The track carries `data-scrollable` too, which is what gives it the grab cursor; a track that fits shows the ordinary pointer, because there is nothing to drag
 - `data-dragging` is on the track for the length of a mouse drag: the cursor closes, snapping and smooth scrolling stand down so the row tracks the pointer exactly, and text selection is suppressed
 - A drag that travels more than a few pixels swallows the click it ends on, so releasing over a link inside a slide does not follow it
-- Each control carries `disabled` at its end of the track, so a reader is never offered a step that does nothing
+- Each control is focusable-disabled (`aria-disabled="true"`, the disabled look, a click does nothing) at its end of the track, so a reader is never offered a step that does nothing, and the tab order stays the same while `Tab` scrolls the track
 - The track is focusable and shows the focus ring, because a scrollable region must be reachable by keyboard
 
 ## Accessibility
 
 - Visible focus: the track and both controls carry `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` reaches the controls and the track itself; with the track focused the arrow keys scroll it natively, and `Enter` / `Space` on a control steps one slide. No custom key handler replaces native scrolling. Pointer dragging is an addition for mice, never the only way to move the track — the keyboard, the wheel, touch and the step controls all still reach every slide.
-- ARIA: the root is a `<section>` with `aria-roledescription="carousel"` named by `ariaLabel`; the track is a `<ul>` of `<li>` slides carrying `tabindex="0"` so the scrollable region is keyboard-reachable (WCAG 2.1.1); each control is a real `<button>` with its own `ariaLabel` and the native `disabled` state at its end of the track.
+- ARIA: the root is a `<section>` with `aria-roledescription="carousel"` named by `ariaLabel`; the track is a `<ul>` of `<li>` slides carrying `tabindex="0"` so the scrollable region is keyboard-reachable (WCAG 2.1.1); each control is a real `<button>` with its own `ariaLabel`, and `aria-disabled="true"` (never the native `disabled`, which would drop it from the tab order) at its end of the track.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the control glyph is `var(--text-muted)` on `var(--bg-surface)` and darkens to `var(--text-default)` on hover; slide content carries its own colours.
 - `motion-reduce:scroll-auto` on the track and `motion-reduce:transition-none` on the controls. The track never auto-advances, so WCAG 2.2.2 (pause, stop, hide) does not apply by construction.
 - Touch target ≥40×40 px — each step control is a 40×40 button.
@@ -678,7 +678,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Doc Callout
 
-> The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+> The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 - Import: `import DocCallout from '@aziontech/webkit/doc-callout'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -735,7 +735,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - Keyboard map: `Tab` reaches a link or a command chip (`<code data-command>`) in the copy; `Enter` / `Space` on a command chip copies it. A plain chip is not a stop.
 - Copy feedback: the tooltip is `role="tooltip"`; the result is announced in a polite live region teleported to `body`, which binds `dir` and `lang` from the nearest `ConfigProvider`.
 - ARIA: the role comes from `Alert`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
-- Contrast ≥4.5:1: the copy is `--text-default` in every variant, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
+- Contrast ≥4.5:1: the copy is `--text-default` in every variant, on `--bg-surface` in every variant, so it keeps the surface's body-text contrast in both themes; the glyph is the `-mark` token, which passes the icon target on a surface. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
 - `tip` deliberately does **not** speak in `--text-muted` (3.95:1 light, under AA).
 - Touch target: the callout itself is not interactive; a chip is an inline text control (WCAG 2.5.8 inline exception).
 
@@ -2127,6 +2127,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - `data-variant` mirrors the `variant` prop: `block` | `line`
 - `data-state` — `open` | `closed` on the prompt text of a capped `block`: `open` once the reader has opened it
 - `data-capped` — present on the root when a `block` prompt is taller than its four-line cap; absent when it fits, so a prompt that fits earns no disclosure control
+- Narrow container: below the `sm` container width (`@container/doc-prompt`) the `line` shape wraps instead of scrolling, so on a phone the reader sees the whole prompt the Copy button sends; it then has no overflow and draws no fades.
 - `data-overflow` — on the `line` shape: `start` | `end` | `both`, whichever edge has text scrolled behind it; absent when the line fits
 - `data-single-line` — on the prompt row when the prompt occupies exactly one line (`line` always; a `block` whose sentence fits its column). The row then centres the prompt against the copy control instead of top-aligning it — the control is 28px and one line of the prompt face is 19.5px, so a top-aligned pair leaves the sentence 4.25px above the control's middle. Absent the moment the prompt wraps.
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
@@ -2135,7 +2136,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Accessibility
 
 - Visible focus: `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)` on the `line` shape
-- Keyboard map: the `line` shape takes a tab stop because it is a scroll container — a scroll container holding no focusable child is unreachable by keyboard (and an axe `scrollable-region-focusable` violation); arrow keys then scroll it. The `block` shape scrolls nothing, so it takes no tab stop. `Tab` reaches the disclosure control and the copy control; `Enter` / `Space` activate them.
+- Keyboard map: the `line` shape takes a tab stop because it is a scroll container — a scroll container holding no focusable child is unreachable by keyboard (and an axe `scrollable-region-focusable` violation); arrow keys then scroll it. The `block` shape scrolls nothing, so it takes no tab stop. `Tab` reaches the copy control, then the disclosure control, which sits in a full-width row under the prompt and the copy control, so focus order matches reading order; `Enter` / `Space` activate them.
 - ARIA: the full prompt text is in the DOM in every state, so the cap hides nothing from a screen reader — the disclosure is a visual convenience and the state it reports is the change in its own label (`Show more` / `Show less`). Every fade gradient is `aria-hidden="true"`; the title glyph is `aria-hidden="true"`. The copy control carries its own accessible name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the prompt is `--text-default`, not the muted body ink, because the prompt IS the payload and everything around it is chrome
 - `motion-reduce:transition-none` on both animated states; the disclosure move is skipped rather than shortened
@@ -2203,7 +2204,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - Visual states: `default`, plus `hover` and `focus-visible` on descendant links, and `hover` on an authored inline `code` chip (a ring, and a tooltip offering the copy)
 - No `data-state`: the container is static and holds no state of its own
 - Reflow: an inline `code` chip wraps at any character (`wrap-anywhere`, with `box-decoration-clone` so each line keeps the chip's outline and padding), so a long path or URL never widens the column at 320px or at 200% zoom. Code inside `pre` keeps its lines
-- Inline code chip: `.text-label-code-sm` with no vertical padding, an inner padding of `var(--spacing-2xs)`, and its outline drawn inside the box (`inset-ring`, a real `border` only under `forced-colors`), so the chip is never taller than the 14px `.text-body-sm` line it sits in and chips on consecutive wrapped lines keep at least a 1px gap. It wraps at any character (`wrap-anywhere` + `box-decoration-clone`, so each line keeps its own outline and padding). The same chip renders in `DocProse`, `DocCallout` and `DocItem`. The chip is for inline code only: its selector excludes `code` inside `pre`, so a fenced code block never gets the outline, the fill, the per-line box or the copy ring and keeps the plain code-block look. `src/test/inline-code.test.ts` measures the gap and checks a `pre code` block stays plain, in a styled suite.
+- Inline code chip: `.text-label-code-sm` with no vertical padding, an inner padding of `var(--spacing-2xs)`, and its outline drawn inside the box (`inset-ring`, a real `border` only under `forced-colors`), so the chip is never taller than the 14px `.text-body-sm` line it sits in and chips on consecutive wrapped lines keep at least a 1px gap. It wraps at any character (`wrap-anywhere` + `box-decoration-clone`, so each line keeps its own outline and padding). In a table cell the chip stays on one line (`whitespace-nowrap`), so a class or token name never breaks at its hyphens; the table scrolls sideways instead. The same chip renders in `DocProse`, `DocCallout` and `DocItem`. The chip is for inline code only: its selector excludes `code` inside `pre`, so a fenced code block never gets the outline, the fill, the per-line box or the copy ring and keeps the plain code-block look. `src/test/inline-code.test.ts` measures the gap and checks a `pre code` block stays plain, in a styled suite.
 - Clicking an authored inline `code` chip copies its text (a chip inside a link is the link: no copy ring, no tooltip, the click follows the link); the tooltip reads `Copy`, then `Copied`, and falls back to `Press ⌘C to copy` on macOS (`Press Ctrl+C to copy` elsewhere, the modifier from the `kbd` catalog) with the chip selected when the clipboard is refused. A chip inside `pre`, inside a link, or generated by a component (it carries a `data-testid`, or holds child elements) is excluded
 - A chip marked as a command (`<code data-command>`) is also a control: on mount it gets `role="button"`, `tabindex="0"` and the name `Copy {value}` (the `copyText.copy` key), `Enter` or `Space` copies it, focus shows the same tooltip, and a focus ring (`var(--ring-color)`) marks it. Only commands become tab stops; a plain chip keeps its look and stays a pointer shortcut. Every copy selects the whole chip and writes the result (`Copied`, or the manual shortcut) to a polite live region teleported to `body` (`<testid>__copy-status`), cleared after the 1.4 s feedback window. The behaviour is the shared `useInlineCodeCopy` composable; a chip is handled by its nearest `data-code-copy` root only, so a DocCallout inside DocProse copies once.
 - Reads two descendant contracts: `data-doc-chrome` (every prose rule stops there) and `data-doc-block` (takes the block rung of the ladder)
@@ -2211,7 +2212,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Accessibility
 
 - Visible focus: descendant links take `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)`.
-- Keyboard map: `Tab` moves through descendant links and command chips; `Enter` / `Space` on a command chip copies it; the container itself is not focusable.
+- Keyboard map: `Tab` moves through descendant links, command chips and prose tables; `Enter` / `Space` on a command chip copies it; arrow keys scroll a focused table that is wider than the page; the container itself is not focusable. After mount (and when the slot content changes) `DocProse` gives every prose table outside `[data-doc-chrome]` `tabindex="0"` unless it already has one, the same as the docs markdown renderer, so a table that scrolls sideways is reachable from the keyboard (axe `scrollable-region-focusable`).
 - ARIA: none — the container adds no role. The semantics are the author's HTML (`h2`, `ul`, `blockquote`), which is the point of the contract.
 - Contrast: headings, `strong` and inline `code` are `--text-default` (≥14.7:1). **Body copy and list items are `--text-muted`, which is 3.78:1 on canvas and 3.95:1 on surface in light mode — under the 4.5:1 AA needs for body text** (dark is fine at 5.32:1 / 5.01:1). The contract carries that gap knowingly and in one place; closing it means a documentation body ink one step darker (`#737373` reads the same and clears AA at 4.54:1), not a per-page override.
 - A plain chip copy adds **no tab stops**: it is a pointer shortcut over text that stays selectable the ordinary way, so a page of thirty chips does not become thirty stops. A command chip (`data-command`) is the exception, a `role="button"` stop that `Enter` / `Space` copies, because a reader runs a command and should reach it from the keyboard. The tooltip is `role="tooltip"` and `pointer-events-none`; the result is announced in a polite live region.
@@ -2691,20 +2692,30 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
+  import CardGridCell from '@aziontech/webkit/card-grid-cell'
   import CardGridRoot from '@aziontech/webkit/card-grid-root'
 </script>
 
 <template>
   <CardGridRoot :columns="3">
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
-      Deploy from Git with a preview for every branch.
-    </div>
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
-      Cache static assets in every region.
-    </div>
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
-      Block bots before they reach your code.
-    </div>
+    <CardGridCell>
+      <h3 class="m-0 text-heading-xs text-(--text-default)">Deploy from Git</h3>
+      <p class="mt-(--spacing-xs) mb-0 text-body-md text-(--text-muted)">
+        Every branch gets its own preview URL.
+      </p>
+    </CardGridCell>
+    <CardGridCell>
+      <h3 class="m-0 text-heading-xs text-(--text-default)">Cache at the edge</h3>
+      <p class="mt-(--spacing-xs) mb-0 text-body-md text-(--text-muted)">
+        Static assets are served from the location closest to each user.
+      </p>
+    </CardGridCell>
+    <CardGridCell>
+      <h3 class="m-0 text-heading-xs text-(--text-default)">Stop bad bots</h3>
+      <p class="mt-(--spacing-xs) mb-0 text-body-md text-(--text-muted)">
+        Automated traffic is blocked before it reaches your code.
+      </p>
+    </CardGridCell>
   </CardGridRoot>
 </template>
 ```
@@ -2896,9 +2907,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
   <Module
     eyebrow="Platform"
     title="Build, run, and protect applications"
-    description="One sentence naming what the band is about."
+    description="Deploy applications to a network of edge locations and keep them secure from one console."
   >
-    <p class="m-0 text-body-md text-(--text-muted)">Everything the band has to say.</p>
+    <p class="m-0 text-body-md text-(--text-muted)">
+      Functions run your code next to your users, Cache serves your content, and the Web Application
+      Firewall blocks attacks before they reach your origin.
+    </p>
   </Module>
 </template>
 ```
@@ -3234,7 +3248,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     ],
     links: [{ label: 'Pricing', href: '/en/pricing/' }],
     contact: { label: 'Contact', href: '/en/contact/' },
-    secondaryAction: { label: 'Login', href: 'https://console.azion.com/login' },
+    secondaryAction: { label: 'Log in', href: 'https://console.azion.com/login' },
     primaryAction: { label: 'Start for free', href: 'https://console.azion.com/signup' }
   }
 
@@ -3470,7 +3484,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <template>
   <SplitStack>
     <MediaSplit
-      title="Build and Run Applications"
+      title="Build and run applications"
       description="Deploy applications and static sites straight from Git."
       size="large"
       align="center"
@@ -3481,7 +3495,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </template>
     </MediaSplit>
     <MediaSplit
-      title="Secure Applications and Networks"
+      title="Secure applications and networks"
       description="Stop DDoS attacks, bots and exploits before they reach your origin."
       size="large"
       align="center"
@@ -3492,7 +3506,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       </template>
     </MediaSplit>
     <MediaSplit
-      title="Observe Every Request"
+      title="Observe every request"
       description="Follow logs, metrics and events from every location as they happen."
       size="large"
       align="center"
@@ -3617,7 +3631,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
-- Put the controls in the `actions` slot; the panel lays them out as a row right after the copy from `md` up (a `--spacing-2xl` gap, never pushed to the far edge of a wide band, so the eye goes from the promise to its action) and stacks them full-width below it.
+- Put the controls in the `actions` slot; the panel lays them out as a row right after the copy from `md` up (a `--spacing-2xl` gap, never pushed to the far edge of a wide band, so the eye goes from the promise to its action); the copy takes a fixed measure (`--layout-measure-content`), so two panels stacked on a page start their actions at the same place whatever their headline length and stacks them full-width below it.
 - Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
 - Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
@@ -4747,7 +4761,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on every claim's title control
-- Keyboard map: `Tab` reaches each claim's title control in reading order; focusing or activating one opens that claim at once and scrolls the band to its share of the scroll, so a keyboard reader moves the band exactly as a pointer reader does, and the next `Tab` reaches the claim's actions without waiting for the scroll to settle. There is no key that scrolls the page other than the reader's own — the band never takes the scroll it is given.
+- Keyboard map: `Tab` reaches each claim's title control in reading order; focusing or activating one opens that claim at once and scrolls the band to its share of the scroll, so a keyboard reader moves the band exactly as a pointer reader does, and the next `Tab` reaches the claim's actions without waiting for the scroll to settle. There is no key that scrolls the page other than the reader's own — the band never takes the scroll it is given. Below `lg` the claims stack open and nothing pins, so each title renders as plain heading text with no control, and `Tab` skips it.
 - ARIA: the claim list is an `<ol>` (the run is ordered); the open claim's control carries `aria-current="true"`; the progress hairline is `aria-hidden="true"`
 - Every claim's description stays in the accessibility tree while collapsed (clipped, never `display: none`), so the whole run is readable without scrolling through it
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted tone a read claim rests at
@@ -5684,6 +5698,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
 - Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.
 - Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.
+- Write a unit in its own case (`ms`, `Tbps`, `GB`): a suffix with a letter is set in the text face (`text-big-number-unit`) at the size the figure sets, because the display face draws lowercase as capitals and `MS` or `TBPS` means another unit. A symbol suffix (`+`, `%`) stays in the display face.
 - Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.
 - Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.
 - Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`).
@@ -6093,13 +6108,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <template>
   <ArticleCardsSection
     align="start"
-    title="Related Articles"
-    aria-label="Related Articles"
+    title="Related articles"
+    aria-label="Related articles"
     :items="[
       {
         id: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
-        title: 'How Do You Reduce AI Agent Latency?',
+        title: 'How do you reduce AI agent latency?',
         description:
           'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
         meta: 'SEP 23, 2026 • 8 min read',
@@ -6108,7 +6123,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       {
         id: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
-        title: 'Best Cloudflare Alternatives and Competitors',
+        title: 'Best Cloudflare alternatives and competitors',
         description:
           'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
         meta: 'SEP 22, 2026 • 13 min read',
@@ -6117,7 +6132,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       {
         id: 'which-azion-plan-is-right-for-your-project',
         href: '/blog/which-azion-plan-is-right-for-your-project',
-        title: 'Which Azion Plan Is Right for Your Project?',
+        title: 'Which Azion plan is right for your project?',
         description:
           'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
         meta: 'SEP 22, 2026 • 7 min read',
@@ -6235,7 +6250,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         image: placeholderImage,
         highlightImage: placeholderImage,
         meta: 'Serverless • SEP 23, 2026',
-        title: 'How Do You Reduce AI Agent Latency?',
+        title: 'How do you reduce AI agent latency?',
         description:
           'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',
         readTime: '8 min read'
@@ -6246,7 +6261,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         image: placeholderImage,
         highlightImage: placeholderImage,
         meta: 'Security • SEP 22, 2026',
-        title: 'Best Cloudflare Alternatives and Competitors',
+        title: 'Best Cloudflare alternatives and competitors',
         description:
           'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',
         readTime: '13 min read'
@@ -6257,7 +6272,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         image: placeholderImage,
         highlightImage: placeholderImage,
         meta: 'Company news • SEP 22, 2026',
-        title: 'Which Azion Plan Is Right for Your Project?',
+        title: 'Which Azion plan is right for your project?',
         description: 'Compare Azion’s Hobby, Pro, and Enterprise plans.',
         readTime: '7 min read'
       }
@@ -6392,7 +6407,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         href: '/blog/how-to-reduce-ai-agent-latency',
         image: placeholderImage,
         meta: 'Serverless • SEP 23, 2026',
-        title: 'How Do You Reduce AI Agent Latency?',
+        title: 'How do you reduce AI agent latency?',
         description:
           'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',
         authors: [{ name: 'Priya Patel' }],
@@ -6404,7 +6419,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         href: '/blog/cloudflare-alternatives-and-competitors',
         image: placeholderImage,
         meta: 'Security • SEP 22, 2026',
-        title: 'Best Cloudflare Alternatives and Competitors',
+        title: 'Best Cloudflare alternatives and competitors',
         description:
           'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',
         authors: [{ name: 'Alex Morgan' }],
@@ -6999,13 +7014,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       mark: 'dafiti',
       clientName: 'Dafiti',
       text: "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers.",
-      name: 'Julian H',
-      jobTitle: 'IT OPS, SRE & SEC Manager at Dafiti Group'
+      name: 'Jane Doe',
+      jobTitle: 'IT operations manager at Dafiti'
     },
     {
       mark: 'axur',
       text: 'With Azion, we scale proprietary AI models without managing infrastructure—inspecting millions of websites daily and automating the market’s fastest threat takedown.',
-      name: 'Fabio Ramos',
+      name: 'John Smith',
       jobTitle: 'CEO at Axur'
     },
     {
@@ -7014,28 +7029,28 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       text:
         'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce ' +
         'costs, and deliver the best shopping experiences to millions of customers across Latin America.',
-      name: 'Allan Monteiro',
-      jobTitle: 'CISO & Head of Technology at Magalu'
+      name: 'Alex Morgan',
+      jobTitle: 'Head of technology at Magalu'
     },
     {
       logo: herosparkExtendedColor,
       clientName: 'HeroSpark',
       text: 'Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development.',
-      name: 'Mateus Leonardi',
+      name: 'Sam Lee',
       jobTitle: 'CTO at HeroSpark'
     },
     {
       logo: zoopExtendedColor,
       clientName: 'Zoop',
       text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',
-      name: 'Ismael Aguilar',
-      jobTitle: 'Information Security Manager at Zoop'
+      name: 'Priya Patel',
+      jobTitle: 'Information security manager at Zoop'
     },
     {
       mark: 'contabilizei',
       text: 'With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed.',
-      name: 'Fabrício Santos',
-      jobTitle: 'DevSecOps Manager at Contabilizei'
+      name: 'Chris Taylor',
+      jobTitle: 'DevSecOps manager at Contabilizei'
     }
   ]
 </script>
@@ -7071,7 +7086,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Three cells for `reveal="always"` (the grid is three columns from the medium breakpoint); three or four for `reveal="hover"`, which shares the row between them.
 - With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
 - Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
-- Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.
+- Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. Left out, the ink is chosen by measured contrast: a hex `base` on which white text would fall under 4.5:1 (WCAG AA) takes dark ink. A cell with neither paints a black face.
 
 ## Don’t
 
@@ -7096,6 +7111,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## States
 
 - Visual states: `default`, `hover` on each column (the face reveals the link line, the story fill rises)
+- At rest, in the default layout, each story carries the link label and an arrow under its line, so a card says it is a link before it is hovered
 - The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`, or from the client registry by `name` when `brand` is left out; `data-treatment` on every mark drives its ink
 - `reveal="hover"`: each list item carries `data-state=open|closed`; one card is open at a time on large screens, every card is open below the large breakpoint; a closed card on large screens shows the link label ("Read story") at its foot, so a visitor at rest knows each card holds a story
 - Empty: when `cells` is empty the band renders nothing
@@ -7788,6 +7804,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.
 - Don't pad `channels` to three or drop one to make the row fit.
+- Put an emergency channel (an attack in progress) first and give it `severity: 'danger'`, so a reader under attack finds it at a glance; no other channel takes a severity.
 - Keep each lane's description to one sentence that states what that team handles.
 - Set `target: '_blank'` on a channel or status link that leaves the site.
 - Lead each lane with its `action`; add a `secondaryAction` only for a second route to the same team (an outlined button after the first).
@@ -7809,7 +7826,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `lanes` | `ContactHubSectionLane[]` | `[]` | false | The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them (its optional `severity` draws the live status). |
-| `channels` | `ContactHubSectionChannel[]` | `[]` | false | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. |
+| `channels` | `ContactHubSectionChannel[]` | `[]` | false | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic; `severity: 'danger'` draws the glyph in `var(--danger-mark)` for the emergency channel. |
 
 ## States
 
@@ -7865,12 +7882,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     ]"
     :channels="[
       {
-        icon: 'az az-shield',
+        icon: 'az az-triangle-alert',
         title: 'Under a cyberattack?',
         description:
           'Get emergency mitigation for an attack in progress, even before you become a customer.',
         href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
-        target: '_blank'
+        target: '_blank',
+        severity: 'danger'
       },
       {
         icon: 'az az-discord',
@@ -7899,7 +7917,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Copy Command Section
 
-> A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` the command is one line in a large `InputGroup`, a `$` prompt leading it and an end fade when it scrolls; without it the prompt is a read-only block that wraps, so the reader sees every word they copy. From the design sample's site `CopyCommandSection`.
+> A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …"). Both are a read-only block that wraps, so the reader sees every word they copy; with `shell` a decorative `$` prompt leads the command, which breaks anywhere (a command has no spaces to break at), and without it the agent prompt wraps between words. From the design sample's site `CopyCommandSection`.
 
 - Import: `import CopyCommandSection from '@aziontech/webkit/copy-command-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -7922,7 +7940,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Related
 
-- `CopyButton`, `InputGroup` — the parts.
+- `CopyButton` — the part.
 - `CliTerminalSection` — a full terminal session.
 
 ## Props
@@ -7934,11 +7952,11 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## States
 
-- Read-only input; the copy button shows its copied state (from `CopyButton`).
+- Read-only text; the copy button shows its copied state (from `CopyButton`).
 
 ## Accessibility
 
-- The read-only input is named "Command" or "Prompt"; the copy button is named "Copy command" or "Copy prompt".
+- The read-only block is a group named "Command" or "Prompt"; the copy button is named "Copy command" or "Copy prompt".
 - The `$` is decorative (`aria-hidden`). The command is a read-only textbox named "Command"; the prompt is a group named "Prompt" holding its text and the copy button.
 - Keyboard: `Tab` reaches the field (text can be selected) and the copy button.
 
@@ -8009,7 +8027,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the title cell, not the frame — because a use-case band with no use cases is absent from the page, not an `empty-state`
 - The title cell spans two rows from `lg`, so four items fill a three-column grid exactly
-- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
+- The eyebrow carries the `//` prefix that marks every marketing section header (decision EB-1).
 
 ## Accessibility
 
@@ -8211,6 +8229,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
+- Below the large breakpoint the grid holds two columns from `sm`; with an odd count the last tile (`data-wide`) spans both, so the frame never ends on an empty cell. On a phone a `code` sample drops its own side inset, so the code window takes the tile's full width.
 - The server renders both layouts (CSS shows the right one); once mounted only the layout that matches the width stays in the document, so the band never carries two copies of every scene and illustration
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
 - Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. In the grid a `code` sample opens on a label strip naming its file, which holds the copy button, so the button never covers the first line. A scene name that is not registered draws nothing.
@@ -8243,7 +8262,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Every workload on one list',
         description:
           'See each workload with its domain, status and last deployment, so what is live is never a question.',
-        illustration: 'traffic-and-cost-bar-chart',
+        illustration: 'real-time-metrics-status-codes',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -8254,7 +8273,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Read the deployment topology',
         description:
           'The domains, the application and the firewall a workload serves, drawn as one chain.',
-        illustration: 'global-network',
+        illustration: 'implement-api-gateway-security',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -8265,7 +8284,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Domains and TLS, handled',
         description:
           'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
-        illustration: 'dns-protection',
+        illustration: 'improve-application-performance-and-reliability',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -8287,7 +8306,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         title: 'Gradual rollouts and instant rollback',
         description:
           'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-        illustration: 'preview',
+        illustration: 'branches',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -8361,7 +8380,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
 - The frame draws no rule of its own under the tabs: the tab cells close the band with their own bottom rules, so the frame adds its bottom rule only when the under-frame link follows them
 - The header renders only when `title` is set; the action renders only when `primaryAction` is set — as a secondary `button` in the header, or as a `link` under the frame when there is no header
-- Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing.
+- Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing. The band scene sits inset in the pane (`--spacing-xl`, as the code file does), so the scene's own frame never runs into the pane's rules.
 
 ## Accessibility
 
@@ -8382,30 +8401,32 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
   const tabs = [
     {
-      title: 'Trace',
+      title: 'Error rate',
       description:
-        'The run as a waterfall: each step placed against the invocation it belongs to, nested where it nested.',
-      illustration: 'live-debugging',
-      illustrationLabel: 'A trace waterfall of one invocation'
+        'Spot a spike the moment it starts, on the path that caused it, with the events behind it one click away.',
+      illustration: 'real-time-metrics-error-rate',
+      illustrationLabel:
+        'A Real-Time Metrics panel: the error rate of /api/checkout rising to 42 percent'
     },
     {
-      title: 'Logs',
+      title: 'Status codes',
       description:
-        'Structured output on the same clock as the trace, filtered by level, searchable in place.',
-      illustration: 'traffic-and-cost-bar-chart',
-      illustrationLabel: 'Structured logs filtered by level'
+        'Every response code by host and path across the week, so a burst of 429s stands out.',
+      illustration: 'real-time-metrics-status-codes',
+      illustrationLabel:
+        'A Real-Time Metrics panel: 429 status codes by host and path, Monday to Friday'
     },
     {
-      title: 'Request path',
-      description:
-        'The workload, application, function and connector it travelled, each captioned with the time spent there.',
-      illustration: 'distributed-apis',
-      illustrationLabel: 'The path a request took through the platform'
+      title: 'Data streams',
+      description: 'The same events sent on to your SIEM, dashboards and APIs in under 40 seconds.',
+      illustration: 'data-stream-destinations-map',
+      illustrationLabel:
+        'A data stream from Azion to APIs and GraphQL, dashboards, SIEM and interfaces'
     }
   ]
 
   const primaryAction = {
-    label: 'Open an invocation',
+    label: 'Open Real-Time Metrics',
     href: '/product-preview',
     trailing: true
   }
@@ -8414,8 +8435,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <template>
   <FeatureTabsSection
     eyebrow="Observability"
-    title="Inspect every run end-to-end"
-    description="Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach. Pick a document to open it."
+    title="See every request as it happens"
+    description="Real-time metrics and data streams for every application, on the platform itself. Nothing to configure, no storage to attach."
     :tabs="tabs"
     :primary-action="primaryAction"
   />
@@ -9482,7 +9503,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         group: 'Engineering',
         values: {
           role: 'Software Engineer (Go)',
-          team: 'Engineering · San Francisco',
+          team: 'Platform · San Francisco',
           type: 'Hybrid · Full-time'
         },
         facets: { area: ['Engineering'], location: ['San Francisco'] }
@@ -9525,7 +9546,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     ]"
     sort-aria-label="Sort positions"
     search-placeholder="Search by title, team, or location"
-    search-short-placeholder="Search positions"
+    search-short-placeholder="Search"
     search-aria-label="Search positions"
     empty-title="No positions match"
     empty-description="No open positions match your search."
@@ -9806,9 +9827,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       }
     ]"
     :quote="{
-      text: '&quot;Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.&quot;',
-      name: 'Ismael Aguilar',
-      jobTitle: 'Information Security Manager at Zoop',
+      text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',
+      name: 'Priya Patel',
+      jobTitle: 'Information security manager at Zoop',
       logo: zoopExtendedColor,
       logoAlt: 'Zoop'
     }"
@@ -10036,7 +10057,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     {
       scene: { component: 'ConsoleMockup', props: { name: 'ai-inference-model' } },
       illustration: 'ai-applications',
-      eyebrow: 'AI Inference',
+      eyebrow: 'AI inference',
       title: 'AI applications',
       description:
         'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
@@ -10047,6 +10068,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     },
     {
       illustration: 'automate-threat-mitigation',
+      eyebrow: 'Security',
       title: 'Protected applications and APIs',
       description:
         'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',
@@ -10057,6 +10079,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     },
     {
       illustration: 'content-and-media-delivery',
+      eyebrow: 'Media',
       title: 'Media and streaming content',
       description:
         'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',
@@ -10274,7 +10297,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `failed` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 - `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
-- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
+- The eyebrow carries the `//` prefix that marks every marketing section header (decision EB-1).
 
 ## Accessibility
 
@@ -11472,7 +11495,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `links` | `SiteHeaderSectionLink[]` | `[]` | false | Bar entries that open no panel, after the menus; each is `{ label, href }`. |
 | `contact` | `SiteHeaderSectionLink` | `undefined` | false | Contact link set in the bar from `xl` up and last in the sheet's tree; `{ label, href }`. |
 | `primaryAction` | `SiteHeaderSectionLink` | `undefined` | false | The sign-up button, filled, in the bar and in the sheet footer; `{ label, href }`. |
-| `secondaryAction` | `SiteHeaderSectionLink` | `undefined` | false | The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`. |
+| `secondaryAction` | `SiteHeaderSectionLink` | `undefined` | false | The login button beside it, outlined so the sign-up button is the one filled action, in the bar from `sm` up and in the sheet footer; `{ label, href }`. |
 | `secondaryActionOnPhones` | `boolean` | `false` | false | Keeps the login button in the bar below `sm` too; off, it steps out on phones, as on azion.com, and stays in the sheet footer. |
 
 ## Events
@@ -12127,7 +12150,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `primaryAction` | `ModuleHeaderAction` | `undefined` | false | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `secondaryAction` | `ModuleHeaderAction` | `undefined` | false | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `templates` | `TemplateGallerySectionTemplate[]` | `[]` | false | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
-| `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. |
+| `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. The button is named `<label>, <template title>`, so each card's action is told apart. |
 | `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling wall of templates. |
 | `marqueeLabel` | `string` | `''` | false | Eyebrow above the row of marks. |
 | `marqueeMarks` | `string[]` | `[]` | false | Registry names of the frameworks and clouds in the row of marks, in order; the marquee is omitted when empty. |
@@ -12141,6 +12164,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## States
 
 - Visual states: `default`
+- Four templates or fewer fit without scrolling: the wall (`data-few`) sizes to its cards instead of holding the 44rem scrolling panel, so no empty framed space sits under them.
 - A card with an `href` is a link target as a whole: a click anywhere on it follows the `href` (and a modified or middle click opens it in a new tab, as any link does), the pointer turns to the hand over it, and hovering it lights its deploy button. With a deploy button the card keeps one tab stop — the button — and the card-wide link is a pointer-only target hidden from assistive technology; without a deploy button the card-wide link is the card's one tab stop, named by the template title
 - A card without an `href` is not interactive: no hand pointer, no hover light
 - Empty: when no template carries a title the band renders nothing — not the split, not the marquee, not the closing frame

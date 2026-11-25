@@ -93,13 +93,13 @@
 <template>
   <ArticleCardsSection
     align="start"
-    title="Related Articles"
-    aria-label="Related Articles"
+    title="Related articles"
+    aria-label="Related articles"
     :items="[
       {
         id: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
-        title: 'How Do You Reduce AI Agent Latency?',
+        title: 'How do you reduce AI agent latency?',
         description:
           'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
         meta: 'SEP 23, 2026 • 8 min read',
@@ -108,7 +108,7 @@
       {
         id: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
-        title: 'Best Cloudflare Alternatives and Competitors',
+        title: 'Best Cloudflare alternatives and competitors',
         description:
           'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
         meta: 'SEP 22, 2026 • 13 min read',
@@ -117,7 +117,7 @@
       {
         id: 'which-azion-plan-is-right-for-your-project',
         href: '/blog/which-azion-plan-is-right-for-your-project',
-        title: 'Which Azion Plan Is Right for Your Project?',
+        title: 'Which Azion plan is right for your project?',
         description:
           'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
         meta: 'SEP 22, 2026 • 7 min read',
@@ -143,13 +143,13 @@
   <div class="flex flex-col gap-(--spacing-xl)">
     <ArticleCardsSection
       align="start"
-      title="Related Articles"
-      aria-label="Related Articles"
+      title="Related articles"
+      aria-label="Related articles"
       :items="[
         {
           id: 'how-to-reduce-ai-agent-latency',
           href: '/blog/how-to-reduce-ai-agent-latency',
-          title: 'How Do You Reduce AI Agent Latency?',
+          title: 'How do you reduce AI agent latency?',
           description:
             'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',
           meta: 'SEP 23, 2026 • 8 min read',
@@ -158,7 +158,7 @@
         {
           id: 'cloudflare-alternatives-and-competitors',
           href: '/blog/cloudflare-alternatives-and-competitors',
-          title: 'Best Cloudflare Alternatives and Competitors',
+          title: 'Best Cloudflare alternatives and competitors',
           description:
             'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',
           meta: 'SEP 22, 2026 • 13 min read',
@@ -167,7 +167,7 @@
         {
           id: 'which-azion-plan-is-right-for-your-project',
           href: '/blog/which-azion-plan-is-right-for-your-project',
-          title: 'Which Azion Plan Is Right for Your Project?',
+          title: 'Which Azion plan is right for your project?',
           description: 'Compare Azion’s Hobby, Pro, and Enterprise plans.',
           meta: 'SEP 22, 2026 • 7 min read',
           image: placeholderImage
@@ -183,7 +183,7 @@
         {
           id: 'netshoes',
           href: '/success-cases/netshoes',
-          title: 'Netshoes Blocks 4M+ Threats in 6 Months with Azion WAF',
+          title: 'Netshoes blocks 4M+ threats in 6 months with Azion WAF',
           description:
             'Netshoes strengthened its e-commerce security and improved the shopping experience.',
           meta: 'FEB 4, 2022 • 4 min read',
@@ -195,7 +195,7 @@
         {
           id: 'renner',
           href: '/success-cases/renner',
-          title: 'Lojas Renner Optimizes Online Shopping Journey with Azion',
+          title: 'Lojas Renner optimizes its online shopping journey with Azion',
           description: 'Faster product pages allowed Renner to scale its e-commerce platform.',
           meta: 'AUG 10, 2021 • 4 min read',
           mark: { name: 'Renner', logo: rennerExtendedColor }

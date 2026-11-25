@@ -149,7 +149,7 @@
     ],
     "sortAriaLabel": "Sort positions",
     "searchPlaceholder": "Search by title, team, or location",
-    "searchShortPlaceholder": "Search positions",
+    "searchShortPlaceholder": "Search",
     "searchAriaLabel": "Search positions",
     "emptyTitle": "No positions match",
     "emptyDescription": "No open positions match your search.",

@@ -361,7 +361,7 @@ const deploymentBuildStep = (command: string): DeploymentLogsStep => ({
       id: '2',
       time: '14:02:12',
       type: 'text',
-      message: '[build] Building with preset"vue" (platform bundler)'
+      message: '[build] Building with preset "vue" (platform bundler)'
     },
     {
       id: '3',

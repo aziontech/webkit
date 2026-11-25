@@ -73,7 +73,7 @@
       data-testid="version-detail-bar"
     >
       <div
-        class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
+        class="layout-boundary-inline flex min-w-0 flex-1 flex-wrap items-center gap-(--spacing-sm) py-(--spacing-xs) sm:flex-nowrap"
       >
         <span
           v-if="creating || isDraft"
@@ -92,7 +92,7 @@
           />
         </span>
         <div
-          class="flex min-w-0 flex-1 flex-col"
+          class="flex min-w-0 flex-[1_1_100%] flex-col sm:flex-1"
           role="status"
         >
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">

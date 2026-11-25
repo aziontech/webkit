@@ -54,7 +54,7 @@ describe('state state-async-submit and state-form-validation', () => {
       }
     })
     expect(view.container.textContent).toContain('The build ran out of memory.')
-    expect(view.container.textContent).toContain('Failed on build')
+    expect(view.container.textContent).toContain('Failed: Build')
     await fireEvent.click(view.getAllByRole('button', { name: 'Redeploy' })[0]!)
     expect(view.emitted<unknown[]>('redeploy')![0]![0]).toBeInstanceOf(MouseEvent)
     view.unmount()

@@ -1,8 +1,10 @@
+import { createHash } from 'node:crypto'
 import { existsSync, readFileSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
 import { createSecureServer } from 'node:http2'
 import { dirname, extname, join, normalize, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { parseArgs } from 'node:util'
 import { brotliCompressSync, constants, gzipSync } from 'node:zlib'
 
 const DIST = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
@@ -29,6 +31,22 @@ export const SECURITY_HEADERS = {
   'Content-Security-Policy': "frame-ancestors 'self'; object-src 'none'; base-uri 'self'",
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin'
+}
+
+const INLINE_SCRIPT = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi
+const DATA_BLOCK = /\btype\s*=\s*["']?application\/(?:ld\+)?json/i
+
+export function pagePolicy(html) {
+  const hashes = new Set()
+  for (const [, attributes, code] of html.matchAll(INLINE_SCRIPT)) {
+    if (/\bsrc\s*=/i.test(attributes) || DATA_BLOCK.test(attributes)) continue
+    hashes.add(`'sha256-${createHash('sha256').update(code).digest('base64')}'`)
+  }
+  return [
+    SECURITY_HEADERS['Content-Security-Policy'],
+    `script-src 'self' ${[...hashes].join(' ')}`.trim(),
+    "worker-src 'self' blob:"
+  ].join('; ')
 }
 
 const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.md', '.txt', '.svg'])
@@ -75,6 +93,11 @@ function locator(root, spa) {
 function responder(root, spa) {
   const locate = locator(root, spa)
   const encoded = new Map()
+  const policies = new Map()
+  const policy = (file) => {
+    if (!policies.has(file)) policies.set(file, pagePolicy(readFileSync(file, 'utf8')))
+    return policies.get(file)
+  }
   const body = (file, encoding) => {
     const key = `${encoding}:${file}`
     if (!encoded.has(key)) {
@@ -97,6 +120,7 @@ function responder(root, spa) {
     const payload = body(target, encoding)
     res.writeHead(file ? 200 : 404, {
       ...SECURITY_HEADERS,
+      ...(type === '.html' ? { 'Content-Security-Policy': policy(target) } : {}),
       'Content-Type': TYPES[type] ?? 'application/octet-stream',
       'Content-Length': payload.length,
       Vary: 'Accept-Encoding',
@@ -118,7 +142,17 @@ export function serve(
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const server = await serve()
+  const { values } = parseArgs({
+    options: {
+      root: { type: 'string' },
+      spa: { type: 'boolean', default: false },
+      port: { type: 'string' }
+    }
+  })
+  const server = await serve(Number(values.port ?? process.env.PORT ?? 4173), {
+    root: values.root ? resolve(values.root) : DIST,
+    spa: values.spa
+  })
   const scheme = tlsFromEnv() ? 'https' : 'http'
-  console.log(`WebKit docs on ${scheme}://localhost:${server.address().port}`)
+  console.log(`WebKit ${values.root ?? 'docs'} on ${scheme}://localhost:${server.address().port}`)
 }

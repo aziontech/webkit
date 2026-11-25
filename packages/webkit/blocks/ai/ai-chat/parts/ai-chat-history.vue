@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ConversationHistory, {
-    type ConversationHistoryItem
-  } from '@aziontech/webkit/conversation-history'
+  import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
   import DrawerBody from '@aziontech/webkit/drawer-body'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerHeader from '@aziontech/webkit/drawer-header'
@@ -13,18 +11,13 @@
   import PopoverContent from '@aziontech/webkit/popover-content'
   import Popover from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
-  import {
-    type AiChatProject,
-    type AiChatThread,
-    sampleHistory,
-    sampleHistoryNow,
-    sampleProjects,
-    sampleThreads
-  } from '../sample'
-  import AiChatHistoryRow from './ai-chat-history-row.vue'
+  import { useWideScreen } from '../composables/use-wide-screen'
+  import { type AiChatProject, type AiChatThread, sampleProjects, sampleThreads } from '../sample'
+  import AiChatHistoryList from './ai-chat-history-list.vue'
   import AiChatProjectFilter from './ai-chat-project-filter.vue'
 
   defineProps<{ panelOpen: boolean }>()
@@ -33,6 +26,8 @@
 
   const active = defineModel<string | null>({ required: true })
   const drawerOpen = defineModel<boolean>('drawerOpen', { required: true })
+
+  const wide = useWideScreen()
 
   const projects = ref<AiChatProject[]>(sampleProjects.map((item) => ({ ...item })))
   const threads = ref<AiChatThread[]>(sampleThreads.map((item) => ({ ...item })))
@@ -51,20 +46,19 @@
       title: 'New Function',
       kind: 'function',
       icon: 'az az-functions',
-      cloud: true
+      inCloud: true
     },
     {
       code: 'OS',
       title: 'New Object Storage',
       kind: 'storage',
       icon: 'az az-object-storage',
-      cloud: true
+      inCloud: true
     }
   ]
 
   const projectMap = computed(() => new Map(projects.value.map((item) => [item.id, item])))
   const threadMap = computed(() => new Map(threads.value.map((item) => [item.id, item])))
-  const updatedMap = new Map(sampleHistory.map((item) => [item.id, item.updatedAt]))
 
   const matchingThreads = computed(() => {
     const needle = search.value.trim().toLowerCase()
@@ -81,7 +75,7 @@
   const toHistoryItem = (thread: AiChatThread): ConversationHistoryItem => ({
     id: thread.id,
     title: thread.title,
-    updatedAt: updatedMap.get(thread.id) ?? sampleHistoryNow,
+    updatedAt: thread.updatedAt,
     description: viewMode.value === 'detailed' ? thread.environment : undefined
   })
 
@@ -117,33 +111,52 @@
     )
   }
 
-  function toggleSnooze(id: string) {
+  function toggleSnooze(_event: MouseEvent | KeyboardEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, snoozed: !item.snoozed } : item
     )
   }
 
-  function toggleSettle(id: string) {
+  function toggleSettle(_event: MouseEvent | KeyboardEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, settled: !item.settled, snoozed: false } : item
     )
   }
 
-  function discardDraft(id: string) {
+  function discardDraft(_event: MouseEvent | KeyboardEvent, id: string) {
+    const index = threads.value.findIndex((item) => item.id === id)
+    const thread = threads.value[index]
+    if (!thread) return
+    const wasActive = active.value === id
     threads.value = threads.value.filter((item) => item.id !== id)
-    if (active.value === id) active.value = null
+    if (wasActive) active.value = null
+    toast('Draft discarded', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          const next = [...threads.value]
+          next.splice(index, 0, thread)
+          threads.value = next
+          if (wasActive) active.value = id
+        }
+      }
+    })
   }
+
+  const PANEL_CLASS =
+    'flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto ' +
+    'border-e border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden [--ai-chat-history-actions-width:--spacing(24)] pointer-coarse:[--ai-chat-history-actions-width:--spacing(9)]'
 </script>
 
 <template>
   <aside
-    v-if="panelOpen"
+    v-if="panelOpen && wide"
     id="ai-chat-history"
     aria-label="Conversation history"
-    class="flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto border-e border-(--border-subtle) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
+    :class="PANEL_CLASS"
   >
     <div
-      class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)"
+      class="flex items-center gap-(--spacing-2xs) border-b border-(--border-default) pb-(--spacing-xs)"
     >
       <Input
         v-model="search"
@@ -230,23 +243,16 @@
       </Tooltip>
     </div>
 
-    <ConversationHistory
+    <AiChatHistoryList
       v-model="active"
       :items="activeItems"
-      :now="sampleHistoryNow"
-    >
-      <template #item="{ item }">
-        <AiChatHistoryRow
-          v-if="threadMap.get(item.id)"
-          :thread="threadMap.get(item.id)!"
-          :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-          :view-mode="viewMode"
-          @snooze="toggleSnooze"
-          @settle="toggleSettle"
-          @discard="discardDraft"
-        />
-      </template>
-    </ConversationHistory>
+      :thread-map="threadMap"
+      :project-map="projectMap"
+      :view-mode="viewMode"
+      @snooze="toggleSnooze"
+      @settle="toggleSettle"
+      @discard="discardDraft"
+    />
 
     <div
       v-if="snoozedItems.length"
@@ -255,24 +261,17 @@
       <span class="px-(--spacing-xs) text-label-xs text-(--text-muted)">
         Snoozed ({{ snoozedItems.length }})
       </span>
-      <ConversationHistory
+      <AiChatHistoryList
         v-model="active"
         :items="snoozedItems"
-        :now="sampleHistoryNow"
         aria-label="Snoozed conversations"
-      >
-        <template #item="{ item }">
-          <AiChatHistoryRow
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-            :view-mode="viewMode"
-            @snooze="toggleSnooze"
-            @settle="toggleSettle"
-            @discard="discardDraft"
-          />
-        </template>
-      </ConversationHistory>
+        :thread-map="threadMap"
+        :project-map="projectMap"
+        :view-mode="viewMode"
+        @snooze="toggleSnooze"
+        @settle="toggleSettle"
+        @discard="discardDraft"
+      />
     </div>
 
     <div
@@ -288,25 +287,18 @@
         class="w-full"
         @click="settledOpen = !settledOpen"
       />
-      <ConversationHistory
+      <AiChatHistoryList
         v-if="settledOpen"
         v-model="active"
         :items="settledItems"
-        :now="sampleHistoryNow"
         aria-label="Settled conversations"
-      >
-        <template #item="{ item }">
-          <AiChatHistoryRow
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-            :view-mode="viewMode"
-            @snooze="toggleSnooze"
-            @settle="toggleSettle"
-            @discard="discardDraft"
-          />
-        </template>
-      </ConversationHistory>
+        :thread-map="threadMap"
+        :project-map="projectMap"
+        :view-mode="viewMode"
+        @snooze="toggleSnooze"
+        @settle="toggleSettle"
+        @discard="discardDraft"
+      />
     </div>
   </aside>
 
@@ -319,24 +311,54 @@
       <DrawerHeader class="w-full">
         <DrawerTitle>Conversation history</DrawerTitle>
       </DrawerHeader>
+      <div class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-xs)">
+        <div class="flex items-center gap-(--spacing-2xs)">
+          <Input
+            v-model="search"
+            size="small"
+            placeholder="Search"
+            aria-label="Search conversations"
+            role="searchbox"
+            autocomplete="off"
+            class="min-w-0 flex-1"
+          >
+            <template #leading>
+              <i
+                class="az az-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+          <AiChatProjectFilter
+            v-model="selectedProject"
+            :projects="projects"
+            @toggle-pin="togglePinProject"
+          />
+        </div>
+        <Button
+          label="New chat"
+          icon="az az-square-pen"
+          variant="ghost"
+          size="small"
+          class="w-full"
+          @click="create"
+        />
+      </div>
       <DrawerBody>
-        <ConversationHistory
-          v-model="active"
-          :items="activeItems"
-          :now="sampleHistoryNow"
+        <div
+          class="[--ai-chat-history-actions-width:--spacing(24)] pointer-coarse:[--ai-chat-history-actions-width:--spacing(9)]"
         >
-          <template #item="{ item }">
-            <AiChatHistoryRow
-              v-if="threadMap.get(item.id)"
-              :thread="threadMap.get(item.id)!"
-              :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-              :view-mode="viewMode"
-              @snooze="toggleSnooze"
-              @settle="toggleSettle"
-              @discard="discardDraft"
-            />
-          </template>
-        </ConversationHistory>
+          <AiChatHistoryList
+            v-model="active"
+            :items="activeItems"
+            :thread-map="threadMap"
+            :project-map="projectMap"
+            :view-mode="viewMode"
+            @snooze="toggleSnooze"
+            @settle="toggleSettle"
+            @discard="discardDraft"
+          />
+        </div>
       </DrawerBody>
     </DrawerContent>
   </Drawer>

@@ -257,6 +257,37 @@ test('has-on-scroll-frame stays silent on a data attribute or another group', ()
   }
 })
 
+test('universal-sibling-selector fires on a sibling variant with a universal subject', () => {
+  for (const content of [
+    // The one that shipped: the StreamingResponse heading pulled up the block after it.
+    'class="mt-(--spacing-xs) [&+*]:-mt-(--spacing-xs)"',
+    'class="[&~*]:hidden"',
+    'class="md:[&_+_*]:mt-0"',
+    'class="[&:not(:last-child)+*]:border-t"',
+    'class="flex [&>*+*]:-ms-2 group-hover/item:[&>*+*]:-ms-1.5"'
+  ]) {
+    assert.ok(
+      ids(content).includes('universal-sibling-selector'),
+      `expected universal-sibling-selector for: ${content}`
+    )
+  }
+})
+
+test('universal-sibling-selector stays silent on a named sibling or a child variant', () => {
+  for (const content of [
+    'class="not-last:-mb-(--spacing-xs)"',
+    'class="[&+p]:mt-0 [&~li]:border-t"',
+    'class="*:min-w-0 [&>*]:shrink-0 [&_*]:pointer-events-none"',
+    'class="[&>*:not(:first-child)]:-ms-2 [&+[data-slot=item-content]]:w-auto"',
+    'class="peer-checked:block"'
+  ]) {
+    assert.ok(
+      !ids(content).includes('universal-sibling-selector'),
+      `expected universal-sibling-selector silent for: ${content}`
+    )
+  }
+})
+
 test('color-logo-interpolated fires on a colour logo class built at runtime', () => {
   for (const content of [
     ':class="`az-color az-${template.logo}`"',
@@ -363,6 +394,7 @@ test('off-brand-orange stays silent on the logo orange and on the primary roles'
 
 test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
   const WIDE = [
+    'universal-sibling-selector',
     'rtl-double-flip',
     'off-brand-orange',
     'status-fill-as-text',
@@ -426,4 +458,11 @@ test('status-fill-as-text stays silent on the mark, foreground and text roles', 
   ]) {
     assert.ok(!ids(content).includes('status-fill-as-text'), `expected silence for: ${content}`)
   }
+})
+
+test('font-family-raw catches the font-code and font-display utilities, which the theme never generates', () => {
+  assert.ok(ids('class="w-full font-code"').includes('font-family-raw'))
+  assert.ok(ids('class="font-display text-heading-md"').includes('font-family-raw'))
+  assert.ok(!ids('font-family: var(--font-code);').includes('font-family-raw'))
+  assert.ok(!ids('class="text-label-code-sm"').includes('font-family-raw'))
 })

@@ -42,6 +42,12 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the strip. |
 | `activeIndex` | `number \| null` | `null` | false | Two-way value (`v-model:activeIndex`). |
 
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `error` | — | Replaces the inline error banner shown in place of the blocks while `error` is set. The strip is too short for the chart family's centred error card, so it keeps a banner; the slot lets a page add the family's `Try again` action (a danger `Alert` with `action-label="Try again"`). |
+
 ## v-model
 
 | Model                  | Type             | Default | Emits                | Notes                                                                                                                                                                                                                          |
@@ -64,6 +70,7 @@
 
 - The strip is one tab stop: `role="group"` named by `ariaLabel`, with `aria-roledescription="status history"`.
 - Keyboard map: Left / Right move the active block, Home / End jump to the ends, Escape clears.
+- Touch: a tap on the strip makes the block under it active and keeps the readout open until a tap outside the tracker; the strip takes `touch-action: pan-y`, so a sideways drag scrubs across the blocks while a vertical drag still scrolls the page.
 - A polite live region reads the active block's `label`; the visual readout is `aria-hidden`.
 - Browse mode: a visually hidden list holds one entry per period label, and a visually hidden summary (`tracker.summary` / `tracker.summaryWorst`: `90 periods. Worst: Nov 8 · Partial outage`) describes the strip through `aria-describedby`, as the table twins of `chart`, `donut-chart` and `map-chart` do.
 - Severity never rests on color alone: the label names the state.

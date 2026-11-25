@@ -122,6 +122,19 @@ describe('Timeline', () => {
     expect(list.querySelectorAll(':scope > li[data-slot="timeline-item"]')).toHaveLength(2)
   })
 
+  it('shows only the time of an item inside a group, whose label carries the date', () => {
+    const grouped = render(Groups)
+    const formats = grouped
+      .getAllByTestId('timestamp')
+      .map((stamp) => stamp.getAttribute('data-format'))
+    expect(formats.length).toBeGreaterThan(0)
+    expect(new Set(formats)).toEqual(new Set(['time']))
+    grouped.unmount()
+
+    const flat = mount({})
+    expect(flat.getAllByTestId('timestamp')[0]?.getAttribute('data-format')).toBe('local')
+  })
+
   it('shows placeholders and a hidden loading label while loading, and hides the slot', () => {
     const { getByTestId, getAllByTestId, queryByText, getByText } = mount({ loading: true })
     const root = getByTestId('timeline')

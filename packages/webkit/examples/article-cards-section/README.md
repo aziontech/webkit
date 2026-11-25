@@ -8,7 +8,7 @@ The band is the `ArticleCardsSection` component from `@aziontech/webkit/article-
 
 ## Examples
 
-### Related Articles
+### Related articles
 
 The blog post's closing band: three related posts, each with its cover image.
 
@@ -34,7 +34,7 @@ Site JSON: [`site-related-articles.json`](./site-related-articles.json)
   }}
 />
 
-### Related Success Cases
+### Related success cases
 
 The Magalu story's closing band: the next three Retail stories in the library's order, Netshoes, Renner and GPA. A story has no cover, so each card draws its client's mark.
 

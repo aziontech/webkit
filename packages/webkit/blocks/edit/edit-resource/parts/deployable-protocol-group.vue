@@ -44,7 +44,7 @@
               size="large"
               class="w-full"
               placeholder="Select an HTTP port"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="portsLabel"
             >
               <MultiSelect.Trigger aria-label="HTTP ports" />
@@ -72,7 +72,7 @@
             <Switch
               :model-value="form.protocols.useHttps"
               aria-label="HTTPS support"
-              :disabled="saving"
+              :readonly="saving"
               @update:model-value="setHttps"
             />
           </SettingsRow>
@@ -87,7 +87,7 @@
               size="large"
               class="w-full"
               placeholder="Select an HTTPS port"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="portsLabel"
             >
               <MultiSelect.Trigger aria-label="HTTPS ports" />
@@ -115,7 +115,7 @@
             <Switch
               :model-value="form.protocols.useHttp3"
               aria-label="HTTP/3 support"
-              :disabled="saving"
+              :readonly="saving"
               @update:model-value="setHttp3"
             />
           </SettingsRow>
@@ -130,7 +130,7 @@
               size="large"
               class="w-full"
               placeholder="Select an HTTP/3 port"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="portsLabel"
             >
               <MultiSelect.Trigger aria-label="HTTP/3 ports" />
@@ -160,7 +160,7 @@
               v-model="form.protocols.minimumTlsVersion"
               size="large"
               class="w-full"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="tlsVersionLabel"
             >
               <Select.Trigger
@@ -188,7 +188,7 @@
               v-model="form.protocols.cipherSuite"
               size="large"
               class="w-full"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="cipherSuiteLabel"
             >
               <Select.Trigger

@@ -165,6 +165,8 @@ export const tokenPurpose = {
   'text-big-number-lg': 'The largest numeric figure on one line, shrunk to fit its container.',
   'text-big-number-md': 'A numeric figure in a stat card, on one line, shrunk to fit.',
   'text-big-number-sm': 'A compact numeric figure, on one line, shrunk to fit.',
+  'text-big-number-unit':
+    'A word unit in a big-number figure (ms, Tbps), in the text face so it keeps its case.',
   'text-amount-lg': 'The largest price or amount.',
   'text-amount-md': 'A price or amount in a card.',
   'text-amount-sm': 'A compact price or amount.',
@@ -184,8 +186,12 @@ export const tokenPurpose = {
   'text-label-sm': 'Small labels and metadata.',
   'text-label-code-sm': 'Monospace code lines and line numbers, one row per line.',
   'text-body-code-sm': 'A monospace paragraph that wraps.',
+  'text-body-code-lg':
+    'Wrapping or multi-line code at the 16px touch size, with a real line height.',
   'text-label-code-md': 'A monospace label such as a file name bar.',
   'text-label-code-lg': 'A large monospace label.',
+  'text-heading-code-md':
+    'A 24px monospace code the reader compares or copies by eye, such as a device code.',
   'text-body-lg': 'Lead paragraphs.',
   'text-body-md': 'Body copy.',
   'text-body-prose-md': 'Long-form prose at a relaxed line height.',

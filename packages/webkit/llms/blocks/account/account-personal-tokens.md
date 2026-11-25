@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DatePickerRoot`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DatePickerRoot`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -27,9 +27,9 @@ The Personal tokens page of the account settings. A person creates a token for a
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Button` (required)
+### A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 
-Title `Personal tokens` and one sentence that says what a token does and that it is shown once. Actions: the outlined Documentation button and the primary `Create Personal Token` at `size="medium"`.
+Title `Personal tokens` and one sentence that says what a token does and that it is shown once. Actions: the outlined Documentation button and the primary `Create Personal Token` at `size="medium"`. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render, so the expiry dates and relative times read the same everywhere; with live data and no `now` they read the real clock.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -192,6 +192,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -259,7 +260,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
     error?: string
     /** The create request is in flight; the drawer's fields lock and its submit spins. */
     creating?: boolean
-    /** The moment statuses and the expiry hint count from. Left out, the sample clock. */
+    /** The moment statuses, the expiry hint and the relative times count from. Left out, the sample clock with the sample, the real clock with your tokens. */
     now?: Date
   }
 
@@ -288,6 +289,9 @@ Each variant is the same screen in another state: `get_block("account/account-pe
 
   const DAY = 86_400_000
   const referenceTime = computed(() => (props.now ?? sampleNow).getTime())
+  const clock = computed(
+    () => props.now ?? (props.tokens || props.loading || props.error ? undefined : sampleNow)
+  )
   const daysFrom = (days: number) => new Date(referenceTime.value + days * DAY)
 
   const { formatDate: formatLocaleDate } = useLocale()
@@ -332,7 +336,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2, minWidth: 200 },
-    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 160 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 160, narrow: false },
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
     { accessorKey: 'lastUsedAt', header: 'Last used', minWidth: 140 },
     { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 160 },
@@ -413,161 +417,163 @@ Each variant is the same screen in another state: `get_block("account/account-pe
 </script>
 
 <template>
-  <div class="layout-boundary">
-    <div class="layout-column flex flex-col">
-      <PageHeader
-        title="Personal tokens"
-        description="Tokens let scripts and tools call the API as you. Each one is shown only once, right after you create it."
-      >
-        <template #actions>
-          <Button
-            label="Documentation"
-            aria-label="Documentation (opens in a new tab)"
-            icon="az az-book"
-            variant="outline"
-            size="medium"
-            href="https://example.com/docs/personal-tokens"
-            target="_blank"
-          />
-          <Button
-            label="Create Personal Token"
-            icon="az az-plus"
-            variant="primary"
-            size="medium"
-            @click="openCreate"
-          />
-        </template>
-      </PageHeader>
-
-      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <header
-          v-if="!loadFailed && (loading || status !== 'empty')"
-          class="flex flex-wrap items-start gap-(--layout-group-gap)"
+  <ConfigProvider :now="clock">
+    <div class="layout-boundary">
+      <div class="layout-column flex flex-col">
+        <PageHeader
+          title="Personal tokens"
+          description="Tokens let scripts and tools call the API as you. Each one is shown only once, right after you create it."
         >
-          <div class="flex min-w-0 grow basis-(--container-2xs)">
-            <PropertyFilter
-              v-bind="propertyFilterProps"
-              placeholder="Filter tokens"
-              aria-label="Filter tokens"
-            />
-          </div>
-          <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
-            <Tooltip
-              content="Refresh"
-              class="shrink-0"
-            >
-              <IconButton
-                icon="az az-refresh"
-                variant="outline"
-                size="medium"
-                :loading="refreshing"
-                aria-label="Refresh"
-                @click="emit('refresh', $event)"
-              />
-            </Tooltip>
-            <Tooltip
-              content="Download CSV"
-              class="shrink-0"
-            >
-              <IconButton
-                icon="az az-download"
-                variant="outline"
-                size="medium"
-                :disabled="!matchingItems.length"
-                aria-label="Download CSV"
-                @click="exportCsv"
-              />
-            </Tooltip>
-            <CollectionPreferences
-              v-bind="preferencesProps"
-              title="Table preferences"
-            />
-          </div>
-        </header>
-
-        <Alert
-          v-if="loadFailed"
-          severity="danger"
-        >
-          {{ error }}
           <template #actions>
             <Button
-              label="Retry"
-              variant="secondary"
-              size="small"
-              @click="emit('retry', $event)"
+              label="Documentation"
+              aria-label="Documentation (opens in a new tab)"
+              icon="az az-book"
+              variant="outline"
+              size="medium"
+              href="https://example.com/docs/personal-tokens"
+              target="_blank"
+            />
+            <Button
+              label="Create Personal Token"
+              icon="az az-plus"
+              variant="primary"
+              size="medium"
+              @click="openCreate"
             />
           </template>
-        </Alert>
+        </PageHeader>
 
-        <Card
-          key="card-1"
-          v-else-if="!loading && status === 'empty'"
-          :padded="false"
-        >
-          <template #default>
-            <EmptyState
-              size="medium"
-              icon="az az-key"
-              title="No personal tokens yet"
-              description="Create a token to call the API from a script, a CI job or the CLI."
-            >
-              <template #actions>
-                <Button
-                  label="Create Personal Token"
-                  icon="az az-plus"
-                  variant="secondary"
-                  size="small"
-                  @click="openCreate"
+        <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
+          <header
+            v-if="!loadFailed && (loading || status !== 'empty')"
+            class="flex flex-wrap items-start gap-(--layout-group-gap)"
+          >
+            <div class="flex min-w-0 grow basis-(--container-2xs)">
+              <PropertyFilter
+                v-bind="propertyFilterProps"
+                placeholder="Filter tokens"
+                aria-label="Filter tokens"
+              />
+            </div>
+            <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+              <Tooltip
+                content="Refresh"
+                class="shrink-0"
+              >
+                <IconButton
+                  icon="az az-refresh"
+                  variant="outline"
+                  size="medium"
+                  :loading="refreshing"
+                  aria-label="Refresh"
+                  @click="emit('refresh', $event)"
                 />
-              </template>
-            </EmptyState>
-          </template>
-        </Card>
+              </Tooltip>
+              <Tooltip
+                content="Download CSV"
+                class="shrink-0"
+              >
+                <IconButton
+                  icon="az az-download"
+                  variant="outline"
+                  size="medium"
+                  :disabled="!matchingItems.length"
+                  aria-label="Download CSV"
+                  @click="exportCsv"
+                />
+              </Tooltip>
+              <CollectionPreferences
+                v-bind="preferencesProps"
+                title="Table preferences"
+              />
+            </div>
+          </header>
 
-        <TokensTable
-          key="card-2"
-          v-else
-          ref="tokensTableEl"
-          :table-props="tableProps"
-          :pagination-props="paginationProps"
-          :loading="loading"
-          :status-of="statusOf"
-          @action="onAction"
-          @clear="clearFilters"
-        />
-      </section>
+          <Alert
+            v-if="loadFailed"
+            severity="danger"
+          >
+            {{ error }}
+            <template #actions>
+              <Button
+                label="Retry"
+                variant="secondary"
+                size="small"
+                @click="emit('retry', $event)"
+              />
+            </template>
+          </Alert>
+
+          <Card
+            key="card-1"
+            v-else-if="!loading && status === 'empty'"
+            :padded="false"
+          >
+            <template #default>
+              <EmptyState
+                size="medium"
+                icon="az az-key"
+                title="No personal tokens yet"
+                description="Create a token to call the API from a script, a CI job or the CLI."
+              >
+                <template #actions>
+                  <Button
+                    label="Create Personal Token"
+                    icon="az az-plus"
+                    variant="secondary"
+                    size="small"
+                    @click="openCreate"
+                  />
+                </template>
+              </EmptyState>
+            </template>
+          </Card>
+
+          <TokensTable
+            key="card-2"
+            v-else
+            ref="tokensTableEl"
+            :table-props="tableProps"
+            :pagination-props="paginationProps"
+            :loading="loading"
+            :status-of="statusOf"
+            @action="onAction"
+            @clear="clearFilters"
+          />
+        </section>
+      </div>
+
+      <CreateTokenDrawer
+        v-model:open="createOpen"
+        :submitting="submitting"
+        :names="items.map((token) => token.name)"
+        :format-date="formatDate"
+        :days-from="daysFrom"
+        @create="(event, values) => emit('create', event, values)"
+      />
+
+      <TokenSecretDialog v-model:secret="secretModel" />
+
+      <ConfirmDialog
+        v-model:open="revokeOpen"
+        title="Revoke token"
+        :description="`Scripts and tools that use “${pending?.name ?? ''}” stop working right away. You cannot undo this.`"
+        confirm-label="Revoke token"
+        size="small"
+        @confirm="revoke"
+      />
+
+      <ConfirmDialog
+        v-model:open="deleteOpen"
+        title="Delete token"
+        :description="`“${pending?.name ?? ''}” no longer works; deleting removes it from this list.`"
+        confirm-label="Delete token"
+        size="small"
+        @confirm="remove"
+      />
     </div>
-
-    <CreateTokenDrawer
-      v-model:open="createOpen"
-      :submitting="submitting"
-      :names="items.map((token) => token.name)"
-      :format-date="formatDate"
-      :days-from="daysFrom"
-      @create="(event, values) => emit('create', event, values)"
-    />
-
-    <TokenSecretDialog v-model:secret="secretModel" />
-
-    <ConfirmDialog
-      v-model:open="revokeOpen"
-      title="Revoke token"
-      :description="`Scripts and tools that use “${pending?.name ?? ''}” stop working right away. You cannot undo this.`"
-      confirm-label="Revoke token"
-      size="small"
-      @confirm="revoke"
-    />
-
-    <ConfirmDialog
-      v-model:open="deleteOpen"
-      title="Delete token"
-      :description="`“${pending?.name ?? ''}” no longer works; deleting removes it from this list.`"
-      confirm-label="Delete token"
-      size="small"
-      @confirm="remove"
-    />
-  </div>
+  </ConfigProvider>
 </template>
 ```
 
@@ -1026,7 +1032,7 @@ export const sampleTokens: PersonalTokensToken[] = [
       >
         <template #cell-name="{ row, value }">
           <div class="flex min-w-0 flex-col">
-            <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>
+            <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
             <div
               aria-hidden="true"
               data-slot="narrow-summary"

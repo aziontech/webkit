@@ -79,7 +79,14 @@ describe('create-deploy-drawer', () => {
     })
     const dialog = await screen.findByRole('dialog', { name: 'Build and deployment' })
     expect(within(dialog).getByText('C7')).toBeTruthy()
-    expect(within(dialog).getByText('Building…')).toBeTruthy()
+    expect(
+      within(dialog).getByText('Building… Project and environment unlock when the build finishes.')
+    ).toBeTruthy()
+    const project = within(dialog).getByRole('heading', { name: 'Project' }).closest('section')
+    const pending = project?.parentElement
+    expect(pending?.hasAttribute('inert')).toBe(true)
+    expect(pending?.hasAttribute('data-pending')).toBe(true)
+    expect(pending?.classList.contains('data-[pending]:opacity-50')).toBe(true)
     expect(within(dialog).getByRole('button', { name: 'Deploy' }).hasAttribute('disabled')).toBe(
       true
     )

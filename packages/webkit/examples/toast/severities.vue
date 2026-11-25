@@ -1,65 +1,52 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import { toast, Toaster } from '@aziontech/webkit/toast'
+
+  const showNeutral = () =>
+    toast('Settings saved', { description: 'Changes apply to new requests.' })
+  const showSuccess = () =>
+    toast.success('Deployment finished', { description: 'acme-store is live on example.com.' })
+  const showInfo = () =>
+    toast.info('Maintenance on March 4', { description: 'From 02:00 to 03:00 UTC.' })
+  const showWarning = () =>
+    toast.warning('Request limit at 90%', { description: 'Upgrade the plan to avoid throttling.' })
+  const showError = () =>
+    toast.error('Deploy failed', { description: 'Check the build log for details.' })
+  const showLoading = () => toast.loading('Deploying acme-store…')
 </script>
 
 <template>
   <Toaster position="bottom-end" />
-  <div class="flex flex-wrap justify-center gap-2">
+  <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
     <Button
-      label="Default"
-      variant="secondary"
-      @click="
-        () =>
-          toast('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
-      "
+      label="Neutral"
+      variant="outline"
+      @click="showNeutral"
     />
     <Button
       label="Success"
-      variant="primary"
-      @click="
-        () =>
-          toast.success('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      variant="outline"
+      @click="showSuccess"
     />
     <Button
       label="Info"
       variant="outline"
-      @click="
-        () =>
-          toast.info('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      @click="showInfo"
     />
     <Button
       label="Warning"
       variant="outline"
-      @click="
-        () =>
-          toast.warning('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      @click="showWarning"
     />
     <Button
       label="Error"
-      variant="danger"
-      @click="
-        () =>
-          toast.error('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      variant="outline"
+      @click="showError"
     />
     <Button
       label="Loading"
-      variant="ghost"
-      @click="
-        () => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
-      "
+      variant="outline"
+      @click="showLoading"
     />
   </div>
 </template>

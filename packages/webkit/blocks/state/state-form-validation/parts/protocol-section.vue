@@ -65,7 +65,7 @@
                 v-model="form.protocolUsage"
                 variant="card"
                 name="protocolUsage"
-                aria-label="Protocol Usage"
+                aria-label="Protocol usage"
                 :disabled="submitting"
               >
                 <RadioGroup.Item

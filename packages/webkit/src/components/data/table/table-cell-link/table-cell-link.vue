@@ -8,7 +8,7 @@
     type OverflowCountItem,
     type OverflowCountNoun
   } from '../../../content/overflow-count/overflow-count.vue'
-  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
+  import { LazyTooltip } from '../../../overlay/tooltip/lib/lazy-tooltip'
 
   defineOptions({
     name: 'TableCellLink',
@@ -99,7 +99,7 @@
       class="shrink-0 text-body-lg leading-none text-(--text-muted)"
       aria-hidden="true"
     />
-    <Tooltip
+    <LazyTooltip
       :content="tooltip"
       :disabled="!isLink"
       class="min-w-0 shrink!"
@@ -129,7 +129,7 @@
           aria-hidden="true"
         />
       </component>
-    </Tooltip>
+    </LazyTooltip>
     <OverflowCount
       v-if="more.length > 0"
       :items="more"

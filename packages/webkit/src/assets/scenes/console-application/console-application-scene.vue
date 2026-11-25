@@ -185,7 +185,7 @@
         :key="pageKey"
         :data-animated="animated || null"
         :data-testid="`${testId}__page`"
-        class="flex min-h-0 flex-1 flex-col gap-(--spacing-lg) p-(--spacing-md) [--page-enter-distance:var(--spacing-lg)] data-animated:animate-page-enter motion-reduce:animate-none"
+        class="flex min-h-0 flex-1 flex-col gap-(--spacing-lg) p-(--spacing-md) [--page-enter-distance:var(--spacing-lg)] data-animated:animate-page-enter motion-reduce:animate-none max-md:overflow-hidden max-md:mask-[linear-gradient(to_bottom,black_calc(100%-var(--spacing-2xl)),transparent)]"
       >
         <div class="flex min-w-0 shrink-0 items-center justify-between gap-(--spacing-sm)">
           <span class="truncate text-heading-xs text-(--text-default)">{{ step.heading }}</span>
@@ -293,7 +293,7 @@
           variant="centered"
           :data-animated="animated || null"
           :data-testid="`${testId}__save-bar`"
-          class="mt-auto data-animated:animate-content-enter motion-reduce:animate-none"
+          class="mt-auto max-sm:hidden data-animated:animate-content-enter motion-reduce:animate-none"
         >
           <template #leading>
             <i

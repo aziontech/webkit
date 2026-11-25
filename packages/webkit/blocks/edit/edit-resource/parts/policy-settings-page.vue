@@ -9,7 +9,7 @@
   export interface PolicySettingsPageProps {
     /** Unsaved edits the form opens with, so the save bar is up. */
     defaultDraft?: Partial<PolicySettingsRecord>
-    /** Opens with the save in flight: the fieldset and Discard lock and Save spins. */
+    /** Opens with the save in flight: the fields turn read-only, Discard locks and Save spins. */
     defaultSaving?: boolean
   }
 
@@ -58,7 +58,6 @@
     <fieldset
       v-if="defaultSaving"
       class="m-0 flex min-w-0 flex-col border-0 p-0"
-      :disabled="saving"
     >
       <legend class="sr-only">Settings</legend>
       <PolicyGroups
@@ -68,7 +67,7 @@
         v-model:selected-keys="form.modules"
         :modules="samplePolicyModules"
         :name-invalid="nameError"
-        :disabled="saving"
+        :readonly="saving"
       />
     </fieldset>
     <PolicyGroups

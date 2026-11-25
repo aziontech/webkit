@@ -186,7 +186,8 @@
       </template>
       <div
         v-else
-        class="flex min-w-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) group-data-[grouped]/stat-tile:justify-between"
+        :data-testid="`${testId}__figure-row`"
+        class="flex min-w-0 flex-col items-start gap-x-(--spacing-xs) gap-y-(--spacing-2xs) @3xs/stat-tile:flex-row @3xs/stat-tile:items-center group-data-[grouped]/stat-tile:justify-between"
       >
         <span
           aria-hidden="true"

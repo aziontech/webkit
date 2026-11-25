@@ -104,8 +104,11 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ consoleShowcaseSection: en.consoleShowcaseSection })
-  const roomy = useMediaQuery('(min-width: 40rem)', true)
   const cramped = useMediaQuery('(max-width: 22.49rem)', false)
+
+  const SWITCH_CLASS =
+    'max-sm:grid max-sm:w-full max-sm:data-[columns=1]:grid-cols-1 max-sm:data-[columns=2]:grid-cols-2 max-sm:data-[columns=3]:grid-cols-3 ' +
+    'max-sm:[&>button]:min-w-0 max-sm:data-[columns=2]:[&>button:last-child:nth-child(even)]:col-span-2'
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'console-showcase-section'
@@ -177,8 +180,9 @@
             v-if="tabs.length"
             v-model="current"
             :options="options"
-            :fluid="!roomy && !cramped"
+            :data-columns="tabs.length > 3 ? 2 : tabs.length"
             :size="cramped ? 'medium' : 'large'"
+            :class="SWITCH_CLASS"
             :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
           />
         </template>

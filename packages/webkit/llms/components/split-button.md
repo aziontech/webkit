@@ -72,6 +72,7 @@
 - `data-disabled` mirrors the `disabled` prop
 - `data-loading` mirrors the `loading` prop
 - `data-state` on the menu toggle: `open` | `closed` (provided by the composed `DropdownMenu.Trigger`)
+- The menu opens below the whole control, its start edge lined up with the primary segment's start (the segments' wrapper is the `dropdown-menu-anchor`); where that would overflow the viewport it is clamped inside it
 - When `loading`, the control takes the disabled status: the primary button shows the spinner over the disabled tokens and blocks activation (owned by `Button`), the menu toggle is natively disabled with the disabled tokens, and the composed `DropdownMenu` is disabled so the menu cannot open. No `click` or `item-click` is emitted while loading.
 
 ## Accessibility
@@ -102,7 +103,7 @@
 ## Responsive
 
 - The control never wraps; on narrow screens keep the label short or move the actions into a `DropdownMenu` behind an `IconButton`.
-- Touch: both segments use the Button and IconButton touch-target spans (44 px tall on a coarse pointer); the spans grow only vertically, so a tap on the edge of one segment never opens or fires the other.
+- Touch: both segments use the Button and IconButton touch-target spans (44 px tall on a coarse pointer); the spans grow only vertically, so a tap on the edge of one segment never opens or fires the other. The menu segment is at least 44px wide on a coarse pointer (`pointer-coarse:min-w-11`), so its target is 44 × 44 at every size.
 
 ## Examples
 
@@ -144,7 +145,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <SplitButton
       variant="primary"
       label="Primary"
@@ -178,7 +179,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <SplitButton
       size="small"
       label="Small"

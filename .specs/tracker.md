@@ -3,10 +3,10 @@ name: tracker
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 0d939a226304d571c0b72b7cd41af4d28c2dca164a59a7259d19875d366d829c
+checksum: b103335f3c8d6d086b78efcd22c3596b17163aad1fcb1e4b74f0c1dc85d2ad65
 ---
 
 # Tracker — Component Spec
@@ -79,12 +79,12 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 
 ## Props
 
-| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                   |
-| ----------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                             |
+| ----------- | --------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`     | `TrackerItem[]` | `[]`    | false    | One block per period, oldest first; each item is `{ id?: string; severity?: ChartSemanticSeverity; label: string }`. No severity renders a neutral no-data block. |
-| `loading`   | `boolean`       | `false` | false    | Renders a Skeleton strip in place of the blocks.                                                                                                        |
-| `error`     | `string`        | `''`    | false    | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks.                   |
-| `ariaLabel` | `string`        | `''`    | false    | Accessible name of the strip.                                                                                                                           |
+| `loading`   | `boolean`       | `false` | false    | Renders a Skeleton strip in place of the blocks.                                                                                                                  |
+| `error`     | `string`        | `''`    | false    | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks.                             |
+| `ariaLabel` | `string`        | `''`    | false    | Accessible name of the strip.                                                                                                                                     |
 
 ## v-model
 
@@ -98,7 +98,9 @@ _None of its own._ The active index above is the only emit.
 
 ## Slots
 
-_No slots._
+| Slot    | Scope | Notes                                                                                                                                                                                                                                                                                    |
+| ------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `error` | —     | Replaces the inline error banner shown in place of the blocks while `error` is set. The strip is too short for the chart family's centred error card, so it keeps a banner; the slot lets a page add the family's `Try again` action (a danger `Alert` with `action-label="Try again"`). |
 
 ## States
 
@@ -139,6 +141,7 @@ _No slots._
 
 - The strip is one tab stop: `role="group"` named by `ariaLabel`, with `aria-roledescription="status history"`.
 - Keyboard map: Left / Right move the active block, Home / End jump to the ends, Escape clears.
+- Touch: a tap on the strip makes the block under it active and keeps the readout open until a tap outside the tracker; the strip takes `touch-action: pan-y`, so a sideways drag scrubs across the blocks while a vertical drag still scrolls the page.
 - A polite live region reads the active block's `label`; the visual readout is `aria-hidden`.
 - Browse mode: a visually hidden list holds one entry per period label, and a visually hidden summary (`tracker.summary` / `tracker.summaryWorst`: `90 periods. Worst: Nov 8 · Partial outage`) describes the strip through `aria-describedby`, as the table twins of `chart`, `donut-chart` and `map-chart` do.
 - Severity never rests on color alone: the label names the state.

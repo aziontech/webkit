@@ -1,23 +1,35 @@
 <script setup>
   import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
-  const date = ref(new Date(2026, 9, 8))
+  const start = ref(new Date(2026, 9, 8))
+  const review = ref(new Date(2026, 9, 15))
+  const end = ref(new Date(2026, 9, 22))
 </script>
 
 <template>
   <div class="flex flex-wrap items-start gap-4">
-    <DatePickerRoot
-      v-model="date"
-      size="small"
-    />
-    <DatePickerRoot
-      v-model="date"
-      size="medium"
-    />
-    <DatePickerRoot
-      v-model="date"
-      size="large"
-    />
+    <Field class="max-w-fit">
+      <Field.Label>Start date</Field.Label>
+      <DatePickerRoot
+        v-model="start"
+        size="small"
+      />
+    </Field>
+    <Field class="max-w-fit">
+      <Field.Label>Review date</Field.Label>
+      <DatePickerRoot
+        v-model="review"
+        size="medium"
+      />
+    </Field>
+    <Field class="max-w-fit">
+      <Field.Label>End date</Field.Label>
+      <DatePickerRoot
+        v-model="end"
+        size="large"
+      />
+    </Field>
   </div>
 </template>

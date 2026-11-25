@@ -2348,23 +2348,12 @@ Budget-raise: popover 11.35 KB → 11.5 KB (measured 11.41 KB): the teleport hyd
 
 Budget-raise: popover-content 1.25 KB → 1.4 KB (measured 1.34 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
 
-Budget-raise: config-provider 14.55 KB → 14.7 KB (measured 14.63 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs, which ConfigProvider bundles.
+Budget-raise: prompt-input-model-picker 16 KB → 16.15 KB (measured 16.08 KB): the panel is built from the library's own IconButton and Input instead of raw button, input and role="menu"/role="tab" markup, so lint:quality (webkit/no-unowned-element) passes.
 
-Budget-raise: locales-pt-BR 13 KB → 13.15 KB (measured 13.09 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+Budget-raise: prompt-input-tools 18.3 KB → 18.4 KB (measured 18.36 KB): the shared promptInput locale catalog gained the model picker's provider and search strings, which every prompt-input part that reads the catalog bundles.
 
-Budget-raise: locales-es 13.1 KB → 13.25 KB (measured 13.21 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+Budget-raise: conversation-history 42.3 KB → 42.35 KB (measured 42.31 KB): the new item-actions slot, so an app can put its own row actions (Snooze, Settle) beside the row button instead of nesting buttons inside it.
 
-Budget-raise: prompt-input-tools 18.3 KB → 18.45 KB (measured 18.36 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs; PromptInputTools imports the English catalog as a namespace.
-
-Budget-raise: doc-markdown 41.9 KB → 42 KB (measured 41.96 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
-
-Budget-raise: media-split-section 17.9 KB → 18 KB (measured 17.90 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
-
-Budget-raise: feature-scroll-section 21 KB → 21.1 KB (measured 21.00 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
-
-Budget-raise: feature-widgets-section 20.6 KB → 20.75 KB (measured 20.68 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
-
-Budget-raise: feature-tabs-section 60.6 KB → 60.8 KB (measured 60.72 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
 Budget-raise: doc-layout 75.8 KB → 75.9 KB (measured 75.83 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: doc-call-to-action 12.55 KB → 12.65 KB (measured 12.62 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
@@ -2376,4 +2365,603 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
-Budget-raise: prompt-input 16 KB → 16.15 KB (measured 16.08 KB): the model picker draws its shortcut keycaps with Kbd instead of a raw `kbd` element (the owners lint) and its search field steps up to 16px on touch.
+
+## Raises after audit 6
+
+From here on a raise names what grew. The size ratchet fails a line below this heading (or in the PR body) whose only reason is a merge, such as "each side fit its own budget" (`MERGE_ONLY_FROM` in `scripts/check-size-ratchet.mjs`, audit-6 A6-288).
+
+Budget-raise: conversation-history 42.35 KB → 17.9 KB entryOnly (measured 17.74 KB): restores entryOnly, which the 17.25 KB raise intended: the row, project, sort and toolbar menus load as lazy chunks (52.9 KB together, listed by `check-size --lazy`), so the budget again measures the entry and its static imports. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: app-layout 24.55 KB → 24.6 KB (measured 24.56 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: collection-preferences 32.95 KB → 33 KB (measured 32.95 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: site-header-section 60.2 KB → 60.25 KB (measured 60.22 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: chart 27.55 KB → 27.6 KB (measured 27.55 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: error-boundary 7.3 KB → 7.35 KB (measured 7.32 KB): ErrorBoundary moves focus to a custom fallback when the failure leaves focus on the body or a disabled control (A6-006).
+
+Budget-raise: confirm-dialog 28.25 KB → 28.5 KB (measured 28.44 KB): ConfirmDialog explains a typed phrase that does not match on Enter (A6-157) and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.10 KB): The es catalog gained confirmDialog.phraseMismatch (A6-157).
+
+Budget-raise: table-head-cell 5.45 KB → 5.5 KB (measured 5.45 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: transfer-list 8.05 KB → 8.1 KB (measured 8.05 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: toast-root 11.7 KB → 11.75 KB (measured 11.72 KB): Toast regions keep clear of the phone safe areas with env(safe-area-inset-*) (A6-008).
+
+Budget-raise: sidebar-menu-sub-trigger 15.95 KB → 16 KB (measured 15.95 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: command 29.4 KB → 29.45 KB (measured 29.41 KB): Command shows its title in the phone sheet header (A6-003) and its dialog carries the useModalRoot and IconButton changes (A6-290, A6-232).
+
+Budget-raise: drawer 23.45 KB → 23.5 KB (measured 23.45 KB): Drawer shares its root state through useModalRoot (A6-290) and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: shortcuts-dialog 27.3 KB → 27.35 KB (measured 27.32 KB): ShortcutsDialog renders Dialog and IconButton, which carry the useModalRoot and disabled ghost changes (A6-290, A6-232).
+
+Budget-raise: console-application-scene 127.2 KB → 127.25 KB (measured 127.21 KB): the scene renders Avatar and Eyebrow: the small Avatar presence dot now clears the second initial (A6-193) and the Eyebrow prefix stays beside the first word of a wrapped label (A6-095).
+
+Budget-raise: logo-wall-section 25.45 KB → 25.5 KB (measured 25.46 KB): the band renders an Eyebrow, whose prefix now stays beside the first word of a wrapped label (A6-095).
+
+Budget-raise: pricing-plans-section 22.25 KB → 22.3 KB (measured 22.27 KB): PricingCard hides its plan label when the price already names the plan (A6-210, owner call).
+
+Budget-raise: pricing-card 5.4 KB → 5.5 KB (measured 5.45 KB): PricingCard hides its plan label when the price already names the plan (A6-210, owner call).
+
+Budget-raise: timeline 22.6 KB → 22.7 KB (measured 22.69 KB): Timestamp gained the time format and a Timeline.Item inside a Timeline.Group renders it through TimelineGroupInjectionKey (A6-042, owner call).
+
+Budget-raise: timeline-item 21.6 KB → 21.65 KB (measured 21.62 KB): Timestamp gained the time format and the item reads TimelineGroupInjectionKey to use it inside a group (A6-042, owner call).
+
+Budget-raise: timeline-group 0.75 KB → 0.8 KB (measured 0.77 KB): the group provides TimelineGroupInjectionKey so its items show only the time (A6-042, owner call).
+
+Budget-raise: message-thread 38.1 KB → 38.2 KB (measured 38.15 KB): Timestamp gained the time format (A6-042, owner call), the message body stops at the reading measure, and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: message-thread-item 35.6 KB → 35.75 KB (measured 35.71 KB): Timestamp gained the time format (A6-042, owner call), the message body stops at the reading measure, and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.11 KB): three retry strings for ImageGallery, AudioPlayer and VideoPlayer (A6-039, owner call).
+
+Budget-raise: audio-player 10.5 KB → 10.6 KB (measured 10.56 KB): a retry event and a Try again button in the error state that also reloads a failed file (A6-039, owner call).
+
+Budget-raise: video-player 12.65 KB → 12.7 KB (measured 12.69 KB): a retry event and a Try again button in the error state that also reloads a failed file (A6-039, owner call).
+
+Budget-raise: image-gallery 27.6 KB → 27.75 KB (measured 27.72 KB): a retry event and a Try again button in the error state (A6-039, owner call).
+
+Budget-raise: doc-prompt 13.5 KB → 13.7 KB (measured 13.66 KB): audit-6 lane L07 (A6-086, A6-087, A6-088) isolates the prompt direction with dir=auto and draws the line fades from the prompt's resolved direction, lets the line shape wrap below the sm container width, and moves Show more after the copy control; about 0.2 KB of logic and classes, nothing left to cut without dropping one of the fixes.
+
+Budget-raise: media-scroll 5.75 KB → 5.85 KB (measured 5.84 KB): MediaScroll renders each claim title as a plain heading below lg and the button only from lg, through useMediaQuery, so phones get no dead tab stops (A6-096).
+
+Budget-raise: console-showcase-section 22.3 KB → 22.35 KB (measured 22.31 KB): the view switcher lays out as an even grid on a phone instead of wrapping one view onto its own row (A6-098, A6-110).
+
+Budget-raise: feature-scroll-section 21 KB → 21.1 KB (measured 21.07 KB): an odd last tile spans both tablet columns and a phone code sample drops its side inset (A6-115, A6-117).
+
+Budget-raise: client-mosaic-section 8.3 KB → 8.8 KB (measured 8.79 KB): the band works out the tablet grid placement (lib/trailing-spans.ts) so a short last row of marks ends flush instead of leaving empty framed slots (A6-105).
+
+Budget-raise: client-story-columns-section 9.25 KB → 9.5 KB (measured 9.49 KB): a face without an explicit ink takes dark ink when white falls under 4.5:1 (lib/face-ink.ts), and the default layout draws a link cue under each story (A6-107, A6-108).
+
+Budget-raise: feature-tabs-section 60.6 KB → 60.65 KB (measured 60.62 KB): the band scene sits inside the pane's spacing-xl inset in its own wrapper (A6-119).
+
+Budget-raise: closing-call-to-action-section 9.85 KB → 9.9 KB (measured 9.86 KB): CallToAction's panel copy takes a fixed measure so stacked bands start their actions at one place (A6-109).
+
+## Audit-6 fixes, lane L04 (2026-11-25)
+
+Budget-raise: data-table 58.45 KB → 58.6 KB (measured 58.54 KB): table rows repaint their bottom rule above the sideways-scroll fade so a frozen column leaves no notch, and plain cell text is dir=auto (A6-059, A6-061).
+
+Budget-raise: console-application-scene 127.2 KB → 127.3 KB (measured 127.23 KB): the scene renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: console-trace-scene 86.4 KB → 87.05 KB (measured 87.01 KB): the scene renders LogViewer, whose header now hosts the copy control and a loading Skeleton, and Table rows that repaint their rule above the scroll fade (A6-049, A6-065, A6-059).
+
+Budget-raise: listing-index-section 43.6 KB → 43.7 KB (measured 43.63 KB): the section renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: listing-table-section 26.7 KB → 26.75 KB (measured 26.71 KB): the section renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: chart 27.55 KB → 27.8 KB (measured 27.76 KB): ChartReference moves a band label off the band when a series crosses it, and legend buttons grow to 44 px on a coarse pointer (A6-056, A6-170).
+
+Budget-raise: chart-legend 1.5 KB → 1.55 KB (measured 1.51 KB): legend buttons grow to 44 px on a coarse pointer (A6-170).
+
+Budget-raise: chart-reference 2 KB → 2.15 KB (measured 2.11 KB): a band label checks the shown series at the last category and moves above or below the band when the line would cross it (A6-056); a tighter rewrite measured larger.
+
+Budget-raise: tracker 6.4 KB → 6.6 KB (measured 6.54 KB): a touch tap opens the day readout and a capture listener closes it on a tap outside, and the error banner is a slot (A6-064, A6-060); onClickOutside measured 0.7 KB more.
+
+Budget-raise: tree 11 KB → 11.1 KB (measured 11.03 KB): labels and sizes are dir=auto so they keep their order in right-to-left (A6-061).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.10 KB): new flowDiagram.route string for the stacked FlowDiagram routes (A6-052).
+
+Budget-raise: code-editor 11.6 KB → 11.65 KB (measured 11.60 KB): problem messages wrap instead of truncating (A6-058).
+
+Budget-raise: log-viewer 44 KB → 44.45 KB (measured 44.41 KB): LogViewerHeader hosts the copy control and a loading Skeleton (A6-049, A6-065).
+
+Budget-raise: log-viewer-header 5.15 KB → 18.1 KB (measured 18.06 KB): the header now renders the copy control (CopyButton, moved from LogViewerContent so the log body keeps its full width on a phone) and a loading Skeleton (A6-049, A6-057, A6-065); loading CopyButton as an async chunk added chunk overhead to every entry that renders LogViewer, so it stays static.
+
+Budget-raise: table 9 KB → 9.05 KB (measured 9.01 KB): rows repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: table-head-cell 5.45 KB → 5.5 KB (measured 5.46 KB): the sort button drops its generic aria-label when the header names it (A6-062).
+
+Budget-raise: flow-diagram 22.1 KB → 22.25 KB (measured 22.20 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
+
+Budget-raise: flow-diagram-root 19.85 KB → 20 KB (measured 19.95 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.13 KB): the FileTokenGroup catalog gained Cancel upload and the upload progress strings, so an uploading file names its cancel action and states its amount (audit-6 A6-037).
+
+Budget-raise: multi-select 31.5 KB → 31.55 KB (measured 31.50 KB): MultiSelect renders Chip and Checkbox; a clickable Chip gained its 44px coarse-pointer hit area and a disabled checked Checkbox draws a readable mark (audit-6 A6-015, A6-033).
+
+Budget-raise: prompt-input-root 12.05 KB → 12.1 KB (measured 12.09 KB): PromptInput renders Chip and Checkbox; a clickable Chip gained its 44px coarse-pointer hit area and a disabled checked Checkbox draws a readable mark (audit-6 A6-015, A6-033).
+
+Budget-raise: tag-editor 27.3 KB → 27.35 KB (measured 27.31 KB): AttributeEditor names Remove (and TagEditor its Undo) by the row key instead of its position, and sets the limit text in the hint style (audit-6 A6-022, A6-030).
+
+Budget-raise: schema-form 69.2 KB → 69.3 KB (measured 69.27 KB): SchemaForm renders AttributeEditor, Field, Switch, Checkbox and Combobox, which gained the key-named Remove, the RadioGroup choice-card fill, the readable disabled on looks and the label-step option description (audit-6 A6-022, A6-029, A6-033, A6-034).
+
+Budget-raise: console-layout-root 85.6 KB → 86.4 KB (measured 86.36 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: doc-page-header 33.5 KB → 34.2 KB (measured 34.11 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: console-application-scene 127.2 KB → 127.3 KB (measured 127.21 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: article-body-section 48.9 KB → 49.5 KB (measured 49.49 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: message-thread-item 35.6 KB → 35.7 KB (measured 35.63 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: field 12.9 KB → 13 KB (measured 12.91 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: chat-message-feedback 16.8 KB → 17.3 KB (measured 17.21 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: prompt-input-context-picker 15.9 KB → 16.3 KB (measured 16.27 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: prompt-input-tools 18.4 KB → 18.8 KB (measured 18.74 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: sources 14.6 KB → 15 KB (measured 14.91 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: conversation-history 42.35 KB → 42.8 KB (measured 42.74 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: button-group 17.5 KB → 17.8 KB (measured 17.78 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: tag-editor 27.3 KB → 27.4 KB (measured 27.30 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: table-cell-actions 12.7 KB → 12.9 KB (measured 12.86 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: filter-menu 37.9 KB → 38 KB (measured 37.92 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: split-button 17.8 KB → 18.1 KB (measured 18.05 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: flow-diagram-bind 16.8 KB → 17.2 KB (measured 17.13 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: context-menu 13 KB → 13.3 KB (measured 13.29 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: context-menu-root 7.9 KB → 8.1 KB (measured 8.03 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu 14 KB → 14.5 KB (measured 14.41 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu-root 7.8 KB → 8 KB (measured 7.90 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu-trigger 2.55 KB → 2.7 KB (measured 2.65 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu-item 3.4 KB → 3.9 KB (measured 3.85 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: console-layout 87.3 KB → 88.1 KB (measured 88.00 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: breadcrumb 27.6 KB → 28.2 KB (measured 28.14 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: breadcrumb-root 27.5 KB → 28.2 KB (measured 28.11 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: dialog-trigger 2.15 KB → 2.3 KB (measured 2.23 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: drawer 23.45 KB → 23.5 KB (measured 23.46 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: drawer-trigger 2.15 KB → 2.3 KB (measured 2.23 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: popover-trigger 2.55 KB → 2.7 KB (measured 2.61 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: shortcuts-dialog 27.3 KB → 27.4 KB (measured 27.32 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: doc-markdown 41.9 KB → 41.95 KB (measured 41.90 KB): DocCallout draws every variant on the calm reading surface (A6-085), and the en catalog it bundles through ConfigProvider gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: call-to-action 3.7 KB → 3.75 KB (measured 3.70 KB): CallToAction starts its actions at one place (A6-109), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: console-application-scene 127.3 KB → 127.45 KB (measured 127.44 KB): The console scenes fade at the crop on a phone (A6-100), and the switches, checkboxes, settings rows, item descriptions and table rows the scene draws carry their own fixes (A6-033, A6-138, A6-145, A6-059).
+
+Budget-raise: console-trace-scene 87.05 KB → 87.15 KB (measured 87.11 KB): The console scenes fade at the crop on a phone (A6-100), a stacked FlowDiagram keeps every edge and its severity (A6-052), the Trace minimap handles take a 44 px tap (A6-063) and the LogViewer copy moves into its header toolbar (A6-049).
+
+Budget-raise: article-body-section 49.5 KB → 49.55 KB (measured 49.53 KB): The breadcrumb folds only when its segments do not fit (A6-066), a menu shortcut reads with the platform modifier (A6-073), DocProse keeps inline code in a table cell on one line (A6-258), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: network-section 28.15 KB → 28.2 KB (measured 28.16 KB): NetworkSection wraps its claims eyebrow before the map (A6-128), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: client-quotes-section 28.55 KB → 28.6 KB (measured 28.56 KB): The Eyebrow prefix stays beside the first word when the label wraps (A6-095), and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: job-posting-section 63.7 KB → 63.8 KB (measured 63.79 KB): PhoneInput lists countries A to Z with no national mask as placeholder (A6-016, A6-017), an uploading file token offers Cancel upload and states its progress (A6-037), controls inside an InputGroup match its height (A6-018), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: donut-chart 13.9 KB → 13.95 KB (measured 13.90 KB): Chart legend items are 44 px tall on a touch screen (A6-070), and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: timeline 22.7 KB → 22.75 KB (measured 22.73 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042).
+
+Budget-raise: timeline-item 21.65 KB → 21.7 KB (measured 21.65 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042).
+
+Budget-raise: timestamp 20.7 KB → 20.75 KB (measured 20.72 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042).
+
+Budget-raise: message-thread-item 35.75 KB → 35.8 KB (measured 35.79 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042), and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: config-provider 14.55 KB → 14.6 KB (measured 14.55 KB): The en catalog it bundles gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: locales-pt-BR 13 KB → 13.05 KB (measured 13.02 KB): The pt-BR catalog gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: prompt-input 16 KB → 16.05 KB (measured 16.00 KB): The empty composer keeps a readable text field on a phone (A6-081), the model menu drops keyboard shortcuts on touch (A6-230), and a clickable chip grows to a 44 px hit area on touch (A6-015).
+
+Budget-raise: attribute-editor 25.4 KB → 25.45 KB (measured 25.43 KB): AttributeEditor names Remove by the row key (A6-022), and a selected Field choice card takes the RadioGroup card fill in the field label it renders (A6-029).
+
+Budget-raise: button-group 17.8 KB → 17.85 KB (measured 17.80 KB): Grouped icon buttons reach the 44 px touch width (A6-005), and a menu item prints its shortcut with the platform modifier (A6-073).
+
+Budget-raise: image-gallery 27.75 KB → 27.8 KB (measured 27.75 KB): ImageGallery shows Try again and emits retry when an image fails (A6-039), and its Dialog shares its root state through useModalRoot (A6-290).
+
+Budget-raise: avatar 12.8 KB → 12.85 KB (measured 12.80 KB): An avatar menu trigger is named by its aria-label and has a touch target (A6-069), and the small presence dot clears the second initial (A6-193).
+
+Budget-raise: log-viewer-steps 42.4 KB → 42.45 KB (measured 42.40 KB): The LogViewer copy sits in the header toolbar and the header is honest while loading (A6-049, A6-057).
+
+Budget-raise: table-sort-button 3.8 KB → 3.85 KB (measured 3.80 KB): A sort button named by its header carries no generic aria-label (A6-062), and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: dialog 23.3 KB → 23.35 KB (measured 23.31 KB): Dialog shares its root state through useModalRoot (A6-290), and the en catalog it bundles through ConfigProvider gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: css-button 11.05 KB → 11.1 KB (measured 11.09 KB gzip): the theme stylesheet every app compiles gains the brand-tint text selection (A6-026), the open word spacing of display headings on phones (A6-122) and the 16px code step with a real line height for wrapping code (A6-180).
+
+Budget-raise: css-icons 15.35 KB → 15.45 KB (measured 15.41 KB gzip): the same theme additions as css-button (A6-026, A6-122, A6-180).
+
+Budget-raise: css-console 24.7 KB → 24.95 KB (measured 24.91 KB gzip): the same theme additions (A6-026, A6-122, A6-180), plus the pointer-coarse 44px touch targets of grouped icon buttons, chips and chart legend items (A6-005, A6-015, A6-070), the transparent disabled ghost and outline IconButton fill (A6-232), the whole table row rules beside a frozen column (A6-059) and the platform shortcut hint in menu items (A6-073).
+
+## Audit-6 wave 2, lane W1 (2026-11-25)
+
+Budget-raise: console-layout-root 86.4 KB → 86.5 KB (measured 86.47 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: doc-page-header 34.2 KB → 34.25 KB (measured 34.20 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: media-tabs 10.5 KB → 10.55 KB (measured 10.52 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: quote-tabs 25.35 KB → 25.4 KB (measured 25.38 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: console-application-scene 127.45 KB → 127.55 KB (measured 127.50 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: customer-use-cases-section 8.2 KB → 8.25 KB (measured 8.21 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: article-body-section 49.55 KB → 49.6 KB (measured 49.59 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: article-highlight-section 13.05 KB → 13.1 KB (measured 13.05 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: recognition-marquee-section 22.35 KB → 22.4 KB (measured 22.35 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: message-thread 38.2 KB → 38.25 KB (measured 38.20 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: save-bar 4.6 KB → 4.65 KB (measured 4.62 KB): the new column prop (A6-142) and its two data-[column] classes, plus IconButton; audit-6 wave 2 lane W1.
+
+Budget-raise: artifact-canvas 12.3 KB → 12.35 KB (measured 12.30 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: chat-message-feedback 17.3 KB → 17.35 KB (measured 17.30 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: prompt-input-root 12.1 KB → 12.15 KB (measured 12.11 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: prompt-input-context-picker 16.3 KB → 16.35 KB (measured 16.33 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: prompt-input-tools 18.8 KB → 18.85 KB (measured 18.83 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: reasoning 5.2 KB → 5.25 KB (measured 5.20 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: sources 15 KB → 15.05 KB (measured 15.03 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: conversation-history 42.8 KB → 42.85 KB (measured 42.84 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: response-branches 4.5 KB → 4.55 KB (measured 4.51 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: button-group 17.85 KB → 17.9 KB (measured 17.89 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: table-cell-id 10.6 KB → 10.65 KB (measured 10.61 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: table-cell-actions 12.9 KB → 12.95 KB (measured 12.94 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: highlight-button 2.55 KB → 2.6 KB (measured 2.56 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: icon-button 2.7 KB → 2.75 KB (measured 2.72 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: split-button 18.1 KB → 18.15 KB (measured 18.14 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: flow-diagram-bind 17.2 KB → 17.25 KB (measured 17.23 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: transfer-list-controls 4.35 KB → 4.4 KB (measured 4.35 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: toast-action 3.45 KB → 3.5 KB (measured 3.46 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: password-input 5.35 KB → 5.4 KB (measured 5.36 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: console-layout 88.1 KB → 88.15 KB (measured 88.13 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: carousel 6.7 KB → 6.75 KB (measured 6.71 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: breadcrumb 28.2 KB → 28.25 KB (measured 28.22 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: drawer-content 18.35 KB → 18.4 KB (measured 18.35 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: stats-section 5.05 KB → 5.1 KB (measured 5.08 KB): Stats sets a suffix that holds a letter in the new text-face unit role, so `ms` and `Tbps` keep their case (A6-099, lane W3); the binding and the class add about 70 bytes after removing its test id.
+
+Budget-raise: network-section 28.2 KB → 28.25 KB (measured 28.21 KB): renders Stats, so it carries the same unit-role binding (A6-099, lane W3).
+
+## Audit-6 wave 2, lane W2 (2026-11-25)
+
+Budget-raise: data-table 58.6 KB → 58.7 KB (measured 58.68 KB): DataTable takes the principal-cell cap and the narrow column option, passes principal to its cells and holds minWidth floors before measuring (A6-174, A6-208, A6-209).
+
+Budget-raise: doc-code-group 34.8 KB → 34.9 KB (measured 34.87 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: console-application-scene 127.45 KB → 127.7 KB (measured 127.68 KB): CodeBlock tabs gain a touch-target layer, the table parts the principal-cell cap and the narrow column option, and FlowDiagram showPorts (A6-048, A6-174, A6-208, A6-149); the scene renders all three.
+
+Budget-raise: console-trace-scene 87.15 KB → 87.2 KB (measured 87.17 KB): CodeBlock tabs gain a touch-target layer and the table parts the principal-cell cap and the narrow column option (A6-048, A6-174, A6-208); the scene renders both.
+
+Budget-raise: job-posting-section 63.8 KB → 63.9 KB (measured 63.88 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress through FileTokenGroup.
+
+Budget-raise: listing-index-section 43.7 KB → 43.75 KB (measured 43.72 KB): The table parts gain the principal-cell cap (A6-174); the entry renders Table.
+
+Budget-raise: cli-terminal-section 48 KB → 48.05 KB (measured 48.04 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: feature-tabs-section 60.65 KB → 60.8 KB (measured 60.76 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: listing-table-section 26.75 KB → 26.8 KB (measured 26.77 KB): The table parts gain the principal-cell cap (A6-174); the entry renders Table.
+
+Budget-raise: code-block 34.4 KB → 34.45 KB (measured 34.43 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117).
+
+Budget-raise: response-loading 2.6 KB → 2.65 KB (measured 2.61 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress.
+
+Budget-raise: chat-message 20.6 KB → 20.7 KB (measured 20.67 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: streaming-response 43.9 KB → 43.95 KB (measured 43.94 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: video-player 12.7 KB → 12.8 KB (measured 12.77 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress as its seek bar.
+
+Budget-raise: table-cell-time 19.8 KB → 19.85 KB (measured 19.83 KB): TableCellTime prints the UTC date until mount and the relative phrase after, so a server render hydrates cleanly (A6-148, A6-206).
+
+Budget-raise: file-token-group 8.1 KB → 8.15 KB (measured 8.14 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress for uploads.
+
+Budget-raise: log-viewer 44.45 KB → 44.5 KB (measured 44.48 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: log-viewer-steps 42.45 KB → 42.5 KB (measured 42.50 KB): CodeBlock tabs gain a touch-target layer and lines a narrow-block inset (A6-048, A6-117); the entry renders CodeBlock.
+
+Budget-raise: table 9.05 KB → 9.1 KB (measured 9.07 KB): The table parts gain the principal-cell cap, max(var(--size-48), 50cqi), so a long principal value no longer widens every row (A6-174).
+
+Budget-raise: table-head-cell 5.5 KB → 5.55 KB (measured 5.51 KB): The head cell carries data-principal and the principal-cell cap (A6-174).
+
+Budget-raise: flow-diagram 22.25 KB → 22.3 KB (measured 22.27 KB): FlowDiagram gains showPorts and centres a stacked rail (A6-149, A6-198).
+
+Budget-raise: flow-diagram-root 20 KB → 20.05 KB (measured 20.02 KB): FlowDiagram gains showPorts and centres a stacked rail (A6-149, A6-198).
+
+Budget-raise: toast 12 KB → 12.1 KB (measured 12.06 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress in its timer bar.
+
+Budget-raise: toast-root 11.75 KB → 11.8 KB (measured 11.77 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress in its timer bar.
+
+Budget-raise: progress 1.85 KB → 1.95 KB (measured 1.93 KB): Progress gains a severity fill: five data-severity classes and the attribute (A6-161).
+
+Budget-raise: css-console 24.95 KB → 25.05 KB (measured 25.02 KB gzip): the console fixture's stylesheet gains the Progress severity fills (A6-161), the narrow-table column hiding and the principal-cell cap (A6-208, A6-174), the StatTile figure row container query (A6-279), the FlowDiagram centred rail and showPorts (A6-198, A6-149), and the CodeBlock tab hit area and narrow line inset (A6-048, A6-117).
+
+## Audit-6 fixes, lane W6 (2026-11-25)
+
+Budget-raise: doc-markdown 41.95 KB → 42 KB (measured 41.99 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: media-split-section 17.9 KB → 18 KB (measured 17.96 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: feature-scroll-section 21.1 KB → 21.15 KB (measured 21.15 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: feature-widgets-section 20.6 KB → 20.7 KB (measured 20.65 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: cli-terminal-section 48 KB → 48.05 KB (measured 48.04 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: feature-tabs-section 60.65 KB → 60.75 KB (measured 60.73 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: media-split-stack-section 18.25 KB → 18.35 KB (measured 18.31 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: quote 15.75 KB → 14.8 KB entryOnly (measured 14.63 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: console-application-scene 127.45 KB → 121.6 KB entryOnly (measured 120.36 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: console-trace-scene 87.15 KB → 79.95 KB entryOnly (measured 79.11 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: plan-comparison-section 40.3 KB → 37.95 KB entryOnly (measured 37.57 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its capability rows (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: logo-wall-section 25.5 KB → 24.65 KB entryOnly (measured 24.37 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: recognition-marquee-section 22.35 KB → 21.5 KB entryOnly (measured 21.24 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: timeline 22.75 KB → 19.6 KB entryOnly (measured 19.37 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: timeline-item 21.7 KB → 18.5 KB entryOnly (measured 18.29 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: timestamp 20.75 KB → 17.55 KB entryOnly (measured 17.36 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: message-thread 38.2 KB → 34.1 KB entryOnly (measured 33.74 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: message-thread-item 35.8 KB → 31.65 KB entryOnly (measured 31.32 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: field 13 KB → 4.05 KB entryOnly (measured 4.00 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: field-label 11.3 KB → 2.4 KB entryOnly (measured 2.35 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: settings-group 12.3 KB → 3.75 KB entryOnly (measured 3.68 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: settings-row 22.5 KB → 12.7 KB entryOnly (measured 12.54 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: chat-message-feedback 17.3 KB → 4.95 KB entryOnly (measured 4.90 KB): the budget counts the entry and its static imports and leaves out the Feedback menu it already loads on first open, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: feedback-reason-dialog 38 KB → 30.8 KB entryOnly (measured 30.46 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: attribute-editor 25.45 KB → 21.55 KB entryOnly (measured 21.31 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: tag-editor 27.4 KB → 23.4 KB entryOnly (measured 23.15 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: schema-form 69.3 KB → 66 KB entryOnly (measured 65.31 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: log-viewer 44.45 KB → 41.25 KB entryOnly (measured 40.80 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: log-viewer-steps 42.45 KB → 37.3 KB entryOnly (measured 36.93 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: log-viewer-header 18.1 KB → 14.6 KB entryOnly (measured 14.45 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: console-layout 88.1 KB → 87.8 KB entryOnly (measured 86.91 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: app-header-account 14.4 KB → 13.45 KB entryOnly (measured 13.27 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+### Audit-6 wave 2, lead merge
+
+Budget-raise: stats 2.3 KB → 2.35 KB (measured 2.33 KB): the A6-099 unit role (text-big-number-unit) on top of the A6-W6 entry measure.
+
+Budget-raise: feature-scroll-section 21.15 KB → 21.2 KB (measured 21.15 KB): CodeBlock tab hit area and narrow inset (A6-048, A6-117).
+
+Budget-raise: cli-terminal-section 48.05 KB → 48.2 KB (measured 48.17 KB): CodeBlock tab hit area and narrow inset (A6-048, A6-117).
+
+Budget-raise: feature-tabs-section 60.75 KB → 60.85 KB (measured 60.83 KB): CodeBlock tab hit area and narrow inset (A6-048, A6-117) and the A6-118 example labels.
+
+Budget-raise: contact-hub-section 9.85 KB → 9.9 KB (measured 9.86 KB): the channel severity field (A6-111).
+
+Budget-raise: code-block 34.45 KB → 34.5 KB (measured 34.45 KB): the file tab hit area and the narrow-block inset (A6-048, A6-117).
+
+Budget-raise: streaming-response 43.95 KB → 44 KB (measured 43.96 KB): the AI chat inline code chips (A6-229) and the CodeBlock tab hit area (A6-048).
+
+Budget-raise: copy-text 10.8 KB → 10.85 KB (measured 10.81 KB): the wrapLines prop (CopyText wrap handoff).
+
+Budget-raise: chat-message 20.6 KB → 20.8 KB (measured 20.79 KB): inside a Conversation, ChatMessage.Actions renders its row only when it nears the log's view, through one IntersectionObserver (A6-270); on the long-thread block it cuts the mounted nodes on a phone from 895 to 541 and the blocking time by about a third. Shrunk first: a direct observer in place of VueUse's helper saved 0.2 KB.
+
+Budget-raise: chat-message-actions 14.5 KB → 14.7 KB (measured 14.68 KB): the same lazy action row inside a Conversation (A6-270); a direct IntersectionObserver in place of VueUse's helper kept the growth to 0.2 KB.
+
+Budget-raise: data-table 58.7 KB → 59.25 KB (measured 59.19 KB): a roving-row table takes the links and buttons of every row but the active one out of the Tab order once focus enters it, so a table is one Tab stop (audit-6 A6-253); the row sync, its focus listeners and MutationObserver are the growth.
+
+Budget-raise: collection-preferences 33 KB → 33.15 KB (measured 33.10 KB): it renders DataTable and RadioGroup, which grew for the one-Tab-stop table (A6-253) and the new readonly state (A6-146).
+
+Budget-raise: card-list 8.4 KB → 8.5 KB (measured 8.48 KB): it renders RadioGroup, which gained the readonly state (A6-146).
+
+Budget-raise: radio-group-root 3.2 KB → 3.25 KB (measured 3.24 KB): RadioGroup gains readonly (focusable, keeps its selected look, cancels every change), so a saving or locked form reads instead of looking disabled (A6-146).
+
+Budget-raise: radio-group 3.2 KB → 3.3 KB (measured 3.27 KB): the same readonly state as radio-group-root (A6-146).
+
+Budget-raise: radio-group-item 2.35 KB → 2.4 KB (measured 2.37 KB): the item cancels a click while its group is readonly and drops the hover feedback (A6-146).
+
+Budget-raise: doc-prose 4.7 KB → 4.8 KB (measured 4.77 KB): DocProse gives every prose table tabindex 0 after mount and when its content changes, so a wide table scrolls from the keyboard for every consumer (X1-4).
+
+Budget-raise: article-body-section 49.6 KB → 49.7 KB (measured 49.69 KB): it renders DocProse, whose tables are now focusable (X1-4).
+
+Budget-raise: markdown-editor 32.1 KB → 32.6 KB (measured 32.57 KB): its lazy StreamingResponse preview now loads CodeBlock as a nested lazy chunk (audit-6 X2-4), so the bundler moves the modules the editor shares with CodeBlock (Tooltip, the trigger and teleport helpers) out of the entry into their own statically imported chunks; the editor loads the same code in more files. StreamingResponse itself drops 44 KB → 26.85 KB.
+
+Budget-raise: table 9.1 KB → 9.15 KB (measured 9.1 KB): a wide (grow 2 or 3) cell and head cell contain their inline size above a `--size-44` floor, so a long value no longer widens every row (audit-6 X3-3); the two class pairs ride in every entry that renders the table cells.
+
+Budget-raise: table-head-cell 5.55 KB → 5.6 KB (measured 5.55 KB): a wide (grow 2 or 3) head cell contains its inline size above a `--size-44` floor, so a long value no longer widens every row (audit-6 X3-3).
+
+Budget-raise: streaming-response 26.85 KB → 27.4 KB (measured 27.37 KB): CopyButton now loads its Tooltip lazily (the shared `LazyTooltip`), which takes about 5 KB off CopyButton, CodeBlock, CopyText and 25 other entries; StreamingResponse already loads CodeBlock lazily, so the async-component wrapper the two lazy chunks share is hoisted into its entry.
+
+Budget-raise: chat-message 15.35 KB → 15.4 KB (measured 15.38 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`, which ChatMessage imports from its new home under the tooltip folder; the re-export costs a few bytes.
+
+Budget-raise: chat-message-actions 8.9 KB → 8.95 KB (measured 8.93 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`, which the actions import from its new home under the tooltip folder; the re-export costs a few bytes.
+
+Budget-raise: markdown-editor 32.6 KB → 32.95 KB (measured 32.91 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`; MarkdownEditor's toolbar keeps its static Tooltip (a lazy one re-renders the toolbar buttons mid-selection), so it carries both the static Tooltip and the async wrapper.
+
+Budget-raise: css-button 11.1 KB → 11.15 KB (measured 11.12 KB): the theme every app stylesheet carries grew with the audit-6 fixes: the 16px code step and the display code step (A6 lanes L01 and X1), the medium amount step that reads 20px on a phone (W3), and the brand-tinted text selection (L01).
+
+Budget-raise: css-console 25.05 KB → 25.15 KB (measured 25.1 KB): the same audit-6 theme steps as css-button, plus the wide table cell's contained inline size and its `--size-44` floor in the DataTable cells (audit-6 X3-3).
+
+Budget-raise: console-layout-root 86.5 KB → 86.85 KB (measured 86.84 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: doc-layout 75.9 KB → 76.05 KB (measured 76.03 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: browser-frame 10.55 KB → 11 KB (measured 10.95 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: search-trigger 10 KB → 10.3 KB (measured 10.25 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: copy-prompt-button 9.5 KB → 9.8 KB (measured 9.75 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: doc-agent-card 15.5 KB → 15.75 KB (measured 15.74 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: property-filter 37 KB → 37.3 KB (measured 37.29 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: chip 8.1 KB → 8.4 KB (measured 8.37 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: doc-code-group 30.4 KB → 30.8 KB (measured 30.78 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: doc-prompt 8.6 KB → 9.05 KB (measured 9.01 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: doc-page-header 34.25 KB → 34.55 KB (measured 34.51 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: console-application-scene 116.85 KB → 117.25 KB (measured 117.21 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: console-trace-scene 74.7 KB → 75.15 KB (measured 75.11 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: article-body-section 49.7 KB → 50.05 KB (measured 50 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: copy-command-section 5.65 KB → 6.05 KB (measured 6.04 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: site-header-section 60.25 KB → 60.55 KB (measured 60.54 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: competitor-comparison-section 21 KB → 21.2 KB (measured 21.15 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: cli-terminal-section 42 KB → 42.6 KB (measured 42.56 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: feature-tabs-section 54.65 KB → 55.25 KB (measured 55.22 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: timeline 18.4 KB → 18.8 KB (measured 18.77 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: timeline-item 17.35 KB → 17.75 KB (measured 17.72 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: timestamp 16.45 KB → 16.8 KB (measured 16.79 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: message-thread 32.9 KB → 33.3 KB (measured 33.26 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: message-thread-item 30.45 KB → 30.85 KB (measured 30.81 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: subheader 5.9 KB → 6.35 KB (measured 6.31 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: multi-select 31.55 KB → 31.85 KB (measured 31.8 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: code-block 29.95 KB → 30.35 KB (measured 30.34 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: log-viewer-content 24.95 KB → 25.35 KB (measured 25.33 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: trace 35.1 KB → 35.6 KB (measured 35.55 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: artifact-canvas 7.55 KB → 8 KB (measured 7.96 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: artifact-preview 7.15 KB → 7.6 KB (measured 7.58 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: chat-message 15.4 KB → 16.05 KB (measured 16.03 KB): ChatMessageActions loads More, CopyButton and the Tooltip part through defineClientLazy, which renders their face on the server and during hydration and swaps after mount, so the action row hydrates without a mismatch; plus the stable-trigger Tooltip split (see tooltip).
+
+Budget-raise: chat-message-actions 8.95 KB → 9.6 KB (measured 9.57 KB): ChatMessageActions loads More, CopyButton and the Tooltip part through defineClientLazy, which renders their face on the server and during hydration and swaps after mount, so the action row hydrates without a mismatch; plus the stable-trigger Tooltip split (see tooltip).
+
+Budget-raise: prompt-input-tools 18.85 KB → 19.15 KB (measured 19.14 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: attribute-editor 21.55 KB → 21.65 KB (measured 21.61 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: button-group 17.9 KB → 18.2 KB (measured 18.19 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: tag-editor 23.4 KB → 23.5 KB (measured 23.48 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: table-cell-link 19.9 KB → 20.25 KB (measured 20.24 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: table-cell-id 5.45 KB → 5.9 KB (measured 5.86 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: table-cell-time 19.85 KB → 20.2 KB (measured 20.16 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: filter-menu 38 KB → 38.35 KB (measured 38.3 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: filter-menu-chip-group 22.7 KB → 23 KB (measured 22.99 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: copy-button 5.15 KB → 5.55 KB (measured 5.52 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: copy-text 5.65 KB → 6.1 KB (measured 6.06 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: log-viewer 36.5 KB → 36.95 KB (measured 36.92 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: log-viewer-steps 32.55 KB → 32.95 KB (measured 32.93 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: log-viewer-header 9.55 KB → 9.95 KB (measured 9.93 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: table-export-button 9.2 KB → 9.45 KB (measured 9.41 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: table-refresh-button 9.1 KB → 9.35 KB (measured 9.33 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: flow-diagram-bind 17.25 KB → 17.55 KB (measured 17.51 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: theme-switcher 18.5 KB → 18.75 KB (measured 18.71 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: markdown-editor 32.95 KB → 33.25 KB (measured 33.24 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: multi-select-trigger 10.5 KB → 10.8 KB (measured 10.77 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: sidebar 25.5 KB → 25.8 KB (measured 25.76 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: sidebar-root 25.3 KB → 25.6 KB (measured 25.57 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
+
+Budget-raise: tooltip 5.9 KB → 6.25 KB (measured 6.22 KB): Tooltip keeps its trigger span and moves its behaviour and panel into a private TooltipContent part, so the lazy Tooltip can render the same span and load only that part after mount; before, the late swap remounted the slotted button (the manual-copy popover lost its focus target on Escape) and its teleports hydrated out of order (the open Drawer in two blocks claimed a tooltip's anchor). The part carries its own props and mirrors its open state and placement on the trigger.

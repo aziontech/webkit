@@ -14,6 +14,7 @@ import {
 const STACKED_FIELD_CLASS =
   'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
 const STACKED_CELL_CLASS = 'static! before:hidden! after:hidden!'
+const NARROW_HIDDEN_CLASS = '@max-sm/table:hidden'
 
 export interface DataTableLayoutOptions {
   columns: () => TableColumn[]
@@ -61,6 +62,11 @@ const frozenOffsets = (
   }
 }
 
+const resolvedWidthOf = (o: DataTableLayoutOptions, id: string): number | undefined => {
+  const column = o.columns().find((c) => columnId(c) === id)
+  return o.resizeWidths.value[id] ?? column?.width ?? o.autoWidths.value[id] ?? column?.minWidth
+}
+
 export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayoutReturn {
   const { leftFrozen, startOf, endOf } = frozenOffsets(o)
   const selectionFrozen = computed(() => o.selectable() && leftFrozen.value.length > 0)
@@ -68,16 +74,11 @@ export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayou
   const lead = (): number =>
     (selectionFrozen.value ? SELECTION_WIDTH : 0) +
     (o.reorderable() && leftFrozen.value.length > 0 ? SELECTION_WIDTH : 0)
-  const widthOf = (id: string): number | undefined =>
-    o.columns().find((c) => columnId(c) === id)?.width
   const cellStyleOf = (column: ColumnLike): Record<string, string> | undefined => {
     if (o.stacked()) return undefined
     const style: Record<string, string> = {}
     const meta = metaOf(column)
-    const width =
-      meta.type === 'action'
-        ? undefined
-        : (o.resizeWidths.value[column.id] ?? widthOf(column.id) ?? o.autoWidths.value[column.id])
+    const width = meta.type === 'action' ? undefined : resolvedWidthOf(o, column.id)
     if (width) {
       style['flex'] = `0 0 ${width}px !important`
       style['width'] = `${width}px !important`
@@ -96,7 +97,13 @@ export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayou
       align: meta.align ?? 'start',
       frozen: meta.frozen,
       style: cellStyleOf(column),
-      stackedClass: stacked ? (stackedField ? STACKED_FIELD_CLASS : STACKED_CELL_CLASS) : undefined,
+      cellClass: stacked
+        ? stackedField
+          ? STACKED_FIELD_CLASS
+          : STACKED_CELL_CLASS
+        : meta.narrow === false
+          ? NARROW_HIDDEN_CLASS
+          : undefined,
       stackedField,
       principal: Boolean(meta.principal)
     }

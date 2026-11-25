@@ -19,7 +19,7 @@
     },
     {
       "name": "Error",
-      "summary": "The generation failed: the app's message in place of the grid.",
+      "summary": "The generation failed: the app's message and Try again in place of the grid; Try again starts generating again.",
       "file": "error.vue"
     },
     {

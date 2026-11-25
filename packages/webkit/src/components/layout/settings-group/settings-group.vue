@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
+  import { computed, defineAsyncComponent, h, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { copyText } from '../../../utils/clipboard'
-  import Hint from '../../input/hint/hint.vue'
 
   defineOptions({
     name: 'SettingsGroup',
@@ -42,6 +41,13 @@
     info(): unknown
   }>()
 
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../input/hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
+  })
+
   const attrs = useAttrs()
   const { t } = useTranslate({ settingsGroup: en.settingsGroup })
   const regionId = useId()
@@ -72,7 +78,7 @@
   }
 
   const COPY_LINK_CLASS =
-    'absolute z-1 -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ' +
+    'absolute z-1 -start-(--size-6) flex size-6 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ' +
     'ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     'group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:relative [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 ' +
     '[@media(hover:none)]:start-0 [@media(hover:none)]:z-1 [@media(hover:none)]:ms-(--spacing-xl) ' +
@@ -121,7 +127,7 @@
         <span
           aria-hidden="true"
           data-slot="touch-target"
-          class="absolute inset-[min(0rem,calc(50%-12px))] pointer-coarse:inset-[min(0rem,calc(50%-22px))]"
+          class="absolute inset-0 pointer-coarse:inset-[min(0rem,calc(50%-22px))]"
         />
         <i
           :class="copied ? 'az az-check' : 'az az-link'"

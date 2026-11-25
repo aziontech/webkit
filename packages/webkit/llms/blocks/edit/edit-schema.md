@@ -1271,7 +1271,7 @@ export const createdDescription = (rows: number, relations: number) =>
     <Select.Trigger>
       <template #leading>
         <span
-          class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
+          class="shrink-0 text-label-code-sm text-(--text-muted)"
           aria-hidden="true"
           >{{ glyphOf(type) }}</span
         >
@@ -1299,7 +1299,7 @@ export const createdDescription = (rows: number, relations: number) =>
           :value="item.value"
         >
           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-            <span class="font-code text-label-code-sm">{{ item.value }}</span>
+            <span class="text-label-code-sm">{{ item.value }}</span>
             <span class="truncate text-body-xs text-(--text-muted)">{{ item.description }}</span>
           </span>
         </Select.Item>
@@ -1940,12 +1940,8 @@ export const createdDescription = (rows: number, relations: number) =>
               :disabled="isAuto(column)"
             >
               <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                <Field.Label
-                  ><span class="font-code">{{ column.name }}</span></Field.Label
-                >
-                <span class="shrink-0 font-code text-body-xs text-(--text-muted)">{{
-                  column.type
-                }}</span>
+                <Field.Label>{{ column.name }}</Field.Label>
+                <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
               </div>
               <Input
                 v-model="rowForm[column.name]"
@@ -2105,7 +2101,7 @@ export const createdDescription = (rows: number, relations: number) =>
           </div>
         </template>
         <template #cell-name="{ value }">
-          <span class="min-w-0 truncate font-code text-label-code-sm">{{ value }}</span>
+          <span class="min-w-0 truncate text-label-code-sm">{{ value }}</span>
         </template>
         <template #cell-type="{ value }">
           <Tag

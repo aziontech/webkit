@@ -1,7 +1,10 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Tag from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { ref, useId } from 'vue'
+
+  const labelId = useId()
 
   const plans = [
     {
@@ -28,19 +31,26 @@
 </script>
 
 <template>
-  <RadioGroup
-    v-model="plan"
-    variant="card"
-    orientation="horizontal"
-    name="plan"
-    :options="plans"
-    aria-label="Plan"
-  >
-    <template #tag="{ option }">
-      <Tag
-        :label="prices[option.value]"
-        severity="info"
-      />
-    </template>
-  </RadioGroup>
+  <Field.Set>
+    <Field.Legend
+      :id="labelId"
+      type="label"
+      >Plan</Field.Legend
+    >
+    <RadioGroup
+      :aria-labelledby="labelId"
+      v-model="plan"
+      variant="card"
+      orientation="horizontal"
+      name="plan"
+      :options="plans"
+    >
+      <template #tag="{ option }">
+        <Tag
+          :label="prices[option.value]"
+          severity="info"
+        />
+      </template>
+    </RadioGroup>
+  </Field.Set>
 </template>

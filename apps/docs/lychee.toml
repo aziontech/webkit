@@ -17,4 +17,6 @@ exclude = [
   '^https://(www\.)?npmjs\.com/',
   '^https://(www\.)?reddit\.com/',
   '^https://(www\.)?instagram\.com/',
+  '^https://(www\.)?x\.com/',
+  '^https://(www\.)?w3\.org/',
 ]

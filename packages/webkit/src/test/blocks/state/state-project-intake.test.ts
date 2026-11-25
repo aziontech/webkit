@@ -15,9 +15,15 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement | undefined
 describe('state/state-project-intake', () => {
-  it('offers Choose a folder as the keyboard way in', () => {
+  it('offers Choose a folder and Choose files as the keyboard way in', () => {
     const view = render(StateProjectIntake)
     expect(view.getByRole('button', { name: 'Choose a folder' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Choose files' })).toBeTruthy()
+    expect(
+      view
+        .getByRole('button', { name: 'Choose a folder' })
+        .parentElement?.classList.contains('pointer-coarse:hidden')
+    ).toBe(true)
     expect(
       view.container.querySelector('[aria-hidden="true"] h1, [aria-hidden="true"] p')
     ).toBeNull()
@@ -48,6 +54,12 @@ describe('state/state-project-intake', () => {
     expect(retries).toHaveLength(1)
     expect(retries[0][0]).toBeInstanceOf(MouseEvent)
     expect(retries[0][1]).toBeUndefined()
+  })
+
+  it('heads a paused upload with its paused counts, not the uploading wording', () => {
+    const view = render(StateProjectIntake, { props: { uploads: sampleFailedUploads } })
+    expect(view.container.textContent).toContain('Paused: 2 of 5 uploaded, 1 failed')
+    expect(view.container.textContent).not.toMatch(/Uploading \d+ of/)
   })
 
   it('renders the uploads it is given instead of the drop target', () => {

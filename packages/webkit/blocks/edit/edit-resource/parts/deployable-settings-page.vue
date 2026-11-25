@@ -108,10 +108,7 @@
             novalidate
             @submit.prevent="save"
           >
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="saving"
-            >
+            <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">Resource settings</legend>
 
               <SettingsGroup
@@ -133,7 +130,7 @@
                             size="large"
                             class="w-full"
                             aria-label="Name"
-                            :disabled="saving"
+                            :readonly="saving"
                             required
                             :invalid="nameError"
                             :aria-describedby="nameError ? 'resource-name-message' : undefined"
@@ -153,7 +150,7 @@
                         <Switch
                           v-model="form.active"
                           aria-label="Active"
-                          :disabled="saving"
+                          :readonly="saving"
                         />
                       </SettingsRow>
                     </Item.List>
@@ -194,6 +191,7 @@
                               variant="danger"
                               size="medium"
                               icon="az az-trash"
+                              :disabled="saving"
                             />
                           </template>
                           <div class="flex flex-col gap-(--spacing-md)">

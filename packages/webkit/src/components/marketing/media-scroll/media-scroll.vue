@@ -13,6 +13,7 @@
     watch
   } from 'vue'
 
+  import { useMediaQuery } from '../../../composables/use-media-query'
   import Texture from '../../content/texture/texture.vue'
 
   defineOptions({
@@ -68,6 +69,7 @@
   }>()
 
   const attrs = useAttrs()
+  const pinned = useMediaQuery('(min-width: 64rem)')
 
   const trackEl = ref<globalThis.HTMLElement | null>(null)
   const frameEl = ref<globalThis.HTMLElement | null>(null)
@@ -250,6 +252,7 @@
           >
             <h3 :class="ITEM_TITLE_CLASS">
               <button
+                v-if="pinned"
                 type="button"
                 :aria-current="isActive(index) ? 'true' : undefined"
                 :class="ITEM_BUTTON_CLASS"
@@ -258,6 +261,7 @@
               >
                 {{ item.title }}
               </button>
+              <template v-else>{{ item.title }}</template>
             </h3>
 
             <div :class="ITEM_BODY_CLASS">

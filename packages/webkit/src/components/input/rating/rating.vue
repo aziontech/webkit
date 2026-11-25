@@ -158,7 +158,8 @@
     'group-data-[size=small]/rating:size-6 group-data-[size=medium]/rating:size-7 group-data-[size=large]/rating:size-8'
 
   const TARGET_CLASS =
-    'cursor-pointer pointer-coarse:size-11 hover:bg-(--bg-hover) has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 ' +
+    'cursor-pointer pointer-coarse:group-data-[size=small]/rating:size-11 pointer-coarse:group-data-[size=medium]/rating:size-11 ' +
+    'pointer-coarse:group-data-[size=large]/rating:size-11 hover:bg-(--bg-hover) has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 ' +
     'has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas) ' +
     'group-data-[disabled]/rating:cursor-not-allowed group-data-[disabled]/rating:hover:bg-transparent'
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import '../styles/full-utilities.css'
+
   import Card from '@aziontech/webkit/card'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import EmptyState from '@aziontech/webkit/empty-state'

@@ -11,6 +11,7 @@ const TESTID = 'template-gallery-section'
 const TITLE = 'Quick Start with Templates'
 const WALL_LABEL = 'Templates you can deploy'
 const DEPLOY = 'Deploy now'
+const DEPLOY_NAME = new RegExp(`^${DEPLOY}, `)
 
 const primaryAction = { label: 'Start for free', href: '/signup' }
 const secondaryAction = { label: 'Talk to sales', href: '/contact', trailing: true }
@@ -85,10 +86,19 @@ describe('TemplateGallerySection', () => {
       expect(getByText(template.title)).toBeInTheDocument()
       expect(getByText(template.description)).toBeInTheDocument()
     })
-    const deploys = getAllByRole('link', { name: DEPLOY })
+    const deploys = getAllByRole('link', { name: DEPLOY_NAME })
     expect(deploys.map((link) => link.getAttribute('href'))).toEqual(
       templates.map((template) => template.href)
     )
+    expect(deploys.map((link) => link.getAttribute('aria-label'))).toEqual(
+      templates.map((template) => `${DEPLOY}, ${template.title}`)
+    )
+  })
+
+  it('lets a short wall size to its cards instead of holding an empty panel under them', () => {
+    const { getByRole } = band()
+
+    expect(getByRole('region', { name: WALL_LABEL })).toHaveAttribute('data-few')
   })
 
   it('flags only the marks that invert in dark', () => {
@@ -100,11 +110,11 @@ describe('TemplateGallerySection', () => {
 
   it('renders no deploy button without a deploy label or a template href', () => {
     const withoutLabel = band({ deployLabel: '' })
-    expect(withoutLabel.queryAllByRole('link', { name: DEPLOY })).toHaveLength(0)
+    expect(withoutLabel.queryAllByRole('link', { name: DEPLOY_NAME })).toHaveLength(0)
     withoutLabel.unmount()
 
     const withoutHref = band({ templates: [{ title: 'Bare', description: 'No link.' }] })
-    expect(withoutHref.queryAllByRole('link', { name: DEPLOY })).toHaveLength(0)
+    expect(withoutHref.queryAllByRole('link', { name: DEPLOY_NAME })).toHaveLength(0)
     expect(withoutHref.getByText('Bare')).toBeInTheDocument()
   })
 
@@ -125,7 +135,7 @@ describe('TemplateGallerySection', () => {
   it('keeps one tab stop per card', () => {
     const { getAllByRole } = band()
 
-    expect(getAllByRole('link', { name: DEPLOY })).toHaveLength(templates.length)
+    expect(getAllByRole('link', { name: DEPLOY_NAME })).toHaveLength(templates.length)
     expect(
       getAllByRole('link').filter((link) => link.getAttribute('tabindex') === '-1')
     ).toHaveLength(0)
@@ -167,7 +177,7 @@ describe('TemplateGallerySection', () => {
       templates: [...templates, { title: '', description: 'Untitled', href: '/untitled' }]
     })
 
-    expect(getAllByRole('link', { name: DEPLOY })).toHaveLength(templates.length)
+    expect(getAllByRole('link', { name: DEPLOY_NAME })).toHaveLength(templates.length)
   })
 
   it('renders both actions as links to their href', () => {
@@ -286,7 +296,7 @@ describe('TemplateGallerySection', () => {
     }
 
     const deployButtonsOutsideTheirCard = (view: ReturnType<typeof mountIn>) =>
-      view.getAllByRole('link', { name: DEPLOY }).filter((button) => {
+      view.getAllByRole('link', { name: DEPLOY_NAME }).filter((button) => {
         const card = button.parentElement as HTMLElement
         const inner =
           card.getBoundingClientRect().right -
@@ -312,7 +322,7 @@ describe('TemplateGallerySection', () => {
         expect(Math.abs(copy.width - media.width)).toBeLessThanOrEqual(1)
         expect(linesOf(heading)).toBe(2)
         expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(copy.right)
-        expect(view.getAllByRole('link', { name: DEPLOY })).toHaveLength(templates.length)
+        expect(view.getAllByRole('link', { name: DEPLOY_NAME })).toHaveLength(templates.length)
         expect(deployButtonsOutsideTheirCard(view)).toHaveLength(0)
       }
     )

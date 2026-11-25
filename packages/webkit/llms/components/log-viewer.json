@@ -72,7 +72,7 @@
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
+   "doc": "Shows the copy-to-clipboard control: a CopyButton at the end of LogViewerHeader, or pinned top-right beside the log body when no header is composed."
   },
   {
    "name": "disabled",

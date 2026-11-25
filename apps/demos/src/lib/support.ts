@@ -218,7 +218,11 @@ export function findTicket(id: unknown): SupportTicket | undefined {
 }
 
 export function findCustomer(id: unknown): SupportCustomer | undefined {
-  return customers.value.find((customer) => customer.id === String(id))
+  const key = String(id)
+  return customers.value.find(
+    (customer) =>
+      customer.id === key || (key === sampleCustomer.id && customer.name === sampleCustomerName)
+  )
 }
 
 export function customerOf(ticket: TicketInboxTicket): SupportCustomer | undefined {

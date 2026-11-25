@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, useAttrs } from 'vue'
+  import { computed, provide, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -29,7 +29,7 @@
     bordered?: boolean
     /** Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`). */
     searchPlaceholder?: string
-    /** Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent). */
+    /** Shows the copy-to-clipboard control: a CopyButton at the end of LogViewerHeader, or pinned top-right beside the log body when no header is composed. */
     copyable?: boolean
     /** Disables toolbar controls in LogViewerHeader. */
     disabled?: boolean
@@ -164,6 +164,14 @@
     emit('copy', event, value)
   }
 
+  const headers = ref<number>(0)
+  const registerHeader = (): (() => void) => {
+    headers.value += 1
+    return () => {
+      headers.value -= 1
+    }
+  }
+
   provide(LogViewerInjectionKey, {
     testId,
     lines: computed(() => props.lines),
@@ -183,7 +191,9 @@
     copyText,
     setSearch,
     toggleLevel,
-    emitCopy
+    emitCopy,
+    headerMounted: computed(() => headers.value > 0),
+    registerHeader
   })
 </script>
 

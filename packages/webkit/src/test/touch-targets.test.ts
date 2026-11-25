@@ -1,6 +1,6 @@
 import './reflow.css'
 
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { commands, page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
@@ -10,15 +10,20 @@ import AppHeaderWithAccount from '../../examples/app-header/with-account.vue'
 import AppLayoutDefault from '../../examples/app-layout/default.vue'
 import ArticleHighlightAutoplay from '../../examples/article-highlight-section/autoplay.vue'
 import ButtonGroupDefault from '../../examples/button-group/default.vue'
+import ChartTooltipTotal from '../../examples/chart/tooltip-total.vue'
+import ChipSelectable from '../../examples/chip/selectable.vue'
 import CitationDefault from '../../examples/citation/default.vue'
 import CliTerminalDefault from '../../examples/cli-terminal-section/default.vue'
 import ClientQuotesDefault from '../../examples/client-quotes-section/default.vue'
 import ClosingAudiences from '../../examples/closing-call-to-action-section/audiences.vue'
 import CodeBlockUnevenTabs from '../../examples/code-block/uneven-tabs.vue'
 import CompetitorComparisonDefault from '../../examples/competitor-comparison-section/default.vue'
+import ConsoleMockupLibrary from '../../examples/console-mockup/library.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
+import DashboardGridEditing from '../../examples/dashboard-grid/editing.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
 import DocTableOfContentsDefault from '../../examples/doc-table-of-contents/default.vue'
+import DonutChartDefault from '../../examples/donut-chart/default.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
 import FileDropzoneDefault from '../../examples/file-dropzone/default.vue'
 import FooterDefault from '../../examples/footer/default.vue'
@@ -28,15 +33,18 @@ import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import NumberInputDefault from '../../examples/number-input/default.vue'
 import OverflowCountDefault from '../../examples/overflow-count/default.vue'
 import PromptInputShortcutMenus from '../../examples/prompt-input/shortcut-menus.vue'
+import RatingDefault from '../../examples/rating/default.vue'
 import ReasoningDefault from '../../examples/reasoning/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
 import SettingsGroupCollapsible from '../../examples/settings-group/collapsible.vue'
 import SettingsGroupDefault from '../../examples/settings-group/default.vue'
 import SourcesDefault from '../../examples/sources/default.vue'
 import SplitButtonSizes from '../../examples/split-button/sizes.vue'
+import SwitchDefault from '../../examples/switch/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
 import ToggleGroupSizes from '../../examples/toggle-group/sizes.vue'
+import TraceZoom from '../../examples/trace/zoom.vue'
 import TreeDefault from '../../examples/tree/default.vue'
 import ConversationHistory from '../components/ai/conversation-history/conversation-history.vue'
 
@@ -128,6 +136,34 @@ describe('tap targets on a coarse pointer (styled)', () => {
         expect(stepper.getBoundingClientRect().width).toBeGreaterThanOrEqual(39)
         expect(hitSpan(stepper, 'y')).toBeGreaterThanOrEqual(44)
       }
+    })
+
+    it('a selectable Chip answers a tap across 44px of height', async () => {
+      await touch()
+      const view = await mount(ChipSelectable)
+      for (const chip of byTestId(view.container as HTMLElement, 'chip')) {
+        expect(chip.getBoundingClientRect().height).toBeLessThan(44)
+        expect(hitSpan(chip, 'y')).toBeGreaterThanOrEqual(44)
+      }
+    })
+
+    it('Rating stars grow to 44 x 44 on a coarse pointer', async () => {
+      await touch()
+      const view = await mount(RatingDefault)
+      for (const star of byTestId(view.container as HTMLElement, 'rating__star')) {
+        const box = star.getBoundingClientRect()
+        expect(Math.round(box.width)).toBeGreaterThanOrEqual(44)
+        expect(Math.round(box.height)).toBeGreaterThanOrEqual(44)
+      }
+    })
+
+    it('a Switch answers a tap across 44 x 44', async () => {
+      await touch()
+      const view = await mount(SwitchDefault)
+      const control = byTestId(view.container as HTMLElement, 'switch')[0]!
+      expect(control.getBoundingClientRect().height).toBeLessThan(44)
+      expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(44)
+      expect(hitSpan(control, 'x')).toBeGreaterThanOrEqual(44)
     })
 
     it('OverflowCount +N answers a tap across 44px of height', async () => {
@@ -251,12 +287,12 @@ describe('tap targets on a coarse pointer (styled)', () => {
       expect(item.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
     })
 
-    it('ConsoleShowcaseSection keeps a large, fluid view switcher on a phone', async () => {
+    it('ConsoleShowcaseSection keeps a large view switcher in even columns on a phone', async () => {
       await touch()
       const view = await mount(ConsoleShowcaseDefault)
       const group = view.container.querySelector<HTMLElement>('[role="radiogroup"]')!
       expect(group.dataset['size']).toBe('large')
-      expect(group).toHaveAttribute('data-fluid')
+      expect(group).toHaveAttribute('data-columns')
       const option = group.querySelector<HTMLElement>('[role="radio"]')!
       expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(28)
       expect(hitSpan(option, 'y')).toBeGreaterThanOrEqual(44)
@@ -273,6 +309,25 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const control = view.container.querySelector<HTMLElement>(`[data-testid="${id}"]`)!
       expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(44)
       expect(hitSpan(control, 'x')).toBeGreaterThanOrEqual(44)
+    })
+
+    it('the CodeBlock file tab of a scaled-down function-code mockup answers past its drawn box and never takes the taps of its neighbour', async () => {
+      await touch()
+      const view = await mount(ConsoleMockupLibrary)
+      const tab = await waitFor(() => {
+        const found = Array.from(view.container.querySelectorAll<HTMLElement>('[role="tab"]')).find(
+          (el) => el.textContent?.trim() === 'Code'
+        )
+        expect(found).toBeTruthy()
+        return found!
+      })
+      tab.scrollIntoView({ block: 'center' })
+      await settle()
+      const r = tab.getBoundingClientRect()
+      for (const x of [r.left + 2, r.left + r.width / 2, r.right - 2])
+        expect(hits(tab, x, r.top + r.height / 2)).toBe(true)
+      expect(tab.getBoundingClientRect().height).toBeLessThan(24)
+      expect(hitSpan(tab, 'y')).toBeGreaterThanOrEqual(32)
     })
 
     it('the AppLayout split-panel separator takes a finger drag across 44px', async () => {
@@ -307,6 +362,50 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const view = await mount(component)
       const row = view.container.querySelector<HTMLElement>(selector)!
       expect(row.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
+    })
+
+    it.each([
+      ['Chart', ChartTooltipTotal, 'chart-legend__item'],
+      ['DonutChart', DonutChartDefault, 'donut-chart__legend-item']
+    ])('%s legend items are 44px tall', async (_name, component, id) => {
+      await touch()
+      const view = await mount(component)
+      const items = await vi.waitFor(() => {
+        const found = byTestId(view.container as HTMLElement, id)
+        if (found.length < 2) throw new Error('no legend yet')
+        return found
+      })
+      for (const item of items)
+        expect(item.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
+    })
+
+    it('the ChartCard move handle answers a tap across 44 x 44', async () => {
+      await touch()
+      const view = await mount(DashboardGridEditing)
+      const handle = await vi.waitFor(() => {
+        const found = byTestId(view.container as HTMLElement, 'chart-card-drag-handle')[0]
+        if (!found) throw new Error('no handle yet')
+        return found
+      })
+      handle.scrollIntoView({ block: 'center' })
+      await settle()
+      expect(hitSpan(handle, 'x')).toBeGreaterThanOrEqual(44)
+      expect(hitSpan(handle, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
+    it('the Trace zoom handles answer a tap across 44px of height', async () => {
+      await touch()
+      const view = await mount(TraceZoom)
+      const thumbs = await vi.waitFor(() => {
+        const found = byTestId(view.container as HTMLElement, 'trace__thumb')
+        if (found.length < 2) throw new Error('no thumbs yet')
+        return found
+      })
+      thumbs[0]!.scrollIntoView({ block: 'center' })
+      await settle()
+      const top = thumbs.at(-1)!
+      expect(top.getBoundingClientRect().height).toBeLessThan(44)
+      expect(hitSpan(top, 'y')).toBeGreaterThanOrEqual(44)
     })
 
     it('the Sources pill answers a tap across 44px', async () => {

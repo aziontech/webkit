@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -15,6 +16,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+  import { onBeforeRouteLeave } from 'vue-router'
 
   import { sampleProfile } from './settings-form.sample'
 
@@ -71,13 +73,14 @@
   const submitted = ref(false)
   const submitting = computed(() => props.loading)
 
-  const {
-    isDirty: dirty,
-    commit,
-    discard: restore
-  } = useUnsavedChanges(() => form, {
+  const guard = useUnsavedChanges(() => form, {
     onDiscard: (baseline) => Object.assign(form, baseline)
   })
+  const { isDirty: dirty, commit, discard: restore } = guard
+  const leaveDialog = guard.dialogProps
+  const leaveLabels = guard.labels
+
+  onBeforeRouteLeave(() => guard.confirmLeave())
 
   Object.assign(form, props.defaultDraft)
 
@@ -183,17 +186,6 @@
                   title="Full name"
                   description="The name shown across your account."
                 >
-                  <template #title
-                    >Full name
-                    <span class="text-label-sm text-(--text-muted)"
-                      ><span
-                        aria-hidden="true"
-                        class="text-(--text-default)"
-                        >*</span
-                      >
-                      (Required)</span
-                    ></template
-                  >
                   <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                     <div class="flex w-full flex-col gap-(--spacing-xs)">
                       <Input
@@ -219,17 +211,6 @@
                   title="Email"
                   description="Used for sign-in and notifications."
                 >
-                  <template #title
-                    >Email
-                    <span class="text-label-sm text-(--text-muted)"
-                      ><span
-                        aria-hidden="true"
-                        class="text-(--text-default)"
-                        >*</span
-                      >
-                      (Required)</span
-                    ></template
-                  >
                   <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                     <div class="flex w-full flex-col gap-(--spacing-xs)">
                       <Input
@@ -363,14 +344,36 @@
           aria-keyshortcuts="Meta+S Control+S"
         >
           Save
-          <Kbd
-            meta
-            size="small"
+          <span
+            class="pointer-coarse:hidden"
             aria-hidden="true"
-            >S</Kbd
+            data-testid="shortcut-hint"
           >
+            <Kbd
+              meta
+              size="small"
+              >S</Kbd
+            >
+          </span>
         </Button>
       </template>
     </SaveBar>
+
+    <ConfirmDialog v-bind="leaveDialog">
+      <template #actions>
+        <Button
+          :label="leaveLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="leaveLabels.discard"
+          variant="outline"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </form>
 </template>

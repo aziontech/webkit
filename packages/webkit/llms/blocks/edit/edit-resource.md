@@ -41,7 +41,7 @@ A small `PageHeader` titled Settings with one sentence about what these settings
 
 ### C. Settings sections — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 
-One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
+One `form` with a `fieldset` and a visually hidden legend; while saving, every field turns read-only. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
 
 ### D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 
@@ -49,7 +49,7 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 ### E. Save bar — `SaveBar`, `Button` (required)
 
-Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record. In ProjectSettings a failed save (`error`) keeps the edits and raises a `toast` error, "The project settings weren't saved.", with Retry.
+Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, every field is read-only (a control with no read-only state is disabled), Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record. In ProjectSettings a failed save (`error`) keeps the edits and raises a `toast` error, "The project settings weren't saved.", with Retry.
 
 ### F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 
@@ -88,7 +88,7 @@ ProjectSettings takes the saved settings through props and emits the values on S
 | `resource`     | `EditResourceProject`          | The saved settings; the form opens on them and Discard returns to them. A new value resets the form.                                   |
 | `defaultDraft` | `Partial<EditResourceProject>` | Unsaved edits the form opens with on top of `resource`, so the save bar is up.                                                         |
 | `stale`        | `EditResourceProject`          | The version saved elsewhere after the form opened: the Changed elsewhere notice, Reload with Undo, and the overwrite question on Save. |
-| `loading`      | `boolean`                      | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the bar leaves.             |
+| `loading`      | `boolean`                      | The save is in flight: the fields turn read-only, Discard disables and Save spins. When it turns off with no `error`, the bar leaves.  |
 | `error`        | `string`                       | Why the save failed, the description of the error toast with Retry; the edits stay.                                                    |
 | `v-model:tab`  | `string`                       | The active page tab, `main-settings` by default; bind it to the route.                                                                 |
 
@@ -128,7 +128,7 @@ Then delete `sample.ts` and its import.
 ## Do
 
 - Show the save bar only while the form differs from the saved record.
-- Disable the whole fieldset while saving, not each field separately.
+- Hold every field read-only while saving, not disabled: the values stay readable at full contrast and no field can change under the save.
 - Give every section a short hint that says what it controls, and an anchor so a link can land on it.
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
@@ -187,13 +187,13 @@ Then delete `sample.ts` and its import.
 
 ## States
 
-- ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` locks the fieldset and spins Save, and `error` set when it ends raises the error toast with Retry.
+- ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` holds the fields read-only and spins Save, and `error` set when it ends raises the error toast with Retry.
 - DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `edit/edit-delete-dialog`.
 - PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug rules and Status.
-- WafSettings: a WAF rule set's Main Settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
+- WafSettings: a WAF rule set's Main settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
-- Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
+- Saving: while the request is in flight; every field is read-only, so none can change under the save, Save is loading and Discard is disabled.
 - DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Custom headers are `AttributeEditor` rows of Name and Value (up to 5) whose value turns into a masked `PasswordInput` when the name reads as a credential (Authorization, Cookie, a token, key, secret or password), Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
@@ -227,7 +227,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - `ProjectSettings` — primary (the code below)
 - `DeployableSettings` — A deployable resource’s Settings tab, under the environment switcher the page sets as its control crumb with `ConsoleLayout.Breadcrumb` and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.
 - `PolicySettings` — A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status.
-- `WafSettings` — A WAF rule set's Main Settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast.
+- `WafSettings` — A WAF rule set's Main settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast.
 - `ResourceSettings` — The settings page of a first-level resource with no tabs, drawn from the same field list as its create page: here an access list at /access-lists/:id/settings, with its name under General and the type and entries under List settings. The entries field follows the selected type, and Save checks every field before it commits.
 - `UnsavedChanges` — The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go.
 - `Saving` — While the save request is in flight: Save shows its loading state and Discard is disabled.
@@ -286,7 +286,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
     defaultDraft?: Partial<EditResourceProject>
     /** The version saved elsewhere after the form opened: a notice offers Reload, and Save asks before it overwrites. */
     stale?: EditResourceProject
-    /** The save is in flight: the fieldset and Discard lock and Save spins. */
+    /** The save is in flight: the fields turn read-only, Discard locks and Save spins. */
     loading?: boolean
     /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
     error?: string
@@ -512,7 +512,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
               <fieldset
                 :data-stale="stale ? '' : null"
                 class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0 data-[stale]:mt-(--spacing-lg)"
-                :disabled="saving"
               >
                 <legend class="sr-only">Main settings</legend>
 
@@ -533,7 +532,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                               id="resource-name"
                               v-model="form.name"
                               size="large"
-                              :disabled="saving"
+                              :readonly="saving"
                               class="w-full"
                               aria-label="Name"
                               required
@@ -555,7 +554,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                           <Switch
                             v-model="form.active"
                             aria-label="Active"
-                            :disabled="saving"
+                            :readonly="saving"
                           />
                         </SettingsRow>
                       </Item.List>
@@ -581,7 +580,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                           <Switch
                             v-model="form.modules[mod.key]"
                             :aria-label="mod.title"
-                            :disabled="saving"
+                            :readonly="saving"
                           />
                         </SettingsRow>
                       </Item.List>
@@ -1676,13 +1675,13 @@ export function useDeployOnSave<T extends object>(
     modules: PolicyModuleField[]
     /** The name failed validation: the field is marked and the message shows. */
     nameInvalid?: boolean
-    /** Locks the name field while a save is in flight. */
-    disabled?: boolean
+    /** Holds every field read-only while a save is in flight. */
+    readonly?: boolean
   }
 
   const props = withDefaults(defineProps<PolicyGroupsProps>(), {
     nameInvalid: false,
-    disabled: false
+    readonly: false
   })
 
   const name = defineModel<string>('name', { required: true })
@@ -1711,7 +1710,7 @@ export function useDeployOnSave<T extends object>(
                 id="resource-name"
                 v-model="name"
                 size="large"
-                :disabled="disabled"
+                :readonly="readonly"
                 class="w-full"
                 aria-label="Name"
                 autocomplete="off"
@@ -1749,7 +1748,9 @@ export function useDeployOnSave<T extends object>(
             v-for="field in modules"
             :key="field.key"
             :title="field.title"
-            :description="field.description"
+            :description="
+              field.locked ? field.description + ' Always on for every policy.' : field.description
+            "
             variant="compact"
           >
             <Tooltip
@@ -1760,7 +1761,7 @@ export function useDeployOnSave<T extends object>(
                 <Switch
                   :model-value="true"
                   :aria-label="field.title"
-                  disabled
+                  readonly
                 />
               </span>
             </Tooltip>
@@ -1769,6 +1770,7 @@ export function useDeployOnSave<T extends object>(
               :model-value="selectedKeys.includes(field.key)"
               @update:model-value="(on) => setModule(field.key, on)"
               :aria-label="field.title"
+              :readonly="readonly"
             />
           </SettingsRow>
         </Item.List>
@@ -1790,6 +1792,7 @@ export function useDeployOnSave<T extends object>(
           >
             <Switch
               v-model="debugRules"
+              :readonly="readonly"
               aria-label="Debug rules"
             />
           </SettingsRow>
@@ -1809,6 +1812,7 @@ export function useDeployOnSave<T extends object>(
           >
             <Switch
               v-model="active"
+              :readonly="readonly"
               aria-label="Active"
             />
           </SettingsRow>
@@ -1833,7 +1837,7 @@ export function useDeployOnSave<T extends object>(
   export interface PolicySettingsPageProps {
     /** Unsaved edits the form opens with, so the save bar is up. */
     defaultDraft?: Partial<PolicySettingsRecord>
-    /** Opens with the save in flight: the fieldset and Discard lock and Save spins. */
+    /** Opens with the save in flight: the fields turn read-only, Discard locks and Save spins. */
     defaultSaving?: boolean
   }
 
@@ -1882,7 +1886,6 @@ export function useDeployOnSave<T extends object>(
     <fieldset
       v-if="defaultSaving"
       class="m-0 flex min-w-0 flex-col border-0 p-0"
-      :disabled="saving"
     >
       <legend class="sr-only">Settings</legend>
       <PolicyGroups
@@ -1892,7 +1895,7 @@ export function useDeployOnSave<T extends object>(
         v-model:selected-keys="form.modules"
         :modules="samplePolicyModules"
         :name-invalid="nameError"
-        :disabled="saving"
+        :readonly="saving"
       />
     </fieldset>
     <PolicyGroups
@@ -2115,7 +2118,7 @@ export const ttlDuration = (
                 class="w-full"
                 placeholder="GET and HEAD only"
                 :display-value="methodsLabel"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <MultiSelect.Trigger aria-label="Cache by HTTP method" />
                 <MultiSelect.Content>
@@ -2138,7 +2141,7 @@ export const ttlDuration = (
                 size="large"
                 class="w-full"
                 :display-value="labelOf(varyBehaviors)"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <Select.Trigger aria-label="Cache by query string" />
                 <Select.Content>
@@ -2172,7 +2175,7 @@ export const ttlDuration = (
                 :aria-describedby="
                   errors.queryStringFields ? 'cache-queryStringFields-message' : undefined
                 "
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('queryStringFields')"
               />
               <FieldError
@@ -2190,7 +2193,7 @@ export const ttlDuration = (
                 size="large"
                 class="w-full"
                 :display-value="labelOf(varyBehaviors)"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <Select.Trigger aria-label="Cache by cookies" />
                 <Select.Content>
@@ -2222,7 +2225,7 @@ export const ttlDuration = (
                 required
                 :invalid="!!errors.cookieNames"
                 :aria-describedby="errors.cookieNames ? 'cache-cookieNames-message' : undefined"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('cookieNames')"
               />
               <FieldError
@@ -2289,10 +2292,7 @@ export const ttlDuration = (
           size="small"
         />
 
-        <fieldset
-          class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-          :disabled="saving"
-        >
+        <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
           <legend class="sr-only">Cache settings</legend>
 
           <SettingsGroup
@@ -2322,7 +2322,7 @@ export const ttlDuration = (
                         required
                         :invalid="!!errors.name"
                         :aria-describedby="errors.name ? 'cache-name-message' : undefined"
-                        :disabled="saving"
+                        :readonly="saving"
                         @update:model-value="clear('name')"
                       />
                       <FieldError
@@ -2357,7 +2357,7 @@ export const ttlDuration = (
                         size="large"
                         class="w-full"
                         :display-value="labelOf(browserBehaviors)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Browser cache behavior" />
                         <Select.Content>
@@ -2387,7 +2387,7 @@ export const ttlDuration = (
                         :max="31536000"
                         aria-label="Browser maximum TTL in seconds"
                         aria-describedby="cache-browserMaxAge-duration"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                       <p
                         id="cache-browserMaxAge-duration"
@@ -2423,7 +2423,7 @@ export const ttlDuration = (
                         size="large"
                         class="w-full"
                         :display-value="labelOf(edgeBehaviors)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Edge cache behavior" />
                         <Select.Content>
@@ -2452,7 +2452,7 @@ export const ttlDuration = (
                         :min="0"
                         :max="31536000"
                         aria-label="Edge maximum TTL in seconds"
-                        :disabled="saving"
+                        :readonly="saving"
                         :invalid="Boolean(errors.edgeMaxAge)"
                         :aria-describedby="
                           errors.edgeMaxAge
@@ -2483,7 +2483,7 @@ export const ttlDuration = (
                       <Switch
                         v-model="form.staleCache"
                         aria-label="Stale cache"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -2495,7 +2495,7 @@ export const ttlDuration = (
                       <Switch
                         v-model="form.largeFileCache"
                         aria-label="Large file optimization"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -2512,7 +2512,7 @@ export const ttlDuration = (
                         class="w-full"
                         :min="1"
                         aria-label="Fragment size in kilobytes"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -2524,7 +2524,7 @@ export const ttlDuration = (
                       <Switch
                         v-model="form.tieredCache"
                         aria-label="Tiered cache"
-                        :disabled="saving"
+                        :readonly="saving"
                       />
                     </SettingsRow>
                     <SettingsRow
@@ -2539,7 +2539,7 @@ export const ttlDuration = (
                         size="large"
                         class="w-full"
                         :display-value="labelOf(topologies)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Tiered cache topology" />
                         <Select.Content>
@@ -2664,7 +2664,7 @@ export const ttlDuration = (
                 size="large"
                 class="w-full"
                 :display-value="connectorLabel"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="onDestinationChange('connector')"
               >
                 <Select.Trigger
@@ -2739,6 +2739,7 @@ export const ttlDuration = (
                     :model-value="value"
                     autocomplete="off"
                     monospace
+                    :readonly="saving"
                     :invalid="invalid"
                     @update:model-value="update"
                   />
@@ -2747,6 +2748,7 @@ export const ttlDuration = (
                     :model-value="value"
                     autocomplete="off"
                     :spellcheck="false"
+                    :readonly="saving"
                     :invalid="invalid"
                     @update:model-value="update"
                   />
@@ -2760,7 +2762,7 @@ export const ttlDuration = (
               description="The hosts and ports of the Kafka cluster, separated by a comma and no space."
               variant="stacked"
             >
-              <div class="flex w-full font-code">
+              <div class="flex w-full">
                 <Textarea
                   id="data-stream-bootstrapServers"
                   v-model="form.bootstrapServers"
@@ -2773,7 +2775,7 @@ export const ttlDuration = (
                   :aria-describedby="
                     errors.bootstrapServers ? 'data-stream-bootstrapServers-message' : undefined
                   "
-                  :disabled="saving"
+                  :readonly="saving"
                   @update:model-value="onDestinationChange('bootstrapServers')"
                 />
               </div>
@@ -2928,7 +2930,7 @@ export const ttlDuration = (
       required
       :invalid="!!errors[field]"
       :aria-describedby="errors[field] ? `${id}-message` : undefined"
-      :disabled="saving"
+      :readonly="saving"
       @update:model-value="onUpdate"
     />
     <Input
@@ -2943,7 +2945,7 @@ export const ttlDuration = (
       required
       :invalid="!!errors[field]"
       :aria-describedby="errors[field] ? `${id}-message` : undefined"
-      :disabled="saving"
+      :readonly="saving"
       @update:model-value="onUpdate"
     />
     <FieldError
@@ -2991,10 +2993,7 @@ export const ttlDuration = (
         size="small"
       />
 
-      <fieldset
-        class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-        :disabled="saving"
-      >
+      <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
         <legend class="sr-only">Data stream settings</legend>
 
         <SettingsGroup
@@ -3025,7 +3024,7 @@ export const ttlDuration = (
                     <Switch
                       v-model="form.active"
                       aria-label="Active"
-                      :disabled="saving"
+                      :readonly="saving"
                     />
                   </SettingsRow>
                 </TransitionGroup>
@@ -3105,7 +3104,7 @@ export const ttlDuration = (
               <Switch
                 v-model="form.sampling"
                 aria-label="Sampling"
-                :disabled="saving"
+                :readonly="saving"
               />
             </SettingsRow>
             <SettingsRow
@@ -3126,7 +3125,7 @@ export const ttlDuration = (
                 :aria-describedby="
                   errors.samplingRate ? 'data-stream-samplingRate-message' : undefined
                 "
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('samplingRate')"
               >
                 <template #trailing>%</template>
@@ -3191,7 +3190,7 @@ export const ttlDuration = (
                 size="large"
                 class="w-full"
                 :display-value="sourceLabel"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('source')"
               >
                 <Select.Trigger aria-label="Data source" />
@@ -3216,7 +3215,7 @@ export const ttlDuration = (
                 variant="card"
                 name="data-stream-scope"
                 aria-label="Workloads"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <RadioGroup.Item
                   v-for="option in scopeOptions"
@@ -3244,7 +3243,7 @@ export const ttlDuration = (
                 required
                 :invalid="!!errors.workloads"
                 :aria-describedby="errors.workloads ? 'data-stream-workloads-message' : undefined"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('workloads')"
               />
               <FieldError
@@ -3340,7 +3339,7 @@ export const ttlDuration = (
                 size="large"
                 class="w-full"
                 :display-value="templateLabel"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('template')"
               >
                 <Select.Trigger aria-label="Template" />
@@ -3499,7 +3498,7 @@ export const ttlDuration = (
                     size="large"
                     class="w-full"
                     placeholder="Select a deployment setting"
-                    :disabled="saving"
+                    :readonly="saving"
                     :display-value="settingName"
                     @update:model-value="form.deploymentSettings[environment.name] = $event"
                   >
@@ -3723,7 +3722,6 @@ export const ttlDuration = (
             size="small"
             placeholder="Search environments"
             aria-label="Search environments"
-            @keydown.stop
           >
             <template #leading>
               <i
@@ -3820,7 +3818,8 @@ export const ttlDuration = (
             <Switch
               v-model="form.mtls.enabled"
               aria-label="Mutual authentication"
-              :disabled="saving || !form.protocols.useHttps"
+              :readonly="saving"
+              :disabled="!form.protocols.useHttps"
             />
           </SettingsRow>
           <SettingsRow
@@ -3835,7 +3834,7 @@ export const ttlDuration = (
               variant="card"
               name="mtls-mode"
               aria-label="Mutual authentication mode"
-              :disabled="saving"
+              :readonly="saving"
             >
               <RadioGroup.Item
                 v-for="option in mtlsModeOptions"
@@ -3857,7 +3856,7 @@ export const ttlDuration = (
               size="large"
               class="w-full"
               placeholder="Select a Trusted CA certificate"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="certificateName"
             >
               <Select.Trigger
@@ -3891,7 +3890,7 @@ export const ttlDuration = (
               size="large"
               class="w-full"
               placeholder="Select a revocation list"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="crlLabel"
             >
               <MultiSelect.Trigger aria-label="Certificate revocation list" />
@@ -3962,7 +3961,7 @@ export const ttlDuration = (
               size="large"
               class="w-full"
               placeholder="Select an HTTP port"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="portsLabel"
             >
               <MultiSelect.Trigger aria-label="HTTP ports" />
@@ -3990,7 +3989,7 @@ export const ttlDuration = (
             <Switch
               :model-value="form.protocols.useHttps"
               aria-label="HTTPS support"
-              :disabled="saving"
+              :readonly="saving"
               @update:model-value="setHttps"
             />
           </SettingsRow>
@@ -4005,7 +4004,7 @@ export const ttlDuration = (
               size="large"
               class="w-full"
               placeholder="Select an HTTPS port"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="portsLabel"
             >
               <MultiSelect.Trigger aria-label="HTTPS ports" />
@@ -4033,7 +4032,7 @@ export const ttlDuration = (
             <Switch
               :model-value="form.protocols.useHttp3"
               aria-label="HTTP/3 support"
-              :disabled="saving"
+              :readonly="saving"
               @update:model-value="setHttp3"
             />
           </SettingsRow>
@@ -4048,7 +4047,7 @@ export const ttlDuration = (
               size="large"
               class="w-full"
               placeholder="Select an HTTP/3 port"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="portsLabel"
             >
               <MultiSelect.Trigger aria-label="HTTP/3 ports" />
@@ -4078,7 +4077,7 @@ export const ttlDuration = (
               v-model="form.protocols.minimumTlsVersion"
               size="large"
               class="w-full"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="tlsVersionLabel"
             >
               <Select.Trigger
@@ -4106,7 +4105,7 @@ export const ttlDuration = (
               v-model="form.protocols.cipherSuite"
               size="large"
               class="w-full"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="cipherSuiteLabel"
             >
               <Select.Trigger
@@ -4244,10 +4243,7 @@ export const ttlDuration = (
             novalidate
             @submit.prevent="save"
           >
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="saving"
-            >
+            <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">Resource settings</legend>
 
               <SettingsGroup
@@ -4269,7 +4265,7 @@ export const ttlDuration = (
                             size="large"
                             class="w-full"
                             aria-label="Name"
-                            :disabled="saving"
+                            :readonly="saving"
                             required
                             :invalid="nameError"
                             :aria-describedby="nameError ? 'resource-name-message' : undefined"
@@ -4289,7 +4285,7 @@ export const ttlDuration = (
                         <Switch
                           v-model="form.active"
                           aria-label="Active"
-                          :disabled="saving"
+                          :readonly="saving"
                         />
                       </SettingsRow>
                     </Item.List>
@@ -4330,6 +4326,7 @@ export const ttlDuration = (
                               variant="danger"
                               size="medium"
                               icon="az az-trash"
+                              :disabled="saving"
                             />
                           </template>
                           <div class="flex flex-col gap-(--spacing-md)">
@@ -4442,7 +4439,8 @@ export const ttlDuration = (
               <Switch
                 v-model="form.mtls"
                 aria-label="Mutual authentication"
-                :disabled="saving || !form.useHttps"
+                :readonly="saving"
+                :disabled="!form.useHttps"
               />
               <FieldDescription v-if="!form.useHttps"
                 >Turn on HTTPS support to use mutual authentication.</FieldDescription
@@ -4461,7 +4459,7 @@ export const ttlDuration = (
                 variant="card"
                 name="protocols-mtls-mode"
                 aria-label="Mutual authentication mode"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <RadioGroup.Item
                   v-for="option in mtlsModes"
@@ -4485,7 +4483,7 @@ export const ttlDuration = (
                 class="w-full"
                 placeholder="Select a trusted CA certificate"
                 :display-value="caLabel"
-                :disabled="saving"
+                :readonly="saving"
                 required
                 :invalid="errors.trustedCa?.type === 'required'"
                 @update:model-value="pickCa"
@@ -4503,7 +4501,6 @@ export const ttlDuration = (
                       size="small"
                       placeholder="Search certificates"
                       aria-label="Search certificates"
-                      @keydown.stop
                     >
                       <template #leading>
                         <i
@@ -4528,7 +4525,7 @@ export const ttlDuration = (
                       v-if="!caMatches.length"
                       class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                     >
-                      No certificate matches"{{ caQuery }}".
+                      No certificate matches "{{ caQuery }}".
                     </p>
                   </Select.Group>
                   <template #footer>
@@ -4566,7 +4563,7 @@ export const ttlDuration = (
                 class="w-full"
                 placeholder="No revocation list"
                 :display-value="listLabel"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <MultiSelect.Trigger
                   id="protocols-crl"
@@ -4645,10 +4642,7 @@ export const ttlDuration = (
           size="small"
         />
 
-        <fieldset
-          class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-          :disabled="saving"
-        >
+        <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
           <legend class="sr-only">Protocol settings</legend>
 
           <SettingsGroup
@@ -4673,7 +4667,7 @@ export const ttlDuration = (
                         class="w-full"
                         placeholder="Select an HTTP port"
                         :display-value="portsLabel"
-                        :disabled="saving"
+                        :readonly="saving"
                         required
                         :invalid="!!errors.httpPorts"
                         :aria-describedby="
@@ -4710,7 +4704,7 @@ export const ttlDuration = (
                       <Switch
                         :model-value="form.useHttps"
                         aria-label="HTTPS support"
-                        :disabled="saving"
+                        :readonly="saving"
                         @update:model-value="setHttps"
                       />
                     </SettingsRow>
@@ -4727,7 +4721,7 @@ export const ttlDuration = (
                         class="w-full"
                         placeholder="Select an HTTPS port"
                         :display-value="portsLabel"
-                        :disabled="saving"
+                        :readonly="saving"
                         required
                         :invalid="!!errors.httpsPorts"
                         :aria-describedby="
@@ -4764,7 +4758,7 @@ export const ttlDuration = (
                       <Switch
                         :model-value="form.useHttp3"
                         aria-label="HTTP/3 support"
-                        :disabled="saving"
+                        :readonly="saving"
                         @update:model-value="setHttp3"
                       />
                     </SettingsRow>
@@ -4781,7 +4775,7 @@ export const ttlDuration = (
                         class="w-full"
                         placeholder="Select an HTTP/3 port"
                         :display-value="portsLabel"
-                        :disabled="saving"
+                        :readonly="saving"
                         required
                         :invalid="!!errors.http3Ports"
                         :aria-describedby="
@@ -4820,7 +4814,7 @@ export const ttlDuration = (
                         size="large"
                         class="w-full"
                         :display-value="labelOf(tlsVersions)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Minimum TLS version" />
                         <Select.Content>
@@ -4845,7 +4839,7 @@ export const ttlDuration = (
                         size="large"
                         class="w-full"
                         :display-value="labelOf(cipherSuites)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Cipher suite" />
                         <Select.Content>
@@ -5119,10 +5113,7 @@ export const ttlDuration = (
         size="small"
       />
 
-      <fieldset
-        class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-        :disabled="saving"
-      >
+      <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
         <legend class="sr-only">access list settings</legend>
 
         <SettingsGroup
@@ -5151,7 +5142,7 @@ export const ttlDuration = (
                       required
                       :invalid="!!errors.name"
                       :aria-describedby="errors.name ? 'access-lists-name-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('name')"
                     />
                     <FieldError
@@ -5187,7 +5178,7 @@ export const ttlDuration = (
                       variant="card"
                       name="access-lists-type"
                       aria-label="Type"
-                      :disabled="saving"
+                      :readonly="saving"
                     >
                       <RadioGroup.Item
                         v-for="option in typeOptions"
@@ -5211,10 +5202,11 @@ export const ttlDuration = (
                       :rows="5"
                       aria-label="List"
                       placeholder="13335&#10;53331"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('items')"
                     />
                     <FieldError
@@ -5227,19 +5219,26 @@ export const ttlDuration = (
                     v-else-if="form.type === 'ip_cidr'"
                     key="items-ip-cidr"
                     title="List"
-                    description="One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed."
                     variant="stacked"
                   >
+                    <template #description>
+                      One address or range per line. Add a comment after
+                      <code class="whitespace-nowrap font-(family-name:--font-code)">#</code>, and a
+                      date with
+                      <code class="whitespace-nowrap font-(family-name:--font-code)">--LT</code>.
+                      Duplicate entries are removed.
+                    </template>
                     <Textarea
                       v-model="form.items"
                       class="w-full"
                       :rows="5"
                       aria-label="List"
                       placeholder="192.0.2.10&#10;198.51.100.24&#10;203.0.113.7 #comment"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('items')"
                     />
                     <FieldError
@@ -5261,10 +5260,11 @@ export const ttlDuration = (
                       :rows="5"
                       aria-label="Countries"
                       placeholder="BR&#10;US"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('items')"
                     />
                     <FieldError
@@ -5331,9 +5331,9 @@ export const ttlDuration = (
   }
 
   const tabs = [
-    { value: 'main-settings', label: 'Main Settings' },
+    { value: 'main-settings', label: 'Main settings' },
     { value: 'tuning', label: 'Tuning' },
-    { value: 'allowed-rules', label: 'Allowed Rules' }
+    { value: 'allowed-rules', label: 'Allowed rules' }
   ]
   const activeTab = ref('main-settings')
 
@@ -5446,7 +5446,7 @@ export const ttlDuration = (
   <SettingsTabPage
     v-model:tab="activeTab"
     :tabs="tabs"
-    title="Main Settings"
+    title="Main settings"
     description="How this rule set is identified, and what it inspects requests for."
     docs-href="https://example.com/docs/waf-rule-sets"
     :dirty="dirty"
@@ -5474,7 +5474,7 @@ export const ttlDuration = (
                   class="w-full"
                   aria-label="Name"
                   autocomplete="off"
-                  :disabled="saving"
+                  :readonly="saving"
                   required
                   :invalid="nameError"
                   :aria-describedby="nameError ? 'waf-name-message' : undefined"
@@ -5506,7 +5506,7 @@ export const ttlDuration = (
               <Switch
                 v-model="form.active"
                 aria-label="Active"
-                :disabled="saving"
+                :readonly="saving"
               />
             </SettingsRow>
             <SettingsRow
@@ -5518,7 +5518,7 @@ export const ttlDuration = (
                 size="large"
                 class="w-full"
                 placeholder="Select a mode"
-                :disabled="saving"
+                :readonly="saving"
                 :display-value="modeLabel"
               >
                 <Select.Trigger aria-label="Mode" />
@@ -5557,7 +5557,8 @@ export const ttlDuration = (
                   v-model="item.sensitivity"
                   size="medium"
                   class="w-full max-w-(--container-3xs)"
-                  :disabled="saving || !item.enabled"
+                  :readonly="saving"
+                  :disabled="!item.enabled"
                   :display-value="sensitivityLabel"
                 >
                   <Select.Trigger :aria-label="`${item.label} sensitivity`" />
@@ -5574,7 +5575,7 @@ export const ttlDuration = (
                 <Switch
                   v-model="item.enabled"
                   :aria-label="item.label"
-                  :disabled="saving"
+                  :readonly="saving"
                 />
               </div>
             </SettingsRow>

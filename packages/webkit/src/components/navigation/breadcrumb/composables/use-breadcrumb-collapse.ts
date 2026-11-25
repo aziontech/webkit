@@ -1,55 +1,94 @@
 import { useResizeObserver } from '@vueuse/core'
 import {
-  computed,
   type MaybeRefOrGetter,
+  nextTick,
   onMounted,
   onScopeDispose,
   readonly,
   type Ref,
   ref,
-  toValue
+  toValue,
+  watch
 } from 'vue'
 
-const breadcrumbCollapseWidth = 768
-const breadcrumbCompactWidth = 360
+/** How far an items-driven trail folds to fit the width of its own box. */
+export type BreadcrumbCollapseLevel = 'full' | 'collapsed' | 'parent' | 'compact'
 
 export interface UseBreadcrumbCollapseReturn {
-  /** The box is narrower than 768px: the middle segments fold into the overflow menu. */
-  collapsed: Readonly<Ref<boolean>>
-  /** The box is narrower than 360px: every ancestor folds into the overflow menu. */
-  compact: Readonly<Ref<boolean>>
+  /** The fold that fits: every segment, the first and the parent beside the menu, the parent alone beside it, or the current page alone. */
+  level: Readonly<Ref<BreadcrumbCollapseLevel>>
 }
 
-export function useBreadcrumbCollapse(
-  target: MaybeRefOrGetter<globalThis.HTMLElement | null>
-): UseBreadcrumbCollapseReturn {
-  const width = ref<number | null>(null)
-  let frame = 0
+const levelsFor = (count: number): BreadcrumbCollapseLevel[] => {
+  if (count < 2) return ['full']
+  if (count === 2) return ['full', 'compact']
+  if (count === 3) return ['full', 'parent', 'compact']
+  return ['full', 'collapsed', 'parent', 'compact']
+}
 
-  const measure = () => {
-    const el = toValue(target)
-    if (el) width.value = el.getBoundingClientRect().width
+const truncated = (el: globalThis.Element) => el.scrollWidth > el.clientWidth + 0.5
+
+export function useBreadcrumbCollapse(
+  target: MaybeRefOrGetter<globalThis.HTMLElement | null>,
+  count: MaybeRefOrGetter<number>
+): UseBreadcrumbCollapseReturn {
+  const level = ref<BreadcrumbCollapseLevel>('full')
+  let settledWidth = -1
+  let frame = 0
+  let run = 0
+
+  const overflows = (el: globalThis.HTMLElement, current: BreadcrumbCollapseLevel) => {
+    const list = el.querySelector('ol')
+    if (list && truncated(list)) return true
+    const onlyParentLeft = current === 'parent' || (current === 'full' && toValue(count) === 2)
+    return Array.from(el.querySelectorAll('[data-slot="label"]')).some(
+      (label) =>
+        label.clientWidth > 0 &&
+        truncated(label) &&
+        !(onlyParentLeft && label.closest('[aria-current="page"]'))
+    )
   }
 
-  onMounted(measure)
+  const fit = async () => {
+    const el = toValue(target)
+    if (!el) return
+    const id = ++run
+    const levels = levelsFor(toValue(count))
+    let index = 0
+    level.value = levels[0]!
+    await nextTick()
+    while (id === run && index < levels.length - 1 && overflows(el, levels[index]!)) {
+      index += 1
+      level.value = levels[index]!
+      await nextTick()
+    }
+    if (id === run) settledWidth = el.getBoundingClientRect().width
+  }
+
+  onMounted(fit)
+
+  watch(
+    () => toValue(count),
+    () => fit()
+  )
 
   useResizeObserver(
     () => toValue(target),
     () => {
-      if (typeof globalThis.requestAnimationFrame !== 'function') return
+      const el = toValue(target)
+      if (!el || typeof globalThis.requestAnimationFrame !== 'function') return
+      if (Math.abs(el.getBoundingClientRect().width - settledWidth) < 0.5) return
       globalThis.cancelAnimationFrame(frame)
-      frame = globalThis.requestAnimationFrame(measure)
+      frame = globalThis.requestAnimationFrame(() => fit())
     }
   )
 
   onScopeDispose(() => {
+    run += 1
     if (typeof globalThis.cancelAnimationFrame === 'function') {
       globalThis.cancelAnimationFrame(frame)
     }
   })
 
-  const below = (limit: number) =>
-    readonly(computed(() => width.value !== null && width.value < limit))
-
-  return { collapsed: below(breadcrumbCollapseWidth), compact: below(breadcrumbCompactWidth) }
+  return { level: readonly(level) }
 }

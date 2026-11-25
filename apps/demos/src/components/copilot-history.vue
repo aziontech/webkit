@@ -5,8 +5,12 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { sampleHistoryNow } from '../blocks/ai-chat.sample'
-  import { copilotChats, copilotOpenKeys, copilotProjects } from '../lib/copilot-chats'
+  import {
+    copilotChats,
+    copilotHistoryNow,
+    copilotOpenKeys,
+    copilotProjects
+  } from '../lib/copilot-chats'
 
   const route = useRoute()
   const router = useRouter()
@@ -52,9 +56,9 @@
     v-model="active"
     v-model:open-keys="openKeys"
     v-model:project-sort="projectSort"
-    aria-label="AI Copilot chats"
+    aria-label="Agent chats"
     :items="items"
-    :now="sampleHistoryNow"
+    :now="copilotHistoryNow"
     :projects="projects"
     :item-actions="['pin', 'rename', 'share', 'lock', 'move', 'archive']"
     :project-actions="['pin', 'settings', 'remove', 'chat-create']"

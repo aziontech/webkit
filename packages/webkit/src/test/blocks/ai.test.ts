@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { page as browserPage } from 'vitest/browser'
 
 import AiActionApproval from '../../../blocks/ai/ai-action-approval/ai-action-approval.vue'
 import {
@@ -44,7 +45,7 @@ describe('ai', () => {
     })
     expect(view.container.textContent).toContain('still serves the previous version')
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
-    await fireEvent.click(view.getByRole('button', { name: 'Deploy again' }))
+    await fireEvent.click(await view.findByRole('button', { name: 'Deploy again' }))
     const [[event, message]] = view.emitted('retry') as [[Event, AiChatMessage]]
     expect(event).toBeInstanceOf(Event)
     expect(message.id).toBe('m2')
@@ -141,7 +142,12 @@ describe('ai', () => {
       )
       expect(view.getByTestId('prompt-input-model-picker')).toBeTruthy()
       expect(view.getByTestId('prompt-input-context-picker')).toBeTruthy()
-      expect(view.getByTestId('prompt-input-tools')).toBeTruthy()
+      expect(view.queryByTestId('prompt-input-tools')).toBeNull()
+      await waitFor(() =>
+        expect(within(box).getByRole('button', { name: 'Attach files' })).toHaveAttribute(
+          'aria-haspopup'
+        )
+      )
       cleanup()
     }
   })
@@ -220,7 +226,9 @@ describe('ai', () => {
     expect(document.activeElement?.getAttribute('aria-label')).not.toBe('New chat')
   })
 
-  it('ai-chat-drawer opens the assistant from Agent without dimming the page', async () => {
+  it('ai-chat-drawer opens the assistant from Agent without dimming a wide page', async () => {
+    await browserPage.viewport(1280, 800)
+    await vi.waitFor(() => expect(window.innerWidth).toBe(1280))
     const view = render(AiChatDrawer)
     await fireEvent.click(view.getByRole('button', { name: 'Agent' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
@@ -229,6 +237,26 @@ describe('ai', () => {
     expect(page.hasAttribute('data-drawer-open')).toBe(true)
     expect(page.classList.contains('lg:data-drawer-open:pe-[max(30vw,var(--container-md))]')).toBe(
       true
+    )
+  })
+
+  it('ai-chat-drawer is modal on a phone, where it covers the page', async () => {
+    await browserPage.viewport(390, 800)
+    await vi.waitFor(() => expect(window.innerWidth).toBe(390))
+    try {
+      const view = render(AiChatDrawer)
+      await waitFor(() =>
+        expect(document.querySelector('[role="dialog"]')).toHaveAttribute('aria-modal', 'true')
+      )
+      view.unmount()
+    } finally {
+      await browserPage.viewport(1280, 800)
+    }
+    await vi.waitFor(() => expect(window.innerWidth).toBe(1280))
+    const wide = render(AiChatDrawer)
+    await fireEvent.click(wide.getByRole('button', { name: 'Agent' }))
+    await waitFor(() =>
+      expect(document.querySelector('[role="dialog"]')).toHaveAttribute('aria-modal', 'false')
     )
   })
 

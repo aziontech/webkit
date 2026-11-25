@@ -121,4 +121,11 @@ describe('PaymentBrand', () => {
     const brands = render(Brands)
     await expectNoA11yViolations(brands.container)
   })
+
+  it('draws the plate with a card corner, not the rounder control radius', () => {
+    const { getByTestId } = render(PaymentBrand, { props: { brand: 'mastercard', size: 'small' } })
+    const plate = getByTestId('payment-brand')
+    expect(plate.classList.contains('rounded-(--radius-sm)')).toBe(true)
+    expect(plate.classList.contains('rounded-(--shape-control)')).toBe(false)
+  })
 })

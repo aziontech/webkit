@@ -1,4 +1,3 @@
-import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
 import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
@@ -95,7 +94,7 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://github.com/aziontech/azion',
         description: 'Purge URLs, wildcards and cache keys from a terminal.',
         site: 'GitHub',
-        image: 'https://github.com/favicon.ico'
+        icon: 'az az-github'
       }
     ]
   })
@@ -169,14 +168,13 @@ const cacheKeySources: SourcesItem[] = [
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
     publisher: 'aziontech',
-    image: 'https://github.com/favicon.ico'
+    icon: 'az az-github'
   },
   {
     title: 'HTTP Caching (RFC 9111)',
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico',
     publisher: 'World Wide Web Consortium',
     publishedAt: '2022-06-01'
   },
@@ -327,7 +325,12 @@ export interface AiChatProject {
   kind: 'workload' | 'dns' | 'firewall' | 'function' | 'storage'
   icon: string
   pinned?: boolean
-  cloud?: boolean
+  inCloud?: boolean
+}
+
+export interface AiChatProduct {
+  label: string
+  icon: string
 }
 
 export interface AiChatThreadChange {
@@ -339,19 +342,32 @@ export interface AiChatThread {
   id: string
   title: string
   projectId: string
+  updatedAt: string
   age: string
   environment: string
   modelLabel: string
   providerIcon: string
+  products: string[]
+  version?: string
   draft?: boolean
   snoozed?: boolean
   settled?: boolean
-  changeRef?: string
-  chainCount?: number
   changes?: AiChatThreadChange[]
 }
 
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
+
+export const sampleProducts: Record<string, AiChatProduct> = {
+  applications: { label: 'Applications', icon: 'az az-applications' },
+  firewall: { label: 'Firewall', icon: 'az az-firewall' },
+  functions: { label: 'Functions', icon: 'az az-functions' },
+  waf: { label: 'WAF', icon: 'az az-waf' },
+  'real-time-purge': { label: 'Real-Time Purge', icon: 'az az-real-time-purge' },
+  'sql-database': { label: 'SQL Database', icon: 'az az-sql-database' },
+  'edge-dns': { label: 'Edge DNS', icon: 'az az-edge-dns' },
+  'object-storage': { label: 'Object Storage', icon: 'az az-object-storage' },
+  'image-processor': { label: 'Image Processor', icon: 'az az-image-processor' }
+}
 
 export const sampleProjects: AiChatProject[] = [
   {
@@ -370,7 +386,7 @@ export const sampleProjects: AiChatProject[] = [
     title: 'Functions',
     kind: 'function',
     icon: 'az az-functions',
-    cloud: true
+    inCloud: true
   },
   {
     id: 'storage',
@@ -378,17 +394,8 @@ export const sampleProjects: AiChatProject[] = [
     title: 'Object Storage',
     kind: 'storage',
     icon: 'az az-object-storage',
-    cloud: true
+    inCloud: true
   }
-]
-
-export const sampleHistory: ConversationHistoryItem[] = [
-  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00Z' },
-  { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00Z' },
-  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00Z' },
-  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00Z' },
-  { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00Z' },
-  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00Z' }
 ]
 
 export const sampleThreads: AiChatThread[] = [
@@ -396,12 +403,13 @@ export const sampleThreads: AiChatThread[] = [
     id: 'h1',
     title: 'Why does storefront return 502 errors?',
     projectId: 'workloads',
+    updatedAt: '2026-11-19T11:48:00Z',
     age: '12m',
     environment: 'prod-us-east',
     modelLabel: 'Claude Opus 4.5',
     providerIcon: 'az az-claude',
+    products: ['applications', 'firewall', 'functions'],
     draft: true,
-    chainCount: 3,
     changes: [
       { ref: '#1170', title: 'feat(workload): renew origin TLS cert for api.example.com' },
       { ref: '#1200', title: 'fix(cache): allowlist q and page query params on /search' },
@@ -409,53 +417,75 @@ export const sampleThreads: AiChatThread[] = [
     ]
   },
   {
+    id: 'h7',
+    title:
+      'Checkout on acme-store times out for customers in the EU region after the latest deploy',
+    projectId: 'workloads',
+    updatedAt: '2026-11-19T11:05:00Z',
+    age: '55m',
+    environment: 'prod-eu-west',
+    modelLabel: 'Azion Auto',
+    providerIcon: 'az az-azion',
+    products: ['applications', 'functions']
+  },
+  {
     id: 'h2',
     title: 'Purge the cache after a deploy',
     projectId: 'workloads',
+    updatedAt: '2026-11-19T09:40:00Z',
     age: '2h',
     environment: 'prod-us-east',
     modelLabel: 'Gemini 4 Neon',
     providerIcon: 'az az-gemini',
-    changeRef: '1170',
+    products: ['real-time-purge'],
     changes: [{ ref: '#1170', title: 'ci(purge): trigger Real-Time Purge on release tag' }]
   },
   {
     id: 'h3',
     title: 'A WAF rule for login attempts',
     projectId: 'firewall',
+    updatedAt: '2026-11-18T17:15:00Z',
     age: '1d',
     environment: 'edge-global',
     modelLabel: 'Claude Sonnet 4',
     providerIcon: 'az az-claude',
-    changeRef: '1142',
+    products: ['waf'],
+    version: 'v42',
     changes: [{ ref: '#1142', title: 'sec(waf): rate-limit /auth/login to 20 req/min' }]
   },
   {
     id: 'h4',
     title: 'Top orders query for acme-store',
     projectId: 'functions',
+    updatedAt: '2026-11-16T10:20:00Z',
     age: '3d',
     environment: 'edge-sql-eu',
     modelLabel: 'GPT-5.2',
-    providerIcon: 'az az-openai'
+    providerIcon: 'az az-openai',
+    products: ['sql-database'],
+    version: 'v7'
   },
   {
     id: 'h5',
     title: 'Move DNS records to Azion',
     projectId: 'edge-dns',
+    updatedAt: '2026-11-04T14:05:00Z',
     age: '2w',
     environment: 'dns-anycast',
     modelLabel: 'Gemini 4 Carbon',
-    providerIcon: 'az az-gemini'
+    providerIcon: 'az az-gemini',
+    products: ['edge-dns']
   },
   {
     id: 'h6',
     title: 'Image optimization for docs-site',
     projectId: 'storage',
+    updatedAt: '2026-09-28T08:30:00Z',
     age: '1mo',
     environment: 'media-bucket',
     modelLabel: 'Azion Auto',
     providerIcon: 'az az-azion',
+    products: ['image-processor', 'object-storage'],
     settled: true
   }
 ]

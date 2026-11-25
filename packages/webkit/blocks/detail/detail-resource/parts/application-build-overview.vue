@@ -131,8 +131,11 @@
             <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)">{{
               branch
             }}</code>
-            deploys this application to Production. To ship from your machine, drop your project
-            anywhere on this page or run
+            deploys this application to Production. To ship from your machine,
+            <span class="hidden pointer-fine:inline"
+              >drop your project anywhere on this page or
+            </span>
+            run
             <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
               >platform deploy</code
             >

@@ -60,7 +60,8 @@
               <Switch
                 v-model="form.mtls"
                 aria-label="Mutual authentication"
-                :disabled="saving || !form.useHttps"
+                :readonly="saving"
+                :disabled="!form.useHttps"
               />
               <FieldDescription v-if="!form.useHttps"
                 >Turn on HTTPS support to use mutual authentication.</FieldDescription
@@ -79,7 +80,7 @@
                 variant="card"
                 name="protocols-mtls-mode"
                 aria-label="Mutual authentication mode"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <RadioGroup.Item
                   v-for="option in mtlsModes"
@@ -103,7 +104,7 @@
                 class="w-full"
                 placeholder="Select a trusted CA certificate"
                 :display-value="caLabel"
-                :disabled="saving"
+                :readonly="saving"
                 required
                 :invalid="errors.trustedCa?.type === 'required'"
                 @update:model-value="pickCa"
@@ -121,7 +122,6 @@
                       size="small"
                       placeholder="Search certificates"
                       aria-label="Search certificates"
-                      @keydown.stop
                     >
                       <template #leading>
                         <i
@@ -146,7 +146,7 @@
                       v-if="!caMatches.length"
                       class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                     >
-                      No certificate matches"{{ caQuery }}".
+                      No certificate matches "{{ caQuery }}".
                     </p>
                   </Select.Group>
                   <template #footer>
@@ -184,7 +184,7 @@
                 class="w-full"
                 placeholder="No revocation list"
                 :display-value="listLabel"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <MultiSelect.Trigger
                   id="protocols-crl"

@@ -229,12 +229,12 @@
   >
     <DialogContent
       :data-testid="`${testId}__panel`"
-      class="md:items-start md:pt-[15dvh]"
+      class="max-md:items-start max-md:*:data-[state=closed]:-translate-y-full max-md:*:*:rounded-t-(--shape-flat) max-md:*:*:rounded-b-(--shape-card) md:items-start md:pt-[15dvh]"
     >
       <PanelHeader class="py-(--spacing-xs) sm:hidden">
         <DialogTitle
           :data-testid="`${testId}__title`"
-          class="sr-only"
+          class="text-title-sm"
           >{{ t('command.title') }}</DialogTitle
         >
       </PanelHeader>

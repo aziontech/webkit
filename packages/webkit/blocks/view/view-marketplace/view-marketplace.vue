@@ -155,6 +155,10 @@
 
   const featured = computed(() => catalog.value.filter((item) => item.featured))
 
+  const FEATURED_LIST_CLASS =
+    '-m-(--spacing-2xs) flex list-none snap-x snap-mandatory scroll-px-(--spacing-2xs) gap-(--spacing-md) ' +
+    'overflow-x-auto p-(--spacing-2xs) md:m-0 md:grid md:grid-cols-3 md:overflow-visible md:p-0'
+
   const detailOpen = ref(props.defaultIntegration !== '')
   const selectedId = ref(props.defaultIntegration || 'request-signer')
   const selected = computed<MarketplaceIntegration | undefined>(
@@ -267,11 +271,6 @@
     announce()
   }
 
-  const reinstall = (event: MouseEvent) => {
-    form.application = run.application
-    install(event)
-  }
-
   watch(detailOpen, announce)
   watch(
     () => props.installing,
@@ -352,11 +351,14 @@
             >
               Featured
             </h2>
-            <ul class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 md:grid-cols-3">
+            <ul
+              data-testid="marketplace-featured-list"
+              :class="FEATURED_LIST_CLASS"
+            >
               <li
                 v-for="item in featured"
                 :key="item.id"
-                class="flex min-w-0"
+                class="flex w-[85%] min-w-0 shrink-0 snap-start md:w-auto"
               >
                 <IntegrationCard
                   class="w-full"
@@ -453,7 +455,6 @@
       :invalid="applicationInvalid"
       :run="run"
       @submit="install"
-      @reinstall="reinstall"
     />
   </div>
 </template>

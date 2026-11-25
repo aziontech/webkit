@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <IconButton
       variant="primary"
       icon="az az-plus"

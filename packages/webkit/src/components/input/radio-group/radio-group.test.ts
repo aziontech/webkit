@@ -172,6 +172,32 @@ describe('RadioGroup', () => {
     }
   })
 
+  it.each(['default', 'card'])(
+    'keeps a read-only %s group selected and focusable while clicks and arrow keys change nothing',
+    async (variant) => {
+      const view = host(
+        `<RadioGroup v-model="plan" variant="${variant}" readonly aria-label="Plan">${plans}</RadioGroup>`,
+        () => ({ plan: ref('pro') })
+      )
+      const group = view.getByRole('radiogroup')
+      expect(group.getAttribute('aria-readonly')).toBe('true')
+      expect(group.getAttribute('data-readonly')).toBe('true')
+      const pro = view.getByRole('radio', { name: 'Pro' }) as globalThis.HTMLInputElement
+      const free = view.getByRole('radio', { name: 'Free' }) as globalThis.HTMLInputElement
+      expect(pro.disabled).toBe(false)
+      await userEvent.click(view.getByText('Free'))
+      expect(free.checked).toBe(false)
+      expect(pro.checked).toBe(true)
+      pro.focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(pro.checked).toBe(true)
+      expect(
+        (view.getByRole('radio', { name: 'Enterprise' }) as globalThis.HTMLInputElement).checked
+      ).toBe(false)
+      await expectNoA11yViolations(view.container)
+    }
+  )
+
   describe('variant="card" and options', () => {
     const options = [
       { value: 'free', label: 'Free', description: 'For side projects.', icon: 'az az-user' },

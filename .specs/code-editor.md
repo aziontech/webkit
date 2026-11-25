@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: 9c654fd0950757d9b26d8711d52d2fd851bf020ad5d129a29d627cb56ed3d254
+checksum: fb350010b82bbb5d2f297e1bd231d975100aa228b59e96d765bd295e56d437d2
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -196,7 +196,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 - Visible focus: the frame shows `focus-within:ring-2 ring-(--ring-color)` for both editors; a borderless editor draws the same ring inset.
 - Keyboard map (plain editor): typing edits; `Tab` inserts two spaces and `Shift+Tab` removes them at the line start; `Escape` releases the trap so the next `Tab` / `Shift+Tab` leaves the editor (WCAG 2.1.2); the problems list buttons move the caret to the marker's line. Monaco runs in tab-focus mode by default, so `Tab` moves focus out unless the user toggles it with `Ctrl+M`.
 - ARIA: the textarea is a native multi-line text box named by the `Field` label or `ariaLabel`; `aria-invalid`, `aria-readonly` and `aria-describedby` (the field's description plus the problems summary); the gutter is `aria-hidden`; the problems list is a named list; the problem count is a polite `status`.
-- Diagnostics are never colour only: each one is a list item with its line and severity in text. Schema problems reach the user through Monaco's own hover and, when the app shows them, through `markers-change` in a `Field.Error`.
+- Diagnostics are never colour only: each one is a list item with its line and severity in text. A problem message wraps onto as many lines as it needs (never truncated), so the full fix text reads on a phone. Schema problems reach the user through Monaco's own hover and, when the app shows them, through `markers-change` in a `Field.Error`.
 - Contrast ≥4.5:1: code and line numbers use the code syntax tokens tuned for both themes.
 - Forced colors: the frame keeps a system border and the gutter marker becomes a system glyph colour.
 
@@ -230,7 +230,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 - Narrow: the editing area keeps its height and scrolls in both axes; long lines never wrap in code.
 - Touch: problem buttons are 32 px high (44 px on `pointer: coarse`).
 - Reflow: the page never scrolls horizontally; the editor scrolls inside its frame.
-- Touch: on coarse pointers (`pointer-coarse:`) the editing area and its line numbers step up to 16 px (`text-label-code-lg`), so iOS Safari does not zoom the page when the editor takes focus; fine pointers keep the dense size.
+- Touch: on coarse pointers (`pointer-coarse:`) the editing area and its line numbers step up to 16 px with a 1.5 line height (`text-body-code-lg`), so lines and line numbers never touch and iOS Safari does not zoom the page when the editor takes focus; fine pointers keep the dense size.
 
 ## Performance
 

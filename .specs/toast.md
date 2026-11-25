@@ -9,9 +9,9 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 0e8d77317d00d6ff8487c2f20bc39e5efc109cd5f8ebb821cc462ca1e05c70f2
+checksum: 76c7022f174fc62dbd8926dceb29e9fc5445f2f6095c8224c8e4bf9026922e62
 created: 2026-06-23
-last_updated: 2026-11-19
+last_updated: 2026-11-25
 ---
 
 # Toast — Component Spec
@@ -198,13 +198,13 @@ The imperative API is backed by a small reactive store composable, declared here
 <!-- Root <Toaster> element only (reached as `Toast`). Sub-component props are listed in the Sub-components section.
      The imperative `toast()` function and its options object are documented in Usage and Sub-components. -->
 
-| Prop       | Type                                                                                              | Default          | Required | JSDoc                                                                                                                              |
-| ---------- | ------------------------------------------------------------------------------------------------- | ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Prop       | Type                                                                                            | Default        | Required | JSDoc                                                                                                                              |
+| ---------- | ----------------------------------------------------------------------------------------------- | -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `position` | `'top-start' \| 'top-center' \| 'top-end' \| 'bottom-start' \| 'bottom-center' \| 'bottom-end'` | `'bottom-end'` | false    | Corner (or edge-center) the stack is anchored to; `start` and `end` follow the reading direction.                                  |
-| `duration` | `number`                                                                                          | `4000`           | false    | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
-| `max`      | `number`                                                                                          | `3`              | false    | Maximum simultaneously visible toasts per corner before the rest queue behind.                                                     |
-| `expand`   | `boolean`                                                                                         | `false`          | false    | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek.                                  |
-| `closable` | `boolean`                                                                                         | `false`          | false    | Show an always-visible close control on every toast; a per-toast `closable` option overrides it.                                   |
+| `duration` | `number`                                                                                        | `4000`         | false    | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
+| `max`      | `number`                                                                                        | `3`            | false    | Maximum simultaneously visible toasts per corner before the rest queue behind.                                                     |
+| `expand`   | `boolean`                                                                                       | `false`        | false    | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek.                                  |
+| `closable` | `boolean`                                                                                       | `false`        | false    | Show an always-visible close control on every toast; a per-toast `closable` option overrides it.                                   |
 
 ## Events
 
@@ -227,7 +227,8 @@ The imperative API is backed by a small reactive store composable, declared here
 - `data-removing` on a `Toaster` item while its exit transition runs (switches the transition to the exit token).
 - Progress: an entry with `progress` (set by `toast.progress(message, value, options?)`, which defaults `duration` to `0`) renders `__progress` under the copy: a rounded `Progress` bar named by the toast message (`role="progressbar"`, `aria-valuenow` clamped to 0–100) and the percentage formatted with `Intl.NumberFormat` (`style: 'percent'`) in the provider's locale, `aria-hidden` so the region does not announce every step. A later call with the same `id` replaces the entry in place; a typed toast with that `id` drops the bar.
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `start`/`center`/`end`, where `start` is the left edge under `ltr` and the right edge under `rtl`) and the enter/leave translate direction.
-- Bottom offset: a `bottom-*` region sits `var(--spacing-md)` above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
+- Safe areas: every inset is `max(var(--spacing-md), env(safe-area-inset-<edge>))`, so on a phone with a notch or a home indicator (`viewport-fit=cover`) the stack stays clear of the status bar, the indicator and a landscape notch.
+- Bottom offset: a `bottom-*` region sits that inset above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
 - `data-state="open|closed"` on each `Toaster` region: `open` while the stack is laid out expanded (the `expand` prop, hover or focus), `closed` while it overlaps into a peek.
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
 - Announcements go through the two hidden live regions: `danger` to `__live-assertive`, every other severity to `__live-polite`; items inside a Toaster carry no role of their own and the visible regions are not live, so each toast is announced once and never twice. A `ToastItem` rendered outside a Toaster keeps `role="status"` (or `role="alert"` for `danger`). Focus is never stolen (the region is not focused on mount). Tests: `toast.test.ts` › live region (spec), Escape dismisses the focused toast.
@@ -271,7 +272,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 | error icon                  | `var(--danger-foreground)`                                                                             |
 | padding                     | `var(--spacing-sm)`                                                                                    |
 | gap                         | `var(--spacing-xs)`                                                                                    |
-| stack inset (viewport edge) | `var(--spacing-md)`                                                                                    |
+| stack inset (viewport edge) | `max(var(--spacing-md), env(safe-area-inset-*))`                                                       |
 | ring                        | `var(--ring-color)`                                                                                    |
 
 ## Theme gaps

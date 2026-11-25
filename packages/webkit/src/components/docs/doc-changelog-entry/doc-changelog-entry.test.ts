@@ -92,7 +92,7 @@ describe('DocChangelogEntry', () => {
       label: 'September 2, 2026',
       title: 'Terraform Provider',
       description: 'Version 2.8.0',
-      tags: ['Improvements', 'Bug Fixes']
+      tags: ['Improvements', 'Bug fixes']
     }
 
     it('makes the title the heading and the label a plain date', () => {

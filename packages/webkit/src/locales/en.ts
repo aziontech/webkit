@@ -39,10 +39,10 @@ export const attributeEditor = {
   addGroup: 'Add OR group',
   emptyTitle: 'No items yet.',
   remaining: {
-    one: 'You can add {count} more item.',
-    other: 'You can add {count} more items.'
+    one: 'You can add {count} more.',
+    other: 'You can add {count} more.'
   },
-  limitReached: 'You have reached the limit of {limit} items.',
+  limitReached: 'You have reached the limit of {limit}.',
   added: 'Item {index} added.',
   removed: 'Item {index} removed.',
   group: 'Group {index}',
@@ -249,7 +249,8 @@ export const competitorComparisonSection = {
 export const confirmDialog = {
   confirm: 'Confirm',
   cancel: 'Cancel',
-  typeToConfirm: 'Type {phrase} to confirm.'
+  typeToConfirm: 'Type {phrase} to confirm.',
+  phraseMismatch: 'This does not match {phrase}. Type it exactly to confirm.'
 } as const
 
 export const copyButton = {
@@ -546,7 +547,8 @@ export const audioPlayer = {
   downloadTitle: 'Download {title}',
   loading: 'Loading audio',
   error: 'The audio could not play.',
-  transcript: 'Transcript'
+  transcript: 'Transcript',
+  retry: 'Try again'
 } as const
 
 export const filePreview = {
@@ -572,13 +574,17 @@ export const imageGallery = {
   ready: 'Images ready',
   error: 'The images could not load',
   broken: 'This image could not load',
-  empty: 'No images'
+  empty: 'No images',
+  retry: 'Try again'
 } as const
 
 export const fileTokenGroup = {
   label: 'Files',
   remove: 'Remove {name}',
   uploading: 'Uploading {name}',
+  cancelUpload: 'Cancel upload of {name}',
+  uploadProgress: '{percent}%',
+  uploadPending: 'Uploading…',
   modified: 'Modified {date}',
   showMore: {
     one: 'Show {count} more file',
@@ -854,7 +860,7 @@ export const passwordInput = {
 
 export const passwordRequirements = {
   title: 'Must contain:',
-  length: '8-128 characters',
+  length: '12-128 characters',
   uppercase: 'Uppercase letter',
   special: 'Special character',
   number: 'Number',
@@ -1311,6 +1317,7 @@ export const flowDiagram = {
   details: 'Details',
   connections: 'Connections',
   connection: '{from} to {to}',
+  route: 'To {to}',
   emptyTitle: 'Nothing is connected yet.',
   loading: 'Loading the diagram'
 } as const
@@ -1371,7 +1378,8 @@ export const videoPlayer = {
   exitFullscreen: 'Exit full screen',
   pending: 'Waiting to generate',
   running: 'Generating video',
-  error: 'The video could not load'
+  error: 'The video could not load',
+  retry: 'Try again'
 } as const
 
 export const wizard = {

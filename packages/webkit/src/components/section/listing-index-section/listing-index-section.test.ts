@@ -186,6 +186,15 @@ describe('ListingIndexSection', () => {
     expect(list.getByText(rows[0].values.team)).toBeInTheDocument()
   })
 
+  it('draws the focus ring around the whole phone row, not the browser outline around the title', () => {
+    const { getByTestId } = band()
+
+    const link = getByTestId(`${TESTID}__list`).querySelector('a')!
+    expect(link.classList.contains('focus-visible:outline-none')).toBe(true)
+    expect(link.classList.contains('focus-visible:after:ring-2')).toBe(true)
+    expect(link.classList.contains('after:inset-0')).toBe(true)
+  })
+
   it('skips a group that has no row', () => {
     const { getByTestId } = band({ groups: ['Marketing', 'Security'] })
 

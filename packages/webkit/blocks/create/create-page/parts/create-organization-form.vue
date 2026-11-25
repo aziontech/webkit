@@ -177,7 +177,7 @@
     title="Create Organization"
     description="An organization is the outermost space you work in: it owns the workspaces and every resource deployed in them."
     title-id="create-organization-title"
-    submit-label="Create Organization"
+    submit-label="Save"
     :submitting="submitting"
     :failure="failure"
     failure-title="Could not create the organization."

@@ -10,6 +10,18 @@ import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 describe('account/account-onboarding-form', () => {
+  it('lays the marks, the usage and the roles out in columns instead of one card per row', () => {
+    const marks = render(AccountOnboardingForm)
+    const markGroup = marks.getByRole('radiogroup', { name: 'Organization mark' })
+    expect(markGroup.parentElement?.classList.contains('[&>[role=radiogroup]]:grid-cols-3')).toBe(
+      true
+    )
+    marks.unmount()
+    const profile = render(Profile)
+    const roles = profile.getByRole('radiogroup', { name: 'What best describes your role?' })
+    expect(roles.parentElement?.classList.contains('[&>[role=radiogroup]]:grid-cols-2')).toBe(true)
+  })
+
   it('builds each named mark swatch from its own hue', () => {
     const hues: Record<string, RegExp> = {
       orange: /^var\(--(primary|warning)\)$/,
@@ -80,6 +92,23 @@ describe('account/account-onboarding-form', () => {
     expect(await view.findByRole('heading', { level: 2, name: 'Select your plan' })).toBeTruthy()
     await fireEvent.click(view.getByRole('button', { name: 'Next' }))
     expect(view.getByText('Select a plan to continue.')).toBeTruthy()
+  })
+
+  it('moves focus to the first invalid field when Next cannot advance', async () => {
+    const view = render(AccountOnboardingForm, { props: { autofocus: false } })
+    await userEvent.click(view.getByRole('button', { name: 'Next' }))
+    const fullName = view.getByRole('textbox', { name: /Your full name/ })
+    await waitFor(() => expect(document.activeElement).toBe(fullName))
+    view.unmount()
+  })
+
+  it('greets with Hello until a name is typed, never with the email prefix', async () => {
+    const view = render(AccountOnboardingForm)
+    expect(view.container.textContent).toContain('Hello')
+    expect(view.container.textContent).not.toMatch(/Hello, /)
+    await fireEvent.update(view.getByRole('textbox', { name: /Your full name/ }), 'Jane Doe')
+    expect(view.container.textContent).toContain('Hello, Jane Doe')
+    view.unmount()
   })
 
   it('Cancel clears the answers and starts over on the first step', async () => {

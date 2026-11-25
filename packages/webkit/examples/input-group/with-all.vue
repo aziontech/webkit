@@ -13,6 +13,7 @@
     <Button
       label="Send"
       variant="primary"
+      size="medium"
     />
   </InputGroup>
 </template>

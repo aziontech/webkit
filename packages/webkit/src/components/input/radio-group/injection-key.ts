@@ -34,6 +34,8 @@ export interface RadioGroupProps<TOption extends RadioGroupOption = RadioGroupOp
   options?: TOption[]
   /** Disables every option. */
   disabled?: boolean
+  /** Shows the selection but blocks changing it. */
+  readonly?: boolean
   /** Requires a selection. */
   required?: boolean
   /** Marks the group invalid. */
@@ -50,6 +52,8 @@ export interface RadioGroupContext {
   variant: ComputedRef<RadioGroupVariant>
   /** Whether the whole group is disabled. */
   disabled: ComputedRef<boolean>
+  /** Whether the selection is read-only. */
+  readonly: ComputedRef<boolean>
   /** Root test id; items derive theirs from it. */
   testId: ComputedRef<string>
   /** Writes a value to the group. */

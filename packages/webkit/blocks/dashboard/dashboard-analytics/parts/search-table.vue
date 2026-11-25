@@ -84,46 +84,48 @@
       />
     </div>
 
-    <DataTable
-      :data="matchingRows"
-      :columns="columns"
-      row-key="id"
-      sortable
-      density="compact"
-      stackable
-      bordered
-      :loading="loading"
-    >
-      <template #empty>
-        <EmptyState
-          key="empty-state-1"
-          v-if="emptyTitle && !rows.length"
-          size="small"
-          icon="az az-chart-line"
-          :title="emptyTitle"
-          :description="emptyDescription"
-        />
-        <EmptyState
-          key="empty-state-2"
-          v-else
-          size="small"
-          icon="az az-search"
-          title="No matching rows"
-          :description="noMatch()"
-        />
-      </template>
+    <div class="min-w-0">
+      <DataTable
+        :data="matchingRows"
+        :columns="columns"
+        row-key="id"
+        sortable
+        density="compact"
+        stackable
+        bordered
+        :loading="loading"
+      >
+        <template #empty>
+          <EmptyState
+            key="empty-state-1"
+            v-if="emptyTitle && !rows.length"
+            size="small"
+            icon="az az-chart-line"
+            :title="emptyTitle"
+            :description="emptyDescription"
+          />
+          <EmptyState
+            key="empty-state-2"
+            v-else
+            size="small"
+            icon="az az-search"
+            title="No matching rows"
+            :description="noMatch()"
+          />
+        </template>
 
-      <template #cell-requests="{ row }">
-        <span class="tabular-nums">{{
-          formatCount('requests' in row ? Number(row.requests) : 0)
-        }}</span>
-      </template>
-      <template #footer>
-        <DataTablePagination
-          :page-size="5"
-          :page-size-options="[5, 10, 25]"
-        />
-      </template>
-    </DataTable>
+        <template #cell-requests="{ row }">
+          <span class="tabular-nums">{{
+            formatCount('requests' in row ? Number(row.requests) : 0)
+          }}</span>
+        </template>
+        <template #footer>
+          <DataTablePagination
+            :page-size="5"
+            :page-size-options="[5, 10, 25]"
+          />
+        </template>
+      </DataTable>
+    </div>
   </div>
 </template>

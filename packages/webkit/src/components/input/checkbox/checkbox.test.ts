@@ -261,6 +261,18 @@ describe('Checkbox', () => {
     })
   })
 
+  describe('disabled look', () => {
+    it('draws a disabled check mark in --text-muted, so checked still reads in dark', () => {
+      const { getByTestId } = render(Checkbox, {
+        props: { disabled: true, modelValue: true },
+        attrs: { 'aria-label': 'Locked option' }
+      })
+      const box = getByTestId('checkbox')
+      expect(box.getAttribute('data-checked')).toBe('true')
+      expect(box.className).toContain('data-[disabled]:data-[checked]:text-(--text-muted)')
+    })
+  })
+
   describe('disabled suppresses interaction', () => {
     it('sets the native disabled + data-disabled and does not emit on click', async () => {
       const { getByTestId, emitted } = render(Checkbox, {
@@ -377,6 +389,20 @@ describe('Checkbox', () => {
       const inputs = getAllByTestId('checkbox__input') as HTMLInputElement[]
       expect(inputs.length).toBeGreaterThan(0)
       inputs.forEach((input) => expect(input.disabled).toBe(true))
+    })
+  })
+
+  describe('example labels', () => {
+    it.each([
+      ['Default', Default, ['Email notifications']],
+      ['Indeterminate', Indeterminate, ['Select all domains']],
+      ['Disabled', Disabled, ['Daily backups', 'Dedicated IP']]
+    ])('names every box in the %s example by a visible label', (_name, example, names) => {
+      const view = render(example)
+      for (const name of names) {
+        const box = view.getByRole('checkbox', { name })
+        expect(box.hasAttribute('aria-label')).toBe(false)
+      }
     })
   })
 

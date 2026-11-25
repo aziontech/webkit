@@ -12,6 +12,8 @@
    * floats the actions as a raised card centred over the bottom of a create page.
    */
   export type SaveBarVariant = 'floating' | 'docked' | 'plain' | 'fade' | 'centered'
+  /** Width the content of a floating or docked bar keeps: the full region, or the page's form or focused column. */
+  export type SaveBarColumn = 'full' | 'form' | 'focused'
 
   defineOptions({
     name: 'SaveBar',
@@ -21,10 +23,13 @@
   export interface SaveBarProps {
     /** How the bar sits at the bottom of its scroll region. */
     variant?: SaveBarVariant
+    /** Lines the content of a floating or docked bar up with the page column above it; the bar itself still spans the region. */
+    column?: SaveBarColumn
   }
 
   const props = withDefaults(defineProps<SaveBarProps>(), {
-    variant: 'floating'
+    variant: 'floating',
+    column: 'full'
   })
 
   const emit = defineEmits<{
@@ -159,6 +164,7 @@
 
   const BAR_CLASS =
     'layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) pt-(--spacing-sm) pb-[max(var(--spacing-sm),env(safe-area-inset-bottom))] ' +
+    'data-[column=form]:layout-column-form data-[column=focused]:layout-column-focused ' +
     '@xl/save-bar:h-full @xl/save-bar:flex-row @xl/save-bar:flex-wrap @xl/save-bar:items-center @xl/save-bar:justify-between @xl/save-bar:gap-x-(--spacing-xl) @xl/save-bar:py-0'
 </script>
 
@@ -255,6 +261,7 @@
       </div>
       <div
         v-else
+        :data-column="column"
         :class="BAR_CLASS"
       >
         <div

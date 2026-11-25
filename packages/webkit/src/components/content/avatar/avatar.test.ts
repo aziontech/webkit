@@ -14,6 +14,14 @@ const SAMPLE_SRC =
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'
 
 describe('Avatar', () => {
+  it('lets a consumer aria-label name the fallback', () => {
+    const { getByTestId } = render(Avatar, {
+      props: { label: 'IB' },
+      attrs: { 'aria-label': 'Account menu' }
+    })
+    expect(getByTestId('avatar')).toHaveAttribute('aria-label', 'Account menu')
+  })
+
   // --- image branch: src wins over label and icon -------------------------
   it('renders an <img> with the src when src is set, and no fallback label/icon', () => {
     const { getByTestId, queryByTestId } = render(Avatar, {
@@ -275,6 +283,15 @@ describe('Avatar', () => {
 
     await waitFor(() => expect(getAllByTestId('avatar__pattern')).toHaveLength(6))
     await expectNoA11yViolations(container)
+  })
+
+  it('pushes the small presence dot past the corner so it clears the initials', () => {
+    const { getByTestId } = render(Avatar, {
+      props: { label: 'Sam Lee', size: 'small', presence: 'online' }
+    })
+    const dot = getByTestId('avatar__presence')
+    expect(dot.classList.contains('group-data-[size=small]/avatar:translate-1/4')).toBe(true)
+    expect(dot.classList.contains('group-data-[size=small]/avatar:rtl:-translate-x-1/4')).toBe(true)
   })
 
   it('draws no presence dot by default', () => {

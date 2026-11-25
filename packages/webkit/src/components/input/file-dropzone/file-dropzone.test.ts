@@ -360,6 +360,14 @@ describe('FileDropzone', () => {
       await expectNoA11yViolations(view.container)
     })
 
+    it('titles the Folders example for every input and hides Browse folder on touch', () => {
+      const view = render(Folders)
+      expect(view.getByText('Upload files or folders')).toBeTruthy()
+      expect(
+        view.getByRole('button', { name: 'Browse folder' }).parentElement?.classList
+      ).toContain('pointer-coarse:hidden')
+    })
+
     it('does not walk entries when directories is off', async () => {
       const { getByTestId, emitted } = render(FileDropzone)
       await fireEvent(getByTestId(TEST_ID), entryDrop(dirEntry('/site', [fileEntry('/site/a')])))

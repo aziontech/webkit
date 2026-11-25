@@ -18,7 +18,7 @@
         target="_blank"
       />
       <Button
-        label="Create Resource"
+        label="Create resource"
         icon="az az-plus"
         variant="primary"
         size="medium"

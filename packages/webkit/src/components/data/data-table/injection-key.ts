@@ -60,7 +60,7 @@ export interface DataTableColumnView {
   align: 'start' | 'center' | 'end'
   frozen: 'start' | 'end' | undefined
   style: Record<string, string> | undefined
-  stackedClass: string | undefined
+  cellClass: string | undefined
   stackedField: boolean
   principal: boolean
 }

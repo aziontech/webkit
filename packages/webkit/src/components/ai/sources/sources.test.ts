@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { createSSRApp } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { UNSAFE_URLS } from '../../../test/unsafe-urls'
@@ -36,8 +37,9 @@ describe('Sources', () => {
     expect(render(Sources).queryByTestId('sources')).toBeNull()
   })
 
-  it('titles the pill with the count and starts closed', () => {
-    const { getByRole } = render(Sources, { props: { items } })
+  it('titles the pill with the count and starts closed', async () => {
+    const { findByTestId, getByRole } = render(Sources, { props: { items } })
+    await findByTestId('sources__host')
     const trigger = getByRole('button', { name: /2 sources/ })
     expect(trigger).toHaveTextContent('Sources')
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
@@ -191,6 +193,28 @@ describe('Sources', () => {
       await waitFor(() => expect(mark).toHaveAttribute('data-type', 'letter'))
       expect(mark).toHaveTextContent('E')
       expect(mark).toHaveAttribute('data-hue')
+    })
+
+    it('falls back to the letter when the favicon failed before hydration', async () => {
+      const item = { title: 'Broken', href: 'https://example.com/', image: '/missing-ssr.ico' }
+      const first = render(SourcesMark, { props: { item } })
+      const markup = first.container.innerHTML
+      first.unmount()
+      const host = document.createElement('div')
+      host.innerHTML = markup
+      document.body.append(host)
+      const img = host.querySelector('img')!
+      await waitFor(() => expect(img.complete).toBe(true))
+      const app = createSSRApp(SourcesMark, { item })
+      app.mount(host)
+      await waitFor(() =>
+        expect(host.querySelector('[data-testid="sources-mark"]')).toHaveAttribute(
+          'data-type',
+          'letter'
+        )
+      )
+      app.unmount()
+      host.remove()
     })
 
     it('drops an unsafe favicon URL', () => {

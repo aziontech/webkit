@@ -17,7 +17,7 @@
   import SelectTrigger from '../select/select-trigger/select-trigger.vue'
   import { type PhoneInputValue, usePhoneInputValue } from './composables/use-phone-input-value'
   import { defaultCountries, type PhoneInputCountry } from './lib/country-data'
-  import { placeholderFor, stripToDigits } from './lib/phone-mask'
+  import { stripToDigits } from './lib/phone-mask'
 
   export type { PhoneInputValue } from './composables/use-phone-input-value'
   export type { PhoneInputCountry } from './lib/country-data'
@@ -31,11 +31,11 @@
   export type PhoneInputSize = 'small' | 'medium' | 'large'
 
   export interface PhoneInputProps {
-    /** Countries offered by the dial-code Select. When omitted, uses the built-in curated list. */
+    /** Countries offered by the dial-code Select. When omitted, uses the built-in list of every region, in alphabetical order. */
     countries?: PhoneInputCountry[]
-    /** ISO 3166-1 alpha-2 code of the country selected at first, while v-model:country is empty. A code missing from countries falls back to the first country of the list. */
+    /** ISO 3166-1 alpha-2 code of the country selected at first, while v-model:country is empty. A code missing from countries falls back to US, then to the first country of the list. */
     defaultCountry?: string
-    /** Placeholder forwarded to the internal input. Falls back to the selected country's mask when empty. */
+    /** Placeholder forwarded to the internal input; empty shows none. */
     placeholder?: string
     /** Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. */
     size?: PhoneInputSize
@@ -109,10 +109,6 @@
     digits: model,
     country
   })
-
-  const effectivePlaceholder = computed(
-    () => props.placeholder || placeholderFor(selectedCountry.value)
-  )
 
   watch(phone, (value) => emit('phone-change', value), { immediate: true })
 
@@ -323,7 +319,7 @@
         inputmode="tel"
         autocomplete="tel-national"
         :value="displayValue"
-        :placeholder="effectivePlaceholder"
+        :placeholder="placeholder || undefined"
         :disabled="isDisabled"
         :readonly="readonly"
         :required="isRequired"

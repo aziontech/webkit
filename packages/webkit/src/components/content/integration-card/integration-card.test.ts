@@ -154,7 +154,7 @@ describe('IntegrationCard', () => {
     await expectNoA11yViolations(view.container)
   })
 
-  it('lays out the featured tile: corner badges default to primary, a glow, and the title still selects', async () => {
+  it('lays out the featured tile: corner badges default to info like the plain tile, a glow, and the title still selects', async () => {
     const view = render(IntegrationCard, { props: { ...tile, featured: true } })
     const root = view.getByTestId('integration-card')
 
@@ -163,6 +163,8 @@ describe('IntegrationCard', () => {
     const badges = view.getByTestId('integration-card__badges')
     expect(badges.textContent).toContain('Firewall')
     expect(badges.textContent).toContain('Paid')
+    const firewall = view.getByText('Firewall').closest('[data-testid="tag"]')
+    expect(firewall?.getAttribute('data-severity')).toBe('info')
     expect(view.getAllByText('Firewall')).toHaveLength(1)
     expect(view.getByRole('heading', { level: 3 })).toHaveTextContent('Request Signer')
     expect(view.getByTestId('integration-card__vendor')).toHaveTextContent('by Acme Inc.')

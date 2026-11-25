@@ -158,6 +158,13 @@ describe('ButtonGroup', () => {
     expect(view.getByRole('toolbar').getAttribute('data-size')).toBe('large')
   })
 
+  it('widens every button to the 44px touch floor on a coarse pointer', () => {
+    const view = render(WithOverflow)
+    expect(view.getByRole('toolbar').className).toContain(
+      'pointer-coarse:[&_[data-slot=button-group-item]]:min-w-11'
+    )
+  })
+
   it('maps variant and size onto the buttons', () => {
     const view = render(ButtonGroup, {
       props: { items, ariaLabel: 'Actions', variant: 'outline', size: 'small' }

@@ -20,11 +20,14 @@
     ariaLabel?: string
     /** Size token; sets the code typography and the size of the copy button (28 px or 32 px). */
     size?: CopyTextSize
+    /** Wraps a long value onto more lines, breaking anywhere, instead of truncating it in the middle. */
+    wrapLines?: boolean
   }
 
   const props = withDefaults(defineProps<CopyTextProps>(), {
     ariaLabel: '',
-    size: 'medium'
+    size: 'medium',
+    wrapLines: false
   })
 
   const emit = defineEmits<{
@@ -51,7 +54,7 @@
 
   const ROOT_CLASS =
     'inline-flex max-w-full min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-xs) align-middle ' +
-    'text-(--text-default) ' +
+    'text-(--text-default) data-[wrap]:items-start ' +
     'data-[size=medium]:text-label-code-md data-[size=small]:text-label-code-sm'
 </script>
 
@@ -60,9 +63,18 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
+    :data-wrap="wrapLines || null"
     :class="ROOT_CLASS"
   >
     <span
+      v-if="wrapLines"
+      dir="ltr"
+      class="min-w-0 py-0.5 text-start wrap-anywhere"
+      :data-testid="`${testId}__value`"
+      >{{ value }}</span
+    >
+    <span
+      v-else
       dir="ltr"
       :title="value"
       class="flex min-w-0 whitespace-nowrap text-start"

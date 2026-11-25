@@ -35,7 +35,7 @@
           >
         </Item.Title>
         <Item.Description>
-          <span class="block break-all">{{ account.email }}</span>
+          <span class="block wrap-anywhere">{{ account.email }}</span>
         </Item.Description>
       </Item.Content>
       <Item.Actions>

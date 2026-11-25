@@ -2,8 +2,6 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import CodeBlock from '../../code/code-block/code-block.vue'
-  import { languageName } from '../../code/code-block/lib/language-name'
   import Separator from '../../layout/separator/separator.vue'
   import MarkdownInline from '../lib/markdown-inline-cited'
   import MarkdownList from '../lib/markdown-list'
@@ -13,6 +11,8 @@
     parseMarkdownIncremental
   } from '../lib/parse-markdown'
   import type { SourcesItem } from '../sources/types'
+  import { LazyCodeBlock } from './lib/lazy-code-block'
+  import StreamingResponsePendingCode from './parts/streaming-response-pending-code.vue'
 
   defineOptions({
     name: 'StreamingResponse',
@@ -84,7 +84,7 @@
         :is="`h${block.level}`"
         v-else-if="block.type === 'heading'"
         :data-level="block.level"
-        class="m-0 mt-(--spacing-xs) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md [&+*]:-mt-(--spacing-xs)"
+        class="m-0 mt-(--spacing-xs) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md not-last:-mb-(--spacing-xs)"
       >
         <MarkdownInline
           :nodes="block.children"
@@ -101,7 +101,7 @@
         :list="block"
         :sources="sources"
       />
-      <CodeBlock
+      <LazyCodeBlock
         v-else-if="block.type === 'code' && (block.closed || !streaming)"
         :code="block.value"
         :language="block.language"
@@ -111,27 +111,12 @@
         dir="ltr"
         class="rounded-(--shape-card) bg-(--bg-surface-raised) [--code-block-max-height:none]"
       />
-      <div
+      <StreamingResponsePendingCode
         v-else-if="block.type === 'code'"
-        dir="ltr"
+        :code="block.value"
+        :language="block.language"
         :data-testid="`${testId}__pending-code`"
-        class="flex flex-col overflow-clip rounded-(--shape-card) bg-(--bg-surface-raised)"
-      >
-        <div
-          class="flex h-10 shrink-0 items-center gap-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm) text-(--text-muted)"
-        >
-          <i
-            class="az az-code text-label-code-sm shrink-0"
-            aria-hidden="true"
-          />
-          <span class="text-label-code-sm min-w-0 flex-1 truncate">{{
-            languageName(block.language)
-          }}</span>
-        </div>
-        <pre
-          class="m-0 overflow-x-auto px-(--spacing-lg) pb-(--spacing-sm) text-label-code-sm text-(--text-default)"
-          >{{ block.value }}</pre>
-      </div>
+      />
       <blockquote
         v-else-if="block.type === 'quote'"
         class="m-0 border-s-2 border-(--border-strong) ps-(--spacing-sm) text-(--text-muted)"

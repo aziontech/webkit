@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: d4f4c3cd1b36cd4b508fc6d6f0f2a28441f9cffaa84293e248a34507486bae32
+checksum: d4a3c3eef78cf215516f840213bbdaab836a4962563108b27a4fe81bd1707a51
 ---
 
 # ClientStoryColumnsSection — Component Spec
@@ -34,7 +34,7 @@ Three featured success stories side by side: each column is a client's mark on a
 - Three cells for `reveal="always"` (the grid is three columns from the medium breakpoint); three or four for `reveal="hover"`, which shares the row between them.
 - With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
 - Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
-- Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.
+- Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. Left out, the ink is chosen by measured contrast: a hex `base` on which white text would fall under 4.5:1 (WCAG AA) takes dark ink. A cell with neither paints a black face.
 
 ## Usage
 
@@ -90,6 +90,7 @@ Three featured success stories side by side: each column is a client's mark on a
 ## States
 
 - Visual states: `default`, `hover` on each column (the face reveals the link line, the story fill rises)
+- At rest, in the default layout, each story carries the link label and an arrow under its line, so a card says it is a link before it is hovered
 - The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`, or from the client registry by `name` when `brand` is left out; `data-treatment` on every mark drives its ink
 - `reveal="hover"`: each list item carries `data-state=open|closed`; one card is open at a time on large screens, every card is open below the large breakpoint; a closed card on large screens shows the link label ("Read story") at its foot, so a visitor at rest knows each card holds a story
 - Empty: when `cells` is empty the band renders nothing

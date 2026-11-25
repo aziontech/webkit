@@ -1,5 +1,6 @@
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import GaugeChart from '@aziontech/webkit/gauge-chart'
   import { ref } from 'vue'
 
@@ -25,12 +26,28 @@
       :error="failed ? 'Could not load the cache hit ratio.' : ''"
     >
       <template #error>
-        <Alert
-          severity="danger"
-          label="Could not load the cache hit ratio."
-          action-label="Retry"
-          @action="failed = false"
-        />
+        <div
+          role="alert"
+          class="w-full"
+        >
+          <EmptyState
+            title="Could not load the cache hit ratio"
+            description="The metrics service did not answer. Check your connection and try again."
+            icon="az az-triangle-alert"
+            size="small"
+            bordered
+          >
+            <template #actions>
+              <Button
+                label="Try again"
+                variant="secondary"
+                size="small"
+                icon="az az-refresh"
+                @click="failed = false"
+              />
+            </template>
+          </EmptyState>
+        </div>
       </template>
     </GaugeChart>
   </div>

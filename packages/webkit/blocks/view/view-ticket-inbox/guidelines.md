@@ -17,19 +17,19 @@ The support agent's inbox. An agent opens a saved view (their own open tickets, 
 
 ### A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 
-Title `Tickets` and one sentence. The one action is the primary medium Create ticket. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render; with live tickets and no `now` the countdowns read the real clock.
+Title `Tickets` and one sentence. The one action is the primary medium Create Ticket. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render; with live tickets and no `now` the countdowns read the real clock.
 
 ### B. Views and filter — `Select`, `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
-The controls band (`parts/inbox-controls.vue`). A `Select` labelled View leads it: each saved view with its count (`My open tickets (4)`), and a view marked `urgent` (Overdue) says `needs action` with its count above zero. The views are presets of this one list, not pages, so they never become a side menu (the rail navigates, the page does not). The `PropertyFilter` grows beside it, with Status, Priority, Assignee, Group, Channel and Tag as properties and free text over subject, requester, email and number. Refresh and `CollectionPreferences` (page size 25, 50 or 100; columns, Group and Channel hidden by default) close the row. Below `@2xl` of the band the select takes its own line.
+The controls band (`parts/inbox-controls.vue`). A `Select` labelled View leads it: each saved view with its count (`My open tickets (4)`), and a view marked `urgent` (Overdue) says `needs action` with its count above zero. The views are presets of this one list, not pages, so they never become a side menu (the rail navigates, the page does not). The `PropertyFilter` grows beside it, with Status, Priority, Assignee, Group, Channel and Tag as properties and free text over subject, requester, email and number. Refresh and `CollectionPreferences` (page size 25, 50 or 100; columns, Updated, Group and Channel hidden by default) close the row. Below `@2xl` of the band the select takes its own line.
 
-### C. Bulk actions — `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Avatar` (conditional)
+### C. Bulk actions — `Button`, `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuItem`, `Avatar`, `ConfirmDialog`, `RadioGroup` (conditional)
 
-`parts/ticket-bulk-actions.vue`, under the filter in the controls band while tickets are selected: `3 selected` (a polite status), `Select all 12 tickets` once the whole page is ticked and more match (`selectAllMatching`), Clear selection, then Assign (an agent menu, each agent with their avatar and presence), Change status (the five statuses), Merge (disabled with a reason under two tickets) and Close. Every label counts the selection: `Assign (3)`. An action emits `bulk-action` and clears the selection; the app saves, refreshes the list and confirms in a toast.
+`parts/ticket-bulk-actions.vue`, under the filter in the controls band while tickets are selected: `3 selected` (a polite status), `Select all 12 tickets` once the whole page is ticked and more match (`selectAllMatching`), Clear selection, then Assign (an agent menu, each agent with their avatar and presence), Change status (the five statuses), Merge (disabled with a reason under two tickets) and Close. Every label counts the selection: `Assign (3)`. Merge and Close ask first, in a `ConfirmDialog`: Merge lists the selected tickets in a `RadioGroup` named Ticket to keep (the first one picked by default) and confirms with `Merge 3 tickets`; Close confirms with `Close 3 tickets`. Assign and Change status act on the pick. An action emits `bulk-action` and clears the selection; the app saves, refreshes the list and confirms in a toast.
 
 ### D. Ticket table — `Card`, `DataTable`, `DataTablePagination`, `TableCellLink`, `TableCellStatus`, `PriorityTag`, `Countdown`, `TableCellTime`, `useCollection` (required)
 
-One `useCollection` over the view's tickets (selection on, sorted by Next SLA, most urgent first; tickets with no SLA last), `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Subject (`parts/ticket-subject-cell.vue`: a `TableCellLink` to the ticket, an unread mark in `--info-mark` with the hidden word Unread, then the requester's avatar, name and `#number` in muted text), Status as `TableCellStatus` (New warning, since it waits for triage; Open info; Pending and On hold neutral; Solved success), Priority as a small `PriorityTag` sorted by rank, Assignee (`parts/ticket-assignee-cell.vue`: the `Avatar` with presence and the name, or muted Unassigned), Next SLA as a small `Countdown` (paused while Pending or On hold, a dash when no target runs), Updated as `TableCellTime`, then the hidden Group and Channel. A row click or Enter on a focused row emits `open`; clicks on the link, the checkbox or a button do not.
+One `useCollection` over the view's tickets (selection on, sorted by Next SLA, most urgent first; tickets with no SLA last), `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Subject (`parts/ticket-subject-cell.vue`: a `TableCellLink` to the ticket, an unread mark in `--info-mark` with the hidden word Unread, then the requester's avatar, name and `#number` in muted text; below `sm` a third line carries the triage facts, the status, the `PriorityTag` and the running SLA `Countdown`, and the cell takes 60% of the screen so the Status column visibly peeks), Status as `TableCellStatus` (New warning, since it waits for triage; Open info; Pending and On hold neutral; Solved success), Priority as a small `PriorityTag` sorted by rank, Assignee (`parts/ticket-assignee-cell.vue`: the `Avatar` with presence and the name, or muted Unassigned), Next SLA as a small `Countdown` (paused while Pending or On hold, a dash when no target runs), then the hidden Updated as `TableCellTime`, Group and Channel. The Subject cell stops at `--container-xs` from `sm` up, so the visible columns stay whole at 1280 with the rail open. A row click or Enter on a focused row emits `open`; clicks on the link, the checkbox or a button do not.
 
 ### E. Empty view and no match — `EmptyState` (required)
 
@@ -55,14 +55,14 @@ The block takes its records through props and emits every action; it fetches not
 | `defaultQuery`        | `PropertyFilterQuery` | Filter tokens applied on mount, for a link that opens the inbox already filtered.                               |
 | `defaultSelectedKeys` | `string[]`            | Ticket numbers selected on mount.                                                                               |
 
-| Event            | Payload                               | When                                                                            |
-| ---------------- | ------------------------------------- | ------------------------------------------------------------------------------- |
-| `create`         | `(event)`                             | Create ticket.                                                                  |
-| `open`           | `(event, ticket)`                     | A row click or Enter on a focused row.                                          |
-| `bulk-action`    | `(event, { action, value, tickets })` | Assign (`value` the agent), Change status (`value` the status), Merge or Close. |
-| `refresh`        | `(event)`                             | Refresh.                                                                        |
-| `retry`          | `(event)`                             | Retry in the error alert.                                                       |
-| `update:viewKey` | `(key)`                               | Another view was picked.                                                        |
+| Event            | Payload                               | When                                                                                                                    |
+| ---------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `create`         | `(event)`                             | Create Ticket.                                                                                                          |
+| `open`           | `(event, ticket)`                     | A row click or Enter on a focused row.                                                                                  |
+| `bulk-action`    | `(event, { action, value, tickets })` | Assign (`value` the agent), Change status (`value` the status), Merge (`value` the number of the ticket kept) or Close. |
+| `refresh`        | `(event)`                             | Refresh.                                                                                                                |
+| `retry`          | `(event)`                             | Retry in the error alert.                                                                                               |
+| `update:viewKey` | `(key)`                               | Another view was picked.                                                                                                |
 
 To go live, render the block from a page that owns the requests and pass what they return:
 
@@ -108,16 +108,16 @@ Then delete `sample.ts` and its import. A queue too large for the browser moves 
 
 ## Copy
 
-- **Title:** `Tickets`. **Create:** `Create ticket`. **View select:** `View`. **Filter:** `Filter tickets`.
+- **Title:** `Tickets`. **Create:** `Create Ticket`. **View select:** `View`. **Filter:** `Filter tickets`.
 - **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **Unassigned:** `Unassigned`.
-- **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`
+- **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`; the confirmations `Merge 3 tickets` (with Ticket to keep) and `Close 3 tickets`.
 - **Empty view:** `You're all caught up`, `No tickets in <view>.`, `Show all open tickets`. **No match:** `No matching tickets`, `No ticket in this view matches these filters.`, `Clear filters`.
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
 - No `main` of its own and no second navigation: the `PageHeader` title is the only `h1`; the table is named after the active view.
-- Focus order: Create ticket, View, the filter, Refresh, preferences, the bulk controls while a selection exists, the table (select all, then the rows, one tab stop with the arrow keys), then pagination.
+- Focus order: Create Ticket, View, the filter, Refresh, preferences, the bulk controls while a selection exists, the table (select all, then the rows, one tab stop with the arrow keys), then pagination.
 - Rows: Arrow Up and Down move, Enter opens the ticket, Space toggles its selection; the subject link is reachable with Tab too.
 - Announcements: the selection count is a polite status; the filter announces its match count; Refresh shows its busy state; the result of a bulk action comes from the app's toast.
 - Presence is part of the assignee avatar's name (`Jane Doe, online`), so the printed name beside it is hidden from screen readers; priority and status are text, never colour alone.

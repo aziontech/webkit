@@ -15,9 +15,7 @@ describe('Eyebrow', () => {
 
   it('does not render a prefix span when prefix is the empty default', () => {
     const { container, queryByText } = render(Eyebrow, { slots: { default: 'NO PREFIX' } })
-    const spans = container.querySelectorAll('span')
-    expect(spans).toHaveLength(1)
-    expect(spans[0]?.getAttribute('aria-hidden')).toBeNull()
+    expect(container.querySelector('span[aria-hidden]')).toBeNull()
     expect(queryByText('//')).not.toBeInTheDocument()
   })
 
@@ -51,11 +49,28 @@ describe('Eyebrow', () => {
   })
 
   it('spaces the prefix, label and cursor with the --spacing-2xs token', () => {
-    const { getByTestId } = render(Eyebrow, { slots: { default: 'TOKENS' } })
+    const { getByTestId, getByText } = render(Eyebrow, {
+      props: { prefix: '//', cursor: true },
+      slots: { default: 'TOKENS' }
+    })
     const root = getByTestId('eyebrow')
-    expect(root.className).toContain('gap-(--spacing-2xs)')
-    expect(root.className).toContain('ps-(--spacing-2xs)')
-    expect(root.className).toContain('pe-(--spacing-2xs)')
+    expect(root.classList.contains('ps-(--spacing-2xs)')).toBe(true)
+    expect(root.classList.contains('pe-(--spacing-2xs)')).toBe(true)
+    expect(getByText('//').classList.contains('me-(--spacing-2xs)')).toBe(true)
+    expect(getByTestId('eyebrow__cursor').classList.contains('ms-(--spacing-2xs)')).toBe(true)
+  })
+
+  it('sets the prefix in the same text run as the label, joined so it cannot strand on its own line', () => {
+    const { getByText, getByTestId } = render(Eyebrow, {
+      props: { prefix: '//' },
+      slots: { default: 'APPLICATION PERFORMANCE AND RELIABILITY' }
+    })
+    const prefix = getByText('//')
+    const label = getByTestId('eyebrow__label')
+    expect(prefix.parentElement).toBe(getByTestId('eyebrow'))
+    expect(label.parentElement).toBe(getByTestId('eyebrow'))
+    expect(prefix.classList.contains("after:content-['\\2060']")).toBe(true)
+    expect(prefix.nextElementSibling).toBe(label)
   })
 
   it('renders angle-bracket and closing-tag prefixes verbatim', () => {

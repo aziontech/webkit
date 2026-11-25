@@ -97,7 +97,9 @@
   const { locale } = useLocale()
   const copy = computed<SignInCopy>(() => resolveSignInCopy(locale.value))
 
-  const noticeFromProps = () => noticeFor(props.error, props.notice, copy.value)
+  const badCredentials = () => props.error === 'bad-credentials'
+  const noticeFromProps = () =>
+    badCredentials() ? null : noticeFor(props.error, props.notice, copy.value)
 
   const returnStep = ref<SignInStep>('email')
   const email = ref(props.defaultValues.email ?? '')
@@ -109,7 +111,7 @@
   const verifying = computed(() => props.loading)
   const errors = reactive({
     email: '',
-    password: '',
+    password: badCredentials() ? copy.value.badCredentials : '',
     resetEmail: '',
     newPassword: '',
     confirmPassword: ''
@@ -146,10 +148,10 @@
 
   const showOutcome = () => {
     cardNotice.value = noticeFromProps()
-    if (props.error === 'bad-credentials') {
-      password.value = ''
-      focusField('login-password')
-    }
+    if (!badCredentials()) return
+    password.value = ''
+    errors.password = copy.value.badCredentials
+    focusField('login-password')
   }
 
   onMounted(() => {
@@ -203,7 +205,7 @@
   }
 
   const signIn = (event: Event) => {
-    errors.password = password.value ? '' : copy.value.required
+    errors.password = password.value ? '' : copy.value.passwordRequired
     if (errors.password) {
       focusField('login-password')
       return
@@ -234,7 +236,7 @@
   const submitNewPassword = (event: Event) => {
     errors.newPassword = newPasswordError(newPassword.value, copy.value)
     errors.confirmPassword = !confirmPassword.value
-      ? copy.value.required
+      ? copy.value.confirmRequired
       : confirmPassword.value === newPassword.value
         ? ''
         : copy.value.mismatch

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: e417505fbcd1ff1750399ec2cdb7497960d22d06561c24f84b65a7ee1da574ee
+checksum: bbc718c16dce4969f69c03f6a6c11466e6273ddbefd2ac8a536a065d900028fb
 created: 2026-09-25
 last_updated: 2026-11-18
 ---
@@ -165,7 +165,7 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on every claim's title control
-- Keyboard map: `Tab` reaches each claim's title control in reading order; focusing or activating one opens that claim at once and scrolls the band to its share of the scroll, so a keyboard reader moves the band exactly as a pointer reader does, and the next `Tab` reaches the claim's actions without waiting for the scroll to settle. There is no key that scrolls the page other than the reader's own — the band never takes the scroll it is given.
+- Keyboard map: `Tab` reaches each claim's title control in reading order; focusing or activating one opens that claim at once and scrolls the band to its share of the scroll, so a keyboard reader moves the band exactly as a pointer reader does, and the next `Tab` reaches the claim's actions without waiting for the scroll to settle. There is no key that scrolls the page other than the reader's own — the band never takes the scroll it is given. Below `lg` the claims stack open and nothing pins, so each title renders as plain heading text with no control, and `Tab` skips it.
 - ARIA: the claim list is an `<ol>` (the run is ordered); the open claim's control carries `aria-current="true"`; the progress hairline is `aria-hidden="true"`
 - Every claim's description stays in the accessibility tree while collapsed (clipped, never `display: none`), so the whole run is readable without scrolling through it
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted tone a read claim rests at

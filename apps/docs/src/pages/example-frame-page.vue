@@ -7,6 +7,7 @@
   import { applyTheme, settings } from '../lib/settings'
 
   const route = useRoute()
+  const SSR = import.meta.env.SSR
   const mounted = ref(false)
 
   const segments = computed(() => {
@@ -18,9 +19,8 @@
   )
   const example = computed(() => (segments.value.length > 1 ? (segments.value.at(-1) ?? '') : ''))
   const file = computed(() => `${example.value}.vue`)
-  const live = computed(() =>
-    mounted.value ? cached<Component>(keys.example(dir.value, file.value)) : undefined
-  )
+  const live = computed(() => cached<Component>(keys.example(dir.value, file.value)))
+  const styles = computed(() => cached<Component>(keys.frameStyles(`examples/${dir.value}`)))
 
   useHead({
     title: computed(() => (dir.value ? `${dir.value}: ${example.value} — WebKit` : 'WebKit'))
@@ -57,12 +57,17 @@
 <template>
   <div
     :data-example="mounted && dir ? `${dir}/${file}` : undefined"
-    :data-ready="live ? '' : undefined"
+    :data-ready="mounted && live ? '' : undefined"
+    data-allow-mismatch="children"
     class="min-h-screen w-full bg-(--bg-canvas) p-(--spacing-lg) [--layout-sticky-top:0]"
   >
     <component
+      :is="styles"
+      v-if="styles"
+    />
+    <component
       :is="live"
-      v-if="live"
+      v-if="live && (SSR || mounted)"
     />
   </div>
 </template>

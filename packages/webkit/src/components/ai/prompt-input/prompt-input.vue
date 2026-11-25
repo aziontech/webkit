@@ -347,7 +347,7 @@
         />
         <div
           ref="controlEl"
-          class="flex min-h-10 min-w-0 shrink-0 items-center gap-(--spacing-2xs) group-data-[multiline]/prompt-input-box:ms-auto"
+          class="ms-auto flex min-h-10 min-w-0 shrink-0 items-center gap-(--spacing-2xs)"
         >
           <fieldset
             v-if="slots.end"

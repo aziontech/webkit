@@ -257,8 +257,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
             >Create the function</DocHeading
           >
           <p>
-            Open Functions in the console, select Create Function, paste the handler below and save
-            it.
+            Open Functions in the console, select Create Function, paste your handler and save it.
           </p>
           <DocHeading
             anchor="instantiate-the-function"

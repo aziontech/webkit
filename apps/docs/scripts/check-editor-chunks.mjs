@@ -9,7 +9,10 @@ const DIST = resolve(
   process.argv.find((arg) => arg.startsWith('--dist='))?.slice(7) ??
     join(dirname(fileURLToPath(import.meta.url)), '../dist')
 )
-const GRAPH = join(DIST, '.vite/chunk-graph.json')
+const GRAPH = resolve(
+  process.argv.find((arg) => arg.startsWith('--graph='))?.slice(8) ??
+    join(DIST, '../.build/chunk-graph.json')
+)
 const report = process.argv.find((arg) => arg.startsWith('--report='))?.slice(9)
 
 function pages(dir) {

@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 42b98ded771cee555a5a425cfb5fbea21d5b9fae08b542c16689903ae0bae39c
+checksum: 159d4c29c0ba7fa2e31957251976e53c2493a2f12ce0155b421e631ab34744f0
 ---
 
 # ArticleCardsSection — Component Spec
@@ -47,13 +47,13 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 <template>
   <ArticleCardsSection
     align="start"
-    title="Related Articles"
-    aria-label="Related Articles"
+    title="Related articles"
+    aria-label="Related articles"
     :items="[
       {
         id: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
-        title: 'How Do You Reduce AI Agent Latency?',
+        title: 'How do you reduce AI agent latency?',
         description: 'Learn where latency builds up in AI agents.',
         meta: 'SEP 23, 2026 • 8 min read',
         image: '/media/blog/reduce-ai-agent-latency.png'

@@ -48,11 +48,13 @@
   })
 
   const activeIndex = defineModel<number | null>('activeIndex', { default: null })
+  const hiddenSeries = defineModel<string[]>('hiddenSeries', { default: () => [] })
 </script>
 
 <template>
   <Chart
     v-model:active-index="activeIndex"
+    v-model:hidden-series="hiddenSeries"
     :series="series"
     :labels="labels"
     :orientation="ranking ? 'horizontal' : undefined"

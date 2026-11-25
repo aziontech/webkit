@@ -91,7 +91,7 @@
   const runningStep = computed(() => props.steps.find((step) => step.status === 'running'))
   const failedStep = computed(() => props.steps.find((step) => step.status === 'error'))
   const doneCount = computed(() => props.steps.filter((step) => step.status === 'success').length)
-  const failedTitle = computed(() => failedStep.value?.title.toLowerCase() ?? '')
+  const failedTitle = computed(() => failedStep.value?.title ?? '')
 
   const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref<string | undefined>()
@@ -167,7 +167,7 @@
     <div class="layout-column-focused flex min-h-full flex-col">
       <PageHeader
         title="Deploy web-app"
-        description="Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are."
+        description="Builds acme/web-app and publishes it to production."
       >
         <template #meta>
           <Tag
@@ -289,7 +289,7 @@
                   </template>
                   <Tag
                     v-else
-                    :label="`Failed on ${failedTitle}`"
+                    :label="`Failed: ${failedTitle}`"
                     severity="danger"
                   />
                 </div>

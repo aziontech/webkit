@@ -5,7 +5,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { type FigureFormat, hostColumns, trafficCards, trafficFigures } from './analytics-cards'
   import {
@@ -13,11 +13,13 @@
     comparedPeriod,
     comparedPeriods,
     fixedFormatter,
+    hiddenForStatusForm,
     metricFormatters,
     metricQuery,
     periodSlug,
     runCardOption,
-    seriesRows
+    seriesRows,
+    statusForms
   } from './analytics-report'
   import ExpandedDialog from './parts/expanded-dialog.vue'
   import ExpandedTable from './parts/expanded-table.vue'
@@ -199,6 +201,12 @@
 
   const requestsForm = ref('line')
   const statusForm = ref('bar')
+  const statusHidden = ref<string[]>([])
+  watch(
+    [statusForm, statusCodes],
+    ([form, series]) => (statusHidden.value = hiddenForStatusForm(form, series)),
+    { immediate: true }
+  )
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 
@@ -228,9 +236,11 @@
   const expanded = ref(props.defaultExpanded !== '')
   const expandedId = ref<AnalyticsDashboardCardId>(props.defaultExpanded || 'requests')
   const expandedReport = computed(() => trafficCards[expandedId.value])
-  const expandedForms = computed(() =>
-    expandedId.value === 'requests' || expandedId.value === 'status-codes' ? chartForms : []
-  )
+  const cardForms: Partial<Record<AnalyticsDashboardCardId, typeof chartForms>> = {
+    requests: chartForms,
+    'status-codes': statusForms
+  }
+  const expandedForms = computed(() => cardForms[expandedId.value] ?? [])
 
   const openExpanded = (id: AnalyticsDashboardCardId) => {
     expandedId.value = id
@@ -282,28 +292,33 @@
         data-testid="dashboard-analytics__error"
         @action="(event: MouseEvent) => emit('retry', event)"
       />
-      <StatTileGroup
-        aria-label="Key figures"
-        :aria-busy="refetching || undefined"
+      <div
+        :data-updating="refetching || undefined"
+        class="data-[updating]:[&_[data-testid$=__sparkline]]:opacity-60"
       >
-        <StatTile
-          v-for="figure in figures"
-          :key="figure.id"
-          :label="figure.label"
-          :value="figure.value"
-          :format-value="formatters[figure.format]"
-          :delta="figure.delta"
-          :delta-label="currentPeriod.comparison"
-          :inverse="figure.inverse"
-          :trend="figure.trend"
-          :loading="loading"
-          :error="error"
+        <StatTileGroup
+          aria-label="Key figures"
+          :aria-busy="refetching || undefined"
         >
-          <template #aside>
-            <Hint :content="figure.description" />
-          </template>
-        </StatTile>
-      </StatTileGroup>
+          <StatTile
+            v-for="figure in figures"
+            :key="figure.id"
+            :label="figure.label"
+            :value="figure.value"
+            :format-value="formatters[figure.format]"
+            :delta="figure.delta"
+            :delta-label="currentPeriod.comparison"
+            :inverse="figure.inverse"
+            :trend="figure.trend"
+            :loading="loading"
+            :error="error"
+          >
+            <template #aside>
+              <Hint :content="figure.description" />
+            </template>
+          </StatTile>
+        </StatTileGroup>
+      </div>
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
@@ -336,16 +351,17 @@
           :span="6"
           v-bind="card('status-codes')"
           :variation="variations.statusCodes"
-          :forms="chartForms"
+          :forms="statusForms"
           @expand="openExpanded('status-codes')"
           @select="(_event, value) => onCardOption('status-codes', value)"
         >
           <SeriesChart
             v-model:active-index="activeIndex"
+            v-model:hidden-series="statusHidden"
             :series="statusCodes"
             :labels="labels"
             :format-value="formatters.count"
-            :bar="statusForm === 'bar'"
+            :bar="statusForm !== 'line'"
             stacked
             :loading="loading"
             :refetching="refetching"
@@ -414,10 +430,11 @@
       <SeriesChart
         key="chart-2"
         v-else-if="expandedId === 'status-codes'"
+        v-model:hidden-series="statusHidden"
         :series="statusCodes"
         :labels="labels"
         :format-value="formatters.count"
-        :bar="statusForm === 'bar'"
+        :bar="statusForm !== 'line'"
         stacked
         :height="420"
         :refetching="refetching"

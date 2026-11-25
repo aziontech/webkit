@@ -228,6 +228,7 @@
    "--color-alpha-white-500",
    "--color-alpha-white-600",
    "--color-alpha-white-700",
+   "--color-alpha-white-75",
    "--color-alpha-white-800",
    "--color-alpha-white-900",
    "--color-alpha-yellow-100",
@@ -621,10 +622,19 @@
    "--text-big-number-sm-font-weight",
    "--text-big-number-sm-line-height",
    "--text-big-number-sm-white-space",
+   "--text-big-number-unit-font-family",
+   "--text-big-number-unit-font-weight",
+   "--text-big-number-unit-line-height",
    "--text-body-2xs-font-size",
    "--text-body-2xs-font-weight",
    "--text-body-2xs-line-height",
    "--text-body-2xs-text-wrap-style",
+   "--text-body-code-lg-font-family",
+   "--text-body-code-lg-font-size",
+   "--text-body-code-lg-font-weight",
+   "--text-body-code-lg-letter-spacing",
+   "--text-body-code-lg-line-height",
+   "--text-body-code-lg-text-wrap-style",
    "--text-body-code-sm-font-family",
    "--text-body-code-sm-font-size",
    "--text-body-code-sm-font-weight",
@@ -669,6 +679,7 @@
    "--text-heading-2xl-letter-spacing",
    "--text-heading-2xl-line-height",
    "--text-heading-2xl-text-wrap-style",
+   "--text-heading-2xl-word-spacing",
    "--text-heading-2xs-font-size",
    "--text-heading-2xs-font-weight",
    "--text-heading-2xs-letter-spacing",
@@ -679,6 +690,13 @@
    "--text-heading-3xl-letter-spacing",
    "--text-heading-3xl-line-height",
    "--text-heading-3xl-text-wrap-style",
+   "--text-heading-3xl-word-spacing",
+   "--text-heading-code-md-font-family",
+   "--text-heading-code-md-font-size",
+   "--text-heading-code-md-font-variant-numeric",
+   "--text-heading-code-md-font-weight",
+   "--text-heading-code-md-letter-spacing",
+   "--text-heading-code-md-line-height",
    "--text-heading-lg-font-size",
    "--text-heading-lg-font-weight",
    "--text-heading-lg-letter-spacing",
@@ -814,7 +832,9 @@
    "text-big-number-lg",
    "text-big-number-md",
    "text-big-number-sm",
+   "text-big-number-unit",
    "text-body-2xs",
+   "text-body-code-lg",
    "text-body-code-sm",
    "text-body-lg",
    "text-body-md",
@@ -826,6 +846,7 @@
    "text-heading-2xl",
    "text-heading-2xs",
    "text-heading-3xl",
+   "text-heading-code-md",
    "text-heading-lg",
    "text-heading-md",
    "text-heading-sm",
@@ -1059,6 +1080,7 @@
     "--color-alpha-white-500",
     "--color-alpha-white-600",
     "--color-alpha-white-700",
+    "--color-alpha-white-75",
     "--color-alpha-white-800",
     "--color-alpha-white-900",
     "--color-alpha-yellow-100",
@@ -1500,10 +1522,19 @@
     "--text-big-number-sm-font-weight",
     "--text-big-number-sm-line-height",
     "--text-big-number-sm-white-space",
+    "--text-big-number-unit-font-family",
+    "--text-big-number-unit-font-weight",
+    "--text-big-number-unit-line-height",
     "--text-body-2xs-font-size",
     "--text-body-2xs-font-weight",
     "--text-body-2xs-line-height",
     "--text-body-2xs-text-wrap-style",
+    "--text-body-code-lg-font-family",
+    "--text-body-code-lg-font-size",
+    "--text-body-code-lg-font-weight",
+    "--text-body-code-lg-letter-spacing",
+    "--text-body-code-lg-line-height",
+    "--text-body-code-lg-text-wrap-style",
     "--text-body-code-sm-font-family",
     "--text-body-code-sm-font-size",
     "--text-body-code-sm-font-weight",
@@ -1548,6 +1579,7 @@
     "--text-heading-2xl-letter-spacing",
     "--text-heading-2xl-line-height",
     "--text-heading-2xl-text-wrap-style",
+    "--text-heading-2xl-word-spacing",
     "--text-heading-2xs-font-size",
     "--text-heading-2xs-font-weight",
     "--text-heading-2xs-letter-spacing",
@@ -1558,6 +1590,13 @@
     "--text-heading-3xl-letter-spacing",
     "--text-heading-3xl-line-height",
     "--text-heading-3xl-text-wrap-style",
+    "--text-heading-3xl-word-spacing",
+    "--text-heading-code-md-font-family",
+    "--text-heading-code-md-font-size",
+    "--text-heading-code-md-font-variant-numeric",
+    "--text-heading-code-md-font-weight",
+    "--text-heading-code-md-letter-spacing",
+    "--text-heading-code-md-line-height",
     "--text-heading-lg-font-size",
     "--text-heading-lg-font-weight",
     "--text-heading-lg-letter-spacing",
@@ -2010,7 +2049,7 @@
     "group": "background",
     "type": "color",
     "light": "#00000014",
-    "dark": "#FFFFFF1A",
+    "dark": "#FFFFFF14",
     "purpose": "The hover fill of an interactive row, item or control."
    },
    "--bg-active": {
@@ -3097,6 +3136,16 @@
      }
     }
    },
+   "text-big-number-unit": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "line-height": "1",
+     "font-weight": "400",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif"
+    },
+    "purpose": "A word unit in a big-number figure (ms, Tbps), in the text face so it keeps its case."
+   },
    "text-amount-lg": {
     "group": "typography",
     "type": "typography",
@@ -3122,16 +3171,13 @@
     "type": "typography",
     "value": {
      "text-wrap-style": "balance",
-     "font-size": "1rem",
+     "font-size": "1.25rem",
      "line-height": "1.25",
      "font-weight": "400",
      "letter-spacing": "-0.08em"
     },
     "purpose": "A price or amount in a card.",
     "breakpoints": {
-     "sm": {
-      "font-size": "1.25rem"
-     },
      "md": {
       "font-size": "1.5rem"
      }
@@ -3156,7 +3202,8 @@
      "font-size": "1.875rem",
      "line-height": "1.25",
      "font-weight": "400",
-     "letter-spacing": "-0.035em"
+     "letter-spacing": "-0.035em",
+     "word-spacing": "0.06em"
     },
     "purpose": "The largest page heading, for a marketing hero.",
     "breakpoints": {
@@ -3165,7 +3212,8 @@
      },
      "md": {
       "font-size": "3.5rem",
-      "letter-spacing": "-0.046em"
+      "letter-spacing": "-0.046em",
+      "word-spacing": "0"
      }
     }
    },
@@ -3177,7 +3225,8 @@
      "font-size": "1.875rem",
      "line-height": "1",
      "font-weight": "400",
-     "letter-spacing": "-0.035em"
+     "letter-spacing": "-0.035em",
+     "word-spacing": "0.06em"
     },
     "purpose": "A marketing section heading.",
     "breakpoints": {
@@ -3186,7 +3235,8 @@
      },
      "md": {
       "font-size": "3rem",
-      "letter-spacing": "-0.053em"
+      "letter-spacing": "-0.053em",
+      "word-spacing": "0"
      }
     }
    },
@@ -3393,6 +3443,19 @@
     },
     "purpose": "A monospace paragraph that wraps."
    },
+   "text-body-code-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "1rem",
+     "line-height": "1.5",
+     "font-weight": "400",
+     "letter-spacing": "0.025rem"
+    },
+    "purpose": "Wrapping or multi-line code at the 16px touch size, with a real line height."
+   },
    "text-label-code-md": {
     "group": "typography",
     "type": "typography",
@@ -3416,6 +3479,19 @@
      "letter-spacing": "0.025rem"
     },
     "purpose": "A large monospace label."
+   },
+   "text-heading-code-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "1.5rem",
+     "line-height": "1.375",
+     "font-weight": "400",
+     "letter-spacing": "0",
+     "font-variant-numeric": "tabular-nums"
+    },
+    "purpose": "A 24px monospace code the reader compares or copies by eye, such as a device code."
    },
    "text-body-lg": {
     "group": "typography",
@@ -5591,9 +5667,13 @@
      "name": "item-meta",
      "scope": "{ item: ConversationHistoryItem }",
      "notes": "Replaces the end of a chat row (age, lock, status)."
+    },
+    {
+     "name": "item-actions",
+     "scope": "{ item: ConversationHistoryItem }",
+     "notes": "Replaces the row actions (Pin, More, Delete) with the app's own controls, outside the row button; they show like the built-in actions. The row content keeps its place while they show; set `--conversation-history-item-actions-width` on the list to make the row end that wide while they show (default: the row's own end padding, so nothing moves)."
     }
    ],
-   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/conversation-history.json",
    "docsFile": "catalog/components/conversation-history.json"
@@ -6781,6 +6861,13 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Size token; sets the code typography and the size of the copy button (28 px or 32 px)."
+    },
+    {
+     "name": "wrapLines",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Wraps a long value onto more lines, breaking anywhere, instead of truncating it in the middle."
     }
    ],
    "events": [
@@ -8778,6 +8865,13 @@
      "doc": "Two-way value (`v-model:activeIndex`)."
     }
    ],
+   "slots": [
+    {
+     "name": "error",
+     "scope": "—",
+     "notes": "Replaces the inline error banner shown in place of the blocks while `error` is set. The strip is too short for the chart family's centred error card, so it keeps a banner; the slot lets a page add the family's `Try again` action (a danger `Alert` with `action-label=\"Try again\"`)."
+    }
+   ],
    "surface": "app",
    "examplesFile": "catalog/examples/tracker.json",
    "docsFile": "catalog/components/tracker.json"
@@ -9065,10 +9159,10 @@
     },
     {
      "name": "format",
-     "type": "'relative' | 'local' | 'utc'",
+     "type": "'relative' | 'local' | 'utc' | 'time'",
      "default": "'local'",
      "required": "false",
-     "doc": "What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form."
+     "doc": "What the text shows: the relative phrase that updates every minute, the date and time in the time zone, the date and time in UTC, or only the hour and minute in the time zone (for a row under a date header). The panel always lists every form."
     },
     {
      "name": "timeZone",
@@ -9107,7 +9201,7 @@
      "type": "'relative' | 'local' | 'utc'",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`; inside a `Timeline.Group`, `local` reads as Timestamp's `time` (hour and minute only), because the group label carries the date."
     },
     {
      "name": "loading",
@@ -9164,7 +9258,7 @@
      "type": "'relative' | 'local' | 'utc'",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`; inside a `Timeline.Group`, `local` reads as Timestamp's `time` (hour and minute only), because the group label carries the date."
     },
     {
      "name": "loading",
@@ -9847,7 +9941,7 @@
      "type": "IntegrationCardBadge[]",
      "default": "[]",
      "required": "false",
-     "doc": "Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
+     "doc": "Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, in the plain and the featured layout)."
     },
     {
      "name": "installed",
@@ -11082,7 +11176,7 @@
      "type": "TimestampFormat",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union."
     },
     {
      "name": "loading",
@@ -11125,7 +11219,7 @@
      "type": "TimestampFormat",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union."
     },
     {
      "name": "loading",
@@ -11393,7 +11487,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control: a CopyButton at the end of LogViewerHeader, or pinned top-right beside the log body when no header is composed."
     },
     {
      "name": "disabled",
@@ -11502,7 +11596,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control: a CopyButton at the end of LogViewerHeader, or pinned top-right beside the log body when no header is composed."
     },
     {
      "name": "disabled",
@@ -11922,7 +12016,7 @@
      "type": "TableColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, type?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `type: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
+     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, type?, resizable?, hideable?, narrow?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; Until the first measurement (and while loading placeholders draw) the column holds its floor, so a loading table on a phone shows the same columns it shows once loaded. `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `type: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`. **`narrow: false`** drops the column (its header, its cells and its loading placeholders) while the table's own box is narrower than `var(--container-sm)`, for a column whose value the principal cell already repeats there in a phone summary line; the column comes back in a wider box."
     },
     {
      "name": "rowKey",
@@ -11992,7 +12086,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
+     "doc": "opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as label and value lines instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
     },
     {
      "name": "wrapLines",
@@ -13072,6 +13166,13 @@
      "doc": "Shows placeholder steps while the diagram loads."
     },
     {
+     "name": "showPorts",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Draws the port squares where connectors meet the steps; turn off for a diagram a reader only views."
+    },
+    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
@@ -13160,6 +13261,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows placeholder steps while the diagram loads."
+    },
+    {
+     "name": "showPorts",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Draws the port squares where connectors meet the steps; turn off for a diagram a reader only views."
     },
     {
      "name": "ariaLabel",
@@ -15253,6 +15361,13 @@
      "default": "false",
      "required": "false",
      "doc": "Loading state; animates a sliding segment and ignores `value`."
+    },
+    {
+     "name": "severity",
+     "type": "`ProgressSeverity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`)",
+     "default": "—",
+     "required": "false",
+     "doc": "Status colour of the fill; unset keeps the brand fill. The values are the shared `Severity` scale."
     }
    ],
    "surface": "app",
@@ -16314,21 +16429,21 @@
      "type": "PhoneInputCountry[]",
      "default": "(built-in list — see Notes)",
      "required": "false",
-     "doc": "Countries offered by the dial-code Select. When omitted, uses the built-in curated list."
+     "doc": "Countries offered by the dial-code Select. When omitted, uses the built-in list of every region, in alphabetical order."
     },
     {
      "name": "defaultCountry",
      "type": "string",
      "default": "'US'",
      "required": "false",
-     "doc": "ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to the first country of the list."
+     "doc": "ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to US, then to the first country of the list."
     },
     {
      "name": "placeholder",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Placeholder of the tel input. Falls back to the selected country's mask when empty."
+     "doc": "Placeholder of the tel input; empty shows none (never the national mask, per the example-data rule)."
     },
     {
      "name": "size",
@@ -17173,6 +17288,13 @@
      "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
     },
     {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the selection but blocks changing it: the radios stay focusable and keep their selected look."
+    },
+    {
      "name": "invalid",
      "type": "boolean",
      "default": "false",
@@ -17269,6 +17391,13 @@
      "default": "false",
      "required": "false",
      "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the selection but blocks changing it: the radios stay focusable and keep their selected look."
     },
     {
      "name": "invalid",
@@ -17581,6 +17710,13 @@
      "doc": "Disables interaction and applies the disabled tokens."
     },
     {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the value but blocks changing it: the switch stays focusable and keeps its on or off look."
+    },
+    {
      "name": "invalid",
      "type": "boolean",
      "default": "false",
@@ -17880,7 +18016,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows the value without letting it change: the toolbar is disabled and the mention menu never opens; the Preview tab still works."
+     "doc": "Shows the value without letting it change: opens on the Preview tab, hides the toolbar and never opens the mention menu; the Write tab still shows the source."
     },
     {
      "name": "invalid",
@@ -20405,6 +20541,13 @@
      "default": "'floating'",
      "required": "false",
      "doc": "How the bar sits at the bottom of its scroll region. See the variant table below."
+    },
+    {
+     "name": "column",
+     "type": "'full' | 'form' | 'focused'",
+     "default": "'full'",
+     "required": "false",
+     "doc": "Lines the content of a `floating` or `docked` bar up with the page column above it (`layout-column-form` / `layout-column-focused`); the bar's border and fill still span the region. Ignored by `plain`, `fade` and `centered`."
     }
    ],
    "events": [
@@ -28411,7 +28554,7 @@
      "type": "ContactHubSectionChannel[]",
      "default": "[]",
      "required": "false",
-     "doc": "The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic."
+     "doc": "The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic; `severity: 'danger'` draws the glyph in `var(--danger-mark)` for the emergency channel."
     }
    ],
    "surface": "site",
@@ -30333,7 +30476,7 @@
      "type": "SiteHeaderSectionLink",
      "default": "undefined",
      "required": "false",
-     "doc": "The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
+     "doc": "The login button beside it, outlined so the sign-up button is the one filled action, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
     },
     {
      "name": "secondaryActionOnPhones",
@@ -30602,7 +30745,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+     "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. The button is named `<label>, <template title>`, so each card's action is told apart."
     },
     {
      "name": "templatesAriaLabel",
@@ -31480,7 +31623,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "URL of an image or PDF file to draw. Set, it wins over `base64`."
+     "doc": "URL of an image or PDF file to draw: https, http, blob, data or a relative path; any other scheme draws nothing. Set, it wins over `base64`."
     },
     {
      "name": "base64",
@@ -31632,6 +31775,11 @@
      "name": "pause",
      "payload": "Event",
      "notes": "Playback paused, by the reader or because the clip reached its end (the element's `pause` event)."
+    },
+    {
+     "name": "retry",
+     "payload": "MouseEvent",
+     "notes": "Try again in the error state was pressed. The button renders only when this event has a listener; an error the audio element reported is cleared and the element loads `src` again, and the app clears or keeps `error`."
     }
    ],
    "surface": "app",
@@ -31703,6 +31851,13 @@
      "doc": "Accessible name; empty reads Video."
     }
    ],
+   "events": [
+    {
+     "name": "retry",
+     "payload": "MouseEvent",
+     "notes": "Try again in the error state was pressed. The button renders only when this event has a listener; a file that failed to load is loaded again, and the app sets `status` back to `pending` or `running` when it generates the video again."
+    }
+   ],
    "surface": "app",
    "examplesFile": "catalog/examples/video-player.json",
    "docsFile": "catalog/components/video-player.json"
@@ -31749,6 +31904,11 @@
      "name": "download",
      "payload": "(event: MouseEvent, item: ImageGalleryItem)",
      "notes": "Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download)."
+    },
+    {
+     "name": "retry",
+     "payload": "(event: MouseEvent)",
+     "notes": "Try again in the error state was pressed. The button renders only when this event has a listener, so a gallery whose app cannot run the request again shows no dead button; the app starts the request again and clears `error`."
     }
    ],
    "surface": "app",
@@ -32682,6 +32842,7 @@
     "Button",
     "Card",
     "CollectionPreferences",
+    "ConfigProvider",
     "CopyButton",
     "DataTable",
     "DataTablePagination",
@@ -32701,6 +32862,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/config-provider",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/data-table-pagination",
@@ -33336,6 +33498,7 @@
     "Switch",
     "Tag",
     "ToggleGroup",
+    "utils/focus-invalid",
     "Wizard"
    ],
    "imports": [
@@ -33365,6 +33528,7 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/utils/focus-invalid",
     "@aziontech/webkit/wizard"
    ],
    "primary": "Organization",
@@ -33472,6 +33636,7 @@
     "Button",
     "Card",
     "CollectionPreferences",
+    "ConfigProvider",
     "ConfirmDialog",
     "CopyButton",
     "DataTable",
@@ -33512,6 +33677,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/config-provider",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/data-table",
@@ -33998,7 +34164,6 @@
     "PromptInputDictateButton",
     "PromptInputModelPicker",
     "PromptInput",
-    "PromptInputTools",
     "StreamingResponse",
     "ToolApproval",
     "ToolCall",
@@ -34018,7 +34183,6 @@
     "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-model-picker",
     "@aziontech/webkit/prompt-input-root",
-    "@aziontech/webkit/prompt-input-tools",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
@@ -34052,7 +34216,7 @@
    "source": "blocks/ai/ai-chat/ai-chat.vue",
    "surface": "app",
    "stability": "preview",
-   "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
+   "summary": "The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the title of the open conversation with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), the model picker (`v-model:modelKey`, the only one on the page) and Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `HoverCard`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
    "intents": [
     "ai chat",
     "ai assistant",
@@ -34104,6 +34268,7 @@
     "ChatMessage",
     "ChatMessage",
     "CodeBlock",
+    "ConfirmDialog",
     "Conversation",
     "ConversationHistory",
     "DrawerBody",
@@ -34132,9 +34297,10 @@
     "PromptInputDictateButton",
     "PromptInputModelPicker",
     "PromptInput",
-    "PromptInputTools",
     "PromptQueue",
     "Reasoning",
+    "ResizableHandle",
+    "ResizablePane",
     "Resizable",
     "ResponseBranches",
     "Skeleton",
@@ -34143,7 +34309,6 @@
     "StreamingResponse",
     "SubagentCard",
     "SuggestionGroup",
-    "Tag",
     "toast",
     "ToolApproval",
     "ToolCall",
@@ -34168,6 +34333,7 @@
     "@aziontech/webkit/chat-message",
     "@aziontech/webkit/chat-message-root",
     "@aziontech/webkit/code-block",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/conversation-history",
     "@aziontech/webkit/drawer-body",
@@ -34196,10 +34362,11 @@
     "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-model-picker",
     "@aziontech/webkit/prompt-input-root",
-    "@aziontech/webkit/prompt-input-tools",
     "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
-    "@aziontech/webkit/resizable",
+    "@aziontech/webkit/resizable-handle",
+    "@aziontech/webkit/resizable-pane",
+    "@aziontech/webkit/resizable-root",
     "@aziontech/webkit/response-branches",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/sources",
@@ -34207,7 +34374,6 @@
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/subagent-card",
     "@aziontech/webkit/suggestion-group",
-    "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
@@ -34248,7 +34414,7 @@
    "source": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "app",
    "stability": "preview",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with Good response, Bad response, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` that is not modal from `lg` (no overlay), so the page stays undimmed and readable, and modal below `lg`, where it covers the page, whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with Good response, Bad response, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
@@ -34300,7 +34466,6 @@
     "PromptInputDictateButton",
     "PromptInputModelPicker",
     "PromptInput",
-    "PromptInputTools",
     "PromptQueue",
     "Reasoning",
     "ResponseBranches",
@@ -34348,7 +34513,6 @@
     "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-model-picker",
     "@aziontech/webkit/prompt-input-root",
-    "@aziontech/webkit/prompt-input-tools",
     "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
     "@aziontech/webkit/response-branches",
@@ -34388,7 +34552,7 @@
    "title": "Blocks/Auth/AuthSignIn",
    "source": "blocks/auth/auth-sign-in/auth-sign-in.vue",
    "surface": "app",
-   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); and on sign-up a 409 (address already registered) answers exactly like a new address, so the screen never reveals which addresses have an account. In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's WebKit locale (`useLocale`), so the screen translates with WebKit's own strings.",
+   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: the error goes on the thing the user has to change, and auth never toasts. Each error story is the primary flow with one endpoint response, on the same two-step card's password step. A 401 goes on the password field (cleared, `invalid`, its `Field.Error` in neutral words, focused), because it is the one field on the step and the one the user retypes; an outcome no field can fix goes in the same small `Alert` under the heading, with Retry when nobody can fix it (503, 500, timeout); and on sign-up a 409 (address already registered) answers exactly like a new address, so the screen never reveals which addresses have an account. In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's WebKit locale (`useLocale`), so the screen translates with WebKit's own strings.",
    "intents": [
     "login",
     "log in",
@@ -34546,7 +34710,7 @@
     "@aziontech/webkit/use-locale"
    ],
    "primary": "Login",
-   "guidelinesSummary": "The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.",
+   "guidelinesSummary": "The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives lands inside it: a credential the user retypes (the password, an MFA code, a token) takes its error on its own field, and every other answer, success included, lands in one `Alert` in the card. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.",
    "variants": [
     {
      "name": "SignUp"
@@ -34798,7 +34962,7 @@
    "title": "Blocks/Create/CreateDeploySuccess",
    "source": "blocks/create/create-deploy-success/create-deploy-success.vue",
    "surface": "app",
-   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
+   "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
    "intents": [
     "deploy success",
     "deployment successful",
@@ -34822,7 +34986,6 @@
     "IntegrationCard",
     "Item",
     "Link",
-    "Subheader",
     "Tag",
     "ToggleGroup",
     "Tooltip"
@@ -34834,7 +34997,6 @@
     "@aziontech/webkit/integration-card",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/subheader",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
@@ -34853,7 +35015,7 @@
    "title": "Blocks/Create/CreateDeployTemplate",
    "source": "blocks/create/create-deploy-template/create-deploy-template.vue",
    "surface": "app",
-   "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the InCreateFlow state of the `detail/detail-deployment-logs` block) and then to the success screen (the `create/create-deploy-success` block). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. WhereItRuns opens the flow on the service the project deploys to: a search over the services, six at a time, an inline Create Service row and a way to continue without one, before the Git step. InstallIntegration is the same page for an integration template (Origin Proxy): no Git and no build, its settings with the required origin, What gets added previewing the origin record, the request-phase rule and its behaviors on the service, and Add to the service. Built from `AppHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton`, `Item`, `Tag` and `Button`.",
+   "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name side by side, a Public repository switch with its own label and description under them, over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the InCreateFlow state of the `detail/detail-deployment-logs` block) and then to the success screen (the `create/create-deploy-success` block). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. WhereItRuns opens the flow on the service the project deploys to: a search over the services, six at a time, an inline Create Service row and a way to continue without one, before the Git step. InstallIntegration is the same page for an integration template (Origin Proxy): no Git and no build, its settings with the required origin, What gets added previewing the origin record, the request-phase rule and its behaviors on the service, and Add to the service. Built from `AppHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton`, `Item`, `Tag` and `Button`.",
    "intents": [
     "deploy template",
     "clone template",
@@ -35287,7 +35449,7 @@
    "title": "Blocks/Create/CreatePage",
    "source": "blocks/create/create-page/create-page.vue",
    "surface": "app",
-   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section, a Tags section (`TagEditor`) and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant=\"card\"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.",
+   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section, a Tags section (`TagEditor`) and a collapsed Advanced section, and an action whose submit label follows what it does: Save stores the new resource, Purge runs one. A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant=\"card\"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.",
    "intents": [
     "create page",
     "create resource page",
@@ -35595,7 +35757,7 @@
    "source": "blocks/create/create-ticket/create-ticket.vue",
    "surface": "app",
    "stability": "preview",
-   "summary": "The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three `SettingsGroup` bands of `SettingsRow`s in flush `Card`s. Requester: a `Combobox` that searches contacts by name or email, each row an `Avatar` with the name and email, with Add new contact swapping it for Contact name and Contact email inputs, and CC as `MultiSelect` chips of email addresses. Request: Subject (`Input`), Description (`MarkdownEditor` with @mentions of agents and an attachments footer: Attach files and a `FileTokenGroup`), Channel, Type and Priority (`Select`, each priority a `PriorityTag`). Assignment: Group and Assignee (`Combobox`, the agents with `Avatar` presence and only those in the chosen group) and Tags (`MultiSelect` chips). Every field starts empty; Requester, Subject and Description carry the required mark. A raised `SaveBar` holds Cancel, Create and add another and Create ticket (⌘ Enter). Fields turn invalid only after a create press, with a `FieldError` under each and focus on the first; there is no summary. A failed request opens a danger `Alert` with Retry and keeps every value; a created ticket raises a success `toast` with Open ticket and clears the form for the next one. Escape cancels, and a changed form asks before it is discarded (`ConfirmDialog`). The block fetches nothing: it emits `create` with the typed ticket and whether to add another, and the page passes back `submitting`, `error` or `created`.",
+   "summary": "The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create Ticket and the account, then a centred form column with a small `PageHeader` and three `SettingsGroup` bands of `SettingsRow`s in flush `Card`s. Requester: a `Combobox` that searches contacts by name or email, each row an `Avatar` with the name and email, with Add new contact swapping it for Contact name and Contact email inputs, and CC as `MultiSelect` chips of email addresses. Request: Subject (`Input`), Description (`MarkdownEditor` with @mentions of agents and an attachments footer: Attach files and a `FileTokenGroup`), Channel, Type and Priority (`Select`, each priority a `PriorityTag`). Assignment: Group and Assignee (`Combobox`, the agents with `Avatar` presence and only those in the chosen group) and Tags (`MultiSelect` chips). Every field starts empty; Requester, Subject and Description carry the required mark. A raised `SaveBar` holds Cancel, Save and add another and Save (⌘ Enter). Fields turn invalid only after a create press, with a `FieldError` under each and focus on the first; there is no summary. A failed request opens a danger `Alert` with Retry under the page title, scrolled into view, and keeps every value; a created ticket raises a success `toast` with Open ticket and clears the form for the next one. Escape cancels, and a changed form asks before it is discarded (`ConfirmDialog`). The block fetches nothing: it emits `create` with the typed ticket and whether to add another, and the page passes back `submitting`, `error` or `created`.",
    "intents": [
     "create ticket",
     "new ticket",
@@ -35690,7 +35852,7 @@
     "@aziontech/webkit/utils/focus-invalid"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Create and add another, and Create ticket. A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).",
+   "guidelinesSummary": "The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Save and add another, and Save. A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create Ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).",
    "variants": [
     {
      "name": "ValidationErrors"
@@ -37506,6 +37668,7 @@
     "Button",
     "Card",
     "CodeBlock",
+    "ConfigProvider",
     "ConfirmDialog",
     "ConsoleLayout",
     "CopyButton",
@@ -37556,6 +37719,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-block",
+    "@aziontech/webkit/config-provider",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
@@ -38606,6 +38770,7 @@
     "Card",
     "Checkbox",
     "CollectionPreferences",
+    "ConfigProvider",
     "ConfirmDialog",
     "DataTable",
     "DataTablePagination",
@@ -38651,6 +38816,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/collection-preferences",
+    "@aziontech/webkit/config-provider",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/data-table-pagination",
@@ -38846,7 +39012,8 @@
     "Tag",
     "Tooltip",
     "use-collection",
-    "use-locale"
+    "use-locale",
+    "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -38879,7 +39046,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection",
-    "@aziontech/webkit/use-locale"
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "Default",
    "guidelinesSummary": "The admin page for the saved replies support agents insert into a ticket. Zendesk calls them macros, Freshdesk canned responses, Help Scout saved replies. An admin or an agent finds a response by its title or its text, files it in a folder, decides who can insert it, writes the reply in Markdown with placeholders the app fills in for each ticket (the requester's first name, the ticket number, the agent's signature), and can move the ticket to a status when the reply is sent. The list shows which replies the team actually uses. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
@@ -38913,7 +39081,7 @@
    "title": "Blocks/Settings/SettingsForm",
    "source": "blocks/settings/settings-form/settings-form.vue",
    "surface": "app",
-   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `Subheader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveError); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsGroup`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `account/account-mfa-settings`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileError are its first load and its load failure. Each group or card is its own form: its Save stays disabled until that card changes, emits `submit` with the card's values, and its `loading` and `error` props drive the spinner, the success toast and an error toast with Retry; saving one disables just its own fieldset while the others stay editable. Built from `PageHeader`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `FieldError`, `ConfirmDialog`, `CopyText`, `Skeleton` and `Button`.",
+   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `Subheader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveError); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsGroup`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `account/account-mfa-settings`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileError are its first load and its load failure. Each group or card is its own form: its Save stays disabled until that card changes, emits `submit` with the card's values, and its `loading` and `error` props drive the spinner, the success toast and an error toast with Retry; saving one disables just its own fieldset while the others stay editable. Built from `PageHeader`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `FieldError`, `ConfirmDialog`, `CopyButton`, `Skeleton` and `Button`.",
    "intents": [
     "account settings form",
     "organization or account settings",
@@ -38969,7 +39137,7 @@
     "Button",
     "Card",
     "ConfirmDialog",
-    "CopyText",
+    "CopyButton",
     "Field",
     "FieldError",
     "Input",
@@ -38995,7 +39163,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/confirm-dialog",
-    "@aziontech/webkit/copy-text",
+    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/field",
     "@aziontech/webkit/field-error",
     "@aziontech/webkit/input",
@@ -39882,7 +40050,7 @@
    "title": "Blocks/State/StateProjectIntake",
    "source": "blocks/state/state-project-intake/state-project-intake.vue",
    "surface": "app",
-   "summary": "The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and a Choose a folder `Button` as the keyboard way in), then the full-screen Initializing overlay: an `UploadProgress` card in the flow listing the received files with their status in words (Done, the percentage while uploading, Waiting), Cancel and Retry, over the upload summary. A large drop lists only the files still moving (at most 50 rows) while the heading keeps the counts. UploadError shows a file that failed: its row carries the reason and Retry, and a danger `Alert` above sums it up with Retry. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. DropZone is a page body inside the default slot of ConsoleLayout; Initializing covers the whole screen.",
+   "summary": "The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and Choose a folder and Choose files `Button`s as the keyboard way in, only Choose files on a phone), then the full-screen Initializing overlay: an `UploadProgress` card in the flow listing the received files with their status in words (Done, the percentage while uploading, Waiting), Cancel and Retry, over the upload summary. A large drop lists only the files still moving (at most 50 rows) while the heading keeps the counts. UploadError shows a file that failed: its row carries the reason and Retry, and a danger `Alert` above sums it up with Retry. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. DropZone is a page body inside the default slot of ConsoleLayout; Initializing covers the whole screen.",
    "intents": [
     "drop zone",
     "drag and drop upload",
@@ -39915,7 +40083,7 @@
     "@aziontech/webkit/use-locale"
    ],
    "primary": "DropZone",
-   "guidelinesSummary": "The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with a Choose a folder button for anyone not dragging; once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over. DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shell/shell-console`); Initializing covers the whole screen.",
+   "guidelinesSummary": "The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with Choose a folder and Choose files buttons for anyone not dragging (a phone, which has no folder picker, shows only Choose files); once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over. DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shell/shell-console`); Initializing covers the whole screen.",
    "variants": [
     {
      "name": "Initializing"
@@ -40311,6 +40479,7 @@
     "FileDropzone",
     "FileTokenGroup",
     "IconButton",
+    "Input",
     "PanelBody",
     "PanelFooter",
     "PanelHeader",
@@ -40345,6 +40514,7 @@
     "@aziontech/webkit/file-dropzone",
     "@aziontech/webkit/file-token-group",
     "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/input",
     "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
@@ -40384,7 +40554,7 @@
    "title": "Blocks/View/ViewMarketplace",
    "source": "blocks/view/view-marketplace/view-marketplace.vue",
    "surface": "app",
-   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/view-template-browser`): a Featured row of three `featured` `IntegrationCard`s (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `IntegrationCard` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/state-async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/view-template-browser`): a Featured row of three `featured` `IntegrationCard`s (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `IntegrationCard` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview of what installing adds, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/state-async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "marketplace",
     "integration catalog",
@@ -40413,7 +40583,6 @@
     "Button",
     "Card",
     "DataTable",
-    "DocProse",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -40447,7 +40616,6 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/data-table",
-    "@aziontech/webkit/doc-prose",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -41038,7 +41206,7 @@
    "source": "blocks/view/view-ticket-inbox/view-ticket-inbox.vue",
    "surface": "app",
    "stability": "preview",
-   "summary": "The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more) and Close, each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.",
+   "summary": "The support agent's ticket inbox: a `PageHeader` with Create Ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more; a `ConfirmDialog` asks which ticket to keep) and Close (confirmed with the count), each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "ticket inbox",
     "support inbox",
@@ -41076,6 +41244,7 @@
     "Card",
     "CollectionPreferences",
     "ConfigProvider",
+    "ConfirmDialog",
     "Countdown",
     "DataTable",
     "DataTablePagination",
@@ -41087,6 +41256,7 @@
     "PageHeader",
     "PriorityTag",
     "PropertyFilter",
+    "RadioGroup",
     "Select",
     "TableCellLink",
     "TableCellStatus",
@@ -41101,6 +41271,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/config-provider",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/countdown",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/data-table-pagination",
@@ -41112,6 +41283,7 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/priority-tag",
     "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/select",
     "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-status",

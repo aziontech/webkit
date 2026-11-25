@@ -333,6 +333,7 @@
               v-model:tab="activeTab"
               :viewed="viewed"
               :history-expanded="historyExpanded"
+              :creating="creating"
               @select="openHistory"
             />
 

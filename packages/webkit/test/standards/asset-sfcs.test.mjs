@@ -50,3 +50,27 @@ test('an asset SFC test id falls back to its own file name, with no category', (
     assert.equal(fallback, own, `${relative(PKG, file)} falls back to ${fallback}`)
   }
 })
+
+test('every exported asset and svg SFC forwards its attributes to its own root', () => {
+  const missing = files
+    .filter((file) => !file.includes('/parts/'))
+    .filter((file) => {
+      const source = readFileSync(file, 'utf8')
+      return !/inheritAttrs: false/.test(source) || !source.includes('v-bind="$attrs"')
+    })
+    .map((file) => relative(PKG, file))
+  assert.deepEqual(missing, [], 'add inheritAttrs: false and v-bind="$attrs" on the root')
+})
+
+test('an svg SFC is named after its file, like a component', () => {
+  for (const file of sfcs('src/svg')) {
+    const source = readFileSync(file, 'utf8')
+    if (file.includes('/azion/')) continue
+    const name = source.match(/defineOptions\(\{\s*name: '([A-Za-z0-9]+)'/)?.[1]
+    const pascal = basename(file, '.vue')
+      .split('-')
+      .map((part) => part[0].toUpperCase() + part.slice(1))
+      .join('')
+    assert.equal(name, pascal, relative(PKG, file))
+  }
+})

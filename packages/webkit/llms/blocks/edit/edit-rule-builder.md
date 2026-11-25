@@ -1083,7 +1083,6 @@ export const criteriaErrorsOf = (form: RuleForm) =>
                         class="w-full"
                         placeholder="Search behaviors"
                         aria-label="Search behaviors"
-                        @keydown.stop
                       >
                         <template #leading>
                           <i
@@ -1248,7 +1247,7 @@ export const criteriaErrorsOf = (form: RuleForm) =>
       aria-label="Criteria"
     >
       <template #cell-variable="{ value, update, invalid }">
-        <div class="contents font-code">
+        <div class="contents">
           <Combobox
             :model-value="value"
             :options="variablesForPhase"

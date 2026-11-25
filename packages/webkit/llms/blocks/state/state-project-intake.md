@@ -1,6 +1,6 @@
 # StateProjectIntake (`state/state-project-intake`)
 
-> The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and a Choose a folder `Button` as the keyboard way in), then the full-screen Initializing overlay: an `UploadProgress` card in the flow listing the received files with their status in words (Done, the percentage while uploading, Waiting), Cancel and Retry, over the upload summary. A large drop lists only the files still moving (at most 50 rows) while the heading keeps the counts. UploadError shows a file that failed: its row carries the reason and Retry, and a danger `Alert` above sums it up with Retry. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. DropZone is a page body inside the default slot of ConsoleLayout; Initializing covers the whole screen.
+> The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and Choose a folder and Choose files `Button`s as the keyboard way in, only Choose files on a phone), then the full-screen Initializing overlay: an `UploadProgress` card in the flow listing the received files with their status in words (Done, the percentage while uploading, Waiting), Cancel and Retry, over the upload summary. A large drop lists only the files still moving (at most 50 rows) while the heading keeps the counts. UploadError shows a file that failed: its row carries the reason and Retry, and a danger `Alert` above sums it up with Retry. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. DropZone is a page body inside the default slot of ConsoleLayout; Initializing covers the whole screen.
 
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 drop zone; drag and drop upload; upload project; folder upload; initializing project; file drop; arrastar e soltar; enviar projeto; upload de arquivos
 
-The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with a Choose a folder button for anyone not dragging; once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over.
+The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with Choose a folder and Choose files buttons for anyone not dragging (a phone, which has no folder picker, shows only Choose files); once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over.
 
 DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shell/shell-console`); Initializing covers the whole screen.
 
@@ -38,7 +38,7 @@ The inline `FileDropzone` with `directories`, filling the page body: its title s
 
 ### B. Keyboard way in — `Button` (required)
 
-An outlined Choose a folder `Button` in the dropzone's default slot opens the system folder picker (`useFilePicker` with `directory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
+Two outlined `Button`s in the dropzone's default slot: Choose a folder opens the system folder picker (`useFilePicker` with `directory`) and Choose files the file picker (`multiple`, no `directory`). On a coarse pointer Choose a folder hides, because iOS Safari has no folder picker. Drag and drop is a shortcut, never the only way; keyboard and screen reader users take these buttons.
 
 ### C. Upload list — `UploadProgress` (Initializing, UploadError)
 
@@ -55,12 +55,12 @@ The block fetches and uploads nothing: it hands the chosen files to the page and
 | Prop          | Type                    | What it does                                                                                                  |
 | ------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `uploads`     | `ProjectIntakeUpload[]` | The files of the upload, in order, with their status and progress. Set, the overlay replaces the drop target. |
-| `title`       | `string`                | The drop target's heading (`Drop your project to deploy it`).                                                 |
+| `title`       | `string`                | The drop target's heading (`Drop or choose your project to deploy it`).                                       |
 | `description` | `string`                | What the drop target accepts.                                                                                 |
 
 | Event    | Payload          | When                                                                                                                                  |
 | -------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `select` | `(event, files)` | Files were dropped, or a folder was chosen with Choose a folder.                                                                      |
+| `select` | `(event, files)` | Files were dropped, or chosen with Choose a folder or Choose files.                                                                   |
 | `retry`  | `(event, id)`    | Retry on one failed file (its `id`), or Retry in the `Alert` (`undefined`, every failed file). The row shows uploading again at once. |
 | `cancel` | `(event, id)`    | Cancel on one moving file, or Cancel all (`undefined`). The row shows canceled at once.                                               |
 
@@ -87,11 +87,11 @@ Keep `uploads` `undefined` until the first file arrives, so the drop target show
 
 ## Do
 
-- Keep the drop target where a drop does something, with Choose a folder beside the message.
+- Keep the drop target where a drop does something, with Choose a folder and Choose files beside the message.
 - Say what dropping does, not how to drop: the user is already dragging.
 - Render Initializing over the page the drop came from (Home, its empty state, the creation hub), so the user keeps their place.
 - Advance the rows in order and keep finished rows visible while the list is short; past 50 files list only what is still moving.
-- Keep Choose a folder in the drop target; drag and drop is a shortcut, never the only way.
+- Keep the choose buttons in the drop target; drag and drop is a shortcut, never the only way.
 
 ## Don't
 
@@ -104,21 +104,21 @@ Keep `uploads` `undefined` until the first file arrives, so the drop target show
 
 - **Drop heading:** what the drop does, one line: `Drop your project to deploy it`. On a project page: `We build a new version of web-app, then you choose where it goes live.`
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
-- **Overlay heading:** one word for the phase: `Initializing`; `Upload paused` while a file has failed, with the danger `Alert` as the only summary of the failure. The `UploadProgress` header is the one place that counts the files.
+- **Overlay heading:** one word for the phase: `Initializing`; `Upload paused` while a file has failed, with the danger `Alert` as the only summary of the failure. The `UploadProgress` header is the one place that counts the files; while paused it follows the heading: `Paused: 2 of 5 uploaded, 1 failed`.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
 - **Summary:** count and total size, formatted with `formatFileSize` from `useLocale` like the rows: `5 files, 8.2 kB`.
 - **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility
 
-- The drop target names itself through its title and description; Choose a folder is the keyboard and screen reader path, and the number of received files is announced once.
+- The drop target names itself through its title and description; the choose buttons are the keyboard and screen reader path, and the number of received files is announced once.
 - `UploadProgress` announces the transfer summary in its own status region, without stealing focus; the overlay itself is not a live region, so rows changing are not re-announced.
 - Each row says its status in words; glyphs are decorative.
 - Every fade and the row advance honour `prefers-reduced-motion`.
 
 ## States
 
-- DropZone: `uploads` left out; the drop target fills the page body with the drop message and Choose a folder.
+- DropZone: `uploads` left out; the drop target fills the page body with the drop message, Choose a folder and Choose files.
 - Initializing: `uploads` set; the overlay mid-upload, two files uploaded, the third uploading, two queued, each row with its status in words, path and size.
 - UploadError: `uploads` holds a file with `status: 'error'`; one file failed, its row shows the reason and Retry, and a danger `Alert` above the list sums it up with Retry.
 
@@ -163,7 +163,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
 
   const props = withDefaults(defineProps<ProjectIntakeProps>(), {
     uploads: undefined,
-    title: 'Drop your project to deploy it',
+    title: 'Drop or choose your project to deploy it',
     description: 'A project folder, or the files inside one. We detect what it is built with.'
   })
 
@@ -176,6 +176,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
   const MAX_ROWS = 50
 
   const folderPicker = useFilePicker({ directory: true, multiple: true })
+  const filePicker = useFilePicker({ multiple: true })
   const { formatFileSize } = useLocale()
   const received = ref(0)
   const files = ref<ProjectIntakeUpload[]>([])
@@ -196,14 +197,19 @@ Each variant is the same screen in another state: `get_block("state/state-projec
   )
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
+  const pausedTitle = computed(() => {
+    const uploaded = files.value.filter((file) => file.status === 'success').length
+    return `Paused: ${uploaded} of ${files.value.length} uploaded, ${failedCount.value} failed`
+  })
+
   const failedLabel = computed(() =>
     failedCount.value === 1
       ? '1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.'
       : `${failedCount.value} files could not be uploaded. Retry them, or remove them from the folder and drop the project again.`
   )
 
-  const chooseFolder = async (event: MouseEvent) => {
-    const chosen = await folderPicker.open()
+  const choose = async (event: MouseEvent, picker: typeof folderPicker) => {
+    const chosen = await picker.open()
     if (!chosen.length) return
     received.value = chosen.length
     emit('select', event, chosen)
@@ -265,6 +271,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
 
       <UploadProgress
         :items="shownFiles"
+        :title="failedCount ? pausedTitle : ''"
         :floating="false"
         class="w-full max-w-(--container-md)"
         @retry="retry"
@@ -287,13 +294,24 @@ Each variant is the same screen in another state: `get_block("state/state-projec
       class="flex-1"
       @drop="onDrop"
     >
-      <Button
-        label="Choose a folder"
-        variant="outline"
-        size="medium"
-        icon="az az-folder-open"
-        @click="chooseFolder"
-      />
+      <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+        <span class="contents pointer-coarse:hidden">
+          <Button
+            label="Choose a folder"
+            variant="outline"
+            size="medium"
+            icon="az az-folder-open"
+            @click="(event: MouseEvent) => choose(event, folderPicker)"
+          />
+        </span>
+        <Button
+          label="Choose files"
+          variant="outline"
+          size="medium"
+          icon="az az-file"
+          @click="(event: MouseEvent) => choose(event, filePicker)"
+        />
+      </div>
     </FileDropzone>
     <p
       class="sr-only"

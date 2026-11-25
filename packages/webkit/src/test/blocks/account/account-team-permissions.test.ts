@@ -28,6 +28,15 @@ const memberNames = () =>
     item.querySelector('[data-member-name]')?.textContent?.trim()
   )
 describe('account-team-permissions', () => {
+  it('repeats each team status in the name cell for a phone', () => {
+    const view = render(AccountTeamPermissions)
+    const summaries = [
+      ...view.container.querySelectorAll<HTMLElement>('[data-slot="narrow-summary"]')
+    ].map((summary) => summary.textContent?.trim())
+    expect(summaries).toContain('Inactive')
+    expect(summaries).toContain('Active')
+  })
+
   it('says the access model the same way as Users: role for the account, teams for resources', () => {
     const view = render(AccountTeamPermissions)
     expect(view.container.textContent).toContain(

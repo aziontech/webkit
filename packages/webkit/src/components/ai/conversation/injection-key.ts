@@ -10,6 +10,8 @@ export interface ConversationContext {
   ready: Ref<boolean>
   /** Reads a finished message to screen readers through the conversation's polite live region. */
   announce: (author: string, text: string) => void
+  /** The scrolling log; parts that render lazily watch their distance to it. */
+  viewportEl: Readonly<Ref<HTMLElement | null>>
 }
 
 export const ConversationInjectionKey: InjectionKey<ConversationContext> = Symbol('Conversation')

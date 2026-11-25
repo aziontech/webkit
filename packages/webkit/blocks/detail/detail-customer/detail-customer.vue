@@ -202,76 +202,78 @@
           v-if="!error"
           #actions
         >
-          <Button
-            label="Edit"
-            icon="az az-pencil"
-            variant="outline"
-            size="medium"
-            :disabled="loading"
-            @click="(event: MouseEvent) => emit('edit', event)"
-          />
-          <DropdownMenu
-            side="bottom"
-            align="end"
-            :disabled="loading"
-            @select="(event, value) => emit('customer-action', event, value)"
-          >
-            <DropdownMenu.Trigger>
-              <Tooltip content="More actions">
-                <IconButton
-                  icon="az az-ellipsis"
-                  variant="outline"
-                  size="medium"
-                  aria-label="More actions"
-                  :disabled="loading"
-                />
-              </Tooltip>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Group>
-              <DropdownMenu.Item
-                value="merge"
-                label="Merge customer"
-              >
-                <template #leading>
-                  <i
-                    class="az az-git-merge"
-                    aria-hidden="true"
+          <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
+            <Button
+              label="Edit"
+              icon="az az-pencil"
+              variant="outline"
+              size="medium"
+              :disabled="loading"
+              @click="(event: MouseEvent) => emit('edit', event)"
+            />
+            <DropdownMenu
+              side="bottom"
+              align="end"
+              :disabled="loading"
+              @select="(event, value) => emit('customer-action', event, value)"
+            >
+              <DropdownMenu.Trigger>
+                <Tooltip content="More actions">
+                  <IconButton
+                    icon="az az-ellipsis"
+                    variant="outline"
+                    size="medium"
+                    aria-label="More actions"
+                    :disabled="loading"
                   />
-                </template>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                value="export"
-                label="Export data"
-              >
-                <template #leading>
-                  <i
-                    class="az az-download"
-                    aria-hidden="true"
-                  />
-                </template>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                value="delete"
-                label="Delete customer"
-                severity="danger"
-              >
-                <template #leading>
-                  <i
-                    class="az az-trash"
-                    aria-hidden="true"
-                  />
-                </template>
-              </DropdownMenu.Item>
-            </DropdownMenu.Group>
-          </DropdownMenu>
-          <Button
-            label="New ticket"
-            icon="az az-plus"
-            variant="primary"
-            size="medium"
-            :disabled="loading"
-            @click="(event: MouseEvent) => emit('new-ticket', event)"
-          />
+                </Tooltip>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Item
+                  value="merge"
+                  label="Merge customer"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-git-merge"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  value="export"
+                  label="Export data"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-download"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  value="delete"
+                  label="Delete customer"
+                  severity="danger"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-trash"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </DropdownMenu>
+            <Button
+              label="New ticket"
+              icon="az az-plus"
+              variant="primary"
+              size="medium"
+              :disabled="loading"
+              @click="(event: MouseEvent) => emit('new-ticket', event)"
+            />
+          </div>
         </template>
       </PageHeader>
 

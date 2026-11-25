@@ -34,7 +34,7 @@
     icon="az az-chevron-left"
     :data-testid="testId"
     :aria-label="ariaLabel || t('carousel.previous')"
-    :disabled="!context.canScrollPrev.value"
+    :aria-disabled="!context.canScrollPrev.value || undefined"
     @click="context.scrollPrev()"
   />
 </template>

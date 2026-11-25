@@ -138,7 +138,7 @@ packages/webkit/src/components/overlay/command/
 - `data-ranked` on the list and on each group while the query is not empty; `data-leading` on the group ranked first
 - `data-page` on the input bar names the open nested page (absent on the first page)
 - `empty`: when the filter yields no visible items, the `Empty` part renders in place of the list rows
-- Position: from `md` up the panel is anchored near the top of the viewport (`md:items-start md:pt-[15dvh]` on the Dialog content, horizontally centred), not centred vertically, so its top edge and the search field stay put while the list grows and shrinks as you type. Below `md` the panel is the Dialog's sheet.
+- Position: from `md` up the panel is anchored near the top of the viewport (`md:items-start md:pt-[15dvh]` on the Dialog content, horizontally centred), not centred vertically, so its top edge and the search field stay put while the list grows and shrinks as you type. Below `md` the panel is a top sheet: the Dialog's sheet anchored to the top of the screen (`max-md:items-start`), its bottom corners rounded and sliding in from the top, so the search field and the first results stay above the on-screen keyboard.
 
 ## Accessibility
 
@@ -173,7 +173,7 @@ packages/webkit/src/components/overlay/command/
 
 ## Responsive
 
-- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
+- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is a top sheet, so the on-screen keyboard never covers the search field and the first results. Below `sm` the sheet shows a header row with the visible title (`Command menu` from the locale catalog) beside the close button, so the row is never an empty band; from `sm` up that row is hidden and the title stays the dialog's name.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
 - Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate. The keycaps (the input's `Esc` hint and every item `shortcut` hint) hide on a coarse pointer (`pointer-coarse:hidden`), since a phone has no key to press.
 
@@ -183,6 +183,7 @@ packages/webkit/src/components/overlay/command/
 
 ```vue
 <script setup>
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -227,6 +228,7 @@ packages/webkit/src/components/overlay/command/
           >Toggle theme</CommandItem
         >
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>
@@ -237,6 +239,7 @@ packages/webkit/src/components/overlay/command/
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -295,6 +298,7 @@ packages/webkit/src/components/overlay/command/
         </CommandItem>
         <CommandItem value="logout">Log out</CommandItem>
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>
@@ -305,6 +309,7 @@ packages/webkit/src/components/overlay/command/
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -345,6 +350,7 @@ packages/webkit/src/components/overlay/command/
           >Close overlay</CommandItem
         >
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>

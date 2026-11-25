@@ -137,7 +137,7 @@
 - Container queries: `@container/trace`; below `@xl` a waterfall row takes two lines, the span name above its bar (axis, bars and minimap span the full width; the Span header hides); from `@xl` the name column sits beside the bars and grows from 13 rem to 20 rem with the container; the service column and the grid lines appear from `@xl`/`@3xl`.
 - Toolbar: the search and the view switch wrap onto two lines when the trace is narrower than both.
 - Narrow: the timeline view needs no name column and reads best in a narrow panel; names truncate (each name carries the full name as its `title`), the duration labels stay on the bars, the details facts take two columns.
-- Touch: rows and timeline lanes are 44 px high on `pointer: coarse`; a timeline bar narrower than a touch target is still reached from the keyboard and through the Waterfall and Tree views, which show the same span; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`.
+- Touch: rows and timeline lanes are 44 px high on `pointer: coarse`; a timeline bar narrower than a touch target is still reached from the keyboard and through the Waterfall and Tree views, which show the same span; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`, with an invisible layer that takes taps across 44 px of height and 44 px of width. The span search is the small `Input`, whose own touch-target layer answers taps across 44 px.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples

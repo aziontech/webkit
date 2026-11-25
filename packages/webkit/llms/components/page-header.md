@@ -122,7 +122,7 @@ No built-in strings: the title, description and every region come from the consu
         target="_blank"
       />
       <Button
-        label="Create Resource"
+        label="Create resource"
         icon="az az-plus"
         variant="primary"
         size="medium"

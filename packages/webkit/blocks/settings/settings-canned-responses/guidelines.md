@@ -34,7 +34,7 @@ An account with no response yet sees a flush `Card` with an `EmptyState`: what c
 
 ### E. Response table — `DataTable`, `DataTablePagination`, `Tag`, `TableCellTime`, `useCollection`, `useLocale` (required)
 
-One `useCollection` over the responses, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`, sorted by Uses (most used first) and paged by `DataTablePagination`. Columns: Title (the title, then the line of the reply after the greeting as plain text, muted), Folder (a neutral small `Tag`; `No folder` when empty), Visibility (an icon and Personal, Team or Everyone), Last used (`TableCellTime`, relative with the exact time on its tooltip; `Never used`), Uses (end-aligned, formatted with `formatNumber` from `useLocale`), and the row menu. Below the `sm` width the Folder tag, the visibility and the count move under the title. A row click or Enter on a focused row opens Edit.
+One `useCollection` over the responses, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`, sorted by Uses (most used first) and paged by `DataTablePagination`. Columns: Title (the title, then the line of the reply after the greeting as plain text, muted; from `sm` up the cell stops at `--container-sm` and both lines truncate, so the other columns stay whole at 1280), Folder (a neutral small `Tag`; `No folder` when empty), Visibility (an icon and Personal, Team or Everyone), Last used (`TableCellTime`, relative with the exact time on its tooltip; `Never used`), Uses (end-aligned, formatted with `formatNumber` from `useLocale`), and the row menu. Below the `sm` width the Folder tag, the visibility and the count move under the title. A row click or Enter on a focused row opens Edit.
 
 ### F. Row actions — `TableCellActions`, `DropdownMenu` (required)
 
@@ -46,7 +46,7 @@ The table's `#empty` slot: `No matching responses` with Clear filters, which emp
 
 ### H. Editor drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `PanelFooter` (required)
 
-A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Save response spins, and Cancel, the close button and Escape are disabled (`:closable` and `:dismissible` follow `saving`), so the request cannot be left half-way; when `saving` returns to false with no `saveError`, the drawer closes. Footer: Cancel and `Save response`.
+A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Save response spins, and Cancel, the close button and Escape are disabled (`:closable` and `:dismissible` follow `saving`), so the request cannot be left half-way; when `saving` returns to false with no `saveError`, the drawer closes. Once a value differs from what the drawer opened with, Escape and an overlay tap do nothing (`:dismissible` is also false while dirty) and Cancel or the close button open the unsaved-changes `ConfirmDialog` (`useUnsavedChanges`): Keep editing or Discard changes, so one stray tap never loses a drafted reply. Footer: Cancel and `Save response`.
 
 ### I. Fields — `Field`, `Input`, `Combobox`, `RadioGroup`, `Select` (required)
 
@@ -178,6 +178,7 @@ Delete removes the row at once; when the request fails, the page says so in a to
 - Don't let two responses share a title; agents pick by title.
 - Don't make Everyone the default visibility; a new response starts Personal.
 - Don't close the drawer before the save succeeds.
+- Don't drop a typed draft on Escape, an overlay tap or Cancel; ask with the unsaved-changes dialog first.
 
 ## Copy
 

@@ -3,10 +3,10 @@ name: contact-hub-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-05
-last_updated: 2026-11-19
-checksum: a60667147e93866b5c74f6a7565c147103a224438cef9312a2928b403206de79
+last_updated: 2026-11-25
+checksum: 4ef5f84a0f1ec701ac31947084322e8bdcb61d9b26629fdbf5e108aab7ab24f4
 ---
 
 # ContactHubSection — Component Spec
@@ -33,6 +33,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 - Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.
 - Don't pad `channels` to three or drop one to make the row fit.
+- Put an emergency channel (an attack in progress) first and give it `severity: 'danger'`, so a reader under attack finds it at a glance; no other channel takes a severity.
 - Keep each lane's description to one sentence that states what that team handles.
 - Set `target: '_blank'` on a channel or status link that leaves the site.
 - Lead each lane with its `action`; add a `secondaryAction` only for a second route to the same team (an outlined button after the first).
@@ -76,7 +77,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 | ---------- | ---------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `anchor`   | `string`                     | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                         |
 | `lanes`    | `ContactHubSectionLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them (its optional `severity` draws the live status). |
-| `channels` | `ContactHubSectionChannel[]` | `[]`    | false    | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                                                                                                                                      |
+| `channels` | `ContactHubSectionChannel[]` | `[]`    | false    | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic; `severity: 'danger'` draws the glyph in `var(--danger-mark)` for the emergency channel.                                                                   |
 
 ## Events
 

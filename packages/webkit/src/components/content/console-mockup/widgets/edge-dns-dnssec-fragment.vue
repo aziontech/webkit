@@ -143,7 +143,8 @@
                     <Input
                       :model-value="key.value"
                       size="medium"
-                      class="flex-1 font-code"
+                      monospace
+                      class="flex-1"
                       :aria-label="key.label"
                       readonly
                     />

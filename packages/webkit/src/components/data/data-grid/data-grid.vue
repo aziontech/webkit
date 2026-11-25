@@ -262,8 +262,8 @@
     </div>
     <div
       :data-testid="`${testId}__scroll`"
-      :data-overflow-start="overflowStart || undefined"
-      :data-overflow-end="overflowEnd || undefined"
+      :data-overflow-start="overflowStart > 0 ? '' : undefined"
+      :data-overflow-end="overflowEnd > 0 ? '' : undefined"
       class="group/scroll relative flex min-h-0 min-w-0 flex-col"
     >
       <div

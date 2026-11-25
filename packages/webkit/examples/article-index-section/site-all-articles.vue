@@ -26,7 +26,7 @@
       href: '/blog/how-to-reduce-ai-agent-latency',
       image: placeholderImage,
       meta: 'Serverless • SEP 23, 2026',
-      title: 'How Do You Reduce AI Agent Latency?',
+      title: 'How do you reduce AI agent latency?',
       description:
         'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
       byline: 'Priya Patel · 8 min read',
@@ -42,7 +42,7 @@
       href: '/blog/cloudflare-alternatives-and-competitors',
       image: placeholderImage,
       meta: 'Security • SEP 22, 2026',
-      title: 'Best Cloudflare Alternatives and Competitors',
+      title: 'Best Cloudflare alternatives and competitors',
       description:
         'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
       byline: 'Alex Morgan · 13 min read',
@@ -58,7 +58,7 @@
       href: '/blog/which-azion-plan-is-right-for-your-project',
       image: placeholderImage,
       meta: 'Company news • SEP 22, 2026',
-      title: 'Which Azion Plan Is Right for Your Project?',
+      title: 'Which Azion plan is right for your project?',
       description:
         'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
       byline: 'Priya Patel · 7 min read',

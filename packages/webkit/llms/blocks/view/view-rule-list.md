@@ -2371,7 +2371,6 @@ export const pageDescription = (subject: string) =>
                         class="w-full"
                         placeholder="Search behaviors"
                         aria-label="Search behaviors"
-                        @keydown.stop
                       >
                         <template #leading>
                           <i
@@ -2830,7 +2829,7 @@ export const pageDescription = (subject: string) =>
     aria-label="Criteria"
   >
     <template #cell-variable="{ value, update, invalid }">
-      <div class="contents font-code">
+      <div class="contents">
         <Combobox
           :model-value="value"
           :options="variables"

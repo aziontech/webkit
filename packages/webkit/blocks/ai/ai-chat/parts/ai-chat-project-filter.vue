@@ -21,10 +21,6 @@
   const open = ref(false)
   const query = ref('')
 
-  function projectIcon({ cloud }: AiChatProject): string {
-    return cloud ? 'az az-cloud' : 'az az-server'
-  }
-
   const activeProject = computed(() => props.projects.find((item) => item.id === selected.value))
   const filtered = computed(() => {
     const needle = query.value.trim().toLowerCase()
@@ -63,7 +59,7 @@
         class="shrink-0"
       >
         <span
-          class="inline-flex size-5 items-center justify-center rounded-(--shape-control) bg-(--info-surface) font-mono text-label-xs text-(--info-foreground)"
+          class="inline-flex size-5 items-center justify-center rounded-(--shape-control) bg-(--info) font-mono text-label-xs text-(--info-foreground)"
         >
           {{ activeProject.code }}
         </span>
@@ -104,7 +100,7 @@
             <span class="min-w-0 flex-1 truncate text-start">All projects</span>
             <i
               v-if="selected === ''"
-              class="az az-check shrink-0 text-body-sm text-(--accent-primary)"
+              class="az az-check shrink-0 text-body-sm text-(--primary)"
               aria-hidden="true"
             />
           </Button>
@@ -120,18 +116,21 @@
               @click="choose(project.id)"
             >
               <span
-                class="relative inline-flex size-5 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--info-surface) font-mono text-label-xs text-(--info-foreground)"
+                class="relative inline-flex size-5 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--info) font-mono text-label-xs text-(--info-foreground)"
               >
                 {{ project.code }}
                 <i
                   v-if="selected === project.id"
-                  class="az az-circle-check absolute -end-1 -bottom-1 rounded-full bg-(--bg-surface-raised) text-label-xs leading-none text-(--accent-primary)"
+                  class="az az-circle-check absolute -end-1 -bottom-1 rounded-full bg-(--bg-surface-raised) text-label-xs leading-none text-(--primary)"
                   aria-hidden="true"
                 />
               </span>
               <span class="min-w-0 flex-1 truncate text-start">{{ project.title }}</span>
               <i
-                :class="[projectIcon(project), 'shrink-0 text-body-xs text-(--text-muted)']"
+                :class="[
+                  project.inCloud ? 'az az-cloud' : 'az az-server',
+                  'shrink-0 text-body-xs text-(--text-muted)'
+                ]"
                 aria-hidden="true"
               />
             </Button>

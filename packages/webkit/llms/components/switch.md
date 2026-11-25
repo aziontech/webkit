@@ -42,6 +42,7 @@
 | `variant` | `'default' \| 'privacy'` | `'default'` | false | Visual variant (`SwitchVariant`). `privacy` renders a lock icon inside the handle (closed when off, open when on). |
 | `autofocus` | `boolean` | `false` | false | Moves focus to the switch once, when it mounts. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies the disabled tokens. |
+| `readonly` | `boolean` | `false` | false | Shows the value but blocks changing it: the switch stays focusable and keeps its on or off look. |
 | `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
 | `name` | `string` | `''` | false | Form field name. Set, a hidden input inside the button submits `on` under this name while the switch is on and nothing while it is off, as a native checkbox does; `disabled` leaves it out. |
 | `modelValue` | `boolean` | `false` | false | Two-way value (`v-model`). |
@@ -54,10 +55,11 @@
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`, `readonly`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
 - `data-variant` mirrors the `variant` prop (`default` | `privacy`)
-- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too. Locked on keeps a muted accent track (`--accent-mask`) under the disabled handle, so a switch that is on and cannot be turned off never reads as an off one; locked off keeps the `--bg-disabled` track.
+- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too. Locked on keeps a muted accent track (`--accent-mask`) inside the `--border-input` frame, with the handle in `--text-muted` on the on side, so a switch that is on and cannot be turned off never reads as an off one, in either theme; locked off keeps the `--bg-disabled` track and the `--text-disabled` handle. Where a setting is locked rather than unavailable, use `readonly` and say so in its description ("Always on for this plan.").
+- `data-readonly` and `aria-readonly` mirror the `readonly` prop. A read-only switch keeps the enabled tokens of its position (the `--accent` track when on), stays in the tab order (so a tooltip or description explaining the lock is reachable), drops the hover wash, shows `cursor-default`, and neither click nor `Space`/`Enter` emits `update:modelValue`. Its hidden form value still submits, like a native read-only field.
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`disabled:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 - Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.
@@ -65,8 +67,8 @@
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
-- Keyboard map: `Tab` focuses; `Space` / `Enter` toggles. When `disabled`, the native `<button disabled>` root is skipped by `Tab` and both keys are inert.
-- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `variant="privacy"` is decorative — `aria-hidden="true"`.
+- Keyboard map: `Tab` focuses; `Space` / `Enter` toggles. When `disabled`, the native `<button disabled>` root is skipped by `Tab` and both keys are inert; when `readonly`, it is focusable and both keys are inert.
+- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`; `aria-readonly` mirrors `data-readonly`. The lock icon in `variant="privacy"` is decorative — `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically a horizontal `Field`, whose label extends the target). The component still exposes a clickable root.

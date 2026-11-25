@@ -7,7 +7,7 @@
   },
   {
    "name": "NoResults",
-   "summary": "No story matches: the grid gives way to the empty state and its clear-filters action.",
+   "summary": "No story to list yet: the grid gives way to the empty state. A search or a filter that matches nothing shows the same state with its clear-filters action (see the site example).",
    "file": "examples/story-index-section/no-results.vue"
   },
   {

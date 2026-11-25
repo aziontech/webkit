@@ -23,6 +23,18 @@ describe('CallToAction', () => {
     expect(row.className).not.toContain('justify-between')
   })
 
+  it('sets the panel copy in a fixed measure, so the actions start at the same place whatever the headline length', () => {
+    const { getByRole } = render(CallToAction, {
+      props: { title: TITLE, description: DESCRIPTION },
+      slots: { actions: '<button type="button">Start for free</button>' }
+    })
+    const row = getByRole('button', { name: 'Start for free' }).parentElement!.parentElement!
+    const copy = row.firstElementChild!
+
+    expect(copy.classList.contains('md:flex-1')).toBe(true)
+    expect(copy.classList.contains('md:max-w-(--layout-measure-content)')).toBe(true)
+  })
+
   it('renders the panel under the default testid', () => {
     const { getByTestId } = render(CallToAction, { props: { title: TITLE } })
 

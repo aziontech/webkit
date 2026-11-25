@@ -91,13 +91,17 @@
           class="flex flex-col"
         >
           <div
-            class="flex items-start justify-between gap-(--spacing-md) bg-(--bg-surface) px-(--spacing-lg) py-(--spacing-md)"
+            class="flex flex-col items-start gap-(--spacing-sm) bg-(--bg-surface) px-(--spacing-lg) py-(--spacing-md) sm:flex-row sm:justify-between sm:gap-(--spacing-md)"
           >
             <div class="flex flex-col gap-(--spacing-2xs)">
               <h3 class="text-heading-xs">{{ lockup.label }}</h3>
               <p class="max-w-sm text-body-xs text-(--text-muted)">{{ lockup.text }}</p>
             </div>
-            <CopyText :value="snippet(lockup.variant)" />
+            <CopyText
+              :value="snippet(lockup.variant)"
+              size="small"
+              wrap-lines
+            />
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2">
             <div
@@ -146,7 +150,11 @@
             class="flex flex-col items-start gap-(--spacing-xs) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
           >
             <p class="text-body-xs text-(--text-muted)">{{ item.text }}</p>
-            <CopyText :value="treatmentSnippet(item.treatment)" />
+            <CopyText
+              :value="treatmentSnippet(item.treatment)"
+              size="small"
+              wrap-lines
+            />
           </div>
         </li>
       </ul>
@@ -195,7 +203,11 @@
                   class="max-h-full w-full"
                 />
               </div>
-              <CopyText :value="name" />
+              <CopyText
+                :value="name"
+                size="small"
+                wrap-lines
+              />
             </div>
           </Card>
         </li>

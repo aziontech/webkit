@@ -538,7 +538,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-tick
           />
           <div
             v-else
-            class="grid min-w-0 grid-cols-1 items-start gap-(--layout-section-gap) @4xl/ticket:grid-cols-[minmax(0,1fr)_var(--container-xs)]"
+            class="grid min-w-0 grid-cols-1 items-start gap-(--layout-section-gap) @3xl/ticket:grid-cols-[minmax(0,1fr)_var(--container-2xs)]"
           >
             <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
               <TicketConversation

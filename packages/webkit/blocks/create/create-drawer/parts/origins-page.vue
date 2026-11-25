@@ -131,7 +131,7 @@
       @submit="submit"
     >
       <section class="flex flex-col gap-(--layout-group-gap)">
-        <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
+        <p class="text-heading-2xs text-(--text-default)">General</p>
         <Card :padded="false">
           <template #default>
             <Item.List>
@@ -142,7 +142,7 @@
               >
                 <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                   <div class="flex w-full flex-col gap-(--spacing-xs)">
-                    <div class="contents font-code">
+                    <div class="contents">
                       <Input
                         v-model="form.name"
                         size="large"
@@ -185,7 +185,7 @@
       </section>
 
       <section class="flex flex-col gap-(--layout-group-gap)">
-        <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Connection</p>
+        <p class="text-heading-2xs text-(--text-default)">Connection</p>
         <Card :padded="false">
           <template #default>
             <Item.List>
@@ -264,7 +264,7 @@
       </section>
 
       <section class="flex flex-col gap-(--layout-group-gap)">
-        <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Options</p>
+        <p class="text-heading-2xs text-(--text-default)">Options</p>
         <Card :padded="false">
           <template #default>
             <Item.List>

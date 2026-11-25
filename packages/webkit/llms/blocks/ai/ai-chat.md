@@ -1,12 +1,12 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
+> The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the title of the open conversation with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), the model picker (`v-model:modelKey`, the only one on the page) and Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `HoverCard`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), `ResizableHandle`, `ResizablePane`, [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -33,11 +33,11 @@ A full page where a person talks with the generative AI assistant about their ac
 
 ### A. Header — `IconButton`, `Button`, `DropdownMenu`
 
-No bar and no border: the thread scrolls under it. On a phone it is round-cornered floating controls over the thread, blurred over a translucent raised surface: Open conversation history at the inline start, and at the inline end one grouped control holding New chat and More conversation actions; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the model picker as the title (`AI assistant` with the chosen model muted and a chevron, a `DropdownMenu` of `models` as radio items, `v-model:modelKey`), New chat while the history panel is folded away, and at the inline end Share and More conversation actions. The More menu holds Share (on a phone), Rename, Archive and Delete for the open conversation; each emits `share-chat`, `rename-chat`, `archive-chat` or `remove-chat` with `activeKey`, and the app does the work. New chat, Share and More are disabled while the thread is empty; New chat clears it without confirmation, and the previous thread stays in the history.
+No bar and no border: the thread scrolls under it. On a phone it is round-cornered floating controls over the thread, blurred over a translucent raised surface: Open conversation history at the inline start, and at the inline end one grouped control holding New chat and More conversation actions; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the title of the open conversation (`AI assistant` before there is one; the model is chosen in the composer only, so the page never shows two pickers), New chat while the history panel is folded away, and at the inline end Share and More conversation actions. The More menu holds Share (on a phone), Rename, Archive and Delete for the open conversation; each emits `share-chat`, `rename-chat`, `archive-chat` or `remove-chat` with `activeKey`, and the app does the work. Delete first opens a danger `ConfirmDialog` that names the conversation; `remove-chat` fires only on its Delete. New chat, Share and More are disabled while the thread is empty; New chat clears it without confirmation, and the previous thread stays in the history.
 
-### A2. History — `ConversationHistory`, `Drawer`
+### A2. History — `Input`, `Popover`, `HoverCard`, `Drawer`
 
-The reader's earlier conversations, grouped by date, with a New chat row and a search field (`creatable`, `searchable`). From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, closed by picking a conversation or New chat. The open conversation is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
+The reader's threads, grouped by date (Today, Yesterday, Previous 7 days, Previous 30 days, Older), under a search field, a project filter, Add project and New thread. Each thread is one menu row (hover fill `--bg-hover`, the open thread `--bg-selected`, the inset fill of the menu rows): its project, its age, the title cut with an ellipsis on one line, and a meta line with the icon of the Azion product the thread started on, then how many products it touches or, when it edits one version, that version's id, then the model's provider. Resting on the meta line opens a `HoverCard` with every product, the environment, the model and the changes. Discard draft, Snooze and Settle sit outside the row button, fade in over the age on hover or focus and never move the row; snoozed and settled threads move to their own lists. Discard draft removes the thread at once and shows a `Draft discarded` toast with Undo, which puts it back where it was. A single-line view keeps only the title, the product icon and the age. From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, with the same search field and project filter and New chat at its top, closed by picking a thread or New chat. The open thread is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
 
 ### B. Empty state — `SuggestionGroup`, `PromptInput`
 
@@ -67,15 +67,15 @@ At the end of the action row of a complete response that used documents: a pill 
 
 After the last complete response, two or three questions that narrow it, as wrapping pills aligned with the response text. They disappear as soon as the reader sends anything else.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`, `PromptInputTools`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`
 
-The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` and `PromptInputTools` in `#footer`, and the disclaimer in `#hint`. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` in `#footer`, and the disclaimer in `#hint`. The tools live in the "+" menu only, so `PromptInputTools` is not added to `#footer` (both would list the enabled tools as chips). It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
-Variant Artifact only; it adds `ArtifactPreview`, `ArtifactCanvas`, `Resizable`, `CodeBlock` and a `Drawer` for narrow screens.
+Variant Artifact only; it fills the `turn-end` and `canvas` slots of the chat with `ArtifactPreview`, `ArtifactCanvas`, `Resizable`, `CodeBlock` and a `Drawer` for narrow screens.
 
-When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it; `Show artifact` in the header brings a closed canvas back.
+When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it, and any preview's Open brings it back. The Artifact state is the same chat as every other state (history panel, header, composer, disclaimer): the preview goes in its `turn-end` slot and the handle and pane in its `canvas` slot, so an app keeps one chat shell.
 
 ### K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -83,7 +83,7 @@ A `tool-call` part draws in its place in the response as a `ToolCall` with the t
 
 ### L. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
 
-Media parts draw in their place in the response. Consecutive `image` parts are one `ImageGallery` (a URL becomes `src`, base64 data becomes `data` with its `mimeType`, `metadata.alt` its alternative text); an `audio` part is an `AudioPlayer` and a `video` part a `VideoPlayer`, each from its URL or a `data:` URL; a `document` part is a `FilePreview` from its URL or base64, named by `metadata.name` (else `Document`). A `file` source (a provider file handle) has no bytes to draw and is skipped.
+Media parts draw in their place in the response. Consecutive `image` parts are one `ImageGallery` (a URL becomes `src`, base64 data becomes `data` with its `mimeType`, `metadata.alt` its alternative text); an `audio` part is an `AudioPlayer` and a `video` part a `VideoPlayer`, each from its URL or a `data:` URL; a `document` part is a `FilePreview` from its URL or base64, named by `metadata.name` (else `Document`). A `file` source (a provider file handle) has no bytes to draw and is skipped. A media or document part given as a URL loads as soon as it draws, with no click from the reader, so the browser fetches whatever address the model or a tool returned. Before the parts reach the block, keep URLs only from origins the app trusts (its own, its storage bucket) and turn any other into a plain link the reader chooses to open. `FilePreview` accepts only `http(s)`, `blob:` and `data:` addresses; a policy with `object-src 'none'` stops its PDF viewer, so allow `object-src 'self' blob:` where documents preview.
 
 ### M. Agent work — `AgentActivity`, `SubagentCard`, `AgentQuestion`
 
@@ -136,10 +136,12 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 | `maxFiles`          | `number`                                  | Most files on one message; default 4.                                                                                                                                                                                         |
 | `maxFileSize`       | `number`                                  | Largest file in bytes; default 10 MB.                                                                                                                                                                                         |
 | `resolveAppUrl`     | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                                                                                         |
-| `models`            | `PromptInputMenuOption[]`                 | The models the header title picks from on desktop; left out, the sample models. The choice is `v-model:modelKey`.                                                                                                             |
+| `models`            | `PromptInputMenuOption[]`                 | The models the composer's model picker offers; left out, the sample models. The choice is `v-model:modelKey`.                                                                                                                 |
 | `toolOptions`       | `PromptInputMenuOption[]`                 | The tools the composer's "+" menu turns on; left out, the sample tools. The turned-on ones are `v-model:toolKeys`.                                                                                                            |
 
-The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes. The model of the header title is `v-model:modelKey` and the tools turned on in the "+" menu are `v-model:toolKeys`: pass both with each message, `sendMessage(content, { body: { model: modelKey, tools: toolKeys } })`, and read them from `forwardedProps` on the server.
+The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes. The model of the composer is `v-model:modelKey` and the tools turned on in the "+" menu are `v-model:toolKeys`: pass both with each message, `sendMessage(content, { body: { model: modelKey, tools: toolKeys } })`, and read them from `forwardedProps` on the server.
+
+Two slots let a state add to the shell without a second copy of it: `turn-end` (`{ turn }`) puts content after an assistant response, such as the `ArtifactPreview` of a file it wrote, and `canvas` puts a `Resizable.Handle` and `Resizable.Pane` beside the conversation (variant Artifact).
 
 | Event              | Payload                     | When                                                                                                                                                                           |
 | ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -156,7 +158,7 @@ The open conversation of the history is `v-model:activeKey` (`string | null`): p
 | `share-chat`       | `(event, key)`              | Share in the header: make a link to the conversation `key` (`activeKey`).                                                                                                      |
 | `rename-chat`      | `(event, key)`              | Rename in the More menu: rename the conversation `key`.                                                                                                                        |
 | `archive-chat`     | `(event, key)`              | Archive in the More menu: archive the conversation `key`.                                                                                                                      |
-| `remove-chat`      | `(event, key)`              | Delete in the More menu: confirm, then delete the conversation `key`.                                                                                                          |
+| `remove-chat`      | `(event, key)`              | Delete in the More menu, after the reader confirms in the block's danger `ConfirmDialog`: delete the conversation `key`.                                                       |
 | `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt.                              |
 | `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                                                      |
 | `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                                                    |
@@ -288,7 +290,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Feedback is a menu button (`aria-haspopup="menu"`) whose chosen item is `aria-checked`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
 - A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
-- The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.
+- The More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the composer's model picker is a `Popover` whose trigger's name is its visible text.
 - The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
 - Alignment never carries meaning alone: every message's accessible name says who wrote it.
 - Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
@@ -299,7 +301,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
 - Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
-- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
+- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2, in the same chat shell as the other states.
 - LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response with its Sources pill, with `followUps`.
 - Media: an answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary.
 - Agent: activity steps, a finished `SubagentCard` and a pending `AgentQuestion`; answering it resolves the interrupt and the card keeps the answer.
@@ -322,7 +324,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - `Streaming` — A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear.
 - `Error` — A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place.
 - `LongThread` — Six earlier turns about one workload that overflow the log: it opens on the newest response and its Sources pill, stops following when the reader scrolls up, and the round Scroll to the latest message button above the composer brings them back; follow-up questions close the thread.
-- `Artifact` — An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question fills the composer. While a new version is written the canvas takes `streaming`, which locks its pager.
+- `Artifact` — An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane of the same chat shell (the `turn-end` and `canvas` slots of the chat) (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question is sent like in every other state. While a new version is written the canvas takes `streaming`, which locks its pager.
 - `Media` — A prompt with an attached image, then an answer with a chart tool result, two charts in an `ImageGallery`, a structured answer, a CSV in a `FilePreview` and an audio summary; the composer attaches files.
 - `Agent` — `AgentActivity` steps, a finished `SubagentCard` and a pending `AgentQuestion` that keeps its answer.
 
@@ -367,14 +369,16 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     interruptErrorText,
     queueItemOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import { computed, nextTick, onMounted, ref, watch } from 'vue'
+  import { computed, ref, useSlots } from 'vue'
 
+  import { useComposerFocus } from './composables/use-composer-focus'
   import { failureText, turnTime } from './lib/ai-chat-failure'
   import AiChatComposer from './parts/ai-chat-composer.vue'
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatHeader, { type AiChatHeaderAction } from './parts/ai-chat-header.vue'
   import AiChatHistory from './parts/ai-chat-history.vue'
   import AiChatSkeleton from './parts/ai-chat-skeleton.vue'
+  import AiChatSplit from './parts/ai-chat-split.vue'
   import AiChatStart from './parts/ai-chat-start.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
   import { sampleModels, sampleSuggestions, sampleTools } from './sample'
@@ -422,7 +426,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
-    /** The models the header and composer pick from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    /** The models the composer picks from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
     models?: PromptInputMenuOption[]
     /** The tools the composer turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
     toolOptions?: PromptInputMenuOption[]
@@ -488,11 +492,19 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   }>()
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
-  /** The model chosen in the header or composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  /** The model chosen in the composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
   const modelKey = defineModel<string>('modelKey', { default: 'gemini-4-neon' })
   /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
+  defineSlots<{
+    /** Content after an assistant response, such as the card of a file it produced. */
+    'turn-end'?(props: { turn: AiChatMessage }): unknown
+    /** A resizable side pane beside the conversation, given as a Resizable handle and pane, such as an artifact canvas. */
+    canvas?(): unknown
+  }>()
+
+  const slots = useSlots()
   const { formatDate } = useLocale()
   const versions = useAiChatVersions(() => props.messages)
 
@@ -531,8 +543,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     models: modelOptions.value,
     tools: props.toolOptions ?? sampleTools
   }))
+  const statusBindings = computed(() => ({
+    connection: props.connection,
+    resuming: props.resuming,
+    sessionGenerating: props.sessionGenerating,
+    loading: props.loading
+  }))
   const welcome = computed(() => !turns.value.length && !props.hydrating)
-  let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => failureText(props.error))
   const waiting = computed(
@@ -567,25 +584,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   })
 
   const timeOf = (turn: AiChatMessage) => turnTime(turn, formatDate)
-
-  onMounted(() => nextTick(() => composerEl.value?.focus()))
-
-  watch(
-    () => props.loading,
-    (now, before) => {
-      if (!before || now) return
-      const active = globalThis.document?.activeElement
-      const idle = !active || active === globalThis.document.body || !active.isConnected
-      const box = composerEl.value?.$el as globalThis.Element | undefined
-      if (idle || (box && box.contains(active))) composerEl.value?.focus()
-    }
-  )
-
-  watch(welcome, (now) => {
-    if (now || !refocus) return
-    refocus = false
-    void nextTick(() => composerEl.value?.focus())
-  })
+  const { refocusAfterWelcome } = useComposerFocus(composerEl, () => props.loading, welcome)
 
   async function send(event: MouseEvent | KeyboardEvent, text: string, typed = false) {
     const attached = files.value
@@ -601,7 +600,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       files.value = attached
       return
     }
-    refocus = typed
+    refocusAfterWelcome(typed)
     emit('send', event, content)
   }
 
@@ -646,12 +645,11 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       :panel-open="historyPanel"
       @create="newChat"
     />
-    <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+    <AiChatSplit :split="Boolean(slots.canvas)">
       <AiChatHeader
-        v-model:model-key="modelKey"
         :empty="!turns.length"
         :history-open="historyPanel"
-        :models="modelOptions"
+        :conversation-key="activeKey"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
         @toggle-history="historyPanel = !historyPanel"
@@ -662,12 +660,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         :starters="starters"
         @select="(event, item) => send(event, item.label)"
       >
-        <AiChatConnectionStatus
-          :connection="connection"
-          :resuming="resuming"
-          :session-generating="sessionGenerating"
-          :loading="loading"
-        />
+        <AiChatConnectionStatus v-bind="statusBindings" />
         <AiChatComposer
           ref="composerEl"
           v-model="prompt"
@@ -723,7 +716,17 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           @answer="chatTools.answer"
           @skip="chatTools.skip"
           @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
-        />
+        >
+          <template
+            v-if="slots['turn-end']"
+            #end
+          >
+            <slot
+              name="turn-end"
+              :turn="turn"
+            />
+          </template>
+        </AiChatTurn>
         <ChatMessage
           v-if="waiting && last"
           :status="failure ? 'error' : 'pending'"
@@ -737,12 +740,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           @select="(event, item) => send(event, item.label)"
         />
         <template #composer>
-          <AiChatConnectionStatus
-            :connection="connection"
-            :resuming="resuming"
-            :session-generating="sessionGenerating"
-            :loading="loading"
-          />
+          <AiChatConnectionStatus v-bind="statusBindings" />
           <Alert
             key="alert-2"
             v-if="interruptErrors.length"
@@ -772,7 +770,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
           />
         </template>
       </Conversation>
-    </div>
+      <template
+        v-if="slots.canvas"
+        #canvas
+      >
+        <slot name="canvas" />
+      </template>
+    </AiChatSplit>
   </section>
 </template>
 ```
@@ -780,7 +784,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 ## `sample.ts`
 
 ````ts
-import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
 import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
@@ -877,7 +880,7 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://github.com/aziontech/azion',
         description: 'Purge URLs, wildcards and cache keys from a terminal.',
         site: 'GitHub',
-        image: 'https://github.com/favicon.ico'
+        icon: 'az az-github'
       }
     ]
   })
@@ -951,14 +954,13 @@ const cacheKeySources: SourcesItem[] = [
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
     publisher: 'aziontech',
-    image: 'https://github.com/favicon.ico'
+    icon: 'az az-github'
   },
   {
     title: 'HTTP Caching (RFC 9111)',
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico',
     publisher: 'World Wide Web Consortium',
     publishedAt: '2022-06-01'
   },
@@ -1109,7 +1111,12 @@ export interface AiChatProject {
   kind: 'workload' | 'dns' | 'firewall' | 'function' | 'storage'
   icon: string
   pinned?: boolean
-  cloud?: boolean
+  inCloud?: boolean
+}
+
+export interface AiChatProduct {
+  label: string
+  icon: string
 }
 
 export interface AiChatThreadChange {
@@ -1121,19 +1128,32 @@ export interface AiChatThread {
   id: string
   title: string
   projectId: string
+  updatedAt: string
   age: string
   environment: string
   modelLabel: string
   providerIcon: string
+  products: string[]
+  version?: string
   draft?: boolean
   snoozed?: boolean
   settled?: boolean
-  changeRef?: string
-  chainCount?: number
   changes?: AiChatThreadChange[]
 }
 
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
+
+export const sampleProducts: Record<string, AiChatProduct> = {
+  applications: { label: 'Applications', icon: 'az az-applications' },
+  firewall: { label: 'Firewall', icon: 'az az-firewall' },
+  functions: { label: 'Functions', icon: 'az az-functions' },
+  waf: { label: 'WAF', icon: 'az az-waf' },
+  'real-time-purge': { label: 'Real-Time Purge', icon: 'az az-real-time-purge' },
+  'sql-database': { label: 'SQL Database', icon: 'az az-sql-database' },
+  'edge-dns': { label: 'Edge DNS', icon: 'az az-edge-dns' },
+  'object-storage': { label: 'Object Storage', icon: 'az az-object-storage' },
+  'image-processor': { label: 'Image Processor', icon: 'az az-image-processor' }
+}
 
 export const sampleProjects: AiChatProject[] = [
   {
@@ -1152,7 +1172,7 @@ export const sampleProjects: AiChatProject[] = [
     title: 'Functions',
     kind: 'function',
     icon: 'az az-functions',
-    cloud: true
+    inCloud: true
   },
   {
     id: 'storage',
@@ -1160,17 +1180,8 @@ export const sampleProjects: AiChatProject[] = [
     title: 'Object Storage',
     kind: 'storage',
     icon: 'az az-object-storage',
-    cloud: true
+    inCloud: true
   }
-]
-
-export const sampleHistory: ConversationHistoryItem[] = [
-  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00Z' },
-  { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00Z' },
-  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00Z' },
-  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00Z' },
-  { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00Z' },
-  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00Z' }
 ]
 
 export const sampleThreads: AiChatThread[] = [
@@ -1178,12 +1189,13 @@ export const sampleThreads: AiChatThread[] = [
     id: 'h1',
     title: 'Why does storefront return 502 errors?',
     projectId: 'workloads',
+    updatedAt: '2026-11-19T11:48:00Z',
     age: '12m',
     environment: 'prod-us-east',
     modelLabel: 'Claude Opus 4.5',
     providerIcon: 'az az-claude',
+    products: ['applications', 'firewall', 'functions'],
     draft: true,
-    chainCount: 3,
     changes: [
       { ref: '#1170', title: 'feat(workload): renew origin TLS cert for api.example.com' },
       { ref: '#1200', title: 'fix(cache): allowlist q and page query params on /search' },
@@ -1191,53 +1203,75 @@ export const sampleThreads: AiChatThread[] = [
     ]
   },
   {
+    id: 'h7',
+    title:
+      'Checkout on acme-store times out for customers in the EU region after the latest deploy',
+    projectId: 'workloads',
+    updatedAt: '2026-11-19T11:05:00Z',
+    age: '55m',
+    environment: 'prod-eu-west',
+    modelLabel: 'Azion Auto',
+    providerIcon: 'az az-azion',
+    products: ['applications', 'functions']
+  },
+  {
     id: 'h2',
     title: 'Purge the cache after a deploy',
     projectId: 'workloads',
+    updatedAt: '2026-11-19T09:40:00Z',
     age: '2h',
     environment: 'prod-us-east',
     modelLabel: 'Gemini 4 Neon',
     providerIcon: 'az az-gemini',
-    changeRef: '1170',
+    products: ['real-time-purge'],
     changes: [{ ref: '#1170', title: 'ci(purge): trigger Real-Time Purge on release tag' }]
   },
   {
     id: 'h3',
     title: 'A WAF rule for login attempts',
     projectId: 'firewall',
+    updatedAt: '2026-11-18T17:15:00Z',
     age: '1d',
     environment: 'edge-global',
     modelLabel: 'Claude Sonnet 4',
     providerIcon: 'az az-claude',
-    changeRef: '1142',
+    products: ['waf'],
+    version: 'v42',
     changes: [{ ref: '#1142', title: 'sec(waf): rate-limit /auth/login to 20 req/min' }]
   },
   {
     id: 'h4',
     title: 'Top orders query for acme-store',
     projectId: 'functions',
+    updatedAt: '2026-11-16T10:20:00Z',
     age: '3d',
     environment: 'edge-sql-eu',
     modelLabel: 'GPT-5.2',
-    providerIcon: 'az az-openai'
+    providerIcon: 'az az-openai',
+    products: ['sql-database'],
+    version: 'v7'
   },
   {
     id: 'h5',
     title: 'Move DNS records to Azion',
     projectId: 'edge-dns',
+    updatedAt: '2026-11-04T14:05:00Z',
     age: '2w',
     environment: 'dns-anycast',
     modelLabel: 'Gemini 4 Carbon',
-    providerIcon: 'az az-gemini'
+    providerIcon: 'az az-gemini',
+    products: ['edge-dns']
   },
   {
     id: 'h6',
     title: 'Image optimization for docs-site',
     projectId: 'storage',
+    updatedAt: '2026-09-28T08:30:00Z',
     age: '1mo',
     environment: 'media-bucket',
     modelLabel: 'Azion Auto',
     providerIcon: 'az az-azion',
+    products: ['image-processor', 'object-storage'],
     settled: true
   }
 ]
@@ -1347,6 +1381,123 @@ export const turnTime = (
   turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
 ```
 
+## `composables/use-composer-focus.ts`
+
+```ts
+import { type MaybeRefOrGetter, nextTick, onMounted, type Ref, toValue, watch } from 'vue'
+
+export interface UseComposerFocusTarget {
+  focus: () => void
+  $el?: unknown
+}
+
+export interface UseComposerFocusReturn {
+  /** Focuses the composer again once the welcome page gives way to the thread. */
+  refocusAfterWelcome: (typed: boolean) => void
+}
+
+export function useComposerFocus(
+  composerEl: Ref<UseComposerFocusTarget | null>,
+  loading: MaybeRefOrGetter<boolean>,
+  welcome: MaybeRefOrGetter<boolean>
+): UseComposerFocusReturn {
+  let refocus = false
+
+  onMounted(() => nextTick(() => composerEl.value?.focus()))
+
+  watch(
+    () => toValue(loading),
+    (now, before) => {
+      if (!before || now) return
+      const active = globalThis.document?.activeElement
+      const idle = !active || active === globalThis.document.body || !active.isConnected
+      const box = composerEl.value?.$el as globalThis.Element | undefined
+      if (idle || (box && box.contains(active))) composerEl.value?.focus()
+    }
+  )
+
+  watch(
+    () => toValue(welcome),
+    (now) => {
+      if (now || !refocus) return
+      refocus = false
+      void nextTick(() => composerEl.value?.focus())
+    }
+  )
+
+  return {
+    refocusAfterWelcome: (typed) => {
+      refocus = typed
+    }
+  }
+}
+```
+
+## `composables/use-wide-screen.ts`
+
+```ts
+import { onMounted, onScopeDispose, readonly, type Ref, ref } from 'vue'
+
+export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolean>> {
+  const wide = ref(false)
+  let media: MediaQueryList | null = null
+  const onChange = () => {
+    wide.value = Boolean(media?.matches)
+  }
+  onMounted(() => {
+    media = globalThis.matchMedia?.(query) ?? null
+    onChange()
+    media?.addEventListener('change', onChange)
+  })
+  onScopeDispose(() => media?.removeEventListener('change', onChange))
+  return readonly(wide)
+}
+```
+
+## `parts/ai-chat-artifact.vue`
+
+```ts
+<script setup lang="ts">
+  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import { computed, ref } from 'vue'
+
+  const props = defineProps<{ title: string; versions: string[]; downloadable: boolean }>()
+
+  const emit = defineEmits<{ close: [] }>()
+
+  const version = defineModel<number>('version', { required: true })
+
+  const canvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
+  const code = computed(() => props.versions[version.value] ?? '')
+  const lines = computed(() => code.value.split('\n').length)
+
+  defineExpose({ focus: () => canvasEl.value?.focus() })
+</script>
+
+<template>
+  <ArtifactCanvas
+    ref="canvasEl"
+    v-model:version="version"
+    :title="title"
+    :meta="`SQL · ${lines} lines`"
+    type="code"
+    :versions="versions.length"
+    :copy-value="code"
+    :download-href="
+      downloadable ? `data:application/sql;charset=utf-8,${encodeURIComponent(code)}` : ''
+    "
+    @close="emit('close')"
+  >
+    <CodeBlock
+      :tabs="[{ label: 'SQL', value: 'sql', code, language: 'sql' }]"
+      :copyable="false"
+      :bordered="false"
+    />
+  </ArtifactCanvas>
+</template>
+```
+
 ## `parts/ai-chat-composer.vue`
 
 ```ts
@@ -1361,7 +1512,6 @@ export const turnTime = (
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { nextTick, ref } from 'vue'
 
   import { sampleContexts, sampleModes, sampleProviders } from '../sample'
@@ -1457,7 +1607,7 @@ export const turnTime = (
       <PromptInputDictateButton />
     </template>
     <template
-      v-if="contexts.length || tools.length"
+      v-if="contexts.length"
       #footer
     >
       <PromptInputContextPicker
@@ -1465,11 +1615,6 @@ export const turnTime = (
         v-model="contextKey"
         :options="contexts"
         placeholder="Choose project"
-      />
-      <PromptInputTools
-        v-if="tools.length"
-        v-model="toolKeys"
-        :tools="tools"
       />
     </template>
     <template #hint>
@@ -1551,15 +1696,17 @@ export const turnTime = (
   import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
+
+  import { sampleThreads } from '../sample'
+  import AiChatRemoveDialog from './ai-chat-remove-dialog.vue'
 
   export type AiChatHeaderAction = 'share' | 'rename' | 'archive' | 'remove'
 
   const props = defineProps<{
     empty: boolean
     historyOpen: boolean
-    models: PromptInputMenuOption[]
+    conversationKey: string | null
   }>()
 
   const emit = defineEmits<{
@@ -1569,13 +1716,10 @@ export const turnTime = (
     action: [event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction]
   }>()
 
-  const modelKey = defineModel<string>('modelKey', { required: true })
-
-  const selectedModel = computed(() =>
-    props.models.find((option) => option.value === modelKey.value)
+  const title = computed(
+    () =>
+      sampleThreads.find((thread) => thread.id === props.conversationKey)?.title ?? 'AI assistant'
   )
-  const modelLabel = computed(() => selectedModel.value?.label ?? '')
-  const modelIcon = computed(() => selectedModel.value?.icon ?? '')
 
   const actions: { value: AiChatHeaderAction; label: string; severity?: 'danger' }[] = [
     { value: 'share', label: 'Share' },
@@ -1584,12 +1728,11 @@ export const turnTime = (
     { value: 'remove', label: 'Delete', severity: 'danger' }
   ]
 
-  function onModel(_event: MouseEvent | KeyboardEvent, value: string | number) {
-    modelKey.value = String(value)
-  }
+  const removeOpen = ref(false)
 
   function onAction(event: MouseEvent | KeyboardEvent, value: string | number) {
-    emit('action', event, value as AiChatHeaderAction)
+    if (value === 'remove') removeOpen.value = true
+    else emit('action', event, value as AiChatHeaderAction)
   }
 
   const HEADER_CLASS =
@@ -1625,60 +1768,10 @@ export const turnTime = (
       </span>
       <h1
         id="ai-chat-title"
-        class="sr-only"
+        class="pointer-events-auto min-w-0 truncate px-(--spacing-xs) text-label-lg text-(--text-default) max-md:sr-only"
       >
-        AI assistant
+        {{ title }}
       </h1>
-      <span class="pointer-events-auto inline-flex min-w-0 max-md:hidden">
-        <DropdownMenu
-          side="bottom"
-          align="start"
-          :disabled="!models.length"
-          @select="onModel"
-        >
-          <DropdownMenuTrigger>
-            <Button
-              variant="ghost"
-              size="medium"
-              icon="az az-chevron-down"
-              icon-position="trailing"
-              :disabled="!models.length"
-              class="min-w-0"
-            >
-              <span class="truncate text-label-lg">AI assistant</span>
-              <i
-                v-if="modelIcon"
-                :class="[modelIcon, 'shrink-0 text-(--text-muted)']"
-                aria-hidden="true"
-              />
-              <span
-                v-if="modelLabel"
-                class="truncate text-(--text-muted)"
-                >{{ modelLabel }}</span
-              >
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuGroup label="Model">
-            <DropdownMenuItem
-              v-for="option in models"
-              :key="option.value"
-              :value="option.value"
-              type="radio"
-              :selected="option.value === modelKey"
-              :label="option.label"
-            >
-              <template
-                v-if="option.description"
-                #trailing
-              >
-                <span class="max-w-48 truncate text-body-xs text-(--text-muted)">{{
-                  option.description
-                }}</span>
-              </template>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenu>
-      </span>
     </div>
     <div class="flex items-center gap-(--spacing-2xs)">
       <span class="pointer-events-auto inline-flex max-md:hidden">
@@ -1765,6 +1858,11 @@ export const turnTime = (
         </DropdownMenu>
       </span>
     </div>
+    <AiChatRemoveDialog
+      v-model:open="removeOpen"
+      :conversation-key="conversationKey"
+      @confirm="(event: MouseEvent) => emit('action', event, 'remove')"
+    />
   </header>
 </template>
 ```
@@ -1774,9 +1872,7 @@ export const turnTime = (
 ```ts
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ConversationHistory, {
-    type ConversationHistoryItem
-  } from '@aziontech/webkit/conversation-history'
+  import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
   import DrawerBody from '@aziontech/webkit/drawer-body'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerHeader from '@aziontech/webkit/drawer-header'
@@ -1787,18 +1883,13 @@ export const turnTime = (
   import PopoverContent from '@aziontech/webkit/popover-content'
   import Popover from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
-  import {
-    type AiChatProject,
-    type AiChatThread,
-    sampleHistory,
-    sampleHistoryNow,
-    sampleProjects,
-    sampleThreads
-  } from '../sample'
-  import AiChatHistoryRow from './ai-chat-history-row.vue'
+  import { useWideScreen } from '../composables/use-wide-screen'
+  import { type AiChatProject, type AiChatThread, sampleProjects, sampleThreads } from '../sample'
+  import AiChatHistoryList from './ai-chat-history-list.vue'
   import AiChatProjectFilter from './ai-chat-project-filter.vue'
 
   defineProps<{ panelOpen: boolean }>()
@@ -1807,6 +1898,8 @@ export const turnTime = (
 
   const active = defineModel<string | null>({ required: true })
   const drawerOpen = defineModel<boolean>('drawerOpen', { required: true })
+
+  const wide = useWideScreen()
 
   const projects = ref<AiChatProject[]>(sampleProjects.map((item) => ({ ...item })))
   const threads = ref<AiChatThread[]>(sampleThreads.map((item) => ({ ...item })))
@@ -1825,20 +1918,19 @@ export const turnTime = (
       title: 'New Function',
       kind: 'function',
       icon: 'az az-functions',
-      cloud: true
+      inCloud: true
     },
     {
       code: 'OS',
       title: 'New Object Storage',
       kind: 'storage',
       icon: 'az az-object-storage',
-      cloud: true
+      inCloud: true
     }
   ]
 
   const projectMap = computed(() => new Map(projects.value.map((item) => [item.id, item])))
   const threadMap = computed(() => new Map(threads.value.map((item) => [item.id, item])))
-  const updatedMap = new Map(sampleHistory.map((item) => [item.id, item.updatedAt]))
 
   const matchingThreads = computed(() => {
     const needle = search.value.trim().toLowerCase()
@@ -1855,7 +1947,7 @@ export const turnTime = (
   const toHistoryItem = (thread: AiChatThread): ConversationHistoryItem => ({
     id: thread.id,
     title: thread.title,
-    updatedAt: updatedMap.get(thread.id) ?? sampleHistoryNow,
+    updatedAt: thread.updatedAt,
     description: viewMode.value === 'detailed' ? thread.environment : undefined
   })
 
@@ -1891,33 +1983,52 @@ export const turnTime = (
     )
   }
 
-  function toggleSnooze(id: string) {
+  function toggleSnooze(_event: MouseEvent | KeyboardEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, snoozed: !item.snoozed } : item
     )
   }
 
-  function toggleSettle(id: string) {
+  function toggleSettle(_event: MouseEvent | KeyboardEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, settled: !item.settled, snoozed: false } : item
     )
   }
 
-  function discardDraft(id: string) {
+  function discardDraft(_event: MouseEvent | KeyboardEvent, id: string) {
+    const index = threads.value.findIndex((item) => item.id === id)
+    const thread = threads.value[index]
+    if (!thread) return
+    const wasActive = active.value === id
     threads.value = threads.value.filter((item) => item.id !== id)
-    if (active.value === id) active.value = null
+    if (wasActive) active.value = null
+    toast('Draft discarded', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          const next = [...threads.value]
+          next.splice(index, 0, thread)
+          threads.value = next
+          if (wasActive) active.value = id
+        }
+      }
+    })
   }
+
+  const PANEL_CLASS =
+    'flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto ' +
+    'border-e border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden [--ai-chat-history-actions-width:--spacing(24)] pointer-coarse:[--ai-chat-history-actions-width:--spacing(9)]'
 </script>
 
 <template>
   <aside
-    v-if="panelOpen"
+    v-if="panelOpen && wide"
     id="ai-chat-history"
     aria-label="Conversation history"
-    class="flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto border-e border-(--border-subtle) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
+    :class="PANEL_CLASS"
   >
     <div
-      class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)"
+      class="flex items-center gap-(--spacing-2xs) border-b border-(--border-default) pb-(--spacing-xs)"
     >
       <Input
         v-model="search"
@@ -2004,23 +2115,16 @@ export const turnTime = (
       </Tooltip>
     </div>
 
-    <ConversationHistory
+    <AiChatHistoryList
       v-model="active"
       :items="activeItems"
-      :now="sampleHistoryNow"
-    >
-      <template #item="{ item }">
-        <AiChatHistoryRow
-          v-if="threadMap.get(item.id)"
-          :thread="threadMap.get(item.id)!"
-          :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-          :view-mode="viewMode"
-          @snooze="toggleSnooze"
-          @settle="toggleSettle"
-          @discard="discardDraft"
-        />
-      </template>
-    </ConversationHistory>
+      :thread-map="threadMap"
+      :project-map="projectMap"
+      :view-mode="viewMode"
+      @snooze="toggleSnooze"
+      @settle="toggleSettle"
+      @discard="discardDraft"
+    />
 
     <div
       v-if="snoozedItems.length"
@@ -2029,24 +2133,17 @@ export const turnTime = (
       <span class="px-(--spacing-xs) text-label-xs text-(--text-muted)">
         Snoozed ({{ snoozedItems.length }})
       </span>
-      <ConversationHistory
+      <AiChatHistoryList
         v-model="active"
         :items="snoozedItems"
-        :now="sampleHistoryNow"
         aria-label="Snoozed conversations"
-      >
-        <template #item="{ item }">
-          <AiChatHistoryRow
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-            :view-mode="viewMode"
-            @snooze="toggleSnooze"
-            @settle="toggleSettle"
-            @discard="discardDraft"
-          />
-        </template>
-      </ConversationHistory>
+        :thread-map="threadMap"
+        :project-map="projectMap"
+        :view-mode="viewMode"
+        @snooze="toggleSnooze"
+        @settle="toggleSettle"
+        @discard="discardDraft"
+      />
     </div>
 
     <div
@@ -2062,25 +2159,18 @@ export const turnTime = (
         class="w-full"
         @click="settledOpen = !settledOpen"
       />
-      <ConversationHistory
+      <AiChatHistoryList
         v-if="settledOpen"
         v-model="active"
         :items="settledItems"
-        :now="sampleHistoryNow"
         aria-label="Settled conversations"
-      >
-        <template #item="{ item }">
-          <AiChatHistoryRow
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-            :view-mode="viewMode"
-            @snooze="toggleSnooze"
-            @settle="toggleSettle"
-            @discard="discardDraft"
-          />
-        </template>
-      </ConversationHistory>
+        :thread-map="threadMap"
+        :project-map="projectMap"
+        :view-mode="viewMode"
+        @snooze="toggleSnooze"
+        @settle="toggleSettle"
+        @discard="discardDraft"
+      />
     </div>
   </aside>
 
@@ -2093,27 +2183,146 @@ export const turnTime = (
       <DrawerHeader class="w-full">
         <DrawerTitle>Conversation history</DrawerTitle>
       </DrawerHeader>
+      <div class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-xs)">
+        <div class="flex items-center gap-(--spacing-2xs)">
+          <Input
+            v-model="search"
+            size="small"
+            placeholder="Search"
+            aria-label="Search conversations"
+            role="searchbox"
+            autocomplete="off"
+            class="min-w-0 flex-1"
+          >
+            <template #leading>
+              <i
+                class="az az-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+          <AiChatProjectFilter
+            v-model="selectedProject"
+            :projects="projects"
+            @toggle-pin="togglePinProject"
+          />
+        </div>
+        <Button
+          label="New chat"
+          icon="az az-square-pen"
+          variant="ghost"
+          size="small"
+          class="w-full"
+          @click="create"
+        />
+      </div>
       <DrawerBody>
-        <ConversationHistory
-          v-model="active"
-          :items="activeItems"
-          :now="sampleHistoryNow"
+        <div
+          class="[--ai-chat-history-actions-width:--spacing(24)] pointer-coarse:[--ai-chat-history-actions-width:--spacing(9)]"
         >
-          <template #item="{ item }">
-            <AiChatHistoryRow
-              v-if="threadMap.get(item.id)"
-              :thread="threadMap.get(item.id)!"
-              :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-              :view-mode="viewMode"
-              @snooze="toggleSnooze"
-              @settle="toggleSettle"
-              @discard="discardDraft"
-            />
-          </template>
-        </ConversationHistory>
+          <AiChatHistoryList
+            v-model="active"
+            :items="activeItems"
+            :thread-map="threadMap"
+            :project-map="projectMap"
+            :view-mode="viewMode"
+            @snooze="toggleSnooze"
+            @settle="toggleSettle"
+            @discard="discardDraft"
+          />
+        </div>
       </DrawerBody>
     </DrawerContent>
   </Drawer>
+</template>
+```
+
+## `parts/ai-chat-history-list.vue`
+
+```ts
+<script setup lang="ts">
+  import ConversationHistory, {
+    type ConversationHistoryItem
+  } from '@aziontech/webkit/conversation-history'
+
+  import { type AiChatProject, type AiChatThread, sampleHistoryNow } from '../sample'
+  import AiChatHistoryActions from './ai-chat-history-actions.vue'
+  import AiChatHistoryRow from './ai-chat-history-row.vue'
+
+  defineProps<{
+    items: ConversationHistoryItem[]
+    threadMap: Map<string, AiChatThread>
+    projectMap: Map<string, AiChatProject>
+    viewMode: 'detailed' | 'compact'
+  }>()
+
+  const emit = defineEmits<{
+    snooze: [event: MouseEvent | KeyboardEvent, id: string]
+    settle: [event: MouseEvent | KeyboardEvent, id: string]
+    discard: [event: MouseEvent | KeyboardEvent, id: string]
+  }>()
+
+  const active = defineModel<string | null>({ required: true })
+</script>
+
+<template>
+  <ConversationHistory
+    v-model="active"
+    :items="items"
+    :now="sampleHistoryNow"
+  >
+    <template #item="{ item }">
+      <AiChatHistoryRow
+        v-if="threadMap.get(item.id)"
+        :thread="threadMap.get(item.id)!"
+        :project="projectMap.get(threadMap.get(item.id)!.projectId)"
+        :view-mode="viewMode"
+      />
+    </template>
+    <template #item-actions="{ item }">
+      <AiChatHistoryActions
+        v-if="threadMap.get(item.id)"
+        :thread="threadMap.get(item.id)!"
+        @snooze="(event, id) => emit('snooze', event, id)"
+        @settle="(event, id) => emit('settle', event, id)"
+        @discard="(event, id) => emit('discard', event, id)"
+      />
+    </template>
+  </ConversationHistory>
+</template>
+```
+
+## `parts/ai-chat-remove-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import { computed } from 'vue'
+
+  import { sampleThreads } from '../sample'
+
+  const props = defineProps<{ conversationKey: string | null }>()
+
+  const emit = defineEmits<{
+    confirm: [event: MouseEvent]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+
+  const title = computed(() => {
+    const name = sampleThreads.find((thread) => thread.id === props.conversationKey)?.title
+    return name ? `Delete “${name}”?` : 'Delete this conversation?'
+  })
+</script>
+
+<template>
+  <ConfirmDialog
+    v-model:open="open"
+    :title="title"
+    description="The conversation and its messages are removed from your history. This cannot be undone."
+    confirm-label="Delete"
+    @confirm="(event: MouseEvent) => emit('confirm', event)"
+  />
 </template>
 ```
 
@@ -2236,6 +2445,40 @@ export const turnTime = (
       </div>
     </template>
   </div>
+</template>
+```
+
+## `parts/ai-chat-split.vue`
+
+```ts
+<script setup lang="ts">
+  import ResizablePane from '@aziontech/webkit/resizable-pane'
+  import Resizable from '@aziontech/webkit/resizable-root'
+
+  defineProps<{ split: boolean }>()
+
+  defineSlots<{
+    /** The conversation column. */
+    default(): unknown
+    /** The resizable handle and pane beside it. */
+    canvas?(): unknown
+  }>()
+</script>
+
+<template>
+  <component
+    :is="split ? Resizable : 'div'"
+    :aria-label="split ? 'Conversation and artifact' : undefined"
+    class="flex min-h-0 min-w-0 flex-1"
+  >
+    <component
+      :is="split ? ResizablePane : 'div'"
+      class="relative flex min-h-0 min-w-0 flex-1 flex-col"
+    >
+      <slot />
+    </component>
+    <slot name="canvas" />
+  </component>
 </template>
 ```
 
@@ -2480,6 +2723,11 @@ export const turnTime = (
 
   const answers = defineModel<Record<string, string>>('answers', { required: true })
 
+  defineSlots<{
+    /** Content after an assistant response. */
+    end?(): unknown
+  }>()
+
   const reasonOpen = ref(false)
   const rating = ref<ChatMessageFeedbackValue | null>(null)
   const versionsOfTurn = computed(() => props.versions.versionsOf(props.turn))
@@ -2600,6 +2848,7 @@ export const turnTime = (
       >
         You stopped this response.
       </p>
+      <slot name="end" />
     </template>
     <template
       v-if="turn.role === 'user'"

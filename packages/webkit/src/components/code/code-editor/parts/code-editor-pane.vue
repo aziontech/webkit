@@ -107,7 +107,7 @@
 
   const GUTTER_CLASS =
     'sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm ' +
-    'pointer-coarse:text-label-code-lg text-(--code-syntax-line-number) select-none'
+    'pointer-coarse:text-body-code-lg text-(--code-syntax-line-number) select-none'
 
   const LINE_NUMBER_CLASS =
     'relative min-w-[2ch] tabular-nums ' +
@@ -117,7 +117,7 @@
 
   const INPUT_CLASS =
     'm-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm ' +
-    'pointer-coarse:text-label-code-lg whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none ' +
+    'pointer-coarse:text-body-code-lg whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none ' +
     'placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 

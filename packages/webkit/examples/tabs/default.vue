@@ -2,7 +2,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import { ref } from 'vue'
 
-  const active = ref('tab-1')
+  const active = ref('overview')
 </script>
 
 <template>
@@ -12,32 +12,38 @@
   >
     <Tabs.List>
       <Tabs.Trigger
-        value="tab-1"
-        label="Tab Item"
+        value="overview"
+        label="Overview"
       />
       <Tabs.Trigger
-        value="tab-2"
-        label="Tab Item"
+        value="metrics"
+        label="Metrics"
       />
       <Tabs.Trigger
-        value="tab-3"
-        label="Tab Item"
+        value="logs"
+        label="Logs"
       />
     </Tabs.List>
     <div class="w-full">
-      <Tabs.Content value="tab-1">
+      <Tabs.Content value="overview">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-          <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
+          <p class="text-body-sm text-(--text-default)">
+            Requests, bandwidth and errors for the last 24 hours.
+          </p>
         </div>
       </Tabs.Content>
-      <Tabs.Content value="tab-2">
+      <Tabs.Content value="metrics">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-          <p class="text-body-sm text-(--text-default)">Content for tab 2</p>
+          <p class="text-body-sm text-(--text-default)">
+            Charts of requests per second and cache hit ratio.
+          </p>
         </div>
       </Tabs.Content>
-      <Tabs.Content value="tab-3">
+      <Tabs.Content value="logs">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-          <p class="text-body-sm text-(--text-default)">Content for tab 3</p>
+          <p class="text-body-sm text-(--text-default)">
+            The latest events from this application, newest first.
+          </p>
         </div>
       </Tabs.Content>
     </div>

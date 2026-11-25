@@ -26,7 +26,7 @@ The user started a deployment and wants to know where it is, whether it went liv
 
 ### B. Toolbar row — `LogViewer.Steps` header slot, `Tag` (required)
 
-The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome `Tag` (Completed, or Failed on the failed step's title) and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogViewer`, nothing from steps that never ran.
+The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome `Tag` (Completed, or "Failed:" and the failed step's title) and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogViewer`, nothing from steps that never ran.
 
 ## Create-flow card (InCreateFlow, InCreateFlowError)
 
@@ -87,7 +87,7 @@ Then delete `sample.ts` and its import.
 
 - **Header:** "Deployment logs"; inside a card, "Logs" under a card titled "Deployment" or "Provisioning".
 - **Running status:** count and step, e.g. "3/8 steps", "Build"; the card indicator a progressive word, e.g. "Cloning", "Building".
-- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing rules".
+- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed: Routing rules".
 - **Run time:** past tense with the duration, e.g. "Deployed in 42s", "Failed after 42s".
 - **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
 - **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing rules."

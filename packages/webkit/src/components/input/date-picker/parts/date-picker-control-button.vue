@@ -9,7 +9,7 @@
   }>()
 
   const BUTTON_CLASS =
-    'relative inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out ' +
+    'relative inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-label-sm text-(--text-muted) transition-colors duration-150 ease-out ' +
     'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 

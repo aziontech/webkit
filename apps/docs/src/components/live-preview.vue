@@ -2,8 +2,8 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import { type Component, onMounted, onScopeDispose, ref, shallowRef } from 'vue'
 
-  import { loadExample } from '../lib/route-data'
   import { scheduleMount } from '../lib/mount-queue'
+  import { loadExample } from '../lib/route-data'
 
   const props = defineProps<{ dir: string; file: string }>()
 

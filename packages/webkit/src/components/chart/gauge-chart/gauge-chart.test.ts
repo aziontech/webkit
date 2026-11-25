@@ -115,12 +115,12 @@ describe('GaugeChart', () => {
     expect(new Set(units)).toEqual(new Set(['ms']))
   })
 
-  it('offers Retry in the States example error and draws the data once it is pressed', async () => {
+  it('offers Try again in the States example error and draws the data once it is pressed', async () => {
     const view = render(States)
-    const retry = view.getByRole('button', { name: 'Retry' })
-    expect(view.getByText('Could not load the cache hit ratio.')).toBeTruthy()
+    const retry = view.getByRole('button', { name: 'Try again' })
+    expect(view.getByText('Could not load the cache hit ratio')).toBeTruthy()
     await fireEvent.click(retry)
-    expect(view.queryByText('Could not load the cache hit ratio.')).toBeNull()
-    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
+    expect(view.queryByText('Could not load the cache hit ratio')).toBeNull()
+    expect(view.queryByRole('button', { name: 'Try again' })).toBeNull()
   })
 })

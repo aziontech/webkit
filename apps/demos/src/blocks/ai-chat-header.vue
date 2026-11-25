@@ -5,15 +5,17 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
+
+  import { sampleThreads } from './ai-chat.sample'
+  import AiChatRemoveDialog from './ai-chat-remove-dialog.vue'
 
   export type AiChatHeaderAction = 'share' | 'rename' | 'archive' | 'remove'
 
   const props = defineProps<{
     empty: boolean
     historyOpen: boolean
-    models: PromptInputMenuOption[]
+    conversationKey: string | null
   }>()
 
   const emit = defineEmits<{
@@ -23,25 +25,22 @@
     action: [event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction]
   }>()
 
-  const modelKey = defineModel<string>('modelKey', { required: true })
-
-  const modelLabel = computed(
-    () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
+  const title = computed(
+    () => sampleThreads.find((thread) => thread.id === props.conversationKey)?.title ?? 'Agent'
   )
 
-  const actions: { value: AiChatHeaderAction; label: string }[] = [
+  const actions: { value: AiChatHeaderAction; label: string; severity?: 'danger' }[] = [
     { value: 'share', label: 'Share' },
     { value: 'rename', label: 'Rename' },
     { value: 'archive', label: 'Archive' },
-    { value: 'remove', label: 'Delete' }
+    { value: 'remove', label: 'Delete', severity: 'danger' }
   ]
 
-  function onModel(_event: MouseEvent | KeyboardEvent, value: string | number) {
-    modelKey.value = String(value)
-  }
+  const removeOpen = ref(false)
 
   function onAction(event: MouseEvent | KeyboardEvent, value: string | number) {
-    emit('action', event, value as AiChatHeaderAction)
+    if (value === 'remove') removeOpen.value = true
+    else emit('action', event, value as AiChatHeaderAction)
   }
 
   const HEADER_CLASS =
@@ -58,55 +57,10 @@
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <h1
         id="ai-chat-title"
-        class="sr-only"
+        class="pointer-events-auto min-w-0 truncate px-(--spacing-xs) text-label-lg text-(--text-default) max-md:sr-only"
       >
-        Agent
+        {{ title }}
       </h1>
-      <span class="pointer-events-auto inline-flex min-w-0 max-md:hidden">
-        <DropdownMenu
-          side="bottom"
-          align="start"
-          :disabled="!models.length"
-          @select="onModel"
-        >
-          <DropdownMenuTrigger>
-            <Button
-              variant="ghost"
-              size="medium"
-              icon="az az-chevron-down"
-              icon-position="trailing"
-              :disabled="!models.length"
-              class="min-w-0"
-            >
-              <span class="truncate text-label-lg">Agent</span>
-              <span
-                v-if="modelLabel"
-                class="truncate text-(--text-muted)"
-                >{{ modelLabel }}</span
-              >
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuGroup label="Model">
-            <DropdownMenuItem
-              v-for="option in models"
-              :key="option.value"
-              :value="option.value"
-              type="radio"
-              :selected="option.value === modelKey"
-              :label="option.label"
-            >
-              <template
-                v-if="option.description"
-                #trailing
-              >
-                <span class="max-w-48 truncate text-body-xs text-(--text-muted)">{{
-                  option.description
-                }}</span>
-              </template>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenu>
-      </span>
     </div>
     <div class="flex items-center gap-(--spacing-2xs)">
       <span class="pointer-events-auto inline-flex max-md:hidden">
@@ -147,6 +101,7 @@
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>
@@ -186,10 +141,16 @@
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>
       </span>
     </div>
+    <AiChatRemoveDialog
+      v-model:open="removeOpen"
+      :conversation-key="conversationKey"
+      @confirm="(event: MouseEvent) => emit('action', event, 'remove')"
+    />
   </header>
 </template>

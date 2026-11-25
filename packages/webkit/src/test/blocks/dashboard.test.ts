@@ -1,9 +1,10 @@
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Analytics from '../../../blocks/dashboard/dashboard-analytics/dashboard-analytics.vue'
 import AnalyticsMetrics from '../../../blocks/dashboard/dashboard-analytics/variants/metrics.vue'
+import AnalyticsMetricsOverview from '../../../blocks/dashboard/dashboard-analytics/variants/metrics-overview.vue'
 import AnalyticsUsage from '../../../blocks/dashboard/dashboard-analytics/variants/usage.vue'
 import Composition from '../../../blocks/dashboard/dashboard-breakdown/dashboard-breakdown.vue'
 import CompositionEmpty from '../../../blocks/dashboard/dashboard-breakdown/variants/empty.vue'
@@ -188,6 +189,49 @@ describe('dashboard/dashboard-analytics Copy query', () => {
 })
 
 describe('dashboard/dashboard-analytics data shapes', () => {
+  it('offers an Errors view of Status codes that hides 2xx and 3xx so 4xx and 5xx get the scale', async () => {
+    const view = render(Analytics)
+    const toggle = view.getByRole('radiogroup', { name: 'Chart form for Status codes' })
+    await fireEvent.click(within(toggle).getByRole('radio', { name: 'Errors' }))
+    const card = toggle.closest('[data-testid="chart-card"]') as HTMLElement
+    await waitFor(() => {
+      const pressed = Object.fromEntries(
+        Array.from(card.querySelectorAll('[data-testid="chart-legend__item"]')).map((item) => [
+          item.querySelectorAll('span')[1]?.textContent?.trim(),
+          item.getAttribute('aria-pressed')
+        ])
+      )
+      expect(pressed).toEqual({
+        'Status 2xx': 'false',
+        'Status 3xx': 'false',
+        'Status 4xx': 'true',
+        'Status 5xx': 'true'
+      })
+    })
+  })
+
+  it.each([
+    ['Metrics', AnalyticsMetrics],
+    ['Metrics overview', AnalyticsMetricsOverview]
+  ])('offers the same Errors view of Status codes on the %s page', async (_, page) => {
+    const view = render(page)
+    const toggle = await waitFor(() =>
+      view.getByRole('radiogroup', { name: 'Chart form for Status codes' })
+    )
+    await fireEvent.click(within(toggle).getByRole('radio', { name: 'Errors' }))
+    const card = toggle.closest('[data-testid="chart-card"]') as HTMLElement
+    await waitFor(() => {
+      const pressed = Object.fromEntries(
+        Array.from(card.querySelectorAll('[data-testid="chart-legend__item"]')).map((item) => [
+          item.querySelectorAll('span')[1]?.textContent?.trim(),
+          item.getAttribute('aria-pressed')
+        ])
+      )
+      expect(pressed['Status 2xx']).toBe('false')
+      expect(pressed['Status 5xx']).toBe('true')
+    })
+  })
+
   it('keeps the figures while refetching and marks every chart as refetching', async () => {
     const view = render(Analytics, {
       props: {
@@ -201,7 +245,16 @@ describe('dashboard/dashboard-analytics data shapes', () => {
     for (const chart of charts) expect(chart.getAttribute('aria-busy')).toBe('true')
     expect(view.container.querySelector('[data-loading]')).toBeNull()
     expect(view.getByTestId('period-header__updating').textContent).toContain('Updating')
-    expect(view.getByRole('group', { name: 'Key figures' }).getAttribute('aria-busy')).toBe('true')
+    const figures = view.getByRole('group', { name: 'Key figures' })
+    expect(figures.getAttribute('aria-busy')).toBe('true')
+    expect(figures.parentElement?.hasAttribute('data-updating')).toBe(true)
+    expect(
+      figures.parentElement?.classList.contains(
+        'data-[updating]:[&_[data-testid$=__sparkline]]:opacity-60'
+      )
+    ).toBe(true)
+    const hostsTable = view.getByTestId('data-table')
+    expect(hostsTable.closest('[aria-busy="true"]')).not.toBeNull()
   })
 
   it('takes null gaps in a trend and sets the KPI tiles as the cells of one group', () => {

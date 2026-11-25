@@ -22,7 +22,7 @@
             <Item.Description>Deployed from main</Item.Description>
           </Item.Content>
           <i
-            class="az az-arrow-right text-(--text-muted)"
+            class="az az-chevron-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>
@@ -38,7 +38,7 @@
             <Item.Description>Deployed yesterday</Item.Description>
           </Item.Content>
           <i
-            class="az az-arrow-right text-(--text-muted)"
+            class="az az-chevron-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>
@@ -54,7 +54,7 @@
             <Item.Description>Paused by Jane Doe</Item.Description>
           </Item.Content>
           <i
-            class="az az-arrow-right text-(--text-muted)"
+            class="az az-chevron-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>

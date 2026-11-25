@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, onScopeDispose, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
+  import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Input from '../../input/input/input.vue'
   import { useLogViewerContext } from './composables/use-log-viewer-context'
   import type { LogViewerLineLevel } from './injection-key'
@@ -23,6 +25,12 @@
   const ctx = useLogViewerContext()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer-header')
+
+  onScopeDispose(ctx.registerHeader())
+
+  const showCopy = computed<boolean>(
+    () => ctx.copyable.value && !ctx.loading.value && !ctx.error.value
+  )
 
   const offeredLevels = computed<LogViewerLineLevel[]>(() => {
     if (ctx.levels.value.length) return ctx.levels.value
@@ -58,7 +66,15 @@
       class="-my-1.5 flex w-full min-w-0 items-center gap-(--spacing-sm) overflow-x-auto py-1.5 ps-1 -ms-1 pe-1 -me-1 [scrollbar-width:none] sm:w-auto [&::-webkit-scrollbar]:hidden"
     >
       <slot name="start">
+        <Skeleton
+          v-if="ctx.loading.value"
+          width="var(--size-16)"
+          height="var(--size-4)"
+          :data-testid="`${testId}__line-count-loading`"
+          class="shrink-0"
+        />
         <span
+          v-else
           :data-testid="`${testId}__line-count`"
           class="shrink-0 whitespace-nowrap text-label-sm tabular-nums text-(--text-muted)"
         >
@@ -66,7 +82,7 @@
         </span>
 
         <div
-          v-if="offeredLevels.length"
+          v-if="offeredLevels.length && !ctx.loading.value"
           role="group"
           :aria-label="t('logViewer.levels')"
           :data-testid="`${testId}__levels`"
@@ -105,7 +121,7 @@
 
     <div
       :data-testid="`${testId}__end`"
-      class="flex w-full min-w-0 flex-col gap-(--spacing-sm) sm:flex-row sm:items-center sm:gap-(--spacing-sm) sm:w-auto"
+      class="flex w-full min-w-0 items-center gap-(--spacing-sm) sm:w-auto"
     >
       <slot name="end">
         <slot name="search">
@@ -113,7 +129,8 @@
             size="small"
             :model-value="ctx.search.value"
             :placeholder="ctx.searchPlaceholder.value"
-            :disabled="ctx.disabled.value"
+            :disabled="ctx.disabled.value || ctx.loading.value"
+            class="min-w-0 flex-1 sm:flex-none"
             :aria-label="t('logViewer.search')"
             :data-testid="`${testId}__search`"
             @update:model-value="ctx.setSearch"
@@ -127,6 +144,18 @@
           </Input>
         </slot>
       </slot>
+      <CopyButton
+        v-if="showCopy"
+        :value="ctx.copyText.value"
+        variant="outline"
+        size="small"
+        :aria-label="t('logViewer.copy')"
+        :copied-label="t('logViewer.copied')"
+        :disabled="!ctx.canCopy.value"
+        :data-testid="`${ctx.testId.value}__copy`"
+        class="shrink-0"
+        @copy="ctx.emitCopy"
+      />
     </div>
   </header>
 </template>

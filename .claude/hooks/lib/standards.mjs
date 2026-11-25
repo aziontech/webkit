@@ -167,9 +167,10 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'ci', by: 'check-assertions' },
+      { surface: 'ci', by: 'check-sfc-type-coverage' },
       { surface: 'lint', by: 'require-authoring-standards' }
     ],
-    note: 'check-assertions fails any `as never` or `as unknown as` in src, blocks and examples (the one allowed form is `undefined as never` as the default of an unbound defineModel, decision CQ-E7), and caps the count of other type assertions in src.'
+    note: 'check-assertions fails any `as never` or `as unknown as` in src, blocks and examples (the one allowed form is `undefined as never` as the default of an unbound defineModel, decision CQ-E7), and caps the count of other type assertions in src. check-sfc-type-coverage runs type-coverage over the vue-tsc virtual files and caps the identifiers typed any that map back to component SFC code.'
   },
   {
     id: 'v-model',

@@ -1,8 +1,8 @@
 # Create ticket
 
-The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Create and add another, and Create ticket.
+The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Save and add another, and Save.
 
-A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
+A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create Ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
 
 ## When to use
 
@@ -21,11 +21,11 @@ A ticket creates on a page, not in a drawer: it is a first-level resource the in
 
 ### A. Creation header — `AppHeader`, `AppHeaderAccount`, `Brand`, `Breadcrumb`, `IconButton` (required)
 
-`parts/ticket-creation-header.vue`: the outline Back `IconButton` (`Back to Tickets`, the same path as Cancel), the `Brand`, a `Breadcrumb` `Tickets › Create ticket` and the account. No sidebar: creating is the whole task.
+`parts/ticket-creation-header.vue`: the outline Back `IconButton` (`Back to Tickets`, the same path as Cancel), the `Brand`, a `Breadcrumb` `Tickets › Create Ticket` and the account. No sidebar: creating is the whole task.
 
 ### B. Heading — `PageHeader` (required)
 
-`size="small"`, `Create ticket` and one sentence on what happens next, with `title-id` so the `form` is named by it.
+`size="small"`, `Create Ticket` and one sentence on what happens next, with `title-id` so the `form` is named by it.
 
 ### C. Loading rows — `Card`, `Skeleton` (loading only)
 
@@ -45,11 +45,11 @@ A ticket creates on a page, not in a drawer: it is a first-level resource the in
 
 ### G. Failure — `Alert` (conditional)
 
-A danger `Alert` under the bands, `The ticket wasn't created.` with the page's message and Retry, re-mounted on every failed attempt so it is announced again. Every value stays as entered.
+A danger `Alert` under the page title, above the bands, scrolled into view when it appears, `The ticket wasn't created.` with the page's message and Retry, re-mounted on every failed attempt so it is announced again. Every value stays as entered.
 
 ### H. Commit — `SaveBar`, `Button`, `Kbd` (required)
 
-`variant="centered"`, the buttons in `parts/ticket-save-actions.vue`: Cancel (outline), Create and add another (secondary) and Create ticket (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs. Below `sm` the three stack at full width with Create ticket on top, and the `Kbd` hides.
+`variant="centered"`, the buttons in `parts/ticket-save-actions.vue`: Cancel (outline), Save and add another (secondary) and Save (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs. Below `sm` the bar keeps one row, Cancel and Save side by side at equal width, so it stays as low as the other create pages; Save and add another and the `Kbd` hide there.
 
 ### Leaving — `ConfirmDialog`
 
@@ -76,11 +76,11 @@ The block keeps the form as a local draft, validates it on submit and emits `cre
 | `error`            | `string`                      | Why the request failed, shown in the danger `Alert` with Retry.                              |
 | `created`          | `CreateTicketCreated`         | The ticket the request created: the success toast names it and the form clears for the next. |
 
-| Event    | Payload                           | When                                                                                            |
-| -------- | --------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `create` | `(event, { ticket, addAnother })` | Create ticket (`addAnother` false) or Create and add another (true) on a valid form, and Retry. |
-| `cancel` | `(event)`                         | Cancel, Back or Escape, once a changed form is confirmed.                                       |
-| `open`   | `(event, id)`                     | Open ticket in the success toast.                                                               |
+| Event    | Payload                           | When                                                                                 |
+| -------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| `create` | `(event, { ticket, addAnother })` | Save (`addAnother` false) or Save and add another (true) on a valid form, and Retry. |
+| `cancel` | `(event)`                         | Cancel, Back or Escape, once a changed form is confirmed.                            |
+| `open`   | `(event, id)`                     | Open ticket in the success toast.                                                    |
 
 `ticket.requester` with an empty `id` is a new contact to save with the ticket. To go live, render the block from the page that owns the request:
 
@@ -123,7 +123,7 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 - Keep only Requester, Subject and Description required; the rest is triage the team can do later.
 - Validate on create only, and move focus to the first field in error.
 - Keep every value after a failed request, and show the failure where the commit happens.
-- Offer Create and add another for agents logging several calls in a row, and put focus back on Requester.
+- Offer Save and add another for agents logging several calls in a row, and put focus back on Requester.
 
 ## Don't
 
@@ -134,7 +134,7 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 
 ## Copy
 
-- **Title:** `Create ticket`; description `Log a request on behalf of a customer. They get an email with the ticket number.`
+- **Title:** `Create Ticket`; description `Log a request on behalf of a customer. They get an email with the ticket number.`
 - **Bands:** `Requester`, `Request`, `Assignment`, each with a one-sentence Hint. **Rows:** a noun title and one sentence of guidance (`The customer who asked. Search by name or email address.`).
 - **Requester:** placeholder `Search contacts`, no match `No contact matches. Add a new contact instead.`, actions `Add new contact` and `Search contacts`.
 - **Placeholders:** `Select a channel`, `Select a type`, `Select a priority`, `Search groups`, `Search agents`; Assignee no match `No agent in this group matches.`
@@ -142,13 +142,13 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 - **Attachments:** `Attach files`; the list is named `Attachments`.
 - **Failure:** title `The ticket wasn't created.`, the page's message, `Retry`.
 - **Success:** `Ticket #4840 was created.`, the subject, `Open ticket`.
-- **Commit:** `Cancel`, `Create and add another`, `Create ticket`. The discard dialog uses the built-in `useUnsavedChanges` labels.
+- **Commit:** `Cancel`, `Save and add another`, `Save`. The discard dialog uses the built-in `useUnsavedChanges` labels.
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
-- Landmarks: the creation header, then `main` holding a `form` named by the `Create ticket` h1; the bands are h2s (Requester, Request, Assignment).
-- Focus: on load the Requester search, with its list closed until the agent types or presses Arrow Down (the first invalid field instead when the form opens with messages); Tab runs header, then the fields in band order, then Cancel, Create and add another, Create ticket. A create press with gaps moves focus to the first invalid field; after Create and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
+- Landmarks: the creation header, then `main` holding a `form` named by the `Create Ticket` h1; the bands are h2s (Requester, Request, Assignment).
+- Focus: on load the Requester search, with its list closed until the agent types or presses Arrow Down (the first invalid field instead when the form opens with messages); Tab runs header, then the fields in band order, then Cancel, Save and add another, Save. A create press with gaps moves focus to the first invalid field; after Save and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
 - Each control takes its row title as `aria-label`, its error through `aria-describedby`, and `aria-invalid` once a create press finds a problem; the required rows carry the required mark and `aria-required`.
 - Keyboard: ⌘ Enter (Ctrl Enter) creates from anywhere in the form, Escape cancels; the editor's own shortcuts are Ctrl/⌘ B, I and K.
 - Announcements: the failure `Alert` is re-mounted after each attempt; the success toast is announced by the app's toast region; presence is spoken in the avatar's name, never the dot alone.
@@ -159,14 +159,14 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 - Default: every field empty, the sample contacts, groups, agents and tags in the pickers, focus on Requester.
 - ValidationErrors: `defaultSubmitted` with only a Subject and a CC entry that is not an address; Requester, Description and CC show their messages.
 - ContactError: `defaultSubmitted` on a new contact whose email has no domain ending; Contact email, Subject and Description show their messages.
-- Submitting: `submitting` on the filled sample ticket; Create ticket spins and the form locks.
+- Submitting: `submitting` on the filled sample ticket; Save spins and the form locks.
 - SubmitError: `error` on the filled sample ticket; the danger Alert with Retry, every value kept.
-- Success: `created` after Create and add another; the success toast with Open ticket and an empty form.
+- Success: `created` after Save and add another; the success toast with Open ticket and an empty form.
 - Loading: `loading`; skeleton bands and disabled create buttons.
 
 ## Related
 
 - `create/create-page` — the house create page this one follows.
-- `view/view-ticket-inbox` — the queue whose Create ticket opens this page.
+- `view/view-ticket-inbox` — the queue whose Create Ticket opens this page.
 - `state/state-form-validation` — every submit outcome of a create form.
 - `create/create-drawer` — a create inside a resource, kept beside its list.

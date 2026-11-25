@@ -45,7 +45,7 @@
   >
     <SearchTrigger
       :label="ctx.t('conversationHistory.searchChats')"
-      class="min-w-0 flex-1"
+      class="min-w-0 flex-1 [&_kbd]:hidden"
       :data-testid="`${testId}__search`"
       @open="(event: MouseEvent | KeyboardEvent) => emit('search-open', event)"
     />

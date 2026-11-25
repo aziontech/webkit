@@ -14,16 +14,11 @@
 </script>
 
 <template>
-  <TableBody
-    key="skeleton"
-    :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
-  >
+  <TableBody key="skeleton">
     <TableRow
       v-for="n in skeletonRowCount"
       :key="'sk-' + n"
-      :class="
-        stacked ? 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)' : undefined
-      "
+      :class="stacked ? 'flex-wrap py-(--spacing-2xs) before:hidden' : undefined"
     >
       <TableCell
         v-if="reorderActive"
@@ -51,10 +46,11 @@
         :key="header.id"
         :style="viewOf(header.column.id).style"
         :grow="viewOf(header.column.id).grow"
+        :principal="viewOf(header.column.id).principal"
         :align="viewOf(header.column.id).align"
         :frozen="viewOf(header.column.id).frozen"
         :type="viewOf(header.column.id).type"
-        :class="viewOf(header.column.id).stackedClass"
+        :class="viewOf(header.column.id).cellClass"
       >
         <Skeleton
           v-if="viewOf(header.column.id).type !== 'action'"

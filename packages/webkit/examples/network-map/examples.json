@@ -9,7 +9,7 @@
     },
     {
       "name": "Regions",
-      "summary": "Every region, each lighting only its own data centers over the same whole-world map. `asia` and `oceania` hold no data centers, so they read as landmass alone.",
+      "summary": "Every region that holds data centers, each lighting only its own over the same whole-world map. `asia` and `oceania` hold none and would read as a bare landmass, so they are left out.",
       "file": "regions.vue"
     },
     {

@@ -88,7 +88,8 @@ The imperative API is backed by a small reactive store composable, declared here
 - `data-removing` on a `Toaster` item while its exit transition runs (switches the transition to the exit token).
 - Progress: an entry with `progress` (set by `toast.progress(message, value, options?)`, which defaults `duration` to `0`) renders `__progress` under the copy: a rounded `Progress` bar named by the toast message (`role="progressbar"`, `aria-valuenow` clamped to 0–100) and the percentage formatted with `Intl.NumberFormat` (`style: 'percent'`) in the provider's locale, `aria-hidden` so the region does not announce every step. A later call with the same `id` replaces the entry in place; a typed toast with that `id` drops the bar.
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `start`/`center`/`end`, where `start` is the left edge under `ltr` and the right edge under `rtl`) and the enter/leave translate direction.
-- Bottom offset: a `bottom-*` region sits `var(--spacing-md)` above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
+- Safe areas: every inset is `max(var(--spacing-md), env(safe-area-inset-<edge>))`, so on a phone with a notch or a home indicator (`viewport-fit=cover`) the stack stays clear of the status bar, the indicator and a landscape notch.
+- Bottom offset: a `bottom-*` region sits that inset above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
 - `data-state="open|closed"` on each `Toaster` region: `open` while the stack is laid out expanded (the `expand` prop, hover or focus), `closed` while it overlaps into a peek.
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
 - Announcements go through the two hidden live regions: `danger` to `__live-assertive`, every other severity to `__live-polite`; items inside a Toaster carry no role of their own and the visible regions are not live, so each toast is announced once and never twice. A `ToastItem` rendered outside a Toaster keeps `role="status"` (or `role="alert"` for `danger`). Focus is never stolen (the region is not focused on mount). Tests: `toast.test.ts` › live region (spec), Escape dismisses the focused toast.
@@ -138,8 +139,8 @@ The imperative API is backed by a small reactive store composable, declared here
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
-    toast('Event has been created', {
-      description: 'Sunday, December 03, 2023 at 9:00 AM',
+    toast('Application deleted', {
+      description: 'acme-store was removed from your account.',
       action: { label: 'Undo', onClick: () => {} }
     })
 </script>
@@ -147,7 +148,8 @@ The imperative API is backed by a small reactive store composable, declared here
 <template>
   <Toaster position="bottom-end" />
   <Button
-    label="Show toast"
+    label="Delete application"
+    variant="outline"
     @click="show"
   />
 </template>
@@ -159,65 +161,52 @@ The imperative API is backed by a small reactive store composable, declared here
 <script setup>
   import Button from '@aziontech/webkit/button'
   import { toast, Toaster } from '@aziontech/webkit/toast'
+
+  const showNeutral = () =>
+    toast('Settings saved', { description: 'Changes apply to new requests.' })
+  const showSuccess = () =>
+    toast.success('Deployment finished', { description: 'acme-store is live on example.com.' })
+  const showInfo = () =>
+    toast.info('Maintenance on March 4', { description: 'From 02:00 to 03:00 UTC.' })
+  const showWarning = () =>
+    toast.warning('Request limit at 90%', { description: 'Upgrade the plan to avoid throttling.' })
+  const showError = () =>
+    toast.error('Deploy failed', { description: 'Check the build log for details.' })
+  const showLoading = () => toast.loading('Deploying acme-store…')
 </script>
 
 <template>
   <Toaster position="bottom-end" />
-  <div class="flex flex-wrap justify-center gap-2">
+  <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
     <Button
-      label="Default"
-      variant="secondary"
-      @click="
-        () =>
-          toast('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
-      "
+      label="Neutral"
+      variant="outline"
+      @click="showNeutral"
     />
     <Button
       label="Success"
-      variant="primary"
-      @click="
-        () =>
-          toast.success('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      variant="outline"
+      @click="showSuccess"
     />
     <Button
       label="Info"
       variant="outline"
-      @click="
-        () =>
-          toast.info('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      @click="showInfo"
     />
     <Button
       label="Warning"
       variant="outline"
-      @click="
-        () =>
-          toast.warning('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      @click="showWarning"
     />
     <Button
       label="Error"
-      variant="danger"
-      @click="
-        () =>
-          toast.error('Event has been created', {
-            description: 'Sunday, December 03, 2023 at 9:00 AM'
-          })
-      "
+      variant="outline"
+      @click="showError"
     />
     <Button
       label="Loading"
-      variant="ghost"
-      @click="
-        () => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
-      "
+      variant="outline"
+      @click="showLoading"
     />
   </div>
 </template>
@@ -231,15 +220,16 @@ The imperative API is backed by a small reactive store composable, declared here
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
-    toast('Event has been created', {
-      description: 'Sunday, December 03, 2023 at 9:00 AM'
+    toast('Cache purge started', {
+      description: 'https://example.com/docs/* clears from every node in a few minutes.'
     })
 </script>
 
 <template>
   <Toaster position="bottom-end" />
   <Button
-    label="Show toast"
+    label="Purge cache"
+    variant="outline"
     @click="show"
   />
 </template>

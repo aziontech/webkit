@@ -4,6 +4,7 @@ import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import Checkbox from '../components/input/checkbox/checkbox.vue'
+import Switch from '../components/input/switch/switch.vue'
 
 const rgb = (color: string): [number, number, number] => {
   const canvas = document.createElement('canvas')
@@ -47,14 +48,42 @@ describe('a disabled checked Checkbox keeps a readable mark', () => {
         attrs: { 'aria-label': 'Locked field' }
       })
       const root = getByTestId('checkbox')
-      const icon = getByTestId('checkbox__icon')
+      const mark = getByTestId('checkbox__icon').querySelector('path') as SVGPathElement
       expect(getComputedStyle(root).opacity).toBe('1')
-      const ratio = contrast(getComputedStyle(icon).stroke, getComputedStyle(root).backgroundColor)
+      const stroke = getComputedStyle(mark).stroke
+      const ratio = contrast(stroke, getComputedStyle(root).backgroundColor)
       expect(
         ratio,
-        `${getComputedStyle(icon).stroke} on ${getComputedStyle(root).backgroundColor}`
+        `${stroke} on ${getComputedStyle(root).backgroundColor}`
       ).toBeGreaterThanOrEqual(3)
       unmount()
     }
+  })
+})
+
+describe('a disabled Switch reads on and off apart', () => {
+  it.each(['light', 'dark'] as const)('in the %s theme', (theme) => {
+    document.documentElement.dataset['theme'] = theme
+    const look = (modelValue: boolean) => {
+      const { getByTestId, unmount } = render(Switch, {
+        props: { modelValue, disabled: true },
+        attrs: { 'aria-label': modelValue ? 'Locked on' : 'Locked off' }
+      })
+      const root = getByTestId('switch')
+      const style = getComputedStyle(root)
+      const result = {
+        border: style.borderTopColor,
+        track: style.backgroundColor,
+        handle: getComputedStyle(getByTestId('switch__handle')).backgroundColor
+      }
+      unmount()
+      return result
+    }
+    const on = look(true)
+    const off = look(false)
+    expect(rgb(on.border)).toEqual(rgb(off.border))
+    expect(on.border).not.toBe('rgba(0, 0, 0, 0)')
+    expect(on.track).not.toBe(off.track)
+    expect(contrast(on.handle, off.handle), `${on.handle} vs ${off.handle}`).toBeGreaterThan(1.2)
   })
 })

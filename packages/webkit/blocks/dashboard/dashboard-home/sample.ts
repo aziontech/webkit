@@ -163,7 +163,7 @@ export const sampleSummaryZones: SummaryZone[] = [
 export const sampleSummaryActivity: SummaryActivity[] = [
   {
     id: 'act-1',
-    date: 'Jul 13, 2026, 1:52 PM',
+    date: 'Jul 13, 1:52 PM',
     operation: 'Created',
     type: 'User login',
     resource: 'User login for Jane Doe',
@@ -171,7 +171,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-2',
-    date: 'Jun 30, 2026, 6:54 PM',
+    date: 'Jun 30, 6:54 PM',
     operation: 'Deleted',
     type: 'DNS zone',
     resource: 'DNS zone example.org',
@@ -179,7 +179,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-3',
-    date: 'Jun 30, 2026, 6:54 PM',
+    date: 'Jun 30, 6:54 PM',
     operation: 'Created',
     type: 'DNS zone',
     resource: 'DNS zone example.org',
@@ -187,7 +187,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-4',
-    date: 'Jun 30, 2026, 6:53 PM',
+    date: 'Jun 30, 6:53 PM',
     operation: 'Created',
     type: 'User login',
     resource: 'User login for Jane Doe',
@@ -195,7 +195,7 @@ export const sampleSummaryActivity: SummaryActivity[] = [
   },
   {
     id: 'act-5',
-    date: 'Jun 24, 2026, 1:55 AM',
+    date: 'Jun 24, 1:55 AM',
     operation: 'Edited',
     type: 'Response rule',
     resource: 'Response rule Set storage origin for acme-store',

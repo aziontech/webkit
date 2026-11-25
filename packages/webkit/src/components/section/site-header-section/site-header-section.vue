@@ -324,7 +324,6 @@
             align="start"
             :side-offset="12"
             :collision-padding="{ x: columnInset, y: 8 }"
-            variant="contrast"
             arrow
           />
         </NavigationMenu>
@@ -356,7 +355,7 @@
         >
           <Button
             :label="secondaryAction.label"
-            variant="secondary"
+            variant="outline"
             size="medium"
             :href="secondaryAction.href"
           />

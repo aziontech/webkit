@@ -100,7 +100,7 @@
   export interface TicketInboxBulkPayload {
     /** The action. */
     action: TicketInboxBulkAction
-    /** The agent name for assign, the status for status; empty otherwise. */
+    /** The agent name for assign, the status for status, the number of the ticket kept for merge; empty for close. */
     value: string
     /** The selected tickets. */
     tickets: TicketInboxTicket[]
@@ -242,7 +242,7 @@
         >
           <template #actions>
             <Button
-              label="Create ticket"
+              label="Create Ticket"
               icon="az az-plus"
               variant="primary"
               size="medium"
@@ -269,6 +269,7 @@
               :can-select-all="canSelectAll"
               :agents="agentList"
               :statuses="TICKET_STATUSES"
+              :tickets="selectedItems"
               @select-all="selectAllMatching"
               @clear="clearSelection"
               @action="onBulk"

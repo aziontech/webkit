@@ -19,7 +19,7 @@
     },
     {
       "name": "States",
-      "summary": "Loading holds the map footprint, empty says why nothing matched, error replaces the map with a danger Alert whose Retry action loads the map again, and table view shows the accessible twin.",
+      "summary": "Loading holds the map footprint, empty says why nothing matched, error replaces the map with the chart family's error card, whose Try again action loads the map again, and table view shows the accessible twin.",
       "file": "states.vue"
     },
     {

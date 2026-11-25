@@ -52,8 +52,11 @@
     @row-click="(event, row) => emit('open', event, row)"
   >
     <template #cell-version="{ row }">
-      <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
-        <span class="truncate tabular-nums text-body-sm text-(--text-default)">
+      <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-2xs)">
+        <span
+          data-testid="deployment-version"
+          class="shrink-0 tabular-nums text-body-sm text-(--text-default)"
+        >
           {{ row.version }}
         </span>
         <Tag

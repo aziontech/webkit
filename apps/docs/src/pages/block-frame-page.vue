@@ -5,9 +5,12 @@
   import { useRoute } from 'vue-router'
 
   import { cached, findBlock, keys } from '../lib/data'
+  import { holdEmbeddedFocus } from '../lib/embedded-focus'
   import { applyTheme, settings } from '../lib/settings'
 
   const route = useRoute()
+  const releaseFocus =
+    typeof window === 'undefined' ? () => {} : holdEmbeddedFocus(window, HTMLElement.prototype)
 
   const id = computed(() => {
     const value = route.params.id
@@ -16,6 +19,9 @@
   const block = computed(() => findBlock(id.value))
   const state = computed(() =>
     block.value?.states.find((entry) => entry.slug === String(route.params.state))
+  )
+  const styles = computed(() =>
+    block.value ? cached<Component>(keys.frameStyles(`blocks/${block.value.dir}`)) : undefined
   )
   const live = computed(() => {
     if (!block.value || !state.value) return undefined
@@ -47,7 +53,10 @@
 
   onMounted(() => window.addEventListener('message', onMessage))
 
-  onBeforeUnmount(() => window.removeEventListener('message', onMessage))
+  onBeforeUnmount(() => {
+    window.removeEventListener('message', onMessage)
+    releaseFocus()
+  })
 
   const FRAME_CLASS =
     'min-h-screen w-full bg-(--bg-canvas) not-data-[layout=fullscreen]:p-(--spacing-lg) ' +
@@ -61,6 +70,10 @@
     :data-layout="block?.layout"
     :class="FRAME_CLASS"
   >
+    <component
+      :is="styles"
+      v-if="styles"
+    />
     <Toaster />
     <component
       :is="live"

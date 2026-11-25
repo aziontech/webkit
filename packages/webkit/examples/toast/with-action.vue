@@ -3,7 +3,7 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
-    toast('Event has been created', {
+    toast('Rule moved to the end of the list', {
       action: { label: 'Undo', onClick: () => {} }
     })
 </script>
@@ -11,7 +11,8 @@
 <template>
   <Toaster position="bottom-end" />
   <Button
-    label="Show toast"
+    label="Move rule to end"
+    variant="outline"
     @click="show"
   />
 </template>

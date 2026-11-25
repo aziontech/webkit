@@ -80,7 +80,7 @@
                     size="large"
                     class="w-full"
                     placeholder="Select a deployment setting"
-                    :disabled="saving"
+                    :readonly="saving"
                     :display-value="settingName"
                     @update:model-value="form.deploymentSettings[environment.name] = $event"
                   >

@@ -199,8 +199,26 @@ describe('ImageGallery', () => {
     const alert = view.getByRole('alert')
     expect(alert.textContent).toContain('The images could not load')
     expect(alert.textContent).toContain('The image model was busy')
-    expect(alert.textContent).not.toMatch(/try again/i)
     await expectNoA11yViolations(view.container)
+
+    await userEvent.click(view.getByRole('button', { name: 'Try again' }))
+    await waitFor(() => expect(root.hasAttribute('data-error')).toBe(false))
+    expect(root.hasAttribute('data-loading')).toBe(true)
+    expect(view.getAllByTestId(`${TEST_ID}__placeholder`)).toHaveLength(4)
+  })
+
+  it('emits retry from Try again, and shows it only with a retry listener', async () => {
+    const bare = render(ImageGallery, { props: { error: 'Quota reached.' } })
+    expect(bare.queryByRole('button', { name: 'Try again' })).toBeNull()
+    bare.unmount()
+
+    const calls: MouseEvent[] = []
+    const view = render(ImageGallery, {
+      props: { error: 'Quota reached.', onRetry: (event: MouseEvent) => calls.push(event) }
+    })
+    await userEvent.click(view.getByTestId(`${TEST_ID}__retry`))
+    expect(calls).toHaveLength(1)
+    expect(calls[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('lets the error win over images and placeholders', () => {

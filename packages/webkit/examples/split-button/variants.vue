@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <SplitButton
       variant="primary"
       label="Primary"

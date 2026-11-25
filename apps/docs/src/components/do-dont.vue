@@ -17,6 +17,8 @@
       dontHtml?: string
       doItems?: string[]
       dontItems?: string[]
+      doId?: string
+      dontId?: string
     }>(),
     {
       type: 'guidance',
@@ -24,7 +26,9 @@
       doHtml: '',
       dontHtml: '',
       doItems: () => [],
-      dontItems: () => []
+      dontItems: () => [],
+      doId: '',
+      dontId: ''
     }
   )
 
@@ -47,6 +51,7 @@
       {
         side: 'do',
         label: labels.value.do,
+        id: props.doId,
         icon: 'az az-circle-check text-(--success-mark)',
         html: props.doHtml,
         items: props.doItems,
@@ -55,6 +60,7 @@
       {
         side: 'dont',
         label: labels.value.dont,
+        id: props.dontId,
         icon: 'az az-circle-x text-(--danger-mark)',
         html: props.dontHtml,
         items: props.dontItems,
@@ -84,7 +90,8 @@
       <template #header>
         <component
           :is="heading"
-          class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
+          :id="column.id || undefined"
+          class="flex scroll-mt-20 items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
         >
           <i
             v-if="type !== 'usage'"

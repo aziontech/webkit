@@ -50,7 +50,7 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb')
 
   const navEl = ref<globalThis.HTMLElement | null>(null)
-  const { collapsed: isCollapsed, compact: isCompact } = useBreadcrumbCollapse(navEl)
+  const { level } = useBreadcrumbCollapse(navEl, () => props.items.length)
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
@@ -65,18 +65,13 @@
     })
   )
 
+  const isFolded = computed(() => level.value !== 'full' && resolvedItems.value.length > 1)
   const firstItem = computed(() => resolvedItems.value[0])
-  const lastItem = computed(() => resolvedItems.value[resolvedItems.value.length - 1])
-  const showDistinctEnds = computed(
-    () => resolvedItems.value.length > 1 && firstItem.value !== lastItem.value
+  const showFirst = computed(() => level.value === 'collapsed')
+  const tailItems = computed(() => resolvedItems.value.slice(level.value === 'compact' ? -1 : -2))
+  const middleItems = computed(() =>
+    resolvedItems.value.slice(showFirst.value ? 1 : 0, -tailItems.value.length)
   )
-  const showFirst = computed(() => !isCompact.value || !showDistinctEnds.value)
-  const middleItems = computed(() => {
-    if (!showFirst.value) return resolvedItems.value.slice(0, -1)
-    return resolvedItems.value.length > 2 ? resolvedItems.value.slice(1, -1) : []
-  })
-
-  const hasMiddleItems = computed(() => middleItems.value.length > 0)
 
   const onItemClick = (event: MouseEvent, href: string) => {
     emit('navigate', event, href)
@@ -112,7 +107,7 @@
   >
     <template v-if="items.length">
       <BreadcrumbList :data-testid="`${testId}__list`">
-        <template v-if="!isCollapsed">
+        <template v-if="!isFolded">
           <template
             v-for="(item, index) in resolvedItems"
             :key="`full-${item.label}-${index}`"
@@ -139,92 +134,97 @@
         </template>
 
         <template v-else-if="firstItem">
-          <li
-            v-if="showFirst"
-            class="inline-flex items-center"
-            :data-testid="`${testId}__segment-0-mobile`"
-          >
-            <BreadcrumbItem
-              :label="firstItem.label"
-              :href="firstItem.href"
-              :active="firstItem.active && !showDistinctEnds"
-              :show-icon="firstItem.showIcon"
-              :icon="firstItem.icon"
-              :data-testid="`${testId}__item-0`"
-              @click="(event) => !firstItem.active && onItemClick(event, firstItem.href ?? '#')"
-            />
-          </li>
-
-          <template v-if="hasMiddleItems">
-            <BreadcrumbSeparator
-              v-if="showFirst"
-              :data-testid="`${testId}__separator-overflow-before`"
-            />
-
+          <template v-if="showFirst">
             <li
               class="inline-flex items-center"
-              :data-testid="`${testId}__segment-overflow`"
-            >
-              <DropdownMenu
-                :data-testid="`${testId}__overflow-menu`"
-                @select="onOverflowSelect"
-              >
-                <DropdownMenu.Trigger
-                  :aria-label="t('breadcrumb.showHidden')"
-                  :data-testid="`${testId}__overflow-trigger`"
-                  :class="OVERFLOW_TRIGGER_CLASS"
-                >
-                  <i
-                    class="az az-ellipsis size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
-                    aria-hidden="true"
-                  />
-                  <span
-                    aria-hidden="true"
-                    data-slot="touch-target"
-                    class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Item
-                    v-for="(item, index) in middleItems"
-                    :key="`${item.label}-${index}`"
-                    :value="item.href ?? '#'"
-                    :href="item.href ?? '#'"
-                    :label="item.label"
-                    :data-testid="`${testId}__overflow-item-${index}`"
-                  >
-                    <template
-                      v-if="item.showIcon && item.icon"
-                      #leading
-                    >
-                      <i
-                        :class="[item.icon, directionalIconClass(item.icon)]"
-                        class="size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Item>
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </li>
-          </template>
-
-          <template v-if="showDistinctEnds">
-            <BreadcrumbSeparator :data-testid="`${testId}__separator-overflow-after`" />
-
-            <li
-              class="inline-flex items-center"
-              :data-testid="`${testId}__segment-last-mobile`"
+              :data-testid="`${testId}__segment-0-mobile`"
             >
               <BreadcrumbItem
-                :label="lastItem.label"
-                :href="lastItem.href"
-                :active="lastItem.active"
-                :show-icon="lastItem.showIcon"
-                :icon="lastItem.icon"
-                class="text-(--text-default)"
-                :data-testid="`${testId}__item-last`"
-                @click="(event) => !lastItem.active && onItemClick(event, lastItem.href ?? '#')"
+                :label="firstItem.label"
+                :href="firstItem.href"
+                :show-icon="firstItem.showIcon"
+                :icon="firstItem.icon"
+                :data-testid="`${testId}__item-0`"
+                @click="(event) => onItemClick(event, firstItem.href ?? '#')"
+              />
+            </li>
+            <BreadcrumbSeparator :data-testid="`${testId}__separator-overflow-before`" />
+          </template>
+
+          <li
+            class="inline-flex items-center"
+            :data-testid="`${testId}__segment-overflow`"
+          >
+            <DropdownMenu
+              :data-testid="`${testId}__overflow-menu`"
+              @select="onOverflowSelect"
+            >
+              <DropdownMenu.Trigger
+                :aria-label="t('breadcrumb.showHidden')"
+                :data-testid="`${testId}__overflow-trigger`"
+                :class="OVERFLOW_TRIGGER_CLASS"
+              >
+                <i
+                  class="az az-ellipsis size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+                  aria-hidden="true"
+                />
+                <span
+                  aria-hidden="true"
+                  data-slot="touch-target"
+                  class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+                />
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Item
+                  v-for="(item, index) in middleItems"
+                  :key="`${item.label}-${index}`"
+                  :value="item.href ?? '#'"
+                  :href="item.href ?? '#'"
+                  :label="item.label"
+                  :data-testid="`${testId}__overflow-item-${index}`"
+                >
+                  <template
+                    v-if="item.showIcon && item.icon"
+                    #leading
+                  >
+                    <i
+                      :class="[item.icon, directionalIconClass(item.icon)]"
+                      class="size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </DropdownMenu>
+          </li>
+
+          <template
+            v-for="(item, index) in tailItems"
+            :key="`tail-${item.label}-${index}`"
+          >
+            <BreadcrumbSeparator
+              :data-testid="
+                index === 0 ? `${testId}__separator-overflow-after` : `${testId}__separator-parent`
+              "
+            />
+            <li
+              class="inline-flex items-center"
+              :data-testid="
+                index === tailItems.length - 1
+                  ? `${testId}__segment-last-mobile`
+                  : `${testId}__segment-parent-mobile`
+              "
+            >
+              <BreadcrumbItem
+                :label="item.label"
+                :href="item.href"
+                :active="item.active"
+                :show-icon="item.showIcon"
+                :icon="item.icon"
+                :data-testid="
+                  index === tailItems.length - 1 ? `${testId}__item-last` : `${testId}__item-parent`
+                "
+                @click="(event) => !item.active && onItemClick(event, item.href ?? '#')"
               />
             </li>
           </template>

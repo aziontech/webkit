@@ -144,7 +144,7 @@
   <FeatureScrollSection
     anchor="ship-it"
     eyebrow="Ship It"
-    title="Everything You Need to Build and Deploy"
+    title="Everything you need to build and deploy"
     description="Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves."
     :items="items"
   />

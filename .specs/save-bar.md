@@ -3,11 +3,11 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 77f2a296948702df83d38860dc633f006ac65f358d90f3f660d7c22bae96013b
-spec_version: 5
+checksum: b83d00795457476902cf54093247564a670985b78c239249ab2b504e8e9e9656
+spec_version: 6
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-20
+last_updated: 2026-11-25
 ---
 
 # SaveBar — Component Spec
@@ -86,9 +86,10 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 ## Props
 
-| Prop      | Type                                                        | Default      | Required | JSDoc                                                                             |
-| --------- | ----------------------------------------------------------- | ------------ | -------- | --------------------------------------------------------------------------------- |
-| `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false    | How the bar sits at the bottom of its scroll region. See the variant table below. |
+| Prop      | Type                                                        | Default      | Required | JSDoc                                                                                                                                                                                                                            |
+| --------- | ----------------------------------------------------------- | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false    | How the bar sits at the bottom of its scroll region. See the variant table below.                                                                                                                                                |
+| `column`  | `'full' \| 'form' \| 'focused'`                             | `'full'`     | false    | Lines the content of a `floating` or `docked` bar up with the page column above it (`layout-column-form` / `layout-column-focused`); the bar's border and fill still span the region. Ignored by `plain`, `fade` and `centered`. |
 
 Each `variant` is one placement plus one surface, named for what a reader sees:
 
@@ -100,8 +101,8 @@ Each `variant` is one placement plus one surface, named for what a reader sees:
 
 ## Events
 
-| Event  | Payload                  | Description                                                                                                                                                                                                                                                                  |
-| ------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event  | Payload                  | Description                                                                                                                                                                                                                                                                    |
+| ------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `save` | `(event: KeyboardEvent)` | `⌘ S` (`Ctrl S` off Apple) was pressed while the bar is mounted. The bar registers the shortcut only while a `save` listener is bound, prevents the browser's own save, and lists it in `ShortcutsDialog` as Save changes. The page decides whether there is anything to save. |
 
 ## Slots
@@ -116,6 +117,7 @@ Each `variant` is one placement plus one surface, named for what a reader sees:
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
+- `data-column` mirrors the `column` prop on the content row of a `floating` or `docked` bar
 - Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--save-bar-height` (so the `toaster` stacks above the bar, on top of any `--toast-offset-bottom` the app sets for its own bottom chrome, which the bar never overwrites), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--save-bar-height` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Discard above Save, so the screen order is the focus order. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
@@ -151,8 +153,8 @@ _none_
 
 The status sentence and the action labels come from the consumer's slots. One built-in string labels the shortcut in the `ShortcutsDialog` list:
 
-| Key                   | English source | Override prop |
-| --------------------- | -------------- | ------------- |
+| Key                    | English source | Override prop |
+| ---------------------- | -------------- | ------------- |
 | `saveBar.saveShortcut` | `Save changes` | —             |
 
 - Formatting: none.

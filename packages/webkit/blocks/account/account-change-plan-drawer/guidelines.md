@@ -37,7 +37,7 @@ Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assist
 
 ### F. Body — `PanelBody` (required)
 
-The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards sit two to a row from the `@md` container width (Free beside Pro, the tiers people compare most) and three to a row at `@4xl`, the upgrade body keeps What's included above the charge, and the two-field form rows start at `@md`. A wider surface gets the side column at `@3xl`; below `@md` the cards stack.
+The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards sit two to a row from the `@md` container width (Free beside Pro, the tiers people compare most) and three to a row at `@4xl`, the upgrade body opens on the charge (plan, period and total) and lists What's included after the form, so what you pay is on the first screen, and the two-field form rows start at `@md`. A wider surface gets What's included as a side column at the end at `@3xl`; below `@md` the cards stack.
 
 ### G. Description — `DrawerDescription` (plan drawer)
 

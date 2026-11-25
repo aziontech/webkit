@@ -6,7 +6,7 @@
 - Source: `blocks/settings/settings-canned-responses/settings-canned-responses.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-canned-responses")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [MarkdownEditor](../../components/markdown-editor.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [MarkdownEditor](../../components/markdown-editor.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -47,7 +47,7 @@ An account with no response yet sees a flush `Card` with an `EmptyState`: what c
 
 ### E. Response table — `DataTable`, `DataTablePagination`, `Tag`, `TableCellTime`, `useCollection`, `useLocale` (required)
 
-One `useCollection` over the responses, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`, sorted by Uses (most used first) and paged by `DataTablePagination`. Columns: Title (the title, then the line of the reply after the greeting as plain text, muted), Folder (a neutral small `Tag`; `No folder` when empty), Visibility (an icon and Personal, Team or Everyone), Last used (`TableCellTime`, relative with the exact time on its tooltip; `Never used`), Uses (end-aligned, formatted with `formatNumber` from `useLocale`), and the row menu. Below the `sm` width the Folder tag, the visibility and the count move under the title. A row click or Enter on a focused row opens Edit.
+One `useCollection` over the responses, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`, sorted by Uses (most used first) and paged by `DataTablePagination`. Columns: Title (the title, then the line of the reply after the greeting as plain text, muted; from `sm` up the cell stops at `--container-sm` and both lines truncate, so the other columns stay whole at 1280), Folder (a neutral small `Tag`; `No folder` when empty), Visibility (an icon and Personal, Team or Everyone), Last used (`TableCellTime`, relative with the exact time on its tooltip; `Never used`), Uses (end-aligned, formatted with `formatNumber` from `useLocale`), and the row menu. Below the `sm` width the Folder tag, the visibility and the count move under the title. A row click or Enter on a focused row opens Edit.
 
 ### F. Row actions — `TableCellActions`, `DropdownMenu` (required)
 
@@ -59,7 +59,7 @@ The table's `#empty` slot: `No matching responses` with Clear filters, which emp
 
 ### H. Editor drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `PanelFooter` (required)
 
-A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Save response spins, and Cancel, the close button and Escape are disabled (`:closable` and `:dismissible` follow `saving`), so the request cannot be left half-way; when `saving` returns to false with no `saveError`, the drawer closes. Footer: Cancel and `Save response`.
+A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Save response spins, and Cancel, the close button and Escape are disabled (`:closable` and `:dismissible` follow `saving`), so the request cannot be left half-way; when `saving` returns to false with no `saveError`, the drawer closes. Once a value differs from what the drawer opened with, Escape and an overlay tap do nothing (`:dismissible` is also false while dirty) and Cancel or the close button open the unsaved-changes `ConfirmDialog` (`useUnsavedChanges`): Keep editing or Discard changes, so one stray tap never loses a drafted reply. Footer: Cancel and `Save response`.
 
 ### I. Fields — `Field`, `Input`, `Combobox`, `RadioGroup`, `Select` (required)
 
@@ -191,6 +191,7 @@ Delete removes the row at once; when the request fails, the page says so in a to
 - Don't let two responses share a title; agents pick by title.
 - Don't make Everyone the default visibility; a new response starts Personal.
 - Don't close the drawer before the save succeeds.
+- Don't drop a typed draft on Escape, an overlay tap or Cancel; ask with the unsaved-changes dialog first.
 
 ## Copy
 
@@ -710,6 +711,7 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Combobox from '@aziontech/webkit/combobox'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -722,6 +724,7 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Select from '@aziontech/webkit/select'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   import type {
@@ -800,6 +803,26 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
   const errors = reactive({ title: '', body: '' })
   const editing = computed(() => props.response !== null)
 
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    beforeUnload: false
+  })
+  const dirty = guard.isDirty
+  const leaveDialog = guard.dialogProps
+  const leaveLabels = guard.labels
+
+  const drawerOpen = computed({
+    get: () => open.value,
+    set: async (next: boolean) => {
+      if (next) {
+        open.value = true
+        return
+      }
+      if (props.saving) return
+      if (await guard.confirmLeave()) open.value = false
+    }
+  })
+
   watch(
     open,
     (now) => {
@@ -813,6 +836,7 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
         status: response?.status ?? UNCHANGED
       })
       Object.assign(errors, { title: '', body: '' })
+      guard.commit()
     },
     { immediate: true }
   )
@@ -848,10 +872,10 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
 
 <template>
   <Drawer
-    v-model:open="open"
+    v-model:open="drawerOpen"
     size="large"
     side="end"
-    :dismissible="!saving"
+    :dismissible="!saving && !dirty"
     :closable="!saving"
   >
     <DrawerContent>
@@ -1017,7 +1041,7 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
               size="medium"
               type="button"
               :disabled="saving"
-              @click="open = false"
+              @click="drawerOpen = false"
             />
             <Button
               label="Save response"
@@ -1031,6 +1055,23 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
       </form>
     </DrawerContent>
   </Drawer>
+
+  <ConfirmDialog v-bind="leaveDialog">
+    <template #actions>
+      <Button
+        :label="leaveLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="leaveLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>
 ```
 
@@ -1133,7 +1174,7 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
         @row-remove="(event, row) => emit('action', event, 'remove', row)"
       >
         <template #cell-title="{ row }">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) sm:max-w-(--container-xs)">
             <span
               dir="auto"
               class="truncate text-label-sm text-(--text-default)"

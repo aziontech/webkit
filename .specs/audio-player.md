@@ -3,11 +3,11 @@ name: audio-player
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: bc4c9d6bb0e19f974284e1dca0ba42f26c5d8f2723e731ce24a20dd47bc30a3f
+checksum: 00a1a731c41ea38916497bc940ef06722e15897710bc019057994bbf25273846
 created: 2026-11-19
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # AudioPlayer — Component Spec
@@ -88,6 +88,7 @@ A compact player for one audio clip: play and pause, a seek bar between the curr
 | ------- | ------- | ------------------------------------------------------------------------------------------------- |
 | `play`  | `Event` | Playback started (the audio element's `play` event).                                              |
 | `pause` | `Event` | Playback paused, by the reader or because the clip reached its end (the element's `pause` event). |
+| `retry` | `MouseEvent` | Try again in the error state was pressed. The button renders only when this event has a listener; an error the audio element reported is cleared and the element loads `src` again, and the app clears or keeps `error`. |
 
 ## Slots
 
@@ -98,7 +99,7 @@ _none_
 - `data-playing` is set while the audio plays; the play control shows Pause.
 - `data-loading` mirrors `loading` (the audio is still being generated or fetched): the play control shows a `Spinner` (through `IconButton`'s `loading`) and is inert, every other control is disabled, the root has `aria-busy`, and a visually hidden `role="status"` line says Loading audio.
 - `data-buffering` is set while the browser waits for data after Play (the audio element's `waiting` until `playing`): a small `Spinner` replaces the current time, the root has `aria-busy` and the status line says Loading audio, and every control stays enabled; Play keeps its Pause name so the reader can stop a stalled clip.
-- `data-error` is set when `error` is set or the audio element reports an error; the controls are disabled and the error line (`role="alert"`) replaces the time. The app's text wins; with no text the catalog's message shows.
+- `data-error` is set when `error` is set or the audio element reports an error; the controls are disabled and the error line (`role="alert"`) replaces the time. The app's text wins; with no text the catalog's message shows. With a `retry` listener a small outline Try again `Button` (`az az-refresh`) sits at the end of the error line.
 - `data-disabled` mirrors `disabled`; it is also set when `src` is empty and nothing is loading.
 - `data-muted` is set while the audio is muted; the mute control shows Unmute and the volume slider reads 0.
 - Empty: `src` empty with `loading` false sets `data-disabled`; the times show `--:--` and the Download link is not rendered.
@@ -173,6 +174,7 @@ _none_
 | `audioPlayer.loading`       | `Loading audio`             | —             |
 | `audioPlayer.error`         | `The audio could not play.` | `error`       |
 | `audioPlayer.transcript`    | `Transcript`                | —             |
+| `audioPlayer.retry`         | `Try again`                 | —             |
 
 - Formatting: `formatNumber` (`Intl.NumberFormat`, the `ConfigProvider` locale) for the shown time, `m:ss` under an hour and `h:mm:ss` from an hour on, and for the rate inside `audioPlayer.rate` (a locale can move the sign: `×1,5`). The spoken `aria-valuetext` uses `formatNumber` with `style: 'unit'` (`hour`, `minute`, `second`, long) joined by `formatList` (`type: 'unit'`). An unknown duration shows `--:--`; the seek bar is disabled then, so it announces nothing. `audioPlayer.downloadTitle` names the link when `title` is set (the title fills `{title}`), so two players in one message have distinct link names.
 
@@ -205,7 +207,7 @@ The component has no `variant` or `size`; the examples show the states an AI rep
 - Default — a clip with a title, its duration and the transcript.
 - Playback rates — the speed control with the Download link (`playbackRates`, `downloadable`, `fileName`), file `playback-rates.vue`.
 - Loading — the player while the speech is still being generated.
-- Error — the player when the audio cannot play, with the app's message.
+- Error — the player when the audio cannot play, with the app's message and Try again.
 - Disabled — every control disabled.
 
 ## Constraints — DO NOT

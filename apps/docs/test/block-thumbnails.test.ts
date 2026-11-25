@@ -34,10 +34,13 @@ test('every block in the catalog has a small static thumbnail in both themes', (
     for (const theme of ['light', 'dark'] as const) {
       const file = join(PUBLIC, blockThumbnailFile(id, theme))
       if (!existsSync(file)) {
-        problems.push(`${id} (${theme}): missing; run node apps/docs/scripts/generate-block-thumbnails.mjs`)
+        problems.push(
+          `${id} (${theme}): missing; run node apps/docs/scripts/generate-block-thumbnails.mjs`
+        )
         continue
       }
-      if (statSync(file).size > MAX_BYTES) problems.push(`${id} (${theme}): over ${MAX_BYTES} bytes`)
+      if (statSync(file).size > MAX_BYTES)
+        problems.push(`${id} (${theme}): over ${MAX_BYTES} bytes`)
       const { width, height } = webpSize(file)
       if (width !== BLOCK_THUMBNAIL.width || height !== BLOCK_THUMBNAIL.height) {
         problems.push(`${id} (${theme}): ${width}x${height}`)

@@ -91,6 +91,7 @@
     { value: '24h', label: 'Last 24 hours' },
     { value: '7d', label: 'Last 7 days' }
   ]
+  const WIDEST_RANGE: WafTuningRange = '7d'
 
   const columns: TableColumn[] = [
     {
@@ -98,13 +99,14 @@
       header: 'Rule ID',
       sortable: true,
       principal: true,
-      hideable: false
+      hideable: false,
+      minWidth: 64
     },
     { accessorKey: 'hits', header: 'Hits', sortable: true, minWidth: 80 },
     { accessorKey: 'threat', header: 'Threat', grow: 2 },
-    { accessorKey: 'ips', header: 'Top IP addresses', grow: 3 },
-    { accessorKey: 'countries', header: 'Top countries', grow: 2 },
-    { accessorKey: 'paths', header: 'Top paths', grow: 3 }
+    { accessorKey: 'ips', header: 'Top IP addresses', minWidth: 120 },
+    { accessorKey: 'countries', header: 'Top countries', minWidth: 120 },
+    { accessorKey: 'paths', header: 'Top paths', minWidth: 120 }
   ]
 
   const source = computed<WafTuningMatch[]>(
@@ -213,10 +215,7 @@
         class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end) outline-none"
         aria-label="Matched requests"
       >
-        <div
-          v-if="!noMatches"
-          class="flex min-w-0 flex-wrap items-end gap-(--spacing-sm)"
-        >
+        <div class="flex min-w-0 flex-wrap items-end gap-(--spacing-sm)">
           <div class="w-full sm:w-48">
             <Field>
               <Field.Label>Time range</Field.Label>
@@ -246,7 +245,7 @@
                 v-model="threshold"
                 size="medium"
                 :min="0"
-                :disabled="loading"
+                :disabled="loading || noMatches"
               />
             </Field>
           </div>
@@ -259,7 +258,7 @@
               aria-keyshortcuts="/"
               aria-label="Search matched requests"
               class="w-full"
-              :disabled="loading"
+              :disabled="loading || noMatches"
             >
               <template #leading>
                 <i
@@ -296,9 +295,21 @@
             <EmptyState
               v-if="noMatches"
               icon="az az-shield"
-              title="No matches yet"
-              description="This rule set has not matched any request. Matches appear here as traffic arrives."
-            />
+              :title="`No matches in the ${rangeLabel(range).toLowerCase()}`"
+              :description="`This rule set matched no request in the ${rangeLabel(range).toLowerCase()}. Widen the time range, or come back as traffic arrives.`"
+            >
+              <template
+                v-if="range !== WIDEST_RANGE"
+                #actions
+              >
+                <Button
+                  :label="`Show the ${rangeLabel(WIDEST_RANGE).toLowerCase()}`"
+                  variant="outline"
+                  size="small"
+                  @click="range = WIDEST_RANGE"
+                />
+              </template>
+            </EmptyState>
             <DataTable
               v-else
               ref="tuningTableEl"
@@ -313,7 +324,7 @@
               :loading="loading"
             >
               <template #cell-ruleId="{ value }">
-                <span class="min-w-0 truncate font-code tabular-nums">{{ value }}</span>
+                <span class="min-w-0 truncate tabular-nums">{{ value }}</span>
               </template>
               <template #cell-hits="{ value }">
                 <span class="tabular-nums">{{ formatHits(value) }}</span>

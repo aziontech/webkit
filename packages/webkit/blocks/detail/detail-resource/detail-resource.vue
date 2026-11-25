@@ -102,8 +102,11 @@
                 <p
                   class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
                 >
-                  To deploy to Production, drop your project anywhere on this page, connect Git, or
-                  run
+                  To deploy to Production,
+                  <span class="hidden pointer-fine:inline"
+                    >drop your project anywhere on this page,
+                  </span>
+                  connect Git, or run
                   <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
                     >platform deploy</code
                   >

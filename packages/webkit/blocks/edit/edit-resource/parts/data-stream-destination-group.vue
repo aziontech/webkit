@@ -82,7 +82,7 @@
                 size="large"
                 class="w-full"
                 :display-value="connectorLabel"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="onDestinationChange('connector')"
               >
                 <Select.Trigger
@@ -157,6 +157,7 @@
                     :model-value="value"
                     autocomplete="off"
                     monospace
+                    :readonly="saving"
                     :invalid="invalid"
                     @update:model-value="update"
                   />
@@ -165,6 +166,7 @@
                     :model-value="value"
                     autocomplete="off"
                     :spellcheck="false"
+                    :readonly="saving"
                     :invalid="invalid"
                     @update:model-value="update"
                   />
@@ -178,7 +180,7 @@
               description="The hosts and ports of the Kafka cluster, separated by a comma and no space."
               variant="stacked"
             >
-              <div class="flex w-full font-code">
+              <div class="flex w-full">
                 <Textarea
                   id="data-stream-bootstrapServers"
                   v-model="form.bootstrapServers"
@@ -191,7 +193,7 @@
                   :aria-describedby="
                     errors.bootstrapServers ? 'data-stream-bootstrapServers-message' : undefined
                   "
-                  :disabled="saving"
+                  :readonly="saving"
                   @update:model-value="onDestinationChange('bootstrapServers')"
                 />
               </div>

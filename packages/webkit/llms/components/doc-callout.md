@@ -1,6 +1,6 @@
 # Doc Callout
 
-> The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+> The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 - Import: `import DocCallout from '@aziontech/webkit/doc-callout'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -59,7 +59,7 @@
 - Keyboard map: `Tab` reaches a link or a command chip (`<code data-command>`) in the copy; `Enter` / `Space` on a command chip copies it. A plain chip is not a stop.
 - Copy feedback: the tooltip is `role="tooltip"`; the result is announced in a polite live region teleported to `body`, which binds `dir` and `lang` from the nearest `ConfigProvider`.
 - ARIA: the role comes from `Alert`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
-- Contrast ≥4.5:1: the copy is `--text-default` in every variant, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
+- Contrast ≥4.5:1: the copy is `--text-default` in every variant, on `--bg-surface` in every variant, so it keeps the surface's body-text contrast in both themes; the glyph is the `-mark` token, which passes the icon target on a surface. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
 - `tip` deliberately does **not** speak in `--text-muted` (3.95:1 light, under AA).
 - Touch target: the callout itself is not interactive; a chip is an inline text control (WCAG 2.5.8 inline exception).
 

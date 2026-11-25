@@ -5,7 +5,7 @@
 // a computed style imports ./reflow.css first, which compiles the theme and the component classes
 // with the Tailwind plugin in vitest.config.ts. The two modes are described in
 // .claude/rules/testing.md.
-import { cleanup } from '@testing-library/vue'
+import { cleanup, configure } from '@testing-library/vue'
 import { afterEach, beforeEach } from 'vitest'
 
 // Anchor-navigation guard. Components render real <a href> links; in a real
@@ -22,19 +22,11 @@ function preventAnchorNavigation(event: MouseEvent) {
   }
 }
 
-// Chromium reports "ResizeObserver loop completed with undelivered notifications" when an observer
-// callback resizes what it observes; the browser delivers the rest next frame, so it is benign and
-// only floods the log. Registered through the prototype so Vitest's error catcher, which counts
-// listeners added through window.addEventListener, keeps failing on every real unhandled error.
-export const RESIZE_OBSERVER_LOOP =
-  /^ResizeObserver loop (completed with undelivered notifications|limit exceeded)/
+// Lazily loaded parts (Monaco, chart scenes, overlay menus) can take longer than Testing Library's
+// 1 s default to appear when four shards share a loaded machine; every findBy/waitFor waits 5 s.
+export const ASYNC_UTIL_TIMEOUT = 5000
 
-function ignoreResizeObserverLoop(event: Event) {
-  if (event instanceof ErrorEvent && RESIZE_OBSERVER_LOOP.test(event.message))
-    event.stopImmediatePropagation()
-}
-
-EventTarget.prototype.addEventListener.call(window, 'error', ignoreResizeObserverLoop, true)
+configure({ asyncUtilTimeout: ASYNC_UTIL_TIMEOUT })
 
 beforeEach(() => {
   document.addEventListener('click', preventAnchorNavigation, true)

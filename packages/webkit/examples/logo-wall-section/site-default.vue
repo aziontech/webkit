@@ -66,9 +66,9 @@
   ]
 
   const quote = {
-    text: '"Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results."',
-    name: 'Ismael Aguilar',
-    jobTitle: 'Information Security Manager at Zoop',
+    text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',
+    name: 'Priya Patel',
+    jobTitle: 'Information security manager at Zoop',
     logo: zoopExtendedColor,
     logoAlt: 'Zoop'
   }

@@ -72,6 +72,7 @@
 
 ## States
 
+- Error pattern of the chart family: a chart tall enough for it shows the centred error card (a bordered small `EmptyState` with the cause and a secondary `Try again` button, as BarList, DonutChart and DataTable do) through its `error` slot; only a strip too short for the card (Tracker) keeps an inline banner. The retry label is always `Try again`.
 - Visual states: `default`, `loading` (Skeleton at the map ratio), `error` (Alert), `empty` (EmptyState), `refetching`, `table-view`, `active` (a place is hovered or focused; the others dim)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active`, `data-view` on the root
 - `data-geometry`: `loading` | `ready` while the country shapes chunk loads (only when `regions` is set)

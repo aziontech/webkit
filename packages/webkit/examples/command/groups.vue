@@ -1,5 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -58,6 +59,7 @@
         </CommandItem>
         <CommandItem value="logout">Log out</CommandItem>
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>

@@ -42,7 +42,7 @@
     defaultDraft?: Partial<EditResourceProject>
     /** The version saved elsewhere after the form opened: a notice offers Reload, and Save asks before it overwrites. */
     stale?: EditResourceProject
-    /** The save is in flight: the fieldset and Discard lock and Save spins. */
+    /** The save is in flight: the fields turn read-only, Discard locks and Save spins. */
     loading?: boolean
     /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
     error?: string
@@ -268,7 +268,6 @@
               <fieldset
                 :data-stale="stale ? '' : null"
                 class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0 data-[stale]:mt-(--spacing-lg)"
-                :disabled="saving"
               >
                 <legend class="sr-only">Main settings</legend>
 
@@ -289,7 +288,7 @@
                               id="resource-name"
                               v-model="form.name"
                               size="large"
-                              :disabled="saving"
+                              :readonly="saving"
                               class="w-full"
                               aria-label="Name"
                               required
@@ -311,7 +310,7 @@
                           <Switch
                             v-model="form.active"
                             aria-label="Active"
-                            :disabled="saving"
+                            :readonly="saving"
                           />
                         </SettingsRow>
                       </Item.List>
@@ -337,7 +336,7 @@
                           <Switch
                             v-model="form.modules[mod.key]"
                             :aria-label="mod.title"
-                            :disabled="saving"
+                            :readonly="saving"
                           />
                         </SettingsRow>
                       </Item.List>

@@ -26,15 +26,15 @@ One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`
 
 ### B. Storage title and search — `TableSearch` (required)
 
-The toolbar opens with the storage glyph and the storage name, the page's `h1`, truncated on one line. Below it a large `TableSearch` fills the row, searching inside the table with the placeholder "Search in folder"; it searches the current folder, not the whole bucket.
+The toolbar opens with the storage glyph and the storage name, the page's `h1`, truncated on one line. Below it a medium `TableSearch` fills the row, searching inside the table with the placeholder "Search in folder"; it searches the current folder, not the whole bucket.
 
 ### C. Toolbar actions — `Tooltip`, `IconButton` (optional)
 
-Large outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
+Medium outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
 
 ### D. Columns — `CollectionPreferences` (optional)
 
-The last toolbar control is `CollectionPreferences` with only its columns section (`:sections="['columns']"`), which reads the table's columns from context: one switch per column with its order, Name locked, and Confirm writes them back to the table. Do not build a popover of `Switch`es by hand.
+The last toolbar control is `CollectionPreferences` with only its columns section (`:sections="['columns']"`), which reads the table's columns from context: one switch per column with its order, Name locked, and Confirm writes them back to the table. Its trigger is medium, so every control of the search row is medium and the row reads as one height. Do not build a popover of `Switch`es by hand.
 
 ### E. Path and create — `Breadcrumb`, `SplitButton` (required)
 
@@ -72,7 +72,7 @@ When a transfer finishes the page reports it with a toast as well as the card, b
 
 ### L. Selection and Move — `DataTable`, `DropdownMenuItem`, `Field`, `Combobox` (optional)
 
-With `movable`, `selectable` with `v-model:selected-keys` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move), and the selected names are the `selection` model. Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of the `destinations` (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves. A valid path emits `move` with the files and the destination.
+With `movable`, `selectable` with `v-model:selected-keys` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move), and the selected names are the `selection` model. Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`, with focus on the list of files (`data-autofocus`), so the destination list opens only when the person clicks or types in the field; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of the `destinations` (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves. A valid path emits `move` with the files and the destination.
 
 ## Data
 
@@ -221,7 +221,7 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - InsideAFolder: `path` is a build folder; the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
 - Uploading: `transfers` holds a running upload in the floating card; Add to files opens the upload dialog and the page drop overlay adds more.
 - Empty: `entries` is `[]` inside `assets/` of a build; the `..` row stays and the empty state offers Add to files.
-- Error: `error` is set; the storage name, the path and Refresh stay, Add to files is disabled and a danger `Alert` with the message and Retry takes the table's place.
+- Error: `error` is set; the storage name, the search row (search, Download CSV and the column settings disabled, Refresh live) and the path stay, Add to files is disabled and a danger `Alert` with the message and Retry takes the table's place. Every view block's error state follows one rule: the filter or search stays in place, disabled; Download CSV and the preferences are disabled; Refresh stays live.
 - MoveObject: `movable` with two files in `selectedKeys` and `defaultMoveOpen`; the Move dialog is open and Move emits `move`.
 
 ## Related

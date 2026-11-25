@@ -147,7 +147,7 @@ Then delete `sample.ts` and its import.
 
 - Default: applications exist; the cards show them with the property filter, multi-select with Delete (n) behind its confirmation dialog, preferences and pagination wired, and filtering to nothing shows No matching applications with Clear filters.
 - Loading: the first load (`loading` with no `applications`); the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards (`loading`, `aria-busy`).
-- Error: the applications could not load (`error` is set); the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
+- Error: the applications could not load (`error` is set); the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place. Every view block's error state follows one rule: the filter or search stays in place, disabled; Download CSV and the preferences are disabled; Refresh stays live.
 - Empty: the account has no applications (`applications` is `[]`); `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
 
 ## Related

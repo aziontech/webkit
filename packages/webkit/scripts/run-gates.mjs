@@ -128,6 +128,12 @@ export const GATES = [
     steps: [['node', 'scripts/check-assertions.mjs']]
   },
   {
+    id: 'sfc-type-coverage',
+    label:
+      'The count of identifiers typed any in component SFC scripts and templates does not grow',
+    steps: [['node', 'scripts/check-sfc-type-coverage.mjs']]
+  },
+  {
     id: 'quality-lint',
     label:
       'No line over 200 characters and no accessibility lint finding in components, blocks and examples',

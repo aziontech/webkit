@@ -14,16 +14,19 @@ export interface CardNotice {
   retry?: boolean
 }
 
-type FieldCopy = Pick<SignInCopy, 'required' | 'invalidEmail' | 'weakPassword'>
+type FieldCopy = Pick<
+  SignInCopy,
+  'emailRequired' | 'passwordRequired' | 'invalidEmail' | 'weakPassword'
+>
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export const emailError = (value: string, copy: FieldCopy) =>
-  !value.trim() ? copy.required : EMAIL_PATTERN.test(value.trim()) ? '' : copy.invalidEmail
+  !value.trim() ? copy.emailRequired : EMAIL_PATTERN.test(value.trim()) ? '' : copy.invalidEmail
 
 export const newPasswordError = (value: string, copy: FieldCopy) =>
   !value
-    ? copy.required
+    ? copy.passwordRequired
     : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
       ? ''
       : copy.weakPassword

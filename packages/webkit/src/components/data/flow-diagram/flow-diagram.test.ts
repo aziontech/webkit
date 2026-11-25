@@ -96,6 +96,26 @@ describe('FlowDiagram', () => {
     expect(container.querySelector('[data-beside]')?.textContent).toBe('18 ms')
   })
 
+  it('keeps every edge and its severity when a branching diagram stacks on a phone', async () => {
+    const { container } = render(() => h('div', { style: 'width: 360px' }, [h(Default)]))
+    const list = () => container.querySelector<HTMLElement>('[data-testid="flow-diagram__list"]')!
+    await waitFor(() => expect(list().hasAttribute('data-stacked')).toBe(true))
+    await waitFor(() => expect(paths(container).length).toBe(3))
+    const labels = Array.from(
+      container.querySelectorAll('[data-testid="flow-diagram__edge-label"]'),
+      (el) => el.textContent?.trim()
+    )
+    expect(labels).toEqual(['6 ms', '2 ms', '96 ms'])
+    const routes = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-testid="flow-diagram__node-route"]')
+    )
+    expect(routes.map((route) => route.innerText.replace(/\s+/g, ' ').trim())).toEqual([
+      'To static-assets 1 ms',
+      'To api.example.com 840 ms'
+    ])
+    expect(routes[1].dataset['severity']).toBe('danger')
+  })
+
   it('keeps a wide request path in a row of equal boxes', async () => {
     const { container } = render(() => h('div', { style: 'width: 960px' }, [h(RequestPath)]))
     await waitFor(() => expect(cards(container).length).toBe(3))
@@ -131,6 +151,36 @@ describe('FlowDiagram', () => {
     const cap = probe.getBoundingClientRect().width
     expect(cap).toBeGreaterThan(0)
     expect(list().getBoundingClientRect().width).toBeLessThanOrEqual(cap + 0.5)
+    const viewport = container.querySelector(
+      '[data-testid="flow-diagram__viewport"]'
+    ) as HTMLElement
+    const frame = viewport.getBoundingClientRect()
+    const rail = list().getBoundingClientRect()
+    expect(Math.abs(rail.left - frame.left - (frame.right - rail.right))).toBeLessThanOrEqual(1)
+  })
+
+  it('draws the port squares by default and hides them when showPorts is off', async () => {
+    const shown = render(() => h('div', { style: 'width: 1400px' }, [h(Composed)]))
+    const visiblePorts = (root: Element) =>
+      Array.from(root.querySelectorAll<HTMLElement>('[data-slot="flow-diagram-port"]')).filter(
+        (port) => getComputedStyle(port).display !== 'none'
+      )
+    await waitFor(() => expect(visiblePorts(shown.container).length).toBeGreaterThan(0))
+    shown.unmount()
+    const hidden = render(FlowDiagramRoot, {
+      props: {
+        orientation: 'horizontal',
+        showPorts: false,
+        nodes: [
+          { id: 'a', title: 'Request' },
+          { id: 'b', title: 'Response' }
+        ]
+      }
+    })
+    await waitFor(() => expect(cards(hidden.container).length).toBe(2))
+    const list = hidden.getByTestId('flow-diagram__list')
+    expect(list.hasAttribute('data-show-ports')).toBe(false)
+    expect(visiblePorts(hidden.container)).toHaveLength(0)
   })
 
   it('never leaves a lazily loaded row overflowing a viewport that cannot take focus', async () => {

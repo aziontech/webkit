@@ -5,8 +5,8 @@ structure: composition
 status: implemented
 spec_version: 6
 created: 2026-05-24
-last_updated: 2026-11-22
-checksum: 8ca9414e2e325bb0dec9567d84ea79df8efa450d36cda484210932e9465eb2cb
+last_updated: 2026-11-25
+checksum: e72355f194a9571f3ffffa514927682605e53a02ef8caea33776bf08e46f9472
 ---
 
 # Item — Component Spec
@@ -112,7 +112,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - `item-media.vue` — Leading media slot (`type` for icon/image frames).
 - `item-content.vue` — Main text column (title + description).
 - `item-title.vue` — Primary label line.
-- `item-description.vue` — Secondary muted line.
+- `item-description.vue` — Secondary muted text. It wraps in full and never clamps to an ellipsis: the description is often the one fact that tells two rows apart, so on a phone it takes the lines it needs (a consumer that wants a clamp adds `line-clamp-2` through `class`).
 - `item-actions.vue` — Trailing actions cluster.
 - `item-header.vue` — Optional top band (e.g. cover image).
 - `item-footer.vue` — Optional bottom band.

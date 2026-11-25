@@ -21,6 +21,8 @@
         v-if="'pair' in part"
         :type="part.pair.type"
         :level="part.pair.level"
+        :do-id="part.pair.doId"
+        :dont-id="part.pair.dontId"
         :do-html="part.pair.do"
         :dont-html="part.pair.dont"
       />

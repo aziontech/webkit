@@ -1,8 +1,8 @@
 ---
 name: webkit-errors
-description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Alert, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
+description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts (a credential the user retypes goes on its field, everything else in one card Alert), and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-24
 scope: general
 enforced_by: [webkit-component-states, webkit-accessibility, ui-verify]
 ---
@@ -58,13 +58,18 @@ this way. Use **@aziontech/theme tokens** for spacing and color, never raw px or
 Everything below follows from that. The failure's HTTP status does not decide the surface — its
 _recoverability_ and the user's _presence_ do.
 
-| The failure…                                                     | Goes to                                                                          | Carries                                            |
-| ---------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------- |
-| **1.** Empty or malformed input, caught before any request       | the **field itself** — its red `invalid` state and a `FieldError`                | nothing — the field is the recovery                |
-| **2.** Server rejection **scoped to one field**                  | a **`Alert`** inside **that field's own section**, + the field's `invalid` state | the fix, in words; on a long form, a scroll anchor |
-| **3.** Request failed, tied to **no** field (5xx, network)       | **`toast.error`**                                                                | **Retry**                                          |
-| **4.** Anything on a **signed-out** screen                       | **one `Alert` in the card** — auth never toasts                                  | Retry only if the user can't fix it                |
-| **5.** A failure that arrives **after the user left the screen** | a **permanent, closable toast** — the only global surface                        | the ways out (retry + an escape)                   |
+| The failure…                                                     | Goes to                                                                                       | Carries                                            |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **1.** Empty or malformed input, caught before any request       | the **field itself** — its red `invalid` state and a `FieldError`                             | nothing — the field is the recovery                |
+| **2.** Server rejection **scoped to one field**                  | a **`Alert`** inside **that field's own section**, + the field's `invalid` state              | the fix, in words; on a long form, a scroll anchor |
+| **3.** Request failed, tied to **no** field (5xx, network)       | **`toast.error`**                                                                             | **Retry**                                          |
+| **4.** Anything on a **signed-out** screen                       | the **field** the user retypes; anything else **one `Alert` in the card** — auth never toasts | Retry only if the user can't fix it                |
+| **5.** A failure that arrives **after the user left the screen** | a **permanent, closable toast** — the only global surface                                     | the ways out (retry + an escape)                   |
+
+**One rule under all five rows: the error goes on the thing the user has to change.** One field to
+fix: that field, whether the browser or the server caught it. A section to fix: that section, plus
+its field. Nothing on screen can fix it: the surface that holds the screen (a toast in the console,
+the card's `Alert` on a signed-out screen).
 
 Rows 1–3 are the create-form ladder. Row 4 is the same question asked where the answer collapses to
 one surface. Row 5 is the inversion: the page that owned the error may not be mounted any more.
@@ -179,7 +184,8 @@ in `finally`) belong to **`/webkit-ui-states`**.
 On the signed-out screens the placement question collapses to **one answer**, and it is the one most
 apps get backwards:
 
-> **Auth never toasts.** Every outcome the server returns — including success — lands in **one
+> **Auth never toasts.** A credential the user retypes (a password, a code, a token) takes its error
+> on **its own field**, exactly like row 1. Every other outcome — including success — lands in **one
 > `Alert`, inside the card, in the same slot, at the same size.**
 
 A toast is wrong here for reasons that do not apply inside the console. There is exactly **one object
@@ -188,21 +194,26 @@ away from the only thing they are looking at. It **self-dismisses**, so the reas
 expire while the user is still typing. And it **stacks**: three attempts leave three corner cards
 saying the same thing, none of them near the fields.
 
-| Outcome                           | Status        | Severity  | Carries             |
-| --------------------------------- | ------------- | --------- | ------------------- |
-| signed in / account created       | 200           | `success` | nothing             |
-| credentials rejected              | 401           | `danger`  | nothing             |
-| the service itself is down        | 503           | `warning` | Retry               |
-| request failed, tied to no field  | 500           | `danger`  | Retry               |
-| no answer came back               | (no response) | `warning` | Retry               |
-| the address is already registered | 409           | `danger`  | two exits, as links |
+| Outcome                           | Status        | Severity                      | Carries             |
+| --------------------------------- | ------------- | ----------------------------- | ------------------- |
+| signed in / account created       | 200           | `success`                     | nothing             |
+| credentials rejected              | 401           | the password field, `invalid` | nothing             |
+| MFA code or token rejected        | 401 / 403     | its field, `invalid`          | nothing             |
+| the service itself is down        | 503           | `warning`                     | Retry               |
+| request failed, tied to no field  | 500           | `danger`                      | Retry               |
+| no answer came back               | (no response) | `warning`                     | Retry               |
+| the address is already registered | 409           | `danger`                      | two exits, as links |
 
 With the placement settled, three decisions are left per outcome:
 
-1. **401 is not field-scoped.** Which half of the pair is wrong is not yours to disclose — saying
-   "wrong password" confirms the address exists. So it goes above **both** fields, and the password is
-   cleared and refocused under it.
-2. **Whether the `Alert` carries an action, decided by whether the user can fix it.** After a 401 the
+1. **A 401 goes on the password field, in neutral words.** Sign-in asks for the email first and the
+   password on its own step, so the password is the only field on screen when it fails, and it is
+   where the user acts: the password is cleared, the field turns `invalid` with `Incorrect email or
+password. Check both and try again.` and takes focus. What keeps the form from telling anyone which
+   addresses have an account is the copy, never the placement: never "wrong password", never "no
+   account with this email". A rejected MFA code or personal token goes on its field the same way, the
+   help text kept and the reason under it.
+2. **Whether the outcome carries an action, decided by whether the user can fix it.** After a 401 the
    credentials are right there to retype, so a button would only repeat the form. A 503, a 500 and a
    timeout are fixable by nobody, so the `Alert` carries the one move left — **Retry** — and stays
    until it works. A 409 _is_ fixable, but not only here, so it carries the two exits (sign in, reset
@@ -300,7 +311,7 @@ For `/webkit-errors <file>`, list gaps. Each:
 
 ✗ SignIn.vue:64  toast.error('Incorrect credentials')
   rule: Auth never toasts — one Alert in the card, same slot, every outcome.
-  fix: render a size="small" danger Alert above both fields; clear and refocus the password.
+  fix: put the message on the password field (invalid + Field.Error); clear and refocus it.
 
 ✗ Deploy.vue:52  error toast uses the default duration
   rule: A failure the user was not present for must not expire unseen.

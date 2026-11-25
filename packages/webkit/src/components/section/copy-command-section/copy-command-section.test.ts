@@ -31,11 +31,14 @@ describe('CopyCommandSection', () => {
     await vi.waitFor(() => expect(writeText).toHaveBeenCalledWith('npm create azion@latest'))
   })
 
-  it('shows the command read-only with a decorative prompt', () => {
-    const { getByRole, getByText } = render(Default)
-    const field = getByRole('textbox', { name: 'Command' })
-    expect(field).toHaveValue('npm create azion@latest')
-    expect(field).toHaveAttribute('readonly')
+  it('shows the whole command as wrapping text after a decorative prompt', () => {
+    const { getByRole, getByTestId, getByText } = render(Default)
+    const group = getByRole('group', { name: 'Command' })
+    const text = getByTestId('copy-command-section__text')
+    expect(group).toContainElement(text)
+    expect(text.textContent?.trim()).toBe('npm create azion@latest')
+    expect(text.className).toContain('group-data-[shell]:break-all')
+    expect(text.className).not.toContain('mask-image')
     expect(getByText('$')).toHaveAttribute('aria-hidden', 'true')
     expect(getByRole('button', { name: 'Copy command' })).toBeInTheDocument()
   })
@@ -61,8 +64,8 @@ describe('CopyCommandSection', () => {
   })
 
   it('keeps the command left to right inside an rtl page', () => {
-    const { getByRole } = render({ render: () => h('div', { dir: 'rtl' }, [h(Default)]) })
-    expect(getByRole('textbox')).toHaveAttribute('dir', 'ltr')
+    const { getByTestId } = render({ render: () => h('div', { dir: 'rtl' }, [h(Default)]) })
+    expect(getByTestId('copy-command-section__text')).toHaveAttribute('dir', 'ltr')
   })
 
   it('has no axe violations', async () => {

@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { type Component, defineComponent, h } from 'vue'
 
 import DetailVersion, {
@@ -84,6 +85,34 @@ describe('detail-version#EnvironmentCrumb', () => {
     expect(environments).toHaveLength(2)
     for (const trigger of environments) expect(trigger.textContent).toContain('Production')
     expect(screen.getAllByRole('combobox', { name: 'Switch version' })).toHaveLength(2)
+  })
+})
+
+describe('detail-version version picker', () => {
+  it('closes on Escape from the search field and moves into the versions on ArrowDown', async () => {
+    render(DeviceGroups)
+    const trigger = screen.getByRole('combobox', { name: 'Switch version' })
+    trigger.focus()
+    await userEvent.keyboard('{Enter}')
+    const search = await screen.findByRole('textbox', { name: 'Search versions' })
+    await waitFor(() => expect(document.activeElement).toBe(search))
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(document.activeElement?.getAttribute('role')).toBe('option'))
+    search.focus()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+    expect(document.activeElement).toBe(trigger)
+  })
+})
+
+describe('detail-version#Creating', () => {
+  it('tags the new copy as creating, never as the deployed version it copies', async () => {
+    const { default: Creating } =
+      await import('../../../../blocks/detail/detail-version/variants/creating.vue')
+    render(Creating)
+    const actions = screen.getByTestId('page-tabs__actions')
+    expect(actions.textContent).toContain('Creating')
+    expect(actions.textContent).not.toContain('Deployed')
   })
 })
 

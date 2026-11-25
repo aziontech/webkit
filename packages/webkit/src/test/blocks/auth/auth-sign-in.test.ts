@@ -83,6 +83,18 @@ describe('auth/auth-sign-in focus and password managers', () => {
     await waitFor(() => expect(document.activeElement?.id).toBe('login-password'))
   })
 
+  it('names what to enter when the email or the password is empty', async () => {
+    const view = render(Login)
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
+    await waitFor(() => expect(view.getByText('Enter your email address.')).toBeTruthy())
+    await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
+    await waitFor(() => expect(view.getByLabelText(/^Password\b/)).toBeTruthy())
+    await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
+    await waitFor(() => expect(view.getByText('Enter your password.')).toBeTruthy())
+    expect(view.queryByText('This field is required.')).toBeNull()
+  })
+
   it('keeps the email in the password step as the username field', async () => {
     const view = render(Login)
     await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
@@ -176,7 +188,8 @@ describe.each([
     expect(name.classList.contains('truncate')).toBe(true)
     const email = view.getByText('jane.doe@example.com')
     expect(email.classList.contains('truncate')).toBe(false)
-    expect(email.classList.contains('break-all')).toBe(true)
+    expect(email.classList.contains('break-all')).toBe(false)
+    expect(email.classList.contains('wrap-anywhere')).toBe(true)
   })
 })
 
@@ -184,7 +197,7 @@ describe('auth/auth-sign-in#DeviceAuthorization', () => {
   it('shows the code to compare with the request details', async () => {
     const view = render(DeviceAuthorization)
 
-    expect(view.getByText('WDJB-MJHT')).toBeTruthy()
+    expect(view.getByText('WDJB-MJHT').classList.contains('text-heading-code-md')).toBe(true)
     expect(view.getByRole('list', { name: 'Acme CLI will be able to' })).toBeTruthy()
     expect(view.getByText('203.0.113.24')).toBeTruthy()
     await expectNoA11yViolations(view.container)
@@ -202,7 +215,7 @@ describe('auth/auth-sign-in#DeviceAuthorization', () => {
   it('rejects an unknown typed code on the field and accepts a valid one', async () => {
     const view = render(DeviceAuthorization)
 
-    await fireEvent.click(view.getByText(/Enter the code from your terminal/))
+    await fireEvent.click(view.getByRole('button', { name: 'Enter the code' }))
     const input = await waitFor(() => view.getByLabelText('Device code'))
     expect(input).toHaveAttribute('maxlength', '8')
 
@@ -232,6 +245,7 @@ describe('auth#MfaCode', () => {
       timeout: 2000
     })
     expect(input).toHaveAttribute('aria-invalid', 'true')
+    expect(view.getByText(/The 6-digit code your authenticator app shows/)).toBeTruthy()
     expect((input as HTMLInputElement).value).toBe('')
     expect(document.activeElement).toBe(input)
   })
@@ -311,7 +325,7 @@ describe('auth/auth-sign-in', () => {
     expect((view.container.querySelector('fieldset') as HTMLFieldSetElement).disabled).toBe(false)
   })
 
-  it('clears the password and shows the 401 notice when the request is rejected', async () => {
+  it('clears the password and puts the 401 message on the password field when the request is rejected', async () => {
     const view = render(Login, {
       props: {
         step: 'password',
@@ -323,6 +337,8 @@ describe('auth/auth-sign-in', () => {
       expect(view.getByText('Incorrect email or password. Check both and try again.')).toBeTruthy()
     )
     expect((view.getByLabelText(/^Password\b/) as HTMLInputElement).value).toBe('')
+    expect(view.getByLabelText(/^Password\b/).getAttribute('aria-invalid')).toBe('true')
+    expect(view.container.querySelector('[data-testid="alert"]')).toBeNull()
     await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText(/^Password\b/)))
   })
 
@@ -368,12 +384,14 @@ describe('auth/auth-sign-in', () => {
     expect((view.container.querySelector('fieldset') as HTMLFieldSetElement).disabled).toBe(true)
   })
 
-  it('IncorrectCredentials: the two-step card on its password step, notice under the heading', () => {
+  it('IncorrectCredentials: the two-step card on its password step, the message on the password field', () => {
     const view = render(IncorrectCredentials)
     expect(view.getByRole('heading', { level: 1, name: 'Welcome back' })).toBeTruthy()
     expect(view.getByLabelText(/^Password\b/)).toBeTruthy()
     expect(view.queryByLabelText(/^Email\b/)).toBeNull()
     expect(view.getByText('Incorrect email or password. Check both and try again.')).toBeTruthy()
+    expect(view.getByLabelText(/^Password\b/).getAttribute('aria-invalid')).toBe('true')
+    expect(view.container.querySelector('[data-testid="alert"]')).toBeNull()
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
 
@@ -496,6 +514,8 @@ describe('auth/auth-sign-in#PersonalToken', () => {
     await view.rerender({ loading: false, error: 'rejected' })
     await waitFor(() => expect(view.getByText(/Azion did not accept this token/)).toBeTruthy())
     expect((view.getByLabelText(/^Personal token\b/) as HTMLInputElement).value).toBe('')
+    expect(view.getByLabelText(/^Personal token\b/).getAttribute('aria-invalid')).toBe('true')
+    expect(view.container.querySelector('[data-testid="alert"]')).toBeNull()
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
 

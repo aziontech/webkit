@@ -72,6 +72,30 @@
     return { band: entry.band, near, far, edges, at: edges[0] ?? near }
   })
 
+  const readingsAtEnd = computed<number[]>(() => {
+    const last = ctx.category.value.count - 1
+    if (last < 0) return []
+    return ctx.series.value
+      .filter((entry) => !ctx.hidden.value.has(entry.id))
+      .map((entry) => entry.values[last])
+      .filter(isFiniteNumber)
+      .map((value) => ctx.valueScale.value(value))
+  })
+
+  const bandLabelY = (near: number, far: number): { y: number; hanging: boolean } => {
+    const box = plot.value
+    const clear = (top: number) =>
+      readingsAtEnd.value.every((at) => at < top - 2 || at > top + LABEL_ROOM + 2)
+    const inside = near + LABEL_GAP
+    if (far - near >= LABEL_ROOM + LABEL_GAP && clear(inside)) return { y: inside, hanging: true }
+    const above = near - LABEL_GAP - LABEL_ROOM
+    if (above >= box.top && clear(above)) return { y: near - LABEL_GAP, hanging: false }
+    const below = far + LABEL_GAP
+    if (below + LABEL_ROOM <= box.top + box.height && clear(below))
+      return { y: below, hanging: true }
+    return { y: inside, hanging: true }
+  }
+
   const labelBox = computed(() => {
     const current = shape.value
     if (!current || !props.label) return null
@@ -80,7 +104,7 @@
     if (vertical.value) {
       const x = rtl ? box.left + LABEL_GAP : box.left + box.width - LABEL_GAP
       const anchor = rtl ? 'start' : 'end'
-      if (current.band) return { x, y: current.near + LABEL_GAP, anchor, hanging: true }
+      if (current.band) return { x, anchor, ...bandLabelY(current.near, current.far) }
       const above = current.at - box.top > LABEL_ROOM
       return {
         x,

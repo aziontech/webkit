@@ -146,6 +146,12 @@
     :class="[ROOT_CLASS, attrs.class]"
   >
     <span
+      v-if="active"
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute inset-0 pointer-coarse:inset-y-[min(0rem,calc(50%-22px))]"
+    />
+    <span
       class="relative z-(--z-control) inline-flex min-w-0 max-w-full items-center justify-center gap-(--spacing-2xs)"
     >
       <span

@@ -3,8 +3,8 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
-    toast('Event has been created', {
-      description: 'Sunday, December 03, 2023 at 9:00 AM'
+    toast('Domain added', {
+      description: 'shop.example.com starts answering once its DNS record propagates.'
     })
 </script>
 
@@ -14,7 +14,8 @@
     closable
   />
   <Button
-    label="Show toast"
+    label="Add domain"
+    variant="outline"
     @click="show"
   />
 </template>

@@ -127,7 +127,7 @@ Then delete `sample.ts`; the variants are the only files that import it.
 
 ## Copy
 
-- **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: what the run does and that the user may leave: `Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`
+- **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: the static purpose only, `Builds acme/web-app and publishes it to production.`; the timing and that the user may leave are said once, in the empty state, and the running and outcome states carry their own lines.
 - **Status tag:** one or two words: `Idle`, `Deploying`, `Failed`, `Deployed`.
 - **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about half a minute.`
 - **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`; description names the source and that the user may leave: `acme/web-app. It keeps running if you leave.`
@@ -264,7 +264,7 @@ Each variant is the same screen in another state: `get_block("state/state-async-
   const runningStep = computed(() => props.steps.find((step) => step.status === 'running'))
   const failedStep = computed(() => props.steps.find((step) => step.status === 'error'))
   const doneCount = computed(() => props.steps.filter((step) => step.status === 'success').length)
-  const failedTitle = computed(() => failedStep.value?.title.toLowerCase() ?? '')
+  const failedTitle = computed(() => failedStep.value?.title ?? '')
 
   const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref<string | undefined>()
@@ -340,7 +340,7 @@ Each variant is the same screen in another state: `get_block("state/state-async-
     <div class="layout-column-focused flex min-h-full flex-col">
       <PageHeader
         title="Deploy web-app"
-        description="Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are."
+        description="Builds acme/web-app and publishes it to production."
       >
         <template #meta>
           <Tag
@@ -462,7 +462,7 @@ Each variant is the same screen in another state: `get_block("state/state-async-
                   </template>
                   <Tag
                     v-else
-                    :label="`Failed on ${failedTitle}`"
+                    :label="`Failed: ${failedTitle}`"
                     severity="danger"
                   />
                 </div>

@@ -33,7 +33,7 @@ describe('SettingsGroup', () => {
     expect(getByTestId('general-band__label')).toBeTruthy()
   })
 
-  it('renders the Hint only when hint is set', () => {
+  it('renders the Hint only when hint is set', async () => {
     const bare = within(
       render(SettingsGroup, { props: { label: 'General' } }).container as HTMLElement
     )
@@ -43,7 +43,7 @@ describe('SettingsGroup', () => {
       render(SettingsGroup, { props: { label: 'General', hint: 'What this band holds.' } })
         .container as HTMLElement
     )
-    expect(hinted.getByTestId('hint')).toBeTruthy()
+    expect(await hinted.findByTestId('hint')).toBeTruthy()
   })
 
   it('renders the info slot beside the heading, outside the h2 and the disclosure', async () => {
@@ -84,6 +84,15 @@ describe('SettingsGroup', () => {
     )
     expect(anchored.getByRole('heading', { level: 2 }).id).toBe('general')
     expect(anchored.getByRole('button', { name: 'Copy link to the General section' })).toBeTruthy()
+  })
+
+  it('keeps the gutter copy-link hit area inside the 24px gutter, so it never crosses the page edge', () => {
+    const view = render(SettingsGroup, { props: { label: 'General', anchor: 'general' } })
+    const button = view.getByTestId('settings-group__copy-link')
+    const target = button.querySelector('[data-slot="touch-target"]')!
+    expect(button.classList.contains('size-6')).toBe(true)
+    expect(button.classList.contains('-start-(--size-6)')).toBe(true)
+    expect(target.classList.contains('inset-0')).toBe(true)
   })
 
   it('confirms a copied link on the button itself', async () => {

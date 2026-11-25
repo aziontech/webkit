@@ -8,7 +8,7 @@
     loading?: boolean
     /** The create request is in flight. */
     submitting?: boolean
-    /** The request in flight came from Create and add another. */
+    /** The request in flight came from Save and add another. */
     addAnother?: boolean
   }
 
@@ -26,7 +26,7 @@
 
 <template>
   <div
-    class="flex items-center gap-(--spacing-sm) max-sm:flex-col-reverse max-sm:items-stretch max-sm:gap-(--spacing-xs)"
+    class="flex items-center gap-(--spacing-sm) max-sm:w-full max-sm:gap-(--spacing-xs) max-sm:*:flex-1"
   >
     <Button
       type="button"
@@ -36,15 +36,17 @@
       :disabled="submitting"
       @click="(event: MouseEvent) => emit('cancel', event)"
     />
-    <Button
-      type="button"
-      label="Create and add another"
-      variant="secondary"
-      size="medium"
-      :disabled="loading || (submitting && !addAnother)"
-      :loading="submitting && addAnother"
-      @click="(event: MouseEvent) => emit('add-another', event)"
-    />
+    <span class="contents max-sm:hidden">
+      <Button
+        type="button"
+        label="Save and add another"
+        variant="secondary"
+        size="medium"
+        :disabled="loading || (submitting && !addAnother)"
+        :loading="submitting && addAnother"
+        @click="(event: MouseEvent) => emit('add-another', event)"
+      />
+    </span>
     <Button
       variant="primary"
       size="medium"
@@ -53,7 +55,7 @@
       :loading="submitting && !addAnother"
       :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
     >
-      Create ticket
+      Save
       <span
         class="contents max-sm:hidden"
         aria-hidden="true"

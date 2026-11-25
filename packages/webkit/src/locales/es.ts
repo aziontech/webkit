@@ -247,10 +247,10 @@ export const es: Messages = {
     addGroup: 'Agregar grupo O',
     emptyTitle: 'Todavía no hay elementos.',
     remaining: {
-      one: 'Puedes agregar {count} elemento más.',
-      other: 'Puedes agregar {count} elementos más.'
+      one: 'Puedes agregar {count} más.',
+      other: 'Puedes agregar {count} más.'
     },
-    limitReached: 'Alcanzaste el límite de {limit} elementos.',
+    limitReached: 'Alcanzaste el límite de {limit}.',
     added: 'Elemento {index} agregado.',
     removed: 'Elemento {index} quitado.',
     group: 'Grupo {index}',
@@ -437,7 +437,8 @@ export const es: Messages = {
   confirmDialog: {
     confirm: 'Confirmar',
     cancel: 'Cancelar',
-    typeToConfirm: 'Escribe {phrase} para confirmar.'
+    typeToConfirm: 'Escribe {phrase} para confirmar.',
+    phraseMismatch: 'El texto no coincide con {phrase}. Escríbelo exactamente para confirmar.'
   },
   consoleLayout: {
     navigation: 'Navegación principal',
@@ -741,7 +742,8 @@ export const es: Messages = {
     downloadTitle: 'Descargar {title}',
     loading: 'Cargando audio',
     error: 'No se pudo reproducir el audio.',
-    transcript: 'Transcripción'
+    transcript: 'Transcripción',
+    retry: 'Intentar de nuevo'
   },
   filePreview: {
     download: 'Descargar',
@@ -765,12 +767,16 @@ export const es: Messages = {
     ready: 'Imágenes listas',
     error: 'No se pudieron cargar las imágenes',
     broken: 'No se pudo cargar esta imagen',
-    empty: 'No hay imágenes'
+    empty: 'No hay imágenes',
+    retry: 'Intentar de nuevo'
   },
   fileTokenGroup: {
     label: 'Archivos',
     remove: 'Quitar {name}',
     uploading: 'Subiendo {name}',
+    cancelUpload: 'Cancelar la subida de {name}',
+    uploadProgress: '{percent} %',
+    uploadPending: 'Subiendo…',
     modified: 'Modificado el {date}',
     showMore: {
       one: 'Mostrar {count} archivo más',
@@ -1018,7 +1024,7 @@ export const es: Messages = {
   },
   passwordRequirements: {
     title: 'Debe contener:',
-    length: 'De 8 a 128 caracteres',
+    length: 'De 12 a 128 caracteres',
     uppercase: 'Letra mayúscula',
     special: 'Carácter especial',
     number: 'Número',
@@ -1420,6 +1426,7 @@ export const es: Messages = {
     details: 'Detalles',
     connections: 'Conexiones',
     connection: '{from} a {to}',
+    route: 'A {to}',
     emptyTitle: 'Aún no hay nada conectado.',
     loading: 'Cargando el diagrama'
   },
@@ -1485,7 +1492,8 @@ export const es: Messages = {
     exitFullscreen: 'Salir de pantalla completa',
     pending: 'Esperando para generar',
     running: 'Generando video',
-    error: 'No se pudo cargar el video'
+    error: 'No se pudo cargar el video',
+    retry: 'Intentar de nuevo'
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',

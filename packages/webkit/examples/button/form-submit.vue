@@ -6,7 +6,7 @@
 
 <template>
   <form
-    class="flex w-80 flex-col gap-4"
+    class="flex w-(--container-2xs) flex-col gap-(--spacing-md)"
     novalidate
     @submit.prevent
   >
@@ -17,7 +17,7 @@
         id="button-form-name"
       />
     </Field>
-    <div class="flex gap-2">
+    <div class="flex gap-(--spacing-xs)">
       <Button
         type="reset"
         label="Clear"

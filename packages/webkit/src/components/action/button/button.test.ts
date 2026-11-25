@@ -433,14 +433,16 @@ describe('Button', () => {
       expect(view.emitted('click')).toBeUndefined()
     })
 
-    it('carries the reason as the description of the button, with nothing around it', async () => {
+    it('shows the reason on screen in the example and reads it as the description', async () => {
       const view = render(DisabledReason)
       const button = view.getByRole('button', {
         name: 'Delete application',
         description: reason
       })
       expect(button.getAttribute('title')).toBe(reason)
-      expect(button.parentElement).toBe(view.container)
+      const visible = view.getByText(reason)
+      expect(visible.closest('button')).toBeNull()
+      expect(button.getAttribute('aria-describedby')).toBe(visible.id)
       await expectNoA11yViolations(view.container)
     })
 

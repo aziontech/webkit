@@ -18,6 +18,7 @@
 - Join adjacent columns; an edge that skips a column can cross it.
 - Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.
 - Use `orientation="horizontal"` for fixed-size scenes and mock-ups.
+- Set `:show-ports="false"` on a diagram a reader only views, such as a request path on an error page, so it draws no editor-style port squares.
 - A one-resource slot puts `flow-diagram-bind` in the `actions` slot.
 
 ## Don’t
@@ -41,6 +42,7 @@
 | `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of the steps in a row. |
 | `uniform` | `boolean` | `false` | false | Gives every step the width and height of the largest one. |
 | `loading` | `boolean` | `false` | false | Shows placeholder steps while the diagram loads. |
+| `showPorts` | `boolean` | `true` | false | Draws the port squares where connectors meet the steps; turn off for a diagram a reader only views. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Diagram`). |
 | `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
 
@@ -80,7 +82,7 @@
 
 ## States
 
-- List: `data-orientation`, `data-direction` (`row` or `column`, the layout in use), `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
+- List: `data-orientation`, `data-direction` (`row` or `column`, the layout in use), `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden), `data-show-ports` (present while `showPorts` is on; without it no port is drawn).
 - Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
 - Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
@@ -111,14 +113,16 @@
 | `flowDiagram.pending` / `existing` / `noOptions` / `copy`                | Pending / Existing / No options yet. / Copy {field} | —             |
 | `flowDiagram.details`                                                    | Details                                             | —             |
 | `flowDiagram.connections` / `connection`                                 | Connections / {from} to {to}                        | —             |
+| `flowDiagram.route`                                                      | To {to}                                             | —             |
 | `flowDiagram.emptyTitle` / `loading`                                     | Nothing is connected yet. / Loading the diagram     | `empty` slot  |
 
 - Formatting: none; metrics and labels arrive formatted.
 
 ## Responsive
 
-- `responsive` measures the row against its container (a ResizeObserver, re-checked when the container or the steps resize) and keeps the row only when every step fits; otherwise it stacks into a rail in reading order, labels beside it, so no step is ever clipped. Server render and first paint use the rail. The resolved layout is `data-direction="row|column"` on the list.
+- `responsive` measures the row against its container (a ResizeObserver, re-checked when the container or the steps resize) and keeps the row only when every step fits; otherwise it stacks into a rail in reading order, labels beside it, so no step is ever clipped. In data mode the rail joins two neighbouring steps only where an edge joins them; an edge to a step that is not the next one (a branch or a join) is listed under its source card as a route (`__node-route`, `To {title}` and the edge label, a dot in the edge severity, `data-severity`), so every edge and its severity stay readable on a phone. Server render and first paint use the rail. The resolved layout is `data-direction="row|column"` on the list.
 - `horizontal` keeps the row and scrolls in its own area; `vertical` always stacks.
+- A stacked rail is capped at `var(--container-xl)` and centred in a wider container, so a wide frame never leaves the rail on its inline-start edge with the rest empty.
 - When the steps still overflow (a `horizontal` row, or a step wider than the rail), the scroll area keeps a thin visible scrollbar, becomes focusable, and fades the inline edge that still has content (`data-overflow-start`, `data-overflow-end`); the fade follows the text direction in right-to-left and is static, so it needs no reduced-motion fallback.
 
 ## Examples

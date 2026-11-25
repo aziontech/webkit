@@ -176,6 +176,25 @@ describe('Command', () => {
         expect(classes.contains('md:items-center')).toBe(false)
       })
 
+      it('opens as a top sheet below md, so the keyboard never covers the search field', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        const classes = panel()!.classList
+        expect(classes.contains('max-md:items-start')).toBe(true)
+        expect(classes.contains('max-md:items-end')).toBe(false)
+      })
+
+      it('names the palette with a title the phone header shows, not a hidden one', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        const title = byTestId('command__title')!
+        expect(panel()!.getAttribute('aria-labelledby')).toBe(title.id)
+        expect(title.textContent?.trim()).toBe('Command menu')
+        expect(title.classList.contains('sr-only')).toBe(false)
+      })
+
       it('names each group with its label prop', async () => {
         render(composed({ defaultOpen: true }))
         await settle()
@@ -962,6 +981,19 @@ describe('Command', () => {
       render(paged(undefined, 'projects'))
       await settle()
       await expectNoA11yViolations(panel()!)
+    })
+  })
+
+  describe('Command examples', () => {
+    const sources = import.meta.glob<string>('../../../../examples/command/*.vue', {
+      eager: true,
+      query: '?raw',
+      import: 'default'
+    })
+
+    it.each(Object.entries(sources))('%s shows an Empty part when nothing matches', (_, source) => {
+      expect(source).toContain('<CommandList>')
+      expect(source).toMatch(/<CommandEmpty\b/)
     })
   })
 })

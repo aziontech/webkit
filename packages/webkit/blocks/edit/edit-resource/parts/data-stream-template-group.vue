@@ -74,7 +74,7 @@
                 size="large"
                 class="w-full"
                 :display-value="templateLabel"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('template')"
               >
                 <Select.Trigger aria-label="Template" />

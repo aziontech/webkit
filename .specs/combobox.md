@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 27ccddfa219e5ac3e8cd092f664ce2442e26782d5bfa79d6ac7cc1adf0acab11
+checksum: c60514ac92090bc5c3949073b86204792afc9a67c6cd991793ca606efb4fdbdf
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-25
 ---
 
 # Combobox — Component Spec
@@ -152,7 +152,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | list shape                  | `var(--shape-control)`                                                  |
 | list padding / section gap  | `var(--spacing-2xs)`                                                    |
 | option text                 | `.text-label-sm`, `var(--text-default)`                                 |
-| option description          | `.text-body-sm`, `var(--text-muted)`                                    |
+| option description          | `.text-label-sm`, `var(--text-muted)` (the option label's step)         |
 | option active / selected    | `var(--bg-hover)` / `var(--bg-selected)`                                |
 | row fill inset (2px gap)    | `border-y border-transparent bg-clip-padding`                           |
 | group title, empty, loading | `.text-label-sm` / `.text-body-sm`, `var(--text-muted)`                 |

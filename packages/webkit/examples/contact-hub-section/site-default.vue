@@ -34,7 +34,7 @@
 
   const channels = [
     {
-      icon: 'az az-shield',
+      icon: 'az az-triangle-alert',
       title: 'Under a cyberattack?',
       description:
         'Get emergency mitigation for an attack in progress, even before you become a customer.',

@@ -453,6 +453,24 @@ describe('ConsoleLayout', () => {
       expect(header.getByRole('button', { name: 'New' })).toBeTruthy()
     })
 
+    it('opens the drawer with the navigation under its close button, the brand left in the header (A6-077)', async () => {
+      const { getByRole } = mount({ breadcrumbs: [{ label: 'Workloads' }] }, { width: 480 })
+      const header = within(getByRole('banner'))
+      await waitFor(() =>
+        expect(header.getByRole('button', { name: 'Open navigation' })).toBeTruthy()
+      )
+      await fireEvent.click(header.getByRole('button', { name: 'Open navigation' }))
+      const drawer = await waitFor(() => {
+        const panel = document.body.querySelector<HTMLElement>(
+          '[data-testid="app-layout__navigation-drawer__panel"]'
+        )
+        expect(panel).not.toBeNull()
+        return panel!
+      })
+      expect(header.getByRole('link', { name: 'Azion home' })).toBeTruthy()
+      expect(within(drawer).queryByRole('link', { name: 'Azion home' })).toBeNull()
+    })
+
     it.each([768, 1023])(
       'puts the navigation in a drawer at %ipx, the tablet widths',
       async (width) => {

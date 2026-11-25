@@ -18,6 +18,14 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 describe('account/tokens', () => {
+  it('counts the relative times from the sample clock, so a server render matches the browser', () => {
+    const view = render(Tokens)
+    const lastUsed = [
+      ...view.container.querySelectorAll<HTMLElement>('[data-testid="table-cell-time"]')
+    ].map((cell) => cell.textContent?.trim() ?? '')
+    expect(lastUsed.some((text) => text.includes('2 hours ago'))).toBe(true)
+  })
+
   it('lists the description in its own column under the view-table controls row', async () => {
     const view = render(Tokens)
     expect(view.getByRole('columnheader', { name: /Description/ })).toBeTruthy()
