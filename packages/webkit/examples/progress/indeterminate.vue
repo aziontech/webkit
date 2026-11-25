@@ -3,5 +3,8 @@
 </script>
 
 <template>
-  <Progress indeterminate />
+  <Progress
+    indeterminate
+    aria-label="Deploying acme-store"
+  />
 </template>

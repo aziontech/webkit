@@ -17,7 +17,10 @@
 
 <template>
   <div class="flex w-[320px] flex-col gap-4">
-    <Progress :value="value" />
+    <Progress
+      :value="value"
+      aria-label="Deploying acme-store"
+    />
     <div class="flex items-center gap-2">
       <Button
         label="Next"

@@ -7,10 +7,12 @@
     <Progress
       :value="60"
       variant="rounded"
+      aria-label="Uploading site-assets.zip"
     />
     <Progress
       :value="60"
       variant="flat"
+      aria-label="Building docs-site"
     />
   </div>
 </template>
