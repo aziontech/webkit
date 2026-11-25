@@ -55,8 +55,10 @@
   const CARD_BODY_CLASS = 'flex w-full flex-col items-start gap-(--spacing-md) text-start'
 
   const MARK_STACK_CLASS =
-    'flex items-center [&>*:not(:first-child)]:-ms-2 [&>*:not(:first-child)]:transition-[margin-left] [&>*:not(:first-child)]:duration-moderate-01 [&>*:not(:first-child)]:ease-productive-entrance group-hover/item:[&>*:not(:first-child)]:-ms-1.5 ' +
-    'group-focus-visible/item:[&>*:not(:first-child)]:-ms-1.5 motion-reduce:[&>*:not(:first-child)]:transition-none'
+    'flex items-center [&>*:not(:first-child)]:-ms-2 [&>*:not(:first-child)]:transition-[margin-left] ' +
+    '[&>*:not(:first-child)]:duration-moderate-01 [&>*:not(:first-child)]:ease-productive-entrance ' +
+    'group-hover/item:[&>*:not(:first-child)]:-ms-1.5 group-focus-visible/item:[&>*:not(:first-child)]:-ms-1.5 ' +
+    'motion-reduce:[&>*:not(:first-child)]:transition-none'
 
   const MARK_TILE_CLASS =
     'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)'
