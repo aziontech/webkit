@@ -5,7 +5,7 @@
 // a computed style imports ./reflow.css first, which compiles the theme and the component classes
 // with the Tailwind plugin in vitest.config.ts. The two modes are described in
 // .claude/rules/testing.md.
-import { cleanup } from '@testing-library/vue'
+import { cleanup, configure } from '@testing-library/vue'
 import { afterEach, beforeEach } from 'vitest'
 
 // Anchor-navigation guard. Components render real <a href> links; in a real
@@ -21,6 +21,12 @@ function preventAnchorNavigation(event: MouseEvent) {
     event.preventDefault()
   }
 }
+
+// Lazily loaded parts (Monaco, chart scenes, overlay menus) can take longer than Testing Library's
+// 1 s default to appear when four shards share a loaded machine; every findBy/waitFor waits 5 s.
+export const ASYNC_UTIL_TIMEOUT = 5000
+
+configure({ asyncUtilTimeout: ASYNC_UTIL_TIMEOUT })
 
 beforeEach(() => {
   document.addEventListener('click', preventAnchorNavigation, true)

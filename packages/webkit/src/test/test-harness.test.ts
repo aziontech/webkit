@@ -1,7 +1,9 @@
+import { getConfig } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { planShards } from '../../scripts/lib/shard-plan.mjs'
 import { keepConsoleLog, RESIZE_OBSERVER_LOOP } from './console-noise'
+import { ASYNC_UTIL_TIMEOUT } from './setup'
 import DURATIONS from './shard-durations.json'
 
 const SUITES = import.meta.glob<string>('./reflow*.test.ts', {
@@ -22,6 +24,13 @@ describe('the ResizeObserver loop notice', () => {
   it('matches only the loop notice, so every other error still fails the run', () => {
     expect(RESIZE_OBSERVER_LOOP.test('ResizeObserver loop limit exceeded')).toBe(true)
     expect(RESIZE_OBSERVER_LOOP.test('TypeError: x is undefined')).toBe(false)
+  })
+})
+
+describe('the async utilities', () => {
+  it('wait 5 s for a lazily loaded part, not the 1 s default', () => {
+    expect(ASYNC_UTIL_TIMEOUT).toBe(5000)
+    expect(getConfig().asyncUtilTimeout).toBe(ASYNC_UTIL_TIMEOUT)
   })
 })
 
