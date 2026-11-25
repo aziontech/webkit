@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -113,11 +113,7 @@
     onCloseClick(event)
   }
 
-  onMounted(() => {
-    if (!context || props.value === undefined) {
-      return
-    }
-
+  if (context && props.value !== undefined) {
     context.registerTab({
       value: props.value,
       get disabled() {
@@ -125,7 +121,7 @@
       },
       el: buttonEl
     })
-  })
+  }
 
   onBeforeUnmount(() => {
     if (!context || props.value === undefined) {

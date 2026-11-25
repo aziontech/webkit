@@ -1,9 +1,10 @@
 import '../../../test/reflow.css'
 
 import { fireEvent, render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { commands, userEvent as keyboardUser } from 'vitest/browser'
-import { defineComponent, nextTick, ref } from 'vue'
+import { createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
+import { renderToString } from 'vue/server-renderer'
 
 import Centered from '../../../../examples/tabs/centered.vue'
 import Default from '../../../../examples/tabs/default.vue'
@@ -887,6 +888,50 @@ describe('Tabs', () => {
       await settle()
       expect(list.scrollLeft).toBeLessThan(0)
       expectIndicatorOnTab(container, 'Tab 10')
+    })
+  })
+
+  describe('server render', () => {
+    const SsrTree = {
+      render: () =>
+        h(TabsRoot, null, () => [
+          h(TabsList, null, () => [
+            h(TabsTrigger, { value: 'tab-1', label: 'First' }),
+            h(TabsTrigger, { value: 'tab-2', label: 'Second' })
+          ]),
+          h(TabsContent, { value: 'tab-1' }, () => 'Content one'),
+          h(TabsContent, { value: 'tab-2' }, () => 'Content two')
+        ])
+    }
+
+    it('activates the first tab in the server HTML, so hydration changes nothing', async () => {
+      const html = await renderToString(createSSRApp(SsrTree))
+      const host = document.createElement('div')
+      host.innerHTML = html
+      const [first, second] = host.querySelectorAll('[role="tab"]')
+      const [one, two] = host.querySelectorAll('[role="tabpanel"]')
+      expect(first).toHaveAttribute('tabindex', '0')
+      expect(second).toHaveAttribute('tabindex', '-1')
+      expect(one).not.toHaveAttribute('hidden')
+      expect(two).toHaveAttribute('hidden')
+
+      const warnings: string[] = []
+      const collect = (...args: unknown[]) => warnings.push(args.map(String).join(' '))
+      const warn = vi.spyOn(console, 'warn').mockImplementation(collect)
+      const error = vi.spyOn(console, 'error').mockImplementation(collect)
+      document.body.appendChild(host)
+      const app = createSSRApp(SsrTree)
+      try {
+        app.mount(host)
+        await nextTick()
+        expect(warnings.filter((line) => /hydration/i.test(line))).toEqual([])
+        expect(host.querySelector('[role="tab"]')).toHaveAttribute('tabindex', '0')
+      } finally {
+        app.unmount()
+        host.remove()
+        warn.mockRestore()
+        error.mockRestore()
+      }
     })
   })
 })
