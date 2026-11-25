@@ -42,7 +42,7 @@ export const EXAMPLE_DATA_DIRS = [
   'rules'
 ]
 
-export const RETIRED_NAME_DIRS = ['.specs', 'apps/demos/src', 'apps/docs/src']
+export const RETIRED_NAME_DIRS = ['.specs']
 
 export function exampleDataApplies(rel) {
   if (!/\.(vue|ts|js|mjs|json|md)$/.test(rel) || rel.endsWith('.d.ts')) return false

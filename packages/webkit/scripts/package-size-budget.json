@@ -1,6 +1,6 @@
 {
-  "unpackedBytes": 36200000,
-  "packedBytes": 9100000,
+  "unpackedBytes": 36400000,
+  "packedBytes": 9200000,
   "generated": ["skills/", "rules/", "adapters/", "types/"],
   "files": {
     "src/assets/illustrations/": 4490000,

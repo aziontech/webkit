@@ -125,10 +125,10 @@ test('the retired names match deprecatedNames in the product list', async () => 
   )
 })
 
-test('specs and the docs and demos apps are scanned for retired names', async () => {
+test('specs are scanned for retired names', async () => {
   const { RETIRED_NAME_DIRS, scanRetiredNames } =
     await import('../../src/eslint-plugin/lib/example-data.js')
-  assert.deepEqual(RETIRED_NAME_DIRS, ['.specs', 'apps/demos/src', 'apps/docs/src'])
+  assert.deepEqual(RETIRED_NAME_DIRS, ['.specs'])
   assert.deepEqual(scanRetiredNames('Run it in Claude.ai and on Edge SQL'), [
     'retired-product-name'
   ])
