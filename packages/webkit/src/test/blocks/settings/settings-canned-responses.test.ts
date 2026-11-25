@@ -112,6 +112,37 @@ describe('settings/settings-canned-responses block', () => {
     })
   })
 
+  it('keeps a typed draft on Escape and asks before Cancel discards it', async () => {
+    render(SettingsCannedResponses)
+    await fireEvent.click(buttonByText('New response'))
+    await openDialog()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(dialog()).toBeNull())
+    await fireEvent.click(buttonByText('New response'))
+    const again = await openDialog()
+    await userEvent.type(within(again).getByLabelText(/^Title/), 'Draft reply')
+    await userEvent.keyboard('{Escape}')
+    expect(again.isConnected).toBe(true)
+    expect((within(again).getByLabelText(/^Title/) as HTMLInputElement).value).toBe('Draft reply')
+    await fireEvent.click(buttonByText('Cancel', again))
+    const confirm = await waitFor(() => {
+      const node = document.querySelector('[role="alertdialog"]') as HTMLElement | null
+      expect(node?.textContent).toContain('Unsaved changes')
+      return node as HTMLElement
+    })
+    await fireEvent.click(buttonByText('Keep editing', confirm))
+    await waitFor(() => expect(document.querySelector('[role="alertdialog"]')).toBeNull())
+    expect(again.isConnected).toBe(true)
+    await fireEvent.click(buttonByText('Cancel', again))
+    const second = await waitFor(() => {
+      const node = document.querySelector('[role="alertdialog"]') as HTMLElement | null
+      expect(node).not.toBeNull()
+      return node as HTMLElement
+    })
+    await fireEvent.click(buttonByText('Discard changes', second))
+    await waitFor(() => expect(dialog()).toBeNull())
+  })
+
   it('inserts a placeholder at the caret and returns focus to the reply', async () => {
     render(Editing)
     const drawer = await openDialog()
