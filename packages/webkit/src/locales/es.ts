@@ -1018,7 +1018,7 @@ export const es: Messages = {
   },
   passwordRequirements: {
     title: 'Debe contener:',
-    length: 'De 8 a 128 caracteres',
+    length: 'De 12 a 128 caracteres',
     uppercase: 'Letra mayúscula',
     special: 'Carácter especial',
     number: 'Número',

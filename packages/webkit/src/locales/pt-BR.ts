@@ -1018,7 +1018,7 @@ export const ptBR: Messages = {
   },
   passwordRequirements: {
     title: 'Deve conter:',
-    length: '8 a 128 caracteres',
+    length: '12 a 128 caracteres',
     uppercase: 'Letra maiúscula',
     special: 'Caractere especial',
     number: 'Número',

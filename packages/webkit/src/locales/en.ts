@@ -854,7 +854,7 @@ export const passwordInput = {
 
 export const passwordRequirements = {
   title: 'Must contain:',
-  length: '8-128 characters',
+  length: '12-128 characters',
   uppercase: 'Uppercase letter',
   special: 'Special character',
   number: 'Number',
