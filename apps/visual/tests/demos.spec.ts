@@ -202,6 +202,17 @@ test.describe('demo flows', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Customer not found' })).toBeVisible()
   })
 
+  test('in right to left a phone page is no wider than the screen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    for (const path of ['/settings', '/resources/new', '/support/tickets/new']) {
+      await page.goto(`${DEMOS}${path}?dir=rtl`)
+      await expect(page.locator('main, form').first()).toBeVisible()
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+        390
+      )
+    }
+  })
+
   test('on a phone the list shows each row status', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto(`${DEMOS}/resources`)
