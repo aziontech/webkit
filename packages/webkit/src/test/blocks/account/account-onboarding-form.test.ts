@@ -10,6 +10,18 @@ import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 describe('account/account-onboarding-form', () => {
+  it('lays the marks, the usage and the roles out in columns instead of one card per row', () => {
+    const marks = render(AccountOnboardingForm)
+    const markGroup = marks.getByRole('radiogroup', { name: 'Organization mark' })
+    expect(markGroup.parentElement?.classList.contains('[&>[role=radiogroup]]:grid-cols-3')).toBe(
+      true
+    )
+    marks.unmount()
+    const profile = render(Profile)
+    const roles = profile.getByRole('radiogroup', { name: 'What best describes your role?' })
+    expect(roles.parentElement?.classList.contains('[&>[role=radiogroup]]:grid-cols-2')).toBe(true)
+  })
+
   it('builds each named mark swatch from its own hue', () => {
     const hues: Record<string, RegExp> = {
       orange: /^var\(--(primary|warning)\)$/,
