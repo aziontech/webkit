@@ -43,6 +43,8 @@
     uniform?: boolean
     /** Shows placeholder steps while the diagram loads. */
     loading?: boolean
+    /** Draws the port squares where connectors meet the steps; turn off for a diagram a reader only views. */
+    showPorts?: boolean
     /** Accessible name of the diagram. Empty uses the locale catalog (`Diagram`). */
     ariaLabel?: string
   }
@@ -54,6 +56,7 @@
     align: 'start',
     uniform: false,
     loading: false,
+    showPorts: true,
     ariaLabel: ''
   })
 
@@ -173,7 +176,7 @@
     'data-[labelled]:gap-x-(--spacing-2xl) ' +
     'data-[direction=row]:data-[uniform]:grid data-[direction=row]:data-[uniform]:auto-cols-fr data-[direction=row]:data-[uniform]:grid-flow-col ' +
     'data-[direction=row]:data-[uniform]:*:self-stretch ' +
-    'data-[stacked]:[&_[data-slot=flow-diagram-port]]:hidden ' +
+    'data-[stacked]:[&_[data-slot=flow-diagram-port]]:hidden not-data-[show-ports]:[&_[data-slot=flow-diagram-port]]:hidden ' +
     '[&_[data-slot=flow-diagram-node]:not([data-entry])_[data-slot=flow-diagram-port][data-side=end]]:hidden ' +
     '[&_[data-slot=flow-diagram-node]:not([data-exit])_[data-slot=flow-diagram-port][data-side=start]]:hidden'
 
@@ -226,7 +229,9 @@
         class="sr-only"
         >{{ t('flowDiagram.loading') }}</span
       >
-      <div class="relative w-fit min-w-full">
+      <div
+        class="relative w-fit min-w-full has-[>[data-direction=column]]:mx-auto has-[>[data-direction=column]]:w-full has-[>[data-direction=column]]:max-w-(--container-xl) has-[>[data-direction=column]]:min-w-0"
+      >
         <svg
           v-if="paths.length"
           :viewBox="viewBox"
@@ -256,6 +261,7 @@
           :data-uniform="uniform || null"
           :data-labelled="labelled || null"
           :data-stacked="vertical || null"
+          :data-show-ports="showPorts || null"
           :data-testid="`${testId}__list`"
           :class="LIST_CLASS"
         >
