@@ -71,6 +71,8 @@ const NON_TEXT_INPUTS = [
 
 const POPUP_ARIA = ['aria-expanded', 'aria-haspopup', 'aria-controls']
 
+const TOUCH_TARGET_CLASS = 'absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block'
+
 function isTextEntry(el: globalThis.HTMLElement): boolean {
   if (el.hasAttribute('role')) return false
   if (el instanceof globalThis.HTMLTextAreaElement) return true
@@ -185,7 +187,11 @@ export const TriggerHost = defineComponent({
       const nodes = flatten(slots['default']?.() ?? [])
       if (merge(nodes, () => ({ ...props.aria, id: props.controlId })))
         return h('span', { ref: hostEl }, nodes)
-      return h('span', { ref: hostEl, ...(isInert(nodes) && hostAttrs()) }, nodes)
+      if (!isInert(nodes)) return h('span', { ref: hostEl }, nodes)
+      return h('span', { ref: hostEl, class: 'relative', ...hostAttrs() }, [
+        ...nodes,
+        h('span', { 'aria-hidden': 'true', 'data-slot': 'touch-target', class: TOUCH_TARGET_CLASS })
+      ])
     }
   }
 })

@@ -14,6 +14,14 @@ const SAMPLE_SRC =
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'
 
 describe('Avatar', () => {
+  it('lets a consumer aria-label name the fallback', () => {
+    const { getByTestId } = render(Avatar, {
+      props: { label: 'IB' },
+      attrs: { 'aria-label': 'Account menu' }
+    })
+    expect(getByTestId('avatar')).toHaveAttribute('aria-label', 'Account menu')
+  })
+
   // --- image branch: src wins over label and icon -------------------------
   it('renders an <img> with the src when src is set, and no fallback label/icon', () => {
     const { getByTestId, queryByTestId } = render(Avatar, {
