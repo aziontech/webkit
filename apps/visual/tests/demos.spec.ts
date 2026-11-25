@@ -68,6 +68,7 @@ test.describe('demo flows', () => {
     await expect(toastTitle(page, 'shop-api was created.')).toBeVisible()
     await expect(page.getByRole('heading', { level: 1, name: 'shop-api' })).toBeVisible()
     await expect(page.getByText('No deployment yet')).toBeVisible()
+    await expect(page.getByText('Inactive', { exact: true }).first()).toBeVisible()
     await expect(page.getByText(/^now by Amy Chen$/)).toBeVisible()
   })
 
