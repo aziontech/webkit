@@ -15,9 +15,7 @@ const ONE_ROW_CODE = /(?:^|\s)((?:[\w-]+:)*text-label-code-(?:sm|md|lg))!?(?=\s|
 
 const PENDING = new Set([
   'src/components/code/trace/parts/trace-detail.vue',
-  'src/components/content/timestamp/timestamp.vue',
-  'src/components/section/copy-command-section/copy-command-section.vue',
-  'src/components/section/feature-widgets-section/feature-widgets-section.vue'
+  'src/components/content/timestamp/timestamp.vue'
 ])
 
 const vueFiles = (dir) =>
