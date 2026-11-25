@@ -61,12 +61,14 @@
                   :content="`Open ${deployment.domain} in a new tab`"
                   class="w-full"
                 >
-                  <Link
-                    :label="deployment.domain"
-                    :href="deployment.url"
-                    target="_blank"
-                    size="small"
-                  />
+                  <span class="text-body-sm">
+                    <Link
+                      :label="deployment.domain"
+                      :href="deployment.url"
+                      target="_blank"
+                      inline
+                    />
+                  </span>
                 </Tooltip>
               </div>
             </span>
@@ -93,12 +95,14 @@
                   :content="`Open ${source.repository} in a new tab`"
                   class="w-full"
                 >
-                  <Link
-                    :label="source.repository"
-                    :href="source.href"
-                    target="_blank"
-                    size="small"
-                  />
+                  <span class="text-body-sm">
+                    <Link
+                      :label="source.repository"
+                      :href="source.href"
+                      target="_blank"
+                      inline
+                    />
+                  </span>
                 </Tooltip>
               </div>
             </span>

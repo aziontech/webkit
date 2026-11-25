@@ -23,7 +23,7 @@ A large `h1` stating the outcome and one muted lead sentence under it. For a Git
 
 ### B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 
-The live service: the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
+The live service: the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (an `inline` `Link` in body-sm text, the same size as the link `Button` beside it, with `target="_blank"`) with Add custom domain beside it (a small `Button variant="link"` with `href`), and one row for the repository (the same `inline` `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
 
 ### C. Resources list — `Card`, `Item`, `Tag` (required)
 
@@ -33,13 +33,13 @@ A small heading, "Resources", over `Card :padded="false"` holding an `Item` list
 
 `IntegrationCard` tiles stacked one per row, each the full width of the column so its title and sentence never clip, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
-### E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
+### E. Get started — `ToggleGroup`, `CodeBlock`, `Card` (optional)
 
-Only for a resource nothing serves yet (`getStarted` set to its name): a `Subheader` with a link to the CLI docs and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
+Only for a resource nothing serves yet (`getStarted` set to its name): a heading flush with Resources and Next steps, a line with a link to the CLI docs, and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
 
 ### F. Manage — `Button` (required)
 
-One full-width secondary large `Button` at the end of the column that opens the resource: "Manage service" when a service serves it, "Manage resource" when nothing serves it yet (`deployment` is null). It is the only exit; do not add a second.
+One secondary large `Button` at the end of the column, sized to its label and aligned to the end (full width on a phone), that opens the resource: "Manage service" when a service serves it, "Manage resource" when nothing serves it yet (`deployment` is null). It is the only exit; do not add a second.
 
 ## Data
 

@@ -165,7 +165,7 @@
             />
 
             <Button
-              class="w-full"
+              class="self-end max-sm:self-stretch"
               :label="manageLabel"
               variant="secondary"
               size="large"
