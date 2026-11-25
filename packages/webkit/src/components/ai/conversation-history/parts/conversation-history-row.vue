@@ -63,9 +63,12 @@
   const hasMenu = computed<boolean>(() => ctx.itemActions.value.length > 0)
   const pinnable = computed<boolean>(() => ctx.itemActions.value.includes('pin'))
   const deletable = computed<boolean>(() => ctx.removable.value && !hasMenu.value)
+  const customActions = (): boolean => Boolean(ctx.slots['item-actions'])
   const actionCount = computed<number>(
     () => Number(pinnable.value) + Number(hasMenu.value || deletable.value)
   )
+  const actionsKey = (): string | null =>
+    customActions() ? 'custom' : actionCount.value ? String(actionCount.value) : null
   const age = computed<string>(() => {
     if (!ctx.showTime.value) return ''
     const text = compactAge(timeOf(props.item), ctx.now.value, ctx.locale.value)
@@ -96,7 +99,7 @@
     return ids.length ? ids.join(' ') : undefined
   }
 
-  const Outlet: FunctionalComponent<{ name: 'item' | 'item-meta' }> = (outlet) =>
+  const Outlet: FunctionalComponent<{ name: 'item' | 'item-meta' | 'item-actions' }> = (outlet) =>
     ctx.slots[outlet.name]?.({ item: props.item })
 
   const onRenameComplete = (refocus: boolean) => {
@@ -117,6 +120,11 @@
     'pointer-fine:group-data-[actions]/item:group-data-[active]/item:pe-(--conversation-history-actions-width) ' +
     'pointer-fine:group-has-[[data-state=open]]/item:pe-(--conversation-history-actions-width)'
 
+  const ITEM_CLASS =
+    'group/item relative w-full min-w-0 shrink-0 ' +
+    'data-[actions=1]:[--conversation-history-actions-width:--spacing(10)] data-[actions=2]:[--conversation-history-actions-width:--spacing(16)] ' +
+    'data-[actions=custom]:[--conversation-history-actions-width:var(--conversation-history-item-actions-width,var(--spacing-xs))]'
+
   const ACTIONS_CLASS =
     'absolute end-(--spacing-2xs) top-1/2 flex -translate-y-1/2 items-center transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
     'pointer-fine:opacity-0 pointer-fine:group-hover/item:opacity-100 pointer-fine:group-focus-within/item:opacity-100 pointer-fine:group-data-[active]/item:opacity-100 ' +
@@ -135,9 +143,9 @@
     v-else
     v-bind="$attrs"
     :data-active="active || null"
-    :data-actions="actionCount || null"
+    :data-actions="actionsKey()"
     :data-testid="testId"
-    class="group/item relative w-full min-w-0 shrink-0 data-[actions=1]:[--conversation-history-actions-width:--spacing(10)] data-[actions=2]:[--conversation-history-actions-width:--spacing(16)]"
+    :class="ITEM_CLASS"
   >
     <button
       ref="buttonEl"
@@ -245,7 +253,14 @@
       </span>
     </button>
     <div
-      v-if="actionCount"
+      v-if="customActions()"
+      :class="ACTIONS_CLASS"
+      :data-testid="`${testId}__actions`"
+    >
+      <Outlet name="item-actions" />
+    </div>
+    <div
+      v-else-if="actionCount"
       :class="ACTIONS_CLASS"
     >
       <IconButton

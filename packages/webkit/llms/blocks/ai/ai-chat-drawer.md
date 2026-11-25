@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -1488,7 +1488,6 @@ export const sampleTools: PromptInputMenuOption[] = [
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { ref } from 'vue'
 
   defineProps<{
@@ -1571,7 +1570,7 @@ export const sampleTools: PromptInputMenuOption[] = [
       <PromptInputDictateButton />
     </template>
     <template
-      v-if="contexts.length || tools.length"
+      v-if="contexts.length"
       #footer
     >
       <PromptInputContextPicker
@@ -1579,11 +1578,6 @@ export const sampleTools: PromptInputMenuOption[] = [
         v-model="contextKey"
         :options="contexts"
         placeholder="Choose project"
-      />
-      <PromptInputTools
-        v-if="tools.length"
-        v-model="toolKeys"
-        :tools="tools"
       />
     </template>
     <template #hint

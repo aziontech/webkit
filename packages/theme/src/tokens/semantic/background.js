@@ -24,7 +24,7 @@ export const background = {
     'bg-surface-overlay': tokenRef('primitives.gray.700'),
     'bg-placeholder': tokenRef('primitives.alpha.white.100'),
     'bg-placeholder-highlight': tokenRef('primitives.alpha.white.100'),
-    'bg-hover': tokenRef('primitives.alpha.white.100'),
+    'bg-hover': tokenRef('primitives.alpha.white.75'),
     'bg-active': tokenRef('primitives.alpha.white.50'),
     'bg-backdrop': tokenRef('primitives.alpha.black.800'),
     'bg-selected': tokenRef('primitives.gray.750'),

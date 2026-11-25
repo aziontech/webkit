@@ -761,6 +761,25 @@ describe('ConversationHistory', () => {
       expect(row.querySelector('strong')).toHaveTextContent('Custom Charlie')
     })
 
+    it('renders the item-actions slot beside the row button, never inside it', async () => {
+      const snoozed: string[] = []
+      const view = render(ConversationHistory, {
+        props: { items: chats.slice(2, 3), now, itemActions: ['pin'] },
+        slots: {
+          'item-actions': ({ item }: { item: { id: string; title: string } }) =>
+            h('button', { type: 'button', onClick: () => snoozed.push(item.id) }, 'Snooze')
+        }
+      })
+      const row = view.getByRole('button', { name: /Charlie/ })
+      const snooze = view.getByRole('button', { name: 'Snooze' })
+      expect(row.contains(snooze)).toBe(false)
+      expect(row.closest('li')).toHaveAttribute('data-actions', 'custom')
+      expect(view.queryByTestId('conversation-history-row__pin')).toBeNull()
+      await userEvent.click(snooze)
+      expect(snoozed).toEqual([chats[2]!.id])
+      await expectNoA11yViolations(view.container)
+    })
+
     it('groups by status: Working first with its count, Settled collapsed with archived chats', async () => {
       const view = render(StatusGroups)
       const working = view.getByRole('button', { name: 'Working 2' })

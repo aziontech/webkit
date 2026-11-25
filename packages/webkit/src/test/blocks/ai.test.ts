@@ -141,7 +141,12 @@ describe('ai', () => {
       )
       expect(view.getByTestId('prompt-input-model-picker')).toBeTruthy()
       expect(view.getByTestId('prompt-input-context-picker')).toBeTruthy()
-      expect(view.getByTestId('prompt-input-tools')).toBeTruthy()
+      expect(view.queryByTestId('prompt-input-tools')).toBeNull()
+      await waitFor(() =>
+        expect(within(box).getByRole('button', { name: 'Attach files' })).toHaveAttribute(
+          'aria-haspopup'
+        )
+      )
       cleanup()
     }
   })

@@ -9,7 +9,6 @@
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { type AiChatSendContent, contentOf } from '@aziontech/webkit/utils/ai-chat'
   import { ref } from 'vue'
 
@@ -111,10 +110,6 @@
         v-model="contextKey"
         :options="contexts"
         placeholder="Choose project"
-      />
-      <PromptInputTools
-        v-model="toolKeys"
-        :tools="tools"
       />
     </template>
     <template #hint>
