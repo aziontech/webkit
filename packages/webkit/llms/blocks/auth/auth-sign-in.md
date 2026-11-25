@@ -468,7 +468,9 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   const { locale } = useLocale()
   const copy = computed<SignInCopy>(() => resolveSignInCopy(locale.value))
 
-  const noticeFromProps = () => noticeFor(props.error, props.notice, copy.value)
+  const badCredentials = () => props.error === 'bad-credentials'
+  const noticeFromProps = () =>
+    badCredentials() ? null : noticeFor(props.error, props.notice, copy.value)
 
   const returnStep = ref<SignInStep>('email')
   const email = ref(props.defaultValues.email ?? '')
@@ -476,18 +478,15 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   const resetEmail = ref(props.defaultValues.email ?? '')
   const newPassword = ref('')
   const confirmPassword = ref('')
-  const cardNotice = ref<CardNotice | null>(
-    props.error === 'bad-credentials' ? null : noticeFromProps()
-  )
+  const cardNotice = ref<CardNotice | null>(noticeFromProps())
   const verifying = computed(() => props.loading)
   const errors = reactive({
     email: '',
-    password: '',
+    password: badCredentials() ? copy.value.badCredentials : '',
     resetEmail: '',
     newPassword: '',
     confirmPassword: ''
   })
-  if (props.error === 'bad-credentials') errors.password = copy.value.badCredentials
 
   const cardContentEl = ref<HTMLElement | null>(null)
   const { height: cardHeight, resizing, onTransitionend } = useCardHeight(cardContentEl)
@@ -519,14 +518,11 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const showOutcome = () => {
-    if (props.error === 'bad-credentials') {
-      cardNotice.value = null
-      password.value = ''
-      errors.password = copy.value.badCredentials
-      focusField('login-password')
-      return
-    }
     cardNotice.value = noticeFromProps()
+    if (!badCredentials()) return
+    password.value = ''
+    errors.password = copy.value.badCredentials
+    focusField('login-password')
   }
 
   onMounted(() => {
