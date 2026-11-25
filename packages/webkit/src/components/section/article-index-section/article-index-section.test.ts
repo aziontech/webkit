@@ -417,6 +417,15 @@ describe('ArticleIndexSection', () => {
         expect(queryByTestId(TESTID)).toBeNull()
       })
 
+      it('draws the facet selects at the large size on a touch screen', async () => {
+        await commands.emulateTouch(true)
+        const { getAllByTestId } = band()
+
+        await expect
+          .poll(() => getAllByTestId('select').map((select) => select.getAttribute('data-size')))
+          .toEqual(facets.map(() => 'large'))
+      })
+
       it('names the section by its h2 title inside the search toolbar', () => {
         const { getByTestId, getByRole } = band()
 

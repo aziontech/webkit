@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-24
-checksum: a9a1a4079b3910d4077b18b113349efeaafbb39f4299c30f8e543770f36f577f
+checksum: 22bbd00cfee71948368cbf6d737541603d5cb0d062fedea32a2b7b3631579439
 ---
 
 # ArticleIndexSection — Component Spec
@@ -209,7 +209,8 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 ## Responsive
 
 - Container queries: none; from `lg` the toolbar sits on one row and each row splits cover and copy 2:5.
-- Narrow (≤ 640 px): the toolbar stacks; the category picker scrolls sideways at full label width, the facet dropdowns stack at full width; each row stacks its cover above the copy; the read cue is hidden.
+- Narrow (≤ 640 px): the toolbar stacks; the category picker scrolls sideways at full label width and fades out over its end edge (mirrored in right-to-left) so a cut label reads as more to scroll, the facet dropdowns stack at full width; each row stacks its cover above the copy; the read cue is hidden. From `md`, where cover and copy sit side by side, the cover fills the row's height instead of keeping its 40:21 shape.
+- Touch: the category picker, the search field and the facet dropdowns all draw at the large size.
 - Touch: every row is a full-row link; the read cue is a hover/focus extra, never the only affordance.
 - Reflow: no horizontal page scroll at 320 px and 200 % zoom; only the category picker scrolls inside its own box, and from `sm` the facet dropdowns wrap.
 
