@@ -7,9 +7,9 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 930d805950d0d0aacc4e8263614613b57838b77f0be87d366ac526868febfa8d
+checksum: 5f700e1025c0b522138d7061844e1190e59bb8ae6d5c4a885b5c28e1694582c0
 created: 2026-11-10
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # Eyebrow — Component Spec
@@ -86,7 +86,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 ## States
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
-- Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
+- Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`. The prefix and the label are one inline text run, joined by a word joiner (U+2060), so a label that wraps in a centred column keeps the prefix next to its first word instead of stranding it at the start of the row.
 - Cursor: a decorative, `aria-hidden` `span` (`${testId}__cursor`) is rendered only when `cursor` is set, inline at the end of the label, so a wrapped label keeps it after its last word; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
@@ -108,7 +108,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 | text (label)                | `var(--text-default)`; no orange mark (EB-1)                |
 | cursor surface              | `var(--brand-blue)`, the brand blue in both themes          |
 | cursor size                 | `w-1` · `h-5`                                               |
-| gap (prefix, label, cursor) | `var(--spacing-2xs)`                                        |
+| gap (prefix, label, cursor) | `var(--spacing-2xs)` (`me-` on the prefix, `ms-` on the cursor) |
 | padding.x                   | `var(--spacing-2xs)` start and end (`pr-0` with the cursor) |
 
 ## Theme gaps

@@ -51,11 +51,27 @@ describe('Eyebrow', () => {
   })
 
   it('spaces the prefix, label and cursor with the --spacing-2xs token', () => {
-    const { getByTestId } = render(Eyebrow, { slots: { default: 'TOKENS' } })
+    const { getByTestId, getByText } = render(Eyebrow, {
+      props: { prefix: '//', cursor: true },
+      slots: { default: 'TOKENS' }
+    })
     const root = getByTestId('eyebrow')
-    expect(root.className).toContain('gap-(--spacing-2xs)')
-    expect(root.className).toContain('ps-(--spacing-2xs)')
-    expect(root.className).toContain('pe-(--spacing-2xs)')
+    expect(root.classList.contains('ps-(--spacing-2xs)')).toBe(true)
+    expect(root.classList.contains('pe-(--spacing-2xs)')).toBe(true)
+    expect(getByText('//').classList.contains('me-(--spacing-2xs)')).toBe(true)
+    expect(getByTestId('eyebrow__cursor').classList.contains('ms-(--spacing-2xs)')).toBe(true)
+  })
+
+  it('sets the prefix in the same text run as the label, joined so it cannot strand on its own line', () => {
+    const { getByText, getByTestId } = render(Eyebrow, {
+      props: { prefix: '//' },
+      slots: { default: 'APPLICATION PERFORMANCE AND RELIABILITY' }
+    })
+    const prefix = getByText('//')
+    const label = getByTestId('eyebrow__label')
+    expect(prefix.parentElement).toBe(label.parentElement)
+    expect(prefix.nextSibling?.textContent).toBe('\u2060')
+    expect(prefix.nextSibling?.nextSibling).toBe(label)
   })
 
   it('renders angle-bracket and closing-tag prefixes verbatim', () => {
