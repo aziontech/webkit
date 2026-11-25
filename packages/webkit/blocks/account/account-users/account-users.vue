@@ -243,8 +243,14 @@
       removeOpen.value = true
     }
   }
+  const ROW_CONTROLS = 'a, button, input, select, textarea, [role="combobox"], [role="button"]'
+  const fromRowControl = (event: MouseEvent | KeyboardEvent): boolean =>
+    event instanceof MouseEvent &&
+    (event.target instanceof Element ? event.target.closest(ROW_CONTROLS) !== null : true)
   const onRowOpen = (event: MouseEvent | KeyboardEvent, user: UsersUser) => {
-    if (event instanceof KeyboardEvent) onAction(event, 'view', user)
+    if (fromRowControl(event)) return
+    if (event instanceof MouseEvent && window.getSelection()?.toString()) return
+    onAction(event, 'view', user)
   }
   const onRowRemove = (event: KeyboardEvent, user: UsersUser) => {
     if (!user.owner) onAction(event, 'remove', user)

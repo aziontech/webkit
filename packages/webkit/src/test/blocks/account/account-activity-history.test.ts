@@ -5,6 +5,12 @@ import AccountActivityHistory from '../../../../blocks/account/account-activity-
 import Empty from '../../../../blocks/account/account-activity-history/variants/empty.vue'
 
 describe('account/account-activity-history', () => {
+  it('repeats who did it in the event cell for a phone', () => {
+    const view = render(AccountActivityHistory)
+    const summary = view.container.querySelector<HTMLElement>('[data-slot="narrow-summary"]')
+    expect(summary?.textContent).toMatch(/@example\.com/)
+  })
+
   it('draws the category as a Tag, not a status', () => {
     const view = render(AccountActivityHistory)
     const table = view.getByRole('table', { name: 'Activity history' })

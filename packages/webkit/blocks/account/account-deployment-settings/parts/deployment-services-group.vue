@@ -124,9 +124,11 @@
             <Accordion.Trigger :heading-level="3">
               <span class="flex flex-1 flex-wrap items-center gap-(--spacing-sm)">
                 <span class="text-label-md text-(--text-default)">All services</span>
-                <span class="text-body-sm text-(--text-muted)">{{
-                  reachLabel(serviceList.length)
-                }}</span>
+                <span
+                  class="text-body-sm text-(--text-muted)"
+                  dir="auto"
+                  >{{ reachLabel(serviceList.length) }}</span
+                >
                 <Tag
                   v-if="sharedCount"
                   :label="`${sharedCount} on a shared setting`"

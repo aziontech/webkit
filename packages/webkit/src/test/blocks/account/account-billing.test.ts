@@ -17,6 +17,15 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 describe('account/account-billing', () => {
+  it('repeats a status other than Paid in the invoice cell for a phone', () => {
+    const view = render(AccountBilling)
+    const summaries = [
+      ...view.container.querySelectorAll<HTMLElement>('[data-slot="narrow-summary"]')
+    ].map((summary) => summary.textContent?.trim())
+    expect(summaries).toContain('Refunded')
+    expect(summaries).not.toContain('Paid')
+  })
+
   it('switches between the Bills and Payment methods tabs', async () => {
     const view = render(AccountBilling)
     expect(view.getByRole('table', { name: 'Invoices' })).toBeTruthy()

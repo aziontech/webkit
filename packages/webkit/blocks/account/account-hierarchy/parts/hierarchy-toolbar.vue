@@ -10,6 +10,8 @@
     selectedCount: number
     /** A refresh is in flight. */
     refreshing: boolean
+    /** The details panel has something to show; false hides its toggle (a failed load). */
+    detailsAvailable: boolean
   }
 
   defineProps<HierarchyToolbarProps>()
@@ -77,6 +79,7 @@
         />
       </Tooltip>
       <Button
+        v-if="detailsAvailable"
         :label="detailsOpen ? 'Hide details' : 'Show details'"
         :icon="detailsOpen ? 'az az-eye-off' : 'az az-eye'"
         variant="ghost"

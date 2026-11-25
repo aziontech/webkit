@@ -41,6 +41,17 @@ describe('account-change-plan-drawer', () => {
     expect(dialog()!.contains(document.activeElement)).toBe(true)
   })
 
+  it('opens the checkout on what you pay, with What is included after the form', async () => {
+    render(Checkout)
+    const panel = await waitFor(() => {
+      expect(dialog()?.textContent).toContain("What's included")
+      return dialog() as HTMLElement
+    })
+    const text = panel.textContent ?? ''
+    expect(text.indexOf('Total')).toBeGreaterThan(-1)
+    expect(text.indexOf('Total')).toBeLessThan(text.indexOf("What's included"))
+  })
+
   it('renders the plans it is given and emits plan-select and upgrade', async () => {
     const view = render(AccountChangePlanDrawer, {
       props: {

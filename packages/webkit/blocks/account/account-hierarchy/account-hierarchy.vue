@@ -305,6 +305,7 @@
         :uid="uid"
         :selected-count="selectedCount"
         :refreshing="refreshing"
+        :details-available="!error"
         @move="openMove(selectedResources)"
         @labels="openLabels(selectedResources)"
         @delete="openDelete(selectedResources)"

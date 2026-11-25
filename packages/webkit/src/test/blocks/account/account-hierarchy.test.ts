@@ -20,6 +20,13 @@ const row = (id: string): HTMLElement =>
 const checkboxOf = (id: string): HTMLElement =>
   row(id).querySelector<HTMLElement>('[role="checkbox"], input[type="checkbox"]') as HTMLElement
 describe('account/account-hierarchy', () => {
+  it('drops the details toggle when the resources fail to load', () => {
+    const view = render(ManageResources, { props: { error: 'The API answered 503.' } })
+    expect(view.queryByRole('button', { name: /details/ })).toBeNull()
+    const loaded = render(ManageResources)
+    expect(loaded.getByRole('button', { name: 'Hide details' })).toBeTruthy()
+  })
+
   it('shows the hierarchy as a treegrid with the first branch open', () => {
     const view = render(ManageResources)
     expect(view.getByRole('treegrid', { name: 'Resources' })).toBeTruthy()

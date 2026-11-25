@@ -59,28 +59,32 @@
 
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
           <Field.Legend type="label">Organization mark</Field.Legend>
-          <RadioGroup
-            v-model="accent"
-            variant="card"
-            orientation="horizontal"
-            :options="accents"
-            aria-label="Organization mark"
-            class="w-full"
+          <div
+            class="w-full [&>[role=radiogroup]]:grid! [&>[role=radiogroup]]:grid-cols-3 sm:[&>[role=radiogroup]]:grid-cols-4"
           >
-            <template #option="{ option }">
-              <span class="flex flex-col items-center gap-(--spacing-xs)">
-                <Avatar
-                  :label="previewName"
-                  :alt="option.label"
-                  :colors="option.colors"
-                  pattern="marble"
-                  size="medium"
-                  variant="square"
-                />
-                <span class="text-body-xs text-(--text-muted)">{{ option.label }}</span>
-              </span>
-            </template>
-          </RadioGroup>
+            <RadioGroup
+              v-model="accent"
+              variant="card"
+              orientation="horizontal"
+              :options="accents"
+              aria-label="Organization mark"
+              class="w-full"
+            >
+              <template #option="{ option }">
+                <span class="flex flex-col items-center gap-(--spacing-xs)">
+                  <Avatar
+                    :label="previewName"
+                    :alt="option.label"
+                    :colors="option.colors"
+                    pattern="marble"
+                    size="medium"
+                    variant="square"
+                  />
+                  <span class="text-body-xs text-(--text-muted)">{{ option.label }}</span>
+                </span>
+              </template>
+            </RadioGroup>
+          </div>
           <FieldDescription
             >Generated from the organization's name. Select its color.</FieldDescription
           >

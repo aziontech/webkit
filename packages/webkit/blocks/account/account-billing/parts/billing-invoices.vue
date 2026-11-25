@@ -200,12 +200,25 @@
           <template #cell-number="{ value }">
             <span class="tabular-nums text-(--text-muted)">{{ value }}</span>
           </template>
-          <template #cell-id="{ value }">
-            <span
-              class="truncate tabular-nums"
-              dir="ltr"
-              >{{ value }}</span
-            >
+          <template #cell-id="{ row, value }">
+            <div class="flex min-w-0 flex-col">
+              <span
+                class="truncate tabular-nums"
+                dir="ltr"
+                >{{ value }}</span
+              >
+              <div
+                v-if="row.status !== 'Paid'"
+                aria-hidden="true"
+                data-slot="narrow-summary"
+                class="mt-(--spacing-2xs) sm:hidden"
+              >
+                <TableCellStatus
+                  :label="row.status"
+                  :severity="statusSeverity(row.status)"
+                />
+              </div>
+            </div>
           </template>
           <template #cell-seats="{ value }">
             <span class="tabular-nums">{{ value }}</span>
