@@ -399,7 +399,7 @@ describe('Combobox', () => {
       const fields = view.getAllByRole('combobox') as HTMLInputElement[]
       expect(fields[0]!.disabled).toBe(true)
       expect(fields[1]!.getAttribute('aria-invalid')).toBe('true')
-      expect(view.getByRole('combobox', { name: 'Region' })).toBe(fields[1])
+      expect(view.getAllByRole('combobox', { name: 'Region' })).toEqual(fields)
       expect(describedText(fields[1]!)).toContain('Choose a region.')
       await expectNoA11yViolations(view.container)
     })

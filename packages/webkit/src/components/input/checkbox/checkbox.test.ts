@@ -392,6 +392,20 @@ describe('Checkbox', () => {
     })
   })
 
+  describe('example labels', () => {
+    it.each([
+      ['Default', Default, ['Email notifications']],
+      ['Indeterminate', Indeterminate, ['Select all domains']],
+      ['Disabled', Disabled, ['Daily backups', 'Dedicated IP']]
+    ])('names every box in the %s example by a visible label', (_name, example, names) => {
+      const view = render(example)
+      for (const name of names) {
+        const box = view.getByRole('checkbox', { name })
+        expect(box.hasAttribute('aria-label')).toBe(false)
+      }
+    })
+  })
+
   describe('touch target', () => {
     it('grows the native input to 24px, and 44px on coarse pointers', () => {
       const view = render(Checkbox, { attrs: { 'aria-label': 'Option' } })
