@@ -69,7 +69,7 @@
     'rounded-(--shape-control) ' +
     'data-[rounded]:rounded-full! ' +
     'data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) ' +
-    'data-[severity=neutral]:border-(length:--border-width-default) data-[severity=neutral]:border-(--border-default) data-[severity=neutral]:bg-(--bg-canvas) ' +
+    'data-[severity=neutral]:bg-(--bg-selected) ' +
     'data-[severity=neutral]:text-(--text-default) ' +
     'data-[variant=accent]:bg-(--accent) data-[variant=accent]:text-(--accent-foreground) data-[variant=contrast]:bg-(--bg-contrast) data-[variant=contrast]:text-(--text-contrast) ' +
     'data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) ' +
