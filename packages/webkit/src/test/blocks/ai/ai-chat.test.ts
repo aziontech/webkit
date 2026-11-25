@@ -261,6 +261,21 @@ describe('ai/ai-chat', () => {
     expect((view.emitted('share-chat') as unknown[][])[0]?.[1]).toBe('h2')
   })
 
+  it('asks before Delete removes the open conversation', async () => {
+    const view = render(AiChat, { props: { messages: thread, activeKey: 'h2' } })
+    await userEvent.click(view.getAllByRole('button', { name: 'More conversation actions' })[0]!)
+    await userEvent.click(await view.findByRole('menuitem', { name: 'Delete' }))
+    const dialog = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[role="alertdialog"], [role="dialog"]')
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(dialog.textContent).toMatch(/^Delete “.+”\?/)
+    expect(view.emitted('remove-chat')).toBeUndefined()
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Delete' }))
+    await waitFor(() => expect((view.emitted('remove-chat') as unknown[][])[0]?.[1]).toBe('h2'))
+  })
+
   it('turns a tool on from the composer "+" menu and shows it as a chip', async () => {
     const view = render(AiChat)
     const plus = await waitFor(() => {
