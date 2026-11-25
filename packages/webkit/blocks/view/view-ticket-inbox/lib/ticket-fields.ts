@@ -46,6 +46,7 @@ export const ticketComparators = {
 export const ticketDefaultSort = [{ id: 'slaDueAt', desc: false }]
 
 export const ticketHiddenColumns = [
+  { id: 'updatedAt', visible: false },
   { id: 'group', visible: false },
   { id: 'channel', visible: false }
 ]

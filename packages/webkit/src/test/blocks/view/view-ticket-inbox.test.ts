@@ -51,6 +51,15 @@ describe('view/view-ticket-inbox block', () => {
     expect(opened[0][1].id).toBe('9001')
   })
 
+  it('starts with Updated, Group and Channel hidden so the visible columns fit', () => {
+    const view = render(ViewTicketInbox, { props: { tickets: [ticket] } })
+    const headers = view.getAllByRole('columnheader').map((cell) => cell.textContent ?? '')
+    const shown = (name: string) => headers.some((text) => text.includes(name))
+    for (const name of ['Subject', 'Status', 'Next SLA']) expect(shown(name)).toBe(true)
+    for (const name of ['Updated', 'Group', 'Channel']) expect(shown(name)).toBe(false)
+    view.unmount()
+  })
+
   it('does not open the ticket when the row checkbox is clicked', async () => {
     const view = render(ViewTicketInbox, { props: { tickets: [ticket] } })
     await waitFor(() => expect(subjects(view.container).length).toBe(1))
