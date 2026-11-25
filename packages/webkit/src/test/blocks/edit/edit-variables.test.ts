@@ -47,6 +47,17 @@ const openCreate = async () => {
   return { panel, key, value }
 }
 describe('variables#NetworkList', () => {
+  it('types each entry in the code face', async () => {
+    render(NetworkList)
+    const inputs = await waitFor(() => {
+      const found = document.querySelectorAll('input')
+      expect(found.length).toBeGreaterThan(0)
+      return found
+    })
+    const monospace = Array.from(inputs).filter((input) => input.closest('[data-monospace]'))
+    expect(monospace.length).toBeGreaterThan(0)
+  })
+
   it('reports invalid and repeated lines, adds every new line as a row and shows each invalid row its error', async () => {
     render(NetworkList)
     const panel = await openedDrawer()
