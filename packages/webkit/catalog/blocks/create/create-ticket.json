@@ -2,17 +2,17 @@
  "variants": [
   {
    "name": "ValidationErrors",
-   "summary": "Create ticket pressed with gaps: Requester and Description are empty and a CC entry is not an email address, so each turns invalid with its message under it and focus moves to Requester; the typed Subject stays.",
+   "summary": "Save pressed with gaps: Requester and Description are empty and a CC entry is not an email address, so each turns invalid with its message under it and focus moves to Requester; the typed Subject stays.",
    "file": "blocks/create/create-ticket/variants/validation-errors.vue"
   },
   {
    "name": "ContactError",
-   "summary": "Add new contact chosen and Create ticket pressed: Contact email holds an address with no domain ending and turns invalid, Subject and Description are empty and invalid too, and Search contacts goes back to the contact search.",
+   "summary": "Add new contact chosen and Save pressed: Contact email holds an address with no domain ending and turns invalid, Subject and Description are empty and invalid too, and Search contacts goes back to the contact search.",
    "file": "blocks/create/create-ticket/variants/contact-error.vue"
   },
   {
    "name": "Submitting",
-   "summary": "A filled ticket in flight: Create ticket spins, every field, Cancel and Create and add another are disabled until the answer comes back.",
+   "summary": "A filled ticket in flight: Save spins, every field, Cancel and Save and add another are disabled until the answer comes back.",
    "file": "blocks/create/create-ticket/variants/submitting.vue"
   },
   {
@@ -22,7 +22,7 @@
   },
   {
    "name": "Success",
-   "summary": "After Create and add another: a success toast names Ticket #4840 with Open ticket, and the form is empty again with focus on Requester.",
+   "summary": "After Save and add another: a success toast names Ticket #4840 with Open ticket, and the form is empty again with focus on Requester.",
    "file": "blocks/create/create-ticket/variants/success.vue"
   },
   {

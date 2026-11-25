@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-onboarding-form/account-onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-onboarding-form")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [PlanFeatureList](../../components/plan-feature-list.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [PlanFeatureList](../../components/plan-feature-list.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), `utils/focus-invalid`, [Wizard](../../components/wizard.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -162,6 +162,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The page `h1` is visually hidden (`Set up your organization`); each step heading is the Wizard's `h2`, and the Wizard moves focus to it on every step change.
+- A Next that cannot advance (a required field empty, no plan picked) moves focus to the first invalid field and scrolls it into view.
 - The fields sit in a `fieldset` with a hidden legend.
 - The Wizard's `Step 1 of 3` line is a polite live region, so the step change is announced.
 
@@ -205,6 +206,7 @@ Each variant is the same screen in another state: `get_block("account/account-on
   import { type PlanFeatureListItem } from '@aziontech/webkit/plan-feature-list'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
@@ -347,7 +349,7 @@ Each variant is the same screen in another state: `get_block("account/account-on
   const organizationSubmitted = ref(false)
 
   const previewName = computed(() => organizationName.value.trim() || 'Your organization')
-  const ownerName = computed(() => fullName.value.trim() || email.value.split('@')[0])
+  const ownerName = computed(() => fullName.value.trim())
   const accentColors = computed(
     () => (accents.find((item) => item.value === accent.value) ?? accents[0]).colors
   )
@@ -456,6 +458,7 @@ Each variant is the same screen in another state: `get_block("account/account-on
       planSubmitted.value = true
       if (!plan.value) event.preventDefault()
     }
+    if (event.defaultPrevented) void focusFirstInvalid(wizardEl.value)
   }
 
   const startOver = (event: MouseEvent) => {
@@ -1029,12 +1032,14 @@ export const roleOptions = [
               class="mt-auto flex min-w-0 shrink-0 items-center gap-(--spacing-xs) border-t-(length:--border-width-default) border-(--border-muted) pt-(--spacing-md)"
             >
               <Avatar
-                :label="accountInitials(ownerName)"
+                :label="accountInitials(ownerName || email)"
                 size="medium"
                 variant="square"
               />
               <span class="flex min-w-0 flex-col">
-                <span class="truncate text-label-sm text-(--text-default)">{{ ownerName }}</span>
+                <span class="truncate text-label-sm text-(--text-default)">{{
+                  ownerName || email.split('@')[0]
+                }}</span>
                 <span class="truncate text-body-xs text-(--text-muted)">{{ email }}</span>
               </span>
             </div>
@@ -1043,7 +1048,9 @@ export const roleOptions = [
           <div class="min-w-0 flex-1 overflow-hidden bg-(--bg-canvas)">
             <div class="flex min-h-(--container-2xl) flex-col gap-(--spacing-lg) p-(--spacing-lg)">
               <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                <p class="truncate text-heading-sm text-(--text-default)">Hello, {{ ownerName }}</p>
+                <p class="truncate text-heading-sm text-(--text-default)">
+                  {{ ownerName ? 'Hello, ' + ownerName : 'Hello' }}
+                </p>
                 <p class="truncate text-body-sm text-(--text-muted)">
                   My Workspace · no projects yet
                 </p>

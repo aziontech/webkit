@@ -4528,7 +4528,7 @@ export const ttlDuration = (
                       v-if="!caMatches.length"
                       class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                     >
-                      No certificate matches"{{ caQuery }}".
+                      No certificate matches "{{ caQuery }}".
                     </p>
                   </Select.Group>
                   <template #footer>

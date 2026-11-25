@@ -1698,7 +1698,11 @@ jobs:
           label="Created"
           class="lg:col-span-2"
         >
-          <span class="truncate text-body-sm text-(--text-default)">
+          <span
+            dir="auto"
+            data-testid="resource-detail__created"
+            class="truncate text-body-sm text-(--text-default)"
+          >
             {{ created }}
           </span>
           <Avatar
