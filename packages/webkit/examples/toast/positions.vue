@@ -14,7 +14,7 @@
 
 <template>
   <Toaster position="bottom-end" />
-  <div class="flex flex-wrap justify-center gap-2">
+  <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
     <Button
       v-for="p in positions"
       :key="p"

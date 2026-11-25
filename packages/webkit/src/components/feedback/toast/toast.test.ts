@@ -5,6 +5,7 @@ import { createApp, defineComponent, h, nextTick } from 'vue'
 
 import Default from '../../../../examples/toast/default.vue'
 import ProgressExample from '../../../../examples/toast/progress.vue'
+import Severities from '../../../../examples/toast/severities.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
@@ -433,8 +434,22 @@ describe('Toast', () => {
         const { container } = render(Default)
         await nextTick()
 
-        // The Default story renders a "Show toast" Button trigger in the canvas.
-        expect(within(container as HTMLElement).getByText('Show toast')).toBeTruthy()
+        expect(within(container as HTMLElement).getByText('Delete application')).toBeTruthy()
+      })
+    })
+
+    describe('severities example copy', () => {
+      it('gives every severity a message that fits it', async () => {
+        const { getByRole } = render(Severities)
+        const titles: Record<string, string> = {
+          Success: 'Deployment finished',
+          Warning: 'Request limit at 90%',
+          Error: 'Deploy failed'
+        }
+        for (const [label, title] of Object.entries(titles)) {
+          getByRole('button', { name: label }).click()
+          await vi.waitFor(() => expect(document.body.textContent).toContain(title))
+        }
       })
     })
 

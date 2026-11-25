@@ -3,15 +3,16 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
-    toast('Event has been created', {
-      description: 'Sunday, December 03, 2023 at 9:00 AM'
+    toast('Cache purge started', {
+      description: 'https://example.com/docs/* clears from every node in a few minutes.'
     })
 </script>
 
 <template>
   <Toaster position="bottom-end" />
   <Button
-    label="Show toast"
+    label="Purge cache"
+    variant="outline"
     @click="show"
   />
 </template>
