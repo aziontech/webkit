@@ -22,6 +22,7 @@
   import { messages } from '../lib/i18n'
   import { groupLabel } from '../lib/nav'
   import type { GuidelinesDoc, Highlighted } from '../lib/types'
+  import { sentenceTitle } from '../lib/words'
   import NotFound from './not-found-page.vue'
 
   const route = useRoute()
@@ -241,7 +242,7 @@
                 v-for="entry in block.states"
                 :key="entry.slug"
                 :value="entry.slug"
-                >{{ entry.name }}</Select.Item
+                >{{ sentenceTitle(entry.name) }}</Select.Item
               >
             </Select.Content>
           </Select>
@@ -252,7 +253,9 @@
         >
           <ToggleGroup
             v-model="stateSlug"
-            :options="block.states.map((entry) => ({ label: entry.name, value: entry.slug }))"
+            :options="
+              block.states.map((entry) => ({ label: sentenceTitle(entry.name), value: entry.slug }))
+            "
             :aria-label="t.states"
             size="small"
           />
@@ -266,7 +269,7 @@
         <BlockFrame
           v-if="state"
           :src="`/frame/block/${block.id}/${state.slug}/`"
-          :title="`${block.title}: ${state.name}`"
+          :title="`${block.title}: ${sentenceTitle(state.name)}`"
         />
       </section>
 

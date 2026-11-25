@@ -2,6 +2,11 @@ import { en, type Messages } from './i18n'
 
 export const es: Messages = {
   ...en,
+  viewport: 'Ventana',
+  viewportMobile: 'Móvil',
+  viewportTablet: 'Tableta',
+  viewportDesktop: 'Escritorio',
+  viewportFull: 'Completa',
   components: 'Componentes',
   blocks: 'Bloques',
   foundations: 'Fundamentos',

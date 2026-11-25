@@ -32,6 +32,13 @@ export function spacedTitle(value: string): string {
   return words(value).join(' ')
 }
 
+export function sentenceTitle(value: string): string {
+  const acronyms = new Set(Object.values(ACRONYMS))
+  return words(value)
+    .map((word, at) => (at === 0 || acronyms.has(word) ? word : word.toLowerCase()))
+    .join(' ')
+}
+
 export function titleCase(value: string): string {
   return value
     .split(/[-/ ]/)
