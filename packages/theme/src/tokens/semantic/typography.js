@@ -163,6 +163,14 @@ export const typography = {
     fontWeight: fontWeight.normal,
     letterSpacing: tracking.wide
   },
+  'text-body-code-lg': {
+    textWrapStyle: 'pretty',
+    fontFamily: fontFamily.code,
+    fontSize: fontSize.base,
+    lineHeight: leading.normal,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.wide
+  },
   'text-label-code-md': {
     fontFamily: fontFamily.code,
     fontSize: fontSize.sm,
