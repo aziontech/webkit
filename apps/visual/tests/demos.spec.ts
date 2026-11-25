@@ -150,9 +150,11 @@ test.describe('demo flows', () => {
     await expect(page).toHaveURL(/\/settings$/)
   })
 
-  test('a sidebar row with no page is disabled', async ({ page }) => {
+  test('the sidebar lists only rows that lead to a page', async ({ page }) => {
     await page.goto(`${DEMOS}/resources`)
-    await expect(page.getByRole('button', { name: /Projects/ }).first()).toBeDisabled()
+    await expect(page.getByRole('link', { name: 'Resources' }).first()).toBeVisible()
+    await expect(page.getByRole('button', { name: /Projects/ })).toHaveCount(0)
+    await expect(page.locator('nav').getByText('Soon', { exact: true })).toHaveCount(0)
   })
 
   test('the profile opens on the signed-in account and saves with Control+S', async ({ page }) => {
