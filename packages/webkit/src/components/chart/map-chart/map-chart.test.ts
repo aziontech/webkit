@@ -164,12 +164,12 @@ describe('MapChart', () => {
     }
   })
 
-  it('offers Retry in the States example error and draws the data once it is pressed', async () => {
+  it('offers Try again in the States example error and draws the data once it is pressed', async () => {
     const view = render(States)
-    const retry = view.getByRole('button', { name: 'Retry' })
-    expect(view.getByText('Could not load requests by country.')).toBeTruthy()
+    const retry = view.getByRole('button', { name: 'Try again' })
+    expect(view.getByText('Could not load requests by country')).toBeTruthy()
     await fireEvent.click(retry)
-    expect(view.queryByText('Could not load requests by country.')).toBeNull()
-    expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
+    expect(view.queryByText('Could not load requests by country')).toBeNull()
+    expect(view.queryByRole('button', { name: 'Try again' })).toBeNull()
   })
 })

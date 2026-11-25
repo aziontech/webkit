@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 259c69e755a8701e92e861507ce987de74c064683d4a1b1b4b204e0496fa2ef5
+checksum: 29c986c3d63968b603ba187cd39240cc93e2dd115616d39be1291db352468fe0
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -132,6 +132,7 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 
 ## States
 
+- Error pattern of the chart family: a chart tall enough for it shows the centred error card (a bordered small `EmptyState` with the cause and a secondary `Try again` button, as BarList, DonutChart and DataTable do) through its `error` slot; only a strip too short for the card (Tracker) keeps an inline banner. The retry label is always `Try again`.
 - Visual states: `default`, `loading` (Skeleton at the dial ratio), `error` (Alert), `empty` (EmptyState), `refetching` (reduced opacity)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching` on the root; priority loading, then error, then empty, then the dial
 - `data-size`: `small` | `medium` | `large`
@@ -149,14 +150,14 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 
 ## Tokens
 
-| Region           | Token (DESIGN.md)                                                                       |
-| ---------------- | --------------------------------------------------------------------------------------- |
-| track            | `var(--border-muted)`                                                                   |
-| arc, no band     | `var(--chart-series-1)`                                                                 |
-| arc in a band    | `var(--chart-status-*)`, `var(--severity-*)`                                            |
-| band marks       | `var(--bg-surface)`                                                                     |
+| Region           | Token (DESIGN.md)                                                                                                                                  |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| track            | `var(--border-muted)`                                                                                                                              |
+| arc, no band     | `var(--chart-series-1)`                                                                                                                            |
+| arc in a band    | `var(--chart-status-*)`, `var(--severity-*)`                                                                                                       |
+| band marks       | `var(--bg-surface)`                                                                                                                                |
 | reading          | `.text-big-number-md`, `.text-big-number-sm`, `.text-heading-sm`, `var(--text-default)`; a trailing unit word `.text-body-sm`, `var(--text-muted)` |
-| caption and ends | `.text-body-sm`, `.text-label-sm`, `var(--text-muted)`                                  |
+| caption and ends | `.text-body-sm`, `.text-label-sm`, `var(--text-muted)`                                                                                             |
 
 ## Theme gaps
 
