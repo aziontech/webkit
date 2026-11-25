@@ -2655,3 +2655,5 @@ Budget-raise: toast 12 KB → 12.1 KB (measured 12.06 KB): Progress gains a seve
 Budget-raise: toast-root 11.75 KB → 11.8 KB (measured 11.77 KB): Progress gains a severity fill (five data-severity classes, A6-161); the entry renders Progress in its timer bar.
 
 Budget-raise: progress 1.85 KB → 1.95 KB (measured 1.93 KB): Progress gains a severity fill: five data-severity classes and the attribute (A6-161).
+
+Budget-raise: css-console 24.95 KB → 25.05 KB (measured 25.02 KB gzip): the console fixture's stylesheet gains the Progress severity fills (A6-161), the narrow-table column hiding and the principal-cell cap (A6-208, A6-174), the StatTile figure row container query (A6-279), the FlowDiagram centred rail and showPorts (A6-198, A6-149), and the CodeBlock tab hit area and narrow line inset (A6-048, A6-117).
