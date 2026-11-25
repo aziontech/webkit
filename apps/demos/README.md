@@ -14,6 +14,12 @@ pnpm build:demos     # static build in apps/demos/dist
 pnpm preview:demos   # preview the build on http://localhost:4174
 ```
 
+`preview:demos` serves the build with the docs server (`apps/docs/scripts/serve.mjs --root dist
+--spa`), so the demos get the same security headers as the docs: `nosniff`, a strict referrer
+policy and a content security policy that allows only the app's own scripts and the hash of its
+inline theme script. A host that deploys the demos sends the same headers (see the docs README,
+"Build and deploy").
+
 ## Flows
 
 | Route                                | Screen (block)                                               | What it does                                                                                       |

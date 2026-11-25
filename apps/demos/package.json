@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --port 4174 --strictPort",
+    "preview": "node ../docs/scripts/serve.mjs --root dist --spa --port 4174",
     "lint": "eslint . --max-warnings 0",
     "check:format": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
   },
