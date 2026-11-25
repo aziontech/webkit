@@ -62,8 +62,6 @@
   const OPEN_ROW_CLASS =
     'flex min-h-0 flex-1 [&_[role=row]:has([data-open-event])]:[--table-row-bg:var(--bg-selected)]!'
 
-  const GROW_TEXT_CLASS = 'block w-0 min-w-full truncate text-(--text-default)'
-
   const STATUS_CELL_CLASS =
     'min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) ' +
     'data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)'
@@ -143,7 +141,7 @@
           </div>
           <span
             v-else
-            :class="GROW_TEXT_CLASS"
+            class="min-w-0 truncate text-(--text-default)"
             >{{ value }}</span
           >
         </template>
@@ -163,8 +161,7 @@
           #[`cell-${field.id}`]="{ value }"
         >
           <span
-            class="min-w-0 truncate text-(--text-default) data-grow:w-0 data-grow:min-w-full data-mono:text-label-code-sm data-numeric:tabular-nums"
-            :data-grow="field.grow ? true : null"
+            class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
             :data-mono="field.mono || null"
             :data-numeric="field.align === 'end' || null"
           >
