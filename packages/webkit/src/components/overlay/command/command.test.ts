@@ -176,6 +176,15 @@ describe('Command', () => {
         expect(classes.contains('md:items-center')).toBe(false)
       })
 
+      it('opens as a top sheet below md, so the keyboard never covers the search field', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        const classes = panel()!.classList
+        expect(classes.contains('max-md:items-start')).toBe(true)
+        expect(classes.contains('max-md:items-end')).toBe(false)
+      })
+
       it('names the palette with a title the phone header shows, not a hidden one', async () => {
         render(composed({ defaultOpen: true }))
         await settle()
