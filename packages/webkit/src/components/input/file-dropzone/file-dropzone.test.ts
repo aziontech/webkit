@@ -363,9 +363,9 @@ describe('FileDropzone', () => {
     it('titles the Folders example for every input and hides Browse folder on touch', () => {
       const view = render(Folders)
       expect(view.getByText('Upload files or folders')).toBeTruthy()
-      expect(view.getByRole('button', { name: 'Browse folder' }).classList).toContain(
-        'pointer-coarse:hidden'
-      )
+      expect(
+        view.getByRole('button', { name: 'Browse folder' }).parentElement?.classList
+      ).toContain('pointer-coarse:hidden')
     })
 
     it('does not walk entries when directories is off', async () => {

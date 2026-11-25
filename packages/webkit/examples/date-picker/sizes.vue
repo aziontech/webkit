@@ -10,21 +10,21 @@
 
 <template>
   <div class="flex flex-wrap items-start gap-4">
-    <Field class="w-fit">
+    <Field class="max-w-fit">
       <Field.Label>Start date</Field.Label>
       <DatePickerRoot
         v-model="start"
         size="small"
       />
     </Field>
-    <Field class="w-fit">
+    <Field class="max-w-fit">
       <Field.Label>Review date</Field.Label>
       <DatePickerRoot
         v-model="review"
         size="medium"
       />
     </Field>
-    <Field class="w-fit">
+    <Field class="max-w-fit">
       <Field.Label>End date</Field.Label>
       <DatePickerRoot
         v-model="end"

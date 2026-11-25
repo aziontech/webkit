@@ -224,11 +224,16 @@ describe('dashboard/dashboard-analytics data shapes', () => {
     expect(view.getByTestId('period-header__updating').textContent).toContain('Updating')
     const figures = view.getByRole('group', { name: 'Key figures' })
     expect(figures.getAttribute('aria-busy')).toBe('true')
-    expect(figures.classList.contains('aria-busy:[&>div]:opacity-60')).toBe(true)
+    expect(figures.parentElement?.hasAttribute('data-updating')).toBe(true)
+    expect(
+      figures.parentElement?.classList.contains('data-[updating]:[&>div>div]:opacity-60')
+    ).toBe(true)
     const hostsTable = view.getByTestId('data-table')
     expect(hostsTable.closest('[aria-busy="true"]')).not.toBeNull()
     expect(
-      hostsTable.classList.contains('group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60')
+      hostsTable.parentElement?.classList.contains(
+        'group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60'
+      )
     ).toBe(true)
   })
 

@@ -292,29 +292,33 @@
         data-testid="dashboard-analytics__error"
         @action="(event: MouseEvent) => emit('retry', event)"
       />
-      <StatTileGroup
-        aria-label="Key figures"
-        :aria-busy="refetching || undefined"
-        class="aria-busy:[&>div]:opacity-60"
+      <div
+        :data-updating="refetching || undefined"
+        class="data-[updating]:[&>div>div]:opacity-60"
       >
-        <StatTile
-          v-for="figure in figures"
-          :key="figure.id"
-          :label="figure.label"
-          :value="figure.value"
-          :format-value="formatters[figure.format]"
-          :delta="figure.delta"
-          :delta-label="currentPeriod.comparison"
-          :inverse="figure.inverse"
-          :trend="figure.trend"
-          :loading="loading"
-          :error="error"
+        <StatTileGroup
+          aria-label="Key figures"
+          :aria-busy="refetching || undefined"
         >
-          <template #aside>
-            <Hint :content="figure.description" />
-          </template>
-        </StatTile>
-      </StatTileGroup>
+          <StatTile
+            v-for="figure in figures"
+            :key="figure.id"
+            :label="figure.label"
+            :value="figure.value"
+            :format-value="formatters[figure.format]"
+            :delta="figure.delta"
+            :delta-label="currentPeriod.comparison"
+            :inverse="figure.inverse"
+            :trend="figure.trend"
+            :loading="loading"
+            :error="error"
+          >
+            <template #aside>
+              <Hint :content="figure.description" />
+            </template>
+          </StatTile>
+        </StatTileGroup>
+      </div>
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"

@@ -83,8 +83,10 @@ describe('create-deploy-drawer', () => {
       within(dialog).getByText('Building… Project and environment unlock when the build finishes.')
     ).toBeTruthy()
     const project = within(dialog).getByRole('heading', { name: 'Project' }).closest('section')
-    expect(project?.hasAttribute('inert')).toBe(true)
-    expect(project?.classList.contains('data-[pending]:opacity-50')).toBe(true)
+    const pending = project?.parentElement
+    expect(pending?.hasAttribute('inert')).toBe(true)
+    expect(pending?.hasAttribute('data-pending')).toBe(true)
+    expect(pending?.classList.contains('data-[pending]:opacity-50')).toBe(true)
     expect(within(dialog).getByRole('button', { name: 'Deploy' }).hasAttribute('disabled')).toBe(
       true
     )

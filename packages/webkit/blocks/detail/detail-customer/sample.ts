@@ -90,7 +90,7 @@ export const sampleActivity: DetailCustomerEvent[] = [
   {
     id: 'evt_3',
     type: 'rated',
-    title: 'Rated ticket #4755: 5 out of 5',
+    title: 'Rated ticket #4755 with 5 out of 5',
     description: 'Quick and clear, thank you.',
     actor: 'Jane Doe',
     at: '2026-11-20T12:30:00Z'

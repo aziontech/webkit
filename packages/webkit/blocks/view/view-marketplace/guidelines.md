@@ -51,23 +51,21 @@ The inline half of the state-async-submit outcome, at the top of the drawer: a s
 
 A two-column `KeyValueList` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
 
-### I. Overview (required)
+Under the facts, an "Overview" `h3` over what installing adds to the application, at `text-body-sm` like the rest of the drawer. The publisher's description already sits under the header, so the Overview never repeats it. Then a "Permissions" `h3` with the list of what the integration may read or add, each line led by a check glyph.
 
-An "Overview" `h3` over what installing adds to the application, at `text-body-sm` like the rest of the drawer. The publisher's description already sits under the header, so the Overview never repeats it. Then a "Permissions" `h3` with the list of what the integration may read or add, each line led by a check glyph.
-
-### J. Install form — `Field`, `Select` (required)
+### I. Install form — `Field`, `Select` (required)
 
 An "Install" `h3` ("Install on another application" once installed somewhere) over a required `Field` labelled Application with a `Select` of the applications it is not installed on yet. Submitting without a choice marks the `Field` invalid and shows `Field.Error` ("Select the application to install Rate Guard on."); otherwise `Field.Description` says where it runs. While the run lasts the `Field` is disabled. When no application is left, the field gives way to one sentence and the footer drops Install.
 
-### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
+### J. Solution page — `Card`, `Select`, `Field`, `KeyValueList` (optional)
 
 The drawer's content as a page, for the integration's own URL (the variant renders `parts/solution-page.vue`, which adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (what it does and what it needs, under section headings smaller than the page title), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
-### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
+### K. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
 The settings of one installed integration on one application (the variant renders `parts/configure-page.vue`, which adds `SettingsGroup`, `Item`, `SettingsRow`, `Switch`, `Input` and `SaveBar`). `SettingsGroup`s group them; an on/off setting is a compact `SettingsRow` in an `Item.List`, the rest are `Field`s. Errors follow `state/state-form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
 
-### M. Loading catalog — `Card`, `Skeleton` (required)
+### L. Loading catalog — `Card`, `Skeleton` (required)
 
 While `loading` is set, the Featured row and the heading of All integrations give way to one band that is `aria-busy` and named Loading integrations: the disabled `PropertyFilter` over six `Card`s holding `Skeleton` shapes (mark, name, two lines, the badge and the action), in the grid of the tiles.
 

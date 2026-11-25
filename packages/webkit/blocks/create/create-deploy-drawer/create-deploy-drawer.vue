@@ -263,54 +263,51 @@
         />
       </SettingsGroup>
 
-      <SettingsGroup
+      <div
         :inert="!!build || undefined"
         :data-pending="build ? 'true' : undefined"
-        class="data-[pending]:opacity-50"
-        label="Project"
-        hint="The project whose domains serve the service. Create one to deploy it on a new domain."
+        class="mt-(--layout-section-gap) flex min-w-0 flex-col data-[pending]:opacity-50"
       >
-        <ProjectCard
-          v-model:project-mode="projectMode"
-          v-model:project-id="projectId"
-          :project="project"
-          :project-groups="projectGroups"
-        />
-      </SettingsGroup>
+        <SettingsGroup
+          label="Project"
+          hint="The project whose domains serve the service. Create one to deploy it on a new domain."
+        >
+          <ProjectCard
+            v-model:project-mode="projectMode"
+            v-model:project-id="projectId"
+            :project="project"
+            :project-groups="projectGroups"
+          />
+        </SettingsGroup>
 
-      <SettingsGroup
-        :inert="!!build || undefined"
-        :data-pending="build ? 'true' : undefined"
-        class="data-[pending]:opacity-50"
-        label="Environment"
-        hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
-      >
-        <EnvironmentChoices
-          v-model="environment"
-          :environments="environmentChoices"
-          name="service-deploy-environment"
-        />
+        <SettingsGroup
+          label="Environment"
+          hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
+        >
+          <EnvironmentChoices
+            v-model="environment"
+            :environments="environmentChoices"
+            name="service-deploy-environment"
+          />
 
-        <slot
-          name="environment-alerts"
-          :environment="environment"
-          :project="project"
-        />
-      </SettingsGroup>
+          <slot
+            name="environment-alerts"
+            :environment="environment"
+            :project="project"
+          />
+        </SettingsGroup>
 
-      <SettingsGroup
-        v-if="impacted.length"
-        :inert="!!build || undefined"
-        :data-pending="build ? 'true' : undefined"
-        class="data-[pending]:opacity-50"
-        label="Projects impacted"
-        hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
-      >
-        <ImpactedProjects
-          :impacted="impacted"
-          :loading="impactedLoading"
-        />
-      </SettingsGroup>
+        <SettingsGroup
+          v-if="impacted.length"
+          label="Projects impacted"
+          hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
+        >
+          <ImpactedProjects
+            :impacted="impacted"
+            :loading="impactedLoading"
+          />
+        </SettingsGroup>
+      </div>
 
       <span
         class="sr-only"

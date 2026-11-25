@@ -16,48 +16,50 @@
 <template>
   <ConfigProvider
     :now="sampleNow"
-    class="flex min-h-0 flex-1 flex-col"
+    class="min-h-0 flex-1"
   >
-    <ResourceTabBar
-      v-model="activeTab"
-      :tabs="tabs"
-    />
-
-    <div
-      v-if="activeTab === 'versions'"
-      class="relative flex min-h-0 flex-1 flex-col"
-    >
-      <section class="min-h-0 flex-1">
-        <div class="flex min-h-full flex-col">
-          <div class="layout-column layout-boundary flex min-w-0 flex-col">
-            <PageHeader
-              title="Versions"
-              description="Each version is an isolated snapshot of this resource's configuration. Open one to view it, or deploy a Ready version."
-              size="small"
-            >
-              <template #actions>
-                <Button
-                  label="Add Version"
-                  icon="az az-plus"
-                  variant="outline"
-                  size="medium"
-                />
-              </template>
-            </PageHeader>
-
-            <ResourceVersionsTable />
-          </div>
-        </div>
-      </section>
-    </div>
-    <div
-      v-else
-      class="relative flex min-h-0 flex-1 flex-col"
-    >
-      <TabRouteEmpty
-        :label="tabLabel"
-        :href="`/resources/analytics-app/${activeTab}`"
+    <div class="flex h-full min-h-0 flex-col">
+      <ResourceTabBar
+        v-model="activeTab"
+        :tabs="tabs"
       />
+
+      <div
+        v-if="activeTab === 'versions'"
+        class="relative flex min-h-0 flex-1 flex-col"
+      >
+        <section class="min-h-0 flex-1">
+          <div class="flex min-h-full flex-col">
+            <div class="layout-column layout-boundary flex min-w-0 flex-col">
+              <PageHeader
+                title="Versions"
+                description="Each version is an isolated snapshot of this resource's configuration. Open one to view it, or deploy a Ready version."
+                size="small"
+              >
+                <template #actions>
+                  <Button
+                    label="Add Version"
+                    icon="az az-plus"
+                    variant="outline"
+                    size="medium"
+                  />
+                </template>
+              </PageHeader>
+
+              <ResourceVersionsTable />
+            </div>
+          </div>
+        </section>
+      </div>
+      <div
+        v-else
+        class="relative flex min-h-0 flex-1 flex-col"
+      >
+        <TabRouteEmpty
+          :label="tabLabel"
+          :href="`/resources/analytics-app/${activeTab}`"
+        />
+      </div>
     </div>
   </ConfigProvider>
 </template>

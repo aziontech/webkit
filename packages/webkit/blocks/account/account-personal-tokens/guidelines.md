@@ -15,9 +15,9 @@ The Personal tokens page of the account settings. A person creates a token for a
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Button` (required)
+### A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 
-Title `Personal tokens` and one sentence that says what a token does and that it is shown once. Actions: the outlined Documentation button and the primary `Create Personal Token` at `size="medium"`.
+Title `Personal tokens` and one sentence that says what a token does and that it is shown once. Actions: the outlined Documentation button and the primary `Create Personal Token` at `size="medium"`. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render, so the expiry dates and relative times read the same everywhere; with live data and no `now` they read the real clock.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 

@@ -36,16 +36,17 @@
       :disabled="submitting"
       @click="(event: MouseEvent) => emit('cancel', event)"
     />
-    <Button
-      type="button"
-      label="Create and add another"
-      variant="secondary"
-      size="medium"
-      class="max-sm:hidden"
-      :disabled="loading || (submitting && !addAnother)"
-      :loading="submitting && addAnother"
-      @click="(event: MouseEvent) => emit('add-another', event)"
-    />
+    <span class="contents max-sm:hidden">
+      <Button
+        type="button"
+        label="Create and add another"
+        variant="secondary"
+        size="medium"
+        :disabled="loading || (submitting && !addAnother)"
+        :loading="submitting && addAnother"
+        @click="(event: MouseEvent) => emit('add-another', event)"
+      />
+    </span>
     <Button
       variant="primary"
       size="medium"

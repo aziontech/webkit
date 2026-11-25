@@ -22,7 +22,7 @@ describe('state/state-project-intake', () => {
     expect(
       view
         .getByRole('button', { name: 'Choose a folder' })
-        .classList.contains('pointer-coarse:hidden')
+        .parentElement?.classList.contains('pointer-coarse:hidden')
     ).toBe(true)
     expect(
       view.container.querySelector('[aria-hidden="true"] h1, [aria-hidden="true"] p')
