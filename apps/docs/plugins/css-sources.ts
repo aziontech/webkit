@@ -9,8 +9,14 @@ import { readBlocks, REPO, walk, WEBKIT } from './paths.ts'
 const APP = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 export const CSS_DIR = join(APP, '.build/css')
 export const DOCS_SOURCES = join(CSS_DIR, 'docs.css')
+const SRC = join(APP, 'src')
 const EXAMPLES_DIR = join(WEBKIT, 'examples')
 const BLOCKS_DIR = join(WEBKIT, 'blocks')
+const FRAME_PAGES = {
+  examples: join(SRC, 'pages/example-frame-page.vue'),
+  blocks: join(SRC, 'pages/block-frame-page.vue')
+}
+const FRAME_STYLES = 'virtual:docs-frame-styles'
 
 const CODE = /\.(vue|[cm]?[jt]s)$/
 const TEST = /\.(test|spec)\.[cm]?[jt]s$/
@@ -18,13 +24,14 @@ const SPECIFIER = /(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"\n]+)['"]/g
 const SUFFIXES = ['', '.vue', '.ts', '.js', '.mjs', '/index.ts', '/index.js']
 const PACKAGE = '@aziontech/webkit/'
 
-const GROUP_HEADER = [
+const UTILITIES_HEADER = [
   "@import 'tailwindcss/utilities' source(none);",
   "@reference '@aziontech/theme';",
   "@import '@aziontech/icons/azionicons-color-utilities';"
 ]
 
 type ExportEntry = string | { default?: string; import?: string } | null
+export type FrameKind = keyof typeof FRAME_PAGES
 
 let exportsCache: Record<string, ExportEntry> | null = null
 
@@ -84,71 +91,53 @@ function write(file: string, content: string) {
   writeFileSync(file, content)
 }
 
-export const exampleSourcesFile = (dir: string) => join(CSS_DIR, 'examples', `${dir}.css`)
-export const blockSourcesFile = (dir: string) => join(CSS_DIR, 'blocks', `${dir}.css`)
-
-function groupCss(file: string, root: string, entries: string[]): string {
-  const files = sourceClosure(entries).filter((path) => !path.startsWith(root + sep))
-  return [...GROUP_HEADER, ...sourceLines(file, [root, ...files]), ''].join('\n')
-}
-
 export function writeDocsSources(): void {
-  const entries = walk(join(APP, 'src'), (name) => CODE.test(name))
-  const files = sourceClosure(entries).filter((path) => !path.startsWith(join(APP, 'src') + sep))
+  const files = sourceClosure(walk(SRC, (name) => CODE.test(name))).filter(
+    (path) => !path.startsWith(SRC + sep)
+  )
   write(DOCS_SOURCES, [...sourceLines(DOCS_SOURCES, files), ''].join('\n'))
 }
 
-export function writeExampleSources(dir: string): string {
-  const root = join(EXAMPLES_DIR, dir)
-  const file = exampleSourcesFile(dir)
+export const frameStylesheet = (kind: FrameKind, dir: string) =>
+  join(CSS_DIR, 'frames', kind, `${dir}.css`)
+
+export function writeFrameStyles(kind: FrameKind, dir: string): string {
+  const root = join(kind === 'examples' ? EXAMPLES_DIR : BLOCKS_DIR, dir)
+  const css = frameStylesheet(kind, dir)
+  const entries = [FRAME_PAGES[kind], ...walk(root, (name) => name.endsWith('.vue'))]
+  const files = sourceClosure(entries).filter((path) => !path.startsWith(root + sep))
+  write(css, [...UTILITIES_HEADER, ...sourceLines(css, [root, ...files]), ''].join('\n'))
+  const wrapper = css.replace(/\.css$/, '.vue')
+  const stylesheet = `./${dir.split('/').at(-1)}.css`
   write(
-    file,
-    groupCss(
-      file,
-      root,
-      walk(root, (name) => name.endsWith('.vue'))
-    )
+    wrapper,
+    `<script setup lang="ts">\nimport ${JSON.stringify(stylesheet)}\n</script>\n\n<template><slot /></template>\n`
   )
-  return file
+  return wrapper
 }
 
-export function writeBlockSources(dir: string): string {
-  const root = join(BLOCKS_DIR, dir)
-  const file = blockSourcesFile(dir)
-  write(
-    file,
-    groupCss(
-      file,
-      root,
-      walk(root, (name) => name.endsWith('.vue'))
-    )
+export function frameGroups(): [FrameKind, string][] {
+  const examples = walk(EXAMPLES_DIR, (name) => name === 'examples.json').map(
+    (file) => ['examples', relative(EXAMPLES_DIR, dirname(file))] as [FrameKind, string]
   )
-  return file
-}
-
-function groupOf(id: string): { kind: 'examples' | 'blocks'; dir: string } | null {
-  if (id.includes('?') || !id.endsWith('.vue')) return null
-  if (id.startsWith(EXAMPLES_DIR + sep)) {
-    const dir = relative(EXAMPLES_DIR, dirname(id))
-    return isFile(join(EXAMPLES_DIR, dir, 'examples.json')) ? { kind: 'examples', dir } : null
-  }
-  if (id.startsWith(BLOCKS_DIR + sep)) {
-    const block = readBlocks().find((entry) => id.startsWith(join(BLOCKS_DIR, entry.dir) + sep))
-    return block ? { kind: 'blocks', dir: block.dir } : null
-  }
-  return null
+  const blocks = readBlocks().map((block) => ['blocks', block.dir] as [FrameKind, string])
+  return [...examples, ...blocks]
 }
 
 export function cssSourcesPlugin(): Plugin {
   return {
     name: 'docs-css-sources',
-    enforce: 'post',
-    transform(code, id) {
-      const group = groupOf(id)
-      if (!group) return null
-      const file =
-        group.kind === 'examples' ? writeExampleSources(group.dir) : writeBlockSources(group.dir)
-      return { code: `import ${JSON.stringify(file)}\n${code}`, map: null }
+    enforce: 'pre',
+    resolveId(id) {
+      return id === FRAME_STYLES ? `\0${id}` : null
+    },
+    load(id) {
+      if (id !== `\0${FRAME_STYLES}`) return null
+      const entries = frameGroups().map(
+        ([kind, dir]) =>
+          `  ${JSON.stringify(`${kind}/${dir}`)}: () => import(${JSON.stringify(writeFrameStyles(kind, dir))}).then((m) => m.default)`
+      )
+      return `export default {\n${entries.join(',\n')}\n}`
     }
   }
 }

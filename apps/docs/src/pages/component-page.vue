@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import '../styles/full-utilities.css'
+
   import CodeBlock from '@aziontech/webkit/code-block'
   import CopyText from '@aziontech/webkit/copy-text'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'

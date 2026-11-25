@@ -1,6 +1,7 @@
 import blockLoaders from 'virtual:docs-block-loaders'
 import componentLoaders from 'virtual:docs-component-loaders'
 import exampleLoaders from 'virtual:docs-example-loaders'
+import frameStyles from 'virtual:docs-frame-styles'
 import { type Component, shallowReactive } from 'vue'
 import type { RouteLocationNormalized } from 'vue-router'
 
@@ -29,7 +30,8 @@ export const keys = {
   blockSource: (dir: string, file: string) => `block-source:${dir}/${file}`,
   blockManifest: (dir: string) => `block-manifest:${dir}`,
   blockGuidelines: (dir: string) => `block-guidelines:${dir}`,
-  markdown: (path: string) => `markdown:${path}`
+  markdown: (path: string) => `markdown:${path}`,
+  frameStyles: (group: string) => `frame-styles:${group}`
 }
 
 async function findBlockLazy(id: string) {
@@ -67,7 +69,10 @@ export async function loadExample(dir: string, file: string): Promise<Component 
 export async function preloadExample(dir: string, example: string) {
   const file = `${example}.vue`
   const files = await exampleLoaders[dir]?.()
-  await remember(keys.example(dir, file), files?.components[file])
+  await Promise.all([
+    remember(keys.example(dir, file), files?.components[file]),
+    remember(keys.frameStyles(`examples/${dir}`), frameStyles[`examples/${dir}`])
+  ])
 }
 
 async function preloadBlock(id: string, withCode = true) {
@@ -87,7 +92,7 @@ async function preloadBlock(id: string, withCode = true) {
           remember(keys.blockManifest(block.dir), files.manifest),
           remember(keys.blockGuidelines(block.dir), files.guidelines)
         ]
-      : [])
+      : [remember(keys.frameStyles(`blocks/${block.dir}`), frameStyles[`blocks/${block.dir}`])])
   ])
 }
 

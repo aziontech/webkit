@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import '../styles/docs-utilities.css'
+
   import AppHeader from '@aziontech/webkit/app-header'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'

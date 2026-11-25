@@ -6,9 +6,10 @@ import { fileURLToPath } from 'node:url'
 
 import {
   DOCS_SOURCES,
+  frameGroups,
   sourceClosure,
   writeDocsSources,
-  writeExampleSources
+  writeFrameStyles
 } from '../plugins/css-sources.ts'
 import { WEBKIT } from '../plugins/paths.ts'
 
@@ -19,26 +20,45 @@ const sources = (file: string) =>
     resolve(dirname(file), match[1])
   )
 
-test('the docs stylesheet scans only the docs app and the WebKit files it imports', () => {
-  const main = readFileSync(resolve(HERE, '../src/styles/main.css'), 'utf8')
-  assert.doesNotMatch(main, /@aziontech\/webkit\/styles\/all/)
-  assert.doesNotMatch(main, /@source '[^']*packages\/webkit\/(examples|blocks)/)
-  assert.match(main, /@import '\.\.\/\.\.\/\.build\/css\/docs\.css'/)
+const styles = (file: string) => readFileSync(resolve(HERE, '../src/styles', file), 'utf8')
+const vue = (file: string) => readFileSync(resolve(HERE, '../src', file), 'utf8')
+
+test('the app stylesheet holds no utilities: each page loads one utility sheet, or nested ones', () => {
+  assert.doesNotMatch(styles('main.css'), /tailwindcss\/utilities|@source/)
+  const docs = styles('docs-utilities.css')
+  const full = styles('full-utilities.css')
+  assert.doesNotMatch(docs, /@aziontech\/webkit\/styles\/all|packages\/webkit\/(examples|blocks)/)
+  for (const line of docs.split('\n').filter((entry) => /^@(source|import '\.\.)/.test(entry)))
+    assert.ok(
+      full.includes(line),
+      `full-utilities.css must hold everything docs-utilities.css does: ${line}`
+    )
+  assert.match(vue('components/docs-shell.vue'), /import '\.\.\/styles\/docs-utilities\.css'/)
+  for (const file of ['pages/component-page.vue', 'components/component-grid.vue'])
+    assert.match(vue(file), /import '\.\.\/styles\/full-utilities\.css'/, file)
+  for (const file of ['pages/example-frame-page.vue', 'pages/block-frame-page.vue'])
+    assert.doesNotMatch(vue(file), /utilities\.css/, `${file} must load only its frame sheet`)
+})
+
+test('the docs utility sheet scans only the docs app and the WebKit files it imports', () => {
   writeDocsSources()
   const files = sources(DOCS_SOURCES)
   assert.ok(files.some((file) => file.endsWith('/components/action/button/button.vue')))
   assert.ok(files.every((file) => !file.includes('/packages/webkit/examples/')))
 })
 
-test('an example folder compiles only its own files and what they import', () => {
-  const file = writeExampleSources('button')
-  const files = sources(file)
+test('a frame compiles only its own example folder, the frame page and what they import', () => {
+  const files = sources(writeFrameStyles('examples', 'button').replace(/\.vue$/, '.css'))
   assert.equal(files[0], join(WEBKIT, 'examples/button'))
   assert.ok(files.includes(join(WEBKIT, 'src/components/action/button/button.vue')))
   assert.ok(
     files.every((path) => !path.includes('/data-table/')),
     'button pulls in unrelated parts'
   )
+  assert.ok(files.some((path) => path.endsWith('/src/pages/example-frame-page.vue')))
+  const groups = frameGroups()
+  assert.ok(groups.some(([kind, dir]) => kind === 'examples' && dir === 'button'))
+  assert.ok(groups.some(([kind]) => kind === 'blocks'))
 })
 
 test('the source closure follows relative and package imports', () => {

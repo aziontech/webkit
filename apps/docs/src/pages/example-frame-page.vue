@@ -19,6 +19,7 @@
   const example = computed(() => (segments.value.length > 1 ? (segments.value.at(-1) ?? '') : ''))
   const file = computed(() => `${example.value}.vue`)
   const live = computed(() => cached<Component>(keys.example(dir.value, file.value)))
+  const styles = computed(() => cached<Component>(keys.frameStyles(`examples/${dir.value}`)))
 
   useHead({
     title: computed(() => (dir.value ? `${dir.value}: ${example.value} — WebKit` : 'WebKit'))
@@ -58,6 +59,10 @@
     :data-ready="mounted && live ? '' : undefined"
     class="min-h-screen w-full bg-(--bg-canvas) p-(--spacing-lg) [--layout-sticky-top:0]"
   >
+    <component
+      :is="styles"
+      v-if="styles"
+    />
     <component
       :is="live"
       v-if="live"
