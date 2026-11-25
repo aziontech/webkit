@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 8
-checksum: ce0563b86f271ef486dc0daadb08ad841726ec6d86d159bd52d28ce904bd9615
+checksum: 9801083907d4d0d3946bb5887414e847020df1d2b1976b553a180f07ad71d926
 created: 2026-05-22
-last_updated: 2026-11-18
+last_updated: 2026-11-25
 ---
 
 # Card Pricing — Component Spec
@@ -27,7 +27,7 @@ The card carries **one** prose region — the pricing caveat, below the amount. 
 
 `equalHeight` makes a ROW of cards read as one comparison. Every region is content-sized by default, which is right for a single card and wrong for three side by side — a tier with a two-line caveat and a tier with none put their feature lists on different lines, and the reader has to re-find the row in every column. It reserves **three** lines for the caveat, in `lh` so the reservation follows the type token rather than a hard-coded height. Three is the design's 64px band expressed in whole lines of the region's own token (`body-md` is a 22px line box, so `3lh` is 66px; `2lh` is 44px and twenty short) — it shipped as `2lh`, and the shortfall stayed invisible until a tier's caveat ran to three lines at the region's then-256px measure, overflowed the band, and pushed that column's feature list 22px below the other two. Opt-in, because reserving empty lines is wrong for a lone card; set it on every card in the row. A caveat past three lines still pushes the row down, like any overflow.
 
-The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token carries the display face, the uppercase transform and the widest tracking step, so the tier reads as a label on the card rather than as a title competing with the price beneath it. It stays an `<h3>` for the document outline — the tier is the section heading — while looking like an overline. There is no built-in plan name: set `title` on every card.
+The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token carries the display face, the uppercase transform and the widest tracking step, so the tier reads as a label on the card rather than as a title competing with the price beneath it. It stays an `<h3>` for the document outline — the tier is the section heading — while looking like an overline. There is no built-in plan name: set `title` on every card. When the price already names the plan (`value` equals `title`, ignoring case and spaces, as `Free` over `Free`), the overline is visually hidden (`data-in-price`, `sr-only`): the heading stays in the outline for a screen reader, and the card stops printing the plan name twice.
 
 ## When to use
 
@@ -132,6 +132,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Title in the price: `data-in-price` on the title when `value` equals `title` (ignoring case and spaces); the title is visually hidden and stays the card's heading.
 - Animated: with `animated`, a change of `value`, `prefix` or `suffix` fades the old price out and the new one in (`data-animated` on the root); without it the price swaps in place
 
 ## Motion & Animations

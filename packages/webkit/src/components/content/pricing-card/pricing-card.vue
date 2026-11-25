@@ -82,6 +82,12 @@
     return isMiddle.value ? 'secondary' : 'outline'
   })
 
+  const titleInPrice = computed(
+    () =>
+      props.title.trim() !== '' &&
+      props.title.trim().toLocaleLowerCase() === props.value.trim().toLocaleLowerCase()
+  )
+
   const currencySize = computed(() => (isMiddle.value ? 'large' : 'medium'))
 
   const currencyPrefix = computed(() => (props.showPrefix ? props.prefix : ''))
@@ -127,8 +133,9 @@
       >
         <div class="flex min-h-6 w-full shrink-0 items-center gap-(--spacing-xs)">
           <h3
-            class="text-overline-md text-(--text-default) [word-break:break-word]"
+            class="text-overline-md text-(--text-default) [word-break:break-word] data-[in-price]:sr-only"
             :data-testid="`${testId}__title`"
+            :data-in-price="titleInPrice || null"
           >
             {{ title }}
           </h3>

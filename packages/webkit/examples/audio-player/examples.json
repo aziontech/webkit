@@ -19,7 +19,7 @@
     },
     {
       "name": "Error",
-      "summary": "The audio cannot play: the app's message replaces the time and the controls are disabled.",
+      "summary": "The audio cannot play: the app's message replaces the time, the controls are disabled and Try again sits at the end of the line.",
       "file": "error.vue"
     },
     {

@@ -381,6 +381,24 @@ describe('ConsoleMockup', () => {
       expect(within(frame).getAllByRole('button').length).toBeGreaterThan(0)
       await expectNoA11yViolations(view.container)
     })
+
+    it('scales the touch targets of an interactive scene back up by the frame scale', async () => {
+      const view = render(host({ name: 'function-code' }))
+      const stage = (await frameOf(view)).firstElementChild as HTMLElement
+      expect(Number(stage.style.getPropertyValue('--console-mockup-shell-scale'))).toBeGreaterThan(
+        0
+      )
+      expect(
+        stage.classList.contains(
+          'pointer-coarse:[&_[data-slot=touch-target]]:[scale:calc(1/var(--console-mockup-shell-scale,1))]'
+        )
+      ).toBe(true)
+      view.unmount()
+
+      const still = render(Default)
+      const inert = (await frameOf(still)).firstElementChild as HTMLElement
+      expect(inert.style.getPropertyValue('--console-mockup-shell-scale')).toBe('')
+    })
   })
 
   describe('scenes on a touch screen', () => {

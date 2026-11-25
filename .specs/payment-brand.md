@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: d19513390f853e16cf03a81b213bcd1c5cc7af655b46e9306d35c4332160658d
+checksum: 36f644abb755a35cd2de2fa5e7710efc15121a45b343c47c80d742e716dda55d
 created: 2026-11-11
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # PaymentBrand — Component Spec
@@ -77,6 +77,7 @@ _none_
 - `data-size`: `small` | `medium`.
 - `data-glyph`: `mark` when the brand has a drawn mark, `generic` otherwise.
 - The Mastercard mark is two equal circles at the same opacity whose overlap reads darker, the network's own one-colour form; one solid circle beside a faded one would read as a switch knob in its track.
+- The plate has a card's corner (`--radius-sm`, 2 px), not the control radius: at 20 × 32 px the 6 px control radius made a pill, and two discs inside a pill read as a toggle switch.
 
 ## Motion & Animations
 
@@ -92,7 +93,7 @@ _none_
 | plate border  | `var(--border-default)` |
 | mark          | `var(--text-default)`   |
 | mark cut-outs | `var(--bg-surface)`     |
-| plate radius  | `var(--shape-control)`  |
+| plate radius  | `var(--radius-sm)`      |
 
 ## Theme gaps
 

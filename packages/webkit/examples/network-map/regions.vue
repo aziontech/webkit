@@ -46,17 +46,5 @@
         <NetworkMap region="africa" />
       </div>
     </div>
-    <div class="flex flex-col gap-(--spacing-xs)">
-      <span class="text-label-sm text-(--text-muted)">asia</span>
-      <div class="relative h-64 w-full overflow-hidden bg-(--bg-canvas)">
-        <NetworkMap region="asia" />
-      </div>
-    </div>
-    <div class="flex flex-col gap-(--spacing-xs)">
-      <span class="text-label-sm text-(--text-muted)">oceania</span>
-      <div class="relative h-64 w-full overflow-hidden bg-(--bg-canvas)">
-        <NetworkMap region="oceania" />
-      </div>
-    </div>
   </div>
 </template>

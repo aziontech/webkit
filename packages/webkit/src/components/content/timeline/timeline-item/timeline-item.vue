@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
   import type { Severity } from '../../../../utils/severity'
-  import Timestamp from '../../timestamp/timestamp.vue'
+  import Timestamp, { type TimestampFormat } from '../../timestamp/timestamp.vue'
   import { useTimelineContext } from '../composables/use-timeline-context'
+  import { TimelineGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TimelineItem',
@@ -46,10 +47,15 @@
 
   const attrs = useAttrs()
   const { size, timeFormat } = useTimelineContext()
+  const group = inject(TimelineGroupInjectionKey, { grouped: false })
 
   const testId = computed(() => String(attrs['data-testid'] ?? 'timeline-item'))
 
   const hasTime = computed(() => props.time !== undefined && props.time !== '')
+
+  const shownFormat = computed<TimestampFormat>(() =>
+    group.grouped && timeFormat.value === 'local' ? 'time' : timeFormat.value
+  )
 
   const marker = () => {
     if (slots.marker) return 'custom'
@@ -124,7 +130,7 @@
           <Timestamp
             v-if="hasTime"
             :value="time"
-            :format="timeFormat"
+            :format="shownFormat"
           />
         </span>
       </div>

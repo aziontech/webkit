@@ -43,8 +43,8 @@
       <Table.Header>
         <Table.Row>
           <Table.HeadCell principal>Subject</Table.HeadCell>
-          <Table.HeadCell>Requester</Table.HeadCell>
           <Table.HeadCell>First reply</Table.HeadCell>
+          <Table.HeadCell>Requester</Table.HeadCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -55,9 +55,6 @@
           <Table.Cell principal
             ><span class="min-w-0 flex-1 truncate">{{ ticket.subject }}</span></Table.Cell
           >
-          <Table.Cell
-            ><span class="min-w-0 flex-1 truncate">{{ ticket.requester }}</span></Table.Cell
-          >
           <Table.Cell>
             <Countdown
               :deadline="ticket.due"
@@ -65,6 +62,9 @@
               size="small"
             />
           </Table.Cell>
+          <Table.Cell
+            ><span class="min-w-0 flex-1 truncate">{{ ticket.requester }}</span></Table.Cell
+          >
         </Table.Row>
       </Table.Body>
     </Table>

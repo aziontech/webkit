@@ -42,6 +42,7 @@ describe('BrowserFrame', () => {
     expect(handle.getAttribute('aria-valuemax')).toBe('1440')
     expect(handle.getAttribute('aria-valuetext')).toBe('768 pixels wide')
     expect(handle.getAttribute('aria-controls')).toBe(viewport.id)
+    expect(handle.parentElement?.classList.contains('pb-6')).toBe(true)
   })
 
   it('publishes the separator semantics on the height handle', () => {

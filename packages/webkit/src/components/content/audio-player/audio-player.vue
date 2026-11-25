@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, getCurrentInstance, ref, useAttrs, useId, watch } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../locales/en'
@@ -58,9 +58,12 @@
     play: [event: Event]
     /** Playback paused, by the reader or because the clip reached its end. */
     pause: [event: Event]
+    /** Try again in the error state was pressed; the button shows only when this event has a listener. */
+    retry: [event: MouseEvent]
   }>()
 
   const attrs = useAttrs()
+  const instance = getCurrentInstance()
   const { t, formatNumber, formatList } = useLocale({ audioPlayer: en.audioPlayer })
   const titleId = useId()
 
@@ -88,6 +91,7 @@
   })
 
   const hasError = computed(() => Boolean(props.error) || mediaError.value)
+  const retryable = computed(() => Boolean(instance?.vnode.props?.['onRetry']))
   const isEmpty = computed(() => !props.src && !props.loading)
   const inert = computed(() => props.disabled || isEmpty.value || hasError.value)
   const controlsDisabled = computed(() => inert.value || props.loading)
@@ -175,6 +179,14 @@
   function onError() {
     mediaError.value = true
     buffering.value = false
+  }
+
+  function onRetryClick(event: MouseEvent) {
+    if (mediaError.value) {
+      mediaError.value = false
+      audioEl.value?.load()
+    }
+    emit('retry', event)
   }
 
   function onVolumechange() {
@@ -374,6 +386,16 @@
           <bdi>{{ durationLabel }}</bdi>
         </span>
       </template>
+      <Button
+        v-if="hasError && retryable"
+        :label="t('audioPlayer.retry')"
+        icon="az az-refresh"
+        variant="outline"
+        size="small"
+        class="ms-auto shrink-0"
+        :data-testid="`${testId}__retry`"
+        @click="onRetryClick"
+      />
     </div>
     <span
       role="status"

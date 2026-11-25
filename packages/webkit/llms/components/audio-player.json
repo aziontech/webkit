@@ -125,6 +125,11 @@
    "name": "pause",
    "payload": "Event",
    "notes": "Playback paused, by the reader or because the clip reached its end (the element's `pause` event)."
+  },
+  {
+   "name": "retry",
+   "payload": "MouseEvent",
+   "notes": "Try again in the error state was pressed. The button renders only when this event has a listener; an error the audio element reported is cleared and the element loads `src` again, and the app clears or keeps `error`."
   }
  ],
  "slots": [],

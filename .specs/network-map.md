@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: bca821eaa3851172c163dcb995cf1dba9d126244f881b1a00e187dd3e06cc4e2
+checksum: e899b4b39bb035b5d9bcfa76352ac51a7cd6a87e46b8128bd06c7aa50c78ef93
 created: 2026-09-26
-last_updated: 2026-11-18
+last_updated: 2026-11-25
 ---
 
 # Network Map — Component Spec
@@ -42,7 +42,7 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's dat
 - Leave `animated` off by default; turn it on for the one band per page whose subject is the network.
 - To nudge the map or let it run off the band, set `offsetX` / `offsetY` (for example `:offset-x="0.15"` to bleed right, `:offset-y="-0.1"` to bleed up) instead of offsetting the layer.
 - The landmass is the design's pixel map cell for cell (4,987 cells on a 10-unit grid), and the default `medium` density lights the design's data center field exactly: 172 cells, each metro a capital with up to two satellites, pulsing in the design's three phases. `low` lights the capitals alone (71); `high` adds 31 outlying data centers.
-- `asia` and `oceania` hold no data centers — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone.
+- `asia` and `oceania` hold no data centers — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone, which looks like a broken map or no coverage on a page: do not place them, and the Regions example leaves them out.
 
 ## Usage
 
@@ -143,7 +143,7 @@ Static by default: without `animated` no data center carries an animation class.
 `region`, `density` and `fade` are this component's multi-option axes — its equivalent of `kind` — so each gets one composite story in place of Types / Sizes, which it does not have. `animated` is the one state prop, so it gets the one state story. `position` is left to the Default story's controls: it only shows when the box's ratio differs from the region's, so nine frames of the same map would teach little. `scale`, `offsetX` and `offsetY` are left there too, since they are continuous ranges rather than sets of options.
 
 - Default
-- Regions — composite story rendering every `region` value side-by-side.
+- Regions — composite story rendering every `region` value that holds data centers side-by-side (`asia` and `oceania` are left out).
 - Densities — composite story rendering every `density` value side-by-side.
 - Fades — composite story rendering every `fade` value side-by-side.
 - Traffic — `traffic` with `animated` over the Atlantic at high density.

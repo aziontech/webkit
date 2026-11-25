@@ -3,6 +3,7 @@
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -28,7 +29,7 @@
     mimeType?: string
     /** Size of the whole file in bytes, shown beside the type. Unset hides the size. */
     bytes?: number
-    /** URL of an image or PDF file to draw. Set, it wins over `base64`. */
+    /** URL of an image or PDF file to draw: https, http, blob, data or a relative path; any other scheme draws nothing. Set, it wins over `base64`. */
     src?: string
     /**
      * Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON
@@ -82,7 +83,8 @@
 
   const declaredType = computed(() => filePreviewType(props.mimeType, props.fileName))
 
-  const drawnSrc = computed(() => props.src || objectUrl.value)
+  const safeSrc = computed(() => safeHref(props.src, true) ?? '')
+  const drawnSrc = computed(() => safeSrc.value || objectUrl.value)
 
   const shownType = computed(() =>
     declaredType.value === 'image' && (!drawnSrc.value || imageFailed.value)
@@ -137,7 +139,7 @@
 
   function makeObjectUrl() {
     releaseObjectUrl()
-    if (!mounted.value || props.src || !props.base64) return
+    if (!mounted.value || safeSrc.value || !props.base64) return
     if (declaredType.value !== 'image' && declaredType.value !== 'pdf') return
     const bytes = decodeBase64(props.base64)
     if (!bytes) return

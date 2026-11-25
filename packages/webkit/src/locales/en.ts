@@ -547,7 +547,8 @@ export const audioPlayer = {
   downloadTitle: 'Download {title}',
   loading: 'Loading audio',
   error: 'The audio could not play.',
-  transcript: 'Transcript'
+  transcript: 'Transcript',
+  retry: 'Try again'
 } as const
 
 export const filePreview = {
@@ -573,7 +574,8 @@ export const imageGallery = {
   ready: 'Images ready',
   error: 'The images could not load',
   broken: 'This image could not load',
-  empty: 'No images'
+  empty: 'No images',
+  retry: 'Try again'
 } as const
 
 export const fileTokenGroup = {
@@ -1358,7 +1360,8 @@ export const videoPlayer = {
   exitFullscreen: 'Exit full screen',
   pending: 'Waiting to generate',
   running: 'Generating video',
-  error: 'The video could not load'
+  error: 'The video could not load',
+  retry: 'Try again'
 } as const
 
 export const wizard = {

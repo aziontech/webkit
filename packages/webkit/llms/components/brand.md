@@ -21,6 +21,7 @@
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
 - Take the logo only from Brand, never from a copied SVG file or a website URL.
 - Keep clear contrast between the logo and its background, and clear space around it; never shrink it below the `small` size.
+- Show the `extended` lockup at the `large` size: at `small` and `medium` its "technologies" line is a few pixels tall and cannot be read.
 - Do not set the logo next to text or interface elements in the brand primary colour: the signature lockup already carries it.
 - The `color` treatment works on light and dark surfaces: the orange mark stays, and the "technologies" line of the extended lockup follows the text colour (dark on a white background, light on a dark one).
 - One-colour versions come from `treatment`: `monochrome` is black on light and white on dark, `knockout` is the label colour of an orange `--primary` fill. Never recolour a copy of the drawing.
@@ -84,10 +85,28 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-8">
-    <Brand variant="default" />
-    <Brand variant="reduced" />
-    <Brand variant="extended" />
+  <div class="flex flex-wrap items-end gap-8">
+    <figure class="m-0 flex flex-col items-start gap-(--spacing-xs)">
+      <Brand
+        variant="default"
+        size="large"
+      />
+      <figcaption class="text-label-sm text-(--text-muted)">default</figcaption>
+    </figure>
+    <figure class="m-0 flex flex-col items-start gap-(--spacing-xs)">
+      <Brand
+        variant="reduced"
+        size="large"
+      />
+      <figcaption class="text-label-sm text-(--text-muted)">reduced</figcaption>
+    </figure>
+    <figure class="m-0 flex flex-col items-start gap-(--spacing-xs)">
+      <Brand
+        variant="extended"
+        size="large"
+      />
+      <figcaption class="text-label-sm text-(--text-muted)">extended</figcaption>
+    </figure>
   </div>
 </template>
 ```

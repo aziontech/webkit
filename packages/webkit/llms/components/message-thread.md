@@ -45,7 +45,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `timestampFormat` | `TimestampFormat` | `'local'` | false | How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union. |
+| `timestampFormat` | `TimestampFormat` | `'local'` | false | How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union. |
 | `loading` | `boolean` | `false` | false | Shows three placeholder messages in place of the items while the thread loads, and marks it busy. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation`). |
 

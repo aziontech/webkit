@@ -92,20 +92,35 @@
 
 <template>
   <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture variant="dots" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">dots</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture variant="dots" />
+      </div>
     </div>
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture variant="grid" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">grid</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture variant="grid" />
+      </div>
     </div>
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture variant="lines" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">lines</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture variant="lines" />
+      </div>
     </div>
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture variant="dither" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">dither</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture variant="dither" />
+      </div>
     </div>
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture variant="pixelate" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">pixelate</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture variant="pixelate" />
+      </div>
     </div>
   </div>
 </template>
@@ -120,14 +135,23 @@
 
 <template>
   <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3">
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture size="small" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">small</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture size="small" />
+      </div>
     </div>
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture size="medium" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">medium</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture size="medium" />
+      </div>
     </div>
-    <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
-      <Texture size="large" />
+    <div class="flex flex-col gap-(--spacing-xs)">
+      <span class="text-label-sm text-(--text-muted)">large</span>
+      <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+        <Texture size="large" />
+      </div>
     </div>
   </div>
 </template>

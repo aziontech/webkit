@@ -6,9 +6,9 @@ status: implemented
 stability: preview
 spec_version: 2
 template: 2
-checksum: ba8b49b1717ba5186dd7a40b1b2d3b252959a7b6ae26947ee9a1a0ed975774c9
+checksum: aedf12176a5abf93db2acd8a67b86f725712b72df0f0106e8a0f913031f2cf86
 created: 2026-11-23
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # MessageThread — Component Spec
@@ -203,7 +203,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 | Prop              | Type                               | Default   | Required | JSDoc                                                                                                  |
 | ----------------- | ---------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| `timestampFormat` | `TimestampFormat`                  | `'local'` | false    | How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union. |
+| `timestampFormat` | `TimestampFormat`                  | `'local'` | false    | How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union. |
 | `loading`         | `boolean`                          | `false`   | false    | Shows three placeholder messages in place of the items while the thread loads, and marks it busy.     |
 | `ariaLabel`       | `string`                           | `''`      | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation`).                          |
 
@@ -244,7 +244,7 @@ their hover fades, each with its `motion-reduce:` fallback.
 | header gap                    | `var(--spacing-sm)`, `var(--spacing-2xs)`                                                        |
 | author                        | `.text-label-md`, `var(--text-default)`                                                          |
 | role, channel, recipients     | `.text-body-sm`, `var(--text-muted)`                                                             |
-| body                          | `.text-body-md`, `var(--text-default)`, `whitespace-pre-line`, `break-words`                     |
+| body                          | `.text-body-md`, `var(--text-default)`, `whitespace-pre-line`, `break-words`, capped at the reading measure `max-w-(--layout-measure-content)` |
 | note band                     | `var(--warning)` fill, `var(--warning-foreground)` text and lock glyph, `.text-label-sm`, padding `var(--spacing-2xs)` / `var(--spacing-md)` |
 | quoted region                 | `border-s-2 border-(--border-default)`, `ps-(--spacing-sm)`, `.text-body-sm`, `var(--text-muted)` |
 | event line                    | `.text-body-sm`, `var(--text-muted)`, glyph `var(--text-muted)`                                  |

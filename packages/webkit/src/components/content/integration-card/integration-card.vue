@@ -128,7 +128,7 @@
           :key="badge.label"
           :label="badge.label"
           :variant="badge.variant"
-          :severity="badge.severity"
+          :severity="badge.severity ?? (badge.variant ? undefined : 'info')"
           size="small"
         />
       </div>

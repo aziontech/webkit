@@ -277,6 +277,15 @@ describe('Avatar', () => {
     await expectNoA11yViolations(container)
   })
 
+  it('pushes the small presence dot past the corner so it clears the initials', () => {
+    const { getByTestId } = render(Avatar, {
+      props: { label: 'Sam Lee', size: 'small', presence: 'online' }
+    })
+    const dot = getByTestId('avatar__presence')
+    expect(dot.classList.contains('group-data-[size=small]/avatar:translate-1/4')).toBe(true)
+    expect(dot.classList.contains('group-data-[size=small]/avatar:rtl:-translate-x-1/4')).toBe(true)
+  })
+
   it('draws no presence dot by default', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: 'Jane Doe' } })
 

@@ -30,6 +30,13 @@
           format="relative"
         />
       </dd>
+      <dt class="text-label-sm text-(--text-muted)">Time</dt>
+      <dd>
+        <Timestamp
+          :value="VALUE"
+          format="time"
+        />
+      </dd>
     </dl>
   </ConfigProvider>
 </template>

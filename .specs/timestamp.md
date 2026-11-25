@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 4365dd75156d476c6d841d73bcd1db1cb126b291cf42769c32b6cb423cfb1dbd
+checksum: 0172307347dc663c473586aacf8554269b25a2c39d2d5496647f4e8cb5604b65
 created: 2026-11-14
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # Timestamp — Component Spec
@@ -40,7 +40,7 @@ Timestamp shows one moment — when a request ran, a deployment finished, a key 
 
 - Pass the value from your data as it comes (`'2026-11-14T12:04:31Z'`, `1794657871000`, or the microseconds a log store returns); do not pre-format it.
 - Set the app's time zone once on `ConfigProvider` (`time-zone`) rather than on each Timestamp; use the `time-zone` prop only for a value that belongs to another zone (a schedule in the customer's zone).
-- Use `format="relative"` for recent activity, `local` for audit records and logs, `utc` for values people compare across teams.
+- Use `format="relative"` for recent activity, `local` for audit records and logs, `utc` for values people compare across teams, and `time` for a row under a header that already names the day (a timeline grouped by date), so the row reads `8:20 AM` instead of repeating the date.
 - In an example, a test or a server render, fix `now` on the provider and give a time zone, so the text does not depend on when or where it renders.
 
 ## Usage
@@ -67,7 +67,7 @@ Timestamp shows one moment — when a request ran, a deployment finished, a key 
 | Prop       | Type                             | Default     | Required | JSDoc                                                                                                                                                                                             |
 | ---------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `value`    | `string \| number \| Date`       | `undefined` | false    | The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with no panel. |
-| `format`   | `'relative' \| 'local' \| 'utc'` | `'local'`   | false    | What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form.                           |
+| `format`   | `'relative' \| 'local' \| 'utc' \| 'time'` | `'local'`   | false    | What the text shows: the relative phrase that updates every minute, the date and time in the time zone, the date and time in UTC, or only the hour and minute in the time zone (for a row under a date header). The panel always lists every form. |
 | `timeZone` | `string`                         | `''`        | false    | IANA time zone of the local time (`America/New_York`). Empty reads the nearest `ConfigProvider`'s `time-zone`, then the browser's zone.                                                           |
 
 ## Events
@@ -85,6 +85,7 @@ _none_
 - Invalid or empty `value`: the root shows a muted dash, renders no trigger and no panel, and carries `data-invalid`.
 - Before mount, with no time zone from the prop or the provider, the text renders in UTC so the server and the first client render agree; after mount it switches to the browser's zone. With a time zone, server and client render the same text.
 - The relative phrase reads the provider's `now` when set, else a shared clock that ticks each minute; under 45 seconds it reads `just now`, under an hour in minutes, beyond that in the largest whole unit.
+- `time` reads only the hour and the minute in the effective time zone (`Intl` `hour: numeric`, `minute: 2-digit`: `8:20 AM`, `08:20`), with no date, seconds or zone name; the `time` element keeps the full ISO value in `datetime` and the panel lists every form, so nothing is lost.
 - An unknown time zone name falls back to UTC instead of throwing.
 - The browser row appears only after mount and only when the effective time zone differs from the browser's.
 
