@@ -1,10 +1,12 @@
 import './reflow.css'
 
-import { render } from '@testing-library/vue'
+import { cleanup, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { commands, page } from 'vitest/browser'
 import type { Component } from 'vue'
 
+import ApplicationSceneDefault from '../../examples/assets-console-application-scene/default.vue'
+import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
 import MarqueeDefault from '../../examples/marquee/default.vue'
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
@@ -46,6 +48,25 @@ describe('marketing element layouts (styled)', () => {
       for (const mark of marks) {
         expect(box(mark).left).toBeGreaterThanOrEqual(0)
         expect(box(mark).right).toBeLessThanOrEqual(width)
+      }
+    }
+  )
+
+  it.each([
+    ['three views', ConsoleShowcaseDefault, 1],
+    ['four views', ApplicationSceneDefault, 2]
+  ] as const)(
+    'ConsoleShowcaseSection lays %s out in even rows on a phone',
+    async (_name, example, rows) => {
+      for (const width of [320, 390]) {
+        const root = await mountAt(example, width)
+        const options = Array.from(root.querySelectorAll('[role="radiogroup"] [role="radio"]')).map(
+          box
+        )
+        expect(new Set(options.map((option) => Math.round(option.top))).size).toBe(rows)
+        const widths = options.map((option) => option.width)
+        expect(Math.max(...widths) - Math.min(...widths)).toBeLessThanOrEqual(1)
+        cleanup()
       }
     }
   )
