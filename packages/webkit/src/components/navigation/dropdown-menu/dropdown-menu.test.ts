@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, type PropType, ref } from 'vue'
 
 import CheckableOptions from '../../../../examples/dropdown-menu/checkable-options.vue'
+import CustomTriggers from '../../../../examples/dropdown-menu/custom-triggers.vue'
 import Default from '../../../../examples/dropdown-menu/default.vue'
 import Groups from '../../../../examples/dropdown-menu/groups.vue'
 import GroupsWithHeaderAndFooter from '../../../../examples/dropdown-menu/groups-with-header-and-footer.vue'
@@ -23,6 +24,9 @@ import DropdownMenu, {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from './index'
+
+const PRIMARY = /mac|iphone|ipad/i.test(navigator.platform) ? { metaKey: true } : { ctrlKey: true }
+const PRIMARY_GLYPH = /mac|iphone|ipad/i.test(navigator.platform) ? '⌘' : 'Ctrl'
 
 type SelectHandler = (event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => void
 
@@ -436,7 +440,8 @@ describe('DropdownMenu', () => {
       await waitFor(() => expect(getOptions()).toHaveLength(1))
       const command = document.body.querySelector('[data-testid="dropdown-menu-item__command"]')
       expect(command).not.toBeNull()
-      expect(command?.textContent?.trim()).toBe('⌘P')
+      expect(command?.textContent?.replace(/\s+/g, '')).toBe(`${PRIMARY_GLYPH}P`)
+      expect(command?.className).toContain('pointer-coarse:hidden')
     })
 
     // ---- Accessibility: axe on the open menu overlay --------------------------
@@ -498,8 +503,7 @@ describe('DropdownMenu', () => {
     // ---- Story smoke: composed stories render through the real compound -------
     it('renders the Default story (closed) with its trigger', () => {
       const { getByRole } = render(Default)
-      // Story trigger wraps an IconButton with aria-label "Open menu".
-      expect(getByRole('button', { name: 'Open menu' })).toBeTruthy()
+      expect(getByRole('button', { name: 'Account menu' })).toBeTruthy()
     })
 
     it('renders the Groups story and opens its two labeled groups', async () => {
@@ -520,7 +524,8 @@ describe('DropdownMenu', () => {
         expect(document.body.querySelectorAll('[role^="menuitem"]').length).toBeGreaterThan(0)
       )
       const command = document.body.querySelector('[data-testid="dropdown-menu-item__command"]')
-      expect(command?.textContent?.trim()).toBe('⌘P')
+      expect(command?.textContent?.replace(/\s+/g, '')).toBe(`${PRIMARY_GLYPH}P`)
+      expect(command?.className).toContain('pointer-coarse:hidden')
     })
   })
 
@@ -867,7 +872,7 @@ describe('DropdownMenu', () => {
                 Array.from({ length: 20 }, (_, i) =>
                   h(DropdownMenu, { key: i, onSelect }, () => [
                     h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, `Row ${i}`)),
-                    h(DropdownMenuItem, { value: `copy-${i}`, label: 'Copy', command: '⌘K' })
+                    h(DropdownMenuItem, { value: `copy-${i}`, label: 'Copy', command: 'mod+K' })
                   ])
                 )
               )
@@ -882,7 +887,7 @@ describe('DropdownMenu', () => {
       expect(mousedowns).toBe(0)
       expect(keydowns).toBeLessThanOrEqual(1)
 
-      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ...PRIMARY }))
       expect(onSelect).toHaveBeenCalledTimes(1)
     })
 
@@ -903,7 +908,7 @@ describe('DropdownMenu', () => {
                       h(DropdownMenuTrigger, null, () =>
                         h('button', { type: 'button' }, `Row ${i}`)
                       ),
-                      h(DropdownMenuItem, { value: `copy-${i}`, label: 'Copy', command: '⌘K' })
+                      h(DropdownMenuItem, { value: `copy-${i}`, label: 'Copy', command: 'mod+K' })
                     ]
                   )
                 )
@@ -913,7 +918,7 @@ describe('DropdownMenu', () => {
       )
       await nextTick()
       const press = () =>
-        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ...PRIMARY }))
       const row = (i: number) =>
         Array.from(document.querySelectorAll('button')).find((b) => b.textContent === `Row ${i}`)!
 
@@ -1123,6 +1128,15 @@ describe('DropdownMenu', () => {
       first.focus()
       await userEvent.keyboard('{End}')
       expect(document.activeElement?.textContent).toContain('Compact')
+    })
+  })
+
+  describe('a trigger that is not a control', () => {
+    it('names the avatar trigger by its aria-label and gives it a touch target', () => {
+      render(CustomTriggers)
+      const trigger = screen.getByRole('button', { name: 'Account menu' })
+      expect(trigger.getAttribute('aria-haspopup')).toBe('menu')
+      expect(trigger.querySelector('[data-slot="touch-target"]')).not.toBeNull()
     })
   })
 })

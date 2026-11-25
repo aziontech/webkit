@@ -134,17 +134,28 @@ context, so a consumer never wires one part to the other.
       orientation="horizontal"
       aria-label="Workspace"
     >
-      <Resizable.Pane aria-label="Document"
-        >Flexible — no basis, so it takes what is left.</Resizable.Pane
-      >
-      <Resizable.Handle aria-label="Resize the panel" />
+      <Resizable.Pane aria-label="Code">
+        <div class="h-full p-(--spacing-md)">
+          <p class="m-0 text-label-md text-(--text-default)">main.js</p>
+          <p class="mt-(--spacing-xs) mb-0 text-body-sm text-(--text-muted)">
+            The function that answers every request to acme-store.
+          </p>
+        </div>
+      </Resizable.Pane>
+      <Resizable.Handle aria-label="Resize the logs" />
       <Resizable.Pane
         v-model:basis="basis"
         :min="160"
         :max="480"
-        aria-label="Panel"
-        >Sized</Resizable.Pane
+        aria-label="Logs"
       >
+        <div class="h-full p-(--spacing-md)">
+          <p class="m-0 text-label-md text-(--text-default)">Logs</p>
+          <p class="mt-(--spacing-xs) mb-0 text-body-sm text-(--text-muted)">
+            GET /products returned 200 in 12 ms.
+          </p>
+        </div>
+      </Resizable.Pane>
     </Resizable>
   </div>
 </template>

@@ -10,7 +10,7 @@
     flush
   >
     <MediaSplit
-      title="Build and Run Applications"
+      title="Build and run applications"
       description="Deploy applications and static sites straight from Git."
       size="large"
       align="center"
@@ -21,7 +21,7 @@
       </template>
     </MediaSplit>
     <MediaSplit
-      title="Secure Applications and Networks"
+      title="Secure applications and networks"
       description="Stop DDoS attacks, bots and exploits before they reach your origin."
       size="large"
       align="center"
@@ -32,7 +32,7 @@
       </template>
     </MediaSplit>
     <MediaSplit
-      title="Observe Every Request"
+      title="Observe every request"
       description="Follow logs, metrics and events from every location as they happen."
       size="large"
       align="center"

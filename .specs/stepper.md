@@ -4,9 +4,9 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 7
-checksum: 63c3f79414a64c9ed4fe9e02877b6af63a613840397db1bca260e546634b0f82
+checksum: 98963d0c77aaf2e394d47695dab756db02c4f8c76300af8d2af828b7e35b20cd
 created: 2026-09-22
-last_updated: 2026-11-16
+last_updated: 2026-11-25
 ---
 
 # Stepper — Component Spec
@@ -198,7 +198,7 @@ even when the row carries nothing but its title.
 | title ink (active, success)           | `var(--text-default)`         |
 | title ink (pending)                   | `var(--text-muted)`           |
 | description ink                       | `var(--text-muted)`           |
-| disabled ink                          | `var(--text-disabled)`        |
+| disabled ink (not reachable yet)      | `var(--text-muted)`           |
 | hover surface                         | `var(--bg-hover)`             |
 | shape (dot)                           | `var(--radius-full)`          |
 | shape (row)                           | `var(--shape-control)`        |

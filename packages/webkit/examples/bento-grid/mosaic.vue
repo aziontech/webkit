@@ -9,7 +9,6 @@
 <template>
   <BentoGridRoot
     columns="4"
-    mobile-columns="2"
     aria-label="The platform, in one block"
   >
     <BentoGridCell
@@ -20,8 +19,7 @@
         <h3 class="m-0 text-heading-md text-(--text-default)">Everything runs at the edge</h3>
         <p class="m-0 text-body-md text-(--text-muted)">
           Every request is served from the location closest to the user, so there is no origin round
-          trip to plan around and no region to choose. The cell claims two columns and two rows,
-          which is what makes it the block's subject.
+          trip to plan around and no region to choose.
         </p>
       </div>
     </BentoGridCell>
@@ -43,8 +41,7 @@
       <div :class="TILE_CLASS">
         <span class="text-heading-xs">Pay for what you use</span>
         <span class="text-body-sm"
-          >An unpadded cell with no fill of its own and an href: the cell is the link, and the
-          content inside it paints the whole tile and carries its own padding.</span
+          >Usage-based pricing with no minimum commitment. See the plans.</span
         >
       </div>
     </BentoGridCell>

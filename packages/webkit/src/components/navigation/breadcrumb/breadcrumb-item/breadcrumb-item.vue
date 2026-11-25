@@ -99,6 +99,7 @@
       :data-testid="`${testId}__icon`"
     />
     <span
+      data-slot="label"
       class="relative z-1 min-w-0 truncate"
       :data-testid="`${testId}__label`"
     >

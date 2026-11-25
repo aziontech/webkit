@@ -62,7 +62,7 @@
 - Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a lone `*` hidden from assistive tech)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
-- Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
+- Responsive: the row is the `@container/settings-row`. The description wraps in full at every width, filling the measure it has (`text-wrap: pretty`, not the balanced wrap of `Item.Description`, which broke a two-line description near half the row on a phone); it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
 
 ## Accessibility
 
@@ -93,14 +93,14 @@
     <template #default>
       <Item.List>
         <SettingsRow
-          title="Company Name"
+          title="Company name"
           description="The legal entity that owns this account."
         >
           <Input
             v-model="form.companyName"
             size="large"
             class="w-full"
-            aria-label="Company Name"
+            aria-label="Company name"
           />
         </SettingsRow>
         <SettingsRow

@@ -252,4 +252,24 @@ describe('SettingsRow', () => {
       expect(beside(mountIn(900, { stackable: true }))).toBe(true)
     })
   })
+
+  it('fills the row with a stacked description on a phone instead of balancing it (A6-138)', () => {
+    const view = render(() =>
+      h('div', { style: 'width: 320px' }, [
+        h(
+          inList({
+            title: 'Name',
+            description: 'Identifies the domain in this list. It is not the hostname.'
+          })
+        )
+      ])
+    )
+    const description = view.getByTestId('settings-row__description')
+    const range = document.createRange()
+    range.selectNodeContents(description)
+    const lines = Array.from(range.getClientRects())
+    const widest = Math.max(...lines.map((rect) => rect.width))
+    expect(lines.length).toBeGreaterThan(1)
+    expect(widest).toBeGreaterThan(description.getBoundingClientRect().width * 0.8)
+  })
 })

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: a57b5873635d07c0f0d7c5cb38d3a62bab48bc1ff1792af3d3c2f48f1e972124
+checksum: 8edcfcce1c3116d701b4c9d7b4eb83e7ecf1f6bc129409c1e245928281d6d012
 created: 2026-05-22
 last_updated: 2026-11-25
 ---
@@ -77,17 +77,17 @@ Identifies a person, an account or an organization with a small visual mark: the
 
 ## Props
 
-| Prop      | Type            | Default                                                     | Required | JSDoc                                                                                                            |
-| --------- | --------------- | ----------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| `src`     | `string`        | `''`                                                        | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                   |
-| `alt`     | `string`        | `''`                                                        | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
-| `label`   | `string`        | `''`                                                        | false    | Initials shown when no image: the first letters of the first and last word, or the first two characters of one word, uppercased.                                           |
-| `icon`    | `string`        | `'az az-user'`                                              | false    | Icon class for the fallback when no image or label (Azion icon class).                                           |
-| `variant` | `AvatarVariant` | `'circle'`                                                  | false    | Visual shape of the avatar container.                                                                            |
-| `size`    | `AvatarSize`    | `'medium'`                                                  | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |
-| `pattern` | `AvatarPattern` | `undefined`                                                 | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
-| `colors`  | `string[]`      | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                   |
-| `presence` | `AvatarPresence \| ''` | `''`                                                       | false    | Whether the person is reachable now, drawn as a dot on the bottom inline-end edge and added to the accessible name; empty draws no dot. |
+| Prop       | Type                   | Default                                                     | Required | JSDoc                                                                                                                                   |
+| ---------- | ---------------------- | ----------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`      | `string`               | `''`                                                        | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                                          |
+| `alt`      | `string`               | `''`                                                        | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.                                |
+| `label`    | `string`               | `''`                                                        | false    | Initials shown when no image: the first letters of the first and last word, or the first two characters of one word, uppercased.        |
+| `icon`     | `string`               | `'az az-user'`                                              | false    | Icon class for the fallback when no image or label (Azion icon class).                                                                  |
+| `variant`  | `AvatarVariant`        | `'circle'`                                                  | false    | Visual shape of the avatar container.                                                                                                   |
+| `size`     | `AvatarSize`           | `'medium'`                                                  | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                                              |
+| `pattern`  | `AvatarPattern`        | `undefined`                                                 | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`).                        |
+| `colors`   | `string[]`             | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                                          |
+| `presence` | `AvatarPresence \| ''` | `''`                                                        | false    | Whether the person is reachable now, drawn as a dot on the bottom inline-end edge and added to the accessible name; empty draws no dot. |
 
 ## Events
 
@@ -113,20 +113,20 @@ _none_
 
 ## Tokens
 
-| Region                   | Token (DESIGN.md)                                         |
-| ------------------------ | --------------------------------------------------------- |
-| typography               | .text-body-sm                                             |
-| surface                  | `var(--bg-surface)`                                       |
-| text                     | `var(--text-default)`                                     |
-| spacing                  | `var(--spacing-3)`                                        |
-| shape                    | `var(--shape-control)`                                    |
-| ring                     | `var(--ring-color)`                                       |
-| pattern colors (default) | `var(--primary)` · `var(--warning)` · `var(--brand-blue)` |
-| presence `online`        | `var(--success-mark)`                                     |
-| presence `away`          | `var(--warning-mark)`                                     |
-| presence `busy`          | `var(--danger-mark)`                                      |
-| presence `offline`       | `var(--text-muted)`                                       |
-| presence ring and cut-outs | `var(--avatar-presence-ring, var(--bg-surface))`        |
+| Region                     | Token (DESIGN.md)                                         |
+| -------------------------- | --------------------------------------------------------- |
+| typography                 | .text-body-sm                                             |
+| surface                    | `var(--bg-surface)`                                       |
+| text                       | `var(--text-default)`                                     |
+| spacing                    | `var(--spacing-3)`                                        |
+| shape                      | `var(--shape-control)`                                    |
+| ring                       | `var(--ring-color)`                                       |
+| pattern colors (default)   | `var(--primary)` · `var(--warning)` · `var(--brand-blue)` |
+| presence `online`          | `var(--success-mark)`                                     |
+| presence `away`            | `var(--warning-mark)`                                     |
+| presence `busy`            | `var(--danger-mark)`                                      |
+| presence `offline`         | `var(--text-muted)`                                       |
+| presence ring and cut-outs | `var(--avatar-presence-ring, var(--bg-surface))`          |
 
 ## Theme gaps
 
@@ -138,21 +138,21 @@ _none_
 
 - Visible focus: none; the avatar is not focusable. A parent control (account menu trigger) owns focus.
 - Keyboard map: none.
-- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
+- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization; an `aria-label` the consumer passes, such as the purpose of a menu trigger the avatar sits in, replaces the derived name), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
 - Contrast ≥4.5:1 for the initials on `var(--bg-surface-raised)`; the generated pattern is decorative and carries no text.
 - Presence: the dot is presentational (`aria-hidden`); the presence joins the accessible name of the root (`aria-label`) or of the image (`alt`) through `avatar.withPresence`, for example "Jane Doe, away"; it wraps whichever name applies (`alt`, the label, the initials or the fallback, so "User avatar, away"). The dot colours are the documented `-mark` colours (`--text-muted` for `offline`, the neutral mark), solid marks at APCA Lc 30 and WCAG 3:1 on the surface, and each value differs in shape as well as colour (WCAG 1.4.1). A change of `presence` is not announced (no live region): the avatar is a label, and a live roster announces through the app.
 
 ## Internationalization
 
-| Key                    | English source | Override prop |
-| ---------------------- | -------------- | ------------- |
-| `avatar.imageAlt`      | Avatar         | `alt`         |
-| `avatar.fallbackLabel` | User avatar    | `alt`         |
-| `avatar.presenceOnline` | online        | —             |
-| `avatar.presenceAway`  | away           | —             |
-| `avatar.presenceBusy`  | busy           | —             |
-| `avatar.presenceOffline` | offline      | —             |
-| `avatar.withPresence`  | {name}, {presence} | —         |
+| Key                      | English source     | Override prop |
+| ------------------------ | ------------------ | ------------- |
+| `avatar.imageAlt`        | Avatar             | `alt`         |
+| `avatar.fallbackLabel`   | User avatar        | `alt`         |
+| `avatar.presenceOnline`  | online             | —             |
+| `avatar.presenceAway`    | away               | —             |
+| `avatar.presenceBusy`    | busy               | —             |
+| `avatar.presenceOffline` | offline            | —             |
+| `avatar.withPresence`    | {name}, {presence} | —             |
 
 - Formatting: none. With `pattern`, the accessible name is `alt`, then the full `label`, then `avatar.fallbackLabel`.
 
