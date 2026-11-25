@@ -166,22 +166,28 @@
     composerHeight.value = composerEl.value?.offsetHeight ?? 0
   }
 
+  function onComposerResize(entries: ResizeObserverEntry[]): void {
+    const entry = entries[entries.length - 1]
+    if (!entry) return
+    composerHeight.value =
+      entry.borderBoxSize?.[0]?.blockSize ?? (entry.target as HTMLElement).offsetHeight
+  }
+
   watch(
     composerEl,
     (now, was) => {
       if (was) composerObserver?.unobserve(was)
       if (now) composerObserver?.observe(now)
-      measureComposer()
+      if (!composerObserver || !now) measureComposer()
     },
     { flush: 'post' }
   )
 
   onMounted(() => {
-    if (typeof ResizeObserver !== 'undefined')
-      composerObserver = new ResizeObserver(measureComposer)
-    if (composerEl.value) composerObserver?.observe(composerEl.value)
-    measureComposer()
-    scrollToBottom()
+    if (typeof ResizeObserver !== 'undefined') {
+      composerObserver = new ResizeObserver(onComposerResize)
+      if (composerEl.value) composerObserver.observe(composerEl.value)
+    } else measureComposer()
     ready.value = true
     ;[watcher, observer] = observeHistory(
       viewportEl.value,
@@ -190,6 +196,7 @@
       onNear,
       onResize
     )
+    if (!observer) scrollToBottom()
   })
 
   onBeforeUnmount(() => {
