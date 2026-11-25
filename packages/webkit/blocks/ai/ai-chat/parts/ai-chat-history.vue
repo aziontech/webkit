@@ -340,7 +340,30 @@
       <DrawerHeader class="w-full">
         <DrawerTitle>Conversation history</DrawerTitle>
       </DrawerHeader>
-      <div class="px-(--spacing-md) pb-(--spacing-xs)">
+      <div class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-xs)">
+        <div class="flex items-center gap-(--spacing-2xs)">
+          <Input
+            v-model="search"
+            size="small"
+            placeholder="Search"
+            aria-label="Search conversations"
+            role="searchbox"
+            autocomplete="off"
+            class="min-w-0 flex-1"
+          >
+            <template #leading>
+              <i
+                class="az az-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+          <AiChatProjectFilter
+            v-model="selectedProject"
+            :projects="projects"
+            @toggle-pin="togglePinProject"
+          />
+        </div>
         <Button
           label="New chat"
           icon="az az-square-pen"

@@ -299,6 +299,11 @@ describe('ai/ai-chat', () => {
       return within(dialog!)
     })
     expect(drawer.getByText('Purge the cache after a deploy')).toBeTruthy()
+    await userEvent.type(drawer.getByRole('searchbox', { name: 'Search conversations' }), 'purge')
+    await waitFor(() =>
+      expect(drawer.queryByText('Why does storefront return 502 errors?')).toBeNull()
+    )
+    expect(drawer.getByText('Purge the cache after a deploy')).toBeTruthy()
     await userEvent.click(drawer.getByRole('button', { name: 'New chat' }))
     expect(view.emitted('new-chat')).toHaveLength(1)
   })
