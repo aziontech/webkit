@@ -7,9 +7,9 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: c81d1f37e0da2aa23ca31594ba77f93a0f24198b9c11ff4cb4aa129a06a55140
+checksum: 40bbfe5b47980dea43d43f6272f3fbc1c6050f62ab22931463d792899bb9e69f
 created: 2026-06-23
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # Chip — Component Spec
@@ -223,7 +223,7 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 - ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, the root carries `aria-disabled="true"` (interactive or not) and an interactive root drops `tabindex`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `az az-x` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on every transition the chip declares (variant/border colour, remove-button colour). The chip declares no dismiss animation at all, so there is nothing to suppress there.
-- Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer; the chip root does not clip it (no `overflow-hidden`: the label truncates on its own), so the target may extend past the chip's edge.
+- Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer; the chip root does not clip it (no `overflow-hidden`: the label truncates on its own), so the target may extend past the chip's edge. A clickable or selectable chip (and the body of a split chip) carries its own `[data-slot=touch-target]` span that grows its hit area to 44 px tall on a coarse pointer; a static or disabled chip has none.
 
 ## Examples
 

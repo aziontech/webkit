@@ -524,6 +524,51 @@ describe('Chip', () => {
     })
   })
 
+  describe('body touch target', () => {
+    it.each([{ clickable: true }, { selectable: true }])(
+      'gives an interactive chip a coarse-pointer hit area (%o)',
+      (flags) => {
+        const { getByTestId } = render(Chip, { props: { label: 'Production', ...flags } })
+        const target = getByTestId('chip').querySelector(':scope > [data-slot="touch-target"]')
+        expect(target?.getAttribute('aria-hidden')).toBe('true')
+        expect(target?.className).toContain('pointer-coarse:inset-y-[min(0rem,calc(50%-22px))]')
+      }
+    )
+
+    it('gives the body of a removable selectable chip its own hit area', () => {
+      const { getByTestId } = render(Chip, {
+        props: { label: 'Production', selectable: true, removable: true }
+      })
+      expect(getByTestId('chip__body').querySelector('[data-slot="touch-target"]')).not.toBeNull()
+    })
+
+    it('gives a static or disabled chip no body hit area', () => {
+      const { getAllByTestId } = render(
+        defineComponent({
+          setup: () => () =>
+            h('div', [
+              h(Chip, { label: 'Static' }),
+              h(Chip, { label: 'Off', clickable: true, disabled: true })
+            ])
+        })
+      )
+      for (const chip of getAllByTestId('chip')) {
+        expect(chip.querySelector(':scope > [data-slot="touch-target"]')).toBeNull()
+      }
+    })
+
+    it('activates the chip through its hit area', async () => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Production', clickable: true }
+      })
+      const target = getByTestId('chip').querySelector(
+        ':scope > [data-slot="touch-target"]'
+      ) as HTMLElement
+      target.click()
+      expect(emitted('click')).toHaveLength(1)
+    })
+  })
+
   describe('Disabled example', () => {
     it('renders a disabled remove button', () => {
       const { getAllByTestId } = render(Disabled)

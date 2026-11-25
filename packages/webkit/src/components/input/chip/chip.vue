@@ -146,6 +146,12 @@
     :class="[ROOT_CLASS, attrs.class]"
   >
     <span
+      v-if="active && !splitBody"
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute inset-x-0 inset-y-0 pointer-coarse:inset-y-[min(0rem,calc(50%-22px))]"
+    />
+    <span
       class="relative z-(--z-control) inline-flex min-w-0 max-w-full items-center justify-center gap-(--spacing-2xs)"
     >
       <span
@@ -157,8 +163,14 @@
         :aria-pressed="selectable ? selected : undefined"
         :aria-disabled="disabled ? 'true' : undefined"
         :data-testid="`${testId}__body`"
-        class="inline-flex min-w-0 items-center gap-(--spacing-2xs) outline-none"
+        class="relative inline-flex min-w-0 items-center gap-(--spacing-2xs) outline-none"
       >
+        <span
+          v-if="active"
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute inset-x-0 inset-y-0 pointer-coarse:inset-y-[min(0rem,calc(50%-22px))]"
+        />
         <slot v-if="$slots['default']" />
         <span
           v-else-if="label"
