@@ -9,6 +9,7 @@ import Option from '../../../../examples/item/option.vue'
 import Outline from '../../../../examples/item/outline.vue'
 import Small from '../../../../examples/item/small.vue'
 import WithIconMedia from '../../../../examples/item/with-icon-media.vue'
+import WithLink from '../../../../examples/item/with-link.vue'
 import WithList from '../../../../examples/item/with-list.vue'
 import WithListLinks from '../../../../examples/item/with-list-links.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -420,5 +421,14 @@ describe('Item', () => {
         expect(getByRole('separator')).toBeTruthy()
       })
     })
+  })
+
+  it('ends every navigating row of the examples with the same chevron', () => {
+    for (const example of [WithLink, WithListLinks, Inline]) {
+      const { container, unmount } = render(example)
+      expect(container.querySelectorAll('.az-chevron-right').length).toBeGreaterThan(0)
+      expect(container.querySelector('.az-arrow-right')).toBeNull()
+      unmount()
+    }
   })
 })
