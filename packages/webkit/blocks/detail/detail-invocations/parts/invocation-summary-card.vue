@@ -57,7 +57,7 @@
             class="az az-functions shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
-          <div class="flex min-w-0">
+          <div class="flex min-w-0 max-w-1/2 shrink-0">
             <Tooltip
               :content="`Open ${fn.name} in Functions`"
               class="w-full"
