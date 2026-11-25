@@ -162,12 +162,12 @@ describe('ArticleCardsSection', () => {
     const { getByRole } = band({ items: [{ ...posts[0], target: '_blank' }, posts[1]] })
 
     const external = getByRole('link', {
-      name: /How Do You Reduce AI Agent Latency\? \(opens in a new tab\)/
+      name: /How do you reduce AI agent latency\? \(opens in a new tab\)/
     })
     expect(external.getAttribute('target')).toBe('_blank')
     expect(external.getAttribute('rel')).toBe('noopener noreferrer')
 
-    const internal = getByRole('link', { name: /Best Cloudflare Alternatives/ })
+    const internal = getByRole('link', { name: /Best Cloudflare alternatives/ })
     expect(internal.hasAttribute('target')).toBe(false)
     expect(internal.textContent).not.toContain('opens in a new tab')
   })
