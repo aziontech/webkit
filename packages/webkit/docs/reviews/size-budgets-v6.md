@@ -2365,3 +2365,65 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-layout-root 85.6 KB → 86.4 KB (measured 86.36 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: doc-page-header 33.5 KB → 34.2 KB (measured 34.11 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: console-application-scene 127.2 KB → 127.3 KB (measured 127.21 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: article-body-section 48.9 KB → 49.5 KB (measured 49.49 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: message-thread-item 35.6 KB → 35.7 KB (measured 35.63 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: field 12.9 KB → 13 KB (measured 12.91 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: chat-message-feedback 16.8 KB → 17.3 KB (measured 17.21 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: prompt-input-context-picker 15.9 KB → 16.3 KB (measured 16.27 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: prompt-input-tools 18.4 KB → 18.8 KB (measured 18.74 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: sources 14.6 KB → 15 KB (measured 14.91 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: conversation-history 42.35 KB → 42.8 KB (measured 42.74 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: button-group 17.5 KB → 17.8 KB (measured 17.78 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: tag-editor 27.3 KB → 27.4 KB (measured 27.30 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: table-cell-actions 12.7 KB → 12.9 KB (measured 12.86 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: filter-menu 37.9 KB → 38 KB (measured 37.92 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: split-button 17.8 KB → 18.1 KB (measured 18.05 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: flow-diagram-bind 16.8 KB → 17.2 KB (measured 17.13 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: context-menu 13 KB → 13.3 KB (measured 13.29 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: context-menu-root 7.9 KB → 8.1 KB (measured 8.03 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu 14 KB → 14.5 KB (measured 14.41 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu-root 7.8 KB → 8 KB (measured 7.90 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu-trigger 2.55 KB → 2.7 KB (measured 2.65 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: dropdown-menu-item 3.4 KB → 3.9 KB (measured 3.85 KB): menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073); an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: console-layout 87.3 KB → 88.1 KB (measured 88.00 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: breadcrumb 27.6 KB → 28.2 KB (measured 28.14 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: breadcrumb-root 27.5 KB → 28.2 KB (measured 28.11 KB): the trail folds on measured overflow, one step at a time, and unfolds when its box grows, so the Console header shows the whole trail (A6-066, A6-067, A6-101, A6-235); menu shortcuts take the platform primary modifier (mod: Meta on macOS, Ctrl elsewhere) and print their hint per platform, hidden on touch, so Ctrl+P works on Windows and Linux (A6-073).
+
+Budget-raise: dialog-trigger 2.15 KB → 2.3 KB (measured 2.23 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: drawer 23.45 KB → 23.5 KB (measured 23.46 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: drawer-trigger 2.15 KB → 2.3 KB (measured 2.23 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: popover-trigger 2.55 KB → 2.7 KB (measured 2.61 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: shortcuts-dialog 27.3 KB → 27.4 KB (measured 27.32 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
