@@ -89,11 +89,11 @@ The block keeps the form as a local draft, validates it on submit and emits `cre
 | `error`            | `string`                      | Why the request failed, shown in the danger `Alert` with Retry.                              |
 | `created`          | `CreateTicketCreated`         | The ticket the request created: the success toast names it and the form clears for the next. |
 
-| Event    | Payload                           | When                                                                                            |
-| -------- | --------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Event    | Payload                           | When                                                                                 |
+| -------- | --------------------------------- | ------------------------------------------------------------------------------------ |
 | `create` | `(event, { ticket, addAnother })` | Save (`addAnother` false) or Save and add another (true) on a valid form, and Retry. |
-| `cancel` | `(event)`                         | Cancel, Back or Escape, once a changed form is confirmed.                                       |
-| `open`   | `(event, id)`                     | Open ticket in the success toast.                                                               |
+| `cancel` | `(event)`                         | Cancel, Back or Escape, once a changed form is confirmed.                            |
+| `open`   | `(event, id)`                     | Open ticket in the success toast.                                                    |
 
 `ticket.requester` with an empty `id` is a new contact to save with the ticket. To go live, render the block from the page that owns the request:
 
