@@ -201,6 +201,7 @@
                   />
                   <span
                     class="truncate"
+                    dir="auto"
                     :data-unused="row.reach === 'Unused' || null"
                     >{{ reachLabel(row.services.length) }}</span
                   >
