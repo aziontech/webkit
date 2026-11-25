@@ -396,16 +396,14 @@ Each variant is the same screen in another state: `get_block("state/state-first-
               >
                 <Item.Actions class="w-full">
                   <InputGroupRoot class="w-full">
-                    <div class="flex min-w-0 flex-1">
-                      <Input
-                        :model-value="command"
-                        class="w-full"
-                        aria-label="Via CLI command"
-                        readonly
-                        monospace
-                        :spellcheck="false"
-                      />
-                    </div>
+                    <Input
+                      :model-value="command"
+                      class="min-w-0 flex-1"
+                      aria-label="Via CLI command"
+                      readonly
+                      monospace
+                      :spellcheck="false"
+                    />
                     <CopyButton
                       :value="command"
                       aria-label="Copy the Via CLI command"

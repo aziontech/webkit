@@ -990,16 +990,14 @@ export const dnsZonePolicyLabel = (value: string) =>
                           :key="ns"
                           size="large"
                         >
-                          <div class="flex flex-1">
-                            <Input
-                              :model-value="ns"
-                              size="large"
-                              class="w-full"
-                              :aria-label="'Nameserver ' + (index + 1)"
-                              monospace
-                              readonly
-                            />
-                          </div>
+                          <Input
+                            :model-value="ns"
+                            size="large"
+                            class="min-w-0 flex-1"
+                            :aria-label="'Nameserver ' + (index + 1)"
+                            monospace
+                            readonly
+                          />
                           <CopyButton
                             variant="ghost"
                             :value="ns"
@@ -1049,16 +1047,14 @@ export const dnsZonePolicyLabel = (value: string) =>
                           size="large"
                           class="w-full"
                         >
-                          <div class="flex flex-1">
-                            <Input
-                              :model-value="key.value"
-                              size="large"
-                              class="w-full"
-                              :aria-label="key.label"
-                              monospace
-                              readonly
-                            />
-                          </div>
+                          <Input
+                            :model-value="key.value"
+                            size="large"
+                            class="min-w-0 flex-1"
+                            :aria-label="key.label"
+                            monospace
+                            readonly
+                          />
                           <CopyButton
                             variant="ghost"
                             :value="key.value"

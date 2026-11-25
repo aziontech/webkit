@@ -14,16 +14,14 @@
       monospace
     />
     <InputGroupRoot class="w-full">
-      <div class="flex min-w-0 flex-1">
-        <Input
-          model-value="azion create edge-function"
-          class="w-full"
-          aria-label="Create function command"
-          :spellcheck="false"
-          readonly
-          monospace
-        />
-      </div>
+      <Input
+        model-value="azion create edge-function"
+        class="min-w-0 flex-1"
+        aria-label="Create function command"
+        :spellcheck="false"
+        readonly
+        monospace
+      />
       <CopyButton
         value="azion create edge-function"
         aria-label="Copy the create function command"
