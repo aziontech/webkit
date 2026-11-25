@@ -169,11 +169,12 @@ describe('Table', () => {
       expect(view.queryByRole('button', { name: 'Show all 2 domains' })).toBeNull()
     })
 
-    it('CellTime shows a relative time, the absolute one for screen readers, and the author', () => {
+    it('CellTime shows a relative time, the absolute one for screen readers, and the author', async () => {
       const value = new Date(Date.now() - 3 * 86_400_000)
       const view = render(TableCellTime, {
         props: { value, author: 'maria.silva@example.com' }
       })
+      await nextTick()
       const time = view.container.querySelector('time')!
       expect(time.getAttribute('datetime')).toBe(value.toISOString())
       expect(time.textContent).toContain('3 days ago')
@@ -181,18 +182,20 @@ describe('Table', () => {
       expect(view.getByRole('img', { name: 'Maria Silva' })).toBeTruthy()
     })
 
-    it('CellTime reads just now, and a dash for no date', () => {
+    it('CellTime reads just now, and a dash for no date', async () => {
       const view = render(TableCellTime, { props: { value: new Date() } })
+      await nextTick()
       expect(view.container.querySelector('time')!.textContent).toContain('just now')
       cleanup()
       const minutes = render(TableCellTime, { props: { value: new Date(Date.now() - 50_000) } })
+      await nextTick()
       expect(minutes.container.querySelector('time')!.textContent).toContain('1 minute ago')
       cleanup()
       const empty = render(TableCellTime, { props: { value: 'not a date' } })
       expect(empty.getByText('—')).toBeTruthy()
     })
 
-    it('CellTime follows the active locale', () => {
+    it('CellTime follows the active locale', async () => {
       const Host = defineComponent({
         render: () =>
           h(
@@ -202,6 +205,7 @@ describe('Table', () => {
           )
       })
       const view = render(Host)
+      await nextTick()
       expect(view.container.querySelector('time')!.textContent).toContain('há 2 horas')
     })
 
@@ -245,6 +249,32 @@ describe('Table', () => {
       })
       const html = await renderToString(createSSRApp(App))
       expect(html).toContain('yesterday')
+    })
+
+    it('CellTime with no provider now renders the UTC date on the server and hydrates without a mismatch', async () => {
+      const value = new Date(Date.UTC(2026, 8, 22, 23, 30))
+      const App = defineComponent({ render: () => h(TableCellTime, { value }) })
+      const html = await renderToString(createSSRApp(App))
+      expect(html).toContain('Sep 22, 2026')
+      expect(html).not.toMatch(/ ago|yesterday/)
+      const host = document.createElement('div')
+      host.innerHTML = html
+      document.body.appendChild(host)
+      const warnings: string[] = []
+      const app = createSSRApp(App)
+      app.config.warnHandler = (message) => void warnings.push(message)
+      const original = console.error
+      console.error = (...args: unknown[]) => void warnings.push(args.join(' '))
+      try {
+        app.mount(host)
+        await nextTick()
+      } finally {
+        console.error = original
+      }
+      expect(warnings.filter((message) => /hydrat/i.test(message))).toEqual([])
+      expect(host.querySelector('time')!.firstChild!.textContent).toMatch(/ ago|last /)
+      app.unmount()
+      host.remove()
     })
 
     it('the cell presets example prints the same relative times whenever it renders', () => {

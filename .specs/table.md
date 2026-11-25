@@ -7,9 +7,9 @@ spec_version: 25
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 49594ded21f34ee7a360a56e293bd7b19c39e98582e30bf74f7d5c3c1cb2b5ed
+checksum: f0f55f8c84d54de58aae0d7082a0424f77aec4787e303bb1fcdad9f39188b2ab
 created: 2026-06-16
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # Table — Component Spec
@@ -20,7 +20,7 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 
 **What the compound carries.** `@aziontech/webkit/table` attaches only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar`), so a hand-composed table costs what its parts cost. The toolbar controls and the cell presets compose `Tooltip`, `DropdownMenu`, `Popover`, `Input` and `CopyButton`; each is imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`, …) and is not attached to the compound, so a screen pays only for the ones it renders.
 
-**Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row).
+**Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers; with no provider `now`, a server render prints the UTC date and the cell switches to the relative time once mounted, so hydration never mismatches) and `TableCellActions` (the row menu named after the row).
 
 **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in [`data-table`](./data-table.md).
 

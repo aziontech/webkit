@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref, useAttrs } from 'vue'
+  import { computed, inject, onMounted, ref, useAttrs } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale/use-locale'
   import { useMinuteClock } from '../../../../composables/use-minute-clock'
+  import { LocaleInjectionKey } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import Avatar from '../../../content/avatar/avatar.vue'
   import { relativeText, toDate } from '../../../content/timestamp/timestamp-format'
@@ -30,19 +31,21 @@
 
   const attrs = useAttrs()
   const now = useMinuteClock()
+  const fixedClock = inject(LocaleInjectionKey, null)?.now
   const { t, formatDate, formatRelativeTime } = useLocale({ tableCellTime: en.tableCellTime })
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-time'
   )
 
   const date = computed<Date | null>(() => toDate(props.value))
-  const relative = computed<string>(() =>
-    date.value
-      ? relativeText(date.value, now.value, t('tableCellTime.justNow'), formatRelativeTime)
-      : ''
-  )
   const mounted = ref(false)
   onMounted(() => (mounted.value = true))
+  const relative = computed<string>(() => {
+    if (!date.value) return ''
+    if (!mounted.value && fixedClock?.value === undefined)
+      return formatDate(date.value, { dateStyle: 'medium', timeZone: 'UTC' })
+    return relativeText(date.value, now.value, t('tableCellTime.justNow'), formatRelativeTime)
+  })
   const absolute = computed<string>(() =>
     date.value
       ? formatDate(date.value, {
