@@ -12,6 +12,7 @@ import FileBrowserUploading from '../../blocks/view/view-file-browser/variants/u
 import MarketplaceSolutionPage from '../../blocks/view/view-marketplace/variants/solution-page.vue'
 import QueryEditorQuery from '../../blocks/view/view-query-editor/variants/query.vue'
 import ViewTableDeployments from '../../blocks/view/view-table/variants/deployments.vue'
+import ViewTicketInbox from '../../blocks/view/view-ticket-inbox/view-ticket-inbox.vue'
 import ViewWafTuning from '../../blocks/view/view-waf-tuning/view-waf-tuning.vue'
 import { useToastRegion } from './toast-region'
 
@@ -96,6 +97,13 @@ describe('view blocks, styled layout', () => {
     expect(description).not.toContain(first)
   })
 
+  it('hides the triage line once the columns fit (ticket inbox)', async () => {
+    await atWidth(1280)
+    const view = render(ViewTicketInbox)
+    const [triage] = await waitFor(() => view.getAllByTestId('ticket-triage'))
+    expect(triage!.getBoundingClientRect().height).toBe(0)
+  })
+
   it('keeps the search row one height, the column settings included (file browser)', async () => {
     await atWidth(1280)
     const view = render(FileBrowserInsideAFolder)
@@ -135,6 +143,24 @@ describe('view blocks, styled layout', () => {
         cell.getBoundingClientRect().right + 1
       )
     }
+  })
+
+  it('shows the triage facts in the subject and lets the next column peek on a phone (ticket inbox)', async () => {
+    await atWidth(390)
+    const view = render(ViewTicketInbox)
+    const triage = await waitFor(() => {
+      const found = view.getAllByTestId('ticket-triage')
+      expect(found.length).toBeGreaterThan(0)
+      return found
+    })
+    await settle()
+    expect(triage[0]!.getBoundingClientRect().height).toBeGreaterThan(0)
+    expect(triage.some((line) => /Urgent|High/.test(line.textContent ?? ''))).toBe(true)
+    const status = view.getByRole('columnheader', { name: /Status/ })
+    const scroller = status.closest<HTMLElement>('[data-testid$="__scroll"]')!
+    expect(status.getBoundingClientRect().left).toBeLessThan(
+      scroller.getBoundingClientRect().right - 48
+    )
   })
 
   it('gives the query field its own full row on a phone (events explorer)', async () => {
