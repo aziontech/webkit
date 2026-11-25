@@ -1,11 +1,23 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, useAttrs, useId, useSlots, watch } from 'vue'
+  import {
+    computed,
+    inject,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs,
+    useId,
+    useSlots,
+    watch
+  } from 'vue'
 
-  import { shortcutKeys } from '../../../../composables/use-menu-root/lib/shortcut-registry'
+  import {
+    isMac as platformIsMac,
+    shortcutLabel
+  } from '../../../../composables/use-menu-root/lib/shortcut-registry'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { safeHref } from '../../../../utils/safe-href'
-  import Kbd from '../../../content/kbd/kbd.vue'
   import { useDropdownContext } from '../composables/use-dropdown-context'
   import type { DropdownMenuItemSeverity, DropdownMenuItemType } from '../injection-key'
   import { DropdownMenuGroupInjectionKey } from '../injection-key'
@@ -77,7 +89,11 @@
   )
 
   const hasCommand = computed(() => props.command.length > 0)
-  const commandKeys = computed(() => shortcutKeys(props.command))
+  const isMac = ref(false)
+  onMounted(() => {
+    isMac.value = platformIsMac()
+  })
+  const commandLabel = computed(() => shortcutLabel(props.command, isMac.value))
   const linkHref = computed(() => safeHref(props.href))
   const isLink = computed(() => linkHref.value !== null && !props.disabled)
   const newTab = computed(() => isLink.value && props.target === '_blank')
@@ -246,12 +262,13 @@
       <span
         v-else-if="hasCommand"
         :data-testid="`${testId}__command`"
-        class="flex shrink-0 items-center pointer-coarse:hidden"
+        class="flex shrink-0 items-center text-label-sm text-(--text-muted) pointer-coarse:hidden"
       >
-        <Kbd
-          size="small"
-          :keys="commandKeys"
-        />
+        <kbd
+          dir="ltr"
+          class="font-[inherit]"
+          >{{ commandLabel }}</kbd
+        >
       </span>
 
       <i

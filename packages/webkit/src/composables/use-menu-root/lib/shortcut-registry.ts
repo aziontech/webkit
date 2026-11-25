@@ -16,49 +16,42 @@ interface ShortcutEntry {
 const entries = new Set<ShortcutEntry>()
 let listening = false
 
-const GLYPHS: Record<string, ShortcutKey> = { '⌘': 'meta', '⌃': 'ctrl', '⇧': 'shift', '⌥': 'alt' }
+const MODIFIERS: [RegExp, string][] = [
+  [/^(⌘|mod|cmd|command|meta)$/i, 'meta'],
+  [/^(⌃|ctrl|control)$/i, 'ctrl'],
+  [/^(⇧|shift)$/i, 'shift'],
+  [/^(⌥|alt|option|opt)$/i, 'alt']
+]
 
-const WORDS: Record<string, ShortcutKey> = {
-  mod: 'meta',
-  cmd: 'meta',
-  command: 'meta',
-  meta: 'meta',
-  ctrl: 'ctrl',
-  control: 'ctrl',
-  shift: 'shift',
-  alt: 'alt',
-  option: 'alt',
-  opt: 'alt'
-}
-
-export type ShortcutKey = 'meta' | 'ctrl' | 'shift' | 'alt'
+const modifier = (token: string) => MODIFIERS.find(([pattern]) => pattern.test(token))?.[1]
 
 export function shortcutKeys(command: string): string[] {
   const keys: string[] = []
-  const parts = command.trim().endsWith('++')
-    ? [...command.trim().slice(0, -2).split('+'), '+']
-    : command.split('+')
-  for (const raw of parts) {
-    const part = raw.trim()
-    if (!part) continue
-    const word = WORDS[part.toLowerCase()]
-    if (word) {
-      keys.push(word)
-      continue
-    }
-    let rest = part
-    while (rest.length > 1 && GLYPHS[rest[0]!]) {
-      keys.push(GLYPHS[rest[0]!]!)
+  for (const part of command.replace(/\+\+$/, '+plus').split('+')) {
+    let rest = part.trim()
+    while (rest.length > 1 && modifier(rest[0]!)) {
+      keys.push(modifier(rest[0]!)!)
       rest = rest.slice(1)
     }
-    keys.push(GLYPHS[rest] ?? rest)
+    if (rest) keys.push(modifier(rest) ?? (rest === 'plus' ? '+' : rest))
   }
   return keys
 }
 
+export const isMac = (): boolean => /mac|iphone|ipad/i.test(globalThis.navigator?.platform ?? '')
+
+export function shortcutLabel(command: string, mac: boolean): string {
+  const glyphs: Record<string, string> = mac
+    ? { meta: '⌘', ctrl: '⌃', alt: '⌥', shift: '⇧' }
+    : { meta: 'Ctrl', ctrl: 'Ctrl', alt: 'Alt', shift: '⇧' }
+  return shortcutKeys(command)
+    .map((key) => glyphs[key] ?? key.toUpperCase())
+    .join(mac ? '' : ' ')
+}
+
 function parseShortcut(command: string): DropdownMenuShortcut | null {
   const keys = shortcutKeys(command)
-  const key = keys.filter((name) => !['meta', 'ctrl', 'shift', 'alt'].includes(name)).join('')
+  const key = keys.filter((name) => !/^(meta|ctrl|shift|alt)$/.test(name)).join('')
   if (!key) return null
   return {
     meta: keys.includes('meta'),
@@ -68,8 +61,6 @@ function parseShortcut(command: string): DropdownMenuShortcut | null {
     key: key.toLowerCase()
   }
 }
-
-const isMac = () => /mac|iphone|ipad/i.test(globalThis.navigator?.platform ?? '')
 
 function matches(event: globalThis.KeyboardEvent, parsed: DropdownMenuShortcut): boolean {
   const mac = isMac()

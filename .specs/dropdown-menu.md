@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: eed1e5236e245ac613743e85991b641a7ef188a2d4c0c5704d7d03b07aa2ef71
+checksum: 7465738b5d8af8a39ba8d832b46df849cc0d98bfb54c58747be3f56d33c9fcfe
 created: 2026-06-26
 last_updated: 2026-11-25
 ---
@@ -173,7 +173,7 @@ Sub-menus and checkable options:
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
-    - `command: string` default `''` — keyboard shortcut, written as keys joined by `+` (`'mod+P'`, `'shift+mod+P'`, `'ctrl+,'`); `mod` (or `⌘`, `cmd`, `meta`) is the platform's primary modifier, `Meta` on macOS and `Ctrl` elsewhere, and the glyphs `⇧ ⌥ ⌃` work as well as `shift`, `alt`, `ctrl`. The hint renders through `Kbd` (size `small`), so it reads `⌘P` on macOS and `Ctrl P` elsewhere, and it is hidden on a coarse pointer, where no keyboard is assumed. A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
+    - `command: string` default `''` — keyboard shortcut, written as keys joined by `+` (`'mod+P'`, `'shift+mod+P'`, `'ctrl+,'`); `mod` (or `⌘`, `cmd`, `meta`) is the platform's primary modifier, `Meta` on macOS and `Ctrl` elsewhere, and the glyphs `⇧ ⌥ ⌃` work as well as `shift`, `alt`, `ctrl`. The hint is a `kbd` in `text-label-sm` `--text-muted` that names the keys the way `Kbd` does (`⌘P` on macOS, `Ctrl P` elsewhere; the key caps `Ctrl` and `Alt` are not translated), and it is hidden on a coarse pointer, where no keyboard is assumed. A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
@@ -269,7 +269,7 @@ Sub-menus and checkable options:
 | option selected surface         | `var(--bg-selected)`                                                                                                            |
 | row fill inset (2px gap)        | `border-y border-transparent bg-clip-padding`                                                                                   |
 | option disabled text            | `var(--text-disabled)`                                                                                                          |
-| option command hint             | `Kbd` size `small` (its own keycap tokens), hidden on a coarse pointer                                                          |
+| option command text             | `text-(--text-muted)`, hidden on a coarse pointer                                                                               |
 | option description              | `.text-body-xs` + `text-(--text-muted)`, two lines; row padding.y `var(--spacing-xs)`                                           |
 | option external glyph           | `az az-external-link` + `text-(--text-muted)`                                                                                   |
 | checkable indicator             | `az az-check` / a `size-1.5` `rounded-full` `bg-current` dot in `text-(--text-default)`, in a `size-4` column                   |
