@@ -1,17 +1,27 @@
 <script setup>
+  import CardGridCell from '@aziontech/webkit/card-grid-cell'
   import CardGridRoot from '@aziontech/webkit/card-grid-root'
 </script>
 
 <template>
   <CardGridRoot :columns="3">
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
-      Deploy from Git with a preview for every branch.
-    </div>
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
-      Cache static assets in every region.
-    </div>
-    <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">
-      Block bots before they reach your code.
-    </div>
+    <CardGridCell>
+      <h3 class="m-0 text-heading-xs text-(--text-default)">Deploy from Git</h3>
+      <p class="mt-(--spacing-xs) mb-0 text-body-md text-(--text-muted)">
+        Every branch gets its own preview URL.
+      </p>
+    </CardGridCell>
+    <CardGridCell>
+      <h3 class="m-0 text-heading-xs text-(--text-default)">Cache at the edge</h3>
+      <p class="mt-(--spacing-xs) mb-0 text-body-md text-(--text-muted)">
+        Static assets are served from the location closest to each user.
+      </p>
+    </CardGridCell>
+    <CardGridCell>
+      <h3 class="m-0 text-heading-xs text-(--text-default)">Stop bad bots</h3>
+      <p class="mt-(--spacing-xs) mb-0 text-body-md text-(--text-muted)">
+        Automated traffic is blocked before it reaches your code.
+      </p>
+    </CardGridCell>
   </CardGridRoot>
 </template>

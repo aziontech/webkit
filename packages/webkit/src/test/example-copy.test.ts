@@ -17,7 +17,12 @@ const examples = import.meta.glob<{ default: Component }>(
     '../../examples/console-layout/sidebar-header.vue',
     '../../examples/console-layout/page-opens-search.vue',
     '../../examples/app-layout/compact.vue',
-    '../../examples/scroll-area/default.vue'
+    '../../examples/scroll-area/default.vue',
+    '../../examples/module/default.vue',
+    '../../examples/bento-grid/mosaic.vue',
+    '../../examples/console-layout/fill-page.vue',
+    '../../examples/navigation-menu/default.vue',
+    '../../examples/resizable/default.vue'
   ],
   { eager: true }
 )
@@ -27,12 +32,15 @@ const NARRATION = [
   /\b(divided|padded|eyebrow|rung|cell|anatomy)\b/i,
   /^(Small|Medium|Large|Centered|Left|Horizontal|Narrow|Wide)$/m,
   /⌘K or Ctrl K/,
-  /Jokester/
+  /Jokester/,
+  /\b(band|panes?|demo|basis|flexible)\b/i,
+  /\bLine \d+/,
+  /Primary action/
 ]
 
 describe('layout example copy', () => {
   it('lists every example it guards', () => {
-    expect(Object.keys(examples)).toHaveLength(14)
+    expect(Object.keys(examples)).toHaveLength(19)
   })
 
   it.each(Object.entries(examples))(

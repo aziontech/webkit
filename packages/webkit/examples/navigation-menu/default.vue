@@ -137,14 +137,14 @@
     <div
       class="mx-auto flex max-w-(--container-2xl) flex-col items-center px-(--spacing-lg) py-(--spacing-2xl) text-center"
     >
-      <h1 class="text-heading-lg text-(--text-default)">Navigation menu demo</h1>
+      <h1 class="text-heading-lg text-(--text-default)">Build applications that run at the edge</h1>
       <p class="mt-(--spacing-xl) text-body-sm text-(--text-muted)">
-        Hover or tap a top-level item to open its panel. Keyboard: arrows, Enter, Escape.
+        Deploy, secure and observe your applications on one platform.
       </p>
       <div class="mt-(--spacing-2xl) flex flex-wrap justify-center gap-(--spacing-sm)">
-        <Button label="Primary action" />
+        <Button label="Start for free" />
         <Button
-          label="Secondary"
+          label="Talk to sales"
           variant="secondary"
         />
       </div>

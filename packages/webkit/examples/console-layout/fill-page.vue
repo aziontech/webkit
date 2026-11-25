@@ -14,7 +14,24 @@
     }
   ]
 
-  const lines = Array.from({ length: 80 }, (_, index) => `${index + 1}`)
+  const routes = [
+    'products',
+    'orders',
+    'customers',
+    'carts',
+    'invoices',
+    'reviews',
+    'coupons',
+    'stores'
+  ]
+  const lines = routes.flatMap((name) => [
+    `router.get('/${name}/:id', async ({ params }) => {`,
+    `  const item = await ${name}.get(params.id)`,
+    `  if (!item) return new Response('Not found', { status: 404 })`,
+    '  return Response.json(item)',
+    '})',
+    ''
+  ])
 
   const narrow = ref(false)
   let narrowQuery: MediaQueryList | null = null
@@ -59,12 +76,11 @@
               class="h-full overflow-auto p-(--spacing-md) text-body-sm text-(--text-muted) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
             >
               <p
-                v-for="line in lines"
-                :key="line"
-                class="m-0"
-              >
-                Line {{ line }}
-              </p>
+                v-for="(line, index) in lines"
+                :key="index"
+                class="m-0 min-h-[1lh] whitespace-pre font-code"
+                v-text="line"
+              />
             </div>
           </Resizable.Pane>
           <Resizable.Handle aria-label="Resize the preview" />
@@ -78,7 +94,7 @@
               aria-label="Preview output"
               class="h-full overflow-auto p-(--spacing-md) text-body-sm text-(--text-muted) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
             >
-              The panes scroll on their own; the page does not.
+              GET /products/42 returned 200 in 12 ms.
             </div>
           </Resizable.Pane>
         </Resizable>
