@@ -740,6 +740,7 @@ describe('PromptInput', () => {
       await userEvent.click(await screen.findByRole('button', { name: 'Anthropic' }))
       const panel = within(screen.getByTestId('prompt-input-model-picker__panel'))
       expect(panel.queryByRole('button', { name: /Gemini 4 Neon/ })).toBeNull()
+      expect(panel.getByText('⌘2').classList.contains('pointer-coarse:hidden')).toBe(true)
       await userEvent.click(panel.getByRole('button', { name: /Claude Sonnet 4/ }))
       expect(scope.model!.value).toBe('claude-4')
       await nextTick()
