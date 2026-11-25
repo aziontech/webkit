@@ -7,7 +7,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-04
 last_updated: 2026-11-24
-checksum: 541e51db336ec9de056c0767c0c114a68b1185a62d20fc013aaad3adf6d2e737
+checksum: 2ab87e5c0501e384679a10f7b744a0cfd4e7e0de28f0c83b788b874bf6f15261
 ---
 
 # CustomerUseCasesSection — Component Spec
@@ -93,7 +93,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the title cell, not the frame — because a use-case band with no use cases is absent from the page, not an `empty-state`
 - The title cell spans two rows from `lg`, so four items fill a three-column grid exactly
-- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
+- The eyebrow carries the `//` prefix that marks every marketing section header (decision EB-1).
 
 ## Motion & Animations
 

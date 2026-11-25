@@ -131,6 +131,7 @@
         <Eyebrow
           v-if="eyebrow"
           cursor
+          prefix="//"
           >{{ eyebrow }}</Eyebrow
         >
         <h2
