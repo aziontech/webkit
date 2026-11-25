@@ -12,6 +12,7 @@ import {
 } from 'vue'
 
 import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+import { useDataTableRowTabOrder } from './use-data-table-row-tab-order'
 
 type RowRecord = Record<string, unknown>
 type TableRowItem = Row<RowRecord>
@@ -210,12 +211,14 @@ export function useDataTableRowFocus(host: DataTableRowFocusHost): UseDataTableR
     },
     { flush: 'post' }
   )
+  const tabStop = computed(() => {
+    if (!toValue(host.active)) return undefined
+    const id = focusId.value
+    return id && host.index.value.has(id) ? id : toValue(host.rows)[0]?.id
+  })
+  useDataTableRowTabOrder({ active: host.active, rows: host.rows, tabStop, root: host.root })
   return {
-    tabStop: computed(() => {
-      if (!toValue(host.active)) return undefined
-      const id = focusId.value
-      return id && host.index.value.has(id) ? id : toValue(host.rows)[0]?.id
-    }),
+    tabStop,
     placement: computed(() => (toValue(host.tree) ? placementOf(toValue(host.rows)) : new Map())),
     toggle,
     onFocusin: (row) => {

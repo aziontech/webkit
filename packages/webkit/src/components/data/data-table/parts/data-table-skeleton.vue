@@ -14,16 +14,11 @@
 </script>
 
 <template>
-  <TableBody
-    key="skeleton"
-    :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
-  >
+  <TableBody key="skeleton">
     <TableRow
       v-for="n in skeletonRowCount"
       :key="'sk-' + n"
-      :class="
-        stacked ? 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)' : undefined
-      "
+      :class="stacked ? 'flex-wrap py-(--spacing-2xs) before:hidden' : undefined"
     >
       <TableCell
         v-if="reorderActive"
