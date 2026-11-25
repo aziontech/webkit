@@ -196,9 +196,10 @@ describe('view blocks, styled layout', () => {
       const cells = view.getAllByTestId('table-cell-tags')
       for (const cell of cells) {
         const texts = Array.from(cell.querySelectorAll<HTMLElement>('[data-tag-text]'))
-        if (texts.length < 2) continue
         expect(texts.filter(clipped).map((text) => text.textContent)).toEqual([])
       }
+      const threats = view.getAllByText(/^(SQL injection|Unwanted access|Cross-site scripting)$/)
+      expect(threats.filter(clipped).map((text) => text.textContent)).toEqual([])
     }
   )
 })
