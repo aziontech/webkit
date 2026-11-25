@@ -10,7 +10,7 @@ The band is the `FeatureTabsSection` component from `@aziontech/webkit/feature-t
 
 ### Default
 
-The Observability band from Functions: Trace, Logs and Request path, each held for 5.2 seconds. Each tab shows one `Illustration` scene, named by its `illustration`.
+The Observability band: Error rate, Status codes and Data streams, each held for 5.2 seconds. Each tab shows one `Illustration` scene, named by its `illustration`.
 
 Example: [`site-default.vue`](./site-default.vue)
 

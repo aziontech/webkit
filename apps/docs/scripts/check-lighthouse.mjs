@@ -37,8 +37,7 @@ const PAGES = [
     name: 'frame-example-chart',
     site: 'docs',
     path: '/frame/example/chart/default',
-    preset: 'mobile',
-    budget: { lcp: 4500 }
+    preset: 'mobile'
   }
 ]
 

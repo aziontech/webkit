@@ -2,13 +2,13 @@
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CopyText from '@aziontech/webkit/copy-text'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import Illustration from '@aziontech/webkit/illustration'
   import { useHead } from '@unhead/vue'
   import assets from 'virtual:docs-assets'
   import { computed } from 'vue'
 
-  import CopyName from '../components/copy-name.vue'
   import { index } from '../lib/data'
   import { messages } from '../lib/i18n'
 
@@ -97,7 +97,11 @@
               <h3 class="text-heading-xs">{{ lockup.label }}</h3>
               <p class="max-w-sm text-body-xs text-(--text-muted)">{{ lockup.text }}</p>
             </div>
-            <CopyName :value="snippet(lockup.variant)" />
+            <CopyText
+              :value="snippet(lockup.variant)"
+              size="small"
+              wrap-lines
+            />
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2">
             <div
@@ -146,7 +150,11 @@
             class="flex flex-col items-start gap-(--spacing-xs) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
           >
             <p class="text-body-xs text-(--text-muted)">{{ item.text }}</p>
-            <CopyName :value="treatmentSnippet(item.treatment)" />
+            <CopyText
+              :value="treatmentSnippet(item.treatment)"
+              size="small"
+              wrap-lines
+            />
           </div>
         </li>
       </ul>
@@ -195,7 +203,11 @@
                   class="max-h-full w-full"
                 />
               </div>
-              <CopyName :value="name" />
+              <CopyText
+                :value="name"
+                size="small"
+                wrap-lines
+              />
             </div>
           </Card>
         </li>

@@ -8401,30 +8401,32 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
   const tabs = [
     {
-      title: 'Trace',
+      title: 'Error rate',
       description:
-        'The run as a waterfall: each step placed against the invocation it belongs to, nested where it nested.',
-      illustration: 'live-debugging',
-      illustrationLabel: 'A time window of requests, errors and events, with its trace bar'
-    },
-    {
-      title: 'Logs',
-      description:
-        'Structured output on the same clock as the trace, filtered by level, searchable in place.',
+        'Spot a spike the moment it starts, on the path that caused it, with the events behind it one click away.',
       illustration: 'real-time-metrics-error-rate',
-      illustrationLabel: 'An error-rate spike with the real-time events behind it'
+      illustrationLabel:
+        'A Real-Time Metrics panel: the error rate of /api/checkout rising to 42 percent'
     },
     {
-      title: 'Request path',
+      title: 'Status codes',
       description:
-        'The workload, application, function and connector it travelled, each captioned with the time spent there.',
-      illustration: 'request-inspection',
-      illustrationLabel: 'A request inspected on its way through the platform'
+        'Every response code by host and path across the week, so a burst of 429s stands out.',
+      illustration: 'real-time-metrics-status-codes',
+      illustrationLabel:
+        'A Real-Time Metrics panel: 429 status codes by host and path, Monday to Friday'
+    },
+    {
+      title: 'Data streams',
+      description: 'The same events sent on to your SIEM, dashboards and APIs in under 40 seconds.',
+      illustration: 'data-stream-destinations-map',
+      illustrationLabel:
+        'A data stream from Azion to APIs and GraphQL, dashboards, SIEM and interfaces'
     }
   ]
 
   const primaryAction = {
-    label: 'Open an invocation',
+    label: 'Open Real-Time Metrics',
     href: '/product-preview',
     trailing: true
   }
@@ -8433,8 +8435,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <template>
   <FeatureTabsSection
     eyebrow="Observability"
-    title="Inspect every run end-to-end"
-    description="Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach."
+    title="See every request as it happens"
+    description="Real-time metrics and data streams for every application, on the platform itself. Nothing to configure, no storage to attach."
     :tabs="tabs"
     :primary-action="primaryAction"
   />

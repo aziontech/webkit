@@ -94,7 +94,7 @@
         @row-remove="(event, row) => emit('action', event, 'remove', row)"
       >
         <template #cell-title="{ row }">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) sm:max-w-(--container-sm)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) sm:max-w-(--container-xs)">
             <span
               dir="auto"
               class="truncate text-label-sm text-(--text-default)"
