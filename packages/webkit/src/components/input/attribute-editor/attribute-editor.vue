@@ -133,14 +133,13 @@
   const addLabel = computed(() => props.addButtonLabel || t('attributeEditor.add'))
   const groupAddLabel = computed(() => props.addGroupLabel || t('attributeEditor.addGroup'))
   const emptyText = computed(() => props.emptyTitle || t('attributeEditor.emptyTitle'))
-  const removeLabel = (position: number, item?: object) => {
-    const firstKey = props.definition[0]?.key
-    const name = firstKey ? String((item as Record<string, unknown>)?.[firstKey] ?? '').trim() : ''
-    return t('attributeEditor.rowAction', {
+  const removeLabel = (position: number, item?: object) =>
+    t('attributeEditor.rowAction', {
       label: props.removeButtonLabel || t('attributeEditor.remove'),
-      index: name || position
+      index:
+        String((item as Record<string, unknown>)?.[props.definition[0]?.key ?? ''] ?? '').trim() ||
+        position
     })
-  }
 
   const columnCount = computed(() => Math.max(props.definition.length, 1))
 

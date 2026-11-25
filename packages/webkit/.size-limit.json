@@ -1148,7 +1148,7 @@
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "13.1 KB"
+    "limit": "13.15 KB"
   },
   {
     "name": "phone-input",
@@ -1170,7 +1170,7 @@
   {
     "name": "multi-select",
     "path": "src/components/input/multi-select/index.ts",
-    "limit": "31.5 KB"
+    "limit": "31.55 KB"
   },
   {
     "name": "code-block",
@@ -1268,7 +1268,7 @@
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "12.05 KB",
+    "limit": "12.1 KB",
     "entryOnly": true
   },
   {
@@ -1381,12 +1381,12 @@
   {
     "name": "tag-editor",
     "path": "src/components/input/tag-editor/tag-editor.vue",
-    "limit": "27.3 KB"
+    "limit": "27.35 KB"
   },
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "69.2 KB"
+    "limit": "69.3 KB"
   },
   {
     "name": "use-unsaved-changes",

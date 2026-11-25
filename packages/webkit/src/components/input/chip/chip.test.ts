@@ -535,11 +535,13 @@ describe('Chip', () => {
       }
     )
 
-    it('gives the body of a removable selectable chip its own hit area', () => {
+    it('keeps the hit area on the root of a removable selectable chip', () => {
       const { getByTestId } = render(Chip, {
         props: { label: 'Production', selectable: true, removable: true }
       })
-      expect(getByTestId('chip__body').querySelector('[data-slot="touch-target"]')).not.toBeNull()
+      expect(
+        getByTestId('chip').querySelector(':scope > [data-slot="touch-target"]')
+      ).not.toBeNull()
     })
 
     it('gives a static or disabled chip no body hit area', () => {

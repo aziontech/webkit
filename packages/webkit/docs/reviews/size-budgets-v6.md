@@ -2365,3 +2365,13 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.13 KB): the FileTokenGroup catalog gained Cancel upload and the upload progress strings, so an uploading file names its cancel action and states its amount (audit-6 A6-037).
+
+Budget-raise: multi-select 31.5 KB → 31.55 KB (measured 31.50 KB): MultiSelect renders Chip and Checkbox; a clickable Chip gained its 44px coarse-pointer hit area and a disabled checked Checkbox draws a readable mark (audit-6 A6-015, A6-033).
+
+Budget-raise: prompt-input-root 12.05 KB → 12.1 KB (measured 12.09 KB): PromptInput renders Chip and Checkbox; a clickable Chip gained its 44px coarse-pointer hit area and a disabled checked Checkbox draws a readable mark (audit-6 A6-015, A6-033).
+
+Budget-raise: tag-editor 27.3 KB → 27.35 KB (measured 27.31 KB): AttributeEditor names Remove (and TagEditor its Undo) by the row key instead of its position, and sets the limit text in the hint style (audit-6 A6-022, A6-030).
+
+Budget-raise: schema-form 69.2 KB → 69.3 KB (measured 69.27 KB): SchemaForm renders AttributeEditor, Field, Switch, Checkbox and Combobox, which gained the key-named Remove, the RadioGroup choice-card fill, the readable disabled on looks and the label-step option description (audit-6 A6-022, A6-029, A6-033, A6-034).
