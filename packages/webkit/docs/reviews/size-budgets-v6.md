@@ -2400,6 +2400,6 @@ Budget-raise: table 9 KB → 9.05 KB (measured 9.01 KB): rows repaint their bott
 
 Budget-raise: table-head-cell 5.45 KB → 5.5 KB (measured 5.46 KB): the sort button drops its generic aria-label when the header names it (A6-062).
 
-Budget-raise: flow-diagram 22.1 KB → 22.2 KB (measured 22.16 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
+Budget-raise: flow-diagram 22.1 KB → 22.25 KB (measured 22.20 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
 
-Budget-raise: flow-diagram-root 19.85 KB → 19.95 KB (measured 19.91 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
+Budget-raise: flow-diagram-root 19.85 KB → 20 KB (measured 19.95 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
