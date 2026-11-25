@@ -155,6 +155,10 @@
 
   const featured = computed(() => catalog.value.filter((item) => item.featured))
 
+  const FEATURED_LIST_CLASS =
+    '-m-(--spacing-2xs) flex list-none snap-x snap-mandatory scroll-px-(--spacing-2xs) gap-(--spacing-md) ' +
+    'overflow-x-auto p-(--spacing-2xs) md:m-0 md:grid md:grid-cols-3 md:overflow-visible md:p-0'
+
   const detailOpen = ref(props.defaultIntegration !== '')
   const selectedId = ref(props.defaultIntegration || 'request-signer')
   const selected = computed<MarketplaceIntegration | undefined>(
@@ -349,7 +353,7 @@
             </h2>
             <ul
               data-testid="marketplace-featured-list"
-              class="-m-(--spacing-2xs) flex list-none snap-x snap-mandatory scroll-px-(--spacing-2xs) gap-(--spacing-md) overflow-x-auto p-(--spacing-2xs) md:m-0 md:grid md:grid-cols-3 md:overflow-visible md:p-0"
+              :class="FEATURED_LIST_CLASS"
             >
               <li
                 v-for="item in featured"
