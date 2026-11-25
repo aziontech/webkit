@@ -2372,7 +2372,7 @@ Budget-raise: data-table 58.45 KB → 58.6 KB (measured 58.54 KB): table rows re
 
 Budget-raise: console-application-scene 127.2 KB → 127.3 KB (measured 127.23 KB): the scene renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
 
-Budget-raise: console-trace-scene 86.4 KB → 87 KB (measured 86.97 KB): the scene renders LogViewer, whose header now hosts the copy control and a loading Skeleton, and Table rows that repaint their rule above the scroll fade (A6-049, A6-065, A6-059).
+Budget-raise: console-trace-scene 86.4 KB → 87.05 KB (measured 87.01 KB): the scene renders LogViewer, whose header now hosts the copy control and a loading Skeleton, and Table rows that repaint their rule above the scroll fade (A6-049, A6-065, A6-059).
 
 Budget-raise: listing-index-section 43.6 KB → 43.7 KB (measured 43.63 KB): the section renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
 

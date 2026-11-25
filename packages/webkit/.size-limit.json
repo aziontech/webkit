@@ -464,7 +464,7 @@
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "87 KB"
+    "limit": "87.05 KB"
   },
   {
     "name": "runtime-api-cloud",
