@@ -7,7 +7,7 @@ import type { Plugin } from 'vite'
 import { readBlocks, REPO, walk, WEBKIT } from './paths.ts'
 
 const APP = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-export const CSS_DIR = join(APP, '.build/css')
+const CSS_DIR = join(APP, '.build/css')
 export const DOCS_SOURCES = join(CSS_DIR, 'docs.css')
 const SRC = join(APP, 'src')
 const EXAMPLES_DIR = join(WEBKIT, 'examples')
@@ -98,7 +98,7 @@ export function writeDocsSources(): void {
   write(DOCS_SOURCES, [...sourceLines(DOCS_SOURCES, files), ''].join('\n'))
 }
 
-export const frameStylesheet = (kind: FrameKind, dir: string) =>
+const frameStylesheet = (kind: FrameKind, dir: string) =>
   join(CSS_DIR, 'frames', kind, `${dir}.css`)
 
 export function writeFrameStyles(kind: FrameKind, dir: string): string {
