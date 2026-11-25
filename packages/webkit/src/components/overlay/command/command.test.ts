@@ -974,17 +974,17 @@ describe('Command', () => {
       await expectNoA11yViolations(panel()!)
     })
   })
-})
 
-describe('Command examples', () => {
-  const sources = import.meta.glob<string>('../../../../examples/command/*.vue', {
-    eager: true,
-    query: '?raw',
-    import: 'default'
-  })
+  describe('Command examples', () => {
+    const sources = import.meta.glob<string>('../../../../examples/command/*.vue', {
+      eager: true,
+      query: '?raw',
+      import: 'default'
+    })
 
-  it.each(Object.entries(sources))('%s shows an Empty part when nothing matches', (_, source) => {
-    expect(source).toContain('<CommandList>')
-    expect(source).toMatch(/<CommandEmpty\b/)
+    it.each(Object.entries(sources))('%s shows an Empty part when nothing matches', (_, source) => {
+      expect(source).toContain('<CommandList>')
+      expect(source).toMatch(/<CommandEmpty\b/)
+    })
   })
 })

@@ -193,17 +193,20 @@ describe('Progress', () => {
       expect(before.animationName).not.toBe('none')
     })
   })
-})
 
-describe('Progress examples', () => {
-  const examples = import.meta.glob<{ default: Component }>('../../../../examples/progress/*.vue', {
-    eager: true
-  })
+  describe('Progress examples', () => {
+    const examples = import.meta.glob<{ default: Component }>(
+      '../../../../examples/progress/*.vue',
+      {
+        eager: true
+      }
+    )
 
-  it.each(Object.entries(examples))('%s names the task each bar tracks', (_, mod) => {
-    const { container } = render(mod.default)
-    const bars = Array.from(container.querySelectorAll('[role="progressbar"]'))
-    expect(bars.length).toBeGreaterThan(0)
-    for (const bar of bars) expect(bar.getAttribute('aria-label')).not.toBe('Progress')
+    it.each(Object.entries(examples))('%s names the task each bar tracks', (_, mod) => {
+      const { container } = render(mod.default)
+      const bars = Array.from(container.querySelectorAll('[role="progressbar"]'))
+      expect(bars.length).toBeGreaterThan(0)
+      for (const bar of bars) expect(bar.getAttribute('aria-label')).not.toBe('Progress')
+    })
   })
 })

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, provide, useAttrs } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
+  import { useModalRoot } from '../../../composables/use-modal-root'
   import { DialogInjectionKey, type DialogSize } from './injection-key'
 
   defineOptions({
@@ -35,49 +35,18 @@
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
-  const uid = useId()
-  const triggerEl = ref<HTMLElement | null>(null)
-  const returnFocusEl = ref<HTMLElement | null>(null)
-  const hasDescription = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'dialog')
 
-  const openProp = computed<boolean | undefined>(() => openModel.value)
-
-  const isOpen = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value) => {
-      openModel.value = value
-    }
+  const modal = useModalRoot(openModel, {
+    defaultOpen: props.defaultOpen,
+    dismissible: () => props.dismissible
   })
-
-  const openDialog = () => {
-    isOpen.set(true)
-  }
-
-  const closeDialog = () => {
-    isOpen.set(false)
-  }
-
-  const dismissDialog = () => {
-    if (!props.dismissible) return
-    isOpen.set(false)
-  }
-
-  watch(
-    () => isOpen.value,
-    (open) => {
-      if (open && typeof document !== 'undefined') {
-        returnFocusEl.value = document.activeElement as HTMLElement | null
-      }
-    },
-    { flush: 'sync' }
-  )
+  const { isOpen } = modal
 
   provide(DialogInjectionKey, {
+    ...modal,
     testId: testId.value,
-    isOpen: computed(() => isOpen.value),
     get dismissible() {
       return props.dismissible
     },
@@ -86,21 +55,7 @@
     },
     get size() {
       return props.size
-    },
-    open: openDialog,
-    close: closeDialog,
-    dismiss: dismissDialog,
-    titleId: `${uid}-title`,
-    descriptionId: `${uid}-description`,
-    hasDescription,
-    registerDescription: () => {
-      hasDescription.value = true
-    },
-    unregisterDescription: () => {
-      hasDescription.value = false
-    },
-    triggerEl,
-    returnFocusEl
+    }
   })
 </script>
 
