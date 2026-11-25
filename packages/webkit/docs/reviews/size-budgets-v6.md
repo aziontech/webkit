@@ -2365,3 +2365,29 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-application-scene 127.2 KB → 127.25 KB (measured 127.21 KB): the scene renders Avatar and Eyebrow: the small Avatar presence dot now clears the second initial (A6-193) and the Eyebrow prefix stays beside the first word of a wrapped label (A6-095).
+
+Budget-raise: logo-wall-section 25.45 KB → 25.5 KB (measured 25.46 KB): the band renders an Eyebrow, whose prefix now stays beside the first word of a wrapped label (A6-095).
+
+Budget-raise: pricing-plans-section 22.25 KB → 22.3 KB (measured 22.27 KB): PricingCard hides its plan label when the price already names the plan (A6-210, owner call).
+
+Budget-raise: pricing-card 5.4 KB → 5.5 KB (measured 5.45 KB): PricingCard hides its plan label when the price already names the plan (A6-210, owner call).
+
+Budget-raise: timeline 22.6 KB → 22.7 KB (measured 22.69 KB): Timestamp gained the time format and a Timeline.Item inside a Timeline.Group renders it through TimelineGroupInjectionKey (A6-042, owner call).
+
+Budget-raise: timeline-item 21.6 KB → 21.65 KB (measured 21.62 KB): Timestamp gained the time format and the item reads TimelineGroupInjectionKey to use it inside a group (A6-042, owner call).
+
+Budget-raise: timeline-group 0.75 KB → 0.8 KB (measured 0.77 KB): the group provides TimelineGroupInjectionKey so its items show only the time (A6-042, owner call).
+
+Budget-raise: message-thread 38.1 KB → 38.2 KB (measured 38.15 KB): Timestamp gained the time format (A6-042, owner call), the message body stops at the reading measure, and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: message-thread-item 35.6 KB → 35.75 KB (measured 35.71 KB): Timestamp gained the time format (A6-042, owner call), the message body stops at the reading measure, and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.11 KB): three retry strings for ImageGallery, AudioPlayer and VideoPlayer (A6-039, owner call).
+
+Budget-raise: audio-player 10.5 KB → 10.6 KB (measured 10.56 KB): a retry event and a Try again button in the error state that also reloads a failed file (A6-039, owner call).
+
+Budget-raise: video-player 12.65 KB → 12.7 KB (measured 12.69 KB): a retry event and a Try again button in the error state that also reloads a failed file (A6-039, owner call).
+
+Budget-raise: image-gallery 27.6 KB → 27.75 KB (measured 27.72 KB): a retry event and a Try again button in the error state (A6-039, owner call).
