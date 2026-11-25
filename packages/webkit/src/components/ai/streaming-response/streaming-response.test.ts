@@ -207,11 +207,11 @@ describe('StreamingResponse', () => {
     expect(getByRole('heading', { level: 5, name: 'Step' })).toHaveAttribute('data-level', '5')
   })
 
-  it('draws a closed fence as a filled card with the language and copy in its header', () => {
-    const { getByTestId } = render(StreamingResponse, {
+  it('draws a closed fence as a filled card with the language and copy in its header', async () => {
+    const { findByTestId, getByTestId } = render(StreamingResponse, {
       props: { content: '```bash\nazion deploy\n```' }
     })
-    const block = getByTestId('code-block')
+    const block = await findByTestId('code-block')
     expect(block.hasAttribute('data-bordered')).toBe(false)
     expect(block.classList.contains('rounded-(--shape-card)')).toBe(true)
     expect(getByTestId('code-block__label-text')).toHaveTextContent('Shell')

@@ -14,13 +14,12 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import CopyButton from '../../../action/copy-button/copy-button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
-  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { ConversationInjectionKey } from '../../conversation/injection-key'
   import ChatMessageFeedback from '../chat-message-feedback/chat-message-feedback.vue'
   import { useChatMessageContext } from '../composables/use-chat-message-context'
   import type { ChatMessageFeedbackValue } from '../injection-key'
+  import { LazyCopyButton, LazyTooltip } from '../lib/lazy-overlays'
   import ChatMessageReadAloud from '../parts/chat-message-read-aloud.vue'
 
   defineOptions({
@@ -89,7 +88,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ chatMessage: en.chatMessage })
+  const { t } = useTranslate({ chatMessage: en.chatMessage, common: en.common })
   const { from, status, edit, contentText } = useChatMessageContext()
 
   const rowEl = ref<HTMLElement | null>(null)
@@ -202,13 +201,14 @@
   >
     <template v-if="near">
       <slot name="leading" />
-      <CopyButton
+      <LazyCopyButton
         v-if="copyable"
         :value="copyValue"
+        :aria-label="t('common.copy')"
         size="medium"
         :data-testid="`${testId}__copy`"
       />
-      <Tooltip
+      <LazyTooltip
         v-if="editable"
         :content="t('chatMessage.edit')"
       >
@@ -221,7 +221,7 @@
           :data-testid="`${testId}__edit`"
           @click="edit"
         />
-      </Tooltip>
+      </LazyTooltip>
       <ChatMessageFeedback
         v-if="showFeedback && !compact"
         v-model="feedback"
@@ -232,7 +232,7 @@
         :text="speech"
         :data-testid="`${testId}__read-aloud`"
       />
-      <Tooltip
+      <LazyTooltip
         key="tooltip-2"
         v-if="shareable"
         :content="t('chatMessage.share')"
@@ -245,8 +245,8 @@
           :data-testid="`${testId}__share`"
           @click="(event: MouseEvent) => emit('share', event)"
         />
-      </Tooltip>
-      <Tooltip
+      </LazyTooltip>
+      <LazyTooltip
         key="tooltip-3"
         v-if="retryable && !compact"
         :content="t('chatMessage.retry')"
@@ -260,7 +260,7 @@
           :data-testid="`${testId}__retry`"
           @click="(event: MouseEvent) => emit('retry', event)"
         />
-      </Tooltip>
+      </LazyTooltip>
       <slot />
       <ChatMessageMore
         v-if="showMore"

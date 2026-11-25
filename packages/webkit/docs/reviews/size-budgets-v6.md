@@ -2819,3 +2819,5 @@ Budget-raise: copy-text 10.8 KB → 10.85 KB (measured 10.81 KB): the wrapLines 
 Budget-raise: chat-message 20.6 KB → 20.8 KB (measured 20.79 KB): inside a Conversation, ChatMessage.Actions renders its row only when it nears the log's view, through one IntersectionObserver (A6-270); on the long-thread block it cuts the mounted nodes on a phone from 895 to 541 and the blocking time by about a third. Shrunk first: a direct observer in place of VueUse's helper saved 0.2 KB.
 
 Budget-raise: chat-message-actions 14.5 KB → 14.7 KB (measured 14.68 KB): the same lazy action row inside a Conversation (A6-270); a direct IntersectionObserver in place of VueUse's helper kept the growth to 0.2 KB.
+
+Budget-raise: markdown-editor 32.1 KB → 32.6 KB (measured 32.57 KB): its lazy StreamingResponse preview now loads CodeBlock as a nested lazy chunk (audit-6 X2-4), so the bundler moves the modules the editor shares with CodeBlock (Tooltip, the trigger and teleport helpers) out of the entry into their own statically imported chunks; the editor loads the same code in more files. StreamingResponse itself drops 44 KB → 26.85 KB.

@@ -166,13 +166,6 @@
     composerHeight.value = composerEl.value?.offsetHeight ?? 0
   }
 
-  function onComposerResize(entries: ResizeObserverEntry[]): void {
-    const entry = entries[entries.length - 1]
-    if (!entry) return
-    composerHeight.value =
-      entry.borderBoxSize?.[0]?.blockSize ?? (entry.target as HTMLElement).offsetHeight
-  }
-
   watch(
     composerEl,
     (now, was) => {
@@ -185,7 +178,7 @@
 
   onMounted(() => {
     if (typeof ResizeObserver !== 'undefined') {
-      composerObserver = new ResizeObserver(onComposerResize)
+      composerObserver = new ResizeObserver(measureComposer)
       if (composerEl.value) composerObserver.observe(composerEl.value)
     } else measureComposer()
     ready.value = true
