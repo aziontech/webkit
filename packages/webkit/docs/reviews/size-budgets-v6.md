@@ -2820,7 +2820,7 @@ Budget-raise: chat-message 20.6 KB → 20.8 KB (measured 20.79 KB): inside a Con
 
 Budget-raise: chat-message-actions 14.5 KB → 14.7 KB (measured 14.68 KB): the same lazy action row inside a Conversation (A6-270); a direct IntersectionObserver in place of VueUse's helper kept the growth to 0.2 KB.
 
-Budget-raise: data-table 58.7 KB → 59.15 KB (measured 59.10 KB): a roving-row table takes the links and buttons of every row but the active one out of the Tab order, so a table is one Tab stop (audit-6 A6-253); the row sync and its MutationObserver are the growth.
+Budget-raise: data-table 58.7 KB → 59.25 KB (measured 59.19 KB): a roving-row table takes the links and buttons of every row but the active one out of the Tab order once focus enters it, so a table is one Tab stop (audit-6 A6-253); the row sync, its focus listeners and MutationObserver are the growth.
 
 Budget-raise: collection-preferences 33 KB → 33.15 KB (measured 33.10 KB): it renders DataTable and RadioGroup, which grew for the one-Tab-stop table (A6-253) and the new readonly state (A6-146).
 

@@ -105,7 +105,7 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "59.15 KB"
+    "limit": "59.25 KB"
   },
   {
     "name": "data-table-pagination",
