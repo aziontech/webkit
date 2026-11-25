@@ -50,6 +50,16 @@ describe('Combobox', () => {
     view.unmount()
   })
 
+  it('sets an option description at the option label step, never above it', async () => {
+    render(Combobox, { props: { options, ariaLabel: 'Variable', defaultOpen: true } })
+    await nextTick()
+    const description = Array.from(document.body.querySelectorAll('span')).find(
+      (el) => el.textContent?.trim() === 'Suggested'
+    ) as HTMLElement
+    expect(description.classList).toContain('text-label-sm')
+    expect(description.className).not.toContain('text-body-sm')
+  })
+
   it('shows the search icon by default, another icon or none', async () => {
     const icon = (view: ReturnType<typeof render>) =>
       view.getByTestId('combobox__input').parentElement?.querySelector('i')?.className ?? ''
