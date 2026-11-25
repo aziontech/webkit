@@ -99,6 +99,16 @@ const TOKEN_CHECKS = [
       'the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
   },
   {
+    id: 'universal-sibling-selector',
+    regex: /\[&[^\]\s"'`]*?[+~]_?\*\]:/g,
+    message:
+      'A sibling variant whose subject is the universal selector (`[&+*]:`, `[&~*]:`). It ' +
+      'compiles to a rule like `.x + *`, so Chromium checks every element inserted anywhere ' +
+      'the stylesheet applies against it (the virtual DataTable scroll went from 0.06 to 0.41 ' +
+      'of its style-recalc budget). Put the spacing on the element itself with `not-last:` or ' +
+      '`not-first:`, or name the sibling (.claude/rules/styling.md).'
+  },
+  {
     id: 'rtl-double-flip',
     wide: true,
     regex:

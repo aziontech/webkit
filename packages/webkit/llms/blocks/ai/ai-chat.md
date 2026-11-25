@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -32,11 +32,11 @@ A full page where a person talks with the generative AI assistant about their ac
 
 ### A. Header — `IconButton`, `Button`, `DropdownMenu`
 
-No bar and no border: the thread scrolls under it. On a phone it is round-cornered floating controls over the thread, blurred over a translucent raised surface: Open conversation history at the inline start, and at the inline end one grouped control holding New chat and More conversation actions; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the model picker as the title (`AI assistant` with the chosen model muted and a chevron, a `DropdownMenu` of `models` as radio items, `v-model:modelKey`), New chat while the history panel is folded away, and at the inline end Share and More conversation actions. The More menu holds Share (on a phone), Rename, Archive and Delete for the open conversation; each emits `share-chat`, `rename-chat`, `archive-chat` or `remove-chat` with `activeKey`, and the app does the work. New chat, Share and More are disabled while the thread is empty; New chat clears it without confirmation, and the previous thread stays in the history.
+No bar and no border: the thread scrolls under it. On a phone it is round-cornered floating controls over the thread, blurred over a translucent raised surface: Open conversation history at the inline start, and at the inline end one grouped control holding New chat and More conversation actions; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the model picker as the title (`AI assistant` with the chosen model muted and a chevron, a `DropdownMenu` of `models` as radio items, `v-model:modelKey`), New chat while the history panel is folded away, and at the inline end Share and More conversation actions. The More menu holds Share (on a phone), Rename, Archive and Delete for the open conversation; each emits `share-chat`, `rename-chat`, `archive-chat` or `remove-chat` with `activeKey`, and the app does the work. Delete first opens a danger `ConfirmDialog` that names the conversation; `remove-chat` fires only on its Delete. New chat, Share and More are disabled while the thread is empty; New chat clears it without confirmation, and the previous thread stays in the history.
 
 ### A2. History — `Input`, `Popover`, `HoverCard`, `Drawer`
 
-The reader's threads, grouped by date (Today, Yesterday, Previous 7 days, Previous 30 days, Older), under a search field, a project filter, Add project and New thread. Each thread is one menu row (hover fill `--bg-hover`, the open thread `--bg-selected`, the inset fill of the menu rows): its project, its age, the title cut with an ellipsis on one line, and a meta line with the icon of the Azion product the thread started on, then how many products it touches or, when it edits one version, that version's id, then the model's provider. Resting on the meta line opens a `HoverCard` with every product, the environment, the model and the changes. Discard draft, Snooze and Settle sit outside the row button, fade in over the age on hover or focus and never move the row; snoozed and settled threads move to their own lists. A single-line view keeps only the title, the product icon and the age. From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, with New chat in its header, closed by picking a thread or New chat. The open thread is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
+The reader's threads, grouped by date (Today, Yesterday, Previous 7 days, Previous 30 days, Older), under a search field, a project filter, Add project and New thread. Each thread is one menu row (hover fill `--bg-hover`, the open thread `--bg-selected`, the inset fill of the menu rows): its project, its age, the title cut with an ellipsis on one line, and a meta line with the icon of the Azion product the thread started on, then how many products it touches or, when it edits one version, that version's id, then the model's provider. Resting on the meta line opens a `HoverCard` with every product, the environment, the model and the changes. Discard draft, Snooze and Settle sit outside the row button, fade in over the age on hover or focus and never move the row; snoozed and settled threads move to their own lists. Discard draft removes the thread at once and shows a `Draft discarded` toast with Undo, which puts it back where it was. A single-line view keeps only the title, the product icon and the age. From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, with the same search field and project filter and New chat at its top, closed by picking a thread or New chat. The open thread is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
 
 ### B. Empty state — `SuggestionGroup`, `PromptInput`
 
@@ -155,7 +155,7 @@ The open conversation of the history is `v-model:activeKey` (`string | null`): p
 | `share-chat`       | `(event, key)`              | Share in the header: make a link to the conversation `key` (`activeKey`).                                                                                                      |
 | `rename-chat`      | `(event, key)`              | Rename in the More menu: rename the conversation `key`.                                                                                                                        |
 | `archive-chat`     | `(event, key)`              | Archive in the More menu: archive the conversation `key`.                                                                                                                      |
-| `remove-chat`      | `(event, key)`              | Delete in the More menu: confirm, then delete the conversation `key`.                                                                                                          |
+| `remove-chat`      | `(event, key)`              | Delete in the More menu, after the reader confirms in the block's danger `ConfirmDialog`: delete the conversation `key`.                                                       |
 | `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt.                              |
 | `remove-queued`    | `(event, item)`             | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                                                      |
 | `app-message`      | `(message, part, reply)`    | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                                                    |
@@ -651,6 +651,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         :empty="!turns.length"
         :history-open="historyPanel"
         :models="modelOptions"
+        :conversation-key="activeKey"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
         @toggle-history="historyPanel = !historyPanel"
@@ -875,7 +876,7 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://github.com/aziontech/azion',
         description: 'Purge URLs, wildcards and cache keys from a terminal.',
         site: 'GitHub',
-        image: 'https://github.com/favicon.ico'
+        icon: 'az az-github'
       }
     ]
   })
@@ -949,14 +950,13 @@ const cacheKeySources: SourcesItem[] = [
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
     publisher: 'aziontech',
-    image: 'https://github.com/favicon.ico'
+    icon: 'az az-github'
   },
   {
     title: 'HTTP Caching (RFC 9111)',
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico',
     publisher: 'World Wide Web Consortium',
     publishedAt: '2022-06-01'
   },
@@ -1576,7 +1576,9 @@ export const turnTime = (
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
   import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
+
+  import AiChatRemoveDialog from './ai-chat-remove-dialog.vue'
 
   export type AiChatHeaderAction = 'share' | 'rename' | 'archive' | 'remove'
 
@@ -1584,6 +1586,7 @@ export const turnTime = (
     empty: boolean
     historyOpen: boolean
     models: PromptInputMenuOption[]
+    conversationKey: string | null
   }>()
 
   const emit = defineEmits<{
@@ -1612,8 +1615,11 @@ export const turnTime = (
     modelKey.value = String(value)
   }
 
+  const removeOpen = ref(false)
+
   function onAction(event: MouseEvent | KeyboardEvent, value: string | number) {
-    emit('action', event, value as AiChatHeaderAction)
+    if (value === 'remove') removeOpen.value = true
+    else emit('action', event, value as AiChatHeaderAction)
   }
 
   const HEADER_CLASS =
@@ -1789,6 +1795,11 @@ export const turnTime = (
         </DropdownMenu>
       </span>
     </div>
+    <AiChatRemoveDialog
+      v-model:open="removeOpen"
+      :conversation-key="conversationKey"
+      @confirm="(event: MouseEvent) => emit('action', event, 'remove')"
+    />
   </header>
 </template>
 ```
@@ -1811,6 +1822,7 @@ export const turnTime = (
   import PopoverContent from '@aziontech/webkit/popover-content'
   import Popover from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
@@ -1927,8 +1939,23 @@ export const turnTime = (
   }
 
   function discardDraft(_event: MouseEvent, id: string) {
+    const index = threads.value.findIndex((item) => item.id === id)
+    const thread = threads.value[index]
+    if (!thread) return
+    const wasActive = active.value === id
     threads.value = threads.value.filter((item) => item.id !== id)
-    if (active.value === id) active.value = null
+    if (wasActive) active.value = null
+    toast('Draft discarded', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          const next = [...threads.value]
+          next.splice(index, 0, thread)
+          threads.value = next
+          if (wasActive) active.value = id
+        }
+      }
+    })
   }
 
   const PANEL_CLASS =
@@ -2138,7 +2165,30 @@ export const turnTime = (
       <DrawerHeader class="w-full">
         <DrawerTitle>Conversation history</DrawerTitle>
       </DrawerHeader>
-      <div class="px-(--spacing-md) pb-(--spacing-xs)">
+      <div class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-xs)">
+        <div class="flex items-center gap-(--spacing-2xs)">
+          <Input
+            v-model="search"
+            size="small"
+            placeholder="Search"
+            aria-label="Search conversations"
+            role="searchbox"
+            autocomplete="off"
+            class="min-w-0 flex-1"
+          >
+            <template #leading>
+              <i
+                class="az az-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+          <AiChatProjectFilter
+            v-model="selectedProject"
+            :projects="projects"
+            @toggle-pin="togglePinProject"
+          />
+        </div>
         <Button
           label="New chat"
           icon="az az-square-pen"
@@ -2177,6 +2227,40 @@ export const turnTime = (
       </DrawerBody>
     </DrawerContent>
   </Drawer>
+</template>
+```
+
+## `parts/ai-chat-remove-dialog.vue`
+
+```ts
+<script setup lang="ts">
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import { computed } from 'vue'
+
+  import { sampleThreads } from '../sample'
+
+  const props = defineProps<{ conversationKey: string | null }>()
+
+  const emit = defineEmits<{
+    confirm: [event: MouseEvent]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+
+  const title = computed(() => {
+    const name = sampleThreads.find((thread) => thread.id === props.conversationKey)?.title
+    return name ? `Delete “${name}”?` : 'Delete this conversation?'
+  })
+</script>
+
+<template>
+  <ConfirmDialog
+    v-model:open="open"
+    :title="title"
+    description="The conversation and its messages are removed from your history. This cannot be undone."
+    confirm-label="Delete"
+    @confirm="(event: MouseEvent) => emit('confirm', event)"
+  />
 </template>
 ```
 

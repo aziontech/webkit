@@ -319,6 +319,7 @@
         :empty="!turns.length"
         :history-open="historyPanel"
         :models="modelOptions"
+        :conversation-key="activeKey"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
         @toggle-history="historyPanel = !historyPanel"

@@ -257,6 +257,35 @@ test('has-on-scroll-frame stays silent on a data attribute or another group', ()
   }
 })
 
+test('universal-sibling-selector fires on a sibling variant with a universal subject', () => {
+  for (const content of [
+    // The one that shipped: the StreamingResponse heading pulled up the block after it.
+    'class="mt-(--spacing-xs) [&+*]:-mt-(--spacing-xs)"',
+    'class="[&~*]:hidden"',
+    'class="md:[&_+_*]:mt-0"',
+    'class="[&:not(:last-child)+*]:border-t"'
+  ]) {
+    assert.ok(
+      ids(content).includes('universal-sibling-selector'),
+      `expected universal-sibling-selector for: ${content}`
+    )
+  }
+})
+
+test('universal-sibling-selector stays silent on a named sibling or a child variant', () => {
+  for (const content of [
+    'class="not-last:-mb-(--spacing-xs)"',
+    'class="[&+p]:mt-0 [&~li]:border-t"',
+    'class="*:min-w-0 [&>*]:shrink-0 [&_*]:pointer-events-none"',
+    'class="peer-checked:block"'
+  ]) {
+    assert.ok(
+      !ids(content).includes('universal-sibling-selector'),
+      `expected universal-sibling-selector silent for: ${content}`
+    )
+  }
+})
+
 test('color-logo-interpolated fires on a colour logo class built at runtime', () => {
   for (const content of [
     ':class="`az-color az-${template.logo}`"',

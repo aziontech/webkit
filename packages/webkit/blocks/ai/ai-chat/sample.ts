@@ -94,7 +94,7 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         href: 'https://github.com/aziontech/azion',
         description: 'Purge URLs, wildcards and cache keys from a terminal.',
         site: 'GitHub',
-        image: 'https://github.com/favicon.ico'
+        icon: 'az az-github'
       }
     ]
   })
@@ -168,14 +168,13 @@ const cacheKeySources: SourcesItem[] = [
     description: 'Change the cache settings of an application from a terminal.',
     site: 'GitHub',
     publisher: 'aziontech',
-    image: 'https://github.com/favicon.ico'
+    icon: 'az az-github'
   },
   {
     title: 'HTTP Caching (RFC 9111)',
     href: 'https://www.w3.org/Protocols/',
     description: 'Every distinct URL, query string included, is a separate entry in a cache.',
     site: 'W3C',
-    image: 'https://www.w3.org/favicon.ico',
     publisher: 'World Wide Web Consortium',
     publishedAt: '2022-06-01'
   },

@@ -6,6 +6,7 @@ import { nextTick } from 'vue'
 import AiChat from '../../../../blocks/ai/ai-chat/ai-chat.vue'
 import Agent from '../../../../blocks/ai/ai-chat/variants/agent.vue'
 import Artifact from '../../../../blocks/ai/ai-chat/variants/artifact.vue'
+import LongThread from '../../../../blocks/ai/ai-chat/variants/long-thread.vue'
 import Media from '../../../../blocks/ai/ai-chat/variants/media.vue'
 import type { McpAppFrameMessage } from '../../../components/ai/mcp-app-frame/mcp-app-frame.vue'
 import type {
@@ -16,6 +17,7 @@ import type {
   AiChatSubagentPart,
   AiChatToolCallPart
 } from '../../../utils/ai-chat'
+import { useToastRegion } from '../../toast-region'
 
 describe('ai/ai-chat entry', () => {
   it('focuses the composer when the chat opens', async () => {
@@ -112,6 +114,19 @@ describe('ai/ai-chat Artifact', () => {
 })
 
 describe('ai/ai-chat', () => {
+  it('loads no third-party image for its sample sources', async () => {
+    const view = render(LongThread)
+    await waitFor(() =>
+      expect(view.container.querySelector('[data-testid="sources-mark"]')).not.toBeNull()
+    )
+    const remote = Array.from(document.querySelectorAll('img'))
+      .map((img) => img.getAttribute('src') ?? '')
+      .filter(
+        (src) => /^https?:/.test(src) && !/^https:\/\/([\w-]+\.)*example\.(com|org|net)\//.test(src)
+      )
+    expect(remote).toEqual([])
+  })
+
   const thread: AiChatMessage[] = [
     { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Which plan am I on?' }] },
     {
@@ -261,6 +276,21 @@ describe('ai/ai-chat', () => {
     expect((view.emitted('share-chat') as unknown[][])[0]?.[1]).toBe('h2')
   })
 
+  it('asks before Delete removes the open conversation', async () => {
+    const view = render(AiChat, { props: { messages: thread, activeKey: 'h2' } })
+    await userEvent.click(view.getAllByRole('button', { name: 'More conversation actions' })[0]!)
+    await userEvent.click(await view.findByRole('menuitem', { name: 'Delete' }))
+    const dialog = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[role="alertdialog"], [role="dialog"]')
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(dialog.textContent).toMatch(/^Delete “.+”\?/)
+    expect(view.emitted('remove-chat')).toBeUndefined()
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Delete' }))
+    await waitFor(() => expect((view.emitted('remove-chat') as unknown[][])[0]?.[1]).toBe('h2'))
+  })
+
   it('turns a tool on from the composer "+" menu and shows it as a chip', async () => {
     const view = render(AiChat)
     const plus = await waitFor(() => {
@@ -284,8 +314,35 @@ describe('ai/ai-chat', () => {
       return within(dialog!)
     })
     expect(drawer.getByText('Purge the cache after a deploy')).toBeTruthy()
+    await userEvent.type(drawer.getByRole('searchbox', { name: 'Search conversations' }), 'purge')
+    await waitFor(() =>
+      expect(drawer.queryByText('Why does storefront return 502 errors?')).toBeNull()
+    )
+    expect(drawer.getByText('Purge the cache after a deploy')).toBeTruthy()
     await userEvent.click(drawer.getByRole('button', { name: 'New chat' }))
     expect(view.emitted('new-chat')).toHaveLength(1)
+  })
+
+  describe('discarding a draft', () => {
+    useToastRegion()
+
+    it('offers Undo, which brings the thread back', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
+      const title = 'Why does storefront return 502 errors?'
+      expect(panel.getByText(title)).toBeTruthy()
+      await userEvent.click(panel.getByRole('button', { name: 'Discard draft' }))
+      await waitFor(() => expect(panel.queryByText(title)).toBeNull())
+      const undo = await waitFor(() => {
+        const button = Array.from(document.body.querySelectorAll('button')).find(
+          (candidate) => candidate.textContent?.trim() === 'Undo'
+        )
+        expect(button).toBeTruthy()
+        return button!
+      })
+      await userEvent.click(undo)
+      await waitFor(() => expect(panel.getByText(title)).toBeTruthy())
+    })
   })
 
   it('reports the conversation picked in the history', async () => {

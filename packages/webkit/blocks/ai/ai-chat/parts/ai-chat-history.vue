@@ -13,6 +13,7 @@
   import PopoverContent from '@aziontech/webkit/popover-content'
   import Popover from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
@@ -129,8 +130,23 @@
   }
 
   function discardDraft(_event: MouseEvent, id: string) {
+    const index = threads.value.findIndex((item) => item.id === id)
+    const thread = threads.value[index]
+    if (!thread) return
+    const wasActive = active.value === id
     threads.value = threads.value.filter((item) => item.id !== id)
-    if (active.value === id) active.value = null
+    if (wasActive) active.value = null
+    toast('Draft discarded', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          const next = [...threads.value]
+          next.splice(index, 0, thread)
+          threads.value = next
+          if (wasActive) active.value = id
+        }
+      }
+    })
   }
 
   const PANEL_CLASS =
@@ -340,7 +356,30 @@
       <DrawerHeader class="w-full">
         <DrawerTitle>Conversation history</DrawerTitle>
       </DrawerHeader>
-      <div class="px-(--spacing-md) pb-(--spacing-xs)">
+      <div class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-xs)">
+        <div class="flex items-center gap-(--spacing-2xs)">
+          <Input
+            v-model="search"
+            size="small"
+            placeholder="Search"
+            aria-label="Search conversations"
+            role="searchbox"
+            autocomplete="off"
+            class="min-w-0 flex-1"
+          >
+            <template #leading>
+              <i
+                class="az az-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+          <AiChatProjectFilter
+            v-model="selectedProject"
+            :projects="projects"
+            @toggle-pin="togglePinProject"
+          />
+        </div>
         <Button
           label="New chat"
           icon="az az-square-pen"

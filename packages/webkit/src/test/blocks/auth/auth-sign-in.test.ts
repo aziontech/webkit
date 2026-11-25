@@ -83,6 +83,18 @@ describe('auth/auth-sign-in focus and password managers', () => {
     await waitFor(() => expect(document.activeElement?.id).toBe('login-password'))
   })
 
+  it('names what to enter when the email or the password is empty', async () => {
+    const view = render(Login)
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
+    await waitFor(() => expect(view.getByText('Enter your email address.')).toBeTruthy())
+    await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
+    await waitFor(() => expect(view.getByLabelText(/^Password\b/)).toBeTruthy())
+    await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
+    await waitFor(() => expect(view.getByText('Enter your password.')).toBeTruthy())
+    expect(view.queryByText('This field is required.')).toBeNull()
+  })
+
   it('keeps the email in the password step as the username field', async () => {
     const view = render(Login)
     await fireEvent.update(view.getByLabelText(/^Email\b/), 'jane.doe@example.com')
@@ -176,7 +188,8 @@ describe.each([
     expect(name.classList.contains('truncate')).toBe(true)
     const email = view.getByText('jane.doe@example.com')
     expect(email.classList.contains('truncate')).toBe(false)
-    expect(email.classList.contains('break-all')).toBe(true)
+    expect(email.classList.contains('break-all')).toBe(false)
+    expect(email.classList.contains('wrap-anywhere')).toBe(true)
   })
 })
 
@@ -202,7 +215,7 @@ describe('auth/auth-sign-in#DeviceAuthorization', () => {
   it('rejects an unknown typed code on the field and accepts a valid one', async () => {
     const view = render(DeviceAuthorization)
 
-    await fireEvent.click(view.getByText(/Enter the code from your terminal/))
+    await fireEvent.click(view.getByRole('button', { name: 'Enter the code' }))
     const input = await waitFor(() => view.getByLabelText('Device code'))
     expect(input).toHaveAttribute('maxlength', '8')
 

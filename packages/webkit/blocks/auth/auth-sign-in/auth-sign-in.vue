@@ -205,7 +205,7 @@
   }
 
   const signIn = (event: Event) => {
-    errors.password = password.value ? '' : copy.value.required
+    errors.password = password.value ? '' : copy.value.passwordRequired
     if (errors.password) {
       focusField('login-password')
       return
@@ -236,7 +236,7 @@
   const submitNewPassword = (event: Event) => {
     errors.newPassword = newPasswordError(newPassword.value, copy.value)
     errors.confirmPassword = !confirmPassword.value
-      ? copy.value.required
+      ? copy.value.confirmRequired
       : confirmPassword.value === newPassword.value
         ? ''
         : copy.value.mismatch

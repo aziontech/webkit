@@ -194,13 +194,17 @@
           />
         </div>
 
-        <Button
+        <p
           v-if="!settled"
-          variant="link"
-          label="The code does not match? Enter the code from your terminal"
-          class="self-start"
-          @click="enterCode"
-        />
+          class="flex flex-wrap items-center gap-x-(--spacing-2xs) text-body-sm text-(--text-muted)"
+        >
+          Code does not match?
+          <Button
+            variant="link"
+            label="Enter the code"
+            @click="enterCode"
+          />
+        </p>
       </template>
     </section>
   </AuthCard>

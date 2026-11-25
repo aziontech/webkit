@@ -242,5 +242,8 @@ describe('ToolApproval', () => {
       (run) => run.textContent
     )
     expect(runs).toEqual(['--env production', '--workload storefront'])
+    expect(example.getByLabelText('Command to run').querySelector('code')?.textContent).toBe(
+      'azion deploy --env production --workload storefront'
+    )
   })
 })

@@ -100,7 +100,7 @@
               <AccordionContent :padded="false">
                 <div
                   :data-testid="`${testId}__answer`"
-                  class="max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted) [&>*]:m-0 [&>*+*]:mt-(--spacing-xs)"
+                  class="max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted) [&>*]:m-0 *:not-first:mt-(--spacing-xs)"
                 >
                   <slot
                     name="answer"

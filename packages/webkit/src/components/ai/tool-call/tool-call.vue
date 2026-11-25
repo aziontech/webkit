@@ -120,7 +120,7 @@
       </div>
       <span
         role="status"
-        class="flex shrink-0"
+        class="ms-auto flex shrink-0"
       >
         <StatusIndicator
           :severity="severity"

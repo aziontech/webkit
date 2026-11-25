@@ -225,7 +225,7 @@
                 />
                 <span
                   v-if="option.shortcut"
-                  class="shrink-0 text-body-code-sm text-(--text-muted)"
+                  class="shrink-0 text-body-code-sm text-(--text-muted) pointer-coarse:hidden"
                   >{{ option.shortcut }}</span
                 >
                 <span
@@ -251,10 +251,10 @@
           <div
             class="flex min-h-12 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
           >
-            <span class="truncate text-label-sm text-(--text-muted)">{{
+            <span class="shrink-0 text-label-sm whitespace-nowrap text-(--text-muted)">{{
               modeLabel || t('promptInput.mode')
             }}</span>
-            <span class="max-w-20 truncate text-body-xs text-(--text-muted)">{{ modelLabel }}</span>
+            <span class="min-w-0 truncate text-body-xs text-(--text-muted)">{{ modelLabel }}</span>
           </div>
           <ul
             :aria-label="modeLabel || t('promptInput.mode')"

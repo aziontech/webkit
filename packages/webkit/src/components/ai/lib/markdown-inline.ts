@@ -8,7 +8,7 @@ import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 const EXTERNAL = /^https?:/i
 
 const CODE_CLASS =
-  'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px font-medium text-(--text-default)'
+  'rounded-(--shape-control) bg-(--bg-surface-raised) box-decoration-clone px-1 py-px font-medium text-(--text-default)'
 const EXTERNAL_ICON_CLASS =
   'az az-external-link ms-0.5 inline-block text-body-xs leading-none no-underline'
 const LINK_CLASS =
