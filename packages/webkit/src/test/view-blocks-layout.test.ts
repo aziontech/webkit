@@ -6,10 +6,12 @@ import { page } from 'vitest/browser'
 
 import EventsExplorerEventDocument from '../../blocks/view/view-events-explorer/variants/event-document.vue'
 import EventsExplorerQuery from '../../blocks/view/view-events-explorer/variants/query.vue'
+import EventsExplorerSessions from '../../blocks/view/view-events-explorer/variants/sessions.vue'
 import FileBrowserInsideAFolder from '../../blocks/view/view-file-browser/variants/inside-a-folder.vue'
 import FileBrowserUploading from '../../blocks/view/view-file-browser/variants/uploading.vue'
 import MarketplaceSolutionPage from '../../blocks/view/view-marketplace/variants/solution-page.vue'
 import QueryEditorQuery from '../../blocks/view/view-query-editor/variants/query.vue'
+import ViewTableDeployments from '../../blocks/view/view-table/variants/deployments.vue'
 import ViewWafTuning from '../../blocks/view/view-waf-tuning/view-waf-tuning.vue'
 import { useToastRegion } from './toast-region'
 
@@ -55,6 +57,16 @@ describe('view blocks, styled layout', () => {
     expect(openFill).not.toBe(closedFill)
   })
 
+  it('fits every shown column at 1280 instead of cutting the last one (events explorer)', async () => {
+    await atWidth(1280)
+    const view = render(EventsExplorerSessions)
+    const header = await waitFor(() => view.getByRole('columnheader', { name: /Remote address/ }))
+    await settle()
+    const scroller = header.closest<HTMLElement>('[data-testid$="__scroll"]')
+    const edge = (scroller ?? view.container).getBoundingClientRect().right
+    expect(header.getBoundingClientRect().right).toBeLessThanOrEqual(edge + 1)
+  })
+
   it('lets the folder path take the free width of its row (file browser)', async () => {
     await atWidth(1280)
     const view = render(FileBrowserInsideAFolder)
@@ -77,9 +89,24 @@ describe('view blocks, styled layout', () => {
     const sections = view.getAllByRole('heading', { level: 2 })
     expect(sections.length).toBeGreaterThan(0)
     for (const heading of sections) expect(size(heading)).toBeLessThan(size(title))
+    const prose = view.container.querySelector('[role="tabpanel"] p')!
+    for (const heading of sections) expect(size(heading)).toBeGreaterThan(size(prose))
     const description = title.parentElement?.parentElement?.textContent ?? ''
     const first = view.container.querySelector('[role="tabpanel"] p')?.textContent?.trim() ?? ''
     expect(description).not.toContain(first)
+  })
+
+  it('keeps the search row one height, the column settings included (file browser)', async () => {
+    await atWidth(1280)
+    const view = render(FileBrowserInsideAFolder)
+    const refresh = await waitFor(() => view.getByRole('button', { name: 'Refresh' }))
+    await settle()
+    const height = (el: Element) => Math.round(el.getBoundingClientRect().height)
+    const settings = view.getByTestId('collection-preferences__trigger')
+    const search = view.getByRole('textbox', { name: /search/i })
+    expect(height(settings)).toBe(height(refresh))
+    expect(height(view.getByRole('button', { name: 'Download CSV' }))).toBe(height(refresh))
+    expect(height(search.closest('[data-size]') ?? search)).toBe(height(refresh))
   })
 
   it('keeps the floating upload card inside a phone screen (file browser)', async () => {
@@ -90,6 +117,24 @@ describe('view blocks, styled layout', () => {
     const box = card.getBoundingClientRect()
     expect(box.left).toBeGreaterThanOrEqual(15)
     expect(box.right).toBeLessThanOrEqual(window.innerWidth - 15)
+  })
+
+  it('never cuts a deployment version to fit the Current tag on a phone (view table)', async () => {
+    await atWidth(390)
+    const view = render(ViewTableDeployments)
+    const versions = await waitFor(() => {
+      const found = view.getAllByTestId('deployment-version')
+      expect(found.length).toBeGreaterThan(0)
+      return found
+    })
+    await settle()
+    expect(versions.filter(clipped).map((version) => version.textContent?.trim())).toEqual([])
+    for (const version of versions) {
+      const cell = version.closest<HTMLElement>('[role="cell"], [role="rowheader"]')!
+      expect(version.getBoundingClientRect().right).toBeLessThanOrEqual(
+        cell.getBoundingClientRect().right + 1
+      )
+    }
   })
 
   it('gives the query field its own full row on a phone (events explorer)', async () => {
