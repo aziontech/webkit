@@ -24,6 +24,13 @@ describe('detail/detail-customer', () => {
     await expectNoA11yViolations(view.container as HTMLElement)
   })
 
+  it('keeps the three header actions in one row so a phone does not stack them', () => {
+    render(DetailCustomer)
+    const row = screen.getByRole('button', { name: 'Edit' }).parentElement as HTMLElement
+    expect(within(row).getByRole('button', { name: 'More actions' })).toBeTruthy()
+    expect(within(row).getByRole('button', { name: 'New ticket' })).toBeTruthy()
+  })
+
   it('emits the header actions with the DOM event first', async () => {
     const view = render(DetailCustomer)
     await fireEvent.click(screen.getByRole('button', { name: 'Edit' }))
