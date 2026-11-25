@@ -329,6 +329,10 @@ Which token does which job, and which components use each one, is in [`rules/web
 
 Text on `--bg-surface-overlay` is `--text-default`. In dark the overlay fill is `#4D4D4D`, and `--text-muted` (`#B2B2B2`) on it is 3.99:1, under the 4.5:1 that WCAG 1.4.3 asks for (found by the a11y harness, M2.9 WP a11y).
 
+### Text selection
+
+The theme's base layer paints selected text with the brand tint behind the default text (`::selection { background-color: var(--primary-mask); color: var(--text-default) }`), in light and dark, instead of the browser's blue. A component does not restyle selection; the one exception is a control that hides its own caret selection (`OtpInput`, `selection:bg-transparent`). Forced colors keep the system highlight.
+
 ### Loading placeholders
 
 A loading placeholder (skeleton, image stand-in, lazy block) does **not** use a surface token. Surface tokens

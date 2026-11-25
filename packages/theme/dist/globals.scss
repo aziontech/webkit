@@ -1808,6 +1808,11 @@
     line-height: 1.75;
   }
 
+  ::selection {
+    background-color: var(--primary-mask);
+    color: var(--text-default);
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   summary {
