@@ -23,7 +23,7 @@ async function sessionOf(page: Page): Promise<CDPSession> {
   if (!session) {
     session = await page.context().newCDPSession(page)
     session.on('Tracing.dataCollected', ({ value }) => {
-      traces.get(page)?.push(...(value as TraceEvent[]))
+      traces.get(page)?.push(...(value as unknown as TraceEvent[]))
     })
     sessions.set(page, session)
   }

@@ -32,8 +32,8 @@ describe('useConversationHistoryGroups', () => {
     const original = Object.getOwnPropertyDescriptor(Intl.DateTimeFormat.prototype, 'format')!
     let calls = 0
     const spy = vi
-      .spyOn(Intl.DateTimeFormat.prototype, 'format', 'get')
-      .mockImplementation(function (this: Intl.DateTimeFormat) {
+      .spyOn(Intl.DateTimeFormat.prototype as unknown as { format: unknown }, 'format', 'get')
+      .mockImplementation(function (this: Intl.DateTimeFormat): unknown {
         calls += 1
         return original.get!.call(this)
       })
