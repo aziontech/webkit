@@ -2603,3 +2603,7 @@ Budget-raise: css-button 11.05 KB → 11.1 KB (measured 11.09 KB gzip): the them
 Budget-raise: css-icons 15.35 KB → 15.45 KB (measured 15.41 KB gzip): the same theme additions as css-button (A6-026, A6-122, A6-180).
 
 Budget-raise: css-console 24.7 KB → 24.95 KB (measured 24.91 KB gzip): the same theme additions (A6-026, A6-122, A6-180), plus the pointer-coarse 44px touch targets of grouped icon buttons, chips and chart legend items (A6-005, A6-015, A6-070), the transparent disabled ghost and outline IconButton fill (A6-232), the whole table row rules beside a frozen column (A6-059) and the platform shortcut hint in menu items (A6-073).
+
+Budget-raise: chat-message 20.6 KB → 20.8 KB (measured 20.79 KB): inside a Conversation, ChatMessage.Actions renders its row only when it nears the log's view, through one IntersectionObserver (A6-270); on the long-thread block it cuts the mounted nodes on a phone from 895 to 541 and the blocking time by about a third. Shrunk first: a direct observer in place of VueUse's helper saved 0.2 KB.
+
+Budget-raise: chat-message-actions 14.5 KB → 14.7 KB (measured 14.68 KB): the same lazy action row inside a Conversation (A6-270); a direct IntersectionObserver in place of VueUse's helper kept the growth to 0.2 KB.

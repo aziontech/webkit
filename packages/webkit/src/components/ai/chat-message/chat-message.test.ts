@@ -1,11 +1,12 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref, type VNodeChild } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
+import Conversation from '../conversation/conversation.vue'
 import StreamingResponse from '../streaming-response/streaming-response.vue'
 import { useChatMessageContext } from './composables/use-chat-message-context'
 import ChatMessage, { ChatMessageActions, ChatMessageFeedback } from './index'
@@ -670,6 +671,38 @@ describe('ChatMessage', () => {
       await nextTick()
       expect(queryByTestId('chat-message__actions')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
+    })
+  })
+
+  describe('in a long conversation', () => {
+    it('renders the action row of a response only once it nears the view', async () => {
+      const turns = Array.from({ length: 40 }, (_, index) => `Answer ${index}`)
+      const view = render({
+        render: () =>
+          h(Conversation, { style: 'height:480px', 'data-testid': 'long' }, () =>
+            turns.map((text) =>
+              h(
+                ChatMessage,
+                { key: text, from: 'assistant' },
+                {
+                  default: () => h('p', { style: 'height:240px;margin:0' }, text),
+                  actions: () => h(ChatMessageActions, { copyable: true, copyText: text })
+                }
+              )
+            )
+          )
+      })
+      const log = view.getByTestId('long__viewport')
+      log.style.cssText = 'height:480px;overflow:auto'
+      const rows = view.container.querySelectorAll('[data-testid="chat-message-actions"]')
+      expect(rows).toHaveLength(40)
+      await waitFor(() => expect(rows[39]!.querySelector('button')).not.toBeNull())
+      expect(rows[39]).toHaveAttribute('role', 'group')
+      expect(rows[0]!.querySelector('button')).toBeNull()
+      expect(rows[0]).not.toHaveAttribute('role')
+      log.dispatchEvent(new WheelEvent('wheel', { deltaY: -100 }))
+      log.scrollTop = 0
+      await waitFor(() => expect(rows[0]!.querySelector('button')).not.toBeNull())
     })
   })
 })

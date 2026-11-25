@@ -121,6 +121,11 @@
       "update": 40,
       "update_is": "select a conversation"
     },
+    "ai-chat-long-thread": {
+      "mount": 165,
+      "update": 35,
+      "update_is": "add a prompt and its answer to the 12-message thread at phone width"
+    },
     "conversation-500": {
       "mount": 370,
       "update": 30,

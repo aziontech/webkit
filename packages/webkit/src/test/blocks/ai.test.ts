@@ -45,7 +45,7 @@ describe('ai', () => {
     })
     expect(view.container.textContent).toContain('still serves the previous version')
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
-    await fireEvent.click(view.getByRole('button', { name: 'Deploy again' }))
+    await fireEvent.click(await view.findByRole('button', { name: 'Deploy again' }))
     const [[event, message]] = view.emitted('retry') as [[Event, AiChatMessage]]
     expect(event).toBeInstanceOf(Event)
     expect(message.id).toBe('m2')

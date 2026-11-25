@@ -52,6 +52,7 @@
     "sample.ts",
     "lib/ai-chat-failure.ts",
     "composables/use-composer-focus.ts",
+    "composables/use-wide-screen.ts",
     "parts/ai-chat-artifact.vue",
     "parts/ai-chat-composer.vue",
     "parts/ai-chat-connection-status.vue",

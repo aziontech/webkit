@@ -1432,6 +1432,27 @@ export function useComposerFocus(
 }
 ```
 
+## `composables/use-wide-screen.ts`
+
+```ts
+import { onMounted, onScopeDispose, readonly, type Ref, ref } from 'vue'
+
+export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolean>> {
+  const wide = ref(false)
+  let media: MediaQueryList | null = null
+  const onChange = () => {
+    wide.value = Boolean(media?.matches)
+  }
+  onMounted(() => {
+    media = globalThis.matchMedia?.(query) ?? null
+    onChange()
+    media?.addEventListener('change', onChange)
+  })
+  onScopeDispose(() => media?.removeEventListener('change', onChange))
+  return readonly(wide)
+}
+```
+
 ## `parts/ai-chat-artifact.vue`
 
 ```ts
@@ -1867,6 +1888,7 @@ export function useComposerFocus(
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
+  import { useWideScreen } from '../composables/use-wide-screen'
   import {
     type AiChatProject,
     type AiChatThread,
@@ -1884,6 +1906,8 @@ export function useComposerFocus(
 
   const active = defineModel<string | null>({ required: true })
   const drawerOpen = defineModel<boolean>('drawerOpen', { required: true })
+
+  const wide = useWideScreen()
 
   const projects = ref<AiChatProject[]>(sampleProjects.map((item) => ({ ...item })))
   const threads = ref<AiChatThread[]>(sampleThreads.map((item) => ({ ...item })))
@@ -2006,7 +2030,7 @@ export function useComposerFocus(
 
 <template>
   <aside
-    v-if="panelOpen"
+    v-if="panelOpen && wide"
     id="ai-chat-history"
     aria-label="Conversation history"
     :class="PANEL_CLASS"

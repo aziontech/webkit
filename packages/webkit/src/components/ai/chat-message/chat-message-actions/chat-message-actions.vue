@@ -4,6 +4,7 @@
     computed,
     defineAsyncComponent,
     h,
+    inject,
     onMounted,
     onScopeDispose,
     ref,
@@ -16,6 +17,7 @@
   import CopyButton from '../../../action/copy-button/copy-button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
+  import { ConversationInjectionKey } from '../../conversation/injection-key'
   import ChatMessageFeedback from '../chat-message-feedback/chat-message-feedback.vue'
   import { useChatMessageContext } from '../composables/use-chat-message-context'
   import type { ChatMessageFeedbackValue } from '../injection-key'
@@ -93,6 +95,8 @@
   const rowEl = ref<HTMLElement | null>(null)
   const copyValue = ref<string>(props.copyText)
   const width = ref<number>(0)
+  const conversation = inject(ConversationInjectionKey, null)
+  const near = ref<boolean>(!conversation || typeof globalThis.IntersectionObserver === 'undefined')
   let frame = 0
 
   const testId = computed<string>(
@@ -136,6 +140,30 @@
     else if (value === 'branch') emit('branch', event)
   }
 
+  let nearObserver: IntersectionObserver | null = null
+
+  function onNear(entries: IntersectionObserverEntry[]): void {
+    const entry = entries.find((item) => item.isIntersecting)
+    if (!entry) return
+    width.value = entry.boundingClientRect.width
+    near.value = true
+    nearObserver?.disconnect()
+  }
+
+  watch(
+    rowEl,
+    (el) => {
+      nearObserver?.disconnect()
+      if (!el || near.value) return
+      nearObserver = new IntersectionObserver(onNear, {
+        root: conversation?.viewportEl.value,
+        rootMargin: '600px'
+      })
+      nearObserver.observe(el)
+    },
+    { flush: 'post', immediate: true }
+  )
+
   useResizeObserver(rowEl, (entries) => {
     const next = entries[0]?.contentRect.width ?? 0
     cancelAnimationFrame(frame)
@@ -144,12 +172,15 @@
     })
   })
 
-  onScopeDispose(() => cancelAnimationFrame(frame))
+  onScopeDispose(() => {
+    cancelAnimationFrame(frame)
+    nearObserver?.disconnect()
+  })
   onMounted(refreshCopy)
   watch(() => props.copyText, refreshCopy)
 
   const ACTIONS_CLASS =
-    'relative z-1 flex w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end ' +
+    'relative z-1 flex min-h-8 w-full min-w-0 flex-nowrap items-center gap-(--spacing-2xs) data-[from=user]:w-auto data-[from=user]:justify-end ' +
     '[&_button[data-size=medium]_[data-transition]]:size-5 [&_button[data-size=medium]_i]:text-body-lg ' +
     '[&_button[data-size=medium]:not([data-inert])_i]:text-(--text-muted) ' +
     '[&_button[data-size=medium]:not([data-inert]):hover_i]:text-(--text-default)'
@@ -160,8 +191,8 @@
     v-if="status === 'success'"
     ref="rowEl"
     v-bind="$attrs"
-    role="group"
-    :aria-label="ariaLabel || t('chatMessage.actions')"
+    :role="near ? 'group' : undefined"
+    :aria-label="near ? ariaLabel || t('chatMessage.actions') : undefined"
     :data-testid="testId"
     :data-from="from"
     :data-compact="compact || null"
@@ -169,83 +200,85 @@
     @focusin="refreshCopy"
     @pointerenter="refreshCopy"
   >
-    <slot name="leading" />
-    <CopyButton
-      v-if="copyable"
-      :value="copyValue"
-      size="medium"
-      :data-testid="`${testId}__copy`"
-    />
-    <Tooltip
-      v-if="editable"
-      :content="t('chatMessage.edit')"
-    >
-      <IconButton
-        icon="az az-pencil"
-        :aria-label="t('chatMessage.edit')"
-        variant="ghost"
+    <template v-if="near">
+      <slot name="leading" />
+      <CopyButton
+        v-if="copyable"
+        :value="copyValue"
         size="medium"
+        :data-testid="`${testId}__copy`"
+      />
+      <Tooltip
+        v-if="editable"
+        :content="t('chatMessage.edit')"
+      >
+        <IconButton
+          icon="az az-pencil"
+          :aria-label="t('chatMessage.edit')"
+          variant="ghost"
+          size="medium"
+          :disabled="disabled"
+          :data-testid="`${testId}__edit`"
+          @click="edit"
+        />
+      </Tooltip>
+      <ChatMessageFeedback
+        v-if="showFeedback && !compact"
+        v-model="feedback"
+        :data-testid="`${testId}__feedback`"
+      />
+      <ChatMessageReadAloud
+        v-if="showReadAloud"
+        :text="speech"
+        :data-testid="`${testId}__read-aloud`"
+      />
+      <Tooltip
+        key="tooltip-2"
+        v-if="shareable"
+        :content="t('chatMessage.share')"
+      >
+        <IconButton
+          icon="az az-share"
+          :aria-label="t('chatMessage.share')"
+          variant="ghost"
+          size="medium"
+          :data-testid="`${testId}__share`"
+          @click="(event: MouseEvent) => emit('share', event)"
+        />
+      </Tooltip>
+      <Tooltip
+        key="tooltip-3"
+        v-if="retryable && !compact"
+        :content="t('chatMessage.retry')"
+      >
+        <IconButton
+          icon="az az-refresh"
+          :aria-label="t('chatMessage.retry')"
+          variant="ghost"
+          size="medium"
+          :disabled="disabled"
+          :data-testid="`${testId}__retry`"
+          @click="(event: MouseEvent) => emit('retry', event)"
+        />
+      </Tooltip>
+      <slot />
+      <ChatMessageMore
+        v-if="showMore"
+        :show-feedback="menuFeedback"
+        :feedback="feedback"
+        :retryable="menuRetry"
+        :branchable="branchable"
         :disabled="disabled"
-        :data-testid="`${testId}__edit`"
-        @click="edit"
+        :data-testid="`${testId}__more`"
+        @select="onSelect"
       />
-    </Tooltip>
-    <ChatMessageFeedback
-      v-if="showFeedback && !compact"
-      v-model="feedback"
-      :data-testid="`${testId}__feedback`"
-    />
-    <ChatMessageReadAloud
-      v-if="showReadAloud"
-      :text="speech"
-      :data-testid="`${testId}__read-aloud`"
-    />
-    <Tooltip
-      key="tooltip-2"
-      v-if="shareable"
-      :content="t('chatMessage.share')"
-    >
-      <IconButton
-        icon="az az-share"
-        :aria-label="t('chatMessage.share')"
-        variant="ghost"
-        size="medium"
-        :data-testid="`${testId}__share`"
-        @click="(event: MouseEvent) => emit('share', event)"
-      />
-    </Tooltip>
-    <Tooltip
-      key="tooltip-3"
-      v-if="retryable && !compact"
-      :content="t('chatMessage.retry')"
-    >
-      <IconButton
-        icon="az az-refresh"
-        :aria-label="t('chatMessage.retry')"
-        variant="ghost"
-        size="medium"
-        :disabled="disabled"
-        :data-testid="`${testId}__retry`"
-        @click="(event: MouseEvent) => emit('retry', event)"
-      />
-    </Tooltip>
-    <slot />
-    <ChatMessageMore
-      v-if="showMore"
-      :show-feedback="menuFeedback"
-      :feedback="feedback"
-      :retryable="menuRetry"
-      :branchable="branchable"
-      :disabled="disabled"
-      :data-testid="`${testId}__more`"
-      @select="onSelect"
-    />
-    <div
-      v-if="$slots['trailing']"
-      :data-testid="`${testId}__trailing`"
-      class="ms-(--spacing-2xs) -my-(--spacing-2xs) flex min-w-0 shrink items-center overflow-hidden p-(--spacing-2xs)"
-    >
-      <slot name="trailing" />
-    </div>
+      <div
+        v-if="$slots['trailing']"
+        :data-testid="`${testId}__trailing`"
+        class="ms-(--spacing-2xs) -my-(--spacing-2xs) flex min-w-0 shrink items-center overflow-hidden p-(--spacing-2xs)"
+      >
+        <slot name="trailing" />
+      </div>
+    </template>
   </div>
 </template>

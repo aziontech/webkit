@@ -1230,7 +1230,7 @@
   {
     "name": "chat-message",
     "path": "src/components/ai/chat-message/index.ts",
-    "limit": "20.6 KB",
+    "limit": "20.8 KB",
     "entryOnly": true
   },
   {
@@ -1241,7 +1241,7 @@
   {
     "name": "chat-message-actions",
     "path": "src/components/ai/chat-message/chat-message-actions/chat-message-actions.vue",
-    "limit": "14.5 KB",
+    "limit": "14.7 KB",
     "entryOnly": true
   },
   {

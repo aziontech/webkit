@@ -201,7 +201,8 @@
   provide(ConversationInjectionKey, {
     alignment: computed(() => props.layout),
     ready,
-    announce
+    announce,
+    viewportEl
   })
 
   defineExpose({ scrollToBottom })
