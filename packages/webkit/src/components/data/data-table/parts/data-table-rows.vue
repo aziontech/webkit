@@ -236,6 +236,7 @@
           />
           <span
             v-else
+            dir="auto"
             class="min-w-0 flex-1 truncate"
             >{{ cell.getValue() }}</span
           >

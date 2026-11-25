@@ -87,6 +87,13 @@ describe('Tree', () => {
     expect(custom.queryByTestId('tree')).toBeNull()
   })
 
+  it('isolates the direction of labels and sizes, so 4.2 KB keeps its order in right-to-left', () => {
+    const { getAllByTestId } = mount({}, { attrs: { dir: 'rtl' } })
+    const sizes = getAllByTestId('tree__description')
+    expect(sizes.length).toBeGreaterThan(0)
+    for (const size of sizes) expect(size.getAttribute('dir')).toBe('auto')
+  })
+
   it('names the tree from the locale catalog when ariaLabel is empty', () => {
     const view = render(Tree, { props: { items: ITEMS } })
     expect(view.getByRole('tree', { name: 'Tree' })).toBeTruthy()
