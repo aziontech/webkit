@@ -165,8 +165,10 @@ describe('ai/ai-chat', () => {
 
   it('emits send from a starter prompt', async () => {
     const view = render(AiChat)
-    await userEvent.click(view.getByRole('button', { name: 'Protect my site with a WAF' }))
-    expect((view.emitted('send') as [[Event, string]])[0][1]).toBe('Protect my site with a WAF')
+    await userEvent.click(view.getByRole('button', { name: 'Deploy a Next.js app from GitHub' }))
+    expect((view.emitted('send') as [[Event, string]])[0][1]).toBe(
+      'Deploy a Next.js app from GitHub'
+    )
   })
 
   it('shows Stop while loading, emits stop and marks the stopped response', async () => {
@@ -246,8 +248,8 @@ describe('ai/ai-chat', () => {
   it('picks the model from the header title and reports it', async () => {
     const view = render(AiChat, { props: { messages: thread } })
     await userEvent.click(view.getByRole('button', { name: /AI assistant/ }))
-    await userEvent.click(await view.findByRole('menuitemradio', { name: /Thinking/ }))
-    expect(view.emitted('update:modelKey')).toEqual([['thinking']])
+    await userEvent.click(await view.findByRole('menuitemradio', { name: /Claude Opus 4\.5/ }))
+    expect(view.emitted('update:modelKey')).toEqual([['claude-opus-4-5']])
   })
 
   it('emits the conversation actions of the More menu with the open conversation', async () => {
@@ -291,6 +293,27 @@ describe('ai/ai-chat', () => {
     const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
     await userEvent.click(panel.getByText('Purge the cache after a deploy'))
     expect(view.emitted('update:activeKey')).toEqual([['h2']])
+  })
+
+  it('keeps the history row actions outside the row button', async () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    const history = view.container.querySelector<HTMLElement>('#ai-chat-history')!
+    expect(history.querySelectorAll('button button, button [tabindex]')).toHaveLength(0)
+    const row = within(history).getByText('Purge the cache after a deploy').closest('li')!
+    await userEvent.click(within(row).getByRole('button', { name: 'Settle thread' }))
+    expect(within(history).getByRole('button', { name: 'Settled (2)' })).toBeTruthy()
+    expect(view.emitted('update:activeKey')).toBeUndefined()
+  })
+
+  it('shows the product the thread started on and how many it touches', () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    const history = view.container.querySelector<HTMLElement>('#ai-chat-history')!
+    const row = within(history).getByText('Why does storefront return 502 errors?').closest('li')!
+    expect(row.querySelector('.az-applications')).not.toBeNull()
+    expect(row.querySelector('.az-server')).toBeNull()
+    expect(within(row).getByText('3')).toBeTruthy()
+    const versioned = within(history).getByText('A WAF rule for login attempts').closest('li')!
+    expect(within(versioned).getByText('v42')).toBeTruthy()
   })
 
   it('folds the history panel away from the header', async () => {

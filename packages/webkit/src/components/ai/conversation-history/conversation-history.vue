@@ -126,6 +126,8 @@
     item(props: { item: ConversationHistoryItem }): unknown
     /** Replaces the end of a chat row (age, lock, status). */
     'item-meta'(props: { item: ConversationHistoryItem }): unknown
+    /** Replaces a chat row's actions (Pin, More, Delete); rendered outside the row button. */
+    'item-actions'(props: { item: ConversationHistoryItem }): unknown
   }>()
 
   const attrs = useAttrs()

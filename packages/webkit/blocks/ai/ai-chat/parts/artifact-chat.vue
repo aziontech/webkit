@@ -14,7 +14,6 @@
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
@@ -214,10 +213,6 @@
                       v-model="contextKey"
                       :options="sampleContexts"
                       placeholder="Choose project"
-                    />
-                    <PromptInputTools
-                      v-model="toolKeys"
-                      :tools="sampleTools"
                     />
                   </template>
                   <template #hint>

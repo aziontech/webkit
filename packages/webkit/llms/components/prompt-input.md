@@ -20,7 +20,7 @@
 - Set `queueable` only when the owner queues what is sent while a response runs, and shows the
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden
-- Default to the full composer in blocks and new AI surfaces (`PromptInput.AttachButton` in `actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `end`, `voice`, `PromptInput.ContextPicker` and `PromptInput.Tools` in `footer`, and the disclaimer in `hint`); omit a control only when the product explicitly does not offer that capability. Attach goes first at the inline start; model, dictate and Submit at the inline end, in that order; the secondary row holds what is not about this prompt (where the chat lives, the tools, a link to the desktop app).
+- Default to the full composer in blocks and new AI surfaces (`PromptInput.AttachButton` in `actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `end`, `voice`, `PromptInput.ContextPicker` in `footer`, the tools in one place only — the "+" menu (`PromptInput.AttachButton` with `tools`) or `PromptInput.Tools` in `footer`, never both, since each lists the enabled tools as chips — and the disclaimer in `hint`); omit a control only when the product explicitly does not offer that capability. Attach goes first at the inline start; model, dictate and Submit at the inline end, in that order; the secondary row holds what is not about this prompt (where the chat lives, the tools, a link to the desktop app).
 - Show the upload state on each file (`loading`, `progress`, `error`); Submit waits for them.
 - Set `voice` only when the product has a voice conversation; Submit replaces it as soon as there is
 
@@ -325,7 +325,12 @@ packages/webkit/src/components/ai/prompt-input/
     { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', shortcut: '⌘5' },
     { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', shortcut: '⌘6' },
     { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', shortcut: '⌘7' },
-    { value: 'azion-auto', label: 'Azion Auto', provider: 'azion', description: 'AI Gateway router' }
+    {
+      value: 'azion-auto',
+      label: 'Azion Auto',
+      provider: 'azion',
+      description: 'AI Gateway router'
+    }
   ]
   const modes = [
     { value: 'low', label: 'Low' },

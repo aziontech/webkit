@@ -1,11 +1,11 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
+> The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `HoverCard`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -34,9 +34,9 @@ A full page where a person talks with the generative AI assistant about their ac
 
 No bar and no border: the thread scrolls under it. On a phone it is round-cornered floating controls over the thread, blurred over a translucent raised surface: Open conversation history at the inline start, and at the inline end one grouped control holding New chat and More conversation actions; the page heading stays for assistive tech only. From the md breakpoint it is a quiet row over a fade of the canvas: a Show or Hide conversation history toggle (`aria-expanded`), the model picker as the title (`AI assistant` with the chosen model muted and a chevron, a `DropdownMenu` of `models` as radio items, `v-model:modelKey`), New chat while the history panel is folded away, and at the inline end Share and More conversation actions. The More menu holds Share (on a phone), Rename, Archive and Delete for the open conversation; each emits `share-chat`, `rename-chat`, `archive-chat` or `remove-chat` with `activeKey`, and the app does the work. New chat, Share and More are disabled while the thread is empty; New chat clears it without confirmation, and the previous thread stays in the history.
 
-### A2. History — `ConversationHistory`, `Drawer`
+### A2. History — `Input`, `Popover`, `HoverCard`, `Drawer`
 
-The reader's earlier conversations, grouped by date, with a New chat row and a search field (`creatable`, `searchable`). From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, closed by picking a conversation or New chat. The open conversation is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
+The reader's threads, grouped by date (Today, Yesterday, Previous 7 days, Previous 30 days, Older), under a search field, a project filter, Add project and New thread. Each thread is one menu row (hover fill `--bg-hover`, the open thread `--bg-selected`, the inset fill of the menu rows): its project, its age, the title cut with an ellipsis on one line, and a meta line with the icon of the Azion product the thread started on, then how many products it touches or, when it edits one version, that version's id, then the model's provider. Resting on the meta line opens a `HoverCard` with every product, the environment, the model and the changes. Discard draft, Snooze and Settle sit outside the row button, fade in over the age on hover or focus and never move the row; snoozed and settled threads move to their own lists. A single-line view keeps only the title, the product icon and the age. From the md breakpoint a side panel at the inline start, open by default and folded away by the header toggle; on a phone a start-side `Drawer` the round menu button opens, with New chat in its header, closed by picking a thread or New chat. The open thread is `v-model:activeKey`; the list comes from `sample.ts` until the app gives its own.
 
 ### B. Empty state — `SuggestionGroup`, `PromptInput`
 
@@ -66,9 +66,9 @@ At the end of the action row of a complete response that used documents: a pill 
 
 After the last complete response, two or three questions that narrow it, as wrapping pills aligned with the response text. They disappear as soon as the reader sends anything else.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`, `PromptInputTools`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`
 
-The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` and `PromptInputTools` in `#footer`, and the disclaimer in `#hint`. It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` in `#footer`, and the disclaimer in `#hint`. The tools live in the "+" menu only, so `PromptInputTools` is not added to `#footer` (both would list the enabled tools as chips). It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
@@ -779,7 +779,6 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 ## `sample.ts`
 
 ````ts
-import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
 import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
@@ -1108,7 +1107,12 @@ export interface AiChatProject {
   kind: 'workload' | 'dns' | 'firewall' | 'function' | 'storage'
   icon: string
   pinned?: boolean
-  cloud?: boolean
+  inCloud?: boolean
+}
+
+export interface AiChatProduct {
+  label: string
+  icon: string
 }
 
 export interface AiChatThreadChange {
@@ -1120,35 +1124,60 @@ export interface AiChatThread {
   id: string
   title: string
   projectId: string
+  updatedAt: string
   age: string
   environment: string
   modelLabel: string
   providerIcon: string
+  products: string[]
+  version?: string
   draft?: boolean
   snoozed?: boolean
   settled?: boolean
-  changeRef?: string
-  chainCount?: number
   changes?: AiChatThreadChange[]
 }
 
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
 
-export const sampleProjects: AiChatProject[] = [
-  { id: 'workloads', code: 'WL', title: 'Workloads', kind: 'workload', icon: 'az az-workloads', pinned: true },
-  { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
-  { id: 'firewall', code: 'FW', title: 'Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
-  { id: 'functions', code: 'FN', title: 'Edge Functions', kind: 'function', icon: 'az az-functions', cloud: true },
-  { id: 'storage', code: 'OS', title: 'Object Storage', kind: 'storage', icon: 'az az-object-storage', cloud: true }
-]
+export const sampleProducts: Record<string, AiChatProduct> = {
+  applications: { label: 'Applications', icon: 'az az-applications' },
+  firewall: { label: 'Firewall', icon: 'az az-firewall' },
+  functions: { label: 'Functions', icon: 'az az-functions' },
+  waf: { label: 'WAF', icon: 'az az-waf' },
+  'real-time-purge': { label: 'Real-Time Purge', icon: 'az az-real-time-purge' },
+  'sql-database': { label: 'SQL Database', icon: 'az az-sql-database' },
+  'edge-dns': { label: 'Edge DNS', icon: 'az az-edge-dns' },
+  'object-storage': { label: 'Object Storage', icon: 'az az-object-storage' },
+  'image-processor': { label: 'Image Processor', icon: 'az az-image-processor' }
+}
 
-export const sampleHistory: ConversationHistoryItem[] = [
-  { id: 'h1', title: 'Why does storefront return 502 errors?', updatedAt: '2026-11-19T11:02:00Z' },
-  { id: 'h2', title: 'Purge the cache after a deploy', updatedAt: '2026-11-19T09:40:00Z' },
-  { id: 'h3', title: 'A WAF rule for login attempts', updatedAt: '2026-11-18T17:15:00Z' },
-  { id: 'h4', title: 'Top orders query for acme-store', updatedAt: '2026-11-16T10:20:00Z' },
-  { id: 'h5', title: 'Move DNS records to Azion', updatedAt: '2026-11-04T14:05:00Z' },
-  { id: 'h6', title: 'Image optimization for docs-site', updatedAt: '2026-09-28T08:30:00Z' }
+export const sampleProjects: AiChatProject[] = [
+  {
+    id: 'workloads',
+    code: 'WL',
+    title: 'Workloads',
+    kind: 'workload',
+    icon: 'az az-workloads',
+    pinned: true
+  },
+  { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
+  { id: 'firewall', code: 'FW', title: 'Firewall', kind: 'firewall', icon: 'az az-firewall' },
+  {
+    id: 'functions',
+    code: 'FN',
+    title: 'Functions',
+    kind: 'function',
+    icon: 'az az-functions',
+    inCloud: true
+  },
+  {
+    id: 'storage',
+    code: 'OS',
+    title: 'Object Storage',
+    kind: 'storage',
+    icon: 'az az-object-storage',
+    inCloud: true
+  }
 ]
 
 export const sampleThreads: AiChatThread[] = [
@@ -1156,12 +1185,13 @@ export const sampleThreads: AiChatThread[] = [
     id: 'h1',
     title: 'Why does storefront return 502 errors?',
     projectId: 'workloads',
+    updatedAt: '2026-11-19T11:48:00Z',
     age: '12m',
     environment: 'prod-us-east',
     modelLabel: 'Claude Opus 4.5',
     providerIcon: 'az az-claude',
+    products: ['applications', 'firewall', 'functions'],
     draft: true,
-    chainCount: 3,
     changes: [
       { ref: '#1170', title: 'feat(workload): renew origin TLS cert for api.example.com' },
       { ref: '#1200', title: 'fix(cache): allowlist q and page query params on /search' },
@@ -1169,53 +1199,75 @@ export const sampleThreads: AiChatThread[] = [
     ]
   },
   {
+    id: 'h7',
+    title:
+      'Checkout on acme-store times out for customers in the EU region after the latest deploy',
+    projectId: 'workloads',
+    updatedAt: '2026-11-19T11:05:00Z',
+    age: '55m',
+    environment: 'prod-eu-west',
+    modelLabel: 'Azion Auto',
+    providerIcon: 'az az-azion',
+    products: ['applications', 'functions']
+  },
+  {
     id: 'h2',
     title: 'Purge the cache after a deploy',
     projectId: 'workloads',
+    updatedAt: '2026-11-19T09:40:00Z',
     age: '2h',
     environment: 'prod-us-east',
     modelLabel: 'Gemini 4 Neon',
     providerIcon: 'az az-gemini',
-    changeRef: '1170',
+    products: ['real-time-purge'],
     changes: [{ ref: '#1170', title: 'ci(purge): trigger Real-Time Purge on release tag' }]
   },
   {
     id: 'h3',
     title: 'A WAF rule for login attempts',
     projectId: 'firewall',
+    updatedAt: '2026-11-18T17:15:00Z',
     age: '1d',
     environment: 'edge-global',
     modelLabel: 'Claude Sonnet 4',
     providerIcon: 'az az-claude',
-    changeRef: '1142',
+    products: ['waf'],
+    version: 'v42',
     changes: [{ ref: '#1142', title: 'sec(waf): rate-limit /auth/login to 20 req/min' }]
   },
   {
     id: 'h4',
     title: 'Top orders query for acme-store',
     projectId: 'functions',
+    updatedAt: '2026-11-16T10:20:00Z',
     age: '3d',
     environment: 'edge-sql-eu',
     modelLabel: 'GPT-5.2',
-    providerIcon: 'az az-openai'
+    providerIcon: 'az az-openai',
+    products: ['sql-database'],
+    version: 'v7'
   },
   {
     id: 'h5',
     title: 'Move DNS records to Azion',
     projectId: 'edge-dns',
+    updatedAt: '2026-11-04T14:05:00Z',
     age: '2w',
     environment: 'dns-anycast',
     modelLabel: 'Gemini 4 Carbon',
-    providerIcon: 'az az-gemini'
+    providerIcon: 'az az-gemini',
+    products: ['edge-dns']
   },
   {
     id: 'h6',
     title: 'Image optimization for docs-site',
     projectId: 'storage',
+    updatedAt: '2026-09-28T08:30:00Z',
     age: '1mo',
     environment: 'media-bucket',
     modelLabel: 'Azion Auto',
     providerIcon: 'az az-azion',
+    products: ['image-processor', 'object-storage'],
     settled: true
   }
 ]
@@ -1229,15 +1281,63 @@ export const sampleProviders: PromptInputMenuOption[] = [
 ]
 
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'gemini-4-neon', label: 'Gemini 4 Neon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘1' },
-  { value: 'gemini-4-carbon', label: 'Gemini 4 Carbon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘2' },
-  { value: 'gemini-3-8-flash', label: 'Gemini 3.8 Flash', provider: 'google', icon: 'az az-gemini', shortcut: '⌘3' },
-  { value: 'claude-opus-4-5', label: 'Claude Opus 4.5', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘4' },
-  { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘5' },
+  {
+    value: 'gemini-4-neon',
+    label: 'Gemini 4 Neon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘1'
+  },
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Carbon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘2'
+  },
+  {
+    value: 'gemini-3-8-flash',
+    label: 'Gemini 3.8 Flash',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘3'
+  },
+  {
+    value: 'claude-opus-4-5',
+    label: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘4'
+  },
+  {
+    value: 'claude-sonnet-4',
+    label: 'Claude Sonnet 4',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘5'
+  },
   { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
-  { value: 'gpt-5-mini', label: 'GPT-5 Mini', provider: 'openai', icon: 'az az-openai', shortcut: '⌘7' },
-  { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', icon: 'az az-meta', shortcut: '⌘8' },
-  { value: 'auto', label: 'Azion Auto', provider: 'azion', icon: 'az az-azion', description: 'AI Gateway router' }
+  {
+    value: 'gpt-5-mini',
+    label: 'GPT-5 Mini',
+    provider: 'openai',
+    icon: 'az az-openai',
+    shortcut: '⌘7'
+  },
+  {
+    value: 'llama-4-maverick',
+    label: 'Llama 4 Maverick',
+    provider: 'meta',
+    icon: 'az az-meta',
+    shortcut: '⌘8'
+  },
+  {
+    value: 'auto',
+    label: 'Azion Auto',
+    provider: 'azion',
+    icon: 'az az-azion',
+    description: 'AI Gateway router'
+  }
 ]
 
 export const sampleModes: PromptInputMenuOption[] = [
@@ -1291,7 +1391,6 @@ export const turnTime = (
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { nextTick, ref } from 'vue'
 
   import { sampleContexts, sampleModes, sampleProviders } from '../sample'
@@ -1387,7 +1486,7 @@ export const turnTime = (
       <PromptInputDictateButton />
     </template>
     <template
-      v-if="contexts.length || tools.length"
+      v-if="contexts.length"
       #footer
     >
       <PromptInputContextPicker
@@ -1395,11 +1494,6 @@ export const turnTime = (
         v-model="contextKey"
         :options="contexts"
         placeholder="Choose project"
-      />
-      <PromptInputTools
-        v-if="tools.length"
-        v-model="toolKeys"
-        :tools="tools"
       />
     </template>
     <template #hint>
@@ -1723,11 +1817,11 @@ export const turnTime = (
   import {
     type AiChatProject,
     type AiChatThread,
-    sampleHistory,
     sampleHistoryNow,
     sampleProjects,
     sampleThreads
   } from '../sample'
+  import AiChatHistoryActions from './ai-chat-history-actions.vue'
   import AiChatHistoryRow from './ai-chat-history-row.vue'
   import AiChatProjectFilter from './ai-chat-project-filter.vue'
 
@@ -1749,26 +1843,25 @@ export const turnTime = (
   const projectTemplates: Omit<AiChatProject, 'id'>[] = [
     { code: 'WL', title: 'New Workload', kind: 'workload', icon: 'az az-workloads' },
     { code: 'DN', title: 'New Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
-    { code: 'FW', title: 'New Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+    { code: 'FW', title: 'New Firewall', kind: 'firewall', icon: 'az az-firewall' },
     {
       code: 'FN',
-      title: 'New Edge Function',
+      title: 'New Function',
       kind: 'function',
       icon: 'az az-functions',
-      cloud: true
+      inCloud: true
     },
     {
       code: 'OS',
       title: 'New Object Storage',
       kind: 'storage',
       icon: 'az az-object-storage',
-      cloud: true
+      inCloud: true
     }
   ]
 
   const projectMap = computed(() => new Map(projects.value.map((item) => [item.id, item])))
   const threadMap = computed(() => new Map(threads.value.map((item) => [item.id, item])))
-  const updatedMap = new Map(sampleHistory.map((item) => [item.id, item.updatedAt]))
 
   const matchingThreads = computed(() => {
     const needle = search.value.trim().toLowerCase()
@@ -1777,8 +1870,7 @@ export const turnTime = (
       if (!needle) return true
       const projectTitle = projectMap.value.get(item.projectId)?.title ?? ''
       return (
-        item.title.toLowerCase().includes(needle) ||
-        projectTitle.toLowerCase().includes(needle)
+        item.title.toLowerCase().includes(needle) || projectTitle.toLowerCase().includes(needle)
       )
     })
   })
@@ -1786,7 +1878,7 @@ export const turnTime = (
   const toHistoryItem = (thread: AiChatThread): ConversationHistoryItem => ({
     id: thread.id,
     title: thread.title,
-    updatedAt: updatedMap.get(thread.id) ?? sampleHistoryNow,
+    updatedAt: thread.updatedAt,
     description: viewMode.value === 'detailed' ? thread.environment : undefined
   })
 
@@ -1822,22 +1914,26 @@ export const turnTime = (
     )
   }
 
-  function toggleSnooze(id: string) {
+  function toggleSnooze(_event: MouseEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, snoozed: !item.snoozed } : item
     )
   }
 
-  function toggleSettle(id: string) {
+  function toggleSettle(_event: MouseEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, settled: !item.settled, snoozed: false } : item
     )
   }
 
-  function discardDraft(id: string) {
+  function discardDraft(_event: MouseEvent, id: string) {
     threads.value = threads.value.filter((item) => item.id !== id)
     if (active.value === id) active.value = null
   }
+
+  const PANEL_CLASS =
+    'flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto ' +
+    'border-e border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden [--ai-chat-history-actions-width:--spacing(24)]'
 </script>
 
 <template>
@@ -1845,9 +1941,11 @@ export const turnTime = (
     v-if="panelOpen"
     id="ai-chat-history"
     aria-label="Conversation history"
-    class="flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto border-e border-(--border-subtle) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
+    :class="PANEL_CLASS"
   >
-    <div class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)">
+    <div
+      class="flex items-center gap-(--spacing-2xs) border-b border-(--border-default) pb-(--spacing-xs)"
+    >
       <Input
         v-model="search"
         size="small"
@@ -1944,6 +2042,12 @@ export const turnTime = (
           :thread="threadMap.get(item.id)!"
           :project="projectMap.get(threadMap.get(item.id)!.projectId)"
           :view-mode="viewMode"
+        />
+      </template>
+      <template #item-actions="{ item }">
+        <AiChatHistoryActions
+          v-if="threadMap.get(item.id)"
+          :thread="threadMap.get(item.id)!"
           @snooze="toggleSnooze"
           @settle="toggleSettle"
           @discard="discardDraft"
@@ -1970,6 +2074,12 @@ export const turnTime = (
             :thread="threadMap.get(item.id)!"
             :project="projectMap.get(threadMap.get(item.id)!.projectId)"
             :view-mode="viewMode"
+          />
+        </template>
+        <template #item-actions="{ item }">
+          <AiChatHistoryActions
+            v-if="threadMap.get(item.id)"
+            :thread="threadMap.get(item.id)!"
             @snooze="toggleSnooze"
             @settle="toggleSettle"
             @discard="discardDraft"
@@ -2004,6 +2114,12 @@ export const turnTime = (
             :thread="threadMap.get(item.id)!"
             :project="projectMap.get(threadMap.get(item.id)!.projectId)"
             :view-mode="viewMode"
+          />
+        </template>
+        <template #item-actions="{ item }">
+          <AiChatHistoryActions
+            v-if="threadMap.get(item.id)"
+            :thread="threadMap.get(item.id)!"
             @snooze="toggleSnooze"
             @settle="toggleSettle"
             @discard="discardDraft"
@@ -2022,24 +2138,42 @@ export const turnTime = (
       <DrawerHeader class="w-full">
         <DrawerTitle>Conversation history</DrawerTitle>
       </DrawerHeader>
+      <div class="px-(--spacing-md) pb-(--spacing-xs)">
+        <Button
+          label="New chat"
+          icon="az az-square-pen"
+          variant="ghost"
+          size="small"
+          class="w-full"
+          @click="create"
+        />
+      </div>
       <DrawerBody>
-        <ConversationHistory
-          v-model="active"
-          :items="activeItems"
-          :now="sampleHistoryNow"
-        >
-          <template #item="{ item }">
-            <AiChatHistoryRow
-              v-if="threadMap.get(item.id)"
-              :thread="threadMap.get(item.id)!"
-              :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-              :view-mode="viewMode"
-              @snooze="toggleSnooze"
-              @settle="toggleSettle"
-              @discard="discardDraft"
-            />
-          </template>
-        </ConversationHistory>
+        <div class="[--ai-chat-history-actions-width:--spacing(24)]">
+          <ConversationHistory
+            v-model="active"
+            :items="activeItems"
+            :now="sampleHistoryNow"
+          >
+            <template #item="{ item }">
+              <AiChatHistoryRow
+                v-if="threadMap.get(item.id)"
+                :thread="threadMap.get(item.id)!"
+                :project="projectMap.get(threadMap.get(item.id)!.projectId)"
+                :view-mode="viewMode"
+              />
+            </template>
+            <template #item-actions="{ item }">
+              <AiChatHistoryActions
+                v-if="threadMap.get(item.id)"
+                :thread="threadMap.get(item.id)!"
+                @snooze="toggleSnooze"
+                @settle="toggleSettle"
+                @discard="discardDraft"
+              />
+            </template>
+          </ConversationHistory>
+        </div>
       </DrawerBody>
     </DrawerContent>
   </Drawer>

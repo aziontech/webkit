@@ -1286,7 +1286,7 @@
   {
     "name": "prompt-input-model-picker",
     "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
-    "limit": "16 KB",
+    "limit": "16.15 KB",
     "entryOnly": true
   },
   {
@@ -1298,7 +1298,7 @@
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "18.3 KB",
+    "limit": "18.4 KB",
     "entryOnly": true
   },
   {
@@ -1326,7 +1326,7 @@
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "42.3 KB"
+    "limit": "42.35 KB"
   },
   {
     "name": "feedback-reason-dialog",

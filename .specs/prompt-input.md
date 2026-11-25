@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 45cb9141d2425272e05d4cf5705070c7dca20e047ffaa30c2d719d423b2c9ebd
+checksum: 91dcc1f76c08b84780d0493d91d100fd59e257231375af7ba919fac3011fc3f0
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -73,7 +73,7 @@ two rows (text on its own row) until the prompt is cleared.
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning, and it stays hidden
   until the prompt reaches 80% of the limit, so a resting composer shows no number.
-- Default to the full composer in blocks and new AI surfaces (`PromptInput.AttachButton` in `actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `end`, `voice`, `PromptInput.ContextPicker` and `PromptInput.Tools` in `footer`, and the disclaimer in `hint`); omit a control only when the product explicitly does not offer that capability. Attach goes first at the inline start; model, dictate and Submit at the inline end, in that order; the secondary row holds what is not about this prompt (where the chat lives, the tools, a link to the desktop app).
+- Default to the full composer in blocks and new AI surfaces (`PromptInput.AttachButton` in `actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `end`, `voice`, `PromptInput.ContextPicker` in `footer`, the tools in one place only — the "+" menu (`PromptInput.AttachButton` with `tools`) or `PromptInput.Tools` in `footer`, never both, since each lists the enabled tools as chips — and the disclaimer in `hint`); omit a control only when the product explicitly does not offer that capability. Attach goes first at the inline start; model, dictate and Submit at the inline end, in that order; the secondary row holds what is not about this prompt (where the chat lives, the tools, a link to the desktop app).
 - Show the upload state on each file (`loading`, `progress`, `error`); Submit waits for them.
 - Set `voice` only when the product has a voice conversation; Submit replaces it as soon as there is
   something to send.

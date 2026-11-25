@@ -3,9 +3,9 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
-checksum: 37d42cdd3df050d489adcc0e087ecb65060e64e3505e4bb9cbbd7cb87a78d46c
+checksum: 8f8cb90c1d15034596845ba2b72e925cbc8660d3c1951eaabf3bdf91cc4ebf1e
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -124,10 +124,11 @@ Item fields (`ConversationHistoryItem`): `id`, `title`, `updatedAt` (sets the gr
 
 ## Slots
 
-| Slot        | Scope                               | Notes                                                                                   |
-| ----------- | ----------------------------------- | --------------------------------------------------------------------------------------- |
-| `item`      | `{ item: ConversationHistoryItem }` | Replaces a chat row's tag, title and description; the row keeps its button and actions. |
-| `item-meta` | `{ item: ConversationHistoryItem }` | Replaces the end of a chat row (age, lock, status).                                     |
+| Slot           | Scope                               | Notes                                                                                                                                                                                                                                                                                                                                                     |
+| -------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `item`         | `{ item: ConversationHistoryItem }` | Replaces a chat row's tag, title and description; the row keeps its button and actions.                                                                                                                                                                                                                                                                   |
+| `item-meta`    | `{ item: ConversationHistoryItem }` | Replaces the end of a chat row (age, lock, status).                                                                                                                                                                                                                                                                                                       |
+| `item-actions` | `{ item: ConversationHistoryItem }` | Replaces the row actions (Pin, More, Delete) with the app's own controls, outside the row button; they show like the built-in actions. The row content keeps its place while they show; set `--conversation-history-item-actions-width` on the list to make the row end that wide while they show (default: the row's own end padding, so nothing moves). |
 
 ## States
 
@@ -137,7 +138,7 @@ Item fields (`ConversationHistoryItem`): `id`, `title`, `updatedAt` (sets the gr
 - Search: matching projects and sections show expanded with only their matches; the models do not change.
 - Rows: the `SidebarMenuItem` menu row, 32 px (44 px on coarse pointers), fill inset 1 px top and bottom (`border-y border-transparent bg-clip-padding`, `forced-colors:border-y-0`) for a 2 px gap between filled rows, no list gap. A row with a `description` is 56 px: title over the description (`text-body-xs`, muted, one line), `var(--spacing-xs)` block padding. Hover and focus fill the row; the active row is `data-active`, the selected surface.
 - Row end: the age (`showTime`, narrow units in the active locale, `now` under a minute), a lock glyph (`locked`), a `Spinner` (running) or `az-circle-alert` in `var(--text-danger)` (error).
-- Row actions: Pin and More (`itemActions`), or Delete alone (`removable` only), at the inline end; with a fine pointer they show on hover, focus inside the row, the active row and an open menu, on touch always. More opens Pin (P), Rename (R), Share, Lock, Move to project (a sub-menu of the other projects), Archive (A), then Delete in `var(--text-danger)`; labels flip to Unpin, Unlock, Unarchive. Letter hints are `DropdownMenu.Item` `command`s, mounted only while the menu is open.
+- Row actions: Pin and More (`itemActions`), or Delete alone (`removable` only), at the inline end; with a fine pointer they show on hover, focus inside the row, the active row and an open menu, on touch always. The `item-actions` slot replaces them with the app's own controls (Snooze, Settle), rendered as a sibling of the row button so the row never nests one control in another. More opens Pin (P), Rename (R), Share, Lock, Move to project (a sub-menu of the other projects), Archive (A), then Delete in `var(--text-danger)`; labels flip to Unpin, Unlock, Unarchive. Letter hints are `DropdownMenu.Item` `command`s, mounted only while the menu is open.
 - Project actions: New chat (`az-square-pen`) and More: Pin project, Project settings, then Delete project in danger.
 - Rename: the row becomes an `Input` holding the title; Enter or blur saves a changed, non-empty title, Escape cancels; Enter and Escape return focus to the row.
 - Cut-off title: the row's `title` holds the full title only while it is cut off.

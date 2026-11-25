@@ -9,7 +9,6 @@
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
   import { nextTick, ref } from 'vue'
 
   import { sampleContexts, sampleModes, sampleProviders } from '../sample'
@@ -105,7 +104,7 @@
       <PromptInputDictateButton />
     </template>
     <template
-      v-if="contexts.length || tools.length"
+      v-if="contexts.length"
       #footer
     >
       <PromptInputContextPicker
@@ -113,11 +112,6 @@
         v-model="contextKey"
         :options="contexts"
         placeholder="Choose project"
-      />
-      <PromptInputTools
-        v-if="tools.length"
-        v-model="toolKeys"
-        :tools="tools"
       />
     </template>
     <template #hint>
