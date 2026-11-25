@@ -4,16 +4,16 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 9b291886cda8b43abb3f3c72e85e0eeb941695bd25d20ab276cf2d74c941b611
+checksum: 6c09319b9c2594eef3eb4b04b539846ac52b3905814631abe84a68780656ca15
 created: 2026-08-22
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # DocCallout — Component Spec
 
 ## Purpose
 
-The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 ## When to use
 
@@ -89,22 +89,23 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## Tokens
 
-| Region                               | Token (DESIGN.md)                                                                                 |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| typography (copy)                    | `.text-body-sm`                                                                                   |
-| typography (inline code)             | `.text-label-code-sm`                                                                             |
-| text                                 | `var(--text-default)`                                                                             |
-| surface (neutral variant)            | `var(--bg-surface)`                                                                               |
-| border (neutral variant)             | `var(--border-default)`                                                                           |
-| glyph (neutral variant)              | `var(--primary)`                                                                                  |
-| surface + border (severity variants) | `Alert`'s own `data-severity` tokens                                                              |
-| surface (inline code, neutral)       | `var(--bg-hover)`                                                                                 |
-| inset ring (inline code, severity)   | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
-| shape (inline code)                  | `var(--shape-control)`                                                                            |
-| spacing (inline code)                | `var(--spacing-2xs)` inline, no vertical padding                                                  |
-| spacing                              | `var(--spacing-sm)`                                                                               |
-| surface (copy tooltip)               | `var(--bg-contrast)` / `var(--text-contrast)`                                                     |
-| focus (command chip)                 | `var(--ring-color)`                                                                               |
+| Region                             | Token (DESIGN.md)                                                                                 |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------- |
+| typography (copy)                  | `.text-body-sm`                                                                                   |
+| typography (inline code)           | `.text-label-code-sm`                                                                             |
+| text                               | `var(--text-default)`                                                                             |
+| surface (every variant)            | `var(--bg-surface)`                                                                               |
+| border (neutral variant)           | `var(--border-default)`                                                                           |
+| glyph (neutral variant)            | `var(--primary)`                                                                                  |
+| border (severity variants)         | `Alert`'s own `data-severity` border tokens                                                       |
+| glyph (severity variants)          | `var(--info-mark)` / `var(--success-mark)` / `var(--warning-mark)` / `var(--danger-mark)`         |
+| surface (inline code)              | `var(--bg-hover)`                                                                                 |
+| inset ring (inline code, severity) | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
+| shape (inline code)                | `var(--shape-control)`                                                                            |
+| spacing (inline code)              | `var(--spacing-2xs)` inline, no vertical padding                                                  |
+| spacing                            | `var(--spacing-sm)`                                                                               |
+| surface (copy tooltip)             | `var(--bg-contrast)` / `var(--text-contrast)`                                                     |
+| focus (command chip)               | `var(--ring-color)`                                                                               |
 
 ## Theme gaps
 
@@ -118,7 +119,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 - Keyboard map: `Tab` reaches a link or a command chip (`<code data-command>`) in the copy; `Enter` / `Space` on a command chip copies it. A plain chip is not a stop.
 - Copy feedback: the tooltip is `role="tooltip"`; the result is announced in a polite live region teleported to `body`, which binds `dir` and `lang` from the nearest `ConfigProvider`.
 - ARIA: the role comes from `Alert`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
-- Contrast ≥4.5:1: the copy is `--text-default` in every variant, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
+- Contrast ≥4.5:1: the copy is `--text-default` in every variant, on `--bg-surface` in every variant, so it keeps the surface's body-text contrast in both themes; the glyph is the `-mark` token, which passes the icon target on a surface. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
 - `tip` deliberately does **not** speak in `--text-muted` (3.95:1 light, under AA).
 - Touch target: the callout itself is not interactive; a chip is an inline text control (WCAG 2.5.8 inline exception).
 
