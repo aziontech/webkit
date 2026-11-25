@@ -241,8 +241,8 @@
   watch(
     () => ({
       open: Boolean(isOpen.value),
-      side: resolvedSide.value as TooltipSide,
-      align: resolvedAlign.value as TooltipAlign
+      side: resolvedSide.value,
+      align: resolvedAlign.value
     }),
     (state) => emit('state', state),
     { immediate: true, flush: 'sync' }

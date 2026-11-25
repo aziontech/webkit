@@ -1,4 +1,5 @@
 import {
+  type AsyncComponentLoader,
   type Component,
   defineAsyncComponent,
   defineComponent,
@@ -10,9 +11,9 @@ import {
   ssrContextKey
 } from 'vue'
 
-export function defineClientLazy(loader: () => Promise<unknown>, face: Component): Component {
+export function defineClientLazy(loader: AsyncComponentLoader, face: Component): Component {
   const Loaded = defineAsyncComponent({
-    loader: loader as () => Promise<Component>,
+    loader,
     loadingComponent: face,
     delay: 0
   })

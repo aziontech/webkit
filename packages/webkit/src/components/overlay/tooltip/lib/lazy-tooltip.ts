@@ -1,34 +1,31 @@
-import { computed, defineComponent, h, type PropType, ref } from 'vue'
+import { computed, defineComponent, h, ref } from 'vue'
 
 import { defineClientLazy } from '../../../../utils/client-lazy'
 import type { TooltipContentState } from '../parts/tooltip-content.vue'
-import type { TooltipAlign, TooltipSide } from '../tooltip.vue'
+import type { TooltipProps } from '../tooltip.vue'
 import { TOOLTIP_TRIGGER_CLASS } from './trigger-class'
+
+type LazyTooltipProps = Omit<TooltipProps, 'defaultOpen'>
 
 const LazyTooltipContent = defineClientLazy(() => import('../parts/tooltip-content.vue'), {
   render: () => null
 })
 
-export const LazyTooltip = defineComponent({
-  name: 'LazyTooltip',
-  inheritAttrs: false,
-  props: {
-    content: { type: String, required: true },
-    side: { type: String as PropType<TooltipSide | 'auto'>, default: 'top' },
-    align: { type: String as PropType<TooltipAlign>, default: 'center' },
-    sideOffset: { type: Number, default: 8 },
-    delay: { type: Number, default: 200 },
-    disabled: { type: Boolean, default: false }
-  },
-  setup(props, { attrs, slots }) {
+export const LazyTooltip = defineComponent(
+  (props: LazyTooltipProps, { attrs, slots }) => {
     const triggerEl = ref<HTMLElement | null>(null)
     const getTrigger = () => triggerEl.value
+    const side = computed(() => props.side ?? 'top')
+    const align = computed(() => props.align ?? 'center')
     const state = ref<TooltipContentState>({
       open: false,
-      side: props.side === 'auto' ? 'top' : props.side,
-      align: props.align
+      side: side.value === 'auto' ? 'top' : side.value,
+      align: align.value
     })
-    const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tooltip')
+    const testId = computed(() => {
+      const id = attrs['data-testid']
+      return typeof id === 'string' ? id : 'tooltip'
+    })
 
     return () => [
       h(
@@ -49,15 +46,20 @@ export const LazyTooltip = defineComponent({
         trigger: getTrigger,
         testId: testId.value,
         content: props.content,
-        side: props.side,
-        align: props.align,
-        sideOffset: props.sideOffset,
-        delay: props.delay,
-        disabled: props.disabled,
+        side: side.value,
+        align: align.value,
+        sideOffset: props.sideOffset ?? 8,
+        delay: props.delay ?? 200,
+        disabled: props.disabled ?? false,
         onState: (next: TooltipContentState) => {
           state.value = next
         }
       })
     ]
+  },
+  {
+    name: 'LazyTooltip',
+    inheritAttrs: false,
+    props: ['content', 'side', 'align', 'sideOffset', 'delay', 'disabled']
   }
-})
+)
