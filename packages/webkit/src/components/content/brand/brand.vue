@@ -9,6 +9,8 @@
 
   export type BrandSize = 'small' | 'medium' | 'large'
 
+  export type BrandTreatment = 'color' | 'monochrome' | 'knockout'
+
   defineOptions({
     name: 'Brand',
     inheritAttrs: false
@@ -21,15 +23,23 @@
     size?: BrandSize
     /** Hides the mark from assistive tech when visible text beside it already says Azion. */
     decorative?: boolean
+    /** How the mark is inked: `color` keeps the orange mark, `monochrome` paints it in one colour (black on light, white on dark), `knockout` paints it in the label colour of an orange fill. */
+    treatment?: BrandTreatment
   }
 
   const props = withDefaults(defineProps<BrandProps>(), {
     variant: 'default',
     size: 'medium',
-    decorative: false
+    decorative: false,
+    treatment: 'color'
   })
 
   const attrs = useAttrs()
+
+  const ROOT_CLASS =
+    'inline-flex items-center text-(--text-default) data-[treatment=knockout]:text-(--primary-foreground) ' +
+    'data-[treatment=monochrome]:[&_path]:fill-current data-[treatment=knockout]:[&_path]:fill-current ' +
+    '[&>svg]:w-auto [&[data-size=small]>svg]:h-4 [&[data-size=medium]>svg]:h-6 [&[data-size=large]>svg]:h-8'
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'brand')
 
@@ -49,8 +59,8 @@
     :data-testid="testId"
     :data-variant="variant"
     :data-size="size"
-    :class="attrs.class"
-    class="inline-flex items-center [&>svg]:w-auto [&[data-size=small]>svg]:h-4 [&[data-size=medium]>svg]:h-6 [&[data-size=large]>svg]:h-8"
+    :data-treatment="treatment"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <component
       :is="asset"

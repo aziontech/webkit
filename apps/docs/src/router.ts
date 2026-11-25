@@ -19,12 +19,18 @@ export const routes: RouteRecordRaw[] = [
     name: 'foundations',
     component: () => import('./pages/foundations-page.vue')
   },
+  { path: '/foundations/icon', redirect: '/assets/icons' },
   {
     path: '/foundations/:slug',
     name: 'foundation',
     component: () => import('./pages/foundation-page.vue')
   },
   { path: '/assets', name: 'assets', component: () => import('./pages/assets-page.vue') },
+  {
+    path: '/assets/icons',
+    name: 'icons',
+    component: () => import('./pages/icons-page.vue')
+  },
   {
     path: '/frame/block/:id(.*)/:state',
     name: 'block-frame',

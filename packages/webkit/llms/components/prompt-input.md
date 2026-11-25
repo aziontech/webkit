@@ -325,7 +325,12 @@ packages/webkit/src/components/ai/prompt-input/
     { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', shortcut: '⌘5' },
     { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', shortcut: '⌘6' },
     { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', shortcut: '⌘7' },
-    { value: 'azion-auto', label: 'Azion Auto', provider: 'azion', description: 'AI Gateway router' }
+    {
+      value: 'azion-auto',
+      label: 'Azion Auto',
+      provider: 'azion',
+      description: 'AI Gateway router'
+    }
   ]
   const modes = [
     { value: 'low', label: 'Low' },

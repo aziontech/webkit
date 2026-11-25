@@ -12,16 +12,18 @@
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
 - `variant="reduced"` where space is tight (collapsed sidebar, mobile header).
 - `variant="extended"` in marketing layouts that show "AZION technologies".
+- `treatment="monochrome"` where the orange mark cannot be used (a one-colour print, a document, a partner page that asks for a black or white logo); `treatment="knockout"` on an orange `--primary` fill.
 
 ## Do
 
 - Choose the lockup with `variant` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
-- Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
+- Do not recolor or rebuild the SVG; use the component so every surface shows the same mark. The colour comes from `treatment`, never from a class.
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
 - Take the logo only from Brand, never from a copied SVG file or a website URL.
 - Keep clear contrast between the logo and its background, and clear space around it; never shrink it below the `small` size.
 - Do not set the logo next to text or interface elements in the brand primary colour: the signature lockup already carries it.
-- Black and white versions of the logo do not exist yet: ask the Design team for them, never recolour a copy.
+- The `color` treatment works on light and dark surfaces: the orange mark stays, and the "technologies" line of the extended lockup follows the text colour (dark on a white background, light on a dark one).
+- One-colour versions come from `treatment`: `monochrome` is black on light and white on dark, `knockout` is the label colour of an orange `--primary` fill. Never recolour a copy of the drawing.
 
 ## Don’t
 
@@ -44,12 +46,14 @@
 | `variant` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark over "technologies"). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio. |
 | `decorative` | `boolean` | `false` | false | Hides the mark from assistive tech when visible text beside it already says Azion. |
+| `treatment` | `'color' \| 'monochrome' \| 'knockout'` | `'color'` | false | How the mark is inked: `color` keeps the orange mark, `monochrome` paints it in one colour (black on light, white on dark), `knockout` paints it in the label colour of an orange fill. |
 
 ## States
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop
 - `data-size` mirrors the `size` prop
+- `data-treatment` mirrors the `treatment` prop
 
 ## Accessibility
 

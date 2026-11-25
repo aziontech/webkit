@@ -2347,3 +2347,15 @@ Budget-raise: hover-card-content 1.55 KB → 1.7 KB (measured 1.59 KB): the tele
 Budget-raise: popover 11.35 KB → 11.5 KB (measured 11.41 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
 
 Budget-raise: popover-content 1.25 KB → 1.4 KB (measured 1.34 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: doc-layout 75.8 KB → 75.9 KB (measured 75.83 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: doc-call-to-action 12.55 KB → 12.65 KB (measured 12.62 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: brand-globe-scene 14.85 KB → 14.9 KB (measured 14.86 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.

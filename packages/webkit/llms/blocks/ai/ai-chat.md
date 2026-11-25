@@ -1135,11 +1135,32 @@ export interface AiChatThread {
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
 
 export const sampleProjects: AiChatProject[] = [
-  { id: 'workloads', code: 'WL', title: 'Workloads', kind: 'workload', icon: 'az az-workloads', pinned: true },
+  {
+    id: 'workloads',
+    code: 'WL',
+    title: 'Workloads',
+    kind: 'workload',
+    icon: 'az az-workloads',
+    pinned: true
+  },
   { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
   { id: 'firewall', code: 'FW', title: 'Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
-  { id: 'functions', code: 'FN', title: 'Edge Functions', kind: 'function', icon: 'az az-functions', cloud: true },
-  { id: 'storage', code: 'OS', title: 'Object Storage', kind: 'storage', icon: 'az az-object-storage', cloud: true }
+  {
+    id: 'functions',
+    code: 'FN',
+    title: 'Edge Functions',
+    kind: 'function',
+    icon: 'az az-functions',
+    cloud: true
+  },
+  {
+    id: 'storage',
+    code: 'OS',
+    title: 'Object Storage',
+    kind: 'storage',
+    icon: 'az az-object-storage',
+    cloud: true
+  }
 ]
 
 export const sampleHistory: ConversationHistoryItem[] = [
@@ -1229,15 +1250,63 @@ export const sampleProviders: PromptInputMenuOption[] = [
 ]
 
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'gemini-4-neon', label: 'Gemini 4 Neon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘1' },
-  { value: 'gemini-4-carbon', label: 'Gemini 4 Carbon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘2' },
-  { value: 'gemini-3-8-flash', label: 'Gemini 3.8 Flash', provider: 'google', icon: 'az az-gemini', shortcut: '⌘3' },
-  { value: 'claude-opus-4-5', label: 'Claude Opus 4.5', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘4' },
-  { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘5' },
+  {
+    value: 'gemini-4-neon',
+    label: 'Gemini 4 Neon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘1'
+  },
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Carbon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘2'
+  },
+  {
+    value: 'gemini-3-8-flash',
+    label: 'Gemini 3.8 Flash',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘3'
+  },
+  {
+    value: 'claude-opus-4-5',
+    label: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘4'
+  },
+  {
+    value: 'claude-sonnet-4',
+    label: 'Claude Sonnet 4',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘5'
+  },
   { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
-  { value: 'gpt-5-mini', label: 'GPT-5 Mini', provider: 'openai', icon: 'az az-openai', shortcut: '⌘7' },
-  { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', icon: 'az az-meta', shortcut: '⌘8' },
-  { value: 'auto', label: 'Azion Auto', provider: 'azion', icon: 'az az-azion', description: 'AI Gateway router' }
+  {
+    value: 'gpt-5-mini',
+    label: 'GPT-5 Mini',
+    provider: 'openai',
+    icon: 'az az-openai',
+    shortcut: '⌘7'
+  },
+  {
+    value: 'llama-4-maverick',
+    label: 'Llama 4 Maverick',
+    provider: 'meta',
+    icon: 'az az-meta',
+    shortcut: '⌘8'
+  },
+  {
+    value: 'auto',
+    label: 'Azion Auto',
+    provider: 'azion',
+    icon: 'az az-azion',
+    description: 'AI Gateway router'
+  }
 ]
 
 export const sampleModes: PromptInputMenuOption[] = [
@@ -1777,8 +1846,7 @@ export const turnTime = (
       if (!needle) return true
       const projectTitle = projectMap.value.get(item.projectId)?.title ?? ''
       return (
-        item.title.toLowerCase().includes(needle) ||
-        projectTitle.toLowerCase().includes(needle)
+        item.title.toLowerCase().includes(needle) || projectTitle.toLowerCase().includes(needle)
       )
     })
   })
@@ -1847,7 +1915,9 @@ export const turnTime = (
     aria-label="Conversation history"
     class="flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto border-e border-(--border-subtle) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
   >
-    <div class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)">
+    <div
+      class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)"
+    >
       <Input
         v-model="search"
         size="small"

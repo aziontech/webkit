@@ -14,8 +14,13 @@
     },
     {
       "name": "Sizes",
-      "summary": "The lockup at each size token — small (16px), medium (24px), and large (32px) tall — with width scaling to preserve the aspect ratio.",
+      "summary": "The lockup at each size token \u2014 small (16px), medium (24px), and large (32px) tall \u2014 with width scaling to preserve the aspect ratio.",
       "file": "sizes.vue"
+    },
+    {
+      "name": "Treatments",
+      "summary": "The mark inked three ways: color (the orange mark, with the tagline in the text colour so it reads on white and on dark), monochrome (black on light, white on dark) and knockout (on an orange fill).",
+      "file": "treatments.vue"
     }
   ]
 }

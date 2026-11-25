@@ -49,7 +49,8 @@
     while (box && box.scrollHeight <= box.clientHeight) box = box.parentElement
     if (!item || !box) return
     const top = item.getBoundingClientRect().top - box.getBoundingClientRect().top
-    if (top < 0 || top + item.offsetHeight > box.clientHeight) box.scrollTop += top - box.clientHeight / 2
+    if (top < 0 || top + item.offsetHeight > box.clientHeight)
+      box.scrollTop += top - box.clientHeight / 2
   }
 
   onMounted(() => {
