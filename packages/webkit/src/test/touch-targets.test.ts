@@ -1,6 +1,6 @@
 import './reflow.css'
 
-import { fireEvent, render } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { commands, page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
@@ -18,6 +18,7 @@ import ClientQuotesDefault from '../../examples/client-quotes-section/default.vu
 import ClosingAudiences from '../../examples/closing-call-to-action-section/audiences.vue'
 import CodeBlockUnevenTabs from '../../examples/code-block/uneven-tabs.vue'
 import CompetitorComparisonDefault from '../../examples/competitor-comparison-section/default.vue'
+import ConsoleMockupLibrary from '../../examples/console-mockup/library.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
 import DashboardGridEditing from '../../examples/dashboard-grid/editing.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
@@ -308,6 +309,25 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const control = view.container.querySelector<HTMLElement>(`[data-testid="${id}"]`)!
       expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(44)
       expect(hitSpan(control, 'x')).toBeGreaterThanOrEqual(44)
+    })
+
+    it('the CodeBlock file tab of a scaled-down function-code mockup answers past its drawn box and never takes the taps of its neighbour', async () => {
+      await touch()
+      const view = await mount(ConsoleMockupLibrary)
+      const tab = await waitFor(() => {
+        const found = Array.from(view.container.querySelectorAll<HTMLElement>('[role="tab"]')).find(
+          (el) => el.textContent?.trim() === 'Code'
+        )
+        expect(found).toBeTruthy()
+        return found!
+      })
+      tab.scrollIntoView({ block: 'center' })
+      await settle()
+      const r = tab.getBoundingClientRect()
+      for (const x of [r.left + 2, r.left + r.width / 2, r.right - 2])
+        expect(hits(tab, x, r.top + r.height / 2)).toBe(true)
+      expect(tab.getBoundingClientRect().height).toBeLessThan(24)
+      expect(hitSpan(tab, 'y')).toBeGreaterThanOrEqual(32)
     })
 
     it('the AppLayout split-panel separator takes a finger drag across 44px', async () => {

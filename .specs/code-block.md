@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 62087323a4ee08e550a9a0301d979a30237f7fc87ca56300687670c6aa1c6df1
+checksum: d508c56e79190e7c6a890a747a192bdef3aaa35df1a7ed61e0a8f12eb5ec3743
 created: 2026-05-28
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 ---
 
 # CodeBlock — Component Spec
@@ -319,7 +319,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 
 - Container queries: the root is a size container (`@container`), so long lines scroll inside the block instead of widening the layout above it.
 - Narrow (≤ 640 px or a narrow container): the shell takes the container width; lines never wrap and scroll horizontally inside `scroll-area`; the tab strip keeps one row. The split view halves the width, so it suits wide containers; `unified` is the narrow form.
-- Touch: tabs are 32 px tall inside the 40 px strip; the copy control is a 28 px CopyButton with its own touch target.
+- Touch: tabs are 32 px tall inside the 40 px strip (44 px on a coarse pointer), and each tab carries a `data-slot="touch-target"` layer that a scaled-down `ConsoleMockup` frame scales back up; the layer is narrowed by the frame's scale first, so it grows only in height and never takes a neighbouring tab's taps. The copy control is a 28 px CopyButton with its own touch target.
 - Reflow: no page-level horizontal scroll at 320 px; the code region scrolls on its own (code is an allowed two-dimensional exception, WCAG 1.4.10).
 
 ## Performance

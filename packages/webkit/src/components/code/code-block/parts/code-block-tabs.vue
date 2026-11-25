@@ -177,6 +177,11 @@
           />
         </span>
         {{ tab.label }}
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-x-[calc((1_-_var(--console-mockup-shell-scale,1))*50%)] inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+        />
       </button>
     </div>
     <slot name="actions" />

@@ -132,7 +132,9 @@ describe('CodeBlock', () => {
         props: { tabs: twoTabs, defaultValue: 'first' }
       })
 
-      getAllByRole('tab').forEach((tab) => expect(tab.querySelector('span')).toBeNull())
+      getAllByRole('tab').forEach((tab) =>
+        expect(tab.querySelector('span:not([data-slot="touch-target"])')).toBeNull()
+      )
     })
 
     it('does not render a tab header when only one tab is given', () => {
