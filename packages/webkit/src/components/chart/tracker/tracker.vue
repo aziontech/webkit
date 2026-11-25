@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { onClickOutside, useElementSize } from '@vueuse/core'
-  import { computed, ref, useAttrs, useId, watch } from 'vue'
+  import { useElementSize } from '@vueuse/core'
+  import { computed, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useElementListener } from '../../../composables/use-element-listener'
@@ -166,23 +166,29 @@
     )
   }
 
-  let tapped = false
+  let release = (): void => {}
+
+  function onTapOutside(event: globalThis.PointerEvent) {
+    if (rootEl.value?.contains(event.target as globalThis.Node)) return
+    release()
+    setActiveIndex(null)
+  }
 
   function onPointerdown(event: globalThis.PointerEvent) {
-    tapped = event.pointerType === 'touch'
+    if (event.pointerType === 'touch') {
+      release()
+      globalThis.document.addEventListener('pointerdown', onTapOutside, true)
+      release = () => globalThis.document.removeEventListener('pointerdown', onTapOutside, true)
+    }
     onPointermove(event)
   }
+
+  onScopeDispose(() => release())
 
   function onPointerleave(event: globalThis.PointerEvent) {
     if (event.pointerType === 'touch') return
     setActiveIndex(null)
   }
-
-  onClickOutside(rootEl, () => {
-    if (!tapped) return
-    tapped = false
-    setActiveIndex(null)
-  })
 
   const ERROR_CLASS =
     'flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-foreground) ' +
