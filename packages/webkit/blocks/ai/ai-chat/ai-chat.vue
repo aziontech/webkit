@@ -156,18 +156,18 @@
     'retry-interrupts': [event: MouseEvent]
   }>()
 
-  defineSlots<{
-    /** Content after an assistant response, such as the card of a file it produced. */
-    'turn-end'(props: { turn: AiChatMessage }): unknown
-    /** A resizable side pane beside the conversation, given as a Resizable handle and pane, such as an artifact canvas. */
-    canvas(): unknown
-  }>()
-
   const activeKey = defineModel<string | null>('activeKey', { default: null })
   /** The model chosen in the composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
   const modelKey = defineModel<string>('modelKey', { default: 'gemini-4-neon' })
   /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
+
+  defineSlots<{
+    /** Content after an assistant response, such as the card of a file it produced. */
+    'turn-end'?(props: { turn: AiChatMessage }): unknown
+    /** A resizable side pane beside the conversation, given as a Resizable handle and pane, such as an artifact canvas. */
+    canvas?(): unknown
+  }>()
 
   const slots = useSlots()
   const { formatDate } = useLocale()

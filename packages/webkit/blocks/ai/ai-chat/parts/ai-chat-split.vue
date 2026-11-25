@@ -3,6 +3,13 @@
   import Resizable from '@aziontech/webkit/resizable-root'
 
   defineProps<{ split: boolean }>()
+
+  defineSlots<{
+    /** The conversation column. */
+    default(): unknown
+    /** The resizable handle and pane beside it. */
+    canvas?(): unknown
+  }>()
 </script>
 
 <template>
