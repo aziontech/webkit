@@ -2604,6 +2604,8 @@ Budget-raise: css-icons 15.35 KB → 15.45 KB (measured 15.41 KB gzip): the same
 
 Budget-raise: css-console 24.7 KB → 24.95 KB (measured 24.91 KB gzip): the same theme additions (A6-026, A6-122, A6-180), plus the pointer-coarse 44px touch targets of grouped icon buttons, chips and chart legend items (A6-005, A6-015, A6-070), the transparent disabled ghost and outline IconButton fill (A6-232), the whole table row rules beside a frozen column (A6-059) and the platform shortcut hint in menu items (A6-073).
 
+## Audit-6 fixes, lane W6 (2026-11-25)
+
 Budget-raise: doc-markdown 41.95 KB → 42 KB (measured 41.99 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
 
 Budget-raise: media-split-section 17.9 KB → 18 KB (measured 17.96 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
