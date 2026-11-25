@@ -12,7 +12,7 @@
   import FlowDiagramItem from '../flow-diagram-item/flow-diagram-item.vue'
   import FlowDiagramNode from '../flow-diagram-node/flow-diagram-node.vue'
   import FlowDiagramTitle from '../flow-diagram-title/flow-diagram-title.vue'
-  import type { FlowDiagramNodeData } from '../types'
+  import type { FlowDiagramNodeData, FlowDiagramSeverity } from '../types'
 
   defineOptions({
     name: 'FlowDiagramCard'
@@ -27,6 +27,8 @@
     testId: string
     /** Draws the steps as cards of the same width. */
     card: boolean
+    /** Connectors that leave this node for a step that is not the next one in a stacked layout. */
+    routes?: { to: string; label: string; severity: FlowDiagramSeverity | null }[]
   }>()
 
   const emit = defineEmits<{
@@ -109,6 +111,30 @@
         >{{ metric.value }}</FlowDiagramItem
       >
     </FlowDiagramFooter>
+    <ul
+      v-if="routes?.length"
+      :data-testid="`${testId}__node-routes`"
+      class="m-0 flex list-none flex-col gap-(--spacing-2xs) border-t border-solid border-(--border-muted) px-(--spacing-md) py-(--spacing-xs)"
+    >
+      <li
+        v-for="route in routes"
+        :key="route.to"
+        :data-severity="route.severity"
+        :data-testid="`${testId}__node-route`"
+        class="group/route flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
+      >
+        <span
+          aria-hidden="true"
+          class="size-2 shrink-0 rounded-full bg-(--border-strong) group-data-[severity=danger]/route:bg-(--danger-mark) group-data-[severity=warning]/route:bg-(--warning-mark) group-data-[severity=success]/route:bg-(--success-mark) group-data-[severity=info]/route:bg-(--info-mark)"
+        />
+        <span class="min-w-0 truncate">{{ t('flowDiagram.route', { to: route.to }) }}</span>
+        <bdi
+          v-if="route.label"
+          class="shrink-0 text-label-sm text-(--text-default) tabular-nums group-data-[severity=danger]/route:text-(--text-danger)"
+          >{{ route.label }}</bdi
+        >
+      </li>
+    </ul>
     <template v-if="collapsible">
       <button
         type="button"

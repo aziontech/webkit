@@ -1297,6 +1297,7 @@ export const flowDiagram = {
   details: 'Details',
   connections: 'Connections',
   connection: '{from} to {to}',
+  route: 'To {to}',
   emptyTitle: 'Nothing is connected yet.',
   loading: 'Loading the diagram'
 } as const

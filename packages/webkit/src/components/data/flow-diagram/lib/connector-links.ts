@@ -116,6 +116,7 @@ export const stackedLinks = (
     const edge = list.find(
       (e) => e.from === from.dataset['nodeKey'] && e.to === to.dataset['nodeKey']
     )
+    if (list.length && !edge) continue
     const severity = edge?.severity ?? null
     add(
       from,

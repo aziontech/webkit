@@ -105,6 +105,21 @@
     return node?.title || node?.eyebrow || id
   }
 
+  const order = computed<string[]>(() => columns.value.flat().map((node) => node.id))
+  const routesFrom = (id: string) =>
+    vertical.value
+      ? props.edges
+          .filter(
+            (edge) =>
+              edge.from === id && order.value.indexOf(edge.to) !== order.value.indexOf(id) + 1
+          )
+          .map((edge) => ({
+            to: titleOf(edge.to),
+            label: edge.label ?? '',
+            severity: edge.severity ?? null
+          }))
+      : []
+
   const scrollEl = ref<HTMLElement | null>(null)
   const containerEl = ref<HTMLElement | null>(null)
   const { paths, labels, viewBox, vertical } = useFlowDiagramConnectors(containerEl, () =>
@@ -280,6 +295,7 @@
                     :node="node"
                     :open="isOpen(node.id)"
                     :test-id="testId"
+                    :routes="routesFrom(node.id)"
                     card
                     @toggle="() => toggle(node.id)"
                   >
@@ -302,6 +318,7 @@
                 :node="node"
                 :open="isOpen(node.id)"
                 :test-id="testId"
+                :routes="routesFrom(node.id)"
                 :card="uniform"
                 @toggle="() => toggle(node.id)"
               >
@@ -325,6 +342,7 @@
           :data-severity="mark.severity"
           :data-beside="mark.beside || null"
           :data-testid="`${testId}__edge-label`"
+          dir="auto"
           :style="{ left: `${mark.x}px`, top: `${mark.y}px` }"
           :class="EDGE_LABEL_CLASS"
           >{{ mark.text }}</span
