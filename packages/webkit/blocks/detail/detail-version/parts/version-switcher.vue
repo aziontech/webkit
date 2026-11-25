@@ -53,7 +53,8 @@
           size="small"
           placeholder="Search versions"
           aria-label="Search versions"
-          @keydown.stop
+          @keydown.home.stop
+          @keydown.end.stop
         >
           <template #leading>
             <i
@@ -89,7 +90,7 @@
           v-if="!matches.length"
           class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
         >
-          No versions match"{{ query }}".
+          No versions match "{{ query }}".
         </p>
       </Select.Group>
       <template #footer>

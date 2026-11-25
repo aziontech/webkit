@@ -7,16 +7,18 @@
   import { computed } from 'vue'
 
   import type { VersionDetailTab, VersionDetailVersion } from '../detail-version.vue'
-  import { tagFor, VERSION_TABS as tabs } from '../detail-version-states'
+  import { CREATING_TAG, tagFor, VERSION_TABS as tabs } from '../detail-version-states'
 
   export interface VersionTabBarProps {
     /** The version the page is on. */
     viewed: VersionDetailVersion
     /** Whether Version history is open. */
     historyExpanded: boolean
+    /** A new version is being copied from the viewed one. */
+    creating?: boolean
   }
 
-  const props = defineProps<VersionTabBarProps>()
+  const props = withDefaults(defineProps<VersionTabBarProps>(), { creating: false })
 
   const emit = defineEmits<{
     select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
@@ -25,6 +27,7 @@
   const activeTab = defineModel<VersionDetailTab>('tab', { required: true })
 
   const isDraft = computed(() => props.viewed.state === 'draft')
+  const tag = computed(() => (props.creating ? CREATING_TAG : tagFor(props.viewed)))
 </script>
 
 <template>
@@ -37,16 +40,16 @@
     />
     <template #actions>
       <span
-        v-if="!isDraft && viewed.createdOn"
+        v-if="!isDraft && !creating && viewed.createdOn"
         class="hidden text-body-sm text-(--text-muted) md:inline"
       >
         Created {{ viewed.createdOn }}
       </span>
       <Tag
-        :label="tagFor(viewed).label"
-        :variant="tagFor(viewed).variant"
-        :severity="tagFor(viewed).severity"
-        :icon="tagFor(viewed).icon"
+        :label="tag.label"
+        :variant="tag.variant"
+        :severity="tag.severity"
+        :icon="tag.icon"
         size="medium"
       />
       <DropdownMenu
