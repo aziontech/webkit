@@ -40,6 +40,7 @@ import SplitButtonSizes from '../../examples/split-button/sizes.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
 import ToggleGroupSizes from '../../examples/toggle-group/sizes.vue'
+import TraceZoom from '../../examples/trace/zoom.vue'
 import TreeDefault from '../../examples/tree/default.vue'
 import ConversationHistory from '../components/ai/conversation-history/conversation-history.vue'
 
@@ -339,6 +340,21 @@ describe('tap targets on a coarse pointer (styled)', () => {
       await settle()
       expect(hitSpan(handle, 'x')).toBeGreaterThanOrEqual(44)
       expect(hitSpan(handle, 'y')).toBeGreaterThanOrEqual(44)
+    })
+
+    it('the Trace zoom handles answer a tap across 44px of height', async () => {
+      await touch()
+      const view = await mount(TraceZoom)
+      const thumbs = await vi.waitFor(() => {
+        const found = byTestId(view.container as HTMLElement, 'trace__thumb')
+        if (found.length < 2) throw new Error('no thumbs yet')
+        return found
+      })
+      thumbs[0]!.scrollIntoView({ block: 'center' })
+      await settle()
+      const top = thumbs.at(-1)!
+      expect(top.getBoundingClientRect().height).toBeLessThan(44)
+      expect(hitSpan(top, 'y')).toBeGreaterThanOrEqual(44)
     })
 
     it('the Sources pill answers a tap across 44px', async () => {

@@ -177,7 +177,8 @@
     'after:absolute after:inset-y-(--spacing-2xs) after:start-1/2 after:w-0.5 after:-ms-px after:rounded-full after:bg-(--border-selected) focus-visible:ring-2 ' +
     'focus-visible:ring-(--ring-color) focus-visible:outline-none ' +
     'data-[edge=end]:-end-1.5 data-[edge=start]:-start-1.5 ' +
-    'pointer-coarse:w-6 pointer-coarse:data-[edge=end]:-end-3 pointer-coarse:data-[edge=start]:-start-3'
+    'pointer-coarse:w-6 pointer-coarse:data-[edge=end]:-end-3 pointer-coarse:data-[edge=start]:-start-3 ' +
+    "pointer-coarse:before:absolute pointer-coarse:before:-inset-x-2.5 pointer-coarse:before:inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:before:content-['']"
 </script>
 
 <template>
