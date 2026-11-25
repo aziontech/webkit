@@ -111,6 +111,30 @@ describe('Tracker', () => {
     expect(activeIndexOf(view)).toBe(-1)
   })
 
+  it('opens the readout on a touch tap and keeps it until a tap outside', async () => {
+    const view = mount()
+    const strip = view.getByTestId('tracker__strip')
+    const rect = strip.getBoundingClientRect()
+    const at = { clientX: rect.left + rect.width * 0.9, clientY: rect.top, pointerType: 'touch' }
+    await fireEvent.pointerDown(strip, at)
+    await fireEvent.pointerUp(strip, at)
+    await fireEvent.pointerLeave(strip, at)
+    expect(activeIndexOf(view)).toBe(3)
+    expect(view.getByTestId('tracker__readout').getAttribute('data-state')).toBe('open')
+    await fireEvent.pointerDown(document.body, { pointerType: 'touch' })
+    await fireEvent.click(document.body)
+    expect(activeIndexOf(view)).toBe(-1)
+  })
+
+  it('offers Try again in the Error example and draws the strip once it is pressed', async () => {
+    const { default: ErrorExample } = await import('../../../../examples/tracker/error.vue')
+    const view = render(ErrorExample)
+    expect(view.getByRole('alert').textContent).toContain('Uptime could not be loaded.')
+    await fireEvent.click(view.getByRole('button', { name: 'Try again' }))
+    expect(view.queryByRole('alert')).toBeNull()
+    expect(view.getAllByTestId('tracker__block').length).toBeGreaterThan(1)
+  })
+
   it('shows the active label in an aria-hidden readout', async () => {
     const view = mount()
     const root = view.getByTestId('tracker')

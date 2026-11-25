@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useElementSize } from '@vueuse/core'
+  import { onClickOutside, useElementSize } from '@vueuse/core'
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
@@ -42,6 +42,11 @@
 
   /** Index of the active block, or null. Supports v-model:active-index to sync with a sibling chart. */
   const activeIndex = defineModel<number | null>('activeIndex', { default: null })
+
+  defineSlots<{
+    /** Replaces the inline error banner shown in place of the blocks while `error` is set. */
+    error(): unknown
+  }>()
 
   const attrs = useAttrs()
   const dir = useDirection()
@@ -161,9 +166,23 @@
     )
   }
 
-  function onPointerleave() {
+  let tapped = false
+
+  function onPointerdown(event: globalThis.PointerEvent) {
+    tapped = event.pointerType === 'touch'
+    onPointermove(event)
+  }
+
+  function onPointerleave(event: globalThis.PointerEvent) {
+    if (event.pointerType === 'touch') return
     setActiveIndex(null)
   }
+
+  onClickOutside(rootEl, () => {
+    if (!tapped) return
+    tapped = false
+    setActiveIndex(null)
+  })
 
   const ERROR_CLASS =
     'flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-foreground) ' +
@@ -209,18 +228,21 @@
       height="2rem"
       :data-testid="`${testId}__loading`"
     />
-    <p
-      v-else-if="hasError"
-      role="alert"
-      :data-testid="`${testId}__error`"
-      :class="ERROR_CLASS"
-    >
-      <i
-        class="az az-triangle-alert shrink-0"
-        aria-hidden="true"
-      />
-      <span class="min-w-0 truncate">{{ error }}</span>
-    </p>
+    <template v-else-if="hasError">
+      <slot name="error">
+        <p
+          role="alert"
+          :data-testid="`${testId}__error`"
+          :class="ERROR_CLASS"
+        >
+          <i
+            class="az az-triangle-alert shrink-0"
+            aria-hidden="true"
+          />
+          <span class="min-w-0 truncate">{{ error }}</span>
+        </p>
+      </slot>
+    </template>
     <template v-else>
       <div
         v-if="readout"
@@ -236,7 +258,8 @@
       <div
         ref="stripEl"
         :data-testid="`${testId}__strip`"
-        class="flex h-8 w-full gap-0.5"
+        class="flex h-8 w-full touch-pan-y gap-0.5"
+        @pointerdown="onPointerdown"
         @pointermove="onPointermove"
         @pointerleave="onPointerleave"
       >
