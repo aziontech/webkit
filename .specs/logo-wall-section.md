@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: 4d7761d7d86c8acdf47d6d75cfddcc9c0e21739d4733781cda57111e92596761
+checksum: 6c75adf3084f88dfbd9d90b4ec8357fc43d004757b6359c06369a17fc5d4eeaa
 ---
 
 # LogoWallSection — Component Spec
@@ -62,8 +62,8 @@ The customers band: a section title over a framed logo wall of linked client mar
     ]"
     :quote="{
       text: 'Azion delivered the advanced protection and superior performance we needed.',
-      name: 'Ismael Aguilar',
-      jobTitle: 'Information Security Manager at Zoop',
+      name: 'Priya Patel',
+      jobTitle: 'Information security manager at Zoop',
       logo: '/logos/zoop.svg',
       logoAlt: 'Zoop'
     }"

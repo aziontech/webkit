@@ -8,8 +8,8 @@ const TESTID = 'logo-wall-section'
 const TITLE = "Trusted by the world's largest banks"
 const quote = {
   text: 'Azion delivered the protection we needed.',
-  name: 'Ismael Aguilar',
-  jobTitle: 'Information Security Manager at Zoop',
+  name: 'Priya Patel',
+  jobTitle: 'Information security manager at Zoop',
   logo: '/logos/zoop.svg',
   logoAlt: 'Zoop'
 }
