@@ -9,7 +9,7 @@
       label="September 2, 2026"
       title="Terraform Provider"
       description="Version 2.8.0"
-      :tags="['Improvements', 'Bug Fixes']"
+      :tags="['Improvements', 'Bug fixes']"
     >
       <h3>Improvements</h3>
       <ul>
@@ -18,7 +18,7 @@
           are reverted by <code>terraform plan</code>.
         </li>
       </ul>
-      <h3>Bug Fixes</h3>
+      <h3>Bug fixes</h3>
       <ul>
         <li>Fixed <code>terraform import</code> across multiple data sources and resources.</li>
       </ul>
@@ -34,7 +34,7 @@
     <DocChangelogEntry
       label="August 26, 2026"
       title="Azion Console"
-      :tags="['Bug Fixes']"
+      :tags="['Bug fixes']"
     >
       <p>Fixed the pagination controls being unusable on mobile.</p>
     </DocChangelogEntry>
