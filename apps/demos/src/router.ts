@@ -78,6 +78,15 @@ const routes: RouteRecordRaw[] = [
     meta: { title: 'Deploy', resource: true }
   },
   {
+    path: '/network-lists',
+    name: 'network-lists',
+    component: () => import('./pages/network-lists-page.vue'),
+    meta: {
+      title: 'Network Lists',
+      breadcrumbs: [{ label: 'Secure' }, { label: 'Network Lists' }]
+    }
+  },
+  {
     path: '/settings',
     name: 'settings',
     component: () => import('./pages/settings-form-page.vue'),
