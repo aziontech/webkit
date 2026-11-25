@@ -59,6 +59,10 @@ export interface LogViewerContext {
   setSearch: (value: string) => void
   toggleLevel: (level: LogViewerLineLevel) => void
   emitCopy: (event: MouseEvent, value: string) => void
+  /** A LogViewerHeader is mounted, so the copy control sits in its toolbar instead of beside the body. */
+  headerMounted: ComputedRef<boolean>
+  /** Records a mounted LogViewerHeader; returns the function that removes it again. */
+  registerHeader: () => () => void
 }
 
 export const LogViewerInjectionKey: InjectionKey<LogViewerContext> = Symbol('LogViewer')
