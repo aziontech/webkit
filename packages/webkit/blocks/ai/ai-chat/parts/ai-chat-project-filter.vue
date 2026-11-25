@@ -21,6 +21,10 @@
   const open = ref(false)
   const query = ref('')
 
+  function projectIcon({ cloud }: AiChatProject): string {
+    return cloud ? 'az az-cloud' : 'az az-server'
+  }
+
   const activeProject = computed(() => props.projects.find((item) => item.id === selected.value))
   const filtered = computed(() => {
     const needle = query.value.trim().toLowerCase()
@@ -127,10 +131,7 @@
               </span>
               <span class="min-w-0 flex-1 truncate text-start">{{ project.title }}</span>
               <i
-                :class="[
-                  project.cloud ? 'az az-cloud' : 'az az-server',
-                  'shrink-0 text-body-xs text-(--text-muted)'
-                ]"
+                :class="[projectIcon(project), 'shrink-0 text-body-xs text-(--text-muted)']"
                 aria-hidden="true"
               />
             </Button>

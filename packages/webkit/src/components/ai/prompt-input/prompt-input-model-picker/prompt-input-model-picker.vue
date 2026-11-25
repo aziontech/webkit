@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import Button from '../../../action/button/button.vue'
+  import Kbd from '../../../content/kbd/kbd.vue'
   import Popover from '../../../overlay/popover/popover.vue'
   import PopoverContent from '../../../overlay/popover/popover-content/popover-content.vue'
   import PopoverTrigger from '../../../overlay/popover/popover-trigger/popover-trigger.vue'
@@ -198,7 +199,7 @@
               :placeholder="t('promptInput.searchModels')"
               :aria-label="t('promptInput.searchModels')"
               autocomplete="off"
-              class="min-w-0 flex-1 bg-transparent text-body-sm text-(--text-default) placeholder:text-(--text-muted) outline-none"
+              class="min-w-0 flex-1 bg-transparent text-body-sm text-(--text-default) outline-none placeholder:text-(--text-muted) pointer-coarse:text-body-md"
             />
           </div>
           <div
@@ -227,12 +228,13 @@
                 class="az az-check shrink-0 text-body-sm text-(--text-default)"
                 aria-hidden="true"
               />
-              <kbd
+              <Kbd
                 v-if="option.shortcut"
-                class="shrink-0 rounded-(--shape-control) border border-(--border-subtle) bg-(--bg-subtle) px-(--spacing-2xs) py-0.5 font-mono text-body-xs text-(--text-muted)"
+                size="small"
+                class="shrink-0"
               >
                 {{ option.shortcut }}
-              </kbd>
+              </Kbd>
               <span
                 v-else-if="option.description"
                 class="max-w-36 shrink-0 truncate text-body-xs text-(--text-muted)"

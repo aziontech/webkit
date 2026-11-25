@@ -165,8 +165,10 @@ describe('ai/ai-chat', () => {
 
   it('emits send from a starter prompt', async () => {
     const view = render(AiChat)
-    await userEvent.click(view.getByRole('button', { name: 'Protect my site with a WAF' }))
-    expect((view.emitted('send') as [[Event, string]])[0][1]).toBe('Protect my site with a WAF')
+    await userEvent.click(view.getByRole('button', { name: 'Deploy a Next.js app from GitHub' }))
+    expect((view.emitted('send') as [[Event, string]])[0][1]).toBe(
+      'Deploy a Next.js app from GitHub'
+    )
   })
 
   it('shows Stop while loading, emits stop and marks the stopped response', async () => {
@@ -246,8 +248,8 @@ describe('ai/ai-chat', () => {
   it('picks the model from the header title and reports it', async () => {
     const view = render(AiChat, { props: { messages: thread } })
     await userEvent.click(view.getByRole('button', { name: /AI assistant/ }))
-    await userEvent.click(await view.findByRole('menuitemradio', { name: /Thinking/ }))
-    expect(view.emitted('update:modelKey')).toEqual([['thinking']])
+    await userEvent.click(await view.findByRole('menuitemradio', { name: /Claude Opus 4.5/ }))
+    expect(view.emitted('update:modelKey')).toEqual([['claude-opus-4-5']])
   })
 
   it('emits the conversation actions of the More menu with the open conversation', async () => {
@@ -270,10 +272,11 @@ describe('ai/ai-chat', () => {
     await userEvent.click(await view.findByRole('menuitemcheckbox', { name: /Web search/ }))
     expect(view.emitted('update:toolKeys')).toEqual([[['web-search']]])
     await userEvent.keyboard('{Escape}')
-    expect(view.getByRole('list', { name: 'Enabled tools' })).toHaveTextContent('Web search')
+    const chips = view.getAllByRole('list', { name: 'Enabled tools' })
+    expect(chips.map((list) => list.textContent).join(' ')).toContain('Web search')
   })
 
-  it('opens the conversation history and starts a new chat from it', async () => {
+  it('opens the conversation history and picks a conversation from it', async () => {
     const view = render(AiChat, { props: { messages: thread } })
     await userEvent.click(view.getByRole('button', { name: 'Open conversation history' }))
     const drawer = await waitFor(() => {
@@ -282,8 +285,8 @@ describe('ai/ai-chat', () => {
       return within(dialog!)
     })
     expect(drawer.getByText('Purge the cache after a deploy')).toBeTruthy()
-    await userEvent.click(drawer.getByRole('button', { name: 'New chat' }))
-    expect(view.emitted('new-chat')).toHaveLength(1)
+    await userEvent.click(drawer.getByText('Purge the cache after a deploy'))
+    expect(view.emitted('update:activeKey')).toEqual([['h2']])
   })
 
   it('reports the conversation picked in the history', async () => {

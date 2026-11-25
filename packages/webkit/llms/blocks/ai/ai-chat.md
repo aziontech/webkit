@@ -1145,11 +1145,11 @@ export const sampleProjects: AiChatProject[] = [
     pinned: true
   },
   { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
-  { id: 'firewall', code: 'FW', title: 'Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+  { id: 'firewall', code: 'FW', title: 'Firewall', kind: 'firewall', icon: 'az az-firewall' },
   {
     id: 'functions',
     code: 'FN',
-    title: 'Edge Functions',
+    title: 'Functions',
     kind: 'function',
     icon: 'az az-functions',
     cloud: true
@@ -1819,10 +1819,10 @@ export const turnTime = (
   const projectTemplates: Omit<AiChatProject, 'id'>[] = [
     { code: 'WL', title: 'New Workload', kind: 'workload', icon: 'az az-workloads' },
     { code: 'DN', title: 'New Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
-    { code: 'FW', title: 'New Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+    { code: 'FW', title: 'New Firewall', kind: 'firewall', icon: 'az az-firewall' },
     {
       code: 'FN',
-      title: 'New Edge Function',
+      title: 'New Function',
       kind: 'function',
       icon: 'az az-functions',
       cloud: true

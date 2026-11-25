@@ -1262,7 +1262,7 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "16 KB",
+    "limit": "16.15 KB",
     "entryOnly": true
   },
   {

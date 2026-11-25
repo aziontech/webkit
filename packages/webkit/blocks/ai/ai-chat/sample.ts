@@ -363,11 +363,11 @@ export const sampleProjects: AiChatProject[] = [
     pinned: true
   },
   { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
-  { id: 'firewall', code: 'FW', title: 'Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+  { id: 'firewall', code: 'FW', title: 'Firewall', kind: 'firewall', icon: 'az az-firewall' },
   {
     id: 'functions',
     code: 'FN',
-    title: 'Edge Functions',
+    title: 'Functions',
     kind: 'function',
     icon: 'az az-functions',
     cloud: true

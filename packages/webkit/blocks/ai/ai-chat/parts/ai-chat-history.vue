@@ -45,10 +45,10 @@
   const projectTemplates: Omit<AiChatProject, 'id'>[] = [
     { code: 'WL', title: 'New Workload', kind: 'workload', icon: 'az az-workloads' },
     { code: 'DN', title: 'New Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
-    { code: 'FW', title: 'New Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
+    { code: 'FW', title: 'New Firewall', kind: 'firewall', icon: 'az az-firewall' },
     {
       code: 'FN',
-      title: 'New Edge Function',
+      title: 'New Function',
       kind: 'function',
       icon: 'az az-functions',
       cloud: true
