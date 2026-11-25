@@ -6781,7 +6781,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-custo
 - **Satisfaction:** "Satisfaction", then "4.5 out of 5 from 12 surveys" ("1 survey" for one), or "No ratings yet".
 - **Tabs:** "Tickets", "Activity", "Notes".
 - **Tickets:** caption "Tickets from Jane Doe"; columns "Subject", "Status", "Priority", "Next reply", "Updated"; statuses "Open", "Pending", "Solved", "Closed"; "No SLA running" for the screen reader; empty "No tickets yet" with "Alex Morgan has not contacted support yet." and "New ticket".
-- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
+- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755: 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
 - **Notes:** "Add a note", "Only agents can read notes.", "Add note"; error "Write the note first."
 - **Error:** title "Couldn't load this customer", message "Check your connection and retry.", action "Retry".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
@@ -6896,7 +6896,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-deplo
 
 - **Header:** "Deployment logs"; inside a card, "Logs" under a card titled "Deployment" or "Provisioning".
 - **Running status:** count and step, e.g. "3/8 steps", "Build"; the card indicator a progressive word, e.g. "Cloning", "Building".
-- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing rules".
+- **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed: Routing rules".
 - **Run time:** past tense with the duration, e.g. "Deployed in 42s", "Failed after 42s".
 - **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
 - **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing rules."
@@ -7485,7 +7485,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-produ
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DataTablePagination`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, Item, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellLink`, `TableCellTime`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfigProvider, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DataTablePagination`, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, Item, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, `TableCellLink`, `TableCellTime`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as

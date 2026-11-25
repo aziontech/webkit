@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -312,8 +312,11 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
                 <p
                   class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
                 >
-                  To deploy to Production, drop your project anywhere on this page, connect Git, or
-                  run
+                  To deploy to Production,
+                  <span class="hidden pointer-fine:inline"
+                    >drop your project anywhere on this page,
+                  </span>
+                  connect Git, or run
                   <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
                     >platform deploy</code
                   >
@@ -354,6 +357,8 @@ import type { ProductionStep } from './parts/production-progress-tag.vue'
 import type { TopologyTarget } from './use-topology-staging'
 
 const referenceTime = Date.UTC(2026, 10, 10, 12)
+
+export const sampleNow = new Date(referenceTime).toISOString()
 
 export const sampleResource: ResourceDetailResource = {
   name: 'analytics-app',
@@ -849,7 +854,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'ATFO7PL6',
     name: 'ATFO7PL6',
     state: 'ready',
-    description: 'Add function"image-resize"',
+    description: 'Add function "image-resize"',
     author: 'Taylor Reed',
     createdAt: '2026-10-31T14:37:18.145Z'
   },
@@ -889,7 +894,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'A1CST2VJ',
     name: 'A1CST2VJ',
     state: 'ready',
-    description: 'Add function"image-resize"',
+    description: 'Add function "image-resize"',
     author: 'Riley Carter',
     createdAt: '2026-10-26T14:37:18.145Z'
   },

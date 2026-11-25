@@ -36,7 +36,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ### B. Attached table — `DataTable` (required)
 
-A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `type: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
+A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `type: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead. It sets `stackable`: on a phone each domain becomes a card with its environment, policy and certificate under the name, so the environment is never cut under the actions column.
 
 ### C. Environment chip — `Tag` (optional)
 
@@ -234,6 +234,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-doma
           :columns="columns"
           row-key="id"
           :bordered="false"
+          stackable
           :loading="loading"
         >
           <template #cell-environment="{ value }">
