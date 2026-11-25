@@ -1,5 +1,6 @@
-import { defineAsyncComponent, defineComponent, h } from 'vue'
+import { defineComponent, h } from 'vue'
 
+import { defineClientLazy } from '../../../../utils/client-lazy'
 import IconButton from '../../../action/icon-button/icon-button.vue'
 
 export { LazyTooltip } from '../../../overlay/tooltip/lib/lazy-tooltip'
@@ -22,8 +23,7 @@ const CopyButtonFace = defineComponent({
     ])
 })
 
-export const LazyCopyButton = defineAsyncComponent({
-  loader: () => import('../../../action/copy-button/copy-button.vue'),
-  loadingComponent: CopyButtonFace,
-  delay: 0
-})
+export const LazyCopyButton = defineClientLazy(
+  () => import('../../../action/copy-button/copy-button.vue'),
+  CopyButtonFace
+)

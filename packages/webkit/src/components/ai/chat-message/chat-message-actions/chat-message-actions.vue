@@ -1,19 +1,10 @@
 <script setup lang="ts">
   import { useResizeObserver } from '@vueuse/core'
-  import {
-    computed,
-    defineAsyncComponent,
-    h,
-    inject,
-    onMounted,
-    onScopeDispose,
-    ref,
-    useAttrs,
-    watch
-  } from 'vue'
+  import { computed, h, inject, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import { defineClientLazy } from '../../../../utils/client-lazy'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import { ConversationInjectionKey } from '../../conversation/injection-key'
   import ChatMessageFeedback from '../chat-message-feedback/chat-message-feedback.vue'
@@ -95,7 +86,7 @@
   const copyValue = ref<string>(props.copyText)
   const width = ref<number>(0)
   const conversation = inject(ConversationInjectionKey, null)
-  const near = ref<boolean>(!conversation || typeof globalThis.IntersectionObserver === 'undefined')
+  const near = ref<boolean>(!conversation)
   let frame = 0
 
   const testId = computed<string>(
@@ -109,20 +100,16 @@
   )
   const speech = () => props.readAloudText || contentText()
 
-  const ChatMessageMore = defineAsyncComponent({
-    loader: () => import('../parts/chat-message-more.vue'),
-    loadingComponent: {
-      inheritAttrs: false,
-      render: () =>
-        h(IconButton, {
-          icon: 'az az-ellipsis',
-          ariaLabel: t('chatMessage.more'),
-          variant: 'ghost',
-          size: 'medium',
-          disabled: true
-        })
-    },
-    delay: 0
+  const ChatMessageMore = defineClientLazy(() => import('../parts/chat-message-more.vue'), {
+    inheritAttrs: false,
+    render: () =>
+      h(IconButton, {
+        icon: 'az az-ellipsis',
+        ariaLabel: t('chatMessage.more'),
+        variant: 'ghost',
+        size: 'medium',
+        disabled: true
+      })
   })
 
   function refreshCopy(): void {
@@ -154,6 +141,10 @@
     (el) => {
       nearObserver?.disconnect()
       if (!el || near.value) return
+      if (typeof globalThis.IntersectionObserver === 'undefined') {
+        near.value = true
+        return
+      }
       nearObserver = new IntersectionObserver(onNear, {
         root: conversation?.viewportEl.value,
         rootMargin: '600px'
