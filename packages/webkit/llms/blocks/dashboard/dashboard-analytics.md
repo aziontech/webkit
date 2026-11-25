@@ -625,29 +625,33 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         data-testid="dashboard-analytics__error"
         @action="(event: MouseEvent) => emit('retry', event)"
       />
-      <StatTileGroup
-        aria-label="Key figures"
-        :aria-busy="refetching || undefined"
-        class="aria-busy:[&>div]:opacity-60"
+      <div
+        :data-updating="refetching || undefined"
+        class="data-[updating]:[&>div>div]:opacity-60"
       >
-        <StatTile
-          v-for="figure in figures"
-          :key="figure.id"
-          :label="figure.label"
-          :value="figure.value"
-          :format-value="formatters[figure.format]"
-          :delta="figure.delta"
-          :delta-label="currentPeriod.comparison"
-          :inverse="figure.inverse"
-          :trend="figure.trend"
-          :loading="loading"
-          :error="error"
+        <StatTileGroup
+          aria-label="Key figures"
+          :aria-busy="refetching || undefined"
         >
-          <template #aside>
-            <Hint :content="figure.description" />
-          </template>
-        </StatTile>
-      </StatTileGroup>
+          <StatTile
+            v-for="figure in figures"
+            :key="figure.id"
+            :label="figure.label"
+            :value="figure.value"
+            :format-value="formatters[figure.format]"
+            :delta="figure.delta"
+            :delta-label="currentPeriod.comparison"
+            :inverse="figure.inverse"
+            :trend="figure.trend"
+            :loading="loading"
+            :error="error"
+          >
+            <template #aside>
+              <Hint :content="figure.description" />
+            </template>
+          </StatTile>
+        </StatTileGroup>
+      </div>
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
@@ -1932,48 +1936,49 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
       />
     </div>
 
-    <DataTable
-      class="group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60"
-      :data="matchingRows"
-      :columns="columns"
-      row-key="id"
-      sortable
-      density="compact"
-      stackable
-      bordered
-      :loading="loading"
-    >
-      <template #empty>
-        <EmptyState
-          key="empty-state-1"
-          v-if="emptyTitle && !rows.length"
-          size="small"
-          icon="az az-chart-line"
-          :title="emptyTitle"
-          :description="emptyDescription"
-        />
-        <EmptyState
-          key="empty-state-2"
-          v-else
-          size="small"
-          icon="az az-search"
-          title="No matching rows"
-          :description="noMatch()"
-        />
-      </template>
+    <div class="min-w-0 group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60">
+      <DataTable
+        :data="matchingRows"
+        :columns="columns"
+        row-key="id"
+        sortable
+        density="compact"
+        stackable
+        bordered
+        :loading="loading"
+      >
+        <template #empty>
+          <EmptyState
+            key="empty-state-1"
+            v-if="emptyTitle && !rows.length"
+            size="small"
+            icon="az az-chart-line"
+            :title="emptyTitle"
+            :description="emptyDescription"
+          />
+          <EmptyState
+            key="empty-state-2"
+            v-else
+            size="small"
+            icon="az az-search"
+            title="No matching rows"
+            :description="noMatch()"
+          />
+        </template>
 
-      <template #cell-requests="{ row }">
-        <span class="tabular-nums">{{
-          formatCount('requests' in row ? Number(row.requests) : 0)
-        }}</span>
-      </template>
-      <template #footer>
-        <DataTablePagination
-          :page-size="5"
-          :page-size-options="[5, 10, 25]"
-        />
-      </template>
-    </DataTable>
+        <template #cell-requests="{ row }">
+          <span class="tabular-nums">{{
+            formatCount('requests' in row ? Number(row.requests) : 0)
+          }}</span>
+        </template>
+        <template #footer>
+          <DataTablePagination
+            :page-size="5"
+            :page-size-options="[5, 10, 25]"
+          />
+        </template>
+      </DataTable>
+    </div>
   </div>
 </template>
 ```

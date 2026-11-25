@@ -30,9 +30,9 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Button` (required)
+### A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 
-`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create variable`, the same height as Documentation, which opens the drawer.
+`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create variable`, the same height as Documentation, which opens the drawer. `ConfigProvider` only fixes the clock (`now`) for the sample, a test or a server render, so the relative update times read the same everywhere; with live data and no `now` they read the real clock.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 

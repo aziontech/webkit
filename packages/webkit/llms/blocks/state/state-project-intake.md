@@ -295,14 +295,15 @@ Each variant is the same screen in another state: `get_block("state/state-projec
       @drop="onDrop"
     >
       <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
-        <Button
-          label="Choose a folder"
-          variant="outline"
-          size="medium"
-          icon="az az-folder-open"
-          class="pointer-coarse:hidden"
-          @click="(event: MouseEvent) => choose(event, folderPicker)"
-        />
+        <span class="contents pointer-coarse:hidden">
+          <Button
+            label="Choose a folder"
+            variant="outline"
+            size="medium"
+            icon="az az-folder-open"
+            @click="(event: MouseEvent) => choose(event, folderPicker)"
+          />
+        </span>
         <Button
           label="Choose files"
           variant="outline"

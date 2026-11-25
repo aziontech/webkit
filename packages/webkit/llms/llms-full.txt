@@ -2270,7 +2270,7 @@ The account's audit log. An admin or a security reviewer answers "who did this, 
 
 ## Building blocks
 
-- A. Page heading — `PageHeader`, `Button` (required)
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 - B. Filter — `PropertyFilter` (required)
 - C. Period — `DateRangePicker` (required)
 - D. Listing actions — `Tooltip`, `IconButton`, `CollectionPreferences` (required)
@@ -3104,7 +3104,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 
 ## Building blocks
 
-- A. Page heading — `PageHeader`, `Button` (required)
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 - B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 - C. Token table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `useCollection` (required)
 - D. Row actions — `DropdownMenu` (required)
@@ -6782,7 +6782,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-custo
 - **Satisfaction:** "Satisfaction", then "4.5 out of 5 from 12 surveys" ("1 survey" for one), or "No ratings yet".
 - **Tabs:** "Tickets", "Activity", "Notes".
 - **Tickets:** caption "Tickets from Jane Doe"; columns "Subject", "Status", "Priority", "Next reply", "Updated"; statuses "Open", "Pending", "Solved", "Closed"; "No SLA running" for the screen reader; empty "No tickets yet" with "Alex Morgan has not contacted support yet." and "New ticket".
-- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755: 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
+- **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 with 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
 - **Notes:** "Add a note", "Only agents can read notes.", "Add note"; error "Write the note first."
 - **Error:** title "Couldn't load this customer", message "Check your connection and retry.", action "Retry".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
@@ -8556,7 +8556,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ## Building blocks
 
-- A. Page heading — `PageHeader`, `Button` (required)
+- A. Page heading — `ConfigProvider`, `PageHeader`, `Button` (required)
 - B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 - C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellTime`, `Tooltip` (required)
 - D. Row actions — `TableCellActions`, `DropdownMenu` (required)
@@ -10793,11 +10793,10 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 - G. Install outcome — `Alert` (required)
 - H. Integration facts — `KeyValueList` (required)
-- I. Overview (required)
-- J. Install form — `Field`, `Select` (required)
-- K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
-- L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
-- M. Loading catalog — `Card`, `Skeleton` (required)
+- I. Install form — `Field`, `Select` (required)
+- J. Solution page — `Card`, `Select`, `Field`, `KeyValueList` (optional)
+- K. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
+- L. Loading catalog — `Card`, `Skeleton` (required)
 - Install toast — through `toast`
 
 What each part takes: [blocks/view/view-marketplace.md](blocks/view/view-marketplace.md).

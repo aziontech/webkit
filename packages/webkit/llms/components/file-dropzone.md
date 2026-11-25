@@ -166,14 +166,15 @@
           size="medium"
           @click="browseFiles"
         />
-        <Button
-          label="Browse folder"
-          class="pointer-coarse:hidden"
-          variant="secondary"
-          size="medium"
-          icon="az az-folder-open"
-          @click="browseFolder"
-        />
+        <span class="contents pointer-coarse:hidden">
+          <Button
+            label="Browse folder"
+            variant="secondary"
+            size="medium"
+            icon="az az-folder-open"
+            @click="browseFolder"
+          />
+        </span>
       </div>
     </FileDropzone>
     <FileTokenGroup
