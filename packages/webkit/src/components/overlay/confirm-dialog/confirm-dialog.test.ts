@@ -262,6 +262,26 @@ describe('ConfirmDialog', () => {
       expect(onConfirm).toHaveBeenCalledTimes(1)
     })
 
+    it('explains a phrase that does not match when Enter is pressed', async () => {
+      const onConfirm = vi.fn()
+      render(ConfirmDialog, { props: { ...phraseProps, onConfirm } })
+      await settle()
+      const field = byTestId('confirm-dialog__phrase') as HTMLInputElement
+
+      await userEvent.type(field, 'acme-stor{Enter}')
+      expect(onConfirm).not.toHaveBeenCalled()
+      const message = byTestId('confirm-dialog__mismatch')!
+      expect(message.textContent?.trim()).toBe(
+        'This does not match acme-store. Type it exactly to confirm.'
+      )
+      expect(field.getAttribute('aria-invalid')).toBe('true')
+      expect(field.getAttribute('aria-describedby')).toBe(message.id)
+
+      await userEvent.type(field, 'e')
+      expect(byTestId('confirm-dialog__mismatch')).toBeNull()
+      expect(field.getAttribute('aria-invalid')).not.toBe('true')
+    })
+
     it('empties the field every time the dialog opens', async () => {
       const { rerender } = render(ConfirmDialog, { props: phraseProps })
       await settle()

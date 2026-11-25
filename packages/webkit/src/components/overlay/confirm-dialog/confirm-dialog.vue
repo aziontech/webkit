@@ -86,13 +86,19 @@
   )
 
   const phraseId = `${useId()}-phrase`
+  const mismatchId = `${phraseId}-mismatch`
   const typed = ref('')
+  const mismatch = ref(false)
   const confirmEl = ref<{ $el: HTMLElement } | null>(null)
 
   const phraseLabel = computed(() => {
     const [before = '', after = ''] = t('confirmDialog.typeToConfirm').split('{phrase}')
     return { before, after }
   })
+
+  const mismatchMessage = computed(() =>
+    t('confirmDialog.phraseMismatch').replace('{phrase}', props.confirmationPhrase)
+  )
   const phraseMatches = computed(
     () => !props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase
   )
@@ -102,13 +108,23 @@
     () => [open.value, props.confirmationPhrase],
     () => {
       typed.value = ''
+      mismatch.value = false
     }
   )
+
+  watch(typed, () => {
+    mismatch.value = false
+  })
 
   const onPhraseKeydown = (event: KeyboardEvent) => {
     if (event.key !== 'Enter' || event.isComposing) return
     event.preventDefault()
-    if (confirmDisabled.value || props.loading) return
+    if (props.loading) return
+    if (!phraseMatches.value) {
+      mismatch.value = typed.value.trim().length > 0
+      return
+    }
+    if (confirmDisabled.value) return
     confirmEl.value?.$el.click()
   }
 
@@ -177,6 +193,8 @@
             v-model="typed"
             :data-testid="`${testId}__phrase`"
             :aria-labelledby="phraseId"
+            :aria-describedby="mismatch ? mismatchId : undefined"
+            :invalid="mismatch"
             :disabled="loading"
             :spellcheck="false"
             autocomplete="off"
@@ -187,6 +205,15 @@
             data-autofocus
             @keydown="onPhraseKeydown"
           />
+          <p
+            v-if="mismatch"
+            :id="mismatchId"
+            :data-testid="`${testId}__mismatch`"
+            role="alert"
+            class="m-0 text-body-sm text-(--text-danger)"
+          >
+            {{ mismatchMessage }}
+          </p>
         </div>
       </PanelBody>
       <PanelFooter>

@@ -3,7 +3,7 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: edf02fdd11ada0cbb2f59f7aa60bd64cb14d1de9483038474a28bc5eddc3d840
+checksum: bcdbc07698483cd224e4b6f9d37727f2162d1b9ae9c9f78b462bb625822620b0
 spec_version: 10
 created: 2026-11-10
 last_updated: 2026-11-25
@@ -108,7 +108,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 
 ## States
 
-- Visual states: `closed`, `open`
+- Visual states: `closed`, `open`; with `confirmationPhrase`, the field is `invalid` after `Enter` on a phrase that does not match
 - `data-state` on the root: `open` | `closed` (from `dialog`)
 
 ## Motion & Animations
@@ -131,7 +131,7 @@ _none_
 
 - Visible focus: owned by the buttons and `dialog`.
 - Keyboard map: with `confirmationPhrase`, focus lands on the phrase field (the confirm button is disabled until it matches), and `Enter` in the field confirms once the text matches. Otherwise, on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
-- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). It turns off spellcheck, autocomplete, autocapitalize and autocorrect, so a phone keyboard never changes the case of a typed name the match then rejects. Tests: `confirm-dialog.test.ts` › typed confirmation.
+- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). It turns off spellcheck, autocomplete, autocapitalize and autocorrect, so a phone keyboard never changes the case of a typed name the match then rejects. Pressing `Enter` with a non-empty phrase that does not match marks the field invalid and shows "This does not match `name`. Type it exactly to confirm." under it (`confirmDialog.phraseMismatch`, `role="alert"`, tied to the field by `aria-describedby`); the message clears on the next keystroke and when the dialog opens. Tests: `confirm-dialog.test.ts` › typed confirmation.
 - ARIA: the panel is `role="alertdialog"` (it interrupts with a decision), named by its title and described by its description (`DialogTitle`, `DialogDescription`; `aria-describedby` only when a description renders).
 - Nested: opened from a `Drawer` or a `Dialog`, it is the top overlay layer, so `Esc` closes the confirm only, and while `loading` it closes nothing.
 - Contrast ≥4.5:1, owned by the composed parts.
