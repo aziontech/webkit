@@ -12,6 +12,6 @@ export const DROP_CLASS =
   "text-(--text-default) before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-selected) before:content-['']"
 
 export const TEXTAREA_CLASS =
-  'min-w-0 flex-1 basis-0 resize-none bg-transparent px-(--spacing-xs) py-(--spacing-xs) text-body-md text-(--text-default) ' +
+  'min-w-[min(10rem,100%)] flex-1 basis-0 resize-none bg-transparent px-(--spacing-xs) py-(--spacing-xs) text-body-md text-(--text-default) ' +
   'placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
   'group-data-[multiline]/prompt-input-box:order-first group-data-[multiline]/prompt-input-box:basis-full'
