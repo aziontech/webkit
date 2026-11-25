@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 01fe10406626a0b356ee1c2afd883248a8efc83d750fe2a0e823af06db743765
+checksum: 7339aa3c2c8d74e51064c0f6795134ef02e41b9c3908cc8d1116c1d58aa0020a
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -43,6 +43,7 @@ A band of headline figures — throughput, uptime, data centers — set in the d
 
 - Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.
 - Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.
+- Write a unit in its own case (`ms`, `Tbps`, `GB`): a suffix with a letter is set in the text face at the figure's size, because the display face draws lowercase as capitals and `MS` or `TBPS` means another unit. A symbol suffix (`+`, `%`) stays in the display face.
 - Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.
 - Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.
 - Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`).
@@ -96,22 +97,23 @@ _none_
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)              |
-| --------------------------- | ------------------------------ |
-| typography (figure, small)  | `.text-big-number-sm`          |
-| typography (figure, medium) | `.text-big-number-md`          |
-| typography (figure, large)  | `.text-big-number-lg`          |
-| typography (caption)        | `.text-overline-sm`            |
-| figure fit (glyph count)    | `--text-big-number-characters` |
-| figure fit (gap width)      | `--text-big-number-inset`      |
-| figure text                 | `var(--text-default)`          |
-| prefix accent               | `var(--text-default)`          |
-| suffix text                 | `var(--text-muted)`            |
-| caption text                | `var(--text-muted)`            |
-| cell rules and marks        | `var(--border-default)`        |
-| spacing (cell padding)      | `var(--spacing-xl)`            |
-| spacing (figure to caption) | `var(--spacing-sm)`            |
-| spacing (figure parts)      | `var(--spacing-2xs)`           |
+| Region                      | Token (DESIGN.md)                                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------- |
+| typography (figure, small)  | `.text-big-number-sm`                                                              |
+| typography (figure, medium) | `.text-big-number-md`                                                              |
+| typography (figure, large)  | `.text-big-number-lg`                                                              |
+| typography (word unit)      | `.text-big-number-unit-sm`, `.text-big-number-unit-md`, `.text-big-number-unit-lg` |
+| typography (caption)        | `.text-overline-sm`                                                                |
+| figure fit (glyph count)    | `--text-big-number-characters`                                                     |
+| figure fit (gap width)      | `--text-big-number-inset`                                                          |
+| figure text                 | `var(--text-default)`                                                              |
+| prefix accent               | `var(--text-default)`                                                              |
+| suffix text                 | `var(--text-muted)`                                                                |
+| caption text                | `var(--text-muted)`                                                                |
+| cell rules and marks        | `var(--border-default)`                                                            |
+| spacing (cell padding)      | `var(--spacing-xl)`                                                                |
+| spacing (figure to caption) | `var(--spacing-sm)`                                                                |
+| spacing (figure parts)      | `var(--spacing-2xs)`                                                               |
 
 ## Theme gaps
 

@@ -82,6 +82,13 @@
   const FIGURE_CLASS =
     'flex min-w-0 flex-nowrap items-baseline gap-(--spacing-2xs) ' +
     'group-data-[size=large]:text-big-number-lg group-data-[size=medium]:text-big-number-md group-data-[size=small]:text-big-number-sm'
+
+  const isWordUnit = (suffix: string) => /\p{L}/u.test(suffix)
+
+  const UNIT_CLASS =
+    'text-(--text-muted) ' +
+    'data-[word-unit]:group-data-[size=large]:text-big-number-unit-lg data-[word-unit]:group-data-[size=medium]:text-big-number-unit-md ' +
+    'data-[word-unit]:group-data-[size=small]:text-big-number-unit-sm'
 </script>
 
 <template>
@@ -120,7 +127,9 @@
             <span class="text-(--text-default)">{{ item.value }}</span>
             <span
               v-if="item.suffix"
-              class="text-(--text-muted)"
+              :data-testid="`${testId}__unit`"
+              :data-word-unit="isWordUnit(item.suffix) || null"
+              :class="UNIT_CLASS"
               >{{ item.suffix }}</span
             >
           </span>

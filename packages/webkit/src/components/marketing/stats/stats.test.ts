@@ -184,6 +184,28 @@ describe('Stats', () => {
       expect(document.fonts.check('400 32px "Proto Mono"')).toBe(true)
     })
 
+    it.each(SIZES)(
+      'sets a %s unit in the text face at the figure size, so ms and Tbps keep their case',
+      async (size) => {
+        const { getAllByTestId } = await renderAt(1280, 4, size)
+        const units = getAllByTestId('stats__unit')
+        const tbps = units.find((unit) => unit.textContent === 'Tbps') as HTMLElement
+        const figure = tbps.closest('[data-testid="stats__figure"]') as HTMLElement
+
+        expect(getComputedStyle(tbps).fontFamily).toMatch(/^Rubik/)
+        expect(getComputedStyle(figure).fontFamily).toMatch(/Proto Mono/)
+        expect(getComputedStyle(tbps).textTransform).toBe('none')
+        const percent = units.find((unit) => unit.textContent === '%') as HTMLElement
+        expect(getComputedStyle(percent).fontFamily).toMatch(/^'?"?Proto Mono/)
+        expect(
+          Math.abs(
+            parseFloat(getComputedStyle(tbps).fontSize) -
+              parseFloat(getComputedStyle(figure).fontSize)
+          )
+        ).toBeLessThanOrEqual(0.05)
+      }
+    )
+
     describe.each(SIZES)('size %s', (size) => {
       it.each(WIDTHS.flatMap((width) => COUNTS.map((count) => [width, count] as const)))(
         'keeps every figure on one line inside its cell at %ipx with %i figures',
@@ -213,7 +235,8 @@ describe('Stats', () => {
               const partBox = part.getBoundingClientRect()
               expect(partBox.left).toBeGreaterThanOrEqual(contentStart - 0.5)
               expect(partBox.right).toBeLessThanOrEqual(contentEnd + 0.5)
-              expect(Math.abs(partBox.top - box.top)).toBeLessThanOrEqual(1)
+              expect(partBox.top).toBeGreaterThanOrEqual(box.top - 1)
+              expect(partBox.bottom).toBeLessThanOrEqual(box.bottom + 1)
             }
 
             const row = Math.round(cellBox.top)
