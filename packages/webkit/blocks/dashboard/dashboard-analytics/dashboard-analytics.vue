@@ -5,7 +5,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { type FigureFormat, hostColumns, trafficCards, trafficFigures } from './analytics-cards'
   import {
@@ -199,6 +199,18 @@
 
   const requestsForm = ref('line')
   const statusForm = ref('bar')
+  const statusForms = [...chartForms, { label: 'Errors', value: 'errors' }]
+  const statusHidden = ref<string[]>([])
+  watch(
+    [statusForm, statusCodes],
+    ([form, series]) => {
+      statusHidden.value =
+        form === 'errors'
+          ? series.filter((entry) => !/^[45]xx$/.test(entry.id)).map((entry) => entry.id)
+          : []
+    },
+    { immediate: true }
+  )
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 
@@ -229,7 +241,11 @@
   const expandedId = ref<AnalyticsDashboardCardId>(props.defaultExpanded || 'requests')
   const expandedReport = computed(() => trafficCards[expandedId.value])
   const expandedForms = computed(() =>
-    expandedId.value === 'requests' || expandedId.value === 'status-codes' ? chartForms : []
+    expandedId.value === 'status-codes'
+      ? statusForms
+      : expandedId.value === 'requests'
+        ? chartForms
+        : []
   )
 
   const openExpanded = (id: AnalyticsDashboardCardId) => {
@@ -285,6 +301,7 @@
       <StatTileGroup
         aria-label="Key figures"
         :aria-busy="refetching || undefined"
+        class="aria-busy:[&>div]:opacity-60"
       >
         <StatTile
           v-for="figure in figures"
@@ -336,16 +353,17 @@
           :span="6"
           v-bind="card('status-codes')"
           :variation="variations.statusCodes"
-          :forms="chartForms"
+          :forms="statusForms"
           @expand="openExpanded('status-codes')"
           @select="(_event, value) => onCardOption('status-codes', value)"
         >
           <SeriesChart
             v-model:active-index="activeIndex"
+            v-model:hidden-series="statusHidden"
             :series="statusCodes"
             :labels="labels"
             :format-value="formatters.count"
-            :bar="statusForm === 'bar'"
+            :bar="statusForm !== 'line'"
             stacked
             :loading="loading"
             :refetching="refetching"
@@ -414,10 +432,11 @@
       <SeriesChart
         key="chart-2"
         v-else-if="expandedId === 'status-codes'"
+        v-model:hidden-series="statusHidden"
         :series="statusCodes"
         :labels="labels"
         :format-value="formatters.count"
-        :bar="statusForm === 'bar'"
+        :bar="statusForm !== 'line'"
         stacked
         :height="420"
         :refetching="refetching"

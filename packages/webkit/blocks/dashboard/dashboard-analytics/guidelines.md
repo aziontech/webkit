@@ -69,6 +69,9 @@ another.
 
 Switches a time series between Line and Bar. Only on time series, never on a ranked bar chart. Its
 `aria-label` names the card (`Chart form for Requests over time`).
+`Status codes` adds a third option, `Errors`: stacked bars of the 4xx and 5xx classes only (2xx and 3xx
+are hidden in the legend), so the value axis rescales to the error classes a reader opens the card for
+instead of drawing them as slivers on the 2xx scale.
 
 ### G. Control labels — `Tooltip` (required)
 
