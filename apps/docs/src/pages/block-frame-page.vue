@@ -5,9 +5,12 @@
   import { useRoute } from 'vue-router'
 
   import { cached, findBlock, keys } from '../lib/data'
+  import { holdEmbeddedFocus } from '../lib/embedded-focus'
   import { applyTheme, settings } from '../lib/settings'
 
   const route = useRoute()
+  const releaseFocus =
+    typeof window === 'undefined' ? () => {} : holdEmbeddedFocus(window, HTMLElement.prototype)
 
   const id = computed(() => {
     const value = route.params.id
@@ -47,7 +50,10 @@
 
   onMounted(() => window.addEventListener('message', onMessage))
 
-  onBeforeUnmount(() => window.removeEventListener('message', onMessage))
+  onBeforeUnmount(() => {
+    window.removeEventListener('message', onMessage)
+    releaseFocus()
+  })
 
   const FRAME_CLASS =
     'min-h-screen w-full bg-(--bg-canvas) not-data-[layout=fullscreen]:p-(--spacing-lg) ' +
