@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import PageHeader from '@aziontech/webkit/page-header'
   import { useRouter } from 'vue-router'
 
   defineOptions({ name: 'SupportNotFound' })
@@ -20,11 +21,16 @@
 <template>
   <div class="layout-boundary">
     <div class="layout-column flex flex-col">
+      <PageHeader :title="`${label} not found`" />
       <section class="layout-section-start pb-(--layout-section-gap)">
         <EmptyState
           bordered
           icon="az az-search"
-          :title="id ? `${label} ${id} not found` : `${label} not found`"
+          :title="
+            id
+              ? `No ${label.toLowerCase()} matches ${id}`
+              : `No ${label.toLowerCase()} matches this link`
+          "
           description="It may have been deleted or merged, or the link may be out of date."
         >
           <template #actions>

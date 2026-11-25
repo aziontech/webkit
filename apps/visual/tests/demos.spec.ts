@@ -192,6 +192,15 @@ test.describe('demo flows', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible()
   })
 
+  test('a customer link from the block sample opens, and an unknown one is titled', async ({
+    page
+  }) => {
+    await page.goto(`${DEMOS}/support/customers/cus_1042`)
+    await expect(page.getByRole('heading', { level: 1, name: 'Alex Morgan' })).toBeVisible()
+    await page.goto(`${DEMOS}/support/customers/nobody`)
+    await expect(page.getByRole('heading', { level: 1, name: 'Customer not found' })).toBeVisible()
+  })
+
   test('on a phone the list shows each row status', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto(`${DEMOS}/resources`)
