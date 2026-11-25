@@ -305,7 +305,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
     },
     {
       icon: 'az az-application-accelerator',
-      title: '+90% of requests served instantly',
+      title: 'Over 90% of requests served from cache',
       description: 'Customer requests answered close to your users.'
     }
   ]
@@ -315,7 +315,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
       name: 'firstname',
       autocomplete: 'given-name',
       type: 'text',
-      label: 'Name',
+      label: 'First name',
       half: true,
       required: true
     },
@@ -388,7 +388,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
   <HeroFormSection
     eyebrow="Under Cyberattack?"
     title-highlight=""
-    title="Mitigating Cyberattacks"
+    title="Mitigate a cyberattack now"
     description="Our digital security team is available to provide immediate assistance."
     :items="items"
     form-aria-label="Request immediate contact"

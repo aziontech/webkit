@@ -49,6 +49,7 @@
 
 - Visual states: `default`
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
+- Below the large breakpoint the grid holds two columns from `sm`; with an odd count the last tile (`data-wide`) spans both, so the frame never ends on an empty cell. On a phone a `code` sample drops its own side inset, so the code window takes the tile's full width.
 - The server renders both layouts (CSS shows the right one); once mounted only the layout that matches the width stays in the document, so the band never carries two copies of every scene and illustration
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
 - Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. In the grid a `code` sample opens on a label strip naming its file, which holds the copy button, so the button never covers the first line. A scene name that is not registered draws nothing.
@@ -81,7 +82,7 @@
         title: 'Every workload on one list',
         description:
           'See each workload with its domain, status and last deployment, so what is live is never a question.',
-        illustration: 'traffic-and-cost-bar-chart',
+        illustration: 'real-time-metrics-status-codes',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -92,7 +93,7 @@
         title: 'Read the deployment topology',
         description:
           'The domains, the application and the firewall a workload serves, drawn as one chain.',
-        illustration: 'global-network',
+        illustration: 'implement-api-gateway-security',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -103,7 +104,7 @@
         title: 'Domains and TLS, handled',
         description:
           'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
-        illustration: 'dns-protection',
+        illustration: 'improve-application-performance-and-reliability',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -125,7 +126,7 @@
         title: 'Gradual rollouts and instant rollback',
         description:
           'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-        illustration: 'preview',
+        illustration: 'branches',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -359,7 +360,7 @@
   <FeatureScrollSection
     anchor="ship-it"
     eyebrow="Ship It"
-    title="Everything You Need to Build and Deploy"
+    title="Everything you need to build and deploy"
     description="Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves."
     :items="items"
   />

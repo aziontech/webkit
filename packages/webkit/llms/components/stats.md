@@ -19,6 +19,7 @@
 - The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
 - Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.
 - Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.
+- Units are case-sensitive (`ms`, `Tbps`, `GB`): the display face draws lowercase as capitals, so the `suffix` is set in the text face one heading step below the figure (`text-heading-xl` / `-md` / `-sm` for `large` / `medium` / `small`) and keeps the case it is given.
 - Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.
 - Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.
 - Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`).

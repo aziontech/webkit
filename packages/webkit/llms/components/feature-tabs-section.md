@@ -56,7 +56,7 @@
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
 - The frame draws no rule of its own under the tabs: the tab cells close the band with their own bottom rules, so the frame adds its bottom rule only when the under-frame link follows them
 - The header renders only when `title` is set; the action renders only when `primaryAction` is set — as a secondary `button` in the header, or as a `link` under the frame when there is no header
-- Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing.
+- Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing. The band scene sits inset in the pane (`--spacing-xl`, as the code file does), so the scene's own frame never runs into the pane's rules.
 
 ## Accessibility
 
@@ -81,21 +81,21 @@
       description:
         'The run as a waterfall: each step placed against the invocation it belongs to, nested where it nested.',
       illustration: 'live-debugging',
-      illustrationLabel: 'A trace waterfall of one invocation'
+      illustrationLabel: 'A time window of requests, errors and events, with its trace bar'
     },
     {
       title: 'Logs',
       description:
         'Structured output on the same clock as the trace, filtered by level, searchable in place.',
-      illustration: 'traffic-and-cost-bar-chart',
-      illustrationLabel: 'Structured logs filtered by level'
+      illustration: 'real-time-metrics-error-rate',
+      illustrationLabel: 'An error-rate spike with the real-time events behind it'
     },
     {
       title: 'Request path',
       description:
         'The workload, application, function and connector it travelled, each captioned with the time spent there.',
-      illustration: 'distributed-apis',
-      illustrationLabel: 'The path a request took through the platform'
+      illustration: 'request-inspection',
+      illustrationLabel: 'A request inspected on its way through the platform'
     }
   ]
 
@@ -110,7 +110,7 @@
   <FeatureTabsSection
     eyebrow="Observability"
     title="Inspect every run end-to-end"
-    description="Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach. Pick a document to open it."
+    description="Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach."
     :tabs="tabs"
     :primary-action="primaryAction"
   />

@@ -1,6 +1,6 @@
 # Copy Command Section
 
-> A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` the command is one line in a large `InputGroup`, a `$` prompt leading it and an end fade when it scrolls; without it the prompt is a read-only block that wraps, so the reader sees every word they copy. From the design sample's site `CopyCommandSection`.
+> A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …"). Both are a read-only block that wraps, so the reader sees every word they copy; with `shell` a decorative `$` prompt leads the command, which breaks anywhere (a command has no spaces to break at), and without it the agent prompt wraps between words. From the design sample's site `CopyCommandSection`.
 
 - Import: `import CopyCommandSection from '@aziontech/webkit/copy-command-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -25,7 +25,7 @@
 
 ## Related
 
-- `CopyButton`, `InputGroup` — the parts.
+- `CopyButton` — the part.
 - `CliTerminalSection` — a full terminal session.
 
 ## Props
@@ -37,11 +37,11 @@
 
 ## States
 
-- Read-only input; the copy button shows its copied state (from `CopyButton`).
+- Read-only text; the copy button shows its copied state (from `CopyButton`).
 
 ## Accessibility
 
-- The read-only input is named "Command" or "Prompt"; the copy button is named "Copy command" or "Copy prompt".
+- The read-only block is a group named "Command" or "Prompt"; the copy button is named "Copy command" or "Copy prompt".
 - The `$` is decorative (`aria-hidden`). The command is a read-only textbox named "Command"; the prompt is a group named "Prompt" holding its text and the copy button.
 - Keyboard: `Tab` reaches the field (text can be selected) and the copy button.
 
@@ -65,7 +65,7 @@
 ## Responsive
 
 - Fills its column up to `--container-md`; a command is fixed at that width from large, a prompt keeps the width of its column and grows in height.
-- Touch: the copy button is large; the read-only command field can take focus, so on coarse pointers (`pointer-coarse:`) its text steps up to 16 px (`text-label-code-lg`) and iOS Safari does not zoom the page.
+- Touch: the copy button is large; the text is not a field, so it takes no focus and stays at its code size on a phone, wrapping instead of being cut.
 
 ## Examples
 

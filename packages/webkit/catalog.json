@@ -30223,7 +30223,7 @@
      "type": "SiteHeaderSectionLink",
      "default": "undefined",
      "required": "false",
-     "doc": "The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
+     "doc": "The login button beside it, outlined so the sign-up button is the one filled action, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
     },
     {
      "name": "secondaryActionOnPhones",
@@ -30492,7 +30492,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+     "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. The button is named `<label>, <template title>`, so each card's action is told apart."
     },
     {
      "name": "templatesAriaLabel",

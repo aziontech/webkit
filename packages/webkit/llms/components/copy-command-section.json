@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A command or agent prompt with a copy button, under hero or section copy (\"npm create azion\", \"Ask your agent to …\"). With `shell` the command is one line in a large `InputGroup`, a `$` prompt leading it and an end fade when it scrolls; without it the prompt is a read-only block that wraps, so the reader sees every word they copy. From the design sample's site `CopyCommandSection`.",
+ "purpose": "A command or agent prompt with a copy button, under hero or section copy (\"npm create azion\", \"Ask your agent to …\"). Both are a read-only block that wraps, so the reader sees every word they copy; with `shell` a decorative `$` prompt leads the command, which breaks anywhere (a command has no spaces to break at), and without it the agent prompt wraps between words. From the design sample's site `CopyCommandSection`.",
  "setup": null,
  "useWhen": [
   "Use CopyCommandSection for a one-line command or agent prompt with a copy button on a marketing page.",
@@ -20,7 +20,7 @@
   "For an editable field — use `Input`."
  ],
  "related": [
-  "`CopyButton`, `InputGroup` — the parts.",
+  "`CopyButton` — the part.",
   "`CliTerminalSection` — a full terminal session."
  ],
  "bestPractices": [
