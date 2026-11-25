@@ -24,8 +24,39 @@
     { variant: 'extended' as const, label: 'Extended', text: t.value.brandExtended }
   ])
 
+  const surfaces = computed(() => [
+    { theme: 'dark' as const, label: t.value.brandOnDark },
+    { theme: 'light' as const, label: t.value.brandOnLight }
+  ])
+
+  const treatments = computed(() => [
+    {
+      key: 'mono-light',
+      treatment: 'monochrome' as const,
+      theme: 'light' as const,
+      orange: false,
+      text: t.value.brandMonochrome
+    },
+    {
+      key: 'mono-dark',
+      treatment: 'monochrome' as const,
+      theme: 'dark' as const,
+      orange: false,
+      text: t.value.brandMonochrome
+    },
+    {
+      key: 'knockout',
+      treatment: 'knockout' as const,
+      theme: 'light' as const,
+      orange: true,
+      text: t.value.brandKnockout
+    }
+  ])
+
   const llms = (slug: string) => index.foundationLlms[slug]
   const snippet = (variant: string) => `<Brand variant="${variant}" />`
+  const treatmentSnippet = (treatment: string) =>
+    `<Brand variant="extended" treatment="${treatment}" />`
 </script>
 
 <template>
@@ -52,16 +83,15 @@
         <p class="max-w-3xl text-body-sm text-(--text-muted)">{{ t.brandLead }}</p>
       </div>
       <ul
-        data-theme="dark"
-        class="flex flex-col divide-y divide-(--border-muted) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
+        class="flex flex-col divide-y divide-(--border-default) overflow-hidden rounded-(--shape-card) border border-(--border-default)"
       >
         <li
           v-for="lockup in lockups"
           :key="lockup.variant"
-          class="relative flex min-h-60 items-center justify-center px-(--spacing-xl) pb-(--spacing-xl) pt-(--spacing-2xl)"
+          class="flex flex-col"
         >
           <div
-            class="absolute inset-x-0 top-0 flex items-start justify-between gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-md)"
+            class="flex items-start justify-between gap-(--spacing-md) bg-(--bg-surface) px-(--spacing-lg) py-(--spacing-md)"
           >
             <div class="flex flex-col gap-(--spacing-2xs)">
               <h3 class="text-heading-xs">{{ lockup.label }}</h3>
@@ -69,11 +99,55 @@
             </div>
             <CopyText :value="snippet(lockup.variant)" />
           </div>
-          <Brand
-            :variant="lockup.variant"
-            size="large"
-            class="[&>svg]:h-14! md:[&>svg]:h-20!"
-          />
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <div
+              v-for="surface in surfaces"
+              :key="surface.theme"
+              :data-theme="surface.theme"
+              class="relative flex min-h-48 items-center justify-center bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-2xl) text-(--text-default)"
+            >
+              <span
+                class="absolute start-(--spacing-md) top-(--spacing-sm) text-label-sm text-(--text-muted)"
+              >
+                {{ surface.label }}
+              </span>
+              <Brand
+                :variant="lockup.variant"
+                size="large"
+                class="[&>svg]:h-12! md:[&>svg]:h-16!"
+              />
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="flex flex-col gap-(--spacing-2xs)">
+        <h3 class="text-heading-sm">{{ t.brandTreatments }}</h3>
+        <p class="max-w-3xl text-body-sm text-(--text-muted)">{{ t.brandTreatmentsLead }}</p>
+      </div>
+      <ul class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-3">
+        <li
+          v-for="item in treatments"
+          :key="item.key"
+          class="flex flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default)"
+        >
+          <div
+            :data-theme="item.theme"
+            :data-orange="item.orange || null"
+            class="flex min-h-36 items-center justify-center bg-(--bg-canvas) p-(--spacing-xl) text-(--text-default) data-[orange]:bg-(--primary)"
+          >
+            <Brand
+              variant="extended"
+              :treatment="item.treatment"
+              size="large"
+              class="[&>svg]:h-12!"
+            />
+          </div>
+          <div
+            class="flex flex-col items-start gap-(--spacing-xs) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
+          >
+            <p class="text-body-xs text-(--text-muted)">{{ item.text }}</p>
+            <CopyText :value="treatmentSnippet(item.treatment)" />
+          </div>
         </li>
       </ul>
     </section>
@@ -146,7 +220,7 @@
           :label="t.openIcons"
           variant="secondary"
           size="medium"
-          href="/foundations/icon"
+          href="/assets/icons"
           icon="az az-arrow-right"
           icon-position="trailing"
         />

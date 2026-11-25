@@ -3,13 +3,13 @@ name: brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: cdd26cd8d372d021f0863a847abba132377e63d64bc18b712b2b8ae28c74ba09
+checksum: a016e9030c172364c308a2432fad133844b59e10ca7b4bfcc7241a3ead2e7fbc
 created: 2026-07-13
-last_updated: 2026-11-18
+last_updated: 2026-11-24
 ---
 
 # Brand — Component Spec
@@ -24,6 +24,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
 - `variant="reduced"` where space is tight (collapsed sidebar, mobile header).
 - `variant="extended"` in marketing layouts that show "AZION technologies".
+- `treatment="monochrome"` where the orange mark cannot be used (a one-colour print, a document, a partner page that asks for a black or white logo); `treatment="knockout"` on an orange `--primary` fill.
 
 ## When NOT to use
 
@@ -41,12 +42,13 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 ## Best practices
 
 - Choose the lockup with `variant` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
-- Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
+- Do not recolor or rebuild the SVG; use the component so every surface shows the same mark. The colour comes from `treatment`, never from a class.
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
 - Take the logo only from Brand, never from a copied SVG file or a website URL.
 - Keep clear contrast between the logo and its background, and clear space around it; never shrink it below the `small` size.
 - Do not set the logo next to text or interface elements in the brand primary colour: the signature lockup already carries it.
-- Black and white versions of the logo do not exist yet: ask the Design team for them, never recolour a copy.
+- The `color` treatment works on light and dark surfaces: the orange mark stays, and the "technologies" line of the extended lockup follows the text colour (dark on a white background, light on a dark one).
+- One-colour versions come from `treatment`: `monochrome` is black on light and white on dark, `knockout` is the label colour of an orange `--primary` fill. Never recolour a copy of the drawing.
 
 ## Usage
 
@@ -62,11 +64,12 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 
 ## Props
 
-| Prop         | Type                                   | Default     | Required | JSDoc                                                                                                                                      |
-| ------------ | -------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `variant`    | `'default' \| 'reduced' \| 'extended'` | `'default'` | false    | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark over "technologies"). |
-| `size`       | `'small' \| 'medium' \| 'large'`       | `'medium'`  | false    | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio.        |
-| `decorative` | `boolean`                              | `false`     | false    | Hides the mark from assistive tech when visible text beside it already says Azion.                                                         |
+| Prop         | Type                                    | Default     | Required | JSDoc                                                                                                                                                                                   |
+| ------------ | --------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`    | `'default' \| 'reduced' \| 'extended'`  | `'default'` | false    | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark over "technologies").                                              |
+| `size`       | `'small' \| 'medium' \| 'large'`        | `'medium'`  | false    | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio.                                                     |
+| `decorative` | `boolean`                               | `false`     | false    | Hides the mark from assistive tech when visible text beside it already says Azion.                                                                                                      |
+| `treatment`  | `'color' \| 'monochrome' \| 'knockout'` | `'color'`   | false    | How the mark is inked: `color` keeps the orange mark, `monochrome` paints it in one colour (black on light, white on dark), `knockout` paints it in the label colour of an orange fill. |
 
 ## Events
 
@@ -81,6 +84,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop
 - `data-size` mirrors the `size` prop
+- `data-treatment` mirrors the `treatment` prop
 
 ## Motion & Animations
 
@@ -88,9 +92,11 @@ _none_
 
 ## Tokens
 
-| Region                             | Token (DESIGN.md) |
-| ---------------------------------- | ----------------- |
-| brand mark (SVG fill, asset-owned) | `var(--primary)`  |
+| Region                                 | Token (DESIGN.md)           |
+| -------------------------------------- | --------------------------- |
+| brand mark (SVG fill, asset-owned)     | `var(--primary)`            |
+| "technologies" line, `monochrome` mark | `var(--text-default)`       |
+| `knockout` mark                        | `var(--primary-foreground)` |
 
 ## Theme gaps
 
@@ -110,6 +116,7 @@ _none_
 - Default
 - Types — composite story rendering every `variant` value (`default`, `reduced`, `extended`) side-by-side.
 - Sizes — composite story rendering every `size` value (`small`, `medium`, `large`) side-by-side.
+- Treatments — composite story rendering every `treatment` value (`color`, `monochrome`, `knockout`), each on its background; justified because the treatment changes the colour of the mark, which Types and Sizes do not show.
 
 ## Constraints — DO NOT
 

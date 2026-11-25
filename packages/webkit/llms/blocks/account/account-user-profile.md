@@ -1000,6 +1000,7 @@ export function filterHistory(
       />
       <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
         <Skeleton
+          key="skeleton-2"
           v-if="loading"
           width="12rem"
           height="1.25rem"
@@ -1012,6 +1013,7 @@ export function filterHistory(
           <Tag :label="profile.role" />
         </div>
         <Skeleton
+          key="skeleton-3"
           v-if="loading"
           width="16rem"
           height="1rem"

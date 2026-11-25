@@ -185,7 +185,7 @@ await check(
 )
 
 await check('icon names break only at hyphens', DESKTOP, async (page, open) => {
-  await open('/foundations/icon')
+  await open('/assets/icons')
   const bad = await page.$$eval('[data-docs-icon-name]', (list) =>
     list.filter((el) => !window.__docsProbe.breaksOnlyAtHyphens(el)).map((el) => el.textContent)
   )

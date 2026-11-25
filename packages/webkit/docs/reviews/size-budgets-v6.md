@@ -2365,3 +2365,14 @@ Budget-raise: feature-scroll-section 21 KB → 21.1 KB (measured 21.00 KB): Cont
 Budget-raise: feature-widgets-section 20.6 KB → 20.75 KB (measured 20.68 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
 
 Budget-raise: feature-tabs-section 60.6 KB → 60.8 KB (measured 60.72 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+Budget-raise: doc-layout 75.8 KB → 75.9 KB (measured 75.83 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: doc-call-to-action 12.55 KB → 12.65 KB (measured 12.62 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: brand-globe-scene 14.85 KB → 14.9 KB (measured 14.86 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.

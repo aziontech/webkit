@@ -5,7 +5,6 @@ export type FoundationPage = {
   tokens?: 'color' | 'spacing' | 'typography' | 'radius' | 'shadows' | 'motion' | 'z-index'
   markdown?: string
   demo?: 'locale' | 'direction' | 'devices' | 'keyboard'
-  view?: 'icons'
 }
 
 export const FOUNDATIONS: FoundationPage[] = [
@@ -58,13 +57,6 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Z-index',
     summary: 'Stacking layers for fields, popups and overlays.',
     tokens: 'z-index'
-  },
-  {
-    slug: 'icon',
-    title: 'Icons',
-    summary:
-      'Every icon of @aziontech/icons, grouped as Azion products and platform, interface glyphs and third-party logos. Select one to copy it.',
-    view: 'icons'
   },
   {
     slug: 'internationalization',

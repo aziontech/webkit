@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import { useHead } from '@unhead/vue'
-  import { computed, defineAsyncComponent } from 'vue'
+  import { computed } from 'vue'
   import { useRoute } from 'vue-router'
 
   import FoundationDemo from '../components/foundation-demo.vue'
@@ -13,8 +13,6 @@
   import { messages } from '../lib/i18n'
   import type { MarkdownDoc } from '../lib/types'
   import NotFound from './not-found-page.vue'
-
-  const IconsView = defineAsyncComponent(() => import('../components/icons-view.vue'))
 
   const route = useRoute()
   const t = messages
@@ -72,7 +70,6 @@
         v-if="page.tokens"
         :kind="page.tokens"
       />
-      <IconsView v-if="page.view === 'icons'" />
       <section
         v-if="doc"
         class="flex max-w-4xl flex-col gap-(--spacing-sm)"

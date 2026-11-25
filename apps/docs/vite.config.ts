@@ -19,6 +19,7 @@ function staticRoutes(): string[] {
     '/blocks',
     '/foundations',
     '/assets',
+    '/assets/icons',
     ...FOUNDATION_SLUGS.map((slug) => `/foundations/${slug}`),
     ...components.map((item) => `/components/${item.name}`),
     ...blocks.map((block) => `/blocks/${block.id}`),
