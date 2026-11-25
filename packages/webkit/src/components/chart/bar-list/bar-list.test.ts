@@ -180,11 +180,22 @@ describe('BarList', () => {
     }
   })
 
-  it('ends every bar on a solid cap in the full hue, so the length reads in both themes', () => {
+  it('underlines every bar with a solid rule in the full hue that never crosses its label', () => {
     const view = mount()
     for (const bar of view.getAllByTestId('bar-list__bar')) {
-      expect(bar.classList.contains('border-e-2')).toBe(true)
+      expect(bar.classList.contains('border-b-2')).toBe(true)
+      expect(bar.classList.contains('border-e-2')).toBe(false)
       expect(bar.classList.contains('border-(--bar-list-fill)')).toBe(true)
+    }
+  })
+
+  it('isolates the direction of each name and value, so a path keeps its order in right-to-left', () => {
+    const view = render(BarList, {
+      props: { ariaLabel: 'Top paths', items: ITEMS },
+      attrs: { dir: 'rtl' }
+    })
+    for (const id of ['bar-list__name', 'bar-list__value']) {
+      for (const el of view.getAllByTestId(id)) expect(el.getAttribute('dir')).toBe('auto')
     }
   })
 

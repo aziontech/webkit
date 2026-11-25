@@ -138,7 +138,7 @@
 
   const BAR_CLASS =
     'absolute inset-y-0 start-0 rounded-(--shape-control) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] ' +
-    'border-e-2 border-solid border-(--bar-list-fill) forced-color-adjust-none transition-[width] duration-slow-01 ' +
+    'border-b-2 border-solid border-(--bar-list-fill) forced-color-adjust-none transition-[width] duration-slow-01 ' +
     'ease-productive-entrance motion-reduce:transition-none'
 </script>
 
@@ -231,13 +231,18 @@
               :style="{ width: row.width }"
               :class="BAR_CLASS"
             />
-            <span class="relative min-w-0 truncate px-(--spacing-xs) text-label-md">
+            <span
+              dir="auto"
+              :data-testid="`${testId}__name`"
+              class="relative min-w-0 truncate px-(--spacing-xs) text-label-md"
+            >
               {{ row.item.name }}
             </span>
           </span>
           <span class="sr-only">, </span>
           <span
             :data-testid="`${testId}__value`"
+            dir="auto"
             class="shrink-0 text-end text-label-md tabular-nums"
           >
             {{ row.label }}
