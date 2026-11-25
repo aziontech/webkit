@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: ef2ed277a687652c238214b04b3d21a03dda5a955cbda8b79dbb6648190a8e5a
+checksum: 8a9395434ef24a1036c3e2b40754638e1f399cc80f479c675663a5e8b8a4b41b
 created: 2026-08-22
 last_updated: 2026-11-16
 ---
@@ -29,7 +29,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 ## Related
 
 - `DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.
-- `Tag` — renders the entry's tags row (`severity="neutral"`): small and rounded in the label column, medium with the default shape under a `title`.
+- `Tag` — renders the entry's tags row (`severity="neutral"`): small in the label column, medium under a `title`.
 - `use-heading-navigation` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNavigation`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over.
 
 ## Best practices

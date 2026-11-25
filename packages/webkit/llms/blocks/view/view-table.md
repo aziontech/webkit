@@ -189,7 +189,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 - `Empty` — Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with the primary Create Resource; the heading hides its own Create and keeps Documentation, so neither action appears twice.
 - `Loading` — The first load: the heading stays, the PropertyFilter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows under the column header.
 - `Error` — The resources could not load: the heading and the disabled controls row stay, and a danger Alert with Retry takes the table's place, as the primary does when `useCollection` reports `error`.
-- `Deployments` — The deployments list, the same page with its own columns: a PropertyFilter over Version, Status, Project, Environment and Author with Refresh, Download CSV and preferences; Version with a Current `Tag`, a hidden ID, Status as a `StatusIndicator` (a spinner while Building) with the run's duration, the project as a `TableCellLink`, the environment as a rounded `Tag` and the author avatar with the relative time. Clicking a row opens the deployment; its menu holds View details, Redeploy and Promote to production (disabled unless the run is Ready and not already in Production): Redeploy queues a new run at the top and says so in a toast, and Promote to production asks in a `ConfirmDialog`, then makes the run the Current production deployment of its project. Refresh shows the table's loading state, a filter with no match shows No matching deployments, and an account with no deployments shows the flush empty card. The detail-resource Deployments tabs reuse this table without the page heading.
+- `Deployments` — The deployments list, the same page with its own columns: a PropertyFilter over Version, Status, Project, Environment and Author with Refresh, Download CSV and preferences; Version with a Current `Tag`, a hidden ID, Status as a `StatusIndicator` (a spinner while Building) with the run's duration, the project as a `TableCellLink`, the environment as a neutral `Tag` and the author avatar with the relative time. Clicking a row opens the deployment; its menu holds View details, Redeploy and Promote to production (disabled unless the run is Ready and not already in Production): Redeploy queues a new run at the top and says so in a toast, and Promote to production asks in a `ConfirmDialog`, then makes the run the Current production deployment of its project. Refresh shows the table's loading state, a filter with no match shows No matching deployments, and an account with no deployments shows the flush empty card. The detail-resource Deployments tabs reuse this table without the page heading.
 
 Each variant is the same screen in another state: `get_block("view/view-table", { variant })`, or the file under `blocks/view/view-table/variants/`.
 
@@ -1192,7 +1192,6 @@ export const deploymentColumns: TableColumn[] = [
         :label="value"
         :severity="environmentSeverity(value)"
         size="medium"
-        rounded
       />
     </template>
     <template #cell-deployedAt="{ row }">

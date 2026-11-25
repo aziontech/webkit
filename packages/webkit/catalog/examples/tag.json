@@ -7,13 +7,13 @@
   },
   {
    "name": "Severities",
-   "summary": "All severity variants side by side; `highlight` is the brand orange as a tint, for the one value a list singles out (the Owner role).",
+   "summary": "The five status colours, picked by meaning: `neutral` for a plain or inactive value, `info` for a second category, `success`, `warning` and `danger` for outcomes.",
    "file": "examples/tag/severities.vue"
   },
   {
-   "name": "Sizes",
-   "summary": "Medium row (24px, `--spacing-xs` padding and gap) and small row (20px, `--spacing-2xs` padding and gap), each with default shape, pill, icon, and icon + pill.",
-   "file": "examples/tag/sizes.vue"
+   "name": "Variants",
+   "summary": "The three emphasis looks for a category: `primary` (the logo orange) for the one value a list singles out, `accent` for an entity type, `contrast` for the strongest neutral label.",
+   "file": "examples/tag/variants.vue"
   }
  ]
 }

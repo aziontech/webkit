@@ -271,7 +271,6 @@
         <Tag
           severity="neutral"
           size="small"
-          rounded
           :label="bandLabel"
           :data-testid="`${testId}__empty-label`"
         />

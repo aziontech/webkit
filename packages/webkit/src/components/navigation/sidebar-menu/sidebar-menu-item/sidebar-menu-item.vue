@@ -171,7 +171,6 @@
               :label="tagValue"
               :variant="tagVariant"
               :severity="tagSeverity ?? (tagVariant ? undefined : 'info')"
-              rounded
             />
           </slot>
         </span>

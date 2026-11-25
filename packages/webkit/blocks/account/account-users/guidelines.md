@@ -26,7 +26,7 @@ The view-table controls row (`view/view-table`): a `PropertyFilter` bound with `
 
 ### C. Users table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `Tag`, `useCollection` (required)
 
-`DataTable` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (highlight), Admin (info), Developer and Viewer (secondary). Status is `TableCellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `TableCellTime`, or `Not signed in yet` for an invitation.
+`DataTable` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (`variant="primary"`, the one orange value), Admin (info), Developer and Viewer (neutral). Status is `TableCellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `TableCellTime`, or `Not signed in yet` for an invitation.
 
 ### D. Teams per person — `MultiSelect`, `Tooltip` (required)
 

@@ -1,6 +1,6 @@
 # DetailDomainsCard (`detail/detail-domains-card`)
 
-> The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.
+> The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.
 
 - Surface: app
 - Source: `blocks/detail/detail-domains-card/detail-domains-card.vue` in `@aziontech/webkit`
@@ -95,7 +95,7 @@ Then delete `sample.ts` and its import.
 ## Do
 
 - Keep the card unpadded and the table borderless, so there is one border around the whole list.
-- Keep one chip per row: the Environment `Tag` (secondary, medium, rounded); every other attribute is plain text, with a glyph where it helps.
+- Keep one chip per row: the Environment `Tag` (neutral, medium); every other attribute is plain text, with a glyph where it helps.
 - Leave a cell empty when the attribute does not apply to that record.
 - Hide the row menu on records the user cannot change, rather than showing disabled options.
 - Count the records in the footer with the right singular or plural noun.
@@ -242,7 +242,6 @@ Each variant is the same screen in another state: `get_block("detail/detail-doma
               v-if="value"
               severity="neutral"
               size="medium"
-              rounded
               icon="az az-layers"
               :label="value"
             />

@@ -3,13 +3,13 @@ name: tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 97ef913ca76fbee5c1e2ba4e0357713fae5c058530e62ada5cf8de406d71986b
+checksum: 535338f69d06738da0bf28e2d766cc79c0e3a97588f42a4de4aa1cff11759781
 created: 2026-05-22
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # Tag — Component Spec
@@ -18,13 +18,25 @@ last_updated: 2026-11-23
 
 Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag.
 
-A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon, a pill shape with `rounded`, and two sizes; it is never interactive and never counts.
+A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon and two sizes, and has one shape; it is never interactive and never counts.
 
 ## When to use
 
-- Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
-- Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.
-- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the logo orange as a fill with `--primary-foreground` text, like the success, info and warning tags.
+- Label or categorize an item with a short descriptive text, optionally with a leading icon.
+- Pick the colour from one of two sets, never both on one tag: `severity` when the word is an outcome or a status (`neutral`, `info`, `success`, `warning`, `danger`), `variant` when it is a category that needs emphasis (`primary`, `accent`, `contrast`). `severity` wins when both are set.
+
+| Case                                                                | Prop and value       | Example                              |
+| ------------------------------------------------------------------- | -------------------- | ------------------------------------ |
+| A plain category, an inactive or off value                          | `severity="neutral"` | Developer, Viewer, Inactive, Staging |
+| A second category that has to stand apart from neutral              | `severity="info"`    | Admin, Preview                       |
+| A good outcome                                                      | `severity="success"` | Active, Allowed, Verified            |
+| Needs attention soon                                                | `severity="warning"` | Pending, Expiring                    |
+| Failed or blocked                                                   | `severity="danger"`  | Blocked, Failed                      |
+| The one value the screen singles out                                | `variant="primary"`  | Owner, Current, Recommended          |
+| A category in the accent colour (an entity type next to others)     | `variant="accent"`   | Organization                         |
+| A neutral label with the strongest contrast, on media or a busy row | `variant="contrast"` | Beta, New                            |
+
+- The logo orange (`variant="primary"`) marks **one** value per list or card. When several values need emphasis, use `severity` or `accent`.
 
 ## When NOT to use
 
@@ -39,9 +51,9 @@ A compact, read-only word on an item, colored by its brand look `variant` or its
 ## Best practices
 
 - Colour comes from `variant` or `severity`; the optional icon is decorative — keep it `aria-hidden`.
-- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `variant="highlight"` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Pick the colour by meaning with the table in When to use. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
 - Do not restyle a Tag with colour classes to get a tint; every tint is a `variant` or a `severity`.
-- Use `rounded` for the pill shape rather than a custom radius.
+- Do not round a Tag into a pill with a class: every Tag has the one control shape, so tags in a row line up.
 
 ## Usage
 
@@ -61,14 +73,13 @@ A compact, read-only word on an item, colored by its brand look `variant` or its
 
 ## Props
 
-| Prop       | Type                                                        | Default     | Required | JSDoc                                                                                                                                                                                                                        |
-| ---------- | ----------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                                                    | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                |
-| `variant`  | `'primary' \| 'accent' \| 'contrast' \| 'highlight'`        | `'primary'` | false    | Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
-| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | —           | false    | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set.                                                                                          |
-| `size`     | `'small' \| 'medium'`                                       | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                                          |
-| `rounded`  | `boolean`                                                   | `false`     | false    | Pill shape when true.                                                                                                                                                                                                        |
-| `icon`     | `string`                                                    | `''`        | false    | Azion icon class for the leading icon.                                                                                                                                                                                       |
+| Prop       | Type                                                        | Default     | Required | JSDoc                                                                                                                                                                                                  |
+| ---------- | ----------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `label`    | `string`                                                    | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                          |
+| `variant`  | `'primary' \| 'accent' \| 'contrast'`                       | `'primary'` | false    | Emphasis look of the tag surface and label, used when `severity` is not set: `primary` (the logo orange, one value per list), `accent` and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | —           | false    | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set.                                                                    |
+| `size`     | `'small' \| 'medium'`                                       | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                    |
+| `icon`     | `string`                                                    | `''`        | false    | Azion icon class for the leading icon.                                                                                                                                                                 |
 
 ## Events
 
@@ -91,18 +102,17 @@ _none_
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                                                                       |
-| ---------------------- | --------------------------------------------------------------------------------------- |
-| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                         |
-| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                         |
-| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                     |
-| spacing (small)        | `var(--spacing-2xs)` horizontal padding and icon gap                                    |
-| shape (all severities) | `var(--shape-control)`                                                                  |
-| surface (primary)      | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes                  |
-| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                           |
-| surface (highlight)    | `var(--primary)` / `var(--primary-foreground)`, the logo orange with black text (6.7:1) |
-| shape (pill)           | `rounded-full`                                                                          |
-| ring                   | `var(--ring-color)`                                                                     |
+| Region              | Token (DESIGN.md)                                                      |
+| ------------------- | ---------------------------------------------------------------------- |
+| typography (medium) | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)        |
+| typography (small)  | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)        |
+| spacing (medium)    | `var(--spacing-xs)` horizontal padding and icon gap                    |
+| spacing (small)     | `var(--spacing-2xs)` horizontal padding and icon gap                   |
+| shape               | `var(--shape-control)`, the one shape of every tag                     |
+| surface (primary)   | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes |
+| surface (contrast)  | `var(--bg-contrast)` / `var(--text-contrast)`                          |
+| surface (neutral)   | `var(--bg-selected)` / `var(--text-default)`                           |
+| ring                | `var(--ring-color)`                                                    |
 
 ## Theme gaps
 
@@ -113,7 +123,7 @@ _none_
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is `--primary-foreground` on the logo orange fill (6.7:1).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `primary` label is `--primary-foreground` on the logo orange fill (6.7:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
@@ -127,7 +137,8 @@ _none_
 ## Examples
 
 - Default
-- Types — every variant and every severity.
+- Severities — the five status colours.
+- Variants — the three emphasis looks.
 - Sizes
 - WithIcon
 

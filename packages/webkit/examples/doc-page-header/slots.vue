@@ -53,19 +53,16 @@
           label="Terminal"
           severity="neutral"
           size="medium"
-          rounded
         />
         <Tag
           label="Subscription"
           severity="neutral"
           size="medium"
-          rounded
         />
         <Tag
           label="Project memory"
           severity="neutral"
           size="medium"
-          rounded
         />
       </div>
     </template>

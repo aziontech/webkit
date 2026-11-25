@@ -399,7 +399,7 @@ The one highlighted value of a set (the `Owner` role among Admin / Member) is
 `variant="highlight"`, the orange tint; an `Inactive` state is `neutral`, never `danger` — nothing
 failed.
 
-**A CATEGORY chip is one `rounded` tag in one severity.** A category says _which kind_, not _how it
+**A CATEGORY chip is one tag in one severity.** A category says _which kind_, not _how it
 is going_ — an environment, a type, a tier. Branching its colour (`Production` blue, everything else
 grey) makes the tag carry a second meaning the reader has to learn, and it competes with the status
 colour that earned the row's attention. The tag's **name** is what distinguishes the values, so the
@@ -494,7 +494,7 @@ and a `noun`; an item with `href` opens in a new tab, and the `item` slot takes 
 ### Tags — `TableCellTags`
 
 A list of tags shows as many as fit the cell and moves the rest behind `+N`; it measures itself, so
-the same column reads well at every width. Tags are rounded and neutral (a category, not a status).
+the same column reads well at every width. Tags are neutral (a category, not a status).
 
 ```vue
 <template #cell-tags="{ value }">
@@ -607,7 +607,7 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
 - [ ] Every name that leaves the screen is `TableCellLink` (12px `az-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
-- [ ] Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
+- [ ] Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one tag in one severity from a shared helper — branching colour is reserved for real status.
 - [ ] Domain cell = `TableCellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
 - [ ] In a 320 px box the grid scrolls sideways inside the table (no `stackable` on a console list) and the toolbar wraps.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).

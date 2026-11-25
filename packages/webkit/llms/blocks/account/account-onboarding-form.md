@@ -565,7 +565,6 @@ Each variant is the same screen in another state: `get_block("account/account-on
                                   :variant="option.variant"
                                   :severity="option.severity"
                                   size="small"
-                                  rounded
                                 />
                                 <span class="text-label-sm text-(--text-muted)">
                                   {{ option.price }}

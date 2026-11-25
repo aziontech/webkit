@@ -8864,10 +8864,10 @@
     },
     {
      "name": "variant",
-     "type": "'primary' | 'accent' | 'contrast' | 'highlight'",
+     "type": "'primary' | 'accent' | 'contrast'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
+     "doc": "Emphasis look of the tag surface and label, used when `severity` is not set: `primary` (the logo orange, one value per list), `accent` and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
     },
     {
      "name": "severity",
@@ -8882,13 +8882,6 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Size token; `medium` is 24px tall, `small` is 20px."
-    },
-    {
-     "name": "rounded",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Pill shape when true."
     },
     {
      "name": "icon",
@@ -37139,7 +37132,7 @@
    "source": "blocks/detail/detail-domains-card/detail-domains-card.vue",
    "surface": "app",
    "kind": "fragment",
-   "summary": "The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.",
+   "summary": "The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.",
    "intents": [
     "domains section",
     "domains card",

@@ -167,7 +167,6 @@
         :key="`${index}-${item}`"
         severity="neutral"
         size="medium"
-        rounded
         :data-testid="`${testId}__tag`"
         class="min-w-0 max-w-full"
       >
@@ -203,7 +202,6 @@
             :label="item"
             severity="neutral"
             size="medium"
-            rounded
           />
         </span>
         <span

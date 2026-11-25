@@ -50,7 +50,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 ## Do
 
 - Use CSS variables from `@aziontech/theme` for color: `var(--primary)`, `var(--bg-surface)`, `var(--text-default)`, `var(--border-default)`, and the other semantic tokens.
-- Use one orange, the logo orange `#F3652B`, and never as a text colour: it misses WCAG AA as text on light surfaces. It is `var(--primary)`: a fill behind `--primary-foreground` text (the button, `Tag variant="highlight"`, the `HeroTitle` highlight), or a bar, underline, glyph or glow beside text in `--text-default` (the `Quote` name bar, `LinkDirectory` column underlines). The `Eyebrow` carries no orange mark: its only mark is the `//` prefix on marketing headers. A glow starts from `--primary` and fades to transparent, never to a lighter or darker orange.
+- Use one orange, the logo orange `#F3652B`, and never as a text colour: it misses WCAG AA as text on light surfaces. It is `var(--primary)`: a fill behind `--primary-foreground` text (the button, `Tag variant="primary"`, the `HeroTitle` highlight), or a bar, underline, glyph or glow beside text in `--text-default` (the `Quote` name bar, `LinkDirectory` column underlines). The `Eyebrow` carries no orange mark: its only mark is the `//` prefix on marketing headers. A glow starts from `--primary` and fades to transparent, never to a lighter or darker orange.
 - Put text on a fill with that fill's pair: every fill colour has a `-foreground` text colour (`--primary` / `--primary-foreground`, `--danger` / `--danger-foreground`); the inverted surface `--bg-contrast` takes `--text-contrast`.
 - Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `2xs…2xl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
@@ -109,9 +109,9 @@ use it, so you can check a choice against a real one.
 | --- | --- | --- |
 | Main action | `--primary`, `--primary-foreground` | `Button variant="primary"`, `Checkbox` checked, `Progress` fill, `Tag variant="primary"`, `StatusIndicator severity="alt"` |
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
-| Brand tint | `--primary-mask`, `--primary-selected` | `Tag variant="highlight"` surface, `RadioGroup` selected card |
+| Brand tint | `--primary-mask`, `--primary-selected` | `RadioGroup` selected card |
 | Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` edges and ports |
-| Brand marks: the logo colours | `--primary`, `--brand-blue`, `--brand-blue-foreground` | the logo orange as a mark beside text in `--text-default` or a fill behind `--primary-foreground`, never as text (owner, 2026-11-22): the `Quote` name bar, `LinkDirectory` column underlines, the `HeroTitle` highlight fill, the `CompetitorComparisonSection` group bar, `Tag variant="highlight"`, the hovered linked `FeatureItem` underline; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
+| Brand marks: the logo colours | `--primary`, `--brand-blue`, `--brand-blue-foreground` | the logo orange as a mark beside text in `--text-default` or a fill behind `--primary-foreground`, never as text (owner, 2026-11-22): the `Quote` name bar, `LinkDirectory` column underlines, the `HeroTitle` highlight fill, the `CompetitorComparisonSection` group bar, `Tag variant="primary"`, the hovered linked `FeatureItem` underline; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
 | Hover and press | `--bg-hover`, `--bg-active`, `--bg-mask` | every interactive component (`--bg-mask` is the hover layer on `Button variant="outline"` and `variant="ghost"`) |
@@ -7076,7 +7076,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-dns-z
 
 # DetailDomainsCard (`detail/detail-domains-card`)
 
-> The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its c…
+> The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium tag, its deployment policy as text, its certifica…
 
 - Surface: app
 - Source: `blocks/detail/detail-domains-card/detail-domains-card.vue` in `@aziontech/webkit`
@@ -7128,7 +7128,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-domai
 ## Do
 
 - Keep the card unpadded and the table borderless, so there is one border around the whole list.
-- Keep one chip per row: the Environment `Tag` (secondary, medium, rounded); every other attribute is plain text, with a glyph where it helps.
+- Keep one chip per row: the Environment `Tag` (neutral, medium); every other attribute is plain text, with a glyph where it helps.
 - Leave a cell empty when the attribute does not apply to that record.
 - Hide the row menu on records the user cannot change, rather than showing disabled options.
 - Count the records in the footer with the right singular or plural noun.
@@ -21487,23 +21487,23 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 # Tag
 
-> Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon, a pill shape with `rounded`, and two sizes; it is never interactive and never counts.
+> Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon and two sizes, and has one shape; it is never interactive and never counts.
 
 - Import: `import Tag from '@aziontech/webkit/tag'`
 - Category: content · Surface: app · Structure: monolithic
 
 ## When to use
 
-- Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
-- Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.
-- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the logo orange as a fill with `--primary-foreground` text, like the success, info and warning tags.
+- Label or categorize an item with a short descriptive text, optionally with a leading icon.
+- Pick the colour from one of two sets, never both on one tag: `severity` when the word is an outcome or a status (`neutral`, `info`, `success`, `warning`, `danger`), `variant` when it is a category that needs emphasis (`primary`, `accent`, `contrast`). `severity` wins when both are set.
+- The logo orange (`variant="primary"`) marks **one** value per list or card. When several values need emphasis, use `severity` or `accent`.
 
 ## Do
 
 - Colour comes from `variant` or `severity`; the optional icon is decorative — keep it `aria-hidden`.
-- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `variant="highlight"` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Pick the colour by meaning with the table in When to use. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
 - Do not restyle a Tag with colour classes to get a tint; every tint is a `variant` or a `severity`.
-- Use `rounded` for the pill shape rather than a custom radius.
+- Do not round a Tag into a pill with a class: every Tag has the one control shape, so tags in a row line up.
 
 ## Don’t
 
@@ -21520,10 +21520,9 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `variant` | `'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `variant` | `'primary' \| 'accent' \| 'contrast'` | `'primary'` | false | Emphasis look of the tag surface and label, used when `severity` is not set: `primary` (the logo orange, one value per list), `accent` and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
 | `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `—` | false | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
-| `rounded` | `boolean` | `false` | false | Pill shape when true. |
 | `icon` | `string` | `''` | false | Azion icon class for the leading icon. |
 
 ## Slots
@@ -21546,7 +21545,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is `--primary-foreground` on the logo orange fill (6.7:1).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `primary` label is `--primary-foreground` on the logo orange fill (6.7:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
@@ -24007,7 +24006,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `table-cell-link/table-cell-link.vue` — cross-resource link preset.
 - `table-cell-id/table-cell-id.vue` — identifier preset: the value (`dir="ltr"`, tabular numbers, truncating) and a `CopyButton` pinned to the end edge named `Copy <resource> ID`.
 - `table-cell-status/table-cell-status.vue` — status preset: one `Tag` (`size="medium"`, truncating).
-- `table-cell-tags/table-cell-tags.vue` — tag list preset: rounded secondary tags, as many as fit the cell (measured with a `ResizeObserver` against a hidden ruler), the rest behind an `OverflowCount`.
+- `table-cell-tags/table-cell-tags.vue` — tag list preset: neutral tags, as many as fit the cell (measured with a `ResizeObserver` against a hidden ruler), the rest behind an `OverflowCount`.
 - `table-cell-time/table-cell-time.vue` — last-modified preset: the author's `Avatar` (name on its tooltip; an email reads as a name) and a `<time datetime>` with the relative time (`just now` under 45 s), the absolute…
 - `table-cell-actions/table-cell-actions.vue` — row actions preset: a `DropdownMenu` (`side="bottom"` + `align="end"`) triggered by an outlined ellipsis `IconButton` named `Actions for <name>`.
 

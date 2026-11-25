@@ -2,13 +2,14 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/tag/default.vue'
-import Types from '../../../../examples/tag/severities.vue'
+import Severities from '../../../../examples/tag/severities.vue'
+import Variants from '../../../../examples/tag/variants.vue'
 import WithIcon from '../../../../examples/tag/with-icon.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tag from './tag.vue'
 
 const SEVERITIES = ['neutral', 'success', 'info', 'warning', 'danger'] as const
-const VARIANTS = ['primary', 'accent', 'contrast', 'highlight'] as const
+const VARIANTS = ['primary', 'accent', 'contrast'] as const
 
 const SIZES = ['small', 'medium'] as const
 
@@ -21,8 +22,6 @@ describe('Tag', () => {
     expect(root.getAttribute('data-variant')).toBe('primary')
     expect(root.hasAttribute('data-severity')).toBe(false)
     expect(root.getAttribute('data-size')).toBe('medium')
-    // rounded defaults to false → attribute is null (rendered via `rounded || null`).
-    expect(root.getAttribute('data-rounded')).toBeNull()
   })
 
   it('honors a consumer-supplied data-testid', () => {
@@ -74,7 +73,7 @@ describe('Tag', () => {
 
   it('lets severity win over variant when both are set', () => {
     const { getByTestId } = render(Tag, {
-      props: { label: 'Label', variant: 'highlight', severity: 'danger' }
+      props: { label: 'Label', variant: 'accent', severity: 'danger' }
     })
 
     const root = getByTestId('tag')
@@ -90,16 +89,6 @@ describe('Tag', () => {
       expect(getByTestId('tag').getAttribute('data-size')).toBe(size)
       unmount()
     }
-  })
-
-  it('sets data-rounded only when rounded is true', () => {
-    const roundedOn = render(Tag, { props: { label: 'Label', rounded: true } })
-    // Rendered as :data-rounded="rounded || null" → present (empty string) when true.
-    expect(roundedOn.getByTestId('tag').hasAttribute('data-rounded')).toBe(true)
-    roundedOn.unmount()
-
-    const roundedOff = render(Tag, { props: { label: 'Label', rounded: false } })
-    expect(roundedOff.getByTestId('tag').getAttribute('data-rounded')).toBeNull()
   })
 
   it('renders the leading icon element with the provided class and hides it from a11y', () => {
@@ -142,9 +131,9 @@ describe('Tag', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations with an icon and pill shape', async () => {
+  it('has no a11y violations with an icon at the small size', async () => {
     const { container } = render(Tag, {
-      props: { label: 'Label', icon: 'az az-box', rounded: true, size: 'small' }
+      props: { label: 'Label', icon: 'az az-box', size: 'small' }
     })
 
     await expectNoA11yViolations(container)
@@ -162,28 +151,29 @@ describe('Tag', () => {
     }
   })
 
-  it('renders every variant and every severity in the Types example', () => {
-    const { getAllByTestId } = render(Types)
-
-    const looks = getAllByTestId('tag').map(
-      (tag) => tag.getAttribute('data-severity') ?? tag.getAttribute('data-variant')
-    )
-
-    expect([...looks].sort()).toEqual([...SEVERITIES, ...VARIANTS].sort())
-  })
-
   it.each([
-    ['Severities', Types],
-    ['WithIcon', WithIcon]
-  ])('names each look in words in the %s example, never by colour alone', (_, example) => {
-    const tags = render(example).getAllByTestId('tag')
-    const words = tags.map((tag) => tag.textContent?.trim().toLowerCase())
-    const looks = tags.map(
-      (tag) => tag.getAttribute('data-severity') ?? tag.getAttribute('data-variant')
-    )
+    ['Severities', Severities, SEVERITIES],
+    ['Variants', Variants, VARIANTS]
+  ])('renders every look of its set once in the %s example', (_, example, set) => {
+    const looks = render(example)
+      .getAllByTestId('tag')
+      .map((tag) => tag.getAttribute('data-severity') ?? tag.getAttribute('data-variant'))
 
-    expect(words).toEqual(looks)
+    expect([...looks].sort()).toEqual([...set].sort())
   })
+
+  it.each([['WithIcon', WithIcon]])(
+    'names each look in words in the %s example, never by colour alone',
+    (_, example) => {
+      const tags = render(example).getAllByTestId('tag')
+      const words = tags.map((tag) => tag.textContent?.trim().toLowerCase())
+      const looks = tags.map(
+        (tag) => tag.getAttribute('data-severity') ?? tag.getAttribute('data-variant')
+      )
+
+      expect(words).toEqual(looks)
+    }
+  )
 
   it('gives each severity its own glyph in the WithIcon example', () => {
     const glyphs = render(WithIcon)

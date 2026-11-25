@@ -159,7 +159,7 @@
     "assets/gpa-extended-color.svg",
     "assets/gpa-extended-mono.svg",
     "assets/gpa-extended-reversed.svg",
-    "assets/gpa-photo.jpg",
+    "assets/gpa-photo.webp",
     "assets/gpa-symbol-color.svg",
     "assets/grafana-symbol-mono.svg",
     "assets/graphql-symbol-mono.svg",
@@ -239,7 +239,7 @@
     "assets/neon-extended-reversed.svg",
     "assets/netshoes-extended-color.svg",
     "assets/netshoes-extended-reversed.svg",
-    "assets/netshoes-photo.jpg",
+    "assets/netshoes-photo.webp",
     "assets/new-balance-extended-color.svg",
     "assets/new-balance-extended-mono.svg",
     "assets/new-balance-extended-reversed.svg",
@@ -930,7 +930,6 @@
     "account/account-team-permissions",
     "account/account-users",
     "ai/ai-action-approval",
-    "ai/ai-api-key",
     "ai/ai-chat",
     "ai/ai-chat-drawer",
     "auth/auth-sign-in",
@@ -972,6 +971,7 @@
     "edit/edit-rule-builder",
     "edit/edit-schema",
     "edit/edit-variables",
+    "settings/settings-api-key",
     "settings/settings-canned-responses",
     "settings/settings-form",
     "shell/shell-console",
@@ -1199,7 +1199,8 @@
         "ready",
         "streaming"
       ],
-      "voice": null
+      "voice": null,
+      "voiceActive": null
     },
     "prompt-input-root": {
       "accept": null,
@@ -1221,7 +1222,8 @@
         "ready",
         "streaming"
       ],
-      "voice": null
+      "voice": null,
+      "voiceActive": null
     },
     "prompt-queue": {
       "ariaLabel": null,
@@ -1347,6 +1349,7 @@
       "ariaLabel": null,
       "copiedLabel": null,
       "disabled": null,
+      "icon": null,
       "size": [
         "large",
         "medium",
@@ -1367,7 +1370,8 @@
         "medium",
         "small"
       ],
-      "value": null
+      "value": null,
+      "wrapLines": null
     },
     "search-trigger": {
       "collapsible": null,
@@ -1655,7 +1659,6 @@
     "tag": {
       "icon": null,
       "label": null,
-      "rounded": null,
       "severity": [
         "danger",
         "info",
@@ -1670,7 +1673,6 @@
       "variant": [
         "accent",
         "contrast",
-        "highlight",
         "primary"
       ]
     },
@@ -1714,6 +1716,7 @@
       "format": [
         "local",
         "relative",
+        "time",
         "utc"
       ],
       "timeZone": null,
@@ -1811,6 +1814,11 @@
         "large",
         "medium",
         "small"
+      ],
+      "treatment": [
+        "color",
+        "knockout",
+        "monochrome"
       ],
       "variant": [
         "default",
@@ -2465,6 +2473,7 @@
         "responsive",
         "vertical"
       ],
+      "showPorts": null,
       "uniform": null
     },
     "flow-diagram-root": {
@@ -2482,6 +2491,7 @@
         "responsive",
         "vertical"
       ],
+      "showPorts": null,
       "uniform": null
     },
     "transfer-list": {
@@ -2754,6 +2764,7 @@
     "progress": {
       "indeterminate": null,
       "max": null,
+      "severity": null,
       "size": [
         "large",
         "medium",
@@ -3080,6 +3091,7 @@
         "horizontal",
         "vertical"
       ],
+      "readonly": null,
       "required": null,
       "variant": [
         "card",
@@ -3096,6 +3108,7 @@
         "horizontal",
         "vertical"
       ],
+      "readonly": null,
       "required": null,
       "variant": [
         "card",
@@ -3149,6 +3162,7 @@
       "invalid": null,
       "modelValue": null,
       "name": null,
+      "readonly": null,
       "variant": [
         "default",
         "privacy"
@@ -3499,6 +3513,11 @@
       ]
     },
     "save-bar": {
+      "column": [
+        "focused",
+        "form",
+        "full"
+      ],
       "variant": [
         "centered",
         "docked",
@@ -3584,10 +3603,6 @@
       "items": null,
       "label": null,
       "marks": null,
-      "size": [
-        "medium",
-        "small"
-      ],
       "variant": [
         "band",
         "plain"
