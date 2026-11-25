@@ -67,7 +67,6 @@
                     size="small"
                     placeholder="Search"
                     aria-label="Search"
-                    @keydown.stop
                   >
                     <template #leading>
                       <i

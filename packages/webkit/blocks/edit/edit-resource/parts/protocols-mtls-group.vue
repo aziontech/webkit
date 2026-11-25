@@ -121,7 +121,6 @@
                       size="small"
                       placeholder="Search certificates"
                       aria-label="Search certificates"
-                      @keydown.stop
                     >
                       <template #leading>
                         <i
