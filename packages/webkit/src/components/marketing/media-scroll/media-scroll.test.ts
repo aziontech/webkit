@@ -1,5 +1,6 @@
 import { render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { h, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -65,14 +66,27 @@ function rowsOf(container: Element): globalThis.HTMLLIElement[] {
 
 function activeTitle(container: Element): string {
   const row = rowsOf(container).find((item) => item.getAttribute('data-active') !== null)
-  return row?.querySelector('button')?.textContent?.trim() ?? ''
+  return row?.querySelector('h3')?.textContent?.trim() ?? ''
 }
 
 function completedTitles(container: HTMLElement): string[] {
   return rowsOf(container)
     .filter((row) => row.getAttribute('data-completed') !== null)
-    .map((row) => row.querySelector('button')?.textContent?.trim() ?? '')
+    .map((row) => row.querySelector('h3')?.textContent?.trim() ?? '')
 }
+
+async function viewport(width: number): Promise<void> {
+  await page.viewport(width, 900)
+  await vi.waitFor(() => expect(globalThis.matchMedia(`(width: ${width}px)`).matches).toBe(true))
+}
+
+beforeAll(async () => {
+  await viewport(1280)
+})
+
+afterAll(async () => {
+  await page.viewport(414, 896)
+})
 
 afterEach(async () => {
   await scrollTo(0)
@@ -96,8 +110,9 @@ describe('MediaScroll', () => {
     expect(container.querySelector(`[data-testid="${TESTID}"]`)).toBeNull()
   })
 
-  it('renders every claim as an ordered list entry with its own control', () => {
+  it('renders every claim as an ordered list entry with its own control', async () => {
     const { container } = render(MediaScroll, { props: { items: ITEMS } })
+    await nextTick()
     const rows = rowsOf(container as HTMLElement)
     expect(rows).toHaveLength(ITEMS.length)
     expect(rows.map((row) => row.querySelector('button')?.textContent?.trim())).toEqual(
@@ -113,8 +128,9 @@ describe('MediaScroll', () => {
     )
   })
 
-  it('opens the first claim at rest and marks it aria-current', () => {
+  it('opens the first claim at rest and marks it aria-current', async () => {
     const { container } = render(MediaScroll, { props: { items: ITEMS } })
+    await nextTick()
     expect(activeTitle(container as HTMLElement)).toBe(ITEMS[0].title)
     expect(completedTitles(container as HTMLElement)).toEqual([])
 
@@ -180,8 +196,9 @@ describe('MediaScroll', () => {
     expect(scenes.some((scene) => scene.parentElement?.contains(backdrops[0]))).toBe(false)
   })
 
-  it('adds no controls to a claim when the actions slot is empty', () => {
+  it('adds no controls to a claim when the actions slot is empty', async () => {
     const { container } = render(MediaScroll, { props: { items: ITEMS } })
+    await nextTick()
     expect(container.querySelectorAll('ol > li button')).toHaveLength(ITEMS.length)
     expect(container.querySelector('ol a')).toBeNull()
   })
@@ -272,6 +289,7 @@ describe('MediaScroll', () => {
     document.documentElement.style.scrollPaddingTop = '78px'
     try {
       const { container } = render(MediaScroll, { props: { items: ITEMS } })
+      await nextTick()
       await scrollTo(slice() * 0.2)
 
       for (const index of [2, 0, 1, 2, 1]) {
@@ -292,6 +310,7 @@ describe('MediaScroll', () => {
         props: { items: ITEMS },
         slots: { actions: () => h('a', { href: '#' }, 'Docs') }
       })
+      await nextTick()
       rowsOf(container)[2].querySelector('button')?.focus()
       await nextTick()
       expect(activeTitle(container)).toBe(ITEMS[2].title)
@@ -300,6 +319,21 @@ describe('MediaScroll', () => {
       expect(emitted('active-index-change')).toEqual([[2]])
     } finally {
       release()
+    }
+  })
+
+  it('renders each title as plain heading text below lg, with no control that does nothing', async () => {
+    await viewport(390)
+    try {
+      const { container } = render(MediaScroll, { props: { items: ITEMS } })
+      await nextTick()
+      expect(container.querySelectorAll('ol button')).toHaveLength(0)
+      expect(rowsOf(container).map((row) => row.querySelector('h3')?.textContent?.trim())).toEqual(
+        ITEMS.map((item) => item.title)
+      )
+      await expectNoA11yViolations(container)
+    } finally {
+      await viewport(1280)
     }
   })
 
