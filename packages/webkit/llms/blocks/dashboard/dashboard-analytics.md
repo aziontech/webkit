@@ -346,11 +346,13 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     comparedPeriod,
     comparedPeriods,
     fixedFormatter,
+    hiddenForStatusForm,
     metricFormatters,
     metricQuery,
     periodSlug,
     runCardOption,
-    seriesRows
+    seriesRows,
+    statusForms
   } from './analytics-report'
   import ExpandedDialog from './parts/expanded-dialog.vue'
   import ExpandedTable from './parts/expanded-table.vue'
@@ -532,16 +534,10 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
   const requestsForm = ref('line')
   const statusForm = ref('bar')
-  const statusForms = [...chartForms, { label: 'Errors', value: 'errors' }]
   const statusHidden = ref<string[]>([])
   watch(
     [statusForm, statusCodes],
-    ([form, series]) => {
-      statusHidden.value =
-        form === 'errors'
-          ? series.filter((entry) => !/^[45]xx$/.test(entry.id)).map((entry) => entry.id)
-          : []
-    },
+    ([form, series]) => (statusHidden.value = hiddenForStatusForm(form, series)),
     { immediate: true }
   )
   const activeIndex = ref<number | null>(null)
@@ -573,13 +569,11 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const expanded = ref(props.defaultExpanded !== '')
   const expandedId = ref<AnalyticsDashboardCardId>(props.defaultExpanded || 'requests')
   const expandedReport = computed(() => trafficCards[expandedId.value])
-  const expandedForms = computed(() =>
-    expandedId.value === 'status-codes'
-      ? statusForms
-      : expandedId.value === 'requests'
-        ? chartForms
-        : []
-  )
+  const cardForms: Partial<Record<AnalyticsDashboardCardId, typeof chartForms>> = {
+    requests: chartForms,
+    'status-codes': statusForms
+  }
+  const expandedForms = computed(() => cardForms[expandedId.value] ?? [])
 
   const openExpanded = (id: AnalyticsDashboardCardId) => {
     expandedId.value = id
@@ -1459,6 +1453,13 @@ export const chartForms = [
   { label: 'Line', value: 'line' },
   { label: 'Bar', value: 'bar' }
 ]
+
+export const statusForms = [...chartForms, { label: 'Errors', value: 'errors' }]
+
+export const hiddenForStatusForm = (form: string, series: { id: string }[]): string[] =>
+  form === 'errors'
+    ? series.filter((entry) => !/^[45]xx$/.test(entry.id)).map((entry) => entry.id)
+    : []
 ```
 
 ## `parts/expanded-dialog.vue`
