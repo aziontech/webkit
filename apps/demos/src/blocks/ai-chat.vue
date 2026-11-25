@@ -34,14 +34,16 @@
     interruptErrorText,
     queueItemOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import { computed, nextTick, onMounted, ref, watch } from 'vue'
+  import { computed, ref, useSlots } from 'vue'
 
   import { failureText, turnTime } from './ai-chat.ai-chat-failure'
   import { sampleModels, sampleSuggestions, sampleTools } from './ai-chat.sample'
+  import { useComposerFocus } from './ai-chat.use-composer-focus'
   import AiChatComposer from './ai-chat-composer.vue'
   import AiChatConnectionStatus from './ai-chat-connection-status.vue'
   import AiChatHeader, { type AiChatHeaderAction } from './ai-chat-header.vue'
   import AiChatSkeleton from './ai-chat-skeleton.vue'
+  import AiChatSplit from './ai-chat-split.vue'
   import AiChatStart from './ai-chat-start.vue'
   import AiChatTurn from './ai-chat-turn.vue'
 
@@ -88,7 +90,7 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
-    /** The models the header and composer pick from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    /** The models the composer picks from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
     models?: PromptInputMenuOption[]
     /** The tools the composer turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
     toolOptions?: PromptInputMenuOption[]
@@ -154,11 +156,19 @@
   }>()
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
-  /** The model chosen in the header or composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  /** The model chosen in the composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
   const modelKey = defineModel<string>('modelKey', { default: 'gemini-4-neon' })
   /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
+  defineSlots<{
+    /** Content after an assistant response, such as the card of a file it produced. */
+    'turn-end'?(props: { turn: AiChatMessage }): unknown
+    /** A resizable side pane beside the conversation, given as a Resizable handle and pane, such as an artifact canvas. */
+    canvas?(): unknown
+  }>()
+
+  const slots = useSlots()
   const { formatDate } = useLocale()
   const versions = useAiChatVersions(() => props.messages)
 
@@ -197,8 +207,13 @@
     models: modelOptions.value,
     tools: props.toolOptions ?? sampleTools
   }))
+  const statusBindings = computed(() => ({
+    connection: props.connection,
+    resuming: props.resuming,
+    sessionGenerating: props.sessionGenerating,
+    loading: props.loading
+  }))
   const welcome = computed(() => !turns.value.length && !props.hydrating)
-  let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
   const failure = computed(() => failureText(props.error))
   const waiting = computed(
@@ -233,25 +248,7 @@
   })
 
   const timeOf = (turn: AiChatMessage) => turnTime(turn, formatDate)
-
-  onMounted(() => nextTick(() => composerEl.value?.focus()))
-
-  watch(
-    () => props.loading,
-    (now, before) => {
-      if (!before || now) return
-      const active = globalThis.document?.activeElement
-      const idle = !active || active === globalThis.document.body || !active.isConnected
-      const box = composerEl.value?.$el as globalThis.Element | undefined
-      if (idle || (box && box.contains(active))) composerEl.value?.focus()
-    }
-  )
-
-  watch(welcome, (now) => {
-    if (now || !refocus) return
-    refocus = false
-    void nextTick(() => composerEl.value?.focus())
-  })
+  const { refocusAfterWelcome } = useComposerFocus(composerEl, () => props.loading, welcome)
 
   async function send(event: MouseEvent | KeyboardEvent, text: string, typed = false) {
     const attached = files.value
@@ -267,7 +264,7 @@
       files.value = attached
       return
     }
-    refocus = typed
+    refocusAfterWelcome(typed)
     emit('send', event, content)
   }
 
@@ -306,12 +303,10 @@
     data-layout-fill
     class="flex min-h-0 w-full grow basis-0"
   >
-    <div class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+    <AiChatSplit :split="Boolean(slots.canvas)">
       <AiChatHeader
-        v-model:model-key="modelKey"
         :empty="!turns.length"
         :history-open="historyPanel"
-        :models="modelOptions"
         :conversation-key="activeKey"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
@@ -323,12 +318,7 @@
         :starters="starters"
         @select="(event, item) => send(event, item.label)"
       >
-        <AiChatConnectionStatus
-          :connection="connection"
-          :resuming="resuming"
-          :session-generating="sessionGenerating"
-          :loading="loading"
-        />
+        <AiChatConnectionStatus v-bind="statusBindings" />
         <AiChatComposer
           ref="composerEl"
           v-model="prompt"
@@ -384,7 +374,17 @@
           @answer="chatTools.answer"
           @skip="chatTools.skip"
           @app-message="(message, part, reply) => emit('app-message', message, part, reply)"
-        />
+        >
+          <template
+            v-if="slots['turn-end']"
+            #end
+          >
+            <slot
+              name="turn-end"
+              :turn="turn"
+            />
+          </template>
+        </AiChatTurn>
         <ChatMessage
           v-if="waiting && last"
           :status="failure ? 'error' : 'pending'"
@@ -398,12 +398,7 @@
           @select="(event, item) => send(event, item.label)"
         />
         <template #composer>
-          <AiChatConnectionStatus
-            :connection="connection"
-            :resuming="resuming"
-            :session-generating="sessionGenerating"
-            :loading="loading"
-          />
+          <AiChatConnectionStatus v-bind="statusBindings" />
           <Alert
             key="alert-2"
             v-if="interruptErrors.length"
@@ -433,6 +428,12 @@
           />
         </template>
       </Conversation>
-    </div>
+      <template
+        v-if="slots.canvas"
+        #canvas
+      >
+        <slot name="canvas" />
+      </template>
+    </AiChatSplit>
   </section>
 </template>

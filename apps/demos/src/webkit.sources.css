@@ -430,6 +430,9 @@
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/parts/console-layout-header-start.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/console-layout/parts/console-layout-palette.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/page-header/page-header.vue";
+@source "../node_modules/@aziontech/webkit/src/components/layout/resizable/injection-key.ts";
+@source "../node_modules/@aziontech/webkit/src/components/layout/resizable/resizable-pane/resizable-pane.vue";
+@source "../node_modules/@aziontech/webkit/src/components/layout/resizable/resizable.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/save-bar/save-bar.vue";
 @source "../node_modules/@aziontech/webkit/src/components/layout/scroll-area/composables/use-scroll-fade.ts";
 @source "../node_modules/@aziontech/webkit/src/components/layout/scroll-area/scroll-area.vue";

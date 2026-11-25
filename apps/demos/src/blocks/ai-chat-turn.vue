@@ -73,6 +73,11 @@
 
   const answers = defineModel<Record<string, string>>('answers', { required: true })
 
+  defineSlots<{
+    /** Content after an assistant response. */
+    end?(): unknown
+  }>()
+
   const reasonOpen = ref(false)
   const rating = ref<ChatMessageFeedbackValue | null>(null)
   const versionsOfTurn = computed(() => props.versions.versionsOf(props.turn))
@@ -193,6 +198,7 @@
       >
         You stopped this response.
       </p>
+      <slot name="end" />
     </template>
     <template
       v-if="turn.role === 'user'"

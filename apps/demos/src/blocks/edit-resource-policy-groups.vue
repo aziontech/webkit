@@ -110,7 +110,9 @@
             v-for="field in modules"
             :key="field.key"
             :title="field.title"
-            :description="field.description"
+            :description="
+              field.locked ? field.description + ' Always on for every policy.' : field.description
+            "
             variant="compact"
           >
             <Tooltip
