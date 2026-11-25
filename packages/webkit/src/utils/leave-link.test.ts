@@ -31,6 +31,16 @@ describe('leavingLink', () => {
     expect(leavingLink(clickOn('#hash'))).toBeNull()
   })
 
+  it('leaves a link that is not a web page to the browser, so a script link is never assigned', () => {
+    document.body.innerHTML =
+      '<a id="script" href="javascript:alert(1)">Run</a>' +
+      '<a id="mail" href="mailto:jane.doe@example.com">Mail</a>' +
+      '<a id="web" href="https://example.com/teams">Teams</a>'
+    expect(leavingLink(clickOn('#script'))).toBeNull()
+    expect(leavingLink(clickOn('#mail'))).toBeNull()
+    expect(leavingLink(clickOn('#web'))).not.toBeNull()
+  })
+
   it('keeps to the root when one is given', () => {
     document.body.innerHTML =
       '<main><a id="inside" href="/teams">Teams</a></main><a id="outside" href="/home">Home</a>'
