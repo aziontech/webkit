@@ -2815,3 +2815,7 @@ Budget-raise: code-block 34.45 KB → 34.5 KB (measured 34.45 KB): the file tab 
 Budget-raise: streaming-response 43.95 KB → 44 KB (measured 43.96 KB): the AI chat inline code chips (A6-229) and the CodeBlock tab hit area (A6-048).
 
 Budget-raise: copy-text 10.8 KB → 10.85 KB (measured 10.81 KB): the wrapLines prop (CopyText wrap handoff).
+
+Budget-raise: chat-message 20.6 KB → 20.8 KB (measured 20.79 KB): inside a Conversation, ChatMessage.Actions renders its row only when it nears the log's view, through one IntersectionObserver (A6-270); on the long-thread block it cuts the mounted nodes on a phone from 895 to 541 and the blocking time by about a third. Shrunk first: a direct observer in place of VueUse's helper saved 0.2 KB.
+
+Budget-raise: chat-message-actions 14.5 KB → 14.7 KB (measured 14.68 KB): the same lazy action row inside a Conversation (A6-270); a direct IntersectionObserver in place of VueUse's helper kept the growth to 0.2 KB.

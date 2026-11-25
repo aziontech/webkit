@@ -11,6 +11,8 @@ import { afterEach, beforeAll, describe, expect, inject, it } from 'vitest'
 import { server } from 'vitest/browser'
 import { type Component, defineComponent, h, nextTick, ref } from 'vue'
 
+import AiChat from '../../blocks/ai/ai-chat/ai-chat.vue'
+import { sampleLongThread } from '../../blocks/ai/ai-chat/sample'
 import budgets from '../../perf-budgets.json'
 import ChatMessageRoot from '../components/ai/chat-message/chat-message.vue'
 import Conversation from '../components/ai/conversation/conversation.vue'
@@ -73,6 +75,7 @@ import ConfigProvider from '../components/provider/config-provider/config-provid
 import ListingIndexSection from '../components/section/listing-index-section/listing-index-section.vue'
 import ListingTableSection from '../components/section/listing-table-section/listing-table-section.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
+import type { AiChatMessage } from '../utils/ai-chat'
 import { hostable } from './hostable'
 
 const DataGrid = hostable(DataGridRoot)
@@ -759,6 +762,34 @@ function dropdownMenuCase(): Case {
         document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
         window.dispatchEvent(new KeyboardEvent('keydown', { key: 'e', metaKey: true }))
       }
+    }
+  }
+}
+
+function aiChatLongThreadCase(): Case {
+  const messages = ref<AiChatMessage[]>([...sampleLongThread])
+  const Host = defineComponent({
+    setup: () => () =>
+      h('div', { style: 'height:844px;width:390px;display:flex;flex-direction:column' }, [
+        h(AiChat, { messages: messages.value })
+      ])
+  })
+  return {
+    mount: () => Host,
+    update: () => {
+      messages.value = [
+        ...messages.value,
+        {
+          id: 'q-next',
+          role: 'user',
+          parts: [{ type: 'text', content: 'And the cache hit ratio?' }]
+        },
+        {
+          id: 'a-next',
+          role: 'assistant',
+          parts: [{ type: 'text', content: 'It held at **92%** for the whole week.' }]
+        }
+      ]
     }
   }
 }
@@ -1522,6 +1553,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('ConversationHistory with 5k items: mount and select', async () => {
     check('conversation-history-5k', await measure(conversationHistoryCase))
+  })
+  it('AI chat long thread on a phone: mount and add a turn', async () => {
+    check('ai-chat-long-thread', await measure(aiChatLongThreadCase))
   })
   it('Conversation with 500 messages: mount and stream into the last one', async () => {
     check('conversation-500', await measure(conversationCase))

@@ -3540,7 +3540,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, ConfirmDialog, Conversation, ConversationHistory, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, DropdownMenu, `DropdownMenuTrigger`, FeedbackReasonDialog, FilePreview, `HoverCardContent`, HoverCard, `HoverCardTrigger`, IconButton, ImageGallery, Input, McpAppFrame, `PopoverContent`, Popover, `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, PromptQueue, Reasoning, Resizable, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, Tooltip, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, ConfirmDialog, Conversation, ConversationHistory, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, DropdownMenu, `DropdownMenuTrigger`, FeedbackReasonDialog, FilePreview, `HoverCardContent`, HoverCard, `HoverCardTrigger`, IconButton, ImageGallery, Input, McpAppFrame, `PopoverContent`, Popover, `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, PromptQueue, Reasoning, `ResizableHandle`, `ResizablePane`, Resizable, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Toast, ToolApproval, ToolCall, Tooltip, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3596,7 +3596,9 @@ What TanStack AI does not carry, the app adds in `metadata`: `sources` (the docu
 
 Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `hydrating`, `sessionGenerating`, `attachable`, `voice`, `accept`, `maxFiles`, `maxFileSize`, `resolveAppUrl`, `models`, `toolOptions`.
 
-The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes. The model of the header title is `v-model:modelKey` and the tools turned on in the "+" menu are `v-model:toolKeys`: pass both with each message, `sendMessage(content, { body: { model: modelKey, tools: toolKeys } })`, and read them from `forwardedProps` on the server.
+The open conversation of the history is `v-model:activeKey` (`string | null`): picking a row sets it, New chat clears it; load that conversation's messages when it changes. The model of the composer is `v-model:modelKey` and the tools turned on in the "+" menu are `v-model:toolKeys`: pass both with each message, `sendMessage(content, { body: { model: modelKey, tools: toolKeys } })`, and read them from `forwardedProps` on the server.
+
+Two slots let a state add to the shell without a second copy of it: `turn-end` (`{ turn }`) puts content after an assistant response, such as the `ArtifactPreview` of a file it wrote, and `canvas` puts a `Resizable.Handle` and `Resizable.Pane` beside the conversation (variant Artifact).
 
 Event: `send`, `stop`, `voice-start`, `retry`, `new-chat`, `feedback`, `share`, `edit`, `version-change`, `branch`, `share-chat`, `rename-chat`, `archive-chat`, `remove-chat`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
 
@@ -3646,7 +3648,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Feedback is a menu button (`aria-haspopup="menu"`) whose chosen item is `aria-checked`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
 - A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
-- The model picker and the More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the model trigger's name is its visible text.
+- The More and "+" menus are `DropdownMenu`s: arrows, typeahead, Escape and focus return come from it; the composer's model picker is a `Popover` whose trigger's name is its visible text.
 - The phone history is a `Drawer` named Conversation history that returns focus to the menu button; the desktop toggle names what it does and carries `aria-expanded`.
 - Alignment never carries meaning alone: every message's accessible name says who wrote it.
 - Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
@@ -3657,7 +3659,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
 - Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
-- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
+- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2, in the same chat shell as the other states.
 - LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response with its Sources pill, with `followUps`.
 - Media: an answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary.
 - Agent: activity steps, a finished `SubagentCard` and a pending `AgentQuestion`; answering it resolves the interrupt and the card keeps the answer.

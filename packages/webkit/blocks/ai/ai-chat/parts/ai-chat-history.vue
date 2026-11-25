@@ -17,6 +17,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
+  import { useWideScreen } from '../composables/use-wide-screen'
   import {
     type AiChatProject,
     type AiChatThread,
@@ -34,6 +35,8 @@
 
   const active = defineModel<string | null>({ required: true })
   const drawerOpen = defineModel<boolean>('drawerOpen', { required: true })
+
+  const wide = useWideScreen()
 
   const projects = ref<AiChatProject[]>(sampleProjects.map((item) => ({ ...item })))
   const threads = ref<AiChatThread[]>(sampleThreads.map((item) => ({ ...item })))
@@ -156,7 +159,7 @@
 
 <template>
   <aside
-    v-if="panelOpen"
+    v-if="panelOpen && wide"
     id="ai-chat-history"
     aria-label="Conversation history"
     :class="PANEL_CLASS"

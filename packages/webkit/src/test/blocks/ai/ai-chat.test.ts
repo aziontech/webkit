@@ -74,11 +74,17 @@ describe('ai/ai-chat Artifact', () => {
       expect(view.getAllByRole('button', { name: 'Open top-orders.sql' })).toHaveLength(2)
     })
 
-    it('puts a follow-up question in the composer without a canned answer', async () => {
+    it('keeps the chat shell of the other states around the canvas', async () => {
       const view = render(Artifact)
       await view.findByRole('region', { name: 'top-orders.sql' })
+      expect(view.getByRole('heading', { level: 1, name: 'AI assistant' })).toBeTruthy()
+      expect(view.getByRole('button', { name: /Hide conversation history/ })).toBeTruthy()
+      expect(
+        view.getAllByRole('button', { name: 'More conversation actions' }).length
+      ).toBeGreaterThan(0)
+      expect(view.queryByText('Preview')).toBeNull()
+      expect(view.getByText(/Check important information before you act on it/)).toBeTruthy()
       await userEvent.click(view.getByRole('button', { name: 'Show the customer email too' }))
-      expect(view.getByRole('textbox')).toHaveValue('Show the customer email too')
       expect(view.getByRole('region', { name: 'top-orders.sql' }).textContent).toContain('2 of 2')
     })
 
@@ -96,7 +102,6 @@ describe('ai/ai-chat Artifact', () => {
       await userEvent.click(view.getByRole('button', { name: 'Close top-orders.sql' }))
       expect(view.queryByRole('region', { name: 'top-orders.sql' })).toBeNull()
       await waitFor(() => expect(document.activeElement).toBe(firstOpen))
-      expect(view.getByRole('button', { name: 'Show artifact' })).toBeTruthy()
     })
   })
 
@@ -260,10 +265,22 @@ describe('ai/ai-chat', () => {
     expect(message.id).toBe('a1')
   })
 
-  it('picks the model from the header title and reports it', async () => {
-    const view = render(AiChat, { props: { messages: thread } })
-    await userEvent.click(view.getByRole('button', { name: /AI assistant/ }))
-    await userEvent.click(await view.findByRole('menuitemradio', { name: /Claude Opus 4\.5/ }))
+  it('picks the model in the composer only, and the header shows the chat title', async () => {
+    await page.viewport(1280, 900)
+    const view = render(AiChat, { props: { messages: thread, activeKey: 'h2' } })
+    const header = view.container.querySelector('header')!
+    expect(within(header).queryByRole('button', { name: /Gemini|Claude/ })).toBeNull()
+    expect(within(header).getByRole('heading', { level: 1 }).textContent?.trim()).not.toBe('')
+    await userEvent.click(view.getByTestId('prompt-input-model-picker'))
+    const panel = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>(
+        '[data-testid="prompt-input-model-picker__panel"]'
+      )
+      expect(found).not.toBeNull()
+      return found!
+    })
+    await userEvent.click(within(panel).getByRole('button', { name: /^Claude Opus 4\.5/ }))
+    await page.viewport(414, 896)
     expect(view.emitted('update:modelKey')).toEqual([['claude-opus-4-5']])
   })
 
@@ -323,75 +340,102 @@ describe('ai/ai-chat', () => {
     expect(view.emitted('new-chat')).toHaveLength(1)
   })
 
-  describe('discarding a draft', () => {
-    useToastRegion()
+  describe('history panel', () => {
+    beforeEach(async () => {
+      await page.viewport(1280, 900)
+    })
+    afterEach(async () => {
+      await page.viewport(414, 896)
+    })
 
-    it('offers Undo, which brings the thread back', async () => {
-      const view = render(AiChat, { props: { messages: thread } })
-      const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
-      const title = 'Why does storefront return 502 errors?'
-      expect(panel.getByText(title)).toBeTruthy()
-      await userEvent.click(panel.getByRole('button', { name: 'Discard draft' }))
-      await waitFor(() => expect(panel.queryByText(title)).toBeNull())
-      const undo = await waitFor(() => {
-        const button = Array.from(document.body.querySelectorAll('button')).find(
-          (candidate) => candidate.textContent?.trim() === 'Undo'
-        )
-        expect(button).toBeTruthy()
-        return button!
+    const historyPanel = (view: ReturnType<typeof render>) =>
+      waitFor(() => {
+        const panel = view.container.querySelector<HTMLElement>('#ai-chat-history')
+        expect(panel).not.toBeNull()
+        return panel!
       })
-      await userEvent.click(undo)
-      await waitFor(() => expect(panel.getByText(title)).toBeTruthy())
+
+    describe('discarding a draft', () => {
+      useToastRegion()
+
+      it('offers Undo, which brings the thread back', async () => {
+        const view = render(AiChat, { props: { messages: thread } })
+        const panel = within(await historyPanel(view))
+        const title = 'Why does storefront return 502 errors?'
+        expect(panel.getByText(title)).toBeTruthy()
+        await userEvent.click(panel.getByRole('button', { name: 'Discard draft' }))
+        await waitFor(() => expect(panel.queryByText(title)).toBeNull())
+        const undo = await waitFor(() => {
+          const button = Array.from(document.body.querySelectorAll('button')).find(
+            (candidate) => candidate.textContent?.trim() === 'Undo'
+          )
+          expect(button).toBeTruthy()
+          return button!
+        })
+        await userEvent.click(undo)
+        await waitFor(() => expect(panel.getByText(title)).toBeTruthy())
+      })
+    })
+
+    it('reports the conversation picked in the history', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const panel = within(await historyPanel(view))
+      await userEvent.click(panel.getByText('Purge the cache after a deploy'))
+      expect(view.emitted('update:activeKey')).toEqual([['h2']])
+    })
+
+    it('keeps the history row actions outside the row button', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const history = await historyPanel(view)
+      expect(history.querySelectorAll('button button, button [tabindex]')).toHaveLength(0)
+      const row = within(history).getByText('Purge the cache after a deploy').closest('li')!
+      await userEvent.click(within(row).getByRole('button', { name: 'Settle thread' }))
+      expect(within(history).getByRole('button', { name: 'Settled (2)' })).toBeTruthy()
+      expect(view.emitted('update:activeKey')).toBeUndefined()
+    })
+
+    it('shows the product the thread started on and how many it touches', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const history = await historyPanel(view)
+      const row = within(history).getByText('Why does storefront return 502 errors?').closest('li')!
+      expect(row.querySelector('.az-applications')).not.toBeNull()
+      expect(row.querySelector('.az-server')).toBeNull()
+      expect(within(row).getByText('3')).toBeTruthy()
+      const versioned = within(history).getByText('A WAF rule for login attempts').closest('li')!
+      expect(within(versioned).getByText('v42')).toBeTruthy()
+    })
+
+    it('keeps Discard draft apart, last and in red in the touch menu of a row', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const panel = within(await historyPanel(view))
+      const trigger = panel
+        .getAllByRole('button', { name: 'Thread actions' })
+        .find((button) =>
+          button
+            .closest('span.hidden')
+            ?.parentElement?.querySelector('[aria-label="Discard draft"]')
+        )!
+      await userEvent.click(trigger)
+      const items = await waitFor(() => {
+        const found = Array.from(document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'))
+        expect(found.length).toBe(3)
+        return found
+      })
+      const discard = items[items.length - 1]!
+      expect(discard.textContent?.trim()).toBe('Discard draft')
+      expect(discard.getAttribute('data-severity')).toBe('danger')
+      expect(discard.closest('[role="group"]')).not.toBe(items[0]!.closest('[role="group"]'))
+      await userEvent.keyboard('{Escape}')
     })
   })
 
-  it('keeps Discard draft apart, last and in red in the touch menu of a row', async () => {
+  it('mounts no history panel on a phone, where the drawer holds the history', async () => {
     const view = render(AiChat, { props: { messages: thread } })
-    const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
-    const trigger = panel
-      .getAllByRole('button', { name: 'Thread actions' })
-      .find((button) =>
-        button.closest('span.hidden')?.parentElement?.querySelector('[aria-label="Discard draft"]')
-      )!
-    await userEvent.click(trigger)
-    const items = await waitFor(() => {
-      const found = Array.from(document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'))
-      expect(found.length).toBe(3)
-      return found
-    })
-    const discard = items[items.length - 1]!
-    expect(discard.textContent?.trim()).toBe('Discard draft')
-    expect(discard.getAttribute('data-severity')).toBe('danger')
-    expect(discard.closest('[role="group"]')).not.toBe(items[0]!.closest('[role="group"]'))
-    await userEvent.keyboard('{Escape}')
-  })
-
-  it('reports the conversation picked in the history', async () => {
-    const view = render(AiChat, { props: { messages: thread } })
-    const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
-    await userEvent.click(panel.getByText('Purge the cache after a deploy'))
-    expect(view.emitted('update:activeKey')).toEqual([['h2']])
-  })
-
-  it('keeps the history row actions outside the row button', async () => {
-    const view = render(AiChat, { props: { messages: thread } })
-    const history = view.container.querySelector<HTMLElement>('#ai-chat-history')!
-    expect(history.querySelectorAll('button button, button [tabindex]')).toHaveLength(0)
-    const row = within(history).getByText('Purge the cache after a deploy').closest('li')!
-    await userEvent.click(within(row).getByRole('button', { name: 'Settle thread' }))
-    expect(within(history).getByRole('button', { name: 'Settled (2)' })).toBeTruthy()
-    expect(view.emitted('update:activeKey')).toBeUndefined()
-  })
-
-  it('shows the product the thread started on and how many it touches', () => {
-    const view = render(AiChat, { props: { messages: thread } })
-    const history = view.container.querySelector<HTMLElement>('#ai-chat-history')!
-    const row = within(history).getByText('Why does storefront return 502 errors?').closest('li')!
-    expect(row.querySelector('.az-applications')).not.toBeNull()
-    expect(row.querySelector('.az-server')).toBeNull()
-    expect(within(row).getByText('3')).toBeTruthy()
-    const versioned = within(history).getByText('A WAF rule for login attempts').closest('li')!
-    expect(within(versioned).getByText('v42')).toBeTruthy()
+    await waitFor(() =>
+      expect(view.getByRole('button', { name: 'Open conversation history' })).toBeTruthy()
+    )
+    await nextTick()
+    expect(view.container.querySelector('#ai-chat-history')).toBeNull()
   })
 
   it('folds the history panel away from the header', async () => {
@@ -414,12 +458,18 @@ describe('ai/ai-chat', () => {
       await page.viewport(414, 896)
     })
 
-    const responseActions = (view: ReturnType<typeof render>) =>
-      view.getAllByRole('group', { name: 'Message actions' }).at(-1)!
+    const actionRows = (view: ReturnType<typeof render>) =>
+      waitFor(() => {
+        const rows = view.getAllByRole('group', { name: 'Message actions' })
+        expect(rows).toHaveLength(2)
+        return rows
+      })
+    const responseActions = async (view: ReturnType<typeof render>) =>
+      (await actionRows(view)).at(-1)!
 
     it('emits share and branch with the response', async () => {
       const view = render(AiChat, { props: { messages: thread } })
-      const row = responseActions(view)
+      const row = await responseActions(view)
       await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
       await userEvent.click(within(row).getByRole('button', { name: 'Share' }))
       const [[shareEvent, shared]] = view.emitted('share') as [[Event, AiChatMessage]]
@@ -436,7 +486,7 @@ describe('ai/ai-chat', () => {
 
     it('asks why after Bad response and sends the reason in a second feedback', async () => {
       const view = render(AiChat, { props: { messages: thread } })
-      const row = responseActions(view)
+      const row = await responseActions(view)
       await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
       await waitFor(() =>
         expect(within(row).getByRole('button', { name: 'Feedback' })).not.toBeDisabled()
@@ -467,7 +517,7 @@ describe('ai/ai-chat', () => {
 
     it('edits a prompt, then pages back to the earlier version', async () => {
       const view = render(AiChat, { props: { messages: thread } })
-      const [promptRow] = view.getAllByRole('group', { name: 'Message actions' })
+      const [promptRow] = await actionRows(view)
       await userEvent.click(within(promptRow!).getByRole('button', { name: 'Edit message' }))
       const field = view.getByRole('textbox', { name: 'Edit your message' })
       await userEvent.clear(field)
@@ -490,7 +540,7 @@ describe('ai/ai-chat', () => {
 
     it('keeps a regenerated answer as a version paged from the action row', async () => {
       const view = render(AiChat, { props: { messages: thread } })
-      const row = responseActions(view)
+      const row = await responseActions(view)
       await waitFor(() => expect(row).not.toHaveAttribute('data-compact'))
       await userEvent.click(within(row).getByRole('button', { name: 'Try again' }))
       expect((view.emitted('retry') as [[Event, AiChatMessage]])[0][1].id).toBe('a1')
@@ -501,14 +551,14 @@ describe('ai/ai-chat', () => {
         ]
       })
       const pager = await view.findByRole('group', { name: 'Response versions' })
-      expect(responseActions(view)).toContainElement(pager)
+      expect(await responseActions(view)).toContainElement(pager)
       await userEvent.click(within(pager).getByRole('button', { name: 'Previous version' }))
       const [[versions]] = view.emitted('version-change') as [[AiChatMessage[]]]
       expect(versions.map((message) => message.id)).toEqual(['u1', 'a1'])
     })
   })
 
-  it('reads sources from the message metadata', () => {
+  it('reads sources from the message metadata', async () => {
     const view = render(AiChat, {
       props: {
         messages: [
@@ -522,7 +572,11 @@ describe('ai/ai-chat', () => {
         ]
       }
     })
-    const actions = view.getAllByRole('group', { name: 'Message actions' }).at(-1)!
+    const actions = await waitFor(() => {
+      const rows = view.getAllByRole('group', { name: 'Message actions' })
+      expect(rows).toHaveLength(2)
+      return rows.at(-1)!
+    })
     expect(within(actions).getByRole('button', { name: '1 source' })).toBeTruthy()
   })
 
