@@ -43,7 +43,7 @@ Title `Cost breakdown` with one sentence on what it shows. Its actions hold the 
 
 The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
 
-`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes the Spend by category trend and the sparklines; the tiles, Current split and Top contributors always read this month, and say so on screen (`this month vs previous month` under each figure), never only in a hint. The ghost trigger sizes to its label, so it sits next to Export CSV with no gap.
+`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes the Spend by category trend and the sparklines; the tiles, Current split and Top contributors always read this month, and say so on screen (a `This month` heading over the tiles and `this month vs previous month` under each figure), never only in a hint, so the header select is not read as scoping them. The ghost trigger sizes to its label, so it sits next to Export CSV with no gap.
 
 ### C. Export — `Button` (optional)
 
@@ -230,7 +230,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import { toast } from '@aziontech/webkit/toast'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
-  import { computed, ref } from 'vue'
+  import { computed, ref, useId } from 'vue'
 
   import ContributorsTable from './parts/contributors-table.vue'
   import SpendCard from './parts/spend-card.vue'
@@ -312,6 +312,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const period = defineModel<string>('period', { default: '12m' })
 
   const comparison = 'this month vs previous month'
+  const kpisHeadingId = useId()
   const LOADING_TREND = [0, 0]
 
   const tiles: { metric: BreakdownDashboardMetric; label: string; description: string }[] = [
@@ -511,29 +512,40 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         @action="(event: MouseEvent) => emit('retry', event)"
       />
 
-      <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
-        <li
-          v-for="tile in tiles"
-          :key="tile.metric"
-          class="flex min-w-0 flex-col"
+      <section
+        :aria-labelledby="kpisHeadingId"
+        class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+      >
+        <h2
+          :id="kpisHeadingId"
+          class="text-heading-xs text-(--text-default)"
         >
-          <StatTile
-            :label="tile.label"
-            :value="kpis[tile.metric]?.value ?? null"
-            :format-value="formatters.spend"
-            :delta="kpis[tile.metric]?.delta ?? null"
-            :delta-label="comparison"
-            inverse
-            :trend="kpis[tile.metric]?.trend ?? (loading ? LOADING_TREND : [])"
-            :loading="loading"
-            :error="error"
+          This month
+        </h2>
+        <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
+          <li
+            v-for="tile in tiles"
+            :key="tile.metric"
+            class="flex min-w-0 flex-col"
           >
-            <template #aside>
-              <Hint :content="tile.description" />
-            </template>
-          </StatTile>
-        </li>
-      </ul>
+            <StatTile
+              :label="tile.label"
+              :value="kpis[tile.metric]?.value ?? null"
+              :format-value="formatters.spend"
+              :delta="kpis[tile.metric]?.delta ?? null"
+              :delta-label="comparison"
+              inverse
+              :trend="kpis[tile.metric]?.trend ?? (loading ? LOADING_TREND : [])"
+              :loading="loading"
+              :error="error"
+            >
+              <template #aside>
+                <Hint :content="tile.description" />
+              </template>
+            </StatTile>
+          </li>
+        </ul>
+      </section>
 
       <EmptyState
         v-if="nothing"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
-  import CopyText from '@aziontech/webkit/copy-text'
+  import CopyButton from '@aziontech/webkit/copy-button'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -51,10 +51,23 @@
             title="Client ID"
             description="Can't be changed. Quote it when opening a support ticket about this account."
           >
-            <CopyText
-              :value="form.clientId"
-              aria-label="Copy Client ID"
-            />
+            <div
+              class="flex w-full min-w-0 items-center gap-(--spacing-2xs)"
+              data-testid="profile-general-group__client-id"
+            >
+              <span
+                dir="ltr"
+                class="min-w-0 truncate text-label-code-md text-(--text-default)"
+                >{{ form.clientId }}</span
+              >
+              <CopyButton
+                :value="form.clientId"
+                aria-label="Copy Client ID"
+                size="medium"
+                variant="ghost"
+                class="shrink-0"
+              />
+            </div>
           </SettingsRow>
         </Item.List>
       </template>

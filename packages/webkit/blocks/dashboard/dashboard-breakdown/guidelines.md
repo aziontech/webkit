@@ -31,7 +31,7 @@ Title `Cost breakdown` with one sentence on what it shows. Its actions hold the 
 
 The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
 
-`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes the Spend by category trend and the sparklines; the tiles, Current split and Top contributors always read this month, and say so on screen (`this month vs previous month` under each figure), never only in a hint. The ghost trigger sizes to its label, so it sits next to Export CSV with no gap.
+`Last 12 months` or `Last 6 months`, labelled `Period`. It scopes the Spend by category trend and the sparklines; the tiles, Current split and Top contributors always read this month, and say so on screen (a `This month` heading over the tiles and `this month vs previous month` under each figure), never only in a hint, so the header select is not read as scoping them. The ghost trigger sizes to its label, so it sits next to Export CSV with no gap.
 
 ### C. Export — `Button` (optional)
 

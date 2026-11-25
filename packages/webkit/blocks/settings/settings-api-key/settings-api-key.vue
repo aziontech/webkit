@@ -80,6 +80,8 @@
   }>()
 
   const provider = defineModel<string>('provider', { default: '' })
+  /** The key the reader is typing; it starts empty and clears once the saved key changes. */
+  const draft = defineModel<string>('apiKey', { default: '' })
 
   const titleId = useId()
   const noteId = useId()
@@ -101,7 +103,6 @@
     providerList.value.find((option) => option.value === value)?.label ?? ''
   const saved = computed(() => savedList.value.find((entry) => entry.provider === picked.value))
 
-  const draft = ref('')
   const submitted = ref(false)
   const keyInputEl = ref<InstanceType<typeof PasswordInput> | null>(null)
   const removeOpen = ref(false)
@@ -122,9 +123,7 @@
     return { severity: 'info', label: 'Saved', loading: false }
   })
 
-  const keyPlaceholder = computed(() =>
-    saved.value ? `Paste a new key to replace ${saved.value.masked}` : ''
-  )
+  const keyPlaceholder = computed(() => (saved.value ? `Replace ${saved.value.masked}` : ''))
   const replacing = computed(() => Boolean(saved.value))
 
   const focusKey = () => nextTick(() => keyInputEl.value?.focus())

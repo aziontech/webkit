@@ -56,6 +56,8 @@ describe('dashboard/dashboard-breakdown', () => {
     const deltas = view.container.querySelectorAll('[data-testid="stat-tile__delta"]')
     expect(deltas.length).toBe(4)
     for (const delta of deltas) expect(delta.textContent).toContain('this month vs previous month')
+    const region = view.getByRole('region', { name: 'This month' })
+    expect(region.querySelectorAll('[data-testid="stat-tile"]').length).toBe(4)
   })
 
   it('lets the ghost period trigger size to its label instead of a fixed box', () => {

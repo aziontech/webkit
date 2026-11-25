@@ -196,7 +196,13 @@
     percentage: (value) => `${fixed(value, 0)}%`,
     uptime: (value) => `${fixed(value, 2)}%`,
     score: (value) => fixed(value, 0),
-    cost: (value) => `${fixed(value, 4)}`
+    cost: (value) =>
+      formatNumber(value, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
+      })
   }
 
   const reportColumns: CsvColumn[] = Object.entries({

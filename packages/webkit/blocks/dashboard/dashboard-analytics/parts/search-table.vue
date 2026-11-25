@@ -57,7 +57,7 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+  <div class="group/search-table flex min-w-0 flex-col gap-(--spacing-sm)">
     <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
       <div class="min-w-36 grow basis-(--container-3xs)">
         <Input
@@ -85,6 +85,7 @@
     </div>
 
     <DataTable
+      class="group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60"
       :data="matchingRows"
       :columns="columns"
       row-key="id"

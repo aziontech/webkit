@@ -8707,7 +8707,7 @@ The block takes the providers, the saved keys' masked tails and the request stat
 
 Prop: `title`, `description`, `providers`, `savedKeys`, `status`, `loading`, `error`, `storageNote`.
 
-Model: `v-model:provider`.
+Model: `v-model:provider`, `v-model:apiKey`.
 
 Event: `save`, `test`, `remove`.
 
@@ -8756,11 +8756,11 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-a
 
 - Saved: the default props; GitHub has a saved key, not tested: Saved with its masked tail, Test connection, Remove key and Replace key.
 - Empty: `savedKeys` is `[]`; the status reads No key saved and only Save key shows.
-- Saving: `loading`; every control but Replace key locks and Replace key spins. The variant opens on an empty field (the block never seeds the key).
+- Saving: `loading` with a typed replacement key (`v-model:apiKey`), the only way a save starts; every control but Replace key locks and Replace key spins.
 - Testing: `status="running"`; Testing with a spinner, Remove key and the Provider lock, Replace key stays available.
 - Success: `status="success"`; the status reads Connected.
 - Error: `status="error"` with `error`; the status reads Connection failed and the danger `Alert` gives the provider's message with Test again.
-- SaveError: `error` with `status="pending"`; the `Alert` says `The key wasn't saved.` with no action; Replace key retries.
+- SaveError: `error` with `status="pending"` and the typed key still in the field (`v-model:apiKey`); the `Alert` says `The key wasn't saved.` with no action; Replace key retries.
 
 ## Related
 
@@ -8786,7 +8786,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-a
 - Source: `blocks/settings/settings-canned-responses/settings-canned-responses.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-canned-responses")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: Alert, Button, Card, Combobox, ConfigProvider, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, MarkdownEditor, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, Select, Table, `TableCellActions`, `TableCellTime`, Tag, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, Combobox, ConfigProvider, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, MarkdownEditor, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, Select, Table, `TableCellActions`, `TableCellTime`, Tag, Tooltip, `use-collection`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -8848,6 +8848,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-c
 - Don't let two responses share a title; agents pick by title.
 - Don't make Everyone the default visibility; a new response starts Personal.
 - Don't close the drawer before the save succeeds.
+- Don't drop a typed draft on Escape, an overlay tap or Cancel; ask with the unsaved-changes dialog first.
 
 ## Copy
 
@@ -8908,7 +8909,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-c
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: Alert, Button, Card, ConfirmDialog, CopyText, Field, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
+- Components: Alert, Button, Card, ConfirmDialog, CopyButton, Field, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as

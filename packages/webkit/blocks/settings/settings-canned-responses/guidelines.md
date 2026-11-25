@@ -46,7 +46,7 @@ The table's `#empty` slot: `No matching responses` with Clear filters, which emp
 
 ### H. Editor drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `PanelFooter` (required)
 
-A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Save response spins, and Cancel, the close button and Escape are disabled (`:closable` and `:dismissible` follow `saving`), so the request cannot be left half-way; when `saving` returns to false with no `saveError`, the drawer closes. Footer: Cancel and `Save response`.
+A large `Drawer` on the end side with one `form`, titled `New response` or `Edit response`. A failed save shows a danger `Alert` at the top of the body and keeps every value. While `saving` the fields lock (one `fieldset`), Save response spins, and Cancel, the close button and Escape are disabled (`:closable` and `:dismissible` follow `saving`), so the request cannot be left half-way; when `saving` returns to false with no `saveError`, the drawer closes. Once a value differs from what the drawer opened with, Escape and an overlay tap do nothing (`:dismissible` is also false while dirty) and Cancel or the close button open the unsaved-changes `ConfirmDialog` (`useUnsavedChanges`): Keep editing or Discard changes, so one stray tap never loses a drafted reply. Footer: Cancel and `Save response`.
 
 ### I. Fields — `Field`, `Input`, `Combobox`, `RadioGroup`, `Select` (required)
 
@@ -178,6 +178,7 @@ Delete removes the row at once; when the request fails, the page says so in a to
 - Don't let two responses share a title; agents pick by title.
 - Don't make Everyone the default visibility; a new response starts Personal.
 - Don't close the drawer before the save succeeds.
+- Don't drop a typed draft on Escape, an overlay tap or Cancel; ask with the unsaved-changes dialog first.
 
 ## Copy
 
