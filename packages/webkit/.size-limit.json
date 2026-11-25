@@ -345,7 +345,7 @@
   {
     "name": "media-scroll",
     "path": "src/components/marketing/media-scroll/media-scroll.vue",
-    "limit": "5.75 KB"
+    "limit": "5.85 KB"
   },
   {
     "name": "texture",
@@ -523,7 +523,7 @@
   {
     "name": "console-showcase-section",
     "path": "src/components/section/console-showcase-section/console-showcase-section.vue",
-    "limit": "22.3 KB"
+    "limit": "22.35 KB"
   },
   {
     "name": "process-scroll-section",
@@ -572,7 +572,7 @@
   {
     "name": "feature-scroll-section",
     "path": "src/components/section/feature-scroll-section/feature-scroll-section.vue",
-    "limit": "21 KB",
+    "limit": "21.1 KB",
     "entryOnly": true
   },
   {
@@ -606,12 +606,12 @@
   {
     "name": "client-mosaic-section",
     "path": "src/components/section/client-mosaic-section/client-mosaic-section.vue",
-    "limit": "8.3 KB"
+    "limit": "8.8 KB"
   },
   {
     "name": "client-story-columns-section",
     "path": "src/components/section/client-story-columns-section/client-story-columns-section.vue",
-    "limit": "9.25 KB"
+    "limit": "9.5 KB"
   },
   {
     "name": "client-quotes-section",
@@ -687,7 +687,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "60.6 KB",
+    "limit": "60.65 KB",
     "entryOnly": true
   },
   {
@@ -720,7 +720,7 @@
   {
     "name": "closing-call-to-action-section",
     "path": "src/components/section/closing-call-to-action-section/closing-call-to-action-section.vue",
-    "limit": "9.85 KB",
+    "limit": "9.9 KB",
     "entryOnly": true
   },
   {

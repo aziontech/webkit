@@ -110,6 +110,30 @@ describe('ClientStoryColumnsSection', () => {
     expect(anchor?.getAttribute('href')).toBe(cells[0].href)
   })
 
+  it('says at rest that each card is a link, with the link label and an arrow under the story', () => {
+    const { container } = columns()
+
+    const cues = container.querySelectorAll('[data-slot="story-cue"]')
+    expect(cues).toHaveLength(cells.length)
+    cues.forEach((cue) => {
+      expect(cue.textContent?.trim()).toBe(LINK_LABEL)
+      expect(cue.closest('a')).toHaveAttribute('aria-hidden', 'true')
+    })
+  })
+
+  it('inks a face by contrast, so text on a bright brand base turns dark', () => {
+    const { getByAltText } = columns()
+
+    expect(getByAltText('Magalu').closest('section')).toHaveAttribute('data-theme', 'light')
+    expect(getByAltText('MadeiraMadeira').closest('section')).toHaveAttribute('data-theme', 'light')
+    const deep = render(ClientStoryColumnsSection, {
+      props: {
+        cells: [{ ...cells[0], name: 'Renner', brand: { base: '#7a0202', glow: '#ef0000' } }]
+      }
+    })
+    expect(deep.getByAltText('Renner').closest('section')).toHaveAttribute('data-theme', 'dark')
+  })
+
   it('names the one focusable link per column by the client and its story', () => {
     const { getAllByRole } = columns()
 

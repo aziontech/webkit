@@ -60,6 +60,8 @@
   const hasItems = computed(() => props.items.length > 0)
 
   const hasHeading = computed(() => hasItems.value && props.title.length > 0)
+
+  const EYEBROW_PREFIX = '//' as const
 </script>
 
 <template>
@@ -85,6 +87,7 @@
           <Eyebrow
             v-if="eyebrow"
             cursor
+            :prefix="EYEBROW_PREFIX"
           >
             {{ eyebrow }}
           </Eyebrow>

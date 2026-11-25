@@ -142,12 +142,12 @@ describe('CustomerUseCasesSection', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('renders the eyebrow as plain text, with no // prefix', () => {
+  it('marks the eyebrow with the // prefix of every section header (EB-1)', () => {
     const { getByTestId } = band()
     const eyebrow = getByTestId(TESTID).querySelector('[data-testid$="eyebrow"]') as HTMLElement
 
-    expect(eyebrow.textContent?.trim()).toBe('SQL Database')
-    expect(eyebrow.textContent).not.toContain('//')
+    expect(eyebrow.textContent).toContain('SQL Database')
+    expect(eyebrow.textContent?.trim().startsWith('//')).toBe(true)
   })
 
   it('opens the example with a whole sentence, not a lead-in to nothing', () => {

@@ -128,7 +128,8 @@
     'data-[content=items]:gap-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] data-[content=items]:pe-[max(var(--spacing-2xl),calc(var(--spacing-xl)*2))] ' +
     'motion-reduce:data-[content=items]:gap-(--spacing-md) motion-reduce:data-[content=items]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap ' +
     'motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden ' +
-    'max-sm:motion-reduce:data-[content=marks]:grid max-sm:motion-reduce:data-[content=marks]:grid-cols-2 max-sm:motion-reduce:data-[content=marks]:justify-items-center'
+    'max-sm:motion-reduce:data-[content=marks]:grid max-sm:motion-reduce:data-[content=marks]:grid-cols-2 max-sm:motion-reduce:data-[content=marks]:justify-items-center ' +
+    'max-sm:motion-reduce:data-[duplicate]:hidden'
 
   const ITEM_CLASS =
     'flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-sm text-(--text-default) ' +
@@ -137,7 +138,7 @@
   const MARK_CLASS =
     'flex shrink-0 items-center ' +
     'justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance ' +
-    'hover:opacity-100 motion-reduce:transition-none'
+    'hover:opacity-100 motion-reduce:min-w-0 motion-reduce:max-w-full motion-reduce:transition-none'
 </script>
 
 <template>
@@ -219,7 +220,7 @@
             fill="currentColor"
             aria-hidden="true"
             focusable="false"
-            class="h-(--marquee-brand-mark) w-auto max-w-(--marquee-brand-cell)"
+            class="h-(--marquee-brand-mark) w-auto max-w-(--marquee-brand-cell) motion-reduce:max-w-full"
           >
             <use :href="`#${symbolId(mark.name)}`" />
           </svg>

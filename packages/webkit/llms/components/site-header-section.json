@@ -75,7 +75,7 @@
    "type": "SiteHeaderSectionLink",
    "default": "undefined",
    "required": "false",
-   "doc": "The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
+   "doc": "The login button beside it, outlined so the sign-up button is the one filled action, in the bar from `sm` up and in the sheet footer; `{ label, href }`."
   },
   {
    "name": "secondaryActionOnPhones",

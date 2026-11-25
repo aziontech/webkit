@@ -6,7 +6,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-05
 last_updated: 2026-11-17
-checksum: 4f59bc344de400ac7fdd91e0ad3e948eb34e5d243cbb6709b9b5ffe6b37be093
+checksum: a93ce740d69106fbcf7b54107175d344d88ae90f4af89c64ca21a045816e073d
 template: 2
 ---
 
@@ -118,7 +118,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `failed` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 - `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
-- The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.
+- The eyebrow carries the `//` prefix that marks every marketing section header (decision EB-1).
 
 ## Motion & Animations
 

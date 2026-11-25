@@ -7,7 +7,7 @@ status: implemented
 spec_version: 10
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 27463ac55a9de44687c370bccd7c64b4dede3a133583c99099d090e68c4efff7
+checksum: 9d2f5552003a853f405cdb18a1ad66c58e8d553adebc02fb3004dd70dc31410a
 ---
 
 # TemplateGallerySection — Component Spec
@@ -90,7 +90,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 | `primaryAction`      | `ModuleHeaderAction`               | `undefined` | false    | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
 | `secondaryAction`    | `ModuleHeaderAction`               | `undefined` | false    | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
 | `templates`          | `TemplateGallerySectionTemplate[]` | `[]`        | false    | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
-| `deployLabel`        | `string`                           | `''`        | false    | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set.                                                                                                      |
+| `deployLabel`        | `string`                           | `''`        | false    | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. The button is named `<label>, <template title>`, so each card's action is told apart.                                                                                                      |
 | `templatesAriaLabel` | `string`                           | `''`        | false    | Accessible name of the scrolling wall of templates.                                                                                                                                                                 |
 | `marqueeLabel`       | `string`                           | `''`        | false    | Eyebrow above the row of marks.                                                                                                                                                                                     |
 | `marqueeMarks`       | `string[]`                         | `[]`        | false    | Registry names of the frameworks and clouds in the row of marks, in order; the marquee is omitted when empty.                                                                                                       |
@@ -108,6 +108,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 ## States
 
 - Visual states: `default`
+- Four templates or fewer fit without scrolling: the wall (`data-few`) sizes to its cards instead of holding the 44rem scrolling panel, so no empty framed space sits under them.
 - A card with an `href` is a link target as a whole: a click anywhere on it follows the `href` (and a modified or middle click opens it in a new tab, as any link does), the pointer turns to the hand over it, and hovering it lights its deploy button. With a deploy button the card keeps one tab stop — the button — and the card-wide link is a pointer-only target hidden from assistive technology; without a deploy button the card-wide link is the card's one tab stop, named by the template title
 - A card without an `href` is not interactive: no hand pointer, no hover light
 - Empty: when no template carries a title the band renders nothing — not the split, not the marquee, not the closing frame

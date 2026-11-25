@@ -241,6 +241,35 @@ describe('ClientMosaicSection', () => {
     )
   })
 
+  it('widens the last marks on a tablet so the four-column grid ends flush', () => {
+    const { container } = render(Default)
+
+    const widened = Array.from(container.querySelectorAll('[data-tablet-span]')).map((cell) => [
+      cell.querySelector('a')?.getAttribute('aria-label'),
+      cell.getAttribute('data-tablet-span')
+    ])
+    expect(widened).toHaveLength(2)
+    expect(widened.every(([, span]) => span === '2')).toBe(true)
+    expect(container.querySelector('[data-tablet-span]')?.className).toContain(
+      'md:max-lg:data-[tablet-span=2]:col-span-2'
+    )
+  })
+
+  it('widens no mark when the tablet rows are full', () => {
+    const { container } = render(ClientMosaicSection, {
+      props: {
+        ariaLabel: ARIA_LABEL,
+        logos: ['A', 'B', 'C', 'D'].map((name) => ({
+          logo: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+          logoAlt: name,
+          href: 'https://example.com/'
+        }))
+      }
+    })
+
+    expect(container.querySelectorAll('[data-tablet-span]')).toHaveLength(0)
+  })
+
   it('marks no cell lone when the marks pair up', () => {
     const { container } = render(Default)
 

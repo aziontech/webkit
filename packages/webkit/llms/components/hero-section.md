@@ -229,8 +229,7 @@
       description="New features and fixes, newest first."
     />
     <HeroSection
-      variant="center"
-      plain
+      variant="center-band"
       title="Ship from your terminal"
       description="One command creates, builds and deploys a project."
     >

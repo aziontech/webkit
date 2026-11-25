@@ -254,8 +254,8 @@
   }
 
   const CATEGORY_STRIP_CLASS =
-    'min-w-0 overflow-x-auto max-lg:pe-(--spacing-xl) max-lg:[mask-image:linear-gradient(to_right,black_calc(100%-var(--spacing-xl)),transparent)] ' +
-    'max-lg:rtl:[mask-image:linear-gradient(to_left,black_calc(100%-var(--spacing-xl)),transparent)]'
+    'min-w-0 overflow-x-auto max-lg:pe-(--spacing-2xl) max-lg:[mask-image:linear-gradient(to_right,black_calc(100%-var(--spacing-2xl)),transparent)] ' +
+    'max-lg:rtl:[mask-image:linear-gradient(to_left,black_calc(100%-var(--spacing-2xl)),transparent)]'
 
   const ROW_CLASS =
     'group/row relative grid transition-colors duration-fast-02 ease-productive-entrance ' +
@@ -339,7 +339,7 @@
             :label="facet.label"
             :options="choicesOf(facet)"
             :all-option="{ value: facet.allLabel, label: facet.allLabel }"
-            size="medium"
+            :size="controlSize"
             :search-placeholder="t('articleIndexSection.search')"
             :search-aria-label="
               t('articleIndexSection.searchFacet', { facet: facet.label.toLowerCase() })
@@ -377,7 +377,7 @@
             />
             <article :class="ROW_CLASS">
               <div
-                class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) md:border-e md:border-b-0"
+                class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) md:aspect-auto md:min-h-full md:border-e md:border-b-0"
               >
                 <img
                   v-if="item.image && !failedCovers.has(item.id)"

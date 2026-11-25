@@ -10,6 +10,7 @@
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import SectionBand from '../parts/section-band.vue'
+  import { faceInk } from './lib/face-ink'
 
   defineOptions({
     name: 'ClientStoryColumnsSection',
@@ -100,7 +101,7 @@
   }
 
   const faceTheme = (cell: ClientStoryColumnsSectionCell): 'light' | 'dark' =>
-    (cell.brand ?? clientBrand(cell.name) ?? NO_BRAND).ink === 'dark' ? 'light' : 'dark'
+    faceInk(cell.brand ?? clientBrand(cell.name) ?? NO_BRAND) === 'dark' ? 'light' : 'dark'
 
   const listName = computed(() => props.ariaLabel || t('clientStoryColumnsSection.list'))
   const story = computed(() => props.linkLabel || t('clientStoryColumnsSection.story'))
@@ -316,6 +317,13 @@
               <p class="m-0 text-balance text-heading-sm text-(--text-default)">
                 {{ cell.story }}
               </p>
+              <span
+                data-slot="story-cue"
+                class="mt-(--spacing-md) flex items-center gap-(--spacing-2xs) text-overline-md whitespace-nowrap text-(--text-muted) uppercase"
+              >
+                {{ story }}
+                <i class="az az-arrow-up-right leading-none rtl:-scale-x-100" />
+              </span>
             </a>
           </div>
         </RegistrationFrame>

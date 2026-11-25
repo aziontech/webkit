@@ -90,6 +90,8 @@
 
   const hasCards = computed(() => cards.value.length > 0)
 
+  const fitsWithoutScroll = computed(() => cards.value.length <= 4)
+
   const hasActions = computed(() => Boolean(props.primaryAction || props.secondaryAction))
 
   const DEPLOY_BUTTON_CLASS =
@@ -97,8 +99,8 @@
     'rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5'
 
   const SCROLL_AREA_CLASS =
-    '@min-[60rem]/template-gallery:absolute @min-[60rem]/template-gallery:inset-0 ' +
-    '@min-[60rem]/template-gallery:mask-t-from-[calc(100%_-_2rem)] @min-[60rem]/template-gallery:mask-b-from-[calc(100%_-_6rem)]'
+    '@min-[60rem]/template-gallery:not-data-[few]:absolute @min-[60rem]/template-gallery:not-data-[few]:inset-0 ' +
+    '@min-[60rem]/template-gallery:not-data-[few]:mask-t-from-[calc(100%_-_2rem)] @min-[60rem]/template-gallery:not-data-[few]:mask-b-from-[calc(100%_-_6rem)]'
 
   const CARD_LINK_CLASS =
     'absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
@@ -124,8 +126,12 @@
       :description="description"
     >
       <template #media>
-        <div class="relative w-full self-stretch @min-[60rem]/template-gallery:min-h-[44rem]">
+        <div
+          :data-few="fitsWithoutScroll || null"
+          class="relative w-full self-stretch @min-[60rem]/template-gallery:not-data-[few]:min-h-[44rem]"
+        >
           <ScrollArea
+            :data-few="fitsWithoutScroll || null"
             :aria-label="templatesAriaLabel || undefined"
             :class="SCROLL_AREA_CLASS"
           >
@@ -189,6 +195,7 @@
                     icon-position="trailing"
                     animated
                     :href="template.href"
+                    :aria-label="`${deployLabel}, ${template.title}`"
                     :class="DEPLOY_BUTTON_CLASS"
                   >
                     <template #leading>
@@ -202,8 +209,9 @@
               </CardGridCell>
             </CardGrid>
             <div
+              v-if="!fitsWithoutScroll"
               aria-hidden="true"
-              class="h-16"
+              class="hidden h-16 @min-[60rem]/template-gallery:block"
             />
           </ScrollArea>
         </div>

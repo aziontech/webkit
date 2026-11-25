@@ -2427,3 +2427,17 @@ Budget-raise: video-player 12.65 KB → 12.7 KB (measured 12.69 KB): a retry eve
 Budget-raise: image-gallery 27.6 KB → 27.75 KB (measured 27.72 KB): a retry event and a Try again button in the error state (A6-039, owner call).
 
 Budget-raise: doc-prompt 13.5 KB → 13.7 KB (measured 13.66 KB): audit-6 lane L07 (A6-086, A6-087, A6-088) isolates the prompt direction with dir=auto and draws the line fades from the prompt's resolved direction, lets the line shape wrap below the sm container width, and moves Show more after the copy control; about 0.2 KB of logic and classes, nothing left to cut without dropping one of the fixes.
+
+Budget-raise: media-scroll 5.75 KB → 5.85 KB (measured 5.84 KB): MediaScroll renders each claim title as a plain heading below lg and the button only from lg, through useMediaQuery, so phones get no dead tab stops (A6-096).
+
+Budget-raise: console-showcase-section 22.3 KB → 22.35 KB (measured 22.31 KB): the view switcher lays out as an even grid on a phone instead of wrapping one view onto its own row (A6-098, A6-110).
+
+Budget-raise: feature-scroll-section 21 KB → 21.1 KB (measured 21.07 KB): an odd last tile spans both tablet columns and a phone code sample drops its side inset (A6-115, A6-117).
+
+Budget-raise: client-mosaic-section 8.3 KB → 8.8 KB (measured 8.79 KB): the band works out the tablet grid placement (lib/trailing-spans.ts) so a short last row of marks ends flush instead of leaving empty framed slots (A6-105).
+
+Budget-raise: client-story-columns-section 9.25 KB → 9.5 KB (measured 9.49 KB): a face without an explicit ink takes dark ink when white falls under 4.5:1 (lib/face-ink.ts), and the default layout draws a link cue under each story (A6-107, A6-108).
+
+Budget-raise: feature-tabs-section 60.6 KB → 60.65 KB (measured 60.62 KB): the band scene sits inside the pane's spacing-xl inset in its own wrapper (A6-119).
+
+Budget-raise: closing-call-to-action-section 9.85 KB → 9.9 KB (measured 9.86 KB): CallToAction's panel copy takes a fixed measure so stacked bands start their actions at one place (A6-109).

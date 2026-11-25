@@ -124,6 +124,14 @@ describe('NetworkSection', () => {
     expect(getByText(LEAD)).toBeInTheDocument()
   })
 
+  it('caps the claims eyebrow at the claims measure, so it wraps before the map', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId('network-section__claims-eyebrow').classList).toContain(
+      'max-w-(--container-sm)'
+    )
+  })
+
   it('renders one list item per claim, in order', () => {
     const { getAllByRole } = band()
 

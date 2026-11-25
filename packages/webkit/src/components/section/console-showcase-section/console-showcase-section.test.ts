@@ -85,20 +85,30 @@ describe('ConsoleShowcaseSection', () => {
     expect(custom.getByRole('radiogroup', { name: 'Views of the console' })).toBeInTheDocument()
   })
 
-  it('sizes the view switcher to its labels at medium on a 320px screen, fluid and large above', async () => {
+  it('sizes the view switcher at medium on a 320px screen and large above, in even columns on a phone', async () => {
     await page.viewport(320, 640)
     await vi.waitFor(() => expect(window.matchMedia('(max-width: 22.49rem)').matches).toBe(true))
     const narrow = panel()
     const cramped = narrow.getByRole('radiogroup')
     await vi.waitFor(() => expect(cramped.getAttribute('data-size')).toBe('medium'))
-    expect(cramped.hasAttribute('data-fluid')).toBe(false)
+    expect(cramped.getAttribute('data-columns')).toBe('2')
     narrow.unmount()
 
     await page.viewport(390, 844)
     await vi.waitFor(() => expect(window.matchMedia('(max-width: 22.49rem)').matches).toBe(false))
     const phone = panel().getByRole('radiogroup')
     await vi.waitFor(() => expect(phone.getAttribute('data-size')).toBe('large'))
-    expect(phone.hasAttribute('data-fluid')).toBe(true)
+    expect(phone.getAttribute('data-columns')).toBe('2')
+  })
+
+  it('splits four views into two even columns, so no view is left alone on a row', () => {
+    const four = [
+      { value: 'a', title: 'Build' },
+      { value: 'b', title: 'Devices' },
+      { value: 'c', title: 'Rules' },
+      { value: 'd', title: 'Settings' }
+    ]
+    expect(panel({ tabs: four }).getByRole('radiogroup').getAttribute('data-columns')).toBe('2')
   })
 
   it('translates the built-in name', () => {

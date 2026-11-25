@@ -44,7 +44,7 @@
 | `links` | `SiteHeaderSectionLink[]` | `[]` | false | Bar entries that open no panel, after the menus; each is `{ label, href }`. |
 | `contact` | `SiteHeaderSectionLink` | `undefined` | false | Contact link set in the bar from `xl` up and last in the sheet's tree; `{ label, href }`. |
 | `primaryAction` | `SiteHeaderSectionLink` | `undefined` | false | The sign-up button, filled, in the bar and in the sheet footer; `{ label, href }`. |
-| `secondaryAction` | `SiteHeaderSectionLink` | `undefined` | false | The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`. |
+| `secondaryAction` | `SiteHeaderSectionLink` | `undefined` | false | The login button beside it, outlined so the sign-up button is the one filled action, in the bar from `sm` up and in the sheet footer; `{ label, href }`. |
 | `secondaryActionOnPhones` | `boolean` | `false` | false | Keeps the login button in the bar below `sm` too; off, it steps out on phones, as on azion.com, and stays in the sheet footer. |
 
 ## Events

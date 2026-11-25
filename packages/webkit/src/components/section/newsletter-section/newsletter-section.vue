@@ -112,6 +112,8 @@
   const FLOOR_CLASS =
     'relative isolate h-[calc(var(--spacing-2xl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] ' +
     '[--texture-wave-gain:3] [--texture-wave-pace:5]'
+
+  const EYEBROW_PREFIX = '//' as const
 </script>
 
 <template>
@@ -131,6 +133,7 @@
         <Eyebrow
           v-if="eyebrow"
           cursor
+          :prefix="EYEBROW_PREFIX"
           >{{ eyebrow }}</Eyebrow
         >
         <h2

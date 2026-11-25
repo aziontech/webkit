@@ -110,6 +110,20 @@ describe('FeatureScrollSection', () => {
     })
   })
 
+  it('spans the last tile across both tablet columns when the count is odd', () => {
+    const { getAllByTestId, unmount } = band()
+
+    const cells = getAllByTestId('media-tile').map((tile) =>
+      tile.closest('[data-testid="card-grid-cell"]')
+    )
+    expect(cells.map((cell) => cell?.hasAttribute('data-wide'))).toEqual([false, false, true])
+    expect(cells.at(-1)?.className).toContain('sm:data-[wide]:col-span-2')
+    unmount()
+
+    const even = band({ items: items.slice(0, 2) })
+    expect(even.container.querySelectorAll('[data-wide]')).toHaveLength(0)
+  })
+
   it('renders one step heading per item, in order, on the large layout', () => {
     const { getAllByRole } = band()
 

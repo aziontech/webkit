@@ -7,7 +7,7 @@ spec_version: 4
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-24
-checksum: 6e940b2f4c07e3332c1d9766c7bfc5a3ea73964a68461642696405e8ba7ec600
+checksum: 2e8fc5888b7e4d0ee6a6f4501c2f8cc86e0f0bb39aa078a649b46a5392bf4e4e
 ---
 
 # ClientMosaicSection — Component Spec
@@ -155,6 +155,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 - Narrow: a two-column span fills the phone row; cells keep a minimum height of `clamp(180px, 18vw, 240px)`.
 - On a phone a mark cell left alone in its row (an odd run of marks before a story, or the last mark) carries `data-lone` and fills the row, so the two-column frame never shows a blank half cell.
 - Below `lg` a story cell spans two columns (the full row on a phone, half the four-column grid on a tablet), so its claim and its link never squeeze into one narrow column.
+- On a tablet (`md` to `lg`) the band works out where the four-column grid places each cell; when the last row is short, its mark cells widen (carrying `data-tablet-span`) until the row ends flush, so the frame never runs on over empty slots.
 - Touch: every mark cell is a full-cell link; story links are `link` targets.
 - Reflow: no horizontal scroll at 320 px.
 

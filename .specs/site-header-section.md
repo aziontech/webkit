@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 3006a98031503d37e29357f281b9149cf8b10716d14d08ffed0f56f19dca2edd
+checksum: 75fea16e475910bad62809a559231f4c6af1d39c31a34d6a43388103514619be
 template: 2
 ---
 
@@ -97,7 +97,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 | `links`                   | `SiteHeaderSectionLink[]` | `[]`        | false    | Bar entries that open no panel, after the menus; each is `{ label, href }`.                                                                                                                                       |
 | `contact`                 | `SiteHeaderSectionLink`   | `undefined` | false    | Contact link set in the bar from `xl` up and last in the sheet's tree; `{ label, href }`.                                                                                                                         |
 | `primaryAction`           | `SiteHeaderSectionLink`   | `undefined` | false    | The sign-up button, filled, in the bar and in the sheet footer; `{ label, href }`.                                                                                                                                |
-| `secondaryAction`         | `SiteHeaderSectionLink`   | `undefined` | false    | The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`.                                                                                                                   |
+| `secondaryAction`         | `SiteHeaderSectionLink`   | `undefined` | false    | The login button beside it, outlined so the sign-up button is the one filled action, in the bar from `sm` up and in the sheet footer; `{ label, href }`.                                                                                                                   |
 | `secondaryActionOnPhones` | `boolean`                 | `false`     | false    | Keeps the login button in the bar below `sm` too; off, it steps out on phones, as on azion.com, and stays in the sheet footer.                                                                                    |
 
 ## Events
