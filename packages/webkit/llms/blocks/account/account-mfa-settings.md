@@ -258,7 +258,7 @@ Each variant is the same screen in another state: `get_block("account/account-mf
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
-    { accessorKey: 'status', header: 'MFA', minWidth: 120 },
+    { accessorKey: 'status', header: 'MFA', minWidth: 120, narrow: false },
     { accessorKey: 'method', header: 'Method', minWidth: 160 },
     { accessorKey: 'since', header: 'Set up', minWidth: 160 },
     { id: 'actions', type: 'action', hideable: false }
@@ -475,6 +475,7 @@ Each variant is the same screen in another state: `get_block("account/account-mf
                       <span class="truncate text-body-xs text-(--text-muted)">{{ row.email }}</span>
                       <div
                         aria-hidden="true"
+                        data-slot="narrow-summary"
                         class="mt-(--spacing-2xs) w-fit sm:hidden"
                       >
                         <TableCellStatus

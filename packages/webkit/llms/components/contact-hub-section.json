@@ -24,6 +24,7 @@
  "bestPractices": [
   "Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.",
   "Don't pad `channels` to three or drop one to make the row fit.",
+  "Put an emergency channel (an attack in progress) first and give it `severity: 'danger'`, so a reader under attack finds it at a glance; no other channel takes a severity.",
   "Keep each lane's description to one sentence that states what that team handles.",
   "Set `target: '_blank'` on a channel or status link that leaves the site.",
   "Lead each lane with its `action`; add a `secondaryAction` only for a second route to the same team (an outlined button after the first).",
@@ -49,7 +50,7 @@
    "type": "ContactHubSectionChannel[]",
    "default": "[]",
    "required": "false",
-   "doc": "The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic."
+   "doc": "The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic; `severity: 'danger'` draws the glyph in `var(--danger-mark)` for the emergency channel."
   }
  ],
  "events": [],

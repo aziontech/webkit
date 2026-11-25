@@ -310,12 +310,13 @@ Each variant is the same screen in another state: `get_block("state/state-edge-e
         >
           Request path
         </h2>
-        <div class="-mx-(--spacing-md) [&_[data-slot=flow-diagram-port]]:hidden">
+        <div class="-mx-(--spacing-md)">
           <FlowDiagram
             :nodes="nodes"
             :edges="edges"
             orientation="responsive"
             uniform
+            :show-ports="false"
             :aria-labelledby="pathId"
             data-testid="state-edge-error-page__path"
           />

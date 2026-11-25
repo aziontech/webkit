@@ -9,7 +9,7 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | Class | Base size | Steps to | Purpose |
 | --- | --- | --- | --- |
 | `text-amount-lg` | `1.875rem` | sm: 3rem, md: 3.5rem | The largest price or amount. |
-| `text-amount-md` | `1rem` | sm: 1.25rem, md: 1.5rem | A price or amount in a card. |
+| `text-amount-md` | `1.25rem` | md: 1.5rem | A price or amount in a card. |
 | `text-amount-sm` | `1rem` |  | A compact price or amount. |
 | `text-big-number-lg` | `1.5rem` | sm: 2.25rem, md: 3.5rem | The largest numeric figure on one line, shrunk to fit its container. |
 | `text-big-number-md` | `1.25rem` | sm: 1.5rem, md: 2.25rem | A numeric figure in a stat card, on one line, shrunk to fit. |

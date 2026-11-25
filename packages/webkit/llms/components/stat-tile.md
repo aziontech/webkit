@@ -70,6 +70,7 @@
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
+- The figure row is laid out from the tile's width alone, never from the figure's: from `var(--container-3xs)` (256px) of tile width the delta stays on the figure line (its label truncates), and below it the delta sits under the figure. A web font arriving after first paint therefore never re-wraps the row and shifts the page
 - `data-carded` is set when the tile sits in a `ChartCard` and not in a group (injected, no prop): the card owns the only frame, so the tile drops its border, radius and surface; use an unpadded `ChartCard.Content`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
