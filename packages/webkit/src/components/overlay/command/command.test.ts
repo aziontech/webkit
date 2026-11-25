@@ -965,3 +965,16 @@ describe('Command', () => {
     })
   })
 })
+
+describe('Command examples', () => {
+  const sources = import.meta.glob<string>('../../../../examples/command/*.vue', {
+    eager: true,
+    query: '?raw',
+    import: 'default'
+  })
+
+  it.each(Object.entries(sources))('%s shows an Empty part when nothing matches', (_, source) => {
+    expect(source).toContain('<CommandList>')
+    expect(source).toMatch(/<CommandEmpty\b/)
+  })
+})
