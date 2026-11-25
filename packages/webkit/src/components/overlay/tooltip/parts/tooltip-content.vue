@@ -25,8 +25,8 @@
   }
 
   export interface TooltipContentProps {
-    /** The trigger span the tooltip listens on and anchors to. */
-    trigger: HTMLElement | null
+    /** Returns the trigger span the tooltip listens on and anchors to. */
+    trigger: () => HTMLElement | null
     /** Test id of the trigger; the panel takes it with the panel suffix. */
     testId: string
     /** Plain text shown inside the tooltip. */
@@ -67,7 +67,7 @@
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const uid = useId()
-  const triggerEl = computed<HTMLElement | null>(() => props.trigger)
+  const triggerEl = computed<HTMLElement | null>(() => props.trigger())
   const panelEl = ref<HTMLElement | null>(null)
   const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)

@@ -57,6 +57,10 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tooltip')
 
+  function getTrigger(): HTMLElement | null {
+    return triggerEl.value
+  }
+
   function onState(next: TooltipContentState) {
     state.value = next
   }
@@ -78,7 +82,7 @@
 
   <TooltipContent
     v-model:open="openModel"
-    :trigger="triggerEl"
+    :trigger="getTrigger"
     :test-id="testId"
     :content="content"
     :side="side"

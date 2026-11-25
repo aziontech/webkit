@@ -22,6 +22,7 @@ export const LazyTooltip = defineComponent({
   },
   setup(props, { attrs, slots }) {
     const triggerEl = ref<HTMLElement | null>(null)
+    const getTrigger = () => triggerEl.value
     const state = ref<TooltipContentState>({
       open: false,
       side: props.side === 'auto' ? 'top' : props.side,
@@ -45,7 +46,7 @@ export const LazyTooltip = defineComponent({
         slots['default']?.()
       ),
       h(LazyTooltipContent, {
-        trigger: triggerEl.value,
+        trigger: getTrigger,
         testId: testId.value,
         content: props.content,
         side: props.side,
