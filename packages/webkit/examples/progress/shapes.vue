@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex w-[320px] flex-col gap-4">
+  <div class="flex w-(--container-2xs) flex-col gap-(--spacing-md)">
     <Progress
       :value="60"
       variant="rounded"

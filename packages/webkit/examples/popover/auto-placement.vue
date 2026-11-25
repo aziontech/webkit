@@ -11,7 +11,7 @@
 <template>
   <div class="relative h-[30rem] w-full border border-dashed border-(--border-muted)">
     <p
-      class="absolute inset-x-(--spacing-md) top-1/2 mx-auto max-w-md -translate-y-1/2 text-center text-body-sm text-(--text-muted)"
+      class="absolute inset-x-(--spacing-md) top-1/2 mx-auto max-w-(--container-md) -translate-y-1/2 text-center text-body-sm text-(--text-muted)"
     >
       All triggers use side="auto". Click one: its panel opens on the side with the most room for
       its place in the viewport.

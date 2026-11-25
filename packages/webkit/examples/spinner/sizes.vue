@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex items-center gap-4 text-(--text-default)">
+  <div class="flex items-center gap-(--spacing-md) text-(--text-default)">
     <Spinner class="size-3" />
     <Spinner class="size-4" />
     <Spinner class="size-6" />
