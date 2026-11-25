@@ -504,7 +504,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'ATFO7PL6',
     name: 'ATFO7PL6',
     state: 'ready',
-    description: 'Add function"image-resize"',
+    description: 'Add function "image-resize"',
     author: 'Taylor Reed',
     createdAt: '2026-10-31T14:37:18.145Z'
   },
@@ -544,7 +544,7 @@ export const resourceVersions: ResourceVersionRow[] = [
     id: 'A1CST2VJ',
     name: 'A1CST2VJ',
     state: 'ready',
-    description: 'Add function"image-resize"',
+    description: 'Add function "image-resize"',
     author: 'Riley Carter',
     createdAt: '2026-10-26T14:37:18.145Z'
   },
