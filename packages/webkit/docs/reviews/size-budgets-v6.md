@@ -2603,3 +2603,7 @@ Budget-raise: css-button 11.05 KB → 11.1 KB (measured 11.09 KB gzip): the them
 Budget-raise: css-icons 15.35 KB → 15.45 KB (measured 15.41 KB gzip): the same theme additions as css-button (A6-026, A6-122, A6-180).
 
 Budget-raise: css-console 24.7 KB → 24.95 KB (measured 24.91 KB gzip): the same theme additions (A6-026, A6-122, A6-180), plus the pointer-coarse 44px touch targets of grouped icon buttons, chips and chart legend items (A6-005, A6-015, A6-070), the transparent disabled ghost and outline IconButton fill (A6-232), the whole table row rules beside a frozen column (A6-059) and the platform shortcut hint in menu items (A6-073).
+
+Budget-raise: stats-section 5.05 KB → 5.1 KB (measured 5.08 KB): Stats sets a suffix that holds a letter in the new text-face unit role, so `ms` and `Tbps` keep their case (A6-099, lane W3); the binding and the class add about 70 bytes after removing its test id.
+
+Budget-raise: network-section 28.2 KB → 28.25 KB (measured 28.21 KB): renders Stats, so it carries the same unit-role binding (A6-099, lane W3).

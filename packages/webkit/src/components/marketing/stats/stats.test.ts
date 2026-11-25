@@ -188,7 +188,9 @@ describe('Stats', () => {
       'sets a %s unit in the text face at the figure size, so ms and Tbps keep their case',
       async (size) => {
         const { getAllByTestId } = await renderAt(1280, 4, size)
-        const units = getAllByTestId('stats__unit')
+        const units = getAllByTestId('stats__value').map(
+          (run) => run.lastElementChild as HTMLElement
+        )
         const tbps = units.find((unit) => unit.textContent === 'Tbps') as HTMLElement
         const figure = tbps.closest('[data-testid="stats__figure"]') as HTMLElement
 

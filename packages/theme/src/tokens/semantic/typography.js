@@ -33,26 +33,7 @@ export const typography = {
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
-  'text-big-number-unit-md': {
-    whiteSpace: 'nowrap',
-    fontSize: { _: fontSize.xl, sm: fontSize['2xl'], md: fontSize['4xl'] },
-    fontSizeFit: bigNumberFit,
-    lineHeight: leading.none,
-    fontWeight: fontWeight.normal,
-    fontFamily: fontFamily.sans
-  },
-  'text-big-number-unit-sm': {
-    whiteSpace: 'nowrap',
-    fontSize: { _: fontSize.base, sm: fontSize.xl },
-    fontSizeFit: bigNumberFit,
-    lineHeight: leading.none,
-    fontWeight: fontWeight.normal,
-    fontFamily: fontFamily.sans
-  },
-  'text-big-number-unit-lg': {
-    whiteSpace: 'nowrap',
-    fontSize: { _: fontSize['2xl'], sm: fontSize['4xl'], md: fontSize['6xl'] },
-    fontSizeFit: bigNumberFit,
+  'text-big-number-unit': {
     lineHeight: leading.none,
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.sans

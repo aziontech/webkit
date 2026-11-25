@@ -590,13 +590,13 @@
   {
     "name": "network-section",
     "path": "src/components/section/network-section/network-section.vue",
-    "limit": "28.2 KB",
+    "limit": "28.25 KB",
     "entryOnly": true
   },
   {
     "name": "stats-section",
     "path": "src/components/section/stats-section/stats-section.vue",
-    "limit": "5.05 KB"
+    "limit": "5.1 KB"
   },
   {
     "name": "card-carousel-section",

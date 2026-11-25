@@ -14,9 +14,7 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | `text-big-number-lg` | `1.5rem` | sm: 2.25rem, md: 3.5rem | The largest numeric figure on one line, shrunk to fit its container. |
 | `text-big-number-md` | `1.25rem` | sm: 1.5rem, md: 2.25rem | A numeric figure in a stat card, on one line, shrunk to fit. |
 | `text-big-number-sm` | `1rem` | sm: 1.25rem | A compact numeric figure, on one line, shrunk to fit. |
-| `text-big-number-unit-lg` | `1.5rem` | sm: 2.25rem, md: 3.5rem | The unit after a text-big-number-lg figure, in the text face so its case is kept (ms, Tbps). |
-| `text-big-number-unit-md` | `1.25rem` | sm: 1.5rem, md: 2.25rem | The unit after a text-big-number-md figure, in the text face so its case is kept (ms, Tbps). |
-| `text-big-number-unit-sm` | `1rem` | sm: 1.25rem | The unit after a text-big-number-sm figure, in the text face so its case is kept (ms, Tbps). |
+| `text-big-number-unit` |  |  | A word unit in a big-number figure (ms, Tbps), in the text face so it keeps its case. |
 | `text-body-2xs` | `0.75rem` |  | The smallest body text, such as footnotes. |
 | `text-body-code-lg` | `1rem` |  | Wrapping or multi-line code at the 16px touch size, with a real line height. |
 | `text-body-code-sm` | `0.75rem` |  | A monospace paragraph that wraps. |

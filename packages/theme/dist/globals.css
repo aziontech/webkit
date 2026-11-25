@@ -542,21 +542,9 @@
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
   --text-big-number-lg-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
-  --text-big-number-unit-md-white-space: nowrap;
-  --text-big-number-unit-md-font-size: 1.25rem;
-  --text-big-number-unit-md-line-height: 1;
-  --text-big-number-unit-md-font-weight: 400;
-  --text-big-number-unit-md-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
-  --text-big-number-unit-sm-white-space: nowrap;
-  --text-big-number-unit-sm-font-size: 1rem;
-  --text-big-number-unit-sm-line-height: 1;
-  --text-big-number-unit-sm-font-weight: 400;
-  --text-big-number-unit-sm-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
-  --text-big-number-unit-lg-white-space: nowrap;
-  --text-big-number-unit-lg-font-size: 1.5rem;
-  --text-big-number-unit-lg-line-height: 1;
-  --text-big-number-unit-lg-font-weight: 400;
-  --text-big-number-unit-lg-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --text-big-number-unit-line-height: 1;
+  --text-big-number-unit-font-weight: 400;
+  --text-big-number-unit-font-family: Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-amount-lg-text-wrap-style: balance;
   --text-amount-lg-font-size: 1.875rem;
   --text-amount-lg-line-height: 1.25;
@@ -737,9 +725,6 @@
     --text-big-number-md-font-size: 1.5rem;
     --text-big-number-sm-font-size: 1.25rem;
     --text-big-number-lg-font-size: 2.25rem;
-    --text-big-number-unit-md-font-size: 1.5rem;
-    --text-big-number-unit-sm-font-size: 1.25rem;
-    --text-big-number-unit-lg-font-size: 2.25rem;
     --text-amount-lg-font-size: 3rem;
     --text-amount-md-font-size: 1.25rem;
     --text-heading-3xl-font-size: 3rem;
@@ -754,8 +739,6 @@
   @media (min-width: 768px) {
     --text-big-number-md-font-size: 2.25rem;
     --text-big-number-lg-font-size: 3.5rem;
-    --text-big-number-unit-md-font-size: 2.25rem;
-    --text-big-number-unit-lg-font-size: 3.5rem;
     --text-amount-lg-font-size: 3.5rem;
     --text-amount-md-font-size: 1.5rem;
     --text-heading-3xl-font-size: 3.5rem;
@@ -1333,28 +1316,10 @@
   font-family: var(--text-big-number-lg-font-family);
 }
 
-@utility text-big-number-unit-md {
-  white-space: var(--text-big-number-unit-md-white-space);
-  font-size: min(var(--text-big-number-unit-md-font-size), (100cqi - var(--text-big-number-inset, calc(0rem))) / (var(--text-big-number-characters, 1) * 0.65));
-  line-height: var(--text-big-number-unit-md-line-height);
-  font-weight: var(--text-big-number-unit-md-font-weight);
-  font-family: var(--text-big-number-unit-md-font-family);
-}
-
-@utility text-big-number-unit-sm {
-  white-space: var(--text-big-number-unit-sm-white-space);
-  font-size: min(var(--text-big-number-unit-sm-font-size), (100cqi - var(--text-big-number-inset, calc(0rem))) / (var(--text-big-number-characters, 1) * 0.65));
-  line-height: var(--text-big-number-unit-sm-line-height);
-  font-weight: var(--text-big-number-unit-sm-font-weight);
-  font-family: var(--text-big-number-unit-sm-font-family);
-}
-
-@utility text-big-number-unit-lg {
-  white-space: var(--text-big-number-unit-lg-white-space);
-  font-size: min(var(--text-big-number-unit-lg-font-size), (100cqi - var(--text-big-number-inset, calc(0rem))) / (var(--text-big-number-characters, 1) * 0.65));
-  line-height: var(--text-big-number-unit-lg-line-height);
-  font-weight: var(--text-big-number-unit-lg-font-weight);
-  font-family: var(--text-big-number-unit-lg-font-family);
+@utility text-big-number-unit {
+  line-height: var(--text-big-number-unit-line-height);
+  font-weight: var(--text-big-number-unit-font-weight);
+  font-family: var(--text-big-number-unit-font-family);
 }
 
 @utility text-amount-lg {
