@@ -33,6 +33,7 @@
   "The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
   "Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.",
   "Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.",
+  "Write a unit in its own case (`ms`, `Tbps`, `GB`): a suffix with a letter is set in the text face at the figure's size, because the display face draws lowercase as capitals and `MS` or `TBPS` means another unit. A symbol suffix (`+`, `%`) stays in the display face.",
   "Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.",
   "Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.",
   "Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`).",

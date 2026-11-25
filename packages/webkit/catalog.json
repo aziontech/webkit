@@ -622,6 +622,21 @@
    "--text-big-number-sm-font-weight",
    "--text-big-number-sm-line-height",
    "--text-big-number-sm-white-space",
+   "--text-big-number-unit-lg-font-family",
+   "--text-big-number-unit-lg-font-size",
+   "--text-big-number-unit-lg-font-weight",
+   "--text-big-number-unit-lg-line-height",
+   "--text-big-number-unit-lg-white-space",
+   "--text-big-number-unit-md-font-family",
+   "--text-big-number-unit-md-font-size",
+   "--text-big-number-unit-md-font-weight",
+   "--text-big-number-unit-md-line-height",
+   "--text-big-number-unit-md-white-space",
+   "--text-big-number-unit-sm-font-family",
+   "--text-big-number-unit-sm-font-size",
+   "--text-big-number-unit-sm-font-weight",
+   "--text-big-number-unit-sm-line-height",
+   "--text-big-number-unit-sm-white-space",
    "--text-body-2xs-font-size",
    "--text-body-2xs-font-weight",
    "--text-body-2xs-line-height",
@@ -823,6 +838,9 @@
    "text-big-number-lg",
    "text-big-number-md",
    "text-big-number-sm",
+   "text-big-number-unit-lg",
+   "text-big-number-unit-md",
+   "text-big-number-unit-sm",
    "text-body-2xs",
    "text-body-code-lg",
    "text-body-code-sm",
@@ -1511,6 +1529,21 @@
     "--text-big-number-sm-font-weight",
     "--text-big-number-sm-line-height",
     "--text-big-number-sm-white-space",
+    "--text-big-number-unit-lg-font-family",
+    "--text-big-number-unit-lg-font-size",
+    "--text-big-number-unit-lg-font-weight",
+    "--text-big-number-unit-lg-line-height",
+    "--text-big-number-unit-lg-white-space",
+    "--text-big-number-unit-md-font-family",
+    "--text-big-number-unit-md-font-size",
+    "--text-big-number-unit-md-font-weight",
+    "--text-big-number-unit-md-line-height",
+    "--text-big-number-unit-md-white-space",
+    "--text-big-number-unit-sm-font-family",
+    "--text-big-number-unit-sm-font-size",
+    "--text-big-number-unit-sm-font-weight",
+    "--text-big-number-unit-sm-line-height",
+    "--text-big-number-unit-sm-white-space",
     "--text-body-2xs-font-size",
     "--text-body-2xs-font-weight",
     "--text-body-2xs-line-height",
@@ -3107,6 +3140,63 @@
      "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
     },
     "purpose": "The largest numeric figure on one line, shrunk to fit its container.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "2.25rem"
+     },
+     "md": {
+      "font-size": "3.5rem"
+     }
+    }
+   },
+   "text-big-number-unit-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "white-space": "nowrap",
+     "font-size": "1.25rem",
+     "line-height": "1",
+     "font-weight": "400",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif"
+    },
+    "purpose": "The unit after a text-big-number-md figure, in the text face so its case is kept (ms, Tbps).",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1.5rem"
+     },
+     "md": {
+      "font-size": "2.25rem"
+     }
+    }
+   },
+   "text-big-number-unit-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "white-space": "nowrap",
+     "font-size": "1rem",
+     "line-height": "1",
+     "font-weight": "400",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif"
+    },
+    "purpose": "The unit after a text-big-number-sm figure, in the text face so its case is kept (ms, Tbps).",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1.25rem"
+     }
+    }
+   },
+   "text-big-number-unit-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "white-space": "nowrap",
+     "font-size": "1.5rem",
+     "line-height": "1",
+     "font-weight": "400",
+     "font-family": "Rubik, 'Rubik Fallback', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif"
+    },
+    "purpose": "The unit after a text-big-number-lg figure, in the text face so its case is kept (ms, Tbps).",
     "breakpoints": {
      "sm": {
       "font-size": "2.25rem"
