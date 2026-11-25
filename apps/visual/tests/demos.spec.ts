@@ -85,6 +85,10 @@ test.describe('demo flows', () => {
     await page.goto(`${DEMOS}/resources/${FIRST}/delete`)
     const dialog = page.getByRole('alertdialog', { name: 'Delete resource' })
     await expect(dialog).toBeVisible()
+    await expect(
+      dialog.getByRole('textbox', { name: 'Type resource-01 to confirm.' })
+    ).toBeVisible()
+    await expect(dialog.getByRole('button', { name: /^Copy/ })).toHaveCount(0)
     await dialog.getByRole('textbox').fill('resource-01')
     await dialog.getByRole('button', { name: 'Delete resource' }).click()
     await expect(page).toHaveURL(/\/resources$/)

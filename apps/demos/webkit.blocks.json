@@ -479,7 +479,7 @@
       ]
     },
     "edit/edit-delete-dialog": {
-      "version": "5.12.3",
+      "version": "5.13.0",
       "files": [
         {
           "path": "src/blocks/delete-dialog.sample.ts",
@@ -494,7 +494,7 @@
           "imports": {
             "./sample": "./delete-dialog.sample"
           },
-          "checksum": "sha256:3856dbea0c9fca83afd1b0538dbe1d17638e9e5c61e8118c527565f8ca524d33"
+          "checksum": "sha256:95bff6c2080cd49b0f8bf96911f9ea48a859f25fecea016ab63fabb3d64706bb"
         }
       ]
     },
