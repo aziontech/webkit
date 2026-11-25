@@ -258,6 +258,7 @@
           <template #header>
             <div class="-m-(--spacing-md) flex flex-col">
               <div
+                v-if="!drawer || pageTrail?.hasControl()"
                 class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
               >
                 <AppHeaderBrand
