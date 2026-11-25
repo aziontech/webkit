@@ -10,6 +10,7 @@
   import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import Link from '../../navigation/link/link.vue'
   import SectionBand from '../parts/section-band.vue'
+  import { trailingSpans } from './lib/trailing-spans'
 
   defineOptions({
     name: 'ClientMosaicSection',
@@ -137,6 +138,16 @@
     return lone
   })
 
+  const tabletSpans = computed(() =>
+    trailingSpans(
+      placed.value.map((cell) => ({
+        width: cell.text || cell.span === '2' ? 2 : 1,
+        height: cell.rows === '2' ? 2 : 1
+      })),
+      4
+    )
+  )
+
   const treatmentOf = (cell: ClientMosaicSectionCell): ThirdPartyLogoTreatment =>
     cell.logoTreatment ??
     (cell.fill === 'white' || cell.fill === 'primary' ? 'knockout' : 'monochrome')
@@ -144,6 +155,10 @@
   const inkOf = (cell: ClientMosaicSectionCell): ThirdPartyLogoVariant => {
     return treatmentOf(cell)
   }
+
+  const CELL_CLASS =
+    'min-h-[clamp(180px,18vw,240px)] max-md:data-[span=2]:col-span-full max-md:data-[lone]:col-span-full max-lg:data-[cell=story]:col-span-2 ' +
+    'md:max-lg:data-[tablet-span=2]:col-span-2 md:max-lg:data-[tablet-span=3]:col-span-3 md:max-lg:data-[tablet-span=4]:col-span-4'
 
   const STORY_CELL_CLASS =
     'relative flex h-full min-w-0 flex-col justify-between gap-(--spacing-xl) overflow-hidden p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance ' +
@@ -184,7 +199,8 @@
         :padded="false"
         :data-cell="cell.text ? 'story' : 'logo'"
         :data-lone="loneOnPhone.has(index) || null"
-        class="min-h-[clamp(180px,18vw,240px)] max-md:data-[span=2]:col-span-full max-md:data-[lone]:col-span-full max-lg:data-[cell=story]:col-span-2"
+        :data-tablet-span="tabletSpans.get(index)"
+        :class="CELL_CLASS"
       >
         <div
           v-if="cell.text"
