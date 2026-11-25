@@ -273,6 +273,13 @@ describe('SiteHeaderSection', () => {
     expect(events[0]?.[0]).toBeInstanceOf(KeyboardEvent)
   })
 
+  it('draws the login as an outline button, so sign-up is the one filled action in the bar', () => {
+    const { getByTestId } = nav()
+
+    const login = getByTestId(`${TESTID}__secondary-action`).querySelector('[data-testid="button"]')
+    expect(login).toHaveAttribute('data-variant', 'outline')
+  })
+
   it('lets the login button step out of the phone bar unless secondaryActionOnPhones is set', async () => {
     const { getByTestId, rerender } = nav()
 

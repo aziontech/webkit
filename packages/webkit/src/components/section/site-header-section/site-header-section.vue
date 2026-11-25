@@ -356,7 +356,7 @@
         >
           <Button
             :label="secondaryAction.label"
-            variant="secondary"
+            variant="outline"
             size="medium"
             :href="secondaryAction.href"
           />
