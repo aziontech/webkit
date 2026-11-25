@@ -6,7 +6,9 @@
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
   import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
+
+  import AiChatRemoveDialog from './ai-chat-remove-dialog.vue'
 
   export type AiChatHeaderAction = 'share' | 'rename' | 'archive' | 'remove'
 
@@ -14,6 +16,7 @@
     empty: boolean
     historyOpen: boolean
     models: PromptInputMenuOption[]
+    conversationKey: string | null
   }>()
 
   const emit = defineEmits<{
@@ -42,8 +45,11 @@
     modelKey.value = String(value)
   }
 
+  const removeOpen = ref(false)
+
   function onAction(event: MouseEvent | KeyboardEvent, value: string | number) {
-    emit('action', event, value as AiChatHeaderAction)
+    if (value === 'remove') removeOpen.value = true
+    else emit('action', event, value as AiChatHeaderAction)
   }
 
   const HEADER_CLASS =
@@ -219,5 +225,10 @@
         </DropdownMenu>
       </span>
     </div>
+    <AiChatRemoveDialog
+      v-model:open="removeOpen"
+      :conversation-key="conversationKey"
+      @confirm="(event: MouseEvent) => emit('action', event, 'remove')"
+    />
   </header>
 </template>

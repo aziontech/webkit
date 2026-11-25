@@ -2,7 +2,6 @@
   import Alert from '@aziontech/webkit/alert'
   import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import ChatMessage from '@aziontech/webkit/chat-message-root'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Conversation from '@aziontech/webkit/conversation'
   import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
   import {
@@ -45,7 +44,7 @@
   import AiChatSkeleton from './parts/ai-chat-skeleton.vue'
   import AiChatStart from './parts/ai-chat-start.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
-  import { sampleModels, sampleSuggestions, sampleThreads, sampleTools } from './sample'
+  import { sampleModels, sampleSuggestions, sampleTools } from './sample'
 
   export interface AiChatProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
@@ -293,14 +292,8 @@
     if (action === 'share') emit('share-chat', event, activeKey.value)
     else if (action === 'rename') emit('rename-chat', event, activeKey.value)
     else if (action === 'archive') emit('archive-chat', event, activeKey.value)
-    else removeOpen.value = true
+    else emit('remove-chat', event, activeKey.value)
   }
-
-  const removeOpen = ref(false)
-  const removeTitle = computed(() => {
-    const title = sampleThreads.find((thread) => thread.id === activeKey.value)?.title
-    return title ? `Delete “${title}”?` : 'Delete this conversation?'
-  })
 
   function removeQueued(event: MouseEvent, id: string) {
     const item = props.queue?.find((entry) => entry.id === id)
@@ -326,6 +319,7 @@
         :empty="!turns.length"
         :history-open="historyPanel"
         :models="modelOptions"
+        :conversation-key="activeKey"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
         @toggle-history="historyPanel = !historyPanel"
@@ -447,12 +441,5 @@
         </template>
       </Conversation>
     </div>
-    <ConfirmDialog
-      v-model:open="removeOpen"
-      :title="removeTitle"
-      description="The conversation and its messages are removed from your history. This cannot be undone."
-      confirm-label="Delete"
-      @confirm="(event: MouseEvent) => emit('remove-chat', event, activeKey)"
-    />
   </section>
 </template>
