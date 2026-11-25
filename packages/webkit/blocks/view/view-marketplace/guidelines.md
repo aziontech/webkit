@@ -25,7 +25,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Featured — `IntegrationCard` (required)
 
-While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `IntegrationCard featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
+While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `IntegrationCard featured` tiles in a row (below `md` a horizontal snap row, one card and a peek of the next, so the search is reached within a screen instead of after three stacked cards): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
 
 ### C. Search and filter — `PropertyFilter` (required)
 
@@ -41,19 +41,19 @@ When `status` is `no-match`, the grid gives way to a medium `EmptyState` with th
 
 ### F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 
-A large right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelBody` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
+A large right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelBody` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit while an application is left: Install, or Reinstall while the application that just failed is still chosen. It is the drawer's only submit.
 
 ### G. Install outcome — `Alert` (required)
 
-The inline half of the state-async-submit outcome, at the top of the drawer: a success `Alert` naming the application ("Rate Guard is installed on storefront. It runs from the next request."), or a danger `Alert` with the server's reason and a Reinstall action. Nothing shows while idle or running; the button and the toast carry the running state.
+The inline half of the state-async-submit outcome, at the top of the drawer: a success `Alert` naming the application ("Rate Guard is installed on storefront. It runs from the next request."), or a danger `Alert` with the server's reason and a Choose another application action that moves focus to the Application `Select` (the recovery a full or unfit application calls for); trying the same application again is the footer's Reinstall, so the drawer never shows two submits. Nothing shows while idle or running; the button and the toast carry the running state.
 
 ### H. Integration facts — `KeyValueList` (required)
 
 A two-column `KeyValueList` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
 
-### I. Overview — `DocProse` (required)
+### I. Overview (required)
 
-An "Overview" `h3` over the publisher's text in `DocProse`, ending on what installing adds to the application. Then a "Permissions" `h3` with the list of what the integration may read or add, each line led by a check glyph.
+An "Overview" `h3` over what installing adds to the application, at `text-body-sm` like the rest of the drawer. The publisher's description already sits under the header, so the Overview never repeats it. Then a "Permissions" `h3` with the list of what the integration may read or add, each line led by a check glyph.
 
 ### J. Install form — `Field`, `Select` (required)
 
@@ -169,7 +169,7 @@ Then delete `sample.ts` and its import.
 - **Validation:** "Select the application to install <name> on."
 - **Progress toast:** "Installing <name> on <application>…" / "It keeps running if you close this panel."
 - **Success:** toast "<name> is installed on <application>." / "It runs from the next request to the application.", actions "Configure" and "Open application"; the inline `Alert` says the same in one line.
-- **Failure:** toast "<name> wasn't installed on <application>." with the reason as a full sentence, actions "Edit" and "Reinstall"; the inline `Alert` carries the reason and "Reinstall".
+- **Failure:** toast "<name> wasn't installed on <application>." with the reason as a full sentence, actions "Edit" and "Reinstall"; the inline `Alert` carries the reason and "Choose another application", and the footer submit reads "Reinstall".
 - **No match:** "No matching integrations", "No integration matches this search. Remove a filter to widen the results.", "Clear filters".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
@@ -190,7 +190,7 @@ Then delete `sample.ts` and its import.
 - Detail: `defaultIntegration="request-signer"`; the drawer is open on Request Signer with its details, overview, permissions and the install form.
 - Installing: `installing`, with `defaultApplication="storefront"`; Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
 - Installed: `installedApplication="storefront"`; Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
-- InstallError: `error`, with `defaultApplication="checkout"`; the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
+- InstallError: `error`, with `defaultApplication="checkout"`; the install on checkout failed; the danger Alert with the reason and Choose another application, the footer submit reading Reinstall, and the permanent toast with Edit and Reinstall.
 - NoMatch: `defaultText="kubernetes"`; the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
 - Loading: `loading`; the search is disabled and six `Skeleton` integration tiles hold the grid in a band that is `aria-busy`.
 - SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.

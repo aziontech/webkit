@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
-  import DocProse from '@aziontech/webkit/doc-prose'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -11,6 +10,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
+  import { computed, ref } from 'vue'
 
   import type { MarketplaceIntegration } from '../view-marketplace.vue'
 
@@ -38,15 +38,28 @@
     run: IntegrationDrawerRun
   }
 
-  withDefaults(defineProps<IntegrationDrawerProps>(), { installing: false, invalid: false })
+  const props = withDefaults(defineProps<IntegrationDrawerProps>(), {
+    installing: false,
+    invalid: false
+  })
 
   const emit = defineEmits<{
     submit: [event: Event]
-    reinstall: [event: MouseEvent]
   }>()
 
   const open = defineModel<boolean>('open', { default: false })
   const application = defineModel<string>('application', { default: '' })
+
+  const installEl = ref<HTMLElement | null>(null)
+
+  const submitLabel = computed(() =>
+    props.run.state === 'failed' && application.value === props.run.application
+      ? 'Reinstall'
+      : 'Install'
+  )
+
+  const chooseApplication = () =>
+    installEl.value?.querySelector<HTMLElement>('[role="combobox"], button')?.focus()
 </script>
 
 <template>
@@ -99,8 +112,8 @@
               v-else-if="run.state === 'failed'"
               severity="danger"
               :label="`${integration.name} wasn't installed on ${run.application}. ${run.reason}`"
-              action-label="Reinstall"
-              @action="(event: MouseEvent) => emit('reinstall', event)"
+              :action-label="available.length ? 'Choose another application' : ''"
+              @action="chooseApplication"
             />
 
             <p class="m-0 text-body-sm text-(--text-muted)">{{ integration.description }}</p>
@@ -133,13 +146,10 @@
               >
                 Overview
               </h3>
-              <DocProse>
-                <p>{{ integration.description }}</p>
-                <p>
-                  Installing adds a function instance to the application you choose and one rule
-                  that runs it. Its settings can be changed at any time from Configure.
-                </p>
-              </DocProse>
+              <p class="m-0 text-body-sm text-(--text-default)">
+                Installing adds a function instance to the application you choose and one rule that
+                runs it. Its settings can be changed at any time from Configure.
+              </p>
             </section>
 
             <section
@@ -172,6 +182,7 @@
             </section>
 
             <section
+              ref="installEl"
               class="flex flex-col gap-(--layout-group-gap)"
               aria-labelledby="integration-install"
             >
@@ -233,7 +244,7 @@
             <Button
               key="button-2"
               v-if="available.length"
-              label="Install"
+              :label="submitLabel"
               variant="primary"
               size="medium"
               type="submit"
