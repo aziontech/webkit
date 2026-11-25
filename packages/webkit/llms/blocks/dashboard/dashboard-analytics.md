@@ -81,6 +81,9 @@ another.
 
 Switches a time series between Line and Bar. Only on time series, never on a ranked bar chart. Its
 `aria-label` names the card (`Chart form for Requests over time`).
+`Status codes` adds a third option, `Errors`: stacked bars of the 4xx and 5xx classes only (2xx and 3xx
+are hidden in the legend), so the value axis rescales to the error classes a reader opens the card for
+instead of drawing them as slivers on the 2xx scale.
 
 ### G. Control labels — `Tooltip` (required)
 
@@ -335,7 +338,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { type FigureFormat, hostColumns, trafficCards, trafficFigures } from './analytics-cards'
   import {
@@ -529,6 +532,18 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
   const requestsForm = ref('line')
   const statusForm = ref('bar')
+  const statusForms = [...chartForms, { label: 'Errors', value: 'errors' }]
+  const statusHidden = ref<string[]>([])
+  watch(
+    [statusForm, statusCodes],
+    ([form, series]) => {
+      statusHidden.value =
+        form === 'errors'
+          ? series.filter((entry) => !/^[45]xx$/.test(entry.id)).map((entry) => entry.id)
+          : []
+    },
+    { immediate: true }
+  )
   const activeIndex = ref<number | null>(null)
   const search = ref('')
 
@@ -559,7 +574,11 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
   const expandedId = ref<AnalyticsDashboardCardId>(props.defaultExpanded || 'requests')
   const expandedReport = computed(() => trafficCards[expandedId.value])
   const expandedForms = computed(() =>
-    expandedId.value === 'requests' || expandedId.value === 'status-codes' ? chartForms : []
+    expandedId.value === 'status-codes'
+      ? statusForms
+      : expandedId.value === 'requests'
+        ? chartForms
+        : []
   )
 
   const openExpanded = (id: AnalyticsDashboardCardId) => {
@@ -615,6 +634,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       <StatTileGroup
         aria-label="Key figures"
         :aria-busy="refetching || undefined"
+        class="aria-busy:[&>div]:opacity-60"
       >
         <StatTile
           v-for="figure in figures"
@@ -666,16 +686,17 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           :span="6"
           v-bind="card('status-codes')"
           :variation="variations.statusCodes"
-          :forms="chartForms"
+          :forms="statusForms"
           @expand="openExpanded('status-codes')"
           @select="(_event, value) => onCardOption('status-codes', value)"
         >
           <SeriesChart
             v-model:active-index="activeIndex"
+            v-model:hidden-series="statusHidden"
             :series="statusCodes"
             :labels="labels"
             :format-value="formatters.count"
-            :bar="statusForm === 'bar'"
+            :bar="statusForm !== 'line'"
             stacked
             :loading="loading"
             :refetching="refetching"
@@ -744,10 +765,11 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       <SeriesChart
         key="chart-2"
         v-else-if="expandedId === 'status-codes'"
+        v-model:hidden-series="statusHidden"
         :series="statusCodes"
         :labels="labels"
         :format-value="formatters.count"
-        :bar="statusForm === 'bar'"
+        :bar="statusForm !== 'line'"
         stacked
         :height="420"
         :refetching="refetching"
@@ -1882,7 +1904,7 @@ export const chartForms = [
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+  <div class="group/search-table flex min-w-0 flex-col gap-(--spacing-sm)">
     <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
       <div class="min-w-36 grow basis-(--container-3xs)">
         <Input
@@ -1910,6 +1932,7 @@ export const chartForms = [
     </div>
 
     <DataTable
+      class="group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60"
       :data="matchingRows"
       :columns="columns"
       row-key="id"
@@ -2007,11 +2030,13 @@ export const chartForms = [
   })
 
   const activeIndex = defineModel<number | null>('activeIndex', { default: null })
+  const hiddenSeries = defineModel<string[]>('hiddenSeries', { default: () => [] })
 </script>
 
 <template>
   <Chart
     v-model:active-index="activeIndex"
+    v-model:hidden-series="hiddenSeries"
     :series="series"
     :labels="labels"
     :orientation="ranking ? 'horizontal' : undefined"
