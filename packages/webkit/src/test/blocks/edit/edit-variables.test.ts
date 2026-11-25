@@ -164,6 +164,13 @@ describe('variables data contract', () => {
     expect(document.body.textContent).not.toContain('API_BASE_URL')
   })
 
+  it('reads Last modified from the clock it is given, so a server render and the browser agree', async () => {
+    render(VariablesList, {
+      props: { variables: given, now: new Date('2026-11-10T12:00:00Z') }
+    })
+    await waitFor(() => expect(document.body.textContent).toContain('5 minutes ago'))
+  })
+
   it('shows the state-first-use empty state for an empty list', async () => {
     render(VariablesList, { props: { variables: [] } })
     await waitFor(() => expect(document.body.textContent).toContain('No variables yet'))
