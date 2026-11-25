@@ -32,7 +32,7 @@ describe('settings/settings-api-key', () => {
     const field = keyField(view.container)
     expect(field.value).toBe('')
     expect(field.type).toBe('password')
-    expect(field.getAttribute('placeholder')).toBe('Paste a new key to replace ••••3f9a')
+    expect(field.getAttribute('placeholder')).toBe('Replace ••••3f9a')
     expect(field.getAttribute('autocomplete')).toBe('off')
     const replace = view.getByRole('button', { name: 'Replace key' })
     expect(replace.getAttribute('data-variant')).toBe('outline')
@@ -132,6 +132,7 @@ describe('settings/settings-api-key', () => {
     expect(save.getAttribute('aria-busy')).toBe('true')
     expect(save.hasAttribute('disabled')).toBe(false)
     expect(keyField(view.container)).toBeDisabled()
+    expect((keyField(view.container) as HTMLInputElement).value).not.toBe('')
     expect(view.getByRole('combobox', { name: 'Provider' })).toBeDisabled()
     expect(view.getByRole('button', { name: 'Test connection' })).toBeDisabled()
     expect(view.getByRole('button', { name: 'Remove key' })).toBeDisabled()
@@ -158,6 +159,7 @@ describe('settings/settings-api-key', () => {
     expect(alert.textContent).toContain("The key wasn't saved.")
     expect(within(alert).queryByRole('button', { name: 'Test again' })).toBeNull()
     expect(statusRegion(view.container).textContent).toContain('Saved')
+    expect((keyField(view.container) as HTMLInputElement).value).not.toBe('')
   })
 
   it('asks before removing, emits remove and moves focus to the key field once it is gone', async () => {
