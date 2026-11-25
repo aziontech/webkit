@@ -80,7 +80,7 @@ describe('view/view-events-explorer block', () => {
 
   it('opens an event from its detail button, a keyboard path to the document', async () => {
     const view = render(ViewEventsExplorer)
-    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event: / }))
     expect(open).toHaveAttribute('aria-expanded', 'false')
     await fireEvent.click(open)
     await waitFor(() => expect(open).toHaveAttribute('aria-expanded', 'true'))
@@ -130,7 +130,7 @@ describe('view/view-events-explorer block', () => {
     })
     await waitFor(() => expect(view.container.textContent).toContain('Acme checkout failed'))
     expect(view.container.textContent).not.toContain('Delivered from cache')
-    expect(view.getAllByRole('button', { name: /^Open event / })).toHaveLength(1)
+    expect(view.getAllByRole('button', { name: /^Open event: / })).toHaveLength(1)
     view.unmount()
     const empty = render(EventsExplorerEmpty)
     await waitFor(() => expect(empty.container.textContent).toContain('No events yet'))
@@ -299,7 +299,7 @@ describe('view/view-events-explorer block', () => {
   it('opens the event drawer on a phone without focusing a search field', async () => {
     await page.viewport(390, 844)
     const view = render(ViewEventsExplorer)
-    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event: / }))
     await fireEvent.click(open!)
     const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
     await waitFor(() => expect(drawer.contains(document.activeElement)).toBe(true))
@@ -314,7 +314,7 @@ describe('view/view-events-explorer block', () => {
 
   it('runs its typed query on the log through the block (Query)', async () => {
     const view = render(EventsExplorerQuery)
-    const opens = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    const opens = await waitFor(() => view.getAllByRole('button', { name: /^Open event: / }))
     const rows = opens.map((button) => button.closest<HTMLElement>('tr, [role="row"]')!)
     for (const row of rows) {
       expect(row.textContent).toContain('Error')
