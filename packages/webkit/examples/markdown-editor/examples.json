@@ -14,7 +14,7 @@
     },
     {
       "name": "Readonly",
-      "summary": "`readonly` keeps the value visible and the Preview tab working, and disables the toolbar; this note uses every format, so Preview shows them all.",
+      "summary": "`readonly` opens on the Preview tab and hides the toolbar, so a reader sees the rendered note; Write still shows the source. This note uses every format.",
       "file": "readonly.vue"
     },
     {
