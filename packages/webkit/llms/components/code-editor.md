@@ -107,7 +107,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 - Visible focus: the frame shows `focus-within:ring-2 ring-(--ring-color)` for both editors; a borderless editor draws the same ring inset.
 - Keyboard map (plain editor): typing edits; `Tab` inserts two spaces and `Shift+Tab` removes them at the line start; `Escape` releases the trap so the next `Tab` / `Shift+Tab` leaves the editor (WCAG 2.1.2); the problems list buttons move the caret to the marker's line. Monaco runs in tab-focus mode by default, so `Tab` moves focus out unless the user toggles it with `Ctrl+M`.
 - ARIA: the textarea is a native multi-line text box named by the `Field` label or `ariaLabel`; `aria-invalid`, `aria-readonly` and `aria-describedby` (the field's description plus the problems summary); the gutter is `aria-hidden`; the problems list is a named list; the problem count is a polite `status`.
-- Diagnostics are never colour only: each one is a list item with its line and severity in text. Schema problems reach the user through Monaco's own hover and, when the app shows them, through `markers-change` in a `Field.Error`.
+- Diagnostics are never colour only: each one is a list item with its line and severity in text. A problem message wraps onto as many lines as it needs (never truncated), so the full fix text reads on a phone. Schema problems reach the user through Monaco's own hover and, when the app shows them, through `markers-change` in a `Field.Error`.
 - Contrast ≥4.5:1: code and line numbers use the code syntax tokens tuned for both themes.
 - Forced colors: the frame keeps a system border and the gutter marker becomes a system glyph colour.
 

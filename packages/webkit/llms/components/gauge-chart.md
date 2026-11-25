@@ -63,6 +63,7 @@
 
 ## States
 
+- Error pattern of the chart family: a chart tall enough for it shows the centred error card (a bordered small `EmptyState` with the cause and a secondary `Try again` button, as BarList, DonutChart and DataTable do) through its `error` slot; only a strip too short for the card (Tracker) keeps an inline banner. The retry label is always `Try again`.
 - Visual states: `default`, `loading` (Skeleton at the dial ratio), `error` (Alert), `empty` (EmptyState), `refetching` (reduced opacity)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching` on the root; priority loading, then error, then empty, then the dial
 - `data-size`: `small` | `medium` | `large`

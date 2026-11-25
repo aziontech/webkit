@@ -111,13 +111,14 @@
 | `flowDiagram.pending` / `existing` / `noOptions` / `copy`                | Pending / Existing / No options yet. / Copy {field} | —             |
 | `flowDiagram.details`                                                    | Details                                             | —             |
 | `flowDiagram.connections` / `connection`                                 | Connections / {from} to {to}                        | —             |
+| `flowDiagram.route`                                                      | To {to}                                             | —             |
 | `flowDiagram.emptyTitle` / `loading`                                     | Nothing is connected yet. / Loading the diagram     | `empty` slot  |
 
 - Formatting: none; metrics and labels arrive formatted.
 
 ## Responsive
 
-- `responsive` measures the row against its container (a ResizeObserver, re-checked when the container or the steps resize) and keeps the row only when every step fits; otherwise it stacks into a rail in reading order, labels beside it, so no step is ever clipped. Server render and first paint use the rail. The resolved layout is `data-direction="row|column"` on the list.
+- `responsive` measures the row against its container (a ResizeObserver, re-checked when the container or the steps resize) and keeps the row only when every step fits; otherwise it stacks into a rail in reading order, labels beside it, so no step is ever clipped. In data mode the rail joins two neighbouring steps only where an edge joins them; an edge to a step that is not the next one (a branch or a join) is listed under its source card as a route (`__node-route`, `To {title}` and the edge label, a dot in the edge severity, `data-severity`), so every edge and its severity stay readable on a phone. Server render and first paint use the rail. The resolved layout is `data-direction="row|column"` on the list.
 - `horizontal` keeps the row and scrolls in its own area; `vertical` always stacks.
 - When the steps still overflow (a `horizontal` row, or a step wider than the rail), the scroll area keeps a thin visible scrollbar, becomes focusable, and fades the inline edge that still has content (`data-overflow-start`, `data-overflow-end`); the fade follows the text direction in right-to-left and is static, so it needs no reduced-motion fallback.
 
