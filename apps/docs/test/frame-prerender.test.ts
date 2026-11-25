@@ -27,5 +27,7 @@ test('an example frame renders its example on the server and loads it before the
   assert.notEqual(live, '', 'the live example computed was not found')
   assert.doesNotMatch(live, /mounted/, 'the example must not wait for mount to render')
   assert.match(page, /:data-ready="mounted && live/)
+  assert.match(page, /v-if="live && \(SSR \|\| mounted\)"/, 'the client mounts the example fresh')
+  assert.match(page, /data-allow-mismatch="children"/)
   assert.match(source('src/lib/route-data.ts'), /route\.name === 'example-frame'/)
 })

@@ -7,6 +7,7 @@
   import { applyTheme, settings } from '../lib/settings'
 
   const route = useRoute()
+  const SSR = import.meta.env.SSR
   const mounted = ref(false)
 
   const segments = computed(() => {
@@ -57,6 +58,7 @@
   <div
     :data-example="mounted && dir ? `${dir}/${file}` : undefined"
     :data-ready="mounted && live ? '' : undefined"
+    data-allow-mismatch="children"
     class="min-h-screen w-full bg-(--bg-canvas) p-(--spacing-lg) [--layout-sticky-top:0]"
   >
     <component
@@ -65,7 +67,7 @@
     />
     <component
       :is="live"
-      v-if="live"
+      v-if="live && (SSR || mounted)"
     />
   </div>
 </template>
