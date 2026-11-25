@@ -60,6 +60,15 @@
     if (value === 'action:theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
   }
 
+  const createItems = [
+    { value: '/resources/new', label: 'Resource' },
+    { value: '/support/tickets/new', label: 'Ticket' }
+  ]
+
+  const onCreateSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    router.push(String(value))
+  }
+
   const ACCOUNT_ROUTES: Record<string, string> = {
     settings: '/settings',
     'api-keys': '/settings/api-keys',
@@ -97,18 +106,22 @@
     >
       <template #actions="{ compact }">
         <template v-if="compact">
-          <Tooltip
-            content="Create"
-            side="bottom"
-          >
-            <IconButton
-              icon="az az-circle-plus"
-              variant="primary"
-              size="medium"
-              aria-label="Create"
-              @click="router.push('/resources/new')"
+          <DropdownMenu @select="onCreateSelect">
+            <DropdownMenu.Trigger>
+              <IconButton
+                icon="az az-circle-plus"
+                variant="outline"
+                size="medium"
+                aria-label="Create"
+              />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Item
+              v-for="item in createItems"
+              :key="item.value"
+              :value="item.value"
+              :label="item.label"
             />
-          </Tooltip>
+          </DropdownMenu>
           <Tooltip
             content="AI Copilot"
             side="bottom"
@@ -123,13 +136,22 @@
           </Tooltip>
         </template>
         <template v-else>
-          <Button
-            label="Create"
-            variant="primary"
-            size="medium"
-            icon="az az-circle-plus"
-            @click="router.push('/resources/new')"
-          />
+          <DropdownMenu @select="onCreateSelect">
+            <DropdownMenu.Trigger>
+              <Button
+                label="Create"
+                variant="outline"
+                size="medium"
+                icon="az az-circle-plus"
+              />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Item
+              v-for="item in createItems"
+              :key="item.value"
+              :value="item.value"
+              :label="item.label"
+            />
+          </DropdownMenu>
           <HighlightButton
             label="AI Copilot"
             size="medium"
