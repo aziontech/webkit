@@ -626,6 +626,12 @@
    "--text-body-2xs-font-weight",
    "--text-body-2xs-line-height",
    "--text-body-2xs-text-wrap-style",
+   "--text-body-code-lg-font-family",
+   "--text-body-code-lg-font-size",
+   "--text-body-code-lg-font-weight",
+   "--text-body-code-lg-letter-spacing",
+   "--text-body-code-lg-line-height",
+   "--text-body-code-lg-text-wrap-style",
    "--text-body-code-sm-font-family",
    "--text-body-code-sm-font-size",
    "--text-body-code-sm-font-weight",
@@ -670,6 +676,7 @@
    "--text-heading-2xl-letter-spacing",
    "--text-heading-2xl-line-height",
    "--text-heading-2xl-text-wrap-style",
+   "--text-heading-2xl-word-spacing",
    "--text-heading-2xs-font-size",
    "--text-heading-2xs-font-weight",
    "--text-heading-2xs-letter-spacing",
@@ -680,6 +687,7 @@
    "--text-heading-3xl-letter-spacing",
    "--text-heading-3xl-line-height",
    "--text-heading-3xl-text-wrap-style",
+   "--text-heading-3xl-word-spacing",
    "--text-heading-lg-font-size",
    "--text-heading-lg-font-weight",
    "--text-heading-lg-letter-spacing",
@@ -816,6 +824,7 @@
    "text-big-number-md",
    "text-big-number-sm",
    "text-body-2xs",
+   "text-body-code-lg",
    "text-body-code-sm",
    "text-body-lg",
    "text-body-md",
@@ -1506,6 +1515,12 @@
     "--text-body-2xs-font-weight",
     "--text-body-2xs-line-height",
     "--text-body-2xs-text-wrap-style",
+    "--text-body-code-lg-font-family",
+    "--text-body-code-lg-font-size",
+    "--text-body-code-lg-font-weight",
+    "--text-body-code-lg-letter-spacing",
+    "--text-body-code-lg-line-height",
+    "--text-body-code-lg-text-wrap-style",
     "--text-body-code-sm-font-family",
     "--text-body-code-sm-font-size",
     "--text-body-code-sm-font-weight",
@@ -1550,6 +1565,7 @@
     "--text-heading-2xl-letter-spacing",
     "--text-heading-2xl-line-height",
     "--text-heading-2xl-text-wrap-style",
+    "--text-heading-2xl-word-spacing",
     "--text-heading-2xs-font-size",
     "--text-heading-2xs-font-weight",
     "--text-heading-2xs-letter-spacing",
@@ -1560,6 +1576,7 @@
     "--text-heading-3xl-letter-spacing",
     "--text-heading-3xl-line-height",
     "--text-heading-3xl-text-wrap-style",
+    "--text-heading-3xl-word-spacing",
     "--text-heading-lg-font-size",
     "--text-heading-lg-font-weight",
     "--text-heading-lg-letter-spacing",
@@ -3158,7 +3175,8 @@
      "font-size": "1.875rem",
      "line-height": "1.25",
      "font-weight": "400",
-     "letter-spacing": "-0.035em"
+     "letter-spacing": "-0.035em",
+     "word-spacing": "0.06em"
     },
     "purpose": "The largest page heading, for a marketing hero.",
     "breakpoints": {
@@ -3167,7 +3185,8 @@
      },
      "md": {
       "font-size": "3.5rem",
-      "letter-spacing": "-0.046em"
+      "letter-spacing": "-0.046em",
+      "word-spacing": "0"
      }
     }
    },
@@ -3179,7 +3198,8 @@
      "font-size": "1.875rem",
      "line-height": "1",
      "font-weight": "400",
-     "letter-spacing": "-0.035em"
+     "letter-spacing": "-0.035em",
+     "word-spacing": "0.06em"
     },
     "purpose": "A marketing section heading.",
     "breakpoints": {
@@ -3188,7 +3208,8 @@
      },
      "md": {
       "font-size": "3rem",
-      "letter-spacing": "-0.053em"
+      "letter-spacing": "-0.053em",
+      "word-spacing": "0"
      }
     }
    },
@@ -3394,6 +3415,19 @@
      "letter-spacing": "0.025rem"
     },
     "purpose": "A monospace paragraph that wraps."
+   },
+   "text-body-code-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "pretty",
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "1rem",
+     "line-height": "1.5",
+     "font-weight": "400",
+     "letter-spacing": "0.025rem"
+    },
+    "purpose": "Wrapping or multi-line code at the 16px touch size, with a real line height."
    },
    "text-label-code-md": {
     "group": "typography",
