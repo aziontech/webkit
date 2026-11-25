@@ -2849,3 +2849,7 @@ Budget-raise: chat-message 15.35 KB → 15.4 KB (measured 15.38 KB): CopyButton 
 Budget-raise: chat-message-actions 8.9 KB → 8.95 KB (measured 8.93 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`, which the actions import from its new home under the tooltip folder; the re-export costs a few bytes.
 
 Budget-raise: markdown-editor 32.6 KB → 32.95 KB (measured 32.91 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`; MarkdownEditor's toolbar keeps its static Tooltip (a lazy one re-renders the toolbar buttons mid-selection), so it carries both the static Tooltip and the async wrapper.
+
+Budget-raise: css-button 11.1 KB → 11.15 KB (measured 11.12 KB): the theme every app stylesheet carries grew with the audit-6 fixes: the 16px code step and the display code step (A6 lanes L01 and X1), the medium amount step that reads 20px on a phone (W3), and the brand-tinted text selection (L01).
+
+Budget-raise: css-console 25.05 KB → 25.15 KB (measured 25.1 KB): the same audit-6 theme steps as css-button, plus the wide table cell's contained inline size and its `--size-44` floor in the DataTable cells (audit-6 X3-3).
