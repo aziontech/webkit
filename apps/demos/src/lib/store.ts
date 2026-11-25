@@ -48,11 +48,7 @@ export function findResource(id: unknown): Resource | undefined {
   return resources.value.find((item) => item.id === String(id))
 }
 
-export function createResource(input: {
-  name: string
-  domain: string
-  dnssec: boolean
-}) {
+export function createResource(input: { name: string; domain: string; dnssec: boolean }) {
   nextId += 1
   const now = new Date()
   const resource: Resource = {
