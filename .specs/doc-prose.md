@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 60e5c9d8a9988f3319de0ed0ee2642d186a3819fbd7e5097c00dc07eff7c040f
+checksum: 57726562c973e12857d84b964b4074c05ef5128fe14e74d3462e97dcc223ac77
 created: 2026-08-21
 last_updated: 2026-11-25
 ---
@@ -91,38 +91,38 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ## Tokens
 
-| Region                                     | Token (DESIGN.md)                                                                                                                                      |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| typography (h1)                            | `.text-heading-2xl` / `sm:.text-heading-xl`                                                                                                            |
-| typography (h2)                            | `.text-heading-xl` / `sm:.text-heading-md`                                                                                                             |
-| typography (h3)                            | `.text-heading-lg` / `md:.text-heading-sm`                                                                                                             |
-| typography (h4)                            | `.text-heading-xs`                                                                                                                                     |
-| typography (body, list item)               | `.text-body-prose-md`                                                                                                                                  |
-| typography (inline code)                   | `.text-label-code-sm`                                                                                                                                  |
-| text (heading, strong, code)               | `var(--text-default)`                                                                                                                                  |
-| text (body, list item)                     | `var(--text-muted)`                                                                                                                                    |
-| text (blockquote, list marker)             | `var(--text-muted)`                                                                                                                                    |
-| link                                       | `var(--text-link)`                                                                                                                                     |
-| link.hover                                 | `var(--text-link-hover)`                                                                                                                               |
-| surface (inline code)                      | `var(--bg-hover)`                                                                                                                                      |
-| border (inline code, inset ring; hr)       | `var(--border-default)`                                                                                                                                |
-| spacing (inline code, inline padding)      | `var(--spacing-2xs)`, no vertical padding                                                                                                              |
-| border (blockquote rule)                   | `var(--border-strong)`                                                                                                                                 |
-| shape (inline code)                        | `var(--shape-control)`                                                                                                                                 |
-| surface (copy tooltip)                     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                                                          |
-| focus (command chip)                       | `var(--ring-color)`                                                                                                                                    |
-| spacing (section step)                     | `var(--spacing-14)` (open, 56) / `var(--spacing-12)` (close, 48)                                                                                       |
-| spacing (block, indent)                    | `var(--spacing-lg)`                                                                                                                                    |
-| spacing (base rung)                        | `var(--spacing-md)`                                                                                                                                    |
-| spacing (tightened rungs)                  | `var(--spacing-sm)` / `var(--spacing-xs)`                                                                                                              |
-| ring                                       | `var(--ring-color)`                                                                                                                                    |
-| reading measure (p, ul, ol, blockquote)    | `max-w-(--container-xl)` (644px, about 75 to 80 characters of 16px text); code, tables, frames and other `[data-doc-block]` blocks keep the full width |
-| table                                      | block, `max-w-full`, `overflow-x-auto` (scrolls sideways when wider than the page)                                                                     |
-| typography (table cell)                    | `.text-body-sm`                                                                                                                                        |
-| text (th / td)                             | `var(--text-default)` / `var(--text-muted)`                                                                                                            |
-| border (table row)                         | `var(--border-default)`                                                                                                                                |
-| spacing (table cell)                       | `var(--spacing-xs)` block / `var(--spacing-sm)` inline                                                                                                 |
-| spacing (before a table or a fenced block) | `var(--spacing-md)` — two framed blocks never touch, so their rules never stack                                                                        |
+| Region                                     | Token (DESIGN.md)                                                                                                                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| typography (h1)                            | `.text-heading-2xl` / `sm:.text-heading-xl`                                                                                                                             |
+| typography (h2)                            | `.text-heading-xl` / `sm:.text-heading-md`                                                                                                                              |
+| typography (h3)                            | `.text-heading-lg` / `md:.text-heading-sm`                                                                                                                              |
+| typography (h4)                            | `.text-heading-xs`                                                                                                                                                      |
+| typography (body, list item)               | `.text-body-prose-md`                                                                                                                                                   |
+| typography (inline code)                   | `.text-label-code-sm`                                                                                                                                                   |
+| text (heading, strong, code)               | `var(--text-default)`                                                                                                                                                   |
+| text (body, list item)                     | `var(--text-muted)`                                                                                                                                                     |
+| text (blockquote, list marker)             | `var(--text-muted)`                                                                                                                                                     |
+| link                                       | `var(--text-link)`                                                                                                                                                      |
+| link.hover                                 | `var(--text-link-hover)`                                                                                                                                                |
+| surface (inline code)                      | `var(--bg-hover)`                                                                                                                                                       |
+| border (inline code, inset ring; hr)       | `var(--border-default)`                                                                                                                                                 |
+| spacing (inline code, inline padding)      | `var(--spacing-2xs)`, no vertical padding                                                                                                                               |
+| border (blockquote rule)                   | `var(--border-strong)`                                                                                                                                                  |
+| shape (inline code)                        | `var(--shape-control)`                                                                                                                                                  |
+| surface (copy tooltip)                     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                                                                           |
+| focus (command chip)                       | `var(--ring-color)`                                                                                                                                                     |
+| spacing (section step)                     | `var(--spacing-14)` (open, 56) / `var(--spacing-12)` (close, 48)                                                                                                        |
+| spacing (block, indent)                    | `var(--spacing-lg)`                                                                                                                                                     |
+| spacing (base rung)                        | `var(--spacing-md)`                                                                                                                                                     |
+| spacing (tightened rungs)                  | `var(--spacing-sm)` / `var(--spacing-xs)`                                                                                                                               |
+| ring                                       | `var(--ring-color)`                                                                                                                                                     |
+| reading measure (p, ul, ol, blockquote)    | `max-w-(--container-xl)` (644px, about 75 to 80 characters of 16px text); code, tables, frames and other `[data-doc-block]` blocks keep the full width                  |
+| table                                      | block, `max-w-full`, `overflow-x-auto` (scrolls sideways when wider than the page); `tabindex="0"` and a 2px `--ring-color` focus ring, so it scrolls from the keyboard |
+| typography (table cell)                    | `.text-body-sm`                                                                                                                                                         |
+| text (th / td)                             | `var(--text-default)` / `var(--text-muted)`                                                                                                                             |
+| border (table row)                         | `var(--border-default)`                                                                                                                                                 |
+| spacing (table cell)                       | `var(--spacing-xs)` block / `var(--spacing-sm)` inline                                                                                                                  |
+| spacing (before a table or a fenced block) | `var(--spacing-md)` — two framed blocks never touch, so their rules never stack                                                                                         |
 
 ## Theme gaps
 
@@ -133,7 +133,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: descendant links take `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)`.
-- Keyboard map: `Tab` moves through descendant links and command chips; `Enter` / `Space` on a command chip copies it; the container itself is not focusable.
+- Keyboard map: `Tab` moves through descendant links, command chips and prose tables; `Enter` / `Space` on a command chip copies it; arrow keys scroll a focused table that is wider than the page; the container itself is not focusable. After mount (and when the slot content changes) `DocProse` gives every prose table outside `[data-doc-chrome]` `tabindex="0"` unless it already has one, the same as the docs markdown renderer, so a table that scrolls sideways is reachable from the keyboard (axe `scrollable-region-focusable`).
 - ARIA: none — the container adds no role. The semantics are the author's HTML (`h2`, `ul`, `blockquote`), which is the point of the contract.
 - Contrast: headings, `strong` and inline `code` are `--text-default` (≥14.7:1). **Body copy and list items are `--text-muted`, which is 3.78:1 on canvas and 3.95:1 on surface in light mode — under the 4.5:1 AA needs for body text** (dark is fine at 5.32:1 / 5.01:1). The contract carries that gap knowingly and in one place; closing it means a documentation body ink one step darker (`#737373` reads the same and clears AA at 4.54:1), not a per-page override.
 - A plain chip copy adds **no tab stops**: it is a pointer shortcut over text that stays selectable the ordinary way, so a page of thirty chips does not become thirty stops. A command chip (`data-command`) is the exception, a `role="button"` stop that `Enter` / `Space` copies, because a reader runs a command and should reach it from the keyboard. The tooltip is `role="tooltip"` and `pointer-events-none`; the result is announced in a polite live region.
