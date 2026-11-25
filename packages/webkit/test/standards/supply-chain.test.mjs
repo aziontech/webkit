@@ -127,3 +127,12 @@ test('every ignored advisory carries a review date that has not passed', () => {
     )
   }
 })
+
+test('pull requests publish the Semgrep SARIF to code scanning, so OSSF Scorecard sees SAST on merged PRs', () => {
+  const text = readFileSync(resolve(DIR, 'governance.yml'), 'utf8')
+  const job = text.slice(text.indexOf('\n  code-scanning:'), text.indexOf('\n  lint-canaries:'))
+  assert.match(job, /needs: security-suite/)
+  assert.match(job, /security-events: write/)
+  assert.match(job, /github\/codeql-action\/upload-sarif@[0-9a-f]{40}/)
+  assert.match(job, /head\.repo\.full_name == github\.repository/)
+})
