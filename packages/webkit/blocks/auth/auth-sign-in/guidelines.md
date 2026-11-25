@@ -1,6 +1,6 @@
 # Auth
 
-The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
+The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives lands inside it: a credential the user retypes (the password, an MFA code, a token) takes its error on its own field, and every other answer, success included, lands in one `Alert` in the card. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
 
 ## When to use
 
@@ -43,16 +43,17 @@ One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centre
 
 ### E. Card notice — `Alert` (conditional)
 
-The one place every outcome lands. It sits under the card heading and above **both** fields, always `size="small"`, always in the same slot:
+The one place for every outcome no field can fix. It sits under the card heading and above the fields, always `size="small"`, always in the same slot:
 
 - **Session expired** (primary, `SessionExpired`): `severity="info"`, clears on the next action. Only for a person who had a session that ended: a 401 to a request that carried their token, or a server that reports the session cookie it received as ended. A first visit, or a cold load with no credential, opens the card with no notice.
-- **401** (`IncorrectCredentials`): `danger`, no action. The fields under it are the recovery. The password is cleared and takes focus.
 - **503** (`ServiceUnavailable`) and **no response** (`Timeout`): `warning`, with **Retry** in the `#actions` slot. Severity follows certainty: a timeout is an unknown.
 - **500** (`ServerError`): `danger`, with **Retry**. Tied to no field, so where the console would toast, the card keeps it.
 - **409** (`EmailAlreadyRegistered`): no error on screen. The card answers with the same `success` Check your inbox notice as a new sign-up, so the form never tells anyone which addresses have an account (account enumeration); the server emails the owner how to sign in or reset the password.
 - **Success** (signed in, account created, password updated, link resent): `success`, no action. Sign up reads `Account created. We sent a verification link to jane.doe@example.com.`
 
 Put the copy in the default slot when it carries links; animate the entrance on a wrapper, not on the `Alert` itself.
+
+A **401** (`IncorrectCredentials`) is not a notice: it goes on the password field, the one field of the password step and the one the user acts on. The password is cleared, the field turns `invalid` with `Incorrect email or password. Check both and try again.` in its `Field.Error`, and it takes focus; no `Alert` shows. The words never say which half was wrong, so the form tells nobody which addresses have an account.
 
 ### F. Social divider — `Separator` (email step only)
 
@@ -106,22 +107,22 @@ Two bars of the provider buttons' height (`height="2.5rem"`) in a `role="status"
 
 For an app that signs in with an Azion personal token instead of an account. The card is its own file, `token-sign-in.vue`, and the three variants render it with props. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). Under it a `Checkbox` `Remember for this tab`, off by default. The card has no Google or GitHub buttons and no steps.
 
-The card checks nothing against the API itself: it emits `sign-in` with `(event, token)`, the token trimmed, and the app answers with `loading` and then `error`. It stores nothing: the `remember` model only tells the app where to keep the token (on: `sessionStorage`, which lasts while the tab is open; off: memory, gone on reload; never `localStorage` or a cookie the app's server can read). Attaching it to requests is the app's job; see `skills/webkit-azion-api`. `rejected` (401) and `no-access` (403) are danger notices with no action, the field cleared and focused (RejectedToken, NoAccessToken); `rate-limited` (429) and `unreachable` (no answer) are warning notices with Retry and the entry kept; any other text is a danger notice with Retry.
+The card checks nothing against the API itself: it emits `sign-in` with `(event, token)`, the token trimmed, and the app answers with `loading` and then `error`. It stores nothing: the `remember` model only tells the app where to keep the token (on: `sessionStorage`, which lasts while the tab is open; off: memory, gone on reload; never `localStorage` or a cookie the app's server can read). Attaching it to requests is the app's job; see `skills/webkit-azion-api`. `rejected` (401) and `no-access` (403) go on the field: it is cleared, turns `invalid` with the reason in its `Field.Error` and takes focus, with no notice and no action (RejectedToken, NoAccessToken); `rate-limited` (429) and `unreachable` (no answer) are warning notices with Retry and the entry kept; any other text is a danger notice with Retry.
 
 ## Data
 
 The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInMethod`, `SignInFailure` and `SignInNoticeKind` are exported from `auth-sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken, RejectedToken and NoAccessToken render their own card, `token-sign-in.vue` (listed in `files`), not the primary: it takes no account fields, and its contract is below the primary's.
 
-| Prop                                                             | Type                    | What it does                                                                                                                                                                                                   |
-| ---------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `step` (`v-model:step`)                                          | `SignInStep`            | The step the card shows, `email` by default. The card moves itself between email, password, reset, sent and new-password; bind it to move it from the page (after `password-reset`, set it to `password`).     |
-| `defaultValues`                                                  | `Partial<SignInValues>` | The email (and, to repeat a request, the password) the fields open on, such as the address of an expired session.                                                                                              |
-| `loading`                                                        | `boolean`               | A request is in flight: the step's fieldset disables, the form is `aria-busy` and the primary `Button` (and Retry) spin.                                                                                       |
-| `error`                                                          | `string`                | Why the request failed. `bad-credentials` (401), `service-unavailable` (503), `server-error` (500) and `timeout` carry their own copy, severity and Retry; any other text shows as a danger notice with Retry. |
-| `notice`                                                         | `string`                | A non-error outcome: `session-expired`, `signed-in` or `password-updated`, or any text as an info notice.                                                                                                      |
-| `providersLoading`                                               | `boolean`               | The identity providers are still loading; two `Skeleton` bars hold the place of Google and GitHub.                                                                                                             |
-| `lastUsed`                                                       | `SignInMethod \| ''`    | The method this browser signed in with last time (`email`, `google` or `github`); its button carries the `Last used` tag. Empty by default: no tag.                                                            |
-| `homeHref`, `docsHref`, `signUpHref`, `termsHref`, `privacyHref` | `string`                | Where the product mark, Documentation, Sign up and the two terms links lead.                                                                                                                                   |
+| Prop                                                             | Type                    | What it does                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `step` (`v-model:step`)                                          | `SignInStep`            | The step the card shows, `email` by default. The card moves itself between email, password, reset, sent and new-password; bind it to move it from the page (after `password-reset`, set it to `password`).                                            |
+| `defaultValues`                                                  | `Partial<SignInValues>` | The email (and, to repeat a request, the password) the fields open on, such as the address of an expired session.                                                                                                                                     |
+| `loading`                                                        | `boolean`               | A request is in flight: the step's fieldset disables, the form is `aria-busy` and the primary `Button` (and Retry) spin.                                                                                                                              |
+| `error`                                                          | `string`                | Why the request failed. `bad-credentials` (401) puts its message on the password field; `service-unavailable` (503), `server-error` (500) and `timeout` carry their own copy, severity and Retry; any other text shows as a danger notice with Retry. |
+| `notice`                                                         | `string`                | A non-error outcome: `session-expired`, `signed-in` or `password-updated`, or any text as an info notice.                                                                                                                                             |
+| `providersLoading`                                               | `boolean`               | The identity providers are still loading; two `Skeleton` bars hold the place of Google and GitHub.                                                                                                                                                    |
+| `lastUsed`                                                       | `SignInMethod \| ''`    | The method this browser signed in with last time (`email`, `google` or `github`); its button carries the `Last used` tag. Empty by default: no tag.                                                                                                   |
+| `homeHref`, `docsHref`, `signUpHref`, `termsHref`, `privacyHref` | `string`                | Where the product mark, Documentation, Sign up and the two terms links lead.                                                                                                                                                                          |
 
 | Event            | Payload                         | When                                                                                                         |
 | ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -134,12 +135,12 @@ The block takes its starting values and the request state through props and emit
 
 The token card, `token-sign-in.vue` (`TokenSignInProps` and `TokenSignInFailure` are exported from it):
 
-| Prop                            | Type      | What it does                                                                                                                                                                              |
-| ------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `loading`                       | `boolean` | The token is being checked: the fieldset disables, the form is `aria-busy` and Sign in spins.                                                                                             |
-| `error`                         | `string`  | Why the check failed. `rejected` (401), `no-access` (403), `rate-limited` (429) and `unreachable` carry their own copy, severity and Retry; any other text is a danger notice with Retry. |
-| `remember` (`v-model:remember`) | `boolean` | Remember for this tab, `false` by default. The block stores nothing; the app reads it to choose `sessionStorage` over memory.                                                             |
-| `homeHref`, `docsHref`          | `string`  | Where the product mark and Documentation lead.                                                                                                                                            |
+| Prop                            | Type      | What it does                                                                                                                                                                                                                |
+| ------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `loading`                       | `boolean` | The token is being checked: the fieldset disables, the form is `aria-busy` and Sign in spins.                                                                                                                               |
+| `error`                         | `string`  | Why the check failed. `rejected` (401) and `no-access` (403) show their reason on the field; `rate-limited` (429) and `unreachable` carry their own copy, severity and Retry; any other text is a danger notice with Retry. |
+| `remember` (`v-model:remember`) | `boolean` | Remember for this tab, `false` by default. The block stores nothing; the app reads it to choose `sessionStorage` over memory.                                                                                               |
+| `homeHref`, `docsHref`          | `string`  | Where the product mark and Documentation lead.                                                                                                                                                                              |
 
 | Event             | Payload          | When                                                                              |
 | ----------------- | ---------------- | --------------------------------------------------------------------------------- |
@@ -218,7 +219,7 @@ To go live, render the block from the route that owns the session and pass what 
 
 - Keep one card and one notice slot for the whole flow; swap the step body, not the page.
 - Validate on submit only, then clear a field's error as the user types in it.
-- After a 401, put the message above both fields, clear the password and move focus back to it.
+- After a 401, clear the password, put the message on the password field and move focus back to it.
 - Keep the credentials after a 503, a 500 or a timeout; Retry re-sends the same request.
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
 - While a request is in flight, show the primary `Button` `loading`, disable the step's `fieldset` and mark the form `aria-busy`; release the lock on every outcome so Retry can run again.
@@ -239,7 +240,7 @@ To go live, render the block from the route that owns the session and pass what 
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
 - Don't show the session-expired notice to someone who never signed in. A route guard that finds no session can't tell a first visit from an ended session by itself: send `reason=expired` only when the 401 came on a request that carried a credential, or when the server says the session it received has ended (an HttpOnly cookie is invisible to the page, so the server has to say it).
 - Don't say which half of the pair was wrong after a 401; it confirms the address exists.
-- Don't put a Retry button on a 401: the form under the notice is the retry.
+- Don't put a Retry button on a 401, and don't raise a card notice for it: the password field is the retry.
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
@@ -289,7 +290,7 @@ To go live, render the block from the route that owns the session and pass what 
 - The provider placeholder is announced once by its status name; the `Skeleton` bars are decorative.
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
-- MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
+- MFA: the code field is named by its label (`Authentication code`, `Recovery code`), keeps its help text, and shows the reason in its `Field.Error` when rejected; the QR code is an image named after the account, and the setup key is real text.
 - Consent and device authorization: the card body is a `section` named by its `h1` (`aria-labelledby`); the scope list is an `Item.List` named by its heading (`Acme Deploy will be able to`), each scope a `listitem` with a decorative glyph; the request details are a `KeyValueList` named `Request details`.
 
 ## States

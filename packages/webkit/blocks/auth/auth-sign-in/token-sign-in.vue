@@ -70,10 +70,16 @@
   }
 
   const token = ref('')
-  const tokenError = ref('')
+  const clearsEntry = (error: string) => error === 'rejected' || error === 'no-access'
+
+  const tokenError = ref(
+    !props.loading && clearsEntry(props.error)
+      ? failures[props.error as TokenSignInFailure].label
+      : ''
+  )
 
   const notice = computed<CardNotice | null>(() => {
-    if (!props.error || props.loading) return null
+    if (!props.error || props.loading || clearsEntry(props.error)) return null
     return (
       failures[props.error as TokenSignInFailure] ?? {
         severity: 'danger',
@@ -85,8 +91,6 @@
 
   const focusToken = () => nextTick(() => document.getElementById('personal-token')?.focus())
 
-  const clearsEntry = (error: string) => error === 'rejected' || error === 'no-access'
-
   onMounted(focusToken)
 
   watch(
@@ -94,6 +98,7 @@
     ([error, loading]) => {
       if (loading || !clearsEntry(error)) return
       token.value = ''
+      tokenError.value = failures[error as TokenSignInFailure].label
       focusToken()
     }
   )

@@ -3816,7 +3816,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 
 login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login; oauth consent; authorize app; authorize application; app authorization; consent screen; allow access; grant access; scopes; permissions requested; third-party app access; device authorization; device code; cli login; connect cli; device flow; autorizar aplicativo; tela de consentimento; conceder acesso; autorizar dispositivo; login pela cli; token sign in; api token sign in; personal token; personal token sign in; sign in with token; sign in with api key; api key login; paste token; access token login; token login; entrar com token; login com token; token pessoal
 
-The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
+The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives lands inside it: a credential the user retypes (the password, an MFA code, a token) takes its error on its own field, and every other answer, success included, lands in one `Alert` in the card. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
 
 ## When to use
 
@@ -3878,7 +3878,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 
 - Keep one card and one notice slot for the whole flow; swap the step body, not the page.
 - Validate on submit only, then clear a field's error as the user types in it.
-- After a 401, put the message above both fields, clear the password and move focus back to it.
+- After a 401, clear the password, put the message on the password field and move focus back to it.
 - Keep the credentials after a 503, a 500 or a timeout; Retry re-sends the same request.
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
 - While a request is in flight, show the primary `Button` `loading`, disable the step's `fieldset` and mark the form `aria-busy`; release the lock on every outcome so Retry can run again.
@@ -3899,7 +3899,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
 - Don't show the session-expired notice to someone who never signed in. A route guard that finds no session can't tell a first visit from an ended session by itself: send `reason=expired` only when the 401 came on a request that carried a credential, or when the server says the session it received has ended (an HttpOnly cookie is invisible to the page, so the server has to say it).
 - Don't say which half of the pair was wrong after a 401; it confirms the address exists.
-- Don't put a Retry button on a 401: the form under the notice is the retry.
+- Don't put a Retry button on a 401, and don't raise a card notice for it: the password field is the retry.
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
@@ -3949,7 +3949,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - The provider placeholder is announced once by its status name; the `Skeleton` bars are decorative.
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
-- MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
+- MFA: the code field is named by its label (`Authentication code`, `Recovery code`), keeps its help text, and shows the reason in its `Field.Error` when rejected; the QR code is an image named after the account, and the setup key is real text.
 - Consent and device authorization: the card body is a `section` named by its `h1` (`aria-labelledby`); the scope list is an `Item.List` named by its heading (`Acme Deploy will be able to`), each scope a `listitem` with a decorative glyph; the request details are a `KeyValueList` named `Request details`.
 
 ## States

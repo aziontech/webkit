@@ -105,7 +105,9 @@
   const resetEmail = ref(props.defaultValues.email ?? '')
   const newPassword = ref('')
   const confirmPassword = ref('')
-  const cardNotice = ref<CardNotice | null>(noticeFromProps())
+  const cardNotice = ref<CardNotice | null>(
+    props.error === 'bad-credentials' ? null : noticeFromProps()
+  )
   const verifying = computed(() => props.loading)
   const errors = reactive({
     email: '',
@@ -114,6 +116,7 @@
     newPassword: '',
     confirmPassword: ''
   })
+  if (props.error === 'bad-credentials') errors.password = copy.value.badCredentials
 
   const cardContentEl = ref<HTMLElement | null>(null)
   const { height: cardHeight, resizing, onTransitionend } = useCardHeight(cardContentEl)
@@ -145,11 +148,14 @@
   const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const showOutcome = () => {
-    cardNotice.value = noticeFromProps()
     if (props.error === 'bad-credentials') {
+      cardNotice.value = null
       password.value = ''
+      errors.password = copy.value.badCredentials
       focusField('login-password')
+      return
     }
+    cardNotice.value = noticeFromProps()
   }
 
   onMounted(() => {
