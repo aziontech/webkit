@@ -5,7 +5,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { commands, page } from 'vitest/browser'
 import type { Component } from 'vue'
 
+import ApplicationSceneBand from '../../examples/assets-console-application-scene/band.vue'
 import ApplicationSceneDefault from '../../examples/assets-console-application-scene/default.vue'
+import TraceSceneDefault from '../../examples/assets-console-trace-scene/default.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
 import MarqueeDefault from '../../examples/marquee/default.vue'
 
@@ -70,4 +72,26 @@ describe('marketing element layouts (styled)', () => {
       }
     }
   )
+
+  it('console scenes fade their page out at the crop on a phone instead of cutting a row', async () => {
+    const root = await mountAt(TraceSceneDefault, 390)
+    const page = await vi.waitFor(() => {
+      const found = root.querySelector('[data-testid="console-trace-scene__page"]')
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(getComputedStyle(page).maskImage).toContain('linear-gradient')
+  })
+
+  it('the application scene keeps its save bar off the rows on a phone', async () => {
+    const root = await mountAt(ApplicationSceneBand, 390)
+    await vi.waitFor(() =>
+      expect(root.querySelector('[data-testid="console-application-scene__page"]')).not.toBeNull()
+    )
+    for (const bar of root.querySelectorAll(
+      '[data-testid="console-application-scene__save-bar"]'
+    )) {
+      expect(visible(bar)).toBe(false)
+    }
+  })
 })
