@@ -253,6 +253,7 @@
       >
         <ModuleHeader
           :framed="false"
+          class="md:max-w-(--layout-measure-content) md:min-w-0 md:flex-1"
           align="start"
           :title="title"
           :eyebrow="eyebrow"
@@ -268,7 +269,7 @@
 
         <div
           v-if="slots.actions"
-          class="flex w-full flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full md:w-auto md:flex-row md:items-center md:[&>*]:w-auto"
+          class="flex w-full flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full md:w-auto md:shrink-0 md:flex-row md:items-center md:[&>*]:w-auto"
         >
           <slot name="actions" />
         </div>
