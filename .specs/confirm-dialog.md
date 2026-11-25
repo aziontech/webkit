@@ -3,10 +3,10 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: 8900f3a8b5cc22d37d68f5a36ec739505fffab6f79f1ce7c7a6caf7158446e2e
+checksum: edf02fdd11ada0cbb2f59f7aa60bd64cb14d1de9483038474a28bc5eddc3d840
 spec_version: 10
 created: 2026-11-10
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 ---
 
 # ConfirmDialog — Component Spec
@@ -40,7 +40,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 - `variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
 - Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.
 - Typed confirmation has one rule everywhere: the reader types the resource name (`confirmation-phrase`), the match is case-sensitive after trimming the ends, the confirm button stays disabled until it matches, `Enter` in the field confirms once it matches, and the field empties every time the dialog opens. Do not hand-write the field.
-- Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`.
+- Below `md` the buttons stack full width in DOM and focus order, Cancel above and the confirm button last at the bottom nearest the thumb, the same order as `save-bar`, `Dialog` and `Drawer` footers.
 
 ## Usage
 
@@ -74,18 +74,18 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 
 ## Props
 
-| Prop           | Type                    | Default    | Required | JSDoc                                                                                                                               |
-| -------------- | ----------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `title`        | `string`                | `—`        | true     | The question or the outcome, as the dialog title.                                                                                   |
-| `description`  | `string`                | `''`       | false    | One sentence that says what happens on confirm.                                                                                     |
-| `confirmLabel` | `string`                | `''`       | false    | Label of the confirm button. Empty uses the locale catalog (`Confirm`).                                                             |
-| `cancelLabel`  | `string`                | `''`       | false    | Label of the cancel button. Empty uses the locale catalog (`Cancel`).                                                               |
-| `variant`      | `'danger' \| 'primary'` | `'danger'` | false    | Kind of the confirm button.                                                                                                         |
-| `size`         | `'small' \| 'medium'`   | `'medium'` | false    | Width of the dialog.                                                                                                                |
-| `loading`      | `boolean`               | `false`    | false    | Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears. |
-| `disabled`     | `boolean`               | `false`    | false    | Disables the confirm button, for a confirmation that needs input first.                                                             |
-| `confirmationPhrase` | `string`          | `''`       | false    | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
-| `defaultOpen`  | `boolean`               | `false`    | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                      |
+| Prop                 | Type                    | Default    | Required | JSDoc                                                                                                                                       |
+| -------------------- | ----------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`              | `string`                | `—`        | true     | The question or the outcome, as the dialog title.                                                                                           |
+| `description`        | `string`                | `''`       | false    | One sentence that says what happens on confirm.                                                                                             |
+| `confirmLabel`       | `string`                | `''`       | false    | Label of the confirm button. Empty uses the locale catalog (`Confirm`).                                                                     |
+| `cancelLabel`        | `string`                | `''`       | false    | Label of the cancel button. Empty uses the locale catalog (`Cancel`).                                                                       |
+| `variant`            | `'danger' \| 'primary'` | `'danger'` | false    | Kind of the confirm button.                                                                                                                 |
+| `size`               | `'small' \| 'medium'`   | `'medium'` | false    | Width of the dialog.                                                                                                                        |
+| `loading`            | `boolean`               | `false`    | false    | Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears.         |
+| `disabled`           | `boolean`               | `false`    | false    | Disables the confirm button, for a confirmation that needs input first.                                                                     |
+| `confirmationPhrase` | `string`                | `''`       | false    | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
+| `defaultOpen`        | `boolean`               | `false`    | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                              |
 
 ## v-model
 
@@ -93,10 +93,10 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 
 ## Events
 
-| Event     | Payload               | Notes                                                                            |
-| --------- | --------------------- | -------------------------------------------------------------------------------- |
+| Event     | Payload               | Notes                                                                                                   |
+| --------- | --------------------- | ------------------------------------------------------------------------------------------------------- |
 | `confirm` | `(event: MouseEvent)` | The confirm button was activated; not emitted while `disabled`, `loading` or before the phrase matches. |
-| `cancel`  | `(event: MouseEvent)` | The cancel button was activated; the dialog closes. Not emitted while `loading`. |
+| `cancel`  | `(event: MouseEvent)` | The cancel button was activated; the dialog closes. Not emitted while `loading`.                        |
 
 ## Slots
 

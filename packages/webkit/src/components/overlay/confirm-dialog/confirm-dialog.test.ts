@@ -59,6 +59,18 @@ describe('ConfirmDialog', () => {
     expect(document.body.textContent).toContain('It stops answering.')
   })
 
+  it('stacks the actions in DOM order on phones, the confirm button last', async () => {
+    render(ConfirmDialog, { props: { open: true, title: 'Remove domain' } })
+    await settle()
+
+    const actions = byTestId('confirm-dialog__actions')!
+    expect(actions.classList.contains('flex-col')).toBe(true)
+    expect(actions.classList.contains('flex-col-reverse')).toBe(false)
+    const cancel = byTestId('confirm-dialog__cancel')!
+    const confirm = byTestId('confirm-dialog__confirm')!
+    expect(cancel.compareDocumentPosition(confirm) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('honours a consumer data-testid', async () => {
     render(ConfirmDialog, {
       props: { open: true, title: 'Remove domain' },

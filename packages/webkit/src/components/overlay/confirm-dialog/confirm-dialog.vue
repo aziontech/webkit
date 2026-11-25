@@ -192,7 +192,7 @@
       <PanelFooter>
         <div
           :data-testid="`${testId}__actions`"
-          class="flex w-full flex-col-reverse gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+          class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
         >
           <slot
             name="actions"
