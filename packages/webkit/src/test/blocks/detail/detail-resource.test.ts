@@ -223,3 +223,17 @@ describe('detail-resource#ResourceVersions', () => {
     }
   })
 })
+
+describe('detail-resource drop hint', () => {
+  it('offers drag and drop only on a fine pointer, never on a phone', () => {
+    const { container } = render(DetailsPage)
+    const hints = Array.from(container.querySelectorAll('span')).filter((el) =>
+      el.textContent?.includes('drop your project')
+    )
+    expect(hints.length).toBeGreaterThan(0)
+    for (const hint of hints) {
+      expect(hint.classList.contains('hidden')).toBe(true)
+      expect(hint.classList.contains('pointer-fine:inline')).toBe(true)
+    }
+  })
+})
