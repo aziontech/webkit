@@ -344,7 +344,7 @@
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container">
           <AppHeader :data-testid="`${testId}__header`">
-            <AppHeaderStart>
+            <AppHeaderStart class="grow">
               <ConsoleLayoutHeaderStart
                 :compact="compact"
                 :home="home"

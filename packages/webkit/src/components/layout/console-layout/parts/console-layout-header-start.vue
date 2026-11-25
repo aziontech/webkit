@@ -94,7 +94,7 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
+  <div class="flex min-w-0 flex-1 items-center justify-start gap-(--spacing-xs)">
     <template v-if="compact">
       <Tooltip
         :content="openNavigationLabel"
@@ -158,7 +158,7 @@
     <div
       v-else-if="!trail && $slots['breadcrumbs']"
       :data-compact="compact || null"
-      class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink *:ms-0 data-compact:@max-md:hidden"
+      class="-ms-(--spacing-xs) flex min-w-0 flex-1 *:ms-0 data-compact:@max-md:hidden"
     >
       <slot name="breadcrumbs" />
     </div>
@@ -166,7 +166,7 @@
       v-else-if="crumbItems.length"
       :data-compact="compact || null"
       :data-testid="`${layoutTestId}__breadcrumbs`"
-      class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink data-compact:@max-md:hidden"
+      class="-ms-(--spacing-xs) flex min-w-0 flex-1 data-compact:@max-md:hidden"
     >
       <Breadcrumb
         :items="crumbItems"

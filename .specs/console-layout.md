@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 15
 template: 2
-checksum: 1e22a70b1a3dbc4ad6757fde0418ed4933b4bf2906c657ccbfc67007ab8a4bea
+checksum: 8f21b37851ed82038aaffe4ec9e397aa35c5d07287349bbbc2249252173f7801
 created: 2026-11-12
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # ConsoleLayout — Component Spec
@@ -33,7 +33,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - `AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
-- `Breadcrumb` — the header trail (`breadcrumbs`); while compact it stays from a 28rem header up (collapsed by `Breadcrumb` to first › … › current), or only a page's control crumbs when the page has them.
+- `Breadcrumb` — the header trail (`breadcrumbs`), given the free width of the header start so it shows whole whenever it fits and `Breadcrumb` folds it only when it does not; while compact it stays from a 28rem header up, or only a page's control crumbs when the page has them.
 - `shell/shell-console` — the block that shows this layout with sample console navigation.
 
 ## Best practices
