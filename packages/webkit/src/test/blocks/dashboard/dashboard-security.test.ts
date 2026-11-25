@@ -84,6 +84,16 @@ describe('dashboard/dashboard-security', () => {
     expect(view.queryByRole('button', { name: 'Expand Matched requests over time' })).toBeNull()
   })
 
+  it('lets every card title take the free space so the actions stay on the title row', () => {
+    for (const component of [Security, SecurityByActor]) {
+      const view = render(component)
+      const headers = view.container.querySelectorAll('[data-testid="chart-card-header"]')
+      expect(headers.length).toBeGreaterThan(0)
+      for (const header of headers) expect(header.firstElementChild?.classList).toContain('flex-1')
+      view.unmount()
+    }
+  })
+
   it('disables the card actions while loading', () => {
     const view = render(Security, { props: { loading: true } })
     const expand = view.getByRole('button', {
