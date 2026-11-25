@@ -34,7 +34,7 @@
     },
     {
       "name": "ResizableColumns",
-      "summary": "A simple table whose columns opt into drag-to-resize via per-column `resizable: true`. Drag a header divider: only that column resizes (the others freeze at their current width) and the table grows with horizontal scroll. A column can shrink only down to its own content width. Frozen and action columns ignore `resizable`.",
+      "summary": "Every column resizes by default: drag a header divider and only that column changes, the table grows. `@column-resize` saves the width to localStorage and the column `width` restores it. Frozen and action columns never resize.",
       "file": "resizable-columns.vue"
     },
     {

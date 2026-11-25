@@ -22,6 +22,7 @@ export interface CollectionColumn {
   label?: string
   hideable?: boolean
   type?: 'default' | 'action'
+  width?: number
 }
 
 /** What a server-mode `fetch` receives. */
@@ -119,6 +120,7 @@ export interface CollectionTableProps<T, C> {
   'onUpdate:sorting': (value: CollectionSort[] | undefined) => void
   'onUpdate:selectedKeys': (value: string[] | undefined) => void
   'onUpdate:columnVisibility': (value: Record<string, boolean> | undefined) => void
+  onColumnResize: (event: Event, column: { id: string; width: number }) => void
 }
 
 export interface CollectionPaginationProps {

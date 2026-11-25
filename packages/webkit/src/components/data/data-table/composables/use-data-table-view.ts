@@ -131,6 +131,7 @@ export function useDataTableView(host: DataTableViewHost): DataTableView {
     leadingCells,
     skip: () => props.loading || stacked.value,
     resizeWidths,
+    commit: host.emit.columnResize,
     refit: () => [
       props.columns,
       props.loading,

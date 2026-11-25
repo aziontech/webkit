@@ -15,6 +15,8 @@ import type { DataTableHeader } from '../injection-key'
 import { columnId, type ColumnLike, metaOf } from '../lib/column-meta'
 import { columnContentMinWidths, RESIZE_FALLBACK_MIN_WIDTH } from '../lib/measure-columns'
 
+type PointerLike = MouseEvent | TouchEvent
+
 export interface DataTableResizeOptions {
   root: Ref<HTMLElement | null>
   columns: () => TableColumn[]
@@ -23,6 +25,7 @@ export interface DataTableResizeOptions {
   skip: () => boolean
   refit: () => unknown[]
   resizeWidths: Ref<Record<string, number>>
+  commit: (event: PointerLike, column: { id: string; width: number }) => void
 }
 
 export interface UseDataTableResizeReturn {
@@ -31,8 +34,6 @@ export interface UseDataTableResizeReturn {
   resizingColumnId: ComputedRef<string | null>
   startResize: (column: ColumnLike, event: MouseEvent | TouchEvent) => void
 }
-
-type PointerLike = MouseEvent | TouchEvent
 
 const pointX = (e: PointerLike): number =>
   'touches' in e ? (e.touches[0]?.clientX ?? 0) : e.clientX
@@ -78,10 +79,13 @@ const frozenWidths = (
   return snapshot
 }
 
-const dragListeners = (onMove: (e: PointerLike) => void, onEnd: () => void): (() => void) => {
+const dragListeners = (
+  onMove: (e: PointerLike) => void,
+  onEnd: (e: PointerLike) => void
+): (() => void) => {
   const doc = globalThis.document
-  const end = (): void => {
-    onEnd()
+  const end = (e: PointerLike): void => {
+    onEnd(e)
     stop()
   }
   const stop = (): void => {
@@ -141,16 +145,20 @@ export function useDataTableResize(o: DataTableResizeOptions): UseDataTableResiz
     const startWidth = startWidthOf(o, column, headEl, autoWidths.value)
     const minWidth = minWidthOf(headEl)
     resizingColumnId.value = column.id
+    let moved = false
     stopDrag?.()
     stopDrag = dragListeners(
       (move) => {
         move.preventDefault()
+        moved = true
         const next = Math.max(minWidth, Math.round(startWidth + (pointX(move) - startX)))
         resizeWidths.value = { ...resizeWidths.value, [column.id]: next }
       },
-      () => {
+      (end) => {
         resizingColumnId.value = null
         stopDrag = null
+        const width = resizeWidths.value[column.id]
+        if (moved && width !== undefined) o.commit(end, { id: column.id, width })
       }
     )
     event.preventDefault()

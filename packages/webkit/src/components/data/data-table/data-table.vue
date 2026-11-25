@@ -119,6 +119,7 @@
     refresh: [event: Event]
     export: [event: Event, rows: TRow[]]
     reorder: [event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow }]
+    'column-resize': [event: MouseEvent | TouchEvent, column: { id: string; width: number }]
   }>()
 
   /** Row records; `reorderable` writes the new order back (v-model:data). */
@@ -180,7 +181,9 @@
       reorder: (
         event: KeyboardEvent | PointerEvent,
         payload: { from: number; to: number; row: TRow }
-      ) => emit('reorder', event, payload)
+      ) => emit('reorder', event, payload),
+      columnResize: (event: MouseEvent | TouchEvent, column: { id: string; width: number }) =>
+        emit('column-resize', event, column)
     }),
     slots: typed<Slots>(slots)
   }

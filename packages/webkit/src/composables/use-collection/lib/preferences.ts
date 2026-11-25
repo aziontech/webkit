@@ -14,6 +14,7 @@ export interface CollectionPreferencesValue {
   wrapLines?: boolean
   striped?: boolean
   density?: CollectionDensity
+  columnWidths?: Record<string, number>
 }
 
 /** The storage the preferences use; `localStorage` by default. */

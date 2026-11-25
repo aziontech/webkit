@@ -300,6 +300,23 @@ describe('useCollection — preferences', () => {
     })
   })
 
+  it('saves a resized column width with the other preferences and hands it back as the column width', () => {
+    const storage = memoryStorage({
+      'widths-prefs': JSON.stringify({ columnWidths: { name: 240 } })
+    })
+    const columns = [
+      { accessorKey: 'name', header: 'Name' },
+      { accessorKey: 'status', header: 'Status', width: 120 }
+    ]
+    const c = setup({ items: rows, columns, preferences: { storageKey: 'widths-prefs', storage } })
+    expect(c.tableProps.value.columns.map((col) => col.width)).toEqual([240, 120])
+    c.tableProps.value.onColumnResize(new Event('mouseup'), { id: 'status', width: 180 })
+    expect(c.tableProps.value.columns.map((col) => col.width)).toEqual([240, 180])
+    expect(JSON.parse(storage.data['widths-prefs'] ?? '{}')).toMatchObject({
+      columnWidths: { name: 240, status: 180 }
+    })
+  })
+
   it('works without storage (server render)', () => {
     const c = setup({ items: rows, preferences: { storageKey: 'x', storage: null } })
     c.setPreferences({ striped: true })

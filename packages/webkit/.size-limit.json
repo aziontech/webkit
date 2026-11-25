@@ -105,7 +105,7 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "59.25 KB"
+    "limit": "59.4 KB"
   },
   {
     "name": "data-table-pagination",
@@ -460,7 +460,7 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "117.25 KB",
+    "limit": "117.35 KB",
     "entryOnly": true
   },
   {

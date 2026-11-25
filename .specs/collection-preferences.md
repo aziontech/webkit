@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: a8581331533a5c1ea04e5b3ed492c9b564743b6d6b0153697201666f43d754bd
+checksum: 3d1ed884e2c4ed6ccc002107e38ebf05bb7ec61ab559a04e76f48c9e1bc14437
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-25
 ---
 
 # CollectionPreferences — Component Spec
@@ -76,7 +76,7 @@ It is the one column chooser of a table. Placed in a DataTable's `toolbar` slot 
 | `disabled`        | `boolean`                        | `false`                                                        | false    | Disables the trigger.                                                                                                     |
 | `defaultOpen`     | `boolean`                        | `false`                                                        | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                            |
 
-Types: `CollectionPreferencesValue = { pageSize?: number; columns?: { id: string; visible: boolean }[]; wrapLines?: boolean; striped?: boolean; density?: 'comfortable' | 'compact' }`; `CollectionPreferencesColumn = { id: string; label: string; locked?: boolean }`; `CollectionPreferencesSection = 'page-size' | 'columns' | 'wrap-lines' | 'striped' | 'density'`.
+Types: `CollectionPreferencesValue = { pageSize?: number; columns?: { id: string; visible: boolean }[]; wrapLines?: boolean; striped?: boolean; density?: 'comfortable' | 'compact'; columnWidths?: Record<string, number> }` (`columnWidths` holds the widths of the columns the person resized, written from the table's `column-resize`, never by the panel; Confirm keeps it); `CollectionPreferencesColumn = { id: string; label: string; locked?: boolean }`; `CollectionPreferencesSection = 'page-size' | 'columns' | 'wrap-lines' | 'striped' | 'density'`.
 
 ## v-model
 

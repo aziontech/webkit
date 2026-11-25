@@ -25,5 +25,6 @@ export const basePreferences = (
   wrapLines: false,
   striped: false,
   density: 'comfortable',
+  columnWidths: {},
   ...options.preferences?.defaults
 })

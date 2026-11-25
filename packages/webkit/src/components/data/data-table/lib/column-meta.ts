@@ -84,5 +84,5 @@ export const stackedLabelOf = (column: ColumnLike): string => {
 
 export const isResizableColumn = (column: ColumnLike): boolean => {
   const meta = metaOf(column)
-  return meta.resizable === true && !meta.frozen && meta.type !== 'action'
+  return meta.resizable !== false && !meta.frozen && meta.type !== 'action'
 }

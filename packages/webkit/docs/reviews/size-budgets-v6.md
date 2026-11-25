@@ -2965,3 +2965,9 @@ Budget-raise: sidebar 25.5 KB → 25.8 KB (measured 25.76 KB): it renders Toolti
 Budget-raise: sidebar-root 25.3 KB → 25.6 KB (measured 25.57 KB): it renders Tooltip or the lazy Tooltip (directly or through CopyButton, TableCellLink or ChatMessage): Tooltip split into its trigger and a private TooltipContent part, and the lazy Tooltip now renders the trigger span itself and loads only that part once mounted (defineClientLazy), so server, hydration and first client render produce the same nodes and the button is never remounted (CI fix after the audit-6 lanes, see tooltip).
 
 Budget-raise: tooltip 5.9 KB → 6.25 KB (measured 6.22 KB): Tooltip keeps its trigger span and moves its behaviour and panel into a private TooltipContent part, so the lazy Tooltip can render the same span and load only that part after mount; before, the late swap remounted the slotted button (the manual-copy popover lost its focus target on Escape) and its teleports hydrated out of order (the open Drawer in two blocks claimed a tooltip's anchor). The part carries its own props and mirrors its open state and placement on the trigger.
+
+## Resizable columns by default (2026-11-25)
+
+Budget-raise: data-table 59.25 KB → 59.4 KB (measured 59.34 KB): every column resizes unless it sets `resizable: false`, and a drag that moved ends with a `column-resize` event (the column id and its width), so an app or `useCollection` can save the width and restore it as the column `width`.
+
+Budget-raise: console-application-scene 117.25 KB → 117.35 KB (measured 117.30 KB): it renders DataTable, which now resizes every column by default and emits `column-resize` when a drag ends (see data-table).

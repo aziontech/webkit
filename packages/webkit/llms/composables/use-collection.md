@@ -138,6 +138,7 @@ What a person can change about a collection, saved per collection.
 | `wrapLines` | `boolean` | no |  |
 | `striped` | `boolean` | no |  |
 | `density` | `CollectionDensity` | no |  |
+| `columnWidths` | `Record<string, number>` | no |  |
 
 ## `PreferencesStorage`
 
@@ -239,6 +240,7 @@ The column fields `useCollection` reads; a Table column satisfies it.
 | `label` | `string` | no |  |
 | `hideable` | `boolean` | no |  |
 | `type` | `'default' \| 'action'` | no |  |
+| `width` | `number` | no |  |
 
 ## `CollectionExportParams`
 
@@ -363,6 +365,7 @@ type CollectionStatus = 'loading' | 'error' | 'empty' | 'no-match' | 'ready'
 | `onUpdate:sorting` | `(value: CollectionSort[] \| undefined) => void` | yes |  |
 | `onUpdate:selectedKeys` | `(value: string[] \| undefined) => void` | yes |  |
 | `onUpdate:columnVisibility` | `(value: Record<string, boolean> \| undefined) => void` | yes |  |
+| `onColumnResize` | `(event: Event, column: { id: string; width: number }) => void` | yes |  |
 
 ## `CollectionTextFilterProps`
 
