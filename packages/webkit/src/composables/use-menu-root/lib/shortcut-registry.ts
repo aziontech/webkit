@@ -16,29 +16,68 @@ interface ShortcutEntry {
 const entries = new Set<ShortcutEntry>()
 let listening = false
 
-function parseShortcut(command: string): DropdownMenuShortcut | null {
-  let meta = false
-  let ctrl = false
-  let shift = false
-  let alt = false
-  let key = ''
-  const tokens = command.split(/\s*\+\s*/).flatMap((part) => Array.from(part))
-  for (const token of tokens) {
-    const lower = token.toLowerCase()
-    if (/^(⌘|cmd|meta)$/.test(lower)) meta = true
-    else if (/^(⌃|ctrl|control)$/.test(lower)) ctrl = true
-    else if (/^(⇧|shift)$/.test(lower)) shift = true
-    else if (/^(⌥|alt|option|opt)$/.test(lower)) alt = true
-    else key += token
-  }
-  if (!key) return null
-  return { meta, ctrl, shift, alt, key: key.toLowerCase() }
+const GLYPHS: Record<string, ShortcutKey> = { '⌘': 'meta', '⌃': 'ctrl', '⇧': 'shift', '⌥': 'alt' }
+
+const WORDS: Record<string, ShortcutKey> = {
+  mod: 'meta',
+  cmd: 'meta',
+  command: 'meta',
+  meta: 'meta',
+  ctrl: 'ctrl',
+  control: 'ctrl',
+  shift: 'shift',
+  alt: 'alt',
+  option: 'alt',
+  opt: 'alt'
 }
 
+export type ShortcutKey = 'meta' | 'ctrl' | 'shift' | 'alt'
+
+export function shortcutKeys(command: string): string[] {
+  const keys: string[] = []
+  const parts = command.trim().endsWith('++')
+    ? [...command.trim().slice(0, -2).split('+'), '+']
+    : command.split('+')
+  for (const raw of parts) {
+    const part = raw.trim()
+    if (!part) continue
+    const word = WORDS[part.toLowerCase()]
+    if (word) {
+      keys.push(word)
+      continue
+    }
+    let rest = part
+    while (rest.length > 1 && GLYPHS[rest[0]!]) {
+      keys.push(GLYPHS[rest[0]!]!)
+      rest = rest.slice(1)
+    }
+    keys.push(GLYPHS[rest] ?? rest)
+  }
+  return keys
+}
+
+function parseShortcut(command: string): DropdownMenuShortcut | null {
+  const keys = shortcutKeys(command)
+  const key = keys.filter((name) => !['meta', 'ctrl', 'shift', 'alt'].includes(name)).join('')
+  if (!key) return null
+  return {
+    meta: keys.includes('meta'),
+    ctrl: keys.includes('ctrl'),
+    shift: keys.includes('shift'),
+    alt: keys.includes('alt'),
+    key: key.toLowerCase()
+  }
+}
+
+const isMac = () => /mac|iphone|ipad/i.test(globalThis.navigator?.platform ?? '')
+
 function matches(event: globalThis.KeyboardEvent, parsed: DropdownMenuShortcut): boolean {
+  const mac = isMac()
+  const meta = mac ? parsed.meta : false
+  const ctrl = mac ? parsed.ctrl : parsed.ctrl || parsed.meta
   return (
-    event.metaKey === parsed.meta &&
-    event.ctrlKey === parsed.ctrl &&
+    event.metaKey === meta &&
+    event.ctrlKey === ctrl &&
     event.shiftKey === parsed.shift &&
     event.altKey === parsed.alt &&
     event.key.toLowerCase() === parsed.key
