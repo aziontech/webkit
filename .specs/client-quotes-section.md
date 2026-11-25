@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: afc82ab1e9e0c72fce95c439eddf28ffa33cbc376e75c2a4890d93fefb103833
+checksum: 9dfd6736e2ed6efd5979da4487c6882100692ca21ce4384ae8c4ba018b7a6870
 ---
 
 # ClientQuotesSection — Component Spec
@@ -55,15 +55,15 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
         logo: axur,
         clientName: 'Axur',
         text: 'With Azion, we scale proprietary AI models without managing infrastructure.',
-        name: 'Fabio Ramos',
+        name: 'John Smith',
         jobTitle: 'CEO at Axur'
       },
       {
         logo: magalu,
         clientName: 'Magalu',
         text: 'Azion shielded us from sophisticated cyberattacks.',
-        name: 'Allan Monteiro',
-        jobTitle: 'CISO at Magalu'
+        name: 'Alex Morgan',
+        jobTitle: 'Head of technology at Magalu'
       }
     ]"
     :primary-action="{ label: 'See customer stories', href: '/success-cases', trailing: true }"
