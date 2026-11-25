@@ -10,6 +10,7 @@ import AppHeaderWithAccount from '../../examples/app-header/with-account.vue'
 import AppLayoutDefault from '../../examples/app-layout/default.vue'
 import ArticleHighlightAutoplay from '../../examples/article-highlight-section/autoplay.vue'
 import ButtonGroupDefault from '../../examples/button-group/default.vue'
+import ChipSelectable from '../../examples/chip/selectable.vue'
 import CitationDefault from '../../examples/citation/default.vue'
 import CliTerminalDefault from '../../examples/cli-terminal-section/default.vue'
 import ClientQuotesDefault from '../../examples/client-quotes-section/default.vue'
@@ -28,12 +29,14 @@ import MultiSelectDefault from '../../examples/multi-select/default.vue'
 import NumberInputDefault from '../../examples/number-input/default.vue'
 import OverflowCountDefault from '../../examples/overflow-count/default.vue'
 import PromptInputShortcutMenus from '../../examples/prompt-input/shortcut-menus.vue'
+import RatingDefault from '../../examples/rating/default.vue'
 import ReasoningDefault from '../../examples/reasoning/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
 import SettingsGroupCollapsible from '../../examples/settings-group/collapsible.vue'
 import SettingsGroupDefault from '../../examples/settings-group/default.vue'
 import SourcesDefault from '../../examples/sources/default.vue'
 import SplitButtonSizes from '../../examples/split-button/sizes.vue'
+import SwitchDefault from '../../examples/switch/default.vue'
 import TabsDefault from '../../examples/tabs/default.vue'
 import ThemeSwitcherDefault from '../../examples/theme-switcher/default.vue'
 import ToggleGroupSizes from '../../examples/toggle-group/sizes.vue'
@@ -128,6 +131,34 @@ describe('tap targets on a coarse pointer (styled)', () => {
         expect(stepper.getBoundingClientRect().width).toBeGreaterThanOrEqual(39)
         expect(hitSpan(stepper, 'y')).toBeGreaterThanOrEqual(44)
       }
+    })
+
+    it('a selectable Chip answers a tap across 44px of height', async () => {
+      await touch()
+      const view = await mount(ChipSelectable)
+      for (const chip of byTestId(view.container as HTMLElement, 'chip')) {
+        expect(chip.getBoundingClientRect().height).toBeLessThan(44)
+        expect(hitSpan(chip, 'y')).toBeGreaterThanOrEqual(44)
+      }
+    })
+
+    it('Rating stars grow to 44 x 44 on a coarse pointer', async () => {
+      await touch()
+      const view = await mount(RatingDefault)
+      for (const star of byTestId(view.container as HTMLElement, 'rating__star')) {
+        const box = star.getBoundingClientRect()
+        expect(Math.round(box.width)).toBeGreaterThanOrEqual(44)
+        expect(Math.round(box.height)).toBeGreaterThanOrEqual(44)
+      }
+    })
+
+    it('a Switch answers a tap across 44 x 44', async () => {
+      await touch()
+      const view = await mount(SwitchDefault)
+      const control = byTestId(view.container as HTMLElement, 'switch')[0]!
+      expect(control.getBoundingClientRect().height).toBeLessThan(44)
+      expect(hitSpan(control, 'y')).toBeGreaterThanOrEqual(44)
+      expect(hitSpan(control, 'x')).toBeGreaterThanOrEqual(44)
     })
 
     it('OverflowCount +N answers a tap across 44px of height', async () => {
