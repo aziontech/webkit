@@ -1166,28 +1166,32 @@ export const roleOptions = [
 
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
           <Field.Legend type="label">Organization mark</Field.Legend>
-          <RadioGroup
-            v-model="accent"
-            variant="card"
-            orientation="horizontal"
-            :options="accents"
-            aria-label="Organization mark"
-            class="w-full"
+          <div
+            class="w-full [&>[role=radiogroup]]:grid! [&>[role=radiogroup]]:grid-cols-3 sm:[&>[role=radiogroup]]:grid-cols-4"
           >
-            <template #option="{ option }">
-              <span class="flex flex-col items-center gap-(--spacing-xs)">
-                <Avatar
-                  :label="previewName"
-                  :alt="option.label"
-                  :colors="option.colors"
-                  pattern="marble"
-                  size="medium"
-                  variant="square"
-                />
-                <span class="text-body-xs text-(--text-muted)">{{ option.label }}</span>
-              </span>
-            </template>
-          </RadioGroup>
+            <RadioGroup
+              v-model="accent"
+              variant="card"
+              orientation="horizontal"
+              :options="accents"
+              aria-label="Organization mark"
+              class="w-full"
+            >
+              <template #option="{ option }">
+                <span class="flex flex-col items-center gap-(--spacing-xs)">
+                  <Avatar
+                    :label="previewName"
+                    :alt="option.label"
+                    :colors="option.colors"
+                    pattern="marble"
+                    size="medium"
+                    variant="square"
+                  />
+                  <span class="text-body-xs text-(--text-muted)">{{ option.label }}</span>
+                </span>
+              </template>
+            </RadioGroup>
+          </div>
           <FieldDescription
             >Generated from the organization's name. Select its color.</FieldDescription
           >
@@ -1227,25 +1231,31 @@ export const roleOptions = [
       <div class="flex flex-col gap-(--spacing-lg)">
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
           <Field.Legend type="label">How are you planning to use the platform?</Field.Legend>
-          <RadioGroup
-            v-model="usage"
-            variant="card"
-            orientation="horizontal"
-            :options="usageOptions"
-            aria-label="How are you planning to use the platform?"
-          />
+          <div class="w-full [&>[role=radiogroup]]:grid! [&>[role=radiogroup]]:grid-cols-3">
+            <RadioGroup
+              v-model="usage"
+              variant="card"
+              orientation="horizontal"
+              :options="usageOptions"
+              aria-label="How are you planning to use the platform?"
+            />
+          </div>
           <FieldError v-if="submitted && !usage">Select one to continue.</FieldError>
         </fieldset>
 
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
           <Field.Legend type="label">What best describes your role?</Field.Legend>
-          <RadioGroup
-            v-model="role"
-            variant="card"
-            orientation="horizontal"
-            :options="roleOptions"
-            aria-label="What best describes your role?"
-          />
+          <div
+            class="w-full [&>[role=radiogroup]]:grid! [&>[role=radiogroup]]:grid-cols-2 sm:[&>[role=radiogroup]]:grid-cols-3"
+          >
+            <RadioGroup
+              v-model="role"
+              variant="card"
+              orientation="horizontal"
+              :options="roleOptions"
+              aria-label="What best describes your role?"
+            />
+          </div>
           <FieldError v-if="submitted && !role">Select one to continue.</FieldError>
         </fieldset>
 

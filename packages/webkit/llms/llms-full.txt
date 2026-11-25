@@ -2247,7 +2247,7 @@ Descriptions, groups and keywords: foundations/icons.md.
 - Surface: app
 - Source: `blocks/account/account-activity-history/account-activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-activity-history")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DataTablePagination`, DateRangePicker, EmptyState, IconButton, PageHeader, PropertyFilter, Table, `TableCellTime`, Tag, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, ConfigProvider, CopyButton, DataTable, `DataTablePagination`, DateRangePicker, EmptyState, IconButton, PageHeader, PropertyFilter, Table, `TableCellTime`, Tag, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3081,7 +3081,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-pay
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DataTablePagination`, `DatePickerRoot`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfigProvider, ConfirmDialog, CopyButton, DataTable, `DataTablePagination`, `DatePickerRoot`, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as

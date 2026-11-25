@@ -514,6 +514,16 @@ Each variant is the same screen in another state: `get_block("account/account-te
                     <span class="truncate text-body-xs text-(--text-muted)">{{
                       row.description
                     }}</span>
+                    <div
+                      aria-hidden="true"
+                      data-slot="narrow-summary"
+                      class="mt-(--spacing-2xs) sm:hidden"
+                    >
+                      <TableCellStatus
+                        :label="row.status"
+                        :severity="statusSeverity(row.status)"
+                      />
+                    </div>
                   </div>
                 </div>
               </template>
