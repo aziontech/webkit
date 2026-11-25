@@ -27,6 +27,20 @@ describe('PricingCard', () => {
     expect(getByTestId(`${ROOT}__header`)).toContainElement(title)
   })
 
+  it('hides the plan label when the price already names the plan, keeping the heading', () => {
+    const free = render(PricingCard, {
+      props: { title: 'Free', value: ' free ', showPrefix: false, showSuffix: false }
+    })
+    const hidden = free.getByTestId(`${ROOT}__title`)
+    expect(hidden).toHaveAttribute('data-in-price')
+    expect(hidden.classList.contains('data-[in-price]:sr-only')).toBe(true)
+    expect(free.getByRole('heading', { level: 3, name: 'Free' })).toBe(hidden)
+    free.unmount()
+
+    const pro = render(PricingCard, { props: { title: 'Pro', value: '20' } })
+    expect(pro.getByTestId(`${ROOT}__title`).hasAttribute('data-in-price')).toBe(false)
+  })
+
   it('has no built-in plan name: the heading is empty until title is set', () => {
     const { getByTestId } = render(PricingCard, { props: {} })
     expect(getByTestId(`${ROOT}__title`).textContent?.trim()).toBe('')
