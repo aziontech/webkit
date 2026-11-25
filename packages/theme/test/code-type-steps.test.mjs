@@ -19,3 +19,11 @@ test('every body-code step has a real line height, unlike the one-row label-code
     assert.ok(step.lineHeight >= 1.5, `${name} line height ${step.lineHeight}`)
   }
 })
+
+test('a code the reader compares has one display step: 24px mono, a real line height, tabular figures', () => {
+  const step = typography['text-heading-code-md']
+  assert.equal(step.fontFamily, fontFamily.code)
+  assert.equal(step.fontSize, '1.5rem')
+  assert.ok(step.lineHeight > 1, `line height ${step.lineHeight}`)
+  assert.equal(step.fontVariantNumeric, 'tabular-nums')
+})

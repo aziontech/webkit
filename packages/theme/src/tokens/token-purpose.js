@@ -190,6 +190,8 @@ export const tokenPurpose = {
     'Wrapping or multi-line code at the 16px touch size, with a real line height.',
   'text-label-code-md': 'A monospace label such as a file name bar.',
   'text-label-code-lg': 'A large monospace label.',
+  'text-heading-code-md':
+    'A 24px monospace code the reader compares or copies by eye, such as a device code.',
   'text-body-lg': 'Lead paragraphs.',
   'text-body-md': 'Body copy.',
   'text-body-prose-md': 'Long-form prose at a relaxed line height.',

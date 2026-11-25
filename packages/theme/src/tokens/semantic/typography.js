@@ -192,6 +192,14 @@ export const typography = {
     fontWeight: fontWeight.normal,
     letterSpacing: tracking.wide
   },
+  'text-heading-code-md': {
+    fontFamily: fontFamily.code,
+    fontSize: fontSize['2xl'],
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.normal,
+    fontVariantNumeric: 'tabular-nums'
+  },
   'text-body-lg': {
     textWrapStyle: 'pretty',
     fontSize: { _: fontSize.base, md: fontSize.lg },
