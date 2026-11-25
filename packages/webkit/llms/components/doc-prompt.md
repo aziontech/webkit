@@ -77,7 +77,7 @@
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
-- Edge fades: the horizontal fades of a `line` prompt follow the prompt's own resolved direction (`data-direction` on each fade, `<testid>__fade-start` / `<testid>__fade-end`), not the page's, so an English prompt in a right-to-left page fades on its real clipped edge.
+- Edge fades: the horizontal fades of a `line` prompt follow the prompt's own resolved direction (the fade row takes that `dir`, and each fade, `<testid>__fade-start` / `<testid>__fade-end`, draws its gradient toward the text), not the page's, so an English prompt in a right-to-left page fades on its real clipped edge.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the prompt paragraph is `dir="auto"`: an English prompt runs left to right (its period stays at the end, the `line` shape opens on its first words) and an Arabic prompt still runs right to left.
 

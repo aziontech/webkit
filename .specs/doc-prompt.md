@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 8b2ea911bc4b290ebe9e1b8e57598e683abeed3bbd8bb3a827bf15ad25a91cfe
+checksum: 60a139dabe535600ed20f9be8f40b3e6ee8b425356e8d10bd43b2591c20091b3
 created: 2026-08-22
 last_updated: 2026-11-25
 ---
@@ -147,7 +147,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
-- Edge fades: the horizontal fades of a `line` prompt follow the prompt's own resolved direction (`data-direction` on each fade, `<testid>__fade-start` / `<testid>__fade-end`), not the page's, so an English prompt in a right-to-left page fades on its real clipped edge.
+- Edge fades: the horizontal fades of a `line` prompt follow the prompt's own resolved direction (the fade row takes that `dir`, and each fade, `<testid>__fade-start` / `<testid>__fade-end`, draws its gradient toward the text), not the page's, so an English prompt in a right-to-left page fades on its real clipped edge.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the prompt paragraph is `dir="auto"`: an English prompt runs left to right (its period stays at the end, the `line` shape opens on its first words) and an Arabic prompt still runs right to left.
 
