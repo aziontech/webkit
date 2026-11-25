@@ -116,6 +116,7 @@
     width: `${frame.value.width}px`,
     height: `${frame.value.height}px`,
     transform: `scale(${frame.value.scale})`,
+    ...(props.interactive ? { '--console-mockup-shell-scale': String(frame.value.scale) } : {}),
     ...(props.shell === 'legacy' ? CONSOLE_MOCKUP_SHELL_LEGACY_TOKENS : {})
   }))
 
@@ -228,7 +229,7 @@
   >
     <div
       :data-variant="variant"
-      class="absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[variant=window]:bg-(--bg-canvas)"
+      class="absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[variant=window]:bg-(--bg-canvas) pointer-coarse:[&_[data-slot=touch-target]]:[scale:calc(1/var(--console-mockup-shell-scale,1))]"
       :style="frameStyle"
     >
       <Texture
