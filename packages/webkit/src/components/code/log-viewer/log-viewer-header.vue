@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, useAttrs } from 'vue'
+  import { computed, onScopeDispose, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -26,11 +26,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer-header')
 
-  let unregister = (): void => {}
-  onMounted(() => {
-    unregister = ctx.registerHeader()
-  })
-  onScopeDispose(() => unregister())
+  onScopeDispose(ctx.registerHeader())
 
   const showCopy = computed<boolean>(
     () => ctx.copyable.value && !ctx.loading.value && !ctx.error.value
