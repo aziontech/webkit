@@ -7,6 +7,7 @@ import { h } from 'vue'
 import DeviceAuthorization from '../../blocks/auth/auth-sign-in/variants/device-authorization.vue'
 import ConversationHistoryRichRows from '../../examples/conversation-history/rich-rows.vue'
 import PromptInputDefault from '../../examples/prompt-input/default.vue'
+import StreamingResponse from '../components/ai/streaming-response/streaming-response.vue'
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
 
@@ -49,5 +50,21 @@ describe('the conversation history toolbar in a sidebar', () => {
     )
     await frame()
     expect(label.scrollWidth).toBeLessThanOrEqual(label.clientWidth + 1)
+  })
+})
+
+describe('inline code in an AI response', () => {
+  it('draws each line of a wrapped chip as a whole chip', async () => {
+    const view = render(() =>
+      h('div', { style: 'width: 180px' }, [
+        h(StreamingResponse, {
+          content: 'Build `build-2026-11-24-b-4821-storefront` finished on the second try.'
+        })
+      ])
+    )
+    await frame()
+    const code = view.container.querySelector('code')!
+    expect(code.getClientRects().length).toBeGreaterThan(1)
+    expect(getComputedStyle(code).boxDecorationBreak).toBe('clone')
   })
 })
