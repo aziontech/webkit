@@ -247,10 +247,10 @@ export const ptBR: Messages = {
     addGroup: 'Adicionar grupo OU',
     emptyTitle: 'Nenhum item ainda.',
     remaining: {
-      one: 'Você pode adicionar mais {count} item.',
-      other: 'Você pode adicionar mais {count} itens.'
+      one: 'Você pode adicionar mais {count}.',
+      other: 'Você pode adicionar mais {count}.'
     },
-    limitReached: 'Você atingiu o limite de {limit} itens.',
+    limitReached: 'Você atingiu o limite de {limit}.',
     added: 'Item {index} adicionado.',
     removed: 'Item {index} removido.',
     group: 'Grupo {index}',

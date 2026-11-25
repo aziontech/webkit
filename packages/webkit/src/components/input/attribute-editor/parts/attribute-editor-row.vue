@@ -38,7 +38,7 @@
 
   const errors = computed(() => ctx.rowErrors(props.index, props.groupIndex))
   const place = computed(() => ({ index: ctx.position(props.index, props.groupIndex) }))
-  const removeText = computed(() => ctx.removeLabel(place.value.index))
+  const removeText = computed(() => ctx.removeLabel(place.value.index, props.item))
   const update = (key: string, value: unknown) =>
     ctx.update(props.index, props.groupIndex, key, value)
   const remove = (event: MouseEvent | KeyboardEvent) =>

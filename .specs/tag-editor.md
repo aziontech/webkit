@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: aa4e5e79e29710ae6d9e1e1af50a16e6afbcf7a533f98c6d7acf6018931f0801
+checksum: b328de6c44cd202d255f296dff6213ee7657f84e604becdd9c6ab3c9ee47d249
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-25
 ---
 
 # TagEditor — Component Spec
@@ -126,7 +126,7 @@ _none_
 
 - Visible focus: every control keeps its own ring.
 - Keyboard map: as `attribute-editor`; suggestions open with the browser's native `datalist` keys (ArrowDown, Enter, Escape).
-- ARIA: rows, labels, errors and announcements come from `attribute-editor`; Undo is named "Undo removal of tag n"; a marked tag keeps a visible note ("This tag will be removed when you save.").
+- ARIA: rows, labels, errors and announcements come from `attribute-editor`; Remove and Undo are named by the tag key ("Remove tag env", "Undo removal of tag env"), by position only while the key is empty; a marked tag keeps a visible note ("This tag will be removed when you save.").
 - Contrast ≥4.5:1 from the semantic text tokens.
 - Touch target: Remove and Undo are 32 px buttons (`medium`).
 - Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error` (plus `requiredId` when required), `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.

@@ -45,11 +45,22 @@ describe('TagEditor', () => {
 
   it('marks a saved tag for removal and restores it with Undo', async () => {
     const view = render(Harness([{ key: 'team', value: 'payments', existing: true }]))
-    await fireEvent.click(view.getByRole('button', { name: 'Remove tag 1' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Remove tag team' }))
     expect(view.getByTestId('tag-editor__marked').textContent).toContain('removed when you save')
     expect(keys(view)[0]?.disabled).toBe(true)
-    await fireEvent.click(view.getByRole('button', { name: 'Undo removal of tag 1' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Undo removal of tag team' }))
     expect(view.queryByTestId('tag-editor__marked')).toBeNull()
+  })
+
+  it('names Remove by the tag key, and by position only while the key is empty', () => {
+    const view = render(
+      Harness([
+        { key: 'env', value: 'dev' },
+        { key: '', value: '' }
+      ])
+    )
+    expect(view.getByRole('button', { name: 'Remove tag env' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Remove tag 2' })).toBeTruthy()
   })
 
   it('falls back to the input-tag-editor test id and lets a passed one win', () => {
@@ -67,13 +78,13 @@ describe('TagEditor', () => {
 
   it('keeps its own tags when v-model:tags is not bound', async () => {
     const view = render(TagEditor, { props: { tags: [{ key: 'env', value: 'dev' }] } })
-    await fireEvent.click(view.getByRole('button', { name: 'Remove tag 1' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Remove tag env' }))
     expect(view.getByText('No tags associated with the resource.')).toBeTruthy()
   })
 
   it('deletes a new tag on Remove', async () => {
     const view = render(Harness([{ key: 'env', value: 'dev' }]))
-    await fireEvent.click(view.getByRole('button', { name: 'Remove tag 1' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Remove tag env' }))
     expect(view.getByText('No tags associated with the resource.')).toBeTruthy()
   })
 

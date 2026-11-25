@@ -225,7 +225,9 @@
         <Button
           v-if="item.markedForRemoval"
           :label="t('tagEditor.undo')"
-          :aria-label="t('tagEditor.undoLabel', { index: index + 1 })"
+          :aria-label="
+            t('tagEditor.undoLabel', { index: String(item.key ?? '').trim() || index + 1 })
+          "
           variant="ghost"
           size="medium"
           :disabled="isDisabled || left === 0"

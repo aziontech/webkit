@@ -247,10 +247,10 @@ export const es: Messages = {
     addGroup: 'Agregar grupo O',
     emptyTitle: 'Todavía no hay elementos.',
     remaining: {
-      one: 'Puedes agregar {count} elemento más.',
-      other: 'Puedes agregar {count} elementos más.'
+      one: 'Puedes agregar {count} más.',
+      other: 'Puedes agregar {count} más.'
     },
-    limitReached: 'Alcanzaste el límite de {limit} elementos.',
+    limitReached: 'Alcanzaste el límite de {limit}.',
     added: 'Elemento {index} agregado.',
     removed: 'Elemento {index} quitado.',
     group: 'Grupo {index}',
