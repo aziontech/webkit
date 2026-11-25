@@ -89,7 +89,15 @@ describe('view/view-marketplace block', () => {
     await waitFor(() =>
       expect(within(drawer).getByText(/wasn't installed on checkout/)).toBeTruthy()
     )
-    expect(within(drawer).getByRole('button', { name: 'Reinstall' })).toBeTruthy()
+    expect(within(drawer).getAllByRole('button', { name: 'Reinstall' })).toHaveLength(1)
+    expect(within(drawer).queryByRole('button', { name: 'Install' })).toBeNull()
+    await fireEvent.click(
+      within(drawer).getByRole('button', { name: 'Choose another application' })
+    )
+    const field = within(drawer).getByText('Application').closest('[data-testid="field"]')
+    await waitFor(() => expect(field?.contains(document.activeElement)).toBe(true))
+    const summary = 'Sign every request with a rotating key'
+    expect(within(drawer).getAllByText((text) => text.startsWith(summary))).toHaveLength(1)
     expect(toastWith("Request Signer wasn't installed on checkout.")).toBeFalsy()
     await fireEvent.click(drawer.querySelector<HTMLButtonElement>('[data-testid="drawer__close"]')!)
     const toast = await waitFor(() => {

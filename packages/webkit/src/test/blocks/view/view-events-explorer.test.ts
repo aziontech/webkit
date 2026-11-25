@@ -58,9 +58,29 @@ describe('view/view-events-explorer block', () => {
     await waitFor(() => expect(zone.textContent).toContain('UTC−03:00 · Sao Paulo'))
   })
 
+  it('names the level colours of the volume chart in a legend, not only in the tooltip', async () => {
+    const view = render(ViewEventsExplorer)
+    const legend = await waitFor(() => view.getByTestId('chart-legend'))
+    const names = within(legend)
+      .getAllByRole('button')
+      .map((item) => item.textContent?.trim())
+    expect(names).toEqual(expect.arrayContaining(['Error', 'Warning', 'Info']))
+  })
+
+  it('names each open button from the message and time the reader sees, not the event id', async () => {
+    const view = render(ViewEventsExplorer, {
+      props: { now, events: [record('ev-acme', 'Acme checkout failed')] }
+    })
+    const open = await waitFor(() =>
+      view.getByRole('button', { name: /^Open event: Acme checkout failed, / })
+    )
+    expect(open.getAttribute('aria-label')).not.toContain('ev-acme')
+    expect(open.getAttribute('aria-label')).toMatch(/\d{2}:\d{2}:\d{2}$/)
+  })
+
   it('opens an event from its detail button, a keyboard path to the document', async () => {
     const view = render(ViewEventsExplorer)
-    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event: / }))
     expect(open).toHaveAttribute('aria-expanded', 'false')
     await fireEvent.click(open)
     await waitFor(() => expect(open).toHaveAttribute('aria-expanded', 'true'))
@@ -80,7 +100,9 @@ describe('view/view-events-explorer block', () => {
         ]
       }
     })
-    const open = await waitFor(() => view.getByRole('button', { name: 'Open event ev-trace' }))
+    const open = await waitFor(() =>
+      view.getByRole('button', { name: /^Open event: Origin slow, / })
+    )
     await fireEvent.click(open)
     const [trace] = await waitFor(() =>
       view.getAllByRole('treegrid', { name: 'Trace of request req-1' })
@@ -90,7 +112,7 @@ describe('view/view-events-explorer block', () => {
       'request',
       'origin'
     ])
-    await fireEvent.click(view.getByRole('button', { name: 'Open event ev-plain' }))
+    await fireEvent.click(view.getByRole('button', { name: /^Open event: Rule matched, / }))
     await waitFor(() => expect(view.queryAllByRole('treegrid')).toHaveLength(0))
   })
 
@@ -108,7 +130,7 @@ describe('view/view-events-explorer block', () => {
     })
     await waitFor(() => expect(view.container.textContent).toContain('Acme checkout failed'))
     expect(view.container.textContent).not.toContain('Delivered from cache')
-    expect(view.getAllByRole('button', { name: /^Open event / })).toHaveLength(1)
+    expect(view.getAllByRole('button', { name: /^Open event: / })).toHaveLength(1)
     view.unmount()
     const empty = render(EventsExplorerEmpty)
     await waitFor(() => expect(empty.container.textContent).toContain('No events yet'))
@@ -202,7 +224,9 @@ describe('view/view-events-explorer block', () => {
     const view = render(ViewEventsExplorer, { props: { now, events: [given] } })
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     expect(view.emitted('refresh')).toHaveLength(1)
-    const open = await waitFor(() => view.getByRole('button', { name: 'Open event ev-acme' }))
+    const open = await waitFor(() =>
+      view.getByRole('button', { name: /^Open event: Acme checkout failed, / })
+    )
     await fireEvent.click(open)
     const selected = view.emitted('select') as [MouseEvent, EventsExplorerEvent][]
     expect(selected).toHaveLength(1)
@@ -275,7 +299,7 @@ describe('view/view-events-explorer block', () => {
   it('opens the event drawer on a phone without focusing a search field', async () => {
     await page.viewport(390, 844)
     const view = render(ViewEventsExplorer)
-    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event: / }))
     await fireEvent.click(open!)
     const drawer = await waitFor(() => document.querySelector<HTMLElement>('[role="dialog"]')!)
     await waitFor(() => expect(drawer.contains(document.activeElement)).toBe(true))
@@ -290,7 +314,7 @@ describe('view/view-events-explorer block', () => {
 
   it('runs its typed query on the log through the block (Query)', async () => {
     const view = render(EventsExplorerQuery)
-    const opens = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    const opens = await waitFor(() => view.getAllByRole('button', { name: /^Open event: / }))
     const rows = opens.map((button) => button.closest<HTMLElement>('tr, [role="row"]')!)
     for (const row of rows) {
       expect(row.textContent).toContain('Error')

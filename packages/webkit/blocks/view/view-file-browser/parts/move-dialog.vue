@@ -76,7 +76,9 @@
         >
           <ul
             aria-label="Files to move"
-            class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
+            tabindex="-1"
+            data-autofocus
+            class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0 outline-none"
           >
             <li
               v-for="item in moving"

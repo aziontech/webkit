@@ -62,7 +62,7 @@ describe('view/view-waf-tuning block', () => {
     expect(event).toBeInstanceOf(MouseEvent)
   })
 
-  it('renders the matches it is given instead of the sample, and No matches yet for none', async () => {
+  it('renders the matches it is given instead of the sample, and names the range when none match', async () => {
     const view = render(ViewWafTuning, {
       props: {
         matches: [
@@ -80,7 +80,10 @@ describe('view/view-waf-tuning block', () => {
     expect(view.getByText('Path traversal')).toBeTruthy()
     expect(view.queryByText('SQL injection')).toBeNull()
     await view.rerender({ matches: [] })
-    expect(view.getByText('No matches yet')).toBeTruthy()
+    expect(view.getByText('No matches in the last 24 hours')).toBeTruthy()
+    expect(view.getByRole('combobox', { name: 'Time range' })).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Show the last 7 days' }))
+    expect(view.emitted('update:range')?.at(-1)).toEqual(['7d'])
   })
 
   it('emits refresh from the Refresh button', async () => {

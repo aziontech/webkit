@@ -158,8 +158,8 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 - Default: resources exist; the table shows them with the property filter, refresh, export, preferences, sorting and pagination wired, and filtering to nothing shows No matching resources with Clear filters.
 - Empty: every resource was deleted on an account that is not new (`resources` is `[]`); `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
 - Loading: the first load (`loading` with no `resources`); the heading stays, the filter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows.
-- Error: the resources could not load (`error` is set); the heading and the disabled controls stay, and a danger `Alert` with the message and Retry takes the table's place.
-- Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy (queues a new run, with a toast) and Promote to production (asks first), and Refresh, no match and empty behave as in Default and Empty.
+- Error: the resources could not load (`error` is set); the heading and the disabled controls stay, and a danger `Alert` with the message and Retry takes the table's place. Every view block's error state follows one rule: the filter or search stays in place, disabled; Download CSV and the preferences are disabled; Refresh stays live.
+- Deployments: the deployments list with Version (Current tag; the version never truncates, the tag wraps under it when the column is narrow), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy (queues a new run, with a toast) and Promote to production (asks first), and Refresh, no match and empty behave as in Default and Empty.
 
 ## Related
 

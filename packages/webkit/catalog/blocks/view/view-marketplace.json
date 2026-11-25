@@ -17,7 +17,7 @@
   },
   {
    "name": "InstallError",
-   "summary": "The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall.",
+   "summary": "The install failed on checkout: the danger Alert with the reason and Choose another application, the footer submit reading Reinstall, and the permanent failure toast with Edit and Reinstall.",
    "file": "blocks/view/view-marketplace/variants/install-error.vue"
   },
   {

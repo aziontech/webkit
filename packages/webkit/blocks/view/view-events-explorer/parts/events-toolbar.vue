@@ -18,9 +18,11 @@
     loading: boolean
     /** Download CSV is not available yet. */
     exportDisabled: boolean
+    /** Nothing is loaded to filter: the filter and the search show, disabled. */
+    disabled?: boolean
   }
 
-  defineProps<EventsToolbarProps>()
+  withDefaults(defineProps<EventsToolbarProps>(), { disabled: false })
 
   const emit = defineEmits<{
     refresh: [event: MouseEvent]
@@ -44,6 +46,7 @@
       <FilterMenu
         v-model="filters"
         :fields="menuFields"
+        :disabled="disabled"
         class="shrink-0"
         data-testid="filter-button"
       />
@@ -52,6 +55,7 @@
           ref="searchEl"
           v-model="search"
           size="medium"
+          :disabled="disabled"
           placeholder="Search events, hosts, paths or addresses"
           aria-keyshortcuts="/"
           aria-label="Search events"

@@ -257,6 +257,7 @@
           :time-zone="timeZone"
           :loading="loading"
           :export-disabled="!tableEl"
+          :disabled="error !== ''"
           @refresh="(event: MouseEvent) => emit('refresh', event)"
           @export="exportCsv"
         />
