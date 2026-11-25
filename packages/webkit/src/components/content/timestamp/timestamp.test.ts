@@ -82,6 +82,26 @@ describe('Timestamp', () => {
     expect(text).toMatch(/UTC/)
   })
 
+  it('shows only the hour and minute in the time format, and keeps the full value', async () => {
+    render(
+      inProvider(
+        { value: VALUE, format: 'time' },
+        { locale: 'en-US', timeZone: 'America/New_York' }
+      )
+    )
+
+    const root = screen.getByTestId('timestamp')
+    expect(root).toHaveAttribute('data-format', 'time')
+    const time = root.querySelector('time')
+    expect(time?.textContent).toMatch(/^7:04\sAM$/)
+    expect(time).toHaveAttribute('datetime', ISO)
+
+    await userEvent.click(screen.getByTestId('timestamp__text'))
+    const local = panel()?.querySelector('[data-row="local"]')
+    expect(local?.textContent).toMatch(/Nov 14, 2026/)
+    expect(local?.textContent).toMatch(/07:04:31/)
+  })
+
   it('joins the date and the time itself, so every browser engine writes the same text', () => {
     render(inProvider({ value: VALUE, format: 'utc' }, { locale: 'en-US' }))
 

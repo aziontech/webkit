@@ -15,7 +15,7 @@
   defineOptions({ name: 'Timestamp', inheritAttrs: false })
 
   /** What the text of the timestamp shows. */
-  export type TimestampFormat = 'relative' | 'local' | 'utc'
+  export type TimestampFormat = 'relative' | 'local' | 'utc' | 'time'
 
   export interface TimestampProps {
     /**
@@ -24,7 +24,7 @@
      * no panel.
      */
     value?: string | number | Date
-    /** What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form. */
+    /** What the text shows: the relative phrase that updates every minute, the date and time in the time zone, the date and time in UTC, or only the hour and minute in the time zone (for a row under a date header). The panel always lists every form. */
     format?: TimestampFormat
     /** IANA time zone of the local time (`America/New_York`). Empty reads the nearest `ConfigProvider`'s `time-zone`, then the browser's zone. */
     timeZone?: string
@@ -46,6 +46,11 @@
     minute: '2-digit',
     second: '2-digit',
     timeZoneName: 'short'
+  }
+
+  const CLOCK: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: '2-digit'
   }
 
   const attrs = useAttrs()
@@ -82,9 +87,18 @@
   )
   const utc = computed<string>(() => (date.value ? inZone(date.value, 'UTC') : ''))
   const local = computed<string>(() => (date.value ? inZone(date.value, zone.value) : ''))
+  const clock = computed<string>(() => {
+    if (!date.value) return ''
+    try {
+      return formatDate(date.value, { ...CLOCK, ...(zone.value ? { timeZone: zone.value } : {}) })
+    } catch {
+      return formatDate(date.value, { ...CLOCK, timeZone: 'UTC' })
+    }
+  })
   const text = computed<string>(() => {
     if (props.format === 'relative') return relative.value
     if (props.format === 'utc') return utc.value
+    if (props.format === 'time') return clock.value
     return local.value
   })
 

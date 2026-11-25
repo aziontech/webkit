@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useId } from 'vue'
+  import { computed, provide, useAttrs, useId } from 'vue'
 
   import { useTimelineContext } from '../composables/use-timeline-context'
+  import { TimelineGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TimelineGroup',
@@ -25,6 +26,8 @@
   const attrs = useAttrs()
   const { size } = useTimelineContext()
   const labelId = useId()
+
+  provide(TimelineGroupInjectionKey, { grouped: true })
 
   const testId = computed(() => String(attrs['data-testid'] ?? 'timeline-group'))
 </script>
