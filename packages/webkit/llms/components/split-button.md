@@ -102,7 +102,7 @@
 ## Responsive
 
 - The control never wraps; on narrow screens keep the label short or move the actions into a `DropdownMenu` behind an `IconButton`.
-- Touch: both segments use the Button and IconButton touch-target spans (44 px tall on a coarse pointer); the spans grow only vertically, so a tap on the edge of one segment never opens or fires the other.
+- Touch: both segments use the Button and IconButton touch-target spans (44 px tall on a coarse pointer); the spans grow only vertically, so a tap on the edge of one segment never opens or fires the other. The menu segment is at least 44px wide on a coarse pointer (`pointer-coarse:min-w-11`), so its target is 44 × 44 at every size.
 
 ## Examples
 
@@ -144,7 +144,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <SplitButton
       variant="primary"
       label="Primary"
@@ -178,7 +178,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <SplitButton
       size="small"
       label="Small"

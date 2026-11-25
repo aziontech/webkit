@@ -11939,7 +11939,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
-- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers.
+- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers. The root is `relative`, so the hidden region is positioned against the button and never extends the page when the button sits deep in a scrolling pane.
 - Attributes: consumer `class`, `id`, `aria-describedby` and listeners land on the root `span` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
@@ -12242,6 +12242,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
+- While inert, a `ghost` or `outline` button keeps its transparent fill (an `outline` keeps its `--border-default` frame) and only its glyph takes `--text-disabled`, so an unavailable control is never louder than the enabled ones beside it; the filled variants take `--bg-disabled`
 - `data-variant` mirrors `variant` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
 - `IconButtonType` is exported beside `IconButtonVariant`, `IconButtonSize` and `IconButtonTarget`
 - Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.
@@ -24697,7 +24698,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 - Visible focus: the root is focusable only by script (`tabindex="-1"`, `outline-none`) and never in the tab order; the Retry button carries the `Button` focus ring.
 - Keyboard map: `Tab` reaches the Retry action in the fallback; `Enter` / `Space` runs it. No key handling of its own.
-- Focus: when the region fails while focus was inside it (or had fallen to the document body), focus moves to the fallback `Alert`, which is announced. After a retry from inside the boundary, focus moves to the boundary's root so it is not lost to the body.
+- Focus: when the region fails while focus was inside it, or focus falls to the document body or sits on a control the failure disabled, focus moves to the fallback `Alert`, which is announced; with a custom `fallback` it moves to the boundary's root, so the reader lands on the custom message and its actions. After a retry from inside the boundary, focus moves to the boundary's root so it is not lost to the body.
 - ARIA: the built-in fallback is an `Alert` with `role="alert"` (danger), so the failure is announced once when it appears. A custom fallback is responsible for its own announcement (`EmptyState` is `role="status"`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): inherited from the `alert` danger tokens.
 - No motion.
@@ -24744,7 +24745,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 </script>
 
 <template>
-  <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
+  <div class="flex w-full max-w-(--container-lg) flex-col gap-(--spacing-sm)">
     <Card title="Top services">
       <template #default>
         <ErrorBoundary
@@ -24929,7 +24930,10 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 </script>
 
 <template>
-  <Progress :value="60" />
+  <Progress
+    :value="60"
+    aria-label="Uploading site-assets.zip"
+  />
 </template>
 ```
 
@@ -25257,7 +25261,8 @@ The imperative API is backed by a small reactive store composable, declared here
 - `data-removing` on a `Toaster` item while its exit transition runs (switches the transition to the exit token).
 - Progress: an entry with `progress` (set by `toast.progress(message, value, options?)`, which defaults `duration` to `0`) renders `__progress` under the copy: a rounded `Progress` bar named by the toast message (`role="progressbar"`, `aria-valuenow` clamped to 0–100) and the percentage formatted with `Intl.NumberFormat` (`style: 'percent'`) in the provider's locale, `aria-hidden` so the region does not announce every step. A later call with the same `id` replaces the entry in place; a typed toast with that `id` drops the bar.
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `start`/`center`/`end`, where `start` is the left edge under `ltr` and the right edge under `rtl`) and the enter/leave translate direction.
-- Bottom offset: a `bottom-*` region sits `var(--spacing-md)` above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
+- Safe areas: every inset is `max(var(--spacing-md), env(safe-area-inset-<edge>))`, so on a phone with a notch or a home indicator (`viewport-fit=cover`) the stack stays clear of the status bar, the indicator and a landscape notch.
+- Bottom offset: a `bottom-*` region sits that inset above the viewport bottom plus `--toast-offset-bottom` (set by the app for its own bottom chrome) plus `--save-bar-height` (published by a mounted `SaveBar`), so a toast never covers either. Test: `src/test/save-bar-toast.test.ts`.
 - `data-state="open|closed"` on each `Toaster` region: `open` while the stack is laid out expanded (the `expand` prop, hover or focus), `closed` while it overlaps into a peek.
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
 - Announcements go through the two hidden live regions: `danger` to `__live-assertive`, every other severity to `__live-polite`; items inside a Toaster carry no role of their own and the visible regions are not live, so each toast is announced once and never twice. A `ToastItem` rendered outside a Toaster keeps `role="status"` (or `role="alert"` for `danger`). Focus is never stolen (the region is not focused on mount). Tests: `toast.test.ts` › live region (spec), Escape dismisses the focused toast.
@@ -25285,8 +25290,8 @@ The imperative API is backed by a small reactive store composable, declared here
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
-    toast('Event has been created', {
-      description: 'Sunday, December 03, 2023 at 9:00 AM',
+    toast('Application deleted', {
+      description: 'acme-store was removed from your account.',
       action: { label: 'Undo', onClick: () => {} }
     })
 </script>
@@ -25294,7 +25299,8 @@ The imperative API is backed by a small reactive store composable, declared here
 <template>
   <Toaster position="bottom-end" />
   <Button
-    label="Show toast"
+    label="Delete application"
+    variant="outline"
     @click="show"
   />
 </template>
@@ -34098,6 +34104,7 @@ packages/webkit/src/components/overlay/command/
 
 ```vue
 <script setup>
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -34142,6 +34149,7 @@ packages/webkit/src/components/overlay/command/
           >Toggle theme</CommandItem
         >
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>
@@ -34173,7 +34181,7 @@ packages/webkit/src/components/overlay/command/
 - `variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
 - Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.
 - Typed confirmation has one rule everywhere: the reader types the resource name (`confirmation-phrase`), the match is case-sensitive after trimming the ends, the confirm button stays disabled until it matches, `Enter` in the field confirms once it matches, and the field empties every time the dialog opens. Do not hand-write the field.
-- Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`.
+- Below `md` the buttons stack full width in DOM and focus order, Cancel above and the confirm button last at the bottom nearest the thumb, the same order as `save-bar`, `Dialog` and `Drawer` footers.
 
 ## Don’t
 
@@ -34224,14 +34232,14 @@ packages/webkit/src/components/overlay/command/
 
 ## States
 
-- Visual states: `closed`, `open`
+- Visual states: `closed`, `open`; with `confirmationPhrase`, the field is `invalid` after `Enter` on a phrase that does not match
 - `data-state` on the root: `open` | `closed` (from `dialog`)
 
 ## Accessibility
 
 - Visible focus: owned by the buttons and `dialog`.
 - Keyboard map: with `confirmationPhrase`, focus lands on the phrase field (the confirm button is disabled until it matches), and `Enter` in the field confirms once the text matches. Otherwise, on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
-- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). It turns off spellcheck, autocomplete, autocapitalize and autocorrect, so a phone keyboard never changes the case of a typed name the match then rejects. Tests: `confirm-dialog.test.ts` › typed confirmation.
+- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). It turns off spellcheck, autocomplete, autocapitalize and autocorrect, so a phone keyboard never changes the case of a typed name the match then rejects. Pressing `Enter` with a non-empty phrase that does not match marks the field invalid and shows "This does not match `name`. Type it exactly to confirm." under it (`confirmDialog.phraseMismatch`, `role="alert"`, tied to the field by `aria-describedby`); the message clears on the next keystroke and when the dialog opens. Tests: `confirm-dialog.test.ts` › typed confirmation.
 - ARIA: the panel is `role="alertdialog"` (it interrupts with a decision), named by its title and described by its description (`DialogTitle`, `DialogDescription`; `aria-describedby` only when a description renders).
 - Nested: opened from a `Drawer` or a `Dialog`, it is the top overlay layer, so `Esc` closes the confirm only, and while `loading` it closes nothing.
 - Contrast ≥4.5:1, owned by the composed parts.
@@ -34253,7 +34261,7 @@ packages/webkit/src/components/overlay/command/
   <ConfirmDialog
     v-model:open="open"
     title="Remove domain"
-    description="shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response."
+    description="Traffic sent to shop.example.com stops getting a response. You can add the domain again later."
     confirm-label="Remove domain"
     @confirm="open = false"
   >
@@ -34383,9 +34391,12 @@ packages/webkit/src/components/overlay/command/
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
   const open = ref(false)
+  const name = ref('')
 </script>
 
 <template>
@@ -34396,18 +34407,28 @@ packages/webkit/src/components/overlay/command/
   >
     <Dialog.Trigger>
       <Button
-        label="Open dialog"
+        label="Rename application"
         variant="primary"
       />
     </Dialog.Trigger>
     <Dialog.Content>
       <Dialog.Header class="w-full">
-        <Dialog.Title>Dialog Title</Dialog.Title>
+        <Dialog.Title>Rename application</Dialog.Title>
       </Dialog.Header>
       <Dialog.Body>
-        <Dialog.Description>
-          Modal content. Uses the shared Panel header, body, and footer regions.
-        </Dialog.Description>
+        <div class="flex flex-col gap-(--spacing-md)">
+          <Dialog.Description>
+            The new name shows in the console and in the API. URLs and domains do not change.
+          </Dialog.Description>
+          <Field>
+            <Field.Label>Name</Field.Label>
+            <Input
+              v-model="name"
+              name="name"
+              autocomplete="off"
+            />
+          </Field>
+        </div>
       </Dialog.Body>
       <Dialog.Footer>
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
@@ -34417,8 +34438,9 @@ packages/webkit/src/components/overlay/command/
             @click="open = false"
           />
           <Button
-            label="Save"
+            label="Rename"
             variant="primary"
+            @click="open = false"
           />
         </div>
       </Dialog.Footer>
@@ -34558,17 +34580,17 @@ packages/webkit/src/components/overlay/command/
   >
     <Drawer.Trigger>
       <Button
-        label="Open drawer"
+        label="Edit cache settings"
         variant="primary"
       />
     </Drawer.Trigger>
     <Drawer.Content>
       <Drawer.Header class="w-full">
-        <Drawer.Title>Drawer Title</Drawer.Title>
+        <Drawer.Title>Cache settings</Drawer.Title>
       </Drawer.Header>
       <Drawer.Body>
         <Drawer.Description>
-          Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
+          Choose how long edge nodes keep a copy of each response before they ask the origin again.
         </Drawer.Description>
       </Drawer.Body>
       <Drawer.Footer>
@@ -34581,6 +34603,7 @@ packages/webkit/src/components/overlay/command/
           <Button
             label="Save"
             variant="primary"
+            @click="open = false"
           />
         </div>
       </Drawer.Footer>
@@ -34798,7 +34821,7 @@ packages/webkit/src/components/overlay/command/
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
 - `data-width` on the root carries the resolved width: `small` | `medium` | `large`, the same with `-md` when `sizeAtMd` is set, or `fluid` when the internal `data-fluid` attribute is passed (Drawer). Tailwind `data-[width=…]:` variants map it to the container tokens; there is no JS class map.
-- Responsive: `PanelBody` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`. A footer the consumer stacks as a column (`flex-col`) keeps every child at its own height (`max-sm:[&.flex-col]:*:flex-none`), so stacked buttons never collapse below their drawn height.
+- Responsive: `PanelBody` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`. A footer the consumer stacks as a column (`flex-col`) keeps every child at its own height (`max-sm:[&.flex-col]:*:flex-none`), so stacked buttons never collapse below their drawn height. Stacked actions keep DOM order, with the primary action last, at the bottom nearest the thumb, so the screen order is the focus order in every Dialog, Drawer and ConfirmDialog footer.
 
 ## Accessibility
 
@@ -35143,7 +35166,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 </script>
 
 <template>
-  <div class="flex w-full max-w-md flex-col gap-(--spacing-md)">
+  <div class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)">
     <Input
       ref="searchEl"
       aria-label="Search domains"
@@ -35264,17 +35287,18 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>
   <Tooltip
-    content="This is a Tooltip"
+    content="Copies the request ID to the clipboard"
     side="top"
   >
-    <Button
-      label="Hover me"
+    <IconButton
+      icon="az az-copy"
+      aria-label="Copy request ID"
       variant="outline"
       size="medium"
     />

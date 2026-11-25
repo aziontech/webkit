@@ -171,7 +171,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-4">
+  <div class="flex flex-col items-start gap-(--spacing-md)">
     <ToggleGroup
       :options="options"
       default-value="day"

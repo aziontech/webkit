@@ -173,7 +173,7 @@ packages/webkit/src/components/overlay/command/
 
 ## Responsive
 
-- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
+- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet. Below `sm` the sheet shows a header row with the visible title (`Command menu` from the locale catalog) beside the close button, so the row is never an empty band; from `sm` up that row is hidden and the title stays the dialog's name.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
 - Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate. The keycaps (the input's `Esc` hint and every item `shortcut` hint) hide on a coarse pointer (`pointer-coarse:hidden`), since a phone has no key to press.
 
@@ -183,6 +183,7 @@ packages/webkit/src/components/overlay/command/
 
 ```vue
 <script setup>
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -227,6 +228,7 @@ packages/webkit/src/components/overlay/command/
           >Toggle theme</CommandItem
         >
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>
@@ -237,6 +239,7 @@ packages/webkit/src/components/overlay/command/
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -295,6 +298,7 @@ packages/webkit/src/components/overlay/command/
         </CommandItem>
         <CommandItem value="logout">Log out</CommandItem>
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>
@@ -305,6 +309,7 @@ packages/webkit/src/components/overlay/command/
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -345,6 +350,7 @@ packages/webkit/src/components/overlay/command/
           >Close overlay</CommandItem
         >
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>

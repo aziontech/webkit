@@ -91,17 +91,18 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>
   <Tooltip
-    content="This is a Tooltip"
+    content="Copies the request ID to the clipboard"
     side="top"
   >
-    <Button
-      label="Hover me"
+    <IconButton
+      icon="az az-copy"
+      aria-label="Copy request ID"
       variant="outline"
       size="medium"
     />
@@ -178,7 +179,7 @@
 <template>
   <div class="relative h-[28rem] w-full border border-dashed border-(--border-muted)">
     <p
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-body-sm text-(--text-muted) text-center max-w-(--container-md)"
     >
       All four triggers use <code>side="auto"</code>.<br />
       Hover or focus a trigger: its tooltip resolves to the side with the most room.

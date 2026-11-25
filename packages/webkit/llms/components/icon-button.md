@@ -65,6 +65,7 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
+- While inert, a `ghost` or `outline` button keeps its transparent fill (an `outline` keeps its `--border-default` frame) and only its glyph takes `--text-disabled`, so an unavailable control is never louder than the enabled ones beside it; the filled variants take `--bg-disabled`
 - `data-variant` mirrors `variant` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
 - `IconButtonType` is exported beside `IconButtonVariant`, `IconButtonSize` and `IconButtonTarget`
 - Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.
@@ -123,7 +124,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <IconButton
       variant="primary"
       icon="az az-plus"
@@ -161,7 +162,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <div class="flex flex-wrap items-center gap-(--spacing-md)">
     <IconButton
       size="small"
       icon="az az-plus"

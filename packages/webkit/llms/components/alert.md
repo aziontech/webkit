@@ -132,7 +132,7 @@
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-4">
+  <div class="flex w-full flex-col gap-(--spacing-md)">
     <Alert
       severity="info"
       label="Your workload finished deploying in 42 seconds."
@@ -165,7 +165,7 @@
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-4">
+  <div class="flex w-full flex-col gap-(--spacing-md)">
     <Alert
       severity="info"
       size="small"
