@@ -119,6 +119,24 @@ describe('FileTokenGroup', () => {
     await waitFor(() => expect(document.activeElement).toBe(view.getByRole('list')))
   })
 
+  it('names the button Cancel upload and states the amount while a file uploads', () => {
+    const view = render(FileTokenGroup, {
+      props: {
+        items: [
+          { file: { name: 'app.js', size: 1024 }, loading: true, progress: 64 },
+          { file: { name: 'styles.css' }, loading: true },
+          { file: { name: 'done.txt' } }
+        ]
+      }
+    })
+    expect(view.getByRole('button', { name: 'Cancel upload of app.js' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Cancel upload of styles.css' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Remove done.txt' })).toBeTruthy()
+    const meta = view.getAllByTestId('file-token-group__meta').map((el) => el.textContent ?? '')
+    expect(meta[0]).toContain('64%')
+    expect(meta[1]).toContain('Uploading…')
+  })
+
   it('shows a progress bar while loading', () => {
     const view = render(Uploading)
     const bars = view.getAllByRole('progressbar')

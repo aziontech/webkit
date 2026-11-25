@@ -579,6 +579,9 @@ export const fileTokenGroup = {
   label: 'Files',
   remove: 'Remove {name}',
   uploading: 'Uploading {name}',
+  cancelUpload: 'Cancel upload of {name}',
+  uploadProgress: '{percent}%',
+  uploadPending: 'Uploading…',
   modified: 'Modified {date}',
   showMore: {
     one: 'Show {count} more file',

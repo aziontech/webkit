@@ -122,9 +122,9 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - The root is a `ul` (`role="list"`) named by `ariaLabel` or the catalog; each token is a `li`.
-- Each remove button is an `IconButton` named `Remove <file name>`; its `aria-describedby` points at the token's error or warning line, so the reason is read with it.
+- Each remove button is an `IconButton` named `Remove <file name>`, and `Cancel upload of <file name>` while the file uploads (the same `remove` event); its `aria-describedby` points at the token's error or warning line, so the reason is read with it.
 - Keyboard map: Tab reaches each remove button and the Show more toggle in order; Enter or Space removes. After a removal focus moves to the remove button now at the same index, else the previous one, else the list itself (`tabindex="-1"`).
-- An error or warning is shown as text with an icon, never by colour alone (WCAG 1.4.1); the uploading bar is a `progressbar` named `Uploading <file name>`.
+- An error or warning is shown as text with an icon, never by colour alone (WCAG 1.4.1); the uploading bar is a `progressbar` named `Uploading <file name>`, and the meta line states the amount as text beside the size (`242.5 kB · 64%`, or `Uploading…` while the progress is unknown), so a stuck upload reads apart from a moving one.
 - Contrast: name and meta ≥ 4.5:1 on `--bg-surface` in both themes; the danger border ≥ 3:1.
 
 ## Internationalization

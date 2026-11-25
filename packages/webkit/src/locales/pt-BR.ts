@@ -771,6 +771,9 @@ export const ptBR: Messages = {
     label: 'Arquivos',
     remove: 'Remover {name}',
     uploading: 'Enviando {name}',
+    cancelUpload: 'Cancelar o envio de {name}',
+    uploadProgress: '{percent}%',
+    uploadPending: 'Enviando…',
     modified: 'Modificado em {date}',
     showMore: {
       one: 'Mostrar mais {count} arquivo',

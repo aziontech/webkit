@@ -771,6 +771,9 @@ export const es: Messages = {
     label: 'Archivos',
     remove: 'Quitar {name}',
     uploading: 'Subiendo {name}',
+    cancelUpload: 'Cancelar la subida de {name}',
+    uploadProgress: '{percent} %',
+    uploadPending: 'Subiendo…',
     modified: 'Modificado el {date}',
     showMore: {
       one: 'Mostrar {count} archivo más',
