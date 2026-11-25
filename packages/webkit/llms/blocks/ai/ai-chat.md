@@ -1871,9 +1871,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 ```ts
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ConversationHistory, {
-    type ConversationHistoryItem
-  } from '@aziontech/webkit/conversation-history'
+  import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
   import DrawerBody from '@aziontech/webkit/drawer-body'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerHeader from '@aziontech/webkit/drawer-header'
@@ -1889,15 +1887,8 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
   import { computed, ref, watch } from 'vue'
 
   import { useWideScreen } from '../composables/use-wide-screen'
-  import {
-    type AiChatProject,
-    type AiChatThread,
-    sampleHistoryNow,
-    sampleProjects,
-    sampleThreads
-  } from '../sample'
-  import AiChatHistoryActions from './ai-chat-history-actions.vue'
-  import AiChatHistoryRow from './ai-chat-history-row.vue'
+  import { type AiChatProject, type AiChatThread, sampleProjects, sampleThreads } from '../sample'
+  import AiChatHistoryList from './ai-chat-history-list.vue'
   import AiChatProjectFilter from './ai-chat-project-filter.vue'
 
   defineProps<{ panelOpen: boolean }>()
@@ -2123,29 +2114,16 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
       </Tooltip>
     </div>
 
-    <ConversationHistory
+    <AiChatHistoryList
       v-model="active"
       :items="activeItems"
-      :now="sampleHistoryNow"
-    >
-      <template #item="{ item }">
-        <AiChatHistoryRow
-          v-if="threadMap.get(item.id)"
-          :thread="threadMap.get(item.id)!"
-          :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-          :view-mode="viewMode"
-        />
-      </template>
-      <template #item-actions="{ item }">
-        <AiChatHistoryActions
-          v-if="threadMap.get(item.id)"
-          :thread="threadMap.get(item.id)!"
-          @snooze="toggleSnooze"
-          @settle="toggleSettle"
-          @discard="discardDraft"
-        />
-      </template>
-    </ConversationHistory>
+      :thread-map="threadMap"
+      :project-map="projectMap"
+      :view-mode="viewMode"
+      @snooze="toggleSnooze"
+      @settle="toggleSettle"
+      @discard="discardDraft"
+    />
 
     <div
       v-if="snoozedItems.length"
@@ -2154,30 +2132,17 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
       <span class="px-(--spacing-xs) text-label-xs text-(--text-muted)">
         Snoozed ({{ snoozedItems.length }})
       </span>
-      <ConversationHistory
+      <AiChatHistoryList
         v-model="active"
         :items="snoozedItems"
-        :now="sampleHistoryNow"
         aria-label="Snoozed conversations"
-      >
-        <template #item="{ item }">
-          <AiChatHistoryRow
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-            :view-mode="viewMode"
-          />
-        </template>
-        <template #item-actions="{ item }">
-          <AiChatHistoryActions
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            @snooze="toggleSnooze"
-            @settle="toggleSettle"
-            @discard="discardDraft"
-          />
-        </template>
-      </ConversationHistory>
+        :thread-map="threadMap"
+        :project-map="projectMap"
+        :view-mode="viewMode"
+        @snooze="toggleSnooze"
+        @settle="toggleSettle"
+        @discard="discardDraft"
+      />
     </div>
 
     <div
@@ -2193,31 +2158,18 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
         class="w-full"
         @click="settledOpen = !settledOpen"
       />
-      <ConversationHistory
+      <AiChatHistoryList
         v-if="settledOpen"
         v-model="active"
         :items="settledItems"
-        :now="sampleHistoryNow"
         aria-label="Settled conversations"
-      >
-        <template #item="{ item }">
-          <AiChatHistoryRow
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-            :view-mode="viewMode"
-          />
-        </template>
-        <template #item-actions="{ item }">
-          <AiChatHistoryActions
-            v-if="threadMap.get(item.id)"
-            :thread="threadMap.get(item.id)!"
-            @snooze="toggleSnooze"
-            @settle="toggleSettle"
-            @discard="discardDraft"
-          />
-        </template>
-      </ConversationHistory>
+        :thread-map="threadMap"
+        :project-map="projectMap"
+        :view-mode="viewMode"
+        @snooze="toggleSnooze"
+        @settle="toggleSettle"
+        @discard="discardDraft"
+      />
     </div>
   </aside>
 
@@ -2267,33 +2219,75 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
         <div
           class="[--ai-chat-history-actions-width:--spacing(24)] pointer-coarse:[--ai-chat-history-actions-width:--spacing(9)]"
         >
-          <ConversationHistory
+          <AiChatHistoryList
             v-model="active"
             :items="activeItems"
-            :now="sampleHistoryNow"
-          >
-            <template #item="{ item }">
-              <AiChatHistoryRow
-                v-if="threadMap.get(item.id)"
-                :thread="threadMap.get(item.id)!"
-                :project="projectMap.get(threadMap.get(item.id)!.projectId)"
-                :view-mode="viewMode"
-              />
-            </template>
-            <template #item-actions="{ item }">
-              <AiChatHistoryActions
-                v-if="threadMap.get(item.id)"
-                :thread="threadMap.get(item.id)!"
-                @snooze="toggleSnooze"
-                @settle="toggleSettle"
-                @discard="discardDraft"
-              />
-            </template>
-          </ConversationHistory>
+            :thread-map="threadMap"
+            :project-map="projectMap"
+            :view-mode="viewMode"
+            @snooze="toggleSnooze"
+            @settle="toggleSettle"
+            @discard="discardDraft"
+          />
         </div>
       </DrawerBody>
     </DrawerContent>
   </Drawer>
+</template>
+```
+
+## `parts/ai-chat-history-list.vue`
+
+```ts
+<script setup lang="ts">
+  import ConversationHistory, {
+    type ConversationHistoryItem
+  } from '@aziontech/webkit/conversation-history'
+
+  import { type AiChatProject, type AiChatThread, sampleHistoryNow } from '../sample'
+  import AiChatHistoryActions from './ai-chat-history-actions.vue'
+  import AiChatHistoryRow from './ai-chat-history-row.vue'
+
+  defineProps<{
+    items: ConversationHistoryItem[]
+    threadMap: Map<string, AiChatThread>
+    projectMap: Map<string, AiChatProject>
+    viewMode: 'detailed' | 'compact'
+  }>()
+
+  const emit = defineEmits<{
+    snooze: [event: MouseEvent | KeyboardEvent, id: string]
+    settle: [event: MouseEvent | KeyboardEvent, id: string]
+    discard: [event: MouseEvent | KeyboardEvent, id: string]
+  }>()
+
+  const active = defineModel<string | null>({ required: true })
+</script>
+
+<template>
+  <ConversationHistory
+    v-model="active"
+    :items="items"
+    :now="sampleHistoryNow"
+  >
+    <template #item="{ item }">
+      <AiChatHistoryRow
+        v-if="threadMap.get(item.id)"
+        :thread="threadMap.get(item.id)!"
+        :project="projectMap.get(threadMap.get(item.id)!.projectId)"
+        :view-mode="viewMode"
+      />
+    </template>
+    <template #item-actions="{ item }">
+      <AiChatHistoryActions
+        v-if="threadMap.get(item.id)"
+        :thread="threadMap.get(item.id)!"
+        @snooze="(event, id) => emit('snooze', event, id)"
+        @settle="(event, id) => emit('settle', event, id)"
+        @discard="(event, id) => emit('discard', event, id)"
+      />
+    </template>
+  </ConversationHistory>
 </template>
 ```
 

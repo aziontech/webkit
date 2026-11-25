@@ -43,6 +43,7 @@
   "parts/ai-chat-connection-status.vue",
   "parts/ai-chat-header.vue",
   "parts/ai-chat-history.vue",
+  "parts/ai-chat-history-list.vue",
   "parts/ai-chat-remove-dialog.vue",
   "parts/ai-chat-media-segment.vue",
   "parts/ai-chat-skeleton.vue",
