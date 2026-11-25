@@ -43,7 +43,7 @@
                 class="w-full"
                 placeholder="GET and HEAD only"
                 :display-value="methodsLabel"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <MultiSelect.Trigger aria-label="Cache by HTTP method" />
                 <MultiSelect.Content>
@@ -66,7 +66,7 @@
                 size="large"
                 class="w-full"
                 :display-value="labelOf(varyBehaviors)"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <Select.Trigger aria-label="Cache by query string" />
                 <Select.Content>
@@ -100,7 +100,7 @@
                 :aria-describedby="
                   errors.queryStringFields ? 'cache-queryStringFields-message' : undefined
                 "
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('queryStringFields')"
               />
               <FieldError
@@ -118,7 +118,7 @@
                 size="large"
                 class="w-full"
                 :display-value="labelOf(varyBehaviors)"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <Select.Trigger aria-label="Cache by cookies" />
                 <Select.Content>
@@ -150,7 +150,7 @@
                 required
                 :invalid="!!errors.cookieNames"
                 :aria-describedby="errors.cookieNames ? 'cache-cookieNames-message' : undefined"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('cookieNames')"
               />
               <FieldError

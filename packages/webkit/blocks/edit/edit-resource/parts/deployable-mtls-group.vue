@@ -40,7 +40,8 @@
             <Switch
               v-model="form.mtls.enabled"
               aria-label="Mutual authentication"
-              :disabled="saving || !form.protocols.useHttps"
+              :readonly="saving"
+              :disabled="!form.protocols.useHttps"
             />
           </SettingsRow>
           <SettingsRow
@@ -55,7 +56,7 @@
               variant="card"
               name="mtls-mode"
               aria-label="Mutual authentication mode"
-              :disabled="saving"
+              :readonly="saving"
             >
               <RadioGroup.Item
                 v-for="option in mtlsModeOptions"
@@ -77,7 +78,7 @@
               size="large"
               class="w-full"
               placeholder="Select a Trusted CA certificate"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="certificateName"
             >
               <Select.Trigger
@@ -111,7 +112,7 @@
               size="large"
               class="w-full"
               placeholder="Select a revocation list"
-              :disabled="saving"
+              :readonly="saving"
               :display-value="crlLabel"
             >
               <MultiSelect.Trigger aria-label="Certificate revocation list" />

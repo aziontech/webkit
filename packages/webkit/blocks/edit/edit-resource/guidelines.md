@@ -29,7 +29,7 @@ A small `PageHeader` titled Settings with one sentence about what these settings
 
 ### C. Settings sections — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 
-One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
+One `form` with a `fieldset` and a visually hidden legend; while saving, every field turns read-only. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
 
 ### D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 
@@ -37,7 +37,7 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 ### E. Save bar — `SaveBar`, `Button` (required)
 
-Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record. In ProjectSettings a failed save (`error`) keeps the edits and raises a `toast` error, "The project settings weren't saved.", with Retry.
+Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, every field is read-only (a control with no read-only state is disabled), Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record. In ProjectSettings a failed save (`error`) keeps the edits and raises a `toast` error, "The project settings weren't saved.", with Retry.
 
 ### F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 
@@ -76,7 +76,7 @@ ProjectSettings takes the saved settings through props and emits the values on S
 | `resource`     | `EditResourceProject`          | The saved settings; the form opens on them and Discard returns to them. A new value resets the form.                                   |
 | `defaultDraft` | `Partial<EditResourceProject>` | Unsaved edits the form opens with on top of `resource`, so the save bar is up.                                                         |
 | `stale`        | `EditResourceProject`          | The version saved elsewhere after the form opened: the Changed elsewhere notice, Reload with Undo, and the overwrite question on Save. |
-| `loading`      | `boolean`                      | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the bar leaves.             |
+| `loading`      | `boolean`                      | The save is in flight: the fields turn read-only, Discard disables and Save spins. When it turns off with no `error`, the bar leaves.  |
 | `error`        | `string`                       | Why the save failed, the description of the error toast with Retry; the edits stay.                                                    |
 | `v-model:tab`  | `string`                       | The active page tab, `main-settings` by default; bind it to the route.                                                                 |
 
@@ -116,7 +116,7 @@ Then delete `sample.ts` and its import.
 ## Do
 
 - Show the save bar only while the form differs from the saved record.
-- Disable the whole fieldset while saving, not each field separately.
+- Hold every field read-only while saving, not disabled: the values stay readable at full contrast and no field can change under the save.
 - Give every section a short hint that says what it controls, and an anchor so a link can land on it.
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
@@ -175,13 +175,13 @@ Then delete `sample.ts` and its import.
 
 ## States
 
-- ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` locks the fieldset and spins Save, and `error` set when it ends raises the error toast with Retry.
+- ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` holds the fields read-only and spins Save, and `error` set when it ends raises the error toast with Retry.
 - DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `edit/edit-delete-dialog`.
 - PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug rules and Status.
 - WafSettings: a WAF rule set's Main settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
-- Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
+- Saving: while the request is in flight; every field is read-only, so none can change under the save, Save is loading and Discard is disabled.
 - DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Custom headers are `AttributeEditor` rows of Name and Value (up to 5) whose value turns into a masked `PasswordInput` when the name reads as a credential (Authorization, Cookie, a token, key, secret or password), Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.

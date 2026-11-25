@@ -42,7 +42,7 @@
               <Switch
                 v-model="form.sampling"
                 aria-label="Sampling"
-                :disabled="saving"
+                :readonly="saving"
               />
             </SettingsRow>
             <SettingsRow
@@ -63,7 +63,7 @@
                 :aria-describedby="
                   errors.samplingRate ? 'data-stream-samplingRate-message' : undefined
                 "
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('samplingRate')"
               >
                 <template #trailing>%</template>

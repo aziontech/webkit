@@ -175,7 +175,7 @@
                   class="w-full"
                   aria-label="Name"
                   autocomplete="off"
-                  :disabled="saving"
+                  :readonly="saving"
                   required
                   :invalid="nameError"
                   :aria-describedby="nameError ? 'waf-name-message' : undefined"
@@ -207,7 +207,7 @@
               <Switch
                 v-model="form.active"
                 aria-label="Active"
-                :disabled="saving"
+                :readonly="saving"
               />
             </SettingsRow>
             <SettingsRow
@@ -219,7 +219,7 @@
                 size="large"
                 class="w-full"
                 placeholder="Select a mode"
-                :disabled="saving"
+                :readonly="saving"
                 :display-value="modeLabel"
               >
                 <Select.Trigger aria-label="Mode" />
@@ -258,7 +258,8 @@
                   v-model="item.sensitivity"
                   size="medium"
                   class="w-full max-w-(--container-3xs)"
-                  :disabled="saving || !item.enabled"
+                  :readonly="saving"
+                  :disabled="!item.enabled"
                   :display-value="sensitivityLabel"
                 >
                   <Select.Trigger :aria-label="`${item.label} sensitivity`" />
@@ -275,7 +276,7 @@
                 <Switch
                   v-model="item.enabled"
                   :aria-label="item.label"
-                  :disabled="saving"
+                  :readonly="saving"
                 />
               </div>
             </SettingsRow>

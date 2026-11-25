@@ -31,10 +31,7 @@
         size="small"
       />
 
-      <fieldset
-        class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-        :disabled="saving"
-      >
+      <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
         <legend class="sr-only">Data stream settings</legend>
 
         <SettingsGroup
@@ -65,7 +62,7 @@
                     <Switch
                       v-model="form.active"
                       aria-label="Active"
-                      :disabled="saving"
+                      :readonly="saving"
                     />
                   </SettingsRow>
                 </TransitionGroup>

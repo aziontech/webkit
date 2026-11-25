@@ -59,7 +59,7 @@
       required
       :invalid="!!errors[field]"
       :aria-describedby="errors[field] ? `${id}-message` : undefined"
-      :disabled="saving"
+      :readonly="saving"
       @update:model-value="onUpdate"
     />
     <Input
@@ -74,7 +74,7 @@
       required
       :invalid="!!errors[field]"
       :aria-describedby="errors[field] ? `${id}-message` : undefined"
-      :disabled="saving"
+      :readonly="saving"
       @update:model-value="onUpdate"
     />
     <FieldError

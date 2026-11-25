@@ -136,12 +136,19 @@ describe('edit-resource#DangerZone', () => {
 })
 
 describe('edit-resource#Saving', () => {
-  it('locks every field while the save is in flight', async () => {
-    render(Saving)
+  it('holds every field read-only, not disabled, while the save is in flight', async () => {
+    const view = render(Saving)
     const name = (await screen.findByRole('textbox', { name: 'Name' })) as HTMLInputElement
-    expect(name.disabled).toBe(true)
-    for (const toggle of screen.getAllByRole('switch')) {
-      expect(toggle.matches(':disabled')).toBe(true)
+    expect(name.readOnly).toBe(true)
+    expect(name.disabled).toBe(false)
+    expect(view.container.querySelector('fieldset:disabled')).toBeNull()
+    const toggles = screen.getAllByRole('switch').filter((toggle) => !toggle.matches(':disabled'))
+    expect(toggles.length).toBeGreaterThan(0)
+    for (const toggle of toggles) {
+      expect(toggle.getAttribute('aria-readonly')).toBe('true')
+      const checked = toggle.getAttribute('aria-checked')
+      await fireEvent.click(toggle)
+      expect(toggle.getAttribute('aria-checked')).toBe(checked)
     }
     expect(screen.getByRole('button', { name: 'Discard' })).toBeDisabled()
     expect(screen.getByTestId('settings-save-bar__saving').textContent).toBe('Saving changes…')

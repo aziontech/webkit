@@ -87,10 +87,7 @@
         size="small"
       />
 
-      <fieldset
-        class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-        :disabled="saving"
-      >
+      <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
         <legend class="sr-only">access list settings</legend>
 
         <SettingsGroup
@@ -119,7 +116,7 @@
                       required
                       :invalid="!!errors.name"
                       :aria-describedby="errors.name ? 'access-lists-name-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('name')"
                     />
                     <FieldError
@@ -155,7 +152,7 @@
                       variant="card"
                       name="access-lists-type"
                       aria-label="Type"
-                      :disabled="saving"
+                      :readonly="saving"
                     >
                       <RadioGroup.Item
                         v-for="option in typeOptions"
@@ -183,7 +180,7 @@
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('items')"
                     />
                     <FieldError
@@ -215,7 +212,7 @@
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('items')"
                     />
                     <FieldError
@@ -241,7 +238,7 @@
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
-                      :disabled="saving"
+                      :readonly="saving"
                       @update:model-value="clear('items')"
                     />
                     <FieldError

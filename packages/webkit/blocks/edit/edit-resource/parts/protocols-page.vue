@@ -49,10 +49,7 @@
           size="small"
         />
 
-        <fieldset
-          class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-          :disabled="saving"
-        >
+        <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
           <legend class="sr-only">Protocol settings</legend>
 
           <SettingsGroup
@@ -77,7 +74,7 @@
                         class="w-full"
                         placeholder="Select an HTTP port"
                         :display-value="portsLabel"
-                        :disabled="saving"
+                        :readonly="saving"
                         required
                         :invalid="!!errors.httpPorts"
                         :aria-describedby="
@@ -114,7 +111,7 @@
                       <Switch
                         :model-value="form.useHttps"
                         aria-label="HTTPS support"
-                        :disabled="saving"
+                        :readonly="saving"
                         @update:model-value="setHttps"
                       />
                     </SettingsRow>
@@ -131,7 +128,7 @@
                         class="w-full"
                         placeholder="Select an HTTPS port"
                         :display-value="portsLabel"
-                        :disabled="saving"
+                        :readonly="saving"
                         required
                         :invalid="!!errors.httpsPorts"
                         :aria-describedby="
@@ -168,7 +165,7 @@
                       <Switch
                         :model-value="form.useHttp3"
                         aria-label="HTTP/3 support"
-                        :disabled="saving"
+                        :readonly="saving"
                         @update:model-value="setHttp3"
                       />
                     </SettingsRow>
@@ -185,7 +182,7 @@
                         class="w-full"
                         placeholder="Select an HTTP/3 port"
                         :display-value="portsLabel"
-                        :disabled="saving"
+                        :readonly="saving"
                         required
                         :invalid="!!errors.http3Ports"
                         :aria-describedby="
@@ -224,7 +221,7 @@
                         size="large"
                         class="w-full"
                         :display-value="labelOf(tlsVersions)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Minimum TLS version" />
                         <Select.Content>
@@ -249,7 +246,7 @@
                         size="large"
                         class="w-full"
                         :display-value="labelOf(cipherSuites)"
-                        :disabled="saving"
+                        :readonly="saving"
                       >
                         <Select.Trigger aria-label="Cipher suite" />
                         <Select.Content>

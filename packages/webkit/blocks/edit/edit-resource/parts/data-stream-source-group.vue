@@ -41,7 +41,7 @@
                 size="large"
                 class="w-full"
                 :display-value="sourceLabel"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('source')"
               >
                 <Select.Trigger aria-label="Data source" />
@@ -66,7 +66,7 @@
                 variant="card"
                 name="data-stream-scope"
                 aria-label="Workloads"
-                :disabled="saving"
+                :readonly="saving"
               >
                 <RadioGroup.Item
                   v-for="option in scopeOptions"
@@ -94,7 +94,7 @@
                 required
                 :invalid="!!errors.workloads"
                 :aria-describedby="errors.workloads ? 'data-stream-workloads-message' : undefined"
-                :disabled="saving"
+                :readonly="saving"
                 @update:model-value="clear('workloads')"
               />
               <FieldError
