@@ -16,7 +16,7 @@
     /** Up to three sources whose marks overlap at the start of the pill. */
     marks: SourcesItem[]
     /** Visible label of the pill. */
-    heading: string
+    title: string
     /** Accessible name of the pill; empty leaves the visible label as its name. */
     triggerName?: string
     /** Rows of the panel, cited first. */
@@ -46,7 +46,7 @@
       <SourcesButton
         :test-id="testId"
         :marks="marks"
-        :heading="heading"
+        :title="title"
         :trigger-name="triggerName"
         :open="open"
       />

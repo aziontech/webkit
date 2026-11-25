@@ -10,7 +10,7 @@
     /** Up to three sources whose marks overlap at the start of the pill. */
     marks: SourcesItem[]
     /** Visible label of the pill. */
-    heading: string
+    title: string
     /** Accessible name of the pill; empty leaves the visible label as its name. */
     triggerName?: string
     /** The panel is open. */
@@ -53,6 +53,6 @@
         class="ring-2 ring-(--bg-canvas) not-first:-ms-1.5"
       />
     </span>
-    <span>{{ heading }}</span>
+    <span>{{ title }}</span>
   </button>
 </template>

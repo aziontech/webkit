@@ -96,7 +96,7 @@
       :open="isOpen"
       :test-id="testId"
       :marks="marks"
-      :heading="heading"
+      :title="heading"
       :trigger-name="triggerName"
       :groups="groups"
       :grouped="grouped"
