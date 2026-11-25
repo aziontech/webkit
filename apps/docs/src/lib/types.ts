@@ -73,6 +73,15 @@ export type BlockIndexItem = {
   llms: string | null
 }
 
+export type NavIndex = {
+  components: Pick<
+    ComponentIndexItem,
+    'name' | 'title' | 'category' | 'stability' | 'exampleCount'
+  >[]
+  blocks: Pick<BlockIndexItem, 'id' | 'title' | 'group' | 'stability'>[]
+  version: string
+}
+
 export type DocsIndex = {
   components: ComponentIndexItem[]
   blocks: BlockIndexItem[]

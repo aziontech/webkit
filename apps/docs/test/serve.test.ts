@@ -55,3 +55,27 @@ test('the build manifests under .vite are never served', async () => {
   assert.ok(!(await res.text()).includes('/abs/build/host/path'))
   assert.equal(res.headers.get('X-Content-Type-Options'), 'nosniff')
 })
+
+test('the demos are previewed through this server, so a client route carries the same policy', async () => {
+  const demos = JSON.parse(
+    (await import('node:fs')).readFileSync(
+      new URL('../../demos/package.json', import.meta.url),
+      'utf8'
+    )
+  ) as { scripts: Record<string, string> }
+  assert.match(demos.scripts.preview, /\.\.\/docs\/scripts\/serve\.mjs --root dist --spa/)
+  const spa = await serve(0, { root, spa: true, tls: null })
+  try {
+    const port = (spa.address() as AddressInfo).port
+    const response = await fetch(`http://localhost:${port}/resources/edit`)
+    assert.equal(response.status, 200)
+    assert.equal(response.headers.get('x-content-type-options'), 'nosniff')
+    const hash = createHash('sha256').update(INLINE).digest('base64')
+    assert.match(
+      response.headers.get('content-security-policy') ?? '',
+      new RegExp(`script-src 'self' 'sha256-${hash.replace(/[+/]/g, '\\$&')}'`)
+    )
+  } finally {
+    spa.close()
+  }
+})

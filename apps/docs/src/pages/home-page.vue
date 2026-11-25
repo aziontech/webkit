@@ -9,9 +9,9 @@
   import Module from '@aziontech/webkit/module'
   import ModuleHeader from '@aziontech/webkit/module-header'
   import { useHead } from '@unhead/vue'
+  import index from 'virtual:docs-nav'
   import { computed } from 'vue'
 
-  import { index } from '../lib/data'
   import { format, messages } from '../lib/i18n'
 
   const t = messages

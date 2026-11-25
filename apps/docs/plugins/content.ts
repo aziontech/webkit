@@ -151,6 +151,10 @@ const headingSlug = (text: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
+function focusableTables(state: CoreState): void {
+  for (const token of state.tokens) if (token.type === 'table_open') token.attrSet('tabindex', '0')
+}
+
 function addHeadingIds(state: CoreState): void {
   const seen = new Map<string, number>()
   state.tokens.forEach((token, at) => {
@@ -174,6 +178,7 @@ export async function markdown(
   })
   md.core.ruler.after('inline', 'drop-html-comments', dropHtmlComments)
   md.core.ruler.after('drop-html-comments', 'drop-task-markers', dropTaskMarkers)
+  md.core.ruler.after('drop-task-markers', 'focusable-tables', focusableTables)
   if (headingIds) md.core.ruler.after('drop-task-markers', 'heading-ids', addHeadingIds)
   if (file) {
     const render = md.renderer.rules.link_open
@@ -435,6 +440,12 @@ function readExampleDirs(): { dir: string; data: ExamplesFile }[] {
   }))
 }
 
+export function exampleFrameRoutes(): string[] {
+  return readExampleDirs().flatMap(({ dir, data }) =>
+    data.examples.map((example) => `/frame/example/${dir}/${example.file.replace(/\.vue$/, '')}`)
+  )
+}
+
 function pascal(name: string): string {
   return name
     .split(/[-/]/)
@@ -614,7 +625,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         ? 'preview'
         : 'ga',
     summary: plainInline(firstSentence(stripReviewerNotes(block.summary ?? ''))),
-    states: block.states,
+    states: block.states.map(({ name, file, slug }) => ({ name, file, slug })),
     dir: block.dir,
     uses: (
       ((catalog.blocks as Record<string, { imports?: string[] }>)?.[block.id]?.imports ??
@@ -630,6 +641,25 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     llmsTxt: existsSync(join(LLMS, 'llms.txt')),
     foundationLlms: foundationLlms(llms, foundationSlugs),
     version: (catalog.webkitVersion as string) ?? ''
+  }
+}
+
+export function navIndex(index: ReturnType<typeof buildIndex>) {
+  return {
+    components: index.components.map(({ name, title, category, stability, exampleCount }) => ({
+      name,
+      title,
+      category,
+      stability,
+      exampleCount
+    })),
+    blocks: index.blocks.map(({ id, title, group, stability }) => ({
+      id,
+      title,
+      group,
+      stability
+    })),
+    version: index.version
   }
 }
 

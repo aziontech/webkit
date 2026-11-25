@@ -11,12 +11,14 @@ import {
   buildTokens,
   highlight,
   highlighter,
+  navIndex,
   renderGuidelinesFile,
   renderMarkdownFile
 } from './content.ts'
 import { CATALOG, LLMS, readCatalog, THEME, walk, WEBKIT } from './paths.ts'
 
 const INDEX = 'virtual:docs-index'
+const NAV = 'virtual:docs-nav'
 const TOKENS = 'virtual:docs-tokens'
 const ASSETS = 'virtual:docs-assets'
 const ASSET_LLMS = ['illustrations', 'brand-marks']
@@ -121,6 +123,7 @@ export function docsPlugin(): Plugin {
     async resolveId(id, importer) {
       if (
         id === INDEX ||
+        id === NAV ||
         id === TOKENS ||
         id === ASSETS ||
         id === LOADERS ||
@@ -145,6 +148,10 @@ export function docsPlugin(): Plugin {
       return null
     },
     async load(id) {
+      if (id === `\0${NAV}`) {
+        this.addWatchFile(CATALOG)
+        return `export default ${JSON.stringify(navIndex(buildIndex(undefined, [...FOUNDATION_SLUGS, ...ASSET_LLMS])))}`
+      }
       if (id === `\0${INDEX}`) {
         this.addWatchFile(CATALOG)
         return `export default ${JSON.stringify(buildIndex(undefined, [...FOUNDATION_SLUGS, ...ASSET_LLMS]))}`

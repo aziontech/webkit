@@ -41,7 +41,7 @@ test('an HTML comment never reaches the page: own paragraph, inline, multi-line'
     ].join('\n')
   )
   assert.doesNotMatch(html, /&lt;!--|--&gt;|prettier-ignore|inline note|two lines|<!--/)
-  assert.match(html, /<table>/)
+  assert.match(html, /<table tabindex="0">/, 'a table that scrolls must be reachable by keyboard')
   assert.match(html, /Before\s+after\./)
   assert.match(html, /Start\s+end\./)
 })

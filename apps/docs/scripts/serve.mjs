@@ -4,6 +4,7 @@ import { createServer } from 'node:http'
 import { createSecureServer } from 'node:http2'
 import { dirname, extname, join, normalize, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { parseArgs } from 'node:util'
 import { brotliCompressSync, constants, gzipSync } from 'node:zlib'
 
 const DIST = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
@@ -141,7 +142,17 @@ export function serve(
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const server = await serve()
+  const { values } = parseArgs({
+    options: {
+      root: { type: 'string' },
+      spa: { type: 'boolean', default: false },
+      port: { type: 'string' }
+    }
+  })
+  const server = await serve(Number(values.port ?? process.env.PORT ?? 4173), {
+    root: values.root ? resolve(values.root) : DIST,
+    spa: values.spa
+  })
   const scheme = tlsFromEnv() ? 'https' : 'http'
-  console.log(`WebKit docs on ${scheme}://localhost:${server.address().port}`)
+  console.log(`WebKit ${values.root ?? 'docs'} on ${scheme}://localhost:${server.address().port}`)
 }

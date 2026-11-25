@@ -20,6 +20,9 @@
   const state = computed(() =>
     block.value?.states.find((entry) => entry.slug === String(route.params.state))
   )
+  const styles = computed(() =>
+    block.value ? cached<Component>(keys.frameStyles(`blocks/${block.value.dir}`)) : undefined
+  )
   const live = computed(() => {
     if (!block.value || !state.value) return undefined
     const page = cached<Component>(keys.block(block.value.dir, state.value.file))
@@ -67,6 +70,10 @@
     :data-layout="block?.layout"
     :class="FRAME_CLASS"
   >
+    <component
+      :is="styles"
+      v-if="styles"
+    />
     <Toaster />
     <component
       :is="live"

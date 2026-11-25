@@ -5,17 +5,18 @@
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
   import CommandList from '@aziontech/webkit/command-list'
-  import { computed } from 'vue'
+  import { computed, shallowRef, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import { index } from '../lib/data'
   import { FOUNDATIONS } from '../lib/foundations'
   import { messages } from '../lib/i18n'
   import { searchKeywords } from '../lib/search'
+  import type { DocsIndex } from '../lib/types'
 
   const open = defineModel<boolean>('open', { default: false })
   const router = useRouter()
   const t = messages
+  const index = shallowRef<DocsIndex>()
 
   const groups = computed(() => [
     {
@@ -46,7 +47,7 @@
     },
     {
       heading: t.value.components,
-      items: index.components.map((item) => ({
+      items: (index.value?.components ?? []).map((item) => ({
         to: `/components/${item.name}`,
         title: item.title,
         hint: item.purpose,
@@ -55,7 +56,7 @@
     },
     {
       heading: t.value.blocks,
-      items: index.blocks.map((block) => ({
+      items: (index.value?.blocks ?? []).map((block) => ({
         to: `/blocks/${block.id}`,
         title: block.title,
         hint: block.summary,
@@ -63,6 +64,10 @@
       }))
     }
   ])
+
+  watch(open, async (value) => {
+    if (value && !index.value) index.value = (await import('virtual:docs-index')).default
+  })
 
   function onSelect(_event: unknown, value: string | number) {
     open.value = false

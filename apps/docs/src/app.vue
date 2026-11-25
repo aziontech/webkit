@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import ConfigProvider, { type ConfigProviderProps } from '@aziontech/webkit/config-provider'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
+  import { useHead } from '@unhead/vue'
   import {
+    computed,
     defineAsyncComponent,
     getCurrentInstance,
     onMounted,
-    shallowRef,
     useSSRContext,
     watch
   } from 'vue'
@@ -12,26 +13,16 @@
 
   import { loadDocsShell } from './lib/docs-shell-loader'
   import { persistSettings, restoreSettings, settings } from './lib/settings'
+  import { loadWebkitCatalog, webkitCatalogs as catalogs } from './lib/webkit-catalogs'
 
   const DocsShell = defineAsyncComponent(loadDocsShell)
 
-  type Catalog = NonNullable<ConfigProviderProps['catalogs']>[string]
-
-  const LOADERS: Record<string, () => Promise<Catalog>> = {
-    'pt-BR': () => import('@aziontech/webkit/locales/pt-BR').then((module) => module.ptBR),
-    es: () => import('@aziontech/webkit/locales/es').then((module) => module.es)
-  }
-  const catalogs = shallowRef<Record<string, Catalog>>({})
-
   watch(
     () => settings.locale,
-    async (locale) => {
-      const load = LOADERS[locale]
-      if (!load || catalogs.value[locale]) return
-      catalogs.value = { ...catalogs.value, [locale]: await load() }
-    },
+    (locale) => void loadWebkitCatalog(locale),
     { immediate: true }
   )
+  useHead({ htmlAttrs: { lang: computed(() => settings.locale) } })
   const route = useRoute()
 
   if (import.meta.env.SSR) {

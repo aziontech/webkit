@@ -27,6 +27,19 @@
             (stored === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
           var root = document.documentElement
           root.dataset.theme = dark ? 'dark' : 'light'
+          var path = location.pathname
+          var saved = localStorage.getItem('webkit-docs:locale')
+          var match = path.match(/^\/(pt-BR|es)(?=\/|$)/)
+          var current = match ? match[1] : 'en'
+          if (
+            path.indexOf('/frame/') !== 0 &&
+            (saved === 'en' || saved === 'pt-BR' || saved === 'es') &&
+            saved !== current
+          ) {
+            var bare = (match ? path.slice(match[0].length) : path) || '/'
+            var target = saved === 'en' ? bare : '/' + saved + (bare === '/' ? '' : bare)
+            location.replace(target + location.search + location.hash)
+          }
         } catch (e) {}
       })()
     </script>

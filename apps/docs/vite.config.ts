@@ -10,12 +10,19 @@ import {
   chunkGraphPlugin,
   moveBuildManifests
 } from './plugins/chunk-graph.ts'
-import { buildIndex } from './plugins/content.ts'
+import { buildIndex, exampleFrameRoutes } from './plugins/content.ts'
+import { cssSourcesPlugin, writeDocsSources } from './plugins/css-sources.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
 import { fontPreloadPlugin } from './plugins/font-preload.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
+import { localizedRoutes } from './src/lib/locale-path.ts'
 
 function staticRoutes(): string[] {
+  const routes = pageRoutes()
+  return [...routes, ...localizedRoutes(routes)]
+}
+
+function pageRoutes(): string[] {
   const { components, blocks } = buildIndex()
   return [
     '/',
@@ -31,6 +38,7 @@ function staticRoutes(): string[] {
       block.states.map((state) => `/frame/block/${block.id}/${state.slug}`)
     ),
     '/frame/example',
+    ...exampleFrameRoutes(),
     '/404'
   ]
 }
@@ -39,7 +47,7 @@ const ssgOptions: Partial<ViteSSGOptions> = {
   entry: 'src/main.ts',
   dirStyle: 'nested',
   formatting: 'none',
-  concurrency: 2,
+  concurrency: 1,
   beastiesOptions: false,
   onPageRendered: (_route, html, appCtx) => {
     const ssr = (appCtx.app as { ssrContext?: { teleports?: Record<string, string> } }).ssrContext
@@ -54,9 +62,12 @@ const ssgOptions: Partial<ViteSSGOptions> = {
   }
 }
 
+writeDocsSources()
+
 export default defineConfig({
   plugins: [
     docsPlugin(),
+    cssSourcesPlugin(),
     bundlerRuntimePlugin(),
     chunkGraphPlugin(),
     fontPreloadPlugin(),

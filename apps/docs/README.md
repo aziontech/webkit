@@ -160,8 +160,18 @@ in the browser. The output is plain static files:
   Upload `apps/docs/dist/` as is.
 - Serve `/<route>/` from `/<route>/index.html` (the default on most hosts) and `404/index.html` for
   unknown paths.
-- Serve every `/frame/example/<name>/<file>` from `frame/example/index.html`: the example frame is
-  one prerendered page that reads the example from its path (`scripts/serve.mjs` does this).
+- Every example frame (`/frame/example/<name>/<file>`) is its own prerendered page, like the block
+  frames. `frame/example/index.html` is the fallback for a path that has no page of its own
+  (`scripts/serve.mjs` does this).
+- Every docs page is also prerendered in Portuguese and Spanish under `/pt-BR/<route>` and
+  `/es/<route>` (frames and the 404 page are not). A reader who saved a language is sent to that
+  language's page by the inline script in `index.html` before the first paint, and the app then
+  shows the unprefixed path; a shared `/pt-BR/…` link opens in that language.
+- Send the security headers `scripts/serve.mjs` sends: `X-Content-Type-Options: nosniff`,
+  `Referrer-Policy: strict-origin-when-cross-origin`, and on each HTML page a
+  `Content-Security-Policy` of `frame-ancestors 'self'; object-src 'none'; base-uri 'self';
+script-src 'self'` plus the `sha256` hash of each inline script the page carries, and
+  `worker-src 'self' blob:` (`pagePolicy()` computes it from the page).
 - The site expects to live at the domain root. To serve it under a path, set Vite's `base` in
   `vite.config.ts`.
 - Serve it compressed (brotli or gzip) over HTTP/2, as every CDN does by default (Azion's Edge

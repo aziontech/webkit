@@ -1,4 +1,5 @@
-import { index } from './data'
+import index from 'virtual:docs-nav'
+
 import { FOUNDATIONS } from './foundations'
 import { groupLabel, titleCase } from './words'
 
