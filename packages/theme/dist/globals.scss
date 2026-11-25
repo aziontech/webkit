@@ -561,11 +561,13 @@
   --text-heading-3xl-line-height: 1.25;
   --text-heading-3xl-font-weight: 400;
   --text-heading-3xl-letter-spacing: -0.035em;
+  --text-heading-3xl-word-spacing: 0.06em;
   --text-heading-2xl-text-wrap-style: balance;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1;
   --text-heading-2xl-font-weight: 400;
   --text-heading-2xl-letter-spacing: -0.035em;
+  --text-heading-2xl-word-spacing: 0.06em;
   --text-heading-xl-text-wrap-style: balance;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
@@ -738,8 +740,10 @@
     --text-amount-md-font-size: 1.5rem;
     --text-heading-3xl-font-size: 3.5rem;
     --text-heading-3xl-letter-spacing: -0.046em;
+    --text-heading-3xl-word-spacing: 0;
     --text-heading-2xl-font-size: 3rem;
     --text-heading-2xl-letter-spacing: -0.053em;
+    --text-heading-2xl-word-spacing: 0;
     --text-heading-xl-font-size: 2.25rem;
     --text-heading-lg-font-size: 1.875rem;
     --text-heading-md-font-size: 1.5rem;
@@ -1338,6 +1342,7 @@
   line-height: var(--text-heading-3xl-line-height);
   font-weight: var(--text-heading-3xl-font-weight);
   letter-spacing: var(--text-heading-3xl-letter-spacing);
+  word-spacing: var(--text-heading-3xl-word-spacing);
 }
 
 @utility text-heading-2xl {
@@ -1346,6 +1351,7 @@
   line-height: var(--text-heading-2xl-line-height);
   font-weight: var(--text-heading-2xl-font-weight);
   letter-spacing: var(--text-heading-2xl-letter-spacing);
+  word-spacing: var(--text-heading-2xl-word-spacing);
 }
 
 @utility text-heading-xl {
