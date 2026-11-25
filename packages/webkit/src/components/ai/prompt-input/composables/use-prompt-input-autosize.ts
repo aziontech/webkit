@@ -38,7 +38,13 @@ export function usePromptInputAutosize(
     if (old) observer?.unobserve(old)
     if (el) observer?.observe(el)
   })
-  onScopeDispose(() => observer?.disconnect())
-  onMounted(resize)
+  let frame = 0
+  onScopeDispose(() => {
+    observer?.disconnect()
+    if (frame) cancelAnimationFrame(frame)
+  })
+  onMounted(() => {
+    if (!observer) frame = requestAnimationFrame(resize)
+  })
   return { multiline: readonly(multiline) }
 }
