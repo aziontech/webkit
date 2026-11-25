@@ -278,7 +278,7 @@
         </div>
         <span
           v-if="resource.uri"
-          class="max-w-56 shrink-0 truncate text-label-code-sm text-(--text-muted) max-sm:hidden"
+          class="max-w-56 shrink-0 truncate text-body-code-sm text-(--text-muted) max-sm:hidden"
           >{{ resource.uri }}</span
         >
       </div>
