@@ -83,6 +83,14 @@
   const overflow = ref<'start' | 'end' | 'both' | ''>('')
   const blockFitsOneLine = ref(false)
   const capOverride = ref('')
+  const lineDirection = ref<'ltr' | 'rtl'>('ltr')
+
+  const lineFade = (edge: 'start' | 'end') => {
+    const towardStart = (edge === 'start') === (lineDirection.value === 'ltr')
+    return {
+      backgroundImage: `linear-gradient(to ${towardStart ? 'right' : 'left'}, var(--doc-prompt-background), transparent)`
+    }
+  }
 
   const singleLine = computed(() => props.variant === 'line' || blockFitsOneLine.value)
 
@@ -93,8 +101,10 @@
     if (!el) return
 
     if (props.variant === 'line') {
-      const start = el.scrollLeft > 1
-      const end = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth - 1
+      lineDirection.value = globalThis.getComputedStyle(el).direction === 'rtl' ? 'rtl' : 'ltr'
+      const scrolled = Math.abs(el.scrollLeft)
+      const start = scrolled > 1
+      const end = Math.ceil(scrolled + el.clientWidth) < el.scrollWidth - 1
       overflow.value = start && end ? 'both' : start ? 'start' : end ? 'end' : ''
       return
     }
@@ -196,7 +206,7 @@
 
   const BODY_CLASS =
     'flex items-start gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--doc-prompt-background:var(--bg-surface)] ' +
-    'data-[single-line]:items-center ' +
+    'flex-wrap data-[single-line]:items-center data-[line]:@max-sm/doc-prompt:items-start ' +
     'data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--doc-prompt-background:var(--bg-canvas)]'
 
   const PROMPT_CLASS =
@@ -205,7 +215,8 @@
     'data-[variant=block]:duration-moderate-02 data-[variant=block]:ease-productive-exit data-[variant=line]:overflow-x-auto data-[variant=line]:whitespace-nowrap ' +
     'data-[variant=line]:rounded-(--shape-control) data-[variant=line]:[scrollbar-width:none] data-[variant=block]:data-[state=open]:max-h-none ' +
     'data-[variant=block]:data-[state=open]:ease-productive-entrance data-[variant=line]:focus-visible:outline-2 data-[variant=line]:focus-visible:outline-offset-2 ' +
-    'data-[variant=line]:focus-visible:outline-(--ring-color) data-[variant=line]:[&::-webkit-scrollbar]:hidden'
+    'data-[variant=line]:focus-visible:outline-(--ring-color) data-[variant=line]:[&::-webkit-scrollbar]:hidden ' +
+    'data-[variant=line]:@max-sm/doc-prompt:whitespace-pre-wrap'
 
   const FADE_CLASS =
     'pointer-events-none absolute inset-x-0 bottom-0 h-(--spacing-lg) bg-gradient-to-b from-transparent to-(--doc-prompt-background) transition-opacity duration-moderate-01 ' +
@@ -222,7 +233,7 @@
     :data-testid="testId"
     :data-variant="variant"
     :data-capped="variant === 'block' && capped ? '' : undefined"
-    class="w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="@container/doc-prompt w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
     <div
       v-if="title"
@@ -241,13 +252,18 @@
     <div
       :data-titled="title ? '' : undefined"
       :data-single-line="singleLine ? '' : undefined"
+      :data-line="variant === 'line' ? '' : undefined"
       :class="BODY_CLASS"
     >
       <div class="min-w-0 flex-1">
-        <div class="relative">
+        <div
+          class="relative"
+          :dir="variant === 'line' ? lineDirection : undefined"
+        >
           <p
             :id="promptId"
             ref="promptEl"
+            dir="auto"
             :data-variant="variant"
             :data-state="variant === 'block' ? (expanded ? 'open' : 'closed') : undefined"
             :data-overflow="variant === 'line' && overflow ? overflow : undefined"
@@ -267,28 +283,19 @@
           />
           <div
             v-if="variant === 'line' && (overflow === 'start' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg) bg-gradient-to-r from-(--doc-prompt-background) to-transparent rtl:bg-gradient-to-l"
+            :data-direction="lineDirection"
+            :data-testid="`${testId}__fade-start`"
+            :style="lineFade('start')"
+            class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg)"
             aria-hidden="true"
           />
           <div
             v-if="variant === 'line' && (overflow === 'end' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg) bg-gradient-to-l from-(--doc-prompt-background) to-transparent rtl:bg-gradient-to-r"
+            :data-direction="lineDirection"
+            :data-testid="`${testId}__fade-end`"
+            :style="lineFade('end')"
+            class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg)"
             aria-hidden="true"
-          />
-        </div>
-
-        <div
-          v-if="variant === 'block' && capped"
-          class="flex justify-center pt-(--spacing-sm)"
-        >
-          <Button
-            :label="expanded ? t('docPrompt.showLess') : t('docPrompt.showMore')"
-            :icon="expanded ? 'az az-chevron-up' : 'az az-chevron-down'"
-            variant="outline"
-            size="small"
-            :aria-expanded="expanded"
-            :aria-controls="promptId"
-            @click="toggle"
           />
         </div>
       </div>
@@ -303,6 +310,21 @@
           :copied-label="t('docPrompt.copied')"
           variant="outline"
           size="small"
+        />
+      </div>
+
+      <div
+        v-if="variant === 'block' && capped"
+        class="flex basis-full justify-center"
+      >
+        <Button
+          :label="expanded ? t('docPrompt.showLess') : t('docPrompt.showMore')"
+          :icon="expanded ? 'az az-chevron-up' : 'az az-chevron-down'"
+          variant="outline"
+          size="small"
+          :aria-expanded="expanded"
+          :aria-controls="promptId"
+          @click="toggle"
         />
       </div>
     </div>
