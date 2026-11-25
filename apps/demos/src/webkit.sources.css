@@ -555,6 +555,8 @@
 @source "../node_modules/@aziontech/webkit/src/components/overlay/popover/popover.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/tooltip/lib/lazy-tooltip.ts";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/tooltip/lib/trigger-class.ts";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/tooltip/parts/tooltip-content.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/tooltip/tooltip.vue";
 @source "../node_modules/@aziontech/webkit/src/components/provider/config-provider/config-provider.vue";
 @source "../node_modules/@aziontech/webkit/src/composables/use-ai-chat-tools/index.ts";
@@ -673,6 +675,7 @@
 @source "../node_modules/@aziontech/webkit/src/utils/ai-chat-questions.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/ai-chat.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/autofill.ts";
+@source "../node_modules/@aziontech/webkit/src/utils/client-lazy.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/clipboard.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/cn.ts";
 @source "../node_modules/@aziontech/webkit/src/utils/containing-block.ts";
