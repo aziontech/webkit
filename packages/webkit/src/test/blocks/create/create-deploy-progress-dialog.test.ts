@@ -36,6 +36,19 @@ describe('create-deploy-progress-dialog', () => {
       wait
     )
   })
+  it('returns focus to Show progress when the dialog that opened on load closes on Escape', async () => {
+    render(CreateDeployProgressDialog)
+    const dialog = await screen.findByRole('dialog')
+    within(dialog).getByRole('button', { name: 'Hide' }).focus()
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull(), wait)
+    await waitFor(
+      () =>
+        expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Show progress' })),
+      wait
+    )
+  })
+
   it('renders the run it is given and emits retry with the failed rows', async () => {
     const view = render(CreateDeployProgressDialog, { props: { items: samplePartialItems } })
     const dialog = await screen.findByRole('dialog')
