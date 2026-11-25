@@ -230,6 +230,10 @@ describe('Countdown', () => {
       el.getAttribute('data-severity')
     )
     expect(severities).toEqual(['danger', 'warning', 'neutral', 'neutral'])
+    const headings = [...list.container.querySelectorAll('thead th')].map((el) =>
+      el.textContent?.trim()
+    )
+    expect(headings).toEqual(['Subject', 'First reply', 'Requester'])
     await expectNoA11yViolations(list.container)
   })
 
