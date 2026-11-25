@@ -216,7 +216,7 @@
     :data-testid="testId"
     :data-variant="variant"
     :data-size="size"
-    class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-2xs) [&_[data-slot=button-group-item]>[data-slot=touch-target]]:inset-x-0"
+    class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-2xs) [&_[data-slot=button-group-item]>[data-slot=touch-target]]:inset-x-0 pointer-coarse:[&_[data-slot=button-group-item]]:min-w-11"
     @focusin="onFocusin"
   >
     <template
