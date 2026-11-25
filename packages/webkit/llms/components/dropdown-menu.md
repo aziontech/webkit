@@ -88,7 +88,7 @@
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
-    - `command: string` default `''` — keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
+    - `command: string` default `''` — keyboard shortcut, written as keys joined by `+` (`'mod+P'`, `'shift+mod+P'`, `'ctrl+,'`); `mod` (or `⌘`, `cmd`, `meta`) is the platform's primary modifier, `Meta` on macOS and `Ctrl` elsewhere, and the glyphs `⇧ ⌥ ⌃` work as well as `shift`, `alt`, `ctrl`. The hint renders through `Kbd` (size `small`), so it reads `⌘P` on macOS and `Ctrl P` elsewhere, and it is hidden on a coarse pointer, where no keyboard is assumed. A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
@@ -187,8 +187,8 @@ Labels come from the consumer (`label` props and slots); the one built-in string
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"
-        icon="az az-plus"
-        aria-label="Open menu"
+        icon="az az-user"
+        aria-label="Account menu"
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup>
@@ -245,7 +245,7 @@ Labels come from the consumer (`label` props and slots); the one built-in string
       <DropdownMenuItem
         value="profile"
         label="Profile"
-        command="⌘P"
+        command="mod+P"
       />
       <DropdownMenuItem
         value="settings"

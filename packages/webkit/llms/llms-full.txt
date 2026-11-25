@@ -18271,7 +18271,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 - Visible focus: none; the avatar is not focusable. A parent control (account menu trigger) owns focus.
 - Keyboard map: none.
-- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
+- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization; an `aria-label` the consumer passes, such as the purpose of a menu trigger the avatar sits in, replaces the derived name), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
 - Contrast ≥4.5:1 for the initials on `var(--bg-surface-raised)`; the generated pattern is decorative and carries no text.
 - Presence: the dot is presentational (`aria-hidden`); the presence joins the accessible name of the root (`aria-label`) or of the image (`alt`) through `avatar.withPresence`, for example "Jane Doe, away"; it wraps whichever name applies (`alt`, the label, the initials or the fallback, so "User avatar, away"). The dot colours are the documented `-mark` colours (`--text-muted` for `offline`, the neutral mark), solid marks at APCA Lc 30 and WCAG 3:1 on the surface, and each value differs in shape as well as colour (WCAG 1.4.1). A change of `presence` is not announced (no live region): the avatar is a label, and a live roster announces through the app.
 
@@ -29581,7 +29581,7 @@ Unbound, each one keeps its own local state.
 - `AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
-- `Breadcrumb` — the header trail (`breadcrumbs`); while compact it stays from a 28rem header up (collapsed by `Breadcrumb` to first › … › current), or only a page's control crumbs when the page has them.
+- `Breadcrumb` — the header trail (`breadcrumbs`), given the free width of the header start so it shows whole whenever it fits and `Breadcrumb` folds it only when it does not; while compact it stays from a 28rem header up, or only a page's control crumbs when the page has them.
 - `shell/shell-console` — the block that shows this layout with sample console navigation.
 
 ## Props
@@ -29661,7 +29661,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## States
 
-- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer), the palette `open` / `closed`.
+- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer; otherwise the brand is in the header beside the hamburger, so the drawer drops its brand row and the navigation starts under the close button), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main a `flex-1 min-h-0 h-full overflow-hidden` item of `AppLayout`'s body (which turns into a fixed-height flex column while it holds a fill page), and the child `flex-1 min-h-0`; pure CSS, right in the server render. The page then never scrolls as a whole: a chat keeps its composer pinned and scrolls only its thread, at every width (styled test `src/test/layout-fill.test.ts`).
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
@@ -30408,7 +30408,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
         target="_blank"
       />
       <Button
-        label="Create Resource"
+        label="Create resource"
         icon="az az-plus"
         variant="primary"
         size="medium"
@@ -30543,17 +30543,28 @@ context, so a consumer never wires one part to the other.
       orientation="horizontal"
       aria-label="Workspace"
     >
-      <Resizable.Pane aria-label="Document"
-        >Flexible — no basis, so it takes what is left.</Resizable.Pane
-      >
-      <Resizable.Handle aria-label="Resize the panel" />
+      <Resizable.Pane aria-label="Code">
+        <div class="h-full p-(--spacing-md)">
+          <p class="m-0 text-label-md text-(--text-default)">main.js</p>
+          <p class="mt-(--spacing-xs) mb-0 text-body-sm text-(--text-muted)">
+            The function that answers every request to acme-store.
+          </p>
+        </div>
+      </Resizable.Pane>
+      <Resizable.Handle aria-label="Resize the logs" />
       <Resizable.Pane
         v-model:basis="basis"
         :min="160"
         :max="480"
-        aria-label="Panel"
-        >Sized</Resizable.Pane
+        aria-label="Logs"
       >
+        <div class="h-full p-(--spacing-md)">
+          <p class="m-0 text-label-md text-(--text-default)">Logs</p>
+          <p class="mt-(--spacing-xs) mb-0 text-body-sm text-(--text-muted)">
+            GET /products returned 200 in 12 ms.
+          </p>
+        </div>
+      </Resizable.Pane>
     </Resizable>
   </div>
 </template>
@@ -31134,7 +31145,7 @@ context, so a consumer never wires one part to the other.
 - Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set), `required` (after the title, the same marker a required `Field.Label` renders: a lone `*` hidden from assistive tech)
 - `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
-- Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
+- Responsive: the row is the `@container/settings-row`. The description wraps in full at every width, filling the measure it has (`text-wrap: pretty`, not the balanced wrap of `Item.Description`, which broke a two-line description near half the row on a phone); it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
 
 ## Accessibility
 
@@ -31165,14 +31176,14 @@ context, so a consumer never wires one part to the other.
     <template #default>
       <Item.List>
         <SettingsRow
-          title="Company Name"
+          title="Company name"
           description="The legal entity that owns this account."
         >
           <Input
             v-model="form.companyName"
             size="large"
             class="w-full"
-            aria-label="Company Name"
+            aria-label="Company name"
           />
         </SettingsRow>
         <SettingsRow
@@ -31491,10 +31502,11 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             icon="az az-applications"
             href="/applications"
           />
-          <SidebarMenuSub default-open>
+          <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Functions"
-              type="inline"
+              icon="az az-functions"
+              type="drill"
             />
             <SidebarMenuSubContent>
               <SidebarMenuItem
@@ -31732,12 +31744,12 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 - Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.
 - A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).
-- The trail is known as data — pass `items` and let the component render the segments, separators and the collapse when its own box is narrower than 768px.
+- The trail is known as data — pass `items` and let the component render the segments, separators and the fold when the segments do not fit its own box.
 - The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot.
 
 ## Do
 
-- Prefer `items`; only `items` mode collapses the middle segments into an overflow menu when its own box is narrower than 768px. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
+- Prefer `items`; only `items` mode folds segments into an overflow menu when they do not fit its own box. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
 - Let the last entry be the current page — it is treated as current unless its `active` is set to `false`; give every ancestor an `href`.
 - Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.
 - **Vue Router:** a segment has no `to`; put the route's path in `href` (for a named route, `router.resolve(to).href`) and write `@navigate="(event, href) => { event.preventDefault(); router.push(href) }"`. The segment stays a real link, so open-in-new-tab keeps working; leave a modified click (Ctrl, ⌘, Shift, middle button) to the browser.
@@ -31793,9 +31805,9 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 #### Responsive contract
 
 - The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; the current (last) segment gives way first, down to a 2.5rem floor, so the parent link stays readable (the current page is also the page title); a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
-- **`items` mode** additionally collapses when the `nav`'s own width is below 768px (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer collapses on a wide screen too): first segment, an overflow menu holding the middle segments, then the current segment. Below 360px of its own width (the trail beside a brand and an avatar in a phone header) the first segment folds into that menu too, even when there is no middle segment, so the current segment gets the row: an overflow menu holding every ancestor, then the current segment. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
+- **`items` mode** additionally folds when its segments do not fit the `nav`'s own width (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer folds on a wide screen too, and unfolds when its box grows). It folds one step at a time and stops at the first step that fits: every segment; then the first segment, an overflow menu holding the segments between, the parent and the current page; then the overflow menu, the parent and the current page; then the overflow menu holding every ancestor and the current page. A step fits when no ancestor label is cut; the current page may truncate only once the parent is the one ancestor left, so the way back stays readable. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The fit is owned by the component's own `use-breadcrumb-collapse` composable.
 - **Slot (hand-composed) mode** keeps every segment it was given, since the root cannot know which of the consumer's children are middle segments, so on a narrow screen it degrades through the single-row rules above rather than through a collapse.
-- Server render and hydration: the collapse measures the `nav` only after mount (`use-breadcrumb-collapse` reads its width in `onMounted`, then follows a `ResizeObserver`), so the server HTML and the first client render are the full trail and match; in a narrow box the collapse applies in the same tick as mount, before paint.
+- Server render and hydration: the fold measures the `nav` only after mount (`use-breadcrumb-collapse` measures in `onMounted`, then follows a `ResizeObserver`), so the server HTML and the first client render are the full trail and match; in a narrow box the fold applies in the same tick as mount, before paint.
 
 ## Accessibility
 
@@ -32192,7 +32204,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
-    - `command: string` default `''` — keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
+    - `command: string` default `''` — keyboard shortcut, written as keys joined by `+` (`'mod+P'`, `'shift+mod+P'`, `'ctrl+,'`); `mod` (or `⌘`, `cmd`, `meta`) is the platform's primary modifier, `Meta` on macOS and `Ctrl` elsewhere, and the glyphs `⇧ ⌥ ⌃` work as well as `shift`, `alt`, `ctrl`. The hint renders through `Kbd` (size `small`), so it reads `⌘P` on macOS and `Ctrl P` elsewhere, and it is hidden on a coarse pointer, where no keyboard is assumed. A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `az az-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
@@ -32271,8 +32283,8 @@ with `defineModel`, so their `update:*` events are not hand-declared.
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"
-        icon="az az-plus"
-        aria-label="Open menu"
+        icon="az az-user"
+        aria-label="Account menu"
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup>
@@ -32553,7 +32565,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
               <NavigationMenu.Item value="solutions">
                 <NavigationMenu.Trigger> Solutions </NavigationMenu.Trigger>
                 <NavigationMenu.Content class="w-full">
-                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                  <div class="grid grid-cols-1 gap-(--spacing-xl) p-(--spacing-xs) sm:grid-cols-2">
                     <NavigationMenu.List label="By use case">
                       <NavigationMenu.Item
                         layout="entry"
@@ -32613,7 +32625,7 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
               <NavigationMenu.Item value="products">
                 <NavigationMenu.Trigger> Products </NavigationMenu.Trigger>
                 <NavigationMenu.Content class="w-full">
-                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                  <div class="grid grid-cols-1 gap-(--spacing-xl) p-(--spacing-xs) sm:grid-cols-2">
                     <NavigationMenu.List label="Build">
                       <NavigationMenu.Item
                         layout="entry"
@@ -32669,14 +32681,14 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
     <div
       class="mx-auto flex max-w-(--container-2xl) flex-col items-center px-(--spacing-lg) py-(--spacing-2xl) text-center"
     >
-      <h1 class="text-heading-lg text-(--text-default)">Navigation menu demo</h1>
+      <h1 class="text-heading-lg text-(--text-default)">Build applications that run at the edge</h1>
       <p class="mt-(--spacing-xl) text-body-sm text-(--text-muted)">
-        Hover or tap a top-level item to open its panel. Keyboard: arrows, Enter, Escape.
+        Deploy, secure and observe your applications on one platform.
       </p>
       <div class="mt-(--spacing-2xl) flex flex-wrap justify-center gap-(--spacing-sm)">
-        <Button label="Primary action" />
+        <Button label="Start for free" />
         <Button
-          label="Secondary"
+          label="Talk to sales"
           variant="secondary"
         />
       </div>
@@ -33493,7 +33505,7 @@ even when the row carries nothing but its title.
   import Tabs from '@aziontech/webkit/tabs'
   import { ref } from 'vue'
 
-  const active = ref('tab-1')
+  const active = ref('overview')
 </script>
 
 <template>
@@ -33503,32 +33515,38 @@ even when the row carries nothing but its title.
   >
     <Tabs.List>
       <Tabs.Trigger
-        value="tab-1"
-        label="Tab Item"
+        value="overview"
+        label="Overview"
       />
       <Tabs.Trigger
-        value="tab-2"
-        label="Tab Item"
+        value="metrics"
+        label="Metrics"
       />
       <Tabs.Trigger
-        value="tab-3"
-        label="Tab Item"
+        value="logs"
+        label="Logs"
       />
     </Tabs.List>
     <div class="w-full">
-      <Tabs.Content value="tab-1">
+      <Tabs.Content value="overview">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-          <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
+          <p class="text-body-sm text-(--text-default)">
+            Requests, bandwidth and errors for the last 24 hours.
+          </p>
         </div>
       </Tabs.Content>
-      <Tabs.Content value="tab-2">
+      <Tabs.Content value="metrics">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-          <p class="text-body-sm text-(--text-default)">Content for tab 2</p>
+          <p class="text-body-sm text-(--text-default)">
+            Charts of requests per second and cache hit ratio.
+          </p>
         </div>
       </Tabs.Content>
-      <Tabs.Content value="tab-3">
+      <Tabs.Content value="logs">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-          <p class="text-body-sm text-(--text-default)">Content for tab 3</p>
+          <p class="text-body-sm text-(--text-default)">
+            The latest events from this application, newest first.
+          </p>
         </div>
       </Tabs.Content>
     </div>

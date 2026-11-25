@@ -306,10 +306,11 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             icon="az az-applications"
             href="/applications"
           />
-          <SidebarMenuSub default-open>
+          <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Functions"
-              type="inline"
+              icon="az az-functions"
+              type="drill"
             />
             <SidebarMenuSubContent>
               <SidebarMenuItem

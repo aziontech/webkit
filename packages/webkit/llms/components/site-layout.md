@@ -157,7 +157,7 @@
     ],
     links: [{ label: 'Pricing', href: '/en/pricing/' }],
     contact: { label: 'Contact', href: '/en/contact/' },
-    secondaryAction: { label: 'Login', href: 'https://console.azion.com/login' },
+    secondaryAction: { label: 'Log in', href: 'https://console.azion.com/login' },
     primaryAction: { label: 'Start for free', href: 'https://console.azion.com/signup' }
   }
 
@@ -264,7 +264,7 @@
     ],
     links: [{ label: 'Pricing', href: '/en/pricing/' }],
     contact: { label: 'Contact', href: '/en/contact/' },
-    secondaryAction: { label: 'Login', href: 'https://console.azion.com/login' },
+    secondaryAction: { label: 'Log in', href: 'https://console.azion.com/login' },
     primaryAction: { label: 'Start for free', href: 'https://console.azion.com/signup' }
   }
 

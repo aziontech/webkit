@@ -11,12 +11,12 @@
 
 - Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.
 - A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).
-- The trail is known as data — pass `items` and let the component render the segments, separators and the collapse when its own box is narrower than 768px.
+- The trail is known as data — pass `items` and let the component render the segments, separators and the fold when the segments do not fit its own box.
 - The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot.
 
 ## Do
 
-- Prefer `items`; only `items` mode collapses the middle segments into an overflow menu when its own box is narrower than 768px. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
+- Prefer `items`; only `items` mode folds segments into an overflow menu when they do not fit its own box. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
 - Let the last entry be the current page — it is treated as current unless its `active` is set to `false`; give every ancestor an `href`.
 - Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.
 - **Vue Router:** a segment has no `to`; put the route's path in `href` (for a named route, `router.resolve(to).href`) and write `@navigate="(event, href) => { event.preventDefault(); router.push(href) }"`. The segment stays a real link, so open-in-new-tab keeps working; leave a modified click (Ctrl, ⌘, Shift, middle button) to the browser.
@@ -73,9 +73,9 @@
 #### Responsive contract
 
 - The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; the current (last) segment gives way first, down to a 2.5rem floor, so the parent link stays readable (the current page is also the page title); a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
-- **`items` mode** additionally collapses when the `nav`'s own width is below 768px (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer collapses on a wide screen too): first segment, an overflow menu holding the middle segments, then the current segment. Below 360px of its own width (the trail beside a brand and an avatar in a phone header) the first segment folds into that menu too, even when there is no middle segment, so the current segment gets the row: an overflow menu holding every ancestor, then the current segment. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
+- **`items` mode** additionally folds when its segments do not fit the `nav`'s own width (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer folds on a wide screen too, and unfolds when its box grows). It folds one step at a time and stops at the first step that fits: every segment; then the first segment, an overflow menu holding the segments between, the parent and the current page; then the overflow menu, the parent and the current page; then the overflow menu holding every ancestor and the current page. A step fits when no ancestor label is cut; the current page may truncate only once the parent is the one ancestor left, so the way back stays readable. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The fit is owned by the component's own `use-breadcrumb-collapse` composable.
 - **Slot (hand-composed) mode** keeps every segment it was given, since the root cannot know which of the consumer's children are middle segments, so on a narrow screen it degrades through the single-row rules above rather than through a collapse.
-- Server render and hydration: the collapse measures the `nav` only after mount (`use-breadcrumb-collapse` reads its width in `onMounted`, then follows a `ResizeObserver`), so the server HTML and the first client render are the full trail and match; in a narrow box the collapse applies in the same tick as mount, before paint.
+- Server render and hydration: the fold measures the `nav` only after mount (`use-breadcrumb-collapse` measures in `onMounted`, then follows a `ResizeObserver`), so the server HTML and the first client render are the full trail and match; in a narrow box the fold applies in the same tick as mount, before paint.
 
 ## Accessibility
 

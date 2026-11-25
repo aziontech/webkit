@@ -15,7 +15,7 @@
  "useWhen": [
   "Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.",
   "A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).",
-  "The trail is known as data — pass `items` and let the component render the segments, separators and the collapse when its own box is narrower than 768px.",
+  "The trail is known as data — pass `items` and let the component render the segments, separators and the fold when the segments do not fit its own box.",
   "The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot."
  ],
  "avoidWhen": [
@@ -29,7 +29,7 @@
   "`link` — a standalone link; a breadcrumb segment is a link with the trail's muted / current styling."
  ],
  "bestPractices": [
-  "Prefer `items`; only `items` mode collapses the middle segments into an overflow menu when its own box is narrower than 768px. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.",
+  "Prefer `items`; only `items` mode folds segments into an overflow menu when they do not fit its own box. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.",
   "Let the last entry be the current page — it is treated as current unless its `active` is set to `false`; give every ancestor an `href`.",
   "Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.",
   "**Vue Router:** a segment has no `to`; put the route's path in `href` (for a named route, `router.resolve(to).href`) and write `@navigate=\"(event, href) => { event.preventDefault(); router.push(href) }\"`. The segment stays a real link, so open-in-new-tab keeps working; leave a modified click (Ctrl, ⌘, Shift, middle button) to the browser.",
