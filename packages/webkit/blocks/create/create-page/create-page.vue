@@ -22,7 +22,7 @@
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
-  import { onMounted, reactive, ref, watch } from 'vue'
+  import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'
 
@@ -45,7 +45,7 @@
     defaultValues?: Partial<CreatePageValues>
     /** The create request is in flight; the form locks and Save spins. */
     loading?: boolean
-    /** Why the create request failed, shown in an inline error with Retry above the save bar. */
+    /** Why the create request failed, shown in an inline error with Retry under the page title. */
     error?: string
   }
 
@@ -141,6 +141,12 @@
     }
   )
 
+  watch([() => props.error, attempt], async ([next]) => {
+    if (!next) return
+    await nextTick()
+    formEl.value?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
+  })
+
   const DNSSEC_DESCRIPTION =
     "Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
 </script>
@@ -195,6 +201,16 @@
               title-id="create-domain-title"
             />
 
+            <Alert
+              v-if="error"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="Could not create the domain."
+              :label="error"
+              action-label="Retry"
+              @action="submit"
+            />
             <fieldset
               :disabled="loading"
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
@@ -315,17 +331,6 @@
                 </Card>
               </SettingsGroup>
             </fieldset>
-
-            <Alert
-              v-if="error"
-              :key="attempt"
-              class="mt-(--layout-section-gap)"
-              severity="danger"
-              title="Could not create the domain."
-              :label="error"
-              action-label="Retry"
-              @action="submit"
-            />
           </div>
           <SaveBar variant="centered">
             <template #actions>

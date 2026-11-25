@@ -105,6 +105,16 @@
             size="small"
             description="A service answers requests on its domains and forwards them to its origins."
           />
+
+          <Alert
+            v-if="failure"
+            class="mt-(--layout-section-gap)"
+            severity="danger"
+            title="Could not create the service."
+            :label="failure"
+            action-label="Retry"
+            @action="submit"
+          />
           <fieldset
             class="mx-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -379,16 +389,6 @@
               </Card>
             </section>
           </fieldset>
-
-          <Alert
-            v-if="failure"
-            class="mt-(--layout-section-gap)"
-            severity="danger"
-            title="Could not create the service."
-            :label="failure"
-            action-label="Retry"
-            @action="submit"
-          />
         </div>
 
         <ServiceSaveBar

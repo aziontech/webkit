@@ -27,7 +27,7 @@
     submitLabel: string
     /** The request is in flight: the fieldset locks. */
     submitting: boolean
-    /** Why the last request failed, shown inline with Retry above the save bar. */
+    /** Why the last request failed, shown inline with Retry under the page title. */
     failure?: string
     /** The title of that inline error. */
     failureTitle?: string
@@ -92,14 +92,6 @@
               :title-id="titleId"
             />
 
-            <fieldset
-              :disabled="submitting"
-              class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
-            >
-              <legend class="sr-only">{{ title }}</legend>
-              <slot />
-            </fieldset>
-
             <Alert
               v-if="failure"
               class="mt-(--layout-section-gap)"
@@ -109,6 +101,13 @@
               action-label="Retry"
               @action="(event: MouseEvent) => emit('submit', event)"
             />
+            <fieldset
+              :disabled="submitting"
+              class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+            >
+              <legend class="sr-only">{{ title }}</legend>
+              <slot />
+            </fieldset>
           </div>
           <SaveBar variant="centered">
             <template
