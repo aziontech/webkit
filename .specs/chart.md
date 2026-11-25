@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 4b37e7994e7d7c7472afc6d1bce08e1889add5a892a64200d80096d044d3114b
+checksum: 9ad35d4b3766c4af24216457be1f608bc0cf5a98a601b09f76f2fa0f5763922a
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -161,7 +161,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_ (the span flows through the root's `v-model:range`).
   - Slots: _none_.
-- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
+- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. A band label moves above the band (or below it) when a shown series crosses the label's corner at the last category, so the data line never runs through it; it stays inside when no place is clear. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
   - Props: `value?: number` (default `undefined` — the line position), `from?: number` and `to?: number` (default `undefined` — the band bounds, in either order; used when `value` is unset), `label?: string` (default `''`), `severity?: ChartThresholdSeverity` (`'neutral'`, a status `'success' | 'warning' | 'danger' | 'info'`, or a findings level `'severity-critical'` … `'severity-info'`; default `'neutral'` — `neutral` draws in `var(--chart-label)`, a status in its `var(--chart-status-*)` role, a findings level in `var(--severity-*)`). It is the severity map of `ChartThreshold`, the type GaugeChart bands use, so a gauge band and a reference line never disagree. Use Chart.Reference for threshold lines or bands inside a Chart; use GaugeChart bands for a single reading.
   - Events: _none_.
   - Slots: _none_.
