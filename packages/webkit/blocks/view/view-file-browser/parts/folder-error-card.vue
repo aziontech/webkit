@@ -2,11 +2,10 @@
   import Alert from '@aziontech/webkit/alert'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Card from '@aziontech/webkit/card'
-  import IconButton from '@aziontech/webkit/icon-button'
   import SplitButton from '@aziontech/webkit/split-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
 
   import { addToFilesActions } from '../lib/file-rows'
+  import FolderSearchRow from './folder-search-row.vue'
   import StorageTitle from './storage-title.vue'
 
   defineProps<{
@@ -27,6 +26,12 @@
     <template #default>
       <div class="flex w-full flex-col gap-(--spacing-sm)">
         <StorageTitle :name="rootName" />
+        <FolderSearchRow
+          :loading="false"
+          :exportable="false"
+          disabled
+          @refresh="(event: MouseEvent) => emit('refresh', event)"
+        />
         <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
           <div class="min-w-0 flex-1">
             <Breadcrumb
@@ -36,15 +41,6 @@
             />
           </div>
           <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-            <Tooltip content="Refresh">
-              <IconButton
-                icon="az az-refresh"
-                variant="outline"
-                size="medium"
-                aria-label="Refresh"
-                @click="(event: MouseEvent) => emit('refresh', event)"
-              />
-            </Tooltip>
             <SplitButton
               label="Add to files"
               icon="az az-plus"

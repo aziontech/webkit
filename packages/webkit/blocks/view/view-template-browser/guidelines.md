@@ -56,7 +56,7 @@ While `loading` is set, the band is `aria-busy` and named Loading templates: the
 
 ### I. Failed catalog — `Alert`, `EmptyState`, `Button` (required)
 
-When `error` is set, the sections give way to a danger `Alert` with the message and Retry, and a medium `EmptyState`, "Templates are unavailable", whose secondary small Import from Git `Button` still starts a project.
+When `error` is set, the search stays, disabled, and the sections give way to a danger `Alert` with the message and Retry, and a medium `EmptyState`, "Templates are unavailable", whose secondary small Import from Git `Button` still starts a project.
 
 ## Data
 
@@ -144,7 +144,7 @@ Then delete `sample.ts` and its import.
 - Preview: `defaultPreview="next-starter"`; the drawer is open on Next.js Starter with its details, the README, View repository and Deploy.
 - NoMatch: `defaultText="kubernetes"`; the search "kubernetes" matches nothing; the token stays and the empty state offers Clear filters.
 - Loading: `loading`; the filter is disabled and two sections of `Skeleton` tiles (mark, name, two lines, tag) hold the layout in a band that is `aria-busy` and named Loading templates.
-- Error: `error`; the catalog could not load; a danger `Alert` shows the message, e.g. Couldn't load templates with Retry, and a medium empty state offers Import from Git so a project can still start.
+- Error: `error`; the catalog could not load; a danger `Alert` shows the message, e.g. Couldn't load templates with Retry, and a medium empty state offers Import from Git so a project can still start; the search stays, disabled. Every view block's error state follows one rule: the filter or search stays in place, disabled; Download CSV and the preferences are disabled; Refresh stays live.
 
 ## Related
 

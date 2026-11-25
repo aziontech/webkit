@@ -221,7 +221,7 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - InsideAFolder: `path` is a build folder; the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
 - Uploading: `transfers` holds a running upload in the floating card; Add to files opens the upload dialog and the page drop overlay adds more.
 - Empty: `entries` is `[]` inside `assets/` of a build; the `..` row stays and the empty state offers Add to files.
-- Error: `error` is set; the storage name, the path and Refresh stay, Add to files is disabled and a danger `Alert` with the message and Retry takes the table's place.
+- Error: `error` is set; the storage name, the search row (search, Download CSV and the column settings disabled, Refresh live) and the path stay, Add to files is disabled and a danger `Alert` with the message and Retry takes the table's place. Every view block's error state follows one rule: the filter or search stays in place, disabled; Download CSV and the preferences are disabled; Refresh stays live.
 - MoveObject: `movable` with two files in `selectedKeys` and `defaultMoveOpen`; the Move dialog is open and Move emits `move`.
 
 ## Related

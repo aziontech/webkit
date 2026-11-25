@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
 
-  defineProps<{ loading: boolean; exportable: boolean }>()
+  withDefaults(defineProps<{ loading: boolean; exportable: boolean; disabled?: boolean }>(), {
+    disabled: false
+  })
 
   const search = defineModel<string>('search', { default: '' })
 
@@ -17,7 +20,23 @@
 <template>
   <div class="flex w-full items-center gap-(--spacing-xs)">
     <div class="flex flex-1">
+      <Input
+        v-if="disabled"
+        size="medium"
+        placeholder="Search in folder"
+        aria-label="Search the table"
+        disabled
+        class="w-full"
+      >
+        <template #leading>
+          <i
+            class="az az-search text-button-md"
+            aria-hidden="true"
+          />
+        </template>
+      </Input>
       <TableSearch
+        v-else
         v-model="search"
         size="medium"
         placeholder="Search in folder"
@@ -45,13 +64,14 @@
         icon="az az-download"
         variant="outline"
         size="medium"
-        :disabled="!exportable"
+        :disabled="disabled || !exportable"
         aria-label="Download CSV"
         @click="(event: MouseEvent) => emit('download', event)"
       />
     </Tooltip>
     <CollectionPreferences
       :sections="['columns']"
+      :disabled="disabled"
       class="shrink-0"
     />
   </div>
