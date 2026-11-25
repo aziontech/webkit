@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, h, useAttrs } from 'vue'
 
   import Item from '../../content/item/item.vue'
   import ItemActions from '../../content/item/item-actions.vue'
   import ItemContent from '../../content/item/item-content.vue'
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemTitle from '../../content/item/item-title.vue'
-  import Hint from '../../input/hint/hint.vue'
 
   /** Where the control sits: `field` in a right cell capped at the 3xs container, `compact` hard right at its natural width, `stacked` under the copy at the full measure. */
   export type SettingsRowVariant = 'field' | 'compact' | 'stacked'
@@ -52,6 +51,13 @@
     /** Rich description content (links, inline code); replaces the description prop. */
     description(): unknown
   }>()
+
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../input/hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
+  })
 
   const attrs = useAttrs()
 

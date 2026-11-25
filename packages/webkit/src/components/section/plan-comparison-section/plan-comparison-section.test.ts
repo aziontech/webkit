@@ -191,11 +191,11 @@ describe('PlanComparisonSection', () => {
     expect(within(inference[0]).getByText('Not included')).toBeInTheDocument()
   })
 
-  it('renders a Hint and the tag next to a label', () => {
+  it('renders a Hint and the tag next to a label', async () => {
     const { getByRole, getByText } = band()
 
     const row = getByRole('rowheader', { name: /Rules Engine/ })
-    expect(within(row).getByTestId('hint')).toBeInTheDocument()
+    expect(await within(row).findByTestId('hint')).toBeInTheDocument()
     expect(within(row).getByTestId('hint__trigger').tagName).toBe('BUTTON')
     expect(row.querySelector('.az-circle-info')).not.toBeNull()
     expect(getByText('Preview')).toBeInTheDocument()
@@ -205,7 +205,7 @@ describe('PlanComparisonSection', () => {
     const { getByRole } = band()
 
     const row = getByRole('rowheader', { name: /Rules Engine/ })
-    await userEvent.click(within(row).getByTestId('hint__trigger'))
+    await userEvent.click(await within(row).findByTestId('hint__trigger'))
 
     await waitFor(() => expect(document.body).toHaveTextContent('Conditional rules.'))
   })

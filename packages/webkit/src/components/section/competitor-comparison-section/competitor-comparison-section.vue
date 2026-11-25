@@ -1,5 +1,14 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref, shallowRef, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    defineAsyncComponent,
+    h,
+    onMounted,
+    ref,
+    shallowRef,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -7,7 +16,6 @@
   import ThirdPartyLogo, {
     type ThirdPartyLogoArtwork
   } from '../../content/third-party-logo/third-party-logo.vue'
-  import Hint from '../../input/hint/hint.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import SectionBand from '../parts/section-band.vue'
 
@@ -89,6 +97,13 @@
     partialLabel: '',
     noneLabel: '',
     groups: () => []
+  })
+
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../input/hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
   })
 
   const attrs = useAttrs()

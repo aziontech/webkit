@@ -217,7 +217,7 @@ Each variant is the same screen in another state: `get_block("state/state-page-s
           <Card :padded="false">
             <template #default>
               <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                <div class="flex items-center [&>*+*]:-ms-2">
+                <div class="flex items-center [&>*:not(:first-child)]:-ms-2">
                   <Skeleton
                     v-for="mark in 4"
                     :key="mark"

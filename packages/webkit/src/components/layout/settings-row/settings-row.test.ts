@@ -1,6 +1,6 @@
 import '../../../test/reflow.css'
 
-import { render, within } from '@testing-library/vue'
+import { render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
@@ -94,13 +94,13 @@ describe('SettingsRow', () => {
     expect(on.getByTestId('settings-row').hasAttribute('data-stackable')).toBe(true)
   })
 
-  it('renders a Hint beside the title when hint is set', () => {
+  it('renders a Hint beside the title when hint is set', async () => {
     const hint = 'The edge serves the cached copy until this many seconds pass.'
-    const { getByTestId, getByRole } = within(
+    const { getByTestId, getByRole, findByTestId } = within(
       render(inList({ title: 'Cache TTL', hint })).container as HTMLElement
     )
 
-    const glyph = getByTestId('settings-row__hint__trigger')
+    const glyph = await findByTestId('settings-row__hint__trigger')
     expect(getByTestId('settings-row__title').contains(glyph)).toBe(true)
     expect(getByRole('button', { name: 'More information' })).toBe(glyph)
     expect(glyph).toHaveAccessibleDescription(hint)
@@ -150,7 +150,7 @@ describe('SettingsRow', () => {
     expect(getByTestId('settings-row__description').querySelector('a')).toBeTruthy()
   })
 
-  it('renders the examples', () => {
+  it('renders the examples', async () => {
     expect(
       within(render(Default).container as HTMLElement).getAllByTestId('settings-row')
     ).toHaveLength(3)
@@ -172,11 +172,10 @@ describe('SettingsRow', () => {
     expect(within(render(Stackable).container as HTMLElement).getAllByRole('textbox')).toHaveLength(
       2
     )
-    expect(
-      within(render(WithHint).container as HTMLElement).getAllByTestId(
-        'settings-row__hint__trigger'
-      )
-    ).toHaveLength(2)
+    const withHint = within(render(WithHint).container as HTMLElement)
+    await waitFor(() =>
+      expect(withHint.getAllByTestId('settings-row__hint__trigger')).toHaveLength(2)
+    )
   })
 
   it('has no accessibility violations', async () => {

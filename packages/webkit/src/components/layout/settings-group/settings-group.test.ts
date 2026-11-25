@@ -33,7 +33,7 @@ describe('SettingsGroup', () => {
     expect(getByTestId('general-band__label')).toBeTruthy()
   })
 
-  it('renders the Hint only when hint is set', () => {
+  it('renders the Hint only when hint is set', async () => {
     const bare = within(
       render(SettingsGroup, { props: { label: 'General' } }).container as HTMLElement
     )
@@ -43,7 +43,7 @@ describe('SettingsGroup', () => {
       render(SettingsGroup, { props: { label: 'General', hint: 'What this band holds.' } })
         .container as HTMLElement
     )
-    expect(hinted.getByTestId('hint')).toBeTruthy()
+    expect(await hinted.findByTestId('hint')).toBeTruthy()
   })
 
   it('renders the info slot beside the heading, outside the h2 and the disclosure', async () => {

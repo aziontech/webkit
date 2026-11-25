@@ -12,7 +12,7 @@ import { DurationSequencer } from './src/test/duration-sequencer'
 import { emulateMedia } from './src/test/emulate-media'
 import { emulateTouch } from './src/test/emulate-touch'
 import { renderOnServer } from './src/test/server-render'
-import { styleRecalcMs } from './src/test/style-metrics'
+import { styleTraceStart, styleTraceStop } from './src/test/style-metrics'
 
 const EXPORTS: Record<string, string | { default: string }> = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf8')
@@ -53,7 +53,14 @@ export default defineConfig({
       provider: playwright({ contextOptions: { locale: 'en-US', timezoneId: 'UTC' } }),
       headless: true,
       instances: [{ browser: 'chromium' }],
-      commands: { ariaSnapshot, emulateMedia, emulateTouch, renderOnServer, styleRecalcMs }
+      commands: {
+        ariaSnapshot,
+        emulateMedia,
+        emulateTouch,
+        renderOnServer,
+        styleTraceStart,
+        styleTraceStop
+      }
     },
     coverage: {
       provider: 'v8',

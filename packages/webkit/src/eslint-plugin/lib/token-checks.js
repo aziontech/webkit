@@ -100,13 +100,15 @@ const TOKEN_CHECKS = [
   },
   {
     id: 'universal-sibling-selector',
+    wide: true,
     regex: /\[&[^\]\s"'`]*?[+~]_?\*\]:/g,
     message:
-      'A sibling variant whose subject is the universal selector (`[&+*]:`, `[&~*]:`). It ' +
-      'compiles to a rule like `.x + *`, so Chromium checks every element inserted anywhere ' +
-      'the stylesheet applies against it (the virtual DataTable scroll went from 0.06 to 0.41 ' +
-      'of its style-recalc budget). Put the spacing on the element itself with `not-last:` or ' +
-      '`not-first:`, or name the sibling (.claude/rules/styling.md).'
+      'A sibling variant whose subject is the universal selector (`[&+*]:`, `[&~*]:`, ' +
+      '`[&>*+*]:`). It compiles to a rule like `.x + *`, so Chromium checks every element ' +
+      'inserted anywhere the stylesheet applies against it (one such rule made each scroll frame ' +
+      'of the virtual DataTable restyle three quarters of the table). Put the spacing on the ' +
+      'element itself with `not-last:` or `not-first:`, use `[&>*:not(:first-child)]:`, or name ' +
+      'the sibling (.claude/rules/styling.md).'
   },
   {
     id: 'rtl-double-flip',

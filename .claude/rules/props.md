@@ -68,7 +68,7 @@ Every public prop gets a one-line JSDoc `/** ... */`. It is the source of the do
 ## Enforcement
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** blocks props not in the spec, off-vocabulary names, `is`/`has` booleans, and default drift; **[`validate-tokens.mjs`](../hooks/validate-tokens.mjs)** blocks `any` / `@ts-ignore` / `class` in `defineProps`.
-- `type-coverage` (95% threshold, CI) backstops the "no `any`" rule.
+- `type-coverage` (95% threshold, CI) backstops the "no `any`" rule in `.ts` files; [`check-sfc-type-coverage.mjs`](../../packages/webkit/scripts/check-sfc-type-coverage.mjs) runs the same engine over the vue-tsc virtual files and fails when the count of identifiers typed `any` in component SFC scripts and templates grows (CI and the `sfc-type-coverage` gate).
 - The component-scaffolder emits the `export interface <Component>Props` + `withDefaults` + JSDoc shape from the spec's Props table.
 
 ## Why this rule exists

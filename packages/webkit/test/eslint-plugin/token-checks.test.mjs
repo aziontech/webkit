@@ -263,7 +263,8 @@ test('universal-sibling-selector fires on a sibling variant with a universal sub
     'class="mt-(--spacing-xs) [&+*]:-mt-(--spacing-xs)"',
     'class="[&~*]:hidden"',
     'class="md:[&_+_*]:mt-0"',
-    'class="[&:not(:last-child)+*]:border-t"'
+    'class="[&:not(:last-child)+*]:border-t"',
+    'class="flex [&>*+*]:-ms-2 group-hover/item:[&>*+*]:-ms-1.5"'
   ]) {
     assert.ok(
       ids(content).includes('universal-sibling-selector'),
@@ -277,6 +278,7 @@ test('universal-sibling-selector stays silent on a named sibling or a child vari
     'class="not-last:-mb-(--spacing-xs)"',
     'class="[&+p]:mt-0 [&~li]:border-t"',
     'class="*:min-w-0 [&>*]:shrink-0 [&_*]:pointer-events-none"',
+    'class="[&>*:not(:first-child)]:-ms-2 [&+[data-slot=item-content]]:w-auto"',
     'class="peer-checked:block"'
   ]) {
     assert.ok(
@@ -392,6 +394,7 @@ test('off-brand-orange stays silent on the logo orange and on the primary roles'
 
 test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
   const WIDE = [
+    'universal-sibling-selector',
     'rtl-double-flip',
     'off-brand-orange',
     'status-fill-as-text',
