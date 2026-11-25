@@ -110,6 +110,7 @@ export const en = {
   homeNav: 'Home',
   gettingStarted: 'Getting started',
   copiedValue: 'Copied to the clipboard',
+  copyName: 'Copy {value}',
   copyFailed: 'Could not copy',
   token: 'Token',
   usage: 'Usage',
