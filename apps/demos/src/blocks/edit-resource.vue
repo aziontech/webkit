@@ -1,14 +1,14 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
@@ -19,7 +19,12 @@
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
   import { onBeforeRouteLeave } from 'vue-router'
 
-  import { sampleProject } from './edit-resource.sample'
+  import {
+    sampleProject,
+    sampleProjectModules,
+    sampleSubscriptionModules
+  } from './edit-resource.sample'
+  import SettingsSaveBar from './edit-resource-settings-save-bar.vue'
 
   /** The saved project settings, and the values a save sends. */
   export interface EditResourceProject {
@@ -34,6 +39,10 @@
   export interface EditResourceProps {
     /** The saved settings; the form opens on them and Discard returns to them. Left out, the sample renders. */
     resource?: EditResourceProject
+    /** Unsaved edits the form opens with on top of the resource, so it starts dirty. */
+    defaultDraft?: Partial<EditResourceProject>
+    /** The version saved elsewhere after the form opened: a notice offers Reload, and Save asks before it overwrites. */
+    stale?: EditResourceProject
     /** The save is in flight: the fieldset and Discard lock and Save spins. */
     loading?: boolean
     /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
@@ -42,6 +51,8 @@
 
   const props = withDefaults(defineProps<EditResourceProps>(), {
     resource: undefined,
+    defaultDraft: () => ({}),
+    stale: undefined,
     loading: false,
     error: ''
   })
@@ -53,6 +64,11 @@
 
   const activeTab = defineModel<string>('tab', { default: 'main-settings' })
 
+  defineSlots<{
+    /** Sections after Subscription modules, inside the form, such as the Danger zone. */
+    sections(): unknown
+  }>()
+
   const tabs = [
     { value: 'overview', label: 'Overview' },
     { value: 'versions', label: 'Versions' },
@@ -61,65 +77,49 @@
     { value: 'main-settings', label: 'Settings' }
   ]
 
-  const defaultModules = [
-    {
-      key: 'compression',
-      title: 'Compression',
-      description: 'Compress responses with gzip and Brotli before they are sent.'
-    },
-    { key: 'caching', title: 'Caching', description: 'Customize advanced cache settings.' },
-    {
-      key: 'device_detection',
-      title: 'Device Detection',
-      description: 'Expose device variables to build responsive rules.'
-    },
-    {
-      key: 'custom_code',
-      title: 'Custom Code',
-      description: 'Run your own code on each request, close to the user.'
-    },
-    {
-      key: 'image_optimization',
-      title: 'Image Optimization',
-      description: 'Resize and convert images on the fly.'
-    },
-    {
-      key: 'load_balancing',
-      title: 'Load Balancing',
-      description:
-        'Balance traffic across your upstreams for reliability and network congestion control.'
-    }
-  ]
-
-  const subscriptionModules = [
-    {
-      key: 'web_socket_proxy',
-      title: 'WebSocket Proxy',
-      description:
-        'Enhance real-time data exchange between your resource and its backends using the WebSocket protocol.'
-    }
-  ]
-
   const copyOf = (project: EditResourceProject) =>
     JSON.parse(JSON.stringify(project)) as EditResourceProject
   const record = computed<EditResourceProject>(() => props.resource ?? sampleProject)
   const form = reactive<EditResourceProject>(copyOf(record.value))
   const saving = computed(() => props.loading)
-  const guard = useUnsavedChanges(() => form, {
-    onDiscard: (saved) => Object.assign(form, saved)
-  })
-  const dirty = guard.isDirty
-  const leaveDialog = guard.dialogProps
-  const leaveLabels = guard.labels
-
-  onBeforeRouteLeave(() => guard.confirmLeave())
+  const baseline = ref(JSON.stringify(record.value))
+  Object.assign(form, copyOf({ ...record.value, ...props.defaultDraft }))
+  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
   const SAVE_TOAST = 'resource-save'
+
+  const freshness = ref<'conflict' | 'reloaded' | null>(props.stale ? 'conflict' : null)
+  const overwriteOpen = ref(false)
+  const noticeEl = ref<{ $el?: HTMLElement } | null>(null)
+  let editsBeforeReload: EditResourceProject | null = null
+
+  watch(
+    () => props.stale,
+    (next) => {
+      freshness.value = next ? 'conflict' : null
+      editsBeforeReload = null
+    }
+  )
+
+  const reload = () => {
+    if (!props.stale) return
+    editsBeforeReload = copyOf(form)
+    baseline.value = JSON.stringify(props.stale)
+    Object.assign(form, copyOf(props.stale))
+    freshness.value = 'reloaded'
+    nextTick(() => noticeEl.value?.$el?.focus?.())
+  }
+
+  const undoReload = () => {
+    if (editsBeforeReload) Object.assign(form, editsBeforeReload)
+    editsBeforeReload = null
+    freshness.value = 'conflict'
+  }
 
   watch(
     () => JSON.stringify(record.value),
-    () => {
+    (next) => {
       Object.assign(form, copyOf(record.value))
-      guard.commit()
+      baseline.value = next
     }
   )
 
@@ -138,10 +138,25 @@
       nextTick(() => document.getElementById('resource-name')?.focus())
       return
     }
+    if (freshness.value === 'conflict') {
+      overwriteOpen.value = true
+      return
+    }
+    submit(event)
+  }
+
+  const submit = async (event: Event) => {
     toast.dismiss(SAVE_TOAST)
     emit('submit', event, copyOf(form))
     await nextTick()
-    if (!props.loading && !props.error) guard.commit()
+    if (props.loading || props.error) return
+    baseline.value = JSON.stringify(form)
+    freshness.value = null
+  }
+
+  const overwrite = (event: MouseEvent) => {
+    overwriteOpen.value = false
+    submit(event)
   }
 
   const showFailure = () => {
@@ -164,23 +179,39 @@
         showFailure()
         return
       }
-      guard.commit()
+      baseline.value = JSON.stringify(form)
+      freshness.value = null
     }
   )
 
-  const onSaveShortcut = (event: KeyboardEvent) => {
-    if (!dirty.value || saving.value) return
-    save(event)
-  }
-
   const discard = (event: MouseEvent) => {
-    guard.discard()
+    if (freshness.value === 'conflict') {
+      reload()
+      return
+    }
+    Object.assign(form, JSON.parse(baseline.value) as EditResourceProject)
+    freshness.value = null
     emit('discard', event)
   }
+
+  const guard = useUnsavedChanges(() => form, {
+    enabled: dirty,
+    onDiscard: () => Object.assign(form, JSON.parse(baseline.value) as EditResourceProject)
+  })
+  watch(baseline, () => guard.commit())
+  onBeforeRouteLeave(() => guard.confirmLeave())
 </script>
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
+    <div
+      class="layout-column layout-boundary-inline flex min-w-0 flex-col pt-(--layout-boundary-start)"
+    >
+      <PageHeader
+        :title="record.name || 'Settings'"
+        size="small"
+      />
+    </div>
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Trigger
@@ -205,14 +236,57 @@
             <div
               class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
             >
-              <PageHeader
-                :title="record.name || 'Settings'"
-                description="Core configuration for this resource."
-                size="small"
-              />
+              <div
+                v-if="stale"
+                class="mt-(--layout-section-gap) first:mt-0"
+                aria-live="polite"
+              >
+                <Alert
+                  v-if="freshness === 'conflict'"
+                  key="conflict"
+                  ref="noticeEl"
+                  severity="warning"
+                  data-testid="stale-record-notice"
+                >
+                  <strong class="font-medium">Changed elsewhere.</strong>
+                  This project was saved by someone else after you opened it. Reload to see their
+                  values, or keep editing and confirm the overwrite when you save.
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Reload"
+                      variant="secondary"
+                      size="medium"
+                      icon="az az-refresh"
+                      :disabled="saving"
+                      @click="reload"
+                    />
+                  </template>
+                </Alert>
+                <Alert
+                  v-else-if="freshness === 'reloaded'"
+                  key="reloaded"
+                  ref="noticeEl"
+                  severity="info"
+                  data-testid="stale-record-reloaded"
+                >
+                  <strong class="font-medium">Edits discarded.</strong>
+                  The form now shows the values saved elsewhere. Undo brings your edits back.
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Undo"
+                      variant="secondary"
+                      size="medium"
+                      @click="undoReload"
+                    />
+                  </template>
+                </Alert>
+              </div>
 
               <fieldset
-                class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+                :data-stale="stale ? '' : null"
+                class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0 first:mt-0 data-[stale]:mt-(--spacing-lg)"
                 :disabled="saving"
               >
                 <legend class="sr-only">Main settings</legend>
@@ -273,7 +347,7 @@
                     <template #default>
                       <Item.List>
                         <SettingsRow
-                          v-for="mod in defaultModules"
+                          v-for="mod in sampleProjectModules"
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"
@@ -299,95 +373,70 @@
                     <template #default>
                       <Item.List>
                         <SettingsRow
-                          v-for="mod in subscriptionModules"
+                          v-for="mod in sampleSubscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
+                          :description="mod.description"
                           variant="compact"
                         >
-                          <template #description>
-                            {{ mod.description }}
-                            <a
+                          <div class="flex items-center gap-(--spacing-sm)">
+                            <Link
+                              label="Contact sales"
                               href="https://example.com/contact-sales"
                               target="_blank"
-                              rel="noopener noreferrer"
-                              class="text-link"
-                              >Contact sales<span class="sr-only"> (opens in a new tab)</span></a
-                            >
-                          </template>
-                          <Tooltip content="Contact sales to activate this module.">
-                            <Switch
-                              v-model="form.modules[mod.key]"
-                              disabled
-                              :aria-label="mod.title"
+                              size="small"
+                              :aria-label="`Contact sales about ${mod.title}`"
                             />
-                          </Tooltip>
+                            <Tooltip content="Contact sales to activate this module.">
+                              <Switch
+                                v-model="form.modules[mod.key]"
+                                disabled
+                                :aria-label="mod.title"
+                              />
+                            </Tooltip>
+                          </div>
                         </SettingsRow>
                       </Item.List>
                     </template>
                   </Card>
                 </SettingsGroup>
+
+                <slot name="sections" />
               </fieldset>
             </div>
 
-            <Transition
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="translate-y-2 opacity-0"
+            <SettingsSaveBar
+              :visible="dirty || saving"
+              :guard="guard"
+              :saving="saving"
+              :discard-label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
+              @save="save"
+              @discard="discard"
             >
-              <SaveBar
-                v-if="dirty || saving"
-                @save="onSaveShortcut"
+              Resource settings changed.
+              <span
+                v-if="freshness === 'conflict'"
+                class="text-(--text-muted)"
+                >Saving overwrites the version saved elsewhere.</span
               >
-                Resource settings changed.
-                <span class="text-(--text-muted)"
-                  >Saving publishes them on the next deployment.</span
-                >
-                <template #actions>
-                  <Button
-                    type="button"
-                    label="Discard"
-                    variant="outline"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    variant="primary"
-                    size="medium"
-                    :loading="saving"
-                    aria-keyshortcuts="Meta+S Control+S"
-                    @click="save"
-                  >
-                    Save
-                    <Kbd
-                      meta
-                      size="small"
-                      aria-hidden="true"
-                      >S</Kbd
-                    >
-                  </Button>
-                </template>
-              </SaveBar>
-            </Transition>
+              <span
+                v-else
+                class="text-(--text-muted)"
+                >Saving publishes them on the next deployment.</span
+              >
+            </SettingsSaveBar>
           </form>
 
-          <ConfirmDialog v-bind="leaveDialog">
-            <template #actions>
-              <Button
-                :label="leaveLabels.keepEditing"
-                variant="ghost"
-                size="medium"
-                @click="guard.keepEditing"
-              />
-              <Button
-                :label="leaveLabels.discard"
-                variant="outline"
-                size="medium"
-                @click="guard.discardAndLeave"
-              />
-            </template>
-          </ConfirmDialog>
+          <ConfirmDialog
+            v-model:open="overwriteOpen"
+            title="Overwrite changes made elsewhere?"
+            description="This project was saved elsewhere after you opened it. Saving replaces that change with your edits, and it can't be recovered afterwards."
+            confirm-label="Overwrite and save"
+            cancel-label="Go back"
+            variant="primary"
+            size="small"
+            @confirm="overwrite"
+          />
         </div>
       </section>
     </div>

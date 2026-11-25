@@ -8,7 +8,7 @@
     loading?: boolean
     /** The create request is in flight. */
     submitting?: boolean
-    /** The request in flight came from Create and add another. */
+    /** The request in flight came from Save and add another. */
     addAnother?: boolean
   }
 
@@ -39,7 +39,7 @@
     <span class="contents max-sm:hidden">
       <Button
         type="button"
-        label="Create and add another"
+        label="Save and add another"
         variant="secondary"
         size="medium"
         :disabled="loading || (submitting && !addAnother)"
@@ -55,7 +55,7 @@
       :loading="submitting && !addAnother"
       :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
     >
-      Create ticket
+      Save
       <span
         class="contents max-sm:hidden"
         aria-hidden="true"

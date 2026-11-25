@@ -92,7 +92,7 @@
     attachments: File[]
   }
 
-  /** What Create ticket and Create and add another send. */
+  /** What Save and Save and add another send. */
   export interface CreateTicketPayload {
     /** The ticket to create. */
     ticket: CreateTicketValues
@@ -119,7 +119,7 @@
     tagOptions?: string[]
     /** Values the form opens with, such as a kept draft; every field falls back to empty. */
     defaultValues?: Partial<CreateTicketValues>
-    /** Opens with the validation messages shown, as after a press on Create ticket. */
+    /** Opens with the validation messages shown, as after a press on Save. */
     defaultSubmitted?: boolean
     /** The contacts, groups and agents are still arriving: skeleton rows hold the bands and creating waits. */
     loading?: boolean
@@ -210,7 +210,7 @@
 
   useShortcuts({
     keys: 'meta+enter',
-    label: 'Create ticket',
+    label: 'Save',
     group: 'Page',
     element: formEl,
     when: () => !locked.value,
@@ -298,7 +298,7 @@
             class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
             <PageHeader
-              title="Create ticket"
+              title="Create Ticket"
               description="Log a request on behalf of a customer. They get an email with the ticket number."
               size="small"
               title-id="create-ticket-title"
@@ -324,7 +324,7 @@
               :disabled="submitting"
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
             >
-              <legend class="sr-only">Create ticket</legend>
+              <legend class="sr-only">Create Ticket</legend>
 
               <TicketRequesterBand
                 ref="requesterEl"

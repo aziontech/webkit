@@ -9,7 +9,7 @@
     back: [event: MouseEvent]
   }>()
 
-  const breadcrumb = [{ label: 'Tickets', href: '/tickets' }, { label: 'Create ticket' }]
+  const breadcrumb = [{ label: 'Tickets', href: '/tickets' }, { label: 'Create Ticket' }]
 </script>
 
 <template>
@@ -36,7 +36,7 @@
     <AppHeader.Center />
     <AppHeader.End>
       <AppHeaderAccount
-        name="jane.doe@example.com"
+        name="Amy Chen"
         aria-label="Account settings"
       />
     </AppHeader.End>

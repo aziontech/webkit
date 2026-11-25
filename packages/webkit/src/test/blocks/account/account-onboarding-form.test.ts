@@ -94,6 +94,23 @@ describe('account/account-onboarding-form', () => {
     expect(view.getByText('Select a plan to continue.')).toBeTruthy()
   })
 
+  it('moves focus to the first invalid field when Next cannot advance', async () => {
+    const view = render(AccountOnboardingForm, { props: { autofocus: false } })
+    await userEvent.click(view.getByRole('button', { name: 'Next' }))
+    const fullName = view.getByRole('textbox', { name: /Your full name/ })
+    await waitFor(() => expect(document.activeElement).toBe(fullName))
+    view.unmount()
+  })
+
+  it('greets with Hello until a name is typed, never with the email prefix', async () => {
+    const view = render(AccountOnboardingForm)
+    expect(view.container.textContent).toContain('Hello')
+    expect(view.container.textContent).not.toMatch(/Hello, /)
+    await fireEvent.update(view.getByRole('textbox', { name: /Your full name/ }), 'Jane Doe')
+    expect(view.container.textContent).toContain('Hello, Jane Doe')
+    view.unmount()
+  })
+
   it('Cancel clears the answers and starts over on the first step', async () => {
     const view = render(Profile)
     expect(view.getByRole('heading', { level: 2, name: 'Tell us about your work' })).toBeTruthy()

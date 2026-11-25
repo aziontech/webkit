@@ -2881,7 +2881,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-mfa
 - Surface: app
 - Source: `blocks/account/account-onboarding-form/account-onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-onboarding-form")`
-- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, `DrawerContent`, Drawer, `DrawerTitle`, Field, `FieldDescription`, `FieldError`, Input, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, PaymentBrand, PlanFeatureList, RadioGroup, Select, Separator, Switch, Tag, ToggleGroup, Wizard
+- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, `DrawerContent`, Drawer, `DrawerTitle`, Field, `FieldDescription`, `FieldError`, Input, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, PaymentBrand, PlanFeatureList, RadioGroup, Select, Separator, Switch, Tag, ToggleGroup, `utils/focus-invalid`, Wizard
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -2952,6 +2952,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-onb
 ## Accessibility
 
 - The page `h1` is visually hidden (`Set up your organization`); each step heading is the Wizard's `h2`, and the Wizard moves focus to it on every step change.
+- A Next that cannot advance (a required field empty, no plan picked) moves focus to the first invalid field and scrolls it into view.
 - The fields sit in a `fieldset` with a hidden legend.
 - The Wizard's `Step 1 of 3` line is a polite live region, so the step change is announced.
 
@@ -5095,7 +5096,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 
 # CreateTicket (`create/create-ticket`)
 
-> The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three…
+> The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create Ticket and the account, then a centred form column with a small `PageHeader` and three…
 
 - Surface: app
 - Source: `blocks/create/create-ticket/create-ticket.vue` in `@aziontech/webkit`
@@ -5108,9 +5109,9 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 
 create ticket; new ticket; new support ticket; log a ticket for a customer; agent creates ticket; helpdesk new ticket form; support request form; ticket form with requester and assignee; create and add another; add new contact inline; criar ticket; novo ticket; novo chamado; abrir chamado em nome de alguém; formulário de chamado; criar chamado de suporte; registrar solicitação de suporte
 
-The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Create and add another, and Create ticket.
+The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Save and add another, and Save.
 
-A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
+A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create Ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
 
 ## When to use
 
@@ -5155,7 +5156,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-ticke
 - Keep only Requester, Subject and Description required; the rest is triage the team can do later.
 - Validate on create only, and move focus to the first field in error.
 - Keep every value after a failed request, and show the failure where the commit happens.
-- Offer Create and add another for agents logging several calls in a row, and put focus back on Requester.
+- Offer Save and add another for agents logging several calls in a row, and put focus back on Requester.
 
 ## Don't
 
@@ -5166,7 +5167,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-ticke
 
 ## Copy
 
-- **Title:** `Create ticket`; description `Log a request on behalf of a customer. They get an email with the ticket number.`
+- **Title:** `Create Ticket`; description `Log a request on behalf of a customer. They get an email with the ticket number.`
 - **Bands:** `Requester`, `Request`, `Assignment`, each with a one-sentence Hint. **Rows:** a noun title and one sentence of guidance (`The customer who asked. Search by name or email address.`).
 - **Requester:** placeholder `Search contacts`, no match `No contact matches. Add a new contact instead.`, actions `Add new contact` and `Search contacts`.
 - **Placeholders:** `Select a channel`, `Select a type`, `Select a priority`, `Search groups`, `Search agents`; Assignee no match `No agent in this group matches.`
@@ -5174,13 +5175,13 @@ What each prop and event does, and the go-live code: [blocks/create/create-ticke
 - **Attachments:** `Attach files`; the list is named `Attachments`.
 - **Failure:** title `The ticket wasn't created.`, the page's message, `Retry`.
 - **Success:** `Ticket #4840 was created.`, the subject, `Open ticket`.
-- **Commit:** `Cancel`, `Create and add another`, `Create ticket`. The discard dialog uses the built-in `useUnsavedChanges` labels.
+- **Commit:** `Cancel`, `Save and add another`, `Save`. The discard dialog uses the built-in `useUnsavedChanges` labels.
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
-- Landmarks: the creation header, then `main` holding a `form` named by the `Create ticket` h1; the bands are h2s (Requester, Request, Assignment).
-- Focus: on load the Requester search, with its list closed until the agent types or presses Arrow Down (the first invalid field instead when the form opens with messages); Tab runs header, then the fields in band order, then Cancel, Create and add another, Create ticket. A create press with gaps moves focus to the first invalid field; after Create and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
+- Landmarks: the creation header, then `main` holding a `form` named by the `Create Ticket` h1; the bands are h2s (Requester, Request, Assignment).
+- Focus: on load the Requester search, with its list closed until the agent types or presses Arrow Down (the first invalid field instead when the form opens with messages); Tab runs header, then the fields in band order, then Cancel, Save and add another, Save. A create press with gaps moves focus to the first invalid field; after Save and add another, focus returns to Requester. Add new contact focuses Contact name; Search contacts focuses the search.
 - Each control takes its row title as `aria-label`, its error through `aria-describedby`, and `aria-invalid` once a create press finds a problem; the required rows carry the required mark and `aria-required`.
 - Keyboard: ⌘ Enter (Ctrl Enter) creates from anywhere in the form, Escape cancels; the editor's own shortcuts are Ctrl/⌘ B, I and K.
 - Announcements: the failure `Alert` is re-mounted after each attempt; the success toast is announced by the app's toast region; presence is spoken in the avatar's name, never the dot alone.
@@ -5191,15 +5192,15 @@ What each prop and event does, and the go-live code: [blocks/create/create-ticke
 - Default: every field empty, the sample contacts, groups, agents and tags in the pickers, focus on Requester.
 - ValidationErrors: `defaultSubmitted` with only a Subject and a CC entry that is not an address; Requester, Description and CC show their messages.
 - ContactError: `defaultSubmitted` on a new contact whose email has no domain ending; Contact email, Subject and Description show their messages.
-- Submitting: `submitting` on the filled sample ticket; Create ticket spins and the form locks.
+- Submitting: `submitting` on the filled sample ticket; Save spins and the form locks.
 - SubmitError: `error` on the filled sample ticket; the danger Alert with Retry, every value kept.
-- Success: `created` after Create and add another; the success toast with Open ticket and an empty form.
+- Success: `created` after Save and add another; the success toast with Open ticket and an empty form.
 - Loading: `loading`; skeleton bands and disabled create buttons.
 
 ## Related
 
 - `create/create-page` — the house create page this one follows.
-- `view/view-ticket-inbox` — the queue whose Create ticket opens this page.
+- `view/view-ticket-inbox` — the queue whose Create Ticket opens this page.
 - `state/state-form-validation` — every submit outcome of a create form.
 - `create/create-drawer` — a create inside a resource, kept beside its list.
 
@@ -11399,7 +11400,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 
 # ViewTicketInbox (`view/view-ticket-inbox`)
 
-> The support agent's ticket inbox: a `PageHeader` with Create ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `Pr…
+> The support agent's ticket inbox: a `PageHeader` with Create Ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `Pr…
 
 - Surface: app
 - Source: `blocks/view/view-ticket-inbox/view-ticket-inbox.vue` in `@aziontech/webkit`
@@ -11461,7 +11462,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-ticket-in
 
 ## Copy
 
-- **Title:** `Tickets`. **Create:** `Create ticket`. **View select:** `View`. **Filter:** `Filter tickets`.
+- **Title:** `Tickets`. **Create:** `Create Ticket`. **View select:** `View`. **Filter:** `Filter tickets`.
 - **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **Unassigned:** `Unassigned`.
 - **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`; the confirmations `Merge 3 tickets` (with Ticket to keep) and `Close 3 tickets`.
 - **Empty view:** `You're all caught up`, `No tickets in <view>.`, `Show all open tickets`. **No match:** `No matching tickets`, `No ticket in this view matches these filters.`, `Clear filters`.
@@ -11470,7 +11471,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-ticket-in
 ## Accessibility
 
 - No `main` of its own and no second navigation: the `PageHeader` title is the only `h1`; the table is named after the active view.
-- Focus order: Create ticket, View, the filter, Refresh, preferences, the bulk controls while a selection exists, the table (select all, then the rows, one tab stop with the arrow keys), then pagination.
+- Focus order: Create Ticket, View, the filter, Refresh, preferences, the bulk controls while a selection exists, the table (select all, then the rows, one tab stop with the arrow keys), then pagination.
 - Rows: Arrow Up and Down move, Enter opens the ticket, Space toggles its selection; the subject link is reachable with Tab too.
 - Announcements: the selection count is a polite status; the filter announces its match count; Refresh shows its busy state; the result of a bulk action comes from the app's toast.
 - Presence is part of the assignee avatar's name (`Jane Doe, online`), so the printed name beside it is hidden from screen readers; priority and status are text, never colour alone.
@@ -11526,7 +11527,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A plain list of records to browse and act on one at a time: use `view/view-table`.
 - Charts of attack volume over time: use `dashboard/dashboard-security`.
-- Editing the allowed rules once created: an `edit-resource` form on the Allowed Rules tab.
+- Editing the allowed rules once created: an `edit-resource` form on the Allowed rules tab.
 
 ## Building blocks
 

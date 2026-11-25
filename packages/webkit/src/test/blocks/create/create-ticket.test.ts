@@ -19,7 +19,7 @@ useToastRegion()
 
 const wait = { timeout: 4000 }
 
-const createButton = () => screen.getByRole('button', { name: /^Create ticket/ })
+const createButton = () => screen.getByRole('button', { name: 'Save' })
 
 describe('create-ticket', () => {
   it('starts empty, focuses Requester and marks the required rows', async () => {
@@ -52,7 +52,7 @@ describe('create-ticket', () => {
 
   it('emits create with the typed ticket and which button was pressed', async () => {
     const view = render(CreateTicket, { props: { defaultValues: sampleValues } })
-    await userEvent.click(screen.getByRole('button', { name: 'Create and add another' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Save and add another' }))
     await userEvent.click(createButton())
     const calls = view.emitted<[Event, CreateTicketPayload]>('create') ?? []
     expect(calls).toHaveLength(2)
@@ -123,7 +123,7 @@ describe('create-ticket', () => {
     render(Submitting)
     expect(createButton().getAttribute('aria-busy')).toBe('true')
     expect(
-      (screen.getByRole('button', { name: 'Create and add another' }) as HTMLButtonElement).disabled
+      (screen.getByRole('button', { name: 'Save and add another' }) as HTMLButtonElement).disabled
     ).toBe(true)
     expect((screen.getByRole('button', { name: 'Cancel' }) as HTMLButtonElement).disabled).toBe(
       true

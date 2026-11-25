@@ -26,7 +26,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A plain list of records to browse and act on one at a time: use `view/view-table`.
 - Charts of attack volume over time: use `dashboard/dashboard-security`.
-- Editing the allowed rules once created: an `edit-resource` form on the Allowed Rules tab.
+- Editing the allowed rules once created: an `edit-resource` form on the Allowed rules tab.
 
 ## Building blocks
 

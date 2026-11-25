@@ -286,7 +286,7 @@
         <Tag
           v-else
           key="error"
-          :label="failedTitle ? `Failed on ${failedTitle}` : 'Failed'"
+          :label="failedTitle ? `Failed: ${failedTitle}` : 'Failed'"
           severity="danger"
         />
 

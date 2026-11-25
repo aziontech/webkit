@@ -94,7 +94,7 @@
         @row-remove="(event, row) => emit('action', event, 'remove', row)"
       >
         <template #cell-title="{ row }">
-          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) sm:max-w-(--container-sm)">
             <span
               dir="auto"
               class="truncate text-label-sm text-(--text-default)"
@@ -188,6 +188,7 @@
               <DropdownMenu.Item
                 value="remove"
                 label="Delete"
+                severity="danger"
               />
             </DropdownMenu.Group>
           </TableCellActions>

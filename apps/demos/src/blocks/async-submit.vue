@@ -92,7 +92,7 @@
   const runningStep = computed(() => props.steps.find((step) => step.status === 'running'))
   const failedStep = computed(() => props.steps.find((step) => step.status === 'error'))
   const doneCount = computed(() => props.steps.filter((step) => step.status === 'success').length)
-  const failedTitle = computed(() => failedStep.value?.title.toLowerCase() ?? '')
+  const failedTitle = computed(() => failedStep.value?.title ?? '')
 
   const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref<string | undefined>()
@@ -128,6 +128,7 @@
             :label="statusTag.label"
             :severity="statusTag.severity"
             size="medium"
+            data-testid="state-async-submit__status"
           />
         </template>
       </PageHeader>
@@ -242,7 +243,7 @@
                   </template>
                   <Tag
                     v-else
-                    :label="`Failed on ${failedTitle}`"
+                    :label="`Failed: ${failedTitle}`"
                     severity="danger"
                   />
                 </div>
