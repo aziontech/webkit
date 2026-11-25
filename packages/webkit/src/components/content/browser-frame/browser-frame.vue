@@ -195,7 +195,7 @@
   }
 
   const FRAME_CLASS =
-    'relative mx-auto max-w-full rounded-(--shape-card) bg-(--bg-surface) after:pointer-events-none after:absolute after:inset-0 after:rounded-(--shape-card) after:border ' +
+    'relative mx-auto max-w-full rounded-(--shape-card) bg-(--bg-surface) pb-6 after:pointer-events-none after:absolute after:inset-0 after:rounded-(--shape-card) after:border ' +
     "after:border-(--border-default) after:content-['']"
 
   const WIDTH_HANDLE_CLASS =
@@ -288,7 +288,7 @@
         </span>
       </div>
       <div
-        class="overflow-hidden rounded-b-(--shape-card) bg-(--bg-canvas)"
+        class="overflow-hidden bg-(--bg-canvas)"
         :style="clipStyle"
       >
         <iframe

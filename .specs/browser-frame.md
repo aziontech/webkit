@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 3
 created: 2026-10-20
-last_updated: 2026-11-18
-checksum: 3cc72d9f1bd376b06728a50d5e3cba805c3e09dbe6e410faa45a8beb899de982
+last_updated: 2026-11-25
+checksum: 3cc9ee736d47c0e86d37de9665c5eac3f4b935378bebce85d8cae93df04973ac
 ---
 
 # BrowserFrame — Component Spec
@@ -114,7 +114,7 @@ The frame is static apart from its resize handles.
 - **Scale.** When the effective width exceeds the container, the viewport is scaled down by `container / effective` on both axes, and the frame's on-page height is `height × scale`. A frame narrower than its container is centered in it.
 - **Resizing.** Three handles resize the viewport:
   - the **width handle** on the right edge writes `width`;
-  - the **height handle** on the bottom edge writes `height`;
+  - the **height handle** on the bottom edge writes `height`; it sits in a 24px strip the frame reserves under the viewport (`pb-6`), so its grip never covers the preview's last line;
   - the **corner handle** at the bottom-right writes both at once.
     Pointer drags use pointer capture. A width drag moves the right edge under the pointer (the frame is centered, so the width changes by twice the pointer's travel) and is clamped to `minWidth` and the container width; a height drag follows the pointer's travel divided by the current scale and is clamped to `minHeight`…`maxHeight`. The keyboard reaches up to `maxWidth` / `maxHeight`. While any handle is dragged the root sets `data-resizing` and the content ignores the pointer.
 - **Size readout.** While any handle is dragged or focused, the chrome shows the viewport size (`768 × 1024`) at its trailing end; it is hidden otherwise.
