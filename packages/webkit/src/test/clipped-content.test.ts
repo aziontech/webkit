@@ -124,9 +124,12 @@ describe('a navigation menu panel on a phone (A6-074)', () => {
     async (width) => {
       await page.viewport(width, 844)
       const view = render(NavigationMenuDefault)
-      await userEvent.click(view.getByRole('button', { name: 'Solutions' }))
+      view.getByRole('button', { name: 'Solutions' }).focus()
+      await userEvent.keyboard('{Enter}')
       const popover = () =>
-        document.body.querySelector<HTMLElement>('[data-testid="navigation-menu-popover"]')
+        Array.from(
+          document.body.querySelectorAll<HTMLElement>('[data-testid="navigation-menu-popover"]')
+        ).find((el) => el.querySelectorAll('a').length > 3)
       await waitFor(() => expect(popover()?.textContent).toContain('Media and entertainment'))
       await new Promise((resolve) => setTimeout(resolve, 400))
       const box = popover()!.getBoundingClientRect()
