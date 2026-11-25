@@ -2,7 +2,7 @@
 name: webkit-theming-dark-mode
 description: Every screen in a @aziontech/webkit app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
 status: active
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-tokens, ui-verify]
 ---
@@ -96,6 +96,8 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-Mr2TXUqeQ
 X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
 ```
+
+`object-src 'none'` also stops `FilePreview` from showing a PDF; where an app previews documents (an AI chat that draws document parts), use `object-src 'self' blob:` instead.
 
 `style-src 'unsafe-inline'` is there because components set a few inline styles and custom properties;
 add the origins your app frames (`frame-src`, for `Embed`) or fetches (`connect-src`).
