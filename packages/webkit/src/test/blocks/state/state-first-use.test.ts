@@ -14,8 +14,8 @@ describe('state/state-first-use', () => {
     )
     const command = view.getByLabelText('Via CLI command') as HTMLInputElement
     expect(command.value).toBe('azion deploy')
-    const field = command.closest('[data-slot="input"]') ?? command.parentElement
-    expect(field?.querySelector('button[aria-label="Copy the Via CLI command"]')).toBeTruthy()
+    const group = command.closest('[data-testid="input-group"]')
+    expect(group?.querySelector('button[aria-label="Copy the Via CLI command"]')).toBeTruthy()
   })
 
   it('renders the copy it is given and emits the create methods', async () => {
