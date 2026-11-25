@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 7465738b5d8af8a39ba8d832b46df849cc0d98bfb54c58747be3f56d33c9fcfe
+checksum: f7c76b9b99de2b3a042e6a5aa331b1d9d84b3bad65119551a25c6d7354c42f14
 created: 2026-06-26
 last_updated: 2026-11-25
 ---
@@ -242,6 +242,7 @@ Sub-menus and checkable options:
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
 - `data-side` / `data-align` on the panel mirror the resolved side and alignment after flipping
 - `start` and `end` follow the text direction: under `dir="rtl"`, `align="start"` lines the panel up with the trigger's right edge and `side="end"` opens on the left
+- Anchor: when an element marked `data-slot="dropdown-menu-anchor"` inside the root wraps the trigger, the panel is positioned against that element instead of the trigger (the nearest one to the trigger), so a menu opened by one segment of a compound control lines up with the whole control (`SplitButton`). Focus still returns to the trigger
 
 ## Motion & Animations
 

@@ -108,9 +108,12 @@
     'data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)'
 
   const BUCKET_CARD_CLASS =
-    'pointer-events-none absolute top-[calc(100%+var(--spacing-2xs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-control) border border-(--border-default) ' +
-    'bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance ' +
-    'data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full ' +
+    'absolute top-0 start-0 w-max min-w-(--container-3xs) rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) ' +
+    'data-[align=center]:-translate-x-1/2 rtl:data-[align=center]:translate-x-1/2 data-[align=end]:-translate-x-full rtl:data-[align=end]:translate-x-full'
+
+  const MOVER_CLASS =
+    'relative w-full translate-x-(--console-mockup-bucket-offset) rtl:-translate-x-(--console-mockup-bucket-offset) transition-[translate] duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none'
 
   const LEGEND_SWATCH_CLASS =
@@ -176,9 +179,18 @@
           >
             <div
               v-if="activeBucket"
-              class="pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-(--border-strong) transition-[left] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-              :style="{ left: centre }"
-            />
+              class="pointer-events-none absolute inset-0 overflow-x-clip"
+            >
+              <div
+                :class="MOVER_CLASS"
+                class="h-full"
+                :style="{ '--console-mockup-bucket-offset': centre }"
+              >
+                <div
+                  class="absolute inset-y-0 start-0 w-px -translate-x-1/2 rtl:translate-x-1/2 bg-(--border-strong)"
+                />
+              </div>
+            </div>
           </Transition>
 
           <Transition
@@ -189,48 +201,56 @@
           >
             <div
               v-if="activeBucket"
-              :data-align="cardAlign"
-              :class="BUCKET_CARD_CLASS"
-              :style="{ left: centre }"
+              class="pointer-events-none absolute inset-x-0 top-[calc(100%+var(--spacing-2xs))] z-30 overflow-x-clip"
             >
-              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <p class="text-label-code-sm tabular-nums text-(--text-default)">
-                  {{ stamp(activeBucket.index) }}
-                </p>
-
-                <dl
-                  class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
-                >
-                  <template
-                    v-for="level in LEVEL_ORDER"
-                    :key="level"
-                  >
-                    <span
-                      :data-level="level"
-                      aria-hidden="true"
-                      :class="LEGEND_SWATCH_CLASS"
-                    />
-                    <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
-                      {{ level }}
-                    </dt>
-                    <dd class="m-0 text-label-code-sm tabular-nums text-(--text-default)">
-                      {{ activeBucket.levels[level] }}
-                    </dd>
-                  </template>
-                </dl>
-
+              <div
+                :class="MOVER_CLASS"
+                :style="{ '--console-mockup-bucket-offset': centre }"
+              >
                 <div
-                  class="flex items-baseline justify-between gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-xs)"
+                  :data-align="cardAlign"
+                  :class="BUCKET_CARD_CLASS"
                 >
-                  <span class="text-label-sm text-(--text-default)">Total</span>
-                  <span class="text-label-code-sm tabular-nums text-(--text-default)">
-                    {{ activeBucket.total }}
-                  </span>
-                </div>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                    <p class="text-label-code-sm tabular-nums text-(--text-default)">
+                      {{ stamp(activeBucket.index) }}
+                    </p>
 
-                <p class="text-body-sm text-(--text-muted)">
-                  Click to filter to this bucket, or drag to select a span.
-                </p>
+                    <dl
+                      class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
+                    >
+                      <template
+                        v-for="level in LEVEL_ORDER"
+                        :key="level"
+                      >
+                        <span
+                          :data-level="level"
+                          aria-hidden="true"
+                          :class="LEGEND_SWATCH_CLASS"
+                        />
+                        <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
+                          {{ level }}
+                        </dt>
+                        <dd class="m-0 text-label-code-sm tabular-nums text-(--text-default)">
+                          {{ activeBucket.levels[level] }}
+                        </dd>
+                      </template>
+                    </dl>
+
+                    <div
+                      class="flex items-baseline justify-between gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-xs)"
+                    >
+                      <span class="text-label-sm text-(--text-default)">Total</span>
+                      <span class="text-label-code-sm tabular-nums text-(--text-default)">
+                        {{ activeBucket.total }}
+                      </span>
+                    </div>
+
+                    <p class="text-body-sm text-(--text-muted)">
+                      Click to filter to this bucket, or drag to select a span.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </Transition>

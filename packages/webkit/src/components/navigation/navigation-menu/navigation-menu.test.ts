@@ -807,6 +807,7 @@ describe('NavigationMenu', () => {
       await waitFor(() => expect(selector.style.translate).toMatch(/px/))
       expect(selector.style.top).toBe('')
       expect(selector.style.left).toBe('')
+      expect(selector.classList.contains('transition-[translate,opacity]')).toBe(true)
     })
 
     it('names the open panel with aria-controls on its trigger', async () => {

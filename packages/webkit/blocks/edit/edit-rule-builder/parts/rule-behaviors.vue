@@ -102,7 +102,6 @@
                         class="w-full"
                         placeholder="Search behaviors"
                         aria-label="Search behaviors"
-                        @keydown.stop
                       >
                         <template #leading>
                           <i

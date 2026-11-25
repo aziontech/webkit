@@ -40,6 +40,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. See the variant table below. |
+| `column` | `'full' \| 'form' \| 'focused'` | `'full'` | false | Lines the content of a `floating` or `docked` bar up with the page column above it (`layout-column-form` / `layout-column-focused`); the bar's border and fill still span the region. Ignored by `plain`, `fade` and `centered`. |
 
 ## Events
 
@@ -59,6 +60,7 @@
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
+- `data-column` mirrors the `column` prop on the content row of a `floating` or `docked` bar
 - Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--save-bar-height` (so the `toaster` stacks above the bar, on top of any `--toast-offset-bottom` the app sets for its own bottom chrome, which the bar never overwrites), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. Every other variant sits at the bottom too, so it publishes `--save-bar-height` the same way (a toast never covers its Save or Discard) but no `--save-bar-inset` and no reserved height.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Discard above Save, so the screen order is the focus order. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
@@ -80,8 +82,8 @@
 
 The status sentence and the action labels come from the consumer's slots. One built-in string labels the shortcut in the `ShortcutsDialog` list:
 
-| Key                   | English source | Override prop |
-| --------------------- | -------------- | ------------- |
+| Key                    | English source | Override prop |
+| ---------------------- | -------------- | ------------- |
 | `saveBar.saveShortcut` | `Save changes` | —             |
 
 - Formatting: none.

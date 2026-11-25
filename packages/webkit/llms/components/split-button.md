@@ -72,6 +72,7 @@
 - `data-disabled` mirrors the `disabled` prop
 - `data-loading` mirrors the `loading` prop
 - `data-state` on the menu toggle: `open` | `closed` (provided by the composed `DropdownMenu.Trigger`)
+- The menu opens below the whole control, its start edge lined up with the primary segment's start (the segments' wrapper is the `dropdown-menu-anchor`); where that would overflow the viewport it is clamped inside it
 - When `loading`, the control takes the disabled status: the primary button shows the spinner over the disabled tokens and blocks activation (owned by `Button`), the menu toggle is natively disabled with the disabled tokens, and the composed `DropdownMenu` is disabled so the menu cannot open. No `click` or `item-click` is emitted while loading.
 
 ## Accessibility

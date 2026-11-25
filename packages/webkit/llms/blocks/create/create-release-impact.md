@@ -484,7 +484,10 @@ Each variant is the same screen in another state: `get_block("create/create-rele
         </div>
       </div>
 
-      <SaveBar variant="docked">
+      <SaveBar
+        variant="docked"
+        column="focused"
+      >
         <template #leading>
           <p
             v-if="blocker"

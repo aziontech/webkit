@@ -345,6 +345,27 @@ describe('ai/ai-chat', () => {
     })
   })
 
+  it('keeps Discard draft apart, last and in red in the touch menu of a row', async () => {
+    const view = render(AiChat, { props: { messages: thread } })
+    const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
+    const trigger = panel
+      .getAllByRole('button', { name: 'Thread actions' })
+      .find((button) =>
+        button.closest('span.hidden')?.parentElement?.querySelector('[aria-label="Discard draft"]')
+      )!
+    await userEvent.click(trigger)
+    const items = await waitFor(() => {
+      const found = Array.from(document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'))
+      expect(found.length).toBe(3)
+      return found
+    })
+    const discard = items[items.length - 1]!
+    expect(discard.textContent?.trim()).toBe('Discard draft')
+    expect(discard.getAttribute('data-severity')).toBe('danger')
+    expect(discard.closest('[role="group"]')).not.toBe(items[0]!.closest('[role="group"]'))
+    await userEvent.keyboard('{Escape}')
+  })
+
   it('reports the conversation picked in the history', async () => {
     const view = render(AiChat, { props: { messages: thread } })
     const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)

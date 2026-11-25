@@ -86,6 +86,15 @@ describe('SettingsGroup', () => {
     expect(anchored.getByRole('button', { name: 'Copy link to the General section' })).toBeTruthy()
   })
 
+  it('keeps the gutter copy-link hit area inside the 24px gutter, so it never crosses the page edge', () => {
+    const view = render(SettingsGroup, { props: { label: 'General', anchor: 'general' } })
+    const button = view.getByTestId('settings-group__copy-link')
+    const target = button.querySelector('[data-slot="touch-target"]')!
+    expect(button.classList.contains('size-6')).toBe(true)
+    expect(button.classList.contains('-start-(--size-6)')).toBe(true)
+    expect(target.classList.contains('inset-0')).toBe(true)
+  })
+
   it('confirms a copied link on the button itself', async () => {
     const write = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
     const view = within(

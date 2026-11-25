@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: b451918f3fc9c3aecb1da532cfa106c7e77cab012ee42b86db3067660cf2f779
+checksum: 09dbfe2bdab9a788752d1c007218bce3bf61c44f1b39399ed2915338c2c22e15
 created: 2026-05-22
-last_updated: 2026-11-21
+last_updated: 2026-11-25
 ---
 
 # Button — Component Spec
@@ -114,6 +114,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
+- Focusable disabled: an `aria-disabled="true"` attribute (with `disabled` false) keeps the button in the tab order but makes it inert (`data-disabled`, `data-inert`, the disabled look, no `click`), for a control whose availability changes while focus moves past it
 - `data-size` mirrors `size`; every variant, size and inert utility switches on these `data-*` attributes in one flat class (no class presets in script)
 - `data-variant` mirrors `variant`; with `variant="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
 - With `disabledReason` set on a `disabled` button, the root carries `aria-disabled` instead of the native `disabled` attribute, so it keeps its place in the tab order; `click` is still suppressed and the look is the disabled one. The reason is the root's `title`: the browser shows it on hover and assistive technology reads it as the button's description. The button depends on no overlay: a styled `Tooltip` around it is the consumer's choice, and it now opens on focus too, because the button can take focus.

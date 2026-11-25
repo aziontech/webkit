@@ -330,6 +330,13 @@ describe('edit/edit-resource DataStream', () => {
     await expectNoA11yViolations(editor)
   })
 
+  it('says a locked module is always on, so it never reads as switched off', () => {
+    const view = render(PolicySettings)
+    const ddos = view.getByRole('switch', { name: 'DDoS Protection' })
+    expect(ddos.getAttribute('aria-checked')).toBe('true')
+    expect(view.getByText(/Always on for every policy\./)).toBeTruthy()
+  })
+
   it('names the header cell that is missing before it saves', async () => {
     render(DataStream)
     const editor = await waitFor(() => document.querySelector<HTMLElement>('#data-stream-headers')!)

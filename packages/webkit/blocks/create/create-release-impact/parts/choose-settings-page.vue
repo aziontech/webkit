@@ -260,7 +260,10 @@
         </section>
       </div>
 
-      <SaveBar variant="docked">
+      <SaveBar
+        variant="docked"
+        column="focused"
+      >
         <template #leading>
           <p
             id="release-impact-settings-hint"

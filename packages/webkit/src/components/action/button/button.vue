@@ -102,7 +102,7 @@
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity " +
     'before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 ' +
     "after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 " +
-    'motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden ' +
+    'motion-reduce:before:transition-none motion-reduce:after:transition-none ' +
     'not-data-[inert]:data-[variant=primary]:bg-(--primary) not-data-[inert]:data-[variant=primary]:text-(--primary-foreground) ' +
     'not-data-[inert]:data-[variant=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=primary]:after:bg-(--bg-active) ' +
     'not-data-[inert]:data-[variant=secondary]:bg-(--secondary) not-data-[inert]:data-[variant=secondary]:text-(--secondary-foreground) ' +
@@ -123,9 +123,8 @@
     'not-data-[inert]:data-[variant=link]:after:hidden not-data-[inert]:data-[variant=link]:forced-colors:border-0 ' +
     'not-data-[inert]:data-[variant=link]:forced-colors:text-[LinkText] ' +
     'data-[inert]:not-data-[variant=link]:border-transparent data-[inert]:not-data-[variant=link]:bg-(--bg-disabled) ' +
-    'data-[inert]:not-data-[variant=link]:text-(--text-disabled) data-[inert]:not-data-[variant=link]:before:hidden ' +
-    'data-[inert]:not-data-[variant=link]:after:hidden data-[inert]:data-[variant=link]:border-transparent ' +
-    'data-[inert]:data-[variant=link]:text-(--text-disabled) data-[inert]:data-[variant=link]:before:hidden data-[inert]:data-[variant=link]:after:hidden ' +
+    'data-[inert]:text-(--text-disabled) data-[inert]:before:hidden data-[inert]:after:hidden ' +
+    'data-[inert]:data-[variant=link]:border-transparent ' +
     'data-[inert]:data-[variant=link]:forced-colors:border-0 ' +
     'data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed ' +
     'not-data-[variant=link]:data-[size=large]:min-w-20 not-data-[variant=link]:data-[size=large]:h-10 ' +

@@ -117,19 +117,19 @@
     )
   }
 
-  function toggleSnooze(_event: MouseEvent, id: string) {
+  function toggleSnooze(_event: MouseEvent | KeyboardEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, snoozed: !item.snoozed } : item
     )
   }
 
-  function toggleSettle(_event: MouseEvent, id: string) {
+  function toggleSettle(_event: MouseEvent | KeyboardEvent, id: string) {
     threads.value = threads.value.map((item) =>
       item.id === id ? { ...item, settled: !item.settled, snoozed: false } : item
     )
   }
 
-  function discardDraft(_event: MouseEvent, id: string) {
+  function discardDraft(_event: MouseEvent | KeyboardEvent, id: string) {
     const index = threads.value.findIndex((item) => item.id === id)
     const thread = threads.value[index]
     if (!thread) return
@@ -151,7 +151,7 @@
 
   const PANEL_CLASS =
     'flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto ' +
-    'border-e border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden [--ai-chat-history-actions-width:--spacing(24)]'
+    'border-e border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden [--ai-chat-history-actions-width:--spacing(24)] pointer-coarse:[--ai-chat-history-actions-width:--spacing(9)]'
 </script>
 
 <template>
@@ -390,7 +390,9 @@
         />
       </div>
       <DrawerBody>
-        <div class="[--ai-chat-history-actions-width:--spacing(24)]">
+        <div
+          class="[--ai-chat-history-actions-width:--spacing(24)] pointer-coarse:[--ai-chat-history-actions-width:--spacing(9)]"
+        >
           <ConversationHistory
             v-model="active"
             :items="activeItems"

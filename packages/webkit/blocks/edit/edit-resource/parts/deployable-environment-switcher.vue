@@ -50,7 +50,6 @@
             size="small"
             placeholder="Search environments"
             aria-label="Search environments"
-            @keydown.stop
           >
             <template #leading>
               <i

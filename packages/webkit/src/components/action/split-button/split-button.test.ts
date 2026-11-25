@@ -136,6 +136,29 @@ describe('SplitButton', () => {
       expect(icon).not.toBeNull()
     })
 
+    it('lines the menu up with the start of the whole control, not the toggle', async () => {
+      const view = render(
+        defineComponent({
+          components: { SplitButton },
+          setup: () => ({ model }),
+          template: `<div style="padding-inline-start: 64px"><SplitButton label="Deploy" :items="model" /></div>`
+        })
+      )
+      await openMenu(view)
+
+      const anchor = view
+        .getByTestId('split-button__toggle')
+        .closest('[data-slot="dropdown-menu-anchor"]')
+      expect(anchor).not.toBeNull()
+      expect(panel()?.getAttribute('data-align')).toBe('start')
+      await waitFor(() => {
+        const left = panel()?.getBoundingClientRect().left ?? -1
+        expect(Math.abs(left - (anchor as HTMLElement).getBoundingClientRect().left)).toBeLessThan(
+          1
+        )
+      })
+    })
+
     it('opens from the toggle on ArrowDown keydown', async () => {
       const { getByTestId } = render(host())
       await fireEvent.keyDown(getByTestId('split-button__toggle'), { key: 'ArrowDown' })
