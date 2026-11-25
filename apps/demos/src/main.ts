@@ -6,8 +6,9 @@ import '@aziontech/icons'
 import { createApp } from 'vue'
 
 import App from './app.vue'
-import { restoreSettings } from './lib/settings'
+import { loadCatalog, restoreSettings, settings } from './lib/settings'
 import { router } from './router'
 
 restoreSettings()
-createApp(App).use(router).mount('#app')
+const app = createApp(App).use(router)
+Promise.all([router.isReady(), loadCatalog(settings.locale)]).then(() => app.mount('#app'))

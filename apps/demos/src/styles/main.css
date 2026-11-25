@@ -12,6 +12,10 @@ body {
   color: var(--text-default);
 }
 
+body {
+  overflow-x: clip;
+}
+
 .azion {
   font-family: Rubik, ui-sans-serif, system-ui, sans-serif;
   text-rendering: optimizelegibility;

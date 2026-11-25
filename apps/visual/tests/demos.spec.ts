@@ -68,6 +68,7 @@ test.describe('demo flows', () => {
     await expect(toastTitle(page, 'shop-api was created.')).toBeVisible()
     await expect(page.getByRole('heading', { level: 1, name: 'shop-api' })).toBeVisible()
     await expect(page.getByText('No deployment yet')).toBeVisible()
+    await expect(page.getByText('Inactive', { exact: true }).first()).toBeVisible()
     await expect(page.getByText(/^now by Amy Chen$/)).toBeVisible()
   })
 
@@ -84,6 +85,10 @@ test.describe('demo flows', () => {
     await page.goto(`${DEMOS}/resources/${FIRST}/delete`)
     const dialog = page.getByRole('alertdialog', { name: 'Delete resource' })
     await expect(dialog).toBeVisible()
+    await expect(
+      dialog.getByRole('textbox', { name: 'Type resource-01 to confirm.' })
+    ).toBeVisible()
+    await expect(dialog.getByRole('button', { name: /^Copy/ })).toHaveCount(0)
     await dialog.getByRole('textbox').fill('resource-01')
     await dialog.getByRole('button', { name: 'Delete resource' }).click()
     await expect(page).toHaveURL(/\/resources$/)
@@ -150,9 +155,24 @@ test.describe('demo flows', () => {
     await expect(page).toHaveURL(/\/settings$/)
   })
 
-  test('a sidebar row with no page is disabled', async ({ page }) => {
+  test('the sidebar lists only rows that lead to a page', async ({ page }) => {
     await page.goto(`${DEMOS}/resources`)
-    await expect(page.getByRole('button', { name: /Projects/ }).first()).toBeDisabled()
+    await expect(page.getByRole('link', { name: 'Resources' }).first()).toBeVisible()
+    await expect(page.getByRole('button', { name: /Projects/ })).toHaveCount(0)
+    await expect(page.locator('nav').getByText('Soon', { exact: true })).toHaveCount(0)
+  })
+
+  test('leaving the profile with unsaved edits asks first', async ({ page }) => {
+    await page.goto(`${DEMOS}/settings`)
+    await page.locator('#full-name').fill('Amy Chen-Park')
+    await page
+      .getByRole('button', { name: /account menu/ })
+      .first()
+      .click()
+    await page.getByRole('menuitem', { name: 'Integration keys' }).click()
+    await expect(page.getByRole('alertdialog', { name: 'Unsaved changes' })).toBeVisible()
+    await page.getByRole('button', { name: 'Keep editing' }).click()
+    await expect(page.locator('#full-name')).toHaveValue('Amy Chen-Park')
   })
 
   test('the profile opens on the signed-in account and saves with Control+S', async ({ page }) => {
@@ -175,6 +195,26 @@ test.describe('demo flows', () => {
     await page.goto(`${DEMOS}/nope-404`)
     await expect(page).toHaveURL(/\/nope-404$/)
     await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible()
+  })
+
+  test('a customer link from the block sample opens, and an unknown one is titled', async ({
+    page
+  }) => {
+    await page.goto(`${DEMOS}/support/customers/cus_1042`)
+    await expect(page.getByRole('heading', { level: 1, name: 'Alex Morgan' })).toBeVisible()
+    await page.goto(`${DEMOS}/support/customers/nobody`)
+    await expect(page.getByRole('heading', { level: 1, name: 'Customer not found' })).toBeVisible()
+  })
+
+  test('in right to left a phone page is no wider than the screen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    for (const path of ['/settings', '/resources/new', '/support/tickets/new']) {
+      await page.goto(`${DEMOS}${path}?dir=rtl`)
+      await expect(page.locator('main, form').first()).toBeVisible()
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+        390
+      )
+    }
   })
 
   test('on a phone the list shows each row status', async ({ page }) => {

@@ -1,4 +1,6 @@
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, shallowRef, watch } from 'vue'
+
+type Catalog = (typeof import('@aziontech/webkit/locales/pt-BR'))['ptBR']
 
 export type Theme = 'dark' | 'light' | 'system'
 export type ResolvedTheme = 'dark' | 'light'
@@ -14,6 +16,14 @@ export const settings = reactive({
   locale: 'en',
   dir: 'ltr' as Direction
 })
+
+export const catalogs = shallowRef<Record<string, Catalog>>({})
+
+export async function loadCatalog(locale: string) {
+  if (locale !== 'pt-BR' || catalogs.value[locale]) return
+  const { ptBR } = await import('@aziontech/webkit/locales/pt-BR')
+  catalogs.value = { ...catalogs.value, [locale]: ptBR }
+}
 
 const darkScheme = globalThis.matchMedia?.('(prefers-color-scheme: dark)')
 const systemTheme = ref<ResolvedTheme>(darkScheme?.matches ? 'dark' : 'light')
@@ -63,6 +73,7 @@ export function restoreSettings() {
       write('theme', value.theme)
       write('locale', value.locale)
       write('dir', value.dir)
+      loadCatalog(value.locale)
       apply()
     }
   )
