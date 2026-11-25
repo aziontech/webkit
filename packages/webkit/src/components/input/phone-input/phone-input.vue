@@ -98,6 +98,8 @@
     const rest: Record<string, unknown> = { ...attrs }
     delete rest['id']
     delete rest['aria-describedby']
+    delete rest['aria-label']
+    delete rest['aria-labelledby']
     delete rest['data-testid']
     return rest
   })
@@ -326,6 +328,8 @@
         :aria-invalid="isInvalid || undefined"
         :aria-required="isRequired || undefined"
         :aria-describedby="describedBy"
+        :aria-label="attrs['aria-label'] || undefined"
+        :aria-labelledby="attrs['aria-labelledby'] || undefined"
         :data-testid="`${testId}__input`"
         class="pointer-coarse:text-body-md"
         :class="INPUT_CLASS"
