@@ -151,6 +151,10 @@ const headingSlug = (text: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
+function focusableTables(state: CoreState): void {
+  for (const token of state.tokens) if (token.type === 'table_open') token.attrSet('tabindex', '0')
+}
+
 function addHeadingIds(state: CoreState): void {
   const seen = new Map<string, number>()
   state.tokens.forEach((token, at) => {
@@ -174,6 +178,7 @@ export async function markdown(
   })
   md.core.ruler.after('inline', 'drop-html-comments', dropHtmlComments)
   md.core.ruler.after('drop-html-comments', 'drop-task-markers', dropTaskMarkers)
+  md.core.ruler.after('drop-task-markers', 'focusable-tables', focusableTables)
   if (headingIds) md.core.ruler.after('drop-task-markers', 'heading-ids', addHeadingIds)
   if (file) {
     const render = md.renderer.rules.link_open
