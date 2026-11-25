@@ -263,12 +263,12 @@
     }
   },
   "styleRecalc": {
-    "note": "Measured by src/test/table-scroll-performance.test.ts (styled, Chromium): style recalc time while scrolling, divided by the style recalc time of restyling the whole table on as many frames. The ratio does not depend on the machine. A scroll that restyles only the rows it mounts stays well below 1; a selector that makes every frame restyle the whole table (a :has() read from the scroll frame) drove it to about 0.6 (round 5); the scroll that restyles only the rows it mounts measures about 0.08.",
+    "note": "Measured by src/test/table-scroll-performance.test.ts (styled, Chromium): the number of elements Chromium restyles while scrolling (the elementCount of its UpdateLayoutTree trace events), divided by the number it restyles when the whole table restyles on as many frames. Element counts do not depend on the machine or its load, unlike style-recalc time. A scroll that restyles only the rows it mounts measures about 0.10. One sibling rule whose subject is the universal selector (a border-top variant for every child but the last, leaked from a token-check test fixture until src/test/reflow.css excluded the test folder) made every frame restyle three quarters of the table, 0.74 (audit 6, A6-269); a :has() read from the scroll frame did the same in round 5. This file is imported by the suite, so Tailwind reads it as source: never spell a class in this note.",
     "data-table-10k-virtual-scroll": {
-      "maxRatio": 0.25
+      "maxRatio": 0.15
     },
     "data-table-frozen-sideways-scroll": {
-      "maxRatio": 0.5
+      "maxRatio": 0.15
     }
   }
 }

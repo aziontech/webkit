@@ -1243,8 +1243,8 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
   ]
 
   const AGENT_STACK_CLASS =
-    'flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover/item:[&>*+*]:-ms-1.5 ' +
-    'group-focus-visible/item:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none'
+    'flex items-center [&>*:not(:first-child)]:-ms-2 [&>*:not(:first-child)]:transition-[margin-left] [&>*:not(:first-child)]:duration-moderate-01 [&>*:not(:first-child)]:ease-productive-entrance group-hover/item:[&>*:not(:first-child)]:-ms-1.5 ' +
+    'group-focus-visible/item:[&>*:not(:first-child)]:-ms-1.5 motion-reduce:[&>*:not(:first-child)]:transition-none'
 
   const AGENT_MARK_CLASS =
     'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) ' +

@@ -41,23 +41,29 @@ const scrollerIn = (root: HTMLElement): HTMLElement => {
   return el
 }
 
+async function restyled(run: () => Promise<void>): Promise<number> {
+  await commands.styleTraceStart()
+  await run()
+  return commands.styleTraceStop()
+}
+
 async function scrollCost(scroller: HTMLElement): Promise<number> {
-  const before = await commands.styleRecalcMs()
-  for (let i = 0; i < STEPS; i++) {
-    scroller.scrollTop += 60
-    await frame()
-  }
-  return (await commands.styleRecalcMs()) - before
+  return restyled(async () => {
+    for (let i = 0; i < STEPS; i++) {
+      scroller.scrollTop += 60
+      await frame()
+    }
+  })
 }
 
 async function fullRestyleCost(root: HTMLElement): Promise<number> {
-  const before = await commands.styleRecalcMs()
-  for (let i = 0; i < STEPS; i++) {
-    root.style.setProperty('color', i % 2 ? 'currentcolor' : 'canvastext')
-    await frame()
-  }
-  root.style.removeProperty('color')
-  return (await commands.styleRecalcMs()) - before
+  return restyled(async () => {
+    for (let i = 0; i < STEPS; i++) {
+      root.style.setProperty('color', i % 2 ? 'currentcolor' : 'canvastext')
+      await frame()
+    }
+    root.style.removeProperty('color')
+  })
 }
 
 describe('virtual DataTable scroll performance (styled)', () => {
@@ -87,9 +93,10 @@ describe('virtual DataTable scroll performance (styled)', () => {
       const scroll = await scrollCost(scroller)
       const full = await fullRestyleCost(root)
       const ratio = scroll / full
+      expect(full).toBeGreaterThan(0)
       const budget = budgets.styleRecalc['data-table-10k-virtual-scroll']
       console.warn(
-        `[perf] data-table-10k-virtual-scroll (${_name}): style recalc ${scroll.toFixed(1)} ms over ${STEPS} frames, a full table restyle per frame ${full.toFixed(1)} ms, ratio ${ratio.toFixed(2)} (budget ${budget.maxRatio})`
+        `[perf] data-table-10k-virtual-scroll (${_name}): ${scroll} elements restyled over ${STEPS} scroll frames, ${full} over ${STEPS} full table restyles, ratio ${ratio.toFixed(3)} (budget ${budget.maxRatio})`
       )
       if (server.browser !== 'chromium') return
       expect(ratio).toBeLessThanOrEqual(budget.maxRatio)
@@ -98,13 +105,13 @@ describe('virtual DataTable scroll performance (styled)', () => {
 })
 
 async function sidewaysCost(scroller: HTMLElement): Promise<number> {
-  const before = await commands.styleRecalcMs()
-  for (let i = 0; i < STEPS; i++) {
-    scroller.scrollLeft += i < STEPS / 2 ? 2 : -2
-    scroller.dispatchEvent(new Event('scroll'))
-    await frame()
-  }
-  return (await commands.styleRecalcMs()) - before
+  return restyled(async () => {
+    for (let i = 0; i < STEPS; i++) {
+      scroller.scrollLeft += i < STEPS / 2 ? 2 : -2
+      scroller.dispatchEvent(new Event('scroll'))
+      await frame()
+    }
+  })
 }
 
 describe('frozen-column DataTable sideways scroll (styled)', () => {
@@ -133,9 +140,10 @@ describe('frozen-column DataTable sideways scroll (styled)', () => {
     const sideways = await sidewaysCost(scroller)
     const full = await fullRestyleCost(scroll)
     const ratio = sideways / full
+    expect(full).toBeGreaterThan(0)
     const budget = budgets.styleRecalc['data-table-frozen-sideways-scroll']
     console.warn(
-      `[perf] data-table-frozen-sideways-scroll: style recalc ${sideways.toFixed(1)} ms over ${STEPS} frames, a full table restyle per frame ${full.toFixed(1)} ms, ratio ${ratio.toFixed(2)} (budget ${budget.maxRatio})`
+      `[perf] data-table-frozen-sideways-scroll: ${sideways} elements restyled over ${STEPS} sideways frames, ${full} over ${STEPS} full table restyles, ratio ${ratio.toFixed(3)} (budget ${budget.maxRatio})`
     )
     if (server.browser !== 'chromium') return
     expect(ratio).toBeLessThanOrEqual(budget.maxRatio)

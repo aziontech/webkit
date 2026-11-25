@@ -2,3 +2,4 @@
 @source '../components';
 @source '../../blocks';
 @source '../../examples';
+@source not '../../test';
