@@ -57,6 +57,13 @@
    "doc": "Disables interaction and applies the disabled tokens."
   },
   {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the value but blocks changing it: the switch stays focusable and keeps its on or off look."
+  },
+  {
    "name": "invalid",
    "type": "boolean",
    "default": "false",

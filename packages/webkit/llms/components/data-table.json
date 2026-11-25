@@ -142,7 +142,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
+   "doc": "opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as label and value lines instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
   },
   {
    "name": "wrapLines",

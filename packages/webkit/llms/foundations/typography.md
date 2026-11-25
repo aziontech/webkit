@@ -28,6 +28,7 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | `text-heading-2xl` | `1.875rem` | sm: 2.25rem, md: 3rem -0.053em 0 | A marketing section heading. |
 | `text-heading-2xs` | `0.875rem` |  | A small title or a wordmark written in type, a flat 14px. |
 | `text-heading-3xl` | `1.875rem` | sm: 3rem, md: 3.5rem -0.046em 0 | The largest page heading, for a marketing hero. |
+| `text-heading-code-md` | `1.5rem` |  | A 24px monospace code the reader compares or copies by eye, such as a device code. |
 | `text-heading-lg` | `1.125rem` | md: 1.875rem | A large section heading. |
 | `text-heading-md` | `1rem` | sm: 1.25rem, md: 1.5rem | A section heading. |
 | `text-heading-sm` | `0.875rem` | sm: 1rem, md: 1.125rem | A subsection or dialog heading. |

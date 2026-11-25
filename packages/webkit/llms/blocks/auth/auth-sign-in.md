@@ -3017,7 +3017,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
       <template v-else>
         <div :class="CODE_BOX_CLASS">
           <span class="text-label-sm text-(--text-muted)">Device code</span>
-          <span class="text-label-code-lg text-(--text-default)">{{ grouped }}</span>
+          <span class="text-heading-code-md text-(--text-default)">{{ grouped }}</span>
         </div>
 
         <KeyValueList
