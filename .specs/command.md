@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: ae7299eca81a51a5dad9353a5cbe37f0f02b035c336806701ab11269f5e24e10
+checksum: fde24dd858bef33a2162002207cb0eafd235d8a41f81226a5b9d1ca53fadb7af
 created: 2026-07-23
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # Command Menu — Component Spec
@@ -287,7 +287,7 @@ _none_
 
 ## Responsive
 
-- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
+- The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet. Below `sm` the sheet shows a header row with the visible title (`Command menu` from the locale catalog) beside the close button, so the row is never an empty band; from `sm` up that row is hidden and the title stays the dialog's name.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
 - Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate. The keycaps (the input's `Esc` hint and every item `shortcut` hint) hide on a coarse pointer (`pointer-coarse:hidden`), since a phone has no key to press.
 

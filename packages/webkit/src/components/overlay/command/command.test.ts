@@ -176,6 +176,16 @@ describe('Command', () => {
         expect(classes.contains('md:items-center')).toBe(false)
       })
 
+      it('names the palette with a title the phone header shows, not a hidden one', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        const title = byTestId('command__title')!
+        expect(panel()!.getAttribute('aria-labelledby')).toBe(title.id)
+        expect(title.textContent?.trim()).toBe('Command menu')
+        expect(title.classList.contains('sr-only')).toBe(false)
+      })
+
       it('names each group with its label prop', async () => {
         render(composed({ defaultOpen: true }))
         await settle()

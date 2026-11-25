@@ -234,7 +234,7 @@
       <PanelHeader class="py-(--spacing-xs) sm:hidden">
         <DialogTitle
           :data-testid="`${testId}__title`"
-          class="sr-only"
+          class="text-title-sm"
           >{{ t('command.title') }}</DialogTitle
         >
       </PanelHeader>
