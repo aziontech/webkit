@@ -537,11 +537,35 @@ function plainInline(text: string): string {
     .trim()
 }
 
+const LEAD_WORDS = 25
+
+function clauseBreak(sentence: string): number {
+  let depth = 0
+  let code = false
+  for (let at = 0; at < sentence.length; at++) {
+    const char = sentence[at]
+    if (char === '`') code = !code
+    else if (code) continue
+    else if (char === '(' || char === '[') depth++
+    else if (char === ')' || char === ']') depth = Math.max(0, depth - 1)
+    else if (depth === 0 && (char === ':' || char === ';')) return at
+  }
+  return -1
+}
+
 export function splitLead(text: string): { lead: string; rest: string } {
   const source = text.replace(/<!--[\s\S]*?-->/g, '').trim()
   const match = /^([\s\S]+?[.!?])(\s|$)/.exec(source)
   if (!match?.[1]) return { lead: plainInline(source), rest: '' }
-  return { lead: plainInline(match[1]), rest: source.slice(match[0].length).trim() }
+  const sentence = match[1]
+  const rest = source.slice(match[0].length).trim()
+  const cut = plainInline(sentence).split(' ').length > LEAD_WORDS ? clauseBreak(sentence) : -1
+  if (cut <= 0) return { lead: plainInline(sentence), rest }
+  const tail = sentence.slice(cut + 1).trim()
+  return {
+    lead: `${plainInline(sentence.slice(0, cut))}.`,
+    rest: [tail.charAt(0).toUpperCase() + tail.slice(1), rest].filter(Boolean).join(' ')
+  }
 }
 
 export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: string[] = []) {
@@ -567,11 +591,9 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         'other',
       surface: entry.surface ?? 'app',
       stability: entry.stability === 'preview' ? 'preview' : 'ga',
-      purpose: plainInline(
-        firstSentence(
-          stripReviewerNotes(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
-        )
-      ),
+      purpose: splitLead(
+        stripReviewerNotes(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
+      ).lead,
       import: entry.import ?? `@aziontech/webkit/${name}`,
       exampleDir: examples?.dir ?? null,
       exampleCount: examples?.data.examples.length ?? 0,

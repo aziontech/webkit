@@ -172,6 +172,12 @@ test('a component page shows the purpose after the header sentence, never both',
     rest: 'Two `a.b` here.'
   })
   assert.deepEqual(splitLead('Only one sentence'), { lead: 'Only one sentence', rest: '' })
+  const long =
+    'The composer of a chat: a text area that grows with the prompt, a toolbar under it, files attached by a button, a model picker, dictation and a Submit control that becomes Stop.'
+  assert.deepEqual(splitLead(`${long} More.`), {
+    lead: 'The composer of a chat.',
+    rest: 'A text area that grows with the prompt, a toolbar under it, files attached by a button, a model picker, dictation and a Submit control that becomes Stop. More.'
+  })
   const doc = await buildComponent('button')
   const lead = firstSentence(String(readCatalog().imports.button?.purpose ?? ''))
   assert.ok(lead)
