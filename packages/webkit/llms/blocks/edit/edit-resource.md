@@ -190,7 +190,7 @@ Then delete `sample.ts` and its import.
 - ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` locks the fieldset and spins Save, and `error` set when it ends raises the error toast with Retry.
 - DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `edit/edit-delete-dialog`.
 - PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug rules and Status.
-- WafSettings: a WAF rule set's Main Settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
+- WafSettings: a WAF rule set's Main settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
@@ -227,7 +227,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - `ProjectSettings` — primary (the code below)
 - `DeployableSettings` — A deployable resource’s Settings tab, under the environment switcher the page sets as its control crumb with `ConsoleLayout.Breadcrumb` and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.
 - `PolicySettings` — A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status.
-- `WafSettings` — A WAF rule set's Main Settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast.
+- `WafSettings` — A WAF rule set's Main settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast.
 - `ResourceSettings` — The settings page of a first-level resource with no tabs, drawn from the same field list as its create page: here an access list at /access-lists/:id/settings, with its name under General and the type and entries under List settings. The entries field follows the selected type, and Save checks every field before it commits.
 - `UnsavedChanges` — The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go.
 - `Saving` — While the save request is in flight: Save shows its loading state and Discard is disabled.
@@ -5211,6 +5211,7 @@ export const ttlDuration = (
                       :rows="5"
                       aria-label="List"
                       placeholder="13335&#10;53331"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
@@ -5227,15 +5228,22 @@ export const ttlDuration = (
                     v-else-if="form.type === 'ip_cidr'"
                     key="items-ip-cidr"
                     title="List"
-                    description="One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed."
                     variant="stacked"
                   >
+                    <template #description>
+                      One address or range per line. Add a comment after
+                      <code class="whitespace-nowrap font-(family-name:--font-code)">#</code>, and a
+                      date with
+                      <code class="whitespace-nowrap font-(family-name:--font-code)">--LT</code>.
+                      Duplicate entries are removed.
+                    </template>
                     <Textarea
                       v-model="form.items"
                       class="w-full"
                       :rows="5"
                       aria-label="List"
                       placeholder="192.0.2.10&#10;198.51.100.24&#10;203.0.113.7 #comment"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
@@ -5261,6 +5269,7 @@ export const ttlDuration = (
                       :rows="5"
                       aria-label="Countries"
                       placeholder="BR&#10;US"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
@@ -5331,9 +5340,9 @@ export const ttlDuration = (
   }
 
   const tabs = [
-    { value: 'main-settings', label: 'Main Settings' },
+    { value: 'main-settings', label: 'Main settings' },
     { value: 'tuning', label: 'Tuning' },
-    { value: 'allowed-rules', label: 'Allowed Rules' }
+    { value: 'allowed-rules', label: 'Allowed rules' }
   ]
   const activeTab = ref('main-settings')
 
@@ -5446,7 +5455,7 @@ export const ttlDuration = (
   <SettingsTabPage
     v-model:tab="activeTab"
     :tabs="tabs"
-    title="Main Settings"
+    title="Main settings"
     description="How this rule set is identified, and what it inspects requests for."
     docs-href="https://example.com/docs/waf-rule-sets"
     :dirty="dirty"

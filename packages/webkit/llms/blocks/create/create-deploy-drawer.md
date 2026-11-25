@@ -494,6 +494,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
       <SettingsGroup
         :inert="!!build || undefined"
         :data-pending="build ? 'true' : undefined"
+        class="data-[pending]:opacity-50"
         label="Project"
         hint="The project whose domains serve the service. Create one to deploy it on a new domain."
       >
@@ -508,6 +509,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
       <SettingsGroup
         :inert="!!build || undefined"
         :data-pending="build ? 'true' : undefined"
+        class="data-[pending]:opacity-50"
         label="Environment"
         hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
       >
@@ -528,6 +530,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
         v-if="impacted.length"
         :inert="!!build || undefined"
         :data-pending="build ? 'true' : undefined"
+        class="data-[pending]:opacity-50"
         label="Projects impacted"
         hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
       >
@@ -1445,7 +1448,9 @@ export function listFormat(names: string[]): string {
           class="shrink-0"
         />
       </span>
-      <Item.Description>Building…</Item.Description>
+      <Item.Description
+        >Building… Project and environment unlock when the build finishes.</Item.Description
+      >
     </Item.Content>
     <Item.Actions>
       <span

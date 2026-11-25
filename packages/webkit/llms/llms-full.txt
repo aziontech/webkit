@@ -4259,7 +4259,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-success")`
-- Components: Button, Card, CodeBlock, IntegrationCard, Item, Link, Subheader, Tag, ToggleGroup, Tooltip
+- Components: Button, Card, CodeBlock, IntegrationCard, Item, Link, Tag, ToggleGroup, Tooltip
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4287,7 +4287,7 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 - B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 - C. Resources list — `Card`, `Item`, `Tag` (required)
 - D. Next steps — `IntegrationCard` (required)
-- E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
+- E. Get started — `ToggleGroup`, `CodeBlock`, `Card` (optional)
 - F. Manage — `Button` (required)
 
 What each part takes: [blocks/create/create-deploy-success.md](blocks/create/create-deploy-success.md).
@@ -4447,7 +4447,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the same function as the Deploy button, from any field, on Form, BuildSettings and ImportFromGit, and runs Add to service-01 on InstallIntegration; the button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
-- The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
+- The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch sits in its own row with a visible Public repository label and a description of what it means, and announces its on or off state.
 - Settings use `Field` labels and descriptions, so each input announces its name and constraint.
 - Required fields carry the Required marker; a failed Deploy puts each error in a `Field.Error` (`role="alert"`) tied to its input.
 - Each `Accordion` trigger is a button that announces its expanded state; the Value input is labelled by its Value label, the Key row by its Key label (on a phone the key is a read-only line above a full-width Value field), and the show control is a toggle with `aria-pressed`.
@@ -4784,7 +4784,7 @@ What each part takes: [blocks/create/create-page.md](blocks/create/create-page.m
 
 ## Data
 
-The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry above the commit bar; on success the page shows the toast and opens the new domain.
+The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry under the page heading; on success the page shows the toast and opens the new domain.
 
 Prop: `defaultValues`, `loading`, `error`.
 
@@ -8256,7 +8256,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - ProjectSettings: a project's Settings tab with General, Modules and Subscription modules from `resource` (the sample when left out); the save bar is hidden until an edit. Save emits `submit`; `loading` locks the fieldset and spins Save, and `error` set when it ends raises the error toast with Retry.
 - DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `edit/edit-delete-dialog`.
 - PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug rules and Status.
-- WafSettings: a WAF rule set's Main Settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
+- WafSettings: a WAF rule set's Main settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
@@ -8530,7 +8530,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: Alert, AttributeEditor, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-file-picker`, `use-shortcuts`
+- Components: Alert, AttributeEditor, Button, Card, Checkbox, CollectionPreferences, ConfigProvider, ConfirmDialog, DataTable, `DataTablePagination`, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-file-picker`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8579,7 +8579,7 @@ The block takes its variables through props and emits every action; it fetches n
 
 The block is a folder. `edit-variables.vue` is the wiring: the props, the list rows, the row actions and the save. `parts/` holds its regions: `variables-list.vue` (the controls row and the table, on `useCollection`), `variables-drawer-form.vue` (the drawer form with its header, alert, fieldset and Save), `variables-entries.vue` (the Variables section: rows, JSON view and import tools), `variables-scope-group.vue` (the Scope section), `paste-panel.vue` with `env-paste-panel.vue` (the inline paste panel), and `network-list-fields.vue` (the network list sections). `composables/use-variables-form.ts` owns the drawer form state and validation and provides it to the parts, `composables/use-network-list-form.ts` does the same for the network list, and `lib/` holds the pure helpers (the `.env` and JSON parsing, the scopes, the row updates, the network list rules). The PasteEnv and NetworkList variants render the same parts with their own sample text from `sample.ts`. `webkit add` copies every file listed in `block.json` `files`.
 
-Prop: `variables`, `loading`, `saving`, `saveError`, `defaultOpen`.
+Prop: `variables`, `loading`, `saving`, `saveError`, `defaultOpen`, `now`.
 
 Event: `refresh`, `save`, `clone`, `delete`.
 
@@ -9420,7 +9420,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-async-s
 
 ## Copy
 
-- **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: what the run does and that the user may leave: `Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`
+- **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: the static purpose only, `Builds acme/web-app and publishes it to production.`; the timing and that the user may leave are said once, in the empty state, and the running and outcome states carry their own lines.
 - **Status tag:** one or two words: `Idle`, `Deploying`, `Failed`, `Deployed`.
 - **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about half a minute.`
 - **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`; description names the source and that the user may leave: `acme/web-app. It keeps running if you leave.`
@@ -9704,7 +9704,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-error-p
 - Surface: app
 - Source: `blocks/state/state-first-use/state-first-use.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-first-use")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CopyButton, EmptyState, Input, `InputGroupRoot`, Item, Link, Skeleton, ThirdPartyLogo
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CopyButton, EmptyState, Input, Item, Link, Skeleton, ThirdPartyLogo
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -9737,7 +9737,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - D. Documentation — `Link` (required)
 - E. Methods — `Item` (required)
 - F. Method action — `Button` (required)
-- G. Command row — `InputGroupRoot` (CLI method)
+- G. Command row — `Input`, `CopyButton` (CLI method)
 - H. Command — `Input` (CLI method)
 - I. Copy — `CopyButton` (CLI method)
 - J. Placeholder — `Skeleton` (Loading)
@@ -10062,7 +10062,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-page-sk
 
 # StateProjectIntake (`state/state-project-intake`)
 
-> The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and a Choose a folder `Button` as the keyboard way in), the…
+> The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and Choose a folder and Choose files `Button`s as the keybo…
 
 - Surface: app
 - Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
@@ -10074,7 +10074,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-page-sk
 
 drop zone; drag and drop upload; upload project; folder upload; initializing project; file drop; arrastar e soltar; enviar projeto; upload de arquivos
 
-The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with a Choose a folder button for anyone not dragging; once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over.
+The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with Choose a folder and Choose files buttons for anyone not dragging (a phone, which has no folder picker, shows only Choose files); once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over.
 
 DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shell/shell-console`); Initializing covers the whole screen.
 
@@ -10113,11 +10113,11 @@ What each prop and event does, and the go-live code: [blocks/state/state-project
 
 ## Do
 
-- Keep the drop target where a drop does something, with Choose a folder beside the message.
+- Keep the drop target where a drop does something, with Choose a folder and Choose files beside the message.
 - Say what dropping does, not how to drop: the user is already dragging.
 - Render Initializing over the page the drop came from (Home, its empty state, the creation hub), so the user keeps their place.
 - Advance the rows in order and keep finished rows visible while the list is short; past 50 files list only what is still moving.
-- Keep Choose a folder in the drop target; drag and drop is a shortcut, never the only way.
+- Keep the choose buttons in the drop target; drag and drop is a shortcut, never the only way.
 
 ## Don't
 
@@ -10130,21 +10130,21 @@ What each prop and event does, and the go-live code: [blocks/state/state-project
 
 - **Drop heading:** what the drop does, one line: `Drop your project to deploy it`. On a project page: `We build a new version of web-app, then you choose where it goes live.`
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
-- **Overlay heading:** one word for the phase: `Initializing`; `Upload paused` while a file has failed, with the danger `Alert` as the only summary of the failure. The `UploadProgress` header is the one place that counts the files.
+- **Overlay heading:** one word for the phase: `Initializing`; `Upload paused` while a file has failed, with the danger `Alert` as the only summary of the failure. The `UploadProgress` header is the one place that counts the files; while paused it follows the heading: `Paused: 2 of 5 uploaded, 1 failed`.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
 - **Summary:** count and total size, formatted with `formatFileSize` from `useLocale` like the rows: `5 files, 8.2 kB`.
 - **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility
 
-- The drop target names itself through its title and description; Choose a folder is the keyboard and screen reader path, and the number of received files is announced once.
+- The drop target names itself through its title and description; the choose buttons are the keyboard and screen reader path, and the number of received files is announced once.
 - `UploadProgress` announces the transfer summary in its own status region, without stealing focus; the overlay itself is not a live region, so rows changing are not re-announced.
 - Each row says its status in words; glyphs are decorative.
 - Every fade and the row advance honour `prefers-reduced-motion`.
 
 ## States
 
-- DropZone: `uploads` left out; the drop target fills the page body with the drop message and Choose a folder.
+- DropZone: `uploads` left out; the drop target fills the page body with the drop message, Choose a folder and Choose files.
 - Initializing: `uploads` set; the overlay mid-upload, two files uploaded, the third uploading, two queued, each row with its status in words, path and size.
 - UploadError: `uploads` holds a file with `status: 'error'`; one file failed, its row shows the reason and Retry, and a danger `Alert` above the list sums it up with Retry.
 
