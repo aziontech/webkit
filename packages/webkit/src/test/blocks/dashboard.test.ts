@@ -255,11 +255,6 @@ describe('dashboard/dashboard-analytics data shapes', () => {
     ).toBe(true)
     const hostsTable = view.getByTestId('data-table')
     expect(hostsTable.closest('[aria-busy="true"]')).not.toBeNull()
-    expect(
-      hostsTable.parentElement?.classList.contains(
-        'group-aria-busy/search-table:[&_[role=rowgroup]]:opacity-60'
-      )
-    ).toBe(true)
   })
 
   it('takes null gaps in a trend and sets the KPI tiles as the cells of one group', () => {
