@@ -207,7 +207,7 @@ describe('screen-reader smoke · form blocks', () => {
           - list:
             - listitem:
               - text: Protocol usage
-              - radiogroup "Protocol Usage":
+              - radiogroup "Protocol usage":
                 - radio "HTTP support"
                 - text: HTTP support Use only the HTTP protocol. Select from the available HTTP ports.
                 - radio "HTTP and HTTPS support" [checked]

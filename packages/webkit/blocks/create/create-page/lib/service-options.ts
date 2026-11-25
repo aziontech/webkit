@@ -51,4 +51,4 @@ export const cacheOptions = [
 ]
 
 export const MAXIMUM_TTL_DESCRIPTION =
-  'In seconds. Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds.'
+  'In seconds. Enable dynamic acceleration in the Main settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds.'
