@@ -505,7 +505,7 @@ describe('Tooltip', () => {
         const tip = panel()
         expect(tip).not.toBeNull()
         expect(tip!.getAttribute('role')).toBe('tooltip')
-        expect(tip!.textContent).toContain('This is a Tooltip')
+        expect(tip!.textContent).toContain('Copies the request ID to the clipboard')
       })
     })
   })

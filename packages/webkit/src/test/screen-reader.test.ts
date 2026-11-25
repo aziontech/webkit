@@ -60,30 +60,34 @@ describe('screen-reader smoke · overlays', () => {
   it('Dialog', async () => {
     const snapshot = await openAndRead(
       DialogDefault,
-      () => button('Open dialog'),
+      () => button('Rename application'),
       '[role="dialog"]'
     )
     expect(snapshot).toMatchInlineSnapshot(`
-      "- dialog "Dialog Title":
-        - heading "Dialog Title" [level=2]
+      "- dialog "Rename application":
+        - heading "Rename application" [level=2]
         - button "Close"
-        - paragraph: Modal content. Uses the shared Panel header, body, and footer regions.
+        - paragraph: The new name shows in the console and in the API. URLs and domains do not change.
+        - group:
+          - text: Name
+          - textbox "Name":
+            - /placeholder: ""
         - button "Cancel"
-        - button "Save""
+        - button "Rename""
     `)
   })
 
   it('Drawer', async () => {
     const snapshot = await openAndRead(
       DrawerDefault,
-      () => button('Open drawer'),
+      () => button('Edit cache settings'),
       '[role="dialog"]'
     )
     expect(snapshot).toMatchInlineSnapshot(`
-      "- dialog "Drawer Title":
-        - heading "Drawer Title" [level=2]
+      "- dialog "Cache settings":
+        - heading "Cache settings" [level=2]
         - button "Close"
-        - paragraph: Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
+        - paragraph: Choose how long edge nodes keep a copy of each response before they ask the origin again.
         - button "Cancel"
         - button "Save""
     `)

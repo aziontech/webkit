@@ -19,7 +19,7 @@
     },
     {
       "name": "Icon",
-      "summary": "Icon + label via the `icon` prop (Azion icon class) paired with `label`. `icon-position` picks the side: leading names the action, trailing points at where it goes. Add `animated` (third row) to nudge a trailing glyph along its axis on hover — off by default so product UI stays still; marketing CTAs opt in. The `leading` slot (last row) draws a mark before the label that stays first when the icon trails, so a brand mark and a chevron can share one control. `label` is required — for icon-only controls use `IconButton`.",
+      "summary": "Icon + label via the `icon` prop (Azion icon class) paired with `label`. `icon-position` picks the side: leading names the action, trailing points at where it goes. Add `animated` (third row, two marketing calls to action) to nudge a trailing glyph along its axis on hover — off by default so product UI stays still; marketing CTAs opt in. The `leading` slot (last row) draws a mark before the label that stays first when the icon trails, so a brand mark and a chevron can share one control. `label` is required — for icon-only controls use `IconButton`.",
       "file": "icon.vue"
     },
     {

@@ -1,15 +1,16 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
 </script>
 
 <template>
   <Tooltip
-    content="This is a Tooltip"
+    content="Copies the request ID to the clipboard"
     side="top"
   >
-    <Button
-      label="Hover me"
+    <IconButton
+      icon="az az-copy"
+      aria-label="Copy request ID"
       variant="outline"
       size="medium"
     />

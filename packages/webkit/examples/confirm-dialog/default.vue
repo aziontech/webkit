@@ -10,7 +10,7 @@
   <ConfirmDialog
     v-model:open="open"
     title="Remove domain"
-    description="shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response."
+    description="Traffic sent to shop.example.com stops getting a response. You can add the domain again later."
     confirm-label="Remove domain"
     @confirm="open = false"
   >
