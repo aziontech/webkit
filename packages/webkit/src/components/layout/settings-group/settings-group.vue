@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
+  import { computed, defineAsyncComponent, h, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { copyText } from '../../../utils/clipboard'
-  import Hint from '../../input/hint/hint.vue'
 
   defineOptions({
     name: 'SettingsGroup',
@@ -41,6 +40,13 @@
     /** An affordance beside the heading, outside the h2 and the disclosure, such as a help button that opens the page's HelpPanel. */
     info(): unknown
   }>()
+
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../input/hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
+  })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ settingsGroup: en.settingsGroup })

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, h, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import Tag from '../../content/tag/tag.vue'
-  import Hint from '../../input/hint/hint.vue'
   import Input from '../../input/input/input.vue'
   import Select from '../../input/select/select.vue'
   import SelectContent from '../../input/select/select-content/select-content.vue'
@@ -106,6 +105,13 @@
     plans: () => [],
     sections: () => [],
     primaryAction: undefined
+  })
+
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../input/hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
   })
 
   const attrs = useAttrs()

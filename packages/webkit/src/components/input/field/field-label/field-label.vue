@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, h, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import Hint from '../../hint/hint.vue'
   import { FieldInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -25,6 +24,13 @@
   defineSlots<{
     default(): unknown
   }>()
+
+  const Hint = defineAsyncComponent({
+    loader: () => import('../../hint/hint.vue'),
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-flex size-5 shrink-0' }),
+    delay: 0
+  })
 
   const field = inject(FieldInjectionKey, null)
   const attrs = useAttrs()

@@ -160,11 +160,11 @@ describe('CompetitorComparisonSection', () => {
     expect(getByText('Security').classList.contains('border-(--primary)')).toBe(true)
   })
 
-  it('renders a Hint only for a capability with a definition', () => {
+  it('renders a Hint only for a capability with a definition', async () => {
     const { getByRole } = band()
 
     const defined = getByRole('rowheader', { name: /Bot management/ })
-    expect(within(defined).getByTestId('hint__trigger').tagName).toBe('BUTTON')
+    expect((await within(defined).findByTestId('hint__trigger')).tagName).toBe('BUTTON')
     const bare = getByRole('rowheader', { name: /Zero Trust/ })
     expect(within(bare).queryByTestId('hint')).toBeNull()
   })

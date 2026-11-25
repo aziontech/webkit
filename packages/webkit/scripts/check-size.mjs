@@ -72,7 +72,8 @@ async function gzippedSize(entryPath, { entryOnly = false } = {}) {
     }
   })
   const outputs = (Array.isArray(result) ? result : [result]).flatMap((r) => r.output)
-  const counted = entryOnly ? initialOutputs(outputs) : outputs
+  const initial = initialOutputs(outputs)
+  const counted = entryOnly ? initial : outputs
   let bytes = 0
   for (const o of counted) bytes += gzipOf(o)
   const lazy = entryOnly
@@ -81,7 +82,12 @@ async function gzippedSize(entryPath, { entryOnly = false } = {}) {
         bytes: l.outputs.reduce((sum, o) => sum + gzipOf(o), 0)
       }))
     : []
-  return { bytes, split: outputs.length - counted.length, lazy }
+  return {
+    bytes,
+    split: outputs.length - counted.length,
+    lazy,
+    lazyUncounted: !entryOnly && initial.length < outputs.length
+  }
 }
 
 const kb = (n) => `${(n / 1024).toFixed(2)} KB`
@@ -97,12 +103,19 @@ async function main(args) {
     return 1
   }
   const failures = []
+  const unsplit = []
 
   for (const e of entries) {
     const limit = limitToBytes(e.limit)
-    const { bytes: size, split, lazy } = await gzippedSize(e.path, { entryOnly: e.entryOnly })
+    const {
+      bytes: size,
+      split,
+      lazy,
+      lazyUncounted
+    } = await gzippedSize(e.path, { entryOnly: e.entryOnly })
     const over = size > limit
     if (over) failures.push(e.name)
+    if (lazyUncounted) unsplit.push(e.name)
     const note = e.entryOnly
       ? `  · entry and its static imports, ${split} lazy chunk(s) excluded`
       : ''
@@ -124,6 +137,12 @@ async function main(args) {
     )
   }
 
+  if (unsplit.length) {
+    console.error(
+      `\n✖ ${unsplit.length} entr${unsplit.length === 1 ? 'y loads' : 'ies load'} lazy chunks without \`entryOnly\`: ${unsplit.join(', ')}.` +
+        `\nSet \`"entryOnly": true\` and the limit to the entry measurement, so the budget counts what loads first (audit-6 A6-271).`
+    )
+  }
   if (failures.length) {
     console.error(
       `\n✖ ${failures.length} entr${failures.length === 1 ? 'y' : 'ies'} over budget: ${failures.join(', ')}.` +
@@ -131,6 +150,7 @@ async function main(args) {
     )
     return 1
   }
+  if (unsplit.length) return 1
   console.log(
     `✓ check-size: ${only.length ? 'the named entries are' : 'every budgeted entry is'} within budget.`
   )

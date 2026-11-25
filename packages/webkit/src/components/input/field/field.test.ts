@@ -335,9 +335,9 @@ describe('Field', () => {
   })
 
   describe('Field.Label hint and the RequiredAndDisabled example', () => {
-    it('renders the hint glyph beside a label with hint, described by the hint text', () => {
+    it('renders the hint glyph beside a label with hint, described by the hint text', async () => {
       const view = render(RequiredAndDisabled)
-      const glyph = view.getByRole('button', { name: 'More information' })
+      const glyph = await view.findByRole('button', { name: 'More information' })
       expect(glyph).toHaveAccessibleDescription(
         "The name appears in the console and in the application's default domain."
       )
@@ -353,7 +353,7 @@ describe('Field', () => {
             '<Field orientation="horizontal"><Checkbox v-model="checked" /><FieldLabel hint="Values are encrypted at rest.">Sensitive</FieldLabel></Field>'
         })
       )
-      const glyph = view.getByTestId('field-label__hint__trigger')
+      const glyph = await view.findByTestId('field-label__hint__trigger')
       await userEvent.click(glyph)
       await nextTick()
       expect(checked.value).toBe(false)

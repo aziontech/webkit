@@ -2603,3 +2603,67 @@ Budget-raise: css-button 11.05 KB → 11.1 KB (measured 11.09 KB gzip): the them
 Budget-raise: css-icons 15.35 KB → 15.45 KB (measured 15.41 KB gzip): the same theme additions as css-button (A6-026, A6-122, A6-180).
 
 Budget-raise: css-console 24.7 KB → 24.95 KB (measured 24.91 KB gzip): the same theme additions (A6-026, A6-122, A6-180), plus the pointer-coarse 44px touch targets of grouped icon buttons, chips and chart legend items (A6-005, A6-015, A6-070), the transparent disabled ghost and outline IconButton fill (A6-232), the whole table row rules beside a frozen column (A6-059) and the platform shortcut hint in menu items (A6-073).
+
+Budget-raise: doc-markdown 41.95 KB → 42 KB (measured 41.99 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: media-split-section 17.9 KB → 18 KB (measured 17.96 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: feature-scroll-section 21.1 KB → 21.15 KB (measured 21.15 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: feature-widgets-section 20.6 KB → 20.7 KB (measured 20.65 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: cli-terminal-section 48 KB → 48.05 KB (measured 48.04 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: feature-tabs-section 60.65 KB → 60.75 KB (measured 60.73 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: media-split-stack-section 18.25 KB → 18.35 KB (measured 18.31 KB): the field label, settings row and settings group now load their Hint as a lazy chunk (A6-271), so Rollup moves `use-button-root` out of the shared `directional-icons` chunk this entry loads first; the extra chunk's import and export lines are the only growth. The same split lowers field-label 11.3 → 2.4 KB, field 13 → 4.05 KB, settings-row 22.5 → 12.7 KB and settings-group 12.3 → 3.75 KB.
+
+Budget-raise: quote 15.75 KB → 14.8 KB entryOnly (measured 14.63 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: console-application-scene 127.45 KB → 121.6 KB entryOnly (measured 120.36 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: console-trace-scene 87.15 KB → 79.95 KB entryOnly (measured 79.11 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: plan-comparison-section 40.3 KB → 37.95 KB entryOnly (measured 37.57 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its capability rows (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: logo-wall-section 25.5 KB → 24.65 KB entryOnly (measured 24.37 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: recognition-marquee-section 22.35 KB → 21.5 KB entryOnly (measured 21.24 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: timeline 22.75 KB → 19.6 KB entryOnly (measured 19.37 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: timeline-item 21.7 KB → 18.5 KB entryOnly (measured 18.29 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: timestamp 20.75 KB → 17.55 KB entryOnly (measured 17.36 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: message-thread 38.2 KB → 34.1 KB entryOnly (measured 33.74 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: message-thread-item 35.8 KB → 31.65 KB entryOnly (measured 31.32 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: field 13 KB → 4.05 KB entryOnly (measured 4.00 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: field-label 11.3 KB → 2.4 KB entryOnly (measured 2.35 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: settings-group 12.3 KB → 3.75 KB entryOnly (measured 3.68 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: settings-row 22.5 KB → 12.7 KB entryOnly (measured 12.54 KB): the budget counts the entry and its static imports and leaves out the lazy Hint (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: chat-message-feedback 17.3 KB → 4.95 KB entryOnly (measured 4.90 KB): the budget counts the entry and its static imports and leaves out the Feedback menu it already loads on first open, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: feedback-reason-dialog 38 KB → 30.8 KB entryOnly (measured 30.46 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: attribute-editor 25.45 KB → 21.55 KB entryOnly (measured 21.31 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: tag-editor 27.4 KB → 23.4 KB entryOnly (measured 23.15 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: schema-form 69.3 KB → 66 KB entryOnly (measured 65.31 KB): the budget counts the entry and its static imports and leaves out the lazy Hint of its field labels (this change), as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: log-viewer 44.45 KB → 41.25 KB entryOnly (measured 40.80 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: log-viewer-steps 42.45 KB → 37.3 KB entryOnly (measured 36.93 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: log-viewer-header 18.1 KB → 14.6 KB entryOnly (measured 14.45 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: console-layout 88.1 KB → 87.8 KB entryOnly (measured 86.91 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
+
+Budget-raise: app-header-account 14.4 KB → 13.45 KB entryOnly (measured 13.27 KB): the budget counts the entry and its static imports and leaves out the chunks it already loads on demand, as the 74 entryOnly budgets already do; the lazy chunks are listed by `check-size --lazy`. A lower limit, not a raise (audit-6 A6-271).
