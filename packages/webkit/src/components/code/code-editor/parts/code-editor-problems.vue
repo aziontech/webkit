@@ -38,7 +38,7 @@
   const problemCount = computed(() => t('codeEditor.problemCount', { count: props.markers.length }))
 
   const PROBLEM_CLASS =
-    'flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) text-start text-body-xs text-(--text-default) transition-colors ' +
+    'flex min-h-8 w-full cursor-pointer items-baseline gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-start text-body-xs text-(--text-default) transition-colors ' +
     'duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11'
 </script>
 
@@ -88,7 +88,11 @@
           <span class="shrink-0 text-(--text-muted) tabular-nums">{{
             `${t('codeEditor.line', { line: marker.line })} `
           }}</span>
-          <bdi class="min-w-0 flex-1 truncate">{{ marker.message }}</bdi>
+          <bdi
+            :data-testid="`${testId}__problem-message`"
+            class="min-w-0 flex-1 break-words"
+            >{{ marker.message }}</bdi
+          >
         </button>
       </li>
     </ul>
