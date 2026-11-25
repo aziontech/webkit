@@ -6,7 +6,7 @@
   "keyboard": {
     "entry": "prompt"
   },
-  "summary": "The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `HoverCard`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
+  "summary": "The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the title of the open conversation with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), the model picker (`v-model:modelKey`, the only one on the page) and Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `HoverCard`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -51,6 +51,8 @@
   "files": [
     "sample.ts",
     "lib/ai-chat-failure.ts",
+    "composables/use-composer-focus.ts",
+    "parts/ai-chat-artifact.vue",
     "parts/ai-chat-composer.vue",
     "parts/ai-chat-connection-status.vue",
     "parts/ai-chat-header.vue",
@@ -58,6 +60,7 @@
     "parts/ai-chat-remove-dialog.vue",
     "parts/ai-chat-media-segment.vue",
     "parts/ai-chat-skeleton.vue",
+    "parts/ai-chat-split.vue",
     "parts/ai-chat-start.vue",
     "parts/ai-chat-tool-segment.vue",
     "parts/ai-chat-turn.vue",
@@ -81,7 +84,7 @@
     },
     {
       "name": "Artifact",
-      "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question fills the composer. While a new version is written the canvas takes `streaming`, which locks its pager.",
+      "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane of the same chat shell (the `turn-end` and `canvas` slots of the chat) (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question is sent like in every other state. While a new version is written the canvas takes `streaming`, which locks its pager.",
       "file": "variants/artifact.vue"
     },
     {

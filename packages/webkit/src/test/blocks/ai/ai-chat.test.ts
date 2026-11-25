@@ -74,11 +74,17 @@ describe('ai/ai-chat Artifact', () => {
       expect(view.getAllByRole('button', { name: 'Open top-orders.sql' })).toHaveLength(2)
     })
 
-    it('puts a follow-up question in the composer without a canned answer', async () => {
+    it('keeps the chat shell of the other states around the canvas', async () => {
       const view = render(Artifact)
       await view.findByRole('region', { name: 'top-orders.sql' })
+      expect(view.getByRole('heading', { level: 1, name: 'AI assistant' })).toBeTruthy()
+      expect(view.getByRole('button', { name: /Hide conversation history/ })).toBeTruthy()
+      expect(
+        view.getAllByRole('button', { name: 'More conversation actions' }).length
+      ).toBeGreaterThan(0)
+      expect(view.queryByText('Preview')).toBeNull()
+      expect(view.getByText(/Check important information before you act on it/)).toBeTruthy()
       await userEvent.click(view.getByRole('button', { name: 'Show the customer email too' }))
-      expect(view.getByRole('textbox')).toHaveValue('Show the customer email too')
       expect(view.getByRole('region', { name: 'top-orders.sql' }).textContent).toContain('2 of 2')
     })
 
@@ -96,7 +102,6 @@ describe('ai/ai-chat Artifact', () => {
       await userEvent.click(view.getByRole('button', { name: 'Close top-orders.sql' }))
       expect(view.queryByRole('region', { name: 'top-orders.sql' })).toBeNull()
       await waitFor(() => expect(document.activeElement).toBe(firstOpen))
-      expect(view.getByRole('button', { name: 'Show artifact' })).toBeTruthy()
     })
   })
 
@@ -260,10 +265,22 @@ describe('ai/ai-chat', () => {
     expect(message.id).toBe('a1')
   })
 
-  it('picks the model from the header title and reports it', async () => {
-    const view = render(AiChat, { props: { messages: thread } })
-    await userEvent.click(view.getByRole('button', { name: /AI assistant/ }))
-    await userEvent.click(await view.findByRole('menuitemradio', { name: /Claude Opus 4\.5/ }))
+  it('picks the model in the composer only, and the header shows the chat title', async () => {
+    await page.viewport(1280, 900)
+    const view = render(AiChat, { props: { messages: thread, activeKey: 'h2' } })
+    const header = view.container.querySelector('header')!
+    expect(within(header).queryByRole('button', { name: /Gemini|Claude/ })).toBeNull()
+    expect(within(header).getByRole('heading', { level: 1 }).textContent?.trim()).not.toBe('')
+    await userEvent.click(view.getByTestId('prompt-input-model-picker'))
+    const panel = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>(
+        '[data-testid="prompt-input-model-picker__panel"]'
+      )
+      expect(found).not.toBeNull()
+      return found!
+    })
+    await userEvent.click(within(panel).getByRole('button', { name: /^Claude Opus 4\.5/ }))
+    await page.viewport(414, 896)
     expect(view.emitted('update:modelKey')).toEqual([['claude-opus-4-5']])
   })
 

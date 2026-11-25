@@ -193,6 +193,7 @@
       >
         You stopped this response.
       </p>
+      <slot name="end" />
     </template>
     <template
       v-if="turn.role === 'user'"
