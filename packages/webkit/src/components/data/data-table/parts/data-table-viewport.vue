@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { computed } from 'vue'
+
   import Checkbox from '../../../input/checkbox/checkbox.vue'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import SlotOutlet from '../../table/parts/slot-outlet'
@@ -36,13 +38,16 @@
     windowed
   } = view
   const { loading: loadingMore } = loadMore
+  const stateShown = computed<boolean>(
+    () => !props.loading && (Boolean(props.error) || rowTotal.value === 0)
+  )
 </script>
 
 <template>
   <div
     :data-testid="`${testId}__scroll`"
-    :data-overflow-start="overflowStart > 0 ? '' : undefined"
-    :data-overflow-end="overflowEnd > 0 ? '' : undefined"
+    :data-overflow-start="overflowStart > 0 && !stateShown ? '' : undefined"
+    :data-overflow-end="overflowEnd > 0 && !stateShown ? '' : undefined"
     class="group/scroll relative flex min-h-0 min-w-0 flex-col"
   >
     <ScrollArea

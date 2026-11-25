@@ -32,7 +32,9 @@
     'duration-150 ease-out motion-reduce:transition-none ' +
     'data-[hoverable]:hover:[--table-row-bg:var(--bg-canvas)] ' +
     'data-[state=selected]:[--table-row-bg:var(--bg-selected)] data-[state=selected]:hover:[--table-row-bg:var(--bg-selected)] ' +
-    'data-[frozen]:sticky data-[frozen]:top-0 data-[frozen]:z-10'
+    'relative data-[frozen]:sticky data-[frozen]:top-0 data-[frozen]:z-10 ' +
+    'before:pointer-events-none before:absolute before:inset-x-0 before:-bottom-(--border-width-default) before:z-6 before:h-(--border-width-default) ' +
+    "before:bg-(--border-default) before:content-[''] forced-colors:before:hidden"
 </script>
 
 <template>
