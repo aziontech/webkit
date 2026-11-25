@@ -31,10 +31,10 @@ describe('PasswordRequirements', () => {
   })
 
   it('marks the rules the value meets', () => {
-    const { getAllByTestId } = render(PasswordRequirements, { props: { value: 'abcdefgh1' } })
+    const { getAllByTestId } = render(PasswordRequirements, { props: { value: 'abcdefghijk1' } })
 
     expect(validated(getAllByTestId('password-requirements__chip'))).toEqual([
-      ['8-128 characters', true],
+      ['12-128 characters', true],
       ['Lowercase letter', true],
       ['Uppercase letter', false],
       ['Number', true],
@@ -43,7 +43,7 @@ describe('PasswordRequirements', () => {
   })
 
   it('states each rule as met or not met in text, not only in colour', () => {
-    const { getAllByTestId } = render(PasswordRequirements, { props: { value: 'abcdefgh1' } })
+    const { getAllByTestId } = render(PasswordRequirements, { props: { value: 'abcdefghijk1' } })
     const states = getAllByTestId('password-requirements__chip-state').map((el) =>
       el.textContent?.trim()
     )
@@ -74,7 +74,7 @@ describe('PasswordRequirements', () => {
     const { container, getAllByTestId } = render(Default)
     const input = container.querySelector('input') as HTMLInputElement
 
-    await fireEvent.update(input, 'Abcdefg!1')
+    await fireEvent.update(input, 'Abcdefghij!1')
 
     expect(
       getAllByTestId('password-requirements__chip').every((chip) =>
@@ -97,11 +97,19 @@ describe('PasswordRequirements', () => {
     const status = getByTestId('password-requirements__progress')
     expect(status.getAttribute('role')).toBe('status')
     expect(status.textContent).toBe('')
-    await fireEvent.update(container.querySelector('input') as HTMLInputElement, 'abcdefgh')
+    await fireEvent.update(container.querySelector('input') as HTMLInputElement, 'abcdefghijkl')
     expect(status.textContent).toBe('')
     await waitFor(() => expect(status.textContent).toBe('2 of 5 requirements met'), {
       timeout: 2000
     })
+  })
+
+  it('animates no layout property: the row reflows, the check only fades and slides', () => {
+    const { getByTestId, container } = render(PasswordRequirements, { props: { value: 'a' } })
+    const classes = [getByTestId('password-requirements'), ...container.querySelectorAll('i')]
+      .map((el) => el.getAttribute('class') ?? '')
+      .join(' ')
+    expect(classes).not.toMatch(/transition-\[[^\]]*(height|width|margin|left)/)
   })
 
   it('has no axe violations in the Default example', async () => {

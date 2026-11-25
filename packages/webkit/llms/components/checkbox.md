@@ -80,17 +80,20 @@
 ```vue
 <script setup>
   import Checkbox from '@aziontech/webkit/checkbox'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
   const checked = ref(false)
 </script>
 
 <template>
-  <Checkbox
-    v-model="checked"
-    id="webkit-checkbox"
-    aria-label="Toggle option"
-  />
+  <Field orientation="horizontal">
+    <Checkbox
+      v-model="checked"
+      name="email-notifications"
+    />
+    <Field.Label>Email notifications</Field.Label>
+  </Field>
 </template>
 ```
 
@@ -99,18 +102,20 @@
 ```vue
 <script setup>
   import Checkbox from '@aziontech/webkit/checkbox'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
   const checked = ref(false)
 </script>
 
 <template>
-  <Checkbox
-    v-model="checked"
-    indeterminate
-    id="webkit-checkbox-indeterminate"
-    aria-label="Toggle option"
-  />
+  <Field orientation="horizontal">
+    <Checkbox
+      v-model="checked"
+      indeterminate
+    />
+    <Field.Label>Select all domains</Field.Label>
+  </Field>
 </template>
 ```
 
@@ -119,26 +124,35 @@
 ```vue
 <script setup>
   import Checkbox from '@aziontech/webkit/checkbox'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
-  const checked = ref(true)
-  const unchecked = ref(false)
+  const backups = ref(true)
+  const dedicatedIp = ref(false)
 </script>
 
 <template>
-  <div class="flex items-center gap-(--spacing-4)">
-    <Checkbox
-      v-model="checked"
+  <Field.Group class="max-w-(--container-xs)">
+    <Field
+      orientation="horizontal"
       disabled
-      id="webkit-checkbox-disabled-on"
-      aria-label="Disabled checked"
-    />
-    <Checkbox
-      v-model="unchecked"
+    >
+      <Checkbox v-model="backups" />
+      <Field.Content>
+        <Field.Label>Daily backups</Field.Label>
+        <Field.Description>Always on for this plan.</Field.Description>
+      </Field.Content>
+    </Field>
+    <Field
+      orientation="horizontal"
       disabled
-      id="webkit-checkbox-disabled-off"
-      aria-label="Disabled unchecked"
-    />
-  </div>
+    >
+      <Checkbox v-model="dedicatedIp" />
+      <Field.Content>
+        <Field.Label>Dedicated IP</Field.Label>
+        <Field.Description>Available on the Enterprise plan.</Field.Description>
+      </Field.Content>
+    </Field>
+  </Field.Group>
 </template>
 ```

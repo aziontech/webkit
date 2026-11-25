@@ -15,7 +15,7 @@ export type PasswordRequirementsPatternRule = PasswordRequirementsRule & {
 }
 
 export const DEFAULT_PASSWORD_REQUIREMENTS: PasswordRequirementsPatternRule[] = [
-  { key: 'length', label: '8-128 characters', test: /^.{8,128}$/ },
+  { key: 'length', label: '12-128 characters', test: /^.{12,128}$/ },
   { key: 'lowercase', label: 'Lowercase letter', test: /[a-z]/ },
   { key: 'uppercase', label: 'Uppercase letter', test: /[A-Z]/ },
   { key: 'number', label: 'Number', test: /\d/ },

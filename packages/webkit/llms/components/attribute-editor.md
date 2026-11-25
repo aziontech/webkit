@@ -102,7 +102,7 @@
 
 - Visible focus: every control and button keeps its own ring.
 - Keyboard map: Tab moves through the cells of a row, its reorder controls, its Remove, then the next row; Add moves focus to the first control of the new row; Remove moves focus to the same position in the next row, else the previous row, else Add. With `reorderable`: Arrow Up / Arrow Down on a grip, or Alt+Arrow Up / Alt+Arrow Down on any control of a row, move the row one position inside its group (on a group's grip, the group); focus follows the moved row (the same control, or its grip when that control is now disabled). Drag and drop is a pointer shortcut only; every move is reachable by keyboard and by the buttons.
-- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels, with the same `*` after a required column's label as the stacked label, and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); each grip is a button named "Reorder item n" ("Reorder group n") and described by the hint "Drag, or press Arrow Up or Arrow Down to move."; Move up / Move down are named "Move item n up" / "Move item n down" ("Move group n up" / "down"); groups are `group`s named "Group n"; a polite `status` region announces "Item n added", "Item n removed" and "Item n moved to position m." ("Group n moved to position m.").
+- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels, with the same `*` after a required column's label as the stacked label, and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named by the row's first-column value, "Remove item API_BASE_URL" (or `removeButtonLabel` and the value), and by its position, "Remove item n", only while that value is empty; each grip is a button named "Reorder item n" ("Reorder group n") and described by the hint "Drag, or press Arrow Up or Arrow Down to move."; Move up / Move down are named "Move item n up" / "Move item n down" ("Move group n up" / "down"); groups are `group`s named "Group n"; a polite `status` region announces "Item n added", "Item n removed" and "Item n moved to position m." ("Group n moved to position m.").
 - Contrast ≥4.5:1 from the semantic text tokens, including the disabled state.
 - Touch target: Remove follows `size` (40 px at `large`); the stacked layout keeps it at the row's end.
 
@@ -122,8 +122,8 @@
 | `attributeEditor.rowAction`     | {label} {index}                                | —                   |
 | `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
 | `attributeEditor.emptyTitle`    | No items yet.                                  | `emptyTitle`        |
-| `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
-| `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
+| `attributeEditor.remaining`     | You can add {count} more.                      | `#limit` slot       |
+| `attributeEditor.limitReached`  | You have reached the limit of {limit}.         | `#limit` slot       |
 | `attributeEditor.added`         | Item {index} added.                            | —                   |
 | `attributeEditor.removed`       | Item {index} removed.                          | —                   |
 | `attributeEditor.group`         | Group {index}                                  | —                   |

@@ -228,6 +228,20 @@ describe('Switch', () => {
   })
 
   describe('disabled', () => {
+    it('keeps a locked-on switch framed, tinted and its handle readable', () => {
+      const { getByTestId } = render(Switch, {
+        props: { disabled: true, modelValue: true },
+        attrs: { 'aria-label': 'DDoS Protection' }
+      })
+      const root = getByTestId('switch')
+      expect(root.classList).toContain('disabled:data-[checked]:border-(--border-input)')
+      expect(root.classList).toContain('disabled:data-[checked]:bg-(--accent-mask)')
+      expect(root.classList).not.toContain('disabled:data-[checked]:border-transparent')
+      expect(getByTestId('switch__handle').classList).toContain(
+        'group-disabled:group-data-[checked]:bg-(--text-muted)'
+      )
+    })
+
     it('mirrors disabled on data-disabled, aria-disabled and the native button', () => {
       const { getByTestId } = render(Switch, {
         props: { disabled: true },

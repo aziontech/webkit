@@ -144,7 +144,7 @@
         :toggleable="true"
         autocomplete="current-password"
       />
-      <Field.Description>With the show and hide toggle (default).</Field.Description>
+      <Field.Description>At least 12 characters.</Field.Description>
     </Field>
     <Field>
       <Field.Label>Recovery code</Field.Label>
@@ -153,7 +153,7 @@
         :toggleable="false"
         autocomplete="off"
       />
-      <Field.Description>Without the toggle.</Field.Description>
+      <Field.Description>Shown once when you set up two-factor authentication.</Field.Description>
     </Field>
   </div>
 </template>

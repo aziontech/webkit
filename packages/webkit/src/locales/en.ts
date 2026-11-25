@@ -39,10 +39,10 @@ export const attributeEditor = {
   addGroup: 'Add OR group',
   emptyTitle: 'No items yet.',
   remaining: {
-    one: 'You can add {count} more item.',
-    other: 'You can add {count} more items.'
+    one: 'You can add {count} more.',
+    other: 'You can add {count} more.'
   },
-  limitReached: 'You have reached the limit of {limit} items.',
+  limitReached: 'You have reached the limit of {limit}.',
   added: 'Item {index} added.',
   removed: 'Item {index} removed.',
   group: 'Group {index}',
@@ -582,6 +582,9 @@ export const fileTokenGroup = {
   label: 'Files',
   remove: 'Remove {name}',
   uploading: 'Uploading {name}',
+  cancelUpload: 'Cancel upload of {name}',
+  uploadProgress: '{percent}%',
+  uploadPending: 'Uploading…',
   modified: 'Modified {date}',
   showMore: {
     one: 'Show {count} more file',
@@ -857,7 +860,7 @@ export const passwordInput = {
 
 export const passwordRequirements = {
   title: 'Must contain:',
-  length: '8-128 characters',
+  length: '12-128 characters',
   uppercase: 'Uppercase letter',
   special: 'Special character',
   number: 'Number',

@@ -69,7 +69,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Shows the value without letting it change: the toolbar is disabled and the mention menu never opens; the Preview tab still works."
+   "doc": "Shows the value without letting it change: opens on the Preview tab, hides the toolbar and never opens the mention menu; the Write tab still shows the source."
   },
   {
    "name": "invalid",

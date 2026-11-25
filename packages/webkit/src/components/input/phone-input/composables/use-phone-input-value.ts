@@ -47,7 +47,11 @@ export function usePhoneInputValue(options: UsePhoneInputValueOptions): UsePhone
   const find = (code: string) => toValue(options.countries).find((c) => c.code === code)
 
   const selectedCountry = computed<PhoneInputCountry>(
-    () => find(country.value || toValue(options.defaultCountry)) ?? toValue(options.countries)[0]
+    () =>
+      (country.value ? find(country.value) : undefined) ??
+      find(toValue(options.defaultCountry)) ??
+      find('US') ??
+      toValue(options.countries)[0]
   )
 
   const displayValue = computed(() => formatNational(selectedCountry.value, digits.value))

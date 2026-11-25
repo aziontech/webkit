@@ -155,7 +155,7 @@
   <div class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)">
     <FileDropzone
       directories
-      title="Drop files or folders to upload"
+      title="Upload files or folders"
       description="Folders keep their structure: each file goes up with its path."
       @drop="(event, files) => add(files)"
     >
@@ -168,6 +168,7 @@
         />
         <Button
           label="Browse folder"
+          class="pointer-coarse:hidden"
           variant="secondary"
           size="medium"
           icon="az az-folder-open"

@@ -42,6 +42,12 @@ const lastValue = (emitted: Record<string, unknown[][]>) =>
 
 describe('SchemaForm', () => {
   describe('schema helpers', () => {
+    it('ships the Default example without a debug dump of the model', () => {
+      const view = render(Default)
+      expect(view.container.querySelector('pre')).toBeNull()
+      expect(view.container.textContent).not.toContain('"greeting"')
+    })
+
     it('maps types to widgets, infers types and orders keys', () => {
       const nodes = buildNodes(
         {
@@ -173,6 +179,16 @@ describe('SchemaForm', () => {
         view.getByText('Check the format: Lowercase letters, numbers and hyphens.')
       ).toBeTruthy()
     )
+  })
+
+  it('shows a lock on the hints of a disabled form, never of a read-only one', () => {
+    const props = { schema, modelValue: { name: 'shop' } }
+    const busy = render(SchemaForm, { props: { ...props, readonly: true } })
+    expect((busy.getByLabelText(/Name/) as HTMLInputElement).readOnly).toBe(true)
+    expect(busy.container.querySelector('[data-testid="field-description__icon"]')).toBeNull()
+    busy.unmount()
+    const locked = render(SchemaForm, { props: { ...props, disabled: true } })
+    expect(locked.container.querySelector('[data-testid="field-description__icon"]')).not.toBeNull()
   })
 
   it('shows server errors by path until the field is edited', async () => {

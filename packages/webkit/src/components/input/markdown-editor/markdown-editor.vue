@@ -27,7 +27,7 @@
     ariaLabel?: string
     /** Disables the field, the toolbar, the tabs and the mention menu. */
     disabled?: boolean
-    /** Shows the value without letting it change: the toolbar is disabled and the mention menu never opens; the Preview tab still works. */
+    /** Shows the value without letting it change: opens on the Preview tab, hides the toolbar and never opens the mention menu; the Write tab still shows the source. */
     readonly?: boolean
     /** Applies the invalid border to the field and the preview and sets aria-invalid on the field. */
     invalid?: boolean
@@ -76,7 +76,7 @@
   })
 
   const textareaEl = ref<InstanceType<typeof Textarea> | null>(null)
-  const tab = ref<'write' | 'preview'>('write')
+  const tab = ref<'write' | 'preview'>(props.readonly ? 'preview' : 'write')
   const previewReady = ref(false)
   const previewFailed = ref(false)
   let leftSelection: [number, number] | undefined
@@ -251,7 +251,7 @@
           </Tabs.List>
         </div>
         <MarkdownEditorToolbar
-          v-if="tab === 'write'"
+          v-if="tab === 'write' && !readonly"
           :controls="fieldId"
           :disabled="!editable"
           :test-id="testId"

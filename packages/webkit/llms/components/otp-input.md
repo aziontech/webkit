@@ -104,7 +104,7 @@
   import { ref } from 'vue'
 
   const code = ref('')
-  const entered = ref('')
+  const complete = ref(false)
 </script>
 
 <template>
@@ -114,7 +114,8 @@
       <OtpInput
         v-model="code"
         name="code"
-        @complete="(value) => (entered = value)"
+        @update:model-value="complete = false"
+        @complete="complete = true"
       />
       <Field.Description>The 6-digit code from your authenticator app.</Field.Description>
     </Field>
@@ -122,7 +123,7 @@
       class="text-body-sm text-(--text-muted)"
       role="status"
     >
-      {{ entered ? `Code ${entered} entered.` : '' }}
+      {{ complete ? 'Code complete. Verifying…' : '' }}
     </p>
   </div>
 </template>

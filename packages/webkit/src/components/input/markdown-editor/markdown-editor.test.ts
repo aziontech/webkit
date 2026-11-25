@@ -202,14 +202,34 @@ describe('MarkdownEditor', () => {
       expect(getByRole('tab', { name: 'Preview' })).toBeDisabled()
     })
 
-    it('keeps the value unchanged on shortcuts and the menu closed when readonly', async () => {
-      const { field, value, getByRole, getByTestId } = mountEditor({
-        modelValue: 'hello',
-        readonly: true,
-        mentions: PEOPLE
+    it('opens a readonly editor on Preview, with no toolbar', async () => {
+      const { getByRole, queryByRole, getByTestId } = render(MarkdownEditor, {
+        props: { modelValue: '**Jane**', readonly: true }
       })
+      expect(getByRole('tab', { name: 'Preview' })).toHaveAttribute('aria-selected', 'true')
+      expect(queryByRole('button', { name: 'Bold' })).toBeNull()
+      await fireEvent.click(getByRole('tab', { name: 'Write' }))
+      expect(getByTestId('markdown-editor__field')).toHaveAttribute('readonly')
+      expect(queryByRole('button', { name: 'Bold' })).toBeNull()
+    })
+
+    it('keeps the value unchanged on shortcuts and the menu closed when readonly', async () => {
+      const value = ref('hello')
+      const Host = defineComponent({
+        setup: () => () =>
+          h(MarkdownEditor, {
+            modelValue: value.value,
+            readonly: true,
+            mentions: PEOPLE,
+            'onUpdate:modelValue': (next: string) => {
+              value.value = next
+            }
+          })
+      })
+      const { getByRole, getByTestId } = render(Host)
       expect(getByTestId('markdown-editor')).toHaveAttribute('data-readonly')
-      expect(getByRole('button', { name: 'Bold' })).toBeDisabled()
+      await fireEvent.click(getByRole('tab', { name: 'Write' }))
+      const field = getByTestId('markdown-editor__field') as HTMLTextAreaElement
       select(field, 0, 5)
       await fireEvent.keyDown(field, { key: 'b', code: 'KeyB', ...MOD })
       expect(value.value).toBe('hello')
@@ -371,7 +391,7 @@ describe('MarkdownEditor', () => {
           ])
       })
       const utils = render(Host)
-      const field = utils.getByTestId('markdown-editor__field') as HTMLTextAreaElement
+      const field = utils.queryByTestId('markdown-editor__field') as HTMLTextAreaElement
       return { ...utils, editor, value, field }
     }
 

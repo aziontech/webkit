@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The 6-digit authenticator code in a `Field`: type, paste or autofill it; `complete` fires when the last box fills.",
+   "summary": "The 6-digit authenticator code in a `Field`: type, paste or autofill it; `complete` fires when the last box fills, and the status line says the code is being verified without repeating it.",
    "file": "examples/otp-input/default.vue"
   },
   {

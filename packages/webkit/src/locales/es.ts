@@ -247,10 +247,10 @@ export const es: Messages = {
     addGroup: 'Agregar grupo O',
     emptyTitle: 'Todavía no hay elementos.',
     remaining: {
-      one: 'Puedes agregar {count} elemento más.',
-      other: 'Puedes agregar {count} elementos más.'
+      one: 'Puedes agregar {count} más.',
+      other: 'Puedes agregar {count} más.'
     },
-    limitReached: 'Alcanzaste el límite de {limit} elementos.',
+    limitReached: 'Alcanzaste el límite de {limit}.',
     added: 'Elemento {index} agregado.',
     removed: 'Elemento {index} quitado.',
     group: 'Grupo {index}',
@@ -774,6 +774,9 @@ export const es: Messages = {
     label: 'Archivos',
     remove: 'Quitar {name}',
     uploading: 'Subiendo {name}',
+    cancelUpload: 'Cancelar la subida de {name}',
+    uploadProgress: '{percent} %',
+    uploadPending: 'Subiendo…',
     modified: 'Modificado el {date}',
     showMore: {
       one: 'Mostrar {count} archivo más',
@@ -1021,7 +1024,7 @@ export const es: Messages = {
   },
   passwordRequirements: {
     title: 'Debe contener:',
-    length: 'De 8 a 128 caracteres',
+    length: 'De 12 a 128 caracteres',
     uppercase: 'Letra mayúscula',
     special: 'Carácter especial',
     number: 'Número',

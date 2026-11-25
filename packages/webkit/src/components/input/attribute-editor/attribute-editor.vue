@@ -133,10 +133,12 @@
   const addLabel = computed(() => props.addButtonLabel || t('attributeEditor.add'))
   const groupAddLabel = computed(() => props.addGroupLabel || t('attributeEditor.addGroup'))
   const emptyText = computed(() => props.emptyTitle || t('attributeEditor.emptyTitle'))
-  const removeLabel = (position: number) =>
+  const removeLabel = (position: number, item?: object) =>
     t('attributeEditor.rowAction', {
       label: props.removeButtonLabel || t('attributeEditor.remove'),
-      index: position
+      index:
+        String((item as Record<string, unknown>)?.[props.definition[0]?.key ?? ''] ?? '').trim() ||
+        position
     })
 
   const columnCount = computed(() => Math.max(props.definition.length, 1))
@@ -376,7 +378,7 @@
             />
             <span
               v-if="limit !== undefined"
-              class="text-body-sm text-(--text-muted)"
+              class="text-label-sm text-(--text-muted)"
               >{{ limitText(group) }}</span
             >
           </div>
@@ -414,7 +416,7 @@
       </div>
       <p
         v-if="!grouped && limit !== undefined"
-        class="m-0 text-body-sm text-(--text-muted)"
+        class="m-0 text-label-sm text-(--text-muted)"
         :data-testid="`${testId}__limit`"
       >
         <slot

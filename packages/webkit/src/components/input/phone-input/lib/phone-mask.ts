@@ -44,11 +44,6 @@ export function formatNational(country: PhoneInputCountry, digits: string): stri
   return applyMask(digits, maskFor(country, digits))
 }
 
-export function placeholderFor(country: PhoneInputCountry): string {
-  const masks = masksOf(country)
-  return masks[masks.length - 1].replace(/#/g, '9')
-}
-
 export function isComplete(country: PhoneInputCountry, digits: string): boolean {
   return masksOf(country).some((mask) => slotCount(mask) === digits.length)
 }

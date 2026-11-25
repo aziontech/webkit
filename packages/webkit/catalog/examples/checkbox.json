@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Binary control only — associate copy via an external label or a horizontal `Field`.",
+   "summary": "A checkbox in a horizontal `Field`, so its label sits beside it and names it.",
    "file": "examples/checkbox/default.vue"
   },
   {
@@ -12,7 +12,7 @@
   },
   {
    "name": "Disabled",
-   "summary": "Disabled checked and unchecked controls without label chrome.",
+   "summary": "Disabled checked and unchecked boxes in horizontal Fields; the description says why each cannot change, and the disabled state is announced, so it is never part of the name.",
    "file": "examples/checkbox/disabled.vue"
   }
  ]

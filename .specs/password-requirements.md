@@ -4,9 +4,9 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: e4884a6383a17825833c87ea05db129660f1cb9161f4d454e8d284fa440f9a65
+checksum: 22733b3a76312b8565925b0be8a508bf9fd5f29c484a962a54f175a7f2faf6fe
 created: 2026-11-10
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # PasswordRequirements — Component Spec
@@ -84,15 +84,14 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
 
 - Each chip carries `data-validated` when its rule passes.
 - `DEFAULT_PASSWORD_REQUIREMENTS` lists its rules in the order people expect to read them: length, lowercase, uppercase, number, special character.
-- The row animates its height as chips wrap.
+- The row reflows as chips wrap; nothing animates a layout property (height, width, margin).
 
 ## Motion & Animations
 
 | Trigger           | Animation / Transition                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
 | ----------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| row height change | `transition-[height] duration-fast-02 ease-productive-entrance`                         | semantic (`fast-02` · `productive-entrance`)      | `motion-reduce:transition-none` |
 | chip validated    | `transition-colors duration-fast-02 ease-productive-entrance`                           | semantic (`fast-02` · `productive-entrance`)      | `motion-reduce:transition-none` |
-| check icon reveal | `transition-[width,margin,translate,opacity] duration-fast-02 ease-productive-entrance` | semantic (`fast-02` · `productive-entrance`)      | `motion-reduce:transition-none` |
+| check icon reveal | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance`               | semantic (`fast-02` · `productive-entrance`)      | `motion-reduce:transition-none` |
 
 ## Tokens
 

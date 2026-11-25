@@ -167,25 +167,37 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 ```vue
 <script setup>
   import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
-  const date = ref(new Date(2026, 9, 8))
+  const start = ref(new Date(2026, 9, 8))
+  const review = ref(new Date(2026, 9, 15))
+  const end = ref(new Date(2026, 9, 22))
 </script>
 
 <template>
   <div class="flex flex-wrap items-start gap-4">
-    <DatePickerRoot
-      v-model="date"
-      size="small"
-    />
-    <DatePickerRoot
-      v-model="date"
-      size="medium"
-    />
-    <DatePickerRoot
-      v-model="date"
-      size="large"
-    />
+    <Field class="w-fit">
+      <Field.Label>Start date</Field.Label>
+      <DatePickerRoot
+        v-model="start"
+        size="small"
+      />
+    </Field>
+    <Field class="w-fit">
+      <Field.Label>Review date</Field.Label>
+      <DatePickerRoot
+        v-model="review"
+        size="medium"
+      />
+    </Field>
+    <Field class="w-fit">
+      <Field.Label>End date</Field.Label>
+      <DatePickerRoot
+        v-model="end"
+        size="large"
+      />
+    </Field>
   </div>
 </template>
 ```
@@ -195,17 +207,21 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 ```vue
 <script setup>
   import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
   const date = ref(null)
 </script>
 
 <template>
-  <DatePickerRoot
-    v-model="date"
-    orientation="horizontal"
-    clearable
-    show-time
-  />
+  <Field>
+    <Field.Label>Maintenance start</Field.Label>
+    <DatePickerRoot
+      v-model="date"
+      orientation="horizontal"
+      clearable
+      show-time
+    />
+  </Field>
 </template>
 ```

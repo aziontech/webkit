@@ -47,6 +47,7 @@
   <form
     class="flex w-full max-w-(--container-sm) flex-col gap-(--spacing-lg)"
     novalidate
+    :aria-busy="saving || undefined"
     @submit.prevent="save"
   >
     <SchemaForm
@@ -54,7 +55,7 @@
       v-model="value"
       :schema="schema"
       :errors="serverErrors"
-      :disabled="saving"
+      :readonly="saving"
       validate-on="submit"
     />
     <div class="flex justify-end">

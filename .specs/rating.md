@@ -6,9 +6,9 @@ status: implemented
 stability: preview
 spec_version: 2
 template: 2
-checksum: fc9b06313bc4fdc94354518a8d3a4e9ed8863271501d82eca296f2ad9f27d6ad
+checksum: de2e1ba805ebd9555b36056fea44d172c8b7bdb707da46938787855cf2b07b5f
 created: 2026-11-23
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # Rating — Component Spec
@@ -141,7 +141,7 @@ The clear button is an `IconButton` (`variant="ghost"`, `size="small"` at every 
 | focus ring                                    | `var(--ring-color)` offset on `var(--bg-canvas)`                                                       |
 | disabled                                      | 50 % opacity on the whole row, `cursor-not-allowed` (as `radio-group-item` and `checkbox`)             |
 | star glyph size (small / medium / large)      | `text-[1rem]` / `text-[1.25rem]` / `text-[1.5rem]` with `leading-none` (icon font size, as `doc-card`) |
-| star target (small / medium / large / coarse) | `size-6` / `size-7` / `size-8` / `pointer-coarse:size-11`                                              |
+| star target (small / medium / large / coarse) | `size-6` / `size-7` / `size-8` / `pointer-coarse:group-data-[size=*]/rating:size-11` (one per size, so it outranks the size step) |
 
 `--warning-mark` is the amber the theme documents for an icon on a surface at the icon target (APCA Lc 45, WCAG 3:1) on `--bg-canvas`, `--bg-surface` and `--bg-surface-raised` in both themes; `--primary` is documented only as a solid mark (Lc 30), so it is not used for the star glyph. Colour is never the only cue: a filled star is a filled glyph (`az-star-fill`), an empty one an outline (`az-star`), a half star `az-star-half-fill`.
 

@@ -2479,3 +2479,13 @@ Budget-raise: table-head-cell 5.45 KB → 5.5 KB (measured 5.46 KB): the sort bu
 Budget-raise: flow-diagram 22.1 KB → 22.25 KB (measured 22.20 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
 
 Budget-raise: flow-diagram-root 19.85 KB → 20 KB (measured 19.95 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.13 KB): the FileTokenGroup catalog gained Cancel upload and the upload progress strings, so an uploading file names its cancel action and states its amount (audit-6 A6-037).
+
+Budget-raise: multi-select 31.5 KB → 31.55 KB (measured 31.50 KB): MultiSelect renders Chip and Checkbox; a clickable Chip gained its 44px coarse-pointer hit area and a disabled checked Checkbox draws a readable mark (audit-6 A6-015, A6-033).
+
+Budget-raise: prompt-input-root 12.05 KB → 12.1 KB (measured 12.09 KB): PromptInput renders Chip and Checkbox; a clickable Chip gained its 44px coarse-pointer hit area and a disabled checked Checkbox draws a readable mark (audit-6 A6-015, A6-033).
+
+Budget-raise: tag-editor 27.3 KB → 27.35 KB (measured 27.31 KB): AttributeEditor names Remove (and TagEditor its Undo) by the row key instead of its position, and sets the limit text in the hint style (audit-6 A6-022, A6-030).
+
+Budget-raise: schema-form 69.2 KB → 69.3 KB (measured 69.27 KB): SchemaForm renders AttributeEditor, Field, Switch, Checkbox and Combobox, which gained the key-named Remove, the RadioGroup choice-card fill, the readable disabled on looks and the label-step option description (audit-6 A6-022, A6-029, A6-033, A6-034).

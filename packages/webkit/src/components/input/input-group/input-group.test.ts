@@ -2,12 +2,14 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import ReadonlyInput from '../../../../examples/input/readonly.vue'
 import Default from '../../../../examples/input-group/default.vue'
 import Disabled from '../../../../examples/input-group/disabled.vue'
 import Invalid from '../../../../examples/input-group/invalid.vue'
 import Required from '../../../../examples/input-group/required.vue'
 import Sizes from '../../../../examples/input-group/sizes.vue'
 import WithAddons from '../../../../examples/input-group/with-addons.vue'
+import WithAll from '../../../../examples/input-group/with-all.vue'
 import WithButton from '../../../../examples/input-group/with-button.vue'
 import WithSelect from '../../../../examples/input-group/with-select.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -36,6 +38,37 @@ describe('InputGroup', () => {
       expect((view.container.firstElementChild as HTMLElement).classList).toContain(
         'max-w-(--container-xs)'
       )
+    })
+  })
+
+  describe('control heights', () => {
+    const rank = { small: 0, medium: 1, large: 2 } as const
+    it.each([
+      ['WithButton', WithButton],
+      ['WithAll', WithAll],
+      ['WithSelect', WithSelect],
+      ['Sizes', Sizes],
+      ['Input Readonly', ReadonlyInput]
+    ])('never puts a control taller than its group in the %s example', (_name, example) => {
+      const view = render(example)
+      for (const group of view.container.querySelectorAll<HTMLElement>(
+        '[role="group"][data-size]'
+      )) {
+        const groupSize = group.dataset['size'] as keyof typeof rank
+        for (const control of group.querySelectorAll<HTMLElement>('[data-size]')) {
+          const size = control.dataset['size'] as keyof typeof rank
+          if (!(size in rank)) continue
+          expect(
+            rank[size],
+            `${control.outerHTML.slice(0, 80)} in a ${groupSize} group`
+          ).toBeLessThanOrEqual(rank[groupSize])
+        }
+      }
+    })
+
+    it('caps a direct child at the group height', () => {
+      const { getByTestId } = render(InputGroup, { slots: { default: () => h('span', 'x') } })
+      expect(getByTestId('input-group').classList).toContain('[&>*]:max-h-full')
     })
   })
 

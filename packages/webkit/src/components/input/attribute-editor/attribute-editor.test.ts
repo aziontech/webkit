@@ -140,7 +140,7 @@ describe('AttributeEditor', () => {
           { key: 'B', value: '2' }
         ])
       )
-      const remove = view.getByRole('button', { name: 'Remove item 1' })
+      const remove = view.getByRole('button', { name: 'Remove item A' })
       await fireEvent.click(remove)
       expect(view.getAllByTestId('attribute-editor__row')).toHaveLength(1)
       await waitFor(() =>
@@ -158,7 +158,7 @@ describe('AttributeEditor', () => {
       ]
       const view = render(AttributeEditor, { props: { items, definition } })
       await user.click(view.getByTestId('attribute-editor__add'))
-      view.getByRole('button', { name: 'Remove item 2' }).focus()
+      view.getByRole('button', { name: 'Remove item B' }).focus()
       await user.keyboard('{Enter}')
       const adds = view.emitted('add') as [Event, { index: number }][]
       expect(adds).toHaveLength(1)
@@ -187,7 +187,7 @@ describe('AttributeEditor', () => {
 
     it('moves focus to Add after the last row is removed', async () => {
       const view = render(Harness([{ key: 'A', value: '1' }]))
-      await fireEvent.click(view.getByRole('button', { name: 'Remove item 1' }))
+      await fireEvent.click(view.getByRole('button', { name: 'Remove item A' }))
       await waitFor(() =>
         expect(document.activeElement).toBe(view.getByTestId('attribute-editor__add'))
       )
@@ -195,15 +195,33 @@ describe('AttributeEditor', () => {
 
     it('keeps minItems rows and disables Add at the limit', () => {
       const view = render(Harness([{ key: 'A', value: '1' }], { minItems: 1, limit: 1 }))
-      expect(view.queryByRole('button', { name: 'Remove item 1' })).toBeNull()
+      expect(view.queryByRole('button', { name: /^Remove item/ })).toBeNull()
       expect((view.getByTestId('attribute-editor__add') as HTMLButtonElement).disabled).toBe(true)
-      expect(view.getByTestId('attribute-editor__limit').textContent).toContain('limit of 1 items')
+      expect(view.getByTestId('attribute-editor__limit').textContent).toContain('limit of 1.')
+    })
+
+    it('names Remove by the first column value, by position while it is empty', () => {
+      const view = render(
+        Harness([
+          { key: 'API_BASE_URL', value: '1' },
+          { key: '  ', value: '2' }
+        ])
+      )
+      expect(view.getByRole('button', { name: 'Remove item API_BASE_URL' })).toBeTruthy()
+      expect(view.getByRole('button', { name: 'Remove item 2' })).toBeTruthy()
+    })
+
+    it('sets the limit text in the hint style, without a generic noun', () => {
+      const view = render(Harness([{ key: 'A', value: '1' }], { limit: 5 }))
+      const limit = view.getByTestId('attribute-editor__limit')
+      expect(limit.classList).toContain('text-label-sm')
+      expect(limit.textContent).not.toContain('items')
     })
 
     it('says how many rows are left under the limit', () => {
       const view = render(Harness([{ key: 'A', value: '1' }], { limit: 3 }))
       expect(view.getByTestId('attribute-editor__limit').textContent).toContain(
-        'You can add 2 more items.'
+        'You can add 2 more.'
       )
     })
 
@@ -225,7 +243,7 @@ describe('AttributeEditor', () => {
       const view = render(Harness([{ key: 'A', value: '1' }], { disabled: true }))
       expect((view.getByLabelText('Key') as HTMLInputElement).disabled).toBe(true)
       expect((view.getByTestId('attribute-editor__add') as HTMLButtonElement).disabled).toBe(true)
-      expect(view.queryByRole('button', { name: 'Remove item 1' })).toBeNull()
+      expect(view.queryByRole('button', { name: /^Remove item/ })).toBeNull()
     })
 
     it('renders AND groups joined by OR, adds and removes groups', async () => {
@@ -242,7 +260,7 @@ describe('AttributeEditor', () => {
       expect(view.getByRole('group', { name: 'Group 1' })).toBeTruthy()
       await fireEvent.click(view.getByTestId('attribute-editor__add-group'))
       expect(view.getAllByTestId('attribute-editor__group')).toHaveLength(3)
-      await fireEvent.click(view.getByRole('button', { name: 'Remove item 3' }))
+      await fireEvent.click(view.getByRole('button', { name: 'Remove item c' }))
       expect(view.getAllByTestId('attribute-editor__group')).toHaveLength(2)
       const adds = view.getAllByTestId('attribute-editor__add')
       await fireEvent.click(adds[0] as HTMLElement)

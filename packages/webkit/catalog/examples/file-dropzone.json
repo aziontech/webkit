@@ -7,7 +7,7 @@
   },
   {
    "name": "Folders",
-   "summary": "With `directories`, a dropped folder is walked and every file inside arrives in `drop` with its `webkitRelativePath`; Browse folder opens the folder picker (`<input webkitdirectory>`). `FileTokenGroup` names each file by its path.",
+   "summary": "With `directories`, a dropped folder is walked and every file inside arrives in `drop` with its `webkitRelativePath`; Browse folder opens the folder picker (`<input webkitdirectory>`) and is hidden on a touch screen, where phones cannot pick a folder; the title names both paths. `FileTokenGroup` names each file by its path.",
    "file": "examples/file-dropzone/folders.vue"
   },
   {

@@ -35,9 +35,9 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `countries` | `PhoneInputCountry[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in curated list. |
-| `defaultCountry` | `string` | `'US'` | false | ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to the first country of the list. |
-| `placeholder` | `string` | `''` | false | Placeholder of the tel input. Falls back to the selected country's mask when empty. |
+| `countries` | `PhoneInputCountry[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in list of every region, in alphabetical order. |
+| `defaultCountry` | `string` | `'US'` | false | ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to US, then to the first country of the list. |
+| `placeholder` | `string` | `''` | false | Placeholder of the tel input; empty shows none (never the national mask, per the example-data rule). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
 | `readonly` | `boolean` | `false` | false | Marks the internal input read-only; dial-code Select is also disabled while readonly. |
