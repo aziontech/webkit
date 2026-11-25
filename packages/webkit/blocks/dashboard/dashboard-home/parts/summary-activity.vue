@@ -9,7 +9,14 @@
   const activity = sampleSummaryActivity
 
   const activityColumns: TableColumn[] = [
-    { id: 'date', accessorKey: 'date', header: 'Date', principal: true, hideable: false },
+    {
+      id: 'date',
+      accessorKey: 'date',
+      header: 'Date',
+      principal: true,
+      grow: 1,
+      hideable: false
+    },
     { id: 'operation', accessorKey: 'operation', header: 'Operation', minWidth: 120 },
     { id: 'type', accessorKey: 'type', header: 'Type' },
     { id: 'resource', accessorKey: 'resource', header: 'Resource' },
