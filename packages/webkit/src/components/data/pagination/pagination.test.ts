@@ -5,16 +5,28 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import DataDriven from '../../../../examples/pagination/data-driven.vue'
+import Default from '../../../../examples/pagination/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Pagination from './index'
 import PaginationButton from './pagination-button/pagination-button.vue'
 import PaginationDescription from './pagination-description/pagination-description.vue'
 import PaginationPageSize from './pagination-page-size/pagination-page-size.vue'
 
-// Default/Buttons are string-template stories whose Pagination.Button dot-notation
-// the runtime template compiler cannot resolve, so only DataDriven is exercised.
-
 describe('Pagination', () => {
+  it('the default example shows as many pages as its description counts, each named Page N', () => {
+    const { getByTestId, getAllByRole } = render(Default)
+    const text = getByTestId('pagination-description').textContent ?? ''
+    const [, size, total] = /to (\d+) of (\d+) entries/.exec(text) ?? []
+    const pages = Math.ceil(Number(total) / Number(size))
+    const numbers = getAllByRole('button').filter((button) =>
+      /^\d+$/.test(button.textContent?.trim() ?? '')
+    )
+    expect(Math.max(...numbers.map((button) => Number(button.textContent)))).toBe(pages)
+    for (const button of numbers) {
+      expect(button.getAttribute('aria-label')).toBe(`Page ${button.textContent?.trim()}`)
+    }
+  })
+
   describe('composition', () => {
     describe('compound API — dot-notation resolves to the sub-components', () => {
       it('attaches Button / Info / PageSize to the root (Object.assign in index.ts)', () => {
