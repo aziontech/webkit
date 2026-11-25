@@ -59,7 +59,7 @@
 
   const TEXT_CLASS =
     'flex flex-col ' +
-    '[&>[data-slot=item-description]]:line-clamp-none ' +
+    '[&>[data-slot=item-description]]:line-clamp-none [&>[data-slot=item-description]]:text-pretty ' +
     'data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) ' +
     'data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)'
 
