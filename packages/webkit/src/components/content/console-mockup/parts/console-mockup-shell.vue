@@ -196,6 +196,10 @@
 
   provide(ConsoleMockupShellInjectionKey, { entered: readonly(entered), beatStyle })
 
+  const FRAME_CLASS =
+    'absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[variant=window]:bg-(--bg-canvas) ' +
+    'pointer-coarse:[&_[data-slot=touch-target]]:[scale:calc(1/var(--console-mockup-shell-scale,1))]'
+
   const ROOT_CLASS =
     'relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none ' +
     'data-interactive:pointer-events-auto data-interactive:select-auto ' +
@@ -229,7 +233,7 @@
   >
     <div
       :data-variant="variant"
-      class="absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[variant=window]:bg-(--bg-canvas) pointer-coarse:[&_[data-slot=touch-target]]:[scale:calc(1/var(--console-mockup-shell-scale,1))]"
+      :class="FRAME_CLASS"
       :style="frameStyle"
     >
       <Texture

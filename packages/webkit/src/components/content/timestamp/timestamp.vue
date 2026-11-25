@@ -24,7 +24,11 @@
      * no panel.
      */
     value?: string | number | Date
-    /** What the text shows: the relative phrase that updates every minute, the date and time in the time zone, the date and time in UTC, or only the hour and minute in the time zone (for a row under a date header). The panel always lists every form. */
+    /**
+     * What the text shows: the relative phrase that updates every minute, the date and time in the
+     * time zone, the date and time in UTC, or only the hour and minute in the time zone (for a row
+     * under a date header). The panel always lists every form.
+     */
     format?: TimestampFormat
     /** IANA time zone of the local time (`America/New_York`). Empty reads the nearest `ConfigProvider`'s `time-zone`, then the browser's zone. */
     timeZone?: string
