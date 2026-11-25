@@ -92,7 +92,7 @@
       >
         <span class="flex shrink-0 whitespace-nowrap">
           <Tag
-            :label="failedStep ? `Failed on ${failedStep.title}` : 'Completed'"
+            :label="failedStep ? `Failed: ${failedStep.title}` : 'Completed'"
             :severity="failedStep ? 'danger' : 'success'"
           />
         </span>

@@ -49,7 +49,8 @@
           size="small"
           placeholder="Search environments"
           aria-label="Search environments"
-          @keydown.stop
+          @keydown.home.stop
+          @keydown.end.stop
         >
           <template #leading>
             <i
@@ -78,7 +79,7 @@
           v-if="!environmentMatches.length"
           class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
         >
-          No environments match"{{ environmentQuery }}".
+          No environments match "{{ environmentQuery }}".
         </p>
       </Select.Group>
       <template #footer>

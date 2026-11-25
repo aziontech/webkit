@@ -24,6 +24,12 @@ const STATE_TAGS: Record<VersionDetailState, VersionDetailStateTag> = {
   ready: { label: 'Ready', severity: 'success', icon: '' }
 }
 
+export const CREATING_TAG: VersionDetailStateTag = {
+  label: 'Creating',
+  severity: 'neutral',
+  icon: ''
+}
+
 export const tagFor = (entry: VersionDetailVersion): VersionDetailStateTag =>
   STATE_TAGS[entry.state]
 

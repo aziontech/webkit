@@ -52,7 +52,8 @@
             size="small"
             placeholder="Search environments"
             aria-label="Search environments"
-            @keydown.stop
+            @keydown.home.stop
+            @keydown.end.stop
           >
             <template #leading>
               <i

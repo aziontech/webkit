@@ -86,6 +86,7 @@
           :columns="columns"
           row-key="id"
           :bordered="false"
+          stackable
           :loading="loading"
         >
           <template #cell-environment="{ value }">

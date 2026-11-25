@@ -123,7 +123,7 @@ describe('detail/detail-deployment-logs', () => {
     const failed = render(DetailDeploymentLogs, {
       props: { steps: sampleFailedSteps, duration: '9s' }
     })
-    expect(failed.container.textContent).toContain('Failed on Routing rules')
+    expect(failed.container.textContent).toContain('Failed: Routing rules')
     expect(failed.container.textContent).toContain('Failed after 9s')
     expect(failed.container.textContent).not.toMatch(/\d\/8 steps/)
     failed.unmount()

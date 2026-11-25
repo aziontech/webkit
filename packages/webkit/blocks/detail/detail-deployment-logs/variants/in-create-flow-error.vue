@@ -72,7 +72,7 @@
           <div class="ms-auto flex items-center gap-(--spacing-sm)">
             <span class="flex shrink-0 whitespace-nowrap">
               <Tag
-                label="Failed on routing rules"
+                label="Failed: Routing rules"
                 severity="danger"
               />
             </span>

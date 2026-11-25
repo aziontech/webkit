@@ -547,6 +547,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
               v-model:tab="activeTab"
               :viewed="viewed"
               :history-expanded="historyExpanded"
+              :creating="creating"
               @select="openHistory"
             />
 
@@ -690,7 +691,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'AHFPL906',
     name: 'AHFPL906',
     state: 'ready',
-    comment: 'Update function"ab-test" arguments',
+    comment: 'Update function "ab-test" arguments',
     author: 'Chris Taylor',
     createdAt: '2026-11-07T12:00:00Z',
     createdOn: 'Nov 5, 2026'
@@ -1096,6 +1097,12 @@ const STATE_TAGS: Record<VersionDetailState, VersionDetailStateTag> = {
   ready: { label: 'Ready', severity: 'success', icon: '' }
 }
 
+export const CREATING_TAG: VersionDetailStateTag = {
+  label: 'Creating',
+  severity: 'neutral',
+  icon: ''
+}
+
 export const tagFor = (entry: VersionDetailVersion): VersionDetailStateTag =>
   STATE_TAGS[entry.state]
 
@@ -1264,7 +1271,8 @@ export const ADD_ENVIRONMENT = '__create-environment__'
           size="small"
           placeholder="Search environments"
           aria-label="Search environments"
-          @keydown.stop
+          @keydown.home.stop
+          @keydown.end.stop
         >
           <template #leading>
             <i
@@ -1293,7 +1301,7 @@ export const ADD_ENVIRONMENT = '__create-environment__'
           v-if="!environmentMatches.length"
           class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
         >
-          No environments match"{{ environmentQuery }}".
+          No environments match "{{ environmentQuery }}".
         </p>
       </Select.Group>
       <template #footer>
@@ -1650,7 +1658,7 @@ export const ADD_ENVIRONMENT = '__create-environment__'
       data-testid="version-detail-bar"
     >
       <div
-        class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
+        class="layout-boundary-inline flex min-w-0 flex-1 flex-wrap items-center gap-(--spacing-sm) py-(--spacing-xs) sm:flex-nowrap"
       >
         <span
           v-if="creating || isDraft"
@@ -1669,7 +1677,7 @@ export const ADD_ENVIRONMENT = '__create-environment__'
           />
         </span>
         <div
-          class="flex min-w-0 flex-1 flex-col"
+          class="flex min-w-0 flex-[1_1_100%] flex-col sm:flex-1"
           role="status"
         >
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -2094,7 +2102,8 @@ export const ADD_ENVIRONMENT = '__create-environment__'
           size="small"
           placeholder="Search versions"
           aria-label="Search versions"
-          @keydown.stop
+          @keydown.home.stop
+          @keydown.end.stop
         >
           <template #leading>
             <i
@@ -2130,7 +2139,7 @@ export const ADD_ENVIRONMENT = '__create-environment__'
           v-if="!matches.length"
           class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
         >
-          No versions match"{{ query }}".
+          No versions match "{{ query }}".
         </p>
       </Select.Group>
       <template #footer>
@@ -2166,16 +2175,18 @@ export const ADD_ENVIRONMENT = '__create-environment__'
   import { computed } from 'vue'
 
   import type { VersionDetailTab, VersionDetailVersion } from '../detail-version.vue'
-  import { tagFor, VERSION_TABS as tabs } from '../detail-version-states'
+  import { CREATING_TAG, tagFor, VERSION_TABS as tabs } from '../detail-version-states'
 
   export interface VersionTabBarProps {
     /** The version the page is on. */
     viewed: VersionDetailVersion
     /** Whether Version history is open. */
     historyExpanded: boolean
+    /** A new version is being copied from the viewed one. */
+    creating?: boolean
   }
 
-  const props = defineProps<VersionTabBarProps>()
+  const props = withDefaults(defineProps<VersionTabBarProps>(), { creating: false })
 
   const emit = defineEmits<{
     select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
@@ -2184,6 +2195,7 @@ export const ADD_ENVIRONMENT = '__create-environment__'
   const activeTab = defineModel<VersionDetailTab>('tab', { required: true })
 
   const isDraft = computed(() => props.viewed.state === 'draft')
+  const tag = computed(() => (props.creating ? CREATING_TAG : tagFor(props.viewed)))
 </script>
 
 <template>
@@ -2196,16 +2208,16 @@ export const ADD_ENVIRONMENT = '__create-environment__'
     />
     <template #actions>
       <span
-        v-if="!isDraft && viewed.createdOn"
+        v-if="!isDraft && !creating && viewed.createdOn"
         class="hidden text-body-sm text-(--text-muted) md:inline"
       >
         Created {{ viewed.createdOn }}
       </span>
       <Tag
-        :label="tagFor(viewed).label"
-        :variant="tagFor(viewed).variant"
-        :severity="tagFor(viewed).severity"
-        :icon="tagFor(viewed).icon"
+        :label="tag.label"
+        :variant="tag.variant"
+        :severity="tag.severity"
+        :icon="tag.icon"
         size="medium"
       />
       <DropdownMenu

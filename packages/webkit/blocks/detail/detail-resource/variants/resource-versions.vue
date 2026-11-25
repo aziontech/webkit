@@ -1,19 +1,23 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, ref } from 'vue'
 
   import ResourceTabBar from '../parts/resource-tab-bar.vue'
   import ResourceVersionsTable from '../parts/resource-versions-table.vue'
   import TabRouteEmpty from '../parts/tab-route-empty.vue'
-  import { resourceTabs as tabs } from '../sample'
+  import { resourceTabs as tabs, sampleNow } from '../sample'
 
   const activeTab = ref('versions')
   const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
 </script>
 
 <template>
-  <div class="flex min-h-0 flex-1 flex-col">
+  <ConfigProvider
+    :now="sampleNow"
+    class="flex min-h-0 flex-1 flex-col"
+  >
     <ResourceTabBar
       v-model="activeTab"
       :tabs="tabs"
@@ -55,5 +59,5 @@
         :href="`/resources/analytics-app/${activeTab}`"
       />
     </div>
-  </div>
+  </ConfigProvider>
 </template>

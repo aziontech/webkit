@@ -46,7 +46,7 @@ export const sampleVersions: VersionDetailVersion[] = [
     id: 'AHFPL906',
     name: 'AHFPL906',
     state: 'ready',
-    comment: 'Update function"ab-test" arguments',
+    comment: 'Update function "ab-test" arguments',
     author: 'Chris Taylor',
     createdAt: '2026-11-07T12:00:00Z',
     createdOn: 'Nov 5, 2026'
