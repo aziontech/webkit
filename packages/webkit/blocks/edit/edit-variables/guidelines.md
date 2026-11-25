@@ -56,7 +56,7 @@ The JSON view replaces the rows with one `Textarea` labeled Variables JSON over 
 
 ### J. Scope — `SettingsGroup`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
 
-A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account, while no other scope is on" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
+A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account. Turns off by itself when another scope is on" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
