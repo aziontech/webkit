@@ -2603,3 +2603,73 @@ Budget-raise: css-button 11.05 KB → 11.1 KB (measured 11.09 KB gzip): the them
 Budget-raise: css-icons 15.35 KB → 15.45 KB (measured 15.41 KB gzip): the same theme additions as css-button (A6-026, A6-122, A6-180).
 
 Budget-raise: css-console 24.7 KB → 24.95 KB (measured 24.91 KB gzip): the same theme additions (A6-026, A6-122, A6-180), plus the pointer-coarse 44px touch targets of grouped icon buttons, chips and chart legend items (A6-005, A6-015, A6-070), the transparent disabled ghost and outline IconButton fill (A6-232), the whole table row rules beside a frozen column (A6-059) and the platform shortcut hint in menu items (A6-073).
+
+## Audit-6 wave 2, lane W1 (2026-11-25)
+
+Budget-raise: console-layout-root 86.4 KB → 86.5 KB (measured 86.47 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: doc-page-header 34.2 KB → 34.25 KB (measured 34.20 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: media-tabs 10.5 KB → 10.55 KB (measured 10.52 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: quote-tabs 25.35 KB → 25.4 KB (measured 25.38 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: console-application-scene 127.45 KB → 127.55 KB (measured 127.50 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: customer-use-cases-section 8.2 KB → 8.25 KB (measured 8.21 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: article-body-section 49.55 KB → 49.6 KB (measured 49.59 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: article-highlight-section 13.05 KB → 13.1 KB (measured 13.05 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: recognition-marquee-section 22.35 KB → 22.4 KB (measured 22.35 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: message-thread 38.2 KB → 38.25 KB (measured 38.20 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: save-bar 4.6 KB → 4.65 KB (measured 4.62 KB): the new column prop (A6-142) and its two data-[column] classes, plus IconButton; audit-6 wave 2 lane W1.
+
+Budget-raise: artifact-canvas 12.3 KB → 12.35 KB (measured 12.30 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: chat-message-feedback 17.3 KB → 17.35 KB (measured 17.30 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: prompt-input-root 12.1 KB → 12.15 KB (measured 12.11 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: prompt-input-context-picker 16.3 KB → 16.35 KB (measured 16.33 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: prompt-input-tools 18.8 KB → 18.85 KB (measured 18.83 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: reasoning 5.2 KB → 5.25 KB (measured 5.20 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: sources 15 KB → 15.05 KB (measured 15.03 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: conversation-history 42.8 KB → 42.85 KB (measured 42.84 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: response-branches 4.5 KB → 4.55 KB (measured 4.51 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: button-group 17.85 KB → 17.9 KB (measured 17.89 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: table-cell-id 10.6 KB → 10.65 KB (measured 10.61 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: table-cell-actions 12.9 KB → 12.95 KB (measured 12.94 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: highlight-button 2.55 KB → 2.6 KB (measured 2.56 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: icon-button 2.7 KB → 2.75 KB (measured 2.72 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: split-button 18.1 KB → 18.15 KB (measured 18.14 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: flow-diagram-bind 17.2 KB → 17.25 KB (measured 17.23 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: transfer-list-controls 4.35 KB → 4.4 KB (measured 4.35 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: toast-action 3.45 KB → 3.5 KB (measured 3.46 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: password-input 5.35 KB → 5.4 KB (measured 5.36 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: console-layout 88.1 KB → 88.15 KB (measured 88.13 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: carousel 6.7 KB → 6.75 KB (measured 6.71 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
+
+Budget-raise: breadcrumb 28.2 KB → 28.25 KB (measured 28.22 KB): the dropdown-menu-anchor lookup in DropdownMenu (A6-011) and the IconButton focusable-disabled state (A6-294); audit-6 wave 2 lane W1.
+
+Budget-raise: drawer-content 18.35 KB → 18.4 KB (measured 18.35 KB): useButtonRoot treats aria-disabled="true" as focusable disabled (A6-294), shared by IconButton and HighlightButton, after the redundant disabled: classes were dropped to pay for most of it; audit-6 wave 2 lane W1.
