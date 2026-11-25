@@ -22,6 +22,16 @@ describe('usePhoneInputValue', () => {
     expect(setup('', '', 'ZZ').selectedCountry.value.code).toBe('US')
   })
 
+  it('falls back to the default, then US, then the first country for an unknown code', () => {
+    expect(setup('', 'ZZ', 'BR').selectedCountry.value.code).toBe('BR')
+    const sorted = [countries[1], countries[2], countries[0]]
+    const pick = (defaultCountry: string, list: PhoneInputCountry[]) =>
+      usePhoneInputValue({ countries: list, defaultCountry, digits: ref(''), country: ref('') })
+        .selectedCountry.value.code
+    expect(pick('ZZ', sorted)).toBe('US')
+    expect(pick('ZZ', [countries[1], countries[2]])).toBe('BR')
+  })
+
   it('stores typed text as digits and returns it masked', () => {
     const value = setup()
     expect(value.typeDigits('415-555 01')).toBe('(415) 555-01')
