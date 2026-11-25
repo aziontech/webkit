@@ -7,9 +7,9 @@ spec_version: 18
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 98b1912f5968226c8fe8f35626d7bde839e33c3a8e712ca1691ec49d229c8364
+checksum: e9c8b87b170011ca85528353926dfcaa4a864850ff2a9cf5d4b247246848caf5
 created: 2026-05-22
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 ---
 
 # Switch — Component Spec
@@ -93,7 +93,7 @@ _none_
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
 - `data-variant` mirrors the `variant` prop (`default` | `privacy`)
-- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too. Locked on keeps a muted accent track (`--accent-mask`) under the disabled handle, so a switch that is on and cannot be turned off never reads as an off one; locked off keeps the `--bg-disabled` track.
+- `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions. The treatment keys on the native `:disabled` state, so a switch inside a disabled `fieldset` reads disabled too. Locked on keeps a muted accent track (`--accent-mask`) inside the `--border-input` frame, with the handle in `--text-muted` on the on side, so a switch that is on and cannot be turned off never reads as an off one, in either theme; locked off keeps the `--bg-disabled` track and the `--text-disabled` handle. Where a setting is locked rather than unavailable, say so in its description ("Always on for this plan.").
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`disabled:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 - Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.
@@ -120,8 +120,8 @@ The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, 
 | lock icon (on)                | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
 | track (hover) — overlay       | `var(--bg-hover)` (applies to both off and on tracks)                                                |
 | track (disabled) — background | `var(--bg-disabled)` off; `var(--accent-mask)` on, so a locked-on switch keeps its on reading         |
-| track (disabled) — border     | `var(--border-default)`                                                                              |
-| handle (disabled) — fill      | `var(--text-disabled)`                                                                               |
+| track (disabled) — border     | `var(--border-input)`, off and on, so a locked-on track keeps its frame on a dark surface             |
+| handle (disabled) — fill      | `var(--text-disabled)` off; `var(--text-muted)` on                                                   |
 | disabled — cursor             | `cursor-not-allowed`                                                                                 |
 | focus-visible ring            | `var(--ring-color)`                                                                                  |
 | shape — track                 | `rounded-(--shape-control)` (6px)                                                                    |

@@ -78,7 +78,7 @@
     'data-[checked]:border-transparent data-[checked]:bg-(--accent) ' +
     'forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] ' +
     'disabled:cursor-not-allowed disabled:border-(--border-input) disabled:bg-(--bg-disabled) disabled:hover:shadow-none ' +
-    'disabled:data-[checked]:border-transparent disabled:data-[checked]:bg-(--accent-mask) ' +
+    'disabled:data-[checked]:border-(--border-input) disabled:data-[checked]:bg-(--accent-mask) ' +
     'after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
 
   const HANDLE_CLASS =
@@ -87,7 +87,7 @@
     'group-data-[checked]:translate-x-3.5 ' +
     'rtl:group-data-[checked]:-translate-x-3.5 ' +
     'group-data-[checked]:bg-(--accent-foreground) ' +
-    'group-disabled:bg-(--text-disabled) group-disabled:group-data-[checked]:bg-(--text-disabled) ' +
+    'group-disabled:bg-(--text-disabled) group-disabled:group-data-[checked]:bg-(--text-muted) ' +
     'forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-disabled:bg-[GrayText]'
 </script>
 

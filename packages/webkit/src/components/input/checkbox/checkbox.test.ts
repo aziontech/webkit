@@ -261,6 +261,18 @@ describe('Checkbox', () => {
     })
   })
 
+  describe('disabled look', () => {
+    it('draws a disabled check mark in --text-muted, so checked still reads in dark', () => {
+      const { getByTestId } = render(Checkbox, {
+        props: { disabled: true, modelValue: true },
+        attrs: { 'aria-label': 'Locked option' }
+      })
+      const box = getByTestId('checkbox')
+      expect(box.getAttribute('data-checked')).toBe('true')
+      expect(box.className).toContain('data-[disabled]:data-[checked]:text-(--text-muted)')
+    })
+  })
+
   describe('disabled suppresses interaction', () => {
     it('sets the native disabled + data-disabled and does not emit on click', async () => {
       const { getByTestId, emitted } = render(Checkbox, {
