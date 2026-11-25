@@ -242,7 +242,7 @@
         >
           <template #actions>
             <Button
-              label="Create ticket"
+              label="Create Ticket"
               icon="az az-plus"
               variant="primary"
               size="medium"

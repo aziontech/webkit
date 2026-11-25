@@ -8,6 +8,7 @@
   import { type PlanFeatureListItem } from '@aziontech/webkit/plan-feature-list'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
+  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
@@ -150,7 +151,7 @@
   const organizationSubmitted = ref(false)
 
   const previewName = computed(() => organizationName.value.trim() || 'Your organization')
-  const ownerName = computed(() => fullName.value.trim() || email.value.split('@')[0])
+  const ownerName = computed(() => fullName.value.trim())
   const accentColors = computed(
     () => (accents.find((item) => item.value === accent.value) ?? accents[0]).colors
   )
@@ -259,6 +260,7 @@
       planSubmitted.value = true
       if (!plan.value) event.preventDefault()
     }
+    if (event.defaultPrevented) void focusFirstInvalid(wizardEl.value)
   }
 
   const startOver = (event: MouseEvent) => {

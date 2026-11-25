@@ -127,12 +127,14 @@
               class="mt-auto flex min-w-0 shrink-0 items-center gap-(--spacing-xs) border-t-(length:--border-width-default) border-(--border-muted) pt-(--spacing-md)"
             >
               <Avatar
-                :label="accountInitials(ownerName)"
+                :label="accountInitials(ownerName || email)"
                 size="medium"
                 variant="square"
               />
               <span class="flex min-w-0 flex-col">
-                <span class="truncate text-label-sm text-(--text-default)">{{ ownerName }}</span>
+                <span class="truncate text-label-sm text-(--text-default)">{{
+                  ownerName || email.split('@')[0]
+                }}</span>
                 <span class="truncate text-body-xs text-(--text-muted)">{{ email }}</span>
               </span>
             </div>
@@ -141,7 +143,9 @@
           <div class="min-w-0 flex-1 overflow-hidden bg-(--bg-canvas)">
             <div class="flex min-h-(--container-2xl) flex-col gap-(--spacing-lg) p-(--spacing-lg)">
               <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                <p class="truncate text-heading-sm text-(--text-default)">Hello, {{ ownerName }}</p>
+                <p class="truncate text-heading-sm text-(--text-default)">
+                  {{ ownerName ? 'Hello, ' + ownerName : 'Hello' }}
+                </p>
                 <p class="truncate text-body-sm text-(--text-muted)">
                   My Workspace · no projects yet
                 </p>

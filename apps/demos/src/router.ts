@@ -120,7 +120,7 @@ const routes: RouteRecordRaw[] = [
     path: '/support/tickets/new',
     name: 'support-ticket-create',
     component: () => import('./pages/support-create-ticket-page.vue'),
-    meta: { shell: 'focused', title: `Create ticket - ${SUPPORT}` }
+    meta: { shell: 'focused', title: `Create Ticket - ${SUPPORT}` }
   },
   {
     path: '/support/tickets/:id',

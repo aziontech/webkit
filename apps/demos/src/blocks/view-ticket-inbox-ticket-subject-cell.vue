@@ -17,7 +17,9 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 items-start gap-(--spacing-xs) max-sm:w-[60vw]">
+  <div
+    class="flex min-w-0 items-start gap-(--spacing-xs) max-sm:w-[60vw] sm:max-w-(--container-xs)"
+  >
     <span
       class="mt-(--spacing-xs) size-2 shrink-0 rounded-full data-[unread]:bg-(--info-mark)"
       :data-unread="ticket.unread || null"

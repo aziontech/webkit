@@ -11,7 +11,7 @@
           "imports": {
             "../onboarding-form-data": "./onboarding-form.onboarding-form-data"
           },
-          "checksum": "sha256:21f9e77ff31a770c350d564ddae9b276a3175aad90c0ebbf42bf941b4b57aea4"
+          "checksum": "sha256:df48093fdef4e8f5054be8dca02bb82371411384cd21d95ccff2616c2b55e041"
         },
         {
           "path": "src/blocks/onboarding-form-organization-step.vue",
@@ -104,7 +104,7 @@
             "./parts/upgrade-drawer.vue": "./onboarding-form-upgrade-drawer.vue",
             "./sample": "./onboarding-form.sample"
           },
-          "checksum": "sha256:340977c65ff708b90add549409255b3c501162c81010de05e3974fdf3e7c6eea"
+          "checksum": "sha256:8d8750b7209fb8827f70744c18208b3d21df7c81b5498ded710b2d5007c40407"
         }
       ]
     },
@@ -245,7 +245,7 @@
           "path": "src/blocks/create-ticket-ticket-creation-header.vue",
           "source": "blocks/create/create-ticket/parts/ticket-creation-header.vue",
           "variant": "Data",
-          "checksum": "sha256:0abcef4594766f3548fff82f9aa75ae73b272fd65be9ae4b2d45552878668dc8"
+          "checksum": "sha256:774ae32671952db0dcd69f78a0889ddd1c10511cd7ddc0fd54a7b381c45a6827"
         },
         {
           "path": "src/blocks/create-ticket-ticket-description-field.vue",
@@ -306,7 +306,7 @@
           "path": "src/blocks/create-ticket-ticket-save-actions.vue",
           "source": "blocks/create/create-ticket/parts/ticket-save-actions.vue",
           "variant": "Data",
-          "checksum": "sha256:48de6ad6600e68ff27db4cba0efe333808d1f2db959c9aa4fd37a6428ab4a263"
+          "checksum": "sha256:e1282e9d37fcfe5717b9202d769b3107470afd6bb752a74007a80450a35f7ec3"
         },
         {
           "path": "src/blocks/create-ticket.sample.ts",
@@ -338,7 +338,7 @@
             "./parts/ticket-save-actions.vue": "./create-ticket-ticket-save-actions.vue",
             "./sample": "./create-ticket.sample"
           },
-          "checksum": "sha256:de5bd91da03b6757d7457f5f01499e5ea2a63725b4160fe5790e073139c1f3ab"
+          "checksum": "sha256:4668812f694f2200ee3bd9acdd2c616d7b72fff09d7a704c4fc769388bfef845"
         }
       ]
     },
@@ -447,7 +447,7 @@
             "./summary-state-band.vue": "./resource-detail-summary-state-band.vue",
             "./summary-subject-band.vue": "./resource-detail-summary-subject-band.vue"
           },
-          "checksum": "sha256:9bda0798c2fed4d244736980984b99410d94dd40212cd352b4380fa6bcce1c7c"
+          "checksum": "sha256:4c36f00d7a9be1594e14e25ffef581cd0b618336ecf9b92bfbd65a820addf95c"
         },
         {
           "path": "src/blocks/resource-detail-resource-tab-bar.vue",
@@ -627,7 +627,7 @@
             "./parts/ticket-requester.vue": "./detail-ticket-ticket-requester.vue",
             "./sample": "./detail-ticket.sample"
           },
-          "checksum": "sha256:5b62c9d36b3d6f2046044f1a7edd068f68d4c9376ac27a871ddb158246e13b68"
+          "checksum": "sha256:794a057f808616c2b625ae1b23852643796a81a671899ef73cdfd24aaccfd207"
         }
       ]
     },
@@ -735,7 +735,7 @@
           "imports": {
             "../settings-canned-responses.vue": "./settings-canned-responses.vue"
           },
-          "checksum": "sha256:5bd5a201e191fdfb63e4865cc4c22ec8f397b95271474c8aeceba9f3b386aeba"
+          "checksum": "sha256:f4a3a94d74441c204c79daca0ee25b463046edb7fff644a502d753bb32947242"
         },
         {
           "path": "src/blocks/settings-canned-responses.sample.ts",
@@ -885,7 +885,7 @@
             "../lib/ticket-fields": "./view-ticket-inbox.ticket-fields",
             "../view-ticket-inbox.vue": "./view-ticket-inbox.vue"
           },
-          "checksum": "sha256:83ac80224c4c429f59456d441670002321e1caad1c52d961221bf93cf1ada4f6"
+          "checksum": "sha256:ee1614dfb5c9881da30b1cad46a0e8c012a38951cf21867598eb15a3898194ad"
         },
         {
           "path": "src/blocks/view-ticket-inbox.sample.ts",
@@ -900,7 +900,7 @@
           "imports": {
             "../view-ticket-inbox.vue": "./view-ticket-inbox.vue"
           },
-          "checksum": "sha256:b741d1ee9e39e9e07642cfc4ef1928b200b17b1b619a054868f776c3344cd8aa"
+          "checksum": "sha256:503354195b9a739b6ca43b8fbf74fda6e0206e12822333e18b044c685275e11c"
         },
         {
           "path": "src/blocks/view-ticket-inbox.vue",
@@ -914,7 +914,7 @@
             "./parts/ticket-subject-cell.vue": "./view-ticket-inbox-ticket-subject-cell.vue",
             "./sample": "./view-ticket-inbox.sample"
           },
-          "checksum": "sha256:21212ad3f1b4128ddc421ec6cbf7e5878eb41aa55101e5889b4a8bc530c5a2ae"
+          "checksum": "sha256:5211af39f94bfa4a4496b6829e5e2002da490ffbd055f9e3b100b23e9295da5e"
         }
       ]
     }

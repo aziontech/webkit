@@ -9,7 +9,7 @@
     back: [event: MouseEvent]
   }>()
 
-  const breadcrumb = [{ label: 'Tickets', href: '/tickets' }, { label: 'Create ticket' }]
+  const breadcrumb = [{ label: 'Tickets', href: '/tickets' }, { label: 'Create Ticket' }]
 </script>
 
 <template>

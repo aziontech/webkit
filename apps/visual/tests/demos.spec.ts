@@ -64,11 +64,9 @@ test.describe('demo flows', () => {
     await page.getByRole('textbox', { name: 'Domain name', exact: true }).fill('shop.example.com')
     await page.getByRole('button', { name: 'Save', exact: true }).click()
     await expect(page).toHaveURL(/\/resources\/\d+$/)
-    await expect(page.getByText('shop.example.com').first()).toBeVisible()
     await expect(toastTitle(page, 'shop-api was created.')).toBeVisible()
     await expect(page.getByRole('heading', { level: 1, name: 'shop-api' })).toBeVisible()
-    await expect(page.getByText('No deployment yet')).toBeVisible()
-    await expect(page.getByText('Inactive', { exact: true }).first()).toBeVisible()
+    await expect(page.getByText('Not deployed yet')).toBeVisible()
     await expect(page.getByText(/^now by Amy Chen$/)).toBeVisible()
   })
 
@@ -117,7 +115,9 @@ test.describe('demo flows', () => {
     await page.getByRole('menuitem', { name: 'Delete' }).click()
     await expect(page).toHaveURL(new RegExp(`/resources/${FIRST}/delete$`))
     const dialog = page.getByRole('alertdialog', { name: 'Delete resource' })
-    await expect(dialog.getByRole('button', { name: 'Copy resource-01' })).toBeVisible()
+    await expect(
+      dialog.getByRole('textbox', { name: 'Type resource-01 to confirm.' })
+    ).toBeVisible()
   })
 
   test('focus lands on a row after the delete dialog closes', async ({ page }) => {

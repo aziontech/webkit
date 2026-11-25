@@ -29,7 +29,7 @@ pnpm preview:demos   # preview the build on http://localhost:4174
 | `/assistant`                         | `ai/ai-chat`                                                 | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                      |
 | `/settings/api-keys`                 | `settings/settings-api-key`                                  | Integration API keys: pick a provider (GitHub, OpenAI, etc.), save, test and remove a key          |
 | `/support`                           | `view/view-ticket-inbox`                                     | Ticket inbox: saved views with live counts, filters, bulk Assign, Change status, Merge and Close   |
-| `/support/tickets/new`               | `create/create-ticket`                                       | Create a ticket: adds it, toasts with Open ticket and opens it; Create and add another stays       |
+| `/support/tickets/new`               | `create/create-ticket`                                       | Create a ticket: adds it, toasts with Open ticket and opens it; Save and add another stays         |
 | `/support/tickets/:id`               | `detail/detail-ticket`                                       | One ticket: send a reply or a note, change status and properties, insert a canned response, Reopen |
 | `/support/customers/:id`             | `detail/detail-customer`                                     | Customer profile: their tickets, activity and notes; New ticket opens create with the requester    |
 | `/support/settings/canned-responses` | `settings/settings-canned-responses`                         | Canned responses: create, edit, duplicate and delete; the ticket composer inserts the same list    |
