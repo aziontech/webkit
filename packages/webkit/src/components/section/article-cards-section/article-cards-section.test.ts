@@ -5,14 +5,14 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import ArticleCardsSection from './article-cards-section.vue'
 
 const TESTID = 'article-cards-section'
-const TITLE = 'Related Articles'
+const TITLE = 'Related articles'
 const EYEBROW = 'Success cases'
 
 const posts = [
   {
     id: 'latency',
     href: '/blog/how-to-reduce-ai-agent-latency',
-    title: 'How Do You Reduce AI Agent Latency?',
+    title: 'How do you reduce AI agent latency?',
     description: 'Learn where latency builds up in AI agents.',
     meta: 'SEP 23, 2026 • 8 min read',
     image: '/media/blog/reduce-ai-agent-latency.png'
@@ -20,7 +20,7 @@ const posts = [
   {
     id: 'alternatives',
     href: '/blog/cloudflare-alternatives-and-competitors',
-    title: 'Best Cloudflare Alternatives and Competitors',
+    title: 'Best Cloudflare alternatives and competitors',
     description: 'Compare six Cloudflare alternatives.',
     meta: 'SEP 22, 2026 • 13 min read',
     image: '/media/blog/best-cloudflare-alternatives.png'

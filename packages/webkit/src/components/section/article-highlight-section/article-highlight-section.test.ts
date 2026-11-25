@@ -25,7 +25,7 @@ const items = [
     href: '/blog/latency',
     image: '/media/latency.png',
     meta: 'Serverless • SEP 23, 2026',
-    title: 'How Do You Reduce AI Agent Latency?',
+    title: 'How do you reduce AI agent latency?',
     description: 'Where latency builds up.',
     readTime: '8 min read'
   },

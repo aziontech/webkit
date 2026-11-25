@@ -27,7 +27,7 @@ const items = [
     href: '/blog/latency',
     image: '/media/latency.png',
     meta: 'Serverless • SEP 23, 2026',
-    title: 'How Do You Reduce AI Agent Latency?',
+    title: 'How do you reduce AI agent latency?',
     description: 'Where latency builds up in AI agents.',
     authors: [{ name: 'Priya Patel' }],
     byline: 'Priya Patel · 8 min read',
@@ -128,7 +128,7 @@ describe('ArticleIndexSection', () => {
       const { getByRole } = band()
 
       await userEvent.click(getByRole('radio', { name: 'Serverless' }))
-      expect(headlines(getByRole)).toEqual(['How Do You Reduce AI Agent Latency?'])
+      expect(headlines(getByRole)).toEqual(['How do you reduce AI agent latency?'])
 
       await userEvent.click(getByRole('radio', { name: 'All articles' }))
       expect(headlines(getByRole)).toHaveLength(items.length)
@@ -277,7 +277,7 @@ describe('ArticleIndexSection', () => {
         const { getByRole, findByRole } = band({ categoryParam: 'topic' })
 
         expect(await findByRole('radio', { name: 'Serverless', checked: true })).toBeInTheDocument()
-        expect(headlines(getByRole)).toEqual(['How Do You Reduce AI Agent Latency?'])
+        expect(headlines(getByRole)).toEqual(['How do you reduce AI agent latency?'])
       } finally {
         window.history.replaceState(null, '', before)
       }
