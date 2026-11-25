@@ -13,6 +13,7 @@
   import PopoverContent from '@aziontech/webkit/popover-content'
   import Popover from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
@@ -129,8 +130,23 @@
   }
 
   function discardDraft(_event: MouseEvent, id: string) {
+    const index = threads.value.findIndex((item) => item.id === id)
+    const thread = threads.value[index]
+    if (!thread) return
+    const wasActive = active.value === id
     threads.value = threads.value.filter((item) => item.id !== id)
-    if (active.value === id) active.value = null
+    if (wasActive) active.value = null
+    toast('Draft discarded', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          const next = [...threads.value]
+          next.splice(index, 0, thread)
+          threads.value = next
+          if (wasActive) active.value = id
+        }
+      }
+    })
   }
 
   const PANEL_CLASS =

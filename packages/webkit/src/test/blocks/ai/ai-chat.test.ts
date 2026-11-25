@@ -16,6 +16,7 @@ import type {
   AiChatSubagentPart,
   AiChatToolCallPart
 } from '../../../utils/ai-chat'
+import { useToastRegion } from '../../toast-region'
 
 describe('ai/ai-chat entry', () => {
   it('focuses the composer when the chat opens', async () => {
@@ -306,6 +307,28 @@ describe('ai/ai-chat', () => {
     expect(drawer.getByText('Purge the cache after a deploy')).toBeTruthy()
     await userEvent.click(drawer.getByRole('button', { name: 'New chat' }))
     expect(view.emitted('new-chat')).toHaveLength(1)
+  })
+
+  describe('discarding a draft', () => {
+    useToastRegion()
+
+    it('offers Undo, which brings the thread back', async () => {
+      const view = render(AiChat, { props: { messages: thread } })
+      const panel = within(view.container.querySelector<HTMLElement>('#ai-chat-history')!)
+      const title = 'Why does storefront return 502 errors?'
+      expect(panel.getByText(title)).toBeTruthy()
+      await userEvent.click(panel.getByRole('button', { name: 'Discard draft' }))
+      await waitFor(() => expect(panel.queryByText(title)).toBeNull())
+      const undo = await waitFor(() => {
+        const button = Array.from(document.body.querySelectorAll('button')).find(
+          (candidate) => candidate.textContent?.trim() === 'Undo'
+        )
+        expect(button).toBeTruthy()
+        return button!
+      })
+      await userEvent.click(undo)
+      await waitFor(() => expect(panel.getByText(title)).toBeTruthy())
+    })
   })
 
   it('reports the conversation picked in the history', async () => {
