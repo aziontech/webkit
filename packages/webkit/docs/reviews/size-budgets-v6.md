@@ -2365,3 +2365,5 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: conversation-history 42.35 KB → 42.4 KB (measured 42.35 KB): the toolbar Search trigger hides its keycap in the narrow history sidebar, so the Search label is no longer cut to "Searc…" (A6-078); the shortcut still works and stays announced through aria-keyshortcuts.

@@ -40,12 +40,12 @@
 <template>
   <div
     v-bind="$attrs"
-    class="@container/conversation-history-toolbar flex min-w-0 items-center gap-(--spacing-2xs)"
+    class="flex min-w-0 items-center gap-(--spacing-2xs)"
     :data-testid="testId"
   >
     <SearchTrigger
       :label="ctx.t('conversationHistory.searchChats')"
-      class="min-w-0 flex-1 @max-[18rem]/conversation-history-toolbar:[&_kbd]:hidden"
+      class="min-w-0 flex-1 [&_kbd]:hidden"
       :data-testid="`${testId}__search`"
       @open="(event: MouseEvent | KeyboardEvent) => emit('search-open', event)"
     />
