@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  defineOptions({ name: 'SvgAzionDefault' })
+  defineOptions({ name: 'SvgAzionDefault', inheritAttrs: false })
 </script>
 
 <template>
   <svg
+    v-bind="$attrs"
     width="90"
     height="18"
     viewBox="0 0 90 18"
