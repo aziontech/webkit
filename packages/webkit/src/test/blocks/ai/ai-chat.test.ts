@@ -6,6 +6,7 @@ import { nextTick } from 'vue'
 import AiChat from '../../../../blocks/ai/ai-chat/ai-chat.vue'
 import Agent from '../../../../blocks/ai/ai-chat/variants/agent.vue'
 import Artifact from '../../../../blocks/ai/ai-chat/variants/artifact.vue'
+import LongThread from '../../../../blocks/ai/ai-chat/variants/long-thread.vue'
 import Media from '../../../../blocks/ai/ai-chat/variants/media.vue'
 import type { McpAppFrameMessage } from '../../../components/ai/mcp-app-frame/mcp-app-frame.vue'
 import type {
@@ -113,6 +114,19 @@ describe('ai/ai-chat Artifact', () => {
 })
 
 describe('ai/ai-chat', () => {
+  it('loads no third-party image for its sample sources', async () => {
+    const view = render(LongThread)
+    await waitFor(() =>
+      expect(view.container.querySelector('[data-testid="sources-mark"]')).not.toBeNull()
+    )
+    const remote = Array.from(document.querySelectorAll('img'))
+      .map((img) => img.getAttribute('src') ?? '')
+      .filter(
+        (src) => /^https?:/.test(src) && !/^https:\/\/([\w-]+\.)*example\.(com|org|net)\//.test(src)
+      )
+    expect(remote).toEqual([])
+  })
+
   const thread: AiChatMessage[] = [
     { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Which plan am I on?' }] },
     {
