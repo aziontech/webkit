@@ -18,7 +18,7 @@
   const viewportTargetEl = ref<HTMLElement | null>(null)
 
   const ROOT_CLASS =
-    'relative h-full w-full overflow-hidden group-data-[constrained]/positioner:overflow-y-auto'
+    'relative h-full w-full overflow-hidden group-data-[constrained]/positioner:overflow-auto'
 
   watch(
     viewportTargetEl,
@@ -36,7 +36,7 @@
   >
     <div
       ref="viewportTargetEl"
-      class="relative h-full w-[var(--navigation-menu-viewport-width,100%)]"
+      class="relative h-full w-[min(var(--navigation-menu-viewport-width,100%),var(--navigation-menu-available-width,100vw))] max-w-full"
       :data-testid="`${testId}__target`"
     >
       <slot />

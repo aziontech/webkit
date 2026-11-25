@@ -21,7 +21,7 @@
               <NavigationMenu.Item value="solutions">
                 <NavigationMenu.Trigger> Solutions </NavigationMenu.Trigger>
                 <NavigationMenu.Content class="w-full">
-                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                  <div class="grid grid-cols-1 gap-(--spacing-xl) p-(--spacing-xs) sm:grid-cols-2">
                     <NavigationMenu.List label="By use case">
                       <NavigationMenu.Item
                         layout="entry"
@@ -81,7 +81,7 @@
               <NavigationMenu.Item value="products">
                 <NavigationMenu.Trigger> Products </NavigationMenu.Trigger>
                 <NavigationMenu.Content class="w-full">
-                  <div class="grid grid-cols-2 gap-(--spacing-xl) p-(--spacing-xs)">
+                  <div class="grid grid-cols-1 gap-(--spacing-xl) p-(--spacing-xs) sm:grid-cols-2">
                     <NavigationMenu.List label="Build">
                       <NavigationMenu.Item
                         layout="entry"
