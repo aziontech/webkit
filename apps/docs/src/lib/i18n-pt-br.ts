@@ -2,6 +2,7 @@ import { en, type Messages } from './i18n'
 
 export const ptBR: Messages = {
   ...en,
+  guides: 'Guias',
   viewport: 'Janela',
   viewportMobile: 'Celular',
   viewportTablet: 'Tablet',

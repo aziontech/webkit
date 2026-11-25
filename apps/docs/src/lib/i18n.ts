@@ -46,6 +46,7 @@ export const en = {
   newTab: '(opens in a new tab)',
   footer: 'Footer',
   footerWebkit: 'WebKit',
+  guides: 'Guides',
   footerAzion: 'Azion',
   footerGithub: 'GitHub',
   footerNpm: 'npm',
