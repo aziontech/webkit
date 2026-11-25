@@ -62,6 +62,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/autosize.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/box-focus.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/classes.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/references.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/tool-keys.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-add-menu.vue";
@@ -619,6 +620,8 @@
 @source "../node_modules/@aziontech/webkit/src/composables/use-shortcuts/use-shortcuts.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-step-registry/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-step-registry/use-step-registry.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-teleport-ready/index.ts";
+@source "../node_modules/@aziontech/webkit/src/composables/use-teleport-ready/use-teleport-ready.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-translate/index.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-translate/use-translate.ts";
 @source "../node_modules/@aziontech/webkit/src/composables/use-unsaved-changes/composables/use-leave-dialog.ts";

@@ -84,7 +84,7 @@
         :is="`h${block.level}`"
         v-else-if="block.type === 'heading'"
         :data-level="block.level"
-        class="m-0 mt-(--spacing-xs) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md [&+*]:-mt-(--spacing-xs)"
+        class="m-0 mt-(--spacing-xs) text-body-lg text-(--text-default) first:mt-0 data-[level]:font-semibold data-[level='3']:text-heading-md not-last:-mb-(--spacing-xs)"
       >
         <MarkdownInline
           :nodes="block.children"

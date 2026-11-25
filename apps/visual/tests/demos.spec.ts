@@ -278,11 +278,11 @@ test.describe('demo flows', () => {
     )
   })
 
-  test('one name per place: Agent, AI provider keys, Profile', async ({ page }) => {
+  test('one name per place: Agent, Integration keys, Profile', async ({ page }) => {
     await page.goto(`${DEMOS}/assistant`)
     await expect(page.getByRole('heading', { level: 1, name: 'Agent' })).toBeAttached()
-    await page.goto(`${DEMOS}/settings/ai-keys`)
-    await expect(page.getByRole('heading', { level: 1, name: 'AI provider keys' })).toBeVisible()
+    await page.goto(`${DEMOS}/settings/api-keys`)
+    await expect(page.getByRole('heading', { level: 1, name: 'Integration keys' })).toBeVisible()
     await page.goto(`${DEMOS}/settings`)
     await expect(page.getByRole('heading', { level: 1, name: 'Profile' })).toBeVisible()
   })

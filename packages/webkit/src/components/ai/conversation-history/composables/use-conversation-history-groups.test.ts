@@ -14,6 +14,19 @@ describe('useConversationHistoryGroups', () => {
     expect(groupOf(new Date('2026-01-01T10:00:00').getTime(), today)).toBe('older')
   })
 
+  it('starts each day at the local midnight of the time zone, across offsets and clock changes', () => {
+    const at = (iso: string): number => Date.parse(iso)
+    const kathmandu = at('2026-11-11T12:00:00Z')
+    expect(groupOf(at('2026-11-10T18:15:00Z'), kathmandu, 'Asia/Kathmandu')).toBe('today')
+    expect(groupOf(at('2026-11-10T18:14:00Z'), kathmandu, 'Asia/Kathmandu')).toBe('yesterday')
+    const newYork = at('2026-11-02T15:00:00Z')
+    expect(groupOf(at('2026-11-02T05:00:00Z'), newYork, 'America/New_York')).toBe('today')
+    expect(groupOf(at('2026-11-02T04:59:00Z'), newYork, 'America/New_York')).toBe('yesterday')
+    expect(groupOf(at('2026-11-01T04:00:00Z'), newYork, 'America/New_York')).toBe('yesterday')
+    expect(groupOf(at('2026-11-01T03:59:00Z'), newYork, 'America/New_York')).toBe('previous7')
+    expect(groupOf(at('2026-11-30T09:00:00Z'), newYork, 'America/New_York')).toBe('today')
+  })
+
   it('returns only the groups that hold items, newest first inside each', () => {
     const scope = effectScope()
     const { groups } = scope.run(() =>

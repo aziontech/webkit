@@ -53,7 +53,7 @@
     data-docs-toc-compact
   >
     <Accordion.Item value="toc">
-      <Accordion.Trigger>{{ t.onThisPage }}</Accordion.Trigger>
+      <Accordion.Trigger :heading-level="2">{{ t.onThisPage }}</Accordion.Trigger>
       <Accordion.Content>
         <nav :aria-label="t.onThisPage">
           <ul class="flex flex-col gap-(--spacing-2xs)">

@@ -203,7 +203,7 @@ describe('StreamingResponse', () => {
     expect(title).toHaveAttribute('data-level', '3')
     expect(title.classList.contains('data-[level]:font-semibold')).toBe(true)
     expect(title.classList.contains('mt-(--spacing-xs)')).toBe(true)
-    expect(title.classList.contains('[&+*]:-mt-(--spacing-xs)')).toBe(true)
+    expect(title.classList.contains('not-last:-mb-(--spacing-xs)')).toBe(true)
     expect(getByRole('heading', { level: 5, name: 'Step' })).toHaveAttribute('data-level', '5')
   })
 
