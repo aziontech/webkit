@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
   import type { SourcesItem } from '../types'
   import { sourceHue, sourceImage, sourceMonogram } from '../types'
@@ -22,6 +22,7 @@
 
   const attrs = useAttrs()
   const failed = ref<boolean>(false)
+  const imageEl = ref<HTMLImageElement | null>(null)
 
   const testId = computed<string>(() => {
     const id = attrs['data-testid']
@@ -43,6 +44,11 @@
       failed.value = false
     }
   )
+
+  onMounted(() => {
+    const el = imageEl.value
+    if (el?.complete && el.naturalWidth === 0) failed.value = true
+  })
 
   const MARK_CLASS =
     'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-(--border-default) bg-(--bg-surface-raised) text-(--text-default) ' +
@@ -68,6 +74,7 @@
   >
     <img
       v-if="type === 'image'"
+      ref="imageEl"
       :src="image"
       alt=""
       loading="lazy"
