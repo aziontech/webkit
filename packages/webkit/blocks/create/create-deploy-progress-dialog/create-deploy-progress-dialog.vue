@@ -213,7 +213,8 @@
     await nextTick()
     await nextTick()
     const active = document.activeElement
-    if (active && active !== document.body && active.isConnected) return
+    const lost = !active || active === document.body || active.closest('[role="dialog"]')
+    if (!lost) return
     actionsEl.value?.querySelector<HTMLElement>('button, a[href]')?.focus()
   })
 
