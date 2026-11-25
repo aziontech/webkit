@@ -7417,7 +7417,7 @@ What each part takes: [blocks/detail/detail-invocations.md](blocks/detail/detail
 
 The block takes the function and its recent invocations through props, owns the open invocation and the selected span as models, and emits its actions; it fetches nothing. `InvocationsFunction`, `InvocationsInvocation`, `InvocationsLog` and `InvocationsProps` are exported from `detail-invocations.vue`, and `sample.ts` holds the sample function and runs the block renders when they are left out.
 
-Prop / model: `edgeFunction`, `invocations`, `v-model:invocation`, `v-model:span`.
+Prop / model: `functionDetail`, `invocations`, `v-model:invocation`, `v-model:span`.
 
 Event: `replay`, `invocation-action`.
 
@@ -8112,7 +8112,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 
 ## Asked as
 
-code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função; test run; function test; run trace; span waterfall; invocation trace; testar função; execução de teste; rastreamento da execução; function code page; edit function code; function arguments page
+code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função; test run; function test; run trace; span waterfall; invocation trace; testar função; execução de teste; rastreamento da execução; function code page; edit function code; function arguments page
 
 The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).
 
@@ -13895,7 +13895,7 @@ never read as new.
       title: 'Migrate DNS records from another provider',
       updatedAt: '2026-10-28T16:30:00Z'
     },
-    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00Z' }
+    { id: 'c6', title: 'Object Storage pricing', updatedAt: '2026-08-02T10:00:00Z' }
   ])
   const active = ref('c2')
   const historyOpen = ref(false)
@@ -19627,7 +19627,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ## When to use
 
-- The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Edge Storage bucket, a KV value).
+- The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Object Storage bucket, a KV value).
 - Showing an uploaded object before it is published or replaced.
 - A document part or an attachment in an AI conversation: a PDF, a text file or an image, from a URL or from base64 bytes.
 - Any screen that shows one file and needs a type-aware fallback for files it cannot draw.
@@ -33321,7 +33321,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
         <SidebarMenuItem
           label="Firewall"
           icon="az az-shield"
-          href="/edge-firewall"
+          href="/firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem
@@ -33804,7 +33804,7 @@ even when the row carries nothing but its title.
 - Make the last step a review of the answers when the resource is costly to change after creation, and
 - Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no
 - Mark a step `optional` only when Next works with every field in it empty.
-- Always pass `ariaLabel` naming the task (`Create edge application`). Without it, the root is an
+- Always pass `ariaLabel` naming the task (`Create application`). Without it, the root is an
 - The wizard sets no page width. Place it inside the page's create container
 
 ## Don’t
@@ -33829,7 +33829,7 @@ even when the row carries nothing but its title.
 | --- | --- | --- | --- | --- |
 | `submitLabel` | `string` | `''` | false | Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). |
 | `loading` | `boolean` | `false` | false | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
-| `ariaLabel` | `string` | `''` | false | Accessible name for the wizard region. Name the task, for example Create edge application. |
+| `ariaLabel` | `string` | `''` | false | Accessible name for the wizard region. Name the task, for example Create application. |
 | `modelValue` | `number \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Events

@@ -35,19 +35,19 @@ describe('Eyebrow', () => {
   it('renders the prefix text when a prefix is provided', () => {
     const { getByText } = render(Eyebrow, {
       props: { prefix: '//' },
-      slots: { default: 'Edge functions' }
+      slots: { default: 'Functions' }
     })
     expect(getByText('//')).toBeInTheDocument()
-    expect(getByText('Edge functions')).toBeInTheDocument()
+    expect(getByText('Functions')).toBeInTheDocument()
   })
 
   it('hides the decorative prefix from assistive tech and keeps the label exposed', () => {
     const { getByText } = render(Eyebrow, {
       props: { prefix: '//' },
-      slots: { default: 'Edge functions' }
+      slots: { default: 'Functions' }
     })
     expect(getByText('//').getAttribute('aria-hidden')).toBe('true')
-    expect(getByText('Edge functions').closest('[aria-hidden]')).toBeNull()
+    expect(getByText('Functions').closest('[aria-hidden]')).toBeNull()
   })
 
   it('spaces the prefix, label and cursor with the --spacing-2xs token', () => {
@@ -158,7 +158,7 @@ describe('Eyebrow', () => {
     const { getByText } = render(Prefixes)
 
     expect(getByText('//')).toBeInTheDocument()
-    expect(getByText('Edge functions')).toBeInTheDocument()
+    expect(getByText('Functions')).toBeInTheDocument()
     expect(getByText('<>')).toBeInTheDocument()
     expect(getByText('Open source')).toBeInTheDocument()
     expect(getByText('</>')).toBeInTheDocument()

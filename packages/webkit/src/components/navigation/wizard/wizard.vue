@@ -19,7 +19,7 @@
     submitLabel?: string
     /** Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. */
     loading?: boolean
-    /** Accessible name for the wizard region. Name the task, for example Create edge application. */
+    /** Accessible name for the wizard region. Name the task, for example Create application. */
     ariaLabel?: string
   }
 

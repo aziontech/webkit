@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 79d3562d3f9e9512ec57d735715b32abdc062ce4d4cf73b03913a9b73ab4dc22
+checksum: 75de1c430f5ab1ab29189dc78c0937e08162ffc228a94a54ae5299b612046189
 created: 2026-08-05
 last_updated: 2026-11-23
 ---
@@ -72,7 +72,7 @@ export follows light and dark like the rest of the page.
   <!-- Named: the scene is the only thing saying what this is. -->
   <Illustration
     name="deploy-secure-mcp-server"
-    aria-label="An MCP server deployed behind the edge firewall"
+    aria-label="An MCP server deployed behind the firewall"
   />
 
   <!-- No name: the placeholder frame, for a scene design has not drawn yet. -->

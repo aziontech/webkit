@@ -73,7 +73,7 @@
     '### What you get',
     '',
     '- A **workload** bound to its own Azion domain',
-    '- An edge application built from your `azion.config.js`',
+    '- An application built from your `azion.config.js`',
     '- A certificate issued and renewed for you',
     '',
     '1. Pick a template',

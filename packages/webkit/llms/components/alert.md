@@ -145,7 +145,7 @@
     />
     <Alert
       severity="warning"
-      label="This edge function is close to its execution time limit."
+      label="This function is close to its execution time limit."
       action-label="View limits"
     />
     <Alert

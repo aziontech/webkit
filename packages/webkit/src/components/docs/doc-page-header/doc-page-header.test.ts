@@ -239,7 +239,7 @@ describe('DocPageHeader', () => {
       const { container } = render(DocPageHeader, {
         props: {
           title: 'Deploy an application',
-          description: 'Go from a template to a live edge application.',
+          description: 'Go from a template to a live application.',
           breadcrumbs: CRUMBS,
           lastUpdated: '2026-06-30',
           metaActions: META_ACTIONS

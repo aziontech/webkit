@@ -8,7 +8,7 @@
 
 ## When to use
 
-- The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Edge Storage bucket, a KV value).
+- The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Object Storage bucket, a KV value).
 - Showing an uploaded object before it is published or replaced.
 - A document part or an attachment in an AI conversation: a PDF, a text file or an image, from a URL or from base64 bytes.
 - Any screen that shows one file and needs a type-aware fallback for files it cannot draw.

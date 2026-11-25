@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: implemented
 spec_version: 6
-checksum: 675590666c3aecf97d1f412ef4ec3e5ed0dfc80ff1307038f67abcd2d97636e2
+checksum: a1e8fd559e45778fbe9781c8fd3e7ababdc233a8a1f5efdef04caf6e7896eaf7
 created: 2026-06-25
 last_updated: 2026-11-21
 ---
@@ -54,7 +54,7 @@ Composition — one import of the root; every part is reached via dot-notation (
 
   const model = ref([
     [
-      { id: 1, label: 'Edge Functions' },
+      { id: 1, label: 'Functions' },
       { id: 2, label: 'WAF' }
     ],
     [{ id: 3, label: 'Cache' }]

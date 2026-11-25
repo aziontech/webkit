@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: a1bd0028fc4e40e558f0a4b28e0adee79409a3d0af949471e7ad0c1acd3913b1
+checksum: 1a0789acc97fae7ac6b122ad396cf6f82d19eafe7da7291e870ad8a643927cf5
 created: 2026-09-24
 last_updated: 2026-11-24
 ---
@@ -58,7 +58,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
     icon="az az-edge-nodes"
     title="Consistent global speed"
     description="Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage."
-    href="/products/edge-application"
+    href="/products/applications"
   />
 </template>
 ```

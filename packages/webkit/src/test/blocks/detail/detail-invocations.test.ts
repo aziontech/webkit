@@ -59,7 +59,7 @@ describe('detail/detail-invocations', () => {
   it('renders the function and runs it is given and emits replay instead of faking it', async () => {
     const view = render(DetailInvocations, {
       props: {
-        edgeFunction: {
+        functionDetail: {
           id: '9001',
           name: 'acme-auth',
           runtime: 'JavaScript',

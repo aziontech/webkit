@@ -16,7 +16,7 @@
     <InputGroupRoot class="w-full">
       <div class="flex min-w-0 flex-1">
         <Input
-          model-value="azion create edge-function"
+          model-value="azion create function"
           size="large"
           class="w-full"
           aria-label="Create function command"
@@ -26,7 +26,7 @@
         />
       </div>
       <CopyButton
-        value="azion create edge-function"
+        value="azion create function"
         aria-label="Copy the create function command"
         copied-label="Command copied"
         size="small"

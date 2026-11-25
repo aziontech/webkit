@@ -11,7 +11,7 @@
  "purpose": "The preview of one stored file in a storage or object browser, or of a document in an AI conversation (a PDF the reader attaches or a model returns): a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read. An image renders as the image, a PDF in the browser's own PDF viewer, text as wrapped monospace text, JSON pretty-printed, and any other type a no-preview state that points at Download. Audio and video files are recognized (their glyph and type) and show the file card with Download; this component plays nothing. Long text is cut at `maxLength` characters with a note that says so. The file comes as a URL (`src`), as text (`content`) or as base64 bytes (`base64`, the shape a chat message carries); it renders what the app hands it and fetches nothing.",
  "setup": null,
  "useWhen": [
-  "The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Edge Storage bucket, a KV value).",
+  "The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Object Storage bucket, a KV value).",
   "Showing an uploaded object before it is published or replaced.",
   "A document part or an attachment in an AI conversation: a PDF, a text file or an image, from a URL or from base64 bytes.",
   "Any screen that shows one file and needs a type-aware fallback for files it cannot draw."

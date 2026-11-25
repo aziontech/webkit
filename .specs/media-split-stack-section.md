@@ -7,7 +7,7 @@ spec_version: 10
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 01dbe5667eabf1d19c285c6270a0a077ce5ec9f4ff7e06c9391f9bcaf1aa672c
+checksum: 6bc56feccee206b63a54a3e12e961696682fc6cb25192008a53296441a9d64c9
 ---
 
 # MediaSplitStackSection — Component Spec
@@ -110,7 +110,7 @@ _none_
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); each band's action is named by its label and the band's title (`Learn more, Edge Functions`), so five "Learn more" links read apart, and the band's media link, which repeats the action's destination, leaves the tab order; illustrations are named by `illustrationLabel`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); each band's action is named by its label and the band's title (`Learn more, Functions`), so five "Learn more" links read apart, and the band's media link, which repeats the action's destination, leaves the tab order; illustrations are named by `illustrationLabel`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.

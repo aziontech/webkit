@@ -23001,7 +23001,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name for the wizard region. Name the task, for example Create edge application."
+     "doc": "Accessible name for the wizard region. Name the task, for example Create application."
     },
     {
      "name": "modelValue",
@@ -23070,7 +23070,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name for the wizard region. Name the task, for example Create edge application."
+     "doc": "Accessible name for the wizard region. Name the task, for example Create application."
     },
     {
      "name": "modelValue",
@@ -38024,7 +38024,6 @@
     "página do editor",
     "editar código",
     "function editor",
-    "edge function",
     "function detail",
     "function arguments",
     "json schema arguments",

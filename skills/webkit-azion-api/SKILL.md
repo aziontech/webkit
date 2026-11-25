@@ -1,6 +1,6 @@
 ---
 name: webkit-azion-api
-description: Calling the Azion API from a browser app built on @aziontech/webkit — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to a webkit state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
+description: Calling the Azion API from a browser app built on @aziontech/webkit — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin proxy in an Azion Function for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to a webkit state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
 status: active
 last_updated: 2026-11-24
 scope: general

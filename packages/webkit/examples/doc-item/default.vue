@@ -10,7 +10,7 @@
       <DocItem
         title="Functions"
         icon="az az-code"
-        href="#edge-functions"
+        href="#functions"
       >
         Build serverless applications on Azion's global network. Workloads integrate with functions
         natively, through a binding.

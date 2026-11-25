@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: e2c93495b519b4661a42e32005349cbe7c851308e5d20c921631af5891baf550
+checksum: 5069bfe7e0249846b13672f8744a063927171845262383c62f8daa6648cc6700
 created: 2026-08-22
 last_updated: 2026-11-22
 ---
@@ -51,14 +51,14 @@ One row of the documentation's related-content list: a leading glyph in a framed
   <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
-        title="Edge Functions"
+        title="Functions"
         icon="az az-code"
-        href="/docs/edge-functions"
+        href="/docs/functions"
       >
         Build serverless applications on Azion's global network.
       </DocItem>
       <DocItem
-        title="Edge SQL"
+        title="SQL Database"
         icon="az az-database"
         href="/docs/edge-sql"
       >

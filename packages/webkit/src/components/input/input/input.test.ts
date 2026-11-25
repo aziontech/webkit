@@ -451,7 +451,7 @@ describe('Input', () => {
 
     it('has no a11y violations as a read-only monospace command field', async () => {
       const { container } = render(Input, {
-        props: { readonly: true, monospace: true, modelValue: 'azion create edge-function' },
+        props: { readonly: true, monospace: true, modelValue: 'azion create function' },
         attrs: { 'aria-label': 'CLI command' }
       })
       await expectNoA11yViolations(container)

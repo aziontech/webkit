@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: ef2ed277a687652c238214b04b3d21a03dda5a955cbda8b79dbb6648190a8e5a
+checksum: c19ab6581b24ee04230a59aa0ba7a517ce6c4197d5041461a88d7b719a8c044c
 created: 2026-08-22
 last_updated: 2026-11-16
 ---
@@ -50,7 +50,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
   <DocChangelogEntry
     label="August 19, 2026"
     description="v2.4.0"
-    :tags="['Console', 'Edge Functions']"
+    :tags="['Console', 'Functions']"
   >
     <p>
       Rules Engine conditions now match on request headers, so a rule can branch on anything the

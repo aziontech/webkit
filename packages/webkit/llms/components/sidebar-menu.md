@@ -299,7 +299,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
         <SidebarMenuItem
           label="Firewall"
           icon="az az-shield"
-          href="/edge-firewall"
+          href="/firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem

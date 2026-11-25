@@ -5,7 +5,7 @@
 <template>
   <DocPageHeader
     title="Deploy an application"
-    description="Go from a template to a live edge application in a few clicks."
+    description="Go from a template to a live application in a few clicks."
     :breadcrumbs="[{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]"
     last-updated="2026-06-30"
     :meta-actions="[
