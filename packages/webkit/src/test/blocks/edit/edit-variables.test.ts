@@ -171,6 +171,18 @@ describe('variables data contract', () => {
     await waitFor(() => expect(document.body.textContent).toContain('5 minutes ago'))
   })
 
+  it('freezes the Key column, so a value scrolled into view keeps its key beside it', async () => {
+    render(VariablesList, { props: { variables: given } })
+    const header = await waitFor(() => {
+      const cell = Array.from(document.querySelectorAll('[role="columnheader"]')).find((th) =>
+        th.textContent?.includes('Key')
+      )
+      expect(cell).toBeTruthy()
+      return cell as HTMLElement
+    })
+    expect(header.getAttribute('data-frozen')).toBe('start')
+  })
+
   it('shows the state-first-use empty state for an empty list', async () => {
     render(VariablesList, { props: { variables: [] } })
     await waitFor(() => expect(document.body.textContent).toContain('No variables yet'))
