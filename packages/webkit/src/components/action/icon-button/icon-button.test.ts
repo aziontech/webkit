@@ -221,13 +221,32 @@ describe('IconButton', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('keeps a disabled ghost button transparent, filling the other variants', () => {
+  it('keeps a disabled ghost or outline button transparent, filling the other variants', () => {
     const { getByTestId } = render(IconButton, {
-      props: { icon: 'az az-plus', ariaLabel: 'Add', variant: 'ghost', disabled: true }
+      props: { icon: 'az az-plus', ariaLabel: 'Add', variant: 'outline', disabled: true }
     })
     const classes = getByTestId('icon-button').classList
-    expect(classes.contains('data-[inert]:data-[variant=ghost]:bg-transparent')).toBe(true)
-    expect(classes.contains('data-[inert]:bg-(--bg-disabled)')).toBe(true)
+    expect(
+      classes.contains(
+        'data-[inert]:not-data-[variant=ghost]:not-data-[variant=outline]:bg-(--bg-disabled)'
+      )
+    ).toBe(true)
+    expect(classes.contains('data-[inert]:bg-(--bg-disabled)')).toBe(false)
+  })
+
+  it('stays focusable and emits no click while aria-disabled', async () => {
+    const { getByTestId, emitted } = render(IconButton, {
+      props: { icon: 'az az-plus', ariaLabel: 'Add' },
+      attrs: { 'aria-disabled': 'true' }
+    })
+    const button = getByTestId('icon-button') as HTMLButtonElement
+    expect(button.disabled).toBe(false)
+    expect(button.getAttribute('aria-disabled')).toBe('true')
+    expect(button.hasAttribute('data-inert')).toBe(true)
+    button.focus()
+    expect(document.activeElement).toBe(button)
+    await fireEvent.click(button)
+    expect(emitted('click')).toBeUndefined()
   })
 
   it('has no a11y violations in the disabled state', async () => {

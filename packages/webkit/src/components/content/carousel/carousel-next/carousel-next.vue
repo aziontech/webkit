@@ -34,7 +34,7 @@
     icon="az az-chevron-right"
     :data-testid="testId"
     :aria-label="ariaLabel || t('carousel.next')"
-    :disabled="!context.canScrollNext.value"
+    :aria-disabled="!context.canScrollNext.value || undefined"
     @click="context.scrollNext()"
   />
 </template>

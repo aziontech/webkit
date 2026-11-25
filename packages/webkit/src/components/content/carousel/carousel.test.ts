@@ -44,6 +44,9 @@ function makeTrackOverflow(container: Element): globalThis.HTMLUListElement {
 
 const button = (element: globalThis.HTMLElement) => element as globalThis.HTMLButtonElement
 
+const unavailable = (element: globalThis.HTMLElement) =>
+  element.getAttribute('aria-disabled') === 'true'
+
 describe('Carousel', () => {
   describe('composition', () => {
     it('renders the carousel under the default testid', () => {
@@ -110,9 +113,22 @@ describe('Carousel', () => {
       makeTrackOverflow(container)
 
       await vi.waitFor(() => {
-        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+        expect(unavailable(getByTestId(NEXT_TESTID))).toBe(false)
       })
-      expect(button(getByTestId(PREVIOUS_TESTID)).disabled).toBe(true)
+      expect(unavailable(getByTestId(PREVIOUS_TESTID))).toBe(true)
+    })
+
+    it('keeps an unavailable control in the tab order', async () => {
+      const { container, getByTestId } = render(host())
+      makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(unavailable(getByTestId(NEXT_TESTID))).toBe(false)
+      })
+      const previous = button(getByTestId(PREVIOUS_TESTID))
+      expect(previous.disabled).toBe(false)
+      previous.focus()
+      expect(document.activeElement).toBe(previous)
     })
 
     it('marks the root scrollable once the track overflows its row', async () => {
@@ -220,7 +236,7 @@ describe('Carousel', () => {
       const track = makeTrackOverflow(container)
 
       await vi.waitFor(() => {
-        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+        expect(unavailable(getByTestId(NEXT_TESTID))).toBe(false)
       })
       expect(track.scrollLeft).toBe(0)
 
@@ -236,12 +252,12 @@ describe('Carousel', () => {
       makeTrackOverflow(container)
 
       await vi.waitFor(() => {
-        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+        expect(unavailable(getByTestId(NEXT_TESTID))).toBe(false)
       })
       await fireEvent.click(getByTestId(NEXT_TESTID))
 
       await vi.waitFor(() => {
-        expect(button(getByTestId(PREVIOUS_TESTID)).disabled).toBe(false)
+        expect(unavailable(getByTestId(PREVIOUS_TESTID))).toBe(false)
       })
     })
 
@@ -250,13 +266,13 @@ describe('Carousel', () => {
       const track = makeTrackOverflow(container)
 
       await vi.waitFor(() => {
-        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+        expect(unavailable(getByTestId(NEXT_TESTID))).toBe(false)
       })
       await fireEvent.click(getByTestId(NEXT_TESTID))
 
       let stepped = 0
       await vi.waitFor(() => {
-        expect(button(getByTestId(PREVIOUS_TESTID)).disabled).toBe(false)
+        expect(unavailable(getByTestId(PREVIOUS_TESTID))).toBe(false)
         stepped = track.scrollLeft
         expect(stepped).toBeGreaterThan(0)
       })

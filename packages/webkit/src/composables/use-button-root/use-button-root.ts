@@ -41,10 +41,13 @@ export function useButtonRoot(
 ): UseButtonRootReturn {
   const attrs = useAttrs()
 
+  const off = () => props.disabled || `${attrs['aria-disabled']}` === 'true'
+  const blocked = () => off() || props.loading
+
   const rootAttrs = computed(() => {
     const href = safeHref(props.href, isDownload(attrs['download']))
     const anchor = href !== null
-    const inert = props.disabled || props.loading
+    const inert = blocked()
     return {
       ...attrs,
       tag: anchor ? 'a' : 'button',
@@ -56,7 +59,7 @@ export function useButtonRoot(
       tabindex: anchor && inert ? -1 : attrs['tabindex'],
       'aria-disabled': aria(inert),
       'aria-busy': aria(props.loading),
-      'data-disabled': flag(props.disabled),
+      'data-disabled': flag(off()),
       'data-loading': flag(props.loading),
       'data-inert': flag(inert),
       'data-testid': attrs['data-testid'] ?? name
@@ -67,7 +70,7 @@ export function useButtonRoot(
     Root,
     rootAttrs,
     onClick: (event: MouseEvent) => {
-      if (props.disabled || props.loading) event.preventDefault()
+      if (blocked()) event.preventDefault()
       else emitClick(event)
     }
   }
