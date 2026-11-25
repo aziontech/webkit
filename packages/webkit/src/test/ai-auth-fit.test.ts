@@ -1,10 +1,11 @@
 import './reflow.css'
 
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
 import DeviceAuthorization from '../../blocks/auth/auth-sign-in/variants/device-authorization.vue'
+import ConversationHistoryRichRows from '../../examples/conversation-history/rich-rows.vue'
 import PromptInputDefault from '../../examples/prompt-input/default.vue'
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
@@ -37,5 +38,16 @@ describe('the device authorization card on a phone', () => {
     const box = link.getBoundingClientRect()
     expect(box.right).toBeLessThanOrEqual(card.right + 1)
     expect(link.scrollWidth).toBeLessThanOrEqual(link.clientWidth + 1)
+  })
+})
+
+describe('the conversation history toolbar in a sidebar', () => {
+  it('shows the whole Search label at 256px', async () => {
+    const view = render(() => h('div', { style: 'width: 256px' }, [h(ConversationHistoryRichRows)]))
+    const label = await waitFor(() =>
+      view.getByTestId('conversation-history__toolbar__search__label')
+    )
+    await frame()
+    expect(label.scrollWidth).toBeLessThanOrEqual(label.clientWidth + 1)
   })
 })
