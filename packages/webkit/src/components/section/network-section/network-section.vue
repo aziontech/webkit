@@ -190,7 +190,8 @@
           <div class="relative flex flex-col gap-(--spacing-md)">
             <p
               v-if="claimsEyebrow"
-              class="m-0 text-overline-md text-(--text-muted)"
+              :data-testid="`${testId}__claims-eyebrow`"
+              class="m-0 max-w-(--container-sm) text-overline-md text-(--text-muted)"
             >
               {{ claimsEyebrow }}
             </p>
