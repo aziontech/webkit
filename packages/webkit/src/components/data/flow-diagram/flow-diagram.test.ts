@@ -109,7 +109,7 @@ describe('FlowDiagram', () => {
     const routes = Array.from(
       container.querySelectorAll<HTMLElement>('[data-testid="flow-diagram__node-route"]')
     )
-    expect(routes.map((route) => route.textContent?.replace(/\s+/g, ' ').trim())).toEqual([
+    expect(routes.map((route) => route.innerText.replace(/\s+/g, ' ').trim())).toEqual([
       'To static-assets 1 ms',
       'To api.example.com 840 ms'
     ])
