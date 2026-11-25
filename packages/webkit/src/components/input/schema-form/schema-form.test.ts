@@ -181,6 +181,16 @@ describe('SchemaForm', () => {
     )
   })
 
+  it('shows a lock on the hints of a disabled form, never of a read-only one', () => {
+    const props = { schema, modelValue: { name: 'shop' } }
+    const busy = render(SchemaForm, { props: { ...props, readonly: true } })
+    expect((busy.getByLabelText(/Name/) as HTMLInputElement).readOnly).toBe(true)
+    expect(busy.container.querySelector('[data-testid="field-description__icon"]')).toBeNull()
+    busy.unmount()
+    const locked = render(SchemaForm, { props: { ...props, disabled: true } })
+    expect(locked.container.querySelector('[data-testid="field-description__icon"]')).not.toBeNull()
+  })
+
   it('shows server errors by path until the field is edited', async () => {
     const view = render(SchemaForm, {
       props: {
