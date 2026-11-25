@@ -8,7 +8,7 @@
       title: 'Every workload on one list',
       description:
         'See each workload with its domain, status and last deployment, so what is live is never a question.',
-      illustration: 'traffic-and-cost-bar-chart',
+      illustration: 'real-time-metrics-status-codes',
       action: {
         label: 'Docs',
         href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -19,7 +19,7 @@
       title: 'Read the deployment topology',
       description:
         'The domains, the application and the firewall a workload serves, drawn as one chain.',
-      illustration: 'global-network',
+      illustration: 'implement-api-gateway-security',
       action: {
         label: 'Docs',
         href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -30,7 +30,7 @@
       title: 'Domains and TLS, handled',
       description:
         'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
-      illustration: 'dns-protection',
+      illustration: 'improve-application-performance-and-reliability',
       action: {
         label: 'Docs',
         href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -52,7 +52,7 @@
       title: 'Gradual rollouts and instant rollback',
       description:
         'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-      illustration: 'preview',
+      illustration: 'branches',
       action: {
         label: 'Docs',
         href: 'https://www.azion.com/en/documentation/products/workloads/',
