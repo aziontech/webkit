@@ -2348,6 +2348,12 @@ Budget-raise: popover 11.35 KB → 11.5 KB (measured 11.41 KB): the teleport hyd
 
 Budget-raise: popover-content 1.25 KB → 1.4 KB (measured 1.34 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
 
+Budget-raise: prompt-input-model-picker 16 KB → 16.15 KB (measured 16.08 KB): the panel is built from the library's own IconButton and Input instead of raw button, input and role="menu"/role="tab" markup, so lint:quality (webkit/no-unowned-element) passes.
+
+Budget-raise: prompt-input-tools 18.3 KB → 18.4 KB (measured 18.36 KB): the shared promptInput locale catalog gained the model picker's provider and search strings, which every prompt-input part that reads the catalog bundles.
+
+Budget-raise: conversation-history 42.3 KB → 42.35 KB (measured 42.31 KB): the new item-actions slot, so an app can put its own row actions (Snooze, Settle) beside the row button instead of nesting buttons inside it.
+
 Budget-raise: doc-layout 75.8 KB → 75.9 KB (measured 75.83 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: doc-call-to-action 12.55 KB → 12.65 KB (measured 12.62 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
@@ -2359,9 +2365,3 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
-
-Budget-raise: prompt-input-model-picker 16 KB → 16.15 KB (measured 16.08 KB): the panel is built from the library's own IconButton and Input instead of raw button, input and role="menu"/role="tab" markup, so lint:quality (webkit/no-unowned-element) passes.
-
-Budget-raise: prompt-input-tools 18.3 KB → 18.4 KB (measured 18.36 KB): the shared promptInput locale catalog gained the model picker's provider and search strings, which every prompt-input part that reads the catalog bundles.
-
-Budget-raise: conversation-history 42.3 KB → 42.35 KB (measured 42.31 KB): the new item-actions slot, so an app can put its own row actions (Snooze, Settle) beside the row button instead of nesting buttons inside it.
