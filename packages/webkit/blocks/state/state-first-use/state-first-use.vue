@@ -8,7 +8,6 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -221,25 +220,24 @@
                 class="flex basis-full md:basis-auto md:max-w-(--container-3xs) md:flex-1 justify-end"
               >
                 <Item.Actions class="w-full">
-                  <InputGroupRoot class="w-full">
-                    <div class="flex min-w-0 flex-1">
-                      <Input
-                        :model-value="command"
-                        size="large"
-                        class="w-full"
-                        aria-label="Via CLI command"
-                        readonly
-                        monospace
-                        :spellcheck="false"
+                  <Input
+                    :model-value="command"
+                    size="large"
+                    class="w-full"
+                    aria-label="Via CLI command"
+                    readonly
+                    monospace
+                    :spellcheck="false"
+                  >
+                    <template #trailing>
+                      <CopyButton
+                        :value="command"
+                        aria-label="Copy the Via CLI command"
+                        copied-label="Command copied"
+                        size="small"
                       />
-                    </div>
-                    <CopyButton
-                      :value="command"
-                      aria-label="Copy the Via CLI command"
-                      copied-label="Command copied"
-                      size="small"
-                    />
-                  </InputGroupRoot>
+                    </template>
+                  </Input>
                 </Item.Actions>
               </div>
             </Item>

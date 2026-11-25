@@ -12,7 +12,10 @@ describe('state/state-first-use', () => {
     expect(view.getByRole('link', { name: /Set up your coding agent/ }).getAttribute('href')).toBe(
       '/agent-setup'
     )
-    expect((view.getByLabelText('Via CLI command') as HTMLInputElement).value).toBe('azion deploy')
+    const command = view.getByLabelText('Via CLI command') as HTMLInputElement
+    expect(command.value).toBe('azion deploy')
+    const field = command.closest('[data-slot="input"]') ?? command.parentElement
+    expect(field?.querySelector('button[aria-label="Copy the Via CLI command"]')).toBeTruthy()
   })
 
   it('renders the copy it is given and emits the create methods', async () => {
