@@ -334,6 +334,8 @@ describe('edit/edit-resource DataStream', () => {
     const view = render(PolicySettings)
     const ddos = view.getByRole('switch', { name: 'DDoS Protection' })
     expect(ddos.getAttribute('aria-checked')).toBe('true')
+    expect(ddos.getAttribute('aria-readonly')).toBe('true')
+    expect(ddos.matches(':disabled')).toBe(false)
     expect(view.getByText(/Always on for every policy\./)).toBeTruthy()
   })
 

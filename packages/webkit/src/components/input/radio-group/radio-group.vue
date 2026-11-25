@@ -28,6 +28,8 @@
       options?: TOption[]
       /** Disables every option and applies the disabled tokens. */
       disabled?: boolean
+      /** Shows the selection but blocks changing it: the radios stay focusable and keep their selected look. */
+      readonly?: boolean
       /** Requires a selection: sets aria-required on the group and required on the radios, so a native form blocks an empty submit. */
       required?: boolean
       /** Marks the group invalid: sets aria-invalid on the group and on every radio. */
@@ -39,6 +41,7 @@
       variant: 'default',
       options: () => [],
       disabled: false,
+      readonly: false,
       required: false,
       invalid: false
     }
@@ -86,9 +89,10 @@
     value: computed(() => model.value),
     variant: computed(() => props.variant),
     disabled: field.disabled,
+    readonly: computed(() => props.readonly),
     testId,
     select: (value: string) => {
-      if (field.disabled.value) return
+      if (field.disabled.value || props.readonly) return
       model.value = value as TOption['value']
     }
   })
@@ -119,10 +123,12 @@
     :aria-describedby="field.describedBy.value"
     :aria-required="field.required.value || undefined"
     :aria-invalid="field.invalid.value || undefined"
+    :aria-readonly="readonly || undefined"
     :data-testid="testId"
     :data-orientation="orientation"
     :data-variant="variant"
     :data-disabled="field.disabled.value || null"
+    :data-readonly="readonly || null"
     :data-required="field.required.value || null"
     :data-invalid="field.invalid.value || null"
     :class="ROOT_CLASS"

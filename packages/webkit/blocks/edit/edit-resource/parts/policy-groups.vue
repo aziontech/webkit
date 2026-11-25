@@ -123,7 +123,7 @@
                 <Switch
                   :model-value="true"
                   :aria-label="field.title"
-                  disabled
+                  readonly
                 />
               </span>
             </Tooltip>

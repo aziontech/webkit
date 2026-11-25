@@ -227,6 +227,40 @@ describe('Switch', () => {
     })
   })
 
+  describe('readonly', () => {
+    it('keeps a read-only on switch in the on look, focusable, and refuses every change', async () => {
+      const { getByTestId, emitted } = render(
+        () =>
+          h('div', [
+            h(Switch, { modelValue: true, 'aria-label': 'Enabled', 'data-testid': 'on' }),
+            h(Switch, { modelValue: true, readonly: true, 'aria-label': 'DDoS Protection' })
+          ]),
+        {}
+      )
+      const root = getByTestId('switch') as globalThis.HTMLButtonElement
+      expect(root.getAttribute('aria-readonly')).toBe('true')
+      expect(root.getAttribute('data-readonly')).toBe('true')
+      expect(root.disabled).toBe(false)
+      expect(getComputedStyle(root).backgroundColor).toBe(
+        getComputedStyle(getByTestId('on')).backgroundColor
+      )
+      root.focus()
+      expect(document.activeElement).toBe(root)
+      await fireEvent.click(root)
+      await fireEvent.keyDown(root, { key: ' ' })
+      expect(root.getAttribute('aria-checked')).toBe('true')
+      expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it('passes axe when read-only', async () => {
+      const { container } = render(Switch, {
+        props: { modelValue: true, readonly: true },
+        attrs: { 'aria-label': 'DDoS Protection' }
+      })
+      await expectNoA11yViolations(container)
+    })
+  })
+
   describe('disabled', () => {
     it('keeps a locked-on switch framed, tinted and its handle readable', () => {
       const { getByTestId } = render(Switch, {
