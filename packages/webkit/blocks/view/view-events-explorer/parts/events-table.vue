@@ -97,7 +97,7 @@
             :icon="row.id === selectedKey ? 'az az-chevron-down' : 'az az-chevron-right'"
             variant="ghost"
             size="small"
-            :aria-label="`Open event ${row.id}`"
+            :aria-label="`Open event: ${row.message}, ${row.time}`"
             :aria-expanded="row.id === selectedKey"
             :data-open-event="row.id === selectedKey || undefined"
             @click.stop="emit('open', $event, row)"

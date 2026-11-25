@@ -114,6 +114,7 @@
         stacked
       />
       <Chart.Crosshair />
+      <Chart.Legend />
       <Chart.Tooltip total>
         <template #footer>Click to filter to this bucket, or drag to select a span.</template>
       </Chart.Tooltip>
