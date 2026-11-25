@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 8
-checksum: ad427b54d28baf80277eb0120f8bc3161d2dcbe2ead75477dd0eebecee3524da
+checksum: 5ac0996514fb6ffae75c72d9a8152e8e1c6500fa7089b23c6d0610402f935780
 created: 2026-05-22
-last_updated: 2026-11-17
+last_updated: 2026-11-25
 ---
 
 # Panel — Component Spec
@@ -105,7 +105,7 @@ Tree-shaking: `@aziontech/webkit/panel-root` is the root alone, and `panel-heade
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
 - `data-width` on the root carries the resolved width: `small` | `medium` | `large`, the same with `-md` when `sizeAtMd` is set, or `fluid` when the internal `data-fluid` attribute is passed (Drawer). Tailwind `data-[width=…]:` variants map it to the container tokens; there is no JS class map.
-- Responsive: `PanelBody` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`. A footer the consumer stacks as a column (`flex-col`) keeps every child at its own height (`max-sm:[&.flex-col]:*:flex-none`), so stacked buttons never collapse below their drawn height.
+- Responsive: `PanelBody` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`. A footer the consumer stacks as a column (`flex-col`) keeps every child at its own height (`max-sm:[&.flex-col]:*:flex-none`), so stacked buttons never collapse below their drawn height. Stacked actions keep DOM order, with the primary action last, at the bottom nearest the thumb, so the screen order is the focus order in every Dialog, Drawer and ConfirmDialog footer.
 
 ## Motion & Animations
 

@@ -299,6 +299,14 @@ describe('Popover', () => {
       await waitFor(() => expect(panel()).toBeNull())
     })
 
+    it('the FilterBuilder example opens with focus on its first field', async () => {
+      render(FilterBuilder)
+      await userEvent.click(control())
+      await waitFor(() => expect(panel()).not.toBeNull())
+      await waitFor(() => expect(panel()!.contains(document.activeElement)).toBe(true))
+      expect(document.activeElement?.textContent).toContain('Last editor')
+    })
+
     it('the FilterBuilder example closes on Escape and returns focus to its trigger', async () => {
       render(FilterBuilder)
       const trigger = control()

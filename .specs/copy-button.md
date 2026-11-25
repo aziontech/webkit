@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 4f8d06143f57f86f293e57c5ce830746dcfa333f048027e19e7d06f78c847579
+checksum: 11875a7cd00810fe3ae3776c502c9cd3a4a8d8c3a52ebf4e02f3c689f77f8054
 created: 2026-06-02
-last_updated: 2026-11-16
+last_updated: 2026-11-25
 ---
 
 # Copy Button — Component Spec
@@ -101,7 +101,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
-- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers.
+- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers. The root is `relative`, so the hidden region is positioned against the button and never extends the page when the button sits deep in a scrolling pane.
 - Attributes: consumer `class`, `id`, `aria-describedby` and listeners land on the root `span` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

@@ -221,6 +221,15 @@ describe('IconButton', () => {
     await expectNoA11yViolations(container)
   })
 
+  it('keeps a disabled ghost button transparent, filling the other variants', () => {
+    const { getByTestId } = render(IconButton, {
+      props: { icon: 'az az-plus', ariaLabel: 'Add', variant: 'ghost', disabled: true }
+    })
+    const classes = getByTestId('icon-button').classList
+    expect(classes.contains('data-[inert]:data-[variant=ghost]:bg-transparent')).toBe(true)
+    expect(classes.contains('data-[inert]:bg-(--bg-disabled)')).toBe(true)
+  })
+
   it('has no a11y violations in the disabled state', async () => {
     const { container } = render(IconButton, {
       props: { icon: 'az az-plus', ariaLabel: 'Add', disabled: true }

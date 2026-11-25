@@ -61,6 +61,13 @@ describe('SplitButton', () => {
       expect(panel()).toBeNull()
     })
 
+    it('widens the menu segment to the 44px touch floor on a coarse pointer', () => {
+      const { getByTestId } = render(host({ size: 'small' }))
+      expect(getByTestId('split-button__toggle-button').className).toContain(
+        'pointer-coarse:min-w-11'
+      )
+    })
+
     it('falls back to the plain "More actions" toggle label when label is empty', () => {
       const { getByTestId } = render(host({ label: '' }))
       expect(getByTestId('split-button__toggle-button').getAttribute('aria-label')).toBe(

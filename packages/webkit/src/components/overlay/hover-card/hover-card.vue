@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, onBeforeUnmount, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { usePlacement } from '../../../composables/use-placement'
@@ -135,9 +135,14 @@
     returningFocus = false
   }
 
-  onMounted(() => {
-    globalThis.document?.addEventListener('keydown', onDocumentKeydown)
-  })
+  watch(
+    () => isOpenState.value,
+    (open) => {
+      if (open) globalThis.document?.addEventListener('keydown', onDocumentKeydown)
+      else globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
+    },
+    { immediate: true }
+  )
 
   onBeforeUnmount(() => {
     clearTimers()

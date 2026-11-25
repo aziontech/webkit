@@ -324,10 +324,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 <template>
   <div class="relative h-[30rem] w-full border border-dashed border-(--border-muted)">
     <p
-      class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
+      class="absolute inset-x-(--spacing-md) top-1/2 mx-auto max-w-(--container-md) -translate-y-1/2 text-center text-body-sm text-(--text-muted)"
     >
-      All triggers use side="auto". Click one: its panel resolves to the best-fitting corner based
-      on its position in the viewport.
+      All triggers use side="auto". Click one: its panel opens on the side with the most room for
+      its place in the viewport.
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
@@ -335,7 +335,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="Open top left"
+            label="Open at top start"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -343,7 +343,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
             <PopoverTitle>Popover</PopoverTitle>
             <PopoverClose />
           </PopoverHeader>
-          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
+            This panel opened on the side with the most room.
+          </div>
         </PopoverContent>
       </PopoverRoot>
     </div>
@@ -353,7 +355,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="Open top right"
+            label="Open at top end"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -361,7 +363,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
             <PopoverTitle>Popover</PopoverTitle>
             <PopoverClose />
           </PopoverHeader>
-          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
+            This panel opened on the side with the most room.
+          </div>
         </PopoverContent>
       </PopoverRoot>
     </div>
@@ -371,7 +375,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="Open bottom left"
+            label="Open at bottom start"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -379,7 +383,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
             <PopoverTitle>Popover</PopoverTitle>
             <PopoverClose />
           </PopoverHeader>
-          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
+            This panel opened on the side with the most room.
+          </div>
         </PopoverContent>
       </PopoverRoot>
     </div>
@@ -389,7 +395,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="Open bottom right"
+            label="Open at bottom end"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -397,7 +403,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
             <PopoverTitle>Popover</PopoverTitle>
             <PopoverClose />
           </PopoverHeader>
-          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+          <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
+            This panel opened on the side with the most room.
+          </div>
         </PopoverContent>
       </PopoverRoot>
     </div>

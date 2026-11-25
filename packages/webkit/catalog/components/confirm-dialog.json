@@ -21,6 +21,6 @@
   "`variant=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
   "Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.",
   "Typed confirmation has one rule everywhere: the reader types the resource name (`confirmation-phrase`), the match is case-sensitive after trimming the ends, the confirm button stays disabled until it matches, `Enter` in the field confirms once it matches, and the field empties every time the dialog opens. Do not hand-write the field.",
-  "Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`."
+  "Below `md` the buttons stack full width in DOM and focus order, Cancel above and the confirm button last at the bottom nearest the thumb, the same order as `save-bar`, `Dialog` and `Drawer` footers."
  ]
 }

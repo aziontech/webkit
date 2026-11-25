@@ -3,8 +3,8 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
 
   const show = () =>
-    toast('Event has been created', {
-      description: 'Sunday, December 03, 2023 at 9:00 AM',
+    toast('Application deleted', {
+      description: 'acme-store was removed from your account.',
       action: { label: 'Undo', onClick: () => {} }
     })
 </script>
@@ -12,7 +12,8 @@
 <template>
   <Toaster position="bottom-end" />
   <Button
-    label="Show toast"
+    label="Delete application"
+    variant="outline"
     @click="show"
   />
 </template>

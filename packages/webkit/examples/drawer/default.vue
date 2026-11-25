@@ -15,17 +15,17 @@
   >
     <Drawer.Trigger>
       <Button
-        label="Open drawer"
+        label="Edit cache settings"
         variant="primary"
       />
     </Drawer.Trigger>
     <Drawer.Content>
       <Drawer.Header class="w-full">
-        <Drawer.Title>Drawer Title</Drawer.Title>
+        <Drawer.Title>Cache settings</Drawer.Title>
       </Drawer.Header>
       <Drawer.Body>
         <Drawer.Description>
-          Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
+          Choose how long edge nodes keep a copy of each response before they ask the origin again.
         </Drawer.Description>
       </Drawer.Body>
       <Drawer.Footer>
@@ -38,6 +38,7 @@
           <Button
             label="Save"
             variant="primary"
+            @click="open = false"
           />
         </div>
       </Drawer.Footer>

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 48fab4e170a309b4a24514f7493ab88079db49f29c1e2ebd5d28caa33e816db5
+checksum: 3540a82cd65ade170baccd139940152572ed48364b0b5eb7e72044c0741e5e72
 created: 2026-05-22
-last_updated: 2026-11-21
+last_updated: 2026-11-25
 ---
 
 # Icon Button — Component Spec
@@ -81,7 +81,7 @@ A square control that triggers an action with a glyph and no visible text: close
 | `size`           | `'small' \| 'medium' \| 'large'`                               | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                        |
 | `disabled`       | `boolean`                                                      | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                           |
 | `loading`        | `boolean`                                                      | `false`     | false    | Shows loading state and disables activation.                                                                                                                                |
-| `href`           | `string`                                                       | `''`        | false    | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility).                                                                                                                                        |
+| `href`           | `string`                                                       | `''`        | false    | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility).                        |
 | `target`         | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                             |
 | `iconTransition` | `boolean`                                                      | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                           |
 | `iconClass`      | `string`                                                       | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                                    |
@@ -101,6 +101,7 @@ A square control that triggers an action with a glyph and no visible text: close
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
+- While inert, a `ghost` button keeps its transparent fill and only its glyph takes `--text-disabled`, so an unavailable toolbar control is never louder than the enabled ghost controls beside it; the other variants take `--bg-disabled`
 - `data-variant` mirrors `variant` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
 - `IconButtonType` is exported beside `IconButtonVariant`, `IconButtonSize` and `IconButtonTarget`
 - Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.

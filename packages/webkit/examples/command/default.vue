@@ -1,4 +1,5 @@
 <script setup>
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -43,6 +44,7 @@
           >Toggle theme</CommandItem
         >
       </CommandGroup>
+      <CommandEmpty />
     </CommandList>
   </CommandRoot>
 </template>

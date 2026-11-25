@@ -59,6 +59,18 @@ describe('ConfirmDialog', () => {
     expect(document.body.textContent).toContain('It stops answering.')
   })
 
+  it('stacks the actions in DOM order on phones, the confirm button last', async () => {
+    render(ConfirmDialog, { props: { open: true, title: 'Remove domain' } })
+    await settle()
+
+    const actions = byTestId('confirm-dialog__actions')!
+    expect(actions.classList.contains('flex-col')).toBe(true)
+    expect(actions.classList.contains('flex-col-reverse')).toBe(false)
+    const cancel = byTestId('confirm-dialog__cancel')!
+    const confirm = byTestId('confirm-dialog__confirm')!
+    expect(cancel.compareDocumentPosition(confirm) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('honours a consumer data-testid', async () => {
     render(ConfirmDialog, {
       props: { open: true, title: 'Remove domain' },
@@ -248,6 +260,26 @@ describe('ConfirmDialog', () => {
       expect(onConfirm).not.toHaveBeenCalled()
       await userEvent.type(field, '-store{Enter}')
       expect(onConfirm).toHaveBeenCalledTimes(1)
+    })
+
+    it('explains a phrase that does not match when Enter is pressed', async () => {
+      const onConfirm = vi.fn()
+      render(ConfirmDialog, { props: { ...phraseProps, onConfirm } })
+      await settle()
+      const field = byTestId('confirm-dialog__phrase') as HTMLInputElement
+
+      await userEvent.type(field, 'acme-stor{Enter}')
+      expect(onConfirm).not.toHaveBeenCalled()
+      const message = byTestId('confirm-dialog__mismatch')!
+      expect(message.textContent?.trim()).toBe(
+        'This does not match acme-store. Type it exactly to confirm.'
+      )
+      expect(field.getAttribute('aria-invalid')).toBe('true')
+      expect(field.getAttribute('aria-describedby')).toBe(message.id)
+
+      await userEvent.type(field, 'e')
+      expect(byTestId('confirm-dialog__mismatch')).toBeNull()
+      expect(field.getAttribute('aria-invalid')).not.toBe('true')
     })
 
     it('empties the field every time the dialog opens', async () => {

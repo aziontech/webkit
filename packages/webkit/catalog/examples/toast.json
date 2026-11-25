@@ -7,7 +7,7 @@
   },
   {
    "name": "Severities",
-   "summary": "Each type (default, success, info, warning, error, loading) with its own icon, as a two-line toast (title + timestamp) matching the Figma. Loading spins.",
+   "summary": "Each type (neutral, success, info, warning, error, loading) with its own icon and copy that fits it. The triggers share one neutral look, so the row does not suggest the toast colours. Loading spins.",
    "file": "examples/toast/severities.vue"
   },
   {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, provide, ref, toRef, useAttrs, useId, watch } from 'vue'
+  import { computed, provide, toRef, useAttrs } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
+  import { useModalRoot } from '../../../composables/use-modal-root'
   import { DrawerInjectionKey, type DrawerSide, type DrawerSize } from './injection-key'
 
   defineOptions({
@@ -49,49 +49,18 @@
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
-  const uid = useId()
-  const triggerEl = ref<HTMLElement | null>(null)
-  const returnFocusEl = ref<HTMLElement | null>(null)
-  const hasDescription = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'drawer')
 
-  const openProp = computed<boolean | undefined>(() => openModel.value)
-
-  const isOpen = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value) => {
-      openModel.value = value
-    }
+  const modal = useModalRoot(openModel, {
+    defaultOpen: props.defaultOpen,
+    dismissible: () => props.dismissible
   })
-
-  const openDrawer = () => {
-    isOpen.set(true)
-  }
-
-  const closeDrawer = () => {
-    isOpen.set(false)
-  }
-
-  const dismissDrawer = () => {
-    if (!props.dismissible) return
-    isOpen.set(false)
-  }
-
-  watch(
-    () => isOpen.value,
-    (open) => {
-      if (open && typeof document !== 'undefined') {
-        returnFocusEl.value = document.activeElement as HTMLElement | null
-      }
-    },
-    { flush: 'sync' }
-  )
+  const { isOpen } = modal
 
   provide(DrawerInjectionKey, {
+    ...modal,
     testId: testId.value,
-    isOpen: computed(() => isOpen.value),
     get dismissible() {
       return props.dismissible
     },
@@ -102,20 +71,6 @@
       return props.modal
     },
     size: toRef(props, 'size'),
-    open: openDrawer,
-    close: closeDrawer,
-    dismiss: dismissDrawer,
-    titleId: `${uid}-title`,
-    descriptionId: `${uid}-description`,
-    hasDescription,
-    registerDescription: () => {
-      hasDescription.value = true
-    },
-    unregisterDescription: () => {
-      hasDescription.value = false
-    },
-    triggerEl,
-    returnFocusEl,
     get side() {
       return props.side
     }

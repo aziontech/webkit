@@ -249,7 +249,8 @@ export const competitorComparisonSection = {
 export const confirmDialog = {
   confirm: 'Confirm',
   cancel: 'Cancel',
-  typeToConfirm: 'Type {phrase} to confirm.'
+  typeToConfirm: 'Type {phrase} to confirm.',
+  phraseMismatch: 'This does not match {phrase}. Type it exactly to confirm.'
 } as const
 
 export const copyButton = {

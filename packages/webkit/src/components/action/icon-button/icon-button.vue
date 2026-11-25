@@ -79,7 +79,9 @@
     'not-data-[inert]:data-[variant=ghost]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=ghost]:after:bg-(--bg-active) not-data-[inert]:data-[variant=danger]:border ' +
     'not-data-[inert]:data-[variant=danger]:border-(--danger-border) not-data-[inert]:data-[variant=danger]:bg-(--danger) ' +
     'not-data-[inert]:data-[variant=danger]:text-(--danger-foreground) not-data-[inert]:data-[variant=danger]:before:bg-(--bg-hover) ' +
-    'not-data-[inert]:data-[variant=danger]:after:bg-(--bg-active) data-[inert]:border-transparent data-[inert]:bg-(--bg-disabled) data-[inert]:text-(--text-disabled) ' +
+    'not-data-[inert]:data-[variant=danger]:after:bg-(--bg-active) data-[inert]:border-transparent data-[inert]:bg-(--bg-disabled) ' +
+    'data-[inert]:data-[variant=ghost]:bg-transparent ' +
+    'data-[inert]:text-(--text-disabled) ' +
     'data-[inert]:before:hidden data-[inert]:after:hidden ' +
     'data-[loading]:cursor-wait ' +
     'data-[disabled]:cursor-not-allowed ' +

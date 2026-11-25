@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-md flex-col gap-(--spacing-md)">
+  <div class="flex w-full max-w-(--container-md) flex-col gap-(--spacing-md)">
     <Input
       ref="searchEl"
       aria-label="Search domains"

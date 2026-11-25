@@ -67,7 +67,7 @@
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
-- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers.
+- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers. The root is `relative`, so the hidden region is positioned against the button and never extends the page when the button sits deep in a scrolling pane.
 - Attributes: consumer `class`, `id`, `aria-describedby` and listeners land on the root `span` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

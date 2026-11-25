@@ -437,7 +437,8 @@ export const ptBR: Messages = {
   confirmDialog: {
     confirm: 'Confirmar',
     cancel: 'Cancelar',
-    typeToConfirm: 'Digite {phrase} para confirmar.'
+    typeToConfirm: 'Digite {phrase} para confirmar.',
+    phraseMismatch: 'O texto não corresponde a {phrase}. Digite exatamente para confirmar.'
   },
   consoleLayout: {
     navigation: 'Navegação principal',

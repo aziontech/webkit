@@ -437,7 +437,8 @@ export const es: Messages = {
   confirmDialog: {
     confirm: 'Confirmar',
     cancel: 'Cancelar',
-    typeToConfirm: 'Escribe {phrase} para confirmar.'
+    typeToConfirm: 'Escribe {phrase} para confirmar.',
+    phraseMismatch: 'El texto no coincide con {phrase}. Escríbelo exactamente para confirmar.'
   },
   consoleLayout: {
     navigation: 'Navegación principal',

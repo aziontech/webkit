@@ -71,7 +71,7 @@
 
 - Visible focus: the root is focusable only by script (`tabindex="-1"`, `outline-none`) and never in the tab order; the Retry button carries the `Button` focus ring.
 - Keyboard map: `Tab` reaches the Retry action in the fallback; `Enter` / `Space` runs it. No key handling of its own.
-- Focus: when the region fails while focus was inside it (or had fallen to the document body), focus moves to the fallback `Alert`, which is announced. After a retry from inside the boundary, focus moves to the boundary's root so it is not lost to the body.
+- Focus: when the region fails while focus was inside it, or focus falls to the document body or sits on a control the failure disabled, focus moves to the fallback `Alert`, which is announced; with a custom `fallback` it moves to the boundary's root, so the reader lands on the custom message and its actions. After a retry from inside the boundary, focus moves to the boundary's root so it is not lost to the body.
 - ARIA: the built-in fallback is an `Alert` with `role="alert"` (danger), so the failure is announced once when it appears. A custom fallback is responsible for its own announcement (`EmptyState` is `role="status"`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): inherited from the `alert` danger tokens.
 - No motion.
@@ -142,7 +142,7 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
+  <div class="flex w-full max-w-(--container-lg) flex-col gap-(--spacing-sm)">
     <Card title="Top services">
       <template #default>
         <ErrorBoundary
@@ -206,7 +206,7 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
+  <div class="flex w-full max-w-(--container-lg) flex-col gap-(--spacing-sm)">
     <Card title="Requests by region">
       <template #default>
         <ErrorBoundary @retry="broken = false">
