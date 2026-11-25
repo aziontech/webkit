@@ -2,7 +2,6 @@
   import Button from '@aziontech/webkit/button'
   import FieldLegend from '@aziontech/webkit/field-legend'
   import Input from '@aziontech/webkit/input'
-  import PopoverClose from '@aziontech/webkit/popover-close'
   import PopoverContent from '@aziontech/webkit/popover-content'
   import PopoverDescription from '@aziontech/webkit/popover-description'
   import PopoverFooter from '@aziontech/webkit/popover-footer'
@@ -26,11 +25,11 @@
     { value: 'id', label: 'ID' },
     { value: 'infrastructure', label: 'Infrastructure' },
     { value: 'status', label: 'Status' },
-    { value: 'last-editor', label: 'Last Editor' }
+    { value: 'last-editor', label: 'Last editor' }
   ]
   const operators = [
     { value: 'equals', label: 'Equals' },
-    { value: 'not-equals', label: 'Not Equals' }
+    { value: 'not-equals', label: 'Not equals' }
   ]
 
   function apply() {
@@ -58,57 +57,58 @@
     <PopoverContent>
       <PopoverHeader>
         <PopoverTitle>Filter</PopoverTitle>
-        <PopoverDescription>Each combination of operator can only be used once.</PopoverDescription>
-        <PopoverClose />
+        <PopoverDescription>Each field and operator pair can be used once.</PopoverDescription>
       </PopoverHeader>
 
-      <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-(--spacing-md)">
-        <FieldLegend type="label">New Filter</FieldLegend>
-        <div class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:items-start">
-          <div class="min-w-0 flex-1">
-            <SelectRoot
-              v-model="field"
-              size="small"
-              placeholder="Field"
-            >
-              <SelectTrigger aria-label="Field" />
-              <SelectContent>
-                <SelectItem
-                  v-for="option in fields"
-                  :key="option.value"
-                  :value="option.value"
-                  >{{ option.label }}</SelectItem
-                >
-              </SelectContent>
-            </SelectRoot>
+      <div class="p-(--spacing-md)">
+        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+          <FieldLegend type="label">New filter</FieldLegend>
+          <div class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:items-start">
+            <div class="min-w-0 flex-1">
+              <SelectRoot
+                v-model="field"
+                size="small"
+                placeholder="Field"
+              >
+                <SelectTrigger aria-label="Field" />
+                <SelectContent>
+                  <SelectItem
+                    v-for="option in fields"
+                    :key="option.value"
+                    :value="option.value"
+                    >{{ option.label }}</SelectItem
+                  >
+                </SelectContent>
+              </SelectRoot>
+            </div>
+            <div class="min-w-0 flex-1">
+              <SelectRoot
+                size="small"
+                v-model="operator"
+                placeholder="Operator"
+              >
+                <SelectTrigger aria-label="Operator" />
+                <SelectContent>
+                  <SelectItem
+                    v-for="option in operators"
+                    :key="option.value"
+                    :value="option.value"
+                    >{{ option.label }}</SelectItem
+                  >
+                </SelectContent>
+              </SelectRoot>
+            </div>
+            <div class="min-w-0 flex-1">
+              <Input
+                size="small"
+                v-model="value"
+                placeholder="Value"
+                aria-label="Value"
+              />
+            </div>
           </div>
-          <div class="min-w-0 flex-1">
-            <SelectRoot
-              size="small"
-              v-model="operator"
-              placeholder="Operator"
-            >
-              <SelectTrigger aria-label="Operator" />
-              <SelectContent>
-                <SelectItem
-                  v-for="option in operators"
-                  :key="option.value"
-                  :value="option.value"
-                  >{{ option.label }}</SelectItem
-                >
-              </SelectContent>
-            </SelectRoot>
-          </div>
-          <div class="min-w-0 flex-1">
-            <Input
-              size="small"
-              v-model="value"
-              placeholder="Value"
-              aria-label="Value"
-            />
-          </div>
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
 
       <PopoverFooter>
         <Button
