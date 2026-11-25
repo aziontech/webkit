@@ -105,7 +105,7 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "58.7 KB"
+    "limit": "59.15 KB"
   },
   {
     "name": "data-table-pagination",
@@ -130,7 +130,7 @@
   {
     "name": "collection-preferences",
     "path": "src/components/data/collection-preferences/collection-preferences.vue",
-    "limit": "33 KB"
+    "limit": "33.15 KB"
   },
   {
     "name": "card",
@@ -145,7 +145,7 @@
   {
     "name": "card-list",
     "path": "src/components/data/card-list/card-list.vue",
-    "limit": "8.4 KB"
+    "limit": "8.5 KB"
   },
   {
     "name": "use-collection",
@@ -200,7 +200,7 @@
   {
     "name": "doc-prose",
     "path": "src/components/docs/doc-prose/doc-prose.vue",
-    "limit": "4.7 KB"
+    "limit": "4.8 KB"
   },
   {
     "name": "doc-call-to-action",
@@ -487,7 +487,7 @@
   {
     "name": "article-body-section",
     "path": "src/components/section/article-body-section/article-body-section.vue",
-    "limit": "49.6 KB",
+    "limit": "49.7 KB",
     "entryOnly": true
   },
   {
@@ -2038,12 +2038,12 @@
   {
     "name": "radio-group-root",
     "path": "src/components/input/radio-group/radio-group.vue",
-    "limit": "3.2 KB"
+    "limit": "3.25 KB"
   },
   {
     "name": "radio-group",
     "path": "src/components/input/radio-group/index.ts",
-    "limit": "3.2 KB"
+    "limit": "3.3 KB"
   },
   {
     "name": "rating",
@@ -2053,7 +2053,7 @@
   {
     "name": "radio-group-item",
     "path": "src/components/input/radio-group/radio-group-item/radio-group-item.vue",
-    "limit": "2.35 KB"
+    "limit": "2.4 KB"
   },
   {
     "name": "checkbox",

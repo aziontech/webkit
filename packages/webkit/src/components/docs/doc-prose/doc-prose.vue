@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { useMutationObserver } from '@vueuse/core'
-  import { computed, onMounted, reactive, ref, useAttrs } from 'vue'
+  import { computed, onMounted, onScopeDispose, reactive, ref, useAttrs } from 'vue'
 
   import { useInlineCodeCopy } from '../../../composables/use-inline-code-copy'
   import { focusableTables } from './lib/focusable-tables'
@@ -20,16 +19,15 @@
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-prose')
 
+  let tableObserver: globalThis.MutationObserver | null = null
   onMounted(() => {
-    if (proseEl.value) focusableTables(proseEl.value)
+    const host = proseEl.value
+    if (!host) return
+    focusableTables(host)
+    tableObserver = new globalThis.MutationObserver(() => focusableTables(host))
+    tableObserver.observe(host, { childList: true, subtree: true })
   })
-  useMutationObserver(
-    proseEl,
-    () => {
-      if (proseEl.value) focusableTables(proseEl.value)
-    },
-    { childList: true, subtree: true }
-  )
+  onScopeDispose(() => tableObserver?.disconnect())
 
   const ROOT_CLASS =
     'w-full text-(--text-default) [&>*:first-child]:mt-0! ' +
