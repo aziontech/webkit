@@ -22,6 +22,10 @@
     const id = attrs['data-testid']
     return typeof id === 'string' ? id : undefined
   })
+
+  const CODE_CLASS =
+    'm-0 overflow-x-auto px-(--spacing-lg) pb-(--spacing-sm) text-label-code-sm text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:inset-ring-1 focus-visible:inset-ring-(--ring-color)'
 </script>
 
 <template>
@@ -41,7 +45,7 @@
     </div>
     <pre
       tabindex="0"
-      class="m-0 overflow-x-auto px-(--spacing-lg) pb-(--spacing-sm) text-label-code-sm text-(--text-default) focus-visible:outline-none focus-visible:inset-ring-1 focus-visible:inset-ring-(--ring-color)"
+      :class="CODE_CLASS"
       >{{ code }}</pre>
   </div>
 </template>
