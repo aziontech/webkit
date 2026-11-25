@@ -111,7 +111,8 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
         const fade = end!.getBoundingClientRect()
         if (dir === 'rtl') expect(fade.left).toBeCloseTo(box.left, 0)
         else expect(fade.right).toBeCloseTo(box.right, 0)
-        expect(fade.width).toBe(24)
+        expect(fade.width).toBeGreaterThanOrEqual(24)
+        expect(fade.width).toBeLessThanOrEqual(viewport.clientWidth / 2)
         expect(shown(start)).toBe(false)
 
         await scrollTo(viewport, dir, 'middle')

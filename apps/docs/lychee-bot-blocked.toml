@@ -18,4 +18,8 @@ include = [
   '^https://(www\.)?reddit\.com/',
   # Instagram redirects to its login page and answers 429 to automated clients.
   '^https://(www\.)?instagram\.com/',
+  # X answers 403 to every client that is not a signed-in browser.
+  '^https://(www\.)?x\.com/',
+  # The W3C answers 403 to automated clients on some paths (its favicon among them).
+  '^https://(www\.)?w3\.org/',
 ]
