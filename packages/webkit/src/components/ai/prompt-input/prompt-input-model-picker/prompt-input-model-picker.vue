@@ -179,9 +179,12 @@
           </span>
         </div>
         <div class="flex min-w-0 flex-1 flex-col">
-          <div class="border-b border-(--border-default) p-(--spacing-xs)">
+          <div
+            class="flex h-12 shrink-0 items-center border-b border-(--border-default) px-(--spacing-xs)"
+          >
             <Input
               v-model="query"
+              class="w-full"
               role="searchbox"
               size="small"
               :placeholder="t('promptInput.searchModels')"
@@ -249,7 +252,7 @@
           class="flex w-44 shrink-0 flex-col border-s border-(--border-default) max-sm:w-full max-sm:border-s-0 max-sm:border-t"
         >
           <div
-            class="flex min-h-12 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+            class="flex h-12 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
           >
             <span class="shrink-0 text-label-sm whitespace-nowrap text-(--text-muted)">{{
               modeLabel || t('promptInput.mode')
