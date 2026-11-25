@@ -130,27 +130,37 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import { ref } from 'vue'
+  import { ref, useId } from 'vue'
+
+  const labelId = useId()
 
   const cycle = ref('monthly')
 </script>
 
 <template>
-  <RadioGroup
-    v-model="cycle"
-    name="billing-cycle"
-    aria-label="Billing cycle"
-  >
-    <RadioGroup.Item value="monthly">Monthly</RadioGroup.Item>
-    <RadioGroup.Item value="yearly">Yearly, two months free</RadioGroup.Item>
-    <RadioGroup.Item
-      value="contract"
-      disabled
+  <Field.Set>
+    <Field.Legend
+      :id="labelId"
+      type="label"
+      >Billing cycle</Field.Legend
     >
-      Annual contract
-    </RadioGroup.Item>
-  </RadioGroup>
+    <RadioGroup
+      :aria-labelledby="labelId"
+      v-model="cycle"
+      name="billing-cycle"
+    >
+      <RadioGroup.Item value="monthly">Monthly</RadioGroup.Item>
+      <RadioGroup.Item value="yearly">Yearly, two months free</RadioGroup.Item>
+      <RadioGroup.Item
+        value="contract"
+        disabled
+      >
+        Annual contract
+      </RadioGroup.Item>
+    </RadioGroup>
+  </Field.Set>
 </template>
 ```
 
@@ -158,23 +168,33 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import { ref } from 'vue'
+  import { ref, useId } from 'vue'
+
+  const labelId = useId()
 
   const protocol = ref('https')
 </script>
 
 <template>
-  <RadioGroup
-    v-model="protocol"
-    name="protocol"
-    orientation="horizontal"
-    aria-label="Protocol"
-  >
-    <RadioGroup.Item value="http">HTTP</RadioGroup.Item>
-    <RadioGroup.Item value="https">HTTPS</RadioGroup.Item>
-    <RadioGroup.Item value="both">Both</RadioGroup.Item>
-  </RadioGroup>
+  <Field.Set>
+    <Field.Legend
+      :id="labelId"
+      type="label"
+      >Protocol</Field.Legend
+    >
+    <RadioGroup
+      :aria-labelledby="labelId"
+      v-model="protocol"
+      name="protocol"
+      orientation="horizontal"
+    >
+      <RadioGroup.Item value="http">HTTP</RadioGroup.Item>
+      <RadioGroup.Item value="https">HTTPS</RadioGroup.Item>
+      <RadioGroup.Item value="both">Both</RadioGroup.Item>
+    </RadioGroup>
+  </Field.Set>
 </template>
 ```
 
@@ -182,22 +202,32 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import { ref } from 'vue'
+  import { ref, useId } from 'vue'
+
+  const labelId = useId()
 
   const plan = ref('pro')
 </script>
 
 <template>
-  <RadioGroup
-    v-model="plan"
-    name="plan"
-    disabled
-    aria-label="Plan"
-  >
-    <RadioGroup.Item value="free">Free</RadioGroup.Item>
-    <RadioGroup.Item value="pro">Pro</RadioGroup.Item>
-    <RadioGroup.Item value="enterprise">Enterprise</RadioGroup.Item>
-  </RadioGroup>
+  <Field.Set>
+    <Field.Legend
+      :id="labelId"
+      type="label"
+      >Plan</Field.Legend
+    >
+    <RadioGroup
+      :aria-labelledby="labelId"
+      v-model="plan"
+      name="plan"
+      disabled
+    >
+      <RadioGroup.Item value="free">Free</RadioGroup.Item>
+      <RadioGroup.Item value="pro">Pro</RadioGroup.Item>
+      <RadioGroup.Item value="enterprise">Enterprise</RadioGroup.Item>
+    </RadioGroup>
+  </Field.Set>
 </template>
 ```

@@ -7,7 +7,7 @@
   },
   {
    "name": "Sizes",
-   "summary": "All size variants side by side.",
+   "summary": "The three sizes stacked: `small` (28px), `medium` (32px) and `large` (40px).",
    "file": "examples/input/sizes.vue"
   },
   {

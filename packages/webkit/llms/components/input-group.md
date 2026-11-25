@@ -79,7 +79,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ## States
 
 - Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`
-- `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`)
+- `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`); every direct child is capped at the root height (`max-h-full`), so a child left at a larger size cannot stick out of the frame
 - Only one focus indicator is visible when a descendant is focused: the group draws the single `focus-within` ring on its root, and the inner input primitives' own focus rings are suppressed via `[&_*]:focus-visible:!ring-0 [&_*]:focus-within:!ring-0` so `Button`, `Select.Trigger`, `Input` wrappers, and raw `<input>` share the group's ring instead of stacking their own on top
 - `data-invalid` mirrors the `invalid` prop; `aria-invalid` lands on the controls inside, not on the root
 - `data-required` mirrors the `required` prop (no `aria-required` on the group root)
