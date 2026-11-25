@@ -1,8 +1,22 @@
+import { existsSync, mkdirSync, renameSync, rmSync } from 'node:fs'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import type { Plugin } from 'vite'
 
 const CHUNK_GRAPH_FILE = '.vite/chunk-graph.json'
+
+export const BUILD_DIR = fileURLToPath(new URL('../.build', import.meta.url))
+export const DIST_DIR = fileURLToPath(new URL('../dist', import.meta.url))
+
+export function moveBuildManifests(dist = DIST_DIR, buildDir = BUILD_DIR): void {
+  const graph = join(dist, CHUNK_GRAPH_FILE)
+  if (existsSync(graph)) {
+    mkdirSync(buildDir, { recursive: true })
+    renameSync(graph, join(buildDir, 'chunk-graph.json'))
+  }
+  rmSync(join(dist, '.vite'), { recursive: true, force: true })
+}
 
 const CLIENT_ENTRY = fileURLToPath(new URL('../src/main.ts', import.meta.url))
 const RUNTIME_ANCHOR = 'virtual:docs-bundler-runtime'
