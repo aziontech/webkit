@@ -496,7 +496,7 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
               :loading="loading"
             >
               <template #cell-ruleId="{ value }">
-                <span class="min-w-0 truncate font-code tabular-nums">{{ value }}</span>
+                <span class="min-w-0 truncate tabular-nums">{{ value }}</span>
               </template>
               <template #cell-hits="{ value }">
                 <span class="tabular-nums">{{ formatHits(value) }}</span>
@@ -722,7 +722,7 @@ export const sampleMatches: WafTuningMatch[] = [
                 :key="row.ruleId"
                 class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
               >
-                <span class="shrink-0 font-code text-(--text-default)">{{ row.ruleId }}</span>
+                <span class="shrink-0 text-(--text-default)">{{ row.ruleId }}</span>
                 <span class="min-w-0 truncate"
                   >{{ row.threat }} on {{ row.paths.length }}
                   {{ row.paths.length === 1 ? 'path' : 'paths' }}</span

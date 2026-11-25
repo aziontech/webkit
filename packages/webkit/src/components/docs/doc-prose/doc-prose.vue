@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, reactive, ref, useAttrs } from 'vue'
+  import { computed, onMounted, onScopeDispose, reactive, ref, useAttrs } from 'vue'
 
   import { useInlineCodeCopy } from '../../../composables/use-inline-code-copy'
+  import { focusableTables } from './lib/focusable-tables'
   import DocProseCopyTip from './parts/doc-prose-copy-tip.vue'
 
   defineOptions({ name: 'DocProse', inheritAttrs: false })
@@ -17,6 +18,16 @@
   const copy = reactive(useInlineCodeCopy(proseEl))
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-prose')
+
+  let tableObserver: globalThis.MutationObserver | null = null
+  onMounted(() => {
+    const host = proseEl.value
+    if (!host) return
+    focusableTables(host)
+    tableObserver = new globalThis.MutationObserver(() => focusableTables(host))
+    tableObserver.observe(host, { childList: true, subtree: true })
+  })
+  onScopeDispose(() => tableObserver?.disconnect())
 
   const ROOT_CLASS =
     'w-full text-(--text-default) [&>*:first-child]:mt-0! ' +
@@ -48,6 +59,8 @@
     '[&_pre:not([data-doc-chrome],[data-doc-chrome]_*)]:mt-(--spacing-md) [&_:is(th,td):not([data-doc-chrome],[data-doc-chrome]_*)]:text-body-sm ' +
     '[&_td:not([data-doc-chrome],[data-doc-chrome]_*)]:text-(--text-muted) [&_table:not([data-doc-chrome],[data-doc-chrome]_*)]:w-max ' +
     '[&_table:not([data-doc-chrome],[data-doc-chrome]_*)]:max-w-full [&_table:not([data-doc-chrome],[data-doc-chrome]_*)]:overflow-x-auto ' +
+    '[&_table:not([data-doc-chrome],[data-doc-chrome]_*)]:outline-none [&_table:focus-visible:not([data-doc-chrome],[data-doc-chrome]_*)]:ring-2 ' +
+    '[&_table:focus-visible:not([data-doc-chrome],[data-doc-chrome]_*)]:ring-(--ring-color) ' +
     '[&_table:not([data-doc-chrome],[data-doc-chrome]_*)]:border-collapse [&_:is(th,td):not([data-doc-chrome],[data-doc-chrome]_*)]:border-b ' +
     '[&_:is(th,td):not([data-doc-chrome],[data-doc-chrome]_*)]:border-(--border-default) [&_:is(th,td):not([data-doc-chrome],[data-doc-chrome]_*)]:px-(--spacing-sm) ' +
     '[&_:is(th,td):not([data-doc-chrome],[data-doc-chrome]_*)]:py-(--spacing-xs) [&_:is(th,td):not([data-doc-chrome],[data-doc-chrome]_*)]:text-start ' +

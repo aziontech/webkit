@@ -20,15 +20,12 @@
     invalid?: boolean
     /** Writes the text in the code font through the Textarea monospace look. */
     monospace?: boolean
-    /** Writes the text in the code font family only. */
-    codeFont?: boolean
   }
 
   withDefaults(defineProps<PastePanelProps>(), {
     applyDisabled: false,
     invalid: false,
-    monospace: false,
-    codeFont: false
+    monospace: false
   })
 
   const text = defineModel<string>({ default: '' })
@@ -51,17 +48,15 @@
   >
     <Field>
       <Field.Label :for="id">{{ label }}</Field.Label>
-      <div :class="codeFont ? '[&_textarea]:font-code' : undefined">
-        <Textarea
-          :id="id"
-          v-model="text"
-          :rows="rows"
-          :monospace="monospace"
-          spellcheck="false"
-          :invalid="invalid"
-          :aria-describedby="`${id}-report`"
-        />
-      </div>
+      <Textarea
+        :id="id"
+        v-model="text"
+        :rows="rows"
+        :monospace="monospace"
+        spellcheck="false"
+        :invalid="invalid"
+        :aria-describedby="`${id}-report`"
+      />
     </Field>
     <div
       :id="`${id}-report`"

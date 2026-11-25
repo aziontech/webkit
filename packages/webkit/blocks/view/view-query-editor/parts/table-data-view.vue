@@ -195,7 +195,7 @@
         >
           <span
             :data-null="isNull(value) || null"
-            class="truncate font-code text-label-code-sm text-(--text-default) data-null:italic data-null:text-(--text-muted)"
+            class="truncate text-label-code-sm text-(--text-default) data-null:italic data-null:text-(--text-muted)"
             >{{ displayCell(value) }}</span
           >
         </template>

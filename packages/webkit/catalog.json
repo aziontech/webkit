@@ -691,6 +691,12 @@
    "--text-heading-3xl-line-height",
    "--text-heading-3xl-text-wrap-style",
    "--text-heading-3xl-word-spacing",
+   "--text-heading-code-md-font-family",
+   "--text-heading-code-md-font-size",
+   "--text-heading-code-md-font-variant-numeric",
+   "--text-heading-code-md-font-weight",
+   "--text-heading-code-md-letter-spacing",
+   "--text-heading-code-md-line-height",
    "--text-heading-lg-font-size",
    "--text-heading-lg-font-weight",
    "--text-heading-lg-letter-spacing",
@@ -840,6 +846,7 @@
    "text-heading-2xl",
    "text-heading-2xs",
    "text-heading-3xl",
+   "text-heading-code-md",
    "text-heading-lg",
    "text-heading-md",
    "text-heading-sm",
@@ -1584,6 +1591,12 @@
     "--text-heading-3xl-line-height",
     "--text-heading-3xl-text-wrap-style",
     "--text-heading-3xl-word-spacing",
+    "--text-heading-code-md-font-family",
+    "--text-heading-code-md-font-size",
+    "--text-heading-code-md-font-variant-numeric",
+    "--text-heading-code-md-font-weight",
+    "--text-heading-code-md-letter-spacing",
+    "--text-heading-code-md-line-height",
     "--text-heading-lg-font-size",
     "--text-heading-lg-font-weight",
     "--text-heading-lg-letter-spacing",
@@ -3466,6 +3479,19 @@
      "letter-spacing": "0.025rem"
     },
     "purpose": "A large monospace label."
+   },
+   "text-heading-code-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "font-family": "'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+     "font-size": "1.5rem",
+     "line-height": "1.375",
+     "font-weight": "400",
+     "letter-spacing": "0",
+     "font-variant-numeric": "tabular-nums"
+    },
+    "purpose": "A 24px monospace code the reader compares or copies by eye, such as a device code."
    },
    "text-body-lg": {
     "group": "typography",
@@ -11944,7 +11970,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
+     "doc": "opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as label and value lines instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
     },
     {
      "name": "wrapLines",
@@ -17146,6 +17172,13 @@
      "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
     },
     {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the selection but blocks changing it: the radios stay focusable and keep their selected look."
+    },
+    {
      "name": "invalid",
      "type": "boolean",
      "default": "false",
@@ -17242,6 +17275,13 @@
      "default": "false",
      "required": "false",
      "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the selection but blocks changing it: the radios stay focusable and keep their selected look."
     },
     {
      "name": "invalid",
@@ -17552,6 +17592,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables interaction and applies the disabled tokens."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the value but blocks changing it: the switch stays focusable and keeps its on or off look."
     },
     {
      "name": "invalid",

@@ -2475,15 +2475,12 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
     invalid?: boolean
     /** Writes the text in the code font through the Textarea monospace look. */
     monospace?: boolean
-    /** Writes the text in the code font family only. */
-    codeFont?: boolean
   }
 
   withDefaults(defineProps<PastePanelProps>(), {
     applyDisabled: false,
     invalid: false,
-    monospace: false,
-    codeFont: false
+    monospace: false
   })
 
   const text = defineModel<string>({ default: '' })
@@ -2506,17 +2503,15 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
   >
     <Field>
       <Field.Label :for="id">{{ label }}</Field.Label>
-      <div :class="codeFont ? '[&_textarea]:font-code' : undefined">
-        <Textarea
-          :id="id"
-          v-model="text"
-          :rows="rows"
-          :monospace="monospace"
-          spellcheck="false"
-          :invalid="invalid"
-          :aria-describedby="`${id}-report`"
-        />
-      </div>
+      <Textarea
+        :id="id"
+        v-model="text"
+        :rows="rows"
+        :monospace="monospace"
+        spellcheck="false"
+        :invalid="invalid"
+        :aria-describedby="`${id}-report`"
+      />
     </Field>
     <div
       :id="`${id}-report`"
@@ -2734,7 +2729,7 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
           v-model="pasteText"
           :label="`Paste one ${copy.noun} per line`"
           :rows="7"
-          code-font
+          monospace
           :apply-label="`Add ${found}`"
           apply-testid="network-list-paste-apply"
           :apply-disabled="!pasteReport.lines.length"

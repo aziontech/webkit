@@ -104,7 +104,7 @@
                 :key="row.ruleId"
                 class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
               >
-                <span class="shrink-0 font-code text-(--text-default)">{{ row.ruleId }}</span>
+                <span class="shrink-0 text-(--text-default)">{{ row.ruleId }}</span>
                 <span class="min-w-0 truncate"
                   >{{ row.threat }} on {{ row.paths.length }}
                   {{ row.paths.length === 1 ? 'path' : 'paths' }}</span

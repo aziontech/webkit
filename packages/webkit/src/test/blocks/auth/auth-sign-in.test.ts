@@ -197,7 +197,7 @@ describe('auth/auth-sign-in#DeviceAuthorization', () => {
   it('shows the code to compare with the request details', async () => {
     const view = render(DeviceAuthorization)
 
-    expect(view.getByText('WDJB-MJHT')).toBeTruthy()
+    expect(view.getByText('WDJB-MJHT').classList.contains('text-heading-code-md')).toBe(true)
     expect(view.getByRole('list', { name: 'Acme CLI will be able to' })).toBeTruthy()
     expect(view.getByText('203.0.113.24')).toBeTruthy()
     await expectNoA11yViolations(view.container)

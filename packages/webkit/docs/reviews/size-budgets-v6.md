@@ -2819,3 +2819,19 @@ Budget-raise: copy-text 10.8 KB → 10.85 KB (measured 10.81 KB): the wrapLines 
 Budget-raise: chat-message 20.6 KB → 20.8 KB (measured 20.79 KB): inside a Conversation, ChatMessage.Actions renders its row only when it nears the log's view, through one IntersectionObserver (A6-270); on the long-thread block it cuts the mounted nodes on a phone from 895 to 541 and the blocking time by about a third. Shrunk first: a direct observer in place of VueUse's helper saved 0.2 KB.
 
 Budget-raise: chat-message-actions 14.5 KB → 14.7 KB (measured 14.68 KB): the same lazy action row inside a Conversation (A6-270); a direct IntersectionObserver in place of VueUse's helper kept the growth to 0.2 KB.
+
+Budget-raise: data-table 58.7 KB → 59.25 KB (measured 59.19 KB): a roving-row table takes the links and buttons of every row but the active one out of the Tab order once focus enters it, so a table is one Tab stop (audit-6 A6-253); the row sync, its focus listeners and MutationObserver are the growth.
+
+Budget-raise: collection-preferences 33 KB → 33.15 KB (measured 33.10 KB): it renders DataTable and RadioGroup, which grew for the one-Tab-stop table (A6-253) and the new readonly state (A6-146).
+
+Budget-raise: card-list 8.4 KB → 8.5 KB (measured 8.48 KB): it renders RadioGroup, which gained the readonly state (A6-146).
+
+Budget-raise: radio-group-root 3.2 KB → 3.25 KB (measured 3.24 KB): RadioGroup gains readonly (focusable, keeps its selected look, cancels every change), so a saving or locked form reads instead of looking disabled (A6-146).
+
+Budget-raise: radio-group 3.2 KB → 3.3 KB (measured 3.27 KB): the same readonly state as radio-group-root (A6-146).
+
+Budget-raise: radio-group-item 2.35 KB → 2.4 KB (measured 2.37 KB): the item cancels a click while its group is readonly and drops the hover feedback (A6-146).
+
+Budget-raise: doc-prose 4.7 KB → 4.8 KB (measured 4.77 KB): DocProse gives every prose table tabindex 0 after mount and when its content changes, so a wide table scrolls from the keyboard for every consumer (X1-4).
+
+Budget-raise: article-body-section 49.6 KB → 49.7 KB (measured 49.69 KB): it renders DocProse, whose tables are now focusable (X1-4).

@@ -459,3 +459,10 @@ test('status-fill-as-text stays silent on the mark, foreground and text roles', 
     assert.ok(!ids(content).includes('status-fill-as-text'), `expected silence for: ${content}`)
   }
 })
+
+test('font-family-raw catches the font-code and font-display utilities, which the theme never generates', () => {
+  assert.ok(ids('class="w-full font-code"').includes('font-family-raw'))
+  assert.ok(ids('class="font-display text-heading-md"').includes('font-family-raw'))
+  assert.ok(!ids('font-family: var(--font-code);').includes('font-family-raw'))
+  assert.ok(!ids('class="text-label-code-sm"').includes('font-family-raw'))
+})

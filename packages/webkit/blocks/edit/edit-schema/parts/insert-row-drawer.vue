@@ -94,12 +94,8 @@
               :disabled="isAuto(column)"
             >
               <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                <Field.Label
-                  ><span class="font-code">{{ column.name }}</span></Field.Label
-                >
-                <span class="shrink-0 font-code text-body-xs text-(--text-muted)">{{
-                  column.type
-                }}</span>
+                <Field.Label>{{ column.name }}</Field.Label>
+                <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
               </div>
               <Input
                 v-model="rowForm[column.name]"

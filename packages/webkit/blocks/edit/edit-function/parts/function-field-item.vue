@@ -66,7 +66,7 @@
             <Item.Title class="min-w-0">
               <span
                 :data-empty="!field.key || null"
-                class="truncate font-code text-label-code-sm data-empty:text-(--text-muted)"
+                class="truncate text-label-code-sm data-empty:text-(--text-muted)"
               >
                 {{ field.key || 'Unnamed field' }}
               </span>

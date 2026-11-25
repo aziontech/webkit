@@ -455,6 +455,27 @@ describe('DataTable', () => {
       expect(onRowClick.mock.calls[0]![1]).toEqual(rows[2])
     })
 
+    it('once focused, keeps the links and buttons of the other rows out of the Tab order, so a table is one stop', async () => {
+      const Host = defineComponent({
+        components: { DataTable },
+        setup: () => ({ rows, columns, onRowClick: vi.fn() }),
+        template: `<DataTable :data="rows" :columns="columns" row-key="id" @row-click="onRowClick">
+            <template #cell-name="{ value }"><a href="#row">{{ value }}</a><button type="button">Copy</button></template>
+          </DataTable>`
+      })
+      render(Host)
+      await nextTick()
+      const stops = (row: HTMLElement) =>
+        Array.from(row.querySelectorAll<HTMLElement>('a, button')).map((el) => el.tabIndex)
+      bodyRows()[0]!.focus()
+      await waitFor(() => expect(stops(bodyRows()[1]!)).toEqual([-1, -1]))
+      expect(stops(bodyRows()[0]!)).toEqual([0, 0])
+      expect(stops(bodyRows()[2]!)).toEqual([-1, -1])
+      key(bodyRows()[0]!, { key: 'ArrowDown' })
+      await waitFor(() => expect(stops(bodyRows()[1]!)).toEqual([0, 0]))
+      expect(stops(bodyRows()[0]!)).toEqual([-1, -1])
+    })
+
     it('selects on Space and asks to remove on Delete, never with a modifier', async () => {
       const onRowRemove = vi.fn()
       const selected = ref<string[]>([])
@@ -748,6 +769,16 @@ describe('DataTable', () => {
     })
   })
 
+  describe('first render', () => {
+    it('shows rows it has at mount at once, so server-rendered rows never fade out and back', async () => {
+      const view = render(DataTable, { props: { data: rows, columns } })
+      const body = view.getAllByRole('rowgroup').at(-1)!
+      expect(body.classList.contains('opacity-0')).toBe(false)
+      await nextTick()
+      expect(body.classList.contains('opacity-0')).toBe(false)
+    })
+  })
+
   describe('stacked rows in a narrow box', () => {
     const mountIn = (width: number, props: Record<string, unknown> = {}) => {
       const host = document.createElement('div')
@@ -773,6 +804,10 @@ describe('DataTable', () => {
       expect(labels).toHaveLength(rows.length)
       expect(labels[0]?.textContent).toBe('Status')
       expect(labels[0]?.getAttribute('aria-hidden')).toBe('true')
+      for (const row of view.getAllByRole('row').slice(1)) {
+        expect(row.classList.contains('border!')).toBe(false)
+        expect(row.classList.contains('rounded-(--shape-control)')).toBe(false)
+      }
       expect(view.getAllByRole('columnheader').map((cell) => cell.textContent?.trim())).toEqual([
         'Name',
         'Status'

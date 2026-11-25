@@ -300,7 +300,7 @@
                       class="flex flex-wrap items-center gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs) first:border-t-0"
                     >
                       <span class="flex min-w-0 flex-[1_1_10rem] flex-col">
-                        <span class="truncate font-code text-label-code-sm text-(--text-default)">{{
+                        <span class="truncate text-label-code-sm text-(--text-default)">{{
                           header
                         }}</span>
                         <span class="truncate text-body-xs text-(--text-muted)"
@@ -328,9 +328,7 @@
                                 :value="column.name"
                               >
                                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                  <span class="font-code text-label-code-sm">{{
-                                    column.name
-                                  }}</span>
+                                  <span class="text-label-code-sm">{{ column.name }}</span>
                                   <span class="truncate text-body-xs text-(--text-muted)"
                                     >{{ column.type
                                     }}{{

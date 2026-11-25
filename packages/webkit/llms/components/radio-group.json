@@ -84,6 +84,13 @@
    "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
   },
   {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the selection but blocks changing it: the radios stay focusable and keep their selected look."
+  },
+  {
    "name": "invalid",
    "type": "boolean",
    "default": "false",

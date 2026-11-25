@@ -142,7 +142,7 @@
               >
                 <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                   <div class="flex w-full flex-col gap-(--spacing-xs)">
-                    <div class="contents font-code">
+                    <div class="contents">
                       <Input
                         v-model="form.name"
                         size="large"

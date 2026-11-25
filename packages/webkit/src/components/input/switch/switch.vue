@@ -19,6 +19,8 @@
     autofocus?: boolean
     /** Disables interaction and applies the disabled tokens. */
     disabled?: boolean
+    /** Shows the value but blocks changing it: the switch stays focusable and keeps its on or off look. */
+    readonly?: boolean
     /** Marks the control invalid: sets aria-invalid and the danger border. An enclosing Field's invalid sets it too. */
     invalid?: boolean
     /** Form field name: while on, a hidden input submits `on` under this name, like a native checkbox. */
@@ -28,6 +30,7 @@
     variant: 'default',
     autofocus: false,
     disabled: false,
+    readonly: false,
     invalid: false,
     name: ''
   })
@@ -58,7 +61,7 @@
   })
 
   function onToggle() {
-    if (isDisabled.value) return
+    if (isDisabled.value || props.readonly) return
     model.value = !isChecked.value
   }
 
@@ -77,6 +80,7 @@
     'data-[invalid]:not-data-[checked]:border-(--danger-border) ' +
     'data-[checked]:border-transparent data-[checked]:bg-(--accent) ' +
     'forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] ' +
+    'data-[readonly]:cursor-default data-[readonly]:hover:shadow-none ' +
     'disabled:cursor-not-allowed disabled:border-(--border-input) disabled:bg-(--bg-disabled) disabled:hover:shadow-none ' +
     'disabled:data-[checked]:border-(--border-input) disabled:data-[checked]:bg-(--accent-mask) ' +
     'after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
@@ -103,11 +107,13 @@
     :aria-required="isRequired || undefined"
     :aria-checked="isChecked"
     :aria-disabled="isDisabled || undefined"
+    :aria-readonly="readonly || undefined"
     :disabled="isDisabled"
     :data-testid="testId"
     :data-variant="variant"
     :data-checked="isChecked || null"
     :data-disabled="isDisabled || null"
+    :data-readonly="readonly || null"
     :data-invalid="isInvalid || null"
     :class="[ROOT_CLASS, attrs.class]"
     v-bind="passthroughAttrs"

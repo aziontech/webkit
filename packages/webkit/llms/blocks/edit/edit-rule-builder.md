@@ -1247,7 +1247,7 @@ export const criteriaErrorsOf = (form: RuleForm) =>
       aria-label="Criteria"
     >
       <template #cell-variable="{ value, update, invalid }">
-        <div class="contents font-code">
+        <div class="contents">
           <Combobox
             :model-value="value"
             :options="variablesForPhase"

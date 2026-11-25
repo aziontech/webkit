@@ -178,7 +178,7 @@
               description="The hosts and ports of the Kafka cluster, separated by a comma and no space."
               variant="stacked"
             >
-              <div class="flex w-full font-code">
+              <div class="flex w-full">
                 <Textarea
                   id="data-stream-bootstrapServers"
                   v-model="form.bootstrapServers"

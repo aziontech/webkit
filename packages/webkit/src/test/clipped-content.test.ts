@@ -54,7 +54,9 @@ describe('clipped content', () => {
     const headers = view.container.querySelectorAll<HTMLElement>('[data-slot="field-header"]')
     expect(headers.length).toBeGreaterThan(0)
     for (const header of headers) {
-      const key = header.querySelector<HTMLElement>('[data-slot="item-content"] .font-code')!
+      const key = header.querySelector<HTMLElement>(
+        '[data-slot="item-content"] .text-label-code-sm'
+      )!
       expect(key.textContent?.trim()).not.toBe('')
       expect(key.getBoundingClientRect().width).toBeGreaterThan(0)
       expect(key.scrollWidth).toBeLessThanOrEqual(key.clientWidth + 1)

@@ -287,12 +287,12 @@ describe('tap targets on a coarse pointer (styled)', () => {
       expect(item.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
     })
 
-    it('ConsoleShowcaseSection keeps a large, fluid view switcher on a phone', async () => {
+    it('ConsoleShowcaseSection keeps a large view switcher in even columns on a phone', async () => {
       await touch()
       const view = await mount(ConsoleShowcaseDefault)
       const group = view.container.querySelector<HTMLElement>('[role="radiogroup"]')!
       expect(group.dataset['size']).toBe('large')
-      expect(group).toHaveAttribute('data-fluid')
+      expect(group).toHaveAttribute('data-columns')
       const option = group.querySelector<HTMLElement>('[role="radio"]')!
       expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(28)
       expect(hitSpan(option, 'y')).toBeGreaterThanOrEqual(44)

@@ -655,6 +655,12 @@
   --text-label-code-lg-line-height: 1;
   --text-label-code-lg-font-weight: 400;
   --text-label-code-lg-letter-spacing: 0.025rem;
+  --text-heading-code-md-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-heading-code-md-font-size: 1.5rem;
+  --text-heading-code-md-line-height: 1.375;
+  --text-heading-code-md-font-weight: 400;
+  --text-heading-code-md-letter-spacing: 0;
+  --text-heading-code-md-font-variant-numeric: tabular-nums;
   --text-body-lg-text-wrap-style: pretty;
   --text-body-lg-font-size: 1rem;
   --text-body-lg-font-weight: 400;
@@ -1495,6 +1501,15 @@
   line-height: var(--text-label-code-lg-line-height);
   font-weight: var(--text-label-code-lg-font-weight);
   letter-spacing: var(--text-label-code-lg-letter-spacing);
+}
+
+@utility text-heading-code-md {
+  font-family: var(--text-heading-code-md-font-family);
+  font-size: var(--text-heading-code-md-font-size);
+  line-height: var(--text-heading-code-md-line-height);
+  font-weight: var(--text-heading-code-md-font-weight);
+  letter-spacing: var(--text-heading-code-md-letter-spacing);
+  font-variant-numeric: var(--text-heading-code-md-font-variant-numeric);
 }
 
 @utility text-body-lg {
