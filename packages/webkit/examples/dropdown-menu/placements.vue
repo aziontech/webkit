@@ -20,12 +20,12 @@
       </DropdownMenuTrigger>
       <DropdownMenuGroup>
         <DropdownMenuItem
-          value="a"
-          label="Option A"
+          value="duplicate"
+          label="Duplicate"
         />
         <DropdownMenuItem
-          value="b"
-          label="Option B"
+          value="rename"
+          label="Rename"
         />
       </DropdownMenuGroup>
     </DropdownMenuRoot>
@@ -42,12 +42,12 @@
       </DropdownMenuTrigger>
       <DropdownMenuGroup>
         <DropdownMenuItem
-          value="a"
-          label="Option A"
+          value="duplicate"
+          label="Duplicate"
         />
         <DropdownMenuItem
-          value="b"
-          label="Option B"
+          value="rename"
+          label="Rename"
         />
       </DropdownMenuGroup>
     </DropdownMenuRoot>
@@ -64,12 +64,12 @@
       </DropdownMenuTrigger>
       <DropdownMenuGroup>
         <DropdownMenuItem
-          value="a"
-          label="Option A"
+          value="duplicate"
+          label="Duplicate"
         />
         <DropdownMenuItem
-          value="b"
-          label="Option B"
+          value="rename"
+          label="Rename"
         />
       </DropdownMenuGroup>
     </DropdownMenuRoot>
@@ -86,12 +86,12 @@
       </DropdownMenuTrigger>
       <DropdownMenuGroup>
         <DropdownMenuItem
-          value="a"
-          label="Option A"
+          value="duplicate"
+          label="Duplicate"
         />
         <DropdownMenuItem
-          value="b"
-          label="Option B"
+          value="rename"
+          label="Rename"
         />
       </DropdownMenuGroup>
     </DropdownMenuRoot>

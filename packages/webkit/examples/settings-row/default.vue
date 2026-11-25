@@ -14,14 +14,14 @@
     <template #default>
       <Item.List>
         <SettingsRow
-          title="Company Name"
+          title="Company name"
           description="The legal entity that owns this account."
         >
           <Input
             v-model="form.companyName"
             size="large"
             class="w-full"
-            aria-label="Company Name"
+            aria-label="Company name"
           />
         </SettingsRow>
         <SettingsRow

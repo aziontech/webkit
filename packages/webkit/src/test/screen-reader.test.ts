@@ -106,11 +106,11 @@ describe('screen-reader smoke · overlays', () => {
   it('DropdownMenu', async () => {
     const snapshot = await openAndRead(
       DropdownMenuDefault,
-      () => button('Open menu'),
+      () => button('Account menu'),
       '[role="menu"]'
     )
     expect(snapshot).toMatchInlineSnapshot(`
-      "- menu "Open menu":
+      "- menu "Account menu":
         - group:
           - menuitem "Profile"
           - menuitem "Settings"

@@ -503,8 +503,7 @@ describe('DropdownMenu', () => {
     // ---- Story smoke: composed stories render through the real compound -------
     it('renders the Default story (closed) with its trigger', () => {
       const { getByRole } = render(Default)
-      // Story trigger wraps an IconButton with aria-label "Open menu".
-      expect(getByRole('button', { name: 'Open menu' })).toBeTruthy()
+      expect(getByRole('button', { name: 'Account menu' })).toBeTruthy()
     })
 
     it('renders the Groups story and opens its two labeled groups', async () => {

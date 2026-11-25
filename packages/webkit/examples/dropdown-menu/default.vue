@@ -11,8 +11,8 @@
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"
-        icon="az az-plus"
-        aria-label="Open menu"
+        icon="az az-user"
+        aria-label="Account menu"
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup>

@@ -45,3 +45,38 @@ describe('layout example copy', () => {
     }
   )
 })
+
+const sentenceCase = import.meta.glob<{ default: Component }>(
+  [
+    '../../examples/page-header/default.vue',
+    '../../examples/tabs/default.vue',
+    '../../examples/split-stack/default.vue',
+    '../../examples/split-stack/sticky.vue',
+    '../../examples/settings-row/default.vue',
+    '../../examples/dropdown-menu/placements.vue'
+  ],
+  { eager: true }
+)
+
+describe('example labels and headings', () => {
+  it.each(Object.entries(sentenceCase))(
+    '%s writes them in sentence case, each one distinct',
+    (_, mod) => {
+      const { container, unmount } = render(mod.default)
+      const names = Array.from(
+        (container as HTMLElement).querySelectorAll<HTMLElement>(
+          'button, [role="tab"], h1, h2, h3, h4, label, [data-slot="label"]'
+        )
+      )
+        .map((el) => el.innerText.trim())
+        .filter(Boolean)
+      for (const name of names) expect(name).not.toMatch(/\b[A-Z][a-z]+ [A-Z][a-z]+/)
+      const tabs = Array.from(container.querySelectorAll('[role="tab"]')).map((el) =>
+        el.textContent?.trim()
+      )
+      expect(new Set(tabs).size).toBe(tabs.length)
+      expect((container as HTMLElement).innerText).not.toMatch(/Option [A-Z]\b|Tab Item/)
+      unmount()
+    }
+  )
+})
