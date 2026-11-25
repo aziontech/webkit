@@ -150,6 +150,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The page `h1` is visually hidden (`Set up your organization`); each step heading is the Wizard's `h2`, and the Wizard moves focus to it on every step change.
+- A Next that cannot advance (a required field empty, no plan picked) moves focus to the first invalid field and scrolls it into view.
 - The fields sit in a `fieldset` with a hidden legend.
 - The Wizard's `Step 1 of 3` line is a polite live region, so the step change is announced.
 
