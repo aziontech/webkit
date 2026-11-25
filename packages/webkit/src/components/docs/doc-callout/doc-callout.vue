@@ -44,6 +44,12 @@
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-callout')
 
+  const ROOT_CLASS =
+    'bg-(--bg-surface)! data-[neutral]:border-(--border-default)! data-[neutral]:[&_i[aria-hidden=true]]:text-(--primary)! ' +
+    'not-data-[neutral]:data-[severity=info]:[&_i[aria-hidden=true]]:text-(--info-mark)! ' +
+    'data-[severity=success]:[&_i[aria-hidden=true]]:text-(--success-mark)! data-[severity=warning]:[&_i[aria-hidden=true]]:text-(--warning-mark)! ' +
+    'data-[severity=danger]:[&_i[aria-hidden=true]]:text-(--danger-mark)!'
+
   const COPY_CLASS =
     'text-body-sm tracking-normal text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) ' +
     '[&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code:not(pre_*,[data-testid])]:rounded-(--shape-control) ' +
@@ -69,7 +75,7 @@
     :severity="preset.severity"
     :icon="preset.icon"
     :data-testid="testId"
-    class="bg-(--bg-surface)! data-[neutral]:border-(--border-default)! data-[neutral]:[&_i[aria-hidden=true]]:text-(--primary)! not-data-[neutral]:data-[severity=info]:[&_i[aria-hidden=true]]:text-(--info-mark)! data-[severity=success]:[&_i[aria-hidden=true]]:text-(--success-mark)! data-[severity=warning]:[&_i[aria-hidden=true]]:text-(--warning-mark)! data-[severity=danger]:[&_i[aria-hidden=true]]:text-(--danger-mark)!"
+    :class="ROOT_CLASS"
   >
     <div
       ref="copyEl"
