@@ -83,6 +83,19 @@ describe('marketing element layouts (styled)', () => {
     expect(getComputedStyle(page).maskImage).toContain('linear-gradient')
   })
 
+  it('the trace scene gives its phone height to the spans, not the search and view switcher', async () => {
+    const root = await mountAt(TraceSceneDefault, 390)
+    const trace = await vi.waitFor(() => {
+      const found = root.querySelector(
+        '[data-testid="console-trace-scene__page"] [data-testid="trace"]'
+      )
+      expect(found).not.toBeNull()
+      return found!
+    })
+    expect(visible(trace.querySelector('[data-testid="trace__search"]')!)).toBe(false)
+    expect(visible(trace.querySelector('[data-testid="trace__view"]')!)).toBe(false)
+  })
+
   it('the application scene keeps its save bar off the rows on a phone', async () => {
     const root = await mountAt(ApplicationSceneBand, 390)
     await vi.waitFor(() =>
