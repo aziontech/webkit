@@ -381,12 +381,14 @@
       <RouterView name="dialog" />
     </ConsoleLayoutRoot>
     <DemoBar />
-    <p
-      class="sr-only"
-      aria-live="polite"
-    >
-      {{ announcement }}
-    </p>
+    <div class="relative overflow-hidden">
+      <p
+        class="sr-only"
+        aria-live="polite"
+      >
+        {{ announcement }}
+      </p>
+    </div>
     <Toaster position="bottom-end" />
   </ConfigProvider>
 </template>
