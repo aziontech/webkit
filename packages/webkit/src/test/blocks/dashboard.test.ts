@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 
 import Analytics from '../../../blocks/dashboard/dashboard-analytics/dashboard-analytics.vue'
 import AnalyticsMetrics from '../../../blocks/dashboard/dashboard-analytics/variants/metrics.vue'
+import AnalyticsMetricsOverview from '../../../blocks/dashboard/dashboard-analytics/variants/metrics-overview.vue'
 import AnalyticsUsage from '../../../blocks/dashboard/dashboard-analytics/variants/usage.vue'
 import Composition from '../../../blocks/dashboard/dashboard-breakdown/dashboard-breakdown.vue'
 import CompositionEmpty from '../../../blocks/dashboard/dashboard-breakdown/variants/empty.vue'
@@ -206,6 +207,28 @@ describe('dashboard/dashboard-analytics data shapes', () => {
         'Status 4xx': 'true',
         'Status 5xx': 'true'
       })
+    })
+  })
+
+  it.each([
+    ['Metrics', AnalyticsMetrics],
+    ['Metrics overview', AnalyticsMetricsOverview]
+  ])('offers the same Errors view of Status codes on the %s page', async (_, page) => {
+    const view = render(page)
+    const toggle = await waitFor(() =>
+      view.getByRole('radiogroup', { name: 'Chart form for Status codes' })
+    )
+    await fireEvent.click(within(toggle).getByRole('radio', { name: 'Errors' }))
+    const card = toggle.closest('[data-testid="chart-card"]') as HTMLElement
+    await waitFor(() => {
+      const pressed = Object.fromEntries(
+        Array.from(card.querySelectorAll('[data-testid="chart-legend__item"]')).map((item) => [
+          item.querySelectorAll('span')[1]?.textContent?.trim(),
+          item.getAttribute('aria-pressed')
+        ])
+      )
+      expect(pressed['Status 2xx']).toBe('false')
+      expect(pressed['Status 5xx']).toBe('true')
     })
   })
 
