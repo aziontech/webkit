@@ -2,7 +2,7 @@
 name: webkit-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-11-20
+last_updated: 2026-11-25
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -124,13 +124,13 @@ by hand.
 
 Each piece of the anatomy is a component — compose them, never re-type their markup:
 
-| Piece                        | Component                                                                                                                                                                                                                                                               |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                                                                                                                                                        |
-| Section, Advanced band       | `SettingsGroup` (`@aziontech/webkit/settings-group`); Advanced is `collapsible icon="az az-settings"`                                                                                                                                                                   |
-| Row (field, switch, stacked) | `SettingsRow` (`@aziontech/webkit/settings-row`) with `variant` `field`, `compact` or `stacked`                                                                                                                                                                         |
-| Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `variant="centered"` on a create page (Cancel and Create in a raised card centred at the bottom), `variant="plain"` on an in-page form saved as one unit, `variant="fade"` on a wizard step, the floating default on settings |
-| Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                                                                                                                                                    |
+| Piece                        | Component                                                                                                                                                                                                                                                             |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                                                                                                                                                      |
+| Section, Advanced band       | `SettingsGroup` (`@aziontech/webkit/settings-group`); Advanced is `collapsible icon="az az-settings"`                                                                                                                                                                 |
+| Row (field, switch, stacked) | `SettingsRow` (`@aziontech/webkit/settings-row`) with `variant` `field`, `compact` or `stacked`                                                                                                                                                                       |
+| Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `variant="centered"` on a create page (Cancel and Save in a raised card centred at the bottom), `variant="plain"` on an in-page form saved as one unit, `variant="fade"` on a wizard step, the floating default on settings |
+| Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                                                                                                                                                  |
 
 ## 3. Advanced is the endpoint's not-required set
 
@@ -277,7 +277,7 @@ would ship without search never exists.
 - [ ] Wide controls stack their row instead of being squeezed into the cell.
 - [ ] Advanced holds only fields that are not required, already defaulted, and not the point of the form.
 - [ ] Nothing required is inside the disclosure; the collapsed region is `inert`.
-- [ ] Create page: persistent Cancel + Save. Settings page: bar mounts on first edit, with Discard.
+- [ ] Create page: persistent Cancel + Save (a create that runs an act instead of storing a resource names it: Purge). Settings page: bar mounts on first edit, with Discard.
 - [ ] Drawer: one Save, no Cancel.
 - [ ] A dirty form asks before Cancel, Back, X, overlay or Escape discards it; a clean one leaves at once.
 - [ ] Escape on a full-page create runs Cancel (`useEscapeToCancel`); edit and settings pages ignore it.
