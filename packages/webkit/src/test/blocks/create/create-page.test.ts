@@ -267,12 +267,12 @@ describe('create-page#CreateOrganization', () => {
     render(CreateOrganization)
     const name = screen.getByRole('textbox', { name: 'Name' })
     expect(screen.queryByText('This field is required.')).toBeNull()
-    await fireEvent.click(screen.getByRole('button', { name: 'Create Organization' }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Save' }))
     expect(screen.getByText('This field is required.')).toBeTruthy()
     expect(name.getAttribute('aria-describedby')).toBe('create-organization-name-message')
     await fireEvent.update(name, 'acme inc.')
     expect(screen.queryByText('This field is required.')).toBeNull()
-    await fireEvent.click(screen.getByRole('button', { name: 'Create Organization' }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Save' }))
     expect(screen.getByText('You already belong to an organization with this name.')).toBeTruthy()
   })
 
@@ -293,7 +293,7 @@ describe('create-page#CreateOrganization', () => {
   it('creates the organization and confirms it in a toast', async () => {
     render(CreateOrganization)
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
-    await fireEvent.click(screen.getByRole('button', { name: 'Create Organization' }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Save' }))
     await waitFor(() => expect(screen.getByText('Northwind Studio created.')).toBeTruthy(), wait)
   })
 })
