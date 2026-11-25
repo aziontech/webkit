@@ -1,7 +1,9 @@
+import { getConfig } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { planShards } from '../../scripts/lib/shard-plan.mjs'
-import { RESIZE_OBSERVER_LOOP } from './setup'
+import { keepConsoleLog, RESIZE_OBSERVER_LOOP } from './console-noise'
+import { ASYNC_UTIL_TIMEOUT } from './setup'
 import DURATIONS from './shard-durations.json'
 
 const SUITES = import.meta.glob<string>('./reflow*.test.ts', {
@@ -11,22 +13,24 @@ const SUITES = import.meta.glob<string>('./reflow*.test.ts', {
 })
 
 describe('the ResizeObserver loop notice', () => {
-  it('stops before any later error listener sees it', () => {
-    const seen: string[] = []
-    const listener = (event: Event) => seen.push((event as ErrorEvent).message)
-    EventTarget.prototype.addEventListener.call(window, 'error', listener)
-    window.dispatchEvent(
-      new ErrorEvent('error', {
-        message: 'ResizeObserver loop completed with undelivered notifications.'
-      })
-    )
-    EventTarget.prototype.removeEventListener.call(window, 'error', listener)
-    expect(seen).toEqual([])
+  it('is dropped from the console log, while every other line is kept', () => {
+    expect(
+      keepConsoleLog('Error: ResizeObserver loop completed with undelivered notifications.')
+    ).toBe(false)
+    expect(keepConsoleLog('ResizeObserver loop limit exceeded')).toBe(false)
+    expect(keepConsoleLog('TypeError: x is undefined')).toBe(true)
   })
 
   it('matches only the loop notice, so every other error still fails the run', () => {
     expect(RESIZE_OBSERVER_LOOP.test('ResizeObserver loop limit exceeded')).toBe(true)
     expect(RESIZE_OBSERVER_LOOP.test('TypeError: x is undefined')).toBe(false)
+  })
+})
+
+describe('the async utilities', () => {
+  it('wait 5 s for a lazily loaded part, not the 1 s default', () => {
+    expect(ASYNC_UTIL_TIMEOUT).toBe(5000)
+    expect(getConfig().asyncUtilTimeout).toBe(ASYNC_UTIL_TIMEOUT)
   })
 })
 

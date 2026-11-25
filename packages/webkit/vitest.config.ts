@@ -7,6 +7,7 @@ import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
 import { ariaSnapshot } from './src/test/aria-snapshot'
+import { keepConsoleLog } from './src/test/console-noise'
 import { DurationSequencer } from './src/test/duration-sequencer'
 import { emulateMedia } from './src/test/emulate-media'
 import { emulateTouch } from './src/test/emulate-touch'
@@ -36,12 +37,14 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify('test')
   },
+  server: { forwardConsole: false },
   optimizeDeps: {
     include: ['monaco-editor']
   },
   test: {
     include: ['src/**/*.test.{ts,js}'],
     setupFiles: ['./src/test/setup.ts'],
+    onConsoleLog: keepConsoleLog,
     retry: process.env.CI ? 2 : 0,
     sequence: { sequencer: DurationSequencer },
     provide: { perfOnCi: Boolean(process.env.CI) },

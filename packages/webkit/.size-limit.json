@@ -1326,7 +1326,8 @@
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "42.35 KB"
+    "limit": "17.9 KB",
+    "entryOnly": true
   },
   {
     "name": "feedback-reason-dialog",

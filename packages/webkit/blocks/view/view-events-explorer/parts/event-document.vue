@@ -69,7 +69,7 @@
             :key="row.id"
           >
             <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-            <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+            <dd class="m-0 min-w-0 break-words text-body-code-sm text-(--text-default)">
               {{ row.value }}
             </dd>
           </template>

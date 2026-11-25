@@ -58,14 +58,16 @@ export const typography = {
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
-    letterSpacing: { _: '-0.035em', md: tracking.tighter }
+    letterSpacing: { _: '-0.035em', md: tracking.tighter },
+    wordSpacing: { _: '0.06em', md: '0' }
   },
   'text-heading-2xl': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize['3xl'], sm: fontSize['4xl'], md: fontSize['5xl'] },
     lineHeight: leading.none,
     fontWeight: fontWeight.normal,
-    letterSpacing: { _: '-0.035em', md: '-0.053em' }
+    letterSpacing: { _: '-0.035em', md: '-0.053em' },
+    wordSpacing: { _: '0.06em', md: '0' }
   },
   'text-heading-xl': {
     textWrapStyle: 'balance',
@@ -160,6 +162,14 @@ export const typography = {
     fontFamily: fontFamily.code,
     fontSize: fontSize.xs,
     lineHeight: leading.relaxed,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.wide
+  },
+  'text-body-code-lg': {
+    textWrapStyle: 'pretty',
+    fontFamily: fontFamily.code,
+    fontSize: fontSize.base,
+    lineHeight: leading.normal,
     fontWeight: fontWeight.normal,
     letterSpacing: tracking.wide
   },

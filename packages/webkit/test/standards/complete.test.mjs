@@ -19,6 +19,9 @@ import {
   budgetRaiseLines,
   justifies,
   limitToBytes,
+  linesAfter,
+  mergeOnly,
+  mergeOnlyRaises,
   raisedBudgets,
   unjustified
 } from '../../scripts/check-size-ratchet.mjs'
@@ -285,6 +288,27 @@ test('every raise in the 8e86a5b59 to e106f1a04 push has its line in size-budget
   ]) {
     assert.deepEqual(unjustified([{ name, from, to: limit }], record), [], name)
   }
+})
+
+test('a new raise whose only reason is a merge fails; an old one or a named feature passes', () => {
+  const merge =
+    "Budget-raise: sources 2.9 KB → 14.6 KB (measured 14.5 KB): merging the two lanes adds both sides' growth; each fit its own budget."
+  const feature =
+    'Budget-raise: sources 2.9 KB → 14.6 KB (measured 14.5 KB): the Sources list lazy-loads its menu and gains a link hint (merge of lane A and lane B).'
+  assert.equal(mergeOnly(merge), true)
+  assert.equal(mergeOnly(feature), false)
+  assert.equal(
+    mergeOnly(
+      'Budget-raise: a 1 KB → 2 KB: the audit-5 lanes landed together, so the merge adds both'
+    ),
+    true
+  )
+  const raise = { name: 'sources', from: '2.9 KB', to: '14.6 KB' }
+  assert.deepEqual(mergeOnlyRaises([raise], [merge], merge), [raise])
+  assert.deepEqual(mergeOnlyRaises([raise], [], merge), [])
+  assert.deepEqual(mergeOnlyRaises([raise], [merge], merge, feature), [])
+  assert.deepEqual(linesAfter(`${merge}\n\n## Raises after audit 6\n\n${feature}\n`), [feature])
+  assert.deepEqual(linesAfter(merge), [])
 })
 
 test('baseRef uses the PR base, skips non-PR CI runs, falls back locally', () => {

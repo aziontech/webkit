@@ -3145,7 +3145,7 @@ export const tokensForFilters = (
           {{ row.label }}
         </dt>
         <dd class="m-0 flex min-w-0 items-center gap-(--spacing-xs)">
-          <span class="min-w-0 flex-1 break-words text-label-code-sm text-(--text-default)">
+          <span class="min-w-0 flex-1 break-words text-body-code-sm text-(--text-default)">
             <template
               v-for="(part, index) in row.parts"
               :key="index"
@@ -3272,7 +3272,7 @@ export const tokensForFilters = (
             :key="row.id"
           >
             <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-            <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+            <dd class="m-0 min-w-0 break-words text-body-code-sm text-(--text-default)">
               {{ row.value }}
             </dd>
           </template>

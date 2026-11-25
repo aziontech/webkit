@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  defineOptions({ name: 'Error404' })
+  defineOptions({ name: 'Error404', inheritAttrs: false })
 </script>
 
 <template>
   <svg
+    v-bind="$attrs"
     width="158"
     height="71"
     viewBox="0 0 158 71"

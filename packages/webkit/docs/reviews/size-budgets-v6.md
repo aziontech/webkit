@@ -2365,3 +2365,9 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+## Raises after audit 6
+
+From here on a raise names what grew. The size ratchet fails a line below this heading (or in the PR body) whose only reason is a merge, such as "each side fit its own budget" (`MERGE_ONLY_FROM` in `scripts/check-size-ratchet.mjs`, audit-6 A6-288).
+
+Budget-raise: conversation-history 42.35 KB → 17.9 KB entryOnly (measured 17.74 KB): restores entryOnly, which the 17.25 KB raise intended: the row, project, sort and toolbar menus load as lazy chunks (52.9 KB together, listed by `check-size --lazy`), so the budget again measures the entry and its static imports. A lower limit, not a raise (audit-6 A6-271).

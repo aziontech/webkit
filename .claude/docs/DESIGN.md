@@ -71,13 +71,14 @@ Reference: `packages/webkit/src/components/action/button/button.vue`.
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                                                                                                                                                                                                            |
 | `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers)                                                                                                                                                                     |
 | `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code)                                                                                                           |
+| `text-body-code-lg`                                                | Wrapping or multi-line code at 16px with a 1.5 line height: the touch size of a code field (`pointer-coarse:text-body-code-lg` on the code editor's text area and gutter), so lines never touch                                    |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                                                                                                                           |
 | `text-button-lg` / `text-button-md`                                | Button labels                                                                                                                                                                                                                      |
 | `text-link`                                                        | A link inside body/heading copy, rendered by `Link inline` (inherits parent size; quiet underline at rest, full underline on hover)                                                                                                |
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
-Heading tracking is in `em`, so it shrinks with the font: `text-heading-3xl` is `-0.046em` (`--tracking-tighter`) and `text-heading-2xl` is `-0.053em`, the old `-0.16rem` at their desktop size (3.5rem and 3rem). A fixed `rem` tracking on a heading that steps down on phones runs the words together. Any heading, amount or big-number role with tracking uses `em` or `0`, never `rem` or `px` (`packages/theme/test/heading-tracking.test.mjs`).
+Heading tracking is in `em`, so it shrinks with the font: `text-heading-3xl` is `-0.046em` (`--tracking-tighter`) and `text-heading-2xl` is `-0.053em`, the old `-0.16rem` at their desktop size (3.5rem and 3rem). A fixed `rem` tracking on a heading that steps down on phones runs the words together. On phones the two display headings also open their word spaces to `0.06em` (`0` from `md`), because the display face's space glyph is narrow and `-0.035em` tracking still closes it. Any heading, amount or big-number role with tracking uses `em` or `0`, never `rem` or `px` (`packages/theme/test/heading-tracking.test.mjs`).
 
 ### Do not declare typography primitives in components
 
@@ -327,6 +328,10 @@ Every fill colour pairs with a `-foreground` text colour of the same role (`--pr
 Which token does which job, and which components use each one, is in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Which color token does which job". Update that table when a component starts or stops using a color token. A mock-up, example or proposal draws only variants the component's `variant` / `severity` union lists.
 
 Text on `--bg-surface-overlay` is `--text-default`. In dark the overlay fill is `#4D4D4D`, and `--text-muted` (`#B2B2B2`) on it is 3.99:1, under the 4.5:1 that WCAG 1.4.3 asks for (found by the a11y harness, M2.9 WP a11y).
+
+### Text selection
+
+The theme's base layer paints selected text with the brand tint behind the default text (`::selection { background-color: var(--primary-mask); color: var(--text-default) }`), in light and dark, instead of the browser's blue. A component does not restyle selection; the one exception is a control that hides its own caret selection (`OtpInput`, `selection:bg-transparent`). Forced colors keep the system highlight.
 
 ### Loading placeholders
 

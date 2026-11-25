@@ -184,6 +184,8 @@ export const tokenPurpose = {
   'text-label-sm': 'Small labels and metadata.',
   'text-label-code-sm': 'Monospace code lines and line numbers, one row per line.',
   'text-body-code-sm': 'A monospace paragraph that wraps.',
+  'text-body-code-lg':
+    'Wrapping or multi-line code at the 16px touch size, with a real line height.',
   'text-label-code-md': 'A monospace label such as a file name bar.',
   'text-label-code-lg': 'A large monospace label.',
   'text-body-lg': 'Lead paragraphs.',

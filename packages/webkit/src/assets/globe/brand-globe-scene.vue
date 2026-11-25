@@ -2,11 +2,14 @@
   import Brand from '../../components/content/brand/brand.vue'
   import SpinningGlobe from './spinning-globe.vue'
 
-  defineOptions({ name: 'BrandGlobeScene' })
+  defineOptions({ name: 'BrandGlobeScene', inheritAttrs: false })
 </script>
 
 <template>
-  <div class="flex h-full w-full items-center justify-center p-(--spacing-xl)">
+  <div
+    v-bind="$attrs"
+    class="flex h-full w-full items-center justify-center p-(--spacing-xl)"
+  >
     <div class="@container relative aspect-square w-full max-w-120">
       <SpinningGlobe
         animated
