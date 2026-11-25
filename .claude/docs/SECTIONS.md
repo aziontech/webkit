@@ -91,7 +91,7 @@ Which sections a page type opens with and which bands it uses for a given job. A
 | Solution hubs and landing pages                          | `variant: 'title-band'`                                                 | `capability-grid-section` with an `href` per item for use cases or resources that link to their own page          | `center` with the marquee                                                        |
 | Any other page                                           | `variant: 'title-band'`                                                 | —                                                                                                                 | `center` with the marquee                                                        |
 
-The `//` eyebrow prefix belongs to the hero and the pricing sections (`hero-section` and `plan-comparison-section`, the Pricing matrix) only; every other section's eyebrow is plain text.
+The `//` eyebrow prefix marks every marketing section header (decision EB-1, 2026-11-23): the header `ModuleHeader` draws, `hero-section`, `plan-comparison-section`, `newsletter-section`, `customer-use-cases-section` and the other bands that set their own eyebrow. An eyebrow that labels a card inside a band (a `card-carousel-section` card) is not a section header and takes no prefix.
 
 ## What a section component is
 
