@@ -397,9 +397,8 @@
             data-autofocus
           >
             <div
-              class="grid grid-cols-1 gap-(--spacing-lg) @3xl:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] @3xl:gap-(--spacing-xl)"
+              class="grid grid-cols-1 gap-(--spacing-lg) @3xl:grid-cols-[minmax(0,1fr)_minmax(0,18rem)] @3xl:gap-(--spacing-xl)"
             >
-              <UpgradeIncluded :included-features="includedFeatures" />
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <UpgradeChargeCard
                   v-model:period="upgradePeriod"
@@ -433,6 +432,7 @@
                   :submitting="submitting"
                 />
               </div>
+              <UpgradeIncluded :included-features="includedFeatures" />
             </div>
           </div>
         </PanelBody>
