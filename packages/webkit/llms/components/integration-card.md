@@ -18,7 +18,7 @@
 - Keep the description to one or two sentences; the tile clamps it to three lines.
 - Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
 - Tiles sit under a section heading, so their title is an `h3`.
-- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile.
+- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, and a badge without `severity` or `variant` stays `info`, as on the plain tile. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile.
 
 ## Don’t
 
@@ -43,7 +43,7 @@
 | `logo` | `string` | `''` | false | Icon class for the logo mark. The `logo` slot takes an image instead. |
 | `vendor` | `string` | `''` | false | Who publishes the item, shown as "by {vendor}". |
 | `description` | `string` | `''` | false | One or two sentences on what the item does. |
-| `badges` | `IntegrationCardBadge[]` | `[]` | false | Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
+| `badges` | `IntegrationCardBadge[]` | `[]` | false | Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, in the plain and the featured layout). |
 | `installed` | `boolean` | `false` | false | Shows the Installed tag. |
 | `href` | `string` | `''` | false | The title links here; without it the title is a button that emits `select`. |
 | `featured` | `boolean` | `false` | false | The featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. |

@@ -86,7 +86,13 @@
    "doc": "Accessible name; empty reads Video."
   }
  ],
- "events": [],
+ "events": [
+  {
+   "name": "retry",
+   "payload": "MouseEvent",
+   "notes": "Try again in the error state was pressed. The button renders only when this event has a listener; a file that failed to load is loaded again, and the app sets `status` back to `pending` or `running` when it generates the video again."
+  }
+ ],
  "slots": [],
  "styleSeam": false,
  "assets": [],

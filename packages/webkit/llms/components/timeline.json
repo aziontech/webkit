@@ -59,7 +59,7 @@
    "type": "'relative' | 'local' | 'utc'",
    "default": "'local'",
    "required": "false",
-   "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+   "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`; inside a `Timeline.Group`, `local` reads as Timestamp's `time` (hour and minute only), because the group label carries the date."
   },
   {
    "name": "loading",

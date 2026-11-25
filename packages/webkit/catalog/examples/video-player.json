@@ -7,7 +7,7 @@
   },
   {
    "name": "Statuses",
-   "summary": "The states a generated video goes through before it plays: waiting to generate, generating with a percentage, and failed with the app's message.",
+   "summary": "The states a generated video goes through before it plays: waiting to generate, generating with a percentage, and failed with the app's message and Try again.",
    "file": "examples/video-player/statuses.vue"
   }
  ]

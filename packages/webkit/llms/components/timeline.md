@@ -51,7 +51,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Density of every item: `small` for a side panel or drawer, `medium` for a page body. |
-| `timeFormat` | `'relative' \| 'local' \| 'utc'` | `'local'` | false | How every item's `time` reads, passed to `Timestamp` as its `format`. |
+| `timeFormat` | `'relative' \| 'local' \| 'utc'` | `'local'` | false | How every item's `time` reads, passed to `Timestamp` as its `format`; inside a `Timeline.Group`, `local` reads as Timestamp's `time` (hour and minute only), because the group label carries the date. |
 | `loading` | `boolean` | `false` | false | Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`. |
 | `loadingLabel` | `string` | `''` | false | What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Activity`). |
@@ -89,7 +89,7 @@ Markup: the root is an `<ol>`. An Item is an `<li>`. A Group is an `<li>` holdin
   - Slots: `default` — content under the description (a quoted comment, a link, a small key-value list); `marker` — replaces the dot or icon (an `Avatar`, an `OutcomeIcon`), sized by the app to the marker box.
   - Marker precedence: the `marker` slot, then `icon`, then the dot.
   - `data-testid` fallback `timeline-item`; inner `${testId}__title`, `${testId}__marker`. A consumer `data-testid` wins.
-- `timeline-group/timeline-group.vue` — the events of one period: `<li data-slot="timeline-group">` → the label (`data-slot="timeline-group-label"`, with an id from `useId()`) and an `<ol aria-labelledby="<that id>">` holding the Items.
+- `timeline-group/timeline-group.vue` — the events of one period: `<li data-slot="timeline-group">` → the label (`data-slot="timeline-group-label"`, with an id from `useId()`) and an `<ol aria-labelledby="<that id>">` holding the Items. It provides `TimelineGroupInjectionKey` (`Symbol('TimelineGroup')`, `{ grouped: true }`, in `injection-key.ts`); an Item reads it with the default `{ grouped: false }` and, when the root's `timeFormat` is `local`, renders its `Timestamp` with `format="time"` (the day is in the group label; the panel still lists the full date).
   - Props:
 
     | Prop    | Type     | Default | Required | JSDoc                                                        |

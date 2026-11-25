@@ -18146,13 +18146,14 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | --- | --- | --- |
 | `play` | `Event` | Playback started (the audio element's `play` event). |
 | `pause` | `Event` | Playback paused, by the reader or because the clip reached its end (the element's `pause` event). |
+| `retry` | `MouseEvent` | Try again in the error state was pressed. The button renders only when this event has a listener; an error the audio element reported is cleared and the element loads `src` again, and the app clears or keeps `error`. |
 
 ## States
 
 - `data-playing` is set while the audio plays; the play control shows Pause.
 - `data-loading` mirrors `loading` (the audio is still being generated or fetched): the play control shows a `Spinner` (through `IconButton`'s `loading`) and is inert, every other control is disabled, the root has `aria-busy`, and a visually hidden `role="status"` line says Loading audio.
 - `data-buffering` is set while the browser waits for data after Play (the audio element's `waiting` until `playing`): a small `Spinner` replaces the current time, the root has `aria-busy` and the status line says Loading audio, and every control stays enabled; Play keeps its Pause name so the reader can stop a stalled clip.
-- `data-error` is set when `error` is set or the audio element reports an error; the controls are disabled and the error line (`role="alert"`) replaces the time. The app's text wins; with no text the catalog's message shows.
+- `data-error` is set when `error` is set or the audio element reports an error; the controls are disabled and the error line (`role="alert"`) replaces the time. The app's text wins; with no text the catalog's message shows. With a `retry` listener a small outline Try again `Button` (`az az-refresh`) sits at the end of the error line.
 - `data-disabled` mirrors `disabled`; it is also set when `src` is empty and nothing is loading.
 - `data-muted` is set while the audio is muted; the mute control shows Unmute and the volume slider reads 0.
 - Empty: `src` empty with `loading` false sets `data-disabled`; the times show `--:--` and the Download link is not rendered.
@@ -18263,7 +18264,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
 - Root attributes: `data-variant` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
 - Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
-- Presence: `presence` is `online`, `away`, `busy` or `offline` (`AvatarPresence`); `''` (default) renders nothing. When set, the root carries `data-presence` and a dot (`data-slot="presence"`, test id `${testId}__presence`) sits inside the avatar's box, in its bottom inline-end corner, overlapping only the picture, at 10 / 12 / 16 px for `small` / `medium` / `large` (its 2 px ring included), the same for `circle` and `square`. The content is clipped to the avatar shape by an inner box, so the dot is never clipped by the avatar itself, and a parent that clips its content never cuts it off. Each value has its own shape, so colour is not the only signal: `online` a filled dot, `away` a crescent, `busy` a dot with a horizontal bar, `offline` a hollow ring. A 2 px ring in `--avatar-presence-ring` (default `var(--bg-surface)`) separates the dot from the picture and from the background; an app on another background sets that variable on the avatar or an ancestor.
+- Presence: `presence` is `online`, `away`, `busy` or `offline` (`AvatarPresence`); `''` (default) renders nothing. When set, the root carries `data-presence` and a dot (`data-slot="presence"`, test id `${testId}__presence`) sits inside the avatar's box, in its bottom inline-end corner, overlapping only the picture, at 10 / 12 / 16 px for `small` / `medium` / `large` (its 2 px ring included), the same for `circle` and `square`. On `small` the dot is pushed a quarter of its size past the corner (`translate-1/4`, mirrored under `rtl`), so on a 24 px avatar it no longer covers the second initial; only its ring leaves the box. The content is clipped to the avatar shape by an inner box, so the dot is never clipped by the avatar itself, and a parent that clips its content never cuts it off. Each value has its own shape, so colour is not the only signal: `online` a filled dot, `away` a crescent, `busy` a dot with a horizontal bar, `offline` a hollow ring. A 2 px ring in `--avatar-presence-ring` (default `var(--bg-surface)`) separates the dot from the picture and from the background; an app on another background sets that variable on the avatar or an ancestor.
 - Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
 - Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
@@ -18499,6 +18500,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
 - Take the logo only from Brand, never from a copied SVG file or a website URL.
 - Keep clear contrast between the logo and its background, and clear space around it; never shrink it below the `small` size.
+- Show the `extended` lockup at the `large` size: at `small` and `medium` its "technologies" line is a few pixels tall and cannot be read.
 - Do not set the logo next to text or interface elements in the brand primary colour: the signature lockup already carries it.
 - The `color` treatment works on light and dark surfaces: the orange mark stays, and the "technologies" line of the extended lockup follows the text colour (dark on a white background, light on a dark one).
 - One-colour versions come from `treatment`: `monochrome` is black on light and white on dark, `knockout` is the label colour of an orange `--primary` fill. Never recolour a copy of the drawing.
@@ -18637,7 +18639,7 @@ The frame is static apart from its resize handles.
 - **Scale.** When the effective width exceeds the container, the viewport is scaled down by `container / effective` on both axes, and the frame's on-page height is `height × scale`. A frame narrower than its container is centered in it.
 - **Resizing.** Three handles resize the viewport:
   - the **width handle** on the right edge writes `width`;
-  - the **height handle** on the bottom edge writes `height`;
+  - the **height handle** on the bottom edge writes `height`; it sits in a 24px strip the frame reserves under the viewport (`pb-6`), so its grip never covers the preview's last line;
   - the **corner handle** at the bottom-right writes both at once.
     Pointer drags use pointer capture. A width drag moves the right edge under the pointer (the frame is centered, so the width changes by twice the pointer's travel) and is clamped to `minWidth` and the container width; a height drag follows the pointer's travel divided by the current scale and is clamped to `minHeight`…`maxHeight`. The keyboard reaches up to `maxWidth` / `maxHeight`. While any handle is dragged the root sets `data-resizing` and the content ignores the pointer.
 - **Size readout.** While any handle is dragged or focused, the chrome shows the viewport size (`768 × 1024`) at its trailing end; it is hidden otherwise.
@@ -18973,7 +18975,7 @@ The frame is static apart from its resize handles.
 - Moving content (WCAG 2.2.2 Pause, Stop, Hide): the looping widgets (`workload-deploy-logs`, `cli-terminal-start`, `cli-terminal-deploy`, and `functions-start` on its `agents` and `cli` tabs) loop for longer than five seconds, so each always ships the visible, keyboard-reachable pause control, and none starts under a reduced-motion preference. A fragment's beat stops by itself within five seconds, and a looping list fragment moves only while the pointer is over it. The band's own copy carries what it shows.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): widgets use the console's own text and surface pairs (`var(--text-default)` / `var(--text-muted)` on `var(--bg-canvas)` / `var(--bg-surface)`).
 - Every motion class inside a widget pairs with `motion-reduce:transition-none`.
-- Touch target: not applicable in an inert widget; `function-code` keeps the code block's own targets, `functions-start` the segmented button's, and the pause control of the looping widgets (`workload-deploy-logs`, `cli-terminal-start`, `cli-terminal-deploy`, and `functions-start` on its `agents` and `cli` tabs) the icon button's.
+- Touch target: not applicable in an inert widget; `function-code` keeps the code block's own targets (an interactive frame sets `--console-mockup-shell-scale` to its scale, and under `pointer: coarse` every `data-slot="touch-target"` layer inside it is scaled by its inverse, so a 44 px hit area stays 44 px after the frame shrinks), `functions-start` the segmented button's, and the pause control of the looping widgets (`workload-deploy-logs`, `cli-terminal-start`, `cli-terminal-deploy`, and `functions-start` on its `agents` and `cli` tabs) the icon button's.
 - Reflow: the workload-topology node header wraps (`flex-wrap`), so a status tag moves under the node name in a narrow frame instead of overflowing it.
 
 ## Examples
@@ -19344,7 +19346,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 ## States
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
-- Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
+- Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`. The prefix and the label are one inline text run, joined by a word joiner (U+2060), so a label that wraps in a centred column keeps the prefix next to its first word instead of stranding it at the start of the row.
 - Cursor: a decorative, `aria-hidden` `span` (`${testId}__cursor`) is rendered only when `cursor` is set, inline at the end of the label, so a wrapped label keeps it after its last word; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
@@ -19401,6 +19403,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 - Fetch only the first part of a large text file (a ranged request) and pass `bytes` with the full size, so the header shows the real size while the body shows the first part.
 - Handle `download` with the app's own signed or authorized URL; the component never builds one.
 - Pass an object URL (`URL.createObjectURL`) or a short-lived signed URL as `src`; revoke an object URL when the preview closes.
+- `src` goes through `safeHref` (file schemes allowed): `javascript:`, `file:`, a protocol-relative `//host` URL and any other scheme draw nothing, as every other URL-taking component does. An image or PDF URL loads with no click, so an app that shows URLs a model or a tool returned should allow only its own origins before it passes them, or show a click-to-load placeholder. A `Content-Security-Policy` with `object-src 'none'` blocks the PDF viewer; allow `object-src 'self' blob:` where PDFs are previewed.
 - When the app holds the bytes rather than a URL (a chat message part with base64 data), pass them as `base64` with `mimeType`; the component makes its own object URL for an image or PDF and revokes it when the source changes or the preview unmounts. Text and JSON are decoded into the body.
 - A PDF is drawn by the browser's own viewer; where there is none (most phones, a viewer turned off), the body shows the no-preview state and Download stays.
 
@@ -19426,7 +19429,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 | `fileName` | `string` | `—` | true | Name of the file, shown in the header and used as the image's alternative text. |
 | `mimeType` | `string` | `''` | false | Media type of the file (`image/png`, `application/json`). Empty reads the type from the file extension. |
 | `bytes` | `number` | `undefined` | false | Size of the whole file in bytes, shown beside the type. Unset hides the size. |
-| `src` | `string` | `''` | false | URL of an image or PDF file to draw. Set, it wins over `base64`. |
+| `src` | `string` | `''` | false | URL of an image or PDF file to draw: https, http, blob, data or a relative path; any other scheme draws nothing. Set, it wins over `base64`. |
 | `base64` | `string` | `''` | false | Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them. |
 | `content` | `string` | `''` | false | Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`. |
 | `maxLength` | `number` | `20000` | false | Characters of text shown before the rest is cut, with a note that says how much is shown. |
@@ -19828,13 +19831,14 @@ name.
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `download` | `(event: MouseEvent, item: ImageGalleryItem)` | Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download). |
+| `retry` | `(event: MouseEvent)` | Try again in the error state was pressed. The button renders only when this event has a listener, so a gallery whose app cannot run the request again shows no dead button; the app starts the request again and clears `error`. |
 
 ## States
 
 - Precedence: `error` wins over everything (no image, placeholder or empty state shows). Otherwise the images in `items` render first, then, while `loading`, one placeholder for each of `expectedCount - items.length` (none when `expectedCount` is at most `items.length`). With no image and no placeholder the empty state shows.
 - `data-layout`: `single` (one tile) | `pair` (two tiles) | `grid` (three or more), counted over the images and the placeholders.
 - `data-loading` mirrors `loading`; the root has `aria-busy`, and each placeholder is a `Skeleton` tile hidden from assistive technology.
-- `data-error` is set while `error` is set: the grid is replaced by an `EmptyState` titled `The images could not load` with the `error` text as its description, inside a `role="alert"` region.
+- `data-error` is set while `error` is set: the grid is replaced by an `EmptyState` titled `The images could not load` with the `error` text as its description, inside a `role="alert"` region. With a `retry` listener the error state also shows a Try again `Button` (`az az-refresh`, outline, medium) under the message.
 - `data-empty` is set when there is no image, no placeholder and no error: an `EmptyState` that says `No images`.
 - `data-broken` is set on a thumbnail whose image fails to load (it then shows the `az az-image` glyph on the surface and keeps its name) and on the viewer body for that image, which shows an `EmptyState` (`This image could not load`); Download stays.
 - Viewer: `Dialog` with `data-state="open|closed"` (from `Dialog`); Previous is disabled on the first image and Next on the last.
@@ -19906,7 +19910,7 @@ name.
 - Keep the description to one or two sentences; the tile clamps it to three lines.
 - Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
 - Tiles sit under a section heading, so their title is an `h3`.
-- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile.
+- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, and a badge without `severity` or `variant` stays `info`, as on the plain tile. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile.
 
 ## Don’t
 
@@ -19930,7 +19934,7 @@ name.
 | `logo` | `string` | `''` | false | Icon class for the logo mark. The `logo` slot takes an image instead. |
 | `vendor` | `string` | `''` | false | Who publishes the item, shown as "by {vendor}". |
 | `description` | `string` | `''` | false | One or two sentences on what the item does. |
-| `badges` | `IntegrationCardBadge[]` | `[]` | false | Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
+| `badges` | `IntegrationCardBadge[]` | `[]` | false | Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, in the plain and the featured layout). |
 | `installed` | `boolean` | `false` | false | Shows the Installed tag. |
 | `href` | `string` | `''` | false | The title links here; without it the title is a button that emits `select`. |
 | `featured` | `boolean` | `false` | false | The featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. |
@@ -20087,7 +20091,7 @@ name.
 - `item-media.vue` — Leading media slot (`type` for icon/image frames).
 - `item-content.vue` — Main text column (title + description).
 - `item-title.vue` — Primary label line.
-- `item-description.vue` — Secondary muted line.
+- `item-description.vue` — Secondary muted text.
 - `item-actions.vue` — Trailing actions cluster.
 - `item-header.vue` — Optional top band (e.g.
 - `item-footer.vue` — Optional bottom band.
@@ -20430,7 +20434,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `timestampFormat` | `TimestampFormat` | `'local'` | false | How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union. |
+| `timestampFormat` | `TimestampFormat` | `'local'` | false | How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union. |
 | `loading` | `boolean` | `false` | false | Shows three placeholder messages in place of the items while the thread loads, and marks it busy. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation`). |
 
@@ -20645,7 +20649,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 - Leave `animated` off by default; turn it on for the one band per page whose subject is the network.
 - To nudge the map or let it run off the band, set `offsetX` / `offsetY` (for example `:offset-x="0.15"` to bleed right, `:offset-y="-0.1"` to bleed up) instead of offsetting the layer.
 - The landmass is the design's pixel map cell for cell (4,987 cells on a 10-unit grid), and the default `medium` density lights the design's data center field exactly: 172 cells, each metro a capital with up to two satellites, pulsing in the design's three phases. `low` lights the capitals alone (71); `high` adds 31 outlying data centers.
-- `asia` and `oceania` hold no data centers — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone.
+- `asia` and `oceania` hold no data centers — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone, which looks like a broken map or no coverage on a page: do not place them, and the Regions example leaves them out.
 
 ## Don’t
 
@@ -20863,6 +20867,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 - `data-size`: `small` | `medium`.
 - `data-glyph`: `mark` when the brand has a drawn mark, `generic` otherwise.
 - The Mastercard mark is two equal circles at the same opacity whose overlap reads darker, the network's own one-colour form; one solid circle beside a faded one would read as a switch knob in its track.
+- The plate has a card's corner (`--radius-sm`, 2 px), not the control radius: at 20 × 32 px the 6 px control radius made a pill, and two discs inside a pill read as a toggle switch.
 
 ## Accessibility
 
@@ -20983,7 +20988,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 # Pricing Card
 
-> One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it. The card owns the typographic hierarchy of a price — an overline plan name, the amount as the headline figure, and the billing caveat under it in muted body copy — so a row of tiers reads as a comparison rather than as three differently-typeset cards. `actionsPosition` is the axis that decides which of the two compositions the card is. **`bottom`** is the compact tier: the name, a `medium` amount and the caveat stack at the top, the action follows, and the slot sits under it — a card sized by its own content, for a row of tiers a reader scans. With nothing in the default slot the `bottom` card renders no slot region at all, so it ends at its action instead of under an empty band. **`middle`** is the full tier: the amount becomes the `large` headline figure, the caveat moves up to `body-md`, the slot grows to fill the card, and the action is pinned to the bottom edge so a row of `middle` cards has its buttons on one line whatever each tier's feature list holds. The `middle` slot reserves a 160px band (`min-h-40`) only with `equalHeight`; a lone card is sized by what it holds. The built-in action is `outline` (`bottom`) or `secondary` (`middle`); on the card that shows its tag (`showTag`, the tier the row singles out, such as Popular) it is `primary`, so the recommended plan carries the one filled button in the row. The default period is `/ month`: `/ mon` read as Monday. `variant` decides only whether the card draws its own surface (`contained`) or sits on the one behind it (`ghost`); it never changes the composition. The name, the amount and the caveat are **one column**, capped at `--container-xs` (348px) rather than at the card's full width: the caveat is a sentence about the price directly above it, so it wraps on the price's measure. The cap shipped as `--container-3xs` (256px) — two rungs down the ladder, and too narrow for the copy it holds. 256px sets `body-md` at roughly 33 characters, under the 45–75 a prose measure wants, and all three billing caveats on the sample pricing page (66, 69 and 84 characters) ran to three lines there. At 348px the measure is ~46 characters and the same three set in two, while the card's own content box at 1440 is 413px — so the caveat is still held to the price's column instead of the card's. The card carries **one** prose region — the pricing caveat, below the amount. It used to carry a second paragraph above the amount as well, and with `equalHeight` reserving a band for each, a row of tiers showed two two-line muted blocks around every price doing the same visual job. The Figma component (`3605:2260`) has a single prose region, `Pricing Details`, positioned below the amount, so that is the one the card keeps; a tier's positioning sentence belongs to whatever the consumer puts in the slot. `equalHeight` makes a ROW of cards read as one comparison. Every region is content-sized by default, which is right for a single card and wrong for three side by side — a tier with a two-line caveat and a tier with none put their feature lists on different lines, and the reader has to re-find the row in every column. It reserves **three** lines for the caveat, in `lh` so the reservation follows the type token rather than a hard-coded height. Three is the design's 64px band expressed in whole lines of the region's own token (`body-md` is a 22px line box, so `3lh` is 66px; `2lh` is 44px and twenty short) — it shipped as `2lh`, and the shortfall stayed invisible until a tier's caveat ran to three lines at the region's then-256px measure, overflowed the band, and pushed that column's feature list 22px below the other two. Opt-in, because reserving empty lines is wrong for a lone card; set it on every card in the row. A caveat past three lines still pushes the row down, like any overflow. The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token carries the display face, the uppercase transform and the widest tracking step, so the tier reads as a label on the card rather than as a title competing with the price beneath it. It stays an `<h3>` for the document outline — the tier is the section heading — while looking like an overline. There is no built-in plan name: set `title` on every card.
+> One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it. The card owns the typographic hierarchy of a price — an overline plan name, the amount as the headline figure, and the billing caveat under it in muted body copy — so a row of tiers reads as a comparison rather than as three differently-typeset cards. `actionsPosition` is the axis that decides which of the two compositions the card is. **`bottom`** is the compact tier: the name, a `medium` amount and the caveat stack at the top, the action follows, and the slot sits under it — a card sized by its own content, for a row of tiers a reader scans. With nothing in the default slot the `bottom` card renders no slot region at all, so it ends at its action instead of under an empty band. **`middle`** is the full tier: the amount becomes the `large` headline figure, the caveat moves up to `body-md`, the slot grows to fill the card, and the action is pinned to the bottom edge so a row of `middle` cards has its buttons on one line whatever each tier's feature list holds. The `middle` slot reserves a 160px band (`min-h-40`) only with `equalHeight`; a lone card is sized by what it holds. The built-in action is `outline` (`bottom`) or `secondary` (`middle`); on the card that shows its tag (`showTag`, the tier the row singles out, such as Popular) it is `primary`, so the recommended plan carries the one filled button in the row. The default period is `/ month`: `/ mon` read as Monday. `variant` decides only whether the card draws its own surface (`contained`) or sits on the one behind it (`ghost`); it never changes the composition. The name, the amount and the caveat are **one column**, capped at `--container-xs` (348px) rather than at the card's full width: the caveat is a sentence about the price directly above it, so it wraps on the price's measure. The cap shipped as `--container-3xs` (256px) — two rungs down the ladder, and too narrow for the copy it holds. 256px sets `body-md` at roughly 33 characters, under the 45–75 a prose measure wants, and all three billing caveats on the sample pricing page (66, 69 and 84 characters) ran to three lines there. At 348px the measure is ~46 characters and the same three set in two, while the card's own content box at 1440 is 413px — so the caveat is still held to the price's column instead of the card's. The card carries **one** prose region — the pricing caveat, below the amount. It used to carry a second paragraph above the amount as well, and with `equalHeight` reserving a band for each, a row of tiers showed two two-line muted blocks around every price doing the same visual job. The Figma component (`3605:2260`) has a single prose region, `Pricing Details`, positioned below the amount, so that is the one the card keeps; a tier's positioning sentence belongs to whatever the consumer puts in the slot. `equalHeight` makes a ROW of cards read as one comparison. Every region is content-sized by default, which is right for a single card and wrong for three side by side — a tier with a two-line caveat and a tier with none put their feature lists on different lines, and the reader has to re-find the row in every column. It reserves **three** lines for the caveat, in `lh` so the reservation follows the type token rather than a hard-coded height. Three is the design's 64px band expressed in whole lines of the region's own token (`body-md` is a 22px line box, so `3lh` is 66px; `2lh` is 44px and twenty short) — it shipped as `2lh`, and the shortfall stayed invisible until a tier's caveat ran to three lines at the region's then-256px measure, overflowed the band, and pushed that column's feature list 22px below the other two. Opt-in, because reserving empty lines is wrong for a lone card; set it on every card in the row. A caveat past three lines still pushes the row down, like any overflow. The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token carries the display face, the uppercase transform and the widest tracking step, so the tier reads as a label on the card rather than as a title competing with the price beneath it. It stays an `<h3>` for the document outline — the tier is the section heading — while looking like an overline. There is no built-in plan name: set `title` on every card. When the price already names the plan (`value` equals `title`, ignoring case and spaces, as `Free` over `Free`), the overline is visually hidden (`data-in-price`, `sr-only`): the heading stays in the outline for a screen reader, and the card stops printing the plan name twice.
 
 - Import: `import PricingCard from '@aziontech/webkit/pricing-card'`
 - Category: content · Surface: app · Structure: monolithic
@@ -21046,6 +21051,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Title in the price: `data-in-price` on the title when `value` equals `title` (ignoring case and spaces); the title is visually hidden and stays the card's heading.
 - Animated: with `animated`, a change of `value`, `prefix` or `suffix` fades the old price out and the new one in (`data-animated` on the root); without it the price swaps in place
 
 ## Accessibility
@@ -21692,7 +21698,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Density of every item: `small` for a side panel or drawer, `medium` for a page body. |
-| `timeFormat` | `'relative' \| 'local' \| 'utc'` | `'local'` | false | How every item's `time` reads, passed to `Timestamp` as its `format`. |
+| `timeFormat` | `'relative' \| 'local' \| 'utc'` | `'local'` | false | How every item's `time` reads, passed to `Timestamp` as its `format`; inside a `Timeline.Group`, `local` reads as Timestamp's `time` (hour and minute only), because the group label carries the date. |
 | `loading` | `boolean` | `false` | false | Renders three placeholder items in place of the slot while the history loads; sets `aria-busy`. |
 | `loadingLabel` | `string` | `''` | false | What a screen reader hears while loading. Empty uses the locale catalog (`Loading activity`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Activity`). |
@@ -21857,7 +21863,7 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
 
 - Pass the value from your data as it comes (`'2026-11-14T12:04:31Z'`, `1794657871000`, or the microseconds a log store returns); do not pre-format it.
 - Set the app's time zone once on `ConfigProvider` (`time-zone`) rather than on each Timestamp; use the `time-zone` prop only for a value that belongs to another zone (a schedule in the customer's zone).
-- Use `format="relative"` for recent activity, `local` for audit records and logs, `utc` for values people compare across teams.
+- Use `format="relative"` for recent activity, `local` for audit records and logs, `utc` for values people compare across teams, and `time` for a row under a header that already names the day (a timeline grouped by date), so the row reads `8:20 AM` instead of repeating the date.
 - In an example, a test or a server render, fix `now` on the provider and give a time zone, so the text does not depend on when or where it renders.
 
 ## Don’t
@@ -21878,7 +21884,7 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `value` | `string \| number \| Date` | `undefined` | false | The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with no panel. |
-| `format` | `'relative' \| 'local' \| 'utc'` | `'local'` | false | What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form. |
+| `format` | `'relative' \| 'local' \| 'utc' \| 'time'` | `'local'` | false | What the text shows: the relative phrase that updates every minute, the date and time in the time zone, the date and time in UTC, or only the hour and minute in the time zone (for a row under a date header). The panel always lists every form. |
 | `timeZone` | `string` | `''` | false | IANA time zone of the local time (`America/New_York`). Empty reads the nearest `ConfigProvider`'s `time-zone`, then the browser's zone. |
 
 ## States
@@ -21888,6 +21894,7 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
 - Invalid or empty `value`: the root shows a muted dash, renders no trigger and no panel, and carries `data-invalid`.
 - Before mount, with no time zone from the prop or the provider, the text renders in UTC so the server and the first client render agree; after mount it switches to the browser's zone. With a time zone, server and client render the same text.
 - The relative phrase reads the provider's `now` when set, else a shared clock that ticks each minute; under 45 seconds it reads `just now`, under an hour in minutes, beyond that in the largest whole unit.
+- `time` reads only the hour and the minute in the effective time zone (`Intl` `hour: numeric`, `minute: 2-digit`: `8:20 AM`, `08:20`), with no date, seconds or zone name; the `time` element keeps the full ISO value in `datetime` and the panel lists every form, so nothing is lost.
 - An unknown time zone name falls back to UTC instead of throwing.
 - The browser row appears only after mount and only when the effective time zone differs from the browser's.
 
@@ -21937,6 +21944,13 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
         <Timestamp
           :value="VALUE"
           format="relative"
+        />
+      </dd>
+      <dt class="text-label-sm text-(--text-muted)">Time</dt>
+      <dd>
+        <Timestamp
+          :value="VALUE"
+          format="time"
         />
       </dd>
     </dl>
@@ -22287,11 +22301,17 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `error` | `string` | `''` | false | Message of the error state. |
 | `ariaLabel` | `string` | `''` | false | Accessible name; empty reads Video. |
 
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `retry` | `MouseEvent` | Try again in the error state was pressed. The button renders only when this event has a listener; a file that failed to load is loaded again, and the app sets `status` back to `pending` or `running` when it generates the video again. |
+
 ## States
 
 - `data-status` mirrors `status`; a file that fails to load, or no `src`, shows `error`.
 - `pending` / `running`: `Skeleton`, a `role="status"` message, `Progress` and the percentage; no controls.
-- `error`: `EmptyState` with `error` or the default message; no controls.
+- `error`: `EmptyState` with `error` or the default message; no playback controls. With a `retry` listener it shows a Try again `Button` (`az az-refresh`, outline, medium) under the message.
 - `success`: the video and its controls; `data-paused`, `data-muted`.
 
 ## Accessibility

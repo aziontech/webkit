@@ -23,7 +23,7 @@
   "Leave `animated` off by default; turn it on for the one band per page whose subject is the network.",
   "To nudge the map or let it run off the band, set `offsetX` / `offsetY` (for example `:offset-x=\"0.15\"` to bleed right, `:offset-y=\"-0.1\"` to bleed up) instead of offsetting the layer.",
   "The landmass is the design's pixel map cell for cell (4,987 cells on a 10-unit grid), and the default `medium` density lights the design's data center field exactly: 172 cells, each metro a capital with up to two satellites, pulsing in the design's three phases. `low` lights the capitals alone (71); `high` adds 31 outlying data centers.",
-  "`asia` and `oceania` hold no data centers — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone."
+  "`asia` and `oceania` hold no data centers — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone, which looks like a broken map or no coverage on a page: do not place them, and the Regions example leaves them out."
  ],
  "channels": [
   "app",

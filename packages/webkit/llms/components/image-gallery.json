@@ -70,6 +70,11 @@
    "name": "download",
    "payload": "(event: MouseEvent, item: ImageGalleryItem)",
    "notes": "Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download)."
+  },
+  {
+   "name": "retry",
+   "payload": "(event: MouseEvent)",
+   "notes": "Try again in the error state was pressed. The button renders only when this event has a listener, so a gallery whose app cannot run the request again shows no dead button; the app starts the request again and clears `error`."
   }
  ],
  "slots": [],

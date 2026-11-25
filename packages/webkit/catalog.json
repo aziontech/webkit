@@ -8955,10 +8955,10 @@
     },
     {
      "name": "format",
-     "type": "'relative' | 'local' | 'utc'",
+     "type": "'relative' | 'local' | 'utc' | 'time'",
      "default": "'local'",
      "required": "false",
-     "doc": "What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form."
+     "doc": "What the text shows: the relative phrase that updates every minute, the date and time in the time zone, the date and time in UTC, or only the hour and minute in the time zone (for a row under a date header). The panel always lists every form."
     },
     {
      "name": "timeZone",
@@ -8997,7 +8997,7 @@
      "type": "'relative' | 'local' | 'utc'",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`; inside a `Timeline.Group`, `local` reads as Timestamp's `time` (hour and minute only), because the group label carries the date."
     },
     {
      "name": "loading",
@@ -9054,7 +9054,7 @@
      "type": "'relative' | 'local' | 'utc'",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`."
+     "doc": "How every item's `time` reads, passed to `Timestamp` as its `format`; inside a `Timeline.Group`, `local` reads as Timestamp's `time` (hour and minute only), because the group label carries the date."
     },
     {
      "name": "loading",
@@ -9737,7 +9737,7 @@
      "type": "IntegrationCardBadge[]",
      "default": "[]",
      "required": "false",
-     "doc": "Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
+     "doc": "Small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`IntegrationCardBadgeVariant` and `IntegrationCardBadgeSeverity`); a badge with neither is `info`, in the plain and the featured layout)."
     },
     {
      "name": "installed",
@@ -10972,7 +10972,7 @@
      "type": "TimestampFormat",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union."
     },
     {
      "name": "loading",
@@ -11015,7 +11015,7 @@
      "type": "TimestampFormat",
      "default": "'local'",
      "required": "false",
-     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, or `utc` — Timestamp's own union."
+     "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union."
     },
     {
      "name": "loading",
@@ -31370,7 +31370,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "URL of an image or PDF file to draw. Set, it wins over `base64`."
+     "doc": "URL of an image or PDF file to draw: https, http, blob, data or a relative path; any other scheme draws nothing. Set, it wins over `base64`."
     },
     {
      "name": "base64",
@@ -31522,6 +31522,11 @@
      "name": "pause",
      "payload": "Event",
      "notes": "Playback paused, by the reader or because the clip reached its end (the element's `pause` event)."
+    },
+    {
+     "name": "retry",
+     "payload": "MouseEvent",
+     "notes": "Try again in the error state was pressed. The button renders only when this event has a listener; an error the audio element reported is cleared and the element loads `src` again, and the app clears or keeps `error`."
     }
    ],
    "surface": "app",
@@ -31593,6 +31598,13 @@
      "doc": "Accessible name; empty reads Video."
     }
    ],
+   "events": [
+    {
+     "name": "retry",
+     "payload": "MouseEvent",
+     "notes": "Try again in the error state was pressed. The button renders only when this event has a listener; a file that failed to load is loaded again, and the app sets `status` back to `pending` or `running` when it generates the video again."
+    }
+   ],
    "surface": "app",
    "examplesFile": "catalog/examples/video-player.json",
    "docsFile": "catalog/components/video-player.json"
@@ -31639,6 +31651,11 @@
      "name": "download",
      "payload": "(event: MouseEvent, item: ImageGalleryItem)",
      "notes": "Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download)."
+    },
+    {
+     "name": "retry",
+     "payload": "(event: MouseEvent)",
+     "notes": "Try again in the error state was pressed. The button renders only when this event has a listener, so a gallery whose app cannot run the request again shows no dead button; the app starts the request again and clears `error`."
     }
    ],
    "surface": "app",
