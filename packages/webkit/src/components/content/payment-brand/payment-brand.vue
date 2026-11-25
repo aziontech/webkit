@@ -100,7 +100,7 @@
   })
 
   const ROOT_CLASS =
-    'inline-flex shrink-0 items-center justify-center overflow-clip rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
+    'inline-flex shrink-0 items-center justify-center overflow-clip rounded-(--radius-sm) border border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
     'data-[size=medium]:h-7 data-[size=medium]:w-10 data-[size=small]:h-5 data-[size=small]:w-8 ' +
     '[&>svg]:block [&>svg]:h-auto [&>svg]:w-3/5 [&>svg]:max-h-4/5'
 </script>
