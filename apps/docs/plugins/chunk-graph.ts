@@ -6,8 +6,8 @@ import type { Plugin } from 'vite'
 
 const CHUNK_GRAPH_FILE = '.vite/chunk-graph.json'
 
-export const BUILD_DIR = fileURLToPath(new URL('../.build', import.meta.url))
-export const DIST_DIR = fileURLToPath(new URL('../dist', import.meta.url))
+const BUILD_DIR = fileURLToPath(new URL('../.build', import.meta.url))
+const DIST_DIR = fileURLToPath(new URL('../dist', import.meta.url))
 
 export function moveBuildManifests(dist = DIST_DIR, buildDir = BUILD_DIR): void {
   const graph = join(dist, CHUNK_GRAPH_FILE)

@@ -25,7 +25,7 @@ const MODIFIERS: [RegExp, string][] = [
 
 const modifier = (token: string) => MODIFIERS.find(([pattern]) => pattern.test(token))?.[1]
 
-export function shortcutKeys(command: string): string[] {
+function shortcutKeys(command: string): string[] {
   const keys: string[] = []
   for (const part of command.replace(/\+\+$/, '+plus').split('+')) {
     let rest = part.trim()
