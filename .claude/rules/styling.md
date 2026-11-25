@@ -269,6 +269,20 @@ A `group-has-[…]/<frame>:` variant asks Chromium to re-check the `:has()` when
 
 Shipped in the table scroll cue until 2026-11-20 (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc on a phone). Get the same result from the stacking order, or measure the state in script and set a `data-*` attribute on the frame. The **`has-on-scroll-frame`** token check blocks a `:has()` variant read from the `scroll` group at write time and in the CI ratchet, and the styled suite `table-scroll-performance.test.ts` fails when scrolling the virtual DataTable restyles the whole table.
 
+## Never give a sibling variant a universal subject
+
+`[&+*]:` and `[&~*]:` compile to a rule whose subject is `*` after a sibling combinator (`.x + *`). The theme scans every component, so that rule sits in every app's stylesheet, and Chromium checks every element inserted anywhere on the page against it.
+
+```html
+<!-- ❌ the heading pulls up whatever follows it -->
+<h3 class="mt-(--spacing-xs) [&+*]:-mt-(--spacing-xs)"></h3>
+
+<!-- ✅ the heading moves its own edge -->
+<h3 class="mt-(--spacing-xs) not-last:-mb-(--spacing-xs)"></h3>
+```
+
+Shipped in `StreamingResponse` until 2026-11-24 (the virtual DataTable's scroll style recalc rose from 0.06 to 0.41 of its budget). Put the spacing on the element itself with `not-last:` / `not-first:`, or name the sibling (`[&+p]:`). The **`universal-sibling-selector`** token check blocks it at write time and in the CI ratchet.
+
 ## A directional icon already mirrors — never rotate it under `rtl`
 
 `@aziontech/webkit/styles` mirrors every directional glyph (`az-arrow-right`, `az-chevron-left`, `ai-caret-*`, `az-log-in`, `az-reply`, … — the `DIRECTIONAL_ICONS` set in `src/utils/directional-icons.ts`) under `dir="rtl"` with `scale: -1 1`. Adding `rtl:rotate-180` (or `rtl:-rotate-180`) on the same glyph composes a rotation with that scale, which flips it vertically instead of horizontally: the arrow points the wrong way, and nothing errors.
@@ -446,6 +460,7 @@ padding: 0 var(--spacing-md);
 ## Hard prohibitions
 
 - Never mix two border colours on outlined controls side by side in one header or toolbar; only a text-entry field keeps the field outline there.
+- Never write a sibling variant with a universal subject (`[&+*]:`, `[&~*]:`); use `not-last:` / `not-first:` or name the sibling.
 - Never double a line — no two visible borders flush side by side or 1px apart. The container draws the outer frame; the parts inside draw only the dividers between themselves.
 - Never let the fills of two neighbouring list rows touch: inset the fill with `border-y border-transparent bg-clip-padding forced-colors:border-y-0`, keeping the row height.
 - Never build a navigation or menu list row other than the menu row (32px, 44px on touch, the inset fill, no list gap), and never give some of its rows another height.
@@ -544,6 +559,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`has-on-scroll-frame`** (same engine, write-time hook and CI ratchet) blocks a `group-has-[…]/scroll:` or `peer-has-…/scroll:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs). The styled suite [`table-scroll-performance.test.ts`](../../packages/webkit/src/test/table-scroll-performance.test.ts) holds the virtual DataTable's scroll style recalc to a machine-independent ratio (`perf-budgets.json#styleRecalc`).
+- **`universal-sibling-selector`** (same engine, write-time hook and CI ratchet) blocks an arbitrary variant whose subject is `*` after `+` or `~` (`[&+*]:`, `[&~*]:`, `[&>*+*]:`); pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`rtl-double-flip`** (same engine, write-time hook and CI ratchet; marked `wide`, so `tokenChecksFor` also runs it over blocks and examples, and `repoTokenChecksFor` in `.claude/hooks/lib/token-checks.mjs` adds `apps/docs/src` and `apps/demos/src`, since the package itself never names `apps/`) blocks a class string that holds a directional `az-*` glyph together with `rtl:rotate-180` / `rtl:-rotate-180` under any variant chain; pinned both ways, and against `DIRECTIONAL_ICONS`, in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`off-brand-orange`** (same engine, write-time hook and CI ratchet; marked `wide` like `rtl-double-flip`, so it runs over components, blocks, examples, `apps/docs/src` and `apps/demos/src`) blocks `--text-primary` and every `orange` / `brand-primary` / `alpha-orange` step other than the logo step `500`, as a variable or a utility; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`status-fill-as-text`** (same engine, write-time hook and CI ratchet; marked `wide`, so it runs over components, blocks, examples and the docs and demos apps) blocks a status fill (`--danger`, `--success`, `--warning`, `--info`) used as a text or icon colour: an icon on a surface is the `-mark` token, error text `--text-danger`, text on the fill its `-foreground` (`rules/webkit-tokens.md`); pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
