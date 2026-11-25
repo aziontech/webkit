@@ -4,6 +4,7 @@
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [streaming-response.json](streaming-response.json)
 
 ## When to use

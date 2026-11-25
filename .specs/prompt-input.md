@@ -3,6 +3,7 @@ name: prompt-input
 category: ai
 structure: composition
 status: implemented
+stability: preview
 spec_version: 9
 template: 2
 checksum: 45cb9141d2425272e05d4cf5705070c7dca20e047ffaa30c2d719d423b2c9ebd

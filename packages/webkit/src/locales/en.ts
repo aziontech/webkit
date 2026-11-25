@@ -1281,6 +1281,20 @@ export const tracker = {
   roleDescription: 'status history'
 } as const
 
+export const contributionGraph = {
+  roleDescription: 'contribution calendar',
+  noData: 'No activity recorded',
+  errorTitle: "Contributions didn't load",
+  hint: 'Hover or select a day to inspect activity',
+  less: 'Less',
+  more: 'More',
+  dayLabel: {
+    one: '{count} contribution on {date}',
+    other: '{count} contributions on {date}'
+  },
+  dayZero: 'No contributions on {date}'
+} as const
+
 export const flowDiagram = {
   label: 'Diagram',
   notBound: 'Not bound',
@@ -1888,6 +1902,7 @@ export const en = {
   subagentCard,
   flowDiagram,
   tracker,
+  contributionGraph,
   tree,
   unsavedChanges,
   tutorialPanel,

@@ -34,7 +34,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "41.9 KB",
+    "limit": "42 KB",
     "entryOnly": true
   },
   {
@@ -545,7 +545,7 @@
   {
     "name": "media-split-section",
     "path": "src/components/section/media-split-section/media-split-section.vue",
-    "limit": "17.9 KB",
+    "limit": "18 KB",
     "entryOnly": true
   },
   {
@@ -572,7 +572,7 @@
   {
     "name": "feature-scroll-section",
     "path": "src/components/section/feature-scroll-section/feature-scroll-section.vue",
-    "limit": "21 KB",
+    "limit": "21.1 KB",
     "entryOnly": true
   },
   {
@@ -584,7 +584,7 @@
   {
     "name": "feature-widgets-section",
     "path": "src/components/section/feature-widgets-section/feature-widgets-section.vue",
-    "limit": "20.6 KB",
+    "limit": "20.75 KB",
     "entryOnly": true
   },
   {
@@ -687,7 +687,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "60.6 KB",
+    "limit": "60.8 KB",
     "entryOnly": true
   },
   {
@@ -1138,17 +1138,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "14.55 KB"
+    "limit": "14.7 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "13 KB"
+    "limit": "13.15 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "13.1 KB"
+    "limit": "13.25 KB"
   },
   {
     "name": "phone-input",
@@ -1298,7 +1298,7 @@
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "18.3 KB",
+    "limit": "18.45 KB",
     "entryOnly": true
   },
   {
@@ -2711,5 +2711,10 @@
     "name": "countdown",
     "path": "src/components/content/countdown/countdown.vue",
     "limit": "4.3 KB"
+  },
+  {
+    "name": "contribution-graph",
+    "path": "src/components/chart/contribution-graph/contribution-graph.vue",
+    "limit": "7.2 KB"
   }
 ]

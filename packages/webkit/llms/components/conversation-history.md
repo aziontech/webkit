@@ -4,6 +4,7 @@
 
 - Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [conversation-history.json](conversation-history.json)
 
 ## When to use

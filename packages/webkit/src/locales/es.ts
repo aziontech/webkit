@@ -1592,5 +1592,18 @@ export const es: Messages = {
       one: '{count} persona',
       other: '{count} personas'
     }
+  },
+  contributionGraph: {
+    roleDescription: 'calendario de contribuciones',
+    noData: 'Sin actividad registrada',
+    errorTitle: 'No se cargaron las contribuciones',
+    hint: 'Pasa el cursor o selecciona un día para inspeccionar la actividad',
+    less: 'Menos',
+    more: 'Más',
+    dayLabel: {
+      one: '{count} contribución el {date}',
+      other: '{count} contribuciones el {date}'
+    },
+    dayZero: 'Sin contribuciones el {date}'
   }
 }

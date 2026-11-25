@@ -5,6 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), `PromptInputTools`, [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
@@ -1135,11 +1136,32 @@ export interface AiChatThread {
 export const sampleHistoryNow = '2026-11-19T12:00:00Z'
 
 export const sampleProjects: AiChatProject[] = [
-  { id: 'workloads', code: 'WL', title: 'Workloads', kind: 'workload', icon: 'az az-workloads', pinned: true },
+  {
+    id: 'workloads',
+    code: 'WL',
+    title: 'Workloads',
+    kind: 'workload',
+    icon: 'az az-workloads',
+    pinned: true
+  },
   { id: 'edge-dns', code: 'DN', title: 'Edge DNS', kind: 'dns', icon: 'az az-edge-dns' },
   { id: 'firewall', code: 'FW', title: 'Edge Firewall', kind: 'firewall', icon: 'az az-firewall' },
-  { id: 'functions', code: 'FN', title: 'Edge Functions', kind: 'function', icon: 'az az-functions', cloud: true },
-  { id: 'storage', code: 'OS', title: 'Object Storage', kind: 'storage', icon: 'az az-object-storage', cloud: true }
+  {
+    id: 'functions',
+    code: 'FN',
+    title: 'Edge Functions',
+    kind: 'function',
+    icon: 'az az-functions',
+    cloud: true
+  },
+  {
+    id: 'storage',
+    code: 'OS',
+    title: 'Object Storage',
+    kind: 'storage',
+    icon: 'az az-object-storage',
+    cloud: true
+  }
 ]
 
 export const sampleHistory: ConversationHistoryItem[] = [
@@ -1229,15 +1251,63 @@ export const sampleProviders: PromptInputMenuOption[] = [
 ]
 
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'gemini-4-neon', label: 'Gemini 4 Neon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘1' },
-  { value: 'gemini-4-carbon', label: 'Gemini 4 Carbon', provider: 'google', icon: 'az az-gemini', shortcut: '⌘2' },
-  { value: 'gemini-3-8-flash', label: 'Gemini 3.8 Flash', provider: 'google', icon: 'az az-gemini', shortcut: '⌘3' },
-  { value: 'claude-opus-4-5', label: 'Claude Opus 4.5', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘4' },
-  { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', icon: 'az az-claude', shortcut: '⌘5' },
+  {
+    value: 'gemini-4-neon',
+    label: 'Gemini 4 Neon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘1'
+  },
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Carbon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘2'
+  },
+  {
+    value: 'gemini-3-8-flash',
+    label: 'Gemini 3.8 Flash',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘3'
+  },
+  {
+    value: 'claude-opus-4-5',
+    label: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘4'
+  },
+  {
+    value: 'claude-sonnet-4',
+    label: 'Claude Sonnet 4',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘5'
+  },
   { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
-  { value: 'gpt-5-mini', label: 'GPT-5 Mini', provider: 'openai', icon: 'az az-openai', shortcut: '⌘7' },
-  { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', icon: 'az az-meta', shortcut: '⌘8' },
-  { value: 'auto', label: 'Azion Auto', provider: 'azion', icon: 'az az-azion', description: 'AI Gateway router' }
+  {
+    value: 'gpt-5-mini',
+    label: 'GPT-5 Mini',
+    provider: 'openai',
+    icon: 'az az-openai',
+    shortcut: '⌘7'
+  },
+  {
+    value: 'llama-4-maverick',
+    label: 'Llama 4 Maverick',
+    provider: 'meta',
+    icon: 'az az-meta',
+    shortcut: '⌘8'
+  },
+  {
+    value: 'auto',
+    label: 'Azion Auto',
+    provider: 'azion',
+    icon: 'az az-azion',
+    description: 'AI Gateway router'
+  }
 ]
 
 export const sampleModes: PromptInputMenuOption[] = [
@@ -1777,8 +1847,7 @@ export const turnTime = (
       if (!needle) return true
       const projectTitle = projectMap.value.get(item.projectId)?.title ?? ''
       return (
-        item.title.toLowerCase().includes(needle) ||
-        projectTitle.toLowerCase().includes(needle)
+        item.title.toLowerCase().includes(needle) || projectTitle.toLowerCase().includes(needle)
       )
     })
   })
@@ -1847,7 +1916,9 @@ export const turnTime = (
     aria-label="Conversation history"
     class="flex w-(--container-2xs) shrink-0 flex-col gap-(--spacing-sm) overflow-y-auto border-e border-(--border-subtle) bg-(--bg-surface) p-(--spacing-xs) max-md:hidden"
   >
-    <div class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)">
+    <div
+      class="flex items-center gap-(--spacing-2xs) border-b border-(--border-subtle) pb-(--spacing-xs)"
+    >
       <Input
         v-model="search"
         size="small"

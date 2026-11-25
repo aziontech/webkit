@@ -3,6 +3,7 @@ name: response-branches
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 5
 template: 2
 checksum: 16d13cf17a65b17305c462c11702bd9778b3a308d385377420e420b00c5ac81d

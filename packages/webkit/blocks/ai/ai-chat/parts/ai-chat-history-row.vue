@@ -97,7 +97,7 @@
 
     <div class="flex items-center justify-end">
       <HoverCard
-        side="right"
+        side="end"
         align="end"
         :open-delay="150"
         :close-delay="150"
@@ -234,7 +234,7 @@
         />
       </span>
       <HoverCard
-        side="right"
+        side="end"
         align="end"
         :open-delay="150"
         :close-delay="150"

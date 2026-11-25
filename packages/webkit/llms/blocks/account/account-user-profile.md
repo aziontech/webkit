@@ -1,0 +1,1929 @@
+# AccountUserProfile (`account/account-user-profile`)
+
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year, a `CopyButton` for the profile link and an Edit profile `Button`) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year, a `Card` with a `ContributionGraph` (category and cell-shape `ToggleGroup`s, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+
+- Surface: app
+- Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
+- MCP: `get_block("account/account-user-profile")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ContributionGraph](../../components/contribution-graph.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageTabs](../../components/page-tabs.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PhoneInput](../../components/phone-input.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [ThemeSwitcher](../../components/theme-switcher.md), [Timeline](../../components/timeline.md), [Timestamp](../../components/timestamp.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
+- Skills: `webkit-form`, `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`, `webkit-microcopy`
+
+## Asked as
+
+user profile; developer profile; my profile; profile settings; personal settings; contribution graph; platform contributions; contribution history; notification preferences; security settings; perfil do usuário; configurações de perfil; contribuições na plataforma; preferências de notificação
+
+One page for an Azion user's profile and every personal setting: what they did on the platform (metrics, a year of daily contributions and the history behind them) and how their account is set up (profile, security, notifications and preferences). It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+
+## When to use
+
+- The signed-in user's own profile page in the Azion console (`/profile`).
+- Showing a user's contributions year over year next to the settings they own, so they find everything personal in one place.
+
+## When not to use
+
+- Managing the other members of an account: use `account/account-users`.
+- Requiring multi-factor authentication for every member: use `account/account-mfa-settings`.
+- Searching and exporting the account's audit log: use `account/account-activity-history`.
+- Creating and revoking personal tokens: use `account/account-personal-tokens`; this page links to it with Manage tokens.
+
+## Building blocks
+
+### A. Header — `Avatar`, `Tag`, `CopyButton`, `Button`, `Skeleton` (required)
+
+A compact strip: a 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. `CopyButton` copies the profile link; Edit profile opens the Profile and bio tab. No cover picture and no large avatar: the graph and the settings stay above the fold.
+
+### B. Tabs — `PageTabs`, `Tabs` (required)
+
+Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and access, Notifications, Preferences.
+
+### C. Metrics — `StatTileGroup`, `StatTile` (required)
+
+Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak.
+
+### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
+
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history; a second one switches squares and dots. The year rail (one `Button` per year, `aria-current` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
+
+### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
+
+The year's contributions grouped by month in a `Timeline`, newest first. With a day picked, a `Tag` names the day and Show all days clears it. No match shows an `EmptyState` with Reset filters; a user with no contributions sees one that says what will appear.
+
+### F. Settings tabs — `SettingsGroup`, `SettingsRow`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `PhoneInput`, `LanguageSelect`, `Switch`, `PasswordInput`, `PasswordRequirements`, `Alert`, `Link`, `ThemeSwitcher` (required)
+
+Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.List`.
+
+- **Profile and bio:** picture, names, handle, bio, time zone, local time, language, email, phone, website, and two visibility switches.
+- **Security and access:** current, new and confirm password with live `PasswordRequirements`, multi-factor and personal tokens. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider and the password fields are disabled; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
+- **Notifications:** the notification email, the Application Security, Platform and Delivery, and Account Activity and AI Adoption digests (frequency and channel), and real-time alerts for watched resources, mentions, deployments and AI Copilot sessions.
+- **Preferences:** `ThemeSwitcher` and Keyboard shortcuts.
+
+### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
+
+Any edit in a settings tab shows one `SaveBar` with Discard and Save changes. Command S saves; its `Kbd` hint hides when Keyboard shortcuts is off.
+
+## Data
+
+The block fetches nothing. It takes its data through props and hands edits back through events; `sample.ts` fills any record left out (and no activity while `loading`). The types live in `user-profile-model.ts`.
+
+| Prop                    | Type                              | What it does                                                           |
+| ----------------------- | --------------------------------- | ---------------------------------------------------------------------- |
+| `profile`               | `UserProfileData`                 | Identity, contact and visibility.                                      |
+| `years`                 | `UserProfileYearActivity[]`       | Metrics, daily contributions and history per year, newest first.       |
+| `securityPolicy`        | `UserProfileSecurityPolicy`       | SSO and SCIM management, multi-factor state and policy, token summary. |
+| `notifications`         | `UserProfileNotificationSettings` | Notification email, digests and alerts.                                |
+| `preferences`           | `UserProfilePreferences`          | Theme and keyboard shortcuts.                                          |
+| `loading`               | `boolean`                         | Skeletons in the header, metrics, graph and history.                   |
+| `error`                 | `string`                          | A danger `Alert` with Retry replaces the page.                         |
+| `v-model:active-tab`    | `UserProfileTab`                  | The open tab.                                                          |
+| `v-model:selected-year` | `number`                          | The year of the overview.                                              |
+
+Events: `save` (profile, notifications, preferences and security fields), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` (the props change back to the saved values and the `SaveBar` closes) and delete `sample.ts`.
+
+## Do
+
+- Keep the avatar small and the header to one line of facts.
+- Say who locks a setting and why when the organization's identity provider manages it.
+- Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
+
+## Don't
+
+- Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
+- Don't let the user change a password or turn off multi-factor when the organization manages them.
+- Don't fake a save with a timer; persist on `@save`.
+
+## Copy
+
+- History titles are past tense and name the product: "Deployed 14 releases across 3 Applications".
+- Product names follow the Azion catalog: Applications, Functions, Object Storage, Web Application Firewall, AI Copilot.
+
+## Accessibility
+
+- `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
+- The year rail is a `nav` with `aria-current` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+
+## States
+
+- Default: the Overview tab for 2026 with metrics, the contribution graph, the year rail and the history.
+- Profile: the Profile and bio tab (`active-tab` is `profile`).
+- Security: the Security and access tab (`active-tab` is `security`) for an account that signs in with a password.
+- SecuritySso: the same tab with `securityPolicy.ssoManaged` and `mfaEnforced` on; the controls are locked and say why.
+- Notifications: the Notifications tab (`active-tab` is `notifications`).
+- Preferences: the Preferences tab (`active-tab` is `preferences`).
+- Empty: a new user (`years` holds one year with no contributions); zero metrics, an empty graph and an EmptyState for the history.
+- Loading: the first load (`loading`); skeletons in the header, the metrics, the graph and the history.
+- Error: the profile did not load (`error` is set); a danger Alert with Retry replaces the page.
+
+## Related
+
+- `account/account-mfa-settings` — multi-factor policy for every member.
+- `account/account-personal-tokens` — creating and revoking tokens.
+- `account/account-activity-history` — the account's audit log.
+
+## Variants
+
+- `Default` — primary (the code below)
+- `Profile` — The Profile and bio tab: personal information, contact and links, and contribution visibility.
+- `Security` — The Security and access tab for an account that signs in with a password: password fields with live requirements, multi-factor and personal tokens.
+- `SecuritySso` — The Security and access tab when the organization's SSO and SCIM provider manages the password and requires multi-factor: the controls are locked and say why.
+- `Notifications` — The Notifications tab: the notification email, the three scheduled digests and the real-time alerts.
+- `Preferences` — The Preferences tab: theme and the Keyboard shortcuts switch that hides every shortcut hint when off.
+- `Empty` — A new user with no contributions yet: zero metrics, an empty graph and an EmptyState in place of the history.
+- `Loading` — The first load: Skeletons in the header, the metrics, the graph and the history.
+- `Error` — The profile failed to load: a danger Alert with Retry replaces the page.
+
+Each variant is the same screen in another state: `get_block("account/account-user-profile", { variant })`, or the file under `blocks/account/account-user-profile/variants/`.
+
+## Code (`Default`)
+
+```vue
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Kbd from '@aziontech/webkit/kbd'
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import Tabs from '@aziontech/webkit/tabs'
+  import { computed, ref, watch } from 'vue'
+
+  import ProfileBioTab from './parts/profile-bio-tab.vue'
+  import ProfileHeader from './parts/profile-header.vue'
+  import ProfileNotificationsTab from './parts/profile-notifications-tab.vue'
+  import ProfileOverview from './parts/profile-overview.vue'
+  import ProfilePreferencesTab from './parts/profile-preferences-tab.vue'
+  import ProfileSecurityTab from './parts/profile-security-tab.vue'
+  import {
+    sampleNotifications,
+    samplePreferences,
+    sampleProfile,
+    sampleSecurityPolicy,
+    sampleYears
+  } from './sample'
+  import type {
+    UserProfileData,
+    UserProfileNotificationSettings,
+    UserProfilePreferences,
+    UserProfileSavePayload,
+    UserProfileSecurityForm,
+    UserProfileSecurityPolicy,
+    UserProfileTab,
+    UserProfileYearActivity
+  } from './user-profile-model'
+
+  export interface UserProfileProps {
+    /** Identity, contact and visibility data. Left out, the sample profile renders. */
+    profile?: UserProfileData
+    /** Every year of activity, newest first. Left out, the sample years render. */
+    years?: UserProfileYearActivity[]
+    /** Security state and the organization's SSO, SCIM and multi-factor policy. */
+    securityPolicy?: UserProfileSecurityPolicy
+    /** Notification routing, digests and alerts. */
+    notifications?: UserProfileNotificationSettings
+    /** Theme and keyboard shortcut preferences. */
+    preferences?: UserProfilePreferences
+    /** The profile is loading. */
+    loading?: boolean
+    /** Load failure; replaces the page with a danger Alert and Retry. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<UserProfileProps>(), {
+    profile: () => sampleProfile,
+    years: undefined,
+    securityPolicy: () => sampleSecurityPolicy,
+    notifications: () => sampleNotifications,
+    preferences: () => samplePreferences,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    save: [payload: UserProfileSavePayload]
+    retry: [event: MouseEvent]
+    'upload-avatar': [event: MouseEvent]
+    'remove-avatar': [event: MouseEvent]
+    'manage-tokens': [event: MouseEvent]
+    'view-watched': [event: MouseEvent]
+  }>()
+
+  const activeTab = defineModel<UserProfileTab>('activeTab', { default: 'overview' })
+  const selectedYear = defineModel<number>('selectedYear', { default: 2026 })
+
+  const years = computed(() => props.years ?? (props.loading ? [] : sampleYears))
+
+  const securityBaseline = (): UserProfileSecurityForm => ({
+    mfaEnabled: props.securityPolicy.mfaEnabled,
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  })
+
+  const profileForm = ref<UserProfileData>({ ...props.profile })
+  const notificationForm = ref<UserProfileNotificationSettings>({ ...props.notifications })
+  const preferencesForm = ref<UserProfilePreferences>({ ...props.preferences })
+  const securityForm = ref<UserProfileSecurityForm>(securityBaseline())
+
+  const snapshot = (): UserProfileSavePayload => ({
+    profile: { ...profileForm.value },
+    notifications: { ...notificationForm.value },
+    preferences: { ...preferencesForm.value },
+    security: { ...securityForm.value }
+  })
+
+  const dirty = computed(
+    () =>
+      JSON.stringify(snapshot()) !==
+      JSON.stringify({
+        profile: props.profile,
+        notifications: props.notifications,
+        preferences: props.preferences,
+        security: securityBaseline()
+      })
+  )
+
+  function discard() {
+    profileForm.value = { ...props.profile }
+    notificationForm.value = { ...props.notifications }
+    preferencesForm.value = { ...props.preferences }
+    securityForm.value = securityBaseline()
+  }
+
+  watch(
+    () => [props.profile, props.notifications, props.preferences, props.securityPolicy],
+    discard
+  )
+
+  function save() {
+    emit('save', snapshot())
+  }
+</script>
+
+<template>
+  <Alert
+    v-if="error && !loading"
+    severity="danger"
+    title="Your profile didn't load"
+    :label="error"
+    action-label="Retry"
+    @action="emit('retry', $event)"
+  />
+  <div
+    v-else
+    class="flex w-full flex-col gap-(--layout-group-gap)"
+  >
+    <ProfileHeader
+      :profile="profile"
+      :loading="loading"
+      @edit="activeTab = 'profile'"
+    />
+
+    <PageTabs v-model="activeTab">
+      <Tabs.Trigger
+        value="overview"
+        label="Overview"
+      />
+      <Tabs.Trigger
+        value="profile"
+        label="Profile and bio"
+      />
+      <Tabs.Trigger
+        value="security"
+        label="Security and access"
+      />
+      <Tabs.Trigger
+        value="notifications"
+        label="Notifications"
+      />
+      <Tabs.Trigger
+        value="preferences"
+        label="Preferences"
+      />
+    </PageTabs>
+
+    <ProfileOverview
+      v-if="activeTab === 'overview'"
+      v-model:selected-year="selectedYear"
+      :years="years"
+      :loading="loading"
+    />
+    <ProfileBioTab
+      v-else-if="activeTab === 'profile'"
+      v-model:form="profileForm"
+      @upload-avatar="emit('upload-avatar', $event)"
+      @remove-avatar="emit('remove-avatar', $event)"
+    />
+    <ProfileSecurityTab
+      v-else-if="activeTab === 'security'"
+      v-model:form="securityForm"
+      :policy="securityPolicy"
+      @manage-tokens="emit('manage-tokens', $event)"
+    />
+    <ProfileNotificationsTab
+      v-else-if="activeTab === 'notifications'"
+      v-model:form="notificationForm"
+      :emails="profile.alternateEmails"
+      @view-watched="emit('view-watched', $event)"
+    />
+    <ProfilePreferencesTab
+      v-else
+      v-model:form="preferencesForm"
+    />
+
+    <SaveBar
+      v-if="dirty"
+      @save="save"
+    >
+      You have unsaved changes.
+      <template #actions>
+        <Button
+          type="button"
+          label="Discard"
+          variant="outline"
+          size="medium"
+          @click="discard"
+        />
+        <Button
+          type="button"
+          variant="primary"
+          size="medium"
+          :aria-keyshortcuts="preferencesForm.keyboardShortcuts ? 'Meta+S Control+S' : undefined"
+          @click="save"
+        >
+          Save changes
+          <span
+            v-if="preferencesForm.keyboardShortcuts"
+            class="inline-flex pointer-coarse:hidden"
+          >
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </span>
+        </Button>
+      </template>
+    </SaveBar>
+  </div>
+</template>
+```
+
+## `sample.ts`
+
+```ts
+import type {
+  UserProfileData,
+  UserProfileNotificationSettings,
+  UserProfilePreferences,
+  UserProfileSecurityPolicy,
+  UserProfileYearActivity
+} from './user-profile-model'
+
+function buildYearItems(year: number, seed: number) {
+  let state = seed % 2_147_483_647
+  const next = () => {
+    state = (state * 16_807) % 2_147_483_647
+    return (state - 1) / 2_147_483_646
+  }
+  const categories = ['deploy', 'function', 'security'] as const
+  const items = []
+  for (let day = 0; day < 365; day += 1) {
+    const dt = new Date(Date.UTC(year, 0, 1 + day))
+    if (dt.getUTCFullYear() !== year) break
+    const wave = Math.sin(day / 28) * 0.22 + 0.5
+    const active = next() < wave * 0.65
+    const count = active ? Math.max(1, Math.floor(next() * 14)) : 0
+    if (count > 0) {
+      items.push({
+        date: dt.toISOString().slice(0, 10),
+        count,
+        category: categories[Math.floor(next() * categories.length)] ?? 'deploy'
+      })
+    }
+  }
+  return items
+}
+
+export const sampleProfile: UserProfileData = {
+  firstName: 'Jane',
+  lastName: 'Doe',
+  handle: 'jane.doe',
+  role: 'Account owner',
+  email: 'jane.doe@example.com',
+  alternateEmails: ['jane.doe@example.com', 'ops@example.com'],
+  phoneCountry: 'US',
+  phoneDigits: '5550142',
+  timezone: 'America/Los_Angeles',
+  displayLocalTime: true,
+  language: 'en-US',
+  location: 'San Francisco, United States',
+  memberSince: '2023',
+  bio: 'Building the Acme storefront on Azion Applications and Functions.',
+  websiteUrl: 'https://example.com/jane',
+  profileUrl: 'https://app.example.com/u/jane.doe',
+  privateProfile: false,
+  includePrivateContributions: true
+}
+
+export const sampleSecurityPolicy: UserProfileSecurityPolicy = {
+  ssoManaged: false,
+  ssoProvider: 'Okta',
+  mfaEnabled: true,
+  mfaEnforced: false,
+  activeTokensCount: 3,
+  lastTokenUsedAt: '2026-11-24T14:48:00Z',
+  lastTokenClient: 'the Azion CLI'
+}
+
+export const sampleNotifications: UserProfileNotificationSettings = {
+  defaultEmail: 'jane.doe@example.com',
+  securityDigestCadence: 'weekly',
+  securityDigestChannel: 'email',
+  deliveryDigestCadence: 'weekly',
+  deliveryDigestChannel: 'email',
+  activityAiDigestCadence: 'monthly',
+  activityAiDigestChannel: 'email',
+  watchedResourcesCount: 12,
+  watchedResourcesChannel: 'both',
+  mentionsChannel: 'both',
+  deployAlertsChannel: 'failures',
+  copilotSessionsChannel: 'both',
+  tokenAlerts: true,
+  releaseNotes: true
+}
+
+export const samplePreferences: UserProfilePreferences = {
+  theme: 'system',
+  keyboardShortcuts: true
+}
+
+export const sampleYears: UserProfileYearActivity[] = [
+  {
+    year: 2026,
+    totalContributions: 1482,
+    contributionsDelta: 18,
+    deployments: 318,
+    copilotTasks: 124,
+    longestStreakDays: 42,
+    currentStreakDays: 6,
+    items: buildYearItems(2026, 2026),
+    months: [
+      {
+        label: 'November 2026',
+        entries: [
+          {
+            id: '2026-11-deploys',
+            title: 'Deployed 14 releases across 3 Applications',
+            description: 'acme-store (8), production-api (4), docs-site (2)',
+            category: 'deploy',
+            severity: 'info',
+            icon: 'az az-cloud-upload',
+            time: '2026-11-22T18:20:00Z',
+            date: '2026-11-22'
+          },
+          {
+            id: '2026-11-functions',
+            title: 'Published 3 Functions updates',
+            description: 'jwt-auth 2.4.1 and traffic-router 1.2.0',
+            category: 'function',
+            severity: 'success',
+            icon: 'az az-code',
+            time: '2026-11-18T14:05:00Z',
+            date: '2026-11-18'
+          },
+          {
+            id: '2026-11-firewall',
+            title: 'Updated 4 firewall rule sets',
+            description: 'Added rate limits to the production and checkout firewalls',
+            category: 'security',
+            severity: 'warning',
+            icon: 'az az-shield',
+            time: '2026-11-11T10:40:00Z',
+            date: '2026-11-11'
+          }
+        ]
+      },
+      {
+        label: 'October 2026',
+        entries: [
+          {
+            id: '2026-10-deploys',
+            title: 'Deployed 21 releases across 4 Applications',
+            description: 'acme-store (12), checkout (6), site-assets (3)',
+            category: 'deploy',
+            severity: 'info',
+            icon: 'az az-cloud-upload',
+            time: '2026-10-28T16:15:00Z',
+            date: '2026-10-28'
+          },
+          {
+            id: '2026-10-copilot',
+            title: 'Completed 19 AI Copilot workflows',
+            description: 'Cache policy review (11 tasks) and staging migration (8 tasks)',
+            category: 'function',
+            severity: 'neutral',
+            icon: 'az az-sparkles',
+            time: '2026-10-14T21:00:00Z',
+            date: '2026-10-14'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    year: 2025,
+    totalContributions: 1254,
+    contributionsDelta: 24,
+    deployments: 274,
+    copilotTasks: 88,
+    longestStreakDays: 31,
+    currentStreakDays: 0,
+    items: buildYearItems(2025, 2025),
+    months: [
+      {
+        label: 'December 2025',
+        entries: [
+          {
+            id: '2025-12-deploys',
+            title: 'Deployed 19 releases across 3 Applications',
+            description: 'acme-store (11), production-api (8)',
+            category: 'deploy',
+            severity: 'info',
+            icon: 'az az-cloud-upload',
+            time: '2025-12-19T17:45:00Z',
+            date: '2025-12-19'
+          },
+          {
+            id: '2025-12-tls',
+            title: 'Renewed 6 TLS certificates',
+            description: 'Automatic renewal is on for *.example.com',
+            category: 'security',
+            severity: 'success',
+            icon: 'az az-shield',
+            time: '2025-12-04T09:30:00Z',
+            date: '2025-12-04'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    year: 2024,
+    totalContributions: 980,
+    contributionsDelta: 41,
+    deployments: 196,
+    copilotTasks: 41,
+    longestStreakDays: 22,
+    currentStreakDays: 0,
+    items: buildYearItems(2024, 2024),
+    months: [
+      {
+        label: 'November 2024',
+        entries: [
+          {
+            id: '2024-11-functions',
+            title: 'Created 5 Functions and 2 Object Storage buckets',
+            description: 'image-resizer and site-assets',
+            category: 'function',
+            severity: 'info',
+            icon: 'az az-code',
+            time: '2024-11-15T12:00:00Z',
+            date: '2024-11-15'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    year: 2023,
+    totalContributions: 412,
+    contributionsDelta: 0,
+    deployments: 84,
+    copilotTasks: 0,
+    longestStreakDays: 14,
+    currentStreakDays: 0,
+    items: buildYearItems(2023, 2023),
+    months: [
+      {
+        label: 'March 2023',
+        entries: [
+          {
+            id: '2023-03-joined',
+            title: 'Joined Azion and deployed a first Application',
+            description: 'First production deploy of staging',
+            category: 'deploy',
+            severity: 'success',
+            icon: 'az az-cloud-upload',
+            time: '2023-03-12T15:00:00Z',
+            date: '2023-03-12'
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+## `user-profile-model.ts`
+
+```ts
+/** Active tab of the user profile page. */
+export type UserProfileTab = 'overview' | 'profile' | 'security' | 'notifications' | 'preferences'
+
+/** Category of a platform contribution. */
+export type UserProfileContributionCategory = 'deploy' | 'function' | 'security'
+
+/** Colour meaning of a history entry marker. */
+export type UserProfileHistorySeverity = 'neutral' | 'info' | 'success' | 'warning' | 'danger'
+
+/** One daily contribution point with its platform category. */
+export interface UserProfileContributionPoint {
+  /** ISO date (YYYY-MM-DD). */
+  date: string
+  /** Number of contributions recorded on this day. */
+  count: number
+  /** Platform category, used by the category filter. */
+  category: UserProfileContributionCategory
+}
+
+/** One entry of the contribution history. */
+export interface UserProfileHistoryEntry {
+  /** Stable key. */
+  id: string
+  /** Past-tense summary of what the user did. */
+  title: string
+  /** The resources it touched. */
+  description: string
+  /** Platform category, used by the category filter. */
+  category: UserProfileContributionCategory
+  /** Marker colour. */
+  severity: UserProfileHistorySeverity
+  /** Azion icon class of the marker. */
+  icon: string
+  /** ISO timestamp of the entry. */
+  time: string
+  /** ISO date (YYYY-MM-DD), matched against the day picked in the graph. */
+  date: string
+}
+
+/** One month of the contribution history. */
+export interface UserProfileHistoryMonth {
+  /** Month heading, such as November 2026. */
+  label: string
+  /** Entries of the month, newest first. */
+  entries: UserProfileHistoryEntry[]
+}
+
+/** One year of metrics, daily contributions and history. */
+export interface UserProfileYearActivity {
+  /** Calendar year. */
+  year: number
+  /** Platform contributions in the year. */
+  totalContributions: number
+  /** Change against the year before, in percent; 0 hides it. */
+  contributionsDelta: number
+  /** Application and Function deployments in the year. */
+  deployments: number
+  /** Completed AI Copilot and agent tasks in the year. */
+  copilotTasks: number
+  /** Longest run of consecutive active days. */
+  longestStreakDays: number
+  /** Current run of consecutive active days. */
+  currentStreakDays: number
+  /** Daily contribution points for the graph. */
+  items: UserProfileContributionPoint[]
+  /** Month-grouped contribution history. */
+  months: UserProfileHistoryMonth[]
+}
+
+/** Personal profile, contact and visibility data. */
+export interface UserProfileData {
+  /** First name. */
+  firstName: string
+  /** Last name. */
+  lastName: string
+  /** Profile handle, without the leading at sign. */
+  handle: string
+  /** Account role shown as a Tag. */
+  role: string
+  /** Primary email address. */
+  email: string
+  /** Verified addresses notifications can be sent to. */
+  alternateEmails: string[]
+  /** ISO 3166-1 alpha-2 country of the phone number. */
+  phoneCountry: string
+  /** Phone digits. */
+  phoneDigits: string
+  /** IANA time zone. */
+  timezone: string
+  /** Show the local time to team members. */
+  displayLocalTime: boolean
+  /** BCP 47 interface language. */
+  language: string
+  /** City and country. */
+  location: string
+  /** Year the user joined the Azion platform. */
+  memberSince: string
+  /** Short bio. */
+  bio: string
+  /** Website or GitHub profile URL. */
+  websiteUrl: string
+  /** Shareable profile URL. */
+  profileUrl: string
+  /** Hide the profile and its activity from organization directories. */
+  privateProfile: boolean
+  /** Count contributions to private accounts in the graph. */
+  includePrivateContributions: boolean
+}
+
+/** Security state and the organization's SSO and SCIM policy. */
+export interface UserProfileSecurityPolicy {
+  /** The password is managed by an external SSO or SCIM provider. */
+  ssoManaged: boolean
+  /** Name of the identity provider. */
+  ssoProvider: string
+  /** Multi-factor authentication is on for the user. */
+  mfaEnabled: boolean
+  /** The organization requires multi-factor authentication. */
+  mfaEnforced: boolean
+  /** Active personal tokens. */
+  activeTokensCount: number
+  /** ISO timestamp of the last time a personal token was used. */
+  lastTokenUsedAt: string
+  /** The client that used it, such as the Azion CLI. */
+  lastTokenClient: string
+}
+
+/** How often a digest is sent. */
+export type UserProfileDigestCadence = 'daily' | 'weekly' | 'monthly' | 'off'
+
+/** Where a digest is delivered. */
+export type UserProfileDigestChannel = 'email' | 'in-app' | 'both'
+
+/** Where a real-time alert is delivered. */
+export type UserProfileAlertChannel = 'both' | 'email' | 'in-app' | 'off'
+
+/** Which deployments raise an alert. */
+export type UserProfileDeployAlertChannel = 'failures' | 'all' | 'in-app' | 'off'
+
+/** Notification routing, scheduled digests and real-time alerts. */
+export interface UserProfileNotificationSettings {
+  /** Default notification address. */
+  defaultEmail: string
+  /** Application Security Digest cadence. */
+  securityDigestCadence: UserProfileDigestCadence
+  /** Application Security Digest channel. */
+  securityDigestChannel: UserProfileDigestChannel
+  /** Platform and Delivery Digest cadence. */
+  deliveryDigestCadence: UserProfileDigestCadence
+  /** Platform and Delivery Digest channel. */
+  deliveryDigestChannel: UserProfileDigestChannel
+  /** Account Activity and AI Adoption Digest cadence. */
+  activityAiDigestCadence: UserProfileDigestCadence
+  /** Account Activity and AI Adoption Digest channel. */
+  activityAiDigestChannel: UserProfileDigestChannel
+  /** Resources the user watches. */
+  watchedResourcesCount: number
+  /** Channel for watched resources. */
+  watchedResourcesChannel: UserProfileAlertChannel
+  /** Channel for mentions. */
+  mentionsChannel: UserProfileAlertChannel
+  /** Which deployments raise an alert. */
+  deployAlertsChannel: UserProfileDeployAlertChannel
+  /** Channel for AI Copilot and agent sessions. */
+  copilotSessionsChannel: UserProfileAlertChannel
+  /** Email when a personal token is created or expires. */
+  tokenAlerts: boolean
+  /** Show release notes and tips in the console. */
+  releaseNotes: boolean
+}
+
+/** Console theme and keyboard shortcut preferences. */
+export interface UserProfilePreferences {
+  /** Console theme. */
+  theme: 'system' | 'dark' | 'light'
+  /** Keyboard shortcuts on, and their hints shown on buttons and menus. */
+  keyboardShortcuts: boolean
+}
+
+/** The password and multi-factor fields of the security tab. */
+export interface UserProfileSecurityForm {
+  /** Multi-factor authentication on. */
+  mfaEnabled: boolean
+  /** Current password. */
+  currentPassword: string
+  /** New password. */
+  newPassword: string
+  /** New password, typed again. */
+  confirmPassword: string
+}
+
+/** Everything the save event hands back. */
+export interface UserProfileSavePayload {
+  /** The edited profile. */
+  profile: UserProfileData
+  /** The edited notification settings. */
+  notifications: UserProfileNotificationSettings
+  /** The edited preferences. */
+  preferences: UserProfilePreferences
+  /** The edited security fields. */
+  security: UserProfileSecurityForm
+}
+
+/** One choice of a select or a toggle group. */
+export interface UserProfileOption<TValue extends string = string> {
+  /** Text of the choice. */
+  label: string
+  /** Value it writes. */
+  value: TValue
+}
+
+export const CATEGORY_OPTIONS: UserProfileOption<'all' | UserProfileContributionCategory>[] = [
+  { label: 'All', value: 'all' },
+  { label: 'Deploys', value: 'deploy' },
+  { label: 'Functions', value: 'function' },
+  { label: 'Security', value: 'security' }
+]
+
+export const CELL_SHAPE_OPTIONS: UserProfileOption<'square' | 'dot'>[] = [
+  { label: 'Squares', value: 'square' },
+  { label: 'Dots', value: 'dot' }
+]
+
+export const TIMEZONE_OPTIONS: UserProfileOption[] = [
+  { label: '(UTC -08:00) America/Los_Angeles', value: 'America/Los_Angeles' },
+  { label: '(UTC -05:00) America/New_York', value: 'America/New_York' },
+  { label: '(UTC +00:00) UTC', value: 'UTC' },
+  { label: '(UTC +01:00) Europe/Berlin', value: 'Europe/Berlin' }
+]
+
+export const CADENCE_OPTIONS: UserProfileOption<UserProfileDigestCadence>[] = [
+  { label: 'Daily', value: 'daily' },
+  { label: 'Weekly', value: 'weekly' },
+  { label: 'Monthly', value: 'monthly' },
+  { label: 'Off', value: 'off' }
+]
+
+export const DIGEST_CHANNEL_OPTIONS: UserProfileOption<UserProfileDigestChannel>[] = [
+  { label: 'Email', value: 'email' },
+  { label: 'Email and in-app', value: 'both' },
+  { label: 'In-app', value: 'in-app' }
+]
+
+export const ALERT_CHANNEL_OPTIONS: UserProfileOption<UserProfileAlertChannel>[] = [
+  { label: 'Email and in-app', value: 'both' },
+  { label: 'Email only', value: 'email' },
+  { label: 'In-app only', value: 'in-app' },
+  { label: 'Off', value: 'off' }
+]
+
+export const DEPLOY_ALERT_OPTIONS: UserProfileOption<UserProfileDeployAlertChannel>[] = [
+  { label: 'Failed deploys only', value: 'failures' },
+  { label: 'Every deploy', value: 'all' },
+  { label: 'In-app only', value: 'in-app' },
+  { label: 'Off', value: 'off' }
+]
+
+type DigestKey = 'security' | 'delivery' | 'activityAi'
+
+export interface UserProfileDigest {
+  /** Stable key. */
+  key: DigestKey
+  /** Digest name. */
+  title: string
+  /** What the digest summarizes. */
+  description: string
+  /** Settings field that holds its cadence. */
+  cadence: `${DigestKey}DigestCadence`
+  /** Settings field that holds its channel. */
+  channel: `${DigestKey}DigestChannel`
+}
+
+export const DIGESTS: UserProfileDigest[] = [
+  {
+    key: 'security',
+    title: 'Application Security Digest',
+    description:
+      'Threats the Web Application Firewall blocked, Network Shield mitigations, Bot Manager hits and certificate health.',
+    cadence: 'securityDigestCadence',
+    channel: 'securityDigestChannel'
+  },
+  {
+    key: 'delivery',
+    title: 'Platform and Delivery Digest',
+    description:
+      'Application deploys, Functions error rates, cache offload trends and build status.',
+    cadence: 'deliveryDigestCadence',
+    channel: 'deliveryDigestChannel'
+  },
+  {
+    key: 'activityAi',
+    title: 'Account Activity and AI Adoption Digest',
+    description:
+      'Team and permission changes, personal token audits and AI Copilot usage across your accounts.',
+    cadence: 'activityAiDigestCadence',
+    channel: 'activityAiDigestChannel'
+  }
+]
+
+export function pickOption<TValue extends string>(
+  options: UserProfileOption<TValue>[],
+  value: string,
+  fallback: TValue
+): TValue {
+  return options.find((option) => option.value === value)?.value ?? fallback
+}
+
+export function filterHistory(
+  months: UserProfileHistoryMonth[],
+  category: 'all' | UserProfileContributionCategory,
+  date: string | null
+): UserProfileHistoryMonth[] {
+  return months
+    .map((month) => ({
+      label: month.label,
+      entries: month.entries.filter(
+        (entry) =>
+          (category === 'all' || entry.category === category) && (!date || entry.date === date)
+      )
+    }))
+    .filter((month) => month.entries.length > 0)
+}
+```
+
+## `parts/profile-header.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed } from 'vue'
+
+  import type { UserProfileData } from '../user-profile-model'
+
+  export interface ProfileHeaderProps {
+    /** The profile shown in the header. */
+    profile: UserProfileData
+    /** The profile is loading. */
+    loading: boolean
+  }
+
+  const props = defineProps<ProfileHeaderProps>()
+
+  const emit = defineEmits<{
+    edit: [event: MouseEvent]
+  }>()
+
+  const initials = computed(() =>
+    `${props.profile.firstName.charAt(0)}${props.profile.lastName.charAt(0)}`.toUpperCase()
+  )
+  const fullName = computed(() => `${props.profile.firstName} ${props.profile.lastName}`.trim())
+</script>
+
+<template>
+  <header class="flex flex-wrap items-center justify-between gap-(--spacing-md)">
+    <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+      <Skeleton
+        v-if="loading"
+        width="3rem"
+        height="3rem"
+        variant="circle"
+      />
+      <Avatar
+        v-else
+        :label="initials"
+        :alt="fullName"
+        size="large"
+      />
+      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+        <Skeleton
+          v-if="loading"
+          width="12rem"
+          height="1.25rem"
+        />
+        <div
+          v-else
+          class="flex flex-wrap items-center gap-(--spacing-xs)"
+        >
+          <h1 class="text-heading-sm text-(--text-default)">{{ fullName }}</h1>
+          <Tag :label="profile.role" />
+        </div>
+        <Skeleton
+          v-if="loading"
+          width="16rem"
+          height="1rem"
+        />
+        <p
+          v-else
+          class="truncate text-body-sm text-(--text-muted)"
+        >
+          @{{ profile.handle }} · {{ profile.location }} · On Azion since {{ profile.memberSince }}
+        </p>
+      </div>
+    </div>
+
+    <div
+      v-if="!loading"
+      class="flex items-center gap-(--spacing-xs)"
+    >
+      <CopyButton
+        :value="profile.profileUrl"
+        variant="outline"
+        aria-label="Copy profile link"
+      />
+      <Button
+        type="button"
+        label="Edit profile"
+        variant="outline"
+        size="medium"
+        @click="emit('edit', $event)"
+      />
+    </div>
+  </header>
+</template>
+```
+
+## `parts/profile-overview.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import ContributionGraph from '@aziontech/webkit/contribution-graph'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import Tag from '@aziontech/webkit/tag'
+  import Timeline from '@aziontech/webkit/timeline'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+  import { computed, ref, watch } from 'vue'
+
+  import {
+    CATEGORY_OPTIONS,
+    CELL_SHAPE_OPTIONS,
+    filterHistory,
+    type UserProfileContributionCategory,
+    type UserProfileYearActivity
+  } from '../user-profile-model'
+
+  export interface ProfileOverviewProps {
+    /** Every year of activity, newest first. */
+    years: UserProfileYearActivity[]
+    /** The activity is loading. */
+    loading: boolean
+  }
+
+  const props = defineProps<ProfileOverviewProps>()
+
+  const selectedYear = defineModel<number>('selectedYear', { required: true })
+
+  const category = ref<'all' | UserProfileContributionCategory>('all')
+  const cellShape = ref<'square' | 'dot'>('square')
+  const selectedDate = ref<string | null>(null)
+
+  const activeYear = computed<UserProfileYearActivity | null>(
+    () => props.years.find((entry) => entry.year === selectedYear.value) ?? props.years[0] ?? null
+  )
+  const shownYear = computed(() => activeYear.value?.year ?? selectedYear.value)
+
+  const graphItems = computed(() => {
+    const items = activeYear.value?.items ?? []
+    return category.value === 'all'
+      ? items
+      : items.filter((item) => item.category === category.value)
+  })
+
+  const history = computed(() =>
+    filterHistory(activeYear.value?.months ?? [], category.value, selectedDate.value)
+  )
+  const filtered = computed(() => selectedDate.value !== null || category.value !== 'all')
+
+  const { formatDate } = useLocale()
+  const formatDay = (iso: string) => formatDate(iso, { dateStyle: 'medium', timeZone: 'UTC' })
+
+  watch(selectedYear, () => {
+    selectedDate.value = null
+  })
+
+  function resetFilters() {
+    selectedDate.value = null
+    category.value = 'all'
+  }
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--layout-group-gap)">
+    <StatTileGroup aria-label="Platform contribution metrics">
+      <StatTile
+        label="Contributions"
+        :value="activeYear?.totalContributions ?? 0"
+        :delta="activeYear?.contributionsDelta || null"
+        delta-label="vs. last year"
+        :loading="loading"
+      />
+      <StatTile
+        label="Deployments"
+        :value="activeYear?.deployments ?? 0"
+        :loading="loading"
+      />
+      <StatTile
+        label="AI Copilot tasks"
+        :value="activeYear?.copilotTasks ?? 0"
+        :loading="loading"
+      />
+      <StatTile
+        label="Longest streak"
+        :value="activeYear?.longestStreakDays ?? 0"
+        unit="days"
+        :loading="loading"
+      />
+      <StatTile
+        label="Current streak"
+        :value="activeYear?.currentStreakDays ?? 0"
+        unit="days"
+        :loading="loading"
+      />
+    </StatTileGroup>
+
+    <Card>
+      <div class="flex flex-col gap-(--spacing-md)">
+        <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
+          <div class="flex flex-col gap-(--spacing-2xs)">
+            <h2 class="text-heading-xs text-(--text-default)">
+              Platform contributions in {{ shownYear }}
+            </h2>
+            <p class="text-body-sm text-(--text-muted)">
+              Deploys, Functions, firewall rules and AI Copilot workflows, one square per day.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+            <ToggleGroup
+              v-model="category"
+              :options="CATEGORY_OPTIONS"
+              size="small"
+              aria-label="Contribution category"
+            />
+            <ToggleGroup
+              v-model="cellShape"
+              :options="CELL_SHAPE_OPTIONS"
+              size="small"
+              aria-label="Cell shape"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
+          <div class="min-w-0 flex-1">
+            <ContributionGraph
+              v-model:selected-date="selectedDate"
+              :items="graphItems"
+              :year="shownYear"
+              :variant="cellShape"
+              :loading="loading"
+              :aria-label="`Platform contributions in ${shownYear}`"
+            />
+          </div>
+          <nav
+            v-if="years.length > 1"
+            aria-label="Contribution year"
+            class="flex shrink-0 flex-row flex-wrap gap-(--spacing-2xs) lg:w-20 lg:flex-col"
+          >
+            <Button
+              v-for="entry in years"
+              :key="entry.year"
+              type="button"
+              size="small"
+              :variant="entry.year === shownYear ? 'secondary' : 'ghost'"
+              :label="String(entry.year)"
+              :aria-current="entry.year === shownYear ? 'true' : undefined"
+              @click="selectedYear = entry.year"
+            />
+          </nav>
+        </div>
+      </div>
+    </Card>
+
+    <Card>
+      <div class="flex flex-col gap-(--spacing-md)">
+        <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+          <h2 class="text-heading-xs text-(--text-default)">Contribution history</h2>
+          <Tag
+            v-if="selectedDate"
+            :label="formatDay(selectedDate)"
+          />
+          <Button
+            v-if="selectedDate"
+            type="button"
+            label="Show all days"
+            variant="ghost"
+            size="small"
+            @click="selectedDate = null"
+          />
+        </div>
+
+        <EmptyState
+          v-if="!loading && history.length === 0"
+          :title="filtered ? 'Nothing matches these filters' : 'No contributions yet'"
+          :description="
+            filtered
+              ? 'Pick another day or category, or show everything again.'
+              : 'Deploys, Functions and firewall changes you make show up here.'
+          "
+          icon="az az-history"
+          size="small"
+        >
+          <template
+            v-if="filtered"
+            #actions
+          >
+            <Button
+              type="button"
+              label="Reset filters"
+              variant="outline"
+              size="small"
+              @click="resetFilters"
+            />
+          </template>
+        </EmptyState>
+        <Timeline
+          v-else
+          :loading="loading"
+          aria-label="Contribution history"
+        >
+          <Timeline.Group
+            v-for="month in history"
+            :key="month.label"
+            :label="month.label"
+          >
+            <Timeline.Item
+              v-for="entry in month.entries"
+              :key="entry.id"
+              :title="entry.title"
+              :description="entry.description"
+              :severity="entry.severity"
+              :icon="entry.icon"
+              :time="entry.time"
+            />
+          </Timeline.Group>
+        </Timeline>
+      </div>
+    </Card>
+  </div>
+</template>
+```
+
+## `parts/profile-bio-tab.vue`
+
+```ts
+<script setup lang="ts">
+  import Avatar from '@aziontech/webkit/avatar'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import LanguageSelect from '@aziontech/webkit/language-select'
+  import PhoneInput from '@aziontech/webkit/phone-input'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import Textarea from '@aziontech/webkit/textarea'
+  import { computed } from 'vue'
+
+  import { TIMEZONE_OPTIONS, type UserProfileData } from '../user-profile-model'
+  import ProfileSelect from './profile-select.vue'
+
+  const form = defineModel<UserProfileData>('form', { required: true })
+
+  const emit = defineEmits<{
+    'upload-avatar': [event: MouseEvent]
+    'remove-avatar': [event: MouseEvent]
+  }>()
+
+  const initials = computed(() =>
+    `${form.value.firstName.charAt(0)}${form.value.lastName.charAt(0)}`.toUpperCase()
+  )
+</script>
+
+<template>
+  <div class="flex flex-col">
+    <SettingsGroup
+      label="Personal information"
+      hint="Who you are across the Azion console: in headers, activity and team lists."
+      anchor="personal-information"
+    >
+      <Card :padded="false">
+        <Item.List>
+          <SettingsRow
+            title="Profile picture"
+            description="A small picture next to your name. Shown at 48 pixels or less."
+            variant="compact"
+          >
+            <div class="flex items-center gap-(--spacing-xs)">
+              <Avatar
+                :label="initials"
+                :alt="`${form.firstName} ${form.lastName}`"
+              />
+              <Button
+                type="button"
+                label="Upload"
+                variant="outline"
+                size="small"
+                @click="emit('upload-avatar', $event)"
+              />
+              <Button
+                type="button"
+                label="Remove"
+                variant="ghost"
+                size="small"
+                @click="emit('remove-avatar', $event)"
+              />
+            </div>
+          </SettingsRow>
+          <SettingsRow title="First name">
+            <Input
+              v-model="form.firstName"
+              size="large"
+              class="w-full"
+              aria-label="First name"
+              autocomplete="given-name"
+            />
+          </SettingsRow>
+          <SettingsRow title="Last name">
+            <Input
+              v-model="form.lastName"
+              size="large"
+              class="w-full"
+              aria-label="Last name"
+              autocomplete="family-name"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Handle"
+            description="Used for mentions and in your profile link."
+          >
+            <Input
+              v-model="form.handle"
+              size="large"
+              class="w-full"
+              aria-label="Handle"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Bio"
+            description="A line about what you build on Azion."
+            variant="stacked"
+          >
+            <Textarea
+              v-model="form.bio"
+              class="w-full"
+              aria-label="Bio"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Time zone"
+            description="Dates in the contribution graph, deployments and audit logs use it."
+          >
+            <ProfileSelect
+              v-model="form.timezone"
+              :options="TIMEZONE_OPTIONS"
+              aria-label="Time zone"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Show my local time"
+            description="Team members see the time difference from theirs."
+            variant="compact"
+          >
+            <Switch
+              v-model="form.displayLocalTime"
+              aria-label="Show my local time"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Language"
+            description="The language of the console and of the emails Azion sends you."
+          >
+            <LanguageSelect
+              v-model="form.language"
+              size="large"
+              class="w-full"
+              aria-label="Language"
+            />
+          </SettingsRow>
+        </Item.List>
+      </Card>
+    </SettingsGroup>
+
+    <SettingsGroup
+      label="Contact and links"
+      hint="How Azion and your team reach you."
+      anchor="contact"
+    >
+      <Card :padded="false">
+        <Item.List>
+          <SettingsRow
+            title="Email"
+            description="For account recovery and notifications."
+          >
+            <Input
+              v-model="form.email"
+              type="email"
+              size="large"
+              class="w-full"
+              aria-label="Email"
+              autocomplete="email"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Phone number"
+            description="With the country code."
+          >
+            <PhoneInput
+              v-model="form.phoneDigits"
+              v-model:country="form.phoneCountry"
+              aria-label="Phone number"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Website or GitHub"
+            description="Shown on your profile."
+          >
+            <Input
+              v-model="form.websiteUrl"
+              inputmode="url"
+              size="large"
+              class="w-full"
+              aria-label="Website or GitHub"
+            />
+          </SettingsRow>
+        </Item.List>
+      </Card>
+    </SettingsGroup>
+
+    <SettingsGroup
+      label="Contributions and visibility"
+      hint="What other members of your organization see."
+      anchor="visibility"
+    >
+      <Card :padded="false">
+        <Item.List>
+          <SettingsRow
+            title="Private profile"
+            description="Hide your contribution graph and history from organization directories."
+            variant="compact"
+          >
+            <Switch
+              v-model="form.privateProfile"
+              aria-label="Private profile"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Count private contributions"
+            description="Add contributions to private accounts to the graph, without the resource names."
+            variant="compact"
+          >
+            <Switch
+              v-model="form.includePrivateContributions"
+              aria-label="Count private contributions"
+            />
+          </SettingsRow>
+        </Item.List>
+      </Card>
+    </SettingsGroup>
+  </div>
+</template>
+```
+
+## `parts/profile-security-tab.vue`
+
+```ts
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
+  import PasswordInput from '@aziontech/webkit/password-input'
+  import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import Tag from '@aziontech/webkit/tag'
+  import Timestamp from '@aziontech/webkit/timestamp'
+
+  import type { UserProfileSecurityForm, UserProfileSecurityPolicy } from '../user-profile-model'
+
+  export interface ProfileSecurityTabProps {
+    /** The security state and the organization's policy. */
+    policy: UserProfileSecurityPolicy
+  }
+
+  defineProps<ProfileSecurityTabProps>()
+
+  const form = defineModel<UserProfileSecurityForm>('form', { required: true })
+
+  const emit = defineEmits<{
+    'manage-tokens': [event: MouseEvent]
+  }>()
+</script>
+
+<template>
+  <div class="flex flex-col">
+    <SettingsGroup
+      label="Password"
+      :hint="
+        policy.ssoManaged
+          ? 'Your organization signs you in through its identity provider.'
+          : 'Change the password you sign in to the Azion console with.'
+      "
+      anchor="password"
+    >
+      <div class="flex flex-col gap-(--layout-group-gap)">
+        <Alert
+          v-if="policy.ssoManaged"
+          severity="info"
+          :title="`Managed by ${policy.ssoProvider}`"
+          label="Your password is set and reset in your organization's identity provider (SSO and SCIM), so it can't be changed here."
+        />
+        <Card :padded="false">
+          <Item.List>
+            <SettingsRow title="Current password">
+              <PasswordInput
+                v-model="form.currentPassword"
+                autocomplete="current-password"
+                :disabled="policy.ssoManaged"
+                aria-label="Current password"
+              />
+            </SettingsRow>
+            <SettingsRow
+              title="New password"
+              description="Use one you don't use anywhere else."
+            >
+              <div class="flex w-full flex-col gap-(--spacing-xs)">
+                <PasswordInput
+                  v-model="form.newPassword"
+                  autocomplete="new-password"
+                  :disabled="policy.ssoManaged"
+                  aria-label="New password"
+                />
+                <PasswordRequirements
+                  v-if="!policy.ssoManaged"
+                  :value="form.newPassword"
+                />
+              </div>
+            </SettingsRow>
+            <SettingsRow title="Confirm new password">
+              <PasswordInput
+                v-model="form.confirmPassword"
+                autocomplete="new-password"
+                :disabled="policy.ssoManaged"
+                aria-label="Confirm new password"
+              />
+            </SettingsRow>
+          </Item.List>
+        </Card>
+      </div>
+    </SettingsGroup>
+
+    <SettingsGroup
+      label="Sign-in and access"
+      hint="Protect how you sign in and how tools reach your account."
+      anchor="access"
+    >
+      <Card :padded="false">
+        <Item.List>
+          <SettingsRow
+            title="Multi-factor authentication"
+            :description="
+              policy.mfaEnforced
+                ? 'Your organization requires it, so it stays on.'
+                : 'Ask for a code from an authenticator app every time you sign in.'
+            "
+            variant="compact"
+          >
+            <template #title>
+              <span class="flex flex-wrap items-center gap-(--spacing-xs)">
+                <span>Multi-factor authentication</span>
+                <Tag
+                  v-if="policy.mfaEnforced"
+                  label="Required by your organization"
+                  severity="warning"
+                />
+              </span>
+            </template>
+            <Switch
+              v-model="form.mfaEnabled"
+              :disabled="policy.mfaEnforced"
+              aria-label="Multi-factor authentication"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Personal tokens"
+            variant="compact"
+          >
+            <template #description>
+              {{ policy.activeTokensCount }} active. Last used
+              <Timestamp :value="policy.lastTokenUsedAt" />
+              from {{ policy.lastTokenClient }}.
+            </template>
+            <Button
+              type="button"
+              label="Manage tokens"
+              variant="outline"
+              size="small"
+              @click="emit('manage-tokens', $event)"
+            />
+          </SettingsRow>
+        </Item.List>
+      </Card>
+    </SettingsGroup>
+  </div>
+</template>
+```
+
+## `parts/profile-notifications-tab.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import { computed } from 'vue'
+
+  import {
+    ALERT_CHANNEL_OPTIONS,
+    CADENCE_OPTIONS,
+    DEPLOY_ALERT_OPTIONS,
+    DIGEST_CHANNEL_OPTIONS,
+    DIGESTS,
+    pickOption,
+    type UserProfileNotificationSettings
+  } from '../user-profile-model'
+  import ProfileSelect from './profile-select.vue'
+
+  export interface ProfileNotificationsTabProps {
+    /** Verified addresses the user can route notifications to. */
+    emails: string[]
+  }
+
+  const props = defineProps<ProfileNotificationsTabProps>()
+
+  const form = defineModel<UserProfileNotificationSettings>('form', { required: true })
+
+  const emit = defineEmits<{
+    'view-watched': [event: MouseEvent]
+  }>()
+
+  const emailOptions = computed(() => props.emails.map((email) => ({ label: email, value: email })))
+</script>
+
+<template>
+  <div class="flex flex-col">
+    <SettingsGroup
+      label="Delivery"
+      hint="Where Azion sends your notification emails."
+      anchor="delivery"
+    >
+      <Card :padded="false">
+        <Item.List>
+          <SettingsRow
+            title="Notification email"
+            description="Every email below goes here unless your organization routes it elsewhere."
+          >
+            <ProfileSelect
+              v-model="form.defaultEmail"
+              :options="emailOptions"
+              aria-label="Notification email"
+            />
+          </SettingsRow>
+        </Item.List>
+      </Card>
+    </SettingsGroup>
+
+    <SettingsGroup
+      label="Scheduled digests"
+      hint="Summaries of what happened in your accounts, one per area of the platform."
+      anchor="digests"
+    >
+      <Card :padded="false">
+        <Item.List>
+          <SettingsRow
+            v-for="digest in DIGESTS"
+            :key="digest.key"
+            :title="digest.title"
+            :description="digest.description"
+          >
+            <div class="grid w-full grid-cols-2 gap-(--spacing-xs)">
+              <ProfileSelect
+                :model-value="form[digest.cadence]"
+                @update:model-value="
+                  form[digest.cadence] = pickOption(CADENCE_OPTIONS, $event, 'off')
+                "
+                :options="CADENCE_OPTIONS"
+                :aria-label="`${digest.title} frequency`"
+              />
+              <ProfileSelect
+                :model-value="form[digest.channel]"
+                @update:model-value="
+                  form[digest.channel] = pickOption(DIGEST_CHANNEL_OPTIONS, $event, 'email')
+                "
+                :options="DIGEST_CHANNEL_OPTIONS"
+                :aria-label="`${digest.title} channel`"
+              />
+            </div>
+          </SettingsRow>
+        </Item.List>
+      </Card>
+    </SettingsGroup>
+
+    <SettingsGroup
+      label="Watched resources and alerts"
+      hint="What reaches you right away, and where."
+      anchor="alerts"
+    >
+      <Card :padded="false">
+        <Item.List>
+          <SettingsRow title="Watched resources">
+            <template #description>
+              Applications, Functions and firewalls you watch.
+              <Link
+                href="#watched-resources"
+                inline
+                @click.prevent="emit('view-watched', $event)"
+                >See the {{ form.watchedResourcesCount }} you watch</Link
+              >
+            </template>
+            <ProfileSelect
+              :model-value="form.watchedResourcesChannel"
+              @update:model-value="
+                form.watchedResourcesChannel = pickOption(ALERT_CHANNEL_OPTIONS, $event, 'off')
+              "
+              :options="ALERT_CHANNEL_OPTIONS"
+              aria-label="Watched resources channel"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Mentions"
+            description="When someone mentions you in an incident note, a review or a deploy approval."
+          >
+            <ProfileSelect
+              :model-value="form.mentionsChannel"
+              @update:model-value="
+                form.mentionsChannel = pickOption(ALERT_CHANNEL_OPTIONS, $event, 'off')
+              "
+              :options="ALERT_CHANNEL_OPTIONS"
+              aria-label="Mentions channel"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Deployments and builds"
+            description="Application deploys and Functions builds."
+          >
+            <ProfileSelect
+              :model-value="form.deployAlertsChannel"
+              @update:model-value="
+                form.deployAlertsChannel = pickOption(DEPLOY_ALERT_OPTIONS, $event, 'off')
+              "
+              :options="DEPLOY_ALERT_OPTIONS"
+              aria-label="Deployments and builds alerts"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="AI Copilot sessions"
+            description="When a long agent task finishes or waits for your approval."
+          >
+            <ProfileSelect
+              :model-value="form.copilotSessionsChannel"
+              @update:model-value="
+                form.copilotSessionsChannel = pickOption(ALERT_CHANNEL_OPTIONS, $event, 'off')
+              "
+              :options="ALERT_CHANNEL_OPTIONS"
+              aria-label="AI Copilot sessions channel"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Personal token alerts"
+            description="An email as soon as a token is created or is about to expire."
+            variant="compact"
+          >
+            <Switch
+              v-model="form.tokenAlerts"
+              aria-label="Personal token alerts"
+            />
+          </SettingsRow>
+          <SettingsRow
+            title="Release notes and tips"
+            description="New features and tips inside the console."
+            variant="compact"
+          >
+            <Switch
+              v-model="form.releaseNotes"
+              aria-label="Release notes and tips"
+            />
+          </SettingsRow>
+        </Item.List>
+      </Card>
+    </SettingsGroup>
+  </div>
+</template>
+```
+
+## `parts/profile-preferences-tab.vue`
+
+```ts
+<script setup lang="ts">
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+
+  import type { UserProfilePreferences } from '../user-profile-model'
+
+  const form = defineModel<UserProfilePreferences>('form', { required: true })
+</script>
+
+<template>
+  <SettingsGroup
+    label="Appearance and keyboard"
+    hint="How the Azion console looks and responds for you."
+    anchor="appearance"
+  >
+    <Card :padded="false">
+      <Item.List>
+        <SettingsRow
+          title="Theme"
+          description="Follow your system, or keep the console light or dark."
+          variant="compact"
+        >
+          <ThemeSwitcher
+            v-model="form.theme"
+            aria-label="Theme"
+          />
+        </SettingsRow>
+        <SettingsRow
+          title="Keyboard shortcuts"
+          description="Turn on console shortcuts and show their keys on buttons and menus. Off, the keys are hidden everywhere."
+          variant="compact"
+        >
+          <Switch
+            v-model="form.keyboardShortcuts"
+            aria-label="Keyboard shortcuts"
+          />
+        </SettingsRow>
+      </Item.List>
+    </Card>
+  </SettingsGroup>
+</template>
+```
+
+## `parts/profile-select.vue`
+
+```ts
+<script setup lang="ts">
+  import Select from '@aziontech/webkit/select'
+
+  import type { UserProfileOption } from '../user-profile-model'
+
+  export interface ProfileSelectProps {
+    /** Choices of the select. */
+    options: UserProfileOption[]
+    /** Accessible name of the trigger. */
+    ariaLabel?: string
+  }
+
+  const props = withDefaults(defineProps<ProfileSelectProps>(), { ariaLabel: '' })
+
+  const model = defineModel<string>({ required: true })
+
+  const labelOf = (value: string) =>
+    props.options.find((option) => option.value === value)?.label ?? value
+</script>
+
+<template>
+  <Select
+    v-model="model"
+    size="large"
+    class="w-full"
+    :display-value="labelOf"
+  >
+    <Select.Trigger :aria-label="ariaLabel || undefined" />
+    <Select.Content>
+      <Select.Item
+        v-for="option in options"
+        :key="option.value"
+        :value="option.value"
+      >
+        {{ option.label }}
+      </Select.Item>
+    </Select.Content>
+  </Select>
+</template>
+```

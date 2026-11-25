@@ -3296,6 +3296,105 @@ What each prop and event does, and the go-live code: [blocks/account/account-tea
 
 ---
 
+<!-- blocks/account/account-user-profile.md -->
+
+# AccountUserProfile (`account/account-user-profile`)
+
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot.
+
+- Surface: app
+- Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
+- MCP: `get_block("account/account-user-profile")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+- Components: Alert, Avatar, Button, Card, ContributionGraph, CopyButton, EmptyState, Input, Item, Kbd, LanguageSelect, Link, PageTabs, PasswordInput, PasswordRequirements, PhoneInput, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, StatTile, StatTileGroup, Switch, Tabs, Tag, Textarea, ThemeSwitcher, Timeline, Timestamp, ToggleGroup, `use-locale`
+- Skills: `webkit-form`, `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`, `webkit-microcopy`
+
+## Asked as
+
+user profile; developer profile; my profile; profile settings; personal settings; contribution graph; platform contributions; contribution history; notification preferences; security settings; perfil do usuário; configurações de perfil; contribuições na plataforma; preferências de notificação
+
+One page for an Azion user's profile and every personal setting: what they did on the platform (metrics, a year of daily contributions and the history behind them) and how their account is set up (profile, security, notifications and preferences). It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+
+## When to use
+
+- The signed-in user's own profile page in the Azion console (`/profile`).
+- Showing a user's contributions year over year next to the settings they own, so they find everything personal in one place.
+
+## When not to use
+
+- Managing the other members of an account: use `account/account-users`.
+- Requiring multi-factor authentication for every member: use `account/account-mfa-settings`.
+- Searching and exporting the account's audit log: use `account/account-activity-history`.
+- Creating and revoking personal tokens: use `account/account-personal-tokens`; this page links to it with Manage tokens.
+
+## Building blocks
+
+- A. Header — `Avatar`, `Tag`, `CopyButton`, `Button`, `Skeleton` (required)
+- B. Tabs — `PageTabs`, `Tabs` (required)
+- C. Metrics — `StatTileGroup`, `StatTile` (required)
+- D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
+- E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
+- F. Settings tabs — `SettingsGroup`, `SettingsRow`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `PhoneInput`, `LanguageSelect`, `Switch`, `PasswordInput`, `PasswordRequirements`, `Alert`, `Link`, `ThemeSwitcher` (required)
+- G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
+
+What each part takes: [blocks/account/account-user-profile.md](blocks/account/account-user-profile.md).
+
+## Data
+
+The block fetches nothing. It takes its data through props and hands edits back through events; `sample.ts` fills any record left out (and no activity while `loading`). The types live in `user-profile-model.ts`.
+
+Prop: `profile`, `years`, `securityPolicy`, `notifications`, `preferences`, `loading`, `error`, `v-model:active-tab`, `v-model:selected-year`.
+
+Events: `save` (profile, notifications, preferences and security fields), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` (the props change back to the saved values and the `SaveBar` closes) and delete `sample.ts`.
+
+What each prop and event does, and the go-live code: [blocks/account/account-user-profile.md](blocks/account/account-user-profile.md).
+
+## Do
+
+- Keep the avatar small and the header to one line of facts.
+- Say who locks a setting and why when the organization's identity provider manages it.
+- Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
+
+## Don't
+
+- Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
+- Don't let the user change a password or turn off multi-factor when the organization manages them.
+- Don't fake a save with a timer; persist on `@save`.
+
+## Copy
+
+- History titles are past tense and name the product: "Deployed 14 releases across 3 Applications".
+- Product names follow the Azion catalog: Applications, Functions, Object Storage, Web Application Firewall, AI Copilot.
+
+## Accessibility
+
+- `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
+- The year rail is a `nav` with `aria-current` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+
+## States
+
+- Default: the Overview tab for 2026 with metrics, the contribution graph, the year rail and the history.
+- Profile: the Profile and bio tab (`active-tab` is `profile`).
+- Security: the Security and access tab (`active-tab` is `security`) for an account that signs in with a password.
+- SecuritySso: the same tab with `securityPolicy.ssoManaged` and `mfaEnforced` on; the controls are locked and say why.
+- Notifications: the Notifications tab (`active-tab` is `notifications`).
+- Preferences: the Preferences tab (`active-tab` is `preferences`).
+- Empty: a new user (`years` holds one year with no contributions); zero metrics, an empty graph and an EmptyState for the history.
+- Loading: the first load (`loading`); skeletons in the header, the metrics, the graph and the history.
+- Error: the profile did not load (`error` is set); a danger Alert with Retry replaces the page.
+
+## Related
+
+- `account/account-mfa-settings` — multi-factor policy for every member.
+- `account/account-personal-tokens` — creating and revoking tokens.
+- `account/account-activity-history` — the account's audit log.
+
+## Variants
+
+`Default` (primary) · `Profile` · `Security` · `SecuritySso` · `Notifications` · `Preferences` · `Empty` · `Loading` · `Error`. Code: [blocks/account/account-user-profile.md](blocks/account/account-user-profile.md), `get_block("account/account-user-profile", { variant })`.
+
+---
+
 <!-- blocks/account/account-users.md -->
 
 # AccountUsers (`account/account-users`)
@@ -3416,6 +3515,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, ImageGallery, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, `PromptInputTools`, StreamingResponse, ToolApproval, ToolCall, `use-locale`, `utils/ai-chat`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
@@ -3535,6 +3635,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, ChatMessage, CodeBlock, Conversation, ConversationHistory, `DrawerBody`, `DrawerContent`, `DrawerHeader`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, DropdownMenu, `DropdownMenuTrigger`, FeedbackReasonDialog, FilePreview, `HoverCardContent`, HoverCard, `HoverCardTrigger`, IconButton, ImageGallery, Input, McpAppFrame, `PopoverContent`, Popover, `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, `PromptInputTools`, PromptQueue, Reasoning, Resizable, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, Tooltip, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
@@ -3684,6 +3785,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, ChatMessage, CodeBlock, Conversation, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FeedbackReasonDialog, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, PromptInput, `PromptInputTools`, PromptQueue, Reasoning, ResponseBranches, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, Toast, ToolApproval, ToolCall, `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
@@ -12631,6 +12733,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Import: `import AgentActivity from '@aziontech/webkit/agent-activity'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -12737,6 +12840,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Import: `import AgentQuestion from '@aziontech/webkit/agent-question'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -12872,6 +12976,7 @@ the title and description render through the shared `ai/lib/markdown-inline` ren
 
 - Import: `import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -13073,6 +13178,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 
 - Import: `import ArtifactPreview from '@aziontech/webkit/artifact-preview'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -13206,6 +13312,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 - Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
 - Category: ai · Surface: app · Structure: composition
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -13374,6 +13481,7 @@ packages/webkit/src/components/ai/chat-message/
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -13489,6 +13597,7 @@ source block, shared with the `Sources` panel)._
 
 - Import: `import Conversation from '@aziontech/webkit/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -13653,6 +13762,7 @@ never read as new.
 
 - Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -13913,6 +14023,7 @@ never read as new.
 
 - Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -14034,6 +14145,7 @@ never read as new.
 
 - Import: `import McpAppFrame from '@aziontech/webkit/mcp-app-frame'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -14264,6 +14376,7 @@ never read as new.
 - Import: `import PromptInputRoot from '@aziontech/webkit/prompt-input-root'`
 - Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/webkit/prompt-input'`
 - Category: ai · Surface: app · Structure: composition
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -14523,7 +14636,12 @@ packages/webkit/src/components/ai/prompt-input/
     { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', shortcut: '⌘5' },
     { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', shortcut: '⌘6' },
     { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', shortcut: '⌘7' },
-    { value: 'azion-auto', label: 'Azion Auto', provider: 'azion', description: 'AI Gateway router' }
+    {
+      value: 'azion-auto',
+      label: 'Azion Auto',
+      provider: 'azion',
+      description: 'AI Gateway router'
+    }
   ]
   const modes = [
     { value: 'low', label: 'Low' },
@@ -14658,6 +14776,7 @@ packages/webkit/src/components/ai/prompt-input/
 
 - Import: `import PromptQueue from '@aziontech/webkit/prompt-queue'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -14756,6 +14875,7 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 
 - Import: `import Reasoning from '@aziontech/webkit/reasoning'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -14859,6 +14979,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 - Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -14995,6 +15116,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 - Import: `import ResponseLoading from '@aziontech/webkit/response-loading'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -15070,6 +15192,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 - Import: `import Sources from '@aziontech/webkit/sources'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -15200,6 +15323,7 @@ Composed DS components: `dropdown-menu` (`Trigger`, `Group`, `Item`)._
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -15313,6 +15437,7 @@ components: `code-block`, `citation`._
 
 - Import: `import SubagentCard from '@aziontech/webkit/subagent-card'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -15459,6 +15584,7 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 - Import: `import SuggestionGroup from '@aziontech/webkit/suggestion-group'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -15563,6 +15689,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -15701,6 +15828,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 
 - Import: `import ToolCall from '@aziontech/webkit/tool-call'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 
 ## When to use
 
@@ -16405,6 +16533,121 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 ```
 
 2 more example(s) in [components/chart-card.md](components/chart-card.md).
+
+---
+
+<!-- components/contribution-graph.md -->
+
+# Contribution Graph
+
+> Use ContributionGraph for a 52-week × 7-day calendar heatmap of daily activity intensity (platform contributions, deployments, builds, Copilot tasks) across a year. Each day renders as a cell shaded across five sequential intensity levels (0–4), with month and weekday axes, a hover and keyboard-focus readout, an intensity legend, and optional day selection so clicking a cell filters a sibling history list. Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart` (a continuous time-series plot), `ContributionGraph` reveals weekly and seasonal cadence of daily counts at a glance.
+
+- Import: `import ContributionGraph from '@aziontech/webkit/contribution-graph'`
+- Category: chart · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
+
+## When to use
+
+- User profile platform contributions across a year, paired with a year-over-year selector and a `Timeline` of contribution history.
+- Daily deployment, build, or AI workflow cadence over a 12-month period where streaks and active days matter.
+- Any calendar-aligned daily intensity heatmap with up to 366 days where selecting a day filters activity details.
+
+## Do
+
+- Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.
+- Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).
+- Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.
+- Pick `variant="square"` (default) for dense developer activity grids, or `variant="dot"` for softer editorial/profile summaries.
+- Always supply `ariaLabel` naming the subject and period (e.g. `"Platform contributions in 2026"`).
+
+## Don’t
+
+- Uptime or pass/fail severity history across discrete periods → use `tracker`.
+- A continuous measured trend over time (requests/sec, latency, bandwidth) → use `chart` or `spark-chart`.
+- Comparing totals across named categories → use `bar-list`.
+- Picking a single date or date range in a form → use `date-picker` or `date-range-picker`.
+
+## Related
+
+- `tracker` — 1D severity strip for service uptime; `contribution-graph` is a 2D calendar grid of quantitative intensity.
+- `timeline` — chronological activity feed commonly paired below `contribution-graph` and filtered by its `v-model:selected-date`.
+- `stat-tile-group` — summary KPI strip placed above `contribution-graph` (total contributions, streaks, deployments).
+- `card` — the surface `contribution-graph` usually sits inside; the graph itself has no outer card chrome.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `ContributionGraphItem[]` | `[]` | false | Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0. |
+| `year` | `number` | `undefined` | false | Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date. |
+| `endDate` | `string` | `''` | false | ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted. |
+| `variant` | `ContributionGraphVariant` | `'square'` | false | Cell shape: `'square'` (rounded square) or `'dot'` (circular dot). |
+| `showLegend` | `boolean` | `true` | false | Renders the `Less … More` intensity legend in the footer. |
+| `loading` | `boolean` | `false` | false | Renders a Skeleton placeholder in place of the calendar grid. |
+| `error` | `string` | `''` | false | Error message; when set, renders an `EmptyState` with the message inside a `role="alert"` region in place of the grid. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the contribution grid. |
+| `selectedDate` | `string \| null` | `null` | false | Two-way value (`v-model:selectedDate`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `select` | `(event: MouseEvent \| KeyboardEvent, item: ContributionGraphDay)` | Fires when a day cell is activated by pointer click or Enter/Space. |
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model:selected-date` | `string \| null` | `null` | `update:selectedDate` | ISO date (`YYYY-MM-DD`) of the selected day, or `null`. Clicking an already-selected day clears it. |
+
+## States
+
+- Visual states: `default`, `hover` / `focus-visible` (active cell readout), `selected` (`aria-selected="true"` / `data-selected`), `loading` (Skeleton placeholder), `empty` (a small bordered `EmptyState` when `items` is empty and no `year` is set; with a `year` the grid renders all at level 0), `error` (a small bordered `EmptyState` with the message inside a `role="alert"` region).
+- `data-variant` mirrors `variant` (`square` | `dot`) on the root.
+- `data-loading` mirrors `loading` on the root; `data-error` is set when `error` is non-empty and not loading.
+- `data-level` (`0` | `1` | `2` | `3` | `4`) on each day cell; `data-selected` when the cell matches `selectedDate`.
+- Root carries `data-plain-ground` so a `Texture` beside it hides itself.
+
+## Accessibility
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on each focusable cell (roving `tabindex`).
+- Keyboard map: `Tab` focuses the active/selected cell in the grid; `ArrowUp` / `ArrowDown` moves by 1 day; `ArrowRight` / `ArrowLeft` moves by 1 week (mirrored under `dir="rtl"` via `logicalArrowKey`); `Home` / `End` jumps to the first/last day; `Enter` / `Space` toggles selection of the focused day; `Escape` clears `selectedDate`.
+- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces hover/focus/selection; `role="alert"` on error; `aria-busy="true"` while loading.
+- Contrast: all intensity steps use `--chart-sequential-*` tokens and `forced-color-adjust-none` so cells remain distinguishable in light, dark, and forced-colors modes.
+- `motion-reduce:transition-none` on cell transitions.
+
+## Examples
+
+### Default
+
+```vue
+<script setup lang="ts">
+  import ContributionGraph, {
+    type ContributionGraphItem
+  } from '@aziontech/webkit/contribution-graph'
+  import { ref } from 'vue'
+
+  const selectedDate = ref<string | null>(null)
+
+  const items: ContributionGraphItem[] = Array.from({ length: 365 }, (_, index) => {
+    const dt = new Date(Date.UTC(2026, 0, 1 + index))
+    const date = dt.toISOString().slice(0, 10)
+    const count = (index * 7 + (index % 5)) % 13 === 0 ? 0 : (index * 3) % 14
+    return { date, count }
+  })
+</script>
+
+<template>
+  <ContributionGraph
+    v-model:selected-date="selectedDate"
+    :items="items"
+    :year="2026"
+    aria-label="Platform contributions in 2026"
+  />
+</template>
+```
+
+2 more example(s) in [components/contribution-graph.md](components/contribution-graph.md).
 
 ---
 

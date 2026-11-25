@@ -4,6 +4,7 @@
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [citation.json](citation.json)
 
 ## When to use

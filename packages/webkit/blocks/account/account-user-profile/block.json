@@ -1,0 +1,92 @@
+{
+  "id": "account/account-user-profile",
+  "name": "AccountUserProfile",
+  "title": "Blocks/Account/AccountUserProfile",
+  "stability": "preview",
+  "surface": "app",
+  "summary": "One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year, a `CopyButton` for the profile link and an Edit profile `Button`) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year, a `Card` with a `ContributionGraph` (category and cell-shape `ToggleGroup`s, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "user profile",
+    "developer profile",
+    "my profile",
+    "profile settings",
+    "personal settings",
+    "contribution graph",
+    "platform contributions",
+    "contribution history",
+    "notification preferences",
+    "security settings",
+    "perfil do usuário",
+    "configurações de perfil",
+    "contribuições na plataforma",
+    "preferências de notificação"
+  ],
+  "skills": [
+    "webkit-form",
+    "webkit-layout",
+    "webkit-ui-states",
+    "webkit-data-viz",
+    "webkit-microcopy"
+  ],
+  "primary": {
+    "name": "Default",
+    "file": "account-user-profile.vue"
+  },
+  "files": [
+    "sample.ts",
+    "user-profile-model.ts",
+    "parts/profile-header.vue",
+    "parts/profile-overview.vue",
+    "parts/profile-bio-tab.vue",
+    "parts/profile-security-tab.vue",
+    "parts/profile-notifications-tab.vue",
+    "parts/profile-preferences-tab.vue",
+    "parts/profile-select.vue"
+  ],
+  "variants": [
+    {
+      "name": "Profile",
+      "summary": "The Profile and bio tab: personal information, contact and links, and contribution visibility.",
+      "file": "variants/settings.vue"
+    },
+    {
+      "name": "Security",
+      "summary": "The Security and access tab for an account that signs in with a password: password fields with live requirements, multi-factor and personal tokens.",
+      "file": "variants/security.vue"
+    },
+    {
+      "name": "SecuritySso",
+      "summary": "The Security and access tab when the organization's SSO and SCIM provider manages the password and requires multi-factor: the controls are locked and say why.",
+      "file": "variants/security-scim.vue"
+    },
+    {
+      "name": "Notifications",
+      "summary": "The Notifications tab: the notification email, the three scheduled digests and the real-time alerts.",
+      "file": "variants/notifications.vue"
+    },
+    {
+      "name": "Preferences",
+      "summary": "The Preferences tab: theme and the Keyboard shortcuts switch that hides every shortcut hint when off.",
+      "file": "variants/preferences.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A new user with no contributions yet: zero metrics, an empty graph and an EmptyState in place of the history.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: Skeletons in the header, the metrics, the graph and the history.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The profile failed to load: a danger Alert with Retry replaces the page.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

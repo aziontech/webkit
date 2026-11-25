@@ -4,6 +4,7 @@
 
 - Import: `import Conversation from '@aziontech/webkit/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [conversation.json](conversation.json)
 
 ## When to use

@@ -2347,3 +2347,21 @@ Budget-raise: hover-card-content 1.55 KB → 1.7 KB (measured 1.59 KB): the tele
 Budget-raise: popover 11.35 KB → 11.5 KB (measured 11.41 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
 
 Budget-raise: popover-content 1.25 KB → 1.4 KB (measured 1.34 KB): the teleport hydration fix (port of #1210): a body teleport stays inline on the server and while hydrating, then moves to the body once mounted, so a page hydrated without Vue's teleport buffer (Astro) can open a second overlay; the shared useTeleportReady composable adds one ref, a computed and an onMounted per overlay.
+
+Budget-raise: config-provider 14.55 KB → 14.7 KB (measured 14.63 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs, which ConfigProvider bundles.
+
+Budget-raise: locales-pt-BR 13 KB → 13.15 KB (measured 13.09 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+
+Budget-raise: locales-es 13.1 KB → 13.25 KB (measured 13.21 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+
+Budget-raise: prompt-input-tools 18.3 KB → 18.45 KB (measured 18.36 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs; PromptInputTools imports the English catalog as a namespace.
+
+Budget-raise: doc-markdown 41.9 KB → 42 KB (measured 41.96 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+
+Budget-raise: media-split-section 17.9 KB → 18 KB (measured 17.90 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+
+Budget-raise: feature-scroll-section 21 KB → 21.1 KB (measured 21.00 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+
+Budget-raise: feature-widgets-section 20.6 KB → 20.75 KB (measured 20.68 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+
+Budget-raise: feature-tabs-section 60.6 KB → 60.8 KB (measured 60.72 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.

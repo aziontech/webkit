@@ -4551,6 +4551,7 @@
      "notes": "What exactly will run: a `CodeBlock`, or `KeyValueList` with parameters."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/tool-approval.json",
    "docsFile": "catalog/components/tool-approval.json"
@@ -4670,6 +4671,7 @@
      "notes": "Context the reader needs to answer, between the question and the control: a `CodeBlock`, a `KeyValueList`."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/agent-question.json",
    "docsFile": "catalog/components/agent-question.json"
@@ -4704,6 +4706,7 @@
      "doc": "Milliseconds to wait before showing anything, so a fast response never flickers a loading state."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/response-loading.json",
    "docsFile": "catalog/components/response-loading.json"
@@ -4748,6 +4751,7 @@
      "doc": "Two-way value (`v-model:open`)."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/agent-activity.json",
    "docsFile": "catalog/components/agent-activity.json"
@@ -4844,6 +4848,7 @@
      "notes": "Extra icon actions in the toolbar, before Copy and Download (Insert into editor, Run)."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/artifact-canvas.json",
    "docsFile": "catalog/components/artifact-canvas.json"
@@ -4930,6 +4935,7 @@
      "notes": "Extra icon actions, placed before Copy and Download."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/artifact-preview.json",
    "docsFile": "catalog/components/artifact-preview.json"
@@ -4978,6 +4984,7 @@
      "notes": "A message the widget sent (a tool call, a prompt, a link, a notification, the start handshake), validated and rebuilt from its known keys. Not a user activation, so it carries no DOM event. Size messages are handled by the frame and not emitted."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/mcp-app-frame.json",
    "docsFile": "catalog/components/mcp-app-frame.json"
@@ -5079,6 +5086,7 @@
      "notes": "The action row, usually `ChatMessage.Actions`; shown only when `status` is `success`."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/chat-message.json",
    "docsFile": "catalog/components/chat-message.json"
@@ -5176,6 +5184,7 @@
      "notes": "The action row, usually `ChatMessage.Actions`; shown only when `status` is `success`."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "docsFile": "catalog/components/chat-message-root.json"
   },
@@ -5188,6 +5197,7 @@
    "models": [
     "feedback"
    ],
+   "stability": "preview",
    "surface": "app"
   },
   "chat-message-feedback": {
@@ -5199,6 +5209,7 @@
    "models": [
     "modelValue"
    ],
+   "stability": "preview",
    "surface": "app"
   },
   "citation": {
@@ -5224,6 +5235,7 @@
      "doc": "The sources of the response, in citation order; `indexes` point into it. A number with no source renders as a plain numbered note."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/citation.json",
    "docsFile": "catalog/components/citation.json"
@@ -5282,6 +5294,7 @@
      "notes": ""
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/feedback-reason-dialog.json",
    "docsFile": "catalog/components/feedback-reason-dialog.json"
@@ -5342,6 +5355,7 @@
      "notes": "The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. Rendered outside the log, after it in the reading order."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/conversation.json",
    "docsFile": "catalog/components/conversation.json"
@@ -5579,6 +5593,7 @@
      "notes": "Replaces the end of a chat row (age, lock, status)."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/conversation-history.json",
    "docsFile": "catalog/components/conversation-history.json"
@@ -5778,6 +5793,7 @@
      "notes": "Constraint text under everything; referenced by `aria-describedby`."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/prompt-input.json",
    "docsFile": "catalog/components/prompt-input.json"
@@ -5970,6 +5986,7 @@
      "notes": "Constraint text under everything; referenced by `aria-describedby`."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "docsFile": "catalog/components/prompt-input-root.json"
   },
@@ -5982,6 +5999,7 @@
    "models": [
     "modelValue"
    ],
+   "stability": "preview",
    "surface": "app"
   },
   "prompt-input-dictate-button": {
@@ -5993,6 +6011,7 @@
    "models": [
     "listening"
    ],
+   "stability": "preview",
    "surface": "app"
   },
   "prompt-input-model-picker": {
@@ -6006,6 +6025,7 @@
     "modelValue",
     "mode"
    ],
+   "stability": "preview",
    "surface": "app"
   },
   "prompt-input-context-picker": {
@@ -6018,6 +6038,7 @@
    "models": [
     "modelValue"
    ],
+   "stability": "preview",
    "surface": "app"
   },
   "prompt-input-tools": {
@@ -6030,6 +6051,7 @@
    "models": [
     "modelValue"
    ],
+   "stability": "preview",
    "surface": "app"
   },
   "prompt-queue": {
@@ -6062,6 +6084,7 @@
      "notes": ""
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/prompt-queue.json",
    "docsFile": "catalog/components/prompt-queue.json"
@@ -6127,6 +6150,7 @@
      "notes": "The trace: short narration, steps, inline code. Kept as it was once thinking ends."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/reasoning.json",
    "docsFile": "catalog/components/reasoning.json"
@@ -6178,6 +6202,7 @@
      "notes": "Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/response-branches.json",
    "docsFile": "catalog/components/response-branches.json"
@@ -6222,6 +6247,7 @@
      "doc": "Two-way value (`v-model:open`)."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/sources.json",
    "docsFile": "catalog/components/sources.json"
@@ -6256,6 +6282,7 @@
      "doc": "Sources the `[n]`, `[n][m]` and `[n, m]` citations in the content resolve against: each becomes a chip with the site's favicon and name that opens a card of the sources it cites."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/streaming-response.json",
    "docsFile": "catalog/components/streaming-response.json"
@@ -6304,6 +6331,7 @@
      "notes": ""
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/suggestion-group.json",
    "docsFile": "catalog/components/suggestion-group.json"
@@ -6395,6 +6423,7 @@
      "notes": "The task the main agent gave the helper (`CodeBlock`, `KeyValueList`, or a sentence)."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/subagent-card.json",
    "docsFile": "catalog/components/subagent-card.json"
@@ -6458,6 +6487,7 @@
      "notes": "What the tool returned, or the error it failed with."
     }
    ],
+   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/tool-call.json",
    "docsFile": "catalog/components/tool-call.json"
@@ -8751,6 +8781,93 @@
    "surface": "app",
    "examplesFile": "catalog/examples/tracker.json",
    "docsFile": "catalog/components/tracker.json"
+  },
+  "contribution-graph": {
+   "import": "@aziontech/webkit/contribution-graph",
+   "target": "./src/components/chart/contribution-graph/contribution-graph.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/contribution-graph",
+   "models": [
+    "selectedDate"
+   ],
+   "category": "chart",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "ContributionGraphItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0."
+    },
+    {
+     "name": "year",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date."
+    },
+    {
+     "name": "endDate",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted."
+    },
+    {
+     "name": "variant",
+     "type": "ContributionGraphVariant",
+     "default": "'square'",
+     "required": "false",
+     "doc": "Cell shape: `'square'` (rounded square) or `'dot'` (circular dot)."
+    },
+    {
+     "name": "showLegend",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Renders the `Less … More` intensity legend in the footer."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Renders a Skeleton placeholder in place of the calendar grid."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Error message; when set, renders an `EmptyState` with the message inside a `role=\"alert\"` region in place of the grid."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the contribution grid."
+    },
+    {
+     "name": "selectedDate",
+     "type": "string | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:selectedDate`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ContributionGraphDay)",
+     "notes": "Fires when a day cell is activated by pointer click or Enter/Space."
+    }
+   ],
+   "stability": "preview",
+   "surface": "app",
+   "examplesFile": "catalog/examples/contribution-graph.json",
+   "docsFile": "catalog/components/contribution-graph.json"
   },
   "tag": {
    "import": "@aziontech/webkit/tag",
@@ -33571,6 +33688,134 @@
    ],
    "file": "catalog/blocks/account/account-team-permissions.json"
   },
+  "account/account-user-profile": {
+   "name": "AccountUserProfile",
+   "title": "Blocks/Account/AccountUserProfile",
+   "source": "blocks/account/account-user-profile/account-user-profile.vue",
+   "surface": "app",
+   "stability": "preview",
+   "summary": "One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year, a `CopyButton` for the profile link and an Edit profile `Button`) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year, a `Card` with a `ContributionGraph` (category and cell-shape `ToggleGroup`s, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.",
+   "intents": [
+    "user profile",
+    "developer profile",
+    "my profile",
+    "profile settings",
+    "personal settings",
+    "contribution graph",
+    "platform contributions",
+    "contribution history",
+    "notification preferences",
+    "security settings",
+    "perfil do usuário",
+    "configurações de perfil",
+    "contribuições na plataforma",
+    "preferências de notificação"
+   ],
+   "skills": [
+    "webkit-form",
+    "webkit-layout",
+    "webkit-ui-states",
+    "webkit-data-viz",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Alert",
+    "Avatar",
+    "Button",
+    "Card",
+    "ContributionGraph",
+    "CopyButton",
+    "EmptyState",
+    "Input",
+    "Item",
+    "Kbd",
+    "LanguageSelect",
+    "Link",
+    "PageTabs",
+    "PasswordInput",
+    "PasswordRequirements",
+    "PhoneInput",
+    "SaveBar",
+    "Select",
+    "SettingsGroup",
+    "SettingsRow",
+    "Skeleton",
+    "StatTile",
+    "StatTileGroup",
+    "Switch",
+    "Tabs",
+    "Tag",
+    "Textarea",
+    "ThemeSwitcher",
+    "Timeline",
+    "Timestamp",
+    "ToggleGroup",
+    "use-locale"
+   ],
+   "imports": [
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/contribution-graph",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/input",
+    "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
+    "@aziontech/webkit/language-select",
+    "@aziontech/webkit/link",
+    "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/password-input",
+    "@aziontech/webkit/password-requirements-root",
+    "@aziontech/webkit/phone-input",
+    "@aziontech/webkit/save-bar",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/settings-group",
+    "@aziontech/webkit/settings-row",
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/stat-tile",
+    "@aziontech/webkit/stat-tile-group",
+    "@aziontech/webkit/switch",
+    "@aziontech/webkit/tabs",
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/textarea",
+    "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/timeline",
+    "@aziontech/webkit/timestamp",
+    "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/use-locale"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "One page for an Azion user's profile and every personal setting: what they did on the platform (metrics, a year of daily contributions and the history behind them) and how their account is set up (profile, security, notifications and preferences). It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
+   "variants": [
+    {
+     "name": "Profile"
+    },
+    {
+     "name": "Security"
+    },
+    {
+     "name": "SecuritySso"
+    },
+    {
+     "name": "Notifications"
+    },
+    {
+     "name": "Preferences"
+    },
+    {
+     "name": "Empty"
+    },
+    {
+     "name": "Loading"
+    },
+    {
+     "name": "Error"
+    }
+   ],
+   "file": "catalog/blocks/account/account-user-profile.json"
+  },
   "account/account-users": {
    "name": "AccountUsers",
    "title": "Blocks/Account/AccountUsers",
@@ -33710,6 +33955,7 @@
    "title": "Blocks/Ai/AiActionApproval",
    "source": "blocks/ai/ai-action-approval/ai-action-approval.vue",
    "surface": "app",
+   "stability": "preview",
    "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai action approval",
@@ -33798,6 +34044,7 @@
    "title": "Blocks/Ai/AiChat",
    "source": "blocks/ai/ai-chat/ai-chat.vue",
    "surface": "app",
+   "stability": "preview",
    "summary": "The full-page generative AI assistant in the chat-app look: a conversation history (`ConversationHistory` with New chat and search) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the model picker as the title (`AI assistant` and the chosen model, `v-model:modelKey`) with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with \"What can I help with?\", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the \"+\" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `ConversationHistory`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).",
    "intents": [
     "ai chat",
@@ -33993,6 +34240,7 @@
    "title": "Blocks/Ai/AiChatDrawer",
    "source": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "app",
+   "stability": "preview",
    "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with Good response, Bad response, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",

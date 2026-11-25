@@ -131,6 +131,15 @@ export const DATA_TERMS = {
   ],
   'map-chart': ['map chart', 'choropleth', 'geo chart', 'requests by country', 'data by country'],
   'gauge-chart': ['gauge', 'gauge chart', 'radial gauge', 'score dial', 'speedometer'],
+  'contribution-graph': [
+    'contribution graph',
+    'contribution calendar',
+    'activity heatmap',
+    'calendar heatmap',
+    'commit graph',
+    'daily activity',
+    'streaks'
+  ],
   'spark-chart': ['sparkline', 'spark chart', 'tiny chart', 'inline chart', 'trend line in a row'],
   tracker: [
     'tracker',

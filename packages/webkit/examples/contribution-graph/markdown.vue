@@ -1,0 +1,35 @@
+<script setup>
+  import DocMarkdown from '@aziontech/webkit/doc-markdown'
+  import DocProse from '@aziontech/webkit/doc-prose'
+
+  const source = [
+    '## Platform contributions',
+    '',
+    'One square per day of 2026; the darker the square, the more the team shipped that day.',
+    '',
+    '<ContributionGraph',
+    '  year={2026}',
+    '  aria-label="Platform contributions in 2026"',
+    '  items={[',
+    '    { "date": "2026-01-05", "count": 3 },',
+    '    { "date": "2026-02-03", "count": 6 },',
+    '    { "date": "2026-03-04", "count": 1 },',
+    '    { "date": "2026-04-02", "count": 9 },',
+    '    { "date": "2026-05-01", "count": 4 },',
+    '    { "date": "2026-05-30", "count": 12 },',
+    '    { "date": "2026-06-28", "count": 2 },',
+    '    { "date": "2026-07-27", "count": 7 },',
+    '    { "date": "2026-08-25", "count": 5 },',
+    '    { "date": "2026-09-23", "count": 10 },',
+    '    { "date": "2026-10-22", "count": 8 },',
+    '    { "date": "2026-11-20", "count": 14 }',
+    '  ]}',
+    '/>'
+  ].join('\n')
+</script>
+
+<template>
+  <DocProse>
+    <DocMarkdown :source="source" />
+  </DocProse>
+</template>

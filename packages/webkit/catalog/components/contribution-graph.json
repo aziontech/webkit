@@ -1,0 +1,32 @@
+{
+ "purpose": "Use ContributionGraph for a 52-week × 7-day calendar heatmap of daily activity intensity (platform contributions, deployments, builds, Copilot tasks) across a year. Each day renders as a cell shaded across five sequential intensity levels (0–4), with month and weekday axes, a hover and keyboard-focus readout, an intensity legend, and optional day selection so clicking a cell filters a sibling history list. Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart` (a continuous time-series plot), `ContributionGraph` reveals weekly and seasonal cadence of daily counts at a glance.",
+ "useWhen": [
+  "User profile platform contributions across a year, paired with a year-over-year selector and a `Timeline` of contribution history.",
+  "Daily deployment, build, or AI workflow cadence over a 12-month period where streaks and active days matter.",
+  "Any calendar-aligned daily intensity heatmap with up to 366 days where selecting a day filters activity details."
+ ],
+ "avoidWhen": [
+  "Uptime or pass/fail severity history across discrete periods → use `tracker`.",
+  "A continuous measured trend over time (requests/sec, latency, bandwidth) → use `chart` or `spark-chart`.",
+  "Comparing totals across named categories → use `bar-list`.",
+  "Picking a single date or date range in a form → use `date-picker` or `date-range-picker`."
+ ],
+ "related": [
+  "`tracker` — 1D severity strip for service uptime; `contribution-graph` is a 2D calendar grid of quantitative intensity.",
+  "`timeline` — chronological activity feed commonly paired below `contribution-graph` and filtered by its `v-model:selected-date`.",
+  "`stat-tile-group` — summary KPI strip placed above `contribution-graph` (total contributions, streaks, deployments).",
+  "`card` — the surface `contribution-graph` usually sits inside; the graph itself has no outer card chrome."
+ ],
+ "bestPractices": [
+  "Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.",
+  "Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).",
+  "Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.",
+  "Pick `variant=\"square\"` (default) for dense developer activity grids, or `variant=\"dot\"` for softer editorial/profile summaries.",
+  "Always supply `ariaLabel` naming the subject and period (e.g. `\"Platform contributions in 2026\"`)."
+ ],
+ "channels": [
+  "app",
+  "docs",
+  "site"
+ ]
+}

@@ -3,6 +3,7 @@ name: artifact-canvas
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 5
 template: 2
 checksum: ba609d1d9be366ed54e19a2e0e672f5bb1181ce059d28b32a65d9feac58bb94f

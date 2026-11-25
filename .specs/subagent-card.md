@@ -3,6 +3,7 @@ name: subagent-card
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 1
 template: 2
 checksum: efd5a86c94484d88318efb77516b42338c515713846d0955d09ac18210a18554

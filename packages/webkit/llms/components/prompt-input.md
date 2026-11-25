@@ -5,6 +5,7 @@
 - Import: `import PromptInputRoot from '@aziontech/webkit/prompt-input-root'`
 - Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/webkit/prompt-input'`
 - Category: ai · Surface: app · Structure: composition
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [prompt-input.json](prompt-input.json)
 
 ## When to use
@@ -325,7 +326,12 @@ packages/webkit/src/components/ai/prompt-input/
     { value: 'claude-sonnet-4', label: 'Claude Sonnet 4', provider: 'anthropic', shortcut: '⌘5' },
     { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', shortcut: '⌘6' },
     { value: 'llama-4-maverick', label: 'Llama 4 Maverick', provider: 'meta', shortcut: '⌘7' },
-    { value: 'azion-auto', label: 'Azion Auto', provider: 'azion', description: 'AI Gateway router' }
+    {
+      value: 'azion-auto',
+      label: 'Azion Auto',
+      provider: 'azion',
+      description: 'AI Gateway router'
+    }
   ]
   const modes = [
     { value: 'low', label: 'Low' },

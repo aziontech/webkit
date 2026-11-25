@@ -23,6 +23,7 @@
         "src/components/input/number-input": "NumberInput: the increment and decrement steppers of the spin button.",
         "src/components/input/date-picker/parts/date-picker-trigger.vue": "DatePicker trigger: the button that opens the calendar dialog.",
         "src/components/input/date-picker/parts/date-picker-grid.vue": "DatePicker grid: each day cell is the button of a calendar grid cell.",
+        "src/components/chart/contribution-graph/contribution-graph.vue": "ContributionGraph: each day is the button of a calendar grid cell.",
         "src/components/navigation/stepper/stepper-step": "Stepper.Step: the step header is the button that moves to the step (aria-current step).",
         "src/components/chart/chart/parts/chart-legend-button.vue": "Chart legend entry: a toggle button (aria-pressed) that shows or hides its series.",
         "src/components/chart/chart-card/chart-card-drag-handle": "ChartCard.DragHandle: the reorder handle, with its own keyboard model.",

@@ -3,6 +3,7 @@ name: reasoning
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 4
 template: 2
 checksum: a311e0f289664bfba6f8819ba577912a434fd544bdc1f22f24c59bc8708df379

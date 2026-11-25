@@ -3,6 +3,7 @@ name: tool-approval
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 9
 template: 2
 checksum: c86e1476d619be87fce14fb8548575e9e361ab0e5be72ff8bc5f8554defbb056

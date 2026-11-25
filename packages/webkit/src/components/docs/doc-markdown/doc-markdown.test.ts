@@ -7,6 +7,7 @@ import BarListMarkdown from '../../../../examples/bar-list/markdown.vue'
 import CarouselMarkdown from '../../../../examples/carousel/markdown.vue'
 import ChartMarkdown from '../../../../examples/chart/markdown.vue'
 import ConsoleMockupMarkdown from '../../../../examples/console-mockup/markdown.vue'
+import ContributionGraphMarkdown from '../../../../examples/contribution-graph/markdown.vue'
 import DiagramMarkdown from '../../../../examples/diagram/markdown.vue'
 import DocAgentCardMarkdown from '../../../../examples/doc-agent-card/markdown.vue'
 import DocCallToActionMarkdown from '../../../../examples/doc-call-to-action/markdown.vue'
@@ -328,7 +329,8 @@ describe('DocMarkdown', () => {
     ['spark-chart', SparkChartMarkdown],
     ['stat-tile', StatTileMarkdown],
     ['stat-tile-group', StatTileGroupMarkdown],
-    ['tracker', TrackerMarkdown]
+    ['tracker', TrackerMarkdown],
+    ['contribution-graph', ContributionGraphMarkdown]
   ])(
     'renders the %s tag of its Markdown example as the real component',
     async (testId, example) => {

@@ -1591,5 +1591,18 @@ export const ptBR: Messages = {
       one: '{count} pessoa',
       other: '{count} pessoas'
     }
+  },
+  contributionGraph: {
+    roleDescription: 'calendário de contribuições',
+    noData: 'Nenhuma atividade registrada',
+    errorTitle: 'As contribuições não carregaram',
+    hint: 'Passe o mouse ou selecione um dia para inspecionar a atividade',
+    less: 'Menos',
+    more: 'Mais',
+    dayLabel: {
+      one: '{count} contribuição em {date}',
+      other: '{count} contribuições em {date}'
+    },
+    dayZero: 'Nenhuma contribuição em {date}'
   }
 }

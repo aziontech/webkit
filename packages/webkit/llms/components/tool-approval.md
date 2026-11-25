@@ -4,6 +4,7 @@
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [tool-approval.json](tool-approval.json)
 
 ## When to use

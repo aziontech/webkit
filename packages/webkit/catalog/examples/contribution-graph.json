@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A full year of daily Azion platform contributions. Hover or focus any day to inspect its count, and click a day to select or clear it.",
+   "file": "examples/contribution-graph/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "Square and dot cell shapes rendered side-by-side over the same daily contribution series.",
+   "file": "examples/contribution-graph/variants.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "A Skeleton placeholder holds the space of the calendar while contributions load.",
+   "file": "examples/contribution-graph/loading.vue"
+  }
+ ]
+}

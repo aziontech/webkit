@@ -4,6 +4,7 @@
 
 - Import: `import ArtifactPreview from '@aziontech/webkit/artifact-preview'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [artifact-preview.json](artifact-preview.json)
 
 ## When to use

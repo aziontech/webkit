@@ -4,6 +4,7 @@
 
 - Import: `import AgentQuestion from '@aziontech/webkit/agent-question'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [agent-question.json](agent-question.json)
 
 ## When to use

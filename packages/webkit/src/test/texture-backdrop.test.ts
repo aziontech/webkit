@@ -170,6 +170,7 @@ describe('Texture is a backdrop for text only', () => {
     'Card',
     'Chart',
     'CodeBlock',
+    'ContributionGraph',
     'DonutChart',
     'Embed',
     'FlowDiagram',

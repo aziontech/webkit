@@ -1,0 +1,128 @@
+{
+ "name": "contribution-graph",
+ "binding": "ContributionGraph",
+ "import": "@aziontech/webkit/contribution-graph",
+ "treeShakeableImport": "@aziontech/webkit/contribution-graph",
+ "category": "chart",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use ContributionGraph for a 52-week × 7-day calendar heatmap of daily activity intensity (platform contributions, deployments, builds, Copilot tasks) across a year. Each day renders as a cell shaded across five sequential intensity levels (0–4), with month and weekday axes, a hover and keyboard-focus readout, an intensity legend, and optional day selection so clicking a cell filters a sibling history list. Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart` (a continuous time-series plot), `ContributionGraph` reveals weekly and seasonal cadence of daily counts at a glance.",
+ "setup": null,
+ "useWhen": [
+  "User profile platform contributions across a year, paired with a year-over-year selector and a `Timeline` of contribution history.",
+  "Daily deployment, build, or AI workflow cadence over a 12-month period where streaks and active days matter.",
+  "Any calendar-aligned daily intensity heatmap with up to 366 days where selecting a day filters activity details."
+ ],
+ "avoidWhen": [
+  "Uptime or pass/fail severity history across discrete periods → use `tracker`.",
+  "A continuous measured trend over time (requests/sec, latency, bandwidth) → use `chart` or `spark-chart`.",
+  "Comparing totals across named categories → use `bar-list`.",
+  "Picking a single date or date range in a form → use `date-picker` or `date-range-picker`."
+ ],
+ "related": [
+  "`tracker` — 1D severity strip for service uptime; `contribution-graph` is a 2D calendar grid of quantitative intensity.",
+  "`timeline` — chronological activity feed commonly paired below `contribution-graph` and filtered by its `v-model:selected-date`.",
+  "`stat-tile-group` — summary KPI strip placed above `contribution-graph` (total contributions, streaks, deployments).",
+  "`card` — the surface `contribution-graph` usually sits inside; the graph itself has no outer card chrome."
+ ],
+ "bestPractices": [
+  "Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.",
+  "Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).",
+  "Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.",
+  "Pick `variant=\"square\"` (default) for dense developer activity grids, or `variant=\"dot\"` for softer editorial/profile summaries.",
+  "Always supply `ariaLabel` naming the subject and period (e.g. `\"Platform contributions in 2026\"`)."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "ContributionGraphItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0."
+  },
+  {
+   "name": "year",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date."
+  },
+  {
+   "name": "endDate",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted."
+  },
+  {
+   "name": "variant",
+   "type": "ContributionGraphVariant",
+   "default": "'square'",
+   "required": "false",
+   "doc": "Cell shape: `'square'` (rounded square) or `'dot'` (circular dot)."
+  },
+  {
+   "name": "showLegend",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Renders the `Less … More` intensity legend in the footer."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders a Skeleton placeholder in place of the calendar grid."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, renders an `EmptyState` with the message inside a `role=\"alert\"` region in place of the grid."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the contribution grid."
+  },
+  {
+   "name": "selectedDate",
+   "type": "string | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model:selectedDate`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "select",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: ContributionGraphDay)",
+   "notes": "Fires when a day cell is activated by pointer click or Enter/Space."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/contribution-graph/default.vue"
+  },
+  {
+   "name": "Variants",
+   "file": "examples/contribution-graph/variants.vue"
+  },
+  {
+   "name": "Loading",
+   "file": "examples/contribution-graph/loading.vue"
+  }
+ ],
+ "docs": "components/contribution-graph.md"
+}

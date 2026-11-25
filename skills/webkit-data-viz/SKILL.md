@@ -64,6 +64,7 @@ Never guess an import path or a hex value. Resolve both from the contract:
 | A metric by country                                       | `MapChart`                                                | `NetworkMap` (that is the Azion network map) |
 | The recent shape of a metric beside its number, in a row  | `SparkChart`                                              | a full `Chart` squeezed into a cell          |
 | Uptime or status day by day                               | `Tracker`                                                 | a row of hand-coloured boxes                 |
+| How much happened each day of a year (contributions)      | `ContributionGraph`                                       | a `Tracker` or a grid of hand-coloured boxes |
 | One headline number, with its change                      | `StatTile` (several in one card: `StatTileGroup`)         | a `Card` with a large number typed in        |
 | A chart with its title, period and actions on a dashboard | `ChartCard` (in a `DashboardGrid` when widgets rearrange) | a `Card` composed by hand around a chart     |
 
