@@ -2365,3 +2365,33 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: app-layout 24.55 KB → 24.6 KB (measured 24.56 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: collection-preferences 32.95 KB → 33 KB (measured 32.95 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: site-header-section 60.2 KB → 60.25 KB (measured 60.22 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: chart 27.55 KB → 27.6 KB (measured 27.55 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: error-boundary 7.3 KB → 7.35 KB (measured 7.32 KB): ErrorBoundary moves focus to a custom fallback when the failure leaves focus on the body or a disabled control (A6-006).
+
+Budget-raise: confirm-dialog 28.25 KB → 28.5 KB (measured 28.44 KB): ConfirmDialog explains a typed phrase that does not match on Enter (A6-157) and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.10 KB): The es catalog gained confirmDialog.phraseMismatch (A6-157).
+
+Budget-raise: conversation-history 42.35 KB → 42.4 KB (measured 42.35 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: table-head-cell 5.45 KB → 5.5 KB (measured 5.45 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: transfer-list 8.05 KB → 8.1 KB (measured 8.05 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: toast-root 11.7 KB → 11.75 KB (measured 11.72 KB): Toast regions keep clear of the phone safe areas with env(safe-area-inset-*) (A6-008).
+
+Budget-raise: sidebar-menu-sub-trigger 15.95 KB → 16 KB (measured 15.95 KB): IconButton keeps a transparent fill while a ghost button is disabled (A6-232); every entry that renders IconButton carries the few extra bytes.
+
+Budget-raise: command 29.4 KB → 29.45 KB (measured 29.41 KB): Command shows its title in the phone sheet header (A6-003) and its dialog carries the useModalRoot and IconButton changes (A6-290, A6-232).
+
+Budget-raise: drawer 23.45 KB → 23.5 KB (measured 23.45 KB): Drawer shares its root state through useModalRoot (A6-290) and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: shortcuts-dialog 27.3 KB → 27.35 KB (measured 27.32 KB): ShortcutsDialog renders Dialog and IconButton, which carry the useModalRoot and disabled ghost changes (A6-290, A6-232).

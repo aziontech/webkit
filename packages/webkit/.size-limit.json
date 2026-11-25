@@ -2,7 +2,7 @@
   {
     "name": "app-layout",
     "path": "src/components/layout/app-layout/app-layout.vue",
-    "limit": "24.55 KB"
+    "limit": "24.6 KB"
   },
   {
     "name": "console-layout-root",
@@ -130,7 +130,7 @@
   {
     "name": "collection-preferences",
     "path": "src/components/data/collection-preferences/collection-preferences.vue",
-    "limit": "32.95 KB"
+    "limit": "33 KB"
   },
   {
     "name": "card",
@@ -551,7 +551,7 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "60.2 KB"
+    "limit": "60.25 KB"
   },
   {
     "name": "competitor-comparison-section",
@@ -746,7 +746,7 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "27.55 KB"
+    "limit": "27.6 KB"
   },
   {
     "name": "chart-root",
@@ -917,7 +917,7 @@
   {
     "name": "error-boundary",
     "path": "src/components/feedback/error-boundary/error-boundary.vue",
-    "limit": "7.3 KB"
+    "limit": "7.35 KB"
   },
   {
     "name": "tutorial-panel",
@@ -1133,7 +1133,7 @@
   {
     "name": "confirm-dialog",
     "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
-    "limit": "28.25 KB"
+    "limit": "28.5 KB"
   },
   {
     "name": "config-provider",
@@ -1148,7 +1148,7 @@
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "13.1 KB"
+    "limit": "13.15 KB"
   },
   {
     "name": "phone-input",
@@ -1326,7 +1326,7 @@
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "42.35 KB"
+    "limit": "42.4 KB"
   },
   {
     "name": "feedback-reason-dialog",
@@ -1760,7 +1760,7 @@
   {
     "name": "table-head-cell",
     "path": "src/components/data/table/table-head-cell/table-head-cell.vue",
-    "limit": "5.45 KB"
+    "limit": "5.5 KB"
   },
   {
     "name": "table-cell",
@@ -1888,7 +1888,7 @@
   {
     "name": "transfer-list",
     "path": "src/components/data/transfer-list/index.ts",
-    "limit": "8.05 KB"
+    "limit": "8.1 KB"
   },
   {
     "name": "transfer-list-root",
@@ -1933,7 +1933,7 @@
   {
     "name": "toast-root",
     "path": "src/components/feedback/toast/toast.vue",
-    "limit": "11.7 KB"
+    "limit": "11.75 KB"
   },
   {
     "name": "toast-item",
@@ -2350,7 +2350,7 @@
   {
     "name": "sidebar-menu-sub-trigger",
     "path": "src/components/navigation/sidebar-menu/sidebar-menu-sub-trigger/sidebar-menu-sub-trigger.vue",
-    "limit": "15.95 KB"
+    "limit": "16 KB"
   },
   {
     "name": "sidebar-menu-sub-content",
@@ -2440,7 +2440,7 @@
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "29.4 KB"
+    "limit": "29.45 KB"
   },
   {
     "name": "command-root",
@@ -2535,7 +2535,7 @@
   {
     "name": "drawer",
     "path": "src/components/overlay/drawer/index.ts",
-    "limit": "23.45 KB"
+    "limit": "23.5 KB"
   },
   {
     "name": "drawer-root",
@@ -2705,7 +2705,7 @@
   {
     "name": "shortcuts-dialog",
     "path": "src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue",
-    "limit": "27.3 KB"
+    "limit": "27.35 KB"
   },
   {
     "name": "countdown",
