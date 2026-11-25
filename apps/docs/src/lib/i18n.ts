@@ -282,7 +282,7 @@ const LOADERS: Record<string, () => Promise<Messages>> = {
 
 const catalogs = shallowReactive<Record<string, Messages>>({ en })
 
-async function loadMessages(locale: string): Promise<void> {
+export async function loadMessages(locale: string): Promise<void> {
   const load = LOADERS[locale]
   if (!load || catalogs[locale]) return
   catalogs[locale] = await load()
