@@ -10,7 +10,7 @@ import {
   chunkGraphPlugin,
   moveBuildManifests
 } from './plugins/chunk-graph.ts'
-import { buildIndex } from './plugins/content.ts'
+import { buildIndex, exampleFrameRoutes } from './plugins/content.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
 import { fontPreloadPlugin } from './plugins/font-preload.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
@@ -31,6 +31,7 @@ function staticRoutes(): string[] {
       block.states.map((state) => `/frame/block/${block.id}/${state.slug}`)
     ),
     '/frame/example',
+    ...exampleFrameRoutes(),
     '/404'
   ]
 }

@@ -104,7 +104,11 @@ export async function preloadRoute(route: RouteLocationNormalized) {
   if (route.name === 'component') await preloadComponent(param('name'))
   else if (route.name === 'block') await preloadBlock(param('id'))
   else if (route.name === 'block-frame') await preloadBlock(param('id'), false)
-  else if (route.name === 'foundation') {
+  else if (route.name === 'example-frame') {
+    const segments = param('path').split('/').filter(Boolean)
+    if (segments.length > 1)
+      await preloadExample(segments.slice(0, -1).join('/'), segments.at(-1) as string)
+  } else if (route.name === 'foundation') {
     const { FOUNDATIONS } = await import('./foundations')
     const page = FOUNDATIONS.find((item) => item.slug === param('slug'))
     if (page?.markdown) await preloadMarkdown(page.markdown)

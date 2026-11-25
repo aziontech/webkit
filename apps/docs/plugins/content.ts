@@ -435,6 +435,12 @@ function readExampleDirs(): { dir: string; data: ExamplesFile }[] {
   }))
 }
 
+export function exampleFrameRoutes(): string[] {
+  return readExampleDirs().flatMap(({ dir, data }) =>
+    data.examples.map((example) => `/frame/example/${dir}/${example.file.replace(/\.vue$/, '')}`)
+  )
+}
+
 function pascal(name: string): string {
   return name
     .split(/[-/]/)

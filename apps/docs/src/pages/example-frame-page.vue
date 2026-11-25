@@ -18,9 +18,7 @@
   )
   const example = computed(() => (segments.value.length > 1 ? (segments.value.at(-1) ?? '') : ''))
   const file = computed(() => `${example.value}.vue`)
-  const live = computed(() =>
-    mounted.value ? cached<Component>(keys.example(dir.value, file.value)) : undefined
-  )
+  const live = computed(() => cached<Component>(keys.example(dir.value, file.value)))
 
   useHead({
     title: computed(() => (dir.value ? `${dir.value}: ${example.value} — WebKit` : 'WebKit'))
@@ -57,7 +55,7 @@
 <template>
   <div
     :data-example="mounted && dir ? `${dir}/${file}` : undefined"
-    :data-ready="live ? '' : undefined"
+    :data-ready="mounted && live ? '' : undefined"
     class="min-h-screen w-full bg-(--bg-canvas) p-(--spacing-lg) [--layout-sticky-top:0]"
   >
     <component
