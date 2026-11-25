@@ -157,6 +157,19 @@ test.describe('demo flows', () => {
     await expect(page.locator('nav').getByText('Soon', { exact: true })).toHaveCount(0)
   })
 
+  test('leaving the profile with unsaved edits asks first', async ({ page }) => {
+    await page.goto(`${DEMOS}/settings`)
+    await page.locator('#full-name').fill('Amy Chen-Park')
+    await page
+      .getByRole('button', { name: /account menu/ })
+      .first()
+      .click()
+    await page.getByRole('menuitem', { name: 'Integration keys' }).click()
+    await expect(page.getByRole('alertdialog', { name: 'Unsaved changes' })).toBeVisible()
+    await page.getByRole('button', { name: 'Keep editing' }).click()
+    await expect(page.locator('#full-name')).toHaveValue('Amy Chen-Park')
+  })
+
   test('the profile opens on the signed-in account and saves with Control+S', async ({ page }) => {
     await page.goto(`${DEMOS}/settings`)
     await expect(page.locator('#full-name')).toHaveValue('Amy Chen')
