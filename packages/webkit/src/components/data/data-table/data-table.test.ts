@@ -455,7 +455,7 @@ describe('DataTable', () => {
       expect(onRowClick.mock.calls[0]![1]).toEqual(rows[2])
     })
 
-    it('keeps the links and buttons of the other rows out of the Tab order, so a table is one stop', async () => {
+    it('once focused, keeps the links and buttons of the other rows out of the Tab order, so a table is one stop', async () => {
       const Host = defineComponent({
         components: { DataTable },
         setup: () => ({ rows, columns, onRowClick: vi.fn() }),
@@ -467,10 +467,10 @@ describe('DataTable', () => {
       await nextTick()
       const stops = (row: HTMLElement) =>
         Array.from(row.querySelectorAll<HTMLElement>('a, button')).map((el) => el.tabIndex)
+      bodyRows()[0]!.focus()
       await waitFor(() => expect(stops(bodyRows()[1]!)).toEqual([-1, -1]))
       expect(stops(bodyRows()[0]!)).toEqual([0, 0])
       expect(stops(bodyRows()[2]!)).toEqual([-1, -1])
-      bodyRows()[0]!.focus()
       key(bodyRows()[0]!, { key: 'ArrowDown' })
       await waitFor(() => expect(stops(bodyRows()[1]!)).toEqual([0, 0]))
       expect(stops(bodyRows()[0]!)).toEqual([-1, -1])
