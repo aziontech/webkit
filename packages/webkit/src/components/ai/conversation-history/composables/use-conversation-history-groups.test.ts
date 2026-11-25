@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { effectScope } from 'vue'
 
 import { groupOf, useConversationHistoryGroups } from './use-conversation-history-groups'
@@ -25,6 +25,25 @@ describe('useConversationHistoryGroups', () => {
     expect(groupOf(at('2026-11-01T04:00:00Z'), newYork, 'America/New_York')).toBe('yesterday')
     expect(groupOf(at('2026-11-01T03:59:00Z'), newYork, 'America/New_York')).toBe('previous7')
     expect(groupOf(at('2026-11-30T09:00:00Z'), newYork, 'America/New_York')).toBe('today')
+  })
+
+  it('finds the day starts of a day and zone once and shares them across lists', () => {
+    const day = Date.parse('2026-08-14T12:00:00Z')
+    const original = Object.getOwnPropertyDescriptor(Intl.DateTimeFormat.prototype, 'format')!
+    let calls = 0
+    const spy = vi
+      .spyOn(Intl.DateTimeFormat.prototype, 'format', 'get')
+      .mockImplementation(function (this: Intl.DateTimeFormat) {
+        calls += 1
+        return original.get!.call(this)
+      })
+    groupOf(day - 3_600_000, day, 'Europe/Lisbon')
+    const first = calls
+    calls = 0
+    groupOf(day - 7_200_000, day + 60_000, 'Europe/Lisbon')
+    spy.mockRestore()
+    expect(first).toBeGreaterThan(8)
+    expect(calls).toBe(1)
   })
 
   it('returns only the groups that hold items, newest first inside each', () => {
