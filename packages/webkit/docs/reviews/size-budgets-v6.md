@@ -2835,3 +2835,5 @@ Budget-raise: radio-group-item 2.35 KB → 2.4 KB (measured 2.37 KB): the item c
 Budget-raise: doc-prose 4.7 KB → 4.8 KB (measured 4.77 KB): DocProse gives every prose table tabindex 0 after mount and when its content changes, so a wide table scrolls from the keyboard for every consumer (X1-4).
 
 Budget-raise: article-body-section 49.6 KB → 49.7 KB (measured 49.69 KB): it renders DocProse, whose tables are now focusable (X1-4).
+
+Budget-raise: markdown-editor 32.1 KB → 32.6 KB (measured 32.57 KB): its lazy StreamingResponse preview now loads CodeBlock as a nested lazy chunk (audit-6 X2-4), so the bundler moves the modules the editor shares with CodeBlock (Tooltip, the trigger and teleport helpers) out of the entry into their own statically imported chunks; the editor loads the same code in more files. StreamingResponse itself drops 44 KB → 26.85 KB.

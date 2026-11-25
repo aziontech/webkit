@@ -48,11 +48,12 @@ const dayIndex = (time: number, timeZone?: string): number => {
 
 const MINUTE = 60_000
 
-const groupClassifier = (
-  today: number,
-  timeZone?: string
-): ((time: number) => ConversationHistoryGroupKey) => {
-  const current = dayIndex(today, timeZone)
+const dayStarts = new Map<string, number[]>()
+
+const startsOf = (current: number, timeZone?: string): number[] => {
+  const key = `${timeZone ?? ''}|${current}`
+  const cached = dayStarts.get(key)
+  if (cached) return cached
   const starts = [0, 1, 6, 29].map((back) => {
     const day = current - back
     let low = day * 1440 - 900
@@ -64,6 +65,16 @@ const groupClassifier = (
     }
     return low * MINUTE
   })
+  if (dayStarts.size >= 16) dayStarts.clear()
+  dayStarts.set(key, starts)
+  return starts
+}
+
+const groupClassifier = (
+  today: number,
+  timeZone?: string
+): ((time: number) => ConversationHistoryGroupKey) => {
+  const starts = startsOf(dayIndex(today, timeZone), timeZone)
   return (time) => ORDER[starts.findIndex((start) => time >= start)] ?? 'older'
 }
 

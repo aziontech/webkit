@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import IconButton from '../../../action/icon-button/icon-button.vue'
-  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
+  import { LazyTooltip } from '../lib/lazy-overlays'
 
   defineOptions({
     name: 'ChatMessageReadAloud',
@@ -72,7 +72,7 @@
 </script>
 
 <template>
-  <Tooltip
+  <LazyTooltip
     v-if="supported"
     :content="label"
   >
@@ -86,5 +86,5 @@
       size="medium"
       @click="onClick"
     />
-  </Tooltip>
+  </LazyTooltip>
 </template>

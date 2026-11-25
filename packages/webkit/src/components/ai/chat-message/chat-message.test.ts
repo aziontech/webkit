@@ -360,7 +360,11 @@ describe('ChatMessage', () => {
     it('speaks the given text, turns into Stop reading, and stops when pressed again', async () => {
       const { spoken, cancel } = spySpeech()
       const { getByRole, getByTestId } = renderRow({ readAloudText: 'Hello there.' })
-      await nextTick()
+      await vi.waitFor(() =>
+        expect(getByRole('button', { name: 'Read aloud' }).parentElement).toHaveAttribute(
+          'data-side'
+        )
+      )
       await userEvent.click(getByRole('button', { name: 'Read aloud' }))
       expect(spoken).toHaveLength(1)
       expect(spoken[0]?.text).toBe('Hello there.')

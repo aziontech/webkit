@@ -171,17 +171,16 @@
     (now, was) => {
       if (was) composerObserver?.unobserve(was)
       if (now) composerObserver?.observe(now)
-      measureComposer()
+      if (!composerObserver || !now) measureComposer()
     },
     { flush: 'post' }
   )
 
   onMounted(() => {
-    if (typeof ResizeObserver !== 'undefined')
+    if (typeof ResizeObserver !== 'undefined') {
       composerObserver = new ResizeObserver(measureComposer)
-    if (composerEl.value) composerObserver?.observe(composerEl.value)
-    measureComposer()
-    scrollToBottom()
+      if (composerEl.value) composerObserver.observe(composerEl.value)
+    } else measureComposer()
     ready.value = true
     ;[watcher, observer] = observeHistory(
       viewportEl.value,
@@ -190,6 +189,7 @@
       onNear,
       onResize
     )
+    if (!observer) scrollToBottom()
   })
 
   onBeforeUnmount(() => {

@@ -37,8 +37,9 @@ describe('Sources', () => {
     expect(render(Sources).queryByTestId('sources')).toBeNull()
   })
 
-  it('titles the pill with the count and starts closed', () => {
-    const { getByRole } = render(Sources, { props: { items } })
+  it('titles the pill with the count and starts closed', async () => {
+    const { findByTestId, getByRole } = render(Sources, { props: { items } })
+    await findByTestId('sources__host')
     const trigger = getByRole('button', { name: /2 sources/ })
     expect(trigger).toHaveTextContent('Sources')
     expect(trigger).toHaveAttribute('aria-expanded', 'false')

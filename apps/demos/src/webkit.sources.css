@@ -18,6 +18,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/injection-key.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/lib/content-text.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/lib/feedback-icon.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/lib/lazy-overlays.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-feedback-menu.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-more.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/chat-message/parts/chat-message-read-aloud.vue";
@@ -80,10 +81,15 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/reasoning/reasoning.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/response-branches/response-branches.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/response-loading/response-loading.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/sources/lib/sources-menu.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-button.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-item.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-mark.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/sources/parts/sources-menu.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/sources.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/sources/types.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/streaming-response/lib/lazy-code-block.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/streaming-response/parts/streaming-response-pending-code.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/streaming-response/streaming-response.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/subagent-card/subagent-card.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/suggestion-group/suggestion-group.vue";
