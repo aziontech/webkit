@@ -11,6 +11,7 @@ import {
   moveBuildManifests
 } from './plugins/chunk-graph.ts'
 import { buildIndex, exampleFrameRoutes } from './plugins/content.ts'
+import { cssSourcesPlugin, writeDocsSources } from './plugins/css-sources.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
 import { fontPreloadPlugin } from './plugins/font-preload.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
@@ -55,9 +56,12 @@ const ssgOptions: Partial<ViteSSGOptions> = {
   }
 }
 
+writeDocsSources()
+
 export default defineConfig({
   plugins: [
     docsPlugin(),
+    cssSourcesPlugin(),
     bundlerRuntimePlugin(),
     chunkGraphPlugin(),
     fontPreloadPlugin(),
