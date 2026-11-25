@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { type Component, defineComponent, h } from 'vue'
 
 import DetailsPage from '../../../../blocks/detail/detail-resource/detail-resource.vue'
@@ -8,6 +8,7 @@ import ApplicationBuild from '../../../../blocks/detail/detail-resource/variants
 import FirstDeploy from '../../../../blocks/detail/detail-resource/variants/first-deploy.vue'
 import NoDeployment from '../../../../blocks/detail/detail-resource/variants/no-deployment.vue'
 import ResourceBuild from '../../../../blocks/detail/detail-resource/variants/resource-build.vue'
+import ResourceVersions from '../../../../blocks/detail/detail-resource/variants/resource-versions.vue'
 import Service from '../../../../blocks/detail/detail-resource/variants/service.vue'
 import ServiceOverview from '../../../../blocks/detail/detail-resource/variants/service-overview.vue'
 import ConsoleLayout from '../../../components/layout/console-layout/console-layout.vue'
@@ -199,5 +200,26 @@ describe('detail-resource#ServiceOverview', () => {
     await fireEvent.click(await screen.findByRole('option', { name: /^Preview/ }))
     await waitFor(() => expect(cardSwitch()).toBe('Preview'))
     expect(trigger.textContent).toContain('Preview')
+  })
+})
+
+describe('detail-resource#ResourceVersions', () => {
+  it('reads its relative times from the sample clock, so a prerendered page hydrates the same text', () => {
+    const createdTexts = () =>
+      screen
+        .getAllByRole('row')
+        .slice(1)
+        .map((row) => row.textContent ?? '')
+    render(ResourceVersions)
+    const now = createdTexts()
+    cleanup()
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2031-01-01T00:00:00Z'))
+    try {
+      render(ResourceVersions)
+      expect(createdTexts()).toEqual(now)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

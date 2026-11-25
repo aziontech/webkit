@@ -10,6 +10,8 @@ import type { TopologyTarget } from './use-topology-staging'
 
 const referenceTime = Date.UTC(2026, 10, 10, 12)
 
+export const sampleNow = new Date(referenceTime).toISOString()
+
 export const sampleResource: ResourceDetailResource = {
   name: 'analytics-app',
   domain: 'analytics-app-z1x2c3.example.com',
