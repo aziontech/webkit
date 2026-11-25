@@ -2,7 +2,6 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Link from '@aziontech/webkit/link'
-  import Subheader from '@aziontech/webkit/subheader'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, ref } from 'vue'
 
@@ -23,25 +22,26 @@
 
 <template>
   <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-    <Subheader title="Get started">
-      <template #description>
-        Two ways to build and deploy this resource. Select one and follow the steps, or read the
-        <Link
-          href="https://example.com/docs/cli"
-          target="_blank"
-          inline
-          >CLI docs</Link
-        >.
-      </template>
-      <template #actions>
-        <ToggleGroup
-          v-model="path"
-          :options="PATHS"
-          size="large"
-          aria-label="Deploy with"
-        />
-      </template>
-    </Subheader>
+    <div class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+      <div class="flex min-w-0 grow basis-64 flex-col gap-(--spacing-2xs)">
+        <h2 class="text-label-md text-(--text-default)">Get started</h2>
+        <p class="text-pretty text-body-sm text-(--text-muted)">
+          Two ways to build and deploy this resource. Select one and follow the steps, or read the
+          <Link
+            href="https://example.com/docs/cli"
+            target="_blank"
+            inline
+            >CLI docs</Link
+          >.
+        </p>
+      </div>
+      <ToggleGroup
+        v-model="path"
+        :options="PATHS"
+        size="large"
+        aria-label="Deploy with"
+      />
+    </div>
 
     <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
       <div

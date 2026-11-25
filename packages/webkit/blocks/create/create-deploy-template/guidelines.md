@@ -124,7 +124,7 @@ Then delete `sample.ts` and its import.
 - **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the same function as the Deploy button, from any field, on Form, BuildSettings and ImportFromGit, and runs Add to service-01 on InstallIntegration; the button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
-- The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
+- The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch sits in its own row with a visible Public repository label and a description of what it means, and announces its on or off state.
 - Settings use `Field` labels and descriptions, so each input announces its name and constraint.
 - Required fields carry the Required marker; a failed Deploy puts each error in a `Field.Error` (`role="alert"`) tied to its input.
 - Each `Accordion` trigger is a button that announces its expanded state; the Value input is labelled by its Value label, the Key row by its Key label (on a phone the key is a read-only line above a full-width Value field), and the show control is a toggle with `aria-pressed`.

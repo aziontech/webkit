@@ -47,6 +47,17 @@ const openCreate = async () => {
   return { panel, key, value }
 }
 describe('variables#NetworkList', () => {
+  it('types each entry in the code face', async () => {
+    render(NetworkList)
+    const inputs = await waitFor(() => {
+      const found = document.querySelectorAll('input')
+      expect(found.length).toBeGreaterThan(0)
+      return found
+    })
+    const monospace = Array.from(inputs).filter((input) => input.closest('[data-monospace]'))
+    expect(monospace.length).toBeGreaterThan(0)
+  })
+
   it('reports invalid and repeated lines, adds every new line as a row and shows each invalid row its error', async () => {
     render(NetworkList)
     const panel = await openedDrawer()
@@ -162,6 +173,25 @@ describe('variables data contract', () => {
     render(VariablesList, { props: { variables: given } })
     await waitFor(() => expect(document.body.textContent).toContain('ACME_REGION'))
     expect(document.body.textContent).not.toContain('API_BASE_URL')
+  })
+
+  it('reads Last modified from the clock it is given, so a server render and the browser agree', async () => {
+    render(VariablesList, {
+      props: { variables: given, now: new Date('2026-11-10T12:00:00Z') }
+    })
+    await waitFor(() => expect(document.body.textContent).toContain('5 minutes ago'))
+  })
+
+  it('freezes the Key column, so a value scrolled into view keeps its key beside it', async () => {
+    render(VariablesList, { props: { variables: given } })
+    const header = await waitFor(() => {
+      const cell = Array.from(document.querySelectorAll('[role="columnheader"]')).find((th) =>
+        th.textContent?.includes('Key')
+      )
+      expect(cell).toBeTruthy()
+      return cell as HTMLElement
+    })
+    expect(header.getAttribute('data-frozen')).toBe('start')
   })
 
   it('shows the state-first-use empty state for an empty list', async () => {

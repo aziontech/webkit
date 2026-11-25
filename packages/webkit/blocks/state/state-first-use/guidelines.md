@@ -44,9 +44,9 @@ An `Item.List` under the `EmptyState`, one `Item` per way to create the first re
 
 One per method. The recommended method takes `variant="primary"` (`Import`); the others take `variant="outline"` (`Create`). Only one primary on the block.
 
-### G. Command row — `InputGroupRoot` (CLI method)
+### G. Command row — `Input`, `CopyButton` (CLI method)
 
-Joins the read-only command and its copy button into one control, full width.
+A read-only monospace `Input` holds the command with its `CopyButton` in the `trailing` slot, so one framed control carries both, full width.
 
 ### H. Command — `Input` (CLI method)
 

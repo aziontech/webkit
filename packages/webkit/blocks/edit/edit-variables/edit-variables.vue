@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
+  import ConfigProvider from '@aziontech/webkit/config-provider'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Drawer from '@aziontech/webkit/drawer-root'
   import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
@@ -22,7 +23,7 @@
   import VariablesEntries from './parts/variables-entries.vue'
   import VariablesList from './parts/variables-list.vue'
   import VariablesScopeGroup from './parts/variables-scope-group.vue'
-  import { sampleVariables } from './sample'
+  import { sampleNow, sampleVariables } from './sample'
 
   /** Where a variable applies: the whole account, or one environment, project, service or policy. */
   export interface VariablesScope {
@@ -85,6 +86,8 @@
     saveError?: string
     /** The create drawer starts open. */
     defaultOpen?: boolean
+    /** A fixed moment the Last modified times read (a test, a server render). Left out, the real clock; the sample uses its own. */
+    now?: Date
   }
 
   const props = withDefaults(defineProps<VariablesProps>(), {
@@ -92,7 +95,8 @@
     loading: false,
     saving: false,
     saveError: '',
-    defaultOpen: false
+    defaultOpen: false,
+    now: undefined
   })
 
   const emit = defineEmits<{
@@ -104,6 +108,9 @@
 
   const source = computed<VariablesVariable[]>(
     () => props.variables ?? (props.loading ? [] : sampleVariables)
+  )
+  const clock = computed(
+    () => props.now ?? (props.variables || props.loading ? undefined : sampleNow)
   )
   const rows = ref<VariablesRow[]>([])
   watch(
@@ -251,79 +258,81 @@
 </script>
 
 <template>
-  <div class="layout-column layout-boundary flex flex-col">
-    <PageHeader
-      title="Variables"
-      description="Configure variable names, values, and settings for use across your projects."
-    >
-      <template #actions>
-        <Button
-          label="Documentation"
-          aria-label="Documentation (opens in a new tab)"
-          icon="az az-book"
-          variant="outline"
-          href="https://example.com/docs/variables"
-          target="_blank"
-          size="medium"
-        />
-        <Button
-          label="Create variable"
-          icon="az az-plus"
-          variant="primary"
-          size="medium"
-          @click="openCreate"
-        />
-      </template>
-    </PageHeader>
-
-    <VariablesList
-      :rows="rows"
-      :loading="loading"
-      @refresh="refresh"
-      @create="openCreate"
-      @row-action="onRowAction"
-    />
-
-    <Drawer
-      v-model:open="drawerOpen"
-      size="large"
-      side="end"
-    >
-      <VariablesDrawerForm
-        :title="drawerTitle"
-        :description="drawerDescription"
-        shortcut-label="Save variable"
-        :active="drawerOpen"
-        :submitting="submitting"
-        :save-error="saveError"
-        @submit="submit"
+  <ConfigProvider :now="clock">
+    <div class="layout-column layout-boundary flex flex-col">
+      <PageHeader
+        title="Variables"
+        description="Configure variable names, values, and settings for use across your projects."
       >
-        <VariablesEntries
-          :editing="!!editing"
-          :secret-locked="Boolean(editing?.secret)"
-        />
-        <VariablesScopeGroup />
-      </VariablesDrawerForm>
-    </Drawer>
+        <template #actions>
+          <Button
+            label="Documentation"
+            aria-label="Documentation (opens in a new tab)"
+            icon="az az-book"
+            variant="outline"
+            href="https://example.com/docs/variables"
+            target="_blank"
+            size="medium"
+          />
+          <Button
+            label="Create variable"
+            icon="az az-plus"
+            variant="primary"
+            size="medium"
+            @click="openCreate"
+          />
+        </template>
+      </PageHeader>
 
-    <ConfirmDialog
-      v-model:open="deleteOpen"
-      title="Delete variable"
-      size="medium"
-      confirm-label="Delete variable"
-      :confirmation-phrase="pending?.key ?? ''"
-      @confirm="confirmDelete"
-    >
-      <div class="flex flex-col gap-(--spacing-md)">
-        <Alert
-          severity="warning"
-          label="Once confirmed, this action can't be reversed."
-        />
-        <p class="m-0 text-body-sm text-(--text-muted)">
-          The selected variable will be deleted, and services in its scope stop reading it on their
-          next deployment.
-        </p>
-      </div>
-    </ConfirmDialog>
-  </div>
+      <VariablesList
+        :rows="rows"
+        :loading="loading"
+        @refresh="refresh"
+        @create="openCreate"
+        @row-action="onRowAction"
+      />
+
+      <Drawer
+        v-model:open="drawerOpen"
+        size="large"
+        side="end"
+      >
+        <VariablesDrawerForm
+          :title="drawerTitle"
+          :description="drawerDescription"
+          shortcut-label="Save variable"
+          :active="drawerOpen"
+          :submitting="submitting"
+          :save-error="saveError"
+          @submit="submit"
+        >
+          <VariablesEntries
+            :editing="!!editing"
+            :secret-locked="Boolean(editing?.secret)"
+          />
+          <VariablesScopeGroup />
+        </VariablesDrawerForm>
+      </Drawer>
+
+      <ConfirmDialog
+        v-model:open="deleteOpen"
+        title="Delete variable"
+        size="medium"
+        confirm-label="Delete variable"
+        :confirmation-phrase="pending?.key ?? ''"
+        @confirm="confirmDelete"
+      >
+        <div class="flex flex-col gap-(--spacing-md)">
+          <Alert
+            severity="warning"
+            label="Once confirmed, this action can't be reversed."
+          />
+          <p class="m-0 text-body-sm text-(--text-muted)">
+            The selected variable will be deleted, and services in its scope stop reading it on
+            their next deployment.
+          </p>
+        </div>
+      </ConfirmDialog>
+    </div>
+  </ConfigProvider>
 </template>

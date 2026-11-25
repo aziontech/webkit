@@ -32,6 +32,18 @@ afterEach(() => {
   document.documentElement.style.overflow = ''
   document.body.style.overflow = ''
 })
+describe('edit-resource#ResourceSettings list', () => {
+  it('types addresses in the code face and keeps the --LT syntax on one line', async () => {
+    render(ResourceSettings)
+    const list = await screen.findByRole('textbox', { name: 'List' })
+    expect(list.getAttribute('data-monospace')).not.toBeNull()
+    const syntax = Array.from(document.querySelectorAll('code')).find(
+      (code) => code.textContent === '--LT'
+    )
+    expect(syntax?.classList.contains('whitespace-nowrap')).toBe(true)
+  })
+})
+
 describe('edit-resource locked modules', () => {
   it.each([
     ['primary', EditResource],

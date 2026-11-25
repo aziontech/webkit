@@ -217,11 +217,17 @@
     handler: () => formEl.value?.requestSubmit()
   })
 
+  const focusInvalid = async () => {
+    const moved = await focusFirstInvalid(formEl.value)
+    requesterEl.value?.closeList()
+    return moved
+  }
+
   const submit = (event: Event, another: boolean) => {
     if (locked.value) return
     submitted.value = true
     if (Object.values(errors.value).some(Boolean)) {
-      focusFirstInvalid(formEl.value)
+      focusInvalid()
       return
     }
     addAnother.value = another
@@ -250,7 +256,7 @@
   onMounted(async () => {
     if (props.created) return reportCreated(props.created)
     await nextTick()
-    if (!submitted.value || !(await focusFirstInvalid(formEl.value))) requesterEl.value?.focus()
+    if (!submitted.value || !(await focusInvalid())) requesterEl.value?.focus()
   })
 
   watch(
@@ -266,6 +272,12 @@
       if (before && !now) attempt.value += 1
     }
   )
+
+  watch([() => props.error, attempt], async ([next]) => {
+    if (!next || props.loading) return
+    await nextTick()
+    formEl.value?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
+  })
 </script>
 
 <template>
@@ -292,6 +304,16 @@
               title-id="create-ticket-title"
             />
 
+            <Alert
+              v-if="error && !loading"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="The ticket wasn't created."
+              :label="error"
+              action-label="Retry"
+              @action="(event: MouseEvent) => submit(event, addAnother)"
+            />
             <TicketLoadingBands
               v-if="loading"
               class="mt-(--layout-section-gap)"
@@ -341,17 +363,6 @@
                 :disabled="submitting"
               />
             </fieldset>
-
-            <Alert
-              v-if="error && !loading"
-              :key="attempt"
-              class="mt-(--layout-section-gap)"
-              severity="danger"
-              title="The ticket wasn't created."
-              :label="error"
-              action-label="Retry"
-              @action="(event: MouseEvent) => submit(event, addAnother)"
-            />
           </div>
           <SaveBar variant="centered">
             <template #actions>

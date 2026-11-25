@@ -1,6 +1,6 @@
 # CreatePage (`create/create-page`)
 
-> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section, a Tags section (`TagEditor`) and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
+> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section, a Tags section (`TagEditor`) and a collapsed Advanced section, and an action whose submit label follows what it does: Save stores the new resource, Purge runs one. A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
@@ -62,7 +62,7 @@ A Tags band between the required fields and Advanced: a padded `Card` holding on
 
 ### H. Failed request — `Alert` (required)
 
-When the request fails, a danger `Alert` under the last section, above the commit bar, names what failed ("Could not create the domain."), says why, and carries Retry. It stays until the next request ends, and it is mounted again after each one, so a second identical failure is announced again. Nothing is reported only in a toast.
+When the request fails, a danger `Alert` under the page heading, above the first section and scrolled into view, names what failed ("Could not create the domain."), says why, and carries Retry. It stays until the next request ends, and it is mounted again after each one, so a second identical failure is announced again. Nothing is reported only in a toast.
 
 ### I. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
@@ -74,13 +74,13 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry above the commit bar; on success the page shows the toast and opens the new domain.
+The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry under the page heading; on success the page shows the toast and opens the new domain.
 
-| Prop            | Type                        | What it does                                                                         |
-| --------------- | --------------------------- | ------------------------------------------------------------------------------------ |
-| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on.  |
-| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.                |
-| `error`         | `string`                    | Why the request failed, shown in the danger `Alert` with Retry above the commit bar. |
+| Prop            | Type                        | What it does                                                                        |
+| --------------- | --------------------------- | ----------------------------------------------------------------------------------- |
+| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on. |
+| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.               |
+| `error`         | `string`                    | Why the request failed, shown in the danger `Alert` with Retry under the heading.   |
 
 | Event    | Payload           | When                                                                               |
 | -------- | ----------------- | ---------------------------------------------------------------------------------- |
@@ -175,7 +175,7 @@ To go live, render the block from a page that owns the request:
 
 - `Default` — primary (the code below)
 - `CreateZone` — Create Zone after importing a zone file: Import sits in the bar's leading slot (pasting a zone file into Domain name does the same), Name and Domain name take the zone origin, and a Records section lists each imported record with its type Tag, value and TTL, a Remove per row and a Discard import action in the card footer. The SOA and the nameservers are never imported; each import and failure confirms in a toast, and each Remove and Discard import in a toast with Undo. The Records section previews the first 50 records with an 'and N more' line, and a re-import skips records already listed.
-- `CreateOrganization` — Create Organization: General with Name and a Mark picked from six compact RadioGroup card colors (three per row on a phone, one row of six from the small breakpoint) built from semantic tokens, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Create Organization shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry.
+- `CreateOrganization` — Create Organization: General with Name and a Mark picked from six compact RadioGroup card colors (three per row on a phone, one row of six from the small breakpoint) built from semantic tokens, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Save shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry.
 - `CreatePurge` — Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioGroup choice cards, an Arguments section whose monospace Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge, which shows its loading state and confirms in a toast (or an error toast with Retry). Choosing Tiered Cache leaves Cache Key as the only allowed type.
 - `CreateService` — A long create, Create Service, under a small PageHeader, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules, each under an h2) under the centred commit card with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.
 - `RequiredFields` — Create Service after Save on the empty form: Name and Address turn invalid with This field is required. under them, and typing into either clears its own error.
@@ -209,7 +209,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
-  import { onMounted, reactive, ref, watch } from 'vue'
+  import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'
 
@@ -232,7 +232,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
     defaultValues?: Partial<CreatePageValues>
     /** The create request is in flight; the form locks and Save spins. */
     loading?: boolean
-    /** Why the create request failed, shown in an inline error with Retry above the save bar. */
+    /** Why the create request failed, shown in an inline error with Retry under the page title. */
     error?: string
   }
 
@@ -328,6 +328,12 @@ Each variant is the same screen in another state: `get_block("create/create-page
     }
   )
 
+  watch([() => props.error, attempt], async ([next]) => {
+    if (!next) return
+    await nextTick()
+    formEl.value?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
+  })
+
   const DNSSEC_DESCRIPTION =
     "Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
 </script>
@@ -382,6 +388,16 @@ Each variant is the same screen in another state: `get_block("create/create-page
               title-id="create-domain-title"
             />
 
+            <Alert
+              v-if="error"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="Could not create the domain."
+              :label="error"
+              action-label="Retry"
+              @action="submit"
+            />
             <fieldset
               :disabled="loading"
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
@@ -502,17 +518,6 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 </Card>
               </SettingsGroup>
             </fieldset>
-
-            <Alert
-              v-if="error"
-              :key="attempt"
-              class="mt-(--layout-section-gap)"
-              severity="danger"
-              title="Could not create the domain."
-              :label="error"
-              action-label="Retry"
-              @action="submit"
-            />
           </div>
           <SaveBar variant="centered">
             <template #actions>

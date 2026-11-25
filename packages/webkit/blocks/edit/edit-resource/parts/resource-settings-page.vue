@@ -179,6 +179,7 @@
                       :rows="5"
                       aria-label="List"
                       placeholder="13335&#10;53331"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
@@ -195,15 +196,22 @@
                     v-else-if="form.type === 'ip_cidr'"
                     key="items-ip-cidr"
                     title="List"
-                    description="One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed."
                     variant="stacked"
                   >
+                    <template #description>
+                      One address or range per line. Add a comment after
+                      <code class="whitespace-nowrap font-(family-name:--font-code)">#</code>, and a
+                      date with
+                      <code class="whitespace-nowrap font-(family-name:--font-code)">--LT</code>.
+                      Duplicate entries are removed.
+                    </template>
                     <Textarea
                       v-model="form.items"
                       class="w-full"
                       :rows="5"
                       aria-label="List"
                       placeholder="192.0.2.10&#10;198.51.100.24&#10;203.0.113.7 #comment"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
@@ -229,6 +237,7 @@
                       :rows="5"
                       aria-label="Countries"
                       placeholder="BR&#10;US"
+                      monospace
                       required
                       :invalid="!!errors.items"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"

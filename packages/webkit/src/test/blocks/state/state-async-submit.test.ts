@@ -24,6 +24,13 @@ const toastsSaying = (text: string) =>
 afterEach(() => setVisibility(null))
 
 describe('state/state-async-submit heading', () => {
+  it('keeps the timing promise out of the heading lead, so a failed run does not repeat it', () => {
+    const view = render(AsyncSubmitFailed)
+    const lead = view.getByTestId('page-header__description')
+    expect(lead?.textContent).toContain('Builds acme/web-app and publishes it to production.')
+    expect(lead?.textContent).not.toContain('half a minute')
+  })
+
   it('puts the run status beside the title, not among the header actions', () => {
     const view = render(AsyncSubmitFailed)
     const status = view.getByTestId('state-async-submit__status')

@@ -86,13 +86,14 @@ The block takes its variables through props and emits every action; it fetches n
 
 The block is a folder. `edit-variables.vue` is the wiring: the props, the list rows, the row actions and the save. `parts/` holds its regions: `variables-list.vue` (the controls row and the table, on `useCollection`), `variables-drawer-form.vue` (the drawer form with its header, alert, fieldset and Save), `variables-entries.vue` (the Variables section: rows, JSON view and import tools), `variables-scope-group.vue` (the Scope section), `paste-panel.vue` with `env-paste-panel.vue` (the inline paste panel), and `network-list-fields.vue` (the network list sections). `composables/use-variables-form.ts` owns the drawer form state and validation and provides it to the parts, `composables/use-network-list-form.ts` does the same for the network list, and `lib/` holds the pure helpers (the `.env` and JSON parsing, the scopes, the row updates, the network list rules). The PasteEnv and NetworkList variants render the same parts with their own sample text from `sample.ts`. `webkit add` copies every file listed in `block.json` `files`.
 
-| Prop          | Type                  | What it does                                                                                                      |
-| ------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `variables`   | `VariablesVariable[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.      |
-| `loading`     | `boolean`             | The list is loading or refreshing: Refresh spins and the table shows its loading state.                           |
-| `saving`      | `boolean`             | The save is in flight: the drawer locks and Save spins. When it turns off with no `saveError`, the drawer closes. |
-| `saveError`   | `string`              | Why the save failed, in the danger `Alert` at the top of the drawer; every pair is kept so Save retries.          |
-| `defaultOpen` | `boolean`             | The create drawer starts open.                                                                                    |
+| Prop          | Type                  | What it does                                                                                                                 |
+| ------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `variables`   | `VariablesVariable[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.                 |
+| `loading`     | `boolean`             | The list is loading or refreshing: Refresh spins and the table shows its loading state.                                      |
+| `saving`      | `boolean`             | The save is in flight: the drawer locks and Save spins. When it turns off with no `saveError`, the drawer closes.            |
+| `saveError`   | `string`              | Why the save failed, in the danger `Alert` at the top of the drawer; every pair is kept so Save retries.                     |
+| `defaultOpen` | `boolean`             | The create drawer starts open.                                                                                               |
+| `now`         | `Date`                | A fixed clock the Last modified times read, for a test or a server render. Leave it out in the app; the sample uses its own. |
 
 | Event     | Payload                         | When                                                                                          |
 | --------- | ------------------------------- | --------------------------------------------------------------------------------------------- |

@@ -85,6 +85,9 @@ describe('state/state-edge-error-page', () => {
       expect(diagram.getAttribute('aria-labelledby')).toBe(
         view.getByRole('heading', { name: 'Request path' }).id
       )
+      expect(
+        diagram.parentElement?.classList.contains('[&_[data-slot=flow-diagram-port]]:hidden')
+      ).toBe(true)
       expect(view.container.textContent).not.toMatch(/\bedge\b|\borigin\b/i)
       const actions = [...view.container.querySelectorAll('button, a')]
         .map((el) => el.textContent?.trim() ?? '')

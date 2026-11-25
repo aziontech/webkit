@@ -1,6 +1,6 @@
 # CreateTicket (`create/create-ticket`)
 
-> The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three `SettingsGroup` bands of `SettingsRow`s in flush `Card`s. Requester: a `Combobox` that searches contacts by name or email, each row an `Avatar` with the name and email, with Add new contact swapping it for Contact name and Contact email inputs, and CC as `MultiSelect` chips of email addresses. Request: Subject (`Input`), Description (`MarkdownEditor` with @mentions of agents and an attachments footer: Attach files and a `FileTokenGroup`), Channel, Type and Priority (`Select`, each priority a `PriorityTag`). Assignment: Group and Assignee (`Combobox`, the agents with `Avatar` presence and only those in the chosen group) and Tags (`MultiSelect` chips). Every field starts empty; Requester, Subject and Description carry the required mark. A raised `SaveBar` holds Cancel, Create and add another and Create ticket (⌘ Enter). Fields turn invalid only after a create press, with a `FieldError` under each and focus on the first; there is no summary. A failed request opens a danger `Alert` with Retry and keeps every value; a created ticket raises a success `toast` with Open ticket and clears the form for the next one. Escape cancels, and a changed form asks before it is discarded (`ConfirmDialog`). The block fetches nothing: it emits `create` with the typed ticket and whether to add another, and the page passes back `submitting`, `error` or `created`.
+> The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create ticket and the account, then a centred form column with a small `PageHeader` and three `SettingsGroup` bands of `SettingsRow`s in flush `Card`s. Requester: a `Combobox` that searches contacts by name or email, each row an `Avatar` with the name and email, with Add new contact swapping it for Contact name and Contact email inputs, and CC as `MultiSelect` chips of email addresses. Request: Subject (`Input`), Description (`MarkdownEditor` with @mentions of agents and an attachments footer: Attach files and a `FileTokenGroup`), Channel, Type and Priority (`Select`, each priority a `PriorityTag`). Assignment: Group and Assignee (`Combobox`, the agents with `Avatar` presence and only those in the chosen group) and Tags (`MultiSelect` chips). Every field starts empty; Requester, Subject and Description carry the required mark. A raised `SaveBar` holds Cancel, Create and add another and Create ticket (⌘ Enter). Fields turn invalid only after a create press, with a `FieldError` under each and focus on the first; there is no summary. A failed request opens a danger `Alert` with Retry under the page title, scrolled into view, and keeps every value; a created ticket raises a success `toast` with Open ticket and clears the form for the next one. Escape cancels, and a changed form asks before it is discarded (`ConfirmDialog`). The block fetches nothing: it emits `create` with the typed ticket and whether to add another, and the page passes back `submitting`, `error` or `created`.
 
 - Surface: app
 - Source: `blocks/create/create-ticket/create-ticket.vue` in `@aziontech/webkit`
@@ -58,11 +58,11 @@ A ticket creates on a page, not in a drawer: it is a first-level resource the in
 
 ### G. Failure — `Alert` (conditional)
 
-A danger `Alert` under the bands, `The ticket wasn't created.` with the page's message and Retry, re-mounted on every failed attempt so it is announced again. Every value stays as entered.
+A danger `Alert` under the page title, above the bands, scrolled into view when it appears, `The ticket wasn't created.` with the page's message and Retry, re-mounted on every failed attempt so it is announced again. Every value stays as entered.
 
 ### H. Commit — `SaveBar`, `Button`, `Kbd` (required)
 
-`variant="centered"`, the buttons in `parts/ticket-save-actions.vue`: Cancel (outline), Create and add another (secondary) and Create ticket (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs. Below `sm` the three stack at full width with Create ticket on top, and the `Kbd` hides.
+`variant="centered"`, the buttons in `parts/ticket-save-actions.vue`: Cancel (outline), Create and add another (secondary) and Create ticket (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs. Below `sm` the bar keeps one row, Cancel and Create ticket side by side at equal width, so it stays as low as the other create pages; Create and add another and the `Kbd` hide there.
 
 ### Leaving — `ConfirmDialog`
 
@@ -190,7 +190,7 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 - `ValidationErrors` — Create ticket pressed with gaps: Requester and Description are empty and a CC entry is not an email address, so each turns invalid with its message under it and focus moves to Requester; the typed Subject stays.
 - `ContactError` — Add new contact chosen and Create ticket pressed: Contact email holds an address with no domain ending and turns invalid, Subject and Description are empty and invalid too, and Search contacts goes back to the contact search.
 - `Submitting` — A filled ticket in flight: Create ticket spins, every field, Cancel and Create and add another are disabled until the answer comes back.
-- `SubmitError` — The request failed: a danger Alert above the save bar says the ticket wasn't created, with Retry, and every value stays as entered.
+- `SubmitError` — The request failed: a danger Alert under the page title says the ticket wasn't created, with Retry, and every value stays as entered.
 - `Success` — After Create and add another: a success toast names Ticket #4840 with Open ticket, and the form is empty again with focus on Requester.
 - `Loading` — The contacts, groups and agents are still arriving: skeleton rows hold the three bands and both create buttons are disabled.
 
@@ -418,11 +418,17 @@ Each variant is the same screen in another state: `get_block("create/create-tick
     handler: () => formEl.value?.requestSubmit()
   })
 
+  const focusInvalid = async () => {
+    const moved = await focusFirstInvalid(formEl.value)
+    requesterEl.value?.closeList()
+    return moved
+  }
+
   const submit = (event: Event, another: boolean) => {
     if (locked.value) return
     submitted.value = true
     if (Object.values(errors.value).some(Boolean)) {
-      focusFirstInvalid(formEl.value)
+      focusInvalid()
       return
     }
     addAnother.value = another
@@ -451,7 +457,7 @@ Each variant is the same screen in another state: `get_block("create/create-tick
   onMounted(async () => {
     if (props.created) return reportCreated(props.created)
     await nextTick()
-    if (!submitted.value || !(await focusFirstInvalid(formEl.value))) requesterEl.value?.focus()
+    if (!submitted.value || !(await focusInvalid())) requesterEl.value?.focus()
   })
 
   watch(
@@ -467,6 +473,12 @@ Each variant is the same screen in another state: `get_block("create/create-tick
       if (before && !now) attempt.value += 1
     }
   )
+
+  watch([() => props.error, attempt], async ([next]) => {
+    if (!next || props.loading) return
+    await nextTick()
+    formEl.value?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
+  })
 </script>
 
 <template>
@@ -493,6 +505,16 @@ Each variant is the same screen in another state: `get_block("create/create-tick
               title-id="create-ticket-title"
             />
 
+            <Alert
+              v-if="error && !loading"
+              :key="attempt"
+              class="mt-(--layout-section-gap)"
+              severity="danger"
+              title="The ticket wasn't created."
+              :label="error"
+              action-label="Retry"
+              @action="(event: MouseEvent) => submit(event, addAnother)"
+            />
             <TicketLoadingBands
               v-if="loading"
               class="mt-(--layout-section-gap)"
@@ -542,17 +564,6 @@ Each variant is the same screen in another state: `get_block("create/create-tick
                 :disabled="submitting"
               />
             </fieldset>
-
-            <Alert
-              v-if="error && !loading"
-              :key="attempt"
-              class="mt-(--layout-section-gap)"
-              severity="danger"
-              title="The ticket wasn't created."
-              :label="error"
-              action-label="Retry"
-              @action="(event: MouseEvent) => submit(event, addAnother)"
-            />
           </div>
           <SaveBar variant="centered">
             <template #actions>
@@ -823,7 +834,9 @@ export function ticketErrors(
 
   defineExpose({
     /** Moves focus to the first requester control. */
-    focus: () => requesterEl.value?.focus()
+    focus: () => requesterEl.value?.focus(),
+    /** Closes the contact list that focusing the search opened. */
+    closeList: () => requesterEl.value?.closeList()
   })
 </script>
 
@@ -964,7 +977,11 @@ export function ticketErrors(
 
   defineExpose({
     /** Moves focus to the first requester control. */
-    focus: () => (newContact.value ? nameEl.value?.focus() : focusSearch())
+    focus: () => (newContact.value ? nameEl.value?.focus() : focusSearch()),
+    /** Closes the contact list that focusing the search opened. */
+    closeList: () => {
+      listOpen.value = false
+    }
   })
 </script>
 
@@ -1615,7 +1632,7 @@ export function ticketErrors(
 
 <template>
   <div
-    class="flex items-center gap-(--spacing-sm) max-sm:flex-col-reverse max-sm:items-stretch max-sm:gap-(--spacing-xs)"
+    class="flex items-center gap-(--spacing-sm) max-sm:w-full max-sm:gap-(--spacing-xs) max-sm:*:flex-1"
   >
     <Button
       type="button"
@@ -1630,6 +1647,7 @@ export function ticketErrors(
       label="Create and add another"
       variant="secondary"
       size="medium"
+      class="max-sm:hidden"
       :disabled="loading || (submitting && !addAnother)"
       :loading="submitting && addAnother"
       @click="(event: MouseEvent) => emit('add-another', event)"

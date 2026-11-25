@@ -41,6 +41,7 @@ describe('create-ticket', () => {
     const requester = screen.getByRole('combobox', { name: 'Requester' })
     await waitFor(() => expect(document.activeElement).toBe(requester), wait)
     expect(requester.getAttribute('aria-invalid')).toBe('true')
+    await waitFor(() => expect(requester.getAttribute('aria-expanded')).not.toBe('true'), wait)
     expect(screen.getByText('Select the customer who asked, or add a new contact.')).toBeTruthy()
     expect(screen.getByText('Enter a subject.')).toBeTruthy()
     expect(screen.getByText('Describe what the customer needs.')).toBeTruthy()
@@ -98,6 +99,14 @@ describe('create-ticket', () => {
     )
   })
 
+  it('opens on the invalid Requester with its list closed, so the errors stay readable', async () => {
+    render(ValidationErrors)
+    const requester = screen.getByRole('combobox', { name: 'Requester' })
+    await waitFor(() => expect(document.activeElement).toBe(requester), wait)
+    await waitFor(() => expect(requester.getAttribute('aria-expanded')).not.toBe('true'), wait)
+    expect(screen.getByText('Select the customer who asked, or add a new contact.')).toBeTruthy()
+  })
+
   it('shows a CC entry that is not an email address after create', () => {
     render(ValidationErrors)
     expect(
@@ -127,6 +136,8 @@ describe('create-ticket', () => {
       '[role="alert"]'
     ) as HTMLElement
     expect(within(alert).getByRole('button', { name: 'Retry' })).toBeTruthy()
+    const requester = screen.getByRole('combobox', { name: 'Requester' })
+    expect(alert.compareDocumentPosition(requester) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect((screen.getByRole('textbox', { name: 'Subject' }) as HTMLInputElement).value).toBe(
       'Custom domain returns a certificate error'
     )

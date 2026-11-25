@@ -32,9 +32,9 @@
   }
 
   const tabs = [
-    { value: 'main-settings', label: 'Main Settings' },
+    { value: 'main-settings', label: 'Main settings' },
     { value: 'tuning', label: 'Tuning' },
-    { value: 'allowed-rules', label: 'Allowed Rules' }
+    { value: 'allowed-rules', label: 'Allowed rules' }
   ]
   const activeTab = ref('main-settings')
 
@@ -147,7 +147,7 @@
   <SettingsTabPage
     v-model:tab="activeTab"
     :tabs="tabs"
-    title="Main Settings"
+    title="Main settings"
     description="How this rule set is identified, and what it inspects requests for."
     docs-href="https://example.com/docs/waf-rule-sets"
     :dirty="dirty"

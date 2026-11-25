@@ -1,5 +1,7 @@
 import type { VariablesVariable } from './edit-variables.vue'
 
+export const sampleNow = new Date(Date.UTC(2026, 10, 10, 12))
+
 export const sampleVariables: VariablesVariable[] = [
   {
     id: 'v-001',

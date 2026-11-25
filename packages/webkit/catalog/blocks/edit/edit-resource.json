@@ -12,7 +12,7 @@
   },
   {
    "name": "WafSettings",
-   "summary": "A WAF rule set's Main Settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast.",
+   "summary": "A WAF rule set's Main settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast.",
    "file": "blocks/edit/edit-resource/variants/waf-settings.vue"
   },
   {

@@ -153,7 +153,7 @@
       @submit="submitParent"
     >
       <section class="flex flex-col gap-(--layout-group-gap)">
-        <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
+        <p class="text-heading-2xs text-(--text-default)">General</p>
         <Card :padded="false">
           <template #default>
             <Item.List>
@@ -190,7 +190,7 @@
       </section>
 
       <section class="flex flex-col gap-(--layout-group-gap)">
-        <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Behavior</p>
+        <p class="text-heading-2xs text-(--text-default)">Behavior</p>
         <Card :padded="false">
           <template #default>
             <Item.List>
@@ -263,7 +263,7 @@
       @submit="submitChild"
     >
       <section class="flex flex-col gap-(--layout-group-gap)">
-        <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
+        <p class="text-heading-2xs text-(--text-default)">General</p>
         <Card :padded="false">
           <template #default>
             <Item.List>

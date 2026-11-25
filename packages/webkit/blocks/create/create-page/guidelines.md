@@ -50,7 +50,7 @@ A Tags band between the required fields and Advanced: a padded `Card` holding on
 
 ### H. Failed request — `Alert` (required)
 
-When the request fails, a danger `Alert` under the last section, above the commit bar, names what failed ("Could not create the domain."), says why, and carries Retry. It stays until the next request ends, and it is mounted again after each one, so a second identical failure is announced again. Nothing is reported only in a toast.
+When the request fails, a danger `Alert` under the page heading, above the first section and scrolled into view, names what failed ("Could not create the domain."), says why, and carries Retry. It stays until the next request ends, and it is mounted again after each one, so a second identical failure is announced again. Nothing is reported only in a toast.
 
 ### I. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
@@ -62,13 +62,13 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry above the commit bar; on success the page shows the toast and opens the new domain.
+The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in a danger `Alert` with Retry under the page heading; on success the page shows the toast and opens the new domain.
 
-| Prop            | Type                        | What it does                                                                         |
-| --------------- | --------------------------- | ------------------------------------------------------------------------------------ |
-| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on.  |
-| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.                |
-| `error`         | `string`                    | Why the request failed, shown in the danger `Alert` with Retry above the commit bar. |
+| Prop            | Type                        | What it does                                                                        |
+| --------------- | --------------------------- | ----------------------------------------------------------------------------------- |
+| `defaultValues` | `Partial<CreatePageValues>` | The values the form starts from: Name and Domain name empty, DNSSEC off, Active on. |
+| `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.               |
+| `error`         | `string`                    | Why the request failed, shown in the danger `Alert` with Retry under the heading.   |
 
 | Event    | Payload           | When                                                                               |
 | -------- | ----------------- | ---------------------------------------------------------------------------------- |

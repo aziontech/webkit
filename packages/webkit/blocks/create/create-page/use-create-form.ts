@@ -5,7 +5,7 @@ import {
   type UseUnsavedChangesReturn
 } from '@aziontech/webkit/use-unsaved-changes'
 import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
-import { computed, type ComputedRef, readonly, type Ref, ref } from 'vue'
+import { computed, type ComputedRef, nextTick, readonly, type Ref, ref } from 'vue'
 
 /** Options of `useCreateForm`. */
 export interface UseCreateFormOptions<T> {
@@ -25,7 +25,7 @@ export interface UseCreateFormOptions<T> {
 export interface UseCreateFormReturn<T> {
   /** The unsaved-changes guard, for the discard dialog. */
   guard: UseUnsavedChangesReturn<T>
-  /** Why the last request failed, shown inline above the save bar; empty when it did not. */
+  /** Why the last request failed, shown inline under the page title; empty when it did not. */
   failure: Readonly<Ref<string>>
   /** True while the request runs. */
   submitting: Readonly<Ref<boolean>>
@@ -96,6 +96,8 @@ export function useCreateForm<T>(options: UseCreateFormOptions<T>): UseCreateFor
       options.onCreated()
     } catch (error) {
       failure.value = error instanceof Error ? error.message : 'Try again.'
+      await nextTick()
+      options.formEl.value?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
     } finally {
       submitting.value = false
     }

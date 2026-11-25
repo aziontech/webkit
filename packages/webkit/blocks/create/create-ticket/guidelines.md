@@ -45,11 +45,11 @@ A ticket creates on a page, not in a drawer: it is a first-level resource the in
 
 ### G. Failure — `Alert` (conditional)
 
-A danger `Alert` under the bands, `The ticket wasn't created.` with the page's message and Retry, re-mounted on every failed attempt so it is announced again. Every value stays as entered.
+A danger `Alert` under the page title, above the bands, scrolled into view when it appears, `The ticket wasn't created.` with the page's message and Retry, re-mounted on every failed attempt so it is announced again. Every value stays as entered.
 
 ### H. Commit — `SaveBar`, `Button`, `Kbd` (required)
 
-`variant="centered"`, the buttons in `parts/ticket-save-actions.vue`: Cancel (outline), Create and add another (secondary) and Create ticket (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs. Below `sm` the three stack at full width with Create ticket on top, and the `Kbd` hides.
+`variant="centered"`, the buttons in `parts/ticket-save-actions.vue`: Cancel (outline), Create and add another (secondary) and Create ticket (primary, `type="submit"`, with the `Kbd` for ⌘ Enter and `aria-keyshortcuts`). The pressed button shows `loading` and the other two are disabled while the request runs. Below `sm` the bar keeps one row, Cancel and Create ticket side by side at equal width, so it stays as low as the other create pages; Create and add another and the `Kbd` hide there.
 
 ### Leaving — `ConfirmDialog`
 
