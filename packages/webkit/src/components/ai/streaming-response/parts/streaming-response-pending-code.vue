@@ -40,7 +40,8 @@
       <span class="text-label-code-sm min-w-0 flex-1 truncate">{{ languageName(language) }}</span>
     </div>
     <pre
-      class="m-0 overflow-x-auto px-(--spacing-lg) pb-(--spacing-sm) text-label-code-sm text-(--text-default)"
+      tabindex="0"
+      class="m-0 overflow-x-auto px-(--spacing-lg) pb-(--spacing-sm) text-label-code-sm text-(--text-default) focus-visible:outline-none focus-visible:inset-ring-1 focus-visible:inset-ring-(--ring-color)"
       >{{ code }}</pre>
   </div>
 </template>
