@@ -67,6 +67,35 @@ export function unjustified(raised, ...texts) {
   return raised.filter((raise) => !lines.some((line) => justifies(line, raise)))
 }
 
+const MERGE = /\bmerg(?:e|ed|es|ing)\b/i
+const SUMMED =
+  /\b(?:both sides|each (?:lane|side|fit|grew|raised)|landed together|its own (?:budget|fix)|each (?:of them )?fit)\b/i
+
+export function reasonOf(line) {
+  return line.replace(/^Budget-raise:\s*\S+[^:]*:\s*/, '')
+}
+
+export function mergeOnly(line) {
+  const reason = reasonOf(line)
+  return MERGE.test(reason) && SUMMED.test(reason)
+}
+
+export const MERGE_ONLY_FROM = '## Raises after audit 6'
+
+export function linesAfter(text, heading = MERGE_ONLY_FROM) {
+  const source = String(text ?? '')
+  const at = source.indexOf(`\n${heading}\n`)
+  return at < 0 ? [] : budgetRaiseLines(source.slice(at))
+}
+
+export function mergeOnlyRaises(raised, fresh, ...texts) {
+  const lines = texts.flatMap(budgetRaiseLines)
+  return raised.filter((raise) => {
+    const reasons = lines.filter((line) => justifies(line, raise))
+    return reasons.length > 0 && reasons.every((line) => mergeOnly(line) && fresh.includes(line))
+  })
+}
+
 export function baseRef(env) {
   if (env.GITHUB_BASE_REF) return { ref: `origin/${env.GITHUB_BASE_REF}` }
   if (env.GITHUB_ACTIONS === 'true') {
@@ -111,6 +140,16 @@ function main() {
   const list = raised.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n')
   const record = readFileSync(join(ROOT, RECORD), 'utf-8')
   const missing = unjustified(raised, process.env.PR_BODY, record)
+  const fresh = [...budgetRaiseLines(process.env.PR_BODY), ...linesAfter(record)]
+  const merged = missing.length ? [] : mergeOnlyRaises(raised, fresh, process.env.PR_BODY, record)
+  if (merged.length) {
+    console.error(
+      `✖ ${merged.length} size budget(s) raised with only a merge as the reason:\n` +
+        merged.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n') +
+        `\n\nA merge adds no feature: "each side fit its own budget" does not explain the growth. Shrink the entry, or name what grew in the Budget-raise: line (.claude/rules/bundle-budget.md).`
+    )
+    return 1
+  }
   if (!missing.length) {
     console.log(
       `✓ size ratchet: ${raised.length} budget(s) raised, each with its Budget-raise: line (PR body or ${RECORD}):\n${list}`
