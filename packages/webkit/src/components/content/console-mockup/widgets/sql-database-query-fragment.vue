@@ -124,7 +124,8 @@
             :model-value="SQL"
             :disabled="running"
             resize="none"
-            class="w-full rounded-none! border-0! font-code"
+            monospace
+            class="w-full rounded-none! border-0!"
             aria-label="SQL editor"
             placeholder="Write your SQL query here"
           />

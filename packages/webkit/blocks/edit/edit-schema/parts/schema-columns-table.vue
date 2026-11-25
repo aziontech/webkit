@@ -126,7 +126,7 @@
           </div>
         </template>
         <template #cell-name="{ value }">
-          <span class="min-w-0 truncate font-code text-label-code-sm">{{ value }}</span>
+          <span class="min-w-0 truncate text-label-code-sm">{{ value }}</span>
         </template>
         <template #cell-type="{ value }">
           <Tag

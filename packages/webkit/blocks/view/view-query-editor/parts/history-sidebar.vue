@@ -92,9 +92,7 @@
               @click="emit('load', item)"
             >
               <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
-                <span class="min-w-0 truncate font-code text-label-code-sm">{{
-                  oneLine(item.sql)
-                }}</span>
+                <span class="min-w-0 truncate text-label-code-sm">{{ oneLine(item.sql) }}</span>
               </span>
             </Item>
             <DropdownMenu

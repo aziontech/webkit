@@ -102,7 +102,7 @@
           v-model="pasteText"
           :label="`Paste one ${copy.noun} per line`"
           :rows="7"
-          code-font
+          monospace
           :apply-label="`Add ${found}`"
           apply-testid="network-list-paste-apply"
           :apply-disabled="!pasteReport.lines.length"

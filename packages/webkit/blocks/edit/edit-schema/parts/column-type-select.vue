@@ -25,7 +25,7 @@
     <Select.Trigger>
       <template #leading>
         <span
-          class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
+          class="shrink-0 text-label-code-sm text-(--text-muted)"
           aria-hidden="true"
           >{{ glyphOf(type) }}</span
         >
@@ -53,7 +53,7 @@
           :value="item.value"
         >
           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-            <span class="font-code text-label-code-sm">{{ item.value }}</span>
+            <span class="text-label-code-sm">{{ item.value }}</span>
             <span class="truncate text-body-xs text-(--text-muted)">{{ item.description }}</span>
           </span>
         </Select.Item>

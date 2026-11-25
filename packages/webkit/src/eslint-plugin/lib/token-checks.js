@@ -45,7 +45,8 @@ const TOKEN_CHECKS = [
   },
   {
     id: 'font-family-raw',
-    regex: /\b(?:font-(?:sans|serif|mono|rubik|proto-mono)\b|font-[[(]family-name:)/g,
+    regex:
+      /\b(?:font-(?:sans|serif|mono|rubik|proto-mono)\b|(?<![\w-])font-(?:code|display)\b|font-[[(]family-name:)/g,
     message:
       'Raw font-family. Font family is part of the generated typography class (ask the webkit MCP: list_tokens); do not override.'
   },

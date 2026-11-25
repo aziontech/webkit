@@ -78,7 +78,7 @@
               <p
                 v-for="(line, index) in lines"
                 :key="index"
-                class="m-0 min-h-[1lh] whitespace-pre font-code"
+                class="m-0 min-h-[1lh] whitespace-pre"
                 v-text="line"
               />
             </div>

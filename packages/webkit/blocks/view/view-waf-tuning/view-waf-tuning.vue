@@ -324,7 +324,7 @@
               :loading="loading"
             >
               <template #cell-ruleId="{ value }">
-                <span class="min-w-0 truncate font-code tabular-nums">{{ value }}</span>
+                <span class="min-w-0 truncate tabular-nums">{{ value }}</span>
               </template>
               <template #cell-hits="{ value }">
                 <span class="tabular-nums">{{ formatHits(value) }}</span>
