@@ -181,6 +181,20 @@ describe('ContactHubSection', () => {
     expect(topics[2]?.hasAttribute('rel')).toBe(false)
   })
 
+  it('marks a danger channel so its glyph takes the danger mark, and no other', () => {
+    const { getAllByTestId } = render(ContactHubSection, {
+      props: {
+        channels: [{ ...channels[0]!, severity: 'danger' as const }, ...channels.slice(1)]
+      }
+    })
+    const topics = getAllByTestId(TOPIC_TESTID)
+    expect(topics[0]?.dataset['severity']).toBe('danger')
+    expect(topics[0]?.classList.contains('data-[severity=danger]:[&_i]:text-(--danger-mark)')).toBe(
+      true
+    )
+    expect(topics.slice(1).some((topic) => topic.hasAttribute('data-severity'))).toBe(false)
+  })
+
   it('renders only the root when lanes and channels are empty', () => {
     const { getByTestId, queryByRole, queryByTestId } = band({ lanes: [], channels: [] })
 
