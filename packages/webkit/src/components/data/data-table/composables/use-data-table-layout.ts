@@ -71,6 +71,8 @@ export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayou
     (o.reorderable() && leftFrozen.value.length > 0 ? SELECTION_WIDTH : 0)
   const widthOf = (id: string): number | undefined =>
     o.columns().find((c) => columnId(c) === id)?.width
+  const floorOf = (id: string): number | undefined =>
+    o.columns().find((c) => columnId(c) === id)?.minWidth
   const cellStyleOf = (column: ColumnLike): Record<string, string> | undefined => {
     if (o.stacked()) return undefined
     const style: Record<string, string> = {}
@@ -78,7 +80,10 @@ export function useDataTableLayout(o: DataTableLayoutOptions): UseDataTableLayou
     const width =
       meta.type === 'action'
         ? undefined
-        : (o.resizeWidths.value[column.id] ?? widthOf(column.id) ?? o.autoWidths.value[column.id])
+        : (o.resizeWidths.value[column.id] ??
+          widthOf(column.id) ??
+          o.autoWidths.value[column.id] ??
+          floorOf(column.id))
     if (width) {
       style['flex'] = `0 0 ${width}px !important`
       style['width'] = `${width}px !important`

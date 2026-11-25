@@ -682,13 +682,28 @@ describe('DataTable', () => {
         }
       })
 
+      expect(inlineWidth(getAllByRole('columnheader')[1])).not.toBeNull()
       await waitFor(() => {
-        expect(inlineWidth(getAllByRole('columnheader')[1])).not.toBeNull()
+        expect(inlineWidth(getAllByRole('columnheader')[1])).toBeGreaterThan(8)
       })
-      // The floor is 8px; the cell holds a long string, so content decides.
       const resolved = inlineWidth(getAllByRole('columnheader')[1]) as number
       expect(resolved).toBeGreaterThan(8)
       expect(inlineWidth(getAllByRole('row')[1].children[1])).toBe(resolved)
+    })
+
+    it('holds a column at its floor before the first measurement, so loading rows keep the loaded columns', async () => {
+      const { getAllByRole } = render(DataTable, {
+        props: {
+          data: [],
+          loading: true,
+          columns: [
+            { accessorKey: 'name', header: 'Name' },
+            { accessorKey: 'status', header: 'Status', minWidth: 140 }
+          ]
+        }
+      })
+      const skeletonRow = getAllByRole('row').at(-1)!
+      expect(inlineWidth(skeletonRow.children[1])).toBe(140)
     })
 
     it('lets an explicit width win over the floor, and leaves other columns flexible', async () => {
