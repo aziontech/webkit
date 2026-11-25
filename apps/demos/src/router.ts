@@ -7,11 +7,16 @@ import {
 } from 'vue-router'
 
 import { resources } from './lib/store'
-import { findCustomer, findTicket } from './lib/support'
 
 const SITE = 'Azion'
 const RESOURCES = 'Resources'
 const SUPPORT = 'Support'
+
+const assistantPage = () =>
+  Promise.all([
+    import('./pages/ai-chat-page.vue'),
+    import('./components/copilot-history.vue')
+  ]).then(([page]) => page)
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/resources' },
@@ -84,13 +89,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/assistant',
     name: 'assistant',
-    component: () => import('./pages/ai-chat-page.vue'),
+    component: assistantPage,
     meta: { shell: 'copilot', title: 'Agent' }
   },
   {
     path: '/assistant/c/:chatId',
     name: 'assistant-chat',
-    component: () => import('./pages/ai-chat-page.vue'),
+    component: assistantPage,
     meta: { shell: 'copilot', title: 'Agent' }
   },
   {
@@ -154,7 +159,8 @@ export const router = createRouter({
   scrollBehavior: () => ({ top: 0 })
 })
 
-function supportTitle(route: RouteLocationNormalized): string {
+async function supportTitle(route: RouteLocationNormalized): Promise<string> {
+  const { findCustomer, findTicket } = await import('./lib/support')
   const id = String(route.params.id ?? '')
   const label = route.meta.ticket
     ? `#${id} ${findTicket(id)?.subject ?? ''}`.trim()
@@ -162,7 +168,7 @@ function supportTitle(route: RouteLocationNormalized): string {
   return [label, SUPPORT, SITE].filter(Boolean).join(' - ')
 }
 
-function pageTitle(route: RouteLocationNormalized): string {
+async function pageTitle(route: RouteLocationNormalized): Promise<string> {
   if (route.meta.ticket || route.meta.customer) return supportTitle(route)
   const title = String(route.meta.title ?? '')
   if (!route.meta.resource) return [title, SITE].filter(Boolean).join(' - ')
@@ -221,7 +227,7 @@ export const announcement = ref('')
 
 router.afterEach(async (to, from, failure) => {
   if (failure) return
-  document.title = pageTitle(to)
+  document.title = await pageTitle(to)
   if (from.matched.length === 0 || samePage(to, from) || to.matched[0]?.components?.dialog) return
   await nextTick()
   globalThis.requestAnimationFrame(() => {

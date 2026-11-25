@@ -3,36 +3,45 @@
   import Command from '@aziontech/webkit/command'
   import ConfigProvider from '@aziontech/webkit/config-provider'
   import ConsoleLayoutRoot, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout-root'
+  import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import HighlightButton from '@aziontech/webkit/highlight-button'
   import IconButton from '@aziontech/webkit/icon-button'
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import ShortcutsDialog from '@aziontech/webkit/shortcuts-dialog'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import type { ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed } from 'vue'
+  import { computed, defineAsyncComponent, shallowRef, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { sampleHistory } from './blocks/ai-chat.sample'
-  import CopilotHistory from './components/copilot-history.vue'
   import DemoBar from './components/demo-bar.vue'
   import { account, navigation } from './lib/navigation'
-  import { resolvedTheme, settings } from './lib/settings'
+  import { catalogs, resolvedTheme, settings } from './lib/settings'
   import { resources } from './lib/store'
   import { announcement } from './router'
+
+  const CopilotHistory = defineAsyncComponent(() => import('./components/copilot-history.vue'))
 
   const consolePages = [
     { label: 'Resources', icon: 'az az-box', href: '/resources' },
     { label: 'Settings', icon: 'az az-settings', href: '/settings' }
   ]
 
-  const catalogs = { 'pt-BR': ptBR }
   const route = useRoute()
   const router = useRouter()
   const focused = computed(() => route.meta.shell === 'focused')
   const copilot = computed(() => route.meta.shell === 'copilot')
+  const chats = shallowRef<ConversationHistoryItem[]>([])
+  watch(
+    copilot,
+    async (now) => {
+      if (!now || chats.value.length) return
+      const { copilotChats } = await import('./lib/copilot-chats')
+      chats.value = copilotChats.value
+    },
+    { immediate: true }
+  )
   const breadcrumbs = computed(() => (route.meta.breadcrumbs ?? []) as BreadcrumbItemData[])
 
   const recents = computed(() =>
@@ -174,7 +183,7 @@
           label="Chats"
         >
           <Command.Item
-            v-for="chat in sampleHistory"
+            v-for="chat in chats"
             :key="chat.id"
             :value="`chat:${chat.id}`"
           >
