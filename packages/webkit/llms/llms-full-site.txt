@@ -95,14 +95,14 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The track carries `data-scrollable` too, which is what gives it the grab cursor; a track that fits shows the ordinary pointer, because there is nothing to drag
 - `data-dragging` is on the track for the length of a mouse drag: the cursor closes, snapping and smooth scrolling stand down so the row tracks the pointer exactly, and text selection is suppressed
 - A drag that travels more than a few pixels swallows the click it ends on, so releasing over a link inside a slide does not follow it
-- Each control carries `disabled` at its end of the track, so a reader is never offered a step that does nothing
+- Each control is focusable-disabled (`aria-disabled="true"`, the disabled look, a click does nothing) at its end of the track, so a reader is never offered a step that does nothing, and the tab order stays the same while `Tab` scrolls the track
 - The track is focusable and shows the focus ring, because a scrollable region must be reachable by keyboard
 
 ## Accessibility
 
 - Visible focus: the track and both controls carry `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` reaches the controls and the track itself; with the track focused the arrow keys scroll it natively, and `Enter` / `Space` on a control steps one slide. No custom key handler replaces native scrolling. Pointer dragging is an addition for mice, never the only way to move the track — the keyboard, the wheel, touch and the step controls all still reach every slide.
-- ARIA: the root is a `<section>` with `aria-roledescription="carousel"` named by `ariaLabel`; the track is a `<ul>` of `<li>` slides carrying `tabindex="0"` so the scrollable region is keyboard-reachable (WCAG 2.1.1); each control is a real `<button>` with its own `ariaLabel` and the native `disabled` state at its end of the track.
+- ARIA: the root is a `<section>` with `aria-roledescription="carousel"` named by `ariaLabel`; the track is a `<ul>` of `<li>` slides carrying `tabindex="0"` so the scrollable region is keyboard-reachable (WCAG 2.1.1); each control is a real `<button>` with its own `ariaLabel`, and `aria-disabled="true"` (never the native `disabled`, which would drop it from the tab order) at its end of the track.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the control glyph is `var(--text-muted)` on `var(--bg-surface)` and darkens to `var(--text-default)` on hover; slide content carries its own colours.
 - `motion-reduce:scroll-auto` on the track and `motion-reduce:transition-none` on the controls. The track never auto-advances, so WCAG 2.2.2 (pause, stop, hide) does not apply by construction.
 - Touch target ≥40×40 px — each step control is a 40×40 button.

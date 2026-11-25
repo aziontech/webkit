@@ -20336,6 +20336,13 @@
      "default": "'floating'",
      "required": "false",
      "doc": "How the bar sits at the bottom of its scroll region. See the variant table below."
+    },
+    {
+     "name": "column",
+     "type": "'full' | 'form' | 'focused'",
+     "default": "'full'",
+     "required": "false",
+     "doc": "Lines the content of a `floating` or `docked` bar up with the page column above it (`layout-column-form` / `layout-column-focused`); the bar's border and fill still span the region. Ignored by `plain`, `fade` and `centered`."
     }
    ],
    "events": [

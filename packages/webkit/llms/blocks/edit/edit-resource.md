@@ -1749,7 +1749,9 @@ export function useDeployOnSave<T extends object>(
             v-for="field in modules"
             :key="field.key"
             :title="field.title"
-            :description="field.description"
+            :description="
+              field.locked ? field.description + ' Always on for every policy.' : field.description
+            "
             variant="compact"
           >
             <Tooltip
@@ -3723,7 +3725,6 @@ export const ttlDuration = (
             size="small"
             placeholder="Search environments"
             aria-label="Search environments"
-            @keydown.stop
           >
             <template #leading>
               <i
@@ -4503,7 +4504,6 @@ export const ttlDuration = (
                       size="small"
                       placeholder="Search certificates"
                       aria-label="Search certificates"
-                      @keydown.stop
                     >
                       <template #leading>
                         <i

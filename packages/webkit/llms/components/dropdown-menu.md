@@ -131,6 +131,7 @@
 - `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
 - `data-side` / `data-align` on the panel mirror the resolved side and alignment after flipping
 - `start` and `end` follow the text direction: under `dir="rtl"`, `align="start"` lines the panel up with the trigger's right edge and `side="end"` opens on the left
+- Anchor: when an element marked `data-slot="dropdown-menu-anchor"` inside the root wraps the trigger, the panel is positioned against that element instead of the trigger (the nearest one to the trigger), so a menu opened by one segment of a compound control lines up with the whole control (`SplitButton`). Focus still returns to the trigger
 
 ## Accessibility
 
