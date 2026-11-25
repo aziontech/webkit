@@ -1411,3 +1411,9 @@ This register starts from the review of 12–16 November 2026 (192 rows: 178 don
 | A6-L02-3 | PhoneInput lists every built-in country in alphabetical order, with no pinned shortlist; it shows no placeholder by default (never the national mask); an unknown country or default falls back to US, then the first country (A6-016, A6-017). | done   | `phone-input/lib/country-data.ts`, `phone-input.vue`, `use-phone-input-value.ts`, spec |
 | A6-L02-4 | AttributeEditor names Remove by the row's first-column value and by position only while it is empty; its generic limit counter carries no noun ("You can add 4 more.") and the hint style (A6-022, A6-030).                                     | done   | `attribute-editor.vue`, `tag-editor.vue`, locales, specs                               |
 | A6-L02-5 | A readonly MarkdownEditor opens on Preview and hides the toolbar (A6-036). A disabled on Switch keeps its frame and a `--text-muted` handle; a disabled checked Checkbox draws its mark in `--text-muted` (A6-033, A6-146).                     | done   | `markdown-editor.vue`, `switch.vue`, `checkbox.vue`, specs                             |
+
+## 2026-11-25 — Audit-6 fixes, lane W3
+
+| ID      | Decision                                                                                                                                                                   | Status | Where                     |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ------------------------- |
+| A6-W3-1 | Lead call (A6-129, closes the open half of A6-L08-1): the site header's mega-menu opens on the default popover surface, which follows the page theme; Login stays outline. | done   | `site-header-section.vue` |

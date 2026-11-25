@@ -154,6 +154,21 @@ describe('SiteHeaderSection', () => {
     ).toBe('#')
   })
 
+  it('opens the mega-menu on the default popover surface, which follows the page theme', async () => {
+    const { getByRole } = nav()
+
+    await userEvent.click(getByRole('button', { name: /Solutions/ }))
+
+    await waitFor(
+      () =>
+        expect(
+          document.body.querySelector('[data-variant="default"][data-state="open"]')
+        ).not.toBeNull(),
+      { timeout: OPEN_TIMEOUT }
+    )
+    expect(document.body.querySelector('[data-variant="contrast"]')).toBeNull()
+  })
+
   it('mirrors the column count of a panel on data-columns', async () => {
     const { getByRole } = nav()
 
