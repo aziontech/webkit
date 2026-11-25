@@ -1,7 +1,11 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
+  import Countdown from '@aziontech/webkit/countdown'
+  import PriorityTag from '@aziontech/webkit/priority-tag'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
+  import TableCellStatus from '@aziontech/webkit/table-cell-status'
 
+  import { slaPaused, statusSeverity } from './view-ticket-inbox.ticket-fields'
   import type { TicketInboxTicket } from './view-ticket-inbox.vue'
 
   export interface TicketSubjectCellProps {
@@ -13,7 +17,7 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 items-start gap-(--spacing-xs)">
+  <div class="flex min-w-0 items-start gap-(--spacing-xs) max-sm:w-[60vw]">
     <span
       class="mt-(--spacing-xs) size-2 shrink-0 rounded-full data-[unread]:bg-(--info-mark)"
       :data-unread="ticket.unread || null"
@@ -48,6 +52,25 @@
           dir="ltr"
           >#{{ ticket.id }}</span
         >
+      </div>
+      <div
+        data-testid="ticket-triage"
+        class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) sm:hidden"
+      >
+        <TableCellStatus
+          :label="ticket.status"
+          :severity="statusSeverity[ticket.status]"
+        />
+        <PriorityTag
+          v-if="ticket.priority !== 'none'"
+          :priority="ticket.priority"
+          size="small"
+        />
+        <Countdown
+          v-if="ticket.slaDueAt && !slaPaused(ticket)"
+          :deadline="ticket.slaDueAt"
+          size="small"
+        />
       </div>
     </div>
   </div>

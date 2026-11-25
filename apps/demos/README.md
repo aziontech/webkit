@@ -57,16 +57,28 @@ node ../../packages/webkit/src/cli/cli.js add account/account-onboarding-form --
 # … one `add` per block in the table above
 ```
 
-`add` writes kebab-case files named after the block (`table-view.vue`) and its sample data beside
-it (`table-view.sample.ts`). The blocks take their data as props and report what the user did as
-events, so most copies are unchanged; a page such as `src/pages/table-view-page.vue` binds
-`:resources` to the store and handles `@delete`. Three copies changed content only: `create-page`
-names the resource flow in its breadcrumb and title and wires its back button to `cancel`,
-`async-submit` takes the service `name` and leaves the toasts to `src/lib/deploy.ts` (so the run
-reports back after you leave the page), and `src/app.vue`, the `shell/shell-console` shell, renders
-`RouterView` with the demo's navigation. The five support blocks are copied unchanged apart from their imports, re-sorted for
-the app's lint, and `create-ticket`'s root height, which stops above the demo bar like
-`create-page` and `onboarding-form`; their ticket links point at `/tickets` and `/tickets/:id`, which the router
+`add` writes kebab-case files named after the block (`table-view.vue`) with its parts and sample
+data beside it (`table-view-collection-controls.vue`, `table-view.sample.ts`); parts the demo never
+renders are dropped with `remove <path>`. The blocks take their data as props and report what the
+user did as events, so most copies change only their imports, re-sorted for the app's lint. The
+content changes, which `npx @aziontech/webkit diff <file>` lists:
+
+- `create-page` names the resource flow (breadcrumb, title, copy), takes the signed-in account and
+  stops above the demo bar, like `create-ticket` and `onboarding-form` (`h-(--demo-viewport-height)`).
+- `table-view` stacks its rows on a phone and hands Delete to the page, which opens the shared
+  delete dialog route.
+- `resource-detail` and `edit-resource` share one header and one tab set: the resource name, then
+  Overview, Versions, Build, Deployments and Settings. Settings on the detail opens the edit page;
+  the edit page asks before a route change drops unsaved edits, as `settings-form` does.
+- `async-submit` takes the service `name` and leaves the toasts to `src/lib/deploy.ts`, so the run
+  reports back after you leave the page.
+- The `ai-chat` copies call the assistant the Agent, and the chat history lives in the shell's
+  side menu (`src/components/copilot-history.vue`), so the block's own history panel is left out.
+- `create-ticket`'s header shows the demo account.
+- `src/app.vue`, the `shell/shell-console` shell, renders `RouterView` with the demo's navigation,
+  the Agent rail and the demo bar; it is the demo's own shell and keeps only the block's layout.
+
+The ticket links of the support blocks point at `/tickets` and `/tickets/:id`, which the router
 redirects to `/support`.
 
 To update after a release, run `npx @aziontech/webkit check`; for each block it reports, look at

@@ -62,7 +62,7 @@ test.describe('demo flows', () => {
     await expect(page).toHaveURL(/\/resources\/new$/)
     await page.getByRole('textbox', { name: 'Name', exact: true }).fill('shop-api')
     await page.getByRole('textbox', { name: 'Domain name', exact: true }).fill('shop.example.com')
-    await page.getByRole('button', { name: 'Create resource', exact: true }).click()
+    await page.getByRole('button', { name: 'Save', exact: true }).click()
     await expect(page).toHaveURL(/\/resources\/\d+$/)
     await expect(page.getByText('shop.example.com').first()).toBeVisible()
     await expect(toastTitle(page, 'shop-api was created.')).toBeVisible()
@@ -282,7 +282,7 @@ test.describe('demo flows', () => {
 
   test('an empty Create focuses the first invalid field', async ({ page }) => {
     await page.goto(`${DEMOS}/resources/new`)
-    await page.getByRole('button', { name: /^Create resource/ }).click()
+    await page.getByRole('button', { name: 'Save', exact: true }).click()
     await expect(page.getByText('This field is required.')).toHaveCount(2)
     await expect(page.getByRole('textbox', { name: 'Name', exact: true })).toBeFocused()
   })

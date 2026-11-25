@@ -36,6 +36,7 @@
   } from '@aziontech/webkit/utils/ai-chat'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+  import { failureText, turnTime } from './ai-chat.ai-chat-failure'
   import { sampleModels, sampleSuggestions, sampleTools } from './ai-chat.sample'
   import AiChatComposer from './ai-chat-composer.vue'
   import AiChatConnectionStatus from './ai-chat-connection-status.vue'
@@ -87,9 +88,9 @@
     maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
-    /** The models the header title picks from on desktop; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
+    /** The models the header and composer pick from; left out, the sample models show. Read the chosen one from `v-model:modelKey`. */
     models?: PromptInputMenuOption[]
-    /** The tools the composer's "+" menu turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
+    /** The tools the composer turns on (web search, deep research); left out, the sample tools show. Read the turned-on ones from `v-model:toolKeys`. */
     toolOptions?: PromptInputMenuOption[]
   }
 
@@ -153,9 +154,9 @@
   }>()
 
   const activeKey = defineModel<string | null>('activeKey', { default: null })
-  /** The model chosen in the header title, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
-  const modelKey = defineModel<string>('modelKey', { default: 'auto' })
-  /** The tools turned on in the composer's "+" menu, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
+  /** The model chosen in the header or composer, one of `models`; pass it to `sendMessage` as `{ body: { model } }`. */
+  const modelKey = defineModel<string>('modelKey', { default: 'gemini-4-neon' })
+  /** The tools turned on in the composer, in `toolOptions` order; pass them to `sendMessage` as `{ body: { tools } }`. */
   const toolKeys = defineModel<string[]>('toolKeys', { default: () => [] })
 
   const { formatDate } = useLocale()
@@ -184,15 +185,22 @@
   })
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
   const modelOptions = computed(() => props.models ?? sampleModels)
-  const composerTools = computed(() => props.toolOptions ?? sampleTools)
+  const composerBindings = computed(() => ({
+    state: state.value,
+    queueable: queueable.value,
+    hydrating: props.hydrating,
+    accept: props.accept,
+    maxFiles: props.maxFiles,
+    maxFileSize: props.maxFileSize,
+    attachable: props.attachable,
+    voice: props.voice,
+    models: modelOptions.value,
+    tools: props.toolOptions ?? sampleTools
+  }))
   const welcome = computed(() => !turns.value.length && !props.hydrating)
   let refocus = false
   const last = computed(() => turns.value[turns.value.length - 1])
-  const failure = computed(() => {
-    if (!props.error) return ''
-    if (typeof props.error === 'string') return props.error
-    return 'The connection was interrupted before the response finished.'
-  })
+  const failure = computed(() => failureText(props.error))
   const waiting = computed(
     () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
   )
@@ -224,9 +232,7 @@
       : null
   })
 
-  function timeOf(turn: AiChatMessage): string {
-    return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
-  }
+  const timeOf = (turn: AiChatMessage) => turnTime(turn, formatDate)
 
   onMounted(() => nextTick(() => composerEl.value?.focus()))
 
@@ -306,6 +312,7 @@
         :empty="!turns.length"
         :history-open="historyPanel"
         :models="modelOptions"
+        :conversation-key="activeKey"
         @new-chat="newChat"
         @open-history="historyDrawer = true"
         @toggle-history="historyPanel = !historyPanel"
@@ -326,16 +333,9 @@
           ref="composerEl"
           v-model="prompt"
           v-model:files="files"
+          v-model:model-key="modelKey"
           v-model:tool-keys="toolKeys"
-          :state="state"
-          :queueable="queueable"
-          :hydrating="hydrating"
-          :accept="accept"
-          :max-files="maxFiles"
-          :max-file-size="maxFileSize"
-          :attachable="attachable"
-          :voice="voice"
-          :tools="composerTools"
+          v-bind="composerBindings"
           @submit="(event, text) => send(event, text, true)"
           @stop="stop"
           @voice-start="emit('voice-start', $event)"
@@ -424,16 +424,9 @@
             ref="composerEl"
             v-model="prompt"
             v-model:files="files"
+            v-model:model-key="modelKey"
             v-model:tool-keys="toolKeys"
-            :state="state"
-            :queueable="queueable"
-            :hydrating="hydrating"
-            :accept="accept"
-            :max-files="maxFiles"
-            :max-file-size="maxFileSize"
-            :attachable="attachable"
-            :voice="voice"
-            :tools="composerTools"
+            v-bind="composerBindings"
             @submit="(event, text) => send(event, text, true)"
             @stop="stop"
             @voice-start="emit('voice-start', $event)"

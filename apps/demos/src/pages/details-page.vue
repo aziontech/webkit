@@ -18,7 +18,14 @@
   const record = computed(() => findResource(route.params.id))
   const TABS: ResourceDetailTab[] = ['overview', 'versions', 'build', 'deployments']
   const requested = String(globalThis.history?.state?.tab ?? '') as ResourceDetailTab
-  const tab = ref<ResourceDetailTab>(TABS.includes(requested) ? requested : 'overview')
+  const selected = ref<ResourceDetailTab>(TABS.includes(requested) ? requested : 'overview')
+  const tab = computed({
+    get: () => selected.value,
+    set: (value: ResourceDetailTab) => {
+      if (value === 'settings' && record.value) router.push(`/resources/${record.value.id}/edit`)
+      else selected.value = value
+    }
+  })
 
   const resource = computed<ResourceDetailResource | undefined>(() => {
     const found = record.value

@@ -36,7 +36,7 @@
     <AppHeader.Center />
     <AppHeader.End>
       <AppHeaderAccount
-        name="jane.doe@example.com"
+        name="Amy Chen"
         aria-label="Account settings"
       />
     </AppHeader.End>

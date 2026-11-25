@@ -6,7 +6,9 @@
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
   import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
+
+  import AiChatRemoveDialog from './ai-chat-remove-dialog.vue'
 
   export type AiChatHeaderAction = 'share' | 'rename' | 'archive' | 'remove'
 
@@ -14,6 +16,7 @@
     empty: boolean
     historyOpen: boolean
     models: PromptInputMenuOption[]
+    conversationKey: string | null
   }>()
 
   const emit = defineEmits<{
@@ -25,23 +28,28 @@
 
   const modelKey = defineModel<string>('modelKey', { required: true })
 
-  const modelLabel = computed(
-    () => props.models.find((option) => option.value === modelKey.value)?.label ?? ''
+  const selectedModel = computed(() =>
+    props.models.find((option) => option.value === modelKey.value)
   )
+  const modelLabel = computed(() => selectedModel.value?.label ?? '')
+  const modelIcon = computed(() => selectedModel.value?.icon ?? '')
 
-  const actions: { value: AiChatHeaderAction; label: string }[] = [
+  const actions: { value: AiChatHeaderAction; label: string; severity?: 'danger' }[] = [
     { value: 'share', label: 'Share' },
     { value: 'rename', label: 'Rename' },
     { value: 'archive', label: 'Archive' },
-    { value: 'remove', label: 'Delete' }
+    { value: 'remove', label: 'Delete', severity: 'danger' }
   ]
 
   function onModel(_event: MouseEvent | KeyboardEvent, value: string | number) {
     modelKey.value = String(value)
   }
 
+  const removeOpen = ref(false)
+
   function onAction(event: MouseEvent | KeyboardEvent, value: string | number) {
-    emit('action', event, value as AiChatHeaderAction)
+    if (value === 'remove') removeOpen.value = true
+    else emit('action', event, value as AiChatHeaderAction)
   }
 
   const HEADER_CLASS =
@@ -79,6 +87,11 @@
               class="min-w-0"
             >
               <span class="truncate text-label-lg">Agent</span>
+              <i
+                v-if="modelIcon"
+                :class="[modelIcon, 'shrink-0 text-(--text-muted)']"
+                aria-hidden="true"
+              />
               <span
                 v-if="modelLabel"
                 class="truncate text-(--text-muted)"
@@ -147,6 +160,7 @@
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>
@@ -186,10 +200,16 @@
               :key="action.value"
               :value="action.value"
               :label="action.label"
+              :severity="action.severity"
             />
           </DropdownMenuGroup>
         </DropdownMenu>
       </span>
     </div>
+    <AiChatRemoveDialog
+      v-model:open="removeOpen"
+      :conversation-key="conversationKey"
+      @confirm="(event: MouseEvent) => emit('action', event, 'remove')"
+    />
   </header>
 </template>

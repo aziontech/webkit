@@ -2,6 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Combobox from '@aziontech/webkit/combobox'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -14,6 +15,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Select from '@aziontech/webkit/select'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   import type {
@@ -92,6 +94,26 @@
   const errors = reactive({ title: '', body: '' })
   const editing = computed(() => props.response !== null)
 
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    beforeUnload: false
+  })
+  const dirty = guard.isDirty
+  const leaveDialog = guard.dialogProps
+  const leaveLabels = guard.labels
+
+  const drawerOpen = computed({
+    get: () => open.value,
+    set: async (next: boolean) => {
+      if (next) {
+        open.value = true
+        return
+      }
+      if (props.saving) return
+      if (await guard.confirmLeave()) open.value = false
+    }
+  })
+
   watch(
     open,
     (now) => {
@@ -105,6 +127,7 @@
         status: response?.status ?? UNCHANGED
       })
       Object.assign(errors, { title: '', body: '' })
+      guard.commit()
     },
     { immediate: true }
   )
@@ -140,10 +163,10 @@
 
 <template>
   <Drawer
-    v-model:open="open"
+    v-model:open="drawerOpen"
     size="large"
     side="end"
-    :dismissible="!saving"
+    :dismissible="!saving && !dirty"
     :closable="!saving"
   >
     <DrawerContent>
@@ -309,7 +332,7 @@
               size="medium"
               type="button"
               :disabled="saving"
-              @click="open = false"
+              @click="drawerOpen = false"
             />
             <Button
               label="Save response"
@@ -323,4 +346,21 @@
       </form>
     </DrawerContent>
   </Drawer>
+
+  <ConfirmDialog v-bind="leaveDialog">
+    <template #actions>
+      <Button
+        :label="leaveLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="leaveLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>
