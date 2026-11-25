@@ -163,6 +163,7 @@
                         <InputGroupRoot
                           v-for="(ns, index) in zone.nameservers"
                           :key="ns"
+                          size="large"
                         >
                           <div class="flex flex-1">
                             <Input
@@ -219,7 +220,10 @@
                         :description="key.description"
                         variant="stacked"
                       >
-                        <InputGroupRoot class="w-full">
+                        <InputGroupRoot
+                          size="large"
+                          class="w-full"
+                        >
                           <div class="flex flex-1">
                             <Input
                               :model-value="key.value"

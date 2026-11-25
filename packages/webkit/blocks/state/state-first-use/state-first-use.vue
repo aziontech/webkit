@@ -227,7 +227,6 @@
                     <div class="flex min-w-0 flex-1">
                       <Input
                         :model-value="command"
-                        size="large"
                         class="w-full"
                         aria-label="Via CLI command"
                         readonly

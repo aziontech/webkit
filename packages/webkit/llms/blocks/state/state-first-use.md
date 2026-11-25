@@ -399,7 +399,6 @@ Each variant is the same screen in another state: `get_block("state/state-first-
                     <div class="flex min-w-0 flex-1">
                       <Input
                         :model-value="command"
-                        size="large"
                         class="w-full"
                         aria-label="Via CLI command"
                         readonly
