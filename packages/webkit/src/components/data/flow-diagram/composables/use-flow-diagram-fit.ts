@@ -76,8 +76,7 @@ export const useFlowDiagramFit = (
 
   const probe = (): void => {
     probed = ''
-    globalThis.cancelAnimationFrame(frame)
-    fit()
+    schedule()
   }
 
   onMounted(fit)
