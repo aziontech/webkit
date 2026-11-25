@@ -19,7 +19,7 @@
     <div class="flex flex-1">
       <TableSearch
         v-model="search"
-        size="large"
+        size="medium"
         placeholder="Search in folder"
         class="w-full"
       />
@@ -31,7 +31,7 @@
       <IconButton
         icon="az az-refresh"
         variant="outline"
-        size="large"
+        size="medium"
         :loading="loading"
         aria-label="Refresh"
         @click="(event: MouseEvent) => emit('refresh', event)"
@@ -44,7 +44,7 @@
       <IconButton
         icon="az az-download"
         variant="outline"
-        size="large"
+        size="medium"
         :disabled="!exportable"
         aria-label="Download CSV"
         @click="(event: MouseEvent) => emit('download', event)"

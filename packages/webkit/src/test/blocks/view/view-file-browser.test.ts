@@ -204,4 +204,19 @@ describe('view/view-file-browser block', () => {
     expect(payload.destination).toBe('')
     expect(payload.entries.map((entry) => entry.name)).toEqual(['index.html', '404.html'])
   })
+
+  it('opens Move with focus on the files, not on the folder field, so its list stays shut', async () => {
+    render(ViewFileBrowser, {
+      props: {
+        path: '20260622162046/',
+        selectedKeys: ['index.html', '404.html'],
+        movable: true,
+        defaultMoveOpen: true
+      }
+    })
+    const files = await screen.findByRole('list', { name: 'Files to move' })
+    await waitFor(() => expect(document.activeElement).toBe(files))
+    const field = files.closest<HTMLElement>('[role="dialog"]')!.querySelector('[role="combobox"]')!
+    expect(field.getAttribute('aria-expanded')).not.toBe('true')
+  })
 })
