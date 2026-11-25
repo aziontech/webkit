@@ -3,7 +3,7 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: implemented
-checksum: c48e5b88809ca94fc2a7e963be89159aa85c94cc3f692ae66cdd404f9fccfd01
+checksum: 8a8445d36858b6f6ba93ffb45198e48a6df89b484cb8c25ddb3f5921aa5c65b8
 spec_version: 4
 created: 2026-10-20
 last_updated: 2026-11-18
@@ -141,7 +141,7 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 | slices                       | `var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`                                         |
 | status slices                | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
 | slice gap                    | `var(--bg-surface)`                                                                                                    |
-| center value                 | `.text-big-number-sm`, `tabular-nums`; the small ring steps down to `.text-label-code-md` so the value clears the ring  |
+| center value                 | `.text-big-number-sm`, `tabular-nums`; the small ring steps down to `.text-label-code-md` so the value clears the ring |
 | center caption, legend names | `.text-body-sm` (`.text-body-xs` in the small ring), `var(--text-muted)`, `var(--text-default)`                        |
 | legend values and shares     | `.text-label-code-md`, `tabular-nums`, `var(--text-muted)`                                                             |
 | spacing                      | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`                                                          |
@@ -157,7 +157,7 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 
 - Root is a `<figure>`; the ring is one tab stop, `role="group"` with `aria-roledescription="chart"`, named by `ariaLabel`.
 - Keyboard map: Left / Right (or Up / Down) move between slices, with Left and Right swapped under `dir="rtl"` (`logicalArrowKey`, as `chart`, `tracker` and `map-chart`), Home / End jump, Enter / Space fire `slice-click`, Escape clears.
-- Legend entries draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
+- Legend entries draw 24 px but take pointer input over 40 px (a transparent `before:` hit area); on a coarse pointer they grow to 44 px tall, since stacked rows would overlap a hit area (TT01).
 - A polite live region announces the active slice name, value and share.
 - A data table twin is always rendered, visually hidden unless `tableView`.
 - The ring SVG is `aria-hidden`; the legend names every slice with its value and share, so identity never rests on color.

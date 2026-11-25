@@ -10,6 +10,7 @@ import AppHeaderWithAccount from '../../examples/app-header/with-account.vue'
 import AppLayoutDefault from '../../examples/app-layout/default.vue'
 import ArticleHighlightAutoplay from '../../examples/article-highlight-section/autoplay.vue'
 import ButtonGroupDefault from '../../examples/button-group/default.vue'
+import ChartTooltipTotal from '../../examples/chart/tooltip-total.vue'
 import CitationDefault from '../../examples/citation/default.vue'
 import CliTerminalDefault from '../../examples/cli-terminal-section/default.vue'
 import ClientQuotesDefault from '../../examples/client-quotes-section/default.vue'
@@ -17,8 +18,10 @@ import ClosingAudiences from '../../examples/closing-call-to-action-section/audi
 import CodeBlockUnevenTabs from '../../examples/code-block/uneven-tabs.vue'
 import CompetitorComparisonDefault from '../../examples/competitor-comparison-section/default.vue'
 import ConsoleShowcaseDefault from '../../examples/console-showcase-section/default.vue'
+import DashboardGridEditing from '../../examples/dashboard-grid/editing.vue'
 import DatePickerDefault from '../../examples/date-picker/default.vue'
 import DocTableOfContentsDefault from '../../examples/doc-table-of-contents/default.vue'
+import DonutChartDefault from '../../examples/donut-chart/default.vue'
 import DropdownMenuStates from '../../examples/dropdown-menu/states.vue'
 import FileDropzoneDefault from '../../examples/file-dropzone/default.vue'
 import FooterDefault from '../../examples/footer/default.vue'
@@ -307,6 +310,35 @@ describe('tap targets on a coarse pointer (styled)', () => {
       const view = await mount(component)
       const row = view.container.querySelector<HTMLElement>(selector)!
       expect(row.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
+    })
+
+    it.each([
+      ['Chart', ChartTooltipTotal, 'chart-legend__item'],
+      ['DonutChart', DonutChartDefault, 'donut-chart__legend-item']
+    ])('%s legend items are 44px tall', async (_name, component, id) => {
+      await touch()
+      const view = await mount(component)
+      const items = await vi.waitFor(() => {
+        const found = byTestId(view.container as HTMLElement, id)
+        if (found.length < 2) throw new Error('no legend yet')
+        return found
+      })
+      for (const item of items)
+        expect(item.getBoundingClientRect().height).toBeGreaterThanOrEqual(44)
+    })
+
+    it('the ChartCard move handle answers a tap across 44 x 44', async () => {
+      await touch()
+      const view = await mount(DashboardGridEditing)
+      const handle = await vi.waitFor(() => {
+        const found = byTestId(view.container as HTMLElement, 'chart-card-drag-handle')[0]
+        if (!found) throw new Error('no handle yet')
+        return found
+      })
+      handle.scrollIntoView({ block: 'center' })
+      await settle()
+      expect(hitSpan(handle, 'x')).toBeGreaterThanOrEqual(44)
+      expect(hitSpan(handle, 'y')).toBeGreaterThanOrEqual(44)
     })
 
     it('the Sources pill answers a tap across 44px', async () => {

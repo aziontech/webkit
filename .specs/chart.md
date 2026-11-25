@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: b5eb9851718b36221a8e91289f94cfef5596e00a99c2b0505d3b3a559871dede
+checksum: 4b37e7994e7d7c7472afc6d1bce08e1889add5a892a64200d80096d044d3114b
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -174,7 +174,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark type), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
-  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
+  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area); on a coarse pointer they grow to 44 px tall, since wrapped rows would overlap a hit area (TT01).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
 
@@ -350,7 +350,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 - Container queries: none; the plot measures its own box and fills its container (`height` is a minimum).
 - Narrow (≤ 640 px or a narrow container): category labels thin to the width they have; the legend wraps.
-- Touch: legend buttons ≥ 24 px; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. A tap (touch or pen) sets the active index under the finger, so the tooltip and crosshair show and stay after the finger lifts; a tap outside the plot clears it, and the tap's click fires `point-click` for that point. Hover-only readings are also reachable from the keyboard and in the table twin.
+- Touch: legend buttons 44 px tall on a coarse pointer; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. A tap (touch or pen) sets the active index under the finger, so the tooltip and crosshair show and stay after the finger lifts; a tap outside the plot clears it, and the tap's click fires `point-click` for that point. Hover-only readings are also reachable from the keyboard and in the table twin.
 - Reflow: no horizontal scroll at 320 px; the hidden twin sits in an `sr-only` box.
 
 ## Performance
