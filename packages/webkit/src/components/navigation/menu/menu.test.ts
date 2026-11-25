@@ -1,8 +1,9 @@
 import { userEvent } from '@storybook/test'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, nextTick, ref } from 'vue'
+import { createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
 import { compileTemplate, parse } from 'vue/compiler-sfc'
+import { renderToString } from 'vue/server-renderer'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import Menu, {
@@ -642,6 +643,119 @@ describe('Menu (composition, drill stack + data mode)', () => {
 
   it('has no axe violations in data-driven mode', async () => {
     const view = render(Menu, { props: { groups: GROUPS, activeId: 'end-user' } })
+
+    await expectNoA11yViolations(view.container)
+  })
+})
+
+const rootBack = (props: Record<string, unknown> = {}) =>
+  defineComponent({
+    components: COMPONENTS,
+    setup: () => ({ groups: GROUPS, props }),
+    template: `
+      <Menu :groups="groups" aria-label="Docs navigation">
+        <MenuBack href="/docs/" label="Docs" v-bind="props" />
+      </Menu>
+    `
+  })
+
+const rootBackRendered = defineComponent({
+  setup: () => () =>
+    h(Menu, { groups: GROUPS, ariaLabel: 'Docs navigation' }, () => [
+      h(MenuBack, { href: '/docs/', label: 'Docs' })
+    ])
+})
+
+describe('Menu.Back at the root level (href)', () => {
+  it('renders in place as a link to href when no level is open', () => {
+    const view = render(rootBack())
+
+    const back = view.getByTestId('navigation-menu-back')
+    expect(back.tagName).toBe('A')
+    expect(back.getAttribute('href')).toBe('/docs/')
+    expect(back.textContent?.trim()).toBe('Back to Docs')
+    expect(view.getByRole('link', { name: 'Back to Docs' })).toBe(back)
+    expect(view.getByTestId('navigation-menu').contains(back)).toBe(true)
+  })
+
+  it('emits click with the DOM event and leaves the stack alone', async () => {
+    const clicks: unknown[][] = []
+    const paths: string[][] = []
+    const view = render(
+      defineComponent({
+        components: COMPONENTS,
+        setup: () => ({
+          groups: GROUPS,
+          onBack: (...args: unknown[]) => clicks.push(args),
+          onPath: (value: string[]) => paths.push(value)
+        }),
+        template: `
+          <Menu :groups="groups" aria-label="Docs navigation" @update:path="onPath">
+            <MenuBack href="/docs/" @click="onBack" />
+          </Menu>
+        `
+      })
+    )
+
+    await userEvent.click(view.getByTestId('navigation-menu-back'))
+
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0][0]).toBeInstanceOf(globalThis.MouseEvent)
+    expect(clicks[0]).toHaveLength(1)
+    expect(paths).toEqual([])
+  })
+
+  it('becomes the level button once a level opens, and the link again after the pop', async () => {
+    const view = render(rootBack())
+
+    await userEvent.click(arrow(view, 'Settings'))
+
+    const back = await waitFor(() => {
+      const el = view.getByTestId('navigation-menu-back')
+      expect(el.tagName).toBe('BUTTON')
+      return el
+    })
+    expect(back.hasAttribute('href')).toBe(false)
+    expect(view.getByRole('group', { name: 'Settings' }).contains(back)).toBe(true)
+    expect(view.getAllByTestId('navigation-menu-back')).toHaveLength(1)
+
+    await userEvent.click(back)
+
+    await waitFor(() => expect(view.getByTestId('navigation-menu-back').tagName).toBe('A'))
+  })
+
+  it('a consumer data-testid overrides the fallback on the link', () => {
+    const view = render(rootBack({ 'data-testid': 'docs-back' }))
+
+    expect(view.getByTestId('docs-back').tagName).toBe('A')
+  })
+
+  it('is served in the HTML and hydrates without a mismatch', async () => {
+    const html = await renderToString(createSSRApp(rootBackRendered))
+    expect(html).toContain('href="/docs/"')
+    expect(html).toContain('Back to Docs')
+    expect(html).not.toContain('teleport')
+
+    const host = globalThis.document.createElement('div')
+    host.innerHTML = html
+    globalThis.document.body.appendChild(host)
+
+    const warnings: string[] = []
+    const app = createSSRApp(rootBackRendered)
+    app.config.warnHandler = (message) => warnings.push(message)
+    app.mount(host)
+    await nextTick()
+
+    const back = host.querySelector('[data-testid="navigation-menu-back"]')
+    expect(back?.tagName).toBe('A')
+    expect(warnings.filter((message) => /hydrat/i.test(message))).toEqual([])
+
+    app.unmount()
+    host.remove()
+  })
+
+  it('has no axe violations with the root-level link', async () => {
+    const view = render(rootBack())
 
     await expectNoA11yViolations(view.container)
   })

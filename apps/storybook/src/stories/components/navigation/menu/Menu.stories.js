@@ -348,6 +348,52 @@ export const Drill = {
   }
 }
 
+const ROOT_BACK_TEMPLATE = `<div class="${HOST_CLASS}">
+  <Menu aria-label="Docs navigation">
+    <MenuBack href="/docs/" label="Docs" />
+    <MenuGroup label="Firewall">
+      <MenuItem label="Overview" href="/docs/firewall/" selected />
+      <MenuItem label="Quickstart" href="/docs/firewall/quickstart/" />
+      <MenuSub>
+        <MenuSubTrigger label="WAF" kind="drill" />
+        <MenuSubContent>
+          <MenuGroup>
+            <MenuItem label="Quickstart" href="/docs/firewall/waf/quickstart/" />
+            <MenuItem label="Reference" href="/docs/firewall/waf/reference/" />
+          </MenuGroup>
+        </MenuSubContent>
+      </MenuSub>
+    </MenuGroup>
+  </Menu>
+</div>`
+
+export const RootBack = {
+  render: () => ({ components: menuStoryComponents, template: ROOT_BACK_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A menu whose tree sits inside something it does not draw, such as one product of a docs catalog. With `href`, Back renders at the root level as a link to that destination, in place and without a Teleport, so a server-rendered page serves it in its HTML. It keeps the shape of the in-level Back: it hugs its label instead of spanning the row. Open `WAF` and Back becomes the level button that pops; pop and it is the link again. `@click` receives the DOM event, so a host can call `preventDefault()` and handle the way back itself.'
+      },
+      source: {
+        code: toSfc(
+          [
+            IMPORT_ROOT,
+            IMPORT_BACK,
+            IMPORT_GROUP,
+            IMPORT_ITEM,
+            IMPORT_SUB,
+            IMPORT_SUB_TRIGGER,
+            IMPORT_SUB_CONTENT
+          ],
+          ROOT_BACK_TEMPLATE
+        )
+      }
+    }
+  }
+}
+
 const DISABLED_TEMPLATE = `<div class="${HOST_CLASS}">
   <Menu aria-label="Console navigation">
     <MenuGroup label="Azion platform">

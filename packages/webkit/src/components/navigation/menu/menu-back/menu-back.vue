@@ -12,11 +12,18 @@
   interface Props {
     /** Names the destination Back returns to, overriding the level below it on the stack. Set it to name the menu root, which has no trigger to name itself. */
     label?: string
+    /** Destination of Back at the root level, where no level is open to pop. Set it and Back renders in place as a link to this URL, server-rendered, instead of rendering nothing. */
+    href?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    label: ''
+    label: '',
+    href: ''
   })
+
+  const emit = defineEmits<{
+    click: [event: globalThis.MouseEvent]
+  }>()
 
   defineSlots<{
     default?(): unknown
@@ -29,7 +36,11 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-back'
   )
 
-  const isVisible = computed(() => ctx.backHost.value !== null)
+  const isInLevel = computed(() => ctx.backHost.value !== null)
+
+  const isRootLink = computed(
+    () => !isInLevel.value && ctx.levels.value.length === 0 && props.href.length > 0
+  )
 
   const destination = computed(() => {
     const levels = ctx.levels.value
@@ -54,11 +65,20 @@
   const registerElement = (el: globalThis.Element | ComponentPublicInstance | null) => {
     ctx.setBackElement(el as globalThis.HTMLElement | null)
   }
+
+  const onPop = (event: globalThis.MouseEvent) => {
+    emit('click', event)
+    ctx.pop()
+  }
+
+  const onFollow = (event: globalThis.MouseEvent) => {
+    emit('click', event)
+  }
 </script>
 
 <template>
   <Teleport
-    v-if="isVisible"
+    v-if="isInLevel"
     :to="ctx.backHost.value"
   >
     <button
@@ -67,7 +87,7 @@
       type="button"
       :data-testid="testId"
       :class="rootClass"
-      @click="ctx.pop()"
+      @click="onPop"
     >
       <i
         class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted)"
@@ -79,4 +99,21 @@
       </span>
     </button>
   </Teleport>
+  <a
+    v-else-if="isRootLink"
+    v-bind="$attrs"
+    :href="href"
+    :data-testid="testId"
+    :class="rootClass"
+    @click="onFollow"
+  >
+    <i
+      class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted)"
+      aria-hidden="true"
+      :data-testid="`${testId}__icon`"
+    />
+    <span class="min-w-0 truncate text-label-md">
+      <slot>{{ text }}</slot>
+    </span>
+  </a>
 </template>
