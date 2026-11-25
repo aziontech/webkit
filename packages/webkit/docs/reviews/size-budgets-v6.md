@@ -2551,3 +2551,55 @@ Budget-raise: drawer-trigger 2.15 KB → 2.3 KB (measured 2.23 KB): an overlay t
 Budget-raise: popover-trigger 2.55 KB → 2.7 KB (measured 2.61 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
 
 Budget-raise: shortcuts-dialog 27.3 KB → 27.4 KB (measured 27.32 KB): an overlay trigger whose content is not a control (an avatar) gets the 44px pointer-coarse touch target (A6-069).
+
+Budget-raise: doc-markdown 41.9 KB → 41.95 KB (measured 41.90 KB): DocCallout draws every variant on the calm reading surface (A6-085), and the en catalog it bundles through ConfigProvider gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: call-to-action 3.7 KB → 3.75 KB (measured 3.70 KB): CallToAction starts its actions at one place (A6-109), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: console-application-scene 127.3 KB → 127.45 KB (measured 127.44 KB): The console scenes fade at the crop on a phone (A6-100), and the switches, checkboxes, settings rows, item descriptions and table rows the scene draws carry their own fixes (A6-033, A6-138, A6-145, A6-059).
+
+Budget-raise: console-trace-scene 87.05 KB → 87.15 KB (measured 87.11 KB): The console scenes fade at the crop on a phone (A6-100), a stacked FlowDiagram keeps every edge and its severity (A6-052), the Trace minimap handles take a 44 px tap (A6-063) and the LogViewer copy moves into its header toolbar (A6-049).
+
+Budget-raise: article-body-section 49.5 KB → 49.55 KB (measured 49.53 KB): The breadcrumb folds only when its segments do not fit (A6-066), a menu shortcut reads with the platform modifier (A6-073), DocProse keeps inline code in a table cell on one line (A6-258), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: network-section 28.15 KB → 28.2 KB (measured 28.16 KB): NetworkSection wraps its claims eyebrow before the map (A6-128), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: client-quotes-section 28.55 KB → 28.6 KB (measured 28.56 KB): The Eyebrow prefix stays beside the first word when the label wraps (A6-095), and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: job-posting-section 63.7 KB → 63.8 KB (measured 63.79 KB): PhoneInput lists countries A to Z with no national mask as placeholder (A6-016, A6-017), an uploading file token offers Cancel upload and states its progress (A6-037), controls inside an InputGroup match its height (A6-018), and the Eyebrow prefix stays beside the first word when the label wraps (A6-095).
+
+Budget-raise: donut-chart 13.9 KB → 13.95 KB (measured 13.90 KB): Chart legend items are 44 px tall on a touch screen (A6-070), and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: timeline 22.7 KB → 22.75 KB (measured 22.73 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042).
+
+Budget-raise: timeline-item 21.65 KB → 21.7 KB (measured 21.65 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042).
+
+Budget-raise: timestamp 20.7 KB → 20.75 KB (measured 20.72 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042).
+
+Budget-raise: message-thread-item 35.75 KB → 35.8 KB (measured 35.79 KB): Timestamp gains the time format that Timeline items inside a dated group print (A6-042), and the Avatar presence dot clears the second initial (A6-193).
+
+Budget-raise: config-provider 14.55 KB → 14.6 KB (measured 14.55 KB): The en catalog it bundles gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: locales-pt-BR 13 KB → 13.05 KB (measured 13.02 KB): The pt-BR catalog gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: prompt-input 16 KB → 16.05 KB (measured 16.00 KB): The empty composer keeps a readable text field on a phone (A6-081), the model menu drops keyboard shortcuts on touch (A6-230), and a clickable chip grows to a 44 px hit area on touch (A6-015).
+
+Budget-raise: attribute-editor 25.4 KB → 25.45 KB (measured 25.43 KB): AttributeEditor names Remove by the row key (A6-022), and a selected Field choice card takes the RadioGroup card fill in the field label it renders (A6-029).
+
+Budget-raise: button-group 17.8 KB → 17.85 KB (measured 17.80 KB): Grouped icon buttons reach the 44 px touch width (A6-005), and a menu item prints its shortcut with the platform modifier (A6-073).
+
+Budget-raise: image-gallery 27.75 KB → 27.8 KB (measured 27.75 KB): ImageGallery shows Try again and emits retry when an image fails (A6-039), and its Dialog shares its root state through useModalRoot (A6-290).
+
+Budget-raise: avatar 12.8 KB → 12.85 KB (measured 12.80 KB): An avatar menu trigger is named by its aria-label and has a touch target (A6-069), and the small presence dot clears the second initial (A6-193).
+
+Budget-raise: log-viewer-steps 42.4 KB → 42.45 KB (measured 42.40 KB): The LogViewer copy sits in the header toolbar and the header is honest while loading (A6-049, A6-057).
+
+Budget-raise: table-sort-button 3.8 KB → 3.85 KB (measured 3.80 KB): A sort button named by its header carries no generic aria-label (A6-062), and IconButton keeps a transparent disabled ghost fill (A6-232).
+
+Budget-raise: dialog 23.3 KB → 23.35 KB (measured 23.31 KB): Dialog shares its root state through useModalRoot (A6-290), and the en catalog it bundles through ConfigProvider gained the Try again, cancel-upload, upload-progress, phrase-mismatch and route messages (A6-039, A6-037, A6-157, A6-052).
+
+Budget-raise: css-button 11.05 KB → 11.1 KB (measured 11.09 KB gzip): the theme stylesheet every app compiles gains the brand-tint text selection (A6-026), the open word spacing of display headings on phones (A6-122) and the 16px code step with a real line height for wrapping code (A6-180).
+
+Budget-raise: css-icons 15.35 KB → 15.45 KB (measured 15.41 KB gzip): the same theme additions as css-button (A6-026, A6-122, A6-180).
+
+Budget-raise: css-console 24.7 KB → 24.95 KB (measured 24.91 KB gzip): the same theme additions (A6-026, A6-122, A6-180), plus the pointer-coarse 44px touch targets of grouped icon buttons, chips and chart legend items (A6-005, A6-015, A6-070), the transparent disabled ghost and outline IconButton fill (A6-232), the whole table row rules beside a frozen column (A6-059) and the platform shortcut hint in menu items (A6-073).
