@@ -3,11 +3,11 @@ name: subheader
 category: layout
 structure: monolithic
 status: implemented
-checksum: 85329642e3a9bfe3ab230c7dc024b5ffff7e747d5da13c25537555edb7f9b417
+checksum: ace7bf07628d5ddbd6ec44d753edb23c8c81433ef52afded515c1815550fb26d
 spec_version: 7
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # Subheader — Component Spec
@@ -103,15 +103,15 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 
 ## Tokens
 
-| Region         | Token (DESIGN.md)                           |
-| -------------- | ------------------------------------------- |
-| title (medium) | `.text-heading-xs` · `var(--text-default)`  |
-| title (small)  | `.text-heading-2xs` · `var(--text-default)` |
-| description    | `.text-body-sm` · `var(--text-muted)`       |
-| inline padding | `var(--spacing-xs)`                         |
-| row gap        | `var(--spacing-md)`                         |
-| actions gap    | `var(--spacing-xs)`                         |
-| scroll margin  | `var(--spacing-xl)`                         |
+| Region         | Token (DESIGN.md)                                               |
+| -------------- | --------------------------------------------------------------- |
+| title (medium) | `.text-heading-xs` · `var(--text-default)`                      |
+| title (small)  | `.text-heading-2xs` · `var(--text-default)`                     |
+| description    | `.text-body-sm` · `var(--text-muted)`                           |
+| inline padding | none: the title starts on the same edge as the content it heads |
+| row gap        | `var(--spacing-md)`                                             |
+| actions gap    | `var(--spacing-xs)`                                             |
+| scroll margin  | `var(--spacing-xl)`                                             |
 
 ## Theme gaps
 
