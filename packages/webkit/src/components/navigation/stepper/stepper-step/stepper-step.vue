@@ -81,7 +81,6 @@
     'group-data-[active]/step:border-(--secondary) ' +
     'group-data-[status=error]/step:border-(--danger-border) group-data-[status=error]/step:bg-(--danger) group-data-[status=error]/step:text-(--danger-foreground) ' +
     'group-data-[status=running]/step:border-(--secondary) group-data-[status=running]/step:text-(--secondary) ' +
-    'group-data-[disabled]/step:text-(--text-disabled) ' +
     'motion-reduce:transition-none'
 
   const DISC_CLASS =
@@ -93,7 +92,6 @@
     'flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
     'group-data-[completed]/step:text-(--text-default) ' +
     'group-data-[active]/step:text-(--text-default) ' +
-    'group-data-[disabled]/step:text-(--text-disabled) ' +
     'motion-reduce:transition-none'
 
   const CONNECTOR_CLASS =
