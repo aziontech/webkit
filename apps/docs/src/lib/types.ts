@@ -1,6 +1,13 @@
 export type Highlighted = { code: string; html: string }
 export type PairType = 'usage' | 'guidance'
-export type DocPair = { type: PairType; level: number; do: string; dont: string }
+export type DocPair = {
+  type: PairType
+  level: number
+  doId?: string
+  dontId?: string
+  do: string
+  dont: string
+}
 export type DocCode = Highlighted & { lang: string }
 export type DocPart = { html: string } | { pair: DocPair } | { code: DocCode }
 export type DocHeading = { id: string; text: string; depth: number }

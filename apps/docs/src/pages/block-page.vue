@@ -118,7 +118,7 @@
 
   const toc = computed(() => {
     const items = [{ id: 'preview', text: t.value.preview, depth: 2 }]
-    items.push({ id: 'usage', text: t.value.whenToUse, depth: 2 })
+    items.push({ id: 'usage', text: t.value.usage, depth: 2 })
     items.push({ id: 'code', text: t.value.code, depth: 2 })
     if (uses.value.length || anatomy.value)
       items.push({ id: 'anatomy', text: t.value.anatomy, depth: 2 })
@@ -274,11 +274,15 @@
         id="usage"
         class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
+        <h2 class="text-heading-md">{{ t.usage }}</h2>
         <DocProse v-if="guidelines?.intro">
           <RawHtml :html="guidelines.intro" />
         </DocProse>
         <DoDont
           type="usage"
+          :level="3"
+          do-id="usage-do"
+          dont-id="usage-dont"
           :do-html="useWhen"
           :dont-html="avoidWhen"
         />
@@ -286,7 +290,7 @@
           v-if="related"
           class="flex flex-col gap-(--spacing-xs)"
         >
-          <h2 class="text-heading-xs">{{ t.related }}</h2>
+          <h3 class="text-heading-xs">{{ t.related }}</h3>
           <DocProse>
             <RawHtml :html="related" />
           </DocProse>
@@ -352,9 +356,13 @@
       <section
         v-if="doList || dontList"
         id="do-dont"
-        class="scroll-mt-20"
+        class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
+        <h2 class="text-heading-md">{{ t.do }} / {{ t.dont }}</h2>
         <DoDont
+          :level="3"
+          do-id="do-dont-do"
+          dont-id="do-dont-dont"
           :do-html="doList"
           :dont-html="dontList"
         />

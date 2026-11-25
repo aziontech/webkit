@@ -96,7 +96,8 @@ export const FOUNDATIONS: FoundationPage[] = [
   {
     slug: 'site-pages',
     title: 'Site pages',
-    summary: 'The Web Design Guide: SD-01 to SD-25 for every Azion web page.',
+    summary:
+      'What an Azion web page may put on its column: sections, hero, frame, assets and copy.',
     markdown: 'rules/webkit-site-pages.md'
   },
   {

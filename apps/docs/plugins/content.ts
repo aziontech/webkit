@@ -201,7 +201,14 @@ function stripFrontMatter(source: string): string {
 }
 
 export type PairType = 'usage' | 'guidance'
-export type DocPair = { type: PairType; level: number; do: string; dont: string }
+export type DocPair = {
+  type: PairType
+  level: number
+  doId?: string
+  dontId?: string
+  do: string
+  dont: string
+}
 export type DocCode = { code: string; html: string; lang: string }
 export type DocPart = { html: string } | { pair: DocPair } | { code: DocCode }
 export type DocHeading = { id: string; text: string; depth: number }
@@ -272,6 +279,24 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
   const parts: DocPart[] = []
   let pending: MdToken[] = []
   let level = 1
+  const taken = new Set(
+    tokens.map((token, at) =>
+      token.type === 'heading_open' && !pairWord(tokens[at + 1]?.content ?? '')
+        ? token.attrGet('id')
+        : null
+    )
+  )
+  const parents: { level: number; id: string }[] = []
+  const pairId = (pairLevel: number) => {
+    const parent = [...parents].reverse().find((heading) => heading.level < pairLevel)
+    const base = parent?.id ? `${parent.id}-` : ''
+    let id = base
+    for (let count = 2; taken.has(`${id}do`) || taken.has(`${id}dont`); count++)
+      id = `${base}${count}-`
+    taken.add(`${id}do`)
+    taken.add(`${id}dont`)
+    return { doId: `${id}do`, dontId: `${id}dont` }
+  }
   const flush = () => {
     if (pending.length) parts.push({ html: render(pending) })
     pending = []
@@ -306,6 +331,7 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
         push({
           type: word.type,
           level: own,
+          ...pairId(own),
           do: word.side === 'do' ? first : second,
           dont: word.side === 'do' ? second : first
         })
@@ -313,6 +339,8 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
         continue
       }
       level = own
+      while (parents.length && (parents.at(-1)?.level ?? 0) >= own) parents.pop()
+      parents.push({ level: own, id: String(token.attrGet('id') ?? '') })
     }
     if (token.type === 'bullet_list_open' && token.level === 0) {
       const close = closeOf(tokens, at)
@@ -336,6 +364,7 @@ export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: strin
         push({
           type: doItem.word.type,
           level: Math.min(level + 1, 6),
+          ...pairId(Math.min(level + 1, 6)),
           do: body(doItem),
           dont: body(dontItem)
         })
@@ -364,13 +393,32 @@ function headingsOf(parts: DocPart[]): DocHeading[] {
   }))
 }
 
+const TOOLING_SECTION = /^(enforcement|how it is checked)$/i
+
+export function dropToolingSections(source: string): string {
+  const kept: string[] = []
+  let fence = false
+  let dropping = 0
+  for (const line of source.split('\n')) {
+    if (/^\s*(```|~~~)/.test(line)) fence = !fence
+    const heading = fence ? null : /^(#{2,6})\s+(.+?)\s*$/.exec(line)
+    if (heading) {
+      const depth = heading[1]?.length ?? 0
+      if (dropping && depth <= dropping) dropping = 0
+      if (!dropping && TOOLING_SECTION.test(heading[2] ?? '')) dropping = depth
+    }
+    if (!dropping) kept.push(line)
+  }
+  return kept.join('\n')
+}
+
 export async function renderMarkdownFile(
   file: string
 ): Promise<{ parts: DocPart[]; title: string; toc: DocHeading[] }> {
   const md = await markdown(file, { headingIds: true })
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(file, '.md')
-  const body = source.replace(/^#\s+.+\n/m, '')
+  const body = dropToolingSections(source.replace(/^#\s+.+\n/m, ''))
   const parts = markdownParts(md, body)
   return { parts, title, toc: headingsOf(parts) }
 }
