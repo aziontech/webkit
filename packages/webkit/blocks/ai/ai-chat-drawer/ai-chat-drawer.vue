@@ -36,7 +36,7 @@
     interruptErrorText,
     queueItemOf
   } from '@aziontech/webkit/utils/ai-chat'
-  import { computed, nextTick, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, onScopeDispose, ref, watch } from 'vue'
 
   import AiChatConnectionStatus from './parts/ai-chat-connection-status.vue'
   import AiChatTurn from './parts/ai-chat-turn.vue'
@@ -176,6 +176,18 @@
   const { formatDate } = useLocale()
   const versions = useAiChatVersions(() => props.messages)
 
+  const wide = ref(true)
+  const wideQuery = globalThis.matchMedia?.('(min-width: 64rem)') ?? null
+  const onWideChange = (event: MediaQueryListEvent) => {
+    wide.value = event.matches
+  }
+  onMounted(() => {
+    if (!wideQuery) return
+    wide.value = wideQuery.matches
+    wideQuery.addEventListener('change', onWideChange)
+  })
+  onScopeDispose(() => wideQuery?.removeEventListener('change', onWideChange))
+
   const prompt = ref('')
   const files = ref<PromptInputFile[]>([])
   const composerEl = ref<InstanceType<typeof DrawerChatComposer> | null>(null)
@@ -310,7 +322,7 @@
       v-model:open="open"
       side="end"
       size="medium"
-      :modal="false"
+      :modal="!wide"
     >
       <DrawerContent>
         <div class="flex min-h-0 flex-1 flex-col">
