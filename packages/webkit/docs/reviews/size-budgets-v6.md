@@ -2837,3 +2837,15 @@ Budget-raise: doc-prose 4.7 KB → 4.8 KB (measured 4.77 KB): DocProse gives eve
 Budget-raise: article-body-section 49.6 KB → 49.7 KB (measured 49.69 KB): it renders DocProse, whose tables are now focusable (X1-4).
 
 Budget-raise: markdown-editor 32.1 KB → 32.6 KB (measured 32.57 KB): its lazy StreamingResponse preview now loads CodeBlock as a nested lazy chunk (audit-6 X2-4), so the bundler moves the modules the editor shares with CodeBlock (Tooltip, the trigger and teleport helpers) out of the entry into their own statically imported chunks; the editor loads the same code in more files. StreamingResponse itself drops 44 KB → 26.85 KB.
+
+Budget-raise: table 9.1 KB → 9.15 KB (measured 9.1 KB): a wide (grow 2 or 3) cell and head cell contain their inline size above a `--size-44` floor, so a long value no longer widens every row (audit-6 X3-3); the two class pairs ride in every entry that renders the table cells.
+
+Budget-raise: table-head-cell 5.55 KB → 5.6 KB (measured 5.55 KB): a wide (grow 2 or 3) head cell contains its inline size above a `--size-44` floor, so a long value no longer widens every row (audit-6 X3-3).
+
+Budget-raise: streaming-response 26.85 KB → 27.4 KB (measured 27.37 KB): CopyButton now loads its Tooltip lazily (the shared `LazyTooltip`), which takes about 5 KB off CopyButton, CodeBlock, CopyText and 25 other entries; StreamingResponse already loads CodeBlock lazily, so the async-component wrapper the two lazy chunks share is hoisted into its entry.
+
+Budget-raise: chat-message 15.35 KB → 15.4 KB (measured 15.38 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`, which ChatMessage imports from its new home under the tooltip folder; the re-export costs a few bytes.
+
+Budget-raise: chat-message-actions 8.9 KB → 8.95 KB (measured 8.93 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`, which the actions import from its new home under the tooltip folder; the re-export costs a few bytes.
+
+Budget-raise: markdown-editor 32.6 KB → 32.95 KB (measured 32.91 KB): CopyButton now loads its Tooltip lazily through the shared `LazyTooltip`; MarkdownEditor's toolbar keeps its static Tooltip (a lazy one re-renders the toolbar buttons mid-selection), so it carries both the static Tooltip and the async wrapper.

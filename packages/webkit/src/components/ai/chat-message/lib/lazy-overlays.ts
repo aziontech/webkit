@@ -2,13 +2,7 @@ import { defineAsyncComponent, defineComponent, h } from 'vue'
 
 import IconButton from '../../../action/icon-button/icon-button.vue'
 
-const TooltipTrigger = defineComponent({
-  inheritAttrs: false,
-  setup:
-    (_props, { slots }) =>
-    () =>
-      h('span', { class: 'inline-flex w-fit shrink-0' }, slots['default']?.())
-})
+export { LazyTooltip } from '../../../overlay/tooltip/lib/lazy-tooltip'
 
 const CopyButtonFace = defineComponent({
   props: {
@@ -26,12 +20,6 @@ const CopyButtonFace = defineComponent({
         disabled: true
       })
     ])
-})
-
-export const LazyTooltip = defineAsyncComponent({
-  loader: () => import('../../../overlay/tooltip/tooltip.vue'),
-  loadingComponent: TooltipTrigger,
-  delay: 0
 })
 
 export const LazyCopyButton = defineAsyncComponent({
