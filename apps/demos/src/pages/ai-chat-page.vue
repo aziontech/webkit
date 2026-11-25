@@ -38,10 +38,16 @@
 
   const loadingOlder = ref(false)
 
+  type ChatMessages = Parameters<typeof setMessages>[0]
+
+  function toChat(list: readonly AiChatMessage[]): ChatMessages {
+    return list as unknown as ChatMessages
+  }
+
   const route = useRoute()
   watch(
     () => route.params.chatId,
-    (chatId) => setMessages(chatId ? sampleLongThread : []),
+    (chatId) => setMessages(chatId ? toChat(sampleLongThread) : []),
     { immediate: true }
   )
   const modelKey = ref('auto')
@@ -119,7 +125,7 @@
     @stop="stop()"
     @retry="reload()"
     @edit="(_event, message, text) => edit(message, text)"
-    @version-change="(next) => setMessages(next)"
+    @version-change="(next) => setMessages(toChat(next))"
     @new-chat="clear()"
   />
 </template>
