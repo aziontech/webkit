@@ -43,6 +43,18 @@ describe('dashboard/dashboard-executive-summary', () => {
     expect(view.container.textContent).not.toContain('Emma Wilson')
   })
 
+  it('writes Cost per request in dollars, like Revenue', async () => {
+    const view = render(DashboardExecutiveSummary)
+    const tile = Array.from(view.container.querySelectorAll('[data-testid="stat-tile"]')).find(
+      (node) => node.textContent?.includes('Cost per request')
+    ) as HTMLElement
+    await waitFor(() =>
+      expect(tile.querySelector('[data-testid="stat-tile__value"]')?.textContent).toContain(
+        '$0.0022'
+      )
+    )
+  })
+
   it('gives every sample note the initials of its author', () => {
     for (const note of sampleNotes) {
       const initials = note.author
