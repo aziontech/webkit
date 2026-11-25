@@ -13,6 +13,7 @@
     <Button
       label="Search"
       variant="primary"
+      size="medium"
     />
   </InputGroupRoot>
 </template>

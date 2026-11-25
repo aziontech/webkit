@@ -17,7 +17,6 @@
       <div class="flex min-w-0 flex-1">
         <Input
           model-value="azion create edge-function"
-          size="large"
           class="w-full"
           aria-label="Create function command"
           :spellcheck="false"
