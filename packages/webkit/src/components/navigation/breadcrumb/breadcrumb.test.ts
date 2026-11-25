@@ -58,7 +58,7 @@ const inBox = (
 const folded = (props: Record<string, unknown> = {}, attrs: Record<string, unknown> = {}) =>
   renderMounted(inBox(320, props, attrs))
 
-const shown = (container: HTMLElement) =>
+const shown = (container: Element) =>
   Array.from(container.querySelectorAll<HTMLElement>('[data-slot="label"]')).map((el) =>
     el.textContent?.trim()
   )

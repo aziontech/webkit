@@ -168,7 +168,8 @@
     "kbd": {
       "use": "Kbd",
       "owners": {
-        "src/components/content/kbd": "Kbd: the keyboard key."
+        "src/components/content/kbd": "Kbd: the keyboard key.",
+        "src/components/navigation/dropdown-menu/dropdown-menu-item": "DropdownMenu.Item: prints its shortcut hint as one plain key run, so every menu stays in budget without importing Kbd (A6-073)."
       }
     }
   },
