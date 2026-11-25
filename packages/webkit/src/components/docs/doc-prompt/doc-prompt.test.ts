@@ -160,7 +160,8 @@ describe('DocPrompt', () => {
           attrs: { dir: 'rtl' }
         })
         const fade = await waitFor(() => getByTestId('doc-prompt__fade-end'))
-        expect(fade.getAttribute('data-direction')).toBe('ltr')
+        expect(fade.style.backgroundImage).toContain('to left')
+        expect(fade.parentElement?.getAttribute('dir')).toBe('ltr')
       } finally {
         style.remove()
       }

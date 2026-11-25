@@ -2365,3 +2365,5 @@ Budget-raise: console-application-scene 127.1 KB → 127.2 KB (measured 127.13 K
 Budget-raise: console-trace-scene 86.3 KB → 86.4 KB (measured 86.31 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
 
 Budget-raise: console-layout 87.2 KB → 87.3 KB (measured 87.22 KB): Brand gained the treatment prop (color, monochrome, knockout) and draws the extended tagline in the text colour so the logo reads on white (decision BRAND-2); every entry that renders Brand carries the few extra bytes.
+
+Budget-raise: doc-prompt 13.5 KB → 13.7 KB (measured 13.66 KB): audit-6 lane L07 (A6-086, A6-087, A6-088) isolates the prompt direction with dir=auto and draws the line fades from the prompt's resolved direction, lets the line shape wrap below the sm container width, and moves Show more after the copy control; about 0.2 KB of logic and classes, nothing left to cut without dropping one of the fixes.

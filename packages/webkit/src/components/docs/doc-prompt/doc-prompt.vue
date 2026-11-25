@@ -85,12 +85,9 @@
   const capOverride = ref('')
   const lineDirection = ref<'ltr' | 'rtl'>('ltr')
 
-  const lineFade = (edge: 'start' | 'end') => {
-    const towardStart = (edge === 'start') === (lineDirection.value === 'ltr')
-    return {
-      backgroundImage: `linear-gradient(to ${towardStart ? 'right' : 'left'}, var(--doc-prompt-background), transparent)`
-    }
-  }
+  const lineFade = (edge: 'start' | 'end') => ({
+    backgroundImage: `linear-gradient(to ${(edge === 'start') === (lineDirection.value === 'ltr') ? 'right' : 'left'}, var(--doc-prompt-background), transparent)`
+  })
 
   const singleLine = computed(() => props.variant === 'line' || blockFitsOneLine.value)
 
@@ -283,7 +280,6 @@
           />
           <div
             v-if="variant === 'line' && (overflow === 'start' || overflow === 'both')"
-            :data-direction="lineDirection"
             :data-testid="`${testId}__fade-start`"
             :style="lineFade('start')"
             class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg)"
@@ -291,7 +287,6 @@
           />
           <div
             v-if="variant === 'line' && (overflow === 'end' || overflow === 'both')"
-            :data-direction="lineDirection"
             :data-testid="`${testId}__fade-end`"
             :style="lineFade('end')"
             class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg)"
