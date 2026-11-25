@@ -203,6 +203,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/composables/use-data-table-resize.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/composables/use-data-table-row-focus.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/composables/use-data-table-row-heights.ts";
+@source "../node_modules/@aziontech/webkit/src/components/data/data-table/composables/use-data-table-row-tab-order.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/composables/use-data-table-rows.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/composables/use-data-table-state.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/composables/use-data-table-view.ts";
@@ -215,6 +216,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/lib/data-table-classes.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/lib/measure-columns.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/lib/row-offsets.ts";
+@source "../node_modules/@aziontech/webkit/src/components/data/data-table/lib/row-tab-order.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/lib/row-tracker.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/lib/slot-part-props.ts";
 @source "../node_modules/@aziontech/webkit/src/components/data/data-table/lib/table-state.ts";
@@ -552,6 +554,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/overlay/popover/popover-trigger/popover-trigger.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/popover/popover.vue";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue";
+@source "../node_modules/@aziontech/webkit/src/components/overlay/tooltip/lib/lazy-tooltip.ts";
 @source "../node_modules/@aziontech/webkit/src/components/overlay/tooltip/tooltip.vue";
 @source "../node_modules/@aziontech/webkit/src/components/provider/config-provider/config-provider.vue";
 @source "../node_modules/@aziontech/webkit/src/composables/use-ai-chat-tools/index.ts";

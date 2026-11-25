@@ -675,7 +675,7 @@
           "path": "src/blocks/edit-resource-policy-groups.vue",
           "source": "blocks/edit/edit-resource/parts/policy-groups.vue",
           "variant": "Data",
-          "checksum": "sha256:46e5a6359772243cba447d1bd7a2bf8fdd3223f78dcc14003544887a43262aac"
+          "checksum": "sha256:f989b44a7dcc75ab5b684da2b2d1f4c4fb16f1b899be9739cf3bd974edf5b28f"
         },
         {
           "path": "src/blocks/edit-resource-settings-leave-dialog.vue",
@@ -709,7 +709,7 @@
             "./parts/settings-save-bar.vue": "./edit-resource-settings-save-bar.vue",
             "./sample": "./edit-resource.sample"
           },
-          "checksum": "sha256:5459efa773cea57ee853f149bfec30a4c5f6a9f5ee33b94a9367326b4da2b5fe"
+          "checksum": "sha256:2ea55883a2ef913711b4bf96999d75e24876c01adf82e842f3eacdd28af52bfe"
         }
       ]
     },
