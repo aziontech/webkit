@@ -90,5 +90,5 @@ export function useBreadcrumbCollapse(
     }
   })
 
-  return { level: readonly(level) as Readonly<Ref<BreadcrumbCollapseLevel>> }
+  return { level: readonly(level) }
 }

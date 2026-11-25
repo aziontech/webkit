@@ -142,9 +142,7 @@
     :data-content="content"
     :data-pattern="showPattern ? pattern : undefined"
     :role="hasImage ? undefined : 'img'"
-    :aria-label="
-      hasImage ? undefined : (attrs['aria-label'] as string | undefined) || accessibleLabel
-    "
+    :aria-label="hasImage ? undefined : String(attrs['aria-label'] ?? '') || accessibleLabel"
     :data-presence="presence || undefined"
   >
     <span class="flex size-full items-center justify-center overflow-hidden rounded-[inherit]">

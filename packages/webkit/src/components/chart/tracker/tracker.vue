@@ -169,7 +169,7 @@
   let release = (): void => {}
 
   function onTapOutside(event: globalThis.PointerEvent) {
-    if (rootEl.value?.contains(event.target as globalThis.Node)) return
+    if (event.target instanceof globalThis.Node && rootEl.value?.contains(event.target)) return
     release()
     setActiveIndex(null)
   }
