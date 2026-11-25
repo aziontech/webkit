@@ -103,7 +103,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
         const { scroll, viewport, start, end } = parts(container, id)
         expect(viewport.scrollWidth).toBeGreaterThan(viewport.clientWidth)
 
-        expect(scroll.dataset['overflowEnd']).toBeTruthy()
+        expect(scroll.hasAttribute('data-overflow-end')).toBe(true)
         expect(shown(end)).toBe(true)
         expect(getComputedStyle(end!).backgroundImage).toContain('gradient')
         const box = scroll.getBoundingClientRect()
@@ -115,7 +115,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
         expect(shown(start)).toBe(false)
 
         await scrollTo(viewport, dir, 'middle')
-        expect(scroll.dataset['overflowStart']).toBeTruthy()
+        expect(scroll.hasAttribute('data-overflow-start')).toBe(true)
         expect(shown(start)).toBe(true)
         expect(shown(end)).toBe(true)
 
@@ -154,7 +154,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
       )
       await settle()
       const { scroll, end } = parts(container, 'data-table')
-      expect(scroll.dataset['overflowEnd']).toBeTruthy()
+      expect(scroll.hasAttribute('data-overflow-end')).toBe(true)
       const frozen = Array.from(
         container.querySelectorAll<HTMLElement>('[role="columnheader"][data-frozen="end"]')
       ).map((el) => el.getBoundingClientRect())

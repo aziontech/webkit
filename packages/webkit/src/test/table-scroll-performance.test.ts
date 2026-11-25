@@ -4,6 +4,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { commands, server } from 'vitest/browser'
 
+import StickyColumn from '../../examples/data-table/sticky-column.vue'
 import VirtualRows from '../../examples/data-table/virtual-rows.vue'
 import budgets from '../../perf-budgets.json'
 import DataTableRoot from '../components/data/data-table/data-table.vue'
@@ -94,4 +95,49 @@ describe('virtual DataTable scroll performance (styled)', () => {
       expect(ratio).toBeLessThanOrEqual(budget.maxRatio)
     }
   )
+})
+
+async function sidewaysCost(scroller: HTMLElement): Promise<number> {
+  const before = await commands.styleRecalcMs()
+  for (let i = 0; i < STEPS; i++) {
+    scroller.scrollLeft += i < STEPS / 2 ? 2 : -2
+    scroller.dispatchEvent(new Event('scroll'))
+    await frame()
+  }
+  return (await commands.styleRecalcMs()) - before
+}
+
+describe('frozen-column DataTable sideways scroll (styled)', () => {
+  it('scrolling sideways through the fade ramp toggles the scroll frame state only at the edges', async () => {
+    const { container } = render(StickyColumn, { attrs: { style: 'width: 390px' } })
+    await frame()
+    await frame()
+    const scroll = container.querySelector<HTMLElement>('[data-testid$="__scroll"]')!
+    const viewport = container.querySelector<HTMLElement>('[data-testid$="__viewport"]')!
+    const scroller =
+      [viewport, ...viewport.querySelectorAll<HTMLElement>('*')].find(
+        (node) => node.scrollWidth > node.clientWidth + 100
+      ) ?? viewport
+    expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth)
+    const writes: string[] = []
+    const observer = new MutationObserver((records) => {
+      for (const record of records) writes.push(record.attributeName ?? '')
+    })
+    observer.observe(scroll, { attributeFilter: ['data-overflow-start', 'data-overflow-end'] })
+
+    await sidewaysCost(scroller)
+    observer.disconnect()
+    expect(writes.length).toBeLessThanOrEqual(2)
+    expect(scroll.getAttribute('data-overflow-end')).toBe('')
+
+    const sideways = await sidewaysCost(scroller)
+    const full = await fullRestyleCost(scroll)
+    const ratio = sideways / full
+    const budget = budgets.styleRecalc['data-table-frozen-sideways-scroll']
+    console.warn(
+      `[perf] data-table-frozen-sideways-scroll: style recalc ${sideways.toFixed(1)} ms over ${STEPS} frames, a full table restyle per frame ${full.toFixed(1)} ms, ratio ${ratio.toFixed(2)} (budget ${budget.maxRatio})`
+    )
+    if (server.browser !== 'chromium') return
+    expect(ratio).toBeLessThanOrEqual(budget.maxRatio)
+  })
 })
