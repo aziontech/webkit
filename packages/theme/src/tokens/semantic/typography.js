@@ -42,7 +42,7 @@ export const typography = {
   },
   'text-amount-md': {
     textWrapStyle: 'balance',
-    fontSize: { _: fontSize.base, sm: fontSize.xl, md: fontSize['2xl'] },
+    fontSize: { _: fontSize.xl, md: fontSize['2xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
     letterSpacing: '-0.08em'
