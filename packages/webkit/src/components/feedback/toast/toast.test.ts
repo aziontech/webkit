@@ -8,6 +8,7 @@ import ProgressExample from '../../../../examples/toast/progress.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ConfigProvider from '../../provider/config-provider/config-provider.vue'
 import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
+import { edgeInset } from './lib/toast-layout'
 import ToastAction from './toast-action/toast-action.vue'
 import ToastClose from './toast-close/toast-close.vue'
 import ToastDescription from './toast-description/toast-description.vue'
@@ -302,10 +303,19 @@ describe('Toast', () => {
       it('anchors bottom-end to the right edge in ltr', async () => {
         await mountToaster({ position: 'bottom-end', duration: 0 })
         const region = await regionFor('bottom-end')
-        expect(region!.style.right).toBe('var(--spacing-md)')
+        expect(region!.style.right).toBe(edgeInset('right'))
         expect(region!.style.left).toBe('auto')
         const start = await regionFor('bottom-start')
-        expect(start!.style.left).toBe('var(--spacing-md)')
+        expect(start!.style.left).toBe(edgeInset('left'))
+      })
+
+      it('keeps the stack clear of the safe-area insets on a notched phone', async () => {
+        await mountToaster({ position: 'bottom-end', duration: 0 })
+        const bottom = await regionFor('bottom-end')
+        expect(bottom!.style.bottom).toContain('env(safe-area-inset-bottom)')
+        expect(bottom!.style.right).toContain('env(safe-area-inset-right)')
+        const top = await regionFor('top-start')
+        expect(top!.style.top).toBe('max(var(--spacing-md), env(safe-area-inset-top))')
       })
 
       it('mirrors to the left edge when the document is rtl', async () => {
@@ -313,10 +323,10 @@ describe('Toast', () => {
         await mountToaster({ position: 'bottom-end', duration: 0 })
         const region = await regionFor('bottom-end')
         expect(region!.getAttribute('data-position')).toBe('bottom-end')
-        expect(region!.style.left).toBe('var(--spacing-md)')
+        expect(region!.style.left).toBe(edgeInset('left'))
         expect(region!.style.right).toBe('auto')
         const start = await regionFor('top-start')
-        expect(start!.style.right).toBe('var(--spacing-md)')
+        expect(start!.style.right).toBe(edgeInset('right'))
       })
 
       it('mirrors under an rtl ConfigProvider', async () => {
@@ -331,7 +341,7 @@ describe('Toast', () => {
         await nextTick()
         const region = await regionFor('bottom-end')
         expect(region!.getAttribute('dir')).toBe('rtl')
-        expect(region!.style.left).toBe('var(--spacing-md)')
+        expect(region!.style.left).toBe(edgeInset('left'))
         expect(region!.style.right).toBe('auto')
       })
     })

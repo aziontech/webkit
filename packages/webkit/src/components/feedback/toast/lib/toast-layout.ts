@@ -69,6 +69,9 @@ const stackHeight = (
   return `${frontHeight + Math.min(vis.length - 1, 2) * 12}px`
 }
 
+export const edgeInset = (edge: 'top' | 'bottom' | 'left' | 'right'): string =>
+  `max(var(--spacing-md), env(safe-area-inset-${edge}))`
+
 export const toastRegionStyle = (
   region: ToastRegion,
   heights: Record<string, number>,
@@ -86,12 +89,12 @@ export const toastRegionStyle = (
     zIndex: '1100',
     width: '356px',
     maxWidth: 'calc(100vw - 2 * var(--spacing-md))',
-    top: top ? 'var(--spacing-md)' : 'auto',
+    top: top ? edgeInset('top') : 'auto',
     bottom: top
       ? 'auto'
-      : 'calc(var(--spacing-md) + var(--toast-offset-bottom, 0%) + var(--save-bar-height, 0%))',
-    left: center ? '50%' : leftSide ? 'var(--spacing-md)' : 'auto',
-    right: rightSide ? 'var(--spacing-md)' : 'auto',
+      : `calc(${edgeInset('bottom')} + var(--toast-offset-bottom, 0%) + var(--save-bar-height, 0%))`,
+    left: center ? '50%' : leftSide ? edgeInset('left') : 'auto',
+    right: rightSide ? edgeInset('right') : 'auto',
     transform: center ? 'translateX(-50%)' : 'none',
     height: stackHeight(region, heights, visible, expanded)
   }
