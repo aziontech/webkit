@@ -1423,6 +1423,7 @@ export const es: Messages = {
     details: 'Detalles',
     connections: 'Conexiones',
     connection: '{from} a {to}',
+    route: 'A {to}',
     emptyTitle: 'Aún no hay nada conectado.',
     loading: 'Cargando el diagrama'
   },

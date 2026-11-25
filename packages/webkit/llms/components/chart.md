@@ -141,7 +141,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_ (the span flows through the root's `v-model:range`).
   - Slots: _none_.
-- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
+- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. A band label moves above the band (or below it) when a shown series crosses the label's corner at the last category, so the data line never runs through it; it stays inside when no place is clear. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
   - Props: `value?: number` (default `undefined` — the line position), `from?: number` and `to?: number` (default `undefined` — the band bounds, in either order; used when `value` is unset), `label?: string` (default `''`), `severity?: ChartThresholdSeverity` (`'neutral'`, a status `'success' | 'warning' | 'danger' | 'info'`, or a findings level `'severity-critical'` … `'severity-info'`; default `'neutral'` — `neutral` draws in `var(--chart-label)`, a status in its `var(--chart-status-*)` role, a findings level in `var(--severity-*)`). It is the severity map of `ChartThreshold`, the type GaugeChart bands use, so a gauge band and a reference line never disagree. Use Chart.Reference for threshold lines or bands inside a Chart; use GaugeChart bands for a single reading.
   - Events: _none_.
   - Slots: _none_.
@@ -154,7 +154,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark type), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
-  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
+  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area); on a coarse pointer they grow to 44 px tall, since wrapped rows would overlap a hit area (TT01).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
 
@@ -168,6 +168,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## States
 
+- Error pattern of the chart family: a chart tall enough for it shows the centred error card (a bordered small `EmptyState` with the cause and a secondary `Try again` button, as BarList, DonutChart and DataTable do) through its `error` slot; only a strip too short for the card (Tracker) keeps an inline banner. The retry label is always `Try again`.
 - Visual states: `default`, `loading` (Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, filling the plot height), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active` on the root mirror the state; priority loading, then error, then empty, then marks
 - `data-orientation`: `vertical` | `horizontal`
@@ -226,7 +227,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 - Container queries: none; the plot measures its own box and fills its container (`height` is a minimum).
 - Narrow (≤ 640 px or a narrow container): category labels thin to the width they have; the legend wraps.
-- Touch: legend buttons ≥ 24 px; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. A tap (touch or pen) sets the active index under the finger, so the tooltip and crosshair show and stay after the finger lifts; a tap outside the plot clears it, and the tap's click fires `point-click` for that point. Hover-only readings are also reachable from the keyboard and in the table twin.
+- Touch: legend buttons 44 px tall on a coarse pointer; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. A tap (touch or pen) sets the active index under the finger, so the tooltip and crosshair show and stay after the finger lifts; a tap outside the plot clears it, and the tap's click fires `point-click` for that point. Hover-only readings are also reachable from the keyboard and in the table twin.
 - Reflow: no horizontal scroll at 320 px; the hidden twin sits in an `sr-only` box.
 
 ## Examples

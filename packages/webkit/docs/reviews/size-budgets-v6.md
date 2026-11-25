@@ -2441,3 +2441,41 @@ Budget-raise: client-story-columns-section 9.25 KB → 9.5 KB (measured 9.49 KB)
 Budget-raise: feature-tabs-section 60.6 KB → 60.65 KB (measured 60.62 KB): the band scene sits inside the pane's spacing-xl inset in its own wrapper (A6-119).
 
 Budget-raise: closing-call-to-action-section 9.85 KB → 9.9 KB (measured 9.86 KB): CallToAction's panel copy takes a fixed measure so stacked bands start their actions at one place (A6-109).
+
+## Audit-6 fixes, lane L04 (2026-11-25)
+
+Budget-raise: data-table 58.45 KB → 58.6 KB (measured 58.54 KB): table rows repaint their bottom rule above the sideways-scroll fade so a frozen column leaves no notch, and plain cell text is dir=auto (A6-059, A6-061).
+
+Budget-raise: console-application-scene 127.2 KB → 127.3 KB (measured 127.23 KB): the scene renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: console-trace-scene 86.4 KB → 87.05 KB (measured 87.01 KB): the scene renders LogViewer, whose header now hosts the copy control and a loading Skeleton, and Table rows that repaint their rule above the scroll fade (A6-049, A6-065, A6-059).
+
+Budget-raise: listing-index-section 43.6 KB → 43.7 KB (measured 43.63 KB): the section renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: listing-table-section 26.7 KB → 26.75 KB (measured 26.71 KB): the section renders Table rows, which now repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: chart 27.55 KB → 27.8 KB (measured 27.76 KB): ChartReference moves a band label off the band when a series crosses it, and legend buttons grow to 44 px on a coarse pointer (A6-056, A6-170).
+
+Budget-raise: chart-legend 1.5 KB → 1.55 KB (measured 1.51 KB): legend buttons grow to 44 px on a coarse pointer (A6-170).
+
+Budget-raise: chart-reference 2 KB → 2.15 KB (measured 2.11 KB): a band label checks the shown series at the last category and moves above or below the band when the line would cross it (A6-056); a tighter rewrite measured larger.
+
+Budget-raise: tracker 6.4 KB → 6.6 KB (measured 6.54 KB): a touch tap opens the day readout and a capture listener closes it on a tap outside, and the error banner is a slot (A6-064, A6-060); onClickOutside measured 0.7 KB more.
+
+Budget-raise: tree 11 KB → 11.1 KB (measured 11.03 KB): labels and sizes are dir=auto so they keep their order in right-to-left (A6-061).
+
+Budget-raise: locales-es 13.1 KB → 13.15 KB (measured 13.10 KB): new flowDiagram.route string for the stacked FlowDiagram routes (A6-052).
+
+Budget-raise: code-editor 11.6 KB → 11.65 KB (measured 11.60 KB): problem messages wrap instead of truncating (A6-058).
+
+Budget-raise: log-viewer 44 KB → 44.45 KB (measured 44.41 KB): LogViewerHeader hosts the copy control and a loading Skeleton (A6-049, A6-065).
+
+Budget-raise: log-viewer-header 5.15 KB → 18.1 KB (measured 18.06 KB): the header now renders the copy control (CopyButton, moved from LogViewerContent so the log body keeps its full width on a phone) and a loading Skeleton (A6-049, A6-057, A6-065); loading CopyButton as an async chunk added chunk overhead to every entry that renders LogViewer, so it stays static.
+
+Budget-raise: table 9 KB → 9.05 KB (measured 9.01 KB): rows repaint their bottom rule above the sideways-scroll fade (A6-059).
+
+Budget-raise: table-head-cell 5.45 KB → 5.5 KB (measured 5.46 KB): the sort button drops its generic aria-label when the header names it (A6-062).
+
+Budget-raise: flow-diagram 22.1 KB → 22.25 KB (measured 22.20 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).
+
+Budget-raise: flow-diagram-root 19.85 KB → 20 KB (measured 19.95 KB): a stacked diagram lists the edges that skip a step as routes under their source card (A6-052).

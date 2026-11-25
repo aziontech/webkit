@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 2387476ea1ce53a1744a9c49f84efbd17c18006cdeceb0db9943e37be569e7f0
+checksum: cc678ee7defd37484a69063ef262535e04fc811c376adb896d4cd92ba4381f80
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -117,6 +117,7 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 
 ## States
 
+- Error pattern of the chart family: a chart tall enough for it shows the centred error card (a bordered small `EmptyState` with the cause and a secondary `Try again` button, as BarList, DonutChart and DataTable do) through its `error` slot; only a strip too short for the card (Tracker) keeps an inline banner. The retry label is always `Try again`.
 - Visual states: `default`, `loading` (Skeleton at the map ratio), `error` (Alert), `empty` (EmptyState), `refetching`, `table-view`, `active` (a place is hovered or focused; the others dim)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active`, `data-view` on the root
 - `data-geometry`: `loading` | `ready` while the country shapes chunk loads (only when `regions` is set)

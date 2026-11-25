@@ -124,11 +124,16 @@
   <div
     v-bind="attrs"
     :data-testid="testId"
-    :data-copyable="(ctx.copyable.value && !ctx.loading.value && !ctx.error.value) || null"
+    :data-copyable="
+      (ctx.copyable.value && !ctx.loading.value && !ctx.error.value && !ctx.headerMounted.value) ||
+      null
+    "
     class="group/log-viewer-content relative min-h-0 flex-1 data-[copyable]:min-h-13 data-[copyable]:bg-(--bg-canvas)"
   >
     <div
-      v-if="ctx.copyable.value && !ctx.loading.value && !ctx.error.value"
+      v-if="
+        ctx.copyable.value && !ctx.loading.value && !ctx.error.value && !ctx.headerMounted.value
+      "
       class="absolute end-(--spacing-sm) top-(--spacing-sm) z-3"
       :data-testid="`${ctx.testId.value}__copy-anchor`"
     >

@@ -8789,6 +8789,13 @@
      "doc": "Two-way value (`v-model:activeIndex`)."
     }
    ],
+   "slots": [
+    {
+     "name": "error",
+     "scope": "—",
+     "notes": "Replaces the inline error banner shown in place of the blocks while `error` is set. The strip is too short for the chart family's centred error card, so it keeps a banner; the slot lets a page add the family's `Try again` action (a danger `Alert` with `action-label=\"Try again\"`)."
+    }
+   ],
    "surface": "app",
    "examplesFile": "catalog/examples/tracker.json",
    "docsFile": "catalog/components/tracker.json"
@@ -11317,7 +11324,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control: a CopyButton at the end of LogViewerHeader, or pinned top-right beside the log body when no header is composed."
     },
     {
      "name": "disabled",
@@ -11426,7 +11433,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the copy-to-clipboard control (a CopyButton pinned top-right beside the log body in LogViewerContent)."
+     "doc": "Shows the copy-to-clipboard control: a CopyButton at the end of LogViewerHeader, or pinned top-right beside the log body when no header is composed."
     },
     {
      "name": "disabled",

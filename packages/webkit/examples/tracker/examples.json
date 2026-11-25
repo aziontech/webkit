@@ -19,7 +19,7 @@
     },
     {
       "name": "Error",
-      "summary": "`error` renders the message inline in place of the blocks, announced as an alert.",
+      "summary": "`error` replaces the blocks with an inline banner, announced as an alert; the strip is too short for the chart family's error card, so the `error` slot holds a danger Alert whose Try again action loads the history again.",
       "file": "error.vue"
     },
     {

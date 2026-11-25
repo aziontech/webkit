@@ -18,7 +18,7 @@
   }>()
 
   const ITEM_CLASS =
-    "relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] " +
+    "relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] pointer-coarse:min-h-11 pointer-coarse:before:hidden " +
     'gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     'data-[hidden]:text-(--text-muted)'

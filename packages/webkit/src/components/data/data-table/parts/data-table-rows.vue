@@ -18,7 +18,8 @@
     'data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] ' +
     'data-[live-boundary]:shadow-[inset_0_2px_0_var(--success)] ' +
     'outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
-  const STACKED_ROW_CLASS = 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)'
+  const STACKED_ROW_CLASS =
+    'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs) before:hidden'
   const STACKED_CELL_CLASS = 'static! before:hidden! after:hidden!'
   const STRIPE_CLASS = '[--table-row-bg:var(--bg-surface-raised)]'
 
@@ -235,6 +236,7 @@
           />
           <span
             v-else
+            dir="auto"
             class="min-w-0 flex-1 truncate"
             >{{ cell.getValue() }}</span
           >

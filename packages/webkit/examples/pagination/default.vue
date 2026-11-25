@@ -5,7 +5,7 @@
 <template>
   <Pagination>
     <template #info>
-      <Pagination.Description>Showing 1 to 10 of 20 entries</Pagination.Description>
+      <Pagination.Description>Showing 1 to 10 of 87 entries</Pagination.Description>
     </template>
 
     <Pagination.Button
@@ -16,11 +16,25 @@
     <Pagination.Button
       type="number"
       active
+      aria-label="Page 1"
       >1</Pagination.Button
     >
-    <Pagination.Button type="number">2</Pagination.Button>
-    <Pagination.Button type="number">3</Pagination.Button>
+    <Pagination.Button
+      type="number"
+      aria-label="Page 2"
+      >2</Pagination.Button
+    >
+    <Pagination.Button
+      type="number"
+      aria-label="Page 3"
+      >3</Pagination.Button
+    >
     <Pagination.Button type="more" />
+    <Pagination.Button
+      type="number"
+      aria-label="Page 9"
+      >9</Pagination.Button
+    >
     <Pagination.Button
       type="next"
       aria-label="Next page"

@@ -308,6 +308,31 @@ describe('Chart', () => {
       expect(summaryOf(view)).toContain('Normal from 300 to 400.')
     })
 
+    it('moves a band label off the band when the series crosses its corner', async () => {
+      const view = mount({ series: [threats[0]], min: 0, max: 2000 }, () => [
+        h(ChartLine),
+        h(ChartReference, { from: 1400, to: 1600, label: 'Normal' })
+      ])
+      await measured(view)
+      const band = view.getByTestId('chart-reference__band')
+      const label = view.getByTestId('chart-reference__label')
+      const top = Number(band.getAttribute('y'))
+      expect(Number(label.getAttribute('y'))).toBeLessThan(top)
+      expect(label.getAttribute('dominant-baseline')).toBeNull()
+    })
+
+    it('keeps a band label inside the band when the series stays clear of it', async () => {
+      const view = mount({ series: [threats[0]], min: 0, max: 2000 }, () => [
+        h(ChartLine),
+        h(ChartReference, { from: 200, to: 800, label: 'Normal' })
+      ])
+      await measured(view)
+      const band = view.getByTestId('chart-reference__band')
+      const label = view.getByTestId('chart-reference__label')
+      expect(Number(label.getAttribute('y'))).toBeGreaterThan(Number(band.getAttribute('y')))
+      expect(label.getAttribute('dominant-baseline')).toBe('hanging')
+    })
+
     it('skips a reference outside a fixed axis and names an unlabelled one', async () => {
       const view = mount({ max: 1000 }, () => [
         h(ChartReference, { value: 5000 }),

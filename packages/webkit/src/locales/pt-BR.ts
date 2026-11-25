@@ -1423,6 +1423,7 @@ export const ptBR: Messages = {
     details: 'Detalhes',
     connections: 'Conexões',
     connection: '{from} para {to}',
+    route: 'Para {to}',
     emptyTitle: 'Nada conectado ainda.',
     loading: 'Carregando o diagrama'
   },

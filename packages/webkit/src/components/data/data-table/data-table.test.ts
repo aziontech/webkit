@@ -46,6 +46,13 @@ const columns = [
 ]
 
 describe('DataTable', () => {
+  it('isolates the direction of plain cell text, so an email truncates from its end in right-to-left', () => {
+    const { container } = render(Default, { attrs: { dir: 'rtl' } })
+    const texts = container.querySelectorAll<HTMLElement>('[role="cell"] > span.truncate')
+    expect(texts.length).toBeGreaterThan(0)
+    for (const text of texts) expect(text.getAttribute('dir')).toBe('auto')
+  })
+
   describe('frame and accessibility', () => {
     // A realistic composed tree wired through the dot-notation sub-components.
     const CompositionTree = defineComponent({

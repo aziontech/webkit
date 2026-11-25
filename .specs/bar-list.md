@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 6a197a987316cacd34b4fe5a88f21e979953822bcd1390e6b6bcecc5a4d9f95c
+checksum: b0e7a57a47d9099c978a8d8113a47477ce1f0d7455afbc87c2726d44e3893085
 ---
 
 # BarList — Component Spec
@@ -126,15 +126,15 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 
 ## Tokens
 
-| Region    | Token (DESIGN.md)                                                                                                                                  |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| bar fill  | the `color` role (`var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`, `var(--chart-status-*)`) tinted over the surface, ending on a 2px cap in the full hue |
-| name      | `.text-label-md`, `var(--text-default)`                                                                                                            |
-| value     | `.text-label-md`, `tabular-nums`, `var(--text-default)`                                                                                            |
-| row hover | `var(--bg-hover)`                                                                                                                                  |
-| shape     | `var(--shape-control)`                                                                                                                             |
-| spacing   | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                                     |
-| ring      | `var(--ring-color)`                                                                                                                                |
+| Region    | Token (DESIGN.md)                                                                                                                                                                            |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| bar fill  | the `color` role (`var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`, `var(--chart-status-*)`) tinted over the surface, underlined by a 2px rule in the full hue |
+| name      | `.text-label-md`, `var(--text-default)`                                                                                                                                                      |
+| value     | `.text-label-md`, `tabular-nums`, `var(--text-default)`                                                                                                                                      |
+| row hover | `var(--bg-hover)`                                                                                                                                                                            |
+| shape     | `var(--shape-control)`                                                                                                                                                                       |
+| spacing   | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                                                                               |
+| ring      | `var(--ring-color)`                                                                                                                                                                          |
 
 ## Theme gaps
 
@@ -150,7 +150,7 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on interactive rows (the offset takes the surface color, so it never shows as a white gap in the dark theme).
 - `aria-busy` on the root while `loading` or `refetching`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
-- The bar ends on a 2px inline-end cap in the full hue (a solid mark, APCA Lc 30 or more on the surface in both themes), so the length reads in dark, where the tint alone stays under the mark target.
+- The bar is underlined by a 2px rule in the full hue along its bottom edge (a solid mark, APCA Lc 30 or more on the surface in both themes), so the length reads in dark, where the tint alone stays under the mark target, and the rule never crosses the row label the way an inline-end cap did on short bars. The name and the value are `dir="auto"`, so a path or a number keeps its own order in right-to-left.
 - Interactive rows are 32px tall and full width; a transparent hit area (`before:` pseudo-element, 4px above and below) makes the pointer target 40px without changing the look.
 - Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 

@@ -103,7 +103,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
         const { scroll, viewport, start, end } = parts(container, id)
         expect(viewport.scrollWidth).toBeGreaterThan(viewport.clientWidth)
 
-        expect(scroll.dataset['overflowEnd']).toBeTruthy()
+        expect(scroll.hasAttribute('data-overflow-end')).toBe(true)
         expect(shown(end)).toBe(true)
         expect(getComputedStyle(end!).backgroundImage).toContain('gradient')
         const box = scroll.getBoundingClientRect()
@@ -115,7 +115,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
         expect(shown(start)).toBe(false)
 
         await scrollTo(viewport, dir, 'middle')
-        expect(scroll.dataset['overflowStart']).toBeTruthy()
+        expect(scroll.hasAttribute('data-overflow-start')).toBe(true)
         expect(shown(start)).toBe(true)
         expect(shown(end)).toBe(true)
 
@@ -145,6 +145,42 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
     expect(shown(end)).toBe(false)
   })
 
+  it('paints each row rule above the end fade, so a frozen actions column leaves no notch', async () => {
+    const { container } = mount(() => h(TableCellPresets as Component), 'ltr')
+    await settle()
+    const { scroll, end } = parts(container, 'data-table')
+    expect(scroll.hasAttribute('data-overflow-end')).toBe(true)
+    expect(shown(end)).toBe(true)
+    const fadeZ = Number(getComputedStyle(end!).zIndex)
+    const rows = Array.from(container.querySelectorAll<HTMLElement>('[role="row"]'))
+    const ruled = rows.filter(
+      (row) => Number.parseFloat(getComputedStyle(row).borderBottomWidth) > 0
+    )
+    expect(ruled.length).toBeGreaterThan(1)
+    for (const row of ruled) {
+      const rule = getComputedStyle(row, '::before')
+      expect(rule.position).toBe('absolute')
+      expect(Number(rule.zIndex)).toBeGreaterThan(fadeZ)
+      expect(Number.parseFloat(rule.height)).toBeGreaterThan(0)
+      expect(Number.parseFloat(rule.bottom)).toBeCloseTo(-Number.parseFloat(rule.height), 1)
+      expect(rule.backgroundColor).toBe(getComputedStyle(row).borderBottomColor)
+    }
+  })
+
+  it('keeps the scroll fades off an empty DataTable, so the empty state reads in full', async () => {
+    const { container } = mount(
+      () => h(DataTable, { data: [], columns: twoEndFrozen, rowKey: 'id', ariaLabel: 'Workloads' }),
+      'ltr',
+      320
+    )
+    await settle()
+    const { scroll, start, end } = parts(container, 'data-table')
+    expect(container.querySelector('[data-testid="data-table__empty"]')).toBeTruthy()
+    expect(scroll.hasAttribute('data-overflow-end')).toBe(false)
+    expect(shown(start)).toBe(false)
+    expect(shown(end)).toBe(false)
+  })
+
   it.each(['ltr', 'rtl'] as const)(
     'puts the end fade beside the frozen end columns, which draw no cut (%s)',
     async (dir) => {
@@ -154,7 +190,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
       )
       await settle()
       const { scroll, end } = parts(container, 'data-table')
-      expect(scroll.dataset['overflowEnd']).toBeTruthy()
+      expect(scroll.hasAttribute('data-overflow-end')).toBe(true)
       const frozen = Array.from(
         container.querySelectorAll<HTMLElement>('[role="columnheader"][data-frozen="end"]')
       ).map((el) => el.getBoundingClientRect())

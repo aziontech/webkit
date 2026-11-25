@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 54d186223dceac8a5a1d4cf4a408ffea5cc1f5cc7dd443f6ffe3d02e6349547e
+checksum: 9ad35d4b3766c4af24216457be1f608bc0cf5a98a601b09f76f2fa0f5763922a
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -161,7 +161,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_ (the span flows through the root's `v-model:range`).
   - Slots: _none_.
-- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
+- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. A band label moves above the band (or below it) when a shown series crosses the label's corner at the last category, so the data line never runs through it; it stays inside when no place is clear. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
   - Props: `value?: number` (default `undefined` — the line position), `from?: number` and `to?: number` (default `undefined` — the band bounds, in either order; used when `value` is unset), `label?: string` (default `''`), `severity?: ChartThresholdSeverity` (`'neutral'`, a status `'success' | 'warning' | 'danger' | 'info'`, or a findings level `'severity-critical'` … `'severity-info'`; default `'neutral'` — `neutral` draws in `var(--chart-label)`, a status in its `var(--chart-status-*)` role, a findings level in `var(--severity-*)`). It is the severity map of `ChartThreshold`, the type GaugeChart bands use, so a gauge band and a reference line never disagree. Use Chart.Reference for threshold lines or bands inside a Chart; use GaugeChart bands for a single reading.
   - Events: _none_.
   - Slots: _none_.
@@ -174,7 +174,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark type), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
-  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
+  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area); on a coarse pointer they grow to 44 px tall, since wrapped rows would overlap a hit area (TT01).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
 
@@ -204,7 +204,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 | Prop               | Type                            | Default         | Required | JSDoc                                                                                                                                                  |
 | ------------------ | ------------------------------- | --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `series`           | `ChartSeries[]`                 | `[]`            | false    | Series to plot. The first eight take the fixed categorical slots in order; the rest fold into Other.                                                     |
+| `series`           | `ChartSeries[]`                 | `[]`            | false    | Series to plot. The first eight take the fixed categorical slots in order; the rest fold into Other.                                                   |
 | `labels`           | `ChartLabel[]`                  | `[]`            | false    | One category label per index: a string, a number, or a Date.                                                                                           |
 | `orientation`      | `'vertical' \| 'horizontal'`    | `'vertical'`    | false    | Value axis direction. Horizontal lays categories down the side, for ordered bars.                                                                      |
 | `labelScale`       | `'category' \| 'linear'`        | `'category'`    | false    | How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets.                       |
@@ -234,10 +234,10 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## Events
 
-| Event           | Payload                                                   | Notes                                                                                                                                               |
-| --------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event           | Payload                                                   | Notes                                                                                                                                                                                                                   |
+| --------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `point-click`   | `(event: MouseEvent \| KeyboardEvent, point: ChartPoint)` | Click or tap on the plot, or Enter / Space on the focused chart, at the active index (a tap with no active index uses the point under the finger). `point` carries the index, the label and every visible series value. |
-| `legend-toggle` | `(event: MouseEvent, series: ChartSeries)`                | A legend entry toggled; `series` is the consumer's own series object.                                                                               |
+| `legend-toggle` | `(event: MouseEvent, series: ChartSeries)`                | A legend entry toggled; `series` is the consumer's own series object.                                                                                                                                                   |
 
 ## Slots
 
@@ -250,6 +250,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## States
 
+- Error pattern of the chart family: a chart tall enough for it shows the centred error card (a bordered small `EmptyState` with the cause and a secondary `Try again` button, as BarList, DonutChart and DataTable do) through its `error` slot; only a strip too short for the card (Tracker) keeps an inline banner. The retry label is always `Try again`.
 - Visual states: `default`, `loading` (Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, filling the plot height), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active` on the root mirror the state; priority loading, then error, then empty, then marks
 - `data-orientation`: `vertical` | `horizontal`
@@ -277,26 +278,26 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 ## Tokens
 
-| Region                         | Token (DESIGN.md)                                                                                                             |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| series 1 to 8                  | `var(--chart-series-1)` … `var(--chart-series-8)`                                                                             |
-| folded series                  | `var(--chart-series-other)`                                                                                                   |
-| status series                  | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)`        |
-| severity series                | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)`   |
-| gridlines                      | `var(--chart-grid)`                                                                                                           |
-| axis rule                      | `var(--chart-axis)`                                                                                                           |
-| tick labels                    | `var(--chart-label)`, `.text-label-sm`                                                                                        |
-| brush band                     | `var(--bg-selected)`, `var(--border-selected)`                                                                                |
-| crosshair                      | `var(--chart-crosshair)`                                                                                                      |
+| Region                         | Token (DESIGN.md)                                                                                                                                                    |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| series 1 to 8                  | `var(--chart-series-1)` … `var(--chart-series-8)`                                                                                                                    |
+| folded series                  | `var(--chart-series-other)`                                                                                                                                          |
+| status series                  | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)`                                               |
+| severity series                | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)`                                          |
+| gridlines                      | `var(--chart-grid)`                                                                                                                                                  |
+| axis rule                      | `var(--chart-axis)`                                                                                                                                                  |
+| tick labels                    | `var(--chart-label)`, `.text-label-sm`                                                                                                                               |
+| brush band                     | `var(--bg-selected)`, `var(--border-selected)`                                                                                                                       |
+| crosshair                      | `var(--chart-crosshair)`                                                                                                                                             |
 | reference line, band and label | `var(--chart-label)` (neutral), `var(--chart-status-success)`, `-warning`, `-danger`, `-info`, `var(--severity-*)` (findings levels); label halo `var(--bg-surface)` |
-| tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`           |
-| tooltip label and series names | `.text-label-md`                                                                                                              |
-| tooltip values                 | `.text-label-code-md`                                                                                                         |
-| tooltip total label and hint   | `.text-label-md`, `.text-body-sm`                                                                                             |
-| marker ring                    | `var(--bg-surface)`                                                                                                           |
-| tooltip and legend shape       | `var(--shape-control)`                                                                                                       |
-| spacing                        | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                      |
-| focus                          | `var(--ring-color)`                                                                                                           |
+| tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`                                                  |
+| tooltip label and series names | `.text-label-md`                                                                                                                                                     |
+| tooltip values                 | `.text-label-code-md`                                                                                                                                                |
+| tooltip total label and hint   | `.text-label-md`, `.text-body-sm`                                                                                                                                    |
+| marker ring                    | `var(--bg-surface)`                                                                                                                                                  |
+| tooltip and legend shape       | `var(--shape-control)`                                                                                                                                               |
+| spacing                        | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                                                             |
+| focus                          | `var(--ring-color)`                                                                                                                                                  |
 
 ## Theme gaps
 
@@ -349,7 +350,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 - Container queries: none; the plot measures its own box and fills its container (`height` is a minimum).
 - Narrow (≤ 640 px or a narrow container): category labels thin to the width they have; the legend wraps.
-- Touch: legend buttons ≥ 24 px; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. A tap (touch or pen) sets the active index under the finger, so the tooltip and crosshair show and stay after the finger lifts; a tap outside the plot clears it, and the tap's click fires `point-click` for that point. Hover-only readings are also reachable from the keyboard and in the table twin.
+- Touch: legend buttons 44 px tall on a coarse pointer; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. A tap (touch or pen) sets the active index under the finger, so the tooltip and crosshair show and stay after the finger lifts; a tap outside the plot clears it, and the tap's click fires `point-click` for that point. Hover-only readings are also reachable from the keyboard and in the table twin.
 - Reflow: no horizontal scroll at 320 px; the hidden twin sits in an `sr-only` box.
 
 ## Performance
@@ -380,6 +381,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - TableView — `tableView`, the accessible twin made visible.
 
 Justification: a chart has no `type` / `size` axis; its axes are the mark form and the four mutually exclusive data states, and each state is its own story per the component-states rule.
+
 - Markdown — the same data as a `<Chart>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
 - Page JSON — the same data as a `Chart` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
