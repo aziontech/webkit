@@ -217,6 +217,15 @@ describe('ErrorBoundary', () => {
       await waitFor(() => expect(container.querySelector('[role="alert"]')).toBeNull())
     })
 
+    it('moves focus to the boundary when a custom fallback replaces a region and the trigger is disabled', async () => {
+      const { getByRole, getByTestId, getByText } = render(CustomFallback)
+      const simulate = getByRole('button', { name: 'Simulate a failure' })
+      simulate.focus()
+      await fireEvent.click(simulate)
+      await waitFor(() => expect(getByText('This chart failed to load')).toBeTruthy())
+      await waitFor(() => expect(document.activeElement).toBe(getByTestId('error-boundary')))
+    })
+
     it('has no violations in the Custom fallback example', async () => {
       const { container, getByRole, getByText } = render(CustomFallback)
       await fireEvent.click(getByRole('button', { name: 'Simulate a failure' }))

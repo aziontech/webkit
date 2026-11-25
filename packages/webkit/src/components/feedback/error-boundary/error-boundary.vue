@@ -75,18 +75,23 @@
     return !active || active === globalThis.document.body || Boolean(rootEl.value?.contains(active))
   }
 
+  const focusWasLost = () => {
+    const active = globalThis.document?.activeElement
+    return !active || active === globalThis.document.body || active.matches(':disabled')
+  }
+
   onErrorCaptured((error, _instance, info) => {
     if (failure.value) return props.propagate ? undefined : false
     const moveFocus = focusWasInside()
     failure.value = { error }
     emit('error', { error, info })
-    if (moveFocus) {
-      void nextTick(() => {
-        rootEl.value
-          ?.querySelector<HTMLElement>(`[data-testid="${testId.value}__fallback"]`)
-          ?.focus({ preventScroll: true })
-      })
-    }
+    void nextTick(() => {
+      if (!moveFocus && !focusWasLost()) return
+      const fallback = rootEl.value?.querySelector<HTMLElement>(
+        `[data-testid="${testId.value}__fallback"]`
+      )
+      ;(fallback ?? rootEl.value)?.focus({ preventScroll: true })
+    })
     return props.propagate ? undefined : false
   })
 
