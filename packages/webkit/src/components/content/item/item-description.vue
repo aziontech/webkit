@@ -20,7 +20,7 @@
     v-bind="$attrs"
     data-slot="item-description"
     :data-testid="testId"
-    class="line-clamp-2 text-balance text-body-sm text-(--text-muted)"
+    class="text-balance text-body-sm text-(--text-muted)"
   >
     <slot />
   </p>

@@ -431,4 +431,12 @@ describe('Item', () => {
       unmount()
     }
   })
+
+  it('lets a description wrap in full instead of clamping it to an ellipsis', () => {
+    const { getByTestId } = render(Item.Description, {
+      slots: { default: 'Import a repository and deploy it on every push.' }
+    })
+    const description = getByTestId('item-description')
+    expect([...description.classList].some((name) => name.startsWith('line-clamp'))).toBe(false)
+  })
 })
