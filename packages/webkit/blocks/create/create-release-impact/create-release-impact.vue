@@ -293,11 +293,6 @@
 
       <SaveBar variant="docked">
         <template #leading>
-          <p class="text-body-sm text-(--text-muted) max-md:hidden">
-            Deploying puts every included resource into traffic at the version shown.
-          </p>
-        </template>
-        <template #actions>
           <p
             v-if="blocker"
             class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
@@ -308,6 +303,14 @@
             />
             {{ blocker }}
           </p>
+          <p
+            v-else
+            class="text-body-sm text-(--text-muted) max-md:hidden"
+          >
+            Deploying puts every included resource into traffic at the version shown.
+          </p>
+        </template>
+        <template #actions>
           <div
             class="flex w-full gap-(--spacing-xs) @xl/save-bar:w-fit @xl/save-bar:gap-(--spacing-sm)"
           >
