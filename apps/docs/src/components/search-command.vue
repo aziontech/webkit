@@ -20,6 +20,22 @@
 
   const groups = computed(() => [
     {
+      heading: t.value.forAi,
+      items: [
+        {
+          to: '/ai',
+          title: t.value.forAi,
+          hint: t.value.aiPageSummary,
+          keywords: searchKeywords(t.value.forAi, t.value.aiPageSummary, [
+            'mcp',
+            'agent',
+            'llms',
+            'contribute'
+          ])
+        }
+      ]
+    },
+    {
       heading: t.value.foundations,
       items: FOUNDATIONS.map((page) => ({
         to: `/foundations/${page.slug}`,

@@ -108,6 +108,7 @@ export function foundationGroups(labels: {
   start: string
   home: string
   gettingStarted: string
+  forAi: string
   foundations: string
   assets: string
   brand: string
@@ -119,7 +120,8 @@ export function foundationGroups(labels: {
       label: labels.start,
       items: [
         { label: labels.home, to: '/' },
-        { label: labels.gettingStarted, to: '/foundations/getting-started' }
+        { label: labels.gettingStarted, to: '/foundations/getting-started' },
+        { label: labels.forAi, to: '/ai' }
       ]
     },
     {

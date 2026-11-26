@@ -50,12 +50,12 @@ const REPOSITORY_LINK =
   /^https:\/\/github\.com\/aziontech\/webkit\/(blob|tree)\/main\/([^#?]+)(#.*)?$/
 const ABSOLUTE_HREF = /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i
 
-const PAGE_OF_FILE = new Map(
-  FOUNDATIONS.filter((page) => page.markdown).map((page) => [
-    page.markdown,
-    `/foundations/${page.slug}`
-  ])
-)
+const PAGE_OF_FILE = new Map([
+  ...FOUNDATIONS.filter((page) => page.markdown).map(
+    (page) => [page.markdown, `/foundations/${page.slug}`] as [string, string]
+  ),
+  ['packages/webkit/docs/AI.md', '/ai']
+])
 
 function repositoryHref(href: string): string {
   const link = REPOSITORY_LINK.exec(href)
