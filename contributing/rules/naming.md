@@ -112,6 +112,12 @@ see [`compound-api.md`](./compound-api.md).
 `packages/webkit/blocks/`, `catalog.json#blocks`, `blockAliases`, `catalog/blocks/`, MCP
 `search_blocks` / `get_block`, titles `Blocks/<Group>/<Name>`.
 
+**Pattern** is the word for a written guidance page: the pattern skills listed in
+`skills/patterns.json`, rendered at `/patterns/<slug>` on the docs site (as Carbon and Cloudscape
+do). A pattern is read, a block is copied: a pattern links its blocks, and a block never carries the
+word. No MCP tool, catalog key or block title says pattern (`get_pattern` / `search_patterns` stay
+retired, because old agents would expect a block from them).
+
 - **Path:** `blocks/<group>/<block>/` — two levels, no surface level. The surface (`app`,
   `docs`, `site`) is a `surface` field in `block.json` and the catalog.
 - **Groups are singular job words, from a closed list:** `account`, `ai`, `auth`, `create`,

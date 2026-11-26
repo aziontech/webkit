@@ -1,7 +1,10 @@
-# `contributing/` — governance system: folder map & index
+# `contributing/` — everything for improving WebKit
 
-Everything that makes the design system's standards apply by construction and block off-
-standard code. This is the entry-point map; each area links to its own index.
+This folder is for people and agents who add or change WebKit's components, blocks and tokens. Any
+coding agent reads it; `.claude/` only links Claude Code to it. Building an app with WebKit is the
+other door: see the root [`AGENTS.md`](../AGENTS.md). The standards here apply by construction and
+block off-standard code; this is the map, and each area links to its own index.
+
 
 ## Folder layout
 

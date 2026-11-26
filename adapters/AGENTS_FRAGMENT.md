@@ -50,7 +50,7 @@ data flows. Change only the content (copy, handlers); keep the components, their
 classes. Block ids are grouped by job (`create/…`, `view/…`,
 `detail/…`, `edit/…`, `edit/…`, `settings/…`,
 `state/…`, `dashboard/…`, `account/…`, `auth/auth-sign-in`); each is one job
-whose states are its variants (`add --variant <state>`, or `variant` on `get_block`). Use `suggest_component` / `get_component` only for pieces the pattern does
+whose states are its variants (`add --variant <state>`, or `variant` on `get_block`). Use `suggest_component` / `get_component` only for pieces the block does
 not cover. A marketing band is a page section: `suggest_component` returns it (rule `webkit-sections`).
 Every export and block carries a `surface`: `app` (console and apps), `site` (the azion.com site) or
 `docs` (the documentation site). A console screen uses `app` only (`list_components`,
