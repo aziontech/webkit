@@ -1302,7 +1302,7 @@
   {
     "name": "prompt-input-model-picker",
     "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
-    "limit": "17.75 KB",
+    "limit": "20 KB",
     "entryOnly": true
   },
   {

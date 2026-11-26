@@ -3,9 +3,9 @@ name: prompt-input
 category: ai
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
-checksum: 1dd942c9183cb897d2df4dc4fc663a12c6af9899c2d134d29628e6387f00f9a5
+checksum: 11792e9e37f9c50d3183346d229915d34ca714eadcaeb87d7129c38e8ef3db39
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -229,16 +229,16 @@ renders; their standalone paths are static.
   vertical provider filter rail (`providers`), a search input (`Search models...`), a scrollable
   `Model` menu of radio options (provider icon, label, checkmark, a favorite star, and shortcut or
   muted description) and, when `modes` is not empty, a side-by-side mode column of radio options.
-  Each model row has a ghost small star `IconButton` (`az az-star`, `az az-star-fill` when starred,
-  `aria-pressed`, named `Add to favorites` / `Remove from favorites` plus the model label, with a
-  lazy `Tooltip` of the action) that adds the model to or removes it from `favoriteKeys`; it shows
-  on row hover or focus, always on a coarse pointer and always while starred. The rail's first
-  button is a star that filters the list to the favorites (`Favorites`; with none starred the list
-  says `No favorites yet`); a provider button filters to that provider;
-  pressing the active rail button again clears the filter, so the list shows every model. With the
+  Each row has a star `IconButton` (`aria-pressed`, a lazy `Tooltip`) that toggles the model in
+  `favoriteKeys`; it shows on row hover or focus, on a coarse pointer and while starred. The rail's
+  first button filters to the favorites (`No favorites yet` when none), a provider button to that
+  provider; pressing the active one again shows every model. With the
   `footer` slot the panel ends in a bar under its columns (`border-t`, wraps; its last control sits
   at the inline end), for a speed `ToggleGroup`, a toggle `Button` or `PromptInput.AccessPicker`.
-  The panel stays open on a choice; Escape or an outside click closes it. With no `models` the
+  The panel stays open on a choice; Escape or an outside click closes it. Below `md` the trigger
+  is an icon-only `IconButton` (the model's icon) that opens a `Dialog` bottom sheet, loaded on
+  first open: `Favorites`, then one section per provider (44 px rows, check, star), the modes as a
+  `ToggleGroup`, the `footer` slot, and the search at the bottom. With no `models` the
   control is disabled; a `v-model` that matches no model shows `Model`, and a mode that matches
   none shows no mode label.
   - Props: `models?: PromptInputMenuOption[]` (default `[]`); `providers?: PromptInputMenuOption[]` (default `[]` — optional provider rail at the inline start); `modes?: PromptInputMenuOption[]` (default `[]`); `modeLabel?: string` (default `''` — empty uses `Mode`; the mode column's label, such as `Thinking Level` or `Effort`).
@@ -403,7 +403,8 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter (while it shows) and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.
-- Model picker favorites: each star is a `button` with `aria-pressed` and a name that carries the model (`Add to favorites: Gemini 4 Neon`); it is reachable by `Tab` after its row and shows while focused, so it never depends on hover. The rail star is `Favorites`, the rail group `Providers`.
+- Model picker favorites: each star is a `button` with `aria-pressed`, named with its model (`Add to favorites: Gemini 4 Neon`), reachable by `Tab` and shown while focused. The rail group is `Providers`.
+- Model picker on a phone: the trigger is named `Model: <model>, <mode>`; the `Dialog` starts focus on the chosen model.
 - Access picker: the trigger is named `Permissions: <mode>`; the modes are a `radiogroup` named by the title, each radio named by its label (visually hidden text); the description under it is `aria-live="polite"`.
 
 ## Internationalization
@@ -439,7 +440,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 | `promptInput.favorites`        | `Favorites`                                                | —                             |
 | `promptInput.addFavorite`      | `Add to favorites`                                         | —                             |
 | `promptInput.removeFavorite`   | `Remove from favorites`                                    | —                             |
-| `promptInput.noFavorites`      | `No favorites yet`                 | —                             |
+| `promptInput.noFavorites`      | `No favorites yet`                                         | —                             |
 | `promptInput.access`           | `Permissions`                                              | `title` (AccessPicker)        |
 | `promptInput.context`          | `Choose context`                                           | `placeholder` (ContextPicker) |
 | `promptInput.contextRemove`    | `Remove context`                                           | —                             |
@@ -468,6 +469,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 - Shortcut menu (`/`, `@`): opens above the box, and below it when the space above the box in the visible viewport (the on-screen keyboard excluded) is shorter than the list and the space below is larger, so a composer at the top of a page or a panel never draws its list off-screen; the list carries `data-side="top|bottom"`.
 - Height: the text area measures its height again whenever its own width changes (a resize observer, released when the component unmounts), so a composer mounted in a pane that starts near zero width (a split view opening on a phone) settles to one row once the pane has its width.
 - Touch: `enterkeyhint="send"` on a fine pointer and `enterkeyhint="enter"` on a coarse pointer, where Enter adds a line so a multi-line prompt can be typed on a soft keyboard; targets 44 px on coarse pointers, shortcut menu rows included.
+- Phones (below `md`): the model picker is icon-only and opens a bottom sheet; the switch is CSS, so server and client HTML match.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance
@@ -551,14 +553,13 @@ model and effort `DropdownMenu`s, send that becomes stop, IME-safe Enter).
   stays small; until then the control is the plain attach button. The voice control keeps
   `az az-headphones`: the icon set has no audio-wave glyph (`az-wave-pulse` is a chart line in a box).
 
-- Model favorites and the panel footer (2026-11-25, owner request with screenshots of a desktop
-  agent's model picker): each model row stars into `v-model:favoriteKeys`, and the rail's first star
-  filters to the favorites instead of meaning "all providers"; pressing the active rail button again
-  shows every model, so no extra "All" button is needed. The star is a sibling of the row's button,
-  not inside it, because a button cannot hold another button; the row draws the hover and selected
-  fill so the two read as one row. The bar under the columns is a `footer` slot, not props for
-  speed or Ultracode: those are product choices, and the slot composes `ToggleGroup`, `Button` and
-  `AccessPicker` as the example shows.
+- Model favorites and the panel footer (2026-11-25, owner request): rows star into
+  `v-model:favoriteKeys` and the rail's first star filters to them; pressing the active rail button
+  again shows every model. The star sits beside the row's button (a button cannot hold one). The
+  bar under the columns is a `footer` slot, since speed and Ultracode are product choices.
+- Model picker on phones (2026-11-25, owner request with screenshots of a mobile agent app's
+  model sheet and a mobile chat composer): icon-only trigger and a bottom sheet with provider
+  sections, since the popover's side rail does not fit a phone; it reuses `Dialog`.
 - Access picker (2026-11-25, same request): the access mode is its own part, not a `ContextPicker`,
   because a context can be cleared and an access mode always has one value. Its modes are an
   icon-only `ToggleGroup`, so arrow keys move the choice and the description under it follows the

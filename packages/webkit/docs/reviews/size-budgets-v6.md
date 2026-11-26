@@ -3059,3 +3059,7 @@ Budget-raise: prompt-input-tools 19.15 KB → 19.2 KB (measured 19.19 KB): the E
 Budget-raise: log-viewer 36.95 KB → 37.05 KB (measured 37.01 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
 
 Budget-raise: log-viewer-steps 32.95 KB → 33.1 KB (measured 33.06 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+## Model picker on phones (2026-11-25)
+
+Budget-raise: prompt-input-model-picker 17.75 KB → 20 KB (measured 19.96 KB): below `md` the picker shows an icon-only trigger that opens a bottom-sheet `Dialog` with provider sections (owner request with phone screenshots). The `Dialog` part loads on first open, but splitting it out moves the modules it shares with the popover into a chunk the entry loads up front (18.04 KB with the dialog stubbed, 19.96 KB with it), and the phone trigger adds 0.3 KB.

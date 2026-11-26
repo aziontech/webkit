@@ -795,6 +795,50 @@ describe('PromptInput', () => {
       await keys.keyboard('{Escape}')
     })
 
+    it('opens the phone dialog from the icon-only trigger with provider sections', async () => {
+      const { findByTestId, scope } = composer(
+        { model: 'sol', mode: 'high', favorites: ['terra'] },
+        (scope) => ({
+          slots: {
+            end: () =>
+              h(P.ModelPicker, {
+                ...bind(scope, 'model'),
+                ...bind(scope, 'mode', 'mode'),
+                ...bind(scope, 'favorites', 'favoriteKeys'),
+                providers: [{ value: 'acme', label: 'Acme AI', icon: 'az az-sparkles' }],
+                models: [
+                  { value: 'sol', label: 'Sol 6.1', provider: 'acme' },
+                  { value: 'terra', label: 'Terra 6.1', provider: 'acme' }
+                ],
+                modes: [
+                  { value: 'low', label: 'Low' },
+                  { value: 'high', label: 'High' }
+                ],
+                modeLabel: 'Effort'
+              })
+          }
+        })
+      )
+      const compact = await findByTestId('prompt-input-model-picker__compact')
+      expect(compact).toHaveAccessibleName('Model: Sol 6.1, High')
+      expect(compact.textContent?.trim()).toBe('')
+      await userEvent.click(compact)
+      const sheet = within(await screen.findByTestId('prompt-input-model-picker__dialog'))
+      const favorites = within(sheet.getByRole('region', { name: 'Favorites' }))
+      expect(favorites.getByRole('button', { name: 'Terra 6.1' })).toBeTruthy()
+      const acme = within(sheet.getByRole('region', { name: 'Acme AI' }))
+      expect(acme.getByRole('button', { name: 'Sol 6.1' })).toHaveAttribute('aria-pressed', 'true')
+      await userEvent.click(acme.getByRole('button', { name: 'Terra 6.1' }))
+      expect(scope.model!.value).toBe('terra')
+      await userEvent.click(acme.getByRole('button', { name: 'Add to favorites: Sol 6.1' }))
+      expect(scope.favorites!.value).toEqual(['terra', 'sol'])
+      await userEvent.click(sheet.getByRole('radio', { name: 'Low' }))
+      expect(scope.mode!.value).toBe('low')
+      await userEvent.type(sheet.getByRole('searchbox'), 'terra')
+      expect(acme.queryByRole('button', { name: 'Sol 6.1' })).toBeNull()
+      await keys.keyboard('{Escape}')
+    })
+
     it('renders the footer bar and picks an access mode from the access picker', async () => {
       const { findByTestId, scope } = composer({ model: 'sol', access: 'supervised' }, (scope) => ({
         slots: {
@@ -1014,7 +1058,8 @@ describe('PromptInput', () => {
       expect(getByRole('button', { name: 'Start voice conversation' })).toBeTruthy()
       expect(getByRole('button', { name: 'Attach files' })).toBeTruthy()
       expect(await findByRole('button', { name: /Choose project/ })).toBeTruthy()
-      expect(await findByRole('button', { name: /Gemini 4 Neon/ })).toBeTruthy()
+      expect(await findByRole('button', { name: /^Gemini 4 Neon/ })).toBeTruthy()
+      expect(getByRole('button', { name: 'Model: Gemini 4 Neon, Medium' })).toBeTruthy()
       await expectNoA11yViolations(container)
     })
   })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
@@ -11,6 +11,7 @@
   import PopoverTrigger from '../../../overlay/popover/popover-trigger/popover-trigger.vue'
   import { LazyTooltip } from '../../../overlay/tooltip/lib/lazy-tooltip'
   import { usePromptInputContext } from '../composables/use-prompt-input-context'
+  import { toggleKey } from '../lib/favorite-keys'
   import type { PromptInputMenuOption } from '../prompt-input.vue'
 
   defineOptions({
@@ -52,7 +53,11 @@
   const { t } = useTranslate({ promptInput: en.promptInput })
   const { disabled } = usePromptInputContext()
 
+  const ModelDialog = defineAsyncComponent(() => import('../parts/prompt-input-model-dialog.vue'))
+
   const open = ref(false)
+  const dialogOpen = ref(false)
+  const dialogMounted = ref(false)
   const query = ref('')
   const activeProvider = ref('')
   const FAVORITES = '\u0000favorites'
@@ -72,6 +77,9 @@
     if (!item) return ''
     return item.icon || (item.provider ? (providerMap.value.get(item.provider)?.icon ?? '') : '')
   })
+  const triggerName = computed<string>(() =>
+    [modelLabel.value, modeName.value].filter(Boolean).join(', ')
+  )
   const modeName = computed<string>(
     () => props.modes.find((option) => option.value === mode.value)?.label ?? ''
   )
@@ -105,9 +113,12 @@
   }
 
   function toggleFavorite(option: PromptInputMenuOption): void {
-    favoriteKeys.value = isFavorite(option)
-      ? favoriteKeys.value.filter((key) => key !== option.value)
-      : [...favoriteKeys.value, option.value]
+    favoriteKeys.value = toggleKey(favoriteKeys.value, String(option.value))
+  }
+
+  function openDialog(): void {
+    if (dialogMounted.value) dialogOpen.value = true
+    else dialogMounted.value = true
   }
 
   function filterBy(value: string): void {
@@ -137,8 +148,41 @@
 </script>
 
 <template>
+  <IconButton
+    v-bind="$attrs"
+    :icon="modelIcon || 'az az-sparkles'"
+    :aria-label="`${t('promptInput.model')}: ${triggerName}`"
+    aria-haspopup="dialog"
+    :aria-expanded="dialogOpen"
+    variant="ghost"
+    size="medium"
+    :disabled="disabled || models.length === 0"
+    :data-testid="`${testId}__compact`"
+    class="md:hidden"
+    @click="openDialog"
+  />
+  <ModelDialog
+    v-if="dialogMounted"
+    v-model:open="dialogOpen"
+    v-model="model"
+    v-model:mode="mode"
+    v-model:favorite-keys="favoriteKeys"
+    :models="models"
+    :providers="providers"
+    :modes="modes"
+    :mode-label="modeLabel || t('promptInput.mode')"
+    :test-id="testId"
+  >
+    <template
+      v-if="$slots['footer']"
+      #footer
+    >
+      <slot name="footer" />
+    </template>
+  </ModelDialog>
   <Popover
     v-model:open="open"
+    class="max-md:hidden"
     side="top"
     align="end"
     :size="modes.length || providers.length ? 'large' : 'medium'"
