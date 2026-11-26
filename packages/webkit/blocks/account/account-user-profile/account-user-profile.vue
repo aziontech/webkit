@@ -184,7 +184,7 @@
 <template>
   <div
     ref="rootEl"
-    class="layout-column layout-boundary flex min-h-full min-w-0 flex-col gap-(--layout-group-gap)"
+    class="layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)"
     @focusin="onFocusin"
   >
     <Alert
@@ -269,7 +269,7 @@
 
       <SaveBar
         v-if="dirty"
-        class="mt-auto"
+        variant="docked"
         v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
       >
         You have unsaved changes.

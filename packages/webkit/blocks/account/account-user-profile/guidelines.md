@@ -47,7 +47,7 @@ Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.Li
 
 ### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
 
-Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes, pinned to the bottom of the page column so it never covers the last row. Save first checks the first and last name, the handle and the email: each error shows under its field (`FieldError`), the Profile tab opens and the first wrong field takes focus. After Discard or a save, focus goes back to the field you last edited. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
+Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes, `docked`, so it takes its own row under the content and never covers the last row. Save first checks the first and last name, the handle and the email: each error shows under its field (`FieldError`), the Profile tab opens and the first wrong field takes focus. After Discard or a save, focus goes back to the field you last edited. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
 
 ## Data
 

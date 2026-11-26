@@ -205,7 +205,7 @@
             "./sample": "./account-user-profile.sample",
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:587fd2e077ad6befb2fc9a1d03113259b1bbbbbe23b4a4457c658df124ec95b9"
+          "checksum": "sha256:f4b2150854846965bbae553422a3cfbf589828dbe8e1565b0ea0239936c4a16b"
         }
       ]
     },

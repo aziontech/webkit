@@ -1,6 +1,6 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
@@ -60,7 +60,7 @@ Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.Li
 
 ### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
 
-Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes, pinned to the bottom of the page column so it never covers the last row. Save first checks the first and last name, the handle and the email: each error shows under its field (`FieldError`), the Profile tab opens and the first wrong field takes focus. After Discard or a save, focus goes back to the field you last edited. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
+Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes, `docked`, so it takes its own row under the content and never covers the last row. Save first checks the first and last name, the handle and the email: each error shows under its field (`FieldError`), the Profile tab opens and the first wrong field takes focus. After Discard or a save, focus goes back to the field you last edited. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
 
 ## Data
 
@@ -325,7 +325,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
 <template>
   <div
     ref="rootEl"
-    class="layout-column layout-boundary flex min-h-full min-w-0 flex-col gap-(--layout-group-gap)"
+    class="layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)"
     @focusin="onFocusin"
   >
     <Alert
@@ -410,7 +410,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
 
       <SaveBar
         v-if="dirty"
-        class="mt-auto"
+        variant="docked"
         v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
       >
         You have unsaved changes.
