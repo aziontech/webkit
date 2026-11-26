@@ -371,7 +371,7 @@
               <Button
                 class="w-full"
                 label="Retry failed"
-                variant="primary"
+                variant="secondary"
                 size="medium"
                 icon="az az-refresh"
                 @click="retryFailed"

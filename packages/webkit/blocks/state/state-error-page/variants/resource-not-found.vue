@@ -16,7 +16,7 @@
     <template #actions>
       <Button
         label="Back to services"
-        variant="primary"
+        variant="secondary"
         size="medium"
         icon="az az-arrow-left"
         href="/services"

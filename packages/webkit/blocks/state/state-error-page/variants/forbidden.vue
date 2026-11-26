@@ -14,7 +14,7 @@
     <template #actions>
       <Button
         label="Request access"
-        variant="primary"
+        variant="secondary"
         size="medium"
         icon="az az-mail"
       />

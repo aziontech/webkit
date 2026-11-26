@@ -37,7 +37,7 @@ Three hops, always in this order: You (the browser), Azion (the data center that
 
 What happened? and What can I do? sit side by side (stacked on a phone), each an `h2` and one or two sentences. What can I do? only offers what a visitor can do: try again, wait, go back, go to the site's home page, contact the site owner with the request ID.
 
-Under them, two `Button`s at most. The primary is Try again (reloads the address) when waiting can fix it (5xx, 429), or Go to home page (the site's root) when it cannot (403, 404); the second is always Go back. Both emit an event first (`retry`, `back`); call `preventDefault` to handle them yourself.
+Under them, two `Button`s at most. The first is Try again (reloads the address) when waiting can fix it (5xx, 429), or Go to home page (the site's root) when it cannot (403, 404), a secondary button, never primary: an error page carries no orange button; the second is always Go back. Both emit an event first (`retry`, `back`); call `preventDefault` to handle them yourself.
 
 ### D. Request details — `KeyValueList`, `CopyButton`, `Timestamp`
 
@@ -63,7 +63,7 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 | `time`      | `string`                 | When the request was answered, ISO 8601.                                                          |
 | `location`  | `string`                 | The Azion data center, its place then its code (`Ashburn, US (IAD)`); the Azion hop and its fact. |
 | `path`      | `StateEdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.                                   |
-| `recovery`  | `'retry' \| 'home'`      | The primary button: Try again, or Go to home page.                                                |
+| `recovery`  | `'retry' \| 'home'`      | The first button: Try again, or Go to home page.                                                  |
 
 | Event   | Payload   | When                                                                         |
 | ------- | --------- | ---------------------------------------------------------------------------- |

@@ -14,7 +14,7 @@
     <template #actions>
       <Button
         label="Sign in"
-        variant="primary"
+        variant="secondary"
         size="medium"
         icon="az az-log-in"
         href="/sign-in"

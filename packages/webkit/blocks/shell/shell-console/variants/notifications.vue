@@ -86,7 +86,7 @@
             />
             <Button
               label="Redeploy"
-              variant="primary"
+              variant="secondary"
               size="small"
               icon="az az-refresh"
               @click="settleFlash"
