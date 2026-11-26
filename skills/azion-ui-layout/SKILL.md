@@ -415,6 +415,8 @@ truncating text `min-w-0`.
 - Introduce a third rhythm step beside `--layout-section-gap` and `--layout-group-gap`.
 - Stack two page regions (a banner, a card, a framed table, a section heading) closer than
   `--layout-group-gap`; the parent section carries its `gap` even when its first child is a banner.
+- Let text sit on a border or divider: a block above or below a rule pads both block
+  sides, at least `--spacing-2xs` and `--spacing-md` in a card region.
 - Write a responsive variant for the boundary or the rhythm — the tokens are already fluid.
 - Name a physical side: `ps-`/`pe-`, `ms-`/`me-`, `start-`/`end-`, `text-start`,
   `border-s` — so the same page mirrors under `dir="rtl"` (the boundary, the sticky bar and the field

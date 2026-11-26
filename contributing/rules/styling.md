@@ -402,6 +402,29 @@ Two regions of a page never sit closer than the group step, `--layout-group-gap`
 
 A static lint cannot see a rendered gap either; the styled visual suite measures it (see Enforcement).
 
+## Text never sits on a line
+
+Text keeps at least `--spacing-2xs` (4px) between its line box and any border or divider that is not the outline of its own control. A block of text inside a card, above a ruled footer or under a ruled header, pads **both** block sides; a card region pads all four with `p-(--spacing-md)`. The usual miss is a block that sets only its top padding (`pt-*`) and is followed by a part that draws a top rule: the last line of text lands on that rule.
+
+```html
+<!-- ❌ top padding only: the last line touches the footer rule -->
+<Card :padded="false">
+  <p class="px-(--spacing-md) pt-(--spacing-sm)">The labelled control that triggers an action.</p>
+  <template #footer>…</template>
+</Card>
+
+<!-- ✅ the block pads every side it can meet a line on -->
+<Card :padded="false">
+  <p class="p-(--spacing-md)">The labelled control that triggers an action.</p>
+  <template #footer>…</template>
+</Card>
+```
+
+- **A control's own outline is exempt**: the label of a button, a tag, a chip, a field or a tab sits inside a box at most 44px tall, and its padding is the component's.
+- **The step is a floor, not the target**: 4px keeps a caption off a rule; a card region still uses `--spacing-md`, a list row its row padding.
+
+Shipped in the docs component index (the phone card's purpose text sat 1px above its footer rule) until 2026-11-26. A static lint cannot see a rendered gap; the styled visual suite measures it (see Enforcement).
+
 ## A texture is a backdrop for text only
 
 A `Texture` (every variant, the orange `pixelate` floor above all) sits behind **text**: an eyebrow, a headline, a paragraph, the buttons of a band. Nothing that has to be read in its own lines and marks is drawn on it: a chart, a diagram, a map, a stat, and any page-JSON content scene (an accordion, a card, a code block, an embed, a key-value list, a plan feature list). The dots compete with the axis labels, the legend and the lines, and the content cannot be read (owner decision RV-T2-1, 2026-11-18).
@@ -468,6 +491,7 @@ padding: 0 var(--spacing-md);
 - Never let the fills of two neighbouring list rows touch: inset the fill with `border-y border-transparent bg-clip-padding forced-colors:border-y-0`, keeping the row height.
 - Never build a navigation or menu list row other than the menu row (32px, 44px on touch, the inset fill, no list gap), and never give some of its rows another height.
 - Never stack two page regions (a banner, a card, a framed table, a section heading) closer than `--layout-group-gap`; the stack that holds them carries the gap.
+- Never let text sit on a border or divider: outside its own control, text keeps at least `--spacing-2xs` from any line, and a block above or below a rule pads both block sides.
 - Never give a sibling variant a universal subject (`[&+*]:`, `[&~*]:`, `[&>*+*]:`); use `gap-*`, `not-first:` / `not-last:`, or name the sibling.
 - Never draw anything but text on a `Texture`: no chart, diagram, map or stat, and no page-JSON content scene. Use `ConsoleShowcaseSection variant="diagram"`, `texture="none"`, or a band without a texture.
 - No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
@@ -576,6 +600,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - **One height per toolbar row** is gated by the same `visual` job: [`apps/visual/tests/toolbar-heights.spec.ts`](../../apps/visual/tests/toolbar-heights.spec.ts) runs [`findMixedToolbarHeights`](../../apps/visual/tests/toolbar-heights.ts) over the same pages at the same widths. In every toolbar it takes each visible control's outermost painted box (a border or a fill, the control or one of its two nearest wrappers; checkboxes, radios, switches and sliders skipped) and fails on two of them in the same row (centres within 2px) whose heights differ by more than half a pixel. [`apps/visual/scripts/toolbar-heights.mjs`](../../apps/visual/scripts/toolbar-heights.mjs) sweeps every docs route, example and block state.
 - **Two filled rows never touch** is gated by the styled suite [`list-row-gap.test.ts`](../../packages/ui/src/test/list-row-gap.test.ts): it opens Select, MultiSelect, Combobox, DropdownMenu and ConversationHistory, puts a selected row next to a highlighted one, and measures a visible gap of at least 2px between the two fills, with the row height unchanged (ConversationHistory's chat and folder rows measured at exactly 32px).
 - **Never stack regions flush** is gated by the same `visual` job: [`apps/visual/tests/region-gaps.spec.ts`](../../apps/visual/tests/region-gaps.spec.ts) runs [`findTightRegions`](../../apps/visual/tests/region-gaps.ts) over the same pages at the same widths. For every vertical stack (a block flow, a column flex or a grid) that is not inside a unit — a bordered or filled surface, a fixed or sticky layer, an `article`, a list item, a log or a dialog — it takes each pair of consecutive visible children and fails when the first ends on a surface (bordered on four sides or filled with a radius, at least 120 × 32px, not a control or a field wrapper) and the second starts on a surface or a heading, closer than the resolved `--layout-group-gap`. A heading is measured from its content box, so a heading's own top padding counts as space; two surfaces of the same kind (a list of like cards) are a list, not two regions. [`apps/visual/scripts/region-gaps.mjs`](../../apps/visual/scripts/region-gaps.mjs) sweeps every docs route, example and block state.
+- **Text never sits on a line** is gated by the same `visual` job: [`apps/visual/tests/text-on-line.spec.ts`](../../apps/visual/tests/text-on-line.spec.ts) runs [`findTextOnLines`](../../apps/visual/tests/text-on-line.ts) over the docs home, the component and block indexes and the foundation pages, the first example of every component and the primary state of every block, at 390 and 1280. It takes every visible top or bottom border and separator, and every line box of visible text outside code samples, drawings and `LogViewer` output (dense by design: its lines keep 2px from its frame), and fails when a line box lies closer than the resolved `--spacing-2xs` to a line it overlaps along at least 8px. A line drawn by the text's own control or by a box at most 44px tall around the text is skipped, and so are a box that sits beside the text, the frame of the scroll area the text scrolls in, and a line on another fixed, sticky or absolute layer. [`apps/visual/scripts/text-on-line.mjs`](../../apps/visual/scripts/text-on-line.mjs) sweeps every docs route, example and block state.
 - **A texture is a backdrop for text only** is gated three ways. At write time and in CI, the `texture-backdrop` engine ([`texture-backdrop.js`](../../packages/ui/src/eslint-plugin/lib/texture-backdrop.js), run by [`validate-authoring.mjs`](../hooks/validate-authoring.mjs) and the [`check-authoring.mjs`](../../packages/ui/scripts/check-authoring.mjs) ratchet over components, blocks and examples) blocks a chart, diagram, map or stat placed next to a `Texture` or in the slot of a section that paints one (`ConsoleShowcaseSection` outside `diagram`, `MediaSplitSection`, `MediaSplit`, `MediaTabs`, `Backdrop`, the copy column or `background` slot of a `Hero` with a `texture`, the `bottom` window of a `Hero` with a `floorTexture`; the hero's `top`, `bottom` and `media` windows pass because `Hero` keeps its backdrop off them), and page JSON that puts any scene but a backdrop scene on a textured `console-showcase-section` or `media-split-section`; pinned both ways in [`texture-backdrop.test.mjs`](../../packages/ui/test/eslint-plugin/texture-backdrop.test.mjs). In the component, the styled suite [`texture-backdrop.test.ts`](../../packages/ui/src/test/texture-backdrop.test.ts) proves `Texture` drops itself beside marked content and the Page JSON examples paint no texture under their scene. In the `visual` job, [`texture-backdrop.spec.ts`](../../apps/visual/tests/texture-backdrop.spec.ts) runs [`findGraphicsOnTexture`](../../apps/visual/tests/texture-backdrop.ts) on every example that composes a band or a texture and every block's primary state, at 390 and 1280, and fails when a painted texture lies under a `[data-plain-ground]` box; [`apps/visual/scripts/texture-backdrop.mjs`](../../apps/visual/scripts/texture-backdrop.mjs) sweeps every example and block state.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.
 - `contributing/docs/COMPONENT_REQUIREMENTS.md` § 13.w "Styling discipline" supersedes any older example in the same file that still shows the JS-presets pattern. **The data-attribute approach is the canonical pattern for new components.**
