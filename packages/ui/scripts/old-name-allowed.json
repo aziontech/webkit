@@ -11,7 +11,8 @@
     "^packages/ui/src/cli/migrate-package\\.js$",
     "^packages/ui/test/cli/migrate-package\\.test\\.mjs$",
     "^packages/ui/docs/migration-v6-maps\\.md$",
-    "^packages/ui/MIGRATION_V6\\.md$"
+    "^packages/ui/MIGRATION_V6\\.md$",
+    "^packages/ui/scripts/check-old-name\\.mjs$"
   ],
   "patterns": [
     "::?-webkit-[\\w-]*",
