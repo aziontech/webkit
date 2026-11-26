@@ -1289,9 +1289,10 @@ export const tracker = {
 
 export const contributionGraph = {
   roleDescription: 'contribution calendar',
+  label: 'Contributions',
   noData: 'No activity recorded',
   errorTitle: "Contributions didn't load",
-  hint: 'Hover or select a day to inspect activity',
+  hint: 'Select a day to see its activity',
   less: 'Less',
   more: 'More',
   dayLabel: {

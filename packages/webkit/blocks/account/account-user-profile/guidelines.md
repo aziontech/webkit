@@ -41,13 +41,13 @@ The year's contributions grouped by month in a `Timeline`, newest first. With a 
 Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.List`.
 
 - **Profile and bio:** picture, names, handle, bio, time zone, local time, language, email, phone, website, and two visibility switches.
-- **Security and access:** current, new and confirm password with live `PasswordRequirements`, multi-factor and personal tokens. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider and the password fields are disabled; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
+- **Security and access:** current, new and confirm password with live `PasswordRequirements` and its own Change password button, multi-factor and personal tokens. These act on their own and never ride the `SaveBar`: Change password checks the three fields and puts each error on its field (`FieldError`) before it sends `change-password`; turning multi-factor off asks first in a `ConfirmDialog`. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider and the password fields are disabled; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
 - **Notifications:** the notification email, the Application Security, Platform and Delivery, and Account Activity and AI Adoption digests (frequency and channel), and real-time alerts for watched resources, mentions, deployments and AI Copilot sessions.
 - **Preferences:** `ThemeSwitcher` and Keyboard shortcuts.
 
 ### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
 
-Any edit in a settings tab shows one `SaveBar` with Discard and Save changes. Command S saves; its `Kbd` hint hides when Keyboard shortcuts is off.
+Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
 
 ## Data
 
@@ -60,12 +60,12 @@ The block fetches nothing. It takes its data through props and hands edits back 
 | `securityPolicy`        | `UserProfileSecurityPolicy`       | SSO and SCIM management, multi-factor state and policy, token summary. |
 | `notifications`         | `UserProfileNotificationSettings` | Notification email, digests and alerts.                                |
 | `preferences`           | `UserProfilePreferences`          | Theme and keyboard shortcuts.                                          |
-| `loading`               | `boolean`                         | Skeletons in the header, metrics, graph and history.                   |
+| `loading`               | `boolean`                         | Skeletons in the header, metrics, graph, history and settings tabs.    |
 | `error`                 | `string`                          | A danger `Alert` with Retry replaces the page.                         |
 | `v-model:active-tab`    | `UserProfileTab`                  | The open tab.                                                          |
-| `v-model:selected-year` | `number`                          | The year of the overview.                                              |
+| `v-model:selected-year` | `number`                          | The year of the overview; moves to the newest year when it has none.   |
 
-Events: `save` (profile, notifications, preferences and security fields), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` (the props change back to the saved values and the `SaveBar` closes) and delete `sample.ts`.
+Events: `save` (profile, notifications and preferences), `change-password` (`event`, current and new password), `mfa-change` (on or off, after the confirmation), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` and write every record you saved back to its prop (that tab resets and the `SaveBar` closes when nothing else is edited), update `securityPolicy.mfaEnabled` on `@mfa-change`, and delete `sample.ts`.
 
 ## Do
 
@@ -78,6 +78,7 @@ Events: `save` (profile, notifications, preferences and security fields), `retry
 - Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
 - Don't let the user change a password or turn off multi-factor when the organization manages them.
 - Don't fake a save with a timer; persist on `@save`.
+- Don't send a password or a multi-factor change through `@save`; they have their own events.
 - Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
 
 ## Copy

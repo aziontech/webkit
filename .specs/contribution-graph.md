@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: bab30652489e3732c4c0b7f496097ac938d45216be8871948a30729c14b60ab9
+checksum: d5926f3f385b971e76e1abe6f10d1f1f20a641262af3230395d5d02b74543034
 created: 2026-11-24
 last_updated: 2026-11-25
 ---
@@ -73,15 +73,15 @@ Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart
 
 ## Props
 
-| Prop         | Type                       | Default     | Required | JSDoc                                                                                                                                           |
-| ------------ | -------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`      | `ContributionGraphItem[]`  | `[]`        | false    | Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0. |
-| `year`       | `number`                   | `undefined` | false    | Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date.                         |
-| `endDate`    | `string`                   | `''`        | false    | ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted.                                                                 |
-| `showLegend` | `boolean`                  | `true`      | false    | Renders the `Less … More` intensity legend in the footer.                                                                                       |
-| `loading`    | `boolean`                  | `false`     | false    | Renders a Skeleton placeholder in place of the calendar grid.                                                                                   |
-| `error`      | `string`                   | `''`        | false    | Error message; when set, renders an `EmptyState` with the message inside a `role="alert"` region in place of the grid.                          |
-| `ariaLabel`  | `string`                   | `''`        | false    | Accessible name of the contribution grid.                                                                                                       |
+| Prop         | Type                      | Default     | Required | JSDoc                                                                                                                                           |
+| ------------ | ------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`      | `ContributionGraphItem[]` | `[]`        | false    | Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0. |
+| `year`       | `number`                  | `undefined` | false    | Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date.                         |
+| `endDate`    | `string`                  | `''`        | false    | ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted.                                                                 |
+| `showLegend` | `boolean`                 | `true`      | false    | Renders the `Less … More` intensity legend in the footer.                                                                                       |
+| `loading`    | `boolean`                 | `false`     | false    | Renders a Skeleton placeholder in place of the calendar grid.                                                                                   |
+| `error`      | `string`                  | `''`        | false    | Error message; when set, renders an `EmptyState` with the message inside a `role="alert"` region in place of the grid.                          |
+| `ariaLabel`  | `string`                  | `''`        | false    | Accessible name of the contribution grid.                                                                                                       |
 
 ## v-model
 
@@ -139,7 +139,7 @@ _No slots._
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on each focusable cell (roving `tabindex`).
 - Keyboard map: `Tab` focuses the active/selected cell in the grid; `ArrowUp` / `ArrowDown` moves by 1 day; `ArrowRight` / `ArrowLeft` moves by 1 week (mirrored under `dir="rtl"` via `logicalArrowKey`); `Home` / `End` jumps to the first/last day; `Enter` / `Space` toggles selection of the focused day; `Escape` clears `selectedDate`.
-- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces hover/focus/selection; `role="alert"` on error; `aria-busy="true"` while loading.
+- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces the selected day (a focused cell already reads its own name, so focus and hover are not announced again); the grid is named by `ariaLabel`, else the locale's `Contributions`; `role="alert"` on error; `aria-busy="true"` while loading.
 - Contrast: all intensity steps use `--chart-sequential-*` tokens and `forced-color-adjust-none` so cells remain distinguishable in light, dark, and forced-colors modes.
 - `motion-reduce:transition-none` on cell transitions.
 
@@ -148,9 +148,10 @@ _No slots._
 | Key                                 | English source                                                       | Override prop |
 | ----------------------------------- | -------------------------------------------------------------------- | ------------- |
 | `contributionGraph.roleDescription` | `contribution calendar`                                              | —             |
+| `contributionGraph.label`           | `Contributions`                                                      | `ariaLabel`   |
 | `contributionGraph.noData`          | `No activity recorded`                                               | —             |
 | `contributionGraph.errorTitle`      | `Contributions didn't load`                                          | —             |
-| `contributionGraph.hint`            | `Hover or select a day to inspect activity`                          | —             |
+| `contributionGraph.hint`            | `Select a day to see its activity`                                   | —             |
 | `contributionGraph.less`            | `Less`                                                               | —             |
 | `contributionGraph.more`            | `More`                                                               | —             |
 | `contributionGraph.dayLabel`        | `{count} contribution on {date}` / `{count} contributions on {date}` | `item.label`  |
@@ -184,6 +185,8 @@ _No slots._
 - Loading — Skeleton placeholder while contributions load.
 - Empty — empty `items` array showing the no-activity state.
 - Error — an `EmptyState` in an alert region when contributions fail to load.
+- Markdown — the same graph as a `<ContributionGraph>` tag in a docs page.
+- Page JSON — the same graph as a scene in the marketing site's page JSON.
 
 ## Constraints — DO NOT
 

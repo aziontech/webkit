@@ -104,7 +104,7 @@
           </SettingsRow>
           <SettingsRow
             title="Time zone"
-            description="Dates in the contribution graph, deployments and audit logs use it."
+            description="Times in deployments, activity and audit logs use it."
           >
             <ProfileSelect
               v-model="form.timezone"
@@ -174,6 +174,7 @@
             <Input
               v-model="form.websiteUrl"
               inputmode="url"
+              autocomplete="url"
               size="large"
               class="w-full"
               aria-label="Website or GitHub"

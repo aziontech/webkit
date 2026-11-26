@@ -19,7 +19,7 @@
     },
     {
       "name": "Error",
-      "summary": "An inline danger alert replaces the grid when contributions fail to load.",
+      "summary": "When contributions fail to load, a bordered empty state with the error message replaces the grid and is announced as an alert.",
       "file": "error.vue"
     },
     {

@@ -1,5 +1,7 @@
 import { fireEvent, render, type RenderResult } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
+import { nextTick } from 'vue'
 
 import DefaultExample from '../../../../examples/contribution-graph/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -135,6 +137,61 @@ describe('ContributionGraph', () => {
     expect(alert.contains(errorView.getByTestId('contribution-graph__error'))).toBe(true)
     expect(alert.textContent).toContain("Contributions didn't load")
     expect(alert.textContent).toContain('Failed to load contributions.')
+  })
+
+  it('scales the levels by the days shown, not by items outside the year', () => {
+    const view = render(ContributionGraph, {
+      props: {
+        year: 2026,
+        items: [
+          { date: '2025-12-31', count: 500 },
+          { date: '2026-03-02', count: 4 }
+        ]
+      }
+    })
+    expect(cellOn(view, '2026-03-02').getAttribute('data-level')).toBe('4')
+  })
+
+  it('names the grid when ariaLabel is left out', () => {
+    const view = render(ContributionGraph, { props: { year: 2026, items: sampleItems } })
+    expect(view.getByRole('grid', { name: 'Contributions' })).toBeTruthy()
+  })
+
+  it('draws a leap year as 366 days and keeps one cell in the tab order', () => {
+    const view = render(ContributionGraph, {
+      props: { year: 2028, items: [], ariaLabel: 'Leap year' }
+    })
+    const cells = view.getAllByTestId('contribution-graph__cell')
+    expect(cells).toHaveLength(366)
+    expect(cells.filter((cell) => cell.tabIndex === 0)).toHaveLength(1)
+  })
+
+  it('announces only the picked day, and Enter picks it and emits the event first', async () => {
+    const view = mount()
+    const live = view.getByTestId('contribution-graph__live')
+    const day = cellOn(view, '2026-06-15')
+    await fireEvent.pointerOver(day)
+    day.focus()
+    expect(live.textContent?.trim()).toBe('')
+    await userEvent.keyboard('{Enter}')
+    expect(live.textContent).toContain('8 contributions')
+    const [event, item] = view.emitted<unknown[]>('select')!.at(-1)!
+    expect(event).toBeInstanceOf(Event)
+    expect(item).toMatchObject({ date: '2026-06-15', count: 8 })
+    expect(view.emitted<unknown[]>('update:selectedDate')!.at(-1)).toEqual(['2026-06-15'])
+  })
+
+  it('clears the readout once focus leaves the grid', async () => {
+    const view = mount()
+    const day = cellOn(view, '2026-06-15')
+    day.focus()
+    await nextTick()
+    const readout = view.getByTestId('contribution-graph__readout')
+    expect(readout.textContent).toContain('8 contributions')
+    day.blur()
+    await fireEvent.focusOut(day, { relatedTarget: document.body })
+    await nextTick()
+    expect(readout.textContent).toContain('Select a day')
   })
 
   it('passes axe accessibility checks in LTR and RTL', async () => {

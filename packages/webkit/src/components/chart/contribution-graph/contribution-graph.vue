@@ -114,29 +114,38 @@
     return t('contributionGraph.dayLabel', { count: day.count, date: formattedDate })
   }
 
-  const activeDay = computed<ContributionGraphDay | null>(() => {
-    const days = grid.value.days
-    if (!days.length) return null
-    if (hoveredIndex.value !== null && days[hoveredIndex.value]) {
-      return days[hoveredIndex.value] ?? null
-    }
-    if (selectedDate.value) {
-      const found = days.find((d) => d.date === selectedDate.value)
-      if (found) return found
-    }
-    return null
+  const dayLabels = computed(() => grid.value.days.map(labelForDay))
+
+  const selectedIndex = computed(() => {
+    if (!selectedDate.value) return -1
+    return grid.value.days.findIndex((day) => day.date === selectedDate.value)
   })
 
   const readoutText = computed(() => {
-    if (activeDay.value) return labelForDay(activeDay.value)
-    return t('contributionGraph.hint')
+    const index =
+      hoveredIndex.value !== null && grid.value.days[hoveredIndex.value]
+        ? hoveredIndex.value
+        : selectedIndex.value
+    return index >= 0 ? (dayLabels.value[index] ?? '') : t('contributionGraph.hint')
   })
 
   const announcement = computed(() => {
     if (props.loading || hasError.value) return ''
     if (isEmpty.value) return t('contributionGraph.noData')
-    return activeDay.value ? labelForDay(activeDay.value) : ''
+    return selectedIndex.value >= 0 ? (dayLabels.value[selectedIndex.value] ?? '') : ''
   })
+
+  function onGridPointer(event: globalThis.PointerEvent | globalThis.FocusEvent) {
+    const cell =
+      event.target instanceof globalThis.Element ? event.target.closest('[data-day-index]') : null
+    if (cell) hoveredIndex.value = Number(cell.getAttribute('data-day-index'))
+  }
+
+  function onGridFocusout(event: globalThis.FocusEvent) {
+    const next = event.relatedTarget
+    if (!(next instanceof globalThis.Node) || !gridEl.value?.contains(next))
+      hoveredIndex.value = null
+  }
 
   watch(
     () => grid.value.days,
@@ -290,10 +299,13 @@
               ref="gridEl"
               role="grid"
               :aria-roledescription="t('contributionGraph.roleDescription')"
-              :aria-label="ariaLabel || undefined"
+              :aria-label="ariaLabel || t('contributionGraph.label')"
               :data-testid="`${testId}__grid`"
               class="flex flex-col gap-0.5"
               @pointerleave="hoveredIndex = null"
+              @pointerover="onGridPointer"
+              @focusin="onGridPointer"
+              @focusout="onGridFocusout"
             >
               <div
                 v-for="(row, dow) in rows"
@@ -314,12 +326,10 @@
                     :data-date="cell.day.date"
                     :data-level="cell.day.level"
                     :data-selected="selectedDate === cell.day.date || null"
-                    :aria-label="labelForDay(cell.day)"
+                    :aria-label="dayLabels[cell.index]"
                     :aria-selected="selectedDate === cell.day.date"
                     :tabindex="cell.index === focusedIndex ? 0 : -1"
                     :class="CELL_CLASS"
-                    @pointerenter="hoveredIndex = cell.index"
-                    @focus="hoveredIndex = cell.index"
                     @click="toggleDay($event, cell.day, cell.index)"
                     @keydown="onCellKeydown($event, cell.index)"
                   />

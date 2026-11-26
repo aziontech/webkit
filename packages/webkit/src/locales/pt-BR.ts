@@ -1602,9 +1602,10 @@ export const ptBR: Messages = {
   },
   contributionGraph: {
     roleDescription: 'calendário de contribuições',
+    label: 'Contribuições',
     noData: 'Nenhuma atividade registrada',
     errorTitle: 'As contribuições não carregaram',
-    hint: 'Passe o mouse ou selecione um dia para inspecionar a atividade',
+    hint: 'Selecione um dia para ver a atividade',
     less: 'Menos',
     more: 'Mais',
     dayLabel: {

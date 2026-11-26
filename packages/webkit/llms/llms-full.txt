@@ -3312,7 +3312,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-tea
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-user-profile")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: Alert, Avatar, Button, Card, ContributionGraph, EmptyState, Input, Item, Kbd, LanguageSelect, Link, PageTabs, PasswordInput, PasswordRequirements, PhoneInput, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, StatTile, StatTileGroup, Switch, Tabs, Tag, Textarea, ThemeSwitcher, Timeline, Timestamp, ToggleGroup, `use-locale`
+- Components: Alert, Avatar, Button, Card, ConfirmDialog, ContributionGraph, EmptyState, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageTabs, PasswordInput, PasswordRequirements, PasswordRequirements, PhoneInput, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, StatTile, StatTileGroup, Switch, Tabs, Tag, Textarea, ThemeSwitcher, Timeline, Timestamp, ToggleGroup, `use-locale`
 - Skills: `webkit-form`, `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`, `webkit-microcopy`
 
 ## Asked as
@@ -3351,7 +3351,7 @@ The block fetches nothing. It takes its data through props and hands edits back 
 
 Prop: `profile`, `years`, `securityPolicy`, `notifications`, `preferences`, `loading`, `error`, `v-model:active-tab`, `v-model:selected-year`.
 
-Events: `save` (profile, notifications, preferences and security fields), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` (the props change back to the saved values and the `SaveBar` closes) and delete `sample.ts`.
+Events: `save` (profile, notifications and preferences), `change-password` (`event`, current and new password), `mfa-change` (on or off, after the confirmation), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` and write every record you saved back to its prop (that tab resets and the `SaveBar` closes when nothing else is edited), update `securityPolicy.mfaEnabled` on `@mfa-change`, and delete `sample.ts`.
 
 What each prop and event does, and the go-live code: [blocks/account/account-user-profile.md](blocks/account/account-user-profile.md).
 
@@ -3366,6 +3366,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
 - Don't let the user change a password or turn off multi-factor when the organization manages them.
 - Don't fake a save with a timer; persist on `@save`.
+- Don't send a password or a multi-factor change through `@save`; they have their own events.
 - Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
 
 ## Copy
@@ -16623,7 +16624,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on each focusable cell (roving `tabindex`).
 - Keyboard map: `Tab` focuses the active/selected cell in the grid; `ArrowUp` / `ArrowDown` moves by 1 day; `ArrowRight` / `ArrowLeft` moves by 1 week (mirrored under `dir="rtl"` via `logicalArrowKey`); `Home` / `End` jumps to the first/last day; `Enter` / `Space` toggles selection of the focused day; `Escape` clears `selectedDate`.
-- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces hover/focus/selection; `role="alert"` on error; `aria-busy="true"` while loading.
+- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces the selected day (a focused cell already reads its own name, so focus and hover are not announced again); the grid is named by `ariaLabel`, else the locale's `Contributions`; `role="alert"` on error; `aria-busy="true"` while loading.
 - Contrast: all intensity steps use `--chart-sequential-*` tokens and `forced-color-adjust-none` so cells remain distinguishable in light, dark, and forced-colors modes.
 - `motion-reduce:transition-none` on cell transitions.
 

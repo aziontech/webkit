@@ -101,13 +101,19 @@ function resolveBounds(
   return { start, end }
 }
 
-function indexItems(items: ContributionGraphItem[]): {
+function indexItems(
+  items: ContributionGraphItem[],
+  startMs: number,
+  endMs: number
+): {
   byDate: Map<string, ContributionGraphItem>
   maxCount: number
 } {
   const byDate = new Map<string, ContributionGraphItem>()
   let maxCount = 0
   for (const item of items) {
+    const at = parseIsoDate(item.date)?.getTime()
+    if (at === undefined || at < startMs || at > endMs) continue
     const existing = byDate.get(item.date)
     const count = (existing?.count ?? 0) + Math.max(0, item.count)
     byDate.set(item.date, {
@@ -137,9 +143,9 @@ export function buildCalendarGrid(
   const bounds = resolveBounds(items, year, endDate)
   if (!bounds) return { days: [], weeks: 0, months: [] }
 
-  const { byDate, maxCount } = indexItems(items)
   const startMs = bounds.start.getTime()
   const endMs = bounds.end.getTime()
+  const { byDate, maxCount } = indexItems(items, startMs, endMs)
   const gridStart = startMs - bounds.start.getUTCDay() * DAY_MS
   const gridEnd = endMs + (6 - bounds.end.getUTCDay()) * DAY_MS
 

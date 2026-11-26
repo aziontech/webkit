@@ -175,10 +175,8 @@ export interface UserProfilePreferences {
   keyboardShortcuts: boolean
 }
 
-/** The password and multi-factor fields of the security tab. */
+/** The password fields of the security tab. */
 export interface UserProfileSecurityForm {
-  /** Multi-factor authentication on. */
-  mfaEnabled: boolean
   /** Current password. */
   currentPassword: string
   /** New password. */
@@ -195,8 +193,14 @@ export interface UserProfileSavePayload {
   notifications: UserProfileNotificationSettings
   /** The edited preferences. */
   preferences: UserProfilePreferences
-  /** The edited security fields. */
-  security: UserProfileSecurityForm
+}
+
+/** What the change-password event hands back. */
+export interface UserProfilePasswordChange {
+  /** The password the user signs in with today. */
+  currentPassword: string
+  /** The new password; it meets every requirement and was typed twice. */
+  newPassword: string
 }
 
 /** One choice of a select or a toggle group. */

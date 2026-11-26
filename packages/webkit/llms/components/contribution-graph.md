@@ -71,7 +71,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on each focusable cell (roving `tabindex`).
 - Keyboard map: `Tab` focuses the active/selected cell in the grid; `ArrowUp` / `ArrowDown` moves by 1 day; `ArrowRight` / `ArrowLeft` moves by 1 week (mirrored under `dir="rtl"` via `logicalArrowKey`); `Home` / `End` jumps to the first/last day; `Enter` / `Space` toggles selection of the focused day; `Escape` clears `selectedDate`.
-- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces hover/focus/selection; `role="alert"` on error; `aria-busy="true"` while loading.
+- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces the selected day (a focused cell already reads its own name, so focus and hover are not announced again); the grid is named by `ariaLabel`, else the locale's `Contributions`; `role="alert"` on error; `aria-busy="true"` while loading.
 - Contrast: all intensity steps use `--chart-sequential-*` tokens and `forced-color-adjust-none` so cells remain distinguishable in light, dark, and forced-colors modes.
 - `motion-reduce:transition-none` on cell transitions.
 
@@ -87,9 +87,10 @@
 | Key                                 | English source                                                       | Override prop |
 | ----------------------------------- | -------------------------------------------------------------------- | ------------- |
 | `contributionGraph.roleDescription` | `contribution calendar`                                              | —             |
+| `contributionGraph.label`           | `Contributions`                                                      | `ariaLabel`   |
 | `contributionGraph.noData`          | `No activity recorded`                                               | —             |
 | `contributionGraph.errorTitle`      | `Contributions didn't load`                                          | —             |
-| `contributionGraph.hint`            | `Hover or select a day to inspect activity`                          | —             |
+| `contributionGraph.hint`            | `Select a day to see its activity`                                   | —             |
 | `contributionGraph.less`            | `Less`                                                               | —             |
 | `contributionGraph.more`            | `More`                                                               | —             |
 | `contributionGraph.dayLabel`        | `{count} contribution on {date}` / `{count} contributions on {date}` | `item.label`  |

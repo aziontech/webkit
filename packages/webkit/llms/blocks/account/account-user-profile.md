@@ -1,12 +1,12 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-user-profile")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ContributionGraph](../../components/contribution-graph.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageTabs](../../components/page-tabs.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PhoneInput](../../components/phone-input.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [ThemeSwitcher](../../components/theme-switcher.md), [Timeline](../../components/timeline.md), [Timestamp](../../components/timestamp.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [ContributionGraph](../../components/contribution-graph.md), [EmptyState](../../components/empty-state.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageTabs](../../components/page-tabs.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PasswordRequirements](../../components/password-requirements.md), [PhoneInput](../../components/phone-input.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [ThemeSwitcher](../../components/theme-switcher.md), [Timeline](../../components/timeline.md), [Timestamp](../../components/timestamp.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
 - Skills: `webkit-form`, `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`, `webkit-microcopy`
 
 ## Asked as
@@ -54,13 +54,13 @@ The year's contributions grouped by month in a `Timeline`, newest first. With a 
 Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.List`.
 
 - **Profile and bio:** picture, names, handle, bio, time zone, local time, language, email, phone, website, and two visibility switches.
-- **Security and access:** current, new and confirm password with live `PasswordRequirements`, multi-factor and personal tokens. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider and the password fields are disabled; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
+- **Security and access:** current, new and confirm password with live `PasswordRequirements` and its own Change password button, multi-factor and personal tokens. These act on their own and never ride the `SaveBar`: Change password checks the three fields and puts each error on its field (`FieldError`) before it sends `change-password`; turning multi-factor off asks first in a `ConfirmDialog`. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider and the password fields are disabled; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
 - **Notifications:** the notification email, the Application Security, Platform and Delivery, and Account Activity and AI Adoption digests (frequency and channel), and real-time alerts for watched resources, mentions, deployments and AI Copilot sessions.
 - **Preferences:** `ThemeSwitcher` and Keyboard shortcuts.
 
 ### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
 
-Any edit in a settings tab shows one `SaveBar` with Discard and Save changes. Command S saves; its `Kbd` hint hides when Keyboard shortcuts is off.
+Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
 
 ## Data
 
@@ -73,12 +73,12 @@ The block fetches nothing. It takes its data through props and hands edits back 
 | `securityPolicy`        | `UserProfileSecurityPolicy`       | SSO and SCIM management, multi-factor state and policy, token summary. |
 | `notifications`         | `UserProfileNotificationSettings` | Notification email, digests and alerts.                                |
 | `preferences`           | `UserProfilePreferences`          | Theme and keyboard shortcuts.                                          |
-| `loading`               | `boolean`                         | Skeletons in the header, metrics, graph and history.                   |
+| `loading`               | `boolean`                         | Skeletons in the header, metrics, graph, history and settings tabs.    |
 | `error`                 | `string`                          | A danger `Alert` with Retry replaces the page.                         |
 | `v-model:active-tab`    | `UserProfileTab`                  | The open tab.                                                          |
-| `v-model:selected-year` | `number`                          | The year of the overview.                                              |
+| `v-model:selected-year` | `number`                          | The year of the overview; moves to the newest year when it has none.   |
 
-Events: `save` (profile, notifications, preferences and security fields), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` (the props change back to the saved values and the `SaveBar` closes) and delete `sample.ts`.
+Events: `save` (profile, notifications and preferences), `change-password` (`event`, current and new password), `mfa-change` (on or off, after the confirmation), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` and write every record you saved back to its prop (that tab resets and the `SaveBar` closes when nothing else is edited), update `securityPolicy.mfaEnabled` on `@mfa-change`, and delete `sample.ts`.
 
 ## Do
 
@@ -91,6 +91,7 @@ Events: `save` (profile, notifications, preferences and security fields), `retry
 - Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
 - Don't let the user change a password or turn off multi-factor when the organization manages them.
 - Don't fake a save with a timer; persist on `@save`.
+- Don't send a password or a multi-factor change through `@save`; they have their own events.
 - Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
 
 ## Copy
@@ -144,6 +145,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   import Kbd from '@aziontech/webkit/kbd'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Tabs from '@aziontech/webkit/tabs'
   import { computed, ref, watch } from 'vue'
 
@@ -163,6 +165,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   import type {
     UserProfileData,
     UserProfileNotificationSettings,
+    UserProfilePasswordChange,
     UserProfilePreferences,
     UserProfileSavePayload,
     UserProfileSecurityForm,
@@ -204,6 +207,8 @@ Each variant is the same screen in another state: `get_block("account/account-us
     'upload-avatar': [event: MouseEvent]
     'remove-avatar': [event: MouseEvent]
     'manage-tokens': [event: MouseEvent]
+    'change-password': [event: MouseEvent, change: UserProfilePasswordChange]
+    'mfa-change': [enabled: boolean]
     'view-watched': [event: MouseEvent]
   }>()
 
@@ -212,46 +217,63 @@ Each variant is the same screen in another state: `get_block("account/account-us
 
   const years = computed(() => props.years ?? (props.loading ? [] : sampleYears))
 
-  const securityBaseline = (): UserProfileSecurityForm => ({
-    mfaEnabled: props.securityPolicy.mfaEnabled,
+  const profileForm = ref<UserProfileData>({ ...props.profile })
+  const notificationForm = ref<UserProfileNotificationSettings>({ ...props.notifications })
+  const preferencesForm = ref<UserProfilePreferences>({ ...props.preferences })
+  const securityForm = ref<UserProfileSecurityForm>({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   })
 
-  const profileForm = ref<UserProfileData>({ ...props.profile })
-  const notificationForm = ref<UserProfileNotificationSettings>({ ...props.notifications })
-  const preferencesForm = ref<UserProfilePreferences>({ ...props.preferences })
-  const securityForm = ref<UserProfileSecurityForm>(securityBaseline())
-
   const snapshot = (): UserProfileSavePayload => ({
     profile: { ...profileForm.value },
     notifications: { ...notificationForm.value },
-    preferences: { ...preferencesForm.value },
-    security: { ...securityForm.value }
+    preferences: { ...preferencesForm.value }
   })
+
+  const same = (edited: object, saved: object) => JSON.stringify(edited) === JSON.stringify(saved)
 
   const dirty = computed(
     () =>
-      JSON.stringify(snapshot()) !==
-      JSON.stringify({
-        profile: props.profile,
-        notifications: props.notifications,
-        preferences: props.preferences,
-        security: securityBaseline()
-      })
+      !same(profileForm.value, props.profile) ||
+      !same(notificationForm.value, props.notifications) ||
+      !same(preferencesForm.value, props.preferences)
   )
 
   function discard() {
     profileForm.value = { ...props.profile }
     notificationForm.value = { ...props.notifications }
     preferencesForm.value = { ...props.preferences }
-    securityForm.value = securityBaseline()
   }
 
   watch(
-    () => [props.profile, props.notifications, props.preferences, props.securityPolicy],
-    discard
+    () => props.profile,
+    (saved) => {
+      profileForm.value = { ...saved }
+    }
+  )
+  watch(
+    () => props.notifications,
+    (saved) => {
+      notificationForm.value = { ...saved }
+    }
+  )
+  watch(
+    () => props.preferences,
+    (saved) => {
+      preferencesForm.value = { ...saved }
+    }
+  )
+
+  watch(
+    years,
+    (list) => {
+      if (list.length && !list.some((entry) => entry.year === selectedYear.value)) {
+        selectedYear.value = list[0]!.year
+      }
+    },
+    { immediate: true }
   )
 
   function save() {
@@ -298,8 +320,13 @@ Each variant is the same screen in another state: `get_block("account/account-us
         />
       </PageTabs>
 
+      <Skeleton
+        v-if="loading && activeTab !== 'overview'"
+        width="100%"
+        height="20rem"
+      />
       <ProfileOverview
-        v-if="activeTab === 'overview'"
+        v-else-if="activeTab === 'overview'"
         v-model:selected-year="selectedYear"
         :years="years"
         :loading="loading"
@@ -315,6 +342,8 @@ Each variant is the same screen in another state: `get_block("account/account-us
         v-model:form="securityForm"
         :policy="securityPolicy"
         @manage-tokens="emit('manage-tokens', $event)"
+        @change-password="(event, change) => emit('change-password', event, change)"
+        @mfa-change="emit('mfa-change', $event)"
       />
       <ProfileNotificationsTab
         v-else-if="activeTab === 'notifications'"
@@ -329,7 +358,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
 
       <SaveBar
         v-if="dirty"
-        @save="save"
+        v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
       >
         You have unsaved changes.
         <template #actions>
@@ -802,10 +831,8 @@ export interface UserProfilePreferences {
   keyboardShortcuts: boolean
 }
 
-/** The password and multi-factor fields of the security tab. */
+/** The password fields of the security tab. */
 export interface UserProfileSecurityForm {
-  /** Multi-factor authentication on. */
-  mfaEnabled: boolean
   /** Current password. */
   currentPassword: string
   /** New password. */
@@ -822,8 +849,14 @@ export interface UserProfileSavePayload {
   notifications: UserProfileNotificationSettings
   /** The edited preferences. */
   preferences: UserProfilePreferences
-  /** The edited security fields. */
-  security: UserProfileSecurityForm
+}
+
+/** What the change-password event hands back. */
+export interface UserProfilePasswordChange {
+  /** The password the user signs in with today. */
+  currentPassword: string
+  /** The new password; it meets every requirement and was typed twice. */
+  newPassword: string
 }
 
 /** One choice of a select or a toggle group. */
@@ -966,6 +999,15 @@ export function filterHistory(
     `${props.profile.firstName.charAt(0)}${props.profile.lastName.charAt(0)}`.toUpperCase()
   )
   const fullName = computed(() => `${props.profile.firstName} ${props.profile.lastName}`.trim())
+  const details = computed(() =>
+    [
+      props.profile.handle && `@${props.profile.handle}`,
+      props.profile.location,
+      props.profile.memberSince && `On Azion since ${props.profile.memberSince}`
+    ]
+      .filter(Boolean)
+      .join(' · ')
+  )
 </script>
 
 <template>
@@ -1006,7 +1048,7 @@ export function filterHistory(
         v-else
         class="truncate text-body-sm text-(--text-muted)"
       >
-        @{{ profile.handle }} · {{ profile.location }} · On Azion since {{ profile.memberSince }}
+        {{ details }}
       </p>
     </div>
   </header>
@@ -1157,7 +1199,7 @@ export function filterHistory(
               size="small"
               :variant="entry.year === shownYear ? 'secondary' : 'ghost'"
               :label="String(entry.year)"
-              :aria-current="entry.year === shownYear ? 'true' : undefined"
+              :aria-pressed="entry.year === shownYear"
               @click="selectedYear = entry.year"
             />
           </nav>
@@ -1343,7 +1385,7 @@ export function filterHistory(
           </SettingsRow>
           <SettingsRow
             title="Time zone"
-            description="Dates in the contribution graph, deployments and audit logs use it."
+            description="Times in deployments, activity and audit logs use it."
           >
             <ProfileSelect
               v-model="form.timezone"
@@ -1413,6 +1455,7 @@ export function filterHistory(
             <Input
               v-model="form.websiteUrl"
               inputmode="url"
+              autocomplete="url"
               size="large"
               class="w-full"
               aria-label="Website or GitHub"
@@ -1463,29 +1506,94 @@ export function filterHistory(
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import FieldError from '@aziontech/webkit/field-error'
   import Item from '@aziontech/webkit/item'
   import PasswordInput from '@aziontech/webkit/password-input'
+  import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
   import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Timestamp from '@aziontech/webkit/timestamp'
+  import { computed, ref, useId, watch } from 'vue'
 
-  import type { UserProfileSecurityForm, UserProfileSecurityPolicy } from '../user-profile-model'
+  import type {
+    UserProfilePasswordChange,
+    UserProfileSecurityForm,
+    UserProfileSecurityPolicy
+  } from '../user-profile-model'
 
   export interface ProfileSecurityTabProps {
     /** The security state and the organization's policy. */
     policy: UserProfileSecurityPolicy
   }
 
-  defineProps<ProfileSecurityTabProps>()
+  const props = defineProps<ProfileSecurityTabProps>()
 
   const form = defineModel<UserProfileSecurityForm>('form', { required: true })
 
   const emit = defineEmits<{
     'manage-tokens': [event: MouseEvent]
+    'change-password': [event: MouseEvent, change: UserProfilePasswordChange]
+    'mfa-change': [enabled: boolean]
   }>()
+
+  const currentErrorId = useId()
+  const newErrorId = useId()
+  const confirmErrorId = useId()
+
+  const submitted = ref(false)
+  const confirmingMfaOff = ref(false)
+
+  const currentError = computed(() =>
+    submitted.value && !form.value.currentPassword ? 'Enter your current password.' : ''
+  )
+  const newError = computed(() =>
+    submitted.value &&
+    !DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(form.value.newPassword))
+      ? 'Meet every requirement above.'
+      : ''
+  )
+  const confirmError = computed(() =>
+    submitted.value && form.value.confirmPassword !== form.value.newPassword
+      ? "The passwords don't match."
+      : ''
+  )
+
+  const mfaOn = ref(props.policy.mfaEnabled)
+  watch(
+    () => props.policy.mfaEnabled,
+    (enabled) => {
+      mfaOn.value = enabled
+    }
+  )
+
+  const mfaEnabled = computed({
+    get: () => mfaOn.value,
+    set: (enabled: boolean) => {
+      if (enabled) setMfa(true)
+      else confirmingMfaOff.value = true
+    }
+  })
+
+  function setMfa(enabled: boolean) {
+    mfaOn.value = enabled
+    confirmingMfaOff.value = false
+    emit('mfa-change', enabled)
+  }
+
+  function changePassword(event: MouseEvent) {
+    submitted.value = true
+    if (currentError.value || newError.value || confirmError.value) return
+    emit('change-password', event, {
+      currentPassword: form.value.currentPassword,
+      newPassword: form.value.newPassword
+    })
+    form.value = { currentPassword: '', newPassword: '', confirmPassword: '' }
+    submitted.value = false
+  }
 </script>
 
 <template>
@@ -1509,12 +1617,21 @@ export function filterHistory(
         <Card :padded="false">
           <Item.List>
             <SettingsRow title="Current password">
-              <PasswordInput
-                v-model="form.currentPassword"
-                autocomplete="current-password"
-                :disabled="policy.ssoManaged"
-                aria-label="Current password"
-              />
+              <div class="flex w-full flex-col gap-(--spacing-2xs)">
+                <PasswordInput
+                  v-model="form.currentPassword"
+                  autocomplete="current-password"
+                  :disabled="policy.ssoManaged"
+                  :invalid="Boolean(currentError)"
+                  :aria-describedby="currentError ? currentErrorId : undefined"
+                  aria-label="Current password"
+                />
+                <FieldError
+                  v-if="currentError"
+                  :id="currentErrorId"
+                  >{{ currentError }}</FieldError
+                >
+              </div>
             </SettingsRow>
             <SettingsRow
               title="New password"
@@ -1525,24 +1642,52 @@ export function filterHistory(
                   v-model="form.newPassword"
                   autocomplete="new-password"
                   :disabled="policy.ssoManaged"
+                  :invalid="Boolean(newError)"
+                  :aria-describedby="newError ? newErrorId : undefined"
                   aria-label="New password"
                 />
                 <PasswordRequirements
                   v-if="!policy.ssoManaged"
                   :value="form.newPassword"
                 />
+                <FieldError
+                  v-if="newError"
+                  :id="newErrorId"
+                  >{{ newError }}</FieldError
+                >
               </div>
             </SettingsRow>
             <SettingsRow title="Confirm new password">
-              <PasswordInput
-                v-model="form.confirmPassword"
-                autocomplete="new-password"
-                :disabled="policy.ssoManaged"
-                aria-label="Confirm new password"
-              />
+              <div class="flex w-full flex-col gap-(--spacing-2xs)">
+                <PasswordInput
+                  v-model="form.confirmPassword"
+                  autocomplete="new-password"
+                  :disabled="policy.ssoManaged"
+                  :invalid="Boolean(confirmError)"
+                  :aria-describedby="confirmError ? confirmErrorId : undefined"
+                  aria-label="Confirm new password"
+                />
+                <FieldError
+                  v-if="confirmError"
+                  :id="confirmErrorId"
+                  >{{ confirmError }}</FieldError
+                >
+              </div>
             </SettingsRow>
           </Item.List>
         </Card>
+        <div
+          v-if="!policy.ssoManaged"
+          class="flex justify-end"
+        >
+          <Button
+            type="button"
+            label="Change password"
+            variant="secondary"
+            size="medium"
+            @click="changePassword"
+          />
+        </div>
       </div>
     </SettingsGroup>
 
@@ -1573,9 +1718,16 @@ export function filterHistory(
               </span>
             </template>
             <Switch
-              v-model="form.mfaEnabled"
+              v-model="mfaEnabled"
               :disabled="policy.mfaEnforced"
               aria-label="Multi-factor authentication"
+            />
+            <ConfirmDialog
+              v-model:open="confirmingMfaOff"
+              title="Turn off multi-factor authentication?"
+              description="You'll sign in with your password alone, and anyone who learns it can get into your account."
+              confirm-label="Turn off"
+              @confirm="setMfa(false)"
             />
           </SettingsRow>
           <SettingsRow

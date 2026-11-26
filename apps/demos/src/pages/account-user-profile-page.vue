@@ -2,10 +2,18 @@
   import { toast } from '@aziontech/webkit/toast'
   import { ref } from 'vue'
 
-  import { sampleProfile } from '../blocks/account-user-profile.sample'
+  import {
+    sampleNotifications,
+    samplePreferences,
+    sampleProfile,
+    sampleSecurityPolicy
+  } from '../blocks/account-user-profile.sample'
   import type {
     UserProfileData,
+    UserProfileNotificationSettings,
+    UserProfilePreferences,
     UserProfileSavePayload,
+    UserProfileSecurityPolicy,
     UserProfileTab
   } from '../blocks/account-user-profile.user-profile-model'
   import AccountUserProfile from '../blocks/account-user-profile.vue'
@@ -21,13 +29,30 @@
     email: account.email,
     alternateEmails: [account.email, 'ops@example.com']
   })
+  const notifications = ref<UserProfileNotificationSettings>({ ...sampleNotifications })
+  const preferences = ref<UserProfilePreferences>({ ...samplePreferences })
+  const securityPolicy = ref<UserProfileSecurityPolicy>({ ...sampleSecurityPolicy })
   const activeTab = ref<UserProfileTab>('overview')
 
   const onSave = (payload: UserProfileSavePayload) => {
     profile.value = { ...payload.profile }
+    notifications.value = { ...payload.notifications }
+    preferences.value = { ...payload.preferences }
     account.name = `${payload.profile.firstName} ${payload.profile.lastName}`.trim()
     account.email = payload.profile.email.trim()
     toast.success('Your profile was saved.', { closable: true })
+  }
+
+  const onChangePassword = () => {
+    toast.success('Your password was changed.', { closable: true })
+  }
+
+  const onMfaChange = (enabled: boolean) => {
+    securityPolicy.value = { ...securityPolicy.value, mfaEnabled: enabled }
+    toast.success(
+      enabled ? 'Multi-factor authentication is on.' : 'Multi-factor authentication is off.',
+      { closable: true }
+    )
   }
 </script>
 
@@ -35,6 +60,11 @@
   <AccountUserProfile
     v-model:active-tab="activeTab"
     :profile="profile"
+    :notifications="notifications"
+    :preferences="preferences"
+    :security-policy="securityPolicy"
     @save="onSave"
+    @change-password="onChangePassword"
+    @mfa-change="onMfaChange"
   />
 </template>

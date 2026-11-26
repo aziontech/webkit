@@ -4,6 +4,7 @@
   import Kbd from '@aziontech/webkit/kbd'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Tabs from '@aziontech/webkit/tabs'
   import { computed, ref, watch } from 'vue'
 
@@ -23,6 +24,7 @@
   import type {
     UserProfileData,
     UserProfileNotificationSettings,
+    UserProfilePasswordChange,
     UserProfilePreferences,
     UserProfileSavePayload,
     UserProfileSecurityForm,
@@ -64,6 +66,8 @@
     'upload-avatar': [event: MouseEvent]
     'remove-avatar': [event: MouseEvent]
     'manage-tokens': [event: MouseEvent]
+    'change-password': [event: MouseEvent, change: UserProfilePasswordChange]
+    'mfa-change': [enabled: boolean]
     'view-watched': [event: MouseEvent]
   }>()
 
@@ -72,46 +76,63 @@
 
   const years = computed(() => props.years ?? (props.loading ? [] : sampleYears))
 
-  const securityBaseline = (): UserProfileSecurityForm => ({
-    mfaEnabled: props.securityPolicy.mfaEnabled,
+  const profileForm = ref<UserProfileData>({ ...props.profile })
+  const notificationForm = ref<UserProfileNotificationSettings>({ ...props.notifications })
+  const preferencesForm = ref<UserProfilePreferences>({ ...props.preferences })
+  const securityForm = ref<UserProfileSecurityForm>({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   })
 
-  const profileForm = ref<UserProfileData>({ ...props.profile })
-  const notificationForm = ref<UserProfileNotificationSettings>({ ...props.notifications })
-  const preferencesForm = ref<UserProfilePreferences>({ ...props.preferences })
-  const securityForm = ref<UserProfileSecurityForm>(securityBaseline())
-
   const snapshot = (): UserProfileSavePayload => ({
     profile: { ...profileForm.value },
     notifications: { ...notificationForm.value },
-    preferences: { ...preferencesForm.value },
-    security: { ...securityForm.value }
+    preferences: { ...preferencesForm.value }
   })
+
+  const same = (edited: object, saved: object) => JSON.stringify(edited) === JSON.stringify(saved)
 
   const dirty = computed(
     () =>
-      JSON.stringify(snapshot()) !==
-      JSON.stringify({
-        profile: props.profile,
-        notifications: props.notifications,
-        preferences: props.preferences,
-        security: securityBaseline()
-      })
+      !same(profileForm.value, props.profile) ||
+      !same(notificationForm.value, props.notifications) ||
+      !same(preferencesForm.value, props.preferences)
   )
 
   function discard() {
     profileForm.value = { ...props.profile }
     notificationForm.value = { ...props.notifications }
     preferencesForm.value = { ...props.preferences }
-    securityForm.value = securityBaseline()
   }
 
   watch(
-    () => [props.profile, props.notifications, props.preferences, props.securityPolicy],
-    discard
+    () => props.profile,
+    (saved) => {
+      profileForm.value = { ...saved }
+    }
+  )
+  watch(
+    () => props.notifications,
+    (saved) => {
+      notificationForm.value = { ...saved }
+    }
+  )
+  watch(
+    () => props.preferences,
+    (saved) => {
+      preferencesForm.value = { ...saved }
+    }
+  )
+
+  watch(
+    years,
+    (list) => {
+      if (list.length && !list.some((entry) => entry.year === selectedYear.value)) {
+        selectedYear.value = list[0]!.year
+      }
+    },
+    { immediate: true }
   )
 
   function save() {
@@ -158,8 +179,13 @@
         />
       </PageTabs>
 
+      <Skeleton
+        v-if="loading && activeTab !== 'overview'"
+        width="100%"
+        height="20rem"
+      />
       <ProfileOverview
-        v-if="activeTab === 'overview'"
+        v-else-if="activeTab === 'overview'"
         v-model:selected-year="selectedYear"
         :years="years"
         :loading="loading"
@@ -175,6 +201,8 @@
         v-model:form="securityForm"
         :policy="securityPolicy"
         @manage-tokens="emit('manage-tokens', $event)"
+        @change-password="(event, change) => emit('change-password', event, change)"
+        @mfa-change="emit('mfa-change', $event)"
       />
       <ProfileNotificationsTab
         v-else-if="activeTab === 'notifications'"
@@ -189,7 +217,7 @@
 
       <SaveBar
         v-if="dirty"
-        @save="save"
+        v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
       >
         You have unsaved changes.
         <template #actions>

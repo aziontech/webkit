@@ -19,6 +19,15 @@
     `${props.profile.firstName.charAt(0)}${props.profile.lastName.charAt(0)}`.toUpperCase()
   )
   const fullName = computed(() => `${props.profile.firstName} ${props.profile.lastName}`.trim())
+  const details = computed(() =>
+    [
+      props.profile.handle && `@${props.profile.handle}`,
+      props.profile.location,
+      props.profile.memberSince && `On Azion since ${props.profile.memberSince}`
+    ]
+      .filter(Boolean)
+      .join(' · ')
+  )
 </script>
 
 <template>
@@ -59,7 +68,7 @@
         v-else
         class="truncate text-body-sm text-(--text-muted)"
       >
-        @{{ profile.handle }} · {{ profile.location }} · On Azion since {{ profile.memberSince }}
+        {{ details }}
       </p>
     </div>
   </header>

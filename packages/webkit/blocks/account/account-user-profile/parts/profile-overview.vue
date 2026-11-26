@@ -139,7 +139,7 @@
               size="small"
               :variant="entry.year === shownYear ? 'secondary' : 'ghost'"
               :label="String(entry.year)"
-              :aria-current="entry.year === shownYear ? 'true' : undefined"
+              :aria-pressed="entry.year === shownYear"
               @click="selectedYear = entry.year"
             />
           </nav>

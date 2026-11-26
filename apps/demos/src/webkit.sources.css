@@ -411,6 +411,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/input/number-input/number-input.vue";
 @source "../node_modules/@aziontech/webkit/src/components/input/parts/form-value.ts";
 @source "../node_modules/@aziontech/webkit/src/components/input/password-input/password-input.vue";
+@source "../node_modules/@aziontech/webkit/src/components/input/password-requirements/index.ts";
 @source "../node_modules/@aziontech/webkit/src/components/input/password-requirements/password-requirements.vue";
 @source "../node_modules/@aziontech/webkit/src/components/input/password-requirements/rules.ts";
 @source "../node_modules/@aziontech/webkit/src/components/input/phone-input/composables/use-phone-input-value.ts";
