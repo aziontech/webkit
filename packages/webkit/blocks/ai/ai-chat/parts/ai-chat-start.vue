@@ -20,7 +20,7 @@
       class="mx-auto flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-md) max-md:flex-1"
     >
       <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
-        <h2 class="text-center text-heading-lg text-(--text-default)">What can I help with?</h2>
+        <h2 class="text-center text-title-md text-(--text-default)">What can I help with?</h2>
       </div>
       <div class="flex md:order-last md:justify-center">
         <SuggestionGroup

@@ -2977,3 +2977,93 @@ Budget-raise: console-application-scene 117.25 KB → 117.35 KB (measured 117.30
 Budget-raise: css-button 11.15 KB → 11.2 KB (measured 11.16 KB): the theme every app loads gains the three alert tints (`--success-mask`, `--warning-mask`, `--danger-mask`, light and dark) and the blue.350 step behind the dark `--info-mark`, so an info `Alert` icon reaches Lc 45 while its status dot still reads as blue next to white text.
 
 Budget-raise: css-icons 15.45 KB → 15.5 KB (measured 15.46 KB): the same alert tints and the blue.350 step in the theme stylesheet (see css-button).
+
+## Console type set (2026-11-25, CT-1)
+
+Budget-raise: data-grid 13.85 KB → 13.9 KB (measured 13.86 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: card-list 8.5 KB → 8.55 KB (measured 8.51 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: article-index-section 38.6 KB → 38.65 KB (measured 38.61 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: story-index-section 36.7 KB → 36.75 KB (measured 36.71 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: listing-index-section 43.75 KB → 43.8 KB (measured 43.76 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: chart 27.8 KB → 27.85 KB (measured 27.80 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: chart-root 18.3 KB → 18.35 KB (measured 18.32 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: gauge-chart 11.35 KB → 11.4 KB (measured 11.36 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: log-viewer-content 25.35 KB → 25.4 KB (measured 25.36 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: file-preview 8.3 KB → 8.35 KB (measured 8.31 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: log-viewer-steps 32.95 KB → 33 KB (measured 32.96 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: command-root 22.25 KB → 22.3 KB (measured 22.27 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: drawer 23.5 KB → 23.55 KB (measured 23.52 KB): its Drawer.Title now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: shortcuts-dialog 27.4 KB → 27.45 KB (measured 27.42 KB): its Dialog.Title now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: css-button 11.15 KB → 11.2 KB (measured 11.15 KB over the limit): the theme stylesheet every app imports gains the `text-title-nested` text style (14px semibold), the page title of a deeper console page in the console type set (CT-1).
+
+Budget-raise: css-icons 15.45 KB → 15.5 KB (measured 15.46 KB): the same theme text style `text-title-nested` for the console type set (CT-1).
+
+Budget-raise: css-console 25.15 KB → 25.25 KB (measured 25.17 KB): the console type set (CT-1) adds `text-title-nested` to the theme and the `in-data-[type-set=console]:` title utilities of EmptyState, Dialog.Title and Drawer.Title, so a console screen never titles above 16px.
+
+Budget-raise: bar-list 5.85 KB → 5.9 KB (measured 5.86 KB): it renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size, so a console screen never titles above 16px.
+
+Budget-raise: video-player 12.8 KB → 12.85 KB (measured 12.80 KB): it renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size, so a console screen never titles above 16px.
+
+Budget-raise: image-gallery 27.8 KB → 27.85 KB (measured 27.81 KB): it renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size, so a console screen never titles above 16px.
+
+Budget-raise: css-console 25.25 KB → 25.35 KB (measured 25.26 KB after rebasing on the alert tints): the console type set (CT-1) adds `text-title-nested` and the `in-data-[type-set=console]:` title utilities of EmptyState, Dialog.Title and Drawer.Title.
+
+## Model picker favorites and footer (2026-11-25)
+
+Budget-raise: prompt-input-model-picker 16.15 KB → 17.75 KB (measured 17.70 KB): each model row has a star that adds it to the favorites (`v-model:favoriteKeys`), with a lazy Tooltip naming the action, the star at the top of the provider rail filters to the favorites, and the panel takes a `footer` slot for a bar under its columns.
+
+Budget-raise: prompt-input 16.05 KB → 16.25 KB (measured 16.20 KB): the compound attaches the new `PromptInput.AccessPicker` part (the agent's access mode, such as Supervised or Full access) as an async component.
+
+Budget-raise: date-range-picker 58.4 KB → 58.45 KB (measured 58.42 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: property-filter 37.3 KB → 37.4 KB (measured 37.39 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: collection-preferences 33.15 KB → 33.25 KB (measured 33.21 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: console-trace-scene 75.15 KB → 75.2 KB (measured 75.15 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: article-index-section 38.6 KB → 38.75 KB (measured 38.72 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: console-showcase-section 22.35 KB → 22.45 KB (measured 22.42 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: pricing-plans-section 22.3 KB → 22.35 KB (measured 22.31 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: locales-pt-BR 13.05 KB → 13.1 KB (measured 13.06 KB): the pt-BR catalog gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: locales-es 13.15 KB → 13.2 KB (measured 13.18 KB): the es catalog gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-root 12.15 KB → 12.2 KB (measured 12.18 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-attach-button 6.9 KB → 6.95 KB (measured 6.93 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-dictate-button 5.7 KB → 5.8 KB (measured 5.75 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-context-picker 16.35 KB → 16.4 KB (measured 16.38 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-tools 19.15 KB → 19.2 KB (measured 19.19 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: log-viewer 36.95 KB → 37.05 KB (measured 37.01 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: log-viewer-steps 32.95 KB → 33.1 KB (measured 33.06 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+## Model picker on phones (2026-11-25)
+
+Budget-raise: prompt-input-model-picker 17.75 KB → 20 KB (measured 19.96 KB): below `md` the picker shows an icon-only trigger that opens a bottom-sheet `Dialog` with provider sections (owner request with phone screenshots). The `Dialog` part loads on first open, but splitting it out moves the modules it shares with the popover into a chunk the entry loads up front (18.04 KB with the dialog stubbed, 19.96 KB with it), and the phone trigger adds 0.3 KB.
+
+## Console type set in the map chart (2026-11-26)
+
+Budget-raise: map-chart 18.7 KB → 18.75 KB (measured 18.70 KB, a few bytes over in CI): it renders EmptyState, which switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size (18.66 KB before CT-1).

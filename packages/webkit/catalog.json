@@ -798,6 +798,11 @@
    "--text-title-md-letter-spacing",
    "--text-title-md-line-height",
    "--text-title-md-text-wrap-style",
+   "--text-title-nested-font-size",
+   "--text-title-nested-font-weight",
+   "--text-title-nested-letter-spacing",
+   "--text-title-nested-line-height",
+   "--text-title-nested-text-wrap-style",
    "--text-title-sm-font-size",
    "--text-title-sm-font-weight",
    "--text-title-sm-letter-spacing",
@@ -870,6 +875,7 @@
    "text-tag-sm",
    "text-title-lg",
    "text-title-md",
+   "text-title-nested",
    "text-title-sm"
   ],
   "groups": {
@@ -1702,6 +1708,11 @@
     "--text-title-md-letter-spacing",
     "--text-title-md-line-height",
     "--text-title-md-text-wrap-style",
+    "--text-title-nested-font-size",
+    "--text-title-nested-font-weight",
+    "--text-title-nested-letter-spacing",
+    "--text-title-nested-line-height",
+    "--text-title-nested-text-wrap-style",
     "--text-title-sm-font-size",
     "--text-title-sm-font-weight",
     "--text-title-sm-letter-spacing",
@@ -3413,6 +3424,18 @@
      "letter-spacing": "0"
     },
     "purpose": "The title of a popover, card, alert or toast, medium weight."
+   },
+   "text-title-nested": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "600",
+     "letter-spacing": "0"
+    },
+    "purpose": "The page title of a deeper console page (detail, settings, create step): 14px, semibold."
    },
    "text-label-lg": {
     "group": "typography",
@@ -5704,6 +5727,7 @@
     "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-model-picker",
     "@aziontech/webkit/prompt-input-context-picker",
+    "@aziontech/webkit/prompt-input-access-picker",
     "@aziontech/webkit/prompt-input-tools"
    ],
    "models": [
@@ -6114,7 +6138,8 @@
    "attached": false,
    "models": [
     "modelValue",
-    "mode"
+    "mode",
+    "favoriteKeys"
    ],
    "surface": "app"
   },
@@ -6124,6 +6149,18 @@
    "kind": "subcomponent",
    "parent": "prompt-input",
    "treeShakeableImport": "@aziontech/webkit/prompt-input-context-picker",
+   "attached": false,
+   "models": [
+    "modelValue"
+   ],
+   "surface": "app"
+  },
+  "prompt-input-access-picker": {
+   "import": "@aziontech/webkit/prompt-input-access-picker",
+   "target": "./src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-access-picker",
    "attached": false,
    "models": [
     "modelValue"
@@ -7019,7 +7056,7 @@
    "props": [
     {
      "name": "options",
-     "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
+     "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean; icon?: string }`)",
      "default": "[]",
      "required": "false",
      "doc": "Segmented choices shown as a mutually exclusive group."
@@ -7065,6 +7102,13 @@
      "default": "''",
      "required": "false",
      "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out."
+    },
+    {
+     "name": "showLabels",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name and its hover title."
     },
     {
      "name": "modelValue",
@@ -20180,7 +20224,7 @@
      "type": "'small' | 'medium' | 'large'",
      "default": "'medium'",
      "required": "false",
-     "doc": "Heading scale of the title."
+     "doc": "`small` marks a deeper page (14px semibold title); `medium` and `large` are 16px"
     },
     {
      "name": "titleId",
@@ -20253,7 +20297,7 @@
      "type": "'small' | 'medium'",
      "default": "'medium'",
      "required": "false",
-     "doc": "Heading scale of the title (subset: no `large`)."
+     "doc": "Kept for compatibility: in the console type set (CT-1) both sizes render the title at 14px medium."
     },
     {
      "name": "anchor",

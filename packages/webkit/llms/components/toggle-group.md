@@ -43,13 +43,14 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `options` | ``ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`)` | `[]` | false | Segmented choices shown as a mutually exclusive group. |
+| `options` | ``ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean; icon?: string }`)` | `[]` | false | Segmented choices shown as a mutually exclusive group. |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no visible group label is associated. |
 | `defaultValue` | `string` | `undefined` | false | Initial selection when `v-model` is not set. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token, on the same 28 / 32 / 40 rhythm every other control uses. |
 | `fluid` | `boolean` | `false` | false | Stretches the group to its container and lets the options share that width. |
 | `disabled` | `boolean` | `false` | false | Disables every option of the group. |
 | `name` | `string` | `''` | false | Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out. |
+| `showLabels` | `boolean` | `true` | false | Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name and its hover title. |
 | `modelValue` | `TValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
@@ -75,6 +76,7 @@
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` with `focus-visible:outline-none` on each segment.
 - Keyboard map: the group is one tab stop (roving `tabindex`): `Tab` lands on the selected segment, or on the first enabled one when nothing is selected, and the next `Tab` leaves the group; `Enter` / `Space` select the focused segment; `ArrowRight` / `ArrowDown` and `ArrowLeft` / `ArrowUp` move the selection to the next / previous enabled segment, wrapping at the ends, and `Home` / `End` to the first / last enabled one (the APG radio group map), and focus moves with it so the newly checked radio is announced.
 - ARIA: root `role="radiogroup"` named by `ariaLabel` (`aria-label` is omitted when it is empty) or by a consumer `aria-labelledby` pointing at a visible label; each segment `role="radio"` with `aria-checked`; the indicator and the lock icon are `aria-hidden="true"`.
+- Icon-only segments (`showLabels` false): the icon is `aria-hidden="true"` and the option label stays in the segment as visually hidden text, so the radio keeps its accessible name; the same label is the segment's `title`.
 - Disabled options use the native `disabled` attribute, so they are skipped by arrow navigation, never take the tab stop and cannot be clicked.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
 - `motion-reduce:transition-none` on the segment color transition and on the indicator slide.

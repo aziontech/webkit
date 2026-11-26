@@ -42,6 +42,20 @@ describe('PageHeader', () => {
     expect(getByTestId('page-header__title').getAttribute('data-size')).toBe(size)
   })
 
+  it('titles a top-level page at 16px medium and a deeper page at 14px semibold (CT-1)', () => {
+    const top = within(render(Default).container as HTMLElement).getByTestId('page-header__title')
+    const nested = within(render(DetailPage).container as HTMLElement).getByTestId(
+      'page-header__title'
+    )
+
+    expect(top.hasAttribute('data-nested')).toBe(false)
+    expect(getComputedStyle(top).fontSize).toBe('16px')
+    expect(getComputedStyle(top).fontWeight).toBe('500')
+    expect(nested.hasAttribute('data-nested')).toBe(true)
+    expect(getComputedStyle(nested).fontSize).toBe('14px')
+    expect(getComputedStyle(nested).fontWeight).toBe('600')
+  })
+
   it('defaults to the medium size', () => {
     const { getByTestId } = within(
       render(PageHeader, { props: { title: 'Resources' } }).container as HTMLElement

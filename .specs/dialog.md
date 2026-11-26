@@ -7,7 +7,7 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 98f139acb19112e64a79435ea34fc88b66ea96f2995348920c3fa59f3d654a3d
+checksum: 9542672428bd7224f4c353487f13ffb490c65b0da2bb1cf676f81a2afdc4476d
 created: 2026-05-22
 last_updated: 2026-11-22
 ---
@@ -156,14 +156,14 @@ No element sets an inline `transition` (an inline style beats `motion-reduce:tra
 
 ## Tokens
 
-| Region         | Token (TOKENS.md)                                                |
-| -------------- | ---------------------------------------------------------------- |
-| title          | `.text-title-lg` (medium weight), `var(--text-default)`          |
-| description    | `.text-body-sm`, `var(--text-muted)`                             |
-| body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`    |
-| header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding |
-| surface        | `var(--bg-surface)`                                              |
-| ring           | `var(--ring-color)`                                              |
+| Region         | Token (TOKENS.md)                                                                            |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| title          | `.text-title-lg` (medium weight); `.text-title-md` in the console set, `var(--text-default)` |
+| description    | `.text-body-sm`, `var(--text-muted)`                                                         |
+| body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`                                |
+| header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding                             |
+| surface        | `var(--bg-surface)`                                                                          |
+| ring           | `var(--ring-color)`                                                                          |
 
 ## Theme gaps
 

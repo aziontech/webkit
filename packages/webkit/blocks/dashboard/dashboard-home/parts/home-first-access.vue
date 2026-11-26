@@ -39,7 +39,7 @@
       >
         <div class="flex flex-col items-center gap-(--spacing-xs)">
           <p class="text-center text-body-md text-(--text-muted)">{{ greeting }}, {{ name }}</p>
-          <h1 class="text-balance text-center text-heading-lg text-(--text-default)">
+          <h1 class="text-balance text-center text-title-md text-(--text-default)">
             Let's build something new.
           </h1>
         </div>

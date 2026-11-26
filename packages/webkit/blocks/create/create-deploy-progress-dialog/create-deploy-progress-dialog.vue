@@ -228,7 +228,7 @@
 <template>
   <div class="layout-column-form layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
     <header class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-      <h1 class="text-balance text-heading-lg text-(--text-default)">{{ resourceName }}</h1>
+      <h1 class="text-balance text-title-md text-(--text-default)">{{ resourceName }}</h1>
       <p class="text-body-md text-(--text-muted)">
         Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
       </p>

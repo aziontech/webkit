@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 11c579a99203c640ad6dc56a04756e7415ba795727337d8a0c682c351e9a741c
+checksum: 1b4cc46763ee3d30998fa73aed09337029b71054cd226f1808c33793ad7bfa54
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -87,7 +87,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 | ------------- | --------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `title`       | `string`              | `—`        | true     | Primary heading announcing the empty resource.                                                                                                                                                                                                                        |
 | `description` | `string`              | `''`       | false    | Supporting body copy below the title.                                                                                                                                                                                                                                 |
-| `icon`        | `string`              | `''`       | false    | Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders.                                                                  |
+| `icon`        | `string`              | `''`       | false    | Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders.                                                                             |
 | `size`        | `'small' \| 'medium'` | `'medium'` | false    | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
 | `bordered`    | `boolean`             | `false`    | false    | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background.                                                                                                                                                        |
 
@@ -126,7 +126,7 @@ _none_
 | adornment tile surface      | `var(--bg-surface)`                                             |
 | adornment tile border       | `var(--border-default)`                                         |
 | adornment decorative layers | `var(--bg-canvas)` · `var(--border-strong)`                     |
-| adornment shape             | `var(--shape-card)` · `var(--shape-control)`                   |
+| adornment shape             | `var(--shape-card)` · `var(--shape-control)`                    |
 | adornment icon              | `var(--text-default)`                                           |
 | shape (bordered)            | `var(--shape-button)`                                           |
 | spacing (title gap)         | `var(--spacing-xs)`                                             |
@@ -136,13 +136,13 @@ _none_
 
 Every axis steps up one rung per size on a single harmonic ramp. The title climbs the **heading** scale (`heading` tokens only — never `body`); the description climbs the **body** scale one rung below it, so the pair stays in proportion at every size.
 
-| Axis                   | `small`                                 | `medium`                                 |
-| ---------------------- | --------------------------------------- | ---------------------------------------- |
-| title typography       | `.text-heading-2xs` (14px)              | `.text-heading-sm` (14 → 18px)           |
-| description typography | `.text-body-xs` (12px)                  | `.text-body-sm` (14px)                   |
-| adornment tile         | `size-8` (32px)                         | `size-10` (40px)                         |
-| padding (x · y)        | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` |
-| stack gap              | `var(--spacing-4)`                      | `var(--spacing-6)`                       |
+| Axis                   | `small`                                                         | `medium`                                                            |
+| ---------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| title typography       | `.text-heading-2xs` (14px); `.text-title-sm` in the console set | `.text-heading-sm` (14 → 18px); `.text-title-md` in the console set |
+| description typography | `.text-body-xs` (12px)                                          | `.text-body-sm` (14px)                                              |
+| adornment tile         | `size-8` (32px)                                                 | `size-10` (40px)                                                    |
+| padding (x · y)        | `var(--spacing-6)` · `var(--spacing-8)`                         | `var(--spacing-8)` · `var(--spacing-12)`                            |
+| stack gap              | `var(--spacing-4)`                                              | `var(--spacing-6)`                                                  |
 
 ## Theme gaps
 

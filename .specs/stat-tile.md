@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 1e6089c598331d5d6cc12a2deb92057c0b230aa617286a8230ff42e8910caaf4
+checksum: 733d249aa9323214330c3a656ea745d4528ecfdea05f208dc519534fe271f27d
 spec_version: 10
 created: 2026-10-20
 last_updated: 2026-11-25
@@ -110,7 +110,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 ## States
 
 - Visual states: `default`, `loading` (Skeleton), `error`, `empty value`, `not enough data`. A tile never shows a band without a graph: the band under the figure (48px, `data-band`) draws the sparkline when `trend` has two or more points, and otherwise a gray placeholder curve (`spark-chart` `color="other"` at 40% opacity, a fixed gentle wave drawn from zero so it sits low, decorative and hidden from assistive tech) with a centred `Tag` that says why: `not-enough-data` ("Not enough data", neutral) when the value is there but the trend has under two points; `no-data` ("No data", neutral) when `value` is null, over a dash; `error` ("Couldn't load", neutral, because the danger `Alert` that explains the failure and offers Retry belongs to the page, A5-F12-2) when `error` is set, over a dash, with the delta and the sparkline hidden, `data-error` set and the figure's accessible text reading "Couldn't load." followed by the `error` message; `loading` (the curve with no label) while `loading`, and `loading` wins over `error`.
-- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and CSS shows it as soon as any cell in the group shows a band (`group-has-[[data-band-shown]]/stat-tile-group`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
+- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and shows it (`data-band-row`) as soon as any cell in the group shows a band (counted by the group, no `:has()`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
 - Why a placeholder curve (reverses FR07, owner 2026-11-22): a cell without a graph in a row of graphs reads as broken, and a band that comes and goes moves the row. The curve is the reference systems' chart-shaped placeholder (Carbon Charts skeletons, Infragistics skeleton charts, Dynatrace chart states, Preline chart-shaped empty states); it is gray, faint and always labelled, so it does not read as data.
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)

@@ -18,6 +18,11 @@
       "file": "sizes.vue"
     },
     {
+      "name": "Icons",
+      "summary": "An option can carry an icon. The first group shows icon and label (Fast); the second is icon-only with `show-labels` false, where each label stays as the segment's accessible name and hover title.",
+      "file": "icons.vue"
+    },
+    {
       "name": "Fluid",
       "summary": "By default the group hugs its labels (top). `fluid` gives it the container width and lets the options divide that row between them (bottom) — which is what a two-answer question at the head of a form card wants, instead of two pills bunched at the left with dead space beside them.",
       "file": "fluid.vue"

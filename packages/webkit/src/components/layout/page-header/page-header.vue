@@ -66,7 +66,7 @@
           v-if="$slots['icon']"
           :data-testid="`${testId}__icon`"
           aria-hidden="true"
-          class="inline-flex shrink-0 items-center text-heading-sm text-(--text-muted)"
+          class="inline-flex shrink-0 items-center text-title-md text-(--text-muted)"
         >
           <slot name="icon" />
         </span>
@@ -74,8 +74,9 @@
           :id="titleId || undefined"
           :data-testid="`${testId}__title`"
           :data-size="size"
+          :data-nested="$slots['breadcrumbs'] || size === 'small' ? '' : null"
           tabindex="-1"
-          class="outline-none text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
+          class="outline-none text-balance text-(--text-default) text-title-md data-[nested]:text-title-nested"
         >
           {{ title }}
         </h1>

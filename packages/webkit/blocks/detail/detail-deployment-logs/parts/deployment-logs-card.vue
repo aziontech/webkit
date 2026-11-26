@@ -48,7 +48,7 @@
       <div
         class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xs)"
       >
-        <p class="shrink-0 text-heading-xs text-(--text-default)">Deployment logs</p>
+        <p class="shrink-0 text-title-sm text-(--text-default)">Deployment logs</p>
 
         <StatusIndicator
           v-if="!steps.length"

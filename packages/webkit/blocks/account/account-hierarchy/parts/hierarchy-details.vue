@@ -47,7 +47,7 @@
         <div class="flex flex-col gap-(--spacing-md)">
           <h2
             :id="`${uid}-details-heading`"
-            class="text-heading-xs text-(--text-default)"
+            class="text-title-sm text-(--text-default)"
             aria-live="polite"
           >
             {{ detailsTitle }}

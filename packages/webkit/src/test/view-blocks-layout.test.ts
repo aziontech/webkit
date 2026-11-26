@@ -91,7 +91,11 @@ describe('view blocks, styled layout', () => {
     expect(sections.length).toBeGreaterThan(0)
     for (const heading of sections) expect(size(heading)).toBeLessThan(size(title))
     const prose = view.container.querySelector('[role="tabpanel"] p')!
-    for (const heading of sections) expect(size(heading)).toBeGreaterThan(size(prose))
+    const weight = (el: Element) => Number.parseFloat(getComputedStyle(el).fontWeight)
+    for (const heading of sections) {
+      expect(size(heading)).toBeGreaterThanOrEqual(size(prose))
+      expect(weight(heading)).toBeGreaterThan(weight(prose))
+    }
     const description = title.parentElement?.parentElement?.textContent ?? ''
     const first = view.container.querySelector('[role="tabpanel"] p')?.textContent?.trim() ?? ''
     expect(description).not.toContain(first)

@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The full composer: attach files (pick, drop or paste), a model and effort picker, dictation, a voice-conversation control that becomes Submit once there is something to send, and a row under the box with a project picker, files, plugins and a desktop-app link. Enter submits, Shift+Enter adds a line.",
+      "summary": "The full composer: attach files (pick, drop or paste), a model and effort picker (star a model to add it to the favorites; the bar under the panel holds a speed toggle, Ultracode and the access mode), dictation, a voice-conversation control that becomes Submit once there is something to send, and a row under the box with a project picker, files, plugins and a desktop-app link. Enter submits, Shift+Enter adds a line.",
       "file": "default.vue"
     },
     {

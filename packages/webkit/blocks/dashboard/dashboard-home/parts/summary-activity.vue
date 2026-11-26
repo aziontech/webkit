@@ -37,7 +37,7 @@
   >
     <h2
       id="summary-activity"
-      class="text-heading-xs text-(--text-default)"
+      class="text-title-sm text-(--text-default)"
     >
       Recent activity
     </h2>

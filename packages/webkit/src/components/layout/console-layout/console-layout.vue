@@ -234,6 +234,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
+    data-type-set="console"
     :class="
       cn('h-dvh [--sidebar-width:var(--container-2xs)]', attrs['class'] as string | undefined)
     "

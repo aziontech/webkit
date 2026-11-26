@@ -209,6 +209,17 @@ and to a field in a form, never to a button-like control in a header. A header l
 
 The styled visual suite checks it on every docs page, example and block (`toolbar-outlines.spec.ts`).
 
+## One height per toolbar row
+
+Controls side by side in one toolbar row are the same height, border included: give them all
+the same `size` (`medium` is 32px for a button, an input, a select and a date picker). Never mix
+sizes in one row, and never stretch one control with a class.
+
+- **Do:** a filter field, a `DateRangePicker` and outline icon buttons, all `size="medium"`.
+- **Don't:** a `size="large"` select between `size="medium"` buttons, or an `h-9` on one control.
+
+The styled visual suite checks it on every docs page, example and block (`toolbar-heights.spec.ts`).
+
 ## Use a variant only when the component has it
 
 A token pair is not a variant. `--accent` and `--accent-foreground` exist, but `Button` has no accent
@@ -240,7 +251,7 @@ one that is.
 
 ## Token groups
 
-790 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
+795 CSS custom properties from `@aziontech/theme`, grouped by their first segment. The MCP tool `list_tokens` returns the same list.
 
 | Group | Count | Tokens |
 | --- | --- | --- |
@@ -278,7 +289,7 @@ one that is.
 | size | 28 | `--size-10` · `--size-11` · `--size-12` · `--size-14` · `--size-16` · `--size-2` · `--size-20` · `--size-24` · `--size-28` · `--size-3` · `--size-32` · `--size-36` · `--size-4` · `--size-40` · `--size-44` · `--size-48` · `--size-5` · `--size-52` · `--size-56` · `--size-6` · `--size-60` · `--size-64` · `--size-7` · `--size-72` · `--size-8` · `--size-80` · `--size-9` · `--size-96` |
 | spacing | 36 | `--spacing-1` · `--spacing-10` · `--spacing-11` · `--spacing-12` · `--spacing-14` · `--spacing-16` · `--spacing-2` · `--spacing-20` · `--spacing-24` · `--spacing-28` · `--spacing-2xl` · `--spacing-2xs` · `--spacing-3` · `--spacing-32` · `--spacing-36` · `--spacing-4` · `--spacing-40` · `--spacing-44` · `--spacing-48` · `--spacing-5` · `--spacing-52` · `--spacing-56` · `--spacing-6` · `--spacing-60` · `--spacing-64` · `--spacing-7` · `--spacing-72` · `--spacing-8` · `--spacing-80` · `--spacing-9` · `--spacing-96` · `--spacing-lg` · `--spacing-md` · `--spacing-sm` · `--spacing-xl` · `--spacing-xs` |
 | success | 5 | `--success` · `--success-border` · `--success-foreground` · `--success-mark` · `--success-mask` |
-| text | 229 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-lg-white-space` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-md-white-space` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-big-number-sm-white-space` · `--text-big-number-unit-font-family` · `--text-big-number-unit-font-weight` · `--text-big-number-unit-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-lg-font-family` · `--text-body-code-lg-font-size` · `--text-body-code-lg-font-weight` · `--text-body-code-lg-letter-spacing` · `--text-body-code-lg-line-height` · `--text-body-code-lg-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xl-word-spacing` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-3xl-word-spacing` · `--text-heading-code-md-font-family` · `--text-heading-code-md-font-size` · `--text-heading-code-md-font-variant-numeric` · `--text-heading-code-md-font-weight` · `--text-heading-code-md-letter-spacing` · `--text-heading-code-md-line-height` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-title-lg-font-size` · `--text-title-lg-font-weight` · `--text-title-lg-letter-spacing` · `--text-title-lg-line-height` · `--text-title-lg-text-wrap-style` · `--text-title-md-font-size` · `--text-title-md-font-weight` · `--text-title-md-letter-spacing` · `--text-title-md-line-height` · `--text-title-md-text-wrap-style` · `--text-title-sm-font-size` · `--text-title-sm-font-weight` · `--text-title-sm-letter-spacing` · `--text-title-sm-line-height` · `--text-title-sm-text-wrap-style` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
+| text | 234 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-lg-white-space` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-md-white-space` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-big-number-sm-white-space` · `--text-big-number-unit-font-family` · `--text-big-number-unit-font-weight` · `--text-big-number-unit-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-lg-font-family` · `--text-body-code-lg-font-size` · `--text-body-code-lg-font-weight` · `--text-body-code-lg-letter-spacing` · `--text-body-code-lg-line-height` · `--text-body-code-lg-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xl-word-spacing` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-3xl-word-spacing` · `--text-heading-code-md-font-family` · `--text-heading-code-md-font-size` · `--text-heading-code-md-font-variant-numeric` · `--text-heading-code-md-font-weight` · `--text-heading-code-md-letter-spacing` · `--text-heading-code-md-line-height` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-title-lg-font-size` · `--text-title-lg-font-weight` · `--text-title-lg-letter-spacing` · `--text-title-lg-line-height` · `--text-title-lg-text-wrap-style` · `--text-title-md-font-size` · `--text-title-md-font-weight` · `--text-title-md-letter-spacing` · `--text-title-md-line-height` · `--text-title-md-text-wrap-style` · `--text-title-nested-font-size` · `--text-title-nested-font-weight` · `--text-title-nested-letter-spacing` · `--text-title-nested-line-height` · `--text-title-nested-text-wrap-style` · `--text-title-sm-font-size` · `--text-title-sm-font-weight` · `--text-title-sm-letter-spacing` · `--text-title-sm-line-height` · `--text-title-sm-text-wrap-style` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
 | tracking | 6 | `--tracking-normal` · `--tracking-tight` · `--tracking-tighter` · `--tracking-wide` · `--tracking-wider` · `--tracking-widest` |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
 | warning | 5 | `--warning` · `--warning-border` · `--warning-foreground` · `--warning-mark` · `--warning-mask` |
@@ -286,7 +297,7 @@ one that is.
 
 ## Semantic tokens
 
-199 semantic tokens with their value and a one-line purpose: pick a token by its purpose, never by its value. `catalog.json` holds the same export under `tokens.values`, and the MCP tool `list_tokens` returns it per group or per token.
+200 semantic tokens with their value and a one-line purpose: pick a token by its purpose, never by its value. `catalog.json` holds the same export under `tokens.values`, and the MCP tool `list_tokens` returns it per group or per token.
 
 ### Colours (light and dark)
 
@@ -716,7 +727,7 @@ End with: `theme-safe (both themes)` or `N gaps — fix before verifying`.
 | secondary | 4 | `--secondary` · `--secondary-foreground` · `--secondary-mask` · `--secondary-selected` |
 | accent | 4 | `--accent` · `--accent-foreground` · `--accent-mask` · `--accent-selected` |
 | bg | 13 | `--bg-active` · `--bg-backdrop` · `--bg-canvas` · `--bg-contrast` · `--bg-disabled` · `--bg-hover` · `--bg-mask` · `--bg-placeholder` · `--bg-placeholder-highlight` · `--bg-selected` · `--bg-surface` · `--bg-surface-overlay` · `--bg-surface-raised` |
-| text | 229 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-lg-white-space` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-md-white-space` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-big-number-sm-white-space` · `--text-big-number-unit-font-family` · `--text-big-number-unit-font-weight` · `--text-big-number-unit-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-lg-font-family` · `--text-body-code-lg-font-size` · `--text-body-code-lg-font-weight` · `--text-body-code-lg-letter-spacing` · `--text-body-code-lg-line-height` · `--text-body-code-lg-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xl-word-spacing` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-3xl-word-spacing` · `--text-heading-code-md-font-family` · `--text-heading-code-md-font-size` · `--text-heading-code-md-font-variant-numeric` · `--text-heading-code-md-font-weight` · `--text-heading-code-md-letter-spacing` · `--text-heading-code-md-line-height` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-title-lg-font-size` · `--text-title-lg-font-weight` · `--text-title-lg-letter-spacing` · `--text-title-lg-line-height` · `--text-title-lg-text-wrap-style` · `--text-title-md-font-size` · `--text-title-md-font-weight` · `--text-title-md-letter-spacing` · `--text-title-md-line-height` · `--text-title-md-text-wrap-style` · `--text-title-sm-font-size` · `--text-title-sm-font-weight` · `--text-title-sm-letter-spacing` · `--text-title-sm-line-height` · `--text-title-sm-text-wrap-style` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
+| text | 234 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-lg-white-space` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-md-white-space` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-big-number-sm-white-space` · `--text-big-number-unit-font-family` · `--text-big-number-unit-font-weight` · `--text-big-number-unit-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-lg-font-family` · `--text-body-code-lg-font-size` · `--text-body-code-lg-font-weight` · `--text-body-code-lg-letter-spacing` · `--text-body-code-lg-line-height` · `--text-body-code-lg-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xl-word-spacing` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-3xl-word-spacing` · `--text-heading-code-md-font-family` · `--text-heading-code-md-font-size` · `--text-heading-code-md-font-variant-numeric` · `--text-heading-code-md-font-weight` · `--text-heading-code-md-letter-spacing` · `--text-heading-code-md-line-height` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-title-lg-font-size` · `--text-title-lg-font-weight` · `--text-title-lg-letter-spacing` · `--text-title-lg-line-height` · `--text-title-lg-text-wrap-style` · `--text-title-md-font-size` · `--text-title-md-font-weight` · `--text-title-md-letter-spacing` · `--text-title-md-line-height` · `--text-title-md-text-wrap-style` · `--text-title-nested-font-size` · `--text-title-nested-font-weight` · `--text-title-nested-letter-spacing` · `--text-title-nested-line-height` · `--text-title-nested-text-wrap-style` · `--text-title-sm-font-size` · `--text-title-sm-font-weight` · `--text-title-sm-letter-spacing` · `--text-title-sm-line-height` · `--text-title-sm-text-wrap-style` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
 | border | 11 | `--border-default` · `--border-input` · `--border-muted` · `--border-selected` · `--border-strong` · `--border-width-0` · `--border-width-1` · `--border-width-2` · `--border-width-3` · `--border-width-4` · `--border-width-default` |
 | ring | 2 | `--ring-color` · `--ring-offset` |
 | success | 5 | `--success` · `--success-border` · `--success-foreground` · `--success-mark` · `--success-mask` |
@@ -783,6 +794,7 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | `text-tag-sm` | `0.75rem` |  | The label of a small tag or badge. |
 | `text-title-lg` | `0.875rem` | sm: 1rem, md: 1.125rem | The title of a dialog or drawer, medium weight. |
 | `text-title-md` | `1rem` |  | The title of a side panel, medium weight, a flat 16px. |
+| `text-title-nested` | `0.875rem` |  | The page title of a deeper console page (detail, settings, create step): 14px, semibold. |
 | `text-title-sm` | `0.875rem` |  | The title of a popover, card, alert or toast, medium weight. |
 
 ## Related tokens
@@ -12577,13 +12589,14 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `options` | ``ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`)` | `[]` | false | Segmented choices shown as a mutually exclusive group. |
+| `options` | ``ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean; icon?: string }`)` | `[]` | false | Segmented choices shown as a mutually exclusive group. |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no visible group label is associated. |
 | `defaultValue` | `string` | `undefined` | false | Initial selection when `v-model` is not set. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token, on the same 28 / 32 / 40 rhythm every other control uses. |
 | `fluid` | `boolean` | `false` | false | Stretches the group to its container and lets the options share that width. |
 | `disabled` | `boolean` | `false` | false | Disables every option of the group. |
 | `name` | `string` | `''` | false | Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out. |
+| `showLabels` | `boolean` | `true` | false | Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name and its hover title. |
 | `modelValue` | `TValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
@@ -12609,6 +12622,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` with `focus-visible:outline-none` on each segment.
 - Keyboard map: the group is one tab stop (roving `tabindex`): `Tab` lands on the selected segment, or on the first enabled one when nothing is selected, and the next `Tab` leaves the group; `Enter` / `Space` select the focused segment; `ArrowRight` / `ArrowDown` and `ArrowLeft` / `ArrowUp` move the selection to the next / previous enabled segment, wrapping at the ends, and `Home` / `End` to the first / last enabled one (the APG radio group map), and focus moves with it so the newly checked radio is announced.
 - ARIA: root `role="radiogroup"` named by `ariaLabel` (`aria-label` is omitted when it is empty) or by a consumer `aria-labelledby` pointing at a visible label; each segment `role="radio"` with `aria-checked`; the indicator and the lock icon are `aria-hidden="true"`.
+- Icon-only segments (`showLabels` false): the icon is `aria-hidden="true"` and the option label stays in the segment as visually hidden text, so the radio keeps its accessible name; the same label is the segment's `title`.
 - Disabled options use the native `disabled` attribute, so they are skipped by arrow navigation, never take the tab stop and cannot be clicked.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
 - `motion-reduce:transition-none` on the segment color transition and on the indicator slide.
@@ -14372,14 +14386,15 @@ never read as new.
 - `@aziontech/webkit/prompt-input-dictate-button`
 - `@aziontech/webkit/prompt-input-model-picker`
 - `@aziontech/webkit/prompt-input-context-picker`
+- `@aziontech/webkit/prompt-input-access-picker`
 - `@aziontech/webkit/prompt-input-tools`
 
 ## Sub-components
 
 Compound API through `index.ts` (`PromptInput.AttachButton`, `PromptInput.DictateButton`,
-`PromptInput.ModelPicker`, `PromptInput.ContextPicker`, `PromptInput.Tools`); standalone entries
+`PromptInput.ModelPicker`, `PromptInput.ContextPicker`, `PromptInput.Tools`, `PromptInput.AccessPicker`); standalone entries
 `prompt-input-root`, `prompt-input-attach-button`, `prompt-input-dictate-button`,
-`prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`. The root provides
+`prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`, `prompt-input-access-picker`. The root provides
 the composer context (`injection-key.ts`): `disabled`, `voiceActive`, `accept`, `maxFiles`, `maxFileSize`,
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
 `registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
@@ -14426,15 +14441,38 @@ renders; their standalone paths are static.
   small `Button` showing the selected model's provider icon (when set), the model's label and the
   mode's label (muted), with a chevron, that opens a spacious `Popover` above it with an optional
   vertical provider filter rail (`providers`), a search input (`Search models...`), a scrollable
-  `Model` menu of radio options (provider icon, label, checkmark, and shortcut or muted description)
-  and, when `modes` is not empty, a side-by-side mode column of radio options. The panel stays open
-  on a choice; Escape or an outside click closes it. With no `models` the control is disabled; a
-  `v-model` that matches no model shows `Model`, and a mode that matches none shows no mode label.
+  `Model` menu of radio options (provider icon, label, checkmark, a favorite star, and shortcut or
+  muted description) and, when `modes` is not empty, a side-by-side mode column of radio options.
+  Each row has a star `IconButton` (`aria-pressed`, a lazy `Tooltip`) that toggles the model in
+  `favoriteKeys`; it shows on row hover or focus, on a coarse pointer and while starred. The rail's
+  first button filters to the favorites (`No favorites yet` when none), a provider button to that
+  provider; pressing the active one again shows every model. With the
+  `footer` slot the panel ends in a bar under its columns (`border-t`, wraps; its last control sits
+  at the inline end), for a speed `ToggleGroup`, a toggle `Button` or `PromptInput.AccessPicker`.
+  The panel stays open on a choice; Escape or an outside click closes it. Below `md` the trigger
+  is an icon-only `IconButton` (the model's icon) that opens a `Dialog` bottom sheet, loaded on
+  first open: `Favorites`, then one section per provider (44 px rows, check, star), the modes as a
+  `ToggleGroup`, the `footer` slot, and the search at the bottom. With no `models` the
+  control is disabled; a `v-model` that matches no model shows `Model`, and a mode that matches
+  none shows no mode label.
   - Props: `models?: PromptInputMenuOption[]` (default `[]`); `providers?: PromptInputMenuOption[]` (default `[]` — optional provider rail at the inline start); `modes?: PromptInputMenuOption[]` (default `[]`); `modeLabel?: string` (default `''` — empty uses `Mode`; the mode column's label, such as `Thinking Level` or `Effort`).
-  - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the model; `v-model:mode` `string` (default `''`; emits `update:mode`).
+  - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the model; `v-model:mode` `string` (default `''`; emits `update:mode`); `v-model:favoriteKeys` `string[]` (default `[]`; emits `update:favoriteKeys`) — the starred models' values, in the order they were starred.
+  - Events: _none_.
+  - Slots: `footer` — a bar under the panel's columns.
+  - `data-testid` fallback: `prompt-input-model-picker`.
+- `prompt-input-access-picker/prompt-input-access-picker.vue` — the access-mode picker (what the
+  agent may do without asking, such as Supervised, Auto-accept edits, Auto or Full access): a ghost
+  small `Button` with the chosen mode's icon and label and a trailing `az az-chevron-up` (named
+  `<title>: <label>`), that opens a `Popover` above it, aligned to the end, holding the `title`
+  (muted, `Permissions` by default), a fluid icon-only `ToggleGroup` (`showLabels` false) of the
+  modes, and the chosen mode's label and description (`aria-live="polite"`, so a change by arrow
+  key is announced). An option without `icon` uses `az az-shield`. It sits in the model picker's
+  `footer` or in the composer's `footer`. With no `options` the control is disabled.
+  - Props: `options?: PromptInputMenuOption[]` (default `[]` — each with `icon`, `label` and `description`); `title?: string` (default `''` — empty uses `Permissions`).
+  - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the chosen mode.
   - Events: _none_.
   - Slots: _none_.
-  - `data-testid` fallback: `prompt-input-model-picker`.
+  - `data-testid` fallback: `prompt-input-access-picker`.
 - `prompt-input-context-picker/prompt-input-context-picker.vue` — the context picker ("Choose
   project"): a ghost small `Button` with the option's icon (else `icon`) and the chosen label (else
   the placeholder) that opens a `DropdownMenu` of options (the chosen one checked; a choice closes
@@ -14472,6 +14510,7 @@ packages/webkit/src/components/ai/prompt-input/
 ├── prompt-input-attach-button/prompt-input-attach-button.vue
 ├── prompt-input-dictate-button/prompt-input-dictate-button.vue
 ├── prompt-input-model-picker/prompt-input-model-picker.vue
+├── prompt-input-access-picker/prompt-input-access-picker.vue
 ├── prompt-input-context-picker/prompt-input-context-picker.vue
 └── prompt-input-tools/prompt-input-tools.vue
 ```
@@ -14512,6 +14551,9 @@ packages/webkit/src/components/ai/prompt-input/
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter (while it shows) and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.
+- Model picker favorites: each star is a `button` with `aria-pressed`, named with its model (`Add to favorites: Gemini 4 Neon`), reachable by `Tab` and shown while focused. The rail group is `Providers`.
+- Model picker on a phone: the trigger is named `Model: <model>, <mode>`; the `Dialog` starts focus on the chosen model.
+- Access picker: the trigger is named `Permissions: <mode>`; the modes are a `radiogroup` named by the title, each radio named by its label (visually hidden text); the description under it is `aria-live="polite"`.
 
 ## Examples
 
@@ -14522,12 +14564,17 @@ packages/webkit/src/components/ai/prompt-input/
   import Button from '@aziontech/webkit/button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
   const prompt = ref('')
   const files = ref([])
   const model = ref('gemini-4-neon')
   const mode = ref('medium')
+  const favorites = ref(['gemini-4-neon', 'claude-opus-4-5'])
+  const speed = ref('standard')
+  const ultracode = ref(false)
+  const access = ref('full')
   const project = ref('')
   const tools = ref([])
   const last = ref('')
@@ -14560,6 +14607,36 @@ packages/webkit/src/components/ai/prompt-input/
     { value: 'medium', label: 'Medium' },
     { value: 'high', label: 'High' },
     { value: 'extra', label: 'Extra' }
+  ]
+  const speeds = [
+    { value: 'standard', label: 'Standard' },
+    { value: 'fast', label: 'Fast', icon: 'az az-bolt' }
+  ]
+  const accessModes = [
+    {
+      value: 'supervised',
+      label: 'Supervised',
+      icon: 'az az-lock',
+      description: 'Ask before commands and file changes.'
+    },
+    {
+      value: 'edits',
+      label: 'Auto-accept edits',
+      icon: 'az az-pencil',
+      description: 'Auto-approve edits, ask before other actions.'
+    },
+    {
+      value: 'auto',
+      label: 'Auto',
+      icon: 'az az-shield',
+      description: 'Approve routine actions, ask before the rest.'
+    },
+    {
+      value: 'full',
+      label: 'Full access',
+      icon: 'az az-lock-open',
+      description: 'Allow commands and edits without prompts.'
+    }
   ]
   const projects = [
     { value: 'acme-store', label: 'acme-store', description: 'Storefront and checkout' },
@@ -14632,11 +14709,33 @@ packages/webkit/src/components/ai/prompt-input/
         <PromptInput.ModelPicker
           v-model="model"
           v-model:mode="mode"
+          v-model:favorite-keys="favorites"
           :providers="providers"
           :models="models"
           :modes="modes"
           mode-label="Thinking Level"
-        />
+        >
+          <template #footer>
+            <ToggleGroup
+              v-model="speed"
+              :options="speeds"
+              size="small"
+              aria-label="Response speed"
+            />
+            <Button
+              label="Ultracode"
+              icon="az az-sparkles"
+              :variant="ultracode ? 'secondary' : 'ghost'"
+              size="small"
+              :aria-pressed="ultracode"
+              @click="ultracode = !ultracode"
+            />
+            <PromptInput.AccessPicker
+              v-model="access"
+              :options="accessModes"
+            />
+          </template>
+        </PromptInput.ModelPicker>
         <PromptInput.DictateButton />
       </template>
       <template #footer>
@@ -16972,7 +17071,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 ## States
 
 - Visual states: `default`, `loading` (Skeleton), `error`, `empty value`, `not enough data`. A tile never shows a band without a graph: the band under the figure (48px, `data-band`) draws the sparkline when `trend` has two or more points, and otherwise a gray placeholder curve (`spark-chart` `color="other"` at 40% opacity, a fixed gentle wave drawn from zero so it sits low, decorative and hidden from assistive tech) with a centred `Tag` that says why: `not-enough-data` ("Not enough data", neutral) when the value is there but the trend has under two points; `no-data` ("No data", neutral) when `value` is null, over a dash; `error` ("Couldn't load", neutral, because the danger `Alert` that explains the failure and offers Retry belongs to the page, A5-F12-2) when `error` is set, over a dash, with the delta and the sparkline hidden, `data-error` set and the figure's accessible text reading "Couldn't load." followed by the `error` message; `loading` (the curve with no label) while `loading`, and `loading` wins over `error`.
-- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and CSS shows it as soon as any cell in the group shows a band (`group-has-[[data-band-shown]]/stat-tile-group`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
+- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and shows it (`data-band-row`) as soon as any cell in the group shows a band (counted by the group, no `:has()`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
 - Why a placeholder curve (reverses FR07, owner 2026-11-22): a cell without a graph in a row of graphs reads as broken, and a band that comes and goes moves the row. The curve is the reference systems' chart-shaped placeholder (Carbon Charts skeletons, Infragistics skeleton charts, Dynatrace chart states, Preline chart-shaped empty states); it is gray, faint and always labelled, so it does not read as data.
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
@@ -17070,7 +17169,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 - Visual states: `default` only; loading and empty are each tile's own (`loading`, a null `value`).
 - The group provides an injected context (`StatTileGroupInjectionKey`); a `StatTile` inside it sets `data-grouped`, drops its border, radius and surface, and draws `border-e` + `border-b` as dividers. The inner grid is pulled out by `-me-px -mb-px` and the root clips it (`overflow-hidden`), so the last column's end edge and the last row's bottom edge fall under the card border and every column count gets correct dividers with no `nth-child` rules.
-- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`group-has-[[data-band-shown]]/stat-tile-group:block` on the tile's band), so the labels and figures of a mixed row stay on one line. Pure CSS, so the server render already matches.
+- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`data-band-row` on the tile's band), so the labels and figures of a mixed row stay on one line. The group counts those cells (no `:has()`, which restyled pages on scroll) during setup, so server HTML matches.
 - Not applicable: `disabled`, `readonly`, `invalid`, `open`/`closed`, `error`.
 
 ## Accessibility
@@ -29760,6 +29859,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer; otherwise the brand is in the header beside the hamburger, so the drawer drops its brand row and the navigation starts under the close button), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
+- `data-type-set="console"` on the root selects the console type set (decision CT-1): `EmptyState`, `Dialog.Title` and `Drawer.Title` read it to take their console sizes. A dialog or drawer teleports to `body`, so an app that opens overlays sets the same attribute on `<html>`.
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main a `flex-1 min-h-0 h-full overflow-hidden` item of `AppLayout`'s body (which turns into a fixed-height flex column while it holds a fill page), and the child `flex-1 min-h-0`; pure CSS, right in the server render. The page then never scrolls as a whole: a chat keeps its composer pinned and scrolls only its thread, at every width (styled test `src/test/layout-fill.test.ts`).
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
@@ -30405,7 +30505,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 # Page Header
 
-> The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
+> The heading that opens a console page: an h1 in the console type set: 16px medium on a top-level page, 14px semibold on a deeper page (one with `breadcrumbs`, or `size="small"`), a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
 
 - Import: `import PageHeader from '@aziontech/webkit/page-header'`
 - Category: layout · Surface: app · Structure: monolithic
@@ -30450,7 +30550,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | The page title, rendered as the page h1. |
 | `description` | `string` | `''` | false | One sentence under the title that says what the page is for. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Heading scale of the title. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | `small` marks a deeper page (14px semibold title); `medium` and `large` are 16px |
 | `titleId` | `string` | `''` | false | Id set on the h1, so a landmark or form can name itself with aria-labelledby. |
 
 ## Slots
@@ -30468,6 +30568,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop on the root and the h1
+- `data-nested` on the h1 when the page is a deeper page (a `breadcrumbs` slot, or `size="small"`)
 - Each region renders only when its slot is filled: `__breadcrumbs` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
 - Responsive: the root is the `@container/page-header`. Below `@md` of its own box the actions drop under the copy and each one stretches to the full width; from `@md` they sit beside the title at their own width. A header inside a drawer or a split view lays out for that box, not the window.
 
@@ -31772,7 +31873,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | The band title, rendered as an h2. |
 | `description` | `string` | `''` | false | One sentence under the title. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Heading scale of the title (subset: no `large`). |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Kept for compatibility: in the console type set (CT-1) both sizes render the title at 14px medium. |
 | `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus. |
 
 ## Slots

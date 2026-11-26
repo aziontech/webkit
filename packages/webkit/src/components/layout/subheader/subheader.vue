@@ -67,7 +67,7 @@
             :id="anchor || undefined"
             :data-testid="`${testId}__title`"
             :data-size="size"
-            class="scroll-mt-(--spacing-xl) text-balance text-(--text-default) data-[size=medium]:text-heading-xs data-[size=small]:text-heading-2xs"
+            class="scroll-mt-(--spacing-xl) text-balance text-(--text-default) text-title-sm"
           >
             {{ title }}
           </h2>

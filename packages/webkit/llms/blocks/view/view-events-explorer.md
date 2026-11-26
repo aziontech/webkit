@@ -622,7 +622,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
             >
               <h2
                 id="event-document-title"
-                class="min-w-0 truncate text-heading-2xs text-(--text-default)"
+                class="min-w-0 truncate text-title-sm text-(--text-default)"
               >
                 Event
               </h2>

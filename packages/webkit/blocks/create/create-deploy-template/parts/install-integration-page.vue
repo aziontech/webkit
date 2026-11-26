@@ -116,7 +116,7 @@
           <template #default>
             <div class="flex flex-col gap-(--spacing-lg)">
               <div class="flex flex-col gap-(--spacing-2xs)">
-                <h1 class="text-heading-xs text-(--text-default)">Configure Origin Proxy</h1>
+                <h1 class="text-title-nested text-(--text-default)">Configure Origin Proxy</h1>
                 <p class="text-body-sm text-pretty text-(--text-muted)">
                   An integration template adds records and a rule to a service you already run.
                   Nothing is cloned and nothing builds.

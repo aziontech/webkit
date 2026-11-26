@@ -75,7 +75,7 @@
     :progress="!settled"
   >
     <template #header>
-      <h2 class="m-0 shrink-0 text-heading-2xs text-(--text-default)">Deployment logs</h2>
+      <h2 class="m-0 shrink-0 text-title-sm text-(--text-default)">Deployment logs</h2>
       <div
         v-if="!settled"
         role="status"

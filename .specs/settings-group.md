@@ -3,7 +3,7 @@ name: settings-group
 category: layout
 structure: monolithic
 status: implemented
-checksum: b4776a8c08d4ac401af7c35473baef6ab82057529a00a82748ac260d99f321be
+checksum: 59ed93755016395042c5295845229ce27374412780f9ac69d0ddab088a299d94
 spec_version: 10
 template: 2
 created: 2026-11-10
@@ -131,15 +131,15 @@ A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence
 
 ## Tokens
 
-| Region           | Token (TOKENS.md)                           |
-| ---------------- | ------------------------------------------- |
-| title            | `.text-heading-2xs` · `var(--text-default)` |
-| band gap         | `var(--layout-section-gap)`                 |
-| heading-body gap | `var(--spacing-md)`                         |
-| body gap         | `var(--spacing-lg)`                         |
-| copy-link glyph  | `.text-body-xs` · `var(--text-muted)`       |
-| copy-link shape  | `var(--shape-button)`                       |
-| ring             | `var(--ring-color)`                         |
+| Region           | Token (TOKENS.md)                        |
+| ---------------- | ---------------------------------------- |
+| title            | `.text-title-sm` · `var(--text-default)` |
+| band gap         | `var(--layout-section-gap)`              |
+| heading-body gap | `var(--spacing-md)`                      |
+| body gap         | `var(--spacing-lg)`                      |
+| copy-link glyph  | `.text-body-xs` · `var(--text-muted)`    |
+| copy-link shape  | `var(--shape-button)`                    |
+| ring             | `var(--ring-color)`                      |
 
 ## Theme gaps
 

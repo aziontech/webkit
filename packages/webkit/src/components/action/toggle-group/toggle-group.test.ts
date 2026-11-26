@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/toggle-group/default.vue'
 import Fluid from '../../../../examples/toggle-group/fluid.vue'
+import Icons from '../../../../examples/toggle-group/icons.vue'
 import WithDisabledOption from '../../../../examples/toggle-group/with-disabled-option.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ToggleGroup from './toggle-group.vue'
@@ -54,6 +55,23 @@ describe('ToggleGroup', () => {
       expect(target?.className).toContain('inset-y-[min(0rem,calc(50%-22px))]')
       expect(target?.className).toContain('inset-x-0')
     }
+  })
+
+  it('draws an option icon beside its label, and keeps the label as the name when icon-only', async () => {
+    const { container, getAllByRole } = render(Icons)
+    const [standard, fast, list, grid] = getAllByRole('radio')
+    expect(standard!.querySelector('i')).toBeNull()
+    expect(fast!.querySelector('i.az-bolt')).toHaveAttribute('aria-hidden', 'true')
+    expect(fast).toHaveAccessibleName('Fast')
+    expect(fast).not.toHaveAttribute('title')
+    expect(list!.querySelector('i.az-list')).toBeTruthy()
+    expect(list).toHaveAccessibleName('List')
+    expect(list).toHaveAttribute('title', 'List')
+    expect(list!.querySelector('.sr-only')).toHaveTextContent('List')
+    expect(grid).toHaveAccessibleName('Grid')
+    await fireEvent.click(grid!)
+    expect(grid).toHaveAttribute('aria-checked', 'true')
+    await expectNoA11yViolations(container)
   })
 
   it('defaults data-size to large', () => {

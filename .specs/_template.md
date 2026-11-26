@@ -9,7 +9,7 @@ template: 2
 figma:
   url: <https://figma.com/design/...>
   node_id: <e.g. 10:42>
-checksum: 9f6a5dfc5b1dde68851607a090f837d733fdc4a3fb7a847083aa781c187133ca
+checksum: 3ffda110ef2247896df1b33c2ffdd71894ed52f37f1835a3bd218825b0331a2f
 created: <YYYY-MM-DD>
 last_updated: 2026-11-15
 ---

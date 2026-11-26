@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
@@ -9,7 +9,9 @@
   import Popover from '../../../overlay/popover/popover.vue'
   import PopoverContent from '../../../overlay/popover/popover-content/popover-content.vue'
   import PopoverTrigger from '../../../overlay/popover/popover-trigger/popover-trigger.vue'
+  import { LazyTooltip } from '../../../overlay/tooltip/lib/lazy-tooltip'
   import { usePromptInputContext } from '../composables/use-prompt-input-context'
+  import { toggleKey } from '../lib/favorite-keys'
   import type { PromptInputMenuOption } from '../prompt-input.vue'
 
   defineOptions({
@@ -39,14 +41,26 @@
   const model = defineModel<string>({ default: '' })
   /** The chosen mode's value. */
   const mode = defineModel<string>('mode', { default: '' })
+  /** Values of the starred models; the star at the top of the provider rail shows only these. */
+  const favoriteKeys = defineModel<string[]>('favoriteKeys', { default: () => [] })
+
+  defineSlots<{
+    /** A bar under the panel's columns, such as a speed toggle or an access-mode picker. */
+    footer(): unknown
+  }>()
 
   const attrs = useAttrs()
   const { t } = useTranslate({ promptInput: en.promptInput })
   const { disabled } = usePromptInputContext()
 
+  const ModelDialog = defineAsyncComponent(() => import('../parts/prompt-input-model-dialog.vue'))
+
   const open = ref(false)
+  const dialogOpen = ref(false)
+  const dialogMounted = ref(false)
   const query = ref('')
   const activeProvider = ref('')
+  const FAVORITES = '\u0000favorites'
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'prompt-input-model-picker'
@@ -63,13 +77,16 @@
     if (!item) return ''
     return item.icon || (item.provider ? (providerMap.value.get(item.provider)?.icon ?? '') : '')
   })
+  const triggerName = computed<string>(() =>
+    [modelLabel.value, modeName.value].filter(Boolean).join(', ')
+  )
   const modeName = computed<string>(
     () => props.modes.find((option) => option.value === mode.value)?.label ?? ''
   )
   const filteredModels = computed<PromptInputMenuOption[]>(() => {
     const needle = query.value.trim().toLowerCase()
     return props.models.filter((item) => {
-      if (activeProvider.value && item.provider !== activeProvider.value) return false
+      if (!inRailFilter(item)) return false
       if (!needle) return true
       const providerLabel = item.provider ? (providerMap.value.get(item.provider)?.label ?? '') : ''
       return (
@@ -80,10 +97,32 @@
     })
   })
 
+  function inRailFilter(item: PromptInputMenuOption): boolean {
+    if (activeProvider.value === FAVORITES) return favoriteKeys.value.includes(item.value)
+    return !activeProvider.value || item.provider === activeProvider.value
+  }
+
   function iconOf(option: PromptInputMenuOption): string {
     return (
       option.icon || (option.provider ? (providerMap.value.get(option.provider)?.icon ?? '') : '')
     )
+  }
+
+  function isFavorite(option: PromptInputMenuOption): boolean {
+    return favoriteKeys.value.includes(option.value)
+  }
+
+  function toggleFavorite(option: PromptInputMenuOption): void {
+    favoriteKeys.value = toggleKey(favoriteKeys.value, String(option.value))
+  }
+
+  function openDialog(): void {
+    if (dialogMounted.value) dialogOpen.value = true
+    else dialogMounted.value = true
+  }
+
+  function filterBy(value: string): void {
+    activeProvider.value = activeProvider.value === value ? '' : value
   }
 
   watch(open, (isOpen) => {
@@ -92,6 +131,16 @@
 
   const ITEM_CLASS = 'w-full [&>[data-slot=content]]:flex-1 data-[selected]:bg-(--bg-selected)'
 
+  const ROW_CLASS =
+    'group/row flex items-center rounded-(--shape-control) border-y border-transparent bg-clip-padding pe-(--spacing-xs) ' +
+    'forced-colors:border-y-0 hover:bg-(--bg-hover) data-[selected]:bg-(--bg-selected)'
+
+  const ROW_BUTTON_CLASS =
+    'min-w-0 flex-1 before:hidden after:hidden [&>[data-slot=content]]:flex-1'
+
+  const STAR_CLASS =
+    'opacity-0 group-hover/row:opacity-100 group-focus-within/row:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100 data-[active]:opacity-100 data-[active]:text-(--text-default)'
+
   const RAIL_CLASS = 'data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default)'
 
   const BAR_CLASS =
@@ -99,8 +148,41 @@
 </script>
 
 <template>
+  <IconButton
+    v-bind="$attrs"
+    :icon="modelIcon || 'az az-sparkles'"
+    :aria-label="`${t('promptInput.model')}: ${triggerName}`"
+    aria-haspopup="dialog"
+    :aria-expanded="dialogOpen"
+    variant="ghost"
+    size="medium"
+    :disabled="disabled || models.length === 0"
+    :data-testid="`${testId}__compact`"
+    class="md:hidden"
+    @click="openDialog"
+  />
+  <ModelDialog
+    v-if="dialogMounted"
+    v-model:open="dialogOpen"
+    v-model="model"
+    v-model:mode="mode"
+    v-model:favorite-keys="favoriteKeys"
+    :models="models"
+    :providers="providers"
+    :modes="modes"
+    :mode-label="modeLabel || t('promptInput.mode')"
+    :test-id="testId"
+  >
+    <template
+      v-if="$slots['footer']"
+      #footer
+    >
+      <slot name="footer" />
+    </template>
+  </ModelDialog>
   <Popover
     v-model:open="open"
+    class="max-md:hidden"
     side="top"
     align="end"
     :size="modes.length || providers.length ? 'large' : 'medium'"
@@ -136,22 +218,22 @@
         <div
           v-if="providers.length"
           role="group"
-          :aria-label="t('promptInput.allProviders')"
+          :aria-label="t('promptInput.providers')"
           class="flex shrink-0 flex-col items-center gap-(--spacing-2xs) border-e border-(--border-default) p-(--spacing-xs) max-sm:flex-row max-sm:overflow-x-auto max-sm:border-e-0 max-sm:border-b"
         >
           <span class="relative inline-flex">
             <IconButton
               icon="az az-star-fill"
-              :aria-label="t('promptInput.allProviders')"
-              :aria-pressed="activeProvider === ''"
-              :data-active="activeProvider === '' || null"
+              :aria-label="t('promptInput.favorites')"
+              :aria-pressed="activeProvider === FAVORITES"
+              :data-active="activeProvider === FAVORITES || null"
               variant="ghost"
               size="medium"
               :class="RAIL_CLASS"
-              @click="activeProvider = ''"
+              @click="filterBy(FAVORITES)"
             />
             <span
-              v-if="activeProvider === ''"
+              v-if="activeProvider === FAVORITES"
               aria-hidden="true"
               :class="BAR_CLASS"
             />
@@ -169,7 +251,7 @@
               variant="ghost"
               size="medium"
               :class="RAIL_CLASS"
-              @click="activeProvider = String(provider.value)"
+              @click="filterBy(String(provider.value))"
             />
             <span
               v-if="activeProvider === provider.value"
@@ -206,13 +288,14 @@
             <li
               v-for="option in filteredModels"
               :key="option.value"
+              :data-selected="option.value === model || null"
+              :class="ROW_CLASS"
             >
               <Button
                 variant="ghost"
                 size="medium"
                 :aria-pressed="option.value === model"
-                :data-selected="option.value === model || null"
-                :class="ITEM_CLASS"
+                :class="ROW_BUTTON_CLASS"
                 @click="model = String(option.value)"
               >
                 <i
@@ -226,24 +309,47 @@
                   class="az az-check shrink-0 text-body-sm text-(--text-default)"
                   aria-hidden="true"
                 />
-                <span
-                  v-if="option.shortcut"
-                  class="shrink-0 text-body-code-sm text-(--text-muted) pointer-coarse:hidden"
-                  >{{ option.shortcut }}</span
-                >
-                <span
-                  v-else-if="option.description"
-                  class="max-w-36 shrink-0 truncate text-body-xs text-(--text-muted)"
-                >
-                  {{ option.description }}
-                </span>
               </Button>
+              <LazyTooltip
+                :content="
+                  isFavorite(option)
+                    ? t('promptInput.removeFavorite')
+                    : t('promptInput.addFavorite')
+                "
+              >
+                <IconButton
+                  :icon="isFavorite(option) ? 'az az-star-fill' : 'az az-star'"
+                  :aria-label="`${isFavorite(option) ? t('promptInput.removeFavorite') : t('promptInput.addFavorite')}: ${option.label}`"
+                  :aria-pressed="isFavorite(option)"
+                  :data-active="isFavorite(option) || null"
+                  :data-testid="`${testId}__favorite`"
+                  variant="ghost"
+                  size="small"
+                  :class="STAR_CLASS"
+                  @click="toggleFavorite(option)"
+                />
+              </LazyTooltip>
+              <span
+                v-if="option.shortcut"
+                class="ms-(--spacing-2xs) shrink-0 text-body-code-sm text-(--text-muted) pointer-coarse:hidden"
+                >{{ option.shortcut }}</span
+              >
+              <span
+                v-else-if="option.description"
+                class="ms-(--spacing-2xs) max-w-36 shrink-0 truncate text-body-xs text-(--text-muted)"
+              >
+                {{ option.description }}
+              </span>
             </li>
             <li
               v-if="!filteredModels.length"
               class="px-(--spacing-sm) py-(--spacing-md) text-center text-body-xs text-(--text-muted)"
             >
-              {{ t('promptInput.noMatch') }}
+              {{
+                activeProvider === FAVORITES && !favoriteKeys.length
+                  ? t('promptInput.noFavorites')
+                  : t('promptInput.noMatch')
+              }}
             </li>
           </ul>
         </div>
@@ -285,6 +391,13 @@
             </li>
           </ul>
         </div>
+      </div>
+      <div
+        v-if="$slots['footer']"
+        :data-testid="`${testId}__footer`"
+        class="flex flex-wrap items-center gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-xs) [&>:last-child:not(:first-child)]:ms-auto"
+      >
+        <slot name="footer" />
       </div>
     </PopoverContent>
   </Popover>

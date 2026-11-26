@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: ec77699e0cb8f3501234584cf2cb050fb29eff8ce9af0db4b567976b578d8eaf
+checksum: 0806a0f87615298aae6936ad242c96fc4efb1a9df9d9cba24b31a671eff2cab2
 created: 2026-11-12
 last_updated: 2026-11-22
 ---
@@ -115,7 +115,7 @@ _No events — the group is layout; each tile is content._
 
 - Visual states: `default` only; loading and empty are each tile's own (`loading`, a null `value`).
 - The group provides an injected context (`StatTileGroupInjectionKey`); a `StatTile` inside it sets `data-grouped`, drops its border, radius and surface, and draws `border-e` + `border-b` as dividers. The inner grid is pulled out by `-me-px -mb-px` and the root clips it (`overflow-hidden`), so the last column's end edge and the last row's bottom edge fall under the card border and every column count gets correct dividers with no `nth-child` rules.
-- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`group-has-[[data-band-shown]]/stat-tile-group:block` on the tile's band), so the labels and figures of a mixed row stay on one line. Pure CSS, so the server render already matches.
+- The root is also `group/stat-tile-group`: when any cell shows a band (`data-band-shown`, a sparkline or a placeholder), every other cell shows its gray placeholder band too (`data-band-row` on the tile's band), so the labels and figures of a mixed row stay on one line. The group counts those cells (no `:has()`, which restyled pages on scroll) during setup, so server HTML matches.
 - Not applicable: `disabled`, `readonly`, `invalid`, `open`/`closed`, `error`.
 
 ## Motion & Animations

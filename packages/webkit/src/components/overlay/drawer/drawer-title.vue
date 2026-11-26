@@ -21,7 +21,12 @@
 <template>
   <h2
     :id="ctx?.titleId"
-    :class="cn('text-title-lg text-(--text-default)', attrs.class as string | undefined)"
+    :class="
+      cn(
+        'text-title-lg text-(--text-default) in-data-[type-set=console]:text-title-md',
+        attrs.class as string | undefined
+      )
+    "
     :data-testid="testId"
   >
     <slot />

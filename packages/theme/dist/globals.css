@@ -617,6 +617,11 @@
   --text-title-sm-line-height: 1.375;
   --text-title-sm-font-weight: 500;
   --text-title-sm-letter-spacing: 0;
+  --text-title-nested-text-wrap-style: balance;
+  --text-title-nested-font-size: 0.875rem;
+  --text-title-nested-line-height: 1.375;
+  --text-title-nested-font-weight: 600;
+  --text-title-nested-letter-spacing: 0;
   --text-label-lg-font-size: 1rem;
   --text-label-lg-line-height: 1.5;
   --text-label-lg-font-weight: 400;
@@ -1448,6 +1453,14 @@
   line-height: var(--text-title-sm-line-height);
   font-weight: var(--text-title-sm-font-weight);
   letter-spacing: var(--text-title-sm-letter-spacing);
+}
+
+@utility text-title-nested {
+  text-wrap-style: var(--text-title-nested-text-wrap-style);
+  font-size: var(--text-title-nested-font-size);
+  line-height: var(--text-title-nested-line-height);
+  font-weight: var(--text-title-nested-font-weight);
+  letter-spacing: var(--text-title-nested-letter-spacing);
 }
 
 @utility text-label-lg {

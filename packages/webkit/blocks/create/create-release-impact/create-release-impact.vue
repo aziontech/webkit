@@ -263,7 +263,7 @@
               id="release-impact-resources"
               ref="resourcesHeadingEl"
               tabindex="-1"
-              class="text-heading-xs text-(--text-default) focus-visible:outline-none"
+              class="text-title-sm text-(--text-default) focus-visible:outline-none"
             >
               Resources
             </h2>
