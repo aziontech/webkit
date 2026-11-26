@@ -46,7 +46,7 @@
 
   const ROOT_CLASS =
     'bg-(--bg-surface)! data-[neutral]:border-(--border-default)! data-[neutral]:[&_i[aria-hidden=true]]:text-(--primary)! ' +
-    'not-data-[neutral]:data-[severity=info]:[&_i[aria-hidden=true]]:text-(--info-mark)! ' +
+    'not-data-[neutral]:data-[severity=info]:border-(--info-border)! not-data-[neutral]:data-[severity=info]:[&_i[aria-hidden=true]]:text-(--info-mark)! ' +
     'data-[severity=success]:[&_i[aria-hidden=true]]:text-(--success-mark)! data-[severity=warning]:[&_i[aria-hidden=true]]:text-(--warning-mark)! ' +
     'data-[severity=danger]:[&_i[aria-hidden=true]]:text-(--danger-mark)!'
 

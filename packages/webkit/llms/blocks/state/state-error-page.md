@@ -52,7 +52,7 @@ The title says what happened in the user's words (`Page not found`, `Your sessio
 
 ### C. Actions — `Button`
 
-Two at most, side by side, wrapping on narrow screens. The way out is primary (`Go to home`, `Sign in`, `Request access`, `Retry`, `Back to services`); the help is outlined (`Docs`, `Switch account`, `About rate limits`, `System status`, `Status page`). Links that leave the app open in a new tab. The primary renders Go to home and Docs; a variant passes its own buttons in the `actions` slot.
+Two at most, side by side, wrapping on narrow screens. The way out is secondary (`Go to home`, `Sign in`, `Request access`, `Retry`, `Back to services`), never primary: an error page carries no orange button; the help is outlined (`Docs`, `Switch account`, `About rate limits`, `System status`, `Status page`). Links that leave the app open in a new tab. The 404 renders Go to home and Docs; a variant passes its own buttons in the `actions` slot.
 
 ### D. Reference line — `CopyButton`, `Timestamp`
 
@@ -233,7 +233,7 @@ Each variant is the same screen in another state: `get_block("state/state-error-
             <slot name="actions">
               <Button
                 label="Go to home"
-                variant="primary"
+                variant="secondary"
                 size="medium"
                 icon="az az-home"
                 :href="homeHref"

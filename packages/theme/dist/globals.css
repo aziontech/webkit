@@ -23,6 +23,7 @@
   --color-blue-100: #CCE4FF;
   --color-blue-200: #99C9FF;
   --color-blue-300: #66ADFF;
+  --color-blue-350: #4C9FFF;
   --color-blue-400: #3392FF;
   --color-blue-500: #0072F5;
   --color-blue-600: #005FCC;
@@ -819,14 +820,17 @@
   --code-syntax-string: #004799;
   --success: #78EDA2;
   --success-border: #22C55E66;
+  --success-mask: #22C55E1A;
   --success-foreground: #0A2916;
   --success-mark: #16833F;
   --warning: #FAD76B;
   --warning-border: #F7BD0880;
+  --warning-mask: #F7BD0833;
   --warning-foreground: #312602;
   --warning-mark: #947105;
   --danger: #F3A5A5;
   --danger-border: #E74B4B;
+  --danger-mask: #E51A1A1A;
   --danger-foreground: #2E0606;
   --danger-mark: #E51A1A;
   --info: #99C9FF;
@@ -948,20 +952,23 @@
   --code-syntax-string: #99C9FF;
   --success: #0A2916;
   --success-border: #22C55E66;
+  --success-mask: #22C55E1A;
   --success-foreground: #52E086;
   --success-mark: #18B452;
   --warning: #312602;
   --warning-border: #F7BD0880;
+  --warning-mask: #F7BD081A;
   --warning-foreground: #F7BD08;
   --warning-mark: #C59707;
   --danger: #5B0B0B;
   --danger-border: #E74B4B;
+  --danger-mask: #E51A1A33;
   --danger-foreground: #F9D2D2;
   --danger-mark: #ED7878;
   --info: #001833;
   --info-border: #0072F566;
   --info-foreground: #99C9FF;
-  --info-mark: #3392FF;
+  --info-mark: #4C9FFF;
   --illustration-ground: var(--bg-canvas);
   --illustration-surface: var(--bg-surface);
   --illustration-surface-raised: var(--bg-surface-raised);
@@ -1085,20 +1092,23 @@
     --code-syntax-string: #99C9FF;
     --success: #0A2916;
     --success-border: #22C55E66;
+    --success-mask: #22C55E1A;
     --success-foreground: #52E086;
     --success-mark: #18B452;
     --warning: #312602;
     --warning-border: #F7BD0880;
+    --warning-mask: #F7BD081A;
     --warning-foreground: #F7BD08;
     --warning-mark: #C59707;
     --danger: #5B0B0B;
     --danger-border: #E74B4B;
+    --danger-mask: #E51A1A33;
     --danger-foreground: #F9D2D2;
     --danger-mark: #ED7878;
     --info: #001833;
     --info-border: #0072F566;
     --info-foreground: #99C9FF;
-    --info-mark: #3392FF;
+    --info-mark: #4C9FFF;
     --illustration-ground: var(--bg-canvas);
     --illustration-surface: var(--bg-surface);
     --illustration-surface-raised: var(--bg-surface-raised);
@@ -1766,6 +1776,9 @@
 @utility bg-success-border { background-color: var(--success-border); }
 @utility text-success-border { color: var(--success-border); }
 @utility border-success-border { border-color: var(--success-border); }
+@utility bg-success-mask { background-color: var(--success-mask); }
+@utility text-success-mask { color: var(--success-mask); }
+@utility border-success-mask { border-color: var(--success-mask); }
 @utility bg-success-foreground { background-color: var(--success-foreground); }
 @utility text-success-foreground { color: var(--success-foreground); }
 @utility border-success-foreground { border-color: var(--success-foreground); }
@@ -1778,6 +1791,9 @@
 @utility bg-warning-border { background-color: var(--warning-border); }
 @utility text-warning-border { color: var(--warning-border); }
 @utility border-warning-border { border-color: var(--warning-border); }
+@utility bg-warning-mask { background-color: var(--warning-mask); }
+@utility text-warning-mask { color: var(--warning-mask); }
+@utility border-warning-mask { border-color: var(--warning-mask); }
 @utility bg-warning-foreground { background-color: var(--warning-foreground); }
 @utility text-warning-foreground { color: var(--warning-foreground); }
 @utility border-warning-foreground { border-color: var(--warning-foreground); }
@@ -1789,6 +1805,9 @@
 @utility bg-danger-border { background-color: var(--danger-border); }
 @utility text-danger-border { color: var(--danger-border); }
 @utility border-danger-border { border-color: var(--danger-border); }
+@utility bg-danger-mask { background-color: var(--danger-mask); }
+@utility text-danger-mask { color: var(--danger-mask); }
+@utility border-danger-mask { border-color: var(--danger-mask); }
 @utility bg-danger-foreground { background-color: var(--danger-foreground); }
 @utility text-danger-foreground { color: var(--danger-foreground); }
 @utility border-danger-foreground { border-color: var(--danger-foreground); }

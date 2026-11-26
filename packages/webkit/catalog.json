@@ -246,6 +246,7 @@
    "--color-blue-100",
    "--color-blue-200",
    "--color-blue-300",
+   "--color-blue-350",
    "--color-blue-400",
    "--color-blue-50",
    "--color-blue-500",
@@ -387,6 +388,7 @@
    "--danger-border",
    "--danger-foreground",
    "--danger-mark",
+   "--danger-mask",
    "--direction-sign",
    "--drop-shadow-2xl",
    "--drop-shadow-lg",
@@ -575,6 +577,7 @@
    "--success-border",
    "--success-foreground",
    "--success-mark",
+   "--success-mask",
    "--text-2xl",
    "--text-2xl--line-height",
    "--text-3xl",
@@ -822,6 +825,7 @@
    "--warning-border",
    "--warning-foreground",
    "--warning-mark",
+   "--warning-mask",
    "--z-control",
    "--z-control-overlay"
   ],
@@ -1098,6 +1102,7 @@
     "--color-blue-100",
     "--color-blue-200",
     "--color-blue-300",
+    "--color-blue-350",
     "--color-blue-400",
     "--color-blue-50",
     "--color-blue-500",
@@ -1242,7 +1247,8 @@
     "--danger",
     "--danger-border",
     "--danger-foreground",
-    "--danger-mark"
+    "--danger-mark",
+    "--danger-mask"
    ],
    "direction": [
     "--direction-sign"
@@ -1472,7 +1478,8 @@
     "--success",
     "--success-border",
     "--success-foreground",
-    "--success-mark"
+    "--success-mark",
+    "--success-mask"
    ],
    "text": [
     "--text-2xl",
@@ -1727,7 +1734,8 @@
     "--warning",
     "--warning-border",
     "--warning-foreground",
-    "--warning-mark"
+    "--warning-mark",
+    "--warning-mask"
    ],
    "z": [
     "--z-control",
@@ -2252,6 +2260,13 @@
     "dark": "#22C55E66",
     "purpose": "The edge of a success box."
    },
+   "--success-mask": {
+    "group": "success",
+    "type": "color",
+    "light": "#22C55E1A",
+    "dark": "#22C55E1A",
+    "purpose": "The soft tint behind a success alert; text on it stays --text-default, the icon --success-mark."
+   },
    "--success-foreground": {
     "group": "success",
     "type": "color",
@@ -2280,6 +2295,13 @@
     "dark": "#F7BD0880",
     "purpose": "The edge of a warning box."
    },
+   "--warning-mask": {
+    "group": "warning",
+    "type": "color",
+    "light": "#F7BD0833",
+    "dark": "#F7BD081A",
+    "purpose": "The soft tint behind a warning alert; text on it stays --text-default, the icon --warning-mark."
+   },
    "--warning-foreground": {
     "group": "warning",
     "type": "color",
@@ -2307,6 +2329,13 @@
     "light": "#E74B4B",
     "dark": "#E74B4B",
     "purpose": "The edge of a danger box and the outline of an invalid field."
+   },
+   "--danger-mask": {
+    "group": "danger",
+    "type": "color",
+    "light": "#E51A1A1A",
+    "dark": "#E51A1A33",
+    "purpose": "The soft tint behind a error alert; text on it stays --text-default, the icon --danger-mark."
    },
    "--danger-foreground": {
     "group": "danger",
@@ -2347,7 +2376,7 @@
     "group": "info",
     "type": "color",
     "light": "#0072F5",
-    "dark": "#3392FF",
+    "dark": "#4C9FFF",
     "purpose": "An info mark standing on the page: the status dot, the outcome disc."
    },
    "--illustration-ground": {

@@ -184,13 +184,13 @@
     'border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) ' +
     'data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) ' +
     'data-[trailing]:pe-(--spacing-xs) ' +
-    'data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) ' +
-    'data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)'
+    'data-[severity=info]:border-(--border-default) data-[severity=info]:bg-(--bg-surface-raised) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success-mask) ' +
+    'data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning-mask) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger-mask)'
 
   const ICON_CLASS =
     'size-3.5 text-label-md leading-none ' +
-    'data-[severity=info]:text-(--info-foreground) data-[severity=success]:text-(--success-foreground) data-[severity=warning]:text-(--warning-foreground) ' +
-    'data-[severity=danger]:text-(--danger-foreground)'
+    'data-[severity=info]:text-(--info-mark) data-[severity=success]:text-(--success-mark) data-[severity=warning]:text-(--warning-mark) ' +
+    'data-[severity=danger]:text-(--danger-mark)'
 
   const CONTENT_CLASS =
     'm-0 min-w-0 text-(--text-default) ' +
