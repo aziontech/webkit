@@ -44,14 +44,18 @@ describe('account/account-user-profile', () => {
     await expectNoA11yViolations(view.container)
   })
 
-  it('switches the year from the year rail', async () => {
+  it('puts the year filter above everything it changes and switches the year', async () => {
     const view = render(UserProfile)
-    expect(view.getByRole('heading', { name: 'Platform contributions in 2026' })).toBeTruthy()
-    await fireEvent.click(view.getByRole('button', { name: '2025' }))
+    const years = view.getByRole('radiogroup', { name: 'Contribution year' })
+    const metrics = view.getByRole('group', { name: 'Platform contribution metrics' })
+    const graph = view.getByRole('grid')
+    for (const below of [metrics, graph]) {
+      expect(years.compareDocumentPosition(below) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    }
+    await fireEvent.click(view.getByRole('radio', { name: '2025' }))
     await waitFor(() =>
       expect(view.getByRole('heading', { name: 'Platform contributions in 2025' })).toBeTruthy()
     )
-    expect(view.getByRole('button', { name: '2025' }).getAttribute('aria-pressed')).toBe('true')
     expect(view.emitted<number[]>('update:selectedYear')?.at(-1)).toEqual([2025])
   })
 

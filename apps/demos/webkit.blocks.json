@@ -118,7 +118,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:fa1ca2d03ff0bce534fe9e3a0c9bfe4404bbe86b7ce4afc2660e9e2ab77d1cbf"
+          "checksum": "sha256:f7c5760d03f32bf0daed78fa24a60fba5856cfb6b885ab421223a3329194f9c3"
         },
         {
           "path": "src/blocks/account-user-profile-profile-bio-tab.vue",
@@ -156,7 +156,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:c3efa85b288e80a923ff69a37f0b04ef79cdee48a6742fce5f6c72b5993c071b"
+          "checksum": "sha256:542f701c7313bbb5041cd216a4a9b35c56ddd85071bf1a6fdaa00869cbb73035"
         },
         {
           "path": "src/blocks/account-user-profile-profile-preferences-tab.vue",

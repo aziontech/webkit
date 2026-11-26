@@ -32,13 +32,13 @@ Overview is data and fills the content column. The four settings tabs and their 
 
 Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and access, Notifications, Preferences.
 
-### C. Metrics — `StatTileGroup`, `StatTile` (required)
+### C. Year filter and metrics — `ToggleGroup`, `StatTileGroup`, `StatTile` (required)
 
-Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
+The year `ToggleGroup` opens Overview, above everything it changes: the metrics, the graph and the history. Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
 
-### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
+### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup` (required)
 
-A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-pressed` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) in the card header filters the graph and the history below it; the metrics above stay the whole year. Days are squares; there is no shape switch. Picking a day filters the history below to it.
 
 ### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
 
@@ -79,6 +79,7 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 
 - Keep the avatar small and the facts short: one line in the strip, one per line in the column.
 - Cap the settings tabs at the form measure; only Overview uses the full width.
+- Put each filter above everything it changes: the year above the metrics, the category in the graph card over the graph and the history.
 - Say who locks a setting and why when the organization's identity provider manages it.
 - Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
 
@@ -89,6 +90,7 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 - Don't fake a save with a timer; persist on `@save`.
 - Don't send a password or a multi-factor change through `@save`; they have their own events.
 - Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
+- Don't place a filter beside or below content it changes, such as a year picker next to the graph that also changes the metrics above it.
 
 ## Copy
 
@@ -98,11 +100,11 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 ## Accessibility
 
 - `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
-- The year rail is a `nav` with `aria-pressed` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+- The year and category filters are `ToggleGroup`s (a `radiogroup` each, named Contribution year and Contribution category); every control in a `SettingsRow` carries an accessible name that matches its row.
 
 ## States
 
-- Default: the Overview tab for 2026 with metrics, the contribution graph, the year rail and the history.
+- Default: the Overview tab for 2026 with year filter, metrics, the contribution graph and the history.
 - Profile: the Profile and bio tab (`active-tab` is `profile`).
 - Security: the Security and access tab (`active-tab` is `security`) for an account that signs in with a password.
 - SecuritySso: the same tab with `securityPolicy.ssoManaged` and `mfaEnforced` on; the controls are locked and say why.

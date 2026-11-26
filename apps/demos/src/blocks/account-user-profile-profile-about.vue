@@ -47,6 +47,7 @@
       <KeyValueList.Item label="Time zone">{{ timezone }}</KeyValueList.Item>
       <KeyValueList.Item label="Email">{{ profile.email }}</KeyValueList.Item>
       <KeyValueList.Item
+        key="key-value-list.item-2"
         v-if="profile.websiteUrl"
         label="Website"
       >
@@ -58,6 +59,7 @@
         />
       </KeyValueList.Item>
       <KeyValueList.Item
+        key="key-value-list.item-3"
         v-if="profile.memberSince"
         label="On Azion since"
         >{{ profile.memberSince }}</KeyValueList.Item

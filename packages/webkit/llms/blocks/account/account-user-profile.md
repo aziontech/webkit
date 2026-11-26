@@ -1,6 +1,6 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 1192px-wide block (`@5xl`) it becomes a column beside the tab content with the bio under it and, on Overview, a `KeyValueList` summary (location, time zone, email, website, join year, sign-in and multi-factor as a `StatusIndicator`) with a Review security `Button` that opens the Security tab. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` whose days grow to fill the card (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 1192px-wide block (`@5xl`) it becomes a column beside the tab content with the bio under it and, on Overview, a `KeyValueList` summary (location, time zone, email, website, join year, sign-in and multi-factor as a `StatusIndicator`) with a Review security `Button` that opens the Security tab. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview opens with a year `ToggleGroup` above everything it changes, then five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` whose days grow to fill the card (a category `ToggleGroup`, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
@@ -45,13 +45,13 @@ Overview is data and fills the content column. The four settings tabs and their 
 
 Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and access, Notifications, Preferences.
 
-### C. Metrics — `StatTileGroup`, `StatTile` (required)
+### C. Year filter and metrics — `ToggleGroup`, `StatTileGroup`, `StatTile` (required)
 
-Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
+The year `ToggleGroup` opens Overview, above everything it changes: the metrics, the graph and the history. Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
 
-### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
+### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup` (required)
 
-A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-pressed` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) in the card header filters the graph and the history below it; the metrics above stay the whole year. Days are squares; there is no shape switch. Picking a day filters the history below to it.
 
 ### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
 
@@ -92,6 +92,7 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 
 - Keep the avatar small and the facts short: one line in the strip, one per line in the column.
 - Cap the settings tabs at the form measure; only Overview uses the full width.
+- Put each filter above everything it changes: the year above the metrics, the category in the graph card over the graph and the history.
 - Say who locks a setting and why when the organization's identity provider manages it.
 - Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
 
@@ -102,6 +103,7 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 - Don't fake a save with a timer; persist on `@save`.
 - Don't send a password or a multi-factor change through `@save`; they have their own events.
 - Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
+- Don't place a filter beside or below content it changes, such as a year picker next to the graph that also changes the metrics above it.
 
 ## Copy
 
@@ -111,11 +113,11 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 ## Accessibility
 
 - `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
-- The year rail is a `nav` with `aria-pressed` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+- The year and category filters are `ToggleGroup`s (a `radiogroup` each, named Contribution year and Contribution category); every control in a `SettingsRow` carries an accessible name that matches its row.
 
 ## States
 
-- Default: the Overview tab for 2026 with metrics, the contribution graph, the year rail and the history.
+- Default: the Overview tab for 2026 with year filter, metrics, the contribution graph and the history.
 - Profile: the Profile and bio tab (`active-tab` is `profile`).
 - Security: the Security and access tab (`active-tab` is `security`) for an account that signs in with a password.
 - SecuritySso: the same tab with `securityPolicy.ssoManaged` and `mfaEnforced` on; the controls are locked and say why.
@@ -1251,6 +1253,7 @@ export function filterHistory(
       <KeyValueList.Item label="Time zone">{{ timezone }}</KeyValueList.Item>
       <KeyValueList.Item label="Email">{{ profile.email }}</KeyValueList.Item>
       <KeyValueList.Item
+        key="key-value-list.item-2"
         v-if="profile.websiteUrl"
         label="Website"
       >
@@ -1262,6 +1265,7 @@ export function filterHistory(
         />
       </KeyValueList.Item>
       <KeyValueList.Item
+        key="key-value-list.item-3"
         v-if="profile.memberSince"
         label="On Azion since"
         >{{ profile.memberSince }}</KeyValueList.Item
@@ -1334,7 +1338,16 @@ export function filterHistory(
   const activeYear = computed<UserProfileYearActivity | null>(
     () => props.years.find((entry) => entry.year === selectedYear.value) ?? props.years[0] ?? null
   )
+  const yearOptions = computed(() =>
+    props.years.map((entry) => ({ label: String(entry.year), value: String(entry.year) }))
+  )
   const shownYear = computed(() => activeYear.value?.year ?? selectedYear.value)
+  const yearValue = computed({
+    get: () => String(shownYear.value),
+    set: (value: string) => {
+      selectedYear.value = Number(value)
+    }
+  })
 
   const graphItems = computed(() => {
     const items = activeYear.value?.items ?? []
@@ -1378,6 +1391,17 @@ export function filterHistory(
 
 <template>
   <div class="flex flex-col gap-(--layout-group-gap)">
+    <div
+      v-if="years.length > 1"
+      class="flex"
+    >
+      <ToggleGroup
+        v-model="yearValue"
+        :options="yearOptions"
+        size="small"
+        aria-label="Contribution year"
+      />
+    </div>
     <div class="max-md:hidden">
       <StatTileGroup aria-label="Platform contribution metrics">
         <StatTile
@@ -1431,35 +1455,17 @@ export function filterHistory(
           />
         </div>
 
-        <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
-          <div
-            ref="graphEl"
-            class="min-w-0 lg:flex-1"
-          >
-            <ContributionGraph
-              v-model:selected-date="selectedDate"
-              :items="graphItems"
-              :year="shownYear"
-              :loading="loading"
-              :aria-label="`Platform contributions in ${shownYear}`"
-            />
-          </div>
-          <nav
-            v-if="years.length > 1"
-            aria-label="Contribution year"
-            class="flex shrink-0 flex-row flex-wrap gap-(--spacing-2xs) lg:w-20 lg:flex-col"
-          >
-            <Button
-              v-for="entry in years"
-              :key="entry.year"
-              type="button"
-              size="small"
-              :variant="entry.year === shownYear ? 'secondary' : 'ghost'"
-              :label="String(entry.year)"
-              :aria-pressed="entry.year === shownYear"
-              @click="selectedYear = entry.year"
-            />
-          </nav>
+        <div
+          ref="graphEl"
+          class="min-w-0"
+        >
+          <ContributionGraph
+            v-model:selected-date="selectedDate"
+            :items="graphItems"
+            :year="shownYear"
+            :loading="loading"
+            :aria-label="`Platform contributions in ${shownYear}`"
+          />
         </div>
       </div>
     </Card>

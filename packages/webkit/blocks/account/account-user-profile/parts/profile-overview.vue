@@ -35,7 +35,16 @@
   const activeYear = computed<UserProfileYearActivity | null>(
     () => props.years.find((entry) => entry.year === selectedYear.value) ?? props.years[0] ?? null
   )
+  const yearOptions = computed(() =>
+    props.years.map((entry) => ({ label: String(entry.year), value: String(entry.year) }))
+  )
   const shownYear = computed(() => activeYear.value?.year ?? selectedYear.value)
+  const yearValue = computed({
+    get: () => String(shownYear.value),
+    set: (value: string) => {
+      selectedYear.value = Number(value)
+    }
+  })
 
   const graphItems = computed(() => {
     const items = activeYear.value?.items ?? []
@@ -79,6 +88,17 @@
 
 <template>
   <div class="flex flex-col gap-(--layout-group-gap)">
+    <div
+      v-if="years.length > 1"
+      class="flex"
+    >
+      <ToggleGroup
+        v-model="yearValue"
+        :options="yearOptions"
+        size="small"
+        aria-label="Contribution year"
+      />
+    </div>
     <div class="max-md:hidden">
       <StatTileGroup aria-label="Platform contribution metrics">
         <StatTile
@@ -132,35 +152,17 @@
           />
         </div>
 
-        <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
-          <div
-            ref="graphEl"
-            class="min-w-0 lg:flex-1"
-          >
-            <ContributionGraph
-              v-model:selected-date="selectedDate"
-              :items="graphItems"
-              :year="shownYear"
-              :loading="loading"
-              :aria-label="`Platform contributions in ${shownYear}`"
-            />
-          </div>
-          <nav
-            v-if="years.length > 1"
-            aria-label="Contribution year"
-            class="flex shrink-0 flex-row flex-wrap gap-(--spacing-2xs) lg:w-20 lg:flex-col"
-          >
-            <Button
-              v-for="entry in years"
-              :key="entry.year"
-              type="button"
-              size="small"
-              :variant="entry.year === shownYear ? 'secondary' : 'ghost'"
-              :label="String(entry.year)"
-              :aria-pressed="entry.year === shownYear"
-              @click="selectedYear = entry.year"
-            />
-          </nav>
+        <div
+          ref="graphEl"
+          class="min-w-0"
+        >
+          <ContributionGraph
+            v-model:selected-date="selectedDate"
+            :items="graphItems"
+            :year="shownYear"
+            :loading="loading"
+            :aria-label="`Platform contributions in ${shownYear}`"
+          />
         </div>
       </div>
     </Card>

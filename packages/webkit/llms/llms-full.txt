@@ -966,6 +966,13 @@ A tab strip and its panel are one band too: the panel starts one group step belo
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
+**A filter sits above everything it changes, and changes nothing above it.** The eye reads a filter
+as acting on what follows it, so a control that also changes content above it (a year picker beside a
+chart that also rewrites the metric tiles over the chart) breaks the link between cause and effect. A
+page-wide filter opens the band it filters, over every metric, chart and list it narrows; a filter in
+a card header narrows that card and what sits below it, never a card above. When a part above must
+stay unfiltered, its label says so ("this year", "all categories").
+
 **The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
 table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
 parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsGroup` lands
@@ -3339,8 +3346,8 @@ One page for an Azion user's profile and every personal setting: what they did o
 - Summary — `KeyValueList`, `StatusIndicator`, `Link`, `Button` (required)
 - Width — one page, two measures
 - B. Tabs — `PageTabs`, `Tabs` (required)
-- C. Metrics — `StatTileGroup`, `StatTile` (required)
-- D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
+- C. Year filter and metrics — `ToggleGroup`, `StatTileGroup`, `StatTile` (required)
+- D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup` (required)
 - E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
 - F. Settings tabs — `SettingsGroup`, `SettingsRow`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `PhoneInput`, `LanguageSelect`, `Switch`, `PasswordInput`, `PasswordRequirements`, `Alert`, `Link`, `ThemeSwitcher` (required)
 - G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
@@ -3361,6 +3368,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 
 - Keep the avatar small and the facts short: one line in the strip, one per line in the column.
 - Cap the settings tabs at the form measure; only Overview uses the full width.
+- Put each filter above everything it changes: the year above the metrics, the category in the graph card over the graph and the history.
 - Say who locks a setting and why when the organization's identity provider manages it.
 - Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
 
@@ -3371,6 +3379,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Don't fake a save with a timer; persist on `@save`.
 - Don't send a password or a multi-factor change through `@save`; they have their own events.
 - Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
+- Don't place a filter beside or below content it changes, such as a year picker next to the graph that also changes the metrics above it.
 
 ## Copy
 
@@ -3380,11 +3389,11 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 ## Accessibility
 
 - `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
-- The year rail is a `nav` with `aria-pressed` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+- The year and category filters are `ToggleGroup`s (a `radiogroup` each, named Contribution year and Contribution category); every control in a `SettingsRow` carries an accessible name that matches its row.
 
 ## States
 
-- Default: the Overview tab for 2026 with metrics, the contribution graph, the year rail and the history.
+- Default: the Overview tab for 2026 with year filter, metrics, the contribution graph and the history.
 - Profile: the Profile and bio tab (`active-tab` is `profile`).
 - Security: the Security and access tab (`active-tab` is `security`) for an account that signs in with a password.
 - SecuritySso: the same tab with `securityPolicy.ssoManaged` and `mfaEnforced` on; the controls are locked and say why.
