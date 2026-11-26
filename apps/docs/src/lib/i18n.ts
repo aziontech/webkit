@@ -251,15 +251,17 @@ export const en = {
   brandMonochrome: 'Monochrome: black on white, white on dark.',
   brandKnockout: 'Knockout: on an orange fill.',
   openIcons: 'Open the icon gallery',
-  homeEyebrow: 'WebKit',
   homeTitle: 'The Azion design system, built for AI.',
+  homeNote:
+    'The prompt installs WebKit and runs init, so your coding agent gets the MCP server, the guidance and the lint.',
   homeLead:
     'Components, blocks, patterns and foundations for the Azion Console, docs and site. Your AI agent reads the same catalog you browse here, and AI agents build WebKit itself.',
   startWithAgents: 'Start with agents',
   agentPrompt:
     "Build my UI with the Azion design system. Install @aziontech/webkit, @aziontech/theme and @aziontech/icons, run npx @aziontech/webkit init, import the theme once, and compose the app from WebKit's Vue components and design tokens instead of hand-rolled UI, following each component's documented props and compound API.",
-  pathsTitle: 'Two ways in',
-  pathsLead: 'Build an app on WebKit, or make WebKit better.',
+  pathsTitle: 'Start by role',
+  pathsLead:
+    'Hand the work to your coding agent, or pick your path: build an app with WebKit, or make WebKit better.',
   pathBuildTitle: 'Start building',
   pathBuildBody:
     'Install the packages, run npx @aziontech/webkit init and compose your screens from blocks and components. Your AI agent gets the MCP server, the guidance and the lint in the same step.',

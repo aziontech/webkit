@@ -244,11 +244,14 @@ export const ptBR: Messages = {
   brandKnockout: 'Vazado: sobre um fundo laranja.',
   openIcons: 'Abrir a galeria de ícones',
   homeTitle: 'O design system da Azion, feito para IA.',
+  homeNote:
+    'O prompt instala o WebKit e roda o init, então seu agente de código recebe o servidor MCP, as orientações e o lint.',
   homeLead:
     'Componentes, blocos, padrões e fundamentos para o Azion Console, a documentação e o site. Seu agente de IA lê o mesmo catálogo que você navega aqui, e agentes de IA constroem o próprio WebKit.',
   startWithAgents: 'Começar com agentes',
-  pathsTitle: 'Dois caminhos',
-  pathsLead: 'Construa um app com o WebKit, ou melhore o WebKit.',
+  pathsTitle: 'Comece pelo seu papel',
+  pathsLead:
+    'Entregue o trabalho ao seu agente de código, ou escolha o seu caminho: construa um app com o WebKit, ou melhore o WebKit.',
   pathBuildTitle: 'Comece a construir',
   pathBuildBody:
     'Instale os pacotes, rode npx @aziontech/webkit init e monte suas telas com blocos e componentes. Seu agente de IA ganha o servidor MCP, as orientações e o lint no mesmo passo.',

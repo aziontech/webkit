@@ -1,12 +1,10 @@
 <script setup lang="ts">
-  import CardGrid from '@aziontech/webkit/card-grid'
-  import Container from '@aziontech/webkit/container'
+  import Button from '@aziontech/webkit/button'
+  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
   import DocAgentCard from '@aziontech/webkit/doc-agent-card'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import Hero from '@aziontech/webkit/hero'
-  import Module from '@aziontech/webkit/module'
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import DocHero from '@aziontech/webkit/doc-hero'
   import { useHead } from '@unhead/vue'
   import index from 'virtual:docs-nav'
   import { computed } from 'vue'
@@ -39,10 +37,30 @@
   ])
 
   const aiFeatures = computed(() => [
-    { icon: 'az az-server', title: t.value.aiMcpTitle, body: t.value.aiMcpBody },
-    { icon: 'az az-terminal', title: t.value.aiInitTitle, body: t.value.aiInitBody },
-    { icon: 'az az-book', title: t.value.aiGuidanceTitle, body: t.value.aiGuidanceBody },
-    { icon: 'az az-circle-check', title: t.value.aiChecksTitle, body: t.value.aiChecksBody }
+    {
+      to: '/ai#the-mcp-server',
+      icon: 'az az-server',
+      title: t.value.aiMcpTitle,
+      body: t.value.aiMcpBody
+    },
+    {
+      to: '/ai#set-up-your-agent-in-one-step',
+      icon: 'az az-terminal',
+      title: t.value.aiInitTitle,
+      body: t.value.aiInitBody
+    },
+    {
+      to: '/ai#the-guidance-agents-load',
+      icon: 'az az-book',
+      title: t.value.aiGuidanceTitle,
+      body: t.value.aiGuidanceBody
+    },
+    {
+      to: '/ai#the-checks-that-hold-the-line',
+      icon: 'az az-circle-check',
+      title: t.value.aiChecksTitle,
+      body: t.value.aiChecksBody
+    }
   ])
 
   const explore = computed(() => [
@@ -80,156 +98,138 @@
     { title: t.value.whyNextTitle, body: t.value.whyNextBody }
   ])
 
-  const whyLead = computed(() =>
-    format(t.value.whyLead, {
-      components: index.components.length,
-      examples: exampleCount,
-      blocks: index.blocks.length
-    })
-  )
+  const sections = computed(() => [
+    { id: 'webkit-for-ai', title: t.value.aiTitle, lead: t.value.aiLead },
+    { id: 'explore-webkit', title: t.value.exploreTitle, lead: t.value.exploreLead },
+    {
+      id: 'why-webkit',
+      title: t.value.whyTitle,
+      lead: format(t.value.whyLead, {
+        components: index.components.length,
+        examples: exampleCount,
+        blocks: index.blocks.length
+      })
+    }
+  ])
 </script>
 
 <template>
-  <div class="flex w-full flex-col">
-    <Hero
-      max-width="7xl"
-      size="medium"
+  <div
+    class="flex w-full max-w-(--container-7xl) flex-col gap-(--spacing-2xl) px-(--spacing-md) pt-(--spacing-xl) pb-(--spacing-2xl) lg:px-(--spacing-xl)"
+  >
+    <DocHero
+      :title="t.homeTitle"
+      :description="t.homeLead"
     >
-      <Hero.Title
-        :eyebrow="`${t.homeEyebrow} ${index.version}`"
-        :title="t.homeTitle"
-        :description="t.homeLead"
-        size="medium"
-        max-width="3xl"
+      <template #actions>
+        <Button
+          :label="t.pathBuildLink"
+          variant="primary"
+          size="large"
+          href="/foundations/getting-started"
+        />
+        <CopyPromptButton :value="t.agentPrompt" />
+      </template>
+      <template #note>{{ t.homeNote }}</template>
+    </DocHero>
+
+    <section
+      class="flex flex-col gap-(--spacing-lg)"
+      aria-labelledby="start-by-role"
+    >
+      <header class="flex flex-col gap-(--spacing-sm)">
+        <h2
+          id="start-by-role"
+          class="m-0 text-heading-md text-(--text-default)"
+        >
+          {{ t.pathsTitle }}
+        </h2>
+        <p class="m-0 max-w-(--container-2xl) text-body-lg text-(--text-muted)">
+          {{ t.pathsLead }}
+        </p>
+      </header>
+      <DocAgentCard
+        :prompt="t.agentPrompt"
+        :title="t.aiAgentTitle"
+        :description="t.aiAgentBody"
+        :aside-title="t.aiAgentAside"
+        :action-label="t.aiAgentAction"
+        action-href="/ai"
       />
-    </Hero>
+      <DocCardGroup
+        :columns="2"
+        :mobile-columns="1"
+      >
+        <DocCard
+          v-for="path in paths"
+          :key="path.to"
+          :href="path.to"
+          :title="path.title"
+          :icon="path.icon"
+          :label="path.text"
+          :link-label="path.link"
+        />
+      </DocCardGroup>
+    </section>
 
-    <Container
-      max-width="7xl"
-      class="lg:@max-7xl/main:border-s-0!"
+    <section
+      v-for="(section, position) in sections"
+      :key="section.id"
+      class="flex flex-col gap-(--spacing-lg)"
+      :aria-labelledby="section.id"
     >
-      <Module
-        :divided="false"
-        :padded="false"
-      >
-        <template #header>
-          <ModuleHeader
-            :title="t.pathsTitle"
-            :description="t.pathsLead"
-            size="small"
-            padding="small"
-          />
-        </template>
-        <DocCardGroup
-          :columns="2"
-          :mobile-columns="1"
+      <header class="flex flex-col gap-(--spacing-sm)">
+        <h2
+          :id="section.id"
+          class="m-0 text-heading-md text-(--text-default)"
         >
-          <DocCard
-            v-for="path in paths"
-            :key="path.to"
-            :href="path.to"
-            :title="path.title"
-            :icon="path.icon"
-            :label="path.text"
-            :link-label="path.link"
-          />
-        </DocCardGroup>
-      </Module>
-
-      <Module
-        :divided="false"
-        :padded="false"
-        :eyebrow="t.forAi"
-        :title="t.aiTitle"
-        :description="t.aiLead"
+          {{ section.title }}
+        </h2>
+        <p class="m-0 max-w-(--container-2xl) text-body-lg text-(--text-muted)">
+          {{ section.lead }}
+        </p>
+      </header>
+      <DocCardGroup
+        v-if="position === 0"
+        :columns="2"
+        :mobile-columns="1"
       >
-        <CardGrid
-          :columns="2"
-          variant="divider"
-          divider-color="muted"
-        >
-          <div
-            v-for="feature in aiFeatures"
-            :key="feature.title"
-            class="flex flex-col gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
-          >
-            <i
-              :class="feature.icon"
-              class="text-heading-sm text-(--primary)"
-              aria-hidden="true"
-            />
-            <h3 class="text-balance text-heading-xs text-(--text-default)">
-              {{ feature.title }}
-            </h3>
-            <p class="text-pretty text-body-sm text-(--text-muted)">{{ feature.body }}</p>
-          </div>
-        </CardGrid>
-        <div class="p-(--spacing-md) lg:p-(--spacing-xl)">
-          <DocAgentCard
-            :prompt="t.agentPrompt"
-            :title="t.aiAgentTitle"
-            :description="t.aiAgentBody"
-            :aside-title="t.aiAgentAside"
-            :action-label="t.aiAgentAction"
-            action-href="/ai"
-          />
-        </div>
-      </Module>
-
-      <Module
-        :divided="false"
-        :padded="false"
+        <DocCard
+          v-for="feature in aiFeatures"
+          :key="feature.to"
+          :href="feature.to"
+          :title="feature.title"
+          :icon="feature.icon"
+          :label="feature.body"
+        />
+      </DocCardGroup>
+      <DocCardGroup
+        v-else-if="position === 1"
+        :columns="3"
+        :mobile-columns="1"
       >
-        <template #header>
-          <ModuleHeader
-            :title="t.exploreTitle"
-            :description="t.exploreLead"
-            size="small"
-            padding="small"
-          />
-        </template>
-        <DocCardGroup
-          :columns="3"
-          :mobile-columns="1"
-        >
-          <DocCard
-            v-for="section in explore"
-            :key="section.to"
-            :href="section.to"
-            :title="section.label"
-            :icon="section.icon"
-            :label="section.text"
-          />
-        </DocCardGroup>
-      </Module>
-
-      <Module
-        :divided="false"
-        :padded="false"
-        :title="t.whyTitle"
-        :description="whyLead"
+        <DocCard
+          v-for="item in explore"
+          :key="item.to"
+          :href="item.to"
+          :title="item.label"
+          :icon="item.icon"
+          :label="item.text"
+        />
+      </DocCardGroup>
+      <DocCardGroup
+        v-else
+        :columns="3"
+        :mobile-columns="1"
       >
-        <CardGrid
-          :columns="3"
-          variant="divider"
-          divider-color="muted"
-        >
-          <div
-            v-for="feature in features"
-            :key="feature.title"
-            class="flex flex-col gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
-          >
-            <i
-              class="az az-asterisk text-heading-sm text-(--primary)"
-              aria-hidden="true"
-            />
-            <h3 class="max-w-[20ch] text-balance text-heading-xs text-(--text-default)">
-              {{ feature.title }}
-            </h3>
-            <p class="text-pretty text-body-sm text-(--text-muted)">{{ feature.body }}</p>
-          </div>
-        </CardGrid>
-      </Module>
-    </Container>
+        <DocCard
+          v-for="feature in features"
+          :key="feature.title"
+          :title="feature.title"
+          icon="az az-asterisk"
+          :label="feature.body"
+        />
+      </DocCardGroup>
+    </section>
   </div>
 </template>
