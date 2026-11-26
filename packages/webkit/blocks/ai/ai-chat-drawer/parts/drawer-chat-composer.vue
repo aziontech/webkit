@@ -15,6 +15,7 @@
     state: PromptInputStatus
     queueable: boolean
     hydrating: boolean
+    empty: boolean
     accept: string
     maxFiles: number
     maxFileSize: number
@@ -101,7 +102,9 @@
         placeholder="Choose project"
       />
     </template>
-    <template #hint
+    <template
+      v-if="empty"
+      #hint
       >The AI assistant can make mistakes. Check important information before you act on
       it.</template
     >

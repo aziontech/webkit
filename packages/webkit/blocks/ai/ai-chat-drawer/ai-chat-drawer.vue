@@ -422,6 +422,7 @@
                   :state="state"
                   :queueable="queueable"
                   :hydrating="hydrating"
+                  :empty="!turns.length"
                   :accept="accept"
                   :max-files="maxFiles"
                   :max-file-size="maxFileSize"

@@ -108,7 +108,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
 
 - `Conversation` around every thread; never a plain `div` with `overflow-y-auto` and a manual
   scroll-to-bottom (it auto-scrolls while the reader reads, and announces nothing or everything).
-- One `PromptInput`, pinned under the log; only the log scrolls. Compose the full `PromptInput` by default (`PromptInput.AttachButton` in `#actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `#end`, `voice`, `PromptInput.ContextPicker` and `PromptInput.Tools` in `#footer`, and the disclaimer in `#hint`); omit a control only when the product explicitly does not offer that capability.
+- One `PromptInput`, pinned under the log; only the log scrolls. Compose the full `PromptInput` by default (`PromptInput.AttachButton` in `#actions`, `PromptInput.ModelPicker` and `PromptInput.DictateButton` in `#end`, `voice`, `PromptInput.ContextPicker` and `PromptInput.Tools` in `#footer`); omit a control only when the product explicitly does not offer that capability.
 - Actions only on complete responses, always visible, five at most: Copy, Regenerate, feedback.
 - Feedback thumbs only on AI output.
 - Loading text names what is coming: `Generating a response`, `Loading list of workloads`.
@@ -122,7 +122,10 @@ Drive `ChatMessage` from your request, never from timers in the view:
 
 - The assistant is "AI assistant"; its output is a "response". The reader "submits" a prompt.
 - Placeholder `Ask a question`, or "Ask about <resource>" in context; no end punctuation.
-- Disclaimer as the composer's hint: "The AI assistant can make mistakes. Check important information."
+- Disclaimer: "The AI assistant can make mistakes. Check important information." Show it only before
+  the first message, at the foot of the page (the composer's hint in a drawer), while the composer
+  sits in the middle of the page; once the conversation starts the composer moves to the foot and
+  the disclaimer is gone.
 - Errors say what happened and offer Try again: "The connection was interrupted before the response
   finished."
 - Approval titles are questions naming the action, commands in backticks:

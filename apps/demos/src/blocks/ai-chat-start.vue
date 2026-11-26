@@ -11,13 +11,13 @@
 
   const START_CLASS =
     'flex min-h-0 flex-1 flex-col overflow-y-auto px-(--spacing-md) pt-(--spacing-2xl) ' +
-    'pb-[max(var(--spacing-md),env(safe-area-inset-bottom))] md:justify-center md:pb-(--spacing-2xl)'
+    'pb-[max(var(--spacing-sm),env(safe-area-inset-bottom))]'
 </script>
 
 <template>
   <div :class="START_CLASS">
     <div
-      class="mx-auto flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-md) max-md:flex-1"
+      class="mx-auto flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-md) max-md:flex-1 md:my-auto"
     >
       <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
         <h2 class="text-center text-title-md text-(--text-default)">What can I help with?</h2>
@@ -32,5 +32,11 @@
         <slot />
       </div>
     </div>
+    <p
+      data-testid="ai-chat__disclaimer"
+      class="pt-(--spacing-sm) text-center text-body-xs text-(--text-muted)"
+    >
+      The Agent can make mistakes. Check important information before you act on it.
+    </p>
   </div>
 </template>

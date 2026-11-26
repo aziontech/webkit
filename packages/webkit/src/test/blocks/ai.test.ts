@@ -16,19 +16,34 @@ import type { AiChatInterrupt, AiChatMessage, AiChatToolCallPart } from '../../u
 
 afterEach(() => cleanup())
 describe('ai', () => {
-  it('the three AI composers share one disclaimer; only approval adds what it never runs', () => {
+  it('the disclaimer shows only before the first message, at the foot of the page or drawer', () => {
     const shared =
       'The AI assistant can make mistakes. Check important information before you act on it.'
-    for (const block of [AiChat, AiChatDrawer, AiActionApproval]) {
-      const view = render(block)
-      const box = view.getByTestId('prompt-input__box')
-      const hint = document.getElementById(
-        (box.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').split(' ').at(-1) ??
-          ''
-      )
-      expect(hint?.textContent?.replace(/\s+/g, ' ').trim()).toContain(shared)
-      view.unmount()
-    }
+    const started = [{ id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Hi' }] }]
+    const chat = render(AiChat)
+    expect(chat.getByTestId('ai-chat__disclaimer').textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      shared
+    )
+    expect(chat.queryByTestId('prompt-input__hint')).toBeNull()
+    chat.unmount()
+
+    const chatStarted = render(AiChat, { props: { messages: started } })
+    expect(chatStarted.container.textContent).not.toContain(shared)
+    chatStarted.unmount()
+
+    const drawer = render(AiChatDrawer)
+    expect(drawer.getByTestId('prompt-input__hint').textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      shared
+    )
+    drawer.unmount()
+
+    const drawerStarted = render(AiChatDrawer, { props: { messages: started } })
+    expect(drawerStarted.queryByTestId('prompt-input__hint')).toBeNull()
+    drawerStarted.unmount()
+
+    const approval = render(AiActionApproval)
+    expect(approval.container.textContent).not.toContain(shared)
+    approval.unmount()
   })
 
   it('ai-action-approval Denied: the denied call keeps a neutral title, not an in-progress one', () => {
