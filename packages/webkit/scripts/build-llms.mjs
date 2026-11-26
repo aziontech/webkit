@@ -1166,14 +1166,11 @@ export function buildLlms(catalog = loadCatalog()) {
 
   const patternPages = patterns()
   if (patternPages.length) {
-    index.push(
-      '## Patterns',
-      '',
-      'How to build each kind of screen or problem. Read the pattern for the job before composing a screen, then start from its block.',
-      ''
-    )
+    index.push('## Patterns', '')
     for (const page of patternPages)
-      index.push(`- [${page.title}](../skills/${page.skill}/SKILL.md): ${page.summary}`)
+      index.push(
+        `- [${page.title}](https://github.com/aziontech/webkit/blob/main/skills/${page.skill}/SKILL.md): ${page.summary}`
+      )
     index.push('')
   }
 

@@ -27,25 +27,23 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Patterns
 
-How to build each kind of screen or problem. Read the pattern for the job before composing a screen, then start from its block.
-
-- [Building a console screen](../skills/webkit-product-screens/SKILL.md): Where to start a console screen: the block, the pattern and the rule for each problem.
-- [Building a site page](../skills/webkit-site-pages/SKILL.md): How a marketing page is built from page sections, in order, from the content up.
-- [Forms](../skills/webkit-form/SKILL.md): Which control each value takes, labels, grouping, the two layouts and how a form submits.
-- [Create flows](../skills/webkit-create-surface/SKILL.md): Page, drawer or dialog: the surface follows what is created, with one shared anatomy.
-- [Tables](../skills/webkit-tables/SKILL.md): One data-driven table: columns, toolbar, internal scroll and the shared cell recipes.
-- [List pages](../skills/webkit-lists/SKILL.md): One list page: the controls row, the collection model, filters in the URL, selection.
-- [Charts and figures](../skills/webkit-data-viz/SKILL.md): Pick the chart for the question, take every colour from the chart role, render its states.
-- [Showing API data](../skills/webkit-api-data/SKILL.md): References by name, pickers that keep their values, fresh lookups and typed records.
-- [Loading, empty and error states](../skills/webkit-ui-states/SKILL.md): Every data-backed view owns its states, and an action locks its scope while it runs.
-- [Errors](../skills/webkit-errors/SKILL.md): Where an error goes, what it carries there and what it says: field, section or toast.
-- [In-product help](../skills/webkit-in-product-help/SKILL.md): A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.
-- [Navigation](../skills/webkit-navigation/SKILL.md): The two shells, navigation levels, tabs, drawers, breadcrumbs and router wiring.
-- [Page layout](../skills/webkit-layout/SKILL.md): Three decisions per page: the boundary, the measure and the rhythm, each a named token.
-- [Interface text](../skills/webkit-microcopy/SKILL.md): Punctuation and case, which surface owns which words, and one word per concept.
-- [AI chat and actions](../skills/webkit-ai-surfaces/SKILL.md): The conversation, a streamed answer and the step where a person authorizes an action.
-- [Calling the Azion API](../skills/webkit-azion-api/SKILL.md): CORS, a dev proxy and an edge proxy, and where the personal token lives.
-- [Query explorer](../skills/webkit-query-explorer/SKILL.md): A Metrics and Events GraphQL explorer built from WebKit components.
+- [Building a console screen](https://github.com/aziontech/webkit/blob/main/skills/webkit-product-screens/SKILL.md): Where to start a console screen: the block, the pattern and the rule for each problem.
+- [Building a site page](https://github.com/aziontech/webkit/blob/main/skills/webkit-site-pages/SKILL.md): How a marketing page is built from page sections, in order, from the content up.
+- [Forms](https://github.com/aziontech/webkit/blob/main/skills/webkit-form/SKILL.md): Which control each value takes, labels, grouping, the two layouts and how a form submits.
+- [Create flows](https://github.com/aziontech/webkit/blob/main/skills/webkit-create-surface/SKILL.md): Page, drawer or dialog: the surface follows what is created, with one shared anatomy.
+- [Tables](https://github.com/aziontech/webkit/blob/main/skills/webkit-tables/SKILL.md): One data-driven table: columns, toolbar, internal scroll and the shared cell recipes.
+- [List pages](https://github.com/aziontech/webkit/blob/main/skills/webkit-lists/SKILL.md): One list page: the controls row, the collection model, filters in the URL, selection.
+- [Charts and figures](https://github.com/aziontech/webkit/blob/main/skills/webkit-data-viz/SKILL.md): Pick the chart for the question, take every colour from the chart role, render its states.
+- [Showing API data](https://github.com/aziontech/webkit/blob/main/skills/webkit-api-data/SKILL.md): References by name, pickers that keep their values, fresh lookups and typed records.
+- [Loading, empty and error states](https://github.com/aziontech/webkit/blob/main/skills/webkit-ui-states/SKILL.md): Every data-backed view owns its states, and an action locks its scope while it runs.
+- [Errors](https://github.com/aziontech/webkit/blob/main/skills/webkit-errors/SKILL.md): Where an error goes, what it carries there and what it says: field, section or toast.
+- [In-product help](https://github.com/aziontech/webkit/blob/main/skills/webkit-in-product-help/SKILL.md): A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.
+- [Navigation](https://github.com/aziontech/webkit/blob/main/skills/webkit-navigation/SKILL.md): The two shells, navigation levels, tabs, drawers, breadcrumbs and router wiring.
+- [Page layout](https://github.com/aziontech/webkit/blob/main/skills/webkit-layout/SKILL.md): Three decisions per page: the boundary, the measure and the rhythm, each a named token.
+- [Interface text](https://github.com/aziontech/webkit/blob/main/skills/webkit-microcopy/SKILL.md): Punctuation and case, which surface owns which words, and one word per concept.
+- [AI chat and actions](https://github.com/aziontech/webkit/blob/main/skills/webkit-ai-surfaces/SKILL.md): The conversation, a streamed answer and the step where a person authorizes an action.
+- [Calling the Azion API](https://github.com/aziontech/webkit/blob/main/skills/webkit-azion-api/SKILL.md): CORS, a dev proxy and an edge proxy, and where the personal token lives.
+- [Query explorer](https://github.com/aziontech/webkit/blob/main/skills/webkit-query-explorer/SKILL.md): A Metrics and Events GraphQL explorer built from WebKit components.
 
 ## Blocks: Account
 
