@@ -2971,3 +2971,9 @@ Budget-raise: tooltip 5.9 KB → 6.25 KB (measured 6.22 KB): Tooltip keeps its t
 Budget-raise: data-table 59.25 KB → 59.4 KB (measured 59.34 KB): every column resizes unless it sets `resizable: false`, and a drag that moved ends with a `column-resize` event (the column id and its width), so an app or `useCollection` can save the width and restore it as the column `width`.
 
 Budget-raise: console-application-scene 117.25 KB → 117.35 KB (measured 117.30 KB): it renders DataTable, which now resizes every column by default and emits `column-resize` when a drag ends (see data-table).
+
+## Calm alerts (2026-11-25, ALERT-1)
+
+Budget-raise: css-button 11.15 KB → 11.2 KB (measured 11.16 KB): the theme every app loads gains the three alert tints (`--success-mask`, `--warning-mask`, `--danger-mask`, light and dark) and the blue.350 step behind the dark `--info-mark`, so an info `Alert` icon reaches Lc 45 while its status dot still reads as blue next to white text.
+
+Budget-raise: css-icons 15.45 KB → 15.5 KB (measured 15.46 KB): the same alert tints and the blue.350 step in the theme stylesheet (see css-button).
