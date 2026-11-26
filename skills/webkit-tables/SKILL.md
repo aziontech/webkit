@@ -423,7 +423,6 @@ colour _is_ the information.
     severity="neutral"
     size="medium"
     icon="az az-github"
-    rounded
     class="max-w-full"
   >
     <span class="min-w-0 truncate">{{ value }}</span>
