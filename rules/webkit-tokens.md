@@ -164,6 +164,17 @@ and to a field in a form, never to a button-like control in a header. A header l
 
 The styled visual suite checks it on every docs page, example and block (`toolbar-outlines.spec.ts`).
 
+## One height per toolbar row
+
+Controls side by side in one toolbar row are the same height, border included: give them all
+the same `size` (`medium` is 32px for a button, an input, a select and a date picker). Never mix
+sizes in one row, and never stretch one control with a class.
+
+- **Do:** a filter field, a `DateRangePicker` and outline icon buttons, all `size="medium"`.
+- **Don't:** a `size="large"` select between `size="medium"` buttons, or an `h-9` on one control.
+
+The styled visual suite checks it on every docs page, example and block (`toolbar-heights.spec.ts`).
+
 ## Use a variant only when the component has it
 
 A token pair is not a variant. `--accent` and `--accent-foreground` exist, but `Button` has no accent
