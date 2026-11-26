@@ -103,7 +103,7 @@
   <span
     v-else-if="sample === 'type'"
     :class="name"
-    class="block min-w-0 text-(--text-default)"
+    class="block min-w-0 py-(--spacing-2xs) text-(--text-default)"
     >{{ name.includes('-code-') ? 'const region = await edge.nearest()' : text }}</span
   >
   <span

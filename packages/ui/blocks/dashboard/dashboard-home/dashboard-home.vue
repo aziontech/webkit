@@ -167,6 +167,7 @@
       :label="`Couldn't load your usage and resources. ${error}`"
       action-label="Retry"
       data-testid="dashboard-home__error"
+      class="mt-(--layout-group-gap)"
       @action="(event: MouseEvent) => emit('retry', event)"
     />
 

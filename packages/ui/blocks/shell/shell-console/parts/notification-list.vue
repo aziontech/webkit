@@ -114,7 +114,7 @@
             />
           </Item.Title>
           <Item.Description>{{ item.description }}</Item.Description>
-          <span class="text-label-sm text-(--text-muted)">{{ item.time }}</span>
+          <span class="pb-(--spacing-2xs) text-label-sm text-(--text-muted)">{{ item.time }}</span>
           <Item.Actions v-if="item.kind !== 'info'">
             <Button
               label="Edit"

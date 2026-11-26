@@ -15,7 +15,7 @@
       :padded="false"
     >
       <div
-        class="flex h-full items-center justify-center bg-(--primary) text-(--primary-foreground)"
+        class="flex h-full items-center justify-center bg-(--primary) p-(--spacing-md) text-(--primary-foreground)"
       >
         Start building for free
       </div>

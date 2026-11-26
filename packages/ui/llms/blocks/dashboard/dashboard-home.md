@@ -405,6 +405,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
       :label="`Couldn't load your usage and resources. ${error}`"
       action-label="Retry"
       data-testid="dashboard-home__error"
+      class="mt-(--layout-group-gap)"
       @action="(event: MouseEvent) => emit('retry', event)"
     />
 
