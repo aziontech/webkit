@@ -43,14 +43,11 @@ describe('ContributionGraph', () => {
     expect(mount({ 'data-testid': 'activity-grid' }).getByTestId('activity-grid')).toBeTruthy()
   })
 
-  it('renders one cell per day of the year in seven rows, in both variants', () => {
-    const view = mount({ variant: 'dot' })
-    expect(view.getByTestId('contribution-graph').getAttribute('data-variant')).toBe('dot')
+  it('renders one cell per day of the year in seven rows', () => {
+    const view = mount()
     expect(view.getAllByTestId('contribution-graph__cell')).toHaveLength(365)
     expect(view.getAllByRole('row')).toHaveLength(7)
-    const nov22 = cellOn(view, '2026-11-22')
-    expect(nov22.getAttribute('data-level')).toBe('4')
-    expect(nov22.getAttribute('data-variant')).toBe('dot')
+    expect(cellOn(view, '2026-11-22').getAttribute('data-level')).toBe('4')
   })
 
   it('renders only the days of the selected year as cells', () => {

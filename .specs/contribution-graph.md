@@ -6,9 +6,9 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 8e99e57e151a956c1f2f932c4c63e7c2d87ce3f3cbd39c28b0a7d4fd92a24eeb
+checksum: bab30652489e3732c4c0b7f496097ac938d45216be8871948a30729c14b60ab9
 created: 2026-11-24
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 ---
 
 # ContributionGraph — Component Spec
@@ -44,7 +44,6 @@ Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart
 - Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.
 - Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).
 - Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.
-- Pick `variant="square"` (default) for dense developer activity grids, or `variant="dot"` for softer editorial/profile summaries.
 - Always supply `ariaLabel` naming the subject and period (e.g. `"Platform contributions in 2026"`).
 
 ## Usage
@@ -79,7 +78,6 @@ Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart
 | `items`      | `ContributionGraphItem[]`  | `[]`        | false    | Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0. |
 | `year`       | `number`                   | `undefined` | false    | Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date.                         |
 | `endDate`    | `string`                   | `''`        | false    | ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted.                                                                 |
-| `variant`    | `ContributionGraphVariant` | `'square'`  | false    | Cell shape: `'square'` (rounded square) or `'dot'` (circular dot).                                                                              |
 | `showLegend` | `boolean`                  | `true`      | false    | Renders the `Less … More` intensity legend in the footer.                                                                                       |
 | `loading`    | `boolean`                  | `false`     | false    | Renders a Skeleton placeholder in place of the calendar grid.                                                                                   |
 | `error`      | `string`                   | `''`        | false    | Error message; when set, renders an `EmptyState` with the message inside a `role="alert"` region in place of the grid.                          |
@@ -104,7 +102,6 @@ _No slots._
 ## States
 
 - Visual states: `default`, `hover` / `focus-visible` (active cell readout), `selected` (`aria-selected="true"` / `data-selected`), `loading` (Skeleton placeholder), `empty` (a small bordered `EmptyState` when `items` is empty and no `year` is set; with a `year` the grid renders all at level 0), `error` (a small bordered `EmptyState` with the message inside a `role="alert"` region).
-- `data-variant` mirrors `variant` (`square` | `dot`) on the root.
 - `data-loading` mirrors `loading` on the root; `data-error` is set when `error` is non-empty and not loading.
 - `data-level` (`0` | `1` | `2` | `3` | `4`) on each day cell; `data-selected` when the cell matches `selectedDate`.
 - Root carries `data-plain-ground` so a `Texture` beside it hides itself.
@@ -184,7 +181,6 @@ _No slots._
 ## Examples
 
 - Default — full year of Azion platform contributions with selectable days.
-- Variants — composite example rendering `variant="square"` and `variant="dot"` side-by-side.
 - Loading — Skeleton placeholder while contributions load.
 - Empty — empty `items` array showing the no-activity state.
 - Error — an `EmptyState` in an alert region when contributions fail to load.

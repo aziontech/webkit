@@ -16,9 +16,6 @@
 
   defineOptions({ name: 'ContributionGraph', inheritAttrs: false })
 
-  /** Visual cell shape of the calendar heatmap. */
-  export type ContributionGraphVariant = 'square' | 'dot'
-
   export type { ContributionGraphDay, ContributionGraphItem, ContributionGraphLevel }
 
   export interface ContributionGraphProps {
@@ -28,8 +25,6 @@
     year?: number
     /** ISO date (YYYY-MM-DD) ending a rolling 52-week window when year is omitted. */
     endDate?: string
-    /** Cell shape: 'square' (rounded square) or 'dot' (circular dot). */
-    variant?: ContributionGraphVariant
     /** Renders the Less ... More intensity legend in the footer. */
     showLegend?: boolean
     /** Renders a Skeleton placeholder in place of the calendar grid. */
@@ -44,7 +39,6 @@
     items: () => [],
     year: undefined,
     endDate: '',
-    variant: 'square',
     showLegend: true,
     loading: false,
     error: '',
@@ -204,7 +198,7 @@
   const LEGEND_LEVELS: ContributionGraphLevel[] = [0, 1, 2, 3, 4]
 
   const LEVEL_CLASS =
-    'forced-color-adjust-none data-[variant=dot]:rounded-full ' +
+    'forced-color-adjust-none ' +
     'data-[level=0]:bg-(--bg-placeholder) data-[level=1]:bg-(--chart-sequential-2) ' +
     'data-[level=2]:bg-(--chart-sequential-4) data-[level=3]:bg-(--chart-sequential-5) ' +
     'data-[level=4]:bg-(--chart-sequential-7)'
@@ -225,7 +219,6 @@
     v-bind="$attrs"
     :data-testid="testId"
     data-plain-ground
-    :data-variant="variant"
     :data-loading="loading || null"
     :data-error="hasError || null"
     :aria-busy="loading || undefined"
@@ -320,7 +313,6 @@
                     :data-testid="`${testId}__cell`"
                     :data-date="cell.day.date"
                     :data-level="cell.day.level"
-                    :data-variant="variant"
                     :data-selected="selectedDate === cell.day.date || null"
                     :aria-label="labelForDay(cell.day)"
                     :aria-selected="selectedDate === cell.day.date"
@@ -364,7 +356,6 @@
             v-for="level in LEGEND_LEVELS"
             :key="level"
             :data-level="level"
-            :data-variant="variant"
             :class="LEGEND_CELL_CLASS"
           />
           <span>{{ t('contributionGraph.more') }}</span>

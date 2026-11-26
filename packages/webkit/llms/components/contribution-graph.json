@@ -31,7 +31,6 @@
   "Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.",
   "Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).",
   "Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.",
-  "Pick `variant=\"square\"` (default) for dense developer activity grids, or `variant=\"dot\"` for softer editorial/profile summaries.",
   "Always supply `ariaLabel` naming the subject and period (e.g. `\"Platform contributions in 2026\"`)."
  ],
  "props": [
@@ -55,13 +54,6 @@
    "default": "''",
    "required": "false",
    "doc": "ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted."
-  },
-  {
-   "name": "variant",
-   "type": "ContributionGraphVariant",
-   "default": "'square'",
-   "required": "false",
-   "doc": "Cell shape: `'square'` (rounded square) or `'dot'` (circular dot)."
   },
   {
    "name": "showLegend",
@@ -116,12 +108,12 @@
    "file": "examples/contribution-graph/default.vue"
   },
   {
-   "name": "Variants",
-   "file": "examples/contribution-graph/variants.vue"
-  },
-  {
    "name": "Loading",
    "file": "examples/contribution-graph/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "file": "examples/contribution-graph/empty.vue"
   }
  ],
  "docs": "components/contribution-graph.md"

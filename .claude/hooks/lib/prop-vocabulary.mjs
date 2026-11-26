@@ -334,7 +334,6 @@ const VARIANT_EXTRAS = {
   'closing-call-to-action-section': ['panel', 'frame'],
   'console-mockup': ['window', 'bare'],
   'console-showcase-section': ['console', 'diagram'],
-  'contribution-graph': ['square', 'dot'],
   'doc-callout': ['note', 'info', 'tip', 'check', 'warning'],
   'doc-prompt': ['block', 'line'],
   'feature-tiles-section': ['artwork', 'illustrated'],

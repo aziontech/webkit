@@ -6,14 +6,14 @@
    "file": "examples/contribution-graph/default.vue"
   },
   {
-   "name": "Variants",
-   "summary": "Square and dot cell shapes rendered side-by-side over the same daily contribution series.",
-   "file": "examples/contribution-graph/variants.vue"
-  },
-  {
    "name": "Loading",
    "summary": "A Skeleton placeholder holds the space of the calendar while contributions load.",
    "file": "examples/contribution-graph/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "No activity recorded: renders an empty placeholder state when no items or year are supplied.",
+   "file": "examples/contribution-graph/empty.vue"
   }
  ]
 }

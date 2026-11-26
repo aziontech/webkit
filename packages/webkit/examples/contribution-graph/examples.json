@@ -8,11 +8,6 @@
       "file": "default.vue"
     },
     {
-      "name": "Variants",
-      "summary": "Square and dot cell shapes rendered side-by-side over the same daily contribution series.",
-      "file": "variants.vue"
-    },
-    {
       "name": "Loading",
       "summary": "A Skeleton placeholder holds the space of the calendar while contributions load.",
       "file": "loading.vue"

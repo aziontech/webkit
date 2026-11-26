@@ -18,7 +18,6 @@
 - Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.
 - Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).
 - Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.
-- Pick `variant="square"` (default) for dense developer activity grids, or `variant="dot"` for softer editorial/profile summaries.
 - Always supply `ariaLabel` naming the subject and period (e.g. `"Platform contributions in 2026"`).
 
 ## Don’t
@@ -43,7 +42,6 @@
 | `items` | `ContributionGraphItem[]` | `[]` | false | Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0. |
 | `year` | `number` | `undefined` | false | Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date. |
 | `endDate` | `string` | `''` | false | ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted. |
-| `variant` | `ContributionGraphVariant` | `'square'` | false | Cell shape: `'square'` (rounded square) or `'dot'` (circular dot). |
 | `showLegend` | `boolean` | `true` | false | Renders the `Less … More` intensity legend in the footer. |
 | `loading` | `boolean` | `false` | false | Renders a Skeleton placeholder in place of the calendar grid. |
 | `error` | `string` | `''` | false | Error message; when set, renders an `EmptyState` with the message inside a `role="alert"` region in place of the grid. |
@@ -65,7 +63,6 @@
 ## States
 
 - Visual states: `default`, `hover` / `focus-visible` (active cell readout), `selected` (`aria-selected="true"` / `data-selected`), `loading` (Skeleton placeholder), `empty` (a small bordered `EmptyState` when `items` is empty and no `year` is set; with a `year` the grid renders all at level 0), `error` (a small bordered `EmptyState` with the message inside a `role="alert"` region).
-- `data-variant` mirrors `variant` (`square` | `dot`) on the root.
 - `data-loading` mirrors `loading` on the root; `data-error` is set when `error` is non-empty and not loading.
 - `data-level` (`0` | `1` | `2` | `3` | `4`) on each day cell; `data-selected` when the cell matches `selectedDate`.
 - Root carries `data-plain-ground` so a `Texture` beside it hides itself.
@@ -138,40 +135,6 @@
 </template>
 ```
 
-### Variants
-
-```vue
-<script setup lang="ts">
-  import ContributionGraph, {
-    type ContributionGraphItem
-  } from '@aziontech/webkit/contribution-graph'
-
-  const items: ContributionGraphItem[] = Array.from({ length: 365 }, (_, index) => {
-    const dt = new Date(Date.UTC(2026, 0, 1 + index))
-    const date = dt.toISOString().slice(0, 10)
-    const count = (index * 5) % 11 === 0 ? 0 : (index * 2) % 12
-    return { date, count }
-  })
-</script>
-
-<template>
-  <div class="flex flex-col gap-(--spacing-lg)">
-    <ContributionGraph
-      :items="items"
-      :year="2026"
-      variant="square"
-      aria-label="Square contribution graph"
-    />
-    <ContributionGraph
-      :items="items"
-      :year="2026"
-      variant="dot"
-      aria-label="Dot contribution graph"
-    />
-  </div>
-</template>
-```
-
 ### Loading
 
 ```vue
@@ -183,6 +146,21 @@
   <ContributionGraph
     loading
     aria-label="Loading platform contributions"
+  />
+</template>
+```
+
+### Empty
+
+```vue
+<script setup lang="ts">
+  import ContributionGraph from '@aziontech/webkit/contribution-graph'
+</script>
+
+<template>
+  <ContributionGraph
+    :items="[]"
+    aria-label="Platform contributions"
   />
 </template>
 ```
