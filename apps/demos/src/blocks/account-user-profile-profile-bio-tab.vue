@@ -90,7 +90,7 @@
                 size="large"
                 class="w-full"
                 aria-label="First name"
-                autocomplete="given-name"
+                autocomplete="off"
               />
               <FieldError
                 v-if="errors.firstName"
@@ -108,7 +108,7 @@
                 size="large"
                 class="w-full"
                 aria-label="Last name"
-                autocomplete="family-name"
+                autocomplete="off"
               />
               <FieldError
                 v-if="errors.lastName"
@@ -203,7 +203,7 @@
                 size="large"
                 class="w-full"
                 aria-label="Email"
-                autocomplete="email"
+                autocomplete="off"
               />
               <FieldError
                 v-if="errors.email"
@@ -230,7 +230,7 @@
             <Input
               v-model="form.websiteUrl"
               inputmode="url"
-              autocomplete="url"
+              autocomplete="off"
               size="large"
               class="w-full"
               aria-label="Website or GitHub"

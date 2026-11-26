@@ -119,7 +119,7 @@
             "../user-profile-model": "./account-user-profile.user-profile-model",
             "./profile-select.vue": "./account-user-profile-profile-select.vue"
           },
-          "checksum": "sha256:394a7a27a6a3e0d49915a3287f8ea64455dfa28c3adb84c1997b6bbffb62f603"
+          "checksum": "sha256:e1b2d0078746b952c6b2698ea6c45b7625abf598016458198bad1ead6e0d22e5"
         },
         {
           "path": "src/blocks/account-user-profile-profile-header.vue",

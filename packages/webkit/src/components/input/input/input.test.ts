@@ -467,11 +467,11 @@ describe('Input', () => {
       expect(input).toHaveAttribute('data-form-type', 'other')
     })
 
-    it('keeps a login field fillable (autocomplete="username", type="email")', () => {
+    it('keeps a login field fillable only through its autocomplete token', () => {
       const username = render(Input, { props: { autocomplete: 'username' } }).getByTestId('input')
       expect(username).not.toHaveAttribute('data-1p-ignore')
       const email = render(Input, { props: { type: 'email' } }).getAllByTestId('input')[1]
-      expect(email).not.toHaveAttribute('data-1p-ignore')
+      expect(email).toHaveAttribute('data-1p-ignore', 'true')
     })
 
     it('hides read-only fields even when they carry an autocomplete token', () => {

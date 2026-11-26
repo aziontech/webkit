@@ -5,8 +5,7 @@ import { PASSWORD_MANAGER_IGNORE, passwordManagerHints } from './autofill'
 describe('passwordManagerHints', () => {
   it('hides a plain field (no autocomplete) from password managers', () => {
     expect(passwordManagerHints()).toEqual(PASSWORD_MANAGER_IGNORE)
-    expect(passwordManagerHints({ type: 'text' })).toEqual(PASSWORD_MANAGER_IGNORE)
-    expect(passwordManagerHints({ type: 'number' })).toEqual(PASSWORD_MANAGER_IGNORE)
+    expect(passwordManagerHints({ autocomplete: '' })).toEqual(PASSWORD_MANAGER_IGNORE)
   })
 
   it('leaves credential and identity fields to the password manager', () => {
@@ -21,7 +20,6 @@ describe('passwordManagerHints', () => {
     ]) {
       expect(passwordManagerHints({ autocomplete })).toEqual({})
     }
-    expect(passwordManagerHints({ type: 'email' })).toEqual({})
   })
 
   it('hides read-only fields and autocomplete="off" fields', () => {
