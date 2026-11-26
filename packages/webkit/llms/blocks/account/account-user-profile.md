@@ -1,6 +1,6 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 72rem-wide block it becomes a column beside the tab content with the bio under it. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 1192px-wide block (`@5xl`) it becomes a column beside the tab content with the bio under it. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
@@ -31,7 +31,7 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 
-A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least 72rem wide (`@6xl`, a desktop next to the rail) the header becomes a 16rem column beside the tab content, under the tabs, with the facts one per line and the bio below them; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least `--container-5xl` wide (`@5xl`, 1192px: a desktop next to the rail) the header becomes a `--container-3xs` (256px) column beside the tab content, under the tabs, with the facts one per line and the bio below them; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
 
 ### Width — one page, two measures
 
@@ -343,15 +343,15 @@ Each variant is the same screen in another state: `get_block("account/account-us
     />
     <div
       v-else
-      class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @6xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @6xl/profile:gap-x-(--layout-section-gap)"
+      class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @5xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @5xl/profile:gap-x-(--layout-section-gap)"
     >
       <ProfileHeader
         :profile="profile"
         :loading="loading"
-        class="@6xl/profile:col-start-1 @6xl/profile:row-start-2 @6xl/profile:self-start"
+        class="@5xl/profile:col-start-1 @5xl/profile:row-start-2 @5xl/profile:self-start"
       />
 
-      <div class="min-w-0 @6xl/profile:col-span-2 @6xl/profile:row-start-1">
+      <div class="min-w-0 @5xl/profile:col-span-2 @5xl/profile:row-start-1">
         <PageTabs v-model="activeTab">
           <Tabs.Trigger
             value="overview"
@@ -378,7 +378,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
 
       <div
         :data-measure="activeTab === 'overview' ? null : 'form'"
-        class="flex min-w-0 flex-col gap-(--layout-group-gap) data-[measure=form]:max-w-(--layout-measure-form) @6xl/profile:col-start-2 @6xl/profile:row-start-2"
+        class="flex min-w-0 flex-col gap-(--layout-group-gap) data-[measure=form]:max-w-(--layout-measure-form) @5xl/profile:col-start-2 @5xl/profile:row-start-2"
       >
         <div
           role="tabpanel"
@@ -1119,7 +1119,7 @@ export function filterHistory(
 
 <template>
   <header
-    class="flex min-w-0 items-center gap-(--spacing-sm) @6xl/profile:flex-col @6xl/profile:items-start"
+    class="flex min-w-0 items-center gap-(--spacing-sm) @5xl/profile:flex-col @5xl/profile:items-start"
   >
     <Skeleton
       v-if="loading"
@@ -1155,19 +1155,19 @@ export function filterHistory(
       />
       <ul
         v-else
-        class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @6xl/profile:flex-col @6xl/profile:gap-(--spacing-2xs)"
+        class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @5xl/profile:flex-col @5xl/profile:gap-(--spacing-2xs)"
       >
         <li
           v-for="detail in details"
           :key="detail"
-          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @6xl/profile:not-last:after:hidden"
+          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @5xl/profile:not-last:after:hidden"
         >
           {{ detail }}
         </li>
       </ul>
       <p
         v-if="!loading && profile.bio"
-        class="hidden text-body-sm text-(--text-default) @6xl/profile:block"
+        class="hidden text-body-sm text-(--text-default) @5xl/profile:block"
       >
         {{ profile.bio }}
       </p>

@@ -30,7 +30,7 @@
 
 <template>
   <header
-    class="flex min-w-0 items-center gap-(--spacing-sm) @6xl/profile:flex-col @6xl/profile:items-start"
+    class="flex min-w-0 items-center gap-(--spacing-sm) @5xl/profile:flex-col @5xl/profile:items-start"
   >
     <Skeleton
       v-if="loading"
@@ -66,19 +66,19 @@
       />
       <ul
         v-else
-        class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @6xl/profile:flex-col @6xl/profile:gap-(--spacing-2xs)"
+        class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @5xl/profile:flex-col @5xl/profile:gap-(--spacing-2xs)"
       >
         <li
           v-for="detail in details"
           :key="detail"
-          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @6xl/profile:not-last:after:hidden"
+          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @5xl/profile:not-last:after:hidden"
         >
           {{ detail }}
         </li>
       </ul>
       <p
         v-if="!loading && profile.bio"
-        class="hidden text-body-sm text-(--text-default) @6xl/profile:block"
+        class="hidden text-body-sm text-(--text-default) @5xl/profile:block"
       >
         {{ profile.bio }}
       </p>

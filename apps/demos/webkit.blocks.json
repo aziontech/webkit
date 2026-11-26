@@ -128,7 +128,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:4814e57750b34da728c94f18124f329d53b0beb544996fed07c42ef773b17861"
+          "checksum": "sha256:c8dde9bd300b1240770a0d3d5f53a699d4d2d033239772f1b70820c41580e552"
         },
         {
           "path": "src/blocks/account-user-profile-profile-notifications-tab.vue",
@@ -205,7 +205,7 @@
             "./sample": "./account-user-profile.sample",
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:b18062ce50e59797f2a29ba247aa9872b398ea858c23322f508aca6c0c2bbc70"
+          "checksum": "sha256:0187002858ac9fa29a2dc936e384ea302c34f6fdaa1b1828103fb2a993781e70"
         }
       ]
     },

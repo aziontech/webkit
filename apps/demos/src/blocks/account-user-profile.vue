@@ -197,15 +197,15 @@
     />
     <div
       v-else
-      class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @6xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @6xl/profile:gap-x-(--layout-section-gap)"
+      class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @5xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @5xl/profile:gap-x-(--layout-section-gap)"
     >
       <ProfileHeader
         :profile="profile"
         :loading="loading"
-        class="@6xl/profile:col-start-1 @6xl/profile:row-start-2 @6xl/profile:self-start"
+        class="@5xl/profile:col-start-1 @5xl/profile:row-start-2 @5xl/profile:self-start"
       />
 
-      <div class="min-w-0 @6xl/profile:col-span-2 @6xl/profile:row-start-1">
+      <div class="min-w-0 @5xl/profile:col-span-2 @5xl/profile:row-start-1">
         <PageTabs v-model="activeTab">
           <Tabs.Trigger
             value="overview"
@@ -232,7 +232,7 @@
 
       <div
         :data-measure="activeTab === 'overview' ? null : 'form'"
-        class="flex min-w-0 flex-col gap-(--layout-group-gap) data-[measure=form]:max-w-(--layout-measure-form) @6xl/profile:col-start-2 @6xl/profile:row-start-2"
+        class="flex min-w-0 flex-col gap-(--layout-group-gap) data-[measure=form]:max-w-(--layout-measure-form) @5xl/profile:col-start-2 @5xl/profile:row-start-2"
       >
         <div
           role="tabpanel"

@@ -18,7 +18,7 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 
-A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least 72rem wide (`@6xl`, a desktop next to the rail) the header becomes a 16rem column beside the tab content, under the tabs, with the facts one per line and the bio below them; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least `--container-5xl` wide (`@5xl`, 1192px: a desktop next to the rail) the header becomes a `--container-3xs` (256px) column beside the tab content, under the tabs, with the facts one per line and the bio below them; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
 
 ### Width — one page, two measures
 
