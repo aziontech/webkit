@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 82ac0c058497e12cd2c5227a691ac0cc960b6b50425469d5e11a50e1f1075dee
+checksum: abdc5038ef19541d5c13ce0c31f487eafdcc7489133d3b8a09860402bdfbb812
 created: 2026-06-26
-last_updated: 2026-08-12
+last_updated: 2026-11-26
 ---
 
 # Dropdown — Component Spec
@@ -73,7 +73,7 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
     - `command: string` default `''` — keyboard-shortcut hint rendered on the right side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). While the panel is open the root listens for `window` `keydown`, matches the shortcut against every mounted option, and emits `select` for the matching option (preventing the browser default). Shortcuts are active only while the panel is open, since options are only mounted then. Mutually exclusive with the `right` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
-    - `selected: boolean` default `false` — marks the option as currently selected (background + checkmark).
+    - `selected: boolean` default `false` — marks the option as currently selected (background + checkmark). As soon as one mounted option is `selected`, every option in the panel is announced as a single-choice item (`role="menuitemradio"` + `aria-checked`), and opening the panel moves focus to the selected option.
   - Events: _none_ (root emits `select`).
   - Slots: `default` (override of the `label` prop, for rich label content), `left` (left icon / avatar), `right` (right icon / badge; mutually exclusive with `command`).
 
@@ -98,8 +98,8 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 | Slot | Scope | Notes |
 |---|---|---|
 | `default` | — | Place `<Dropdown.Trigger>` followed by one or more `<Dropdown.Group>`. |
-| `top` | — | Sticky region rendered above the scrollable group list (e.g. search input). |
-| `bottom` | — | Sticky region rendered below the scrollable group list (e.g. footer action). |
+| `top` | — | Sticky region rendered above the scrollable group list (e.g. search input). Rendered inside the panel but outside the `role="menu"` element, so form controls placed here do not break the menu's owned-children contract; reached with `Tab` / `Shift+Tab`. |
+| `bottom` | — | Sticky region rendered below the scrollable group list (e.g. a footer action such as a `Button` or link). Rendered inside the panel but outside the `role="menu"` element, so a non-menu control placed here does not break the menu's owned-children contract; reached with `Tab` from the menu without closing the panel, and `Shift+Tab` returns to the menu. Activating a control here does not close the panel — the consumer closes it through `v-model:open` when the action requires it. |
 
 ## States
 
@@ -109,6 +109,7 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 - `data-selected` on option mirrors the `selected` prop
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
 - `data-placement` on the panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- Panel anatomy: the positioned surface (`<testId>__popup`) holds the root `top` region, the `role="menu"` list (`<testId>__panel`, which owns the groups and options), and the root `bottom` region. `data-state` and the resolved `data-placement` are mirrored on both the popup and the panel.
 
 ## Motion & Animations
 
@@ -155,9 +156,9 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and option.
 - Keyboard map:
-  - On the trigger: `Enter` / `Space` opens the panel and focuses the first enabled option; `Down` opens and focuses the first option; `Up` opens and focuses the last option.
-  - Inside the panel: `Down` / `Up` move between enabled options (wrap-around); `Home` / `End` jump to first/last enabled option; `Enter` / `Space` activate the focused option; `Esc` closes the panel and returns focus to the trigger; `Tab` closes the panel and lets focus proceed to the next focusable element.
-- ARIA: trigger exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`; panel uses `role="menu"`; each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`; selected option uses `aria-current="true"`.
+  - On the trigger: `Enter` / `Space` / `Down` open the panel and focus the selected option (or the first enabled option when none is selected); `Up` opens and focuses the last option.
+  - Inside the panel: `Down` / `Up` move between enabled options (wrap-around); `Home` / `End` jump to first/last enabled option; `Enter` / `Space` activate the focused option; `Esc` closes the panel and returns focus to the trigger. `Tab` / `Shift+Tab` move through the panel's tab stops in order — focusable elements in the root `top` slot, the menu (one stop: the focused, selected, or first enabled option), focusable elements in the root `bottom` slot — without closing the panel; tabbing past the first or last stop closes the panel and lets focus proceed.
+- ARIA: trigger exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`; panel uses `role="menu"`; each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`. When at least one mounted option is `selected`, every option renders `role="menuitemradio"` with `aria-checked` mirroring its `selected` prop, so assistive technology announces which option is chosen. The root `top` and `bottom` regions sit outside the `role="menu"` element, so only groups and menu items are owned by the menu.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
@@ -172,7 +173,7 @@ Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/B
 - Placements — composite story rendering all four explicit `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
 - AutoPlacement — composite story demonstrating `placement="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the corner with the most available space. Required because `'auto'` is the only `placement` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
 - OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `left` + `right` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
-- WithTopAndBottomSlots — single panel forced open showing the root `top` and `bottom` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
+- WithTopAndBottomSlots — single panel forced open showing the root `top` and `bottom` named slots in use (e.g. a search input on top, one `selected` option announced as checked, and a footer action on bottom reachable with `Tab`). Required because both slots are public root API documented in the Slots table and have no other coverage.
 - GroupsWithTopAndBottomSlots — panel forced open with two `<Dropdown.Group>` each using its own `top` (per-section caption) and `bottom` (per-section action) slots. Required because the group-level `top`/`bottom` are public API on `Dropdown.Group` and behave differently from the root slots (inline, per-section — not sticky).
 - CustomTriggers — composite story showing the abstract `<Dropdown.Trigger>` wrapping different elements (Button, IconButton, plain text). Required because the spec mandates the trigger is abstract and the consumer chooses the inner element; the existing stories only show a `Button`.
 

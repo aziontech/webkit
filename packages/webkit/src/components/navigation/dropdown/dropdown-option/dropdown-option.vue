@@ -47,6 +47,11 @@
 
   const hasCommand = computed(() => props.command.length > 0)
 
+  const role = computed(() => (ctx.hasSelection.value ? 'menuitemradio' : 'menuitem'))
+  const ariaChecked = computed(() => (ctx.hasSelection.value ? props.selected : undefined))
+
+  const selectionKey = Symbol('DropdownOption')
+
   function activate(event: globalThis.MouseEvent | globalThis.KeyboardEvent) {
     if (props.disabled) return
     ctx.selectOption(props.value, event)
@@ -62,6 +67,12 @@
       activate(event)
     }
   }
+
+  watch(
+    () => props.selected,
+    (selected) => ctx.setOptionSelected(selectionKey, selected),
+    { immediate: true }
+  )
 
   let unregisterCommand: (() => void) | null = null
 
@@ -79,16 +90,17 @@
 
   onBeforeUnmount(() => {
     unregisterCommand?.()
+    ctx.setOptionSelected(selectionKey, false)
   })
 </script>
 
 <template>
   <div
     v-bind="attrs"
-    role="menuitem"
+    :role="role"
     :tabindex="disabled ? -1 : 0"
     :aria-disabled="disabled || undefined"
-    :aria-current="selected ? 'true' : undefined"
+    :aria-checked="ariaChecked"
     :data-testid="testId"
     :data-selected="selected || null"
     :data-disabled="disabled || null"

@@ -24,6 +24,10 @@ export interface DropdownContext {
   panelRef: Ref<globalThis.HTMLElement | null>
   /** Teleport target inside the open panel; groups portal their content here. */
   panelBodyRef: Ref<globalThis.HTMLElement | null>
+  /** True while at least one mounted option is selected; options then render as menuitemradio. */
+  hasSelection: Ref<boolean>
+  /** Records whether the option identified by `key` is selected; pass false on unmount. */
+  setOptionSelected: (key: symbol, selected: boolean) => void
   /** Drives open state. Sub-components never call defineEmits directly. */
   setOpen: (value: boolean) => void
   /** Activates an option — emits select and closes the panel. */

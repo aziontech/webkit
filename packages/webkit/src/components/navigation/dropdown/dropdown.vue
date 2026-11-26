@@ -62,9 +62,20 @@
 
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
   const panelRef = ref<globalThis.HTMLElement | null>(null)
+  const menuRef = ref<globalThis.HTMLElement | null>(null)
+  const topRef = ref<globalThis.HTMLElement | null>(null)
+  const bottomRef = ref<globalThis.HTMLElement | null>(null)
   const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
   const bodyTarget = ref<globalThis.HTMLElement | null>(null)
   const groupCount = ref(0)
+  const selectedKeys = ref(new Set<symbol>())
+
+  const hasSelection = computed(() => selectedKeys.value.size > 0)
+
+  function setOptionSelected(key: symbol, selected: boolean) {
+    if (selected) selectedKeys.value.add(key)
+    else selectedKeys.value.delete(key)
+  }
 
   watch(panelBodyRef, (el) => {
     if (el) bodyTarget.value = el
@@ -113,18 +124,72 @@
     isOpenState.set(value)
   }
 
+  const OPTION_SELECTOR =
+    '[role="menuitem"]:not([aria-disabled="true"]), [role="menuitemradio"]:not([aria-disabled="true"])'
+
+  const TABBABLE_SELECTOR =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
   function getEnabledOptions(): globalThis.HTMLElement[] {
-    const panel = panelRef.value
-    if (!panel) return []
-    const nodes = panel.querySelectorAll<globalThis.HTMLElement>(
-      '[role="menuitem"]:not([aria-disabled="true"])'
-    )
-    return Array.from(nodes)
+    const menu = menuRef.value
+    if (!menu) return []
+    return Array.from(menu.querySelectorAll<globalThis.HTMLElement>(OPTION_SELECTOR))
+  }
+
+  function getActiveElement(): globalThis.HTMLElement | null {
+    return (globalThis.document?.activeElement as globalThis.HTMLElement | null) ?? null
+  }
+
+  function getSelectedOption(options: globalThis.HTMLElement[]): globalThis.HTMLElement | null {
+    return options.find((option) => option.getAttribute('aria-checked') === 'true') ?? null
   }
 
   function focusFirstOption() {
     const options = getEnabledOptions()
     if (options.length > 0) options[0].focus({ preventScroll: true })
+  }
+
+  function focusInitialOption() {
+    const options = getEnabledOptions()
+    const target = getSelectedOption(options) ?? options[0]
+    target?.focus({ preventScroll: true })
+  }
+
+  function getRegionTabbables(region: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
+    if (!region) return []
+    return Array.from(region.querySelectorAll<globalThis.HTMLElement>(TABBABLE_SELECTOR))
+  }
+
+  function getMenuStop(): globalThis.HTMLElement | null {
+    const options = getEnabledOptions()
+    const active = getActiveElement()
+    if (active && options.includes(active)) return active
+    return getSelectedOption(options) ?? options[0] ?? null
+  }
+
+  function onPanelTab(event: globalThis.KeyboardEvent) {
+    const menuStop = getMenuStop()
+    const stops = [
+      ...getRegionTabbables(topRef.value),
+      ...(menuStop ? [menuStop] : []),
+      ...getRegionTabbables(bottomRef.value)
+    ]
+    const active = getActiveElement()
+    const inMenu = active !== null && menuRef.value?.contains(active) === true
+    const focused = inMenu ? menuStop : active
+    const index = focused ? stops.indexOf(focused) : -1
+    if (index === -1 && stops.length > 0) {
+      event.preventDefault()
+      stops[event.shiftKey ? stops.length - 1 : 0].focus({ preventScroll: true })
+      return
+    }
+    const nextIndex = index + (event.shiftKey ? -1 : 1)
+    if (nextIndex < 0 || nextIndex >= stops.length) {
+      setOpen(false)
+      return
+    }
+    event.preventDefault()
+    stops[nextIndex].focus({ preventScroll: true })
   }
 
   function focusLastOption() {
@@ -184,7 +249,7 @@
       setOpen(false)
       focusTrigger()
     } else if (event.key === 'Tab') {
-      setOpen(false)
+      onPanelTab(event)
     }
   }
 
@@ -269,8 +334,10 @@
     () => isOpenState.value,
     async (open) => {
       if (!open) return
-      await nextTick()
-      focusFirstOption()
+      for (let attempt = 0; attempt < 3 && getEnabledOptions().length === 0; attempt += 1) {
+        await nextTick()
+      }
+      focusInitialOption()
     }
   )
 
@@ -300,6 +367,8 @@
     triggerRef,
     panelRef,
     panelBodyRef: bodyTarget,
+    hasSelection,
+    setOptionSelected,
     setOpen,
     selectOption,
     registerGroup,
@@ -336,13 +405,9 @@
       >
         <div
           v-if="isOpenRef"
-          :id="panelId"
           ref="panelRef"
-          role="menu"
           tabindex="-1"
-          :aria-labelledby="triggerId"
-          :aria-hidden="!isOpenRef || undefined"
-          :data-testid="`${testId}__panel`"
+          :data-testid="`${testId}__popup`"
           :data-state="isOpenRef ? 'open' : 'closed'"
           :data-placement="resolvedPlacementRef"
           :style="panelStyle"
@@ -351,6 +416,7 @@
         >
           <div
             v-if="$slots['top']"
+            ref="topRef"
             :data-testid="`${testId}__top`"
             class="sticky top-0 z-10 bg-(--bg-surface) px-(--spacing-xxs) pb-(--spacing-xxs)"
           >
@@ -358,13 +424,25 @@
           </div>
 
           <div
-            ref="panelBodyRef"
-            :data-testid="`${testId}__body`"
-            class="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto"
-          />
+            :id="panelId"
+            ref="menuRef"
+            role="menu"
+            :aria-labelledby="triggerId"
+            :data-testid="`${testId}__panel`"
+            :data-state="isOpenRef ? 'open' : 'closed'"
+            :data-placement="resolvedPlacementRef"
+            class="flex min-h-0 flex-1 flex-col"
+          >
+            <div
+              ref="panelBodyRef"
+              :data-testid="`${testId}__body`"
+              class="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto"
+            />
+          </div>
 
           <div
             v-if="$slots['bottom']"
+            ref="bottomRef"
             :data-testid="`${testId}__bottom`"
             class="sticky bottom-0 z-10 bg-(--bg-surface) px-(--spacing-xxs) pt-(--spacing-xxs)"
           >
