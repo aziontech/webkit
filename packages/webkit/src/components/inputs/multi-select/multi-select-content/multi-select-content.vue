@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { useMounted } from '../../../../composables/use-mounted'
   import { usePlacement } from '../../../../composables/use-placement'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { multiSelectContextKey } from '../injection-key'
@@ -98,10 +99,15 @@
   onBeforeUnmount(() => {
     document.removeEventListener('pointerdown', onDocumentPointerDown, true)
   })
+
+  const teleportReady = useMounted()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

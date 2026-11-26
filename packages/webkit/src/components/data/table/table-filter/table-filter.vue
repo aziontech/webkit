@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { useMounted } from '../../../../composables/use-mounted'
   import { usePlacement } from '../../../../composables/use-placement'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
@@ -198,6 +199,8 @@
   )
 
   resetDraft()
+
+  const teleportReady = useMounted()
 </script>
 
 <template>
@@ -223,7 +226,10 @@
       </slot>
     </span>
 
-    <Teleport to="body">
+    <Teleport
+      to="body"
+      :disabled="!teleportReady"
+    >
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

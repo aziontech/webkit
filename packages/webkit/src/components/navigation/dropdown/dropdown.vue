@@ -12,6 +12,7 @@
   } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useMounted } from '../../../composables/use-mounted'
   import { usePlacement } from '../../../composables/use-placement'
   import type {
     DropdownOptionValue,
@@ -309,6 +310,8 @@
     focusPrevOption,
     focusTrigger
   })
+
+  const teleportReady = useMounted()
 </script>
 
 <template>
@@ -322,7 +325,10 @@
   >
     <slot />
 
-    <Teleport to="body">
+    <Teleport
+      to="body"
+      :disabled="!teleportReady"
+    >
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

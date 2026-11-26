@@ -11,6 +11,7 @@
   } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { useMounted } from '../../../composables/use-mounted'
   import { usePlacement } from '../../../composables/use-placement'
   import Button from '../../actions/button/button.vue'
   import CalendarFields from './calendar-fields/calendar-fields.vue'
@@ -454,6 +455,8 @@
     setTimezone,
     changeMonth
   })
+
+  const teleportReady = useMounted()
 </script>
 
 <template>
@@ -622,7 +625,10 @@
       </slot>
     </span>
 
-    <Teleport to="body">
+    <Teleport
+      to="body"
+      :disabled="!teleportReady"
+    >
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
@@ -687,7 +693,11 @@
       </Transition>
     </Teleport>
 
-    <Teleport to="body">
+    <Teleport
+      key="teleport-2"
+      v-if="teleportReady"
+      to="body"
+    >
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

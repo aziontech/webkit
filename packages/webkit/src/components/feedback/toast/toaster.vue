@@ -11,6 +11,7 @@
     watch
   } from 'vue'
 
+  import { useMounted } from '../../../composables/use-mounted'
   import { ToastInjectionKey } from './injection-key'
   import {
     getRegionTransitionStyle,
@@ -304,10 +305,15 @@
       ...getToastTransitionStyle(false)
     }
   }
+
+  const teleportReady = useMounted()
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport
+    to="body"
+    :disabled="!teleportReady"
+  >
     <template v-if="isActive">
       <div
         v-for="region in regions"
