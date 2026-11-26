@@ -290,6 +290,10 @@ application. Check your connection and try again."` — not `"Error 500"`.
   field's red `invalid` state.
 - **Never auto-dismiss an error that names a required action.** `Alert`s stay until recovery;
   background-job error toasts are `duration: 0` **and** `closable`.
+- **An error never carries a primary (orange) button.** The recovery action in a danger `Alert`,
+  an error page, an `ErrorBoundary` fallback or a failed run is `secondary` (Retry, Redeploy, Go to
+  home); the help beside it is `outline` or `ghost`. The `Alert` built-in action is already
+  `secondary`.
 - **Release the lock in `finally`**, on success and failure alike — otherwise Retry cannot re-run.
 - **Move the user to the problem only after the lock is released**; a disabled control cannot take
   focus.

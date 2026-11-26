@@ -106,7 +106,7 @@
         />
         <Button
           label="Redeploy"
-          variant="primary"
+          variant="secondary"
           size="medium"
           icon="az az-refresh"
           :loading="redeploying"

@@ -4,6 +4,7 @@ export const CONTRAST_SURFACES = ['--bg-canvas', '--bg-surface', '--bg-surface-r
 
 const FILLS = ['primary', 'secondary', 'accent', 'success', 'warning', 'danger', 'info']
 const STATUS = ['success', 'warning', 'danger', 'info']
+const MASKED = ['success', 'warning', 'danger']
 
 export const CONTRAST_PAIRS = [
   ...CONTRAST_SURFACES.map((bg) => ['body', '--text-default', bg]),
@@ -15,10 +16,10 @@ export const CONTRAST_PAIRS = [
   ['text', '--text-contrast', '--bg-contrast'],
   ['text', '--chart-tooltip-text', '--chart-tooltip-bg'],
   ['text', '--chart-tooltip-muted', '--chart-tooltip-bg'],
+  ...MASKED.map((s) => ['body', '--text-default', `--${s}-mask`]),
   ...STATUS.flatMap((s) => CONTRAST_SURFACES.map((bg) => ['icon', `--${s}-foreground`, bg])),
-  ...['success', 'warning', 'danger'].flatMap((s) =>
-    CONTRAST_SURFACES.map((bg) => ['icon', `--${s}-mark`, bg])
-  ),
+  ...STATUS.flatMap((s) => CONTRAST_SURFACES.map((bg) => ['icon', `--${s}-mark`, bg])),
+  ...MASKED.map((s) => ['icon', `--${s}-mark`, `--${s}-mask`]),
   ...[
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `--chart-series-${n}`),
     '--chart-series-other',

@@ -52,14 +52,20 @@ export const tokenPurpose = {
   '--code-syntax-string': 'String literals.',
   '--success': 'The box of a success message, tag or badge.',
   '--success-border': 'The edge of a success box.',
+  '--success-mask':
+    'The soft tint behind a success alert; text on it stays --text-default, the icon --success-mark.',
   '--success-foreground': 'Text and icons on --success; on a surface, --success-mark.',
   '--success-mark': 'A success mark standing on the page: the status dot, the outcome disc.',
   '--warning': 'The box of a warning message, tag or badge.',
   '--warning-border': 'The edge of a warning box.',
+  '--warning-mask':
+    'The soft tint behind a warning alert; text on it stays --text-default, the icon --warning-mark.',
   '--warning-foreground': 'Text and icons on --warning; on a surface, --warning-mark.',
   '--warning-mark': 'A warning mark standing on the page: the status dot, the outcome disc.',
   '--danger': 'The box of an error message, tag or badge, and the danger button.',
   '--danger-border': 'The edge of a danger box and the outline of an invalid field.',
+  '--danger-mask':
+    'The soft tint behind a error alert; text on it stays --text-default, the icon --danger-mark.',
   '--danger-foreground': 'Text and icons on --danger; on a surface, --danger-mark.',
   '--danger-mark': 'An error mark standing on the page: the status dot, the outcome disc.',
   '--info': 'The box of an informational message, tag or badge.',

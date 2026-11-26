@@ -66,7 +66,7 @@ describe('create-deploy-progress-dialog', () => {
     const dialog = await screen.findByRole('dialog')
     const retry = within(dialog).getByRole('button', { name: 'Retry failed' })
     const close = footerButton(dialog, 'Close')
-    expect(retry.getAttribute('data-variant')).toBe('primary')
+    expect(retry.getAttribute('data-variant')).toBe('secondary')
     expect(close.getAttribute('data-variant')).toBe('outline')
     const bar = within(dialog).getByTestId('create-deploy-progress-dialog__progress')
     const value = Number(
