@@ -20276,7 +20276,7 @@
      "type": "'small' | 'medium'",
      "default": "'medium'",
      "required": "false",
-     "doc": "Heading scale of the title (subset: no `large`)."
+     "doc": "Kept for compatibility: in the console type set (CT-1) both sizes render the title at 14px medium."
     },
     {
      "name": "anchor",

@@ -3,7 +3,7 @@ name: subheader
 category: layout
 structure: monolithic
 status: implemented
-checksum: 2de680993c30f2b49217fa900d17966fe7e853eaa1702fe0fcb36a099c707449
+checksum: 68364ab25f97b84be5fae9babf93e3fd394a8f443c8d1f8866a2a8ef62ebb2d4
 spec_version: 7
 template: 2
 created: 2026-11-10
@@ -73,7 +73,7 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 | ------------- | --------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------- |
 | `title`       | `string`              | `—`        | true     | The band title, rendered as an h2.                                                                              |
 | `description` | `string`              | `''`       | false    | One sentence under the title.                                                                                   |
-| `size`        | `'small' \| 'medium'` | `'medium'` | false    | Heading scale of the title (subset: no `large`).                                                                |
+| `size`        | `'small' \| 'medium'` | `'medium'` | false    | Kept for compatibility: in the console type set (CT-1) both sizes render the title at 14px medium.              |
 | `anchor`      | `string`              | `''`       | false    | Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus. |
 
 ## Events
@@ -103,15 +103,14 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 
 ## Tokens
 
-| Region         | Token (DESIGN.md)                                               |
-| -------------- | --------------------------------------------------------------- |
-| title (medium) | `.text-title-sm` · `var(--text-default)`                        |
-| title (small)  | `.text-heading-2xs` · `var(--text-default)`                     |
-| description    | `.text-body-sm` · `var(--text-muted)`                           |
-| inline padding | none: the title starts on the same edge as the content it heads |
-| row gap        | `var(--spacing-md)`                                             |
-| actions gap    | `var(--spacing-xs)`                                             |
-| scroll margin  | `var(--spacing-xl)`                                             |
+| Region         | Token (DESIGN.md)                                                                         |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| title          | `.text-title-sm` (14px medium, both sizes; console type set CT-1) · `var(--text-default)` |
+| description    | `.text-body-sm` · `var(--text-muted)`                                                     |
+| inline padding | none: the title starts on the same edge as the content it heads                           |
+| row gap        | `var(--spacing-md)`                                                                       |
+| actions gap    | `var(--spacing-xs)`                                                                       |
+| scroll margin  | `var(--spacing-xl)`                                                                       |
 
 ## Theme gaps
 

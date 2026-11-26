@@ -371,7 +371,7 @@
             >
               <h2
                 id="event-document-title"
-                class="min-w-0 truncate text-heading-2xs text-(--text-default)"
+                class="min-w-0 truncate text-title-sm text-(--text-default)"
               >
                 Event
               </h2>
