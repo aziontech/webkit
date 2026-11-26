@@ -2977,3 +2977,39 @@ Budget-raise: console-application-scene 117.25 KB → 117.35 KB (measured 117.30
 Budget-raise: css-button 11.15 KB → 11.2 KB (measured 11.16 KB): the theme every app loads gains the three alert tints (`--success-mask`, `--warning-mask`, `--danger-mask`, light and dark) and the blue.350 step behind the dark `--info-mark`, so an info `Alert` icon reaches Lc 45 while its status dot still reads as blue next to white text.
 
 Budget-raise: css-icons 15.45 KB → 15.5 KB (measured 15.46 KB): the same alert tints and the blue.350 step in the theme stylesheet (see css-button).
+
+## Console type set (2026-11-25, CT-1)
+
+Budget-raise: data-grid 13.85 KB → 13.9 KB (measured 13.86 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: card-list 8.5 KB → 8.55 KB (measured 8.51 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: article-index-section 38.6 KB → 38.65 KB (measured 38.61 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: story-index-section 36.7 KB → 36.75 KB (measured 36.71 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: listing-index-section 43.75 KB → 43.8 KB (measured 43.76 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: chart 27.8 KB → 27.85 KB (measured 27.80 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: chart-root 18.3 KB → 18.35 KB (measured 18.32 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: gauge-chart 11.35 KB → 11.4 KB (measured 11.36 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: log-viewer-content 25.35 KB → 25.4 KB (measured 25.36 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: file-preview 8.3 KB → 8.35 KB (measured 8.31 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: log-viewer-steps 32.95 KB → 33 KB (measured 32.96 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: command-root 22.25 KB → 22.3 KB (measured 22.27 KB): renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: drawer 23.5 KB → 23.55 KB (measured 23.52 KB): its Drawer.Title now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: shortcuts-dialog 27.4 KB → 27.45 KB (measured 27.42 KB): its Dialog.Title now switches to the console type set (CT-1): inside `data-type-set="console"` the title takes its console size (`in-data-[type-set=console]:` utilities), so a console screen never titles above 16px while the docs and the site keep their sizes.
+
+Budget-raise: css-button 11.15 KB → 11.2 KB (measured 11.15 KB over the limit): the theme stylesheet every app imports gains the `text-title-nested` text style (14px semibold), the page title of a deeper console page in the console type set (CT-1).
+
+Budget-raise: css-icons 15.45 KB → 15.5 KB (measured 15.46 KB): the same theme text style `text-title-nested` for the console type set (CT-1).
+
+Budget-raise: css-console 25.15 KB → 25.25 KB (measured 25.17 KB): the console type set (CT-1) adds `text-title-nested` to the theme and the `in-data-[type-set=console]:` title utilities of EmptyState, Dialog.Title and Drawer.Title, so a console screen never titles above 16px.

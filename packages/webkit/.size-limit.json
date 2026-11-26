@@ -120,7 +120,7 @@
   {
     "name": "data-grid",
     "path": "src/components/data/data-grid/data-grid.vue",
-    "limit": "13.85 KB"
+    "limit": "13.9 KB"
   },
   {
     "name": "property-filter",
@@ -145,7 +145,7 @@
   {
     "name": "card-list",
     "path": "src/components/data/card-list/card-list.vue",
-    "limit": "8.5 KB"
+    "limit": "8.55 KB"
   },
   {
     "name": "use-collection",
@@ -503,13 +503,13 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "38.6 KB",
+    "limit": "38.65 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "36.7 KB",
+    "limit": "36.75 KB",
     "entryOnly": true
   },
   {
@@ -653,7 +653,7 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "43.75 KB",
+    "limit": "43.8 KB",
     "entryOnly": true
   },
   {
@@ -752,12 +752,12 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "27.8 KB"
+    "limit": "27.85 KB"
   },
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "18.3 KB"
+    "limit": "18.35 KB"
   },
   {
     "name": "chart-line",
@@ -817,7 +817,7 @@
   {
     "name": "gauge-chart",
     "path": "src/components/chart/gauge-chart/gauge-chart.vue",
-    "limit": "11.35 KB"
+    "limit": "11.4 KB"
   },
   {
     "name": "map-chart",
@@ -1196,7 +1196,7 @@
   {
     "name": "log-viewer-content",
     "path": "src/components/code/log-viewer/log-viewer-content.vue",
-    "limit": "25.35 KB",
+    "limit": "25.4 KB",
     "entryOnly": true
   },
   {
@@ -1442,7 +1442,7 @@
   {
     "name": "file-preview",
     "path": "src/components/content/file-preview/file-preview.vue",
-    "limit": "8.3 KB"
+    "limit": "8.35 KB"
   },
   {
     "name": "video-player",
@@ -1742,7 +1742,7 @@
   {
     "name": "log-viewer-steps",
     "path": "src/components/code/log-viewer/log-viewer-steps.vue",
-    "limit": "32.95 KB",
+    "limit": "33 KB",
     "entryOnly": true
   },
   {
@@ -2471,7 +2471,7 @@
   {
     "name": "command-root",
     "path": "src/components/overlay/command/command.vue",
-    "limit": "22.25 KB"
+    "limit": "22.3 KB"
   },
   {
     "name": "command-input",
@@ -2561,7 +2561,7 @@
   {
     "name": "drawer",
     "path": "src/components/overlay/drawer/index.ts",
-    "limit": "23.5 KB"
+    "limit": "23.55 KB"
   },
   {
     "name": "drawer-root",
@@ -2731,7 +2731,7 @@
   {
     "name": "shortcuts-dialog",
     "path": "src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue",
-    "limit": "27.4 KB"
+    "limit": "27.45 KB"
   },
   {
     "name": "countdown",

@@ -59,6 +59,10 @@
   const ICON_TILE_CLASS =
     'relative flex items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) ' +
     'group-data-[size=small]:size-8 group-data-[size=medium]:size-10'
+
+  const TITLE_CLASS =
+    'text-(--text-default) data-[size=small]:text-heading-2xs data-[size=medium]:text-heading-sm ' +
+    'in-data-[type-set=console]:data-[size=small]:text-title-sm in-data-[type-set=console]:data-[size=medium]:text-title-md'
 </script>
 
 <template>
@@ -96,7 +100,7 @@
       <p
         :data-testid="`${testId}__title`"
         :data-size="size"
-        class="text-(--text-default) data-[size=small]:text-heading-2xs data-[size=medium]:text-heading-sm in-data-[type-set=console]:data-[size=small]:text-title-sm in-data-[type-set=console]:data-[size=medium]:text-title-md"
+        :class="TITLE_CLASS"
       >
         {{ title }}
       </p>
