@@ -7,14 +7,14 @@ body:
     attributes:
       value: |
         This issue is the input of `/block-new <issue number>`
-        (`.claude/commands/block-new.md`). A block is a screen built only from WebKit
+        (`contributing/commands/block-new.md`). A block is a screen built only from WebKit
         components: `block.json`, the primary `.vue` and its states in `variants/`. Describe the
         job the screen does; the agent picks the components.
   - type: dropdown
     id: category
     attributes:
       label: Group
-      description: The job the screen serves (the block groups of `.claude/rules/naming.md` § 3).
+      description: The job the screen serves (the block groups of `contributing/rules/naming.md` § 3).
       options:
         - account
         - ai

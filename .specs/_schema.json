@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://aziontech.github.io/webkit/.specs/_schema.json",
   "title": "Webkit Component Spec — frontmatter",
-  "description": "Schema for the YAML frontmatter of every .specs/<name>.md. Body sections (Props/Events/Slots/...) are validated separately by .claude/hooks/lib/spec.mjs.",
+  "description": "Schema for the YAML frontmatter of every .specs/<name>.md. Body sections (Props/Events/Slots/...) are validated separately by contributing/hooks/lib/spec.mjs.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -81,7 +81,7 @@
     "stability": {
       "type": "string",
       "enum": ["preview", "ga"],
-      "description": "Release stability of the public API, orthogonal to status (the authoring pipeline). preview: the API may still change in a minor release, named in the commit body, with no deprecation cycle. ga: the API is frozen and .claude/rules/deprecation.md applies. Absent means ga. spec-create writes preview; only the owner flips a part to ga."
+      "description": "Release stability of the public API, orthogonal to status (the authoring pipeline). preview: the API may still change in a minor release, named in the commit body, with no deprecation cycle. ga: the API is frozen and contributing/rules/deprecation.md applies. Absent means ga. spec-create writes preview; only the owner flips a part to ga."
     },
     "deprecated": {
       "type": "boolean",

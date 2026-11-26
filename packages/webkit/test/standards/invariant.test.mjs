@@ -1,5 +1,5 @@
 // The standards invariant — the mechanical guarantee that "what we suggest to the AI"
-// (a .claude/rules/<id>.md) and "what the pipeline blocks" (a hook/lint/ratchet) are the
+// (a contributing/rules/<id>.md) and "what the pipeline blocks" (a hook/lint/ratchet) are the
 // SAME set of definitions. If someone adds a rule without a gate, a gate without a rule,
 // or splits the write-time and CI engines, this test fails in CI.
 
@@ -9,18 +9,18 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, resolve } from 'node:path'
 
-import { STANDARDS, STANDARDS_BY_ID } from '../../../../.claude/hooks/lib/standards.mjs'
+import { STANDARDS, STANDARDS_BY_ID } from '../../../../contributing/hooks/lib/standards.mjs'
 import {
   CONTENT_CHECKS,
   STANDARD_BY_CHECK,
   MESSAGES
-} from '../../../../.claude/hooks/lib/authoring-checks.mjs'
-import { parseEnforcedBy } from '../../../../.claude/hooks/lib/authoring-docs-checks.mjs'
+} from '../../../../contributing/hooks/lib/authoring-checks.mjs'
+import { parseEnforcedBy } from '../../../../contributing/hooks/lib/authoring-docs-checks.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(HERE, '../../../..')
 
-const ruleIds = readdirSync(join(ROOT, '.claude/rules'))
+const ruleIds = readdirSync(join(ROOT, 'contributing/rules'))
   .filter((f) => f.endsWith('.md') && f !== 'README.md')
   .map((f) => f.replace(/\.md$/, ''))
 
@@ -35,11 +35,11 @@ const dirNames = (rel) =>
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
 
-// Both skill populations: internal (.claude/skills) and consumer (skills/ at the repo root).
+// Both skill populations: internal (contributing/skills) and consumer (skills/ at the repo root).
 const SKILLS = [
-  ...dirNames('.claude/skills').map((id) => ({
+  ...dirNames('contributing/skills').map((id) => ({
     id,
-    path: join('.claude/skills', id, 'SKILL.md'),
+    path: join('contributing/skills', id, 'SKILL.md'),
     valid: new Set([...ruleIds, 'review'])
   })),
   ...dirNames('skills').map((id) => ({
@@ -92,7 +92,7 @@ test('every enforcer reference resolves to a real hook or eslint rule', () => {
     for (const e of s.enforce || []) {
       if (e.surface === 'write-time') {
         assert.ok(
-          existsSync(join(ROOT, `.claude/hooks/${e.by}.mjs`)),
+          existsSync(join(ROOT, `contributing/hooks/${e.by}.mjs`)),
           `standard "${s.id}": write-time hook not found: ${e.by}`
         )
       } else if (e.surface === 'lint') {
@@ -128,9 +128,9 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
   assert.ok(existsSync(join(ROOT, ENGINE)), 'canonical engine missing from the package')
 
   // write-time hook → the lib shim → the package engine
-  const hook = readFileSync(join(ROOT, '.claude/hooks/validate-authoring.mjs'), 'utf-8')
+  const hook = readFileSync(join(ROOT, 'contributing/hooks/validate-authoring.mjs'), 'utf-8')
   assert.match(hook, /lib\/authoring-checks\.mjs/, 'hook does not import the shim')
-  const shim = readFileSync(join(ROOT, '.claude/hooks/lib/authoring-checks.mjs'), 'utf-8')
+  const shim = readFileSync(join(ROOT, 'contributing/hooks/lib/authoring-checks.mjs'), 'utf-8')
   assert.match(
     shim,
     /packages\/webkit\/src\/eslint-plugin\/lib\/authoring-checks\.js/,
@@ -158,22 +158,22 @@ test('the token and spec-compliance engines are shared by hook AND ratchet', () 
 
   // token engine: package canonical, hook via shim, ratchet direct
   assert.ok(existsSync(join(ROOT, 'packages/webkit/src/eslint-plugin/lib/token-checks.js')))
-  const tokenShim = readFileSync(join(ROOT, '.claude/hooks/lib/token-checks.mjs'), 'utf-8')
+  const tokenShim = readFileSync(join(ROOT, 'contributing/hooks/lib/token-checks.mjs'), 'utf-8')
   assert.match(tokenShim, /eslint-plugin\/lib\/token-checks\.js/, 'token shim does not re-export')
-  const tokenHook = readFileSync(join(ROOT, '.claude/hooks/validate-tokens.mjs'), 'utf-8')
+  const tokenHook = readFileSync(join(ROOT, 'contributing/hooks/validate-tokens.mjs'), 'utf-8')
   assert.match(tokenHook, /lib\/token-checks\.mjs/, 'validate-tokens does not import the shim')
   assert.match(ratchet, /token-checks\.js/, 'ratchet does not import the token engine')
 
   // spec-compliance engine (DS-internal): hook + ratchet share lib
-  assert.ok(existsSync(join(ROOT, '.claude/hooks/lib/spec-compliance-checks.mjs')))
-  const specHook = readFileSync(join(ROOT, '.claude/hooks/validate-spec-compliance.mjs'), 'utf-8')
+  assert.ok(existsSync(join(ROOT, 'contributing/hooks/lib/spec-compliance-checks.mjs')))
+  const specHook = readFileSync(join(ROOT, 'contributing/hooks/validate-spec-compliance.mjs'), 'utf-8')
   assert.match(specHook, /lib\/spec-compliance-checks\.mjs/, 'spec hook does not use the engine')
   assert.match(ratchet, /spec-compliance-checks\.mjs/, 'ratchet does not import the spec engine')
 })
 
 test('authoring-docs hook AND ratchet share the single lib/authoring-docs-checks engine', () => {
-  assert.ok(existsSync(join(ROOT, '.claude/hooks/lib/authoring-docs-checks.mjs')))
-  const hook = readFileSync(join(ROOT, '.claude/hooks/validate-authoring-docs.mjs'), 'utf-8')
+  assert.ok(existsSync(join(ROOT, 'contributing/hooks/lib/authoring-docs-checks.mjs')))
+  const hook = readFileSync(join(ROOT, 'contributing/hooks/validate-authoring-docs.mjs'), 'utf-8')
   assert.match(hook, /lib\/authoring-docs-checks\.mjs/, 'hook does not import the engine')
   const ratchet = readFileSync(
     join(ROOT, 'packages/webkit/scripts/check-authoring-docs.mjs'),
@@ -183,8 +183,8 @@ test('authoring-docs hook AND ratchet share the single lib/authoring-docs-checks
 })
 
 test('spec-integrity hook AND CI gate share the single lib/spec-integrity engine', () => {
-  assert.ok(existsSync(join(ROOT, '.claude/hooks/lib/spec-integrity.mjs')))
-  const hook = readFileSync(join(ROOT, '.claude/hooks/enforce-spec-exists.mjs'), 'utf-8')
+  assert.ok(existsSync(join(ROOT, 'contributing/hooks/lib/spec-integrity.mjs')))
+  const hook = readFileSync(join(ROOT, 'contributing/hooks/enforce-spec-exists.mjs'), 'utf-8')
   assert.match(hook, /lib\/spec-integrity\.mjs/, 'hook does not import the engine')
   const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-spec-integrity.mjs'), 'utf-8')
   assert.match(gate, /lib\/spec-integrity\.mjs/, 'CI gate does not import the engine')
@@ -285,13 +285,13 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
 test('naming: hook, CI gate and consumer lint share one engine and the migrate maps', () => {
   const ENGINE = 'packages/webkit/scripts/lib/naming-rules.mjs'
   assert.ok(existsSync(join(ROOT, ENGINE)), 'naming engine missing')
-  const shim = readFileSync(join(ROOT, '.claude/hooks/lib/naming-checks.mjs'), 'utf-8')
+  const shim = readFileSync(join(ROOT, 'contributing/hooks/lib/naming-checks.mjs'), 'utf-8')
   assert.match(
     shim,
     /packages\/webkit\/scripts\/lib\/naming-rules\.mjs/,
     'shim does not re-export the engine'
   )
-  const hook = readFileSync(join(ROOT, '.claude/hooks/validate-naming.mjs'), 'utf-8')
+  const hook = readFileSync(join(ROOT, 'contributing/hooks/validate-naming.mjs'), 'utf-8')
   assert.match(hook, /lib\/naming-checks\.mjs/, 'validate-naming does not import the shim')
   const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-naming.mjs'), 'utf-8')
   assert.match(gate, /lib\/naming-rules\.mjs/, 'check-naming does not run the engine')
@@ -314,7 +314,7 @@ test('naming: hook, CI gate and consumer lint share one engine and the migrate m
 
 test('naming: every engine rule id is documented in naming.md, and every documented id exists', async () => {
   const { RULES } = await import('../../scripts/lib/naming-rules.mjs')
-  const doc = readFileSync(join(ROOT, '.claude/rules/naming.md'), 'utf-8')
+  const doc = readFileSync(join(ROOT, 'contributing/rules/naming.md'), 'utf-8')
   const section = doc.split(/^## How it is checked/m)[1]?.split(/^## /m)[0] ?? ''
   const documented = new Set([...section.matchAll(/^\|\s*`([a-z0-9-]+)`/gm)].map((m) => m[1]))
   const ids = Object.keys(RULES)

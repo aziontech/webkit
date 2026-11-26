@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        This issue is the input of `/component-new <issue number>` (`.claude/commands/component-new.md`).
+        This issue is the input of `/component-new <issue number>` (`contributing/commands/component-new.md`).
         An agent researches the benchmarks, writes the spec, has it reviewed by a second agent,
         builds the component, runs the gates, the `ui-craft` review and the usage check, and opens
         the PR. Write what the component is for; do not design its API here.
@@ -14,7 +14,7 @@ body:
     id: name
     attributes:
       label: Proposed name
-      description: kebab-case English, singular, whole words, modifier first and noun last (`icon-button`), in the shadcn/Radix vocabulary when one exists (`date-picker`, `combobox`, `dialog` not `modal`, `drawer` not `sheet`). A docs piece starts with `doc-`, a marketing page section ends in `-section` (`.claude/rules/naming.md`). The spec reviewer may rename it.
+      description: kebab-case English, singular, whole words, modifier first and noun last (`icon-button`), in the shadcn/Radix vocabulary when one exists (`date-picker`, `combobox`, `dialog` not `modal`, `drawer` not `sheet`). A docs piece starts with `doc-`, a marketing page section ends in `-section` (`contributing/rules/naming.md`). The spec reviewer may rename it.
       placeholder: date-picker
     validations:
       required: true

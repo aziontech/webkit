@@ -380,7 +380,7 @@ jobs:
           retention-days: 3
 
   # Runs on every PR (no path filter): these gates are the machine half of the AI flow
-  # (.claude/commands/component-new.md) and finish in under a minute. Locally:
+  # (contributing/commands/component-new.md) and finish in under a minute. Locally:
   # pnpm --filter @aziontech/webkit run gates
   toolkit:
     name: Toolkit tests and catalog drift

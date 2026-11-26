@@ -5,7 +5,7 @@ import { dirname, join, posix, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadManifest as loadIconManifest } from '../../icons/scripts/lib/icons-manifest.mjs'
 
-import { getSection, parseSpecFile } from '../../../.claude/hooks/lib/spec.mjs'
+import { getSection, parseSpecFile } from '../../../contributing/hooks/lib/spec.mjs'
 import { hydratePart } from '../src/catalog/catalog.js'
 import { composableExports } from './lib/composable-docs.mjs'
 

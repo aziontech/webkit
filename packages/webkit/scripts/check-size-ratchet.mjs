@@ -146,7 +146,7 @@ function main() {
     console.error(
       `✖ ${merged.length} size budget(s) raised with only a merge as the reason:\n` +
         merged.map((r) => `  ${r.name}: ${r.from} → ${r.to}`).join('\n') +
-        `\n\nA merge adds no feature: "each side fit its own budget" does not explain the growth. Shrink the entry, or name what grew in the Budget-raise: line (.claude/rules/bundle-budget.md).`
+        `\n\nA merge adds no feature: "each side fit its own budget" does not explain the growth. Shrink the entry, or name what grew in the Budget-raise: line (contributing/rules/bundle-budget.md).`
     )
     return 1
   }
@@ -160,7 +160,7 @@ function main() {
   console.error(
     `✖ ${raised.length} size budget(s) raised against ${base.ref} (merge base ${short}):\n${list}\n\n` +
       `${missing.length} have no Budget-raise: line naming the entry and its new limit:\n${missingList}\n\n` +
-      `Budgets only ratchet down. Shrink the entry, or add one line per entry, "Budget-raise: <name> <old> → <new> (measured …): <reason>", to ${RECORD} or the PR body (.claude/rules/bundle-budget.md).`
+      `Budgets only ratchet down. Shrink the entry, or add one line per entry, "Budget-raise: <name> <old> → <new> (measured …): <reason>", to ${RECORD} or the PR body (contributing/rules/bundle-budget.md).`
   )
   return 1
 }

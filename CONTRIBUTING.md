@@ -5,12 +5,12 @@ Thanks for working on Webkit. This document covers how to propose changes that p
 ## Before you start
 
 - Read the [README](./README.md) for repo layout and the consumer-facing API.
-- Owner decisions are tracked in [`.claude/docs/DECISIONS.md`](./.claude/docs/DECISIONS.md), one row each with its status and where it lives; a change that records or implements one adds or updates its row in the same change.
-- Skim [`.claude/rules/`](./.claude/rules/) — these are non-negotiable:
-  - [`dependencies.md`](./.claude/rules/dependencies.md) — no external positioning or animation libs.
-  - [`styling.md`](./.claude/rules/styling.md) — classes on the root, no JS class presets.
-  - [`migration.md`](./.claude/rules/migration.md) — never inherit, always rewrite.
-  - [`no-invention.md`](./.claude/rules/no-invention.md) — the spec is the contract.
+- Owner decisions are tracked in [`contributing/docs/DECISIONS.md`](./contributing/docs/DECISIONS.md), one row each with its status and where it lives; a change that records or implements one adds or updates its row in the same change.
+- Skim [`contributing/rules/`](./contributing/rules/) — these are non-negotiable:
+  - [`dependencies.md`](./contributing/rules/dependencies.md) — no external positioning or animation libs.
+  - [`styling.md`](./contributing/rules/styling.md) — classes on the root, no JS class presets.
+  - [`migration.md`](./contributing/rules/migration.md) — never inherit, always rewrite.
+  - [`no-invention.md`](./contributing/rules/no-invention.md) — the spec is the contract.
 
 ## Where things live
 
@@ -18,7 +18,7 @@ Development material and the material WebKit ships to apps never mix:
 
 - **Ships to apps** (in the npm package): `packages/*`, plus the AI bundle at the root — `skills/`,
   `rules/` (`scope: general`) and `adapters/`.
-- **For WebKit development only**: `.claude/` (agents, commands, hooks, contributor rules and skills
+- **For WebKit development only**: `contributing/` (agents, commands, hooks, contributor rules and skills
   such as the mandatory `ui-craft` review, and the process docs `PROCESS.md`, `DOC_LINTS.md`,
   `OVERVIEW_LINT.md`, `OVERVIEW_TESTS.md`, `GOVERNANCE_IMPLEMENTATION.md`), `.specs/`,
   `apps/docs/` (docs site), `apps/demos/`, `apps/visual/` (styled visual suite), `lint-canaries/`
@@ -82,7 +82,7 @@ from step 2, with the existing spec:
   the code. Bump `spec_version` for any API change, and move the spec to `template: 2`. The
   spec stays `implemented`; recompute its `checksum` after the edit:
   ```bash
-  node -e "import('./.claude/hooks/lib/spec.mjs').then((m) => console.log(m.bodyChecksum(m.parseSpecFile('.specs/<name>.md').body)))"
+  node -e "import('./contributing/hooks/lib/spec.mjs').then((m) => console.log(m.bodyChecksum(m.parseSpecFile('.specs/<name>.md').body)))"
   ```
   The PR title is `feat(webkit): …` for an addition (minor) or `fix(webkit): …` for a fix (patch).
 - **Breaking** (a removed or renamed prop, event, slot, value or export; a changed default or
@@ -95,7 +95,7 @@ from step 2, with the existing spec:
 
 ### Deprecate
 
-Follow [`.claude/rules/deprecation.md`](./.claude/rules/deprecation.md). 6.0 was the one clean
+Follow [`contributing/rules/deprecation.md`](./contributing/rules/deprecation.md). 6.0 was the one clean
 break: it removed every old name outright, and apps migrate once with `MIGRATION_V6.md` and
 `webkit migrate`. From 6.0 on, a removal goes through this cycle:
 
@@ -130,7 +130,7 @@ or the migration note that moves consumers to the replacement.
 | `.size-limit.json` entry with the spec's `## Performance` budget                                                                               | `complete`; `size` measures it                                                                                |
 | Every built-in string of the spec's `## Internationalization` as a key in `src/locales/en.ts`, `pt-BR.ts` and `es.ts`                          | `toolkit` (`test/standards/i18n-catalogs.test.mjs`)                                                           |
 | An owner in `src/eslint-plugin/owners.json` for each native control or ARIA widget role it renders                                             | `quality-lint` (`webkit/no-unowned-element`)                                                                  |
-| Files, functions and props within the [`CODE_QUALITY.md`](./.claude/docs/CODE_QUALITY.md) § 3.1 limits; no new look-alike pair at 35 % or more | `maintainability`, `look-alikes`, `duplication`, `assertions`                                                 |
+| Files, functions and props within the [`CODE_QUALITY.md`](./contributing/docs/CODE_QUALITY.md) § 3.1 limits; no new look-alike pair at 35 % or more | `maintainability`, `look-alikes`, `duplication`, `assertions`                                                 |
 | Regenerated `catalog.json`, `catalog/` and `llms/` (`build:catalog` writes all three)                                                          | `catalog`, `llms`                                                                                             |
 | The visual baseline of the first example (`apps/visual/baselines/examples/<name>/<stem>--light-1280.png`, from `/baselines-regenerate`)        | `complete`; the `visual` job compares light and dark                                                          |
 
@@ -185,8 +185,8 @@ design opens the request and approves the merge, and nobody edits the code by ha
 1. **Request.** Open an issue from **New component** or **New block**
    (`.github/ISSUE_TEMPLATE/`): intent, benchmark links (Cloudscape `index.html.md`, shadcn page),
    where it is used, surface (`app` / `site` / `docs`), acceptance criteria.
-2. **Run the flow.** An agent runs `/component-new <issue>` (`.claude/commands/component-new.md`) or
-   `/block-new <issue>` (`.claude/commands/block-new.md`). Each step stops the run on
+2. **Run the flow.** An agent runs `/component-new <issue>` (`contributing/commands/component-new.md`) or
+   `/block-new <issue>` (`contributing/commands/block-new.md`). Each step stops the run on
    failure:
 
    | Step | What happens                                                                                                                            | Owner                             |
@@ -290,7 +290,7 @@ Spec first, then code; a shipped spec stays `implemented`. The steps, including 
 
 ### Legacy components
 
-Components in [`.claude/hooks/lib/legacy-components.json`](./.claude/hooks/lib/legacy-components.json) predate the pipeline. When migrating one under enforcement, rewrite the spec from scratch (see [`migration.md`](./.claude/rules/migration.md)) — do not paste from the legacy file.
+Components in [`contributing/hooks/lib/legacy-components.json`](./contributing/hooks/lib/legacy-components.json) predate the pipeline. When migrating one under enforcement, rewrite the spec from scratch (see [`migration.md`](./contributing/rules/migration.md)) — do not paste from the legacy file.
 
 ## What to update when WebKit changes
 
@@ -315,7 +315,7 @@ shape and `typesVersions` that the `exports` gate checks.
 A block's SFC must pass the consumer lint; legacy findings are frozen in
 `packages/webkit/scripts/blocks-baseline.json` and can only go down
 (`pnpm --filter @aziontech/webkit run check:blocks --update` after fixing some). A block also
-follows the data contract (`.claude/commands/block-new.md`, "The data contract"): typed props in,
+follows the data contract (`contributing/commands/block-new.md`, "The data contract"): typed props in,
 events out, sample records in `sample.ts` (listed in `block.json` `files`), and variants that
 import the primary instead of copying it. Blocks not yet on it are frozen in
 `packages/webkit/scripts/blocks-data-baseline.json`, which the same `--update` shrinks.
@@ -346,7 +346,7 @@ The `complete` gate (`pnpm --filter @aziontech/webkit run check:complete`) fails
 
 ## Testing
 
-Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`.claude/rules/testing.md`](./.claude/rules/testing.md).
+Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`contributing/rules/testing.md`](./contributing/rules/testing.md).
 
 ```bash
 pnpm test:browser-webkit                              # whole suite (headless Chromium)
@@ -365,7 +365,7 @@ PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm test:browser-webkit
 Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm check:pack`.
 
 A test that fails for a known reason (a pre-existing failure, or a flake that passes alone) is
-listed in [`.claude/docs/KNOWN_FAILURES.md`](./.claude/docs/KNOWN_FAILURES.md) with how to re-run
+listed in [`contributing/docs/KNOWN_FAILURES.md`](./contributing/docs/KNOWN_FAILURES.md) with how to re-run
 it. Check there before treating a red test as your regression, and add or remove the row in the
 commit that finds or fixes it.
 
@@ -410,7 +410,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). Merges to `
 | `revert`                                    | Reverting a prior commit                                                                                       | none    |
 | `!` after type or `BREAKING CHANGE:` footer | Removed/renamed prop, event, slot, or export                                                                   | major   |
 
-Types marked **none** never release on their own — they ride along in the next release cut by a `feat`/`fix`. Release-please cannot be configured to change this mapping; the full contract is [`.claude/rules/release-types.md`](./.claude/rules/release-types.md).
+Types marked **none** never release on their own — they ride along in the next release cut by a `feat`/`fix`. Release-please cannot be configured to change this mapping; the full contract is [`contributing/rules/release-types.md`](./contributing/rules/release-types.md).
 
 ### Alert shape
 
@@ -517,7 +517,7 @@ Two consequences worth planning for: the rewrite **dismisses existing approvals*
 Reviewers will look for:
 
 1. **Spec compliance.** Every prop/event/slot in the `.vue` is in the spec. Nothing extra.
-2. **Token usage.** No HEX literals, no raw Tailwind palette (`bg-blue-500`), no inline `@keyframes`. Tokens only — see [`.claude/rules/styling.md`](./.claude/rules/styling.md).
+2. **Token usage.** No HEX literals, no raw Tailwind palette (`bg-blue-500`), no inline `@keyframes`. Tokens only — see [`contributing/rules/styling.md`](./contributing/rules/styling.md).
 3. **No invented dependencies.** Imports resolve; no `floating-ui`, `popper`, `gsap`, `framer-motion`, etc.
 4. **Accessibility.** Keyboard paths, focus rings, `motion-reduce:*` fallbacks for any motion.
 5. **Example coverage.** The states listed in the spec each appear in an example.

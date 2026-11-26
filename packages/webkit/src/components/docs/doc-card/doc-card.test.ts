@@ -6,7 +6,7 @@ import Variants from '../../../../examples/doc-card/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCard from './doc-card.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
+// contributing/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
 // cell ring, the hover fill and the glyph travel emit nothing here. Those belong to the
 // visual gate. What is real without CSS is the part that decides the card's semantics: which
 // ROOT ELEMENT it renders (anchor vs block, driven by `href`), the link attributes, the

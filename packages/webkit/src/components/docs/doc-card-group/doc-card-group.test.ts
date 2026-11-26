@@ -6,7 +6,7 @@ import Default from '../../../../examples/doc-card-group/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCardGroup from './doc-card-group.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
+// contributing/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
 // frame, the 1px gaps, the cell rings and the column tracks all emit nothing here — those
 // belong to the visual gate. What is real without CSS is what drives them: the data
 // attributes the grid switches its column count on, the children rendering through the

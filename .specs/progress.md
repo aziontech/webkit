@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: fc928fe72a48ae2c23c597660b979c5975299ac6a85caab4f75c039e2861d08e
+checksum: a826f5c4f95092b51dfcd944c8fcdd87591e9408c8c4209d0ccc180e4e8cc91c
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
@@ -90,28 +90,28 @@ quantity.
 
 ## Motion & Animations
 
-| Trigger                         | Animation / Transition                                                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations)                      | Reduced-motion fallback                                                                                                                                |
+| Trigger                         | Animation / Transition                                                                                                                                            | Token (see `contributing/docs/TOKENS.md` § Animations)                      | Reduced-motion fallback                                                                                                                                |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `value` change (determinate)    | `transition-[width] duration-moderate-02 ease-productive-entrance` (width morph)                                                                                  | duration/curve aliases from `animate.js` (240ms · productive-entrance) | `motion-reduce:transition-none`                                                                                                                        |
 | `indeterminate` (loading sweep) | `animate-progress-indeterminate` + `animate-progress-indeterminate-short` (two offset bars sweeping across the track via `inset-inline-start`/`inset-inline-end`) | semantic (2.1s · infinite)                                             | `motion-reduce:animate-none` + `motion-reduce:before:inset-x-1/3` (a still segment over the middle third of the track, so the bar never reads as done) |
 
 ## Tokens
 
-| Region          | Token (DESIGN.md)                                                                                                     |
+| Region          | Token (TOKENS.md)                                                                                                     |
 | --------------- | --------------------------------------------------------------------------------------------------------------------- |
 | fill            | `var(--primary)`                                                                                                      |
 | fill (severity) | `var(--success-mark)`, `var(--warning-mark)`, `var(--danger-mark)`, `var(--info-mark)`; `neutral` `var(--text-muted)` |
 | shape (rounded) | `var(--shape-control)`                                                                                                |
 | shape (flat)    | `var(--shape-flat)`                                                                                                   |
 
-<!-- Height is a sizing utility, not a DESIGN.md token: small/medium/large → `h-2`/`h-3`/`h-4`
-     (8/12/16px from `height.js`), per DESIGN.md § Sizing. The track surface is recorded in Theme gaps. -->
+<!-- Height is a sizing utility, not a TOKENS.md token: small/medium/large → `h-2`/`h-3`/`h-4`
+     (8/12/16px from `height.js`), per TOKENS.md § Sizing. The track surface is recorded in Theme gaps. -->
 
 ## Theme gaps
 
 | Figma variable             | Temporary primitive     | Follow-up                                                            |
 | -------------------------- | ----------------------- | -------------------------------------------------------------------- |
-| `--bg-placeholder` (track) | `var(--bg-placeholder)` | `TODO: document --bg-placeholder in .claude/docs/DESIGN.md § Colors` |
+| `--bg-placeholder` (track) | `var(--bg-placeholder)` | `TODO: document --bg-placeholder in contributing/docs/TOKENS.md § Colors` |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -141,13 +141,13 @@ the `Indeterminate` story is the state story for the `indeterminate` boolean.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

@@ -51,7 +51,7 @@ a screen or an app with WebKit? Follow these steps.
 5. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
    lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
 
-Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use `.claude/`,
+Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use `contributing/`,
 `.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
 
 ## Building with WebKit (consume)
@@ -150,7 +150,7 @@ one major) and **Remove** (a major, with everything the component shipped remove
 Designers file the issue forms and review screenshots: see
 [For designers](./CONTRIBUTING.md#for-designers).
 
-1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
+1. Read [`contributing/AGENTS.md`](./contributing/AGENTS.md).
 2. Every component starts from a spec in `.specs/`, through `/component-new`.
 3. Every block in `packages/webkit/blocks/` is a screen agents copy and every folder in
    `packages/webkit/examples/` documents a component. Changed one? Run
@@ -194,7 +194,7 @@ If you are new (human or AI), open these in order — together they describe the
 1. [`.specs/_template.md`](./.specs/_template.md) — the spec format every component conforms to.
 2. [`.specs/button.md`](./.specs/button.md) — canonical filled-in spec.
 3. [`packages/webkit/src/components/action/button/button.vue`](./packages/webkit/src/components/action/button/button.vue) — canonical implementation matching that spec.
-4. [`.claude/rules/`](./.claude/rules/) — the constraints every component must respect.
+4. [`contributing/rules/`](./contributing/rules/) — the constraints every component must respect.
 
 ### Packages
 
@@ -317,13 +317,13 @@ New components follow a **spec-driven pipeline**: spec → scaffold → verify. 
 4. Commit using Conventional Commits with a package scope (e.g. `feat(webkit): …`).
 5. Open a pull request.
 
-Changing, deprecating or removing a component: [component lifecycle](./CONTRIBUTING.md#component-lifecycle). Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CONTRIBUTING.md). Non-negotiable rules: [`.claude/rules/`](./.claude/rules/).
+Changing, deprecating or removing a component: [component lifecycle](./CONTRIBUTING.md#component-lifecycle). Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CONTRIBUTING.md). Non-negotiable rules: [`contributing/rules/`](./contributing/rules/).
 
 ### Claude Code commands for contributors
 
-The slash commands above (`/spec-create`, `/component-create`, `/component-verify`) are [Claude Code](https://claude.com/claude-code) commands defined in [`.claude/commands/`](./.claude/commands/), which orchestrate lower-level skills in [`.claude/skills/`](./.claude/skills/) (spec-validate, component-scaffold, code-connect-write, echo-report, etc.).
+The slash commands above (`/spec-create`, `/component-create`, `/component-verify`) are [Claude Code](https://claude.com/claude-code) commands defined in [`contributing/commands/`](./contributing/commands/), which orchestrate lower-level skills in [`contributing/skills/`](./contributing/skills/) (spec-validate, component-scaffold, code-connect-write, echo-report, etc.).
 
-If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with repo access), read the corresponding `.md` file under `.claude/commands/<name>.md` and follow the steps manually — each command is a documented procedure, not a black box. The constraints in [`.claude/rules/`](./.claude/rules/) apply regardless of which tool runs them; treat that directory as load-bearing context for any contribution.
+If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with repo access), read the corresponding `.md` file under `contributing/commands/<name>.md` and follow the steps manually — each command is a documented procedure, not a black box. The constraints in [`contributing/rules/`](./contributing/rules/) apply regardless of which tool runs them; treat that directory as load-bearing context for any contribution.
 
 ## Related docs
 
@@ -334,7 +334,7 @@ If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with
 - [Webkit package guide](./packages/webkit/README.md)
 - [webkit CLI reference](./packages/webkit/docs/toolkit/CLI.md) — `init`, `doctor`, `report`, `canary`, `sync`
 - [Contributing guide](./CONTRIBUTING.md) — workflow, commit conventions, review checklist
-- [Contribution rules](./.claude/rules/) — dependencies, migration, styling, no-invention
+- [Contribution rules](./contributing/rules/) — dependencies, migration, styling, no-invention
 - [Component specs](./.specs/) — source of truth for every component API
 
 ## License

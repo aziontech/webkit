@@ -8,12 +8,12 @@ import {
   docFileKind,
   scanDoc,
   MESSAGES
-} from '../../../.claude/hooks/lib/authoring-docs-checks.mjs'
+} from '../../../contributing/hooks/lib/authoring-docs-checks.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
 const BASELINE = join(SCRIPT_DIR, 'authoring-docs-baseline.json')
-const DIRS = ['.claude/skills', '.claude/agents', 'skills', 'adapters/claude/agents']
+const DIRS = ['contributing/skills', 'contributing/agents', 'skills', 'adapters/claude/agents']
 
 function walk(dir) {
   const out = []
@@ -88,7 +88,7 @@ if (introduced.length) {
     console.error(`  ${file}\n    [${id}] ${MESSAGES[id] ?? id}`)
   }
   console.error(
-    '\nFix per .claude/rules/authoring-docs.md. Re-baselining is only for a reviewed exception.'
+    '\nFix per contributing/rules/authoring-docs.md. Re-baselining is only for a reviewed exception.'
   )
   process.exit(1)
 }

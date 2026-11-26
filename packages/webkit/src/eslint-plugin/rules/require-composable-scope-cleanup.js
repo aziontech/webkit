@@ -43,7 +43,7 @@ export default {
         '`onScopeDispose` (it also fires in a detached `effectScope()`; `onUnmounted` alone does ' +
         'not), or use the VueUse primitive that owns its cleanup (`useEventListener`, ' +
         '`useIntervalFn`, `useRafFn`, `useResizeObserver`, `useIntersectionObserver`, ' +
-        '`useMutationObserver`). See .claude/rules/webkit-composables.md (shipped by `npx ' +
+        '`useMutationObserver`). See contributing/rules/webkit-composables.md (shipped by `npx ' +
         '@aziontech/webkit init`).'
     }
   },

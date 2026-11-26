@@ -64,7 +64,7 @@
     "build:types": "node scripts/build-types.mjs",
     "check:migrations": "node scripts/check-migrations.mjs",
     "check:api-diff": "node scripts/check-api-diff.mjs",
-    "test:hooks": "node ../../.claude/hooks/test/run.mjs",
+    "test:hooks": "node ../../contributing/hooks/test/run.mjs",
     "check:cited-names": "node scripts/check-cited-names.mjs",
     "test:consume": "node scripts/test-consume.mjs",
     "check:consumer-types": "node scripts/check-consumer-types.mjs",

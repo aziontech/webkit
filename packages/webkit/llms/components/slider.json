@@ -121,7 +121,7 @@
   {
    "name": "change",
    "payload": "number",
-   "notes": "Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `.claude/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`."
+   "notes": "Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `contributing/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`."
   }
  ],
  "slots": [],

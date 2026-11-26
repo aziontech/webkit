@@ -3,7 +3,7 @@
 > This is the one-page digest. The **complete styleguide** — every code standard in full
 > detail, with the gate that blocks each one — is [`STYLEGUIDE.md`](./STYLEGUIDE.md). The
 > **end-to-end process map** (creation → release, adoption → enforcement) is
-> [`PROCESS.md`](https://github.com/aziontech/webkit/blob/main/.claude/docs/PROCESS.md) (in the repository).
+> [`PROCESS.md`](https://github.com/aziontech/webkit/blob/main/contributing/docs/PROCESS.md) (in the repository).
 
 One page to **see every pattern** you need, whether you are:
 
@@ -14,8 +14,8 @@ One page to **see every pattern** you need, whether you are:
 Everything here is **enforced** — automatically (lint / CI) or by mandatory review — so the
 pattern is the path of least resistance, not a checklist you have to remember. The machine-
 readable source of these standards (and their `scope`) is
-[`.claude/hooks/lib/standards.mjs`](../../../.claude/hooks/lib/standards.mjs); each rule
-lives in [`.claude/rules/`](../../../.claude/rules/).
+[`contributing/hooks/lib/standards.mjs`](../../../contributing/hooks/lib/standards.mjs); each rule
+lives in [`contributing/rules/`](../../../contributing/rules/).
 
 > **General vs. webkit.** The patterns in **Part A** are `scope: general` — they ship to your
 > project and apply to any Vue component. The rules that are `scope: webkit` (spec-first
@@ -113,8 +113,8 @@ Each is a `scope: general` standard. Follow ✅, avoid ❌.
 | **data-testid**         | (none)                                                               | `:data-testid="testId"` → the component's own name                                      |
 | **Deprecation**         | remove/rename silently                                               | `@deprecated` (name the replacement + version) → one major → remove                     |
 
-Each links to its full rule in [`.claude/rules/`](../../../.claude/rules/) (e.g. `v-model.md`,
-`props.md`, `composables.md`) — the index is [`rules/README.md`](../../../.claude/rules/README.md).
+Each links to its full rule in [`contributing/rules/`](../../../contributing/rules/) (e.g. `v-model.md`,
+`props.md`, `composables.md`) — the index is [`rules/README.md`](../../../contributing/rules/README.md).
 
 ### Folder structure — one component, one folder
 

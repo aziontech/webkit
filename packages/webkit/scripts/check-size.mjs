@@ -146,7 +146,7 @@ async function main(args) {
   if (failures.length) {
     console.error(
       `\n✖ ${failures.length} entr${failures.length === 1 ? 'y' : 'ies'} over budget: ${failures.join(', ')}.` +
-        `\nShrink the entry (budgets only ratchet down) or justify a raise in the PR — .claude/rules/bundle-budget.md.`
+        `\nShrink the entry (budgets only ratchet down) or justify a raise in the PR — contributing/rules/bundle-budget.md.`
     )
     return 1
   }

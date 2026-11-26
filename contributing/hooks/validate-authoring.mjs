@@ -1,0 +1,185 @@
+#!/usr/bin/env node
+// PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/** (excluding the
+// wip/ legacy zone) that INTRODUCE a wrong construction pattern the contributing/rules define:
+//   - hand-rolled modelValue prop + update:modelValue emit   → use defineModel (v-model.md)
+//   - runtime object defineProps({...})                      → typed defineProps<Props>() (props.md)
+//   - runtime defineEmits([...]) / ({...})                   → typed defineEmits<{...}>() (emits.md)
+//   - <slot> in template without a typed defineSlots         → declare the slots (slots.md)
+//   - composable returns reactive()                          → refs/computed + readonly() (composables.md)
+//   - a new composable authored as .js                       → composables are .ts (composables.md)
+//   - @deprecated with no replacement/version                → name it (deprecation.md)
+//   - a prose comment anywhere under packages/               → API docs only (comments.md)
+//   - a literal UI string in a component template / prop default → locale catalog (webkit-strings.md)
+//   - a composable returning reactive()/a raw ref()/no return type, or leaking a listener,
+//     timer, frame or observer with no onScopeDispose                 (composables.md)
+//   - defineProps declaring `as` / `asChild`                          (root-element.md)
+//   - a chart, diagram, map or stat drawn on a Texture, in a .vue or page JSON of
+//     components, blocks or examples                                  (styling.md)
+//
+// Same discipline as validate-tokens.mjs: reconstruct the RESULTING file content, and only
+// block when a check's occurrence count GROWS past the baseline's.
+// Fail-open on any error.
+
+import { readFileSync } from 'node:fs'
+import { relative, resolve } from 'node:path'
+
+import { CONTENT_CHECKS, MESSAGES } from './lib/authoring-checks.mjs'
+import {
+  appliesToBuiltInStrings,
+  scanBuiltInStrings,
+  STRING_MESSAGES
+} from './lib/built-in-strings.mjs'
+import { scanSignatures, SIGNATURE_MESSAGES } from './lib/signature-checks.mjs'
+import {
+  scanTextureBackdrop,
+  TEXTURE_BACKDROP_MESSAGES,
+  textureBackdropApplies
+} from './lib/texture-backdrop.mjs'
+
+const ROOT = process.cwd()
+const TARGET_PREFIX = 'packages/webkit/src/'
+const WIP_PREFIX = 'packages/webkit/src/components/wip/'
+const PACKAGES_PREFIX = 'packages/'
+const PACKAGE_WIDE_CHECKS = new Set(['prose-comment'])
+
+const occurrences = (check, text, rel) =>
+  check.count ? check.count(text, rel) : check.violated(text, rel) ? 1 : 0
+
+function readStdin() {
+  return new Promise((resolveStdin) => {
+    let data = ''
+    process.stdin.on('data', (chunk) => (data += chunk))
+    process.stdin.on('end', () => resolveStdin(data))
+  })
+}
+
+function readExistingFile(filePath) {
+  try {
+    return readFileSync(filePath, 'utf-8')
+  } catch {
+    return ''
+  }
+}
+
+// Reconstruct the file content AFTER the tool runs, so negative checks (must-have-X) are
+// correct instead of seeing only an edit fragment. Honors replace_all.
+function applyEdit(base, oldS, newS, replaceAll) {
+  if (typeof oldS !== 'string' || oldS === '' || !base.includes(oldS)) return base
+  return replaceAll ? base.split(oldS).join(newS ?? '') : base.replace(oldS, newS ?? '')
+}
+
+function resultingContent(tool, ti, baseline) {
+  if (tool === 'Write') return ti.content ?? ''
+  if (tool === 'Edit') return applyEdit(baseline, ti.old_string, ti.new_string, ti.replace_all)
+  if (tool === 'MultiEdit') {
+    let result = baseline
+    for (const e of ti.edits ?? []) {
+      result = applyEdit(result, e.old_string, e.new_string, e.replace_all)
+    }
+    return result
+  }
+  return ''
+}
+
+async function main() {
+  const raw = await readStdin()
+  let input
+  try {
+    input = JSON.parse(raw)
+  } catch {
+    process.exit(0)
+  }
+
+  const tool = input.tool_name
+  if (!['Write', 'Edit', 'MultiEdit'].includes(tool)) process.exit(0)
+
+  const ti = input.tool_input ?? {}
+  const filePath = ti.file_path
+  if (!filePath) process.exit(0)
+
+  const relPath = relative(ROOT, resolve(filePath))
+  if (!relPath.startsWith(PACKAGES_PREFIX) || relPath.startsWith(WIP_PREFIX)) process.exit(0)
+  const inWebkitSrc = relPath.startsWith(TARGET_PREFIX)
+
+  const baseline = tool === 'Write' ? '' : readExistingFile(filePath)
+  const result = resultingContent(tool, ti, baseline)
+
+  const violations = []
+
+  // Path-based: a NEW composable must be .ts, not .js (only on Write of a fresh file).
+  if (inWebkitSrc && tool === 'Write' && /(^|\/)use-[^/]*\.js$/.test(relPath) && !baseline) {
+    violations.push({ id: 'composable-js', message: MESSAGES['composable-js'] })
+  }
+
+  for (const c of CONTENT_CHECKS) {
+    if (!inWebkitSrc && !PACKAGE_WIDE_CHECKS.has(c.id)) continue
+    if (!c.applies(relPath)) continue
+    const added = occurrences(c, result, relPath) - occurrences(c, baseline, relPath)
+    if (added > 0) violations.push({ id: c.id, message: c.message, added })
+  }
+
+  if (appliesToBuiltInStrings(relPath)) {
+    const before = scanBuiltInStrings(baseline)
+    const after = scanBuiltInStrings(result)
+    for (const id of Object.keys(STRING_MESSAGES)) {
+      const added =
+        after.filter((found) => found === id).length - before.filter((found) => found === id).length
+      if (added > 0) violations.push({ id: `i18n:${id}`, message: STRING_MESSAGES[id], added })
+    }
+  }
+
+  const textureRel = relPath.split('\\').join('/')
+  if (textureBackdropApplies(textureRel)) {
+    const before = scanTextureBackdrop(baseline, textureRel)
+    const after = scanTextureBackdrop(result, textureRel)
+    for (const id of Object.keys(TEXTURE_BACKDROP_MESSAGES)) {
+      const added =
+        after.filter((found) => found === id).length - before.filter((found) => found === id).length
+      if (added > 0) {
+        violations.push({
+          id: `texture-backdrop:${id}`,
+          message: TEXTURE_BACKDROP_MESSAGES[id],
+          added
+        })
+      }
+    }
+  }
+
+  if (inWebkitSrc) {
+    const before = scanSignatures(filePath, baseline)
+    const after = scanSignatures(filePath, result)
+    for (const id of Object.keys(SIGNATURE_MESSAGES)) {
+      const added =
+        after.filter((found) => found.id === id).length -
+        before.filter((found) => found.id === id).length
+      if (added > 0) {
+        const sites = after
+          .filter((found) => found.id === id)
+          .map((found) => `\n      line ${found.line}: ${found.message}`)
+        violations.push({
+          id: `signature:${id}`,
+          message: `${SIGNATURE_MESSAGES[id]}${sites.join('')}`,
+          added
+        })
+      }
+    }
+  }
+
+  if (violations.length === 0) process.exit(0)
+
+  const lines = [`Webkit authoring validation blocked ${tool} on ${relPath}.`, '']
+  for (const v of violations) {
+    lines.push(`  [${v.id}]${v.added > 1 ? ` ×${v.added}` : ''} ${v.message}`)
+  }
+  lines.push('')
+  lines.push(
+    'These are the construction standards in contributing/rules/. Fix the pattern — do not work around the hook.'
+  )
+  process.stderr.write(lines.join('\n') + '\n')
+  process.exit(2)
+}
+
+main().catch((err) => {
+  process.stderr.write(`validate-authoring hook error: ${err?.message ?? err}\n`)
+  process.exit(0) // fail open
+})

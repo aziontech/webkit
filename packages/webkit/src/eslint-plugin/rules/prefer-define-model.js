@@ -12,7 +12,7 @@ export default {
       preferModel:
         'This component declares a `modelValue` prop and an `update:modelValue` emit by hand. ' +
         'Use `defineModel()` — it expresses the two-way value (controlled + uncontrolled) in one ' +
-        'macro. See .claude/rules/webkit-v-model.md (shipped by `npx @aziontech/webkit init`).'
+        'macro. See contributing/rules/webkit-v-model.md (shipped by `npx @aziontech/webkit init`).'
     }
   },
   create(context) {

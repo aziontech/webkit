@@ -50,7 +50,7 @@ async function main() {
         byRule.map(([r, n]) => `${r} ${n}`).join(', ')
     )
     console.error(
-      'Split by feature (.claude/docs/CODE_QUALITY.md 3.2): logic to composables/, markup to parts/, helpers to lib/.\n' +
+      'Split by feature (contributing/docs/CODE_QUALITY.md 3.2): logic to composables/, markup to parts/, helpers to lib/.\n' +
         'There is no baseline and no exemption (decision CQ-E). Run with --report for the list, --json for the data.'
     )
     process.exit(1)

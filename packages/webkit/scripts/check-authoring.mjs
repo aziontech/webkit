@@ -34,11 +34,11 @@ import {
   scanBuiltInStrings,
   STRING_MESSAGES
 } from '../src/eslint-plugin/lib/built-in-strings.js'
-import { collectSpecViolations } from '../../../.claude/hooks/lib/spec-compliance-checks.mjs'
+import { collectSpecViolations } from '../../../contributing/hooks/lib/spec-compliance-checks.mjs'
 import {
   REPO_WIDE_TOKEN_DIRS,
   repoTokenChecksFor
-} from '../../../.claude/hooks/lib/token-checks.mjs'
+} from '../../../contributing/hooks/lib/token-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
@@ -347,7 +347,7 @@ if (introduced.length) {
     }
   }
   console.error(
-    '\nFix the pattern (see .claude/rules/). Re-baselining is only for a deliberate, reviewed exception.'
+    '\nFix the pattern (see contributing/rules/). Re-baselining is only for a deliberate, reviewed exception.'
   )
   process.exit(1)
 }

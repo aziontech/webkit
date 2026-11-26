@@ -6,8 +6,8 @@
   },
   "workspaces": {
     ".": {
-      "entry": [".claude/hooks/*.mjs"],
-      "project": ["*.{js,mjs}", ".claude/hooks/**/*.mjs"]
+      "entry": ["contributing/hooks/*.mjs"],
+      "project": ["*.{js,mjs}", "contributing/hooks/**/*.mjs"]
     },
     "packages/webkit": {
       "entry": [

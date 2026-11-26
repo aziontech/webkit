@@ -30,7 +30,7 @@
 
 - Closes #<!-- issue -->
 - Spec: `.specs/<name>.md` (`status: implemented`, `template: 2`) <!-- or the block folder: packages/webkit/blocks/... -->
-- Spec review (`spec-reviewer`): <!-- approve after N rounds; paste the checklist, one row per item of .claude/agents/spec-reviewer.md -->
+- Spec review (`spec-reviewer`): <!-- approve after N rounds; paste the checklist, one row per item of contributing/agents/spec-reviewer.md -->
 
 | Item                 | Result |
 | -------------------- | ------ |
