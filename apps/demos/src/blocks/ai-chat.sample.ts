@@ -602,3 +602,8 @@ export const sampleAccessModes: PromptInputMenuOption[] = [
     description: 'Allow commands and edits without prompts.'
   }
 ]
+
+export const sampleSpeeds: PromptInputMenuOption[] = [
+  { value: 'standard', label: 'Standard' },
+  { value: 'fast', label: 'Fast', icon: 'az az-bolt' }
+]

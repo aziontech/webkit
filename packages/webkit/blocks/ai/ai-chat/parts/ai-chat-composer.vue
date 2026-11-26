@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
@@ -10,9 +11,16 @@
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { nextTick, ref } from 'vue'
 
-  import { sampleAccessModes, sampleContexts, sampleModes, sampleProviders } from '../sample'
+  import {
+    sampleAccessModes,
+    sampleContexts,
+    sampleModes,
+    sampleProviders,
+    sampleSpeeds
+  } from '../sample'
   import AiChatVoice from './ai-chat-voice.vue'
 
   defineProps<{
@@ -41,8 +49,10 @@
 
   const modeKey = ref('medium')
   const contextKey = ref('')
-  const accessKey = ref('supervised')
-  const favoriteKeys = ref<string[]>([])
+  const accessKey = ref('full')
+  const speedKey = ref('standard')
+  const ultracode = ref(false)
+  const favoriteKeys = ref<string[]>(['gemini-4-neon', 'claude-opus-4-5'])
   const modes = sampleModes
   const contexts = sampleContexts
 
@@ -106,6 +116,20 @@
         mode-label="Thinking Level"
       >
         <template #footer>
+          <ToggleGroup
+            v-model="speedKey"
+            :options="sampleSpeeds"
+            size="small"
+            aria-label="Response speed"
+          />
+          <Button
+            label="Ultracode"
+            icon="az az-sparkles"
+            :variant="ultracode ? 'secondary' : 'ghost'"
+            size="small"
+            :aria-pressed="ultracode"
+            @click="ultracode = !ultracode"
+          />
           <PromptInputAccessPicker
             v-model="accessKey"
             :options="sampleAccessModes"
