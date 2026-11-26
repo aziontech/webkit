@@ -112,6 +112,15 @@
       "version": "5.13.0",
       "files": [
         {
+          "path": "src/blocks/account-user-profile-profile-about.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-about.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:fa1ca2d03ff0bce534fe9e3a0c9bfe4404bbe86b7ce4afc2660e9e2ab77d1cbf"
+        },
+        {
           "path": "src/blocks/account-user-profile-profile-bio-tab.vue",
           "source": "blocks/account/account-user-profile/parts/profile-bio-tab.vue",
           "variant": "Data",
@@ -128,7 +137,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:c8dde9bd300b1240770a0d3d5f53a699d4d2d033239772f1b70820c41580e552"
+          "checksum": "sha256:691073daea6e2ce5efc3d63998d8154c175df4a3360cffcac26a1323f532c0a1"
         },
         {
           "path": "src/blocks/account-user-profile-profile-notifications-tab.vue",
@@ -147,7 +156,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:61051349881498c024a7d5ccbe0f91f527ef9bd707f197c9e38ed63521c53bee"
+          "checksum": "sha256:c3efa85b288e80a923ff69a37f0b04ef79cdee48a6742fce5f6c72b5993c071b"
         },
         {
           "path": "src/blocks/account-user-profile-profile-preferences-tab.vue",
@@ -196,6 +205,7 @@
           "source": "blocks/account/account-user-profile/account-user-profile.vue",
           "variant": "Default",
           "imports": {
+            "./parts/profile-about.vue": "./account-user-profile-profile-about.vue",
             "./parts/profile-bio-tab.vue": "./account-user-profile-profile-bio-tab.vue",
             "./parts/profile-header.vue": "./account-user-profile-profile-header.vue",
             "./parts/profile-notifications-tab.vue": "./account-user-profile-profile-notifications-tab.vue",
@@ -205,7 +215,7 @@
             "./sample": "./account-user-profile.sample",
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:0187002858ac9fa29a2dc936e384ea302c34f6fdaa1b1828103fb2a993781e70"
+          "checksum": "sha256:ac30532ab448439ca8556670aae7633488fc426689a0cad2d3dca2277bb03268"
         }
       ]
     },

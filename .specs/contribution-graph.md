@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 861743ff3429d0ce685b100fcffb7935691792c9fc449b81ebe7cbacf77601f5
+checksum: 435c0f53d33f5b933a8445023078145de9aaed040ff2c60fdf96a2e8ae3f8e3b
 created: 2026-11-24
 last_updated: 2026-11-25
 ---
@@ -172,14 +172,14 @@ _No slots._
 
 ## Responsive
 
-- Container queries: none on the cell grid itself; the calendar sits inside an `overflow-x-auto` scroll container so all 52 weeks stay readable and crisp on narrow viewports without squashing cells below 10 px.
+- Container queries: the root is an inline-size container (`@container/contribution-graph`). With a fine pointer the cells grow with it, from 11 px to 18 px, so the weeks fill the width they are given (`--contribution-graph-week-count`, written by the component, sets the divisor); below 11 px the calendar sits inside an `overflow-x-auto` scroll container so all the weeks stay readable and crisp on narrow viewports. Give the root a width (it is `w-full`; in a flex row, let its wrapper grow).
 - Narrow (≤ 640 px): horizontal scroll on the calendar region, which opens on the latest weeks; the weekday names stay fixed beside it; footer readout and legend wrap cleanly. The footer is as wide as the calendar, so the legend sits under its last week.
 - Touch: on a coarse pointer the cells grow from 11 px with 2 px gaps to 20 px with 4 px gaps (`--contribution-graph-cell-size`, `--contribution-graph-cell-gap`), so every day meets the WCAG 2.5.8 24 px spacing target; tapping a cell updates the readout and selects or clears that date without hover.
 - Reflow: the outer component never forces page-level horizontal overflow; only the calendar strip scrolls when narrower than 52 weeks.
 
 ## Performance
 
-- Bundle budget: `7.45 KB` gzip (the entry includes `Skeleton`, `EmptyState` and the locale composables) for `./contribution-graph` in `.size-limit.json`.
+- Bundle budget: `7.55 KB` gzip (the entry includes `Skeleton`, `EmptyState` and the locale composables) for `./contribution-graph` in `.size-limit.json`.
 - Runtime budget: rendering a full 366-day year completes in `< 16 ms` with a single flat grid of memoized day descriptors.
 - Heavy parts: none.
 

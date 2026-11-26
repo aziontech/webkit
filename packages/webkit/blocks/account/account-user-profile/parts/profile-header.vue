@@ -55,7 +55,9 @@
         v-else
         class="flex flex-wrap items-center gap-(--spacing-xs)"
       >
-        <h1 class="text-heading-sm text-(--text-default)">{{ fullName }}</h1>
+        <h1 class="text-heading-sm text-(--text-default) @5xl/profile:text-heading-md">
+          {{ fullName }}
+        </h1>
         <Tag :label="profile.role" />
       </div>
       <Skeleton
@@ -69,9 +71,10 @@
         class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @5xl/profile:flex-col @5xl/profile:gap-(--spacing-2xs)"
       >
         <li
-          v-for="detail in details"
+          v-for="(detail, index) in details"
           :key="detail"
-          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @5xl/profile:not-last:after:hidden"
+          :data-listed="index > 0 || null"
+          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @5xl/profile:not-last:after:hidden @5xl/profile:data-[listed]:hidden"
         >
           {{ detail }}
         </li>

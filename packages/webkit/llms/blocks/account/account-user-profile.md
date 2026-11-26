@@ -1,12 +1,12 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 1192px-wide block (`@5xl`) it becomes a column beside the tab content with the bio under it. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 1192px-wide block (`@5xl`) it becomes a column beside the tab content with the bio under it and, on Overview, a `KeyValueList` summary (location, time zone, email, website, join year, sign-in and multi-factor as a `StatusIndicator`) with a Review security `Button` that opens the Security tab. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` whose days grow to fill the card (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-user-profile")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [ContributionGraph](../../components/contribution-graph.md), [EmptyState](../../components/empty-state.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageTabs](../../components/page-tabs.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PasswordRequirements](../../components/password-requirements.md), [PhoneInput](../../components/phone-input.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [ThemeSwitcher](../../components/theme-switcher.md), [Timeline](../../components/timeline.md), [Timestamp](../../components/timestamp.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [ContributionGraph](../../components/contribution-graph.md), [EmptyState](../../components/empty-state.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageTabs](../../components/page-tabs.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PasswordRequirements](../../components/password-requirements.md), [PhoneInput](../../components/phone-input.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [ThemeSwitcher](../../components/theme-switcher.md), [Timeline](../../components/timeline.md), [Timestamp](../../components/timestamp.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
 - Skills: `webkit-form`, `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`, `webkit-microcopy`
 
 ## Asked as
@@ -31,7 +31,11 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 
-A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least `--container-5xl` wide (`@5xl`, 1192px: a desktop next to the rail) the header becomes a `--container-3xs` (256px) column beside the tab content, under the tabs, with the facts one per line and the bio below them; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least `--container-5xl` wide (`@5xl`, 1192px: a desktop next to the rail) the header becomes a `--container-3xs` (256px) column beside the tab content, under the tabs, with the handle and the bio below the name; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+
+### Summary — `KeyValueList`, `StatusIndicator`, `Link`, `Button` (required)
+
+On Overview, in the column under the header: location, time zone, email, website and join year, then how the user signs in and whether multi-factor is on, and a Review security button that opens the Security and access tab. The settings tabs show only the header in the column, so nothing repeats a field being edited.
 
 ### Width — one page, two measures
 
@@ -154,6 +158,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   import Tabs from '@aziontech/webkit/tabs'
   import { computed, nextTick, ref, watch } from 'vue'
 
+  import ProfileAbout from './parts/profile-about.vue'
   import ProfileBioTab from './parts/profile-bio-tab.vue'
   import ProfileHeader from './parts/profile-header.vue'
   import ProfileNotificationsTab from './parts/profile-notifications-tab.vue'
@@ -345,11 +350,26 @@ Each variant is the same screen in another state: `get_block("account/account-us
       v-else
       class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @5xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @5xl/profile:gap-x-(--layout-section-gap)"
     >
-      <ProfileHeader
-        :profile="profile"
-        :loading="loading"
-        class="@5xl/profile:col-start-1 @5xl/profile:row-start-2 @5xl/profile:self-start"
-      />
+      <aside
+        aria-label="Profile summary"
+        class="flex min-w-0 flex-col gap-(--spacing-lg) @5xl/profile:sticky @5xl/profile:top-(--spacing-lg) @5xl/profile:col-start-1 @5xl/profile:row-start-2 @5xl/profile:self-start"
+      >
+        <ProfileHeader
+          :profile="profile"
+          :loading="loading"
+        />
+        <div
+          v-if="activeTab === 'overview'"
+          class="hidden @5xl/profile:block"
+        >
+          <ProfileAbout
+            :profile="profile"
+            :policy="securityPolicy"
+            :loading="loading"
+            @open-tab="(_event, tab) => (activeTab = tab)"
+          />
+        </div>
+      </aside>
 
       <div class="min-w-0 @5xl/profile:col-span-2 @5xl/profile:row-start-1">
         <PageTabs v-model="activeTab">
@@ -1144,7 +1164,9 @@ export function filterHistory(
         v-else
         class="flex flex-wrap items-center gap-(--spacing-xs)"
       >
-        <h1 class="text-heading-sm text-(--text-default)">{{ fullName }}</h1>
+        <h1 class="text-heading-sm text-(--text-default) @5xl/profile:text-heading-md">
+          {{ fullName }}
+        </h1>
         <Tag :label="profile.role" />
       </div>
       <Skeleton
@@ -1158,9 +1180,10 @@ export function filterHistory(
         class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @5xl/profile:flex-col @5xl/profile:gap-(--spacing-2xs)"
       >
         <li
-          v-for="detail in details"
+          v-for="(detail, index) in details"
           :key="detail"
-          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @5xl/profile:not-last:after:hidden"
+          :data-listed="index > 0 || null"
+          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @5xl/profile:not-last:after:hidden @5xl/profile:data-[listed]:hidden"
         >
           {{ detail }}
         </li>
@@ -1173,6 +1196,101 @@ export function filterHistory(
       </p>
     </div>
   </header>
+</template>
+```
+
+## `parts/profile-about.vue`
+
+```ts
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import Link from '@aziontech/webkit/link'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { computed } from 'vue'
+
+  import {
+    TIMEZONE_OPTIONS,
+    type UserProfileData,
+    type UserProfileSecurityPolicy,
+    type UserProfileTab
+  } from '../user-profile-model'
+
+  export interface ProfileAboutProps {
+    /** The saved profile. */
+    profile: UserProfileData
+    /** The security state and the organization's policy. */
+    policy: UserProfileSecurityPolicy
+    /** The profile is loading. */
+    loading: boolean
+  }
+
+  const props = defineProps<ProfileAboutProps>()
+
+  const emit = defineEmits<{ 'open-tab': [event: MouseEvent, tab: UserProfileTab] }>()
+
+  const timezone = computed(
+    () =>
+      TIMEZONE_OPTIONS.find((option) => option.value === props.profile.timezone)?.label ??
+      props.profile.timezone
+  )
+  const website = computed(() => props.profile.websiteUrl.replace(/^https?:\/\//, ''))
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-lg)">
+    <KeyValueList
+      aria-label="About"
+      :loading="loading"
+    >
+      <KeyValueList.Item
+        v-if="profile.location"
+        label="Location"
+        >{{ profile.location }}</KeyValueList.Item
+      >
+      <KeyValueList.Item label="Time zone">{{ timezone }}</KeyValueList.Item>
+      <KeyValueList.Item label="Email">{{ profile.email }}</KeyValueList.Item>
+      <KeyValueList.Item
+        v-if="profile.websiteUrl"
+        label="Website"
+      >
+        <Link
+          :href="profile.websiteUrl"
+          :label="website"
+          target="_blank"
+          inline
+        />
+      </KeyValueList.Item>
+      <KeyValueList.Item
+        v-if="profile.memberSince"
+        label="On Azion since"
+        >{{ profile.memberSince }}</KeyValueList.Item
+      >
+    </KeyValueList>
+    <KeyValueList
+      aria-label="Sign-in security"
+      :loading="loading"
+    >
+      <KeyValueList.Item label="Sign-in">
+        {{ policy.ssoManaged ? `Single sign-on with ${policy.ssoProvider}` : 'Password' }}
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Multi-factor authentication">
+        <StatusIndicator
+          :severity="policy.mfaEnabled ? 'success' : 'warning'"
+          :label="policy.mfaEnabled ? 'On' : 'Off'"
+        />
+      </KeyValueList.Item>
+    </KeyValueList>
+    <div>
+      <Button
+        type="button"
+        label="Review security"
+        variant="outline"
+        size="medium"
+        @click="emit('open-tab', $event, 'security')"
+      />
+    </div>
+  </div>
 </template>
 ```
 
@@ -1316,7 +1434,7 @@ export function filterHistory(
         <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
           <div
             ref="graphEl"
-            class="min-w-0"
+            class="min-w-0 lg:flex-1"
           >
             <ContributionGraph
               v-model:selected-date="selectedDate"

@@ -8,6 +8,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import { computed, nextTick, ref, watch } from 'vue'
 
+  import ProfileAbout from './account-user-profile-profile-about.vue'
   import ProfileBioTab from './account-user-profile-profile-bio-tab.vue'
   import ProfileHeader from './account-user-profile-profile-header.vue'
   import ProfileNotificationsTab from './account-user-profile-profile-notifications-tab.vue'
@@ -199,11 +200,26 @@
       v-else
       class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @5xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @5xl/profile:gap-x-(--layout-section-gap)"
     >
-      <ProfileHeader
-        :profile="profile"
-        :loading="loading"
-        class="@5xl/profile:col-start-1 @5xl/profile:row-start-2 @5xl/profile:self-start"
-      />
+      <aside
+        aria-label="Profile summary"
+        class="flex min-w-0 flex-col gap-(--spacing-lg) @5xl/profile:sticky @5xl/profile:top-(--spacing-lg) @5xl/profile:col-start-1 @5xl/profile:row-start-2 @5xl/profile:self-start"
+      >
+        <ProfileHeader
+          :profile="profile"
+          :loading="loading"
+        />
+        <div
+          v-if="activeTab === 'overview'"
+          class="hidden @5xl/profile:block"
+        >
+          <ProfileAbout
+            :profile="profile"
+            :policy="securityPolicy"
+            :loading="loading"
+            @open-tab="(_event, tab) => (activeTab = tab)"
+          />
+        </div>
+      </aside>
 
       <div class="min-w-0 @5xl/profile:col-span-2 @5xl/profile:row-start-1">
         <PageTabs v-model="activeTab">

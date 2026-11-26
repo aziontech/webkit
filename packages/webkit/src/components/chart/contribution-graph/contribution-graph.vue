@@ -213,9 +213,13 @@
   }
 
   const ROOT_CLASS =
-    'flex w-full min-w-0 flex-col gap-(--spacing-xs) ' +
+    '@container/contribution-graph flex w-full min-w-0 flex-col gap-(--spacing-xs) ' +
     '[--contribution-graph-cell-gap:0.125rem] [--contribution-graph-cell-size:0.6875rem] ' +
     'pointer-coarse:[--contribution-graph-cell-gap:0.25rem] pointer-coarse:[--contribution-graph-cell-size:1.25rem]'
+
+  const FIT_CLASS =
+    'flex w-fit max-w-full flex-col gap-(--spacing-xs) ' +
+    'pointer-fine:[--contribution-graph-cell-size:clamp(0.6875rem,calc((100cqi_-_2.125rem)_/_var(--contribution-graph-week-count)_-_var(--contribution-graph-cell-gap)),1.125rem)]'
 
   const LEGEND_LEVELS: ContributionGraphLevel[] = [0, 1, 2, 3, 4]
 
@@ -283,7 +287,8 @@
     />
     <div
       v-else
-      class="flex w-fit max-w-full flex-col gap-(--spacing-xs)"
+      :style="{ '--contribution-graph-week-count': grid.weeks }"
+      :class="FIT_CLASS"
     >
       <div class="flex max-w-full items-end gap-(--spacing-2xs)">
         <div

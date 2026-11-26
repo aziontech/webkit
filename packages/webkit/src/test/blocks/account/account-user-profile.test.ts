@@ -195,6 +195,19 @@ describe('account/account-user-profile', () => {
     )
   })
 
+  it('sums up the account beside the overview and opens the Security tab from it', async () => {
+    const view = render(UserProfile)
+    expect(view.getByRole('complementary', { name: 'Profile summary' })).toBeTruthy()
+    expect(view.getByText('Pacific Time (Los Angeles)')).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Review security' }))
+    await waitFor(() =>
+      expect(
+        view.getByRole('tab', { name: 'Security and access' }).getAttribute('aria-selected')
+      ).toBe('true')
+    )
+    expect(view.queryByRole('button', { name: 'Review security' })).toBeNull()
+  })
+
   it('replaces the page with a danger alert that retries', async () => {
     const view = render(UserProfile, { props: { error: 'The profile service timed out.' } })
     expect(view.queryByRole('tab')).toBeNull()

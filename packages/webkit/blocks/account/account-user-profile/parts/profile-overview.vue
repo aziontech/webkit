@@ -135,7 +135,7 @@
         <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
           <div
             ref="graphEl"
-            class="min-w-0"
+            class="min-w-0 lg:flex-1"
           >
             <ContributionGraph
               v-model:selected-date="selectedDate"

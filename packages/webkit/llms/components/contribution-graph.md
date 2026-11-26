@@ -103,7 +103,7 @@
 
 ## Responsive
 
-- Container queries: none on the cell grid itself; the calendar sits inside an `overflow-x-auto` scroll container so all 52 weeks stay readable and crisp on narrow viewports without squashing cells below 10 px.
+- Container queries: the root is an inline-size container (`@container/contribution-graph`). With a fine pointer the cells grow with it, from 11 px to 18 px, so the weeks fill the width they are given (`--contribution-graph-week-count`, written by the component, sets the divisor); below 11 px the calendar sits inside an `overflow-x-auto` scroll container so all the weeks stay readable and crisp on narrow viewports. Give the root a width (it is `w-full`; in a flex row, let its wrapper grow).
 - Narrow (≤ 640 px): horizontal scroll on the calendar region, which opens on the latest weeks; the weekday names stay fixed beside it; footer readout and legend wrap cleanly. The footer is as wide as the calendar, so the legend sits under its last week.
 - Touch: on a coarse pointer the cells grow from 11 px with 2 px gaps to 20 px with 4 px gaps (`--contribution-graph-cell-size`, `--contribution-graph-cell-gap`), so every day meets the WCAG 2.5.8 24 px spacing target; tapping a cell updates the readout and selects or clears that date without hover.
 - Reflow: the outer component never forces page-level horizontal overflow; only the calendar strip scrolls when narrower than 52 weeks.

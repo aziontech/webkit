@@ -47,6 +47,7 @@
   "sample.ts",
   "user-profile-model.ts",
   "parts/profile-header.vue",
+  "parts/profile-about.vue",
   "parts/profile-overview.vue",
   "parts/profile-bio-tab.vue",
   "parts/profile-security-tab.vue",
