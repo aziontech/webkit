@@ -171,5 +171,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 - [ ] The right child skill ran for the task (structure before polish).
 - [ ] Every component is from `@aziontech/webkit`; every visual value is a token.
 - [ ] Structure is sound (states, feedback, a11y) before any polish or delight was added.
+- [ ] Every filter sits above everything it changes and changes nothing above it (rule
+      `webkit-page-layout`).
 - [ ] The keyboard contract holds (focus on open, `Esc`, `⌘ S`, `/`, `?`, list keys, nothing fires while typing).
 - [ ] The screen was verified for real (`/webkit-ui-verify`), not assumed — both themes, no console errors.
