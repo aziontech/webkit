@@ -3,10 +3,10 @@ name: input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 12
-checksum: 06c876ae0601f46108fcd2df49ef83d2afa4b8a54306b4d316fecbba41c75d3d
+spec_version: 13
+checksum: 5d9d2f972cc6c272e865a3e6e958aa37cfb7b23ea3f335d27079872653c53e1a
 created: 2026-05-22
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 ---
 
 # Input Text — Component Spec
@@ -109,7 +109,7 @@ _none_
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `readonly`, `invalid`
-- Password managers: the `<input>` carries `data-1p-ignore`, `data-lpignore`, `data-bwignore` and `data-form-type="other"` unless it is a credential or identity field — `autocomplete` set to any token but `off`, or `type="email"`. A read-only field always carries them. This keeps 1Password, LastPass, Bitwarden and Dashlane from offering a sign-in on ordinary fields (names, IDs, searches) while login fields stay fillable. A consumer attr (e.g. `data-1p-ignore="false"`) wins.
+- Password managers: the `<input>` carries `data-1p-ignore`, `data-lpignore`, `data-bwignore` and `data-form-type="other"` unless it is a credential or identity field — `autocomplete` set to any token but `off`. `type="email"` alone does not count: a profile or settings address is not a sign-in, so a login or contact field states `autocomplete` (`username`, `email`). A read-only field always carries them. This keeps 1Password, LastPass, Bitwarden and Dashlane from offering a sign-in on ordinary fields (names, IDs, searches) while login fields stay fillable. A consumer attr (e.g. `data-1p-ignore="false"`) wins.
 - `data-readonly` mirrors the `readonly` prop: a read-only field keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
 - `data-monospace` mirrors the `monospace` prop: the value and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
 - `data-slot="input"` marks the root, so an `InputGroup` that holds the field drops its border and radius and the group's own frame is the only line around it

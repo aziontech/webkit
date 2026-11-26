@@ -21,7 +21,11 @@ describe('passwordManagerHints', () => {
     ]) {
       expect(passwordManagerHints({ autocomplete })).toEqual({})
     }
-    expect(passwordManagerHints({ type: 'email' })).toEqual({})
+    expect(passwordManagerHints({ type: 'email', autocomplete: 'email' })).toEqual({})
+  })
+
+  it('hides an email field that states no autocomplete token', () => {
+    expect(passwordManagerHints({ type: 'email' })).toEqual(PASSWORD_MANAGER_IGNORE)
   })
 
   it('hides read-only fields and autocomplete="off" fields', () => {
