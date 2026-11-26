@@ -184,7 +184,7 @@
 <template>
   <div
     ref="rootEl"
-    class="layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)"
+    class="layout-column layout-boundary @container/profile flex min-w-0 flex-col"
     @focusin="onFocusin"
   >
     <Alert
@@ -195,114 +195,127 @@
       action-label="Retry"
       @action="emit('retry', $event)"
     />
-    <template v-else>
+    <div
+      v-else
+      class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @6xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @6xl/profile:gap-x-(--layout-section-gap)"
+    >
       <ProfileHeader
         :profile="profile"
         :loading="loading"
+        class="@6xl/profile:col-start-1 @6xl/profile:row-start-2 @6xl/profile:self-start"
       />
 
-      <PageTabs v-model="activeTab">
-        <Tabs.Trigger
-          value="overview"
-          label="Overview"
-        />
-        <Tabs.Trigger
-          value="profile"
-          label="Profile and bio"
-        />
-        <Tabs.Trigger
-          value="security"
-          label="Security and access"
-        />
-        <Tabs.Trigger
-          value="notifications"
-          label="Notifications"
-        />
-        <Tabs.Trigger
-          value="preferences"
-          label="Preferences"
-        />
-      </PageTabs>
-
-      <div
-        role="tabpanel"
-        :aria-labelledby="panelLabel"
-        class="flex min-w-0 flex-col"
-      >
-        <Skeleton
-          v-if="loading && activeTab !== 'overview'"
-          width="100%"
-          height="20rem"
-        />
-        <ProfileOverview
-          v-else-if="activeTab === 'overview'"
-          v-model:selected-year="selectedYear"
-          :years="years"
-          :loading="loading"
-        />
-        <ProfileBioTab
-          v-else-if="activeTab === 'profile'"
-          v-model:form="profileForm"
-          :errors="fieldErrors"
-          @upload-avatar="emit('upload-avatar', $event)"
-          @remove-avatar="emit('remove-avatar', $event)"
-        />
-        <ProfileSecurityTab
-          v-else-if="activeTab === 'security'"
-          v-model:form="securityForm"
-          :policy="securityPolicy"
-          @manage-tokens="emit('manage-tokens', $event)"
-          @change-password="(event, change) => emit('change-password', event, change)"
-          @mfa-change="emit('mfa-change', $event)"
-        />
-        <ProfileNotificationsTab
-          v-else-if="activeTab === 'notifications'"
-          v-model:form="notificationForm"
-          :emails="profile.alternateEmails"
-          @view-watched="emit('view-watched', $event)"
-        />
-        <ProfilePreferencesTab
-          v-else
-          v-model:form="preferencesForm"
-        />
+      <div class="min-w-0 @6xl/profile:col-span-2 @6xl/profile:row-start-1">
+        <PageTabs v-model="activeTab">
+          <Tabs.Trigger
+            value="overview"
+            label="Overview"
+          />
+          <Tabs.Trigger
+            value="profile"
+            label="Profile and bio"
+          />
+          <Tabs.Trigger
+            value="security"
+            label="Security and access"
+          />
+          <Tabs.Trigger
+            value="notifications"
+            label="Notifications"
+          />
+          <Tabs.Trigger
+            value="preferences"
+            label="Preferences"
+          />
+        </PageTabs>
       </div>
 
-      <SaveBar
-        v-if="dirty"
-        variant="docked"
-        v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
+      <div
+        :data-measure="activeTab === 'overview' ? null : 'form'"
+        class="flex min-w-0 flex-col gap-(--layout-group-gap) data-[measure=form]:max-w-(--layout-measure-form) @6xl/profile:col-start-2 @6xl/profile:row-start-2"
       >
-        You have unsaved changes.
-        <template #actions>
-          <Button
-            type="button"
-            label="Discard"
-            variant="outline"
-            size="medium"
-            @click="discard"
+        <div
+          role="tabpanel"
+          :aria-labelledby="panelLabel"
+          class="flex min-w-0 flex-col"
+        >
+          <Skeleton
+            v-if="loading && activeTab !== 'overview'"
+            width="100%"
+            height="20rem"
           />
-          <Button
-            type="button"
-            variant="primary"
-            size="medium"
-            :aria-keyshortcuts="preferencesForm.keyboardShortcuts ? 'Meta+S Control+S' : undefined"
-            @click="save"
-          >
-            Save changes
-            <span
-              v-if="preferencesForm.keyboardShortcuts"
-              class="inline-flex pointer-coarse:hidden"
+          <ProfileOverview
+            v-else-if="activeTab === 'overview'"
+            v-model:selected-year="selectedYear"
+            :years="years"
+            :loading="loading"
+          />
+          <ProfileBioTab
+            v-else-if="activeTab === 'profile'"
+            v-model:form="profileForm"
+            :errors="fieldErrors"
+            @upload-avatar="emit('upload-avatar', $event)"
+            @remove-avatar="emit('remove-avatar', $event)"
+          />
+          <ProfileSecurityTab
+            v-else-if="activeTab === 'security'"
+            v-model:form="securityForm"
+            :policy="securityPolicy"
+            @manage-tokens="emit('manage-tokens', $event)"
+            @change-password="(event, change) => emit('change-password', event, change)"
+            @mfa-change="emit('mfa-change', $event)"
+          />
+          <ProfileNotificationsTab
+            v-else-if="activeTab === 'notifications'"
+            v-model:form="notificationForm"
+            :emails="profile.alternateEmails"
+            @view-watched="emit('view-watched', $event)"
+          />
+          <ProfilePreferencesTab
+            v-else
+            v-model:form="preferencesForm"
+          />
+        </div>
+
+        <SaveBar
+          v-if="dirty"
+          variant="docked"
+          v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
+        >
+          You have unsaved changes.
+          <template #actions>
+            <Button
+              type="button"
+              label="Discard"
+              variant="outline"
+              size="medium"
+              @click="discard"
+            />
+            <Button
+              type="button"
+              variant="primary"
+              size="medium"
+              :aria-keyshortcuts="
+                preferencesForm.keyboardShortcuts ? 'Meta+S Control+S' : undefined
+              "
+              @click="save"
             >
-              <Kbd
-                meta
-                size="small"
-                aria-hidden="true"
-                >S</Kbd
+              Save changes
+              <span
+                v-if="preferencesForm.keyboardShortcuts"
+                class="inline-flex pointer-coarse:hidden"
               >
-            </span>
-          </Button>
-        </template>
-      </SaveBar>
-    </template>
+                <Kbd
+                  meta
+                  size="small"
+                  aria-hidden="true"
+                  >S</Kbd
+                >
+              </span>
+            </Button>
+          </template>
+        </SaveBar>
+      </div>
+    </div>
   </div>
 </template>

@@ -128,7 +128,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:3cdf4dbc882ba98b1c3089cefa2c7c3ce307b3aa34679843c30cf7b5faa902f1"
+          "checksum": "sha256:4814e57750b34da728c94f18124f329d53b0beb544996fed07c42ef773b17861"
         },
         {
           "path": "src/blocks/account-user-profile-profile-notifications-tab.vue",
@@ -183,7 +183,7 @@
           "imports": {
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:ae34fb70d00f27707214a30a0d5fba6c2b03cc025053d4fd59000cade04255c2"
+          "checksum": "sha256:7bf825e087bdeea543c9ee7f644e26ad0b974a68999960cc352d7bbd98dfec34"
         },
         {
           "path": "src/blocks/account-user-profile.user-profile-model.ts",
@@ -205,7 +205,7 @@
             "./sample": "./account-user-profile.sample",
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:f4b2150854846965bbae553422a3cfbf589828dbe8e1565b0ea0239936c4a16b"
+          "checksum": "sha256:b18062ce50e59797f2a29ba247aa9872b398ea858c23322f508aca6c0c2bbc70"
         }
       ]
     },

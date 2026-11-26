@@ -3336,6 +3336,7 @@ One page for an Azion user's profile and every personal setting: what they did o
 ## Building blocks
 
 - A. Header — `Avatar`, `Tag`, `Skeleton` (required)
+- Width — one page, two measures
 - B. Tabs — `PageTabs`, `Tabs` (required)
 - C. Metrics — `StatTileGroup`, `StatTile` (required)
 - D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
@@ -3357,7 +3358,8 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 
 ## Do
 
-- Keep the avatar small and the header to one line of facts.
+- Keep the avatar small and the facts short: one line in the strip, one per line in the column.
+- Cap the settings tabs at the form measure; only Overview uses the full width.
 - Say who locks a setting and why when the organization's identity provider manages it.
 - Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
 

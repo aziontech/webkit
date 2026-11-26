@@ -24,14 +24,14 @@
       props.profile.handle && `@${props.profile.handle}`,
       props.profile.location,
       props.profile.memberSince && `On Azion since ${props.profile.memberSince}`
-    ]
-      .filter(Boolean)
-      .join(' · ')
+    ].filter((detail): detail is string => Boolean(detail))
   )
 </script>
 
 <template>
-  <header class="flex min-w-0 items-center gap-(--spacing-sm)">
+  <header
+    class="flex min-w-0 items-center gap-(--spacing-sm) @6xl/profile:flex-col @6xl/profile:items-start"
+  >
     <Skeleton
       v-if="loading"
       width="3rem"
@@ -64,11 +64,23 @@
         width="16rem"
         height="1rem"
       />
-      <p
+      <ul
         v-else
-        class="truncate text-body-sm text-(--text-muted)"
+        class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @6xl/profile:flex-col @6xl/profile:gap-(--spacing-2xs)"
       >
-        {{ details }}
+        <li
+          v-for="detail in details"
+          :key="detail"
+          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @6xl/profile:not-last:after:hidden"
+        >
+          {{ detail }}
+        </li>
+      </ul>
+      <p
+        v-if="!loading && profile.bio"
+        class="hidden text-body-sm text-(--text-default) @6xl/profile:block"
+      >
+        {{ profile.bio }}
       </p>
     </div>
   </header>

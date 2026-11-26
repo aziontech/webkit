@@ -39,7 +39,7 @@ export const sampleProfile: UserProfileData = {
   email: 'jane.doe@example.com',
   alternateEmails: ['jane.doe@example.com', 'ops@example.com'],
   phoneCountry: 'US',
-  phoneDigits: '5550142',
+  phoneDigits: '4155550142',
   timezone: 'America/Los_Angeles',
   displayLocalTime: true,
   language: 'en',

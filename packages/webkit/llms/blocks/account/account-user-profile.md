@@ -1,6 +1,6 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 72rem-wide block it becomes a column beside the tab content with the bio under it. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
@@ -31,7 +31,11 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 
-A compact strip: a 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least 72rem wide (`@6xl`, a desktop next to the rail) the header becomes a 16rem column beside the tab content, under the tabs, with the facts one per line and the bio below them; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+
+### Width — one page, two measures
+
+Overview is data and fills the content column. The four settings tabs and their `SaveBar` are a form: they stop at the form measure (`--layout-measure-form`, the width of the settings page), so a field stays next to the name it belongs to. The header column and the tabs keep their place on every tab, so switching tabs never moves them.
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
@@ -82,7 +86,8 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 
 ## Do
 
-- Keep the avatar small and the header to one line of facts.
+- Keep the avatar small and the facts short: one line in the strip, one per line in the column.
+- Cap the settings tabs at the form measure; only Overview uses the full width.
 - Say who locks a setting and why when the organization's identity provider manages it.
 - Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
 
@@ -325,7 +330,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
 <template>
   <div
     ref="rootEl"
-    class="layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)"
+    class="layout-column layout-boundary @container/profile flex min-w-0 flex-col"
     @focusin="onFocusin"
   >
     <Alert
@@ -336,115 +341,128 @@ Each variant is the same screen in another state: `get_block("account/account-us
       action-label="Retry"
       @action="emit('retry', $event)"
     />
-    <template v-else>
+    <div
+      v-else
+      class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) @6xl/profile:grid-cols-[var(--container-3xs)_minmax(0,1fr)] @6xl/profile:gap-x-(--layout-section-gap)"
+    >
       <ProfileHeader
         :profile="profile"
         :loading="loading"
+        class="@6xl/profile:col-start-1 @6xl/profile:row-start-2 @6xl/profile:self-start"
       />
 
-      <PageTabs v-model="activeTab">
-        <Tabs.Trigger
-          value="overview"
-          label="Overview"
-        />
-        <Tabs.Trigger
-          value="profile"
-          label="Profile and bio"
-        />
-        <Tabs.Trigger
-          value="security"
-          label="Security and access"
-        />
-        <Tabs.Trigger
-          value="notifications"
-          label="Notifications"
-        />
-        <Tabs.Trigger
-          value="preferences"
-          label="Preferences"
-        />
-      </PageTabs>
-
-      <div
-        role="tabpanel"
-        :aria-labelledby="panelLabel"
-        class="flex min-w-0 flex-col"
-      >
-        <Skeleton
-          v-if="loading && activeTab !== 'overview'"
-          width="100%"
-          height="20rem"
-        />
-        <ProfileOverview
-          v-else-if="activeTab === 'overview'"
-          v-model:selected-year="selectedYear"
-          :years="years"
-          :loading="loading"
-        />
-        <ProfileBioTab
-          v-else-if="activeTab === 'profile'"
-          v-model:form="profileForm"
-          :errors="fieldErrors"
-          @upload-avatar="emit('upload-avatar', $event)"
-          @remove-avatar="emit('remove-avatar', $event)"
-        />
-        <ProfileSecurityTab
-          v-else-if="activeTab === 'security'"
-          v-model:form="securityForm"
-          :policy="securityPolicy"
-          @manage-tokens="emit('manage-tokens', $event)"
-          @change-password="(event, change) => emit('change-password', event, change)"
-          @mfa-change="emit('mfa-change', $event)"
-        />
-        <ProfileNotificationsTab
-          v-else-if="activeTab === 'notifications'"
-          v-model:form="notificationForm"
-          :emails="profile.alternateEmails"
-          @view-watched="emit('view-watched', $event)"
-        />
-        <ProfilePreferencesTab
-          v-else
-          v-model:form="preferencesForm"
-        />
+      <div class="min-w-0 @6xl/profile:col-span-2 @6xl/profile:row-start-1">
+        <PageTabs v-model="activeTab">
+          <Tabs.Trigger
+            value="overview"
+            label="Overview"
+          />
+          <Tabs.Trigger
+            value="profile"
+            label="Profile and bio"
+          />
+          <Tabs.Trigger
+            value="security"
+            label="Security and access"
+          />
+          <Tabs.Trigger
+            value="notifications"
+            label="Notifications"
+          />
+          <Tabs.Trigger
+            value="preferences"
+            label="Preferences"
+          />
+        </PageTabs>
       </div>
 
-      <SaveBar
-        v-if="dirty"
-        variant="docked"
-        v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
+      <div
+        :data-measure="activeTab === 'overview' ? null : 'form'"
+        class="flex min-w-0 flex-col gap-(--layout-group-gap) data-[measure=form]:max-w-(--layout-measure-form) @6xl/profile:col-start-2 @6xl/profile:row-start-2"
       >
-        You have unsaved changes.
-        <template #actions>
-          <Button
-            type="button"
-            label="Discard"
-            variant="outline"
-            size="medium"
-            @click="discard"
+        <div
+          role="tabpanel"
+          :aria-labelledby="panelLabel"
+          class="flex min-w-0 flex-col"
+        >
+          <Skeleton
+            v-if="loading && activeTab !== 'overview'"
+            width="100%"
+            height="20rem"
           />
-          <Button
-            type="button"
-            variant="primary"
-            size="medium"
-            :aria-keyshortcuts="preferencesForm.keyboardShortcuts ? 'Meta+S Control+S' : undefined"
-            @click="save"
-          >
-            Save changes
-            <span
-              v-if="preferencesForm.keyboardShortcuts"
-              class="inline-flex pointer-coarse:hidden"
+          <ProfileOverview
+            v-else-if="activeTab === 'overview'"
+            v-model:selected-year="selectedYear"
+            :years="years"
+            :loading="loading"
+          />
+          <ProfileBioTab
+            v-else-if="activeTab === 'profile'"
+            v-model:form="profileForm"
+            :errors="fieldErrors"
+            @upload-avatar="emit('upload-avatar', $event)"
+            @remove-avatar="emit('remove-avatar', $event)"
+          />
+          <ProfileSecurityTab
+            v-else-if="activeTab === 'security'"
+            v-model:form="securityForm"
+            :policy="securityPolicy"
+            @manage-tokens="emit('manage-tokens', $event)"
+            @change-password="(event, change) => emit('change-password', event, change)"
+            @mfa-change="emit('mfa-change', $event)"
+          />
+          <ProfileNotificationsTab
+            v-else-if="activeTab === 'notifications'"
+            v-model:form="notificationForm"
+            :emails="profile.alternateEmails"
+            @view-watched="emit('view-watched', $event)"
+          />
+          <ProfilePreferencesTab
+            v-else
+            v-model:form="preferencesForm"
+          />
+        </div>
+
+        <SaveBar
+          v-if="dirty"
+          variant="docked"
+          v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
+        >
+          You have unsaved changes.
+          <template #actions>
+            <Button
+              type="button"
+              label="Discard"
+              variant="outline"
+              size="medium"
+              @click="discard"
+            />
+            <Button
+              type="button"
+              variant="primary"
+              size="medium"
+              :aria-keyshortcuts="
+                preferencesForm.keyboardShortcuts ? 'Meta+S Control+S' : undefined
+              "
+              @click="save"
             >
-              <Kbd
-                meta
-                size="small"
-                aria-hidden="true"
-                >S</Kbd
+              Save changes
+              <span
+                v-if="preferencesForm.keyboardShortcuts"
+                class="inline-flex pointer-coarse:hidden"
               >
-            </span>
-          </Button>
-        </template>
-      </SaveBar>
-    </template>
+                <Kbd
+                  meta
+                  size="small"
+                  aria-hidden="true"
+                  >S</Kbd
+                >
+              </span>
+            </Button>
+          </template>
+        </SaveBar>
+      </div>
+    </div>
   </div>
 </template>
 ```
@@ -493,7 +511,7 @@ export const sampleProfile: UserProfileData = {
   email: 'jane.doe@example.com',
   alternateEmails: ['jane.doe@example.com', 'ops@example.com'],
   phoneCountry: 'US',
-  phoneDigits: '5550142',
+  phoneDigits: '4155550142',
   timezone: 'America/Los_Angeles',
   displayLocalTime: true,
   language: 'en',
@@ -1095,14 +1113,14 @@ export function filterHistory(
       props.profile.handle && `@${props.profile.handle}`,
       props.profile.location,
       props.profile.memberSince && `On Azion since ${props.profile.memberSince}`
-    ]
-      .filter(Boolean)
-      .join(' · ')
+    ].filter((detail): detail is string => Boolean(detail))
   )
 </script>
 
 <template>
-  <header class="flex min-w-0 items-center gap-(--spacing-sm)">
+  <header
+    class="flex min-w-0 items-center gap-(--spacing-sm) @6xl/profile:flex-col @6xl/profile:items-start"
+  >
     <Skeleton
       v-if="loading"
       width="3rem"
@@ -1135,11 +1153,23 @@ export function filterHistory(
         width="16rem"
         height="1rem"
       />
-      <p
+      <ul
         v-else
-        class="truncate text-body-sm text-(--text-muted)"
+        class="flex min-w-0 flex-wrap text-body-sm text-(--text-muted) @6xl/profile:flex-col @6xl/profile:gap-(--spacing-2xs)"
       >
-        {{ details }}
+        <li
+          v-for="detail in details"
+          :key="detail"
+          class="not-last:after:px-(--spacing-2xs) not-last:after:content-['·'_/_''] @6xl/profile:not-last:after:hidden"
+        >
+          {{ detail }}
+        </li>
+      </ul>
+      <p
+        v-if="!loading && profile.bio"
+        class="hidden text-body-sm text-(--text-default) @6xl/profile:block"
+      >
+        {{ profile.bio }}
       </p>
     </div>
   </header>

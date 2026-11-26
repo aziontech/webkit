@@ -18,7 +18,11 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 
-A compact strip: a 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least 72rem wide (`@6xl`, a desktop next to the rail) the header becomes a 16rem column beside the tab content, under the tabs, with the facts one per line and the bio below them; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+
+### Width — one page, two measures
+
+Overview is data and fills the content column. The four settings tabs and their `SaveBar` are a form: they stop at the form measure (`--layout-measure-form`, the width of the settings page), so a field stays next to the name it belongs to. The header column and the tabs keep their place on every tab, so switching tabs never moves them.
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
@@ -69,7 +73,8 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 
 ## Do
 
-- Keep the avatar small and the header to one line of facts.
+- Keep the avatar small and the facts short: one line in the strip, one per line in the column.
+- Cap the settings tabs at the form measure; only Overview uses the full width.
 - Say who locks a setting and why when the organization's identity provider manages it.
 - Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
 
