@@ -1122,6 +1122,11 @@ function header(catalog) {
   ].join('\n')
 }
 
+function patterns() {
+  const abs = resolve(REPO_ROOT, 'skills/patterns.json')
+  return existsSync(abs) ? JSON.parse(readFileSync(abs, 'utf-8')).patterns : []
+}
+
 export function buildLlms(catalog = loadCatalog()) {
   const files = {}
   const index = [header(catalog)]
@@ -1158,6 +1163,19 @@ export function buildLlms(catalog = loadCatalog()) {
     fullParts.push(`<!-- foundations/${f.slug}.md -->\n\n${namesOnly(f.compact ?? f.md)}`)
   }
   index.push('')
+
+  const patternPages = patterns()
+  if (patternPages.length) {
+    index.push(
+      '## Patterns',
+      '',
+      'How to build each kind of screen or problem. Read the pattern for the job before composing a screen, then start from its block.',
+      ''
+    )
+    for (const page of patternPages)
+      index.push(`- [${page.title}](../skills/${page.skill}/SKILL.md): ${page.summary}`)
+    index.push('')
+  }
 
   const ids = Object.keys(catalog.blocks).sort()
   const blockGroups = {}
