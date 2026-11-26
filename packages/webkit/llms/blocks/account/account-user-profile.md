@@ -1,12 +1,12 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year, a `CopyButton` for the profile link and an Edit profile `Button`) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year, a `Card` with a `ContributionGraph` (category and cell-shape `ToggleGroup`s, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-user-profile")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ContributionGraph](../../components/contribution-graph.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageTabs](../../components/page-tabs.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PhoneInput](../../components/phone-input.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [ThemeSwitcher](../../components/theme-switcher.md), [Timeline](../../components/timeline.md), [Timestamp](../../components/timestamp.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ContributionGraph](../../components/contribution-graph.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageTabs](../../components/page-tabs.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PhoneInput](../../components/phone-input.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [ThemeSwitcher](../../components/theme-switcher.md), [Timeline](../../components/timeline.md), [Timestamp](../../components/timestamp.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
 - Skills: `webkit-form`, `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`, `webkit-microcopy`
 
 ## Asked as
@@ -29,9 +29,9 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ## Building blocks
 
-### A. Header — `Avatar`, `Tag`, `CopyButton`, `Button`, `Skeleton` (required)
+### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 
-A compact strip: a 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. `CopyButton` copies the profile link; Edit profile opens the Profile and bio tab. No cover picture and no large avatar: the graph and the settings stay above the fold.
+A compact strip: a 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
@@ -39,11 +39,11 @@ Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and acces
 
 ### C. Metrics — `StatTileGroup`, `StatTile` (required)
 
-Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak.
+Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
 
 ### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
 
-A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history; a second one switches squares and dots. The year rail (one `Button` per year, `aria-current` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-current` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
 
 ### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
 
@@ -91,6 +91,7 @@ Events: `save` (profile, notifications, preferences and security fields), `retry
 - Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
 - Don't let the user change a password or turn off multi-factor when the organization manages them.
 - Don't fake a save with a timer; persist on `@save`.
+- Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
 
 ## Copy
 
@@ -272,7 +273,6 @@ Each variant is the same screen in another state: `get_block("account/account-us
       <ProfileHeader
         :profile="profile"
         :loading="loading"
-        @edit="activeTab = 'profile'"
       />
 
       <PageTabs v-model="activeTab">
@@ -419,7 +419,6 @@ export const sampleProfile: UserProfileData = {
   memberSince: '2023',
   bio: 'Building the Acme storefront on Azion Applications and Functions.',
   websiteUrl: 'https://example.com/jane',
-  profileUrl: 'https://app.example.com/u/jane.doe',
   privateProfile: false,
   includePrivateContributions: true
 }
@@ -727,8 +726,6 @@ export interface UserProfileData {
   bio: string
   /** Website or GitHub profile URL. */
   websiteUrl: string
-  /** Shareable profile URL. */
-  profileUrl: string
   /** Hide the profile and its activity from organization directories. */
   privateProfile: boolean
   /** Count contributions to private accounts in the graph. */
@@ -844,11 +841,6 @@ export const CATEGORY_OPTIONS: UserProfileOption<'all' | UserProfileContribution
   { label: 'Security', value: 'security' }
 ]
 
-export const CELL_SHAPE_OPTIONS: UserProfileOption<'square' | 'dot'>[] = [
-  { label: 'Squares', value: 'square' },
-  { label: 'Dots', value: 'dot' }
-]
-
 export const TIMEZONE_OPTIONS: UserProfileOption[] = [
   { label: '(UTC -08:00) America/Los_Angeles', value: 'America/Los_Angeles' },
   { label: '(UTC -05:00) America/New_York', value: 'America/New_York' },
@@ -955,8 +947,6 @@ export function filterHistory(
 ```ts
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
@@ -972,10 +962,6 @@ export function filterHistory(
 
   const props = defineProps<ProfileHeaderProps>()
 
-  const emit = defineEmits<{
-    edit: [event: MouseEvent]
-  }>()
-
   const initials = computed(() =>
     `${props.profile.firstName.charAt(0)}${props.profile.lastName.charAt(0)}`.toUpperCase()
   )
@@ -983,65 +969,45 @@ export function filterHistory(
 </script>
 
 <template>
-  <header class="flex flex-wrap items-center justify-between gap-(--spacing-md)">
-    <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+  <header class="flex min-w-0 items-center gap-(--spacing-sm)">
+    <Skeleton
+      v-if="loading"
+      width="3rem"
+      height="3rem"
+      variant="circle"
+    />
+    <Avatar
+      v-else
+      :label="initials"
+      :alt="fullName"
+      size="large"
+    />
+    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
       <Skeleton
+        key="skeleton-2"
         v-if="loading"
-        width="3rem"
-        height="3rem"
-        variant="circle"
+        width="12rem"
+        height="1.25rem"
       />
-      <Avatar
+      <div
         v-else
-        :label="initials"
-        :alt="fullName"
-        size="large"
-      />
-      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-        <Skeleton
-          key="skeleton-2"
-          v-if="loading"
-          width="12rem"
-          height="1.25rem"
-        />
-        <div
-          v-else
-          class="flex flex-wrap items-center gap-(--spacing-xs)"
-        >
-          <h1 class="text-heading-sm text-(--text-default)">{{ fullName }}</h1>
-          <Tag :label="profile.role" />
-        </div>
-        <Skeleton
-          key="skeleton-3"
-          v-if="loading"
-          width="16rem"
-          height="1rem"
-        />
-        <p
-          v-else
-          class="truncate text-body-sm text-(--text-muted)"
-        >
-          @{{ profile.handle }} · {{ profile.location }} · On Azion since {{ profile.memberSince }}
-        </p>
+        class="flex flex-wrap items-center gap-(--spacing-xs)"
+      >
+        <h1 class="text-heading-sm text-(--text-default)">{{ fullName }}</h1>
+        <Tag :label="profile.role" />
       </div>
-    </div>
-
-    <div
-      v-if="!loading"
-      class="flex items-center gap-(--spacing-xs)"
-    >
-      <CopyButton
-        :value="profile.profileUrl"
-        variant="outline"
-        aria-label="Copy profile link"
+      <Skeleton
+        key="skeleton-3"
+        v-if="loading"
+        width="16rem"
+        height="1rem"
       />
-      <Button
-        type="button"
-        label="Edit profile"
-        variant="outline"
-        size="medium"
-        @click="emit('edit', $event)"
-      />
+      <p
+        v-else
+        class="truncate text-body-sm text-(--text-muted)"
+      >
+        @{{ profile.handle }} · {{ profile.location }} · On Azion since {{ profile.memberSince }}
+      </p>
     </div>
   </header>
 </template>
@@ -1065,7 +1031,6 @@ export function filterHistory(
 
   import {
     CATEGORY_OPTIONS,
-    CELL_SHAPE_OPTIONS,
     filterHistory,
     type UserProfileContributionCategory,
     type UserProfileYearActivity
@@ -1083,7 +1048,6 @@ export function filterHistory(
   const selectedYear = defineModel<number>('selectedYear', { required: true })
 
   const category = ref<'all' | UserProfileContributionCategory>('all')
-  const cellShape = ref<'square' | 'dot'>('square')
   const selectedDate = ref<string | null>(null)
 
   const activeYear = computed<UserProfileYearActivity | null>(
@@ -1118,37 +1082,39 @@ export function filterHistory(
 
 <template>
   <div class="flex flex-col gap-(--layout-group-gap)">
-    <StatTileGroup aria-label="Platform contribution metrics">
-      <StatTile
-        label="Contributions"
-        :value="activeYear?.totalContributions ?? 0"
-        :delta="activeYear?.contributionsDelta || null"
-        delta-label="vs. last year"
-        :loading="loading"
-      />
-      <StatTile
-        label="Deployments"
-        :value="activeYear?.deployments ?? 0"
-        :loading="loading"
-      />
-      <StatTile
-        label="AI Copilot tasks"
-        :value="activeYear?.copilotTasks ?? 0"
-        :loading="loading"
-      />
-      <StatTile
-        label="Longest streak"
-        :value="activeYear?.longestStreakDays ?? 0"
-        unit="days"
-        :loading="loading"
-      />
-      <StatTile
-        label="Current streak"
-        :value="activeYear?.currentStreakDays ?? 0"
-        unit="days"
-        :loading="loading"
-      />
-    </StatTileGroup>
+    <div class="max-md:hidden">
+      <StatTileGroup aria-label="Platform contribution metrics">
+        <StatTile
+          label="Contributions"
+          :value="activeYear?.totalContributions ?? 0"
+          :delta="activeYear?.contributionsDelta || null"
+          delta-label="vs. last year"
+          :loading="loading"
+        />
+        <StatTile
+          label="Deployments"
+          :value="activeYear?.deployments ?? 0"
+          :loading="loading"
+        />
+        <StatTile
+          label="AI Copilot tasks"
+          :value="activeYear?.copilotTasks ?? 0"
+          :loading="loading"
+        />
+        <StatTile
+          label="Longest streak"
+          :value="activeYear?.longestStreakDays ?? 0"
+          unit="days"
+          :loading="loading"
+        />
+        <StatTile
+          label="Current streak"
+          :value="activeYear?.currentStreakDays ?? 0"
+          unit="days"
+          :loading="loading"
+        />
+      </StatTileGroup>
+    </div>
 
     <Card>
       <div class="flex flex-col gap-(--spacing-md)">
@@ -1161,20 +1127,12 @@ export function filterHistory(
               Deploys, Functions, firewall rules and AI Copilot workflows, one square per day.
             </p>
           </div>
-          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-            <ToggleGroup
-              v-model="category"
-              :options="CATEGORY_OPTIONS"
-              size="small"
-              aria-label="Contribution category"
-            />
-            <ToggleGroup
-              v-model="cellShape"
-              :options="CELL_SHAPE_OPTIONS"
-              size="small"
-              aria-label="Cell shape"
-            />
-          </div>
+          <ToggleGroup
+            v-model="category"
+            :options="CATEGORY_OPTIONS"
+            size="small"
+            aria-label="Contribution category"
+          />
         </div>
 
         <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
@@ -1183,7 +1141,6 @@ export function filterHistory(
               v-model:selected-date="selectedDate"
               :items="graphItems"
               :year="shownYear"
-              :variant="cellShape"
               :loading="loading"
               :aria-label="`Platform contributions in ${shownYear}`"
             />

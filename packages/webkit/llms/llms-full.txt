@@ -3312,7 +3312,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-tea
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-user-profile")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: Alert, Avatar, Button, Card, ContributionGraph, CopyButton, EmptyState, Input, Item, Kbd, LanguageSelect, Link, PageTabs, PasswordInput, PasswordRequirements, PhoneInput, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, StatTile, StatTileGroup, Switch, Tabs, Tag, Textarea, ThemeSwitcher, Timeline, Timestamp, ToggleGroup, `use-locale`
+- Components: Alert, Avatar, Button, Card, ContributionGraph, EmptyState, Input, Item, Kbd, LanguageSelect, Link, PageTabs, PasswordInput, PasswordRequirements, PhoneInput, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, StatTile, StatTileGroup, Switch, Tabs, Tag, Textarea, ThemeSwitcher, Timeline, Timestamp, ToggleGroup, `use-locale`
 - Skills: `webkit-form`, `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`, `webkit-microcopy`
 
 ## Asked as
@@ -3335,7 +3335,7 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ## Building blocks
 
-- A. Header — `Avatar`, `Tag`, `CopyButton`, `Button`, `Skeleton` (required)
+- A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 - B. Tabs — `PageTabs`, `Tabs` (required)
 - C. Metrics — `StatTileGroup`, `StatTile` (required)
 - D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
@@ -3366,6 +3366,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
 - Don't let the user change a password or turn off multi-factor when the organization manages them.
 - Don't fake a save with a timer; persist on `@save`.
+- Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
 
 ## Copy
 
@@ -16570,7 +16571,6 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.
 - Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).
 - Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.
-- Pick `variant="square"` (default) for dense developer activity grids, or `variant="dot"` for softer editorial/profile summaries.
 - Always supply `ariaLabel` naming the subject and period (e.g. `"Platform contributions in 2026"`).
 
 ## Don’t
@@ -16594,7 +16594,6 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 | `items` | `ContributionGraphItem[]` | `[]` | false | Daily contribution entries (`{ date: string; count: number; level?: ContributionGraphLevel; label?: string }`). Missing days render at level 0. |
 | `year` | `number` | `undefined` | false | Calendar year to display (Jan 1 – Dec 31). When omitted, displays 52 weeks ending at `endDate` or the latest item date. |
 | `endDate` | `string` | `''` | false | ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted. |
-| `variant` | `ContributionGraphVariant` | `'square'` | false | Cell shape: `'square'` (rounded square) or `'dot'` (circular dot). |
 | `showLegend` | `boolean` | `true` | false | Renders the `Less … More` intensity legend in the footer. |
 | `loading` | `boolean` | `false` | false | Renders a Skeleton placeholder in place of the calendar grid. |
 | `error` | `string` | `''` | false | Error message; when set, renders an `EmptyState` with the message inside a `role="alert"` region in place of the grid. |
@@ -16616,7 +16615,6 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 ## States
 
 - Visual states: `default`, `hover` / `focus-visible` (active cell readout), `selected` (`aria-selected="true"` / `data-selected`), `loading` (Skeleton placeholder), `empty` (a small bordered `EmptyState` when `items` is empty and no `year` is set; with a `year` the grid renders all at level 0), `error` (a small bordered `EmptyState` with the message inside a `role="alert"` region).
-- `data-variant` mirrors `variant` (`square` | `dot`) on the root.
 - `data-loading` mirrors `loading` on the root; `data-error` is set when `error` is non-empty and not loading.
 - `data-level` (`0` | `1` | `2` | `3` | `4`) on each day cell; `data-selected` when the cell matches `selectedDate`.
 - Root carries `data-plain-ground` so a `Texture` beside it hides itself.

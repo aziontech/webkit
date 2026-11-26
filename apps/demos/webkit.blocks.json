@@ -128,7 +128,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:346be3d68e4035e6f4bd48623e14bf7400426a8baa7efc9413fcbeb4b33f66bc"
+          "checksum": "sha256:4d59dc29c975a3c5e31ecec03433cc4b2fe61ac23370070644f2cc0f0550de01"
         },
         {
           "path": "src/blocks/account-user-profile-profile-notifications-tab.vue",
@@ -147,7 +147,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:583572579b0fc914a9f1712f020e70e8b1c069f95242df0ca0f5b31d70f3ffc2"
+          "checksum": "sha256:05dc2380c253cb47c5644b3f77a88d5a913290753fe3aa3ed8078f94aa239a0f"
         },
         {
           "path": "src/blocks/account-user-profile-profile-preferences-tab.vue",
@@ -183,13 +183,13 @@
           "imports": {
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:89b93679af6aee7eec8e322d1f2677033424962ae1cf0505a374c97e9833ee9f"
+          "checksum": "sha256:1c7d85024b1db05593f88722b64e08e984c20c7a43c779aad29ca55fdc031128"
         },
         {
           "path": "src/blocks/account-user-profile.user-profile-model.ts",
           "source": "blocks/account/account-user-profile/user-profile-model.ts",
           "variant": "Data",
-          "checksum": "sha256:c4145e6185a737de81837f449fa2547db588948b8ea7fe89a200867147130b4e"
+          "checksum": "sha256:cad42c30751de9ac3a7ff1c517f428174c147fabb10cccdcbec81ebe3b471462"
         },
         {
           "path": "src/blocks/account-user-profile.vue",
@@ -205,7 +205,7 @@
             "./sample": "./account-user-profile.sample",
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:4b7212ae8fca5ea161745b8049baff6139ebe4d09a3ab8f3d3746243862cb231"
+          "checksum": "sha256:6b8d042b59304832bd136514ade0644f5415bd93bec5545d02233d52549ca486"
         }
       ]
     },

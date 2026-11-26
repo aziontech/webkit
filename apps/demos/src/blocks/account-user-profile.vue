@@ -133,7 +133,6 @@
       <ProfileHeader
         :profile="profile"
         :loading="loading"
-        @edit="activeTab = 'profile'"
       />
 
       <PageTabs v-model="activeTab">

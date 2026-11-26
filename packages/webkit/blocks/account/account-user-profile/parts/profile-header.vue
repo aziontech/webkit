@@ -1,7 +1,5 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
@@ -17,10 +15,6 @@
 
   const props = defineProps<ProfileHeaderProps>()
 
-  const emit = defineEmits<{
-    edit: [event: MouseEvent]
-  }>()
-
   const initials = computed(() =>
     `${props.profile.firstName.charAt(0)}${props.profile.lastName.charAt(0)}`.toUpperCase()
   )
@@ -28,65 +22,45 @@
 </script>
 
 <template>
-  <header class="flex flex-wrap items-center justify-between gap-(--spacing-md)">
-    <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+  <header class="flex min-w-0 items-center gap-(--spacing-sm)">
+    <Skeleton
+      v-if="loading"
+      width="3rem"
+      height="3rem"
+      variant="circle"
+    />
+    <Avatar
+      v-else
+      :label="initials"
+      :alt="fullName"
+      size="large"
+    />
+    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
       <Skeleton
+        key="skeleton-2"
         v-if="loading"
-        width="3rem"
-        height="3rem"
-        variant="circle"
+        width="12rem"
+        height="1.25rem"
       />
-      <Avatar
+      <div
         v-else
-        :label="initials"
-        :alt="fullName"
-        size="large"
-      />
-      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-        <Skeleton
-          key="skeleton-2"
-          v-if="loading"
-          width="12rem"
-          height="1.25rem"
-        />
-        <div
-          v-else
-          class="flex flex-wrap items-center gap-(--spacing-xs)"
-        >
-          <h1 class="text-heading-sm text-(--text-default)">{{ fullName }}</h1>
-          <Tag :label="profile.role" />
-        </div>
-        <Skeleton
-          key="skeleton-3"
-          v-if="loading"
-          width="16rem"
-          height="1rem"
-        />
-        <p
-          v-else
-          class="truncate text-body-sm text-(--text-muted)"
-        >
-          @{{ profile.handle }} · {{ profile.location }} · On Azion since {{ profile.memberSince }}
-        </p>
+        class="flex flex-wrap items-center gap-(--spacing-xs)"
+      >
+        <h1 class="text-heading-sm text-(--text-default)">{{ fullName }}</h1>
+        <Tag :label="profile.role" />
       </div>
-    </div>
-
-    <div
-      v-if="!loading"
-      class="flex items-center gap-(--spacing-xs)"
-    >
-      <CopyButton
-        :value="profile.profileUrl"
-        variant="outline"
-        aria-label="Copy profile link"
+      <Skeleton
+        key="skeleton-3"
+        v-if="loading"
+        width="16rem"
+        height="1rem"
       />
-      <Button
-        type="button"
-        label="Edit profile"
-        variant="outline"
-        size="medium"
-        @click="emit('edit', $event)"
-      />
+      <p
+        v-else
+        class="truncate text-body-sm text-(--text-muted)"
+      >
+        @{{ profile.handle }} · {{ profile.location }} · On Azion since {{ profile.memberSince }}
+      </p>
     </div>
   </header>
 </template>

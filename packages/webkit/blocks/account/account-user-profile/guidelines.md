@@ -16,9 +16,9 @@ One page for an Azion user's profile and every personal setting: what they did o
 
 ## Building blocks
 
-### A. Header — `Avatar`, `Tag`, `CopyButton`, `Button`, `Skeleton` (required)
+### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
 
-A compact strip: a 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. `CopyButton` copies the profile link; Edit profile opens the Profile and bio tab. No cover picture and no large avatar: the graph and the settings stay above the fold.
+A compact strip: a 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
@@ -26,11 +26,11 @@ Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and acces
 
 ### C. Metrics — `StatTileGroup`, `StatTile` (required)
 
-Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak.
+Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
 
 ### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
 
-A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history; a second one switches squares and dots. The year rail (one `Button` per year, `aria-current` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-current` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
 
 ### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
 
@@ -78,6 +78,7 @@ Events: `save` (profile, notifications, preferences and security fields), `retry
 - Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
 - Don't let the user change a password or turn off multi-factor when the organization manages them.
 - Don't fake a save with a timer; persist on `@save`.
+- Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
 
 ## Copy
 

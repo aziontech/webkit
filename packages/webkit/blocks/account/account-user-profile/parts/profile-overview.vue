@@ -13,7 +13,6 @@
 
   import {
     CATEGORY_OPTIONS,
-    CELL_SHAPE_OPTIONS,
     filterHistory,
     type UserProfileContributionCategory,
     type UserProfileYearActivity
@@ -31,7 +30,6 @@
   const selectedYear = defineModel<number>('selectedYear', { required: true })
 
   const category = ref<'all' | UserProfileContributionCategory>('all')
-  const cellShape = ref<'square' | 'dot'>('square')
   const selectedDate = ref<string | null>(null)
 
   const activeYear = computed<UserProfileYearActivity | null>(
@@ -66,37 +64,39 @@
 
 <template>
   <div class="flex flex-col gap-(--layout-group-gap)">
-    <StatTileGroup aria-label="Platform contribution metrics">
-      <StatTile
-        label="Contributions"
-        :value="activeYear?.totalContributions ?? 0"
-        :delta="activeYear?.contributionsDelta || null"
-        delta-label="vs. last year"
-        :loading="loading"
-      />
-      <StatTile
-        label="Deployments"
-        :value="activeYear?.deployments ?? 0"
-        :loading="loading"
-      />
-      <StatTile
-        label="AI Copilot tasks"
-        :value="activeYear?.copilotTasks ?? 0"
-        :loading="loading"
-      />
-      <StatTile
-        label="Longest streak"
-        :value="activeYear?.longestStreakDays ?? 0"
-        unit="days"
-        :loading="loading"
-      />
-      <StatTile
-        label="Current streak"
-        :value="activeYear?.currentStreakDays ?? 0"
-        unit="days"
-        :loading="loading"
-      />
-    </StatTileGroup>
+    <div class="max-md:hidden">
+      <StatTileGroup aria-label="Platform contribution metrics">
+        <StatTile
+          label="Contributions"
+          :value="activeYear?.totalContributions ?? 0"
+          :delta="activeYear?.contributionsDelta || null"
+          delta-label="vs. last year"
+          :loading="loading"
+        />
+        <StatTile
+          label="Deployments"
+          :value="activeYear?.deployments ?? 0"
+          :loading="loading"
+        />
+        <StatTile
+          label="AI Copilot tasks"
+          :value="activeYear?.copilotTasks ?? 0"
+          :loading="loading"
+        />
+        <StatTile
+          label="Longest streak"
+          :value="activeYear?.longestStreakDays ?? 0"
+          unit="days"
+          :loading="loading"
+        />
+        <StatTile
+          label="Current streak"
+          :value="activeYear?.currentStreakDays ?? 0"
+          unit="days"
+          :loading="loading"
+        />
+      </StatTileGroup>
+    </div>
 
     <Card>
       <div class="flex flex-col gap-(--spacing-md)">
@@ -109,20 +109,12 @@
               Deploys, Functions, firewall rules and AI Copilot workflows, one square per day.
             </p>
           </div>
-          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-            <ToggleGroup
-              v-model="category"
-              :options="CATEGORY_OPTIONS"
-              size="small"
-              aria-label="Contribution category"
-            />
-            <ToggleGroup
-              v-model="cellShape"
-              :options="CELL_SHAPE_OPTIONS"
-              size="small"
-              aria-label="Cell shape"
-            />
-          </div>
+          <ToggleGroup
+            v-model="category"
+            :options="CATEGORY_OPTIONS"
+            size="small"
+            aria-label="Contribution category"
+          />
         </div>
 
         <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
@@ -131,7 +123,6 @@
               v-model:selected-date="selectedDate"
               :items="graphItems"
               :year="shownYear"
-              :variant="cellShape"
               :loading="loading"
               :aria-label="`Platform contributions in ${shownYear}`"
             />

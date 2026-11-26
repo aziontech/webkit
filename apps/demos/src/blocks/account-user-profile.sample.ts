@@ -47,7 +47,6 @@ export const sampleProfile: UserProfileData = {
   memberSince: '2023',
   bio: 'Building the Acme storefront on Azion Applications and Functions.',
   websiteUrl: 'https://example.com/jane',
-  profileUrl: 'https://app.example.com/u/jane.doe',
   privateProfile: false,
   includePrivateContributions: true
 }

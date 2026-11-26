@@ -99,8 +99,6 @@ export interface UserProfileData {
   bio: string
   /** Website or GitHub profile URL. */
   websiteUrl: string
-  /** Shareable profile URL. */
-  profileUrl: string
   /** Hide the profile and its activity from organization directories. */
   privateProfile: boolean
   /** Count contributions to private accounts in the graph. */
@@ -214,11 +212,6 @@ export const CATEGORY_OPTIONS: UserProfileOption<'all' | UserProfileContribution
   { label: 'Deploys', value: 'deploy' },
   { label: 'Functions', value: 'function' },
   { label: 'Security', value: 'security' }
-]
-
-export const CELL_SHAPE_OPTIONS: UserProfileOption<'square' | 'dot'>[] = [
-  { label: 'Squares', value: 'square' },
-  { label: 'Dots', value: 'dot' }
 ]
 
 export const TIMEZONE_OPTIONS: UserProfileOption[] = [

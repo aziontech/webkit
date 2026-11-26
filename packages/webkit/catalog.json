@@ -8909,13 +8909,6 @@
      "doc": "ISO date (`YYYY-MM-DD`) ending a rolling 52-week window when `year` is omitted."
     },
     {
-     "name": "variant",
-     "type": "ContributionGraphVariant",
-     "default": "'square'",
-     "required": "false",
-     "doc": "Cell shape: `'square'` (rounded square) or `'dot'` (circular dot)."
-    },
-    {
      "name": "showLegend",
      "type": "boolean",
      "default": "true",
@@ -33867,7 +33860,7 @@
    "source": "blocks/account/account-user-profile/account-user-profile.vue",
    "surface": "app",
    "stability": "preview",
-   "summary": "One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year, a `CopyButton` for the profile link and an Edit profile `Button`) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year, a `Card` with a `ContributionGraph` (category and cell-shape `ToggleGroup`s, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.",
+   "summary": "One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview shows five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` (a category `ToggleGroup`, a year rail of `Button`s that switches year over year, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements`, multi-factor and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A `SaveBar` appears with unsaved changes (Discard, Save changes with its Command S hint unless shortcuts are off). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.",
    "intents": [
     "user profile",
     "developer profile",
@@ -33897,7 +33890,6 @@
     "Button",
     "Card",
     "ContributionGraph",
-    "CopyButton",
     "EmptyState",
     "Input",
     "Item",
@@ -33931,7 +33923,6 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/contribution-graph",
-    "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",

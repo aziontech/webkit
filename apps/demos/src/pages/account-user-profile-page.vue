@@ -19,8 +19,7 @@
     lastName: rest.join(' '),
     handle,
     email: account.email,
-    alternateEmails: [account.email, 'ops@example.com'],
-    profileUrl: `https://app.example.com/u/${handle}`
+    alternateEmails: [account.email, 'ops@example.com']
   })
   const activeTab = ref<UserProfileTab>('overview')
 
