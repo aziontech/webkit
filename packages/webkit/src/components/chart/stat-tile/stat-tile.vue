@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs, useId } from 'vue'
+  import { computed, inject, onScopeDispose, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -131,6 +131,19 @@
     if (props.loading) return props.trend.length > 0
     return props.trend.length > 0 || band.value === 'error' || band.value === 'no-data'
   })
+  let releaseBand: (() => void) | null = null
+  watch(
+    bandShown,
+    (shown) => {
+      if (shown && group && !releaseBand) releaseBand = group.showBand()
+      if (!shown && releaseBand) {
+        releaseBand()
+        releaseBand = null
+      }
+    },
+    { immediate: true }
+  )
+  onScopeDispose(() => releaseBand?.())
   const bandLabel = computed(() => {
     if (band.value === 'error') return t('statTile.loadError')
     if (band.value === 'no-data') return t('statTile.noData')
@@ -253,8 +266,9 @@
       v-else-if="bandShown || group"
       :data-band="band"
       :data-band-shown="bandShown || null"
+      :data-band-row="bandShown || (group?.bands.value ?? 0) > 0 || null"
       :data-testid="`${testId}__empty`"
-      class="relative mt-(--spacing-xs) hidden h-12 shrink-0 data-[band-shown]:block group-has-[[data-band-shown]]/stat-tile-group:block"
+      class="relative mt-(--spacing-xs) hidden h-12 shrink-0 data-[band-row]:block"
     >
       <SparkChart
         :values="GHOST_TREND"

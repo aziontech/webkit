@@ -37,7 +37,7 @@ describe('StatTileGroup', () => {
     const band = view.getByTestId('cautioned__empty')
     expect(band).toHaveAttribute('data-band', 'not-enough-data')
     expect(band).not.toHaveAttribute('data-band-shown')
-    expect(band.className).toContain('group-has-[[data-band-shown]]/stat-tile-group:block')
+    expect(band).toHaveAttribute('data-band-row')
     expect(view.getByTestId('stat-tile__sparkline')).toHaveAttribute('data-band-shown')
   })
 

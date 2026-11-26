@@ -822,7 +822,7 @@
   {
     "name": "map-chart",
     "path": "src/components/chart/map-chart/map-chart.vue",
-    "limit": "18.7 KB",
+    "limit": "18.75 KB",
     "entryOnly": true
   },
   {

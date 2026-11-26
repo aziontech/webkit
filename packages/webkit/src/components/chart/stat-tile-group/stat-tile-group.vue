@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, useAttrs } from 'vue'
+  import { computed, provide, readonly, ref, useAttrs } from 'vue'
 
   import { StatTileGroupInjectionKey } from './injection-key'
 
@@ -23,7 +23,20 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'stat-tile-group')
 
-  provide(StatTileGroupInjectionKey, { grouped: true })
+  const bands = ref(0)
+
+  provide(StatTileGroupInjectionKey, {
+    grouped: true,
+    bands: readonly(bands),
+    showBand: () => {
+      bands.value += 1
+      let counted = true
+      return () => {
+        if (counted) bands.value -= 1
+        counted = false
+      }
+    }
+  })
 </script>
 
 <template>

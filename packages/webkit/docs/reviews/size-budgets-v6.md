@@ -3063,3 +3063,7 @@ Budget-raise: log-viewer-steps 32.95 KB → 33.1 KB (measured 33.06 KB): the Eng
 ## Model picker on phones (2026-11-25)
 
 Budget-raise: prompt-input-model-picker 17.75 KB → 20 KB (measured 19.96 KB): below `md` the picker shows an icon-only trigger that opens a bottom-sheet `Dialog` with provider sections (owner request with phone screenshots). The `Dialog` part loads on first open, but splitting it out moves the modules it shares with the popover into a chunk the entry loads up front (18.04 KB with the dialog stubbed, 19.96 KB with it), and the phone trigger adds 0.3 KB.
+
+## Console type set in the map chart (2026-11-26)
+
+Budget-raise: map-chart 18.7 KB → 18.75 KB (measured 18.70 KB, a few bytes over in CI): it renders EmptyState, which switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size (18.66 KB before CT-1).
