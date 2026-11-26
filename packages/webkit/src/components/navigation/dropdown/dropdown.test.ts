@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/dropdown/Dropdown.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -71,6 +71,13 @@ const getOptions = () =>
     document.body.querySelectorAll('[role="menuitem"], [role="menuitemradio"]')
   ) as HTMLElement[]
 
+async function pressKey(target: Element, key: string, shiftKey = false): Promise<boolean> {
+  const event = new KeyboardEvent('keydown', { key, shiftKey, bubbles: true, cancelable: true })
+  target.dispatchEvent(event)
+  await nextTick()
+  return event.defaultPrevented
+}
+
 const getPopup = () =>
   document.body.querySelector('[data-testid="navigation-dropdown__popup"]') as HTMLElement | null
 
@@ -105,6 +112,9 @@ async function waitForOpen(count: number) {
     expect(getPanel()).not.toBeNull()
     expect(getOptions()).toHaveLength(count)
   })
+  // Vue ignores a bubbled event stamped in the same millisecond its listener was
+  // attached, so let the clock tick before keyboard events reach the popup handler.
+  await new Promise((resolve) => setTimeout(resolve, 2))
 }
 
 afterEach(() => {
@@ -260,9 +270,141 @@ describe('Dropdown (compound / overlay)', () => {
 
     const footer = document.body.querySelector('[data-testid="footer-action"]') as HTMLElement
     footer.focus()
-    await fireEvent.keyDown(footer, { key: 'Tab' })
-
+    expect(await pressKey(footer, 'Tab')).toBe(true)
     await waitFor(() => expect(getPanel()).toBeNull())
+    expect(document.activeElement).toBe(getByTestId('navigation-dropdown__trigger'))
+  })
+
+  it('closes and returns focus to the trigger on Shift+Tab from the menu, the first tab stop', async () => {
+    const { getByTestId } = render(Host)
+    await fireEvent.click(getByTestId('navigation-dropdown__trigger'))
+    await waitForOpen(3)
+
+    const first = getOptions()[0]
+    await waitFor(() => expect(document.activeElement).toBe(first))
+    expect(await pressKey(first, 'Tab', true)).toBe(true)
+    await waitFor(() => expect(getPanel()).toBeNull())
+    expect(document.activeElement).toBe(getByTestId('navigation-dropdown__trigger'))
+  })
+
+  it('skips footer controls that are not tabbable (tabindex=-1, hidden, inside a disabled fieldset)', async () => {
+    render(
+      defineComponent({
+        setup() {
+          return () =>
+            h(Dropdown, null, {
+              default: () => [
+                h(DropdownTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+                h(DropdownGroup, null, () => [h(DropdownOption, { value: 'a', label: 'A' })])
+              ],
+              bottom: () => [
+                h('button', { type: 'button', tabindex: -1 }, 'Skipped negative'),
+                h('button', { type: 'button', hidden: true }, 'Skipped hidden'),
+                h('fieldset', { disabled: true }, [h('button', { type: 'button' }, 'Skipped')]),
+                h('button', { type: 'button', 'data-testid': 'reachable' }, 'Reachable')
+              ]
+            })
+        }
+      })
+    )
+    await fireEvent.click(screen.getByTestId('navigation-dropdown__trigger'))
+    await waitForOpen(1)
+
+    const option = getOptions()[0]
+    await waitFor(() => expect(document.activeElement).toBe(option))
+    await fireEvent.keyDown(option, { key: 'Tab' })
+    expect(document.activeElement).toBe(screen.getByTestId('reachable'))
+  })
+
+  it('leaves Home and End to a text field in the top slot', async () => {
+    render(
+      defineComponent({
+        setup() {
+          return () =>
+            h(Dropdown, null, {
+              default: () => [
+                h(DropdownTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+                h(DropdownGroup, null, () => [
+                  h(DropdownOption, { value: 'a', label: 'A' }),
+                  h(DropdownOption, { value: 'b', label: 'B' })
+                ])
+              ],
+              top: () =>
+                h('input', { type: 'text', 'aria-label': 'Search', 'data-testid': 'search' })
+            })
+        }
+      })
+    )
+    await fireEvent.click(screen.getByTestId('navigation-dropdown__trigger'))
+    await waitForOpen(2)
+
+    const search = screen.getByTestId('search')
+    search.focus()
+    expect(await pressKey(search, 'Home')).toBe(false)
+    expect(await pressKey(search, 'End')).toBe(false)
+    expect(document.activeElement).toBe(search)
+
+    expect(await pressKey(search, 'ArrowDown')).toBe(true)
+    expect(document.activeElement).toBe(getOptions()[0])
+  })
+
+  it('treats more than one selected option in a set as checked and focuses the first one on open', async () => {
+    render(
+      defineComponent({
+        setup() {
+          return () =>
+            h(Dropdown, null, () => [
+              h(DropdownTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+              h(DropdownGroup, null, () => [
+                h(DropdownOption, { value: 'a', label: 'A' }),
+                h(DropdownOption, { value: 'b', label: 'B', selected: true }),
+                h(DropdownOption, { value: 'c', label: 'C', selected: true })
+              ])
+            ])
+        }
+      })
+    )
+    await fireEvent.click(screen.getByTestId('navigation-dropdown__trigger'))
+    await waitForOpen(3)
+
+    const [a, b, c] = getOptions()
+    expect(a.getAttribute('aria-checked')).toBe('false')
+    expect(b.getAttribute('aria-checked')).toBe('true')
+    expect(c.getAttribute('aria-checked')).toBe('true')
+    await waitFor(() => expect(document.activeElement).toBe(b))
+  })
+
+  it('moves focus back into the panel when the focused option is removed while open', async () => {
+    const items = ref(['a', 'b', 'c'])
+    render(
+      defineComponent({
+        setup() {
+          return () =>
+            h(Dropdown, null, () => [
+              h(DropdownTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+              h(DropdownGroup, null, () =>
+                items.value.map((value) => h(DropdownOption, { key: value, value, label: value }))
+              )
+            ])
+        }
+      })
+    )
+    await fireEvent.click(screen.getByTestId('navigation-dropdown__trigger'))
+    await waitForOpen(3)
+
+    const last = getOptions()[2]
+    last.focus()
+    items.value = ['a', 'b']
+
+    await waitFor(() => expect(getOptions()).toHaveLength(2))
+    await waitFor(() => expect(document.activeElement).toBe(getOptions()[0]))
+
+    await fireEvent.keyDown(document.activeElement as HTMLElement, { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(getOptions()[1])
+
+    await fireEvent.keyDown(document.activeElement as HTMLElement, { key: 'Escape' })
+    await waitFor(() => expect(getPanel()).toBeNull())
+    expect(document.activeElement).toBe(screen.getByTestId('navigation-dropdown__trigger'))
   })
 
   it('closes on Escape from the footer action and returns focus to the trigger', async () => {
@@ -448,7 +590,15 @@ describe('Dropdown (compound / overlay)', () => {
     expect(selected.hasAttribute('aria-current')).toBe(false)
     expect(selected.hasAttribute('data-selected')).toBe(true)
 
-    options
+    const groups = Array.from(document.body.querySelectorAll('[role="group"]')) as HTMLElement[]
+    const accountOptions = within(groups[0]).getAllByRole('menuitem')
+    expect(accountOptions.map((o) => o.textContent?.trim())).toEqual(['Profile', 'Settings'])
+    accountOptions.forEach((o) => expect(o.hasAttribute('aria-checked')).toBe(false))
+
+    const workspaceOptions = Array.from(
+      groups[1].querySelectorAll('[role="menuitem"], [role="menuitemradio"]')
+    ) as HTMLElement[]
+    workspaceOptions
       .filter((o) => o !== selected)
       .forEach((o) => {
         expect(o.getAttribute('role')).toBe('menuitemradio')

@@ -446,7 +446,7 @@ export const WithTopAndBottomSlots = {
       story: { inline: false, iframeHeight: '360px' },
       description: {
         story:
-          'Root `top` and `bottom` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and sit outside the `role="menu"` list, so a `Button` or link in the footer is valid inside the panel. Opening the panel focuses the `selected` option, which screen readers announce as the checked `menuitemradio`; `Tab` moves to the footer action without closing the panel and `Shift+Tab` returns to the menu.'
+          'Root `top` and `bottom` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and sit outside the `role="menu"` list, so a `Button` or link in the footer is valid inside the panel. The `selected` option is announced as the checked `menuitemradio`. This demo is forced open, so nothing is focused on load: when a dropdown is opened from its trigger, focus lands on the selected option. From a focused option, `Tab` reaches the footer action without closing the panel and `Shift+Tab` returns to the menu.'
       },
       source: {
         code: toSfc(

@@ -19,7 +19,11 @@
     DropdownPlacement,
     DropdownPlacementInput
   } from './injection-key'
-  import { DropdownInjectionKey } from './injection-key'
+  import {
+    createDropdownSelectionScope,
+    DropdownInjectionKey,
+    DropdownSelectionScopeKey
+  } from './injection-key'
 
   defineOptions({
     name: 'Dropdown',
@@ -68,14 +72,6 @@
   const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
   const bodyTarget = ref<globalThis.HTMLElement | null>(null)
   const groupCount = ref(0)
-  const selectedKeys = ref(new Set<symbol>())
-
-  const hasSelection = computed(() => selectedKeys.value.size > 0)
-
-  function setOptionSelected(key: symbol, selected: boolean) {
-    if (selected) selectedKeys.value.add(key)
-    else selectedKeys.value.delete(key)
-  }
 
   watch(panelBodyRef, (el) => {
     if (el) bodyTarget.value = el
@@ -130,6 +126,19 @@
   const TABBABLE_SELECTOR =
     'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
+  const NON_TEXT_INPUT_TYPES = [
+    'button',
+    'checkbox',
+    'color',
+    'file',
+    'hidden',
+    'image',
+    'radio',
+    'range',
+    'reset',
+    'submit'
+  ]
+
   function getEnabledOptions(): globalThis.HTMLElement[] {
     const menu = menuRef.value
     if (!menu) return []
@@ -155,9 +164,42 @@
     target?.focus({ preventScroll: true })
   }
 
+  function isTabbable(el: globalThis.HTMLElement): boolean {
+    if (el.tabIndex < 0) return false
+    if (el.matches(':disabled')) return false
+    if (el.closest('[hidden], [inert]')) return false
+    return el.getClientRects().length > 0
+  }
+
   function getRegionTabbables(region: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
     if (!region) return []
-    return Array.from(region.querySelectorAll<globalThis.HTMLElement>(TABBABLE_SELECTOR))
+    return Array.from(region.querySelectorAll<globalThis.HTMLElement>(TABBABLE_SELECTOR)).filter(
+      isTabbable
+    )
+  }
+
+  function isTextEntry(target: globalThis.EventTarget | null): boolean {
+    if (target instanceof globalThis.HTMLTextAreaElement) return true
+    if (target instanceof globalThis.HTMLInputElement) {
+      return !NON_TEXT_INPUT_TYPES.includes(target.type)
+    }
+    return target instanceof globalThis.HTMLElement && target.isContentEditable
+  }
+
+  function closeAndFocusTrigger() {
+    setOpen(false)
+    focusTrigger()
+  }
+
+  function recoverFocus() {
+    nextTick(() => {
+      if (!isOpenState.value) return
+      const active = getActiveElement()
+      if (active && panelRef.value?.contains(active)) return
+      const options = getEnabledOptions()
+      const target = getSelectedOption(options) ?? options[0] ?? panelRef.value
+      target?.focus({ preventScroll: true })
+    })
   }
 
   function getMenuStop(): globalThis.HTMLElement | null {
@@ -185,7 +227,8 @@
     }
     const nextIndex = index + (event.shiftKey ? -1 : 1)
     if (nextIndex < 0 || nextIndex >= stops.length) {
-      setOpen(false)
+      event.preventDefault()
+      closeAndFocusTrigger()
       return
     }
     event.preventDefault()
@@ -232,6 +275,7 @@
   }
 
   function onPanelKeydown(event: globalThis.KeyboardEvent) {
+    if ((event.key === 'Home' || event.key === 'End') && isTextEntry(event.target)) return
     if (event.key === 'ArrowDown') {
       event.preventDefault()
       focusNextOption()
@@ -246,8 +290,7 @@
       focusLastOption()
     } else if (event.key === 'Escape') {
       event.preventDefault()
-      setOpen(false)
-      focusTrigger()
+      closeAndFocusTrigger()
     } else if (event.key === 'Tab') {
       onPanelTab(event)
     }
@@ -367,8 +410,7 @@
     triggerRef,
     panelRef,
     panelBodyRef: bodyTarget,
-    hasSelection,
-    setOptionSelected,
+    recoverFocus,
     setOpen,
     selectOption,
     registerGroup,
@@ -379,6 +421,8 @@
     focusPrevOption,
     focusTrigger
   })
+
+  provide(DropdownSelectionScopeKey, createDropdownSelectionScope())
 
   const teleportReady = useMounted()
 </script>

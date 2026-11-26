@@ -24,7 +24,9 @@ const panel = () =>
   document.body.querySelector<HTMLElement>('[data-testid="actions-split-button__menu__panel"]')
 
 const options = () =>
-  Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[]
+  Array.from(
+    document.body.querySelectorAll('[role="menuitem"], [role="menuitemradio"]')
+  ) as HTMLElement[]
 
 const host = (props: Record<string, unknown> = {}) =>
   defineComponent({
@@ -225,6 +227,14 @@ describe('SplitButton (joined command + menu overlay)', () => {
     await openMenu(view)
     const selected = options().find((row) => row.textContent?.includes('Deploy to staging'))
     expect(selected?.hasAttribute('data-selected')).toBe(true)
+    expect(selected?.getAttribute('role')).toBe('menuitemradio')
+    expect(selected?.getAttribute('aria-checked')).toBe('true')
+    options()
+      .filter((row) => row !== selected)
+      .forEach((row) => {
+        expect(row.getAttribute('role')).toBe('menuitemradio')
+        expect(row.getAttribute('aria-checked')).toBe('false')
+      })
   })
 
   // ---- Suppression: disabled / loading ---------------------------------------------

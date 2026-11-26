@@ -9369,12 +9369,12 @@
         {
           "name": "top",
           "scope": "—",
-          "notes": "Sticky region rendered above the scrollable group list (e.g. search input)."
+          "notes": "Sticky region rendered above the scrollable group list (e.g. search input). Rendered inside the panel but outside the `role=\"menu\"` element, so form controls placed here do not break the menu's owned-children contract; reached with `Tab` / `Shift+Tab`."
         },
         {
           "name": "bottom",
           "scope": "—",
-          "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
+          "notes": "Sticky region rendered below the scrollable group list (e.g. a footer action such as a `Button` or link). Rendered inside the panel but outside the `role=\"menu\"` element, so a non-menu control placed here does not break the menu's owned-children contract; reached with `Tab` from the menu without closing the panel, and `Shift+Tab` returns to the menu. Activating a control here does not close the panel — the consumer closes it through `v-model:open` when the action requires it."
         }
       ],
       "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
@@ -9439,12 +9439,12 @@
         {
           "name": "top",
           "scope": "—",
-          "notes": "Sticky region rendered above the scrollable group list (e.g. search input)."
+          "notes": "Sticky region rendered above the scrollable group list (e.g. search input). Rendered inside the panel but outside the `role=\"menu\"` element, so form controls placed here do not break the menu's owned-children contract; reached with `Tab` / `Shift+Tab`."
         },
         {
           "name": "bottom",
           "scope": "—",
-          "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
+          "notes": "Sticky region rendered below the scrollable group list (e.g. a footer action such as a `Button` or link). Rendered inside the panel but outside the `role=\"menu\"` element, so a non-menu control placed here does not break the menu's owned-children contract; reached with `Tab` from the menu without closing the panel, and `Shift+Tab` returns to the menu. Activating a control here does not close the panel — the consumer closes it through `v-model:open` when the action requires it."
         }
       ],
       "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
