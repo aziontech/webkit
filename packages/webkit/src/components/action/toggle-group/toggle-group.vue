@@ -37,6 +37,8 @@
       disabled?: boolean
       /** Form field name: a hidden input carries the selected value, so a native form submits it. */
       name?: string
+      /** Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name. */
+      showLabels?: boolean
     }>(),
     {
       options: () => [],
@@ -45,7 +47,8 @@
       size: 'large',
       fluid: false,
       disabled: false,
-      name: ''
+      name: '',
+      showLabels: true
     }
   )
 
@@ -72,16 +75,15 @@
 
   const normalizedOptions = computed(() =>
     props.options
-      .filter((option): option is ToggleGroupOption =>
-        Boolean(option && typeof option === 'object')
-      )
+      .filter((option): option is ToggleGroupOption => typeof option === 'object' && !!option)
       .map((option, index) => ({
         label: String(
           option.label ?? option.value ?? t('toggleGroup.option', { index: index + 1 })
         ),
         value: String(option.value ?? option.label ?? index),
         disabled: props.disabled || Boolean(option.disabled),
-        locked: Boolean(option.locked)
+        locked: Boolean(option.locked),
+        icon: option.icon ?? ''
       }))
   )
 
@@ -283,15 +285,15 @@
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
   /**
-   * One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A
-   * number value is coerced to its string. `locked` draws the trailing lock icon; `disabled` alone draws
-   * none.
+   * One segment, typed with the model's union. A number value becomes its string; `locked` draws a lock
+   * after the label, `disabled` alone draws none; `icon` is an Azion icon class drawn before the label.
    */
   export type ToggleGroupOption<TOptionValue extends string | number = string | number> = {
     label?: string | number
     value?: TOptionValue
     disabled?: boolean
     locked?: boolean
+    icon?: string
   }
 
   /** Size token. Sets the group's own height on the 28 / 32 / 40 rhythm. */
@@ -328,6 +330,7 @@
       :disabled="option.disabled"
       :data-testid="`${testId}__option`"
       :data-state="option.value === selectedValue ? 'active' : 'inactive'"
+      :title="!showLabels && option.icon ? option.label : undefined"
       :data-disabled="option.disabled ? '' : undefined"
       :data-locked="option.locked || null"
       :class="OPTION_CLASS"
@@ -339,7 +342,21 @@
         data-slot="touch-target"
         class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
       />
-      <span class="min-w-0 wrap-anywhere">{{ option.label }}</span>
+      <i
+        v-if="option.icon"
+        :class="[option.icon, 'shrink-0']"
+        aria-hidden="true"
+      />
+      <span
+        v-if="showLabels || !option.icon"
+        class="min-w-0 wrap-anywhere"
+        >{{ option.label }}</span
+      >
+      <span
+        v-else
+        class="sr-only"
+        >{{ option.label }}</span
+      >
       <i
         v-if="option.locked"
         class="az az-lock shrink-0 text-(--text-disabled)"

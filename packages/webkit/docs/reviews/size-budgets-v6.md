@@ -3021,3 +3021,41 @@ Budget-raise: video-player 12.8 KB → 12.85 KB (measured 12.80 KB): it renders 
 Budget-raise: image-gallery 27.8 KB → 27.85 KB (measured 27.81 KB): it renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size, so a console screen never titles above 16px.
 
 Budget-raise: css-console 25.25 KB → 25.35 KB (measured 25.26 KB after rebasing on the alert tints): the console type set (CT-1) adds `text-title-nested` and the `in-data-[type-set=console]:` title utilities of EmptyState, Dialog.Title and Drawer.Title.
+
+## Model picker favorites and footer (2026-11-25)
+
+Budget-raise: prompt-input-model-picker 16.15 KB → 17.75 KB (measured 17.70 KB): each model row has a star that adds it to the favorites (`v-model:favoriteKeys`), with a lazy Tooltip naming the action, the star at the top of the provider rail filters to the favorites, and the panel takes a `footer` slot for a bar under its columns.
+
+Budget-raise: prompt-input 16.05 KB → 16.25 KB (measured 16.20 KB): the compound attaches the new `PromptInput.AccessPicker` part (the agent's access mode, such as Supervised or Full access) as an async component.
+
+Budget-raise: date-range-picker 58.4 KB → 58.45 KB (measured 58.42 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: property-filter 37.3 KB → 37.4 KB (measured 37.39 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: collection-preferences 33.15 KB → 33.25 KB (measured 33.21 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: console-trace-scene 75.15 KB → 75.2 KB (measured 75.15 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: article-index-section 38.6 KB → 38.75 KB (measured 38.72 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: console-showcase-section 22.35 KB → 22.45 KB (measured 22.42 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: pricing-plans-section 22.3 KB → 22.35 KB (measured 22.31 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: locales-pt-BR 13.05 KB → 13.1 KB (measured 13.06 KB): the pt-BR catalog gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: locales-es 13.15 KB → 13.2 KB (measured 13.18 KB): the es catalog gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-root 12.15 KB → 12.2 KB (measured 12.18 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-attach-button 6.9 KB → 6.95 KB (measured 6.93 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-dictate-button 5.7 KB → 5.8 KB (measured 5.75 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-context-picker 16.35 KB → 16.4 KB (measured 16.38 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: prompt-input-tools 19.15 KB → 19.2 KB (measured 19.19 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: log-viewer 36.95 KB → 37.05 KB (measured 37.01 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.
+
+Budget-raise: log-viewer-steps 32.95 KB → 33.1 KB (measured 33.06 KB): the English catalog it bundles gained the model picker favorites strings (Favorites, Add to favorites, Remove from favorites, No favorites yet, Providers) and the access picker's Permissions heading.

@@ -3,14 +3,14 @@ name: toggle-group
 category: action
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 171ceaca9918037b9b856d612e0ce9b14d497547e1f6d9399bca1e131f946d37
+checksum: c23ec331d84d51d173d9e8e9cc59b8e36bd25c1f2f4cbfa85bf5e234274abe98
 created: 2026-11-09
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 ---
 
 # ToggleGroup — Component Spec
@@ -79,15 +79,16 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## Props
 
-| Prop           | Type                                                                                                                   | Default     | Required | JSDoc                                                                                                                    |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `options`      | `ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`) | `[]`        | false    | Segmented choices shown as a mutually exclusive group.                                                                   |
-| `ariaLabel`    | `string`                                                                                                               | `''`        | false    | Accessible name when no visible group label is associated.                                                               |
-| `defaultValue` | `string`                                                                                                               | `undefined` | false    | Initial selection when `v-model` is not set.                                                                             |
-| `size`         | `'small' \| 'medium' \| 'large'`                                                                                       | `'large'`   | false    | Size token, on the same 28 / 32 / 40 rhythm every other control uses.                                                    |
-| `fluid`        | `boolean`                                                                                                              | `false`     | false    | Stretches the group to its container and lets the options share that width.                                              |
-| `disabled`     | `boolean`                                                                                                              | `false`     | false    | Disables every option of the group.                                                                                      |
-| `name`         | `string`                                                                                                               | `''`        | false    | Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out. |
+| Prop           | Type                                                                                                                                  | Default     | Required | JSDoc                                                                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`      | `ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean; icon?: string }`) | `[]`        | false    | Segmented choices shown as a mutually exclusive group.                                                                                            |
+| `ariaLabel`    | `string`                                                                                                                              | `''`        | false    | Accessible name when no visible group label is associated.                                                                                        |
+| `defaultValue` | `string`                                                                                                                              | `undefined` | false    | Initial selection when `v-model` is not set.                                                                                                      |
+| `size`         | `'small' \| 'medium' \| 'large'`                                                                                                      | `'large'`   | false    | Size token, on the same 28 / 32 / 40 rhythm every other control uses.                                                                             |
+| `fluid`        | `boolean`                                                                                                                             | `false`     | false    | Stretches the group to its container and lets the options share that width.                                                                       |
+| `disabled`     | `boolean`                                                                                                                             | `false`     | false    | Disables every option of the group.                                                                                                               |
+| `name`         | `string`                                                                                                                              | `''`        | false    | Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out.                          |
+| `showLabels`   | `boolean`                                                                                                                             | `true`      | false    | Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name and its hover title. |
 
 **Generic.** Props stay an inline literal in `defineProps` because the component is generic (`TValue`): a named `interface Props` inside a generic `<script setup>` fails declaration emit (TS4025).
 
@@ -128,22 +129,22 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                                                        |
-| --------------------------------- | ---------------------------------------------------------------------------------------- |
-| typography (small, medium)        | `.text-label-sm`                                                                         |
-| typography (large)                | `.text-label-md`                                                                         |
-| height                            | `min-h-7` (small) · `min-h-8` (medium) · `min-h-10` (large): one row; a wrapped group grows |
-| group surface                     | `var(--bg-surface)`                                                                      |
-| group border                      | `var(--border-muted)`                                                                    |
-| group padding / gap               | `var(--spacing-2xs)`                                                                     |
-| segment padding.x                 | `var(--spacing-xs)` (small) · `var(--spacing-sm)` (medium) · `var(--spacing-md)` (large) |
-| segment gap (label to lock icon)  | `var(--spacing-xs)`                                                                      |
-| shape (group, segment, indicator) | `var(--shape-button)`                                                                    |
-| indicator surface                 | `var(--bg-selected)`                                                                     |
-| text (selected)                   | `var(--text-default)`                                                                    |
-| text (unselected)                 | `var(--text-muted)`                                                                      |
+| Region                            | Token (DESIGN.md)                                                                             |
+| --------------------------------- | --------------------------------------------------------------------------------------------- |
+| typography (small, medium)        | `.text-label-sm`                                                                              |
+| typography (large)                | `.text-label-md`                                                                              |
+| height                            | `min-h-7` (small) · `min-h-8` (medium) · `min-h-10` (large): one row; a wrapped group grows   |
+| group surface                     | `var(--bg-surface)`                                                                           |
+| group border                      | `var(--border-muted)`                                                                         |
+| group padding / gap               | `var(--spacing-2xs)`                                                                          |
+| segment padding.x                 | `var(--spacing-xs)` (small) · `var(--spacing-sm)` (medium) · `var(--spacing-md)` (large)      |
+| segment gap (label to lock icon)  | `var(--spacing-xs)`                                                                           |
+| shape (group, segment, indicator) | `var(--shape-button)`                                                                         |
+| indicator surface                 | `var(--bg-selected)`                                                                          |
+| text (selected)                   | `var(--text-default)`                                                                         |
+| text (unselected)                 | `var(--text-muted)`                                                                           |
 | disabled segment                  | transparent / `var(--text-disabled)` (no fill, so it never reads as a second selected option) |
-| ring                              | `var(--ring-color)`                                                                      |
+| ring                              | `var(--ring-color)`                                                                           |
 
 ## Theme gaps
 
@@ -156,6 +157,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` with `focus-visible:outline-none` on each segment.
 - Keyboard map: the group is one tab stop (roving `tabindex`): `Tab` lands on the selected segment, or on the first enabled one when nothing is selected, and the next `Tab` leaves the group; `Enter` / `Space` select the focused segment; `ArrowRight` / `ArrowDown` and `ArrowLeft` / `ArrowUp` move the selection to the next / previous enabled segment, wrapping at the ends, and `Home` / `End` to the first / last enabled one (the APG radio group map), and focus moves with it so the newly checked radio is announced.
 - ARIA: root `role="radiogroup"` named by `ariaLabel` (`aria-label` is omitted when it is empty) or by a consumer `aria-labelledby` pointing at a visible label; each segment `role="radio"` with `aria-checked`; the indicator and the lock icon are `aria-hidden="true"`.
+- Icon-only segments (`showLabels` false): the icon is `aria-hidden="true"` and the option label stays in the segment as visually hidden text, so the radio keeps its accessible name; the same label is the segment's `title`.
 - Disabled options use the native `disabled` attribute, so they are skipped by arrow navigation, never take the tab stop and cannot be clicked.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
 - `motion-reduce:transition-none` on the segment color transition and on the indicator slide.
@@ -193,6 +195,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Default
 - WithDisabledOption — a group with one disabled option, showing the lock affordance and that arrow navigation skips it. Justified: disabled is per option; the root `disabled` prop disables the whole group the same way.
 - Sizes — composite story rendering every `size` value side-by-side.
+- Icons — options with an `icon`: one group shows icon and label, one is icon-only (`showLabels` false). Justified: the icon-only form changes how each option is named and cannot be shown in the Default frame.
 - Fluid — the group with `fluid` inside a wider container. Justified: `fluid` changes the layout of the whole group and cannot be shown in the Default frame.
 
 ## Constraints — DO NOT

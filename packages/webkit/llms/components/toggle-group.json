@@ -41,7 +41,7 @@
  "props": [
   {
    "name": "options",
-   "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
+   "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean; icon?: string }`)",
    "default": "[]",
    "required": "false",
    "doc": "Segmented choices shown as a mutually exclusive group."
@@ -87,6 +87,13 @@
    "default": "''",
    "required": "false",
    "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out."
+  },
+  {
+   "name": "showLabels",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name and its hover title."
   },
   {
    "name": "modelValue",

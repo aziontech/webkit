@@ -1,6 +1,7 @@
 import { defineAsyncComponent } from 'vue'
 
 import PromptInput from './prompt-input.vue'
+import type PromptInputAccessPicker from './prompt-input-access-picker/prompt-input-access-picker.vue'
 import PromptInputAttachButton from './prompt-input-attach-button/prompt-input-attach-button.vue'
 import type PromptInputContextPicker from './prompt-input-context-picker/prompt-input-context-picker.vue'
 import PromptInputDictateButton from './prompt-input-dictate-button/prompt-input-dictate-button.vue'
@@ -12,6 +13,7 @@ type CompoundPromptInput = typeof PromptInput & {
   DictateButton: typeof PromptInputDictateButton
   ModelPicker: typeof PromptInputModelPicker
   ContextPicker: typeof PromptInputContextPicker
+  AccessPicker: typeof PromptInputAccessPicker
   Tools: typeof PromptInputTools
 }
 
@@ -24,7 +26,10 @@ const PromptInputRoot = Object.assign(PromptInput, {
   ContextPicker: defineAsyncComponent(
     () => import('./prompt-input-context-picker/prompt-input-context-picker.vue')
   ),
-  Tools: defineAsyncComponent(() => import('./prompt-input-tools/prompt-input-tools.vue'))
+  Tools: defineAsyncComponent(() => import('./prompt-input-tools/prompt-input-tools.vue')),
+  AccessPicker: defineAsyncComponent(
+    () => import('./prompt-input-access-picker/prompt-input-access-picker.vue')
+  )
 }) as CompoundPromptInput
 
 export default PromptInputRoot
@@ -38,6 +43,7 @@ export type {
   PromptInputRejectReason,
   PromptInputStatus
 } from './prompt-input.vue'
+export type { PromptInputAccessPickerProps } from './prompt-input-access-picker/prompt-input-access-picker.vue'
 export type { PromptInputAttachButtonProps } from './prompt-input-attach-button/prompt-input-attach-button.vue'
 export type { PromptInputContextPickerProps } from './prompt-input-context-picker/prompt-input-context-picker.vue'
 export type {

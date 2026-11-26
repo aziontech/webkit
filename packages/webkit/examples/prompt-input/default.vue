@@ -2,12 +2,17 @@
   import Button from '@aziontech/webkit/button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
   const prompt = ref('')
   const files = ref([])
   const model = ref('gemini-4-neon')
   const mode = ref('medium')
+  const favorites = ref(['gemini-4-neon', 'claude-opus-4-5'])
+  const speed = ref('standard')
+  const ultracode = ref(false)
+  const access = ref('full')
   const project = ref('')
   const tools = ref([])
   const last = ref('')
@@ -40,6 +45,36 @@
     { value: 'medium', label: 'Medium' },
     { value: 'high', label: 'High' },
     { value: 'extra', label: 'Extra' }
+  ]
+  const speeds = [
+    { value: 'standard', label: 'Standard' },
+    { value: 'fast', label: 'Fast', icon: 'az az-bolt' }
+  ]
+  const accessModes = [
+    {
+      value: 'supervised',
+      label: 'Supervised',
+      icon: 'az az-lock',
+      description: 'Ask before commands and file changes.'
+    },
+    {
+      value: 'edits',
+      label: 'Auto-accept edits',
+      icon: 'az az-pencil',
+      description: 'Auto-approve edits, ask before other actions.'
+    },
+    {
+      value: 'auto',
+      label: 'Auto',
+      icon: 'az az-shield',
+      description: 'Approve routine actions, ask before the rest.'
+    },
+    {
+      value: 'full',
+      label: 'Full access',
+      icon: 'az az-lock-open',
+      description: 'Allow commands and edits without prompts.'
+    }
   ]
   const projects = [
     { value: 'acme-store', label: 'acme-store', description: 'Storefront and checkout' },
@@ -112,11 +147,33 @@
         <PromptInput.ModelPicker
           v-model="model"
           v-model:mode="mode"
+          v-model:favorite-keys="favorites"
           :providers="providers"
           :models="models"
           :modes="modes"
           mode-label="Thinking Level"
-        />
+        >
+          <template #footer>
+            <ToggleGroup
+              v-model="speed"
+              :options="speeds"
+              size="small"
+              aria-label="Response speed"
+            />
+            <Button
+              label="Ultracode"
+              icon="az az-sparkles"
+              :variant="ultracode ? 'secondary' : 'ghost'"
+              size="small"
+              :aria-pressed="ultracode"
+              @click="ultracode = !ultracode"
+            />
+            <PromptInput.AccessPicker
+              v-model="access"
+              :options="accessModes"
+            />
+          </template>
+        </PromptInput.ModelPicker>
         <PromptInput.DictateButton />
       </template>
       <template #footer>

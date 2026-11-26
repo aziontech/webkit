@@ -2089,6 +2089,9 @@ Two behaviour changes need a hand edit:
 - `ToggleGroup`: a disabled option no longer shows the lock by itself; set `locked: true` on the
   options a plan or a permission blocks.
 
+`ToggleGroupOption` also takes an optional `icon`, and `showLabels` false draws icon-only segments
+(`ToggleGroup`); existing options need no change.
+
 ### `Hotspot` is a part of `TutorialPanel`
 
 `Hotspot` (`@aziontech/webkit/hotspot`, from the 6.0 previews) is `TutorialPanelHotspot`

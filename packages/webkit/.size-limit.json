@@ -95,7 +95,7 @@
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "58.4 KB"
+    "limit": "58.45 KB"
   },
   {
     "name": "table-root",
@@ -125,12 +125,12 @@
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "37.3 KB"
+    "limit": "37.4 KB"
   },
   {
     "name": "collection-preferences",
     "path": "src/components/data/collection-preferences/collection-preferences.vue",
-    "limit": "33.15 KB"
+    "limit": "33.25 KB"
   },
   {
     "name": "card",
@@ -466,7 +466,7 @@
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "75.15 KB",
+    "limit": "75.2 KB",
     "entryOnly": true
   },
   {
@@ -503,7 +503,7 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "38.65 KB",
+    "limit": "38.75 KB",
     "entryOnly": true
   },
   {
@@ -526,7 +526,7 @@
   {
     "name": "console-showcase-section",
     "path": "src/components/section/console-showcase-section/console-showcase-section.vue",
-    "limit": "22.35 KB"
+    "limit": "22.45 KB"
   },
   {
     "name": "process-scroll-section",
@@ -571,7 +571,7 @@
   {
     "name": "pricing-plans-section",
     "path": "src/components/section/pricing-plans-section/pricing-plans-section.vue",
-    "limit": "22.3 KB"
+    "limit": "22.35 KB"
   },
   {
     "name": "feature-scroll-section",
@@ -1158,12 +1158,12 @@
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "13.05 KB"
+    "limit": "13.1 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "13.15 KB"
+    "limit": "13.2 KB"
   },
   {
     "name": "phone-input",
@@ -1278,43 +1278,49 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "16.05 KB",
+    "limit": "16.25 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "12.15 KB",
+    "limit": "12.2 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-attach-button",
     "path": "src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue",
-    "limit": "6.9 KB",
+    "limit": "6.95 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-dictate-button",
     "path": "src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue",
-    "limit": "5.7 KB",
+    "limit": "5.8 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-model-picker",
     "path": "src/components/ai/prompt-input/prompt-input-model-picker/prompt-input-model-picker.vue",
-    "limit": "16.15 KB",
+    "limit": "17.75 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-context-picker",
     "path": "src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue",
-    "limit": "16.35 KB",
+    "limit": "16.4 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "prompt-input-access-picker",
+    "path": "src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue",
+    "limit": "26 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-tools",
     "path": "src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue",
-    "limit": "19.15 KB",
+    "limit": "19.2 KB",
     "entryOnly": true
   },
   {
@@ -1726,7 +1732,7 @@
   {
     "name": "log-viewer",
     "path": "src/components/code/log-viewer/index.ts",
-    "limit": "36.95 KB",
+    "limit": "37.05 KB",
     "entryOnly": true
   },
   {
@@ -1742,7 +1748,7 @@
   {
     "name": "log-viewer-steps",
     "path": "src/components/code/log-viewer/log-viewer-steps.vue",
-    "limit": "33 KB",
+    "limit": "33.1 KB",
     "entryOnly": true
   },
   {

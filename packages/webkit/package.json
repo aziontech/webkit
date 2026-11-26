@@ -285,6 +285,10 @@
       "types": "./types/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue.d.ts",
       "default": "./src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue"
     },
+    "./prompt-input-access-picker": {
+      "types": "./types/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue.d.ts",
+      "default": "./src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue"
+    },
     "./prompt-input-tools": {
       "types": "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts",
       "default": "./src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue"
@@ -2837,6 +2841,9 @@
       ],
       "prompt-input-context-picker": [
         "./types/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue.d.ts"
+      ],
+      "prompt-input-access-picker": [
+        "./types/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue.d.ts"
       ],
       "prompt-input-tools": [
         "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts"

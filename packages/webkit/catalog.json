@@ -5727,6 +5727,7 @@
     "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-model-picker",
     "@aziontech/webkit/prompt-input-context-picker",
+    "@aziontech/webkit/prompt-input-access-picker",
     "@aziontech/webkit/prompt-input-tools"
    ],
    "models": [
@@ -6137,7 +6138,8 @@
    "attached": false,
    "models": [
     "modelValue",
-    "mode"
+    "mode",
+    "favoriteKeys"
    ],
    "surface": "app"
   },
@@ -6147,6 +6149,18 @@
    "kind": "subcomponent",
    "parent": "prompt-input",
    "treeShakeableImport": "@aziontech/webkit/prompt-input-context-picker",
+   "attached": false,
+   "models": [
+    "modelValue"
+   ],
+   "surface": "app"
+  },
+  "prompt-input-access-picker": {
+   "import": "@aziontech/webkit/prompt-input-access-picker",
+   "target": "./src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-access-picker",
    "attached": false,
    "models": [
     "modelValue"
@@ -7042,7 +7056,7 @@
    "props": [
     {
      "name": "options",
-     "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
+     "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean; icon?: string }`)",
      "default": "[]",
      "required": "false",
      "doc": "Segmented choices shown as a mutually exclusive group."
@@ -7088,6 +7102,13 @@
      "default": "''",
      "required": "false",
      "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out."
+    },
+    {
+     "name": "showLabels",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name and its hover title."
     },
     {
      "name": "modelValue",
