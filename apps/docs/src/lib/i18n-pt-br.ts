@@ -230,19 +230,55 @@ export const ptBR: Messages = {
   brandMonochrome: 'Monocromático: preto no branco, branco no escuro.',
   brandKnockout: 'Vazado: sobre um fundo laranja.',
   openIcons: 'Abrir a galeria de ícones',
-  homeTitle: 'Um design system. Todos os componentes, prontos para compor.',
+  homeTitle: 'O design system da Azion, feito para IA.',
   homeLead:
-    'Explore @aziontech/webkit: todos os componentes ao vivo, os blocos feitos com eles, os fundamentos por baixo e os recursos da marca. Tokens, acessibilidade e modo escuro incluídos.',
+    'Componentes, blocos, padrões e fundamentos para o Azion Console, a documentação e o site. Seu agente de IA lê o mesmo catálogo que você navega aqui, e agentes de IA constroem o próprio WebKit.',
   startWithAgents: 'Começar com agentes',
-  exploreTitle: 'Explore a documentação',
-  exploreLead:
-    'Quatro entradas: os fundamentos, todos os componentes, os blocos e os recursos da marca.',
+  pathsTitle: 'Dois caminhos',
+  pathsLead: 'Construa um app com o WebKit, ou melhore o WebKit.',
+  pathBuildTitle: 'Comece a construir',
+  pathBuildBody:
+    'Instale os pacotes, rode npx @aziontech/webkit init e monte suas telas com blocos e componentes. Seu agente de IA ganha o servidor MCP, as orientações e o lint no mesmo passo.',
+  pathBuildLink: 'Primeiros passos',
+  pathContributeTitle: 'Comece a contribuir',
+  pathContributeBody:
+    'O WebKit é construído por agentes de IA. Você abre uma issue no GitHub; agentes pesquisam, escrevem a spec, um segundo agente a revisa, constroem, rodam todas as verificações e a revisão de UI e abrem o pull request. Sem arquivo de design, sem componente feito à mão.',
+  pathContributeLink: 'Como o WebKit é construído',
+  forAi: 'WebKit para IA',
+  aiNav: 'IA',
+  aiPageSummary:
+    'O servidor MCP, o comando de configuração, as orientações que os agentes leem, as verificações que passam e como agentes constroem o próprio WebKit.',
+  aiTitle: 'Seu agente de IA lê o mesmo WebKit que você',
+  aiLead:
+    'Este site é metade. A outra metade é para agentes de IA: um servidor que eles consultam, orientações que carregam e verificações que mantêm o código deles no padrão.',
+  aiMcpTitle: 'Servidor MCP',
+  aiMcpBody:
+    '@aziontech/webkit-mcp responde search_blocks, get_component, list_tokens e validate_usage a partir do catálogo da versão instalada.',
+  aiInitTitle: 'Um comando de configuração',
+  aiInitBody:
+    'npx @aziontech/webkit init configura o servidor MCP, o lint, o tema e as instruções do agente no AGENTS.md.',
+  aiGuidanceTitle: 'Skills, regras e padrões',
+  aiGuidanceBody:
+    'As orientações deste site vão em Markdown dentro do pacote, então o agente lê o padrão da tarefa antes de escrever uma linha.',
+  aiChecksTitle: 'Verificações que seguram o padrão',
+  aiChecksBody:
+    'Os presets de lint, webkit doctor e webkit check falham o build com um import errado, uma cor crua ou um rótulo faltando.',
+  aiAgentTitle: 'Configure seu agente com um prompt',
+  aiAgentBody:
+    'Cole no Claude Code, Cursor, Codex ou ChatGPT. Ele instala o WebKit e roda o init, então o agente conhece os componentes desde a primeira tela.',
+  aiAgentAside: 'Quer ver os detalhes antes?',
+  aiAgentAction: 'Ler WebKit para IA',
+  patterns: 'Padrões',
+  exploreTitle: 'Explore o WebKit',
+  exploreLead: 'Tudo o que o sistema tem, para pessoas e para agentes.',
   exploreFoundations:
     'Tokens, cor, tipografia, idiomas, direita para a esquerda, acessibilidade e teclado.',
   exploreComponents:
     'Todos os componentes por categoria, renderizados ao vivo pelo primeiro exemplo.',
+  explorePatterns: 'Como construir formulários, tabelas, erros, estados e navegação.',
   exploreBlocks: 'Telas inteiras feitas com os componentes, num quadro redimensionável.',
   exploreAssets: 'As versões da marca, ilustrações de produto e ícones.',
+  exploreAi: 'O servidor MCP, o comando de configuração e como agentes constroem o WebKit.',
   whyTitle: 'Um kit move todas as interfaces da Azion',
   whyLead:
     '{components} componentes, {examples} exemplos ao vivo e {blocks} blocos: as mesmas peças do Azion Console, moldadas pelas equipes que as usam todo dia.',
@@ -251,7 +287,7 @@ export const ptBR: Messages = {
     'Fundamentos confiáveis e velocidade que se sente. As equipes param de refazer o básico e entregam o que importa.',
   whyPeopleTitle: 'Feito por quem usa',
   whyPeopleBody:
-    'Designers e engenheiros que constroem na Azion dão forma a ele. Fica melhor a cada vez que vai para o produto real.',
+    'As equipes que constroem na Azion pedem o que precisam, e agentes constroem por um fluxo revisado. Fica melhor a cada vez que vai para o produto real.',
   whyNextTitle: 'Pronto para o que vem',
   whyNextBody:
     'Fundamentos opinativos com padrões componíveis, para o sistema acompanhar a evolução do ofício.',

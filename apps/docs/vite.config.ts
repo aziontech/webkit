@@ -29,6 +29,7 @@ function pageRoutes(): string[] {
     '/components',
     '/blocks',
     '/foundations',
+    '/ai',
     '/assets',
     '/assets/icons',
     ...FOUNDATION_SLUGS.map((slug) => `/foundations/${slug}`),

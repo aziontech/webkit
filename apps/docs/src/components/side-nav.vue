@@ -30,6 +30,7 @@
       start: t.start,
       home: t.homeNav,
       gettingStarted: t.gettingStarted,
+      forAi: t.forAi,
       foundations: t.foundations,
       assets: t.assets,
       brand: t.brand,

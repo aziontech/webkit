@@ -25,6 +25,7 @@ export const routes: RouteRecordRaw[] = [
     name: 'foundation',
     component: () => import('./pages/foundation-page.vue')
   },
+  { path: '/ai', name: 'ai', component: () => import('./pages/ai-page.vue') },
   { path: '/assets', name: 'assets', component: () => import('./pages/assets-page.vue') },
   {
     path: '/assets/icons',

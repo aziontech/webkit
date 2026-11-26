@@ -239,18 +239,55 @@ export const en = {
   brandKnockout: 'Knockout: on an orange fill.',
   openIcons: 'Open the icon gallery',
   homeEyebrow: 'WebKit',
-  homeTitle: 'One design system. Every component, ready to compose.',
+  homeTitle: 'The Azion design system, built for AI.',
   homeLead:
-    'Explore @aziontech/webkit: every component live, the blocks built from them, the foundations underneath and the brand assets. Tokens, accessibility and dark mode built in.',
+    'Components, blocks, patterns and foundations for the Azion Console, docs and site. Your AI agent reads the same catalog you browse here, and AI agents build WebKit itself.',
   startWithAgents: 'Start with agents',
   agentPrompt:
     "Build my UI with the Azion design system. Install @aziontech/webkit, @aziontech/theme and @aziontech/icons, run npx @aziontech/webkit init, import the theme once, and compose the app from WebKit's Vue components and design tokens instead of hand-rolled UI, following each component's documented props and compound API.",
-  exploreTitle: 'Explore the docs',
-  exploreLead: 'Four ways in: the foundations, every component, the blocks and the brand assets.',
+  pathsTitle: 'Two ways in',
+  pathsLead: 'Build an app on WebKit, or make WebKit better.',
+  pathBuildTitle: 'Start building',
+  pathBuildBody:
+    'Install the packages, run npx @aziontech/webkit init and compose your screens from blocks and components. Your AI agent gets the MCP server, the guidance and the lint in the same step.',
+  pathBuildLink: 'Get started',
+  pathContributeTitle: 'Start contributing',
+  pathContributeBody:
+    'WebKit is built by AI agents. You open a GitHub issue; agents research it, write the spec, have a second agent review it, build, run every gate and the UI review, and open the pull request. No design file, no hand-built component.',
+  pathContributeLink: 'How WebKit is built',
+  forAi: 'WebKit for AI',
+  aiNav: 'AI',
+  aiPageSummary:
+    'The MCP server, the setup command, the guidance agents load, the checks they pass, and how agents build WebKit itself.',
+  aiTitle: 'Your AI agent reads the same WebKit you do',
+  aiLead:
+    'This site is half of it. The other half is for AI agents: a server they query, guidance they load and checks that hold their code to the standard.',
+  aiMcpTitle: 'MCP server',
+  aiMcpBody:
+    '@aziontech/webkit-mcp answers search_blocks, get_component, list_tokens and validate_usage from the catalog of the version you installed.',
+  aiInitTitle: 'One setup command',
+  aiInitBody:
+    'npx @aziontech/webkit init wires the MCP server, the lint, the theme and the agent instructions in AGENTS.md.',
+  aiGuidanceTitle: 'Skills, rules and patterns',
+  aiGuidanceBody:
+    'The guidance on this site ships as Markdown in the package, so an agent reads the pattern for the job before it writes a line.',
+  aiChecksTitle: 'Checks that hold the line',
+  aiChecksBody:
+    'The lint presets, webkit doctor and webkit check fail the build on a wrong import, a raw colour or a missing label.',
+  aiAgentTitle: 'Set up your agent in one prompt',
+  aiAgentBody:
+    'Paste it into Claude Code, Cursor, Codex or ChatGPT. It installs WebKit and runs init, so the agent knows the components from the first screen.',
+  aiAgentAside: 'Want the details first?',
+  aiAgentAction: 'Read WebKit for AI',
+  patterns: 'Patterns',
+  exploreTitle: 'Explore WebKit',
+  exploreLead: 'Everything the system holds, for people and for agents.',
   exploreFoundations: 'Tokens, color, type, languages, right-to-left, accessibility and keyboard.',
   exploreComponents: 'Every component by category, rendered live from its first example.',
+  explorePatterns: 'How to build forms, tables, errors, states and navigation.',
   exploreBlocks: 'Whole screens built from the components, in a resizable frame.',
   exploreAssets: 'The brand lockups, product illustrations and icons.',
+  exploreAi: 'The MCP server, the setup command and how agents build WebKit.',
   whyTitle: 'One kit powers every Azion interface',
   whyLead:
     '{components} components, {examples} live examples and {blocks} blocks: the same pieces behind the Azion Console, shaped by the teams who use them every day.',
@@ -259,7 +296,7 @@ export const en = {
     'Foundations you can trust and speed you can feel. Teams stop rebuilding the basics and ship the ideas that matter.',
   whyPeopleTitle: 'Built by the people who use it',
   whyPeopleBody:
-    'Designers and engineers who build at Azion shape it. It gets sharper every time it goes to work in the real product.',
+    'The teams who build at Azion ask for what they need, and agents build it through one reviewed flow. It gets sharper every time it goes to work in the real product.',
   whyNextTitle: 'Ready for what comes next',
   whyNextBody:
     'Opinionated foundations with composable patterns, so the system keeps pace as the craft changes.',
