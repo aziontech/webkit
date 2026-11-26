@@ -6,8 +6,21 @@ export const en = {
   components: 'Components',
   blocks: 'Blocks',
   foundations: 'Foundations',
+  patterns: 'Patterns',
+  patternsLead:
+    'How to build each kind of screen: forms, tables, states, errors, navigation and words. Each page is the same file an AI agent reads.',
+  patternGroups: {
+    screens: 'Whole screens',
+    forms: 'Forms and create flows',
+    data: 'Data',
+    feedback: 'Feedback and states',
+    navigation: 'Navigation and layout',
+    content: 'Content',
+    ai: 'AI',
+    azion: 'Azion APIs'
+  },
   search: 'Search',
-  searchPlaceholder: 'Search components, blocks and foundations…',
+  searchPlaceholder: 'Search components, patterns, blocks and foundations…',
   noResults: 'Nothing matches that search.',
   openNavigation: 'Open navigation',
   navigation: 'Documentation',

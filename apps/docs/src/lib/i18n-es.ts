@@ -11,8 +11,21 @@ export const es: Messages = {
   components: 'Componentes',
   blocks: 'Bloques',
   foundations: 'Fundamentos',
+  patterns: 'Patrones',
+  patternsLead:
+    'Cómo construir cada tipo de pantalla: formularios, tablas, estados, errores, navegación y textos. Cada página es el mismo archivo que lee un agente de IA.',
+  patternGroups: {
+    screens: 'Pantallas enteras',
+    forms: 'Formularios y creación',
+    data: 'Datos',
+    feedback: 'Feedback y estados',
+    navigation: 'Navegación y diseño',
+    content: 'Contenido',
+    ai: 'IA',
+    azion: 'APIs de Azion'
+  },
   search: 'Buscar',
-  searchPlaceholder: 'Buscar componentes, bloques y fundamentos…',
+  searchPlaceholder: 'Buscar componentes, patrones, bloques y fundamentos…',
   noResults: 'Nada coincide con esa búsqueda.',
   openNavigation: 'Abrir navegación',
   navigation: 'Documentación',

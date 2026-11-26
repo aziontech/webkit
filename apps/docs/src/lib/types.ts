@@ -87,6 +87,7 @@ export type DocsIndex = {
   blocks: BlockIndexItem[]
   llmsTxt: boolean
   foundationLlms: Record<string, string>
+  patternLlms: Record<string, string>
   version: string
 }
 

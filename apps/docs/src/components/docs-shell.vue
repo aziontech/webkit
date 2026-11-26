@@ -56,11 +56,12 @@
   const sections = computed(() => [
     { to: '/foundations', label: t.value.foundations },
     { to: '/components', label: t.value.components },
+    { to: '/patterns', label: t.value.patterns },
     { to: '/blocks', label: t.value.blocks },
     { to: '/assets', label: t.value.assets }
   ])
 
-  const COPY_ROUTES = new Set(['foundation', 'assets'])
+  const COPY_ROUTES = new Set(['foundation', 'pattern', 'assets'])
 
   const hasCopyToasts = computed(() => COPY_ROUTES.has(String(route.name)))
 

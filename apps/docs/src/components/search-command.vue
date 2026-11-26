@@ -10,6 +10,7 @@
 
   import { FOUNDATIONS } from '../lib/foundations'
   import { messages } from '../lib/i18n'
+  import { PATTERNS } from '../lib/patterns'
   import { searchKeywords } from '../lib/search'
   import type { DocsIndex } from '../lib/types'
 
@@ -23,6 +24,15 @@
       heading: t.value.foundations,
       items: FOUNDATIONS.map((page) => ({
         to: `/foundations/${page.slug}`,
+        title: page.title,
+        hint: page.summary,
+        keywords: searchKeywords(page.title, page.summary)
+      }))
+    },
+    {
+      heading: t.value.patterns,
+      items: PATTERNS.map((page) => ({
+        to: `/patterns/${page.slug}`,
         title: page.title,
         hint: page.summary,
         keywords: searchKeywords(page.title, page.summary)

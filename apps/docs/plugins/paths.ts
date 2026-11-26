@@ -9,6 +9,7 @@ export const THEME = join(REPO, 'packages/theme')
 export const CATALOG = join(WEBKIT, 'catalog.json')
 export const SPECS = join(REPO, '.specs')
 export const LLMS = join(WEBKIT, 'llms')
+export const SKILLS = join(REPO, 'skills')
 
 export function walk(dir: string, match: (name: string) => boolean, out: string[] = []): string[] {
   if (!existsSync(dir)) return out

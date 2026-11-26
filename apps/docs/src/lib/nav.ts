@@ -1,6 +1,7 @@
 import index from 'virtual:docs-nav'
 
 import { FOUNDATIONS } from './foundations'
+import { PATTERN_GROUPS, PATTERNS } from './patterns'
 import { groupLabel, titleCase } from './words'
 
 export { groupLabel, titleCase, tokenGroupTitle } from './words'
@@ -138,4 +139,14 @@ export function foundationGroups(labels: {
       ]
     }
   ]
+}
+
+export function patternGroups(labels: Record<string, string>): NavGroup[] {
+  return PATTERN_GROUPS.map((group) => ({
+    label: labels[group] ?? titleCase(group),
+    items: PATTERNS.filter((page) => page.group === group).map((page) => ({
+      label: page.title,
+      to: `/patterns/${page.slug}`
+    }))
+  }))
 }

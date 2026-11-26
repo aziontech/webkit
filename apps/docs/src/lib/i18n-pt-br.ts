@@ -11,8 +11,21 @@ export const ptBR: Messages = {
   components: 'Componentes',
   blocks: 'Blocos',
   foundations: 'Fundamentos',
+  patterns: 'Padrões',
+  patternsLead:
+    'Como construir cada tipo de tela: formulários, tabelas, estados, erros, navegação e textos. Cada página é o mesmo arquivo que um agente de IA lê.',
+  patternGroups: {
+    screens: 'Telas inteiras',
+    forms: 'Formulários e criação',
+    data: 'Dados',
+    feedback: 'Feedback e estados',
+    navigation: 'Navegação e layout',
+    content: 'Conteúdo',
+    ai: 'IA',
+    azion: 'APIs da Azion'
+  },
   search: 'Buscar',
-  searchPlaceholder: 'Buscar componentes, blocos e fundamentos…',
+  searchPlaceholder: 'Buscar componentes, padrões, blocos e fundamentos…',
   noResults: 'Nada corresponde a essa busca.',
   openNavigation: 'Abrir navegação',
   navigation: 'Documentação',

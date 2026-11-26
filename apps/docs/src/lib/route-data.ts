@@ -117,5 +117,9 @@ export async function preloadRoute(route: RouteLocationNormalized) {
     const { FOUNDATIONS } = await import('./foundations')
     const page = FOUNDATIONS.find((item) => item.slug === param('slug'))
     if (page?.markdown) await preloadMarkdown(page.markdown)
+  } else if (route.name === 'pattern') {
+    const { PATTERNS } = await import('./patterns')
+    const page = PATTERNS.find((item) => item.slug === param('slug'))
+    if (page) await preloadMarkdown(page.markdown)
   }
 }

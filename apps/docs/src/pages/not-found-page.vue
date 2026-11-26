@@ -13,6 +13,7 @@
 
   const sections = computed(() => [
     { to: '/components', label: t.value.components },
+    { to: '/patterns', label: t.value.patterns },
     { to: '/blocks', label: t.value.blocks },
     { to: '/foundations', label: t.value.foundations }
   ])

@@ -16,6 +16,7 @@ import { docsPlugin } from './plugins/docs-plugin.ts'
 import { fontPreloadPlugin } from './plugins/font-preload.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
 import { localizedRoutes } from './src/lib/locale-path.ts'
+import { PATTERN_SLUGS } from './src/lib/patterns.ts'
 
 function staticRoutes(): string[] {
   const routes = pageRoutes()
@@ -32,6 +33,8 @@ function pageRoutes(): string[] {
     '/assets',
     '/assets/icons',
     ...FOUNDATION_SLUGS.map((slug) => `/foundations/${slug}`),
+    '/patterns',
+    ...PATTERN_SLUGS.map((slug) => `/patterns/${slug}`),
     ...components.map((item) => `/components/${item.name}`),
     ...blocks.map((block) => `/blocks/${block.id}`),
     ...blocks.flatMap((block) =>
