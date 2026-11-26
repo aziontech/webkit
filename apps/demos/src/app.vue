@@ -25,6 +25,7 @@
 
   const consolePages = [
     { label: 'Resources', icon: 'az az-box', href: '/resources' },
+    { label: 'Profile', icon: 'az az-user', href: '/profile' },
     { label: 'Settings', icon: 'az az-settings', href: '/settings' }
   ]
 
@@ -79,6 +80,7 @@
   }
 
   const ACCOUNT_ROUTES: Record<string, string> = {
+    profile: '/profile',
     settings: '/settings',
     'api-keys': '/settings/api-keys',
     upgrade: '/onboarding/plan',
@@ -267,6 +269,17 @@
               <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
             </div>
           </template>
+          <DropdownMenu.Item
+            value="profile"
+            label="Your profile"
+          >
+            <template #trailing>
+              <i
+                class="az az-user"
+                aria-hidden="true"
+              />
+            </template>
+          </DropdownMenu.Item>
           <DropdownMenu.Item
             value="settings"
             label="Account settings"

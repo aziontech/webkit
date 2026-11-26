@@ -87,6 +87,12 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('./pages/account-user-profile-page.vue'),
+    meta: { title: 'Profile', breadcrumbs: [{ label: 'Profile' }] }
+  },
+  {
     path: '/assistant',
     name: 'assistant',
     component: assistantPage,

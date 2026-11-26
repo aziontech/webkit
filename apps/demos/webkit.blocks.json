@@ -108,6 +108,107 @@
         }
       ]
     },
+    "account/account-user-profile": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/account-user-profile-profile-bio-tab.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-bio-tab.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model",
+            "./profile-select.vue": "./account-user-profile-profile-select.vue"
+          },
+          "checksum": "sha256:60371d32ddb23f772a7966cec8bcd938e04d344b137984d9c7396b3f156d18fa"
+        },
+        {
+          "path": "src/blocks/account-user-profile-profile-header.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-header.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:346be3d68e4035e6f4bd48623e14bf7400426a8baa7efc9413fcbeb4b33f66bc"
+        },
+        {
+          "path": "src/blocks/account-user-profile-profile-notifications-tab.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-notifications-tab.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model",
+            "./profile-select.vue": "./account-user-profile-profile-select.vue"
+          },
+          "checksum": "sha256:f23f02cd03810de329d52650797f12ea22581c5645984541f782303ef51490de"
+        },
+        {
+          "path": "src/blocks/account-user-profile-profile-overview.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-overview.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:583572579b0fc914a9f1712f020e70e8b1c069f95242df0ca0f5b31d70f3ffc2"
+        },
+        {
+          "path": "src/blocks/account-user-profile-profile-preferences-tab.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-preferences-tab.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:f5b22d9f5845df16187378edbe27800ef26625774437bfdc6739a3bf3e0980a6"
+        },
+        {
+          "path": "src/blocks/account-user-profile-profile-security-tab.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-security-tab.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:029bc2ebd60c5ed818462b1059beeb8fe72601a7d27dd24d07a289bf203aeb49"
+        },
+        {
+          "path": "src/blocks/account-user-profile-profile-select.vue",
+          "source": "blocks/account/account-user-profile/parts/profile-select.vue",
+          "variant": "Data",
+          "imports": {
+            "../user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:1061b08344fe74bfcefc785d4e6db2ddc6ad70e659e2b59bcbbe31cce304d427"
+        },
+        {
+          "path": "src/blocks/account-user-profile.sample.ts",
+          "source": "blocks/account/account-user-profile/sample.ts",
+          "variant": "Data",
+          "imports": {
+            "./user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:89b93679af6aee7eec8e322d1f2677033424962ae1cf0505a374c97e9833ee9f"
+        },
+        {
+          "path": "src/blocks/account-user-profile.user-profile-model.ts",
+          "source": "blocks/account/account-user-profile/user-profile-model.ts",
+          "variant": "Data",
+          "checksum": "sha256:c4145e6185a737de81837f449fa2547db588948b8ea7fe89a200867147130b4e"
+        },
+        {
+          "path": "src/blocks/account-user-profile.vue",
+          "source": "blocks/account/account-user-profile/account-user-profile.vue",
+          "variant": "Default",
+          "imports": {
+            "./parts/profile-bio-tab.vue": "./account-user-profile-profile-bio-tab.vue",
+            "./parts/profile-header.vue": "./account-user-profile-profile-header.vue",
+            "./parts/profile-notifications-tab.vue": "./account-user-profile-profile-notifications-tab.vue",
+            "./parts/profile-overview.vue": "./account-user-profile-profile-overview.vue",
+            "./parts/profile-preferences-tab.vue": "./account-user-profile-profile-preferences-tab.vue",
+            "./parts/profile-security-tab.vue": "./account-user-profile-profile-security-tab.vue",
+            "./sample": "./account-user-profile.sample",
+            "./user-profile-model": "./account-user-profile.user-profile-model"
+          },
+          "checksum": "sha256:4b7212ae8fca5ea161745b8049baff6139ebe4d09a3ab8f3d3746243862cb231"
+        }
+      ]
+    },
     "ai/ai-chat": {
       "version": "5.13.0",
       "files": [
