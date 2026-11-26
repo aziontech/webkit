@@ -3,7 +3,7 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a block, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 enforced_by:
   [
     webkit-imports,
@@ -121,33 +121,42 @@ props, so it imports the primary instead of copying it. A marketing band is a pa
   brand-colour icons (`az-color az-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
   `DocCard` with an overline for these.
 
-## Which skill for which task
+## Read the pattern first
 
-Structure and states first, polish last:
+A **pattern** is the written guidance for one kind of screen or problem: how a form, a table, a
+state or an error is built here. A **block** is the copyable screen that already follows it. Before
+composing a screen, read the pattern for the job, then start from its block. Each pattern is the
+`SKILL.md` named below (in `node_modules/@aziontech/webkit/skills/`), and the same file is the page
+on the docs site:
 
-- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (loading,
-  empty, error, async) · `/webkit-form` (and its control table: dates in `DatePicker`,
-  periods in `DateRangePicker`, references in a searchable picker, never an ID or ISO date typed as
-  text) · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
-  (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
-  levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
-- **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
-- **Help on the screen** (a field, section or page explained in place; an info icon, a help
-  tooltip, contextual help): `/webkit-in-product-help`
-- **Foundation:** `/webkit-quick-cleanup` (tokens, typography, spacing rhythm)
-- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-ai-surfaces` (AI chat
-  and agent actions)
+| Job                                                                                                                                                                      | Pattern                  | Docs page                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ | --------------------------- |
+| A whole product screen, end to end (the routing table)                                                                                                                   | `webkit-product-screens` | `/patterns/product-screens` |
+| An Azion web page (rule `webkit-site-pages`, SD-01 to SD-25)                                                                                                             | `webkit-site-pages`      | `/patterns/site-pages`      |
+| A form, and the control each value takes (dates in `DatePicker`, periods in `DateRangePicker`, references in a searchable picker, never an ID or ISO date typed as text) | `webkit-form`            | `/patterns/form`            |
+| Where a create lives: page, drawer or dialog                                                                                                                             | `webkit-create-surface`  | `/patterns/create-surface`  |
+| A data table: columns, toolbar, scroll, cell recipes                                                                                                                     | `webkit-tables`          | `/patterns/tables`          |
+| The list page around a table: filters, collection, selection                                                                                                             | `webkit-lists`           | `/patterns/lists`           |
+| A chart, a stat or a figure                                                                                                                                              | `webkit-data-viz`        | `/patterns/data-viz`        |
+| API data: references by name, remote pickers, fresh lookups, typed records                                                                                               | `webkit-api-data`        | `/patterns/api-data`        |
+| Loading, empty, error and success; async behaviour                                                                                                                       | `webkit-ui-states`       | `/patterns/ui-states`       |
+| Where a failure goes: field, section, toast, signed-out screen                                                                                                           | `webkit-errors`          | `/patterns/errors`          |
+| Explaining a field, section or page in place                                                                                                                             | `webkit-in-product-help` | `/patterns/in-product-help` |
+| Shells, levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`                                                               | `webkit-navigation`      | `/patterns/navigation`      |
+| Page width, inset and rhythm                                                                                                                                             | `webkit-layout`          | `/patterns/layout`          |
+| Every interface string                                                                                                                                                   | `webkit-microcopy`       | `/patterns/microcopy`       |
+| AI chat, streamed answers and actions the reader approves                                                                                                                | `webkit-ai-surfaces`     | `/patterns/ai-surfaces`     |
+| Calling the Azion API: CORS, the dev and edge proxy, the token                                                                                                           | `webkit-azion-api`       | `/patterns/azion-api`       |
+| A Metrics or Events GraphQL explorer                                                                                                                                     | `webkit-query-explorer`  | `/patterns/query-explorer`  |
+
+The working steps are skills you run, not pages to read. Structure and states first, polish last:
+
+- **Right component per moment:** `/webkit-ux-heuristics`
+- **Foundation:** `/webkit-quick-cleanup` (tokens, typography, spacing rhythm) ·
+  `/webkit-theming-dark-mode`
 - **Polish:** `/webkit-motion-polish` → `/webkit-final-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-adoption`
-- **A whole product screen, end to end:** `/webkit-product-screens` (the routing table: which skill
-  or rule owns each design problem, and what enforces it)
-- **An Azion web page (site, product or Solution page, campaign):** `/webkit-site-pages`, under rule
-  `webkit-site-pages` (the Web Design Guide, SD-01 to SD-25)
-- **API data:** `/webkit-api-data` (references by name, remote pickers, fresh lookups, typed
-  records, server-owned lists; rule `webkit-api-data`)
-- **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
-  lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
 ## Pick the component for the job
 

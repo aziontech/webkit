@@ -9,8 +9,9 @@ them is optional:
    the `webkit` MCP grounds every screen and component choice; `npx @aziontech/webkit check` and the
    `webkit-ui-verify` skill check the rest (axe, both themes, states). If lint or the check fails, the
    change is not done.
-3. **Skills (on-demand guidance)** — `node_modules/@aziontech/webkit/skills/<name>/SKILL.md`
-   (Claude Code also gets them as `/webkit-*` in `.claude/skills/`).
+3. **Patterns and skills (on-demand guidance)** — `node_modules/@aziontech/webkit/skills/<name>/SKILL.md`
+   (Claude Code also gets them as `/webkit-*` in `.claude/skills/`). Read the pattern for the job
+   before composing a screen.
 4. **Reference (depth)** — `node_modules/@aziontech/webkit/rules/webkit-*.md` (also copied to
    `.claude/rules/`) carry the full standards behind the invariants.
 
@@ -164,22 +165,31 @@ runs axe + screenshots), and taste is a review concern.
   (`username` to sign in, `email` to sign up); passwords `current-password` / `new-password`; paste is
   never blocked. Auth screens never toast: every outcome is one `Alert` inside the card.
 
-### Skills — invoke for how to build UI well
+### Patterns — read the one for the job first
+
+A pattern is the written guidance for one kind of screen or problem; a block is the copyable screen
+that follows it. Before composing a screen, read its pattern (a `SKILL.md` in
+`node_modules/@aziontech/webkit/skills/`, the same file as its `/patterns/<name>` docs page), then
+start from its block. `webkit-usage` lists every pattern by job.
+
+- **End to end:** `webkit-product-screens` (a product screen, with the problem → pattern → enforcement routing table) · `webkit-site-pages` (an Azion web page under the Web Design Guide, rule `webkit-site-pages`, SD-01 to SD-25)
+- **Forms and create flows:** `webkit-form` · `webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar)
+- **Data:** `webkit-tables` (data-driven `<Table>` + cell recipes) · `webkit-lists` (the index page around it + the filter system) · `webkit-data-viz` · `webkit-api-data` (references by name, remote pickers that keep the selected values, revalidated lookups, typed records and one formatter per shape, server-owned lists)
+- **Feedback and states:** `webkit-ui-states` (state surface + async behavior) · `webkit-errors` (where a failure goes: field, section Alert, toast, auth card) · `webkit-in-product-help` (a description first, a `Hint` that opens a short note on click, an Info trigger + `HelpPanel` for a page; a `Tooltip` only names a control)
+- **Navigation and layout:** `webkit-navigation` (shells, navigation levels, breadcrumb, and when a drawer may open: never as the way into a resource, `large` then one `medium`) · `webkit-layout` (the page container system: measure, boundary, rhythm — a page never writes its own `mx-auto max-w-*`)
+- **Words:** `webkit-microcopy` (Azion product copy: punctuation, sentence case, label vs message, one word per concept)
+- **AI:** `webkit-ai-surfaces` (chat, streamed responses, citations, feedback, actions the reader approves)
+- **Azion API:** `webkit-azion-api` (CORS, the Vite dev proxy and a same-origin edge proxy, the personal token kept in memory or `sessionStorage`) · `webkit-query-explorer` (a Metrics or Events GraphQL explorer: `DateRangePicker` + `useTimeRange`, `PropertyFilter`, `Chart`, `DataTable`, `CodeBlock`)
+
+### Skills — the working steps you run
 
 Start with `webkit-usage` (the entry point that routes the rest). Get structure and states right
 before any polish:
 
-- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Alert, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation` (shells, navigation levels, breadcrumb, and when a drawer may open: never as the way into a resource, `large` then one `medium`)
-- **Layout:** `/webkit-layout` (the page container system: measure, boundary, rhythm — a page never writes its own `mx-auto max-w-*`)
-- **Words:** `/webkit-microcopy` (Azion product copy: punctuation, sentence case, label vs message, one word per concept)
-- **Help on the screen:** `/webkit-in-product-help` (a description first, a `Hint` that opens a short note on click, an Info trigger + `HelpPanel` for a page; a `Tooltip` only names a control)
-- **Foundation:** `/webkit-quick-cleanup` (tokens, typography hierarchy, spacing rhythm)
-- **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-ai-surfaces` (chat, streamed responses, citations, feedback, actions the reader approves)
+- **Structure:** `/webkit-ux-heuristics` (right component per moment)
+- **Foundation:** `/webkit-quick-cleanup` (tokens, typography hierarchy, spacing rhythm) · `/webkit-theming-dark-mode`
 - **Polish:** `/webkit-motion-polish` · `/webkit-final-polish` (finish + earned delight)
 - **Verify + migrate:** `/webkit-ui-verify` (runtime axe + both themes + states) · `/webkit-adoption`
-- **End to end:** `/webkit-product-screens` (a product screen, with the problem → skill → enforcement routing table) · `/webkit-site-pages` (an Azion web page under the Web Design Guide, rule `webkit-site-pages`, SD-01 to SD-25)
-- **API data:** `/webkit-api-data` (references by name, remote pickers that keep the selected values, revalidated lookups, typed records and one formatter per shape, server-owned lists)
-- **Azion API:** `/webkit-azion-api` (CORS, the Vite dev proxy and a same-origin edge proxy, the personal token kept in memory or `sessionStorage`) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer: `DateRangePicker` + `useTimeRange`, `PropertyFilter`, `Chart`, `DataTable`, `CodeBlock`)
 
 Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/webkit-usage`.
 

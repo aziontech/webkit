@@ -2,7 +2,7 @@
 name: webkit-microcopy
 description: The writing rules for Azion product interfaces (Console). Use whenever you author or review any interface string: page and section titles, field labels, helper text, buttons, menu and nav items, table headers, tags, tooltips, empty states, toasts, dialogs, validation messages. Fixes punctuation and capitalization (no em dash, no ampersand, no parentheses in labels, no bold in running text, sentence case with Azion product names capitalized), which surface each kind of copy belongs on (label names, description constrains, Alert explains impact, Popover defines, StatusIndicator states), one word per concept (Select not Pick, Include dependencies not Additional dependencies, Deployment topology not Composition, Review and deploy not Build and activate, Application not Edge Application, and no `edge` as a prefix or a location), navigation and IA naming, and copy that survives every breakpoint.
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-25
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-prefer-over-custom, review]
 ---
@@ -16,7 +16,7 @@ workload" and the next says "Choose an application", when a label carries a warn
 message, or when an em dash splices two sentences inside a toast, the product reads as assembled by
 different people, and the reader pays for it with attention.
 
-This skill fixes three things, in priority order:
+This pattern fixes three things, in priority order:
 
 1. **Mechanics.** Punctuation and capitalization are settled, not stylistic. The bans below are hard.
 2. **Placement.** Every kind of copy has one surface that owns it. A label names an input; it never
@@ -38,13 +38,13 @@ specific than the catalog (`aria-label="Close deployment logs"`).
 
 ## How to use
 
-- `/webkit-microcopy` while building: apply the rules to every string you write, and place each
+- [Interface text](../webkit-microcopy/SKILL.md) while building: apply the rules to every string you write, and place each
   string on the surface that owns it before styling anything.
 - `/webkit-microcopy <file|screen>` as a review: walk the seven sections in order and report each
   violation as `current → corrected`, with the surface it should move to when placement is wrong.
 
-Related: `/webkit-ui-states` owns how loading, empty, and error **render** and where request failures
-go. `/webkit-form` owns field structure and validation timing. This skill owns the **words** on all of
+Related: [Loading, empty and error states](../webkit-ui-states/SKILL.md) owns how loading, empty, and error **render** and where request failures
+go. [Forms](../webkit-form/SKILL.md) owns field structure and validation timing. This pattern owns the **words** on all of
 them.
 
 ## 1. Mechanics: the hard bans
@@ -99,19 +99,19 @@ Three exceptions, and only three:
 This is where most interface copy goes wrong, and it is not a wording problem. **Explain, then ask:**
 anything the reader needs in order to answer appears before the input, never inside its label.
 
-| The copy is…                               | Surface                                             | Shape                                      | Example                                                                                       |
-| ------------------------------------------ | --------------------------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| The name of an input                       | `Label`                                             | 1 to 3 words, no punctuation               | `Version`                                                                                     |
-| A constraint or format the value must meet | field description / `FieldDescription`              | One short sentence, with a period          | `Lowercase letters, numbers, and hyphens.`                                                    |
-| Why this input exists, or what it affects  | `Alert` above the group                             | 1 to 2 sentences                           | `This connector is shared. Changing its version affects every deployment that references it.` |
-| A definition, or how a feature works       | `Hint` beside the label (`/webkit-in-product-help`) | 1 to 3 sentences, optionally one docs link | What a deployment topology is                                                                 |
-| The name of an icon-only control           | `Tooltip`                                           | A few words, no period                     | `Copy domain`                                                                                 |
-| The state of a resource                    | `StatusIndicator`                                   | 1 to 2 words, never a sentence             | `Active`, `Deploying`                                                                         |
-| A category or outcome word on an item      | `Tag`                                               | 1 to 2 words, never a sentence             | `Production`, `Draft`                                                                         |
-| A count attached to something else         | `Badge`                                             | A number only                              | `12`, `99+`                                                                                   |
-| The result of something the user did       | `Toast`                                             | One sentence, past tense, with a period    | `Deployment created.`                                                                         |
-| Why a value was rejected                   | field error, inline at the field                    | What is wrong plus what to do              | `Version 1.2.0 was already deployed. Select another version.`                                 |
-| There is nothing here yet                  | `EmptyState`                                        | One sentence plus one action               | `No deployments yet. Create your first deployment to start receiving traffic.`                |
+| The copy is…                               | Surface                                                                         | Shape                                      | Example                                                                                       |
+| ------------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| The name of an input                       | `Label`                                                                         | 1 to 3 words, no punctuation               | `Version`                                                                                     |
+| A constraint or format the value must meet | field description / `FieldDescription`                                          | One short sentence, with a period          | `Lowercase letters, numbers, and hyphens.`                                                    |
+| Why this input exists, or what it affects  | `Alert` above the group                                                         | 1 to 2 sentences                           | `This connector is shared. Changing its version affects every deployment that references it.` |
+| A definition, or how a feature works       | `Hint` beside the label ([In-product help](../webkit-in-product-help/SKILL.md)) | 1 to 3 sentences, optionally one docs link | What a deployment topology is                                                                 |
+| The name of an icon-only control           | `Tooltip`                                                                       | A few words, no period                     | `Copy domain`                                                                                 |
+| The state of a resource                    | `StatusIndicator`                                                               | 1 to 2 words, never a sentence             | `Active`, `Deploying`                                                                         |
+| A category or outcome word on an item      | `Tag`                                                                           | 1 to 2 words, never a sentence             | `Production`, `Draft`                                                                         |
+| A count attached to something else         | `Badge`                                                                         | A number only                              | `12`, `99+`                                                                                   |
+| The result of something the user did       | `Toast`                                                                         | One sentence, past tense, with a period    | `Deployment created.`                                                                         |
+| Why a value was rejected                   | field error, inline at the field                                                | What is wrong plus what to do              | `Version 1.2.0 was already deployed. Select another version.`                                 |
+| There is nothing here yet                  | `EmptyState`                                                                    | One sentence plus one action               | `No deployments yet. Create your first deployment to start receiving traffic.`                |
 
 A transitional `StatusIndicator` with `loading` takes the bare verb (`Deploying`, `Building`): the component adds the ellipsis itself and trims one already in the copy, so `Building...` still renders `Building…`.
 
@@ -259,7 +259,7 @@ whoever built the page. Three shapes were in use across the Console for the same
 - **An error states what happened and what to do next**, in that order, in the reader's terms. No
   blame, no apology, no raw error code without a sentence around it. A code the reader may need for
   support goes at the end, or in a copyable block.
-- **Where it goes follows `/webkit-ui-states`:** a rejected value is inline at its field, a failed
+- **Where it goes follows [Loading, empty and error states](../webkit-ui-states/SKILL.md):** a rejected value is inline at its field, a failed
   request is a toast. The words here, the routing there.
 - **A success toast names the object and the outcome in the past tense.** `Deployment created.`, not
   `Success!`.
@@ -298,29 +298,29 @@ let it breathe wider. Never write long and rely on truncation.
 - **No copy that depends on position, order, or input device.** No `on the right`, no `below`, no
   `click` when the surface is also touch operated. Name the thing, and use `select` for the action.
 
-## Review checklist
+## Words to check
 
-- [ ] No em dash, en dash, or ampersand anywhere in the interface strings.
-- [ ] No parentheses, colon, or feedback text in any label; asides moved to description, `Alert`, or
-      `Popover`.
-- [ ] No bold inside running text.
-- [ ] Sentence case throughout, with `Azion`, product and entity names, and acronyms correct.
-- [ ] Every explanation appears before the input it governs, not inside it.
-- [ ] A repeated per row caveat was consolidated into one `Alert`.
-- [ ] One word per concept, checked against the verb and noun tables, including the settled renames.
-- [ ] Every button names a real action, verb first, three words or fewer; `Cancel` is `Cancel`.
-- [ ] The create button is `Create <object>` at module level, `Add <Product Module>` inside a
-      resource, and the same string appears on the page or drawer it opens.
-- [ ] Every error says what happened and what to do next; every success names the object.
-- [ ] Nav item, page title, breadcrumb, and document title use one identical name.
-- [ ] Every collapsed section's closed title states the choice in effect.
-- [ ] Labels and headers survive the narrowest supported width without wrapping or truncating.
-- [ ] No copy naming a position, an order, or a pointer device.
+- No em dash, en dash, or ampersand anywhere in the interface strings.
+- No parentheses, colon, or feedback text in any label; asides moved to description, `Alert`, or
+  `Popover`.
+- No bold inside running text.
+- Sentence case throughout, with `Azion`, product and entity names, and acronyms correct.
+- Every explanation appears before the input it governs, not inside it.
+- A repeated per row caveat was consolidated into one `Alert`.
+- One word per concept, checked against the verb and noun tables, including the settled renames.
+- Every button names a real action, verb first, three words or fewer; `Cancel` is `Cancel`.
+- The create button is `Create <object>` at module level, `Add <Product Module>` inside a
+  resource, and the same string appears on the page or drawer it opens.
+- Every error says what happened and what to do next; every success names the object.
+- Nav item, page title, breadcrumb, and document title use one identical name.
+- Every collapsed section's closed title states the choice in effect.
+- Labels and headers survive the narrowest supported width without wrapping or truncating.
+- No copy naming a position, an order, or a pointer device.
 
-## Definition of Done
+## How to check it works
 
-- [ ] Every string on the screen was read against sections 1 to 4, not skimmed.
-- [ ] Nothing that explains, warns, or reports sits inside a label.
-- [ ] No concept on the screen has two names anywhere in the product.
-- [ ] The screen was read at the narrowest and widest supported width, in both themes, with real
-      content and with empty content (`/webkit-ui-verify`).
+- Every string on the screen was read against sections 1 to 4, not skimmed.
+- Nothing that explains, warns, or reports sits inside a label.
+- No concept on the screen has two names anywhere in the product.
+- The screen was read at the narrowest and widest supported width, in both themes, with real
+  content and with empty content (`/webkit-ui-verify`).

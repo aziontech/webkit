@@ -2,7 +2,7 @@
 name: webkit-ai-surfaces
 description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, ResponseLoading), wires the message lifecycle (pending → streaming → success or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
 status: active
-last_updated: 2026-11-21
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -14,7 +14,7 @@ enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 A generative AI surface fails in ways an ordinary form does not: a response that streams into a
 screen reader one token at a time, a log that yanks the reader to the bottom while they copy an older
 answer, a loading state that flickers for 200 ms, Markdown from the model injected as HTML, a "Deploy"
-the assistant ran because the reader typed "sure". This skill builds the conversation, the response
+the assistant ran because the reader typed "sure". This pattern builds the conversation, the response
 and the authorization step from `@aziontech/webkit` so each of those is handled once, by the
 component, the same way everywhere. It follows Cloudscape's generative AI patterns (chat, loading
 states, thinking, follow-up questions, artifact previews, user-authorized actions) and the anatomy of
@@ -22,7 +22,7 @@ shadcn's AI Elements.
 
 ## How to use
 
-- `/webkit-ai-surfaces` — apply these rules to the AI surface you are building in this conversation.
+- [AI chat and actions](../webkit-ai-surfaces/SKILL.md) — apply these rules to the AI surface you are building in this conversation.
 - `/webkit-ai-surfaces <file>` — review the file and report, per gap: the quoted line, the rule it breaks
   (from **Hard rules**), and the concrete fix with the component that solves it.
 
@@ -130,7 +130,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
 - Built-in strings (Thinking, Thought for N seconds, Sources, Helpful, Not helpful, Feedback
   submitted, Approved, Denied, Request expired) come in English, Portuguese and Spanish from the
   `ConfigProvider` locale.
-- Follow `/webkit-microcopy` for everything else.
+- Follow [Interface text](../webkit-microcopy/SKILL.md) for everything else.
 
 ## Enforcement (honest)
 
@@ -150,12 +150,12 @@ For each gap, in this order:
 
 End with the count of Safety findings first; any Safety finding blocks the change.
 
-## Definition of Done
+## How to check it works
 
-- [ ] The screen started from a `ai/*` block.
-- [ ] Every thread is a `Conversation`; every turn a `ChatMessage` with the real lifecycle `status`.
-- [ ] Model text renders through `StreamingResponse`; no `v-html` anywhere near model output.
-- [ ] Citations share an `anchor` with their `Sources`.
-- [ ] Every side-effecting call waits for `ToolApproval`; denials and expiry are acknowledged.
-- [ ] Empty, streaming, error and long-thread states exist and were checked with a screen reader and
-      with reduced motion.
+- The screen started from a `ai/*` block.
+- Every thread is a `Conversation`; every turn a `ChatMessage` with the real lifecycle `status`.
+- Model text renders through `StreamingResponse`; no `v-html` anywhere near model output.
+- Citations share an `anchor` with their `Sources`.
+- Every side-effecting call waits for `ToolApproval`; denials and expiry are acknowledged.
+- Empty, streaming, error and long-thread states exist and were checked with a screen reader and
+  with reduced motion.

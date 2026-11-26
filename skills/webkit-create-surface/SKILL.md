@@ -18,7 +18,7 @@ aesthetic: a modal cannot be linked or reloaded, a page thrown up over a list de
 the reader was working in, and a dialog that holds a nine-field form traps them in a box they cannot
 resize.
 
-This skill removes the question. The surface is a **property of what is being created**, not a choice
+This pattern removes the question. The surface is a **property of what is being created**, not a choice
 the module makes. Three rules decide it, and one anatomy is shared by all of them so a reader who has
 created one resource recognizes every other.
 
@@ -67,7 +67,7 @@ a page.
 **Configuring a resource is never a drawer.** A Configure, Settings or Edit action on a product or a
 resource navigates to that resource's page, on its settings tab; drawers open only over the screen
 that owns their item. The first drawer is `large`, a nested one `medium`, never a third
-(`/webkit-navigation`, Drawers).
+([Navigation](../webkit-navigation/SKILL.md), Drawers).
 
 **A form creates what it is missing.** When a field needs a resource that does not exist yet (the
 certificate of a workload being created), the field offers `Create <noun>` and a drawer opens over the
@@ -75,7 +75,7 @@ form with that resource's own create form, the same bands as its create page. On
 resource is selected in the field and the form is as the reader left it. This holds for first-level
 resources too: their page is where they start from their own module, the drawer is where another form
 needs them. Never send the reader away to create it and come back. Only a resource that creates in
-several steps opens its create page in a new tab (`/webkit-navigation`, Create what is missing).
+several steps opens its create page in a new tab ([Navigation](../webkit-navigation/SKILL.md), Create what is missing).
 
 **Settings use the create surface again.** The page that edits a resource is the page that created
 it, with values in it. Same bands, same rows, same order — so the two are one object seen twice, and
@@ -116,7 +116,7 @@ Heading (what this is, one line)
 - **The band step is the same everywhere**, and the page opens on that same step: header → heading →
   first band → every band after it. One rhythm, top to bottom.
 
-**The control in the row follows the type of the value** (`/webkit-form`, Pick the control from the kind of value): an
+**The control in the row follows the type of the value** ([Forms](../webkit-form/SKILL.md), Pick the control from the kind of value): an
 instant is a `DatePicker` with `show-time`, a period one `DateRangePicker`, an enum a `Select` or
 `RadioGroup` with human labels, a reference to another resource a searchable picker labelled with
 the thing (`Organization`, never `Organization ID`). A row never asks for an ISO date or an ID typed
@@ -172,7 +172,7 @@ it — a hidden bar still reserves its space.
 - **A page-level commit owes a Discard.** Without it the only way back is undoing each field by hand
   and hoping the bar goes away. The word is exactly `Discard` (outlined, before Save): it restores the
   saved record and the reader stays on the page. `Cancel` is for leaving a create page or closing a
-  dialog, so a settings bar never says Cancel (`/webkit-microcopy` § Verbs).
+  dialog, so a settings bar never says Cancel ([Interface text](../webkit-microcopy/SKILL.md) § Verbs).
 - **Per-band saves are for pages whose bands are genuinely separate records** (an application's build
   configuration vs. its branch controls). When the page is ONE record, a per-band Save asks which part
   of one record the reader meant.
@@ -252,7 +252,7 @@ certificate, a rule's function, an environment. It follows the same rule in the 
 panel: search in `Select.Content`'s `#search` slot past 7 options, Load more in its `#footer`, and a
 `Create <noun>` option there that opens the resource's create form in a drawer (section 1). When the
 options come from the server, debounce the search, page with Load more and pass `display-value` so the
-chosen name shows before its page is loaded; `/webkit-form` (Pick the control from the kind of value) has the code, and a
+chosen name shows before its page is loaded; [Forms](../webkit-form/SKILL.md) (Pick the control from the kind of value) has the code, and a
 `Combobox` with server search for the case where typing is the way in. The person never types the
 resource's ID.
 
@@ -263,28 +263,28 @@ Build the band and the picker once as shared components and pass the noun, the i
 options. Every flow that reuses a resource then reads the same, and the one hand-made copy that
 would ship without search never exists.
 
-## Checklist
+## How to check it works
 
-- [ ] First-level resource → a page at `/<module>/new`. Inside a resource → a drawer. Never a dialog.
-- [ ] Configure, Settings or Edit on a resource → its page, never a drawer. First drawer `large`, nested
-      `medium`, never a third.
-- [ ] A first-level drawer passes BOTH halves of the exception test (small tuple **and** normally bulk).
-- [ ] A field that needs a resource not created yet offers `Create <noun>` in a drawer and selects it
-      on save; the reader never leaves the form to create it.
-- [ ] Settings reuse the create page's bands, in the same order.
-- [ ] Every band is a Section with a title and a Hint — not a paragraph of prose.
-- [ ] Rows carry the name and guidance; the control has an `aria-label`, not a separate label.
-- [ ] Wide controls stack their row instead of being squeezed into the cell.
-- [ ] Advanced holds only fields that are not required, already defaulted, and not the point of the form.
-- [ ] Nothing required is inside the disclosure; the collapsed region is `inert`.
-- [ ] Create page: persistent Cancel + Save (a create that runs an act instead of storing a resource names it: Purge). Settings page: bar mounts on first edit, with Discard.
-- [ ] Drawer: one Save, no Cancel.
-- [ ] A dirty form asks before Cancel, Back, X, overlay or Escape discards it; a clean one leaves at once.
-- [ ] Escape on a full-page create runs Cancel (`useEscapeToCancel`); edit and settings pages ignore it.
-- [ ] Save creates and stops — no deploy, no publish, no charge as a side effect.
-- [ ] The success toast names the resource and offers a way to open it.
-- [ ] One `submitting` flag locks the fieldset AND every control; released in `finally`.
-- [ ] `required` static from the first render; validation on submit only sets `invalid` for an empty or a malformed value.
-- [ ] A reusable resource gets an Existing / New band; Existing is the default when any exist, and the segment is absent when none do.
-- [ ] Every pick of an existing resource (inline picker or `Select`) has search past 7, Load more, a no-match line, and shows a pre-chosen value on open.
-- [ ] Every control matches its value's type (`/webkit-form`, Pick the control from the kind of value): no date, time or resource ID typed as text.
+- First-level resource → a page at `/<module>/new`. Inside a resource → a drawer. Never a dialog.
+- Configure, Settings or Edit on a resource → its page, never a drawer. First drawer `large`, nested
+  `medium`, never a third.
+- A first-level drawer passes BOTH halves of the exception test (small tuple **and** normally bulk).
+- A field that needs a resource not created yet offers `Create <noun>` in a drawer and selects it
+  on save; the reader never leaves the form to create it.
+- Settings reuse the create page's bands, in the same order.
+- Every band is a Section with a title and a Hint — not a paragraph of prose.
+- Rows carry the name and guidance; the control has an `aria-label`, not a separate label.
+- Wide controls stack their row instead of being squeezed into the cell.
+- Advanced holds only fields that are not required, already defaulted, and not the point of the form.
+- Nothing required is inside the disclosure; the collapsed region is `inert`.
+- Create page: persistent Cancel + Save (a create that runs an act instead of storing a resource names it: Purge). Settings page: bar mounts on first edit, with Discard.
+- Drawer: one Save, no Cancel.
+- A dirty form asks before Cancel, Back, X, overlay or Escape discards it; a clean one leaves at once.
+- Escape on a full-page create runs Cancel (`useEscapeToCancel`); edit and settings pages ignore it.
+- Save creates and stops — no deploy, no publish, no charge as a side effect.
+- The success toast names the resource and offers a way to open it.
+- One `submitting` flag locks the fieldset AND every control; released in `finally`.
+- `required` static from the first render; validation on submit only sets `invalid` for an empty or a malformed value.
+- A reusable resource gets an Existing / New band; Existing is the default when any exist, and the segment is absent when none do.
+- Every pick of an existing resource (inline picker or `Select`) has search past 7, Load more, a no-match line, and shows a pre-chosen value on open.
+- Every control matches its value's type ([Forms](../webkit-form/SKILL.md), Pick the control from the kind of value): no date, time or resource ID typed as text.
