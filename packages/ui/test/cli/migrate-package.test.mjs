@@ -82,7 +82,9 @@ test('a 5.x app moves to @aziontech/ui: dependencies, files, MCP server and AI b
     '.claude/skills/webkit-ui-states/SKILL.md': 'states\n',
     '.claude/rules/webkit-tokens.md': 'tokens\n',
     '.claude/agents/webkit-reviewer.md': 'reviewer\n',
-    'webkit.blocks.json': JSON.stringify({ blocks: {} })
+    'webkit.blocks.json': JSON.stringify({ blocks: {} }),
+    '.stylelintrc.json': JSON.stringify({ extends: ['@aziontech/webkit/stylelint-config'] }),
+    'lint.config.js': "export default { rules: { 'webkit/prefer-webkit-component': 'error' } }\n"
   })
   try {
     const results = planMigrate(dir)
@@ -121,6 +123,9 @@ test('a 5.x app moves to @aziontech/ui: dependencies, files, MCP server and AI b
     assert.ok(!existsSync(join(dir, '.claude/skills/webkit-usage')))
     assert.ok(existsSync(join(dir, 'azion-ui.blocks.json')))
     assert.ok(!existsSync(join(dir, 'webkit.blocks.json')))
+
+    assert.match(read(dir, '.stylelintrc.json'), /@aziontech\/ui\/stylelint-config/)
+    assert.match(read(dir, 'lint.config.js'), /'azion-ui\/prefer-azion-ui-component'/)
 
     const all = JSON.stringify(results)
     assert.match(all, /@aziontech\/webkit → @aziontech\/ui/)

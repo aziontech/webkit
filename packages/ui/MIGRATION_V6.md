@@ -27,7 +27,9 @@ The library was called WebKit and shipped as `@aziontech/webkit` up to 5.x. From
 
 It rewrites `package.json` (dependencies and scripts), every source file, `.mcp.json`,
 `AGENTS.md`, `CLAUDE.md` and the AI bundle in `.claude/`, and moves the files above. Then run
-`npx @aziontech/ui sync` to refresh the moved skills, rules and agents, and `pnpm install`.
+`pnpm install` and `npx @aziontech/ui sync --force` to refresh the moved skills, rules and agents
+(5.x wrote them without a sync stamp, so a plain `sync` keeps them as edited; `--force` overwrites
+local edits to those files, so commit first).
 
 The lint rule `azion-ui/no-deprecated-name` flags any import of `@aziontech/webkit` that is left.
 

@@ -36,6 +36,20 @@
       "webkit-sync": "azion-ui-sync"
     }
   },
-  "docs": ["AGENTS.md", "CLAUDE.md"],
-  "mcpConfigs": [".mcp.json", ".cursor/mcp.json", ".vscode/mcp.json"]
+  "docs": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".stylelintrc",
+    ".stylelintrc.json",
+    ".stylelintrc.yaml",
+    ".stylelintrc.yml",
+    ".lintstagedrc",
+    ".lintstagedrc.json",
+    ".husky/pre-commit",
+    ".husky/pre-push"
+  ],
+  "mcpConfigs": [".mcp.json", ".cursor/mcp.json", ".vscode/mcp.json"],
+  "lintRules": {
+    "azion-ui/prefer-webkit-component": "azion-ui/prefer-azion-ui-component"
+  }
 }

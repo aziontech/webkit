@@ -9,6 +9,7 @@ import {
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { listBundle } from './bundle.js'
 import { escapeRe, readJson } from './migrate-syntax.js'
 
 const CLI_DIR = dirname(fileURLToPath(import.meta.url))
@@ -51,6 +52,11 @@ export function migratePackageText(source, map = loadPackageMap()) {
     replacer(map.lintPrefix, (alt) => `(?<![\\w@/.-])(?<key>${alt})(?=[a-z])`),
     map.lintPrefix,
     (a, b) => `lint rules ${a}* → ${b}*`
+  )
+  swap(
+    replacer(map.lintRules, (alt) => `(?<key>${alt})(?![\\w-])`),
+    map.lintRules,
+    (a, b) => `${a} → ${b}`
   )
   swap(
     replacer(map.fileNames, (alt) => `(?<![\\w-])(?<key>${alt})(?![\\w-])`),
@@ -187,29 +193,66 @@ function renamedBundleEntry(name, prefixes) {
   return prefix ? `${prefixes[prefix]}${name.slice(prefix.length)}` : null
 }
 
+function shippedBundleNames() {
+  try {
+    return new Set(listBundle().map((rel) => rel.split('/').slice(0, 2).join('/')))
+  } catch {
+    return null
+  }
+}
+
 function bundleMoves(projectDir, bundle) {
   const moves = []
+  const retired = []
+  const shipped = shippedBundleNames()
   for (const dir of bundle?.dirs || []) {
     const abs = join(projectDir, dir)
     if (!existsSync(abs)) continue
     for (const name of readdirSync(abs)) {
       const next = renamedBundleEntry(name, bundle.prefixes || {})
-      if (next) moves.push([join(dir, name), join(dir, next)])
+      if (!next) continue
+      const key = `${dir.split('/').pop()}/${next}`
+      if (shipped && !shipped.has(key)) retired.push(join(dir, name))
+      else moves.push([join(dir, name), join(dir, next)])
     }
   }
-  return moves
+  return { moves, retired }
+}
+
+function renameMarker(line, map) {
+  const bundle = map.aiBundle || {}
+  let out = line
+  for (const [oldMarker, newMarker] of Object.entries(bundle.marker || {})) {
+    out = out.replace(`<!-- ${oldMarker} `, `<!-- ${newMarker} `)
+  }
+  return out.replace(/source=(\S+)/, (all, source) => {
+    const parts = source
+      .split('/')
+      .map((part) => renamedBundleEntry(part, bundle.prefixes || {}) ?? part)
+    return `source=${parts.join('/')}`
+  })
+}
+
+function rewriteBundleFile(projectDir, rel, map, dryRun) {
+  const file = join(projectDir, rel)
+  if (!existsSync(file)) return null
+  const before = readFileSync(file, 'utf8')
+  const [first, ...rest] = before.split('\n')
+  const marker = renameMarker(first, map)
+  if (marker === first) return null
+  if (!dryRun) writeFileSync(file, [marker, ...rest].join('\n'))
+  return {
+    file: rel,
+    changes: ['sync marker renamed; run `npx @aziontech/ui sync` to refresh it'],
+    warnings: []
+  }
 }
 
 function rewriteText(projectDir, rel, map, dryRun) {
   const file = join(projectDir, rel)
   if (!existsSync(file)) return null
   const before = readFileSync(file, 'utf8')
-  let { source, changes } = migratePackageText(before, map)
-  for (const [oldMarker, newMarker] of Object.entries(map.aiBundle?.marker || {})) {
-    if (!source.includes(`<!-- ${oldMarker} `)) continue
-    source = source.replaceAll(`<!-- ${oldMarker} `, `<!-- ${newMarker} `)
-    changes = [...changes, `${oldMarker} marker → ${newMarker}`]
-  }
+  const { source, changes } = migratePackageText(before, map)
   if (source === before) return null
   if (!dryRun) writeFileSync(file, source)
   return { file: rel, changes, warnings: [] }
@@ -231,10 +274,29 @@ export function planPackageMigration(projectDir, { dryRun = false, map = loadPac
   const results = [migratePackageJson(projectDir, map, dryRun)]
   for (const rel of map.mcpConfigs || [])
     results.push(migrateMcpConfig(projectDir, rel, map, dryRun))
-  for (const rel of [...(map.docs || []), ...bundleTexts(projectDir, map.aiBundle)]) {
-    results.push(rewriteText(projectDir, rel, map, dryRun))
+  for (const rel of map.docs || []) results.push(rewriteText(projectDir, rel, map, dryRun))
+  for (const rel of bundleTexts(projectDir, map.aiBundle)) {
+    results.push(rewriteBundleFile(projectDir, rel, map, dryRun))
   }
-  const moves = [...Object.entries(map.files || {}), ...bundleMoves(projectDir, map.aiBundle)]
-  for (const [from, to] of moves) results.push(moveFile(projectDir, from, to, dryRun))
+  const { moves, retired } = bundleMoves(projectDir, map.aiBundle)
+  for (const [from, to] of [...Object.entries(map.files || {}), ...moves]) {
+    results.push(moveFile(projectDir, from, to, dryRun))
+  }
+  for (const rel of retired) {
+    results.push({
+      file: rel,
+      changes: [],
+      warnings: [`${rel} is not in the 6.0 AI bundle: delete it`]
+    })
+  }
+  if (moves.length) {
+    results.push({
+      file: '.claude',
+      changes: [],
+      warnings: [
+        `${moves.length} AI file(s) moved to their azion-ui names: run \`npx @aziontech/ui sync --force\` to refresh them (it overwrites local edits to those files)`
+      ]
+    })
+  }
   return results.filter(Boolean)
 }

@@ -4,7 +4,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 ## v6-package.json
 
-`v6-package.json`, 24 entries.
+`v6-package.json`, 33 entries.
 
 | Where | Old | New |
 | --- | --- | --- |
@@ -29,9 +29,18 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | aiBundle › marker | `webkit-sync` | `azion-ui-sync` |
 | docs | `0` | `AGENTS.md` |
 | docs | `1` | `CLAUDE.md` |
+| docs | `2` | `.stylelintrc` |
+| docs | `3` | `.stylelintrc.json` |
+| docs | `4` | `.stylelintrc.yaml` |
+| docs | `5` | `.stylelintrc.yml` |
+| docs | `6` | `.lintstagedrc` |
+| docs | `7` | `.lintstagedrc.json` |
+| docs | `8` | `.husky/pre-commit` |
+| docs | `9` | `.husky/pre-push` |
 | mcpConfigs | `0` | `.mcp.json` |
 | mcpConfigs | `1` | `.cursor/mcp.json` |
 | mcpConfigs | `2` | `.vscode/mcp.json` |
+| lintRules | `azion-ui/prefer-webkit-component` | `azion-ui/prefer-azion-ui-component` |
 
 ## Components, types and parts
 
