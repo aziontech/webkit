@@ -2,21 +2,30 @@
 name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/top-bar-creation` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action primary, medium like every heading action) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: page navigation lives in the rail, two levels at most (a product's resources on level 1 when it has 3 or fewer, a drill level when it has more), a page has only its PageTabs (at most 7) and no in-page menu, a destination offered once per screen, no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
-last_updated: 2026-11-21
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-navigation-levels, webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
 
 # Skill: webkit-navigation
 
+## In short
+
+- Two shells: the console layout for browsing, a focused shell for a create flow. The signed-in
+  user is always visible in both.
+- The rail navigates; a page adds only tabs as its second level.
+- A drawer opens from inside a screen, never as the way into a resource.
+- Breadcrumbs carry first-level and resource navigation.
+- Every link takes `href` plus `@navigate`, so Vue Router and a plain anchor both work.
+
 ## Purpose
 
 Every screen in a console lives in one of **two** navigation shells, and picking the wrong one — or
 worse, blending them — is where a prototype stops feeling like one product. A browse page with no way
 back to the rest of the console strands the user; a focused create flow that keeps the full sidebar
-lets the user wander off mid-task and lose their work. This skill fixes which shell a page uses, how
+lets the user wander off mid-task and lose their work. This pattern fixes which shell a page uses, how
 each is composed on `@aziontech/webkit`, and the one invariant they share: **the signed-in user is
-always visible.** It is the layout-shell companion to `webkit-form` (what goes _inside_ a focused
+always visible.** It is the layout-shell companion to [Forms](../webkit-form/SKILL.md) (what goes _inside_ a focused
 flow) and `webkit-ux-heuristics` (states + feedback).
 
 ## How to use
@@ -61,7 +70,7 @@ your views folder and prints the path it wrote (`src/views/console.vue`); make t
 
 The page bodies use `page-header`, `page-tabs`, `tabs`, `card`, `table` — all resolved the same way.
 For spacing / color / typography use the **@aziontech/theme tokens (the webkit MCP lists them)** and
-the `layout-*` utilities (`/webkit-layout`) — never raw px.
+the `layout-*` utilities ([Page layout](../webkit-layout/SKILL.md)) — never raw px.
 
 ## The two shells
 
@@ -453,7 +462,7 @@ feels like a different app.
 ### The page body owns its boundary; the layout pads nothing
 
 `ConsoleLayout` renders the `<main>` and adds no padding, so the page body names its own inset and
-measure with the `layout-*` utilities (`/webkit-layout`):
+measure with the `layout-*` utilities ([Page layout](../webkit-layout/SKILL.md)):
 
 - **List, dashboard, settings, form:** `layout-boundary` + a column class (`layout-column` for data,
   `layout-column-form` for a settings form) on the body's outer blocks.
@@ -550,7 +559,7 @@ narrow the list and the table they narrow.
   already inside the module, so it carries only the action that level can perform; reference material
   a band needs is a `documentation` link on that band's own section heading instead.
 - The full list page — `useCollection`, the property filter, the preferences, the empty and no-match
-  states — is `/webkit-lists` and the `view/view-table` block.
+  states — is [List pages](../webkit-lists/SKILL.md) and the `view/view-table` block.
 
 ## Second-level navigation — tabs, and where the primary button goes
 
@@ -651,7 +660,7 @@ Each tab renders one of two bodies:
   action **on the tab row**.
 - **A settings tab** → the `ItemGroup` form: `SettingsGroup` bands each over a flush `Card` +
   `Item.List` of `SettingsRow` rows, committed as **one block** by a single `SaveBar` pinned below the
-  scroll region (see `webkit-form` and `webkit-ui-states`).
+  scroll region (see [Forms](../webkit-form/SKILL.md) and [Loading, empty and error states](../webkit-ui-states/SKILL.md)).
 
 ## Navigation levels: the rail navigates, the page has only tabs
 
@@ -724,21 +733,21 @@ they were.
 
 ### What a click opens
 
-| The reader clicks…                                                                           | It opens                                               | Why                                                         |
-| -------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------- |
-| A product or module in the rail                                                              | its page (the list or the overview)                    | navigation, level 1                                         |
-| A resource in a list (its row or its name)                                                   | the resource's page, on its tabs                       | navigation, level 2                                         |
-| **Configure, Settings or Edit** on a product or a resource                                   | **the resource's page**, on its settings tab (`?tab=`) | configuring is a destination: reload, link, back, more tabs |
-| Create a first-level resource                                                                | the create page, in the focused shell                  | `/webkit-create-surface`                                    |
-| Add or edit an item that lives inside the resource (a rule, an origin, a record), from a tab | a **`large` drawer** over that tab                     | the tab behind it is the context                            |
-| On a page, a field needs a resource that does not exist yet (a certificate for a workload)   | a **`large` drawer** that creates it, over that page   | create the missing piece where it is missing (below)        |
-| Inside a drawer, a field needs a resource or an item that does not exist yet                 | a **`medium` drawer** stacked on the first             | the same, without losing typed work (`/webkit-form`)        |
-| A yes-or-no guard (remove, discard)                                                          | `ConfirmDialog`, over the page or over any drawer      | a decision, not a surface                                   |
+| The reader clicks…                                                                           | It opens                                               | Why                                                                    |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------- |
+| A product or module in the rail                                                              | its page (the list or the overview)                    | navigation, level 1                                                    |
+| A resource in a list (its row or its name)                                                   | the resource's page, on its tabs                       | navigation, level 2                                                    |
+| **Configure, Settings or Edit** on a product or a resource                                   | **the resource's page**, on its settings tab (`?tab=`) | configuring is a destination: reload, link, back, more tabs            |
+| Create a first-level resource                                                                | the create page, in the focused shell                  | [Create flows](../webkit-create-surface/SKILL.md)                      |
+| Add or edit an item that lives inside the resource (a rule, an origin, a record), from a tab | a **`large` drawer** over that tab                     | the tab behind it is the context                                       |
+| On a page, a field needs a resource that does not exist yet (a certificate for a workload)   | a **`large` drawer** that creates it, over that page   | create the missing piece where it is missing (below)                   |
+| Inside a drawer, a field needs a resource or an item that does not exist yet                 | a **`medium` drawer** stacked on the first             | the same, without losing typed work ([Forms](../webkit-form/SKILL.md)) |
+| A yes-or-no guard (remove, discard)                                                          | `ConfirmDialog`, over the page or over any drawer      | a decision, not a surface                                              |
 
 **The test:** _is the screen this thing belongs to already open behind the click?_ If yes, a drawer.
 If the drawer would open over some other screen (configuring a product from the product list, from a
 dashboard, from the rail), it is the wrong surface: navigate to the resource's page and let the
-drawers start there. Variables are the one first-level drawer (`/webkit-create-surface`), and they
+drawers start there. Variables are the one first-level drawer ([Create flows](../webkit-create-surface/SKILL.md)), and they
 still pass the test: the drawer opens over the variables list, the screen that owns them.
 
 ### Create what is missing, where it is missing
@@ -818,7 +827,7 @@ column, and the page it talks about must stay visible. It never opens a nested d
   content.
 - **Each drawer is its own form.** Its own Save, its own `submitting` flag; saving the child appends
   and selects the new item in the parent's field and closes the child, and the parent keeps what was
-  typed (`/webkit-form`, the nested drawer).
+  typed ([Forms](../webkit-form/SKILL.md), the nested drawer).
 - **Focus returns down the stack.** Closing the child returns focus to the control that opened it in
   the parent; closing the parent returns it to the trigger on the page. `Escape` closes the top
   layer only.
@@ -1095,44 +1104,44 @@ End with: `navigation sound` or `N gaps — fix before polish`.
   `RouterView`.
 - **Page bodies** — `@aziontech/webkit/page-header`, `@aziontech/webkit/page-tabs`,
   `@aziontech/webkit/breadcrumb` (resolve each via the MCP / catalog).
-- **Companion skills:** `webkit-layout` (the boundary and column of the body), `webkit-lists` (the
-  index page around the table), `webkit-form` (what fills a focused flow), `webkit-errors` (where a
-  failure on the page goes), `webkit-ux-heuristics` (states + feedback), `webkit-ui-states` (locking +
+- **Companion skills:** [Page layout](../webkit-layout/SKILL.md) (the boundary and column of the body), [List pages](../webkit-lists/SKILL.md) (the
+  index page around the table), [Forms](../webkit-form/SKILL.md) (what fills a focused flow), [Errors](../webkit-errors/SKILL.md) (where a
+  failure on the page goes), `webkit-ux-heuristics` (states + feedback), [Loading, empty and error states](../webkit-ui-states/SKILL.md) (locking +
   toast), `webkit-quick-cleanup` (components + tokens).
 
-## Definition of Done
+## How to check it works
 
-- [ ] The page uses exactly one shell (persistent console **or** focused creation), matching its job.
-- [ ] The console chrome is one `ConsoleLayout` in `App.vue` around `RouterView`, fed by `navigation`
-      data with an `href` on every row; no hand-composed `AppLayout` / `Sidebar` / `AppHeader`
-      shell, and no chrome copied into a page.
-- [ ] A browse page is only a body: no `<main>`, header, rail or `Command` of its own; it opens the
-      palette with `useConsoleLayout().openSearch()` when it needs it.
-- [ ] Exactly one `AppHeader` renders on the page.
-- [ ] The signed-in user is visible: `account` on `ConsoleLayout` (rail footer + header avatar), or the
-      avatar at the end of the creation bar.
-- [ ] Focused flows route outside `ConsoleLayout` (no rail) and have a working back way out (the back
-      button / breadcrumb), dropped only on a terminal screen.
-- [ ] The body carries `layout-boundary` + its column (or opens flush on `PageTabs`); no bespoke
-      `p-(--spacing-*)` inset; a table sits in a flush borderless `Card`, and the `PageHeader` is out
-      of the card.
-- [ ] A first-level module list opens on its `PageHeader` (the create action `large`) over one band:
-      the controls row (`medium`) and the table.
-- [ ] The page's primary button is in exactly one place: the tab row (`medium`) if the page has tabs,
-      the `PageHeader` (`large`) if it doesn't — never duplicated inside a tab's own list.
-- [ ] A tabbed page renders no `PageHeader`, keeps the tab row `items-center` with the action's height
-      reserved, and carries the active tab in `?tab=`.
-- [ ] The breadcrumb matches the level (no trail at first level; `module › resource name` at second
-      level), every non-last crumb links, and no tab appears in the trail.
-- [ ] Page navigation is the rail, two levels at most (a product's resources on level 1 when it has
-      3 or fewer, a drill level when it has more); a page has only its `PageTabs` (at most 7) and
-      no menu or other in-page navigation; no route appears twice on the screen, and each
-      control's `aria-current="page"` row agrees with the route.
-- [ ] No rail row routes into a resource (a default policy, zone or application); those pages are
-      reached through the resource's list row and its tabs.
-- [ ] Opening, configuring or editing a product or a resource navigates to its page; no drawer is
-      the first surface of a resource, and every drawer opens over the screen that owns its item.
-- [ ] The first drawer is `size="large"`; a nested drawer is `size="medium"`, at most one, never a
-      third; no drawer carries `PageTabs`, a breadcrumb or any other navigation.
-- [ ] Every field that needs another resource offers to create it in a drawer when it does not exist
-      yet, and selects it on save; the reader never leaves the form to create it.
+- The page uses exactly one shell (persistent console **or** focused creation), matching its job.
+- The console chrome is one `ConsoleLayout` in `App.vue` around `RouterView`, fed by `navigation`
+  data with an `href` on every row; no hand-composed `AppLayout` / `Sidebar` / `AppHeader`
+  shell, and no chrome copied into a page.
+- A browse page is only a body: no `<main>`, header, rail or `Command` of its own; it opens the
+  palette with `useConsoleLayout().openSearch()` when it needs it.
+- Exactly one `AppHeader` renders on the page.
+- The signed-in user is visible: `account` on `ConsoleLayout` (rail footer + header avatar), or the
+  avatar at the end of the creation bar.
+- Focused flows route outside `ConsoleLayout` (no rail) and have a working back way out (the back
+  button / breadcrumb), dropped only on a terminal screen.
+- The body carries `layout-boundary` + its column (or opens flush on `PageTabs`); no bespoke
+  `p-(--spacing-*)` inset; a table sits in a flush borderless `Card`, and the `PageHeader` is out
+  of the card.
+- A first-level module list opens on its `PageHeader` (the create action `large`) over one band:
+  the controls row (`medium`) and the table.
+- The page's primary button is in exactly one place: the tab row (`medium`) if the page has tabs,
+  the `PageHeader` (`large`) if it doesn't — never duplicated inside a tab's own list.
+- A tabbed page renders no `PageHeader`, keeps the tab row `items-center` with the action's height
+  reserved, and carries the active tab in `?tab=`.
+- The breadcrumb matches the level (no trail at first level; `module › resource name` at second
+  level), every non-last crumb links, and no tab appears in the trail.
+- Page navigation is the rail, two levels at most (a product's resources on level 1 when it has
+  3 or fewer, a drill level when it has more); a page has only its `PageTabs` (at most 7) and
+  no menu or other in-page navigation; no route appears twice on the screen, and each
+  control's `aria-current="page"` row agrees with the route.
+- No rail row routes into a resource (a default policy, zone or application); those pages are
+  reached through the resource's list row and its tabs.
+- Opening, configuring or editing a product or a resource navigates to its page; no drawer is
+  the first surface of a resource, and every drawer opens over the screen that owns its item.
+- The first drawer is `size="large"`; a nested drawer is `size="medium"`, at most one, never a
+  third; no drawer carries `PageTabs`, a breadcrumb or any other navigation.
+- Every field that needs another resource offers to create it in a drawer when it does not exist
+  yet, and selects it on save; the reader never leaves the form to create it.

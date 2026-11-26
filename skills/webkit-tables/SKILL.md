@@ -9,17 +9,27 @@ enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens,
 
 # Skill: webkit-tables
 
+## In short
+
+- One data-driven `Table`: `:data`, `:columns` and `row-key`, with cells through `#cell-<key>`.
+- A table that lists a collection binds `tableProps` from `useCollection`.
+- Exactly one principal column; the actions column comes last; the toolbar reads Filter, Search,
+  Refresh, Export, then the preferences.
+- The body scrolls inside the table, never the page.
+- Every recurring cell has one recipe: `TableCellLink`, `TableCellId`, `TableCellTime`,
+  `TableCellStatus`, `TableCellActions`.
+
 ## Purpose
 
 A table is where a product shows the most data in the least room, so it is where inconsistency shows
 most: one table right-pins its actions and another left-floats them, one domain cell puts a copy button
 flush against the text so it lands at a different x on every row, one table overflows the page instead of
-scrolling its own body. This skill fixes the **structure** of a data table built on the webkit `Table`
+scrolling its own body. This pattern fixes the **structure** of a data table built on the webkit `Table`
 (`@aziontech/webkit/table`) and the **cell recipes** it composes, so every table in the app reads the
 same and every recurring cell type (name, status, domain, actions, copy) looks identical across screens.
 
-It is the tabular companion to `/webkit-form` (form layout) and `/webkit-ui-states` (the loading / empty /
-error states a table must render). This skill owns **the Table setup, the column model, the toolbar,
+It is the tabular companion to [Forms](../webkit-form/SKILL.md) (form layout) and [Loading, empty and error states](../webkit-ui-states/SKILL.md) (the loading / empty /
+error states a table must render). This pattern owns **the Table setup, the column model, the toolbar,
 internal scroll, and the cell recipes** — including the aligned domain cell.
 
 Find the `Table` and its sub-components through the `webkit` MCP (`suggest_component` / `get_component`)
@@ -27,7 +37,7 @@ or `node_modules/@aziontech/webkit/catalog.json` — never by reading a componen
 
 ## How to use
 
-- `/webkit-tables` — apply the structure + cell recipes below to any table you build in this conversation.
+- [Tables](../webkit-tables/SKILL.md) — apply the structure + cell recipes below to any table you build in this conversation.
 - `/webkit-tables <file>` — review the file's table against the patterns; per gap report the exact
   line/element (quoted), which pattern it breaks (one sentence), and the concrete fix naming the webkit
   component to use.
@@ -37,7 +47,7 @@ or `node_modules/@aziontech/webkit/catalog.json` — never by reading a componen
 - Building or reviewing any list/index page, resource table, or any `<Table>` with cell slots.
 - The user asks "the copy button is misaligned", "how do I lay out this cell", "the table overflows the
   page", "which toolbar controls", "how do actions/status/domain cells look".
-- After `/webkit-ui-states` establishes the empty/loading/error states, and before `/webkit-final-polish`.
+- After [Loading, empty and error states](../webkit-ui-states/SKILL.md) establishes the empty/loading/error states, and before `/webkit-final-polish`.
 
 ## The Table — data-driven, one shape
 
@@ -58,7 +68,7 @@ the column model, the cell slots and the opt-in stacked layout.
 ### Bind it to `useCollection` — the default for any list
 
 A table that lists records is a collection: bind it to `useCollection`
-(`@aziontech/webkit/use-collection`, see `/webkit-lists`) and let the composable own the filter, the
+(`@aziontech/webkit/use-collection`, see [List pages](../webkit-lists/SKILL.md)) and let the composable own the filter, the
 sort, the page, the selection and the saved preferences. One `v-bind` carries all of it:
 
 ```vue
@@ -189,7 +199,7 @@ const columns = [
 ### Toolbar + applied filters
 
 A list page puts its `PropertyFilter` and `CollectionPreferences` **above** the card, bound to
-`useCollection` (`/webkit-lists`). The in-table toolbar below is for a table that is its own small
+`useCollection` ([List pages](../webkit-lists/SKILL.md)). The in-table toolbar below is for a table that is its own small
 surface (a drawer, a panel) and does not page through a collection.
 
 The toolbar is a fixed, ordered set of context-aware controls in the `#toolbar` slot; the
@@ -602,37 +612,37 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 `@select` follows the webkit event contract `(event, value)`. Any interactive control in a
 **non-action** cell of a row-clickable table needs `@click.stop`; the presets already stop theirs.
 
-## Checklist
+## How to check it works
 
-- [ ] Table is data-driven: `:data` + `:columns` + `row-key`, rows via `#cell-<key>` — no hand-built `<tr>`.
-- [ ] A table that lists a collection is bound with `v-bind="tableProps"` from `useCollection`; filters, sort, page and selection are not kept in loose refs.
-- [ ] More than a few hundred rows on one screen → `virtual` with a `max-height`; otherwise paginate.
-- [ ] Density, wrap and stripes come from the saved preferences, not hard-coded per page.
-- [ ] Columns resize (no `resizable: false` without a reason) and the widths are saved: `tableProps`
-      with a `storageKey`, or `@column-resize` kept in `localStorage`.
-- [ ] Exactly one `principal: true` column; the actions column is `{ type: 'action', hideable: false }`.
-- [ ] `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
-- [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.ChipGroup` (menu kind).
-- [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
-- [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
-- [ ] Every name that leaves the screen is `TableCellLink` (12px `az-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
-- [ ] Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one tag in one severity from a shared helper — branching colour is reserved for real status.
-- [ ] Domain cell = `TableCellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
-- [ ] In a 320 px box the grid scrolls sideways inside the table (no `stackable` on a console list) and the toolbar wraps.
-- [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
-- [ ] Every copyable ID or token is `TableCellId`: text then a copy button pinned to the end, named after what it copies.
-- [ ] "Last modified" / "Deployed" cell = `TableCellTime` (relative time, `author` only when there is no `Last Editor` column); no raw absolute date.
-- [ ] Overflow is an `OverflowCount` (`+N` with summary, search past 7, Load more), or `TableCellTags` for tags; never a wrapped inline list.
-- [ ] Status via `TableCellStatus :severity` from one shared helper, never a raw color; long text `truncate`s inside `min-w-0`.
-- [ ] Row actions are `TableCellActions :name` (trigger named after the row), destructive options in their own last group.
-- [ ] A list whose rows change on their own: `TableRefreshButton :loading` keeps the rows, an `Updated` time sits beside it, and auto-refresh follows the six refresh rules.
-- [ ] Order that is data → `reorderable` + `v-model:data`; no sort offered on that table.
-- [ ] Interactive controls in non-action cells use `@click.stop` when the table has `@row-click`.
+- Table is data-driven: `:data` + `:columns` + `row-key`, rows via `#cell-<key>` — no hand-built `<tr>`.
+- A table that lists a collection is bound with `v-bind="tableProps"` from `useCollection`; filters, sort, page and selection are not kept in loose refs.
+- More than a few hundred rows on one screen → `virtual` with a `max-height`; otherwise paginate.
+- Density, wrap and stripes come from the saved preferences, not hard-coded per page.
+- Columns resize (no `resizable: false` without a reason) and the widths are saved: `tableProps`
+  with a `storageKey`, or `@column-resize` kept in `localStorage`.
+- Exactly one `principal: true` column; the actions column is `{ type: 'action', hideable: false }`.
+- `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
+- Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.ChipGroup` (menu kind).
+- Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
+- Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
+- Every name that leaves the screen is `TableCellLink` (12px `az-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
+- Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one tag in one severity from a shared helper — branching colour is reserved for real status.
+- Domain cell = `TableCellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
+- In a 320 px box the grid scrolls sideways inside the table (no `stackable` on a console list) and the toolbar wraps.
+- Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
+- Every copyable ID or token is `TableCellId`: text then a copy button pinned to the end, named after what it copies.
+- "Last modified" / "Deployed" cell = `TableCellTime` (relative time, `author` only when there is no `Last Editor` column); no raw absolute date.
+- Overflow is an `OverflowCount` (`+N` with summary, search past 7, Load more), or `TableCellTags` for tags; never a wrapped inline list.
+- Status via `TableCellStatus :severity` from one shared helper, never a raw color; long text `truncate`s inside `min-w-0`.
+- Row actions are `TableCellActions :name` (trigger named after the row), destructive options in their own last group.
+- A list whose rows change on their own: `TableRefreshButton :loading` keeps the rows, an `Updated` time sits beside it, and auto-refresh follows the six refresh rules.
+- Order that is data → `reorderable` + `v-model:data`; no sort offered on that table.
+- Interactive controls in non-action cells use `@click.stop` when the table has `@row-click`.
 
-## Related skills
+## Related
 
-- `/webkit-api-data` — a cell that holds another resource's ID shows its name (`TableCellLink`),
+- [Showing API data](../webkit-api-data/SKILL.md) — a cell that holds another resource's ID shows its name (`TableCellLink`),
   and every shape the API sends has one typed formatter.
-- `/webkit-form` — form layout & accessibility (the create/edit view a table's "New" button opens).
-- `/webkit-ui-states` — the loading / empty / error states a table must render.
+- [Forms](../webkit-form/SKILL.md) — form layout & accessibility (the create/edit view a table's "New" button opens).
+- [Loading, empty and error states](../webkit-ui-states/SKILL.md) — the loading / empty / error states a table must render.
 - `/webkit-final-polish` — final rhythm/alignment pass over the assembled table.

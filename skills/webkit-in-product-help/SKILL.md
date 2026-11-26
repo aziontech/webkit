@@ -3,7 +3,7 @@ name: webkit-in-product-help
 description: Add in-product help to an Azion product screen built on @aziontech/webkit — the explanation beside a field, a section or a whole page. Picks the level (a visible description first, then a Hint glyph that opens a short note on click, then an Info trigger beside the page title that opens a HelpPanel in the console's tools region; a Tooltip only names a control in a few words), places it (the glyph 4px after the label text, the Info trigger after the page title), and writes it (1 to 3 sentences, one Learn more link). Use whenever a screen needs to explain a field, a setting, a metric, a column or a page, or when someone asks for help text, an info icon, a question-mark icon, a help tooltip, a toggletip, contextual help or in-product documentation.
 scope: general
 status: active
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 enforced_by: [webkit-prefer-over-custom, webkit-accessibility, webkit-strings, ui-verify, review]
 ---
 
@@ -131,7 +131,7 @@ A Hint with a documentation link, beside any label or column header:
 - **Link text names the destination** ("How hits are counted", "Rate limiting documentation"), never
   "click here". Links to the documentation open in a new tab.
 - **The page topic's sections are questions** the person is asking ("How is the window counted?").
-- Words and tone: `/webkit-microcopy`, rule `webkit-strings`.
+- Words and tone: [Interface text](../webkit-microcopy/SKILL.md), rule `webkit-strings`.
 
 ## How it behaves
 

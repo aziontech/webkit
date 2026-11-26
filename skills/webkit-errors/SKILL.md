@@ -2,7 +2,7 @@
 name: webkit-errors
 description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts (a credential the user retypes goes on its field, everything else in one card Alert), and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
 status: active
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-component-states, webkit-accessibility, ui-verify]
 ---
@@ -17,9 +17,9 @@ wrong for a field the user must fix (it dismisses itself and points nowhere), wr
 (it flies away from the only object on the page and stacks one card per attempt), and _right_ for
 exactly one case most apps never handle: the failure that arrives after the user has walked away.
 
-This skill fixes **where an error goes**, **what it carries when it gets there**, and **what it
-says**. It is the error half of `webkit-ui-states` (which owns the full loading / empty / partial
-state surface) and the failure half of `webkit-form` (which owns the field and submit mechanics).
+This pattern fixes **where an error goes**, **what it carries when it gets there**, and **what it
+says**. It is the error half of [Loading, empty and error states](../webkit-ui-states/SKILL.md) (which owns the full loading / empty / partial
+state surface) and the failure half of [Forms](../webkit-form/SKILL.md) (which owns the field and submit mechanics).
 
 ## How to use
 
@@ -48,7 +48,7 @@ Never guess an import path — files move. Resolve every primitive the same way:
 - Or read **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real
   published subpath. If a subpath is not a key there, it does not exist.
 
-The surfaces this skill uses — `message`, `toast`, `field` (with its `Field.Description` / `Field.Error`), `field-error` — all resolve
+The surfaces this pattern uses — `message`, `toast`, `field` (with its `Field.Description` / `Field.Error`), `field-error` — all resolve
 this way. Use **@aziontech/theme tokens** for spacing and color, never raw px or hex.
 
 ## The one question
@@ -85,9 +85,9 @@ belongs on the control that holds it. Validate **on submit**, not on every keyst
   malformed one, with a `FieldError` that says what to enter.
 
 Mechanics (the `Field` triad, `aria-describedby`, submit-time validation, the locked scope) live in
-**`/webkit-form`**. In a settings row (`SettingsRow`, `@aziontech/webkit/settings-row`) the message is a
+**[Forms](../webkit-form/SKILL.md)**. In a settings row (`SettingsRow`, `@aziontech/webkit/settings-row`) the message is a
 `FieldDescription` placed in the row's default slot right after the control, so it sits under the control
-inside the row's control column. The only rule this skill adds: **client-side validation is the one thing that does
+inside the row's control column. The only rule this pattern adds: **client-side validation is the one thing that does
 not go in a `Alert`.** The `Alert` is for what the **server** said.
 
 ## 2. Server rejection scoped to one field → a `Alert` in that section
@@ -177,7 +177,7 @@ attach it to, and blocking the whole form with a banner over-weights something a
 - Say what failed and what to do next — see the words section below.
 
 The mechanics of the in-flight lock (one flag, trigger `:loading`, every field `:disabled`, released
-in `finally`) belong to **`/webkit-ui-states`**.
+in `finally`) belong to **[Loading, empty and error states](../webkit-ui-states/SKILL.md)**.
 
 ## 4. Signed-out screens → auth never toasts
 
@@ -279,7 +279,7 @@ application. Check your connection and try again."` — not `"Error 500"`.
 - **The status code goes last**, if at all. It is for the support ticket, not the lede.
 - **Say what was _not_ lost.** On a rejected submit, `"Nothing else was lost"` is the sentence that
   stops a user from re-entering a six-section form.
-- **`Retry`**, never "Try again". Sentence case, no em dash. Full copy rules: **`/webkit-microcopy`**.
+- **`Retry`**, never "Try again". Sentence case, no em dash. Full copy rules: **[Interface text](../webkit-microcopy/SKILL.md)**.
 
 ## Hard rules
 
@@ -334,26 +334,26 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 - **Blocks:** `state/state-form-validation` (rows 1 and 3 on a short form; row 2, the section `Alert` with
   its recovery action, in SectionRejected), `auth/auth-sign-in` (row 4),
   `state/state-async-submit` (row 5, Edit and Redeploy).
-- **Companion skills:** `/webkit-form` (the field triad, submit-time validation, the locked scope),
-  `/webkit-ui-states` (the full loading / empty / partial / error surface and async behaviour),
-  `/webkit-microcopy` (what the words are), `/webkit-navigation` (which shell the failing page sits
+- **Companion skills:** [Forms](../webkit-form/SKILL.md) (the field triad, submit-time validation, the locked scope),
+  [Loading, empty and error states](../webkit-ui-states/SKILL.md) (the full loading / empty / partial / error surface and async behaviour),
+  [Interface text](../webkit-microcopy/SKILL.md) (what the words are), [Navigation](../webkit-navigation/SKILL.md) (which shell the failing page sits
   in), `/webkit-ux-heuristics` (the right component per moment).
 
-## Definition of Done
+## How to check it works
 
-- [ ] Every `catch` on the screen routes to a surface picked from the table — not to whichever one was
-      easiest.
-- [ ] Client-side validation renders on the field (red `invalid` + `FieldError`), never in a
-      `Alert` or a toast.
-- [ ] Field-scoped server rejections render a `Alert` in the owning section **and** set that field's
-      red `invalid` state, and say what was not lost.
-- [ ] On a long form, the erroring section is scroll-anchored and the field takes focus — after the
-      lock is released, re-asserted after the message region expands, `prefers-reduced-motion` honoured.
-- [ ] Unscoped request failures use `toast.error` and carry `Retry`, with the lock released in
-      `finally`.
-- [ ] No signed-out screen toasts: every auth outcome is one `size="small"` `Alert` in the card, and
-      only the outcomes the user cannot fix carry an action.
-- [ ] A long-running action's state lives outside the component; its progress is a non-dismissing
-      `loading` toast and its failure a `duration: 0` + `closable` toast carrying both ways out.
-- [ ] Severity matches certainty (`warning` for an unknown, `danger` for a confirmed failure), and every
-      message says what happened then what to do next.
+- Every `catch` on the screen routes to a surface picked from the table — not to whichever one was
+  easiest.
+- Client-side validation renders on the field (red `invalid` + `FieldError`), never in a
+  `Alert` or a toast.
+- Field-scoped server rejections render a `Alert` in the owning section **and** set that field's
+  red `invalid` state, and say what was not lost.
+- On a long form, the erroring section is scroll-anchored and the field takes focus — after the
+  lock is released, re-asserted after the message region expands, `prefers-reduced-motion` honoured.
+- Unscoped request failures use `toast.error` and carry `Retry`, with the lock released in
+  `finally`.
+- No signed-out screen toasts: every auth outcome is one `size="small"` `Alert` in the card, and
+  only the outcomes the user cannot fix carry an action.
+- A long-running action's state lives outside the component; its progress is a non-dismissing
+  `loading` toast and its failure a `duration: 0` + `closable` toast carrying both ways out.
+- Severity matches certainty (`warning` for an unknown, `danger` for a confirmed failure), and every
+  message says what happened then what to do next.

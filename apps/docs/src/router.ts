@@ -1,5 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 
+import { MOVED_FROM_FOUNDATIONS } from './lib/patterns'
+
 export const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: () => import('./pages/home-page.vue') },
   {
@@ -20,12 +22,22 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('./pages/foundations-page.vue')
   },
   { path: '/foundations/icon', redirect: '/assets/icons' },
+  ...MOVED_FROM_FOUNDATIONS.map((slug) => ({
+    path: `/foundations/${slug}`,
+    redirect: `/patterns/${slug}`
+  })),
   {
     path: '/foundations/:slug',
     name: 'foundation',
     component: () => import('./pages/foundation-page.vue')
   },
   { path: '/ai', name: 'ai', component: () => import('./pages/ai-page.vue') },
+  { path: '/patterns', name: 'patterns', component: () => import('./pages/patterns-page.vue') },
+  {
+    path: '/patterns/:slug',
+    name: 'pattern',
+    component: () => import('./pages/pattern-page.vue')
+  },
   { path: '/assets', name: 'assets', component: () => import('./pages/assets-page.vue') },
   {
     path: '/assets/icons',

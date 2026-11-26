@@ -2,7 +2,7 @@
 name: webkit-layout
 description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, the control cap inside an item-group field row, and the device contract (viewport breakpoints for the shell, container queries for anything that can sit in a drawer, split view or card, touch targets, reflow at 320 px). Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
-last_updated: 2026-11-18
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-styling, webkit-tokens, webkit-direction, ui-verify, review]
 ---
@@ -25,12 +25,12 @@ happened to match.
 
 ## How to use
 
-- `/webkit-layout` — shape any page in this conversation with the system below.
+- [Page layout](../webkit-layout/SKILL.md) — shape any page in this conversation with the system below.
 - `/webkit-layout <file>` — review that page: per gap report the quoted line, the rule it breaks in
   one sentence, and the concrete fix.
 
-Related: `/webkit-lists` (the index page this shape carries) · `/webkit-create-surface` (page vs
-drawer, and the commit bar that must align with its form) · `/webkit-navigation` (the shell that owns
+Related: [List pages](../webkit-lists/SKILL.md) (the index page this shape carries) · [Create flows](../webkit-create-surface/SKILL.md) (page vs
+drawer, and the commit bar that must align with its form) · [Navigation](../webkit-navigation/SKILL.md) (the shell that owns
 the boundary on a padded page) · `/webkit-quick-cleanup` (tokens, typography, spacing scale).
 
 ## When to invoke
@@ -46,7 +46,7 @@ the boundary on a padded page) · `/webkit-quick-cleanup` (tokens, typography, s
 
 ## 0. The app layout owns the chrome; a page is its body
 
-Everything in this skill is about the page **inside** the app's layout. The chrome around it is one
+Everything in this pattern is about the page **inside** the app's layout. The chrome around it is one
 component, composed once in `App.vue` around `RouterView`:
 
 - **Console:** `ConsoleLayout` — rail, header, breadcrumbs, ⌘K palette, account. It renders the
@@ -406,7 +406,7 @@ truncating text `min-w-0`.
 - **NEVER** name a physical side: `ps-`/`pe-`, `ms-`/`me-`, `start-`/`end-`, `text-start`,
   `border-s` — so the same page mirrors under `dir="rtl"` (the boundary, the sticky bar and the field
   row's control column included). `webkit/no-physical-direction` blocks `pl-`/`mr-`/`left-`/`text-right`;
-  "left" and "right" in this skill read as "start" and "end" in a right-to-left page (rule
+  "left" and "right" in this pattern read as "start" and "end" in a right-to-left page (rule
   `webkit-direction`).
 - **NEVER** use a viewport variant (`md:`, `lg:`) for a layout inside a band, card or panel; use a
   container variant (`@md:`) so it survives being moved into a drawer or a split view.
@@ -464,26 +464,26 @@ Close with `Layout sound` or `N gaps — fix before polish`.
 
 ## References
 
-- `/webkit-lists` — the index page this shape carries, and the controls-row band.
-- `/webkit-create-surface` — where a create lives, and the commit bar that must align with its form.
-- `/webkit-navigation` — the app layout (`ConsoleLayout`) and the focused creation shell, and the page body inside them.
+- [List pages](../webkit-lists/SKILL.md) — the index page this shape carries, and the controls-row band.
+- [Create flows](../webkit-create-surface/SKILL.md) — where a create lives, and the commit bar that must align with its form.
+- [Navigation](../webkit-navigation/SKILL.md) — the app layout (`ConsoleLayout`) and the focused creation shell, and the page body inside them.
 - `/webkit-quick-cleanup` — tokens, typography hierarchy, the spacing scale these derive from.
 - **Foundations → Layout and devices** on the docs site (`pnpm dev:docs`) — every measure and utility.
 - `semantic/layouts` in `@aziontech/theme` — the tokens and utilities themselves, with the reasoning
   for each decision recorded beside it.
 
-## Definition of Done
+## How to check it works
 
-- [ ] The page carries a column class chosen by its payload — or none at all, deliberately, for
-      full-bleed.
-- [ ] No `mx-auto`, `max-w-*`, or `w-full` standing in for the container system.
-- [ ] The boundary is on the page body (the app layout pads nothing), as padding, and the cap absorbs it.
-- [ ] The page renders no `<main>`, shell or chrome of its own: it is the body of the app layout's slot.
-- [ ] Exactly one `layout-section-start` per page stack; no vertical `gap` on the page stack.
-- [ ] Rhythm is the two steps only — section between sections, group inside one.
-- [ ] No two page regions (banner, card, framed table, section heading) closer than the group step.
-- [ ] A controls row and the thing it narrows sit in one band at the group step.
-- [ ] A sticky bar carries the same column class and `layout-boundary-inline` as its body.
-- [ ] Sibling states of the page (empty, populated, each tab) resolve to the same column.
-- [ ] Field rows use `layout-field-control`, not a hand-set width.
-- [ ] Verified at phone, laptop and ultrawide in both themes with `/webkit-ui-verify`.
+- The page carries a column class chosen by its payload — or none at all, deliberately, for
+  full-bleed.
+- No `mx-auto`, `max-w-*`, or `w-full` standing in for the container system.
+- The boundary is on the page body (the app layout pads nothing), as padding, and the cap absorbs it.
+- The page renders no `<main>`, shell or chrome of its own: it is the body of the app layout's slot.
+- Exactly one `layout-section-start` per page stack; no vertical `gap` on the page stack.
+- Rhythm is the two steps only — section between sections, group inside one.
+- No two page regions (banner, card, framed table, section heading) closer than the group step.
+- A controls row and the thing it narrows sit in one band at the group step.
+- A sticky bar carries the same column class and `layout-boundary-inline` as its body.
+- Sibling states of the page (empty, populated, each tab) resolve to the same column.
+- Field rows use `layout-field-control`, not a hand-set width.
+- Verified at phone, laptop and ultrawide in both themes with `/webkit-ui-verify`.

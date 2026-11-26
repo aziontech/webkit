@@ -61,7 +61,13 @@ test('the not-found page offers search and the three sections, not only the star
 
 test('a rule or skill the docs site renders speaks as a page and spells WebKit', () => {
   const root = fileURLToPath(new URL('../../../', import.meta.url))
-  const sources = [...read('lib/foundations.ts').matchAll(/markdown: '([^']+)'/g)].map((m) => m[1])
+  const patterns = JSON.parse(readFileSync(`${root}skills/patterns.json`, 'utf8')) as {
+    patterns: { skill: string }[]
+  }
+  const sources = [
+    ...[...read('lib/foundations.ts').matchAll(/markdown: '([^']+)'/g)].map((m) => m[1]),
+    ...patterns.patterns.map((page) => `skills/${page.skill}/SKILL.md`)
+  ]
   assert.ok(sources.length > 5)
   const leaks = sources.filter((path) =>
     /\bThis skill\b|\bWebkit\b/.test(readFileSync(`${root}${path}`, 'utf8'))

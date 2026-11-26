@@ -3,20 +3,20 @@ name: webkit-site-pages
 description: Design, compose or audit an Azion web page (the marketing site, a product or Solution page, a campaign landing page) with @aziontech/webkit page sections and SitePage, under the Web Design Guide (rule webkit-site-pages, SD-01 to SD-25). Runs the page task end to end — check the project is wired, classify the request, write a sourced brief, compose the page JSON from the sections' own site JSON, set the hero, pick bank assets by render, touch copy only when asked, verify the rendered page at four widths in both themes, and report findings by rule ID. Use when asked to create, lay out, rework or review a page, hero or band of an Azion web page. Product UI (console screens, sign-in, settings, create flows) uses webkit-product-screens instead.
 scope: general
 status: active
-last_updated: 2026-11-16
+last_updated: 2026-11-25
 enforced_by:
   [webkit-site-pages, webkit-sections, webkit-page-layout, webkit-tokens, ui-verify, review]
 ---
 
 # Skill: webkit-site-pages
 
-The rules live in rule `webkit-site-pages` (the Web Design Guide). Read it at the start of every
-run; every decision and report line cites the SD rule it rests on. This skill owns layout: which
+The rules live in rule [Building a site page](../webkit-site-pages/SKILL.md) (the Web Design Guide). Read it at the start of every
+run; every decision and report line cites the SD rule it rests on. This pattern owns layout: which
 sections a page uses, in which order, with which hero and which assets. It never invents a fact,
 and it changes copy only when the person asks (SD-03).
 
 Product UI is out of scope: console screens and flows, sign-in and sign-up, settings and create
-flows use `/webkit-product-screens`. A page is never composed from product blocks, and the SD rules
+flows use [Building a console screen](../webkit-product-screens/SKILL.md). A page is never composed from product blocks, and the SD rules
 never apply to product UI.
 
 ## Content lives with marketing
@@ -48,7 +48,7 @@ Run the stages in order; ask the person at every fork the rule does not decide.
    Note the page type (Home, product, Solution, pricing, trust page, Blog, campaign, other), the
    route, the languages, and what must not change. Ask when the page type is unclear or the
    request mixes copy with layout.
-2. **Load the rule.** Read rule `webkit-sections` and rule `webkit-site-pages`; for the hero, the
+2. **Load the rule.** Read rule `webkit-sections` and rule [Building a site page](../webkit-site-pages/SKILL.md); for the hero, the
    `hero-section` component page (its When to use holds the page-type matrix).
 3. **Brief.** Read the content sources above for the subject. Every claim carries its source path;
    a slot with no source stays out and goes into the report (SD-16). Write nothing to the page yet.
@@ -72,7 +72,7 @@ Run the stages in order; ask the person at every fork the rule does not decide.
    translate with `translate-content`.
 8. **Verify.** Run the repo's gates (lint, `webkit check`), then `/webkit-ui-verify` at 390, 768,
    1280 and 1440 px in both themes, checking the hero, frame, pattern, copy and asset rules by DOM
-   (rule `webkit-site-pages`, Verify). Line counts fail at desktop widths only.
+   (rule [Building a site page](../webkit-site-pages/SKILL.md), Verify). Line counts fail at desktop widths only.
 9. **Report:** what changed and the files touched; each section, variant and asset used, with
    where it was read; findings by SD ID with width and theme; slots left out for lack of a source;
    missing sections and missing assets; copy and label findings for the person to decide.

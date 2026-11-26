@@ -15,7 +15,7 @@ import {
   renderGuidelinesFile,
   renderMarkdownFile
 } from './content.ts'
-import { CATALOG, LLMS, readCatalog, THEME, walk, WEBKIT } from './paths.ts'
+import { CATALOG, LLMS, readCatalog, SKILLS, THEME, walk, WEBKIT } from './paths.ts'
 
 const INDEX = 'virtual:docs-index'
 const NAV = 'virtual:docs-nav'
@@ -34,7 +34,10 @@ const HIGHLIGHT = '\0docs-highlight:'
 const MARKDOWN = '\0docs-markdown:'
 const GUIDELINES = '\0docs-guidelines:'
 
-const STATIC_DIRS: { prefix: string; dir: string }[] = [{ prefix: '/llms/', dir: LLMS }]
+const STATIC_DIRS: { prefix: string; dir: string }[] = [
+  { prefix: '/llms/', dir: LLMS },
+  { prefix: '/skills/', dir: SKILLS }
+]
 
 const PROPOSALS: { route: string; file: string }[] = [
   {
@@ -244,6 +247,7 @@ export function docsPlugin(): Plugin {
         if (existsSync(join(LLMS, 'llms.txt')))
           cpSync(join(LLMS, 'llms.txt'), join(out, 'llms.txt'))
       }
+      if (existsSync(SKILLS)) cpSync(SKILLS, join(out, 'skills'), { recursive: true })
       for (const { route, file } of PROPOSALS) {
         if (existsSync(file)) cpSync(file, join(out, route))
       }

@@ -2,7 +2,7 @@
 name: webkit-ui-states
 description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Alert), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
 status: active
-last_updated: 2026-11-19
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, ui-verify]
 ---
@@ -18,7 +18,7 @@ field error belongs. And the async moments leak just as badly: a submit that sta
 twice, a form whose fields stay editable mid-request sends data the user has already changed, a
 request that fails silently leaves the user staring at a spinner that never clears.
 
-This skill fixes **both halves** of a trustworthy data-backed view:
+This pattern fixes **both halves** of a trustworthy data-backed view:
 
 1. **The state surface** every view owns — loading, empty, partial, error, success — each mapped to
    the `@aziontech/webkit` component that renders it, so the loading/empty/error of every screen
@@ -29,7 +29,7 @@ This skill fixes **both halves** of a trustworthy data-backed view:
 
 ## How to use
 
-- `/webkit-ui-states` — apply the state matrix **and** the async-behavior contract to any view you
+- [Loading, empty and error states](../webkit-ui-states/SKILL.md) — apply the state matrix **and** the async-behavior contract to any view you
   build in this conversation.
 - `/webkit-ui-states <file>` — review the file's views and async flows and report, per gap: the
   quoted line, which state or behavior is missing or mis-handled, and the concrete fix naming the
@@ -69,7 +69,7 @@ missing any is not done.
 | **Success** (transient)                  | a mutation completed                            | optional toast; don't leave the user guessing whether it worked                           |
 
 Field-level validation is **not** in this matrix — a bad email or a required value stays inline next
-to the field (see `/webkit-form` and the toast-vs-field boundary below). This skill is about the
+to the field (see [Forms](../webkit-form/SKILL.md) and the toast-vs-field boundary below). This pattern is about the
 **view's** data states, not a single input's.
 
 ## Loading: pick by the direction of the flow
@@ -358,7 +358,7 @@ Rules:
 
 `toast` is for **request / system** errors. **Field validation is not.** A bad email, a missing
 required value, an out-of-range number stays **next to the field** with the field/message components
-(`/webkit-form`, and `/webkit-ux-heuristics` for error placement) — validating before submit is error
+([Forms](../webkit-form/SKILL.md), and `/webkit-ux-heuristics` for error placement) — validating before submit is error
 prevention, and it never fires a global toast.
 
 | Failure                                                  | Where it goes                                 |
@@ -371,7 +371,7 @@ Two more rows exist, and both are places a toast is **wrong**: a server rejectio
 field** (→ a `Alert` in that field's own section + the field's `invalid` state) and anything on a
 **signed-out** screen (→ one `Alert` in the card; **auth never toasts**). The inverse case — a
 failure that arrives **after** the user left the screen — is the one that _must_ be a toast, and a
-permanent, closable one. The full table lives in **`/webkit-errors`**.
+permanent, closable one. The full table lives in **[Errors](../webkit-errors/SKILL.md)**.
 
 ## Async actions — the run that outlives its screen (`state/state-async-submit`)
 
@@ -438,13 +438,13 @@ For `/webkit-ui-states <file>`, list gaps grouped by view / flow. Each:
 
 End with: `states + async sound` or `N gaps — fix before polish`.
 
-## Definition of Done
+## How to check it works
 
-- [ ] Every data-backed view renders loading, empty, and error — plus partial where it paginates.
-- [ ] Skeleton reserves the arriving layout; controls show their own loading; no blank async panels.
-- [ ] First-run empty ≠ no-results empty (distinct copy + action).
-- [ ] Every async action locks its scope off **one** flag: trigger `:loading`, every field `:disabled`.
-- [ ] The handler guards on the flag and releases it in `finally` (success **and** failure).
-- [ ] `<Toaster>` is mounted once, at the app root, and no page or view renders one; request/API errors raise `toast.error` / `toast.promise` with what failed + how to recover (Retry where it applies).
-- [ ] Field validation stays inline (`Field` + `message`) — never a toast.
-- [ ] Every state component came from the MCP/catalog, not a guessed or borrowed path.
+- Every data-backed view renders loading, empty, and error — plus partial where it paginates.
+- Skeleton reserves the arriving layout; controls show their own loading; no blank async panels.
+- First-run empty ≠ no-results empty (distinct copy + action).
+- Every async action locks its scope off **one** flag: trigger `:loading`, every field `:disabled`.
+- The handler guards on the flag and releases it in `finally` (success **and** failure).
+- `<Toaster>` is mounted once, at the app root, and no page or view renders one; request/API errors raise `toast.error` / `toast.promise` with what failed + how to recover (Retry where it applies).
+- Field validation stays inline (`Field` + `message`) — never a toast.
+- Every state component came from the MCP/catalog, not a guessed or borrowed path.

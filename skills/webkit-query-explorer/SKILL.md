@@ -2,7 +2,7 @@
 name: webkit-query-explorer
 description: Recipe for a query explorer over Azion's GraphQL Metrics and Events APIs built only from @aziontech/webkit pieces — dataset Select, measures and group-by, PropertyFilter tokens turned into GraphQL filters, a DateRangePicker resolved with useTimeRange, a Run button, the result as a Chart and a DataTable, and the generated query in a CodeBlock. Use when building an analytics, metrics or events explorer, a "query builder", or any screen that turns controls into a GraphQL query.
 status: active
-last_updated: 2026-11-19
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, review]
 ---
@@ -11,7 +11,7 @@ enforced_by: [webkit-component-states, webkit-prefer-over-custom, review]
 
 ## Purpose
 
-An explorer lets a person ask the Metrics or Events API a question without writing GraphQL: pick a dataset, what to measure, how to group, which rows to keep and the time range, then Run. Every control is a WebKit component; the only code you write is the state object and the function that turns it into a query. Calling the API from the browser (proxy, token, error states) is `webkit-azion-api`; read it first.
+An explorer lets a person ask the Metrics or Events API a question without writing GraphQL: pick a dataset, what to measure, how to group, which rows to keep and the time range, then Run. Every control is a WebKit component; the only code you write is the state object and the function that turns it into a query. Calling the API from the browser (proxy, token, error states) is [Calling the Azion API](../webkit-azion-api/SKILL.md); read it first.
 
 ## The pieces
 
@@ -121,11 +121,11 @@ async function run() {
 - **Loading:** `Chart` `loading` on the first run and `refetching` on the next ones (the old result stays visible); the Run `Button` `loading`.
 - **Empty:** a `200` with no rows is the table's empty slot with `EmptyState` (`No data for this range and these filters`) and the chart's own empty state, not an error.
 - **Invalid query:** a `400` carries `{ detail }` (limits, unknown fields); show it in an `Alert` above the result with the query still visible in the `CodeBlock`.
-- **Signed out:** a `401` or `403` follows `webkit-azion-api`, never a toast.
+- **Signed out:** a `401` or `403` follows [Calling the Azion API](../webkit-azion-api/SKILL.md), never a toast.
 
 ## 5. Chart a time series
 
-Map rows to `labels` (one `Date` per bucket, from `ts`) and one series per measure (or per value of a second group-by field). Pass `Date` objects, not preformatted strings, so the axis picks day ticks over a week and hour ticks over a day, and set `format-label` only to change the wording. A series colour is a role (`primary`, `success`, `danger`), never a hex value (`webkit-data-viz`).
+Map rows to `labels` (one `Date` per bucket, from `ts`) and one series per measure (or per value of a second group-by field). Pass `Date` objects, not preformatted strings, so the axis picks day ticks over a week and hour ticks over a day, and set `format-label` only to change the wording. A series colour is a role (`primary`, `success`, `danger`), never a hex value ([Charts and figures](../webkit-data-viz/SKILL.md)).
 
 ## Hard rules
 

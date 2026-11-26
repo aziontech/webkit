@@ -90,10 +90,19 @@ test('a component page never renders the spec Constraints block written for agen
   assert.ok(doc.bestPractices.length > 0)
 })
 
-test('no foundations page the docs render holds a task list', () => {
+function patternSources(): string[] {
+  const file = new URL('../../../skills/patterns.json', import.meta.url)
+  const data = JSON.parse(readFileSync(file, 'utf8')) as { patterns: { skill: string }[] }
+  return data.patterns.map((page) => `skills/${page.skill}/SKILL.md`)
+}
+
+test('no foundations or patterns page the docs render holds a task list', () => {
   const repo = new URL('../../../', import.meta.url)
   const pages = readFileSync(new URL('apps/docs/src/lib/foundations.ts', repo), 'utf8')
-  const findings = [...pages.matchAll(/markdown:\s*'([^']+)'/g)].flatMap(([, path]) =>
+  const findings = [
+    ...[...pages.matchAll(/markdown:\s*'([^']+)'/g)].map(([, path]) => path as string),
+    ...patternSources()
+  ].flatMap((path) =>
     scanMarkdown(readFileSync(new URL(path, repo), 'utf8'), { rendered: true }).map(
       (finding) => `${path}:${finding.line} ${finding.message}`
     )
@@ -142,6 +151,7 @@ test('no page source the docs render repeats a heading or a paragraph', () => {
   const pages = readFileSync(new URL('apps/docs/src/lib/foundations.ts', REPO_URL), 'utf8')
   const files = [
     ...[...pages.matchAll(/markdown:\s*'([^']+)'/g)].map(([, path]) => path as string),
+    ...patternSources(),
     ...readBlocks().map((block) => `packages/webkit/blocks/${block.dir}/guidelines.md`)
   ].filter((path) => existsSync(new URL(path, REPO_URL)))
   const findings = files.flatMap((path) =>
