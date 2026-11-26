@@ -68,6 +68,7 @@
     'relative inline-flex items-center w-full rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
     'motion-reduce:transition-none ' +
     'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 [&>*]:max-h-full ' +
+    '[&_[role=combobox]]:-my-px [&_[role=combobox]]:bg-clip-padding ' +
     '[&:not(:focus-within):not([data-invalid]):not([data-required]):not([data-disabled])]:hover:border-(--border-strong) ' +
     'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas) ' +
     'data-[invalid]:border-(--danger-border) ' +
