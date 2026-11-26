@@ -70,6 +70,7 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-menu-list.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-references.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-send.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-attach-button/prompt-input-attach-button.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-dictate-button/prompt-input-dictate-button.vue";
