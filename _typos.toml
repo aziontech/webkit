@@ -34,6 +34,8 @@ extend-exclude = [
 
 [default]
 extend-ignore-re = [
+  # The misspelled aria-lable attribute is the example a lint must catch (contributing/docs/DOC_LINTS.md).
+  "aria-lable",
   # Git commit hashes and other hex ids (a hex run with at least one digit).
   "\\b[0-9a-f]{0,39}[0-9][0-9a-f]{0,39}\\b",
   # Base64 payloads (certificates, inline images).
@@ -49,6 +51,10 @@ IIFEs = "IIFEs"
 ALF0CLL8 = "ALF0CLL8"
 
 [default.extend-words]
+# Portuguese words a user types to ask for a component; the auto-invoke triggers in contributing/ match them.
+componente = "componente"
+# A raw icon name the icons-add command normalizes ("svelt" becomes "svelte"), quoted as input.
+svelt = "svelt"
 # "Look-alikes": the look-alike component check (check:look-alikes) and its reports.
 alikes = "alikes"
 # Americanas, a client brand with a logo in assets/logos/clients.

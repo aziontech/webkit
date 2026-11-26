@@ -3067,3 +3067,7 @@ Budget-raise: prompt-input-model-picker 17.75 KB → 20 KB (measured 19.96 KB): 
 ## Console type set in the map chart (2026-11-26)
 
 Budget-raise: map-chart 18.7 KB → 18.75 KB (measured 18.70 KB, a few bytes over in CI): it renders EmptyState, which switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size (18.66 KB before CT-1).
+
+## Patterns and the AI page in the llms bundle (2026-11-26)
+
+Budget-raise: llms-full.txt 2,600,000 → 2,650,000 bytes (measured 2,600,963): the docs Patterns section (PAT-1) sends agents to the pattern for each job, and the new `/ai` page (HOME-AI-1, `docs/AI.md`) is in the bundle.
