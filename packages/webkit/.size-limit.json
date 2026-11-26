@@ -868,7 +868,7 @@
   {
     "name": "bar-list",
     "path": "src/components/chart/bar-list/bar-list.vue",
-    "limit": "5.85 KB"
+    "limit": "5.9 KB"
   },
   {
     "name": "spark-chart",
@@ -1447,12 +1447,12 @@
   {
     "name": "video-player",
     "path": "src/components/content/video-player/video-player.vue",
-    "limit": "12.8 KB"
+    "limit": "12.85 KB"
   },
   {
     "name": "image-gallery",
     "path": "src/components/content/image-gallery/image-gallery.vue",
-    "limit": "27.8 KB"
+    "limit": "27.85 KB"
   },
   {
     "name": "overflow-count",

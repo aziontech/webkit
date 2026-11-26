@@ -3013,3 +3013,11 @@ Budget-raise: css-button 11.15 KB → 11.2 KB (measured 11.15 KB over the limit)
 Budget-raise: css-icons 15.45 KB → 15.5 KB (measured 15.46 KB): the same theme text style `text-title-nested` for the console type set (CT-1).
 
 Budget-raise: css-console 25.15 KB → 25.25 KB (measured 25.17 KB): the console type set (CT-1) adds `text-title-nested` to the theme and the `in-data-[type-set=console]:` title utilities of EmptyState, Dialog.Title and Drawer.Title, so a console screen never titles above 16px.
+
+Budget-raise: bar-list 5.85 KB → 5.9 KB (measured 5.86 KB): it renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size, so a console screen never titles above 16px.
+
+Budget-raise: video-player 12.8 KB → 12.85 KB (measured 12.80 KB): it renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size, so a console screen never titles above 16px.
+
+Budget-raise: image-gallery 27.8 KB → 27.85 KB (measured 27.81 KB): it renders EmptyState, which now switches to the console type set (CT-1): inside `data-type-set="console"` its title takes the console size, so a console screen never titles above 16px.
+
+Budget-raise: css-console 25.25 KB → 25.35 KB (measured 25.26 KB after rebasing on the alert tints): the console type set (CT-1) adds `text-title-nested` and the `in-data-[type-set=console]:` title utilities of EmptyState, Dialog.Title and Drawer.Title.
