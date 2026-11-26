@@ -4,6 +4,7 @@
     PromptInputMenuOption,
     PromptInputStatus
   } from '@aziontech/webkit/prompt-input'
+  import PromptInputAccessPicker from '@aziontech/webkit/prompt-input-access-picker'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
@@ -11,7 +12,7 @@
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import { nextTick, ref } from 'vue'
 
-  import { sampleContexts, sampleModes, sampleProviders } from '../sample'
+  import { sampleAccessModes, sampleContexts, sampleModes, sampleProviders } from '../sample'
   import AiChatVoice from './ai-chat-voice.vue'
 
   defineProps<{
@@ -40,6 +41,8 @@
 
   const modeKey = ref('medium')
   const contextKey = ref('')
+  const accessKey = ref('supervised')
+  const favoriteKeys = ref<string[]>([])
   const modes = sampleModes
   const contexts = sampleContexts
 
@@ -96,11 +99,19 @@
         v-if="models.length"
         v-model="modelKey"
         v-model:mode="modeKey"
+        v-model:favorite-keys="favoriteKeys"
         :providers="sampleProviders"
         :models="models"
         :modes="modes"
         mode-label="Thinking Level"
-      />
+      >
+        <template #footer>
+          <PromptInputAccessPicker
+            v-model="accessKey"
+            :options="sampleAccessModes"
+          />
+        </template>
+      </PromptInputModelPicker>
       <PromptInputDictateButton />
     </template>
     <template

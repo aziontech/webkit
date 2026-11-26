@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), `ResizableHandle`, `ResizablePane`, [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAccessPicker`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), `ResizableHandle`, `ResizablePane`, [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -68,7 +68,7 @@ After the last complete response, two or three questions that narrow it, as wrap
 
 ### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`
 
-The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` in `#footer` (the disclaimer is not in the composer: see Disclaimer). The tools live in the "+" menu only, so `PromptInputTools` is not added to `#footer` (both would list the enabled tools as chips). It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort, Favorites, and the access mode as a `PromptInputAccessPicker` in its footer) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` in `#footer` (the disclaimer is not in the composer: see Disclaimer). The tools live in the "+" menu only, so `PromptInputTools` is not added to `#footer` (both would list the enabled tools as chips). It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
@@ -1360,6 +1360,33 @@ export const sampleTools: PromptInputMenuOption[] = [
   { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
   { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]
+
+export const sampleAccessModes: PromptInputMenuOption[] = [
+  {
+    value: 'supervised',
+    label: 'Supervised',
+    icon: 'az az-lock',
+    description: 'Ask before commands and file changes.'
+  },
+  {
+    value: 'edits',
+    label: 'Auto-accept edits',
+    icon: 'az az-pencil',
+    description: 'Auto-approve edits, ask before other actions.'
+  },
+  {
+    value: 'auto',
+    label: 'Auto',
+    icon: 'az az-shield',
+    description: 'Approve routine actions, ask before the rest.'
+  },
+  {
+    value: 'full',
+    label: 'Full access',
+    icon: 'az az-lock-open',
+    description: 'Allow commands and edits without prompts.'
+  }
+]
 ````
 
 ## `lib/ai-chat-failure.ts`
@@ -1506,6 +1533,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
     PromptInputMenuOption,
     PromptInputStatus
   } from '@aziontech/webkit/prompt-input'
+  import PromptInputAccessPicker from '@aziontech/webkit/prompt-input-access-picker'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
@@ -1513,7 +1541,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import { nextTick, ref } from 'vue'
 
-  import { sampleContexts, sampleModes, sampleProviders } from '../sample'
+  import { sampleAccessModes, sampleContexts, sampleModes, sampleProviders } from '../sample'
   import AiChatVoice from './ai-chat-voice.vue'
 
   defineProps<{
@@ -1542,6 +1570,8 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
   const modeKey = ref('medium')
   const contextKey = ref('')
+  const accessKey = ref('supervised')
+  const favoriteKeys = ref<string[]>([])
   const modes = sampleModes
   const contexts = sampleContexts
 
@@ -1598,11 +1628,19 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
         v-if="models.length"
         v-model="modelKey"
         v-model:mode="modeKey"
+        v-model:favorite-keys="favoriteKeys"
         :providers="sampleProviders"
         :models="models"
         :modes="modes"
         mode-label="Thinking Level"
-      />
+      >
+        <template #footer>
+          <PromptInputAccessPicker
+            v-model="accessKey"
+            :options="sampleAccessModes"
+          />
+        </template>
+      </PromptInputModelPicker>
       <PromptInputDictateButton />
     </template>
     <template

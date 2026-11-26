@@ -575,3 +575,30 @@ export const sampleTools: PromptInputMenuOption[] = [
   { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
   { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]
+
+export const sampleAccessModes: PromptInputMenuOption[] = [
+  {
+    value: 'supervised',
+    label: 'Supervised',
+    icon: 'az az-lock',
+    description: 'Ask before commands and file changes.'
+  },
+  {
+    value: 'edits',
+    label: 'Auto-accept edits',
+    icon: 'az az-pencil',
+    description: 'Auto-approve edits, ask before other actions.'
+  },
+  {
+    value: 'auto',
+    label: 'Auto',
+    icon: 'az az-shield',
+    description: 'Approve routine actions, ask before the rest.'
+  },
+  {
+    value: 'full',
+    label: 'Full access',
+    icon: 'az az-lock-open',
+    description: 'Allow commands and edits without prompts.'
+  }
+]
