@@ -270,6 +270,25 @@ function bundleTexts(projectDir, bundle) {
   return out
 }
 
+function bundleResults(projectDir, map, dryRun) {
+  const { moves, retired } = bundleMoves(projectDir, map.aiBundle)
+  const results = [...Object.entries(map.files || {}), ...moves].map(([from, to]) =>
+    moveFile(projectDir, from, to, dryRun)
+  )
+  for (const rel of retired) {
+    results.push({
+      file: rel,
+      changes: [],
+      warnings: [`${rel} is not in the 6.0 AI bundle: delete it`]
+    })
+  }
+  if (!moves.length) return results
+  const warning =
+    `${moves.length} AI file(s) moved to their azion-ui names: run \`npx @aziontech/ui sync --force\` ` +
+    'to refresh them (it overwrites local edits to those files)'
+  return [...results, { file: '.claude', changes: [], warnings: [warning] }]
+}
+
 export function planPackageMigration(projectDir, { dryRun = false, map = loadPackageMap() } = {}) {
   const results = [migratePackageJson(projectDir, map, dryRun)]
   for (const rel of map.mcpConfigs || [])
@@ -278,25 +297,5 @@ export function planPackageMigration(projectDir, { dryRun = false, map = loadPac
   for (const rel of bundleTexts(projectDir, map.aiBundle)) {
     results.push(rewriteBundleFile(projectDir, rel, map, dryRun))
   }
-  const { moves, retired } = bundleMoves(projectDir, map.aiBundle)
-  for (const [from, to] of [...Object.entries(map.files || {}), ...moves]) {
-    results.push(moveFile(projectDir, from, to, dryRun))
-  }
-  for (const rel of retired) {
-    results.push({
-      file: rel,
-      changes: [],
-      warnings: [`${rel} is not in the 6.0 AI bundle: delete it`]
-    })
-  }
-  if (moves.length) {
-    results.push({
-      file: '.claude',
-      changes: [],
-      warnings: [
-        `${moves.length} AI file(s) moved to their azion-ui names: run \`npx @aziontech/ui sync --force\` to refresh them (it overwrites local edits to those files)`
-      ]
-    })
-  }
-  return results.filter(Boolean)
+  return [...results, ...bundleResults(projectDir, map, dryRun)].filter(Boolean)
 }
