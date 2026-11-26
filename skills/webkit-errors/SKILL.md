@@ -2,7 +2,7 @@
 name: webkit-errors
 description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts (a credential the user retypes goes on its field, everything else in one card Alert), and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
 status: active
-last_updated: 2026-11-24
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-component-states, webkit-accessibility, ui-verify]
 ---
@@ -290,6 +290,10 @@ application. Check your connection and try again."` — not `"Error 500"`.
   field's red `invalid` state.
 - **Never auto-dismiss an error that names a required action.** `Alert`s stay until recovery;
   background-job error toasts are `duration: 0` **and** `closable`.
+- **An error never carries a primary (orange) button.** The recovery action in a danger `Alert`,
+  an error page, an `ErrorBoundary` fallback or a failed run is `secondary` (Retry, Redeploy, Go to
+  home); the help beside it is `outline` or `ghost`. The `Alert` built-in action is already
+  `secondary`.
 - **Release the lock in `finally`**, on success and failure alike — otherwise Retry cannot re-run.
 - **Move the user to the problem only after the lock is released**; a disabled control cannot take
   focus.
