@@ -42,12 +42,12 @@
     'sm:h-[48px] sm:flex-row sm:items-center sm:justify-between sm:py-0'
 
   const LEVEL_CLASS =
-    'relative inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) ' +
+    'relative inline-flex h-7 shrink-0 cursor-pointer items-center gap-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) ' +
     'px-(--spacing-xs) text-label-sm text-(--text-muted) transition-colors duration-150 ease-out ' +
     "before:absolute before:inset-0 before:content-[''] hover:border-(--border-strong) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 " +
     'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 ' +
     'data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) ' +
-    'motion-reduce:transition-none pointer-coarse:before:-inset-y-1.5'
+    'motion-reduce:transition-none pointer-coarse:before:-inset-y-2'
 
   const LEVEL_DOT_CLASS =
     'size-2 shrink-0 rounded-full bg-(--text-muted) ' +
