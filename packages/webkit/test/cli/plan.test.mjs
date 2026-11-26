@@ -24,6 +24,9 @@ const MAIN_TS =
   "import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n"
 
 const hasGit = !spawnSync('git', ['--version']).error
+const GIT_FREE_ENV = Object.fromEntries(
+  Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))
+)
 
 function makeProject({ git = false } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'webkit-cli-'))
@@ -32,7 +35,7 @@ function makeProject({ git = false } = {}) {
     JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2)
   )
   mkdirSync(join(dir, 'src'))
-  if (git) spawnSync('git', ['init', '-q'], { cwd: dir })
+  if (git) spawnSync('git', ['init', '-q'], { cwd: dir, env: GIT_FREE_ENV })
   return dir
 }
 
